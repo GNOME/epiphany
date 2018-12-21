@@ -1032,7 +1032,7 @@ readability_js_finish_cb (GObject      *object,
 
   js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
   if (!js_result) {
-    g_warning ("Error running javascript: %s", error->message);
+    g_debug ("Error running javascript: %s", error->message);
     g_error_free (error);
     return;
   }

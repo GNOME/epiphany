@@ -6,16 +6,14 @@ envs = [
 ]
 
 if get_option('unit_tests')
-  # FIXME: The tests that need ephy-test-utils are all disabled....
-  #
-  # libephytestutils = static_library('ephytestutils',
-  #   'ephy-test-utils.c',
-  #   dependencies: ephymain_dep
-  # )
-  #
-  # ephytestutils_dep = declare_dependency(
-  #   link_with: libephytestutils
-  # )
+  libephytestutils = static_library('ephytestutils',
+    'ephy-test-utils.c',
+    dependencies: ephymain_dep
+  )
+
+  ephytestutils_dep = declare_dependency(
+    link_with: libephytestutils
+  )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
   # download_test = executable('test-ephy-download',
@@ -102,15 +100,15 @@ if get_option('unit_tests')
        env: envs
   )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707220
-  # session_test = executable('test-ephy-session',
-  #   'ephy-session-test.c',
-  #   dependencies: ephytestutils_dep
-  # )
-  # test('Session test',
-  #      session_test,
-  #      env: envs
-  # )
+  session_test = executable('test-ephy-session',
+    'ephy-session-test.c',
+    resources,
+    dependencies: [ephytestutils_dep, ephymain_dep]
+  )
+  test('Session test',
+       session_test,
+       env: envs
+  )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=693369
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=695703
