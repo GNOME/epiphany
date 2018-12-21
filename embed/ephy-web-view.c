@@ -1923,30 +1923,31 @@ load_changed_cb (WebKitWebView  *web_view,
       ephy_web_view_set_committed_location (view, uri);
       update_security_status_for_committed_load (view, uri);
 
-      /* History. */
-      if (!ephy_web_view_is_history_frozen (view)) {
-        char *history_uri = NULL;
-
-        /* TODO: move the normalization down to the history service? */
-        if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
-          history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-        else
-          history_uri = g_strdup (uri);
-
-        ephy_history_service_visit_url (view->history_service,
-                                        history_uri,
-                                        NULL,
-                                        g_get_real_time (),
-                                        view->visit_type,
-                                        TRUE);
-
-        g_free (history_uri);
-      }
-
-      if (view->loading_error_page)
+      if (view->loading_error_page) {
         view->loading_error_page = FALSE;
-      else
+      } else {
         view->error_page = EPHY_WEB_VIEW_ERROR_PAGE_NONE;
+
+        /* History. */
+        if (!ephy_web_view_is_history_frozen (view)) {
+          char *history_uri = NULL;
+
+          /* TODO: move the normalization down to the history service? */
+          if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+            history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+          else
+            history_uri = g_strdup (uri);
+
+          ephy_history_service_visit_url (view->history_service,
+                                          history_uri,
+                                          NULL,
+                                          g_get_real_time (),
+                                          view->visit_type,
+                                          TRUE);
+
+          g_free (history_uri);
+        }
+      }
 
       /* Zoom level. */
       restore_zoom_level (view, uri);
