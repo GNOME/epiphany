@@ -2648,14 +2648,16 @@ ephy_window_close_tab (EphyWindow *window,
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "ephy-window-close-tab-closed")))
     return;
 
-  if (gtk_notebook_get_n_pages (window->notebook) > 1) {
-    g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
-    gtk_widget_destroy (GTK_WIDGET (tab));
-  } else {
-    EphyWebView *web_view = ephy_embed_get_web_view (tab);
+  g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
+  gtk_widget_destroy (GTK_WIDGET (tab));
 
-    ephy_web_view_load_url (web_view, "about:overview");
-  }
+  /* If that was the last tab, destroy the window.
+   *
+   * Beware: window->closing could be true now, after destroying the
+   * tab, even if it wasn't at the start of this function.
+   */
+  if (!window->closing && gtk_notebook_get_n_pages (window->notebook) == 0)
+   gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 typedef struct {
