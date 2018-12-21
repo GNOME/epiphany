@@ -288,7 +288,7 @@ ephy_default_dot_dir (void)
 {
   return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
     g_strdup (ephy_dot_dir ()) :
-    g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+    g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
 }
 
 /**
