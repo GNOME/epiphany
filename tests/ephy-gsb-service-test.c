@@ -181,18 +181,15 @@ typedef struct {
 } VerifyURLTest;
 
 static const VerifyURLTest verify_url_tests[] = {
-//  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/MALWARE/URL/",                    TRUE},
-//  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/SOCIAL_ENGINEERING/URL/",         TRUE},
-//  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/UNWANTED_SOFTWARE/URL/",          TRUE},
-//  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/MALWARE/URL/",             TRUE},
-//  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/SOCIAL_ENGINEERING/URL/",  TRUE},
-//  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/UNWANTED_SOFTWARE/URL/",   TRUE},
-#if 0
-  /* FIXME: https://groups.google.com/forum/#!topic/google-safe-browsing-api/S6pWV_cjwGU */
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/MALWARE/URL/",                  FALSE},
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/SOCIAL_ENGINEERING/URL/",       FALSE},
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/UNWANTED_SOFTWARE/URL/",        FALSE},
-#endif
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/MALWARE/URL/",                    TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/SOCIAL_ENGINEERING/URL/",         TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/UNWANTED_SOFTWARE/URL/",          TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/MALWARE/URL/",             TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/SOCIAL_ENGINEERING/URL/",  TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/UNWANTED_SOFTWARE/URL/",   TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/MALWARE/URL/",                  TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/SOCIAL_ENGINEERING/URL/",       TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/UNWANTED_SOFTWARE/URL/",        TRUE},
 };
 
 static GMainLoop *test_verify_url_loop;
