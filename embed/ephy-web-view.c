@@ -1344,6 +1344,9 @@ update_ucm_ads_state (WebKitWebView *web_view,
   g_autofree gchar *origin = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_TEST)
+    return;
+
   origin = ephy_uri_to_security_origin (uri);
 
   /* Check page setting first in case it overwrites global setting */
@@ -1424,29 +1427,30 @@ load_changed_cb (WebKitWebView   *web_view,
 
       view->in_pdf_viewer = FALSE;
 
-      if (!ephy_web_view_is_history_frozen (view)) {
-        char *history_uri = NULL;
-
-        /* TODO: move the normalization down to the history service? */
-        if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
-          history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-        else
-          history_uri = g_strdup (uri);
-
-        ephy_history_service_visit_url (view->history_service,
-                                        history_uri,
-                                        NULL,
-                                        g_get_real_time (),
-                                        view->visit_type,
-                                        TRUE);
-
-        g_free (history_uri);
-      }
-
-      if (view->loading_error_page)
+      if (view->loading_error_page) {
         view->loading_error_page = FALSE;
-      else
+      } else {
         view->error_page = EPHY_WEB_VIEW_ERROR_PAGE_NONE;
+
+        if (!ephy_web_view_is_history_frozen (view)) {
+          char *history_uri = NULL;
+
+          /* TODO: move the normalization down to the history service? */
+          if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+            history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+          else
+            history_uri = g_strdup (uri);
+
+          ephy_history_service_visit_url (view->history_service,
+                                          history_uri,
+                                          NULL,
+                                          g_get_real_time (),
+                                          view->visit_type,
+                                          TRUE);
+
+          g_free (history_uri);
+        }
+      }
 
       /* Zoom level. */
       restore_zoom_level (view, uri);
