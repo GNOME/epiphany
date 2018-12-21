@@ -44,6 +44,21 @@
     ],
     "modules" : [
         {
+            "name" : "glib",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/glib.git",
+                    "branch" : "2.58.1"
+                }
+            ]
+        },
+        {
             "name" : "gtk",
             "config-opts" : [
                 "--libdir=/app/lib"
