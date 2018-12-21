@@ -696,7 +696,7 @@ display_download_finished_notification (WebKitDownload *download)
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
   dest = webkit_download_get_destination (download);
 
-  if (!gtk_window_is_active (toplevel) && dest != NULL) {
+  if (toplevel != NULL && !gtk_window_is_active (toplevel) && dest != NULL) {
     char *filename;
     char *message;
     GNotification *notification;
