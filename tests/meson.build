@@ -17,15 +17,14 @@ if get_option('unit_tests')
   #   link_with: libephytestutils
   # )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
-  # download_test = executable('test-ephy-download',
-  #   'ephy-download-test.c',
-  #   dependencies: ephymain_dep
-  # )
-  # test('Download test',
-  #      download_test,
-  #      env: envs
-  # )
+  download_test = executable('test-ephy-download',
+    'ephy-download-test.c',
+    dependencies: ephymain_dep
+  )
+  test('Download test',
+       download_test,
+       env: envs
+  )
 
   embed_shell_test = executable('test-ephy-embed-shell',
     'ephy-embed-shell-test.c',
