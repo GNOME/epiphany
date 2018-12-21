@@ -175,16 +175,15 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=780280
-  # web_view_test = executable('test-ephy-web-view',
-  #   'ephy-web-view-test.c',
-  #   dependencies: ephymain_dep,
-  #   c_args: test_cargs,
-  # )
-  # test('Web view test',
-  #      web_view_test,
-  #      env: envs
-  # )
+  web_view_test = executable('test-ephy-web-view',
+    'ephy-web-view-test.c',
+    resources,
+    dependencies: ephymain_dep
+  )
+  test('Web view test',
+       web_view_test,
+       env: envs
+  )
 
   if get_option('network_tests').enabled()
     gsb_service_test = executable('test-ephy-gsb-service',
