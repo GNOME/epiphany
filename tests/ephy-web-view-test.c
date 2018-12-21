@@ -54,7 +54,6 @@ server_callback (SoupServer        *server,
   } else
     soup_message_set_status (msg, SOUP_STATUS_OK);
 
-
   soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,
                             HTML_STRING, strlen (HTML_STRING));
 
@@ -67,7 +66,9 @@ load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loo
   char *expected_url;
   const char *loaded_url;
 
-  if (load_event != WEBKIT_LOAD_FINISHED)
+  // Currently LOAD_FINISHED is not send using the libsoup test server
+  // if (load_event != WEBKIT_LOAD_FINISHED)
+  if (load_event != WEBKIT_LOAD_COMMITTED)
     return;
 
   expected_url = g_object_get_data (G_OBJECT (view), "test.expected_url");
@@ -320,6 +321,7 @@ test_ephy_web_view_normalize_or_autosearch (void)
 
   ephy_search_engine_manager_delete_engine (manager, "org.gnome.Epiphany.EphyWebViewTest");
 
+  g_assert (ephy_search_engine_manager_set_default_engine (manager, default_engine));
   g_free (default_engine);
   g_object_unref (g_object_ref_sink (view));
 }
