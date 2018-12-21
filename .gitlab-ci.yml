@@ -1,72 +1,23 @@
-stages:
-- test
-- review
+include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
 variables:
-    # Replace with your preferred file name of the resulting Flatpak bundle
-    BUNDLE: "epiphany-git.flatpak"
+  BUNDLE: 'epiphany-git.flatpak'
 
 flatpak:
-    image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
-    stage: test
-    variables:
-        # Replace with your manifest path
-        MANIFEST_PATH: "flatpak/org.gnome.Epiphany.json"
-        RUNTIME_REPO: "https://sdk.gnome.org/gnome-nightly.flatpakrepo"
-        # Replace with your application name, as written in the manifest
-        FLATPAK_MODULE: "epiphany"
-        # Make sure to keep this in sync with the Flatpak manifest, all arguments
-        # are passed except the config-args because we build it ourselves
-        MESON_ARGS: "-Dunit_tests=true"
-        DBUS_ID: "org.gnome.Epiphany"
-
-    script:
-        - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}
-        # Make sure to keep this in sync with the Flatpak manifest, all arguments
-        # are passed except the config-args because we build it ourselves
-        - flatpak build app meson --prefix=/app ${MESON_ARGS} _build
-        - flatpak build app ninja -C _build install
-        - flatpak-builder --finish-only --repo=repo app ${MANIFEST_PATH}
-        # Generate a Flatpak bundle
-        - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${DBUS_ID}
-        # Run automatic tests inside the Flatpak env
-        - xvfb-run -a -s "-screen 0 1024x768x24" flatpak build app ninja -C _build test
-    artifacts:
-        paths:
-            - ${BUNDLE}
-            - _build/meson-logs/meson-log.txt
-            - _build/meson-logs/testlog.txt
-        expire_in: 30 days
-    cache:
-        paths:
-             - .flatpak-builder/cache
+  extends: '.flatpak'
+  variables:
+    MANIFEST_PATH: 'flatpak/org.gnome.Epiphany.json'
+    RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
+    FLATPAK_MODULE: 'epiphany'
+    # Make sure to keep this in sync with the Flatpak manifest, all arguments
+    # are passed except the config-args because we build it ourselves
+    MESON_ARGS: '-Dunit_tests=true'
+    APP_ID: 'org.gnome.Epiphany'
 
 review:
-    stage: review
-    dependencies:
-        - flatpak
-    script:
-        - echo "Generating flatpak deployment"
-    artifacts:
-        paths:
-            - ${BUNDLE}
-        expire_in: 30 days
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        url: https://gitlab.gnome.org/$CI_PROJECT_PATH/-/jobs/$CI_JOB_ID/artifacts/raw/${BUNDLE}
-        on_stop: stop_review
-    except:
-        - master@GNOME/epiphany
-        - tags
-        
+  dependencies:
+    - 'flatpak'
+  extends: '.review'
+
 stop_review:
-    stage: review
-    script:
-        - echo "Stopping flatpak deployment"
-    when: manual
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        action: stop
-    except:
-        - master@GNOME/epiphany
-        - tags
+  extends: '.stop_review'
