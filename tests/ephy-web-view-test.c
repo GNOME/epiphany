@@ -141,8 +141,10 @@ test_ephy_web_view_load_url (void)
     URLTest test;
     GMainLoop *loop;
     EphyWebView *view;
+    GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     view = EPHY_WEB_VIEW (ephy_web_view_new ());
+    gtk_container_add (GTK_CONTAINER (window), view);
     test = test_load_url[i];
     loop = g_main_loop_new (NULL, FALSE);
 
@@ -316,11 +318,11 @@ test_ephy_web_view_normalize_or_autosearch (void)
                                             "http://www.google.com/?q=%s",
                                             "");
 
-  g_assert_true (ephy_search_engine_manager_set_default_engine (manager, default_engine));
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
   ephy_search_engine_manager_delete_engine (manager, "org.gnome.Epiphany.EphyWebViewTest");
 
+  g_assert (ephy_search_engine_manager_set_default_engine (manager, default_engine));
   g_free (default_engine);
   g_object_unref (g_object_ref_sink (view));
 }

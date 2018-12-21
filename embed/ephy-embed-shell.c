@@ -1367,18 +1367,20 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
                            shell, 0);
 
   /* Filter Manager */
-  g_signal_connect_object (priv->filters_manager, "filters-disabled",
-                           G_CALLBACK (webkit_user_content_manager_remove_all_filters),
-                           ucm,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->filters_manager, "filter-ready",
-                           G_CALLBACK (webkit_user_content_manager_add_filter),
-                           ucm,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->filters_manager, "filter-removed",
-                           G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
-                           ucm,
-                           G_CONNECT_SWAPPED);
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST) {
+    g_signal_connect_object (priv->filters_manager, "filters-disabled",
+                             G_CALLBACK (webkit_user_content_manager_remove_all_filters),
+                             ucm,
+                             G_CONNECT_SWAPPED);
+    g_signal_connect_object (priv->filters_manager, "filter-ready",
+                             G_CALLBACK (webkit_user_content_manager_add_filter),
+                             ucm,
+                             G_CONNECT_SWAPPED);
+    g_signal_connect_object (priv->filters_manager, "filter-removed",
+                             G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
+                             ucm,
+                             G_CONNECT_SWAPPED);
+  }
 
   /* User Scripts */
   ephy_embed_prefs_apply_user_style (ucm);
