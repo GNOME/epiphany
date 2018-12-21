@@ -22,10 +22,10 @@
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-prefs.h"
-#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-shell.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>
