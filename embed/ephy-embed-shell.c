@@ -837,8 +837,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  ephy_embed_shell_create_web_context (shell);
-
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
@@ -852,11 +850,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
-                           shell, 0);
-
-  priv->permissions_manager = ephy_permissions_manager_new ();
-  g_signal_connect_object (priv->web_context, "initialize-notification-permissions",
-                           G_CALLBACK (initialize_notification_permissions),
                            shell, 0);
 
   priv->password_manager = ephy_password_manager_new ();
@@ -908,14 +901,6 @@ ephy_embed_shell_startup (GApplication *application)
   cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
-
-  priv->filters_manager = ephy_filters_manager_new (NULL);
-
-  g_signal_connect_object (priv->web_context, "download-started",
-                           G_CALLBACK (download_started_cb), shell, 0);
-
-  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
-                           G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
 }
 
 static void
@@ -966,21 +951,27 @@ ephy_embed_shell_constructed (GObject *object)
 {
   EphyEmbedShell *shell;
   EphyEmbedShellPrivate *priv;
-  EphyEmbedShellMode mode;
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
 
   shell = EPHY_EMBED_SHELL (object);
   priv = ephy_embed_shell_get_instance_private (shell);
   priv->guid = g_dbus_generate_guid ();
-  mode = ephy_embed_shell_get_mode (shell);
 
-  /* These do not run the EmbedShell application instance, so make sure that
-   *  there is a web context and a user content manager for them. */
-  if (mode == EPHY_EMBED_SHELL_MODE_TEST ||
-      mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
-    ephy_embed_shell_create_web_context (shell);
-  }
+  ephy_embed_shell_create_web_context (shell);
+
+  priv->permissions_manager = ephy_permissions_manager_new ();
+  g_signal_connect_object (priv->web_context, "initialize-notification-permissions",
+                           G_CALLBACK (initialize_notification_permissions),
+                           shell, 0);
+
+  priv->filters_manager = ephy_filters_manager_new (NULL);
+
+  g_signal_connect_object (priv->web_context, "download-started",
+                           G_CALLBACK (download_started_cb), shell, 0);
+
+  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
+                           G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
 }
 
 static void
