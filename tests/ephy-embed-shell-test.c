@@ -22,10 +22,10 @@
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-prefs.h"
-#include "ephy-embed-private.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-shell.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -38,9 +38,6 @@ test_ephy_embed_shell_launch_handler (void)
   GFile *file;
 
   embed_shell = ephy_embed_shell_get_default ();
-
-  ret = ephy_embed_shell_launch_handler (embed_shell, NULL, "text/html", 0);
-  g_assert (ret == FALSE);
 
   file = g_file_new_for_path (TEST_DIR "/data/test.html");
   g_assert (file);

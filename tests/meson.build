@@ -27,15 +27,15 @@ if get_option('unit_tests')
   #      env: envs
   # )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=773448
-  # embed_shell_test = executable('test-ephy-embed-shell',
-  #   'ephy-embed-shell-test.c',
-  #   dependencies: ephymain_dep
-  # )
-  # test('Embed shell test',
-  #      embed_shell_test,
-  #      env: envs
-  # )
+  embed_shell_test = executable('test-ephy-embed-shell',
+    'ephy-embed-shell-test.c',
+    dependencies: ephymain_dep,
+    c_args : '-DTEST_DIR="' + meson.current_source_dir() + '"'
+  )
+  test('Embed shell test',
+       embed_shell_test,
+       env: envs
+  )
 
   embed_utils_test = executable('test-ephy-embed-utils',
     'ephy-embed-utils-test.c',

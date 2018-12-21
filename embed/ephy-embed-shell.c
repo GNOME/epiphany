@@ -1688,7 +1688,10 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   gboolean ret = FALSE;
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
-  g_assert (file || mime_type);
+  g_assert (file);
+
+  if (mime_type == NULL)
+    return ret;
 
   if (ephy_is_running_inside_flatpak ()) {
     return ephy_file_launch_file_via_uri_handler (file);
