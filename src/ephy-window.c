@@ -818,6 +818,8 @@ static const GActionEntry tab_entries [] = {
   { "close", window_cmd_tabs_close },
   { "close-left", window_cmd_tabs_close_left },
   { "close-right", window_cmd_tabs_close_right },
+  { "move-left", window_cmd_tabs_move_left },
+  { "move-right", window_cmd_tabs_move_right },
   { "close-others", window_cmd_tabs_close_others },
   { "reload", window_cmd_tabs_reload },
   { "reopen", window_cmd_tabs_reopen_closed_tab },
