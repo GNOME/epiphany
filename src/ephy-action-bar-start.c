@@ -379,6 +379,29 @@ navigation_button_release_event_cb (GtkButton *button,
 }
 
 static gboolean
+homepage_button_release_event_cb (GtkButton *button,
+                                  GdkEvent  *event,
+                                  gpointer   user_data)
+{
+  EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
+  GActionGroup *action_group;
+  GAction *action;
+
+  action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
+
+  switch (((GdkEventButton *)event)->button) {
+    case GDK_BUTTON_MIDDLE:
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "homepage-new-tab");
+       g_action_activate (action, NULL);
+      break;
+    default:
+      break;
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
 navigation_leave_notify_event_cb (GtkButton *button,
                                   GdkEvent  *event,
                                   gpointer   user_data)
@@ -459,6 +482,8 @@ ephy_action_bar_start_constructed (GObject *object)
   } else {
     gtk_widget_set_visible (action_bar_start->homepage_button, FALSE);
   }
+  g_signal_connect (action_bar_start->homepage_button, "button-release-event",
+                    G_CALLBACK (homepage_button_release_event_cb), action_bar_start);
 }
 
 static void

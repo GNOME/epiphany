@@ -2558,3 +2558,28 @@ window_cmd_open_application_manager (GSimpleAction *action,
 
   ephy_web_view_load_url (web_view, "about:applications");
 }
+
+void
+window_cmd_homepage_new_tab (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                              EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                              NULL,
+                              0);
+
+  web_view = ephy_embed_get_web_view (embed);
+  ephy_web_view_load_homepage (web_view);
+
+  ephy_embed_container_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+}
