@@ -829,6 +829,7 @@ static const GActionEntry toolbar_entries [] = {
   { "navigation-back-new-tab", window_cmd_navigation_new_tab },
   { "navigation-forward", window_cmd_navigation },
   { "navigation-forward-new-tab", window_cmd_navigation_new_tab },
+  { "homepage-new-tab", window_cmd_homepage_new_tab },
 
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },

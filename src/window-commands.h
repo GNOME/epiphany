@@ -212,5 +212,8 @@ void window_cmd_toggle_reader_mode              (GSimpleAction *action,
 void window_cmd_open_application_manager        (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_homepage_new_tab                (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS
