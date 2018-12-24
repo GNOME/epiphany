@@ -2034,20 +2034,21 @@ decide_navigation_policy (WebKitWebView            *web_view,
     ephy_web_view_set_visit_type (EPHY_WEB_VIEW (web_view),
                                   EPHY_PAGE_VISIT_LINK);
 
-    /* New tab in new window for control+shift+click */
-    if (button == 1 && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK) &&
+    /* New tab in new window for shift+click */
+    if (button == GDK_BUTTON_PRIMARY && state == GDK_SHIFT_MASK &&
         !g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                  EPHY_PREFS_LOCKDOWN_FULLSCREEN)) {
       target_window = ephy_window_new ();
     }
     /* New tab in existing window for middle click and
-     * control+click */
-    else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK)) {
+     * control+shift+click */
+    else if (button == GDK_BUTTON_MIDDLE ||
+            (button == GDK_BUTTON_PRIMARY && state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
       inherit_session = TRUE;
     }
-    /* Shift+click means download URI */
-    else if (button == 1 && state == GDK_SHIFT_MASK) {
+    /* Alt+click means download URI */
+    else if (button == GDK_BUTTON_PRIMARY && state == GDK_MOD1_MASK) {
       if (save_target_uri (window, web_view)) {
         webkit_policy_decision_ignore (decision);
         return TRUE;
@@ -2075,6 +2076,9 @@ decide_navigation_policy (WebKitWebView            *web_view,
       session_state = webkit_web_view_get_session_state (web_view);
       webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
       webkit_web_view_session_state_unref (session_state);
+
+      if (button == GDK_BUTTON_PRIMARY)
+        ephy_embed_container_set_active_child (EPHY_EMBED_CONTAINER (window), new_embed);
     }
     ephy_web_view_load_request (new_view, request);
 
