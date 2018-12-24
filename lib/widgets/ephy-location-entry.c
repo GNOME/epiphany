@@ -40,10 +40,13 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#if 0
+
+#define ENABLE_DNS_PREFETCH 1
+#ifdef ENABLE_DNS_PREFETCH
 /* FIXME: Refactor the DNS prefetch, this is a layering violation */
 #include <libsoup/soup.h>
 #include <webkit2/webkit2.h>
+#include "ephy-embed-shell.h"
 #endif
 
 /**
@@ -749,6 +752,11 @@ ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
   ephy_location_entry_activate (EPHY_LOCATION_ENTRY (lentry));
 }
 
+#ifdef ENABLE_DNS_PREFETCH
+static void
+schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url);
+#endif
+
 static void
 suggestion_selected (DzlSuggestionEntry *entry,
                      DzlSuggestion      *suggestion,
@@ -760,6 +768,11 @@ suggestion_selected (DzlSuggestionEntry *entry,
   gtk_entry_set_text (GTK_ENTRY (entry), uri);
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+
+#ifdef ENABLE_DNS_PREFETCH
+  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
+  schedule_dns_prefetch (lentry, 250, uri);
+#endif
 }
 
 static void
@@ -846,7 +859,7 @@ ephy_location_entry_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
-#if 0
+#ifdef ENABLE_DNS_PREFETCH
 /* FIXME: Refactor the DNS prefetch, this is a layering violation */
 typedef struct {
   SoupURI *uri;
@@ -875,7 +888,9 @@ do_dns_prefetch (PrefetchHelper *helper)
 }
 
 static void
-schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url)
+schedule_dns_prefetch (EphyLocationEntry *entry,
+                       guint              interval,
+                       const gchar       *url)
 {
   PrefetchHelper *helper;
   SoupURI *uri;
