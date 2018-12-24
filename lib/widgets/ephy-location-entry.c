@@ -28,6 +28,7 @@
 #include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
+#include "ephy-embed-shell.h"
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
@@ -39,12 +40,9 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
-#if 0
-/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 #include <libsoup/soup.h>
+#include <string.h>
 #include <webkit2/webkit2.h>
-#endif
 
 /**
  * SECTION:ephy-location-entry
@@ -121,6 +119,7 @@ enum signalsEnum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
+static void schedule_dns_prefetch (EphyLocationEntry *entry, const gchar *url);
 
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
@@ -754,12 +753,15 @@ suggestion_selected (DzlSuggestionEntry *entry,
                      DzlSuggestion      *suggestion,
                      gpointer            user_data)
 {
+  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   const gchar *uri = dzl_suggestion_get_id (suggestion);
 
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
   gtk_entry_set_text (GTK_ENTRY (entry), uri);
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+
+  schedule_dns_prefetch (lentry, uri);
 }
 
 static void
@@ -846,8 +848,6 @@ ephy_location_entry_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
-#if 0
-/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 typedef struct {
   SoupURI *uri;
   EphyLocationEntry *entry;
@@ -875,7 +875,8 @@ do_dns_prefetch (PrefetchHelper *helper)
 }
 
 static void
-schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url)
+schedule_dns_prefetch (EphyLocationEntry *entry,
+                       const gchar       *url)
 {
   PrefetchHelper *helper;
   SoupURI *uri;
@@ -894,12 +895,13 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
   helper->uri = uri;
 
   entry->dns_prefetch_handler =
-    g_timeout_add_full (G_PRIORITY_DEFAULT, interval,
-                        (GSourceFunc)do_dns_prefetch, helper,
+    g_timeout_add_full (G_PRIORITY_DEFAULT,
+                        250,
+                        (GSourceFunc)do_dns_prefetch,
+                        helper,
                         (GDestroyNotify)free_prefetch_helper);
   g_source_set_name_by_id (entry->dns_prefetch_handler, "[epiphany] do_dns_prefetch");
 }
-#endif
 
 /**
  * ephy_location_entry_get_can_undo:
