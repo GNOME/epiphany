@@ -1643,8 +1643,10 @@ populate_context_menu (WebKitWebView       *web_view,
     add_item_to_context_menu (context_menu, copy_image_item);
     add_action_to_context_menu (context_menu, popup_action_group,
                                 "copy-image-location", window);
-    add_action_to_context_menu (context_menu, popup_action_group,
-                                "view-image", window);
+    if (!app_mode)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "view-image", window);
+
     add_action_to_context_menu (context_menu, popup_action_group,
                                 "set-image-as-background", window);
   }
@@ -1658,19 +1660,23 @@ populate_context_menu (WebKitWebView       *web_view,
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     if (is_video) {
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-video-in-new-window", window);
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-video-in-new-tab", window);
+      if (!app_mode) {
+        add_action_to_context_menu (context_menu, popup_action_group,
+                                    "open-video-in-new-window", window);
+        add_action_to_context_menu (context_menu, popup_action_group,
+                                    "open-video-in-new-tab", window);
+      }
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "save-video-as", window);
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "copy-video-location", window);
     } else if (is_audio) {
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-audio-in-new-window", window);
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-audio-in-new-tab", window);
+      if (!app_mode) {
+        add_action_to_context_menu (context_menu, popup_action_group,
+                                    "open-audio-in-new-window", window);
+        add_action_to_context_menu (context_menu, popup_action_group,
+                                    "open-audio-in-new-tab", window);
+      }
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "save-audios-as", window);
       add_action_to_context_menu (context_menu, popup_action_group,
@@ -1691,17 +1697,19 @@ populate_context_menu (WebKitWebView       *web_view,
                                 "send-to", window);
   }
 
-  webkit_context_menu_append (context_menu,
-                              webkit_context_menu_item_new_separator ());
-  add_action_to_context_menu (context_menu, window_action_group,
-                              "save-as", window);
+  if (!app_mode) {
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_separator ());
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "save-as", window);
 
-  webkit_context_menu_append (context_menu,
-                              webkit_context_menu_item_new_separator ());
-  add_action_to_context_menu (context_menu, window_action_group,
-                              "page-source", window);
-  webkit_context_menu_append (context_menu,
-                              webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_separator ());
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "page-source", window);
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
+  }
 
   return FALSE;
 }
