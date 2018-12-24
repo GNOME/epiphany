@@ -339,7 +339,7 @@ ephy_search_provider_init (EphySearchProvider *self)
 
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
-  filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
   self->bookmarks_manager = ephy_bookmarks_manager_new ();
   self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
                                            self->bookmarks_manager);

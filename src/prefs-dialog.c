@@ -1107,7 +1107,7 @@ css_edit_button_clicked_cb (GtkWidget   *button,
 {
   GFile *css_file;
 
-  css_file = g_file_new_for_path (g_build_filename (ephy_dot_dir (),
+  css_file = g_file_new_for_path (g_build_filename (ephy_profile_dir (),
                                                     USER_STYLESHEET_FILENAME,
                                                     NULL));
 
@@ -1927,7 +1927,7 @@ setup_general_page (PrefsDialog *dialog)
   GSettings *web_settings;
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    dialog->webapp = ephy_web_application_for_profile_directory (ephy_dot_dir ());
+    dialog->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
     prefs_dialog_update_webapp_icon (dialog, dialog->webapp->icon_url);
     gtk_entry_set_text (GTK_ENTRY (dialog->webapp_url), dialog->webapp->url);
     gtk_entry_set_text (GTK_ENTRY (dialog->webapp_title), dialog->webapp->name);
