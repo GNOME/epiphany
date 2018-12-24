@@ -70,6 +70,7 @@ static GHashTable *mime_table;
 static gboolean keep_directory;
 static char *profile_dir_global;
 static char *cache_dir;
+static char *config_dir;
 static char *tmp_dir;
 static EphyProfileDirType profile_dir_type;
 
@@ -232,6 +233,20 @@ ephy_profile_dir (void)
 }
 
 /**
+ * ephy_config_dir:
+ *
+ * Gets Epiphany's configuration directory, usually .config/epiphany
+ * under user's homedir.
+ *
+ * Returns: the full path to Epiphany's configuration directory
+ **/
+const char *
+ephy_config_dir (void)
+{
+  return config_dir;
+}
+
+/**
  * ephy_cache_dir:
  *
  * Gets Epiphany's cache directory, usually .cache/epiphany
@@ -304,6 +319,21 @@ ephy_default_cache_dir (void)
 }
 
 /**
+ * ephy_default_config_dir:
+ *
+ * Get the path to the default config directory found in ~/.config
+ *
+ * Returns: a new allocated string, free with g_free() when done.
+ */
+char *
+ephy_default_config_dir (void)
+{
+  return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
+    g_build_filename (ephy_profile_dir (), "config", NULL) :
+    g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+}
+
+/**
  * ephy_file_helpers_init:
  * @profile_dir: directory to use as Epiphany's profile
  * @flags: the %EphyFileHelpersFlags for this session
@@ -347,6 +377,7 @@ ephy_file_helpers_init (const char          *profile_dir,
     if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
       const char *app_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir_global);
       cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);
+      config_dir = g_build_filename (g_get_user_config_dir (), app_name, NULL);
       profile_dir_type = EPHY_PROFILE_DIR_WEB_APP;
     }
   } else if (private_profile) {
@@ -363,6 +394,7 @@ ephy_file_helpers_init (const char          *profile_dir,
                                            "epiphany",
                                            NULL);
     cache_dir = g_build_filename (profile_dir_global, "cache", NULL);
+    config_dir = g_build_filename (profile_dir_global, "config", NULL);
     if (flags & EPHY_FILE_HELPERS_TESTING_MODE)
       profile_dir_type = EPHY_PROFILE_DIR_TEST;
   }
@@ -375,9 +407,13 @@ ephy_file_helpers_init (const char          *profile_dir,
   if (cache_dir == NULL)
     cache_dir = ephy_default_cache_dir ();
 
+  if (config_dir == NULL)
+    config_dir = ephy_default_config_dir ();
+
   if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) {
     ret = ephy_ensure_dir_exists (ephy_profile_dir (), error);
     ephy_ensure_dir_exists (ephy_cache_dir (), NULL);
+    ephy_ensure_dir_exists (ephy_config_dir (), NULL);
   }
 
   if (steal_data_from_profile && profile_dir) {
@@ -435,6 +471,7 @@ ephy_file_helpers_shutdown (void)
 
   g_clear_pointer (&profile_dir_global, g_free);
   g_clear_pointer (&cache_dir, g_free);
+  g_clear_pointer (&config_dir, g_free);
 
   if (tmp_dir != NULL) {
     if (!keep_directory) {

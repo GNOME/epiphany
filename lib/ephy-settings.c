@@ -195,7 +195,7 @@ ephy_settings_get_for_web_extension (const char *schema)
       return gsettings;
     }
 
-    g_autofree char *keyfile_path = g_build_filename (ephy_profile_dir (), "web-extension-settings.ini", NULL);
+    g_autofree char *keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
     backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
 
     GSettings *web_gsettings;
