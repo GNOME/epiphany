@@ -28,6 +28,7 @@
 #include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
+#include "ephy-embed-shell.h"
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
@@ -39,12 +40,9 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
-#if 0
-/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 #include <libsoup/soup.h>
+#include <string.h>
 #include <webkit2/webkit2.h>
-#endif
 
 /**
  * SECTION:ephy-location-entry
@@ -121,6 +119,7 @@ enum signalsEnum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
+static void schedule_dns_prefetch (EphyLocationEntry *entry, const gchar *url);
 
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
@@ -754,12 +753,15 @@ suggestion_selected (DzlSuggestionEntry *entry,
                      DzlSuggestion      *suggestion,
                      gpointer            user_data)
 {
+  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   const gchar *uri = dzl_suggestion_get_id (suggestion);
 
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
   gtk_entry_set_text (GTK_ENTRY (entry), uri);
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+
+  schedule_dns_prefetch (lentry, uri);
 }
 
 static void
@@ -846,8 +848,6 @@ ephy_location_entry_new (void)
   return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
-#if 0
-/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 typedef struct {
   SoupURI *uri;
   EphyLocationEntry *entry;
@@ -874,11 +874,38 @@ do_dns_prefetch (PrefetchHelper *helper)
   return FALSE;
 }
 
+/*
+ * Note: As we do not have access to WebKitNetworkProxyMode we are just checking
+ * system default proxy.
+ */
+static gboolean
+use_proxy_for_url (const gchar *url)
+{
+  GProxyResolver *resolver = g_proxy_resolver_get_default ();
+  gchar **result;
+  gboolean ret = FALSE;
+
+  if (resolver == NULL)
+    return FALSE;
+
+  result = g_proxy_resolver_lookup (resolver, url, NULL, NULL);
+  if (result != NULL && (g_strv_length (result) > 1 || g_strcmp0 (result[0], "direct://") != 0))
+    ret = TRUE;
+
+  g_strfreev (result);
+
+  return ret;
+}
+
 static void
-schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *url)
+schedule_dns_prefetch (EphyLocationEntry *entry,
+                       const gchar       *url)
 {
   PrefetchHelper *helper;
   SoupURI *uri;
+
+  if (use_proxy_for_url (url))
+    return;
 
   uri = soup_uri_new (url);
   if (!uri || !uri->host) {
@@ -894,12 +921,13 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
   helper->uri = uri;
 
   entry->dns_prefetch_handler =
-    g_timeout_add_full (G_PRIORITY_DEFAULT, interval,
-                        (GSourceFunc)do_dns_prefetch, helper,
+    g_timeout_add_full (G_PRIORITY_DEFAULT,
+                        250,
+                        (GSourceFunc)do_dns_prefetch,
+                        helper,
                         (GDestroyNotify)free_prefetch_helper);
   g_source_set_name_by_id (entry->dns_prefetch_handler, "[epiphany] do_dns_prefetch");
 }
-#endif
 
 /**
  * ephy_location_entry_get_can_undo:
