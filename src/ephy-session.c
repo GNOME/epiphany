@@ -94,7 +94,7 @@ get_session_file (const char *filename)
   }
 
   if (strcmp (filename, SESSION_STATE) == 0) {
-    path = g_build_filename (ephy_dot_dir (),
+    path = g_build_filename (ephy_profile_dir (),
                              "session_state.xml",
                              NULL);
   } else {

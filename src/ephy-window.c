@@ -3075,7 +3075,7 @@ ephy_window_should_save_state (EphyWindow *window)
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     return TRUE;
 
-  return ephy_dot_dir_is_default ();
+  return ephy_profile_dir_is_default ();
 }
 
 static void
