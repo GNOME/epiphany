@@ -100,7 +100,7 @@ typedef void (*EphyProfileMigrator) (void);
 static gboolean
 profile_dir_exists (void)
 {
-  if (g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+  if (g_file_test (ephy_profile_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
     return TRUE;
 
   if (g_file_test (legacy_profile_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
@@ -772,72 +772,6 @@ out:
   g_list_free_full (passwords, g_object_unref);
 }
 
-<<<<<<< HEAD
-=======
-static const char * const old_sync_settings[] = {
-    EPHY_PREFS_SYNC_USER,
-    EPHY_PREFS_SYNC_TIME,
-    EPHY_PREFS_SYNC_DEVICE_ID,
-    EPHY_PREFS_SYNC_DEVICE_NAME,
-    EPHY_PREFS_SYNC_FREQUENCY,
-    EPHY_PREFS_SYNC_WITH_FIREFOX,
-    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
-    EPHY_PREFS_SYNC_BOOKMARKS_TIME,
-    EPHY_PREFS_SYNC_BOOKMARKS_INITIAL,
-    EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
-    EPHY_PREFS_SYNC_PASSWORDS_TIME,
-    EPHY_PREFS_SYNC_PASSWORDS_INITIAL,
-    EPHY_PREFS_SYNC_HISTORY_ENABLED,
-    EPHY_PREFS_SYNC_HISTORY_TIME,
-    EPHY_PREFS_SYNC_HISTORY_INITIAL,
-    EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
-    EPHY_PREFS_SYNC_OPEN_TABS_TIME
-};
-
-static void
-migrate_sync_settings_path (void)
-{
-  GSettings *deprecated_settings = ephy_settings_get ("org.gnome.Epiphany.sync.DEPRECATED");
-
-  /* Sync settings are only used in browser mode, so no need to migrate if we
-   * are not in browser mode. */
-  if (!legacy_dir_is_default ())
-    return;
-
-  for (guint i = 0; i < G_N_ELEMENTS (old_sync_settings); i++) {
-    GVariant *user_value;
-
-    /* Has the setting been changed from its default? */
-    user_value = g_settings_get_user_value (deprecated_settings, old_sync_settings[i]);
-
-    if (user_value != NULL) {
-      GVariant *value;
-      const GVariantType *type;
-
-      value = g_settings_get_value (deprecated_settings, old_sync_settings[i]);
-      type = g_variant_get_type (value);
-
-      /* All double values in the old sync schema have been converted to gint64 in the new schema. */
-      if (g_variant_type_equal (type, G_VARIANT_TYPE_DOUBLE)) {
-        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i],
-                              g_variant_new_int64 (ceil (g_variant_get_double (value))));
-      } else {
-        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i], value);
-      }
-
-      /* We do not want to ever run this migration again, to avoid writing old
-       * values over new ones. So be cautious and reset the old settings. */
-      g_settings_reset (deprecated_settings, old_sync_settings[i]);
-
-      g_variant_unref (value);
-      g_variant_unref (user_value);
-    }
-  }
-
-  g_settings_sync ();
-}
-
->>>>>>> Move profile directories to data dir
 static void
 migrate_sync_device_info (void)
 {
@@ -1223,7 +1157,7 @@ migrate_profile_directories (void)
 
   /* The default profile also changed directories */
   g_autoptr(GFile) old_directory = g_file_new_for_path (legacy_default_profile_dir ());
-  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_dot_dir ());
+  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
 
   if (!move_directory_contents (old_directory, new_directory))
     return;
@@ -1257,7 +1191,7 @@ migrate_zoom_level (void)
   char *history_filename;
   const char *sql_query;
 
-  history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  history_filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
   if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
     LOG ("There is no history to migrate...");
     goto out;

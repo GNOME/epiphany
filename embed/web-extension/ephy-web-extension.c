@@ -770,7 +770,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 
   js_function = jsc_value_new_function (js_context,
                                         "isWebApplication",
-                                        G_CALLBACK (ephy_dot_dir_is_web_application), NULL, NULL,
+                                        G_CALLBACK (ephy_profile_dir_is_web_application), NULL, NULL,
                                         G_TYPE_BOOLEAN, 0,
                                         G_TYPE_NONE);
   jsc_value_object_set_property (js_ephy, "isWebApplication", js_function);

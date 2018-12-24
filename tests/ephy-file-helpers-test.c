@@ -65,11 +65,11 @@ test_ephy_file_helpers_init (void)
                     keep_dir ? "TRUE" : "FALSE",
                     ensure_exists ? "TRUE" : "FALSE");
 
-    g_assert_null (ephy_dot_dir ());
+    g_assert_null (ephy_profile_dir ());
     g_assert_true (ephy_file_helpers_init (NULL, test.flags, NULL));
 
     tmp_dir = g_strdup (ephy_file_tmp_dir ());
-    dot_dir = g_strdup (ephy_dot_dir ());
+    dot_dir = g_strdup (ephy_profile_dir ());
 
     g_assert_nonnull (tmp_dir);
     g_assert_nonnull (dot_dir);

@@ -68,10 +68,10 @@ static GHashTable *files;
 static GHashTable *mime_table;
 
 static gboolean keep_directory;
-static char *dot_dir;
+static char *profile_dir_global;
 static char *cache_dir;
 static char *tmp_dir;
-static EphyProfileDirType dot_dir_type;
+static EphyProfileDirType profile_dir_type;
 
 GQuark ephy_file_helpers_error_quark;
 
@@ -218,17 +218,17 @@ ephy_file_tmp_filename (const char *base,
 }
 
 /**
- * ephy_dot_dir:
+ * ephy_profile_dir:
  *
- * Gets Epiphany's configuration directory, usually .config/epiphany
+ * Gets Epiphany's configuration directory, usually .local/share/epiphany
  * under user's homedir.
  *
  * Returns: the full path to Epiphany's configuration directory
  **/
 const char *
-ephy_dot_dir (void)
+ephy_profile_dir (void)
 {
-  return dot_dir;
+  return profile_dir_global;
 }
 
 /**
@@ -247,44 +247,44 @@ ephy_cache_dir (void)
 
 
 /**
- * ephy_dot_dir_is_default:
+ * ephy_profile_dir_is_default:
  *
- * Returns whether the dot directory in use is the default one, found in
- * ~/.config
+ * Returns whether the profile directory in use is the default one, found in
+ * ~/.local/share
  *
- * Returns: %TRUE if it is the default dot dir, %FALSE for others
+ * Returns: %TRUE if it is the default profile dir, %FALSE for others
  **/
 gboolean
-ephy_dot_dir_is_default (void)
+ephy_profile_dir_is_default (void)
 {
-  return dot_dir_type == EPHY_PROFILE_DIR_DEFAULT || dot_dir_type == EPHY_PROFILE_DIR_TEST;
+  return profile_dir_type == EPHY_PROFILE_DIR_DEFAULT || profile_dir_type == EPHY_PROFILE_DIR_TEST;
 }
 
 /**
- * ephy_dot_dir_is_web_application:
+ * ephy_profile_dir_is_web_application:
  *
- * Returns whether the dot directory in use is a web appplication one.
+ * Returns whether the profile directory in use is a web appplication one.
  *
- * Returns: %TRUE if it is a web application dot dir, %FALSE for others
+ * Returns: %TRUE if it is a web application profile dir, %FALSE for others
  */
 gboolean
-ephy_dot_dir_is_web_application (void)
+ephy_profile_dir_is_web_application (void)
 {
-  return dot_dir_type == EPHY_PROFILE_DIR_WEB_APP;
+  return profile_dir_type == EPHY_PROFILE_DIR_WEB_APP;
 }
 
 /**
- * ephy_default_dot_dir:
+ * ephy_default_profile_dir:
  *
- * Get the path to the default dot directory found in ~/.config
+ * Get the path to the default profile directory found in ~/.local/share
  *
  * Returns: a new allocated string, free with g_free() when done.
  */
 char *
-ephy_default_dot_dir (void)
+ephy_default_profile_dir (void)
 {
-  return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
-    g_strdup (ephy_dot_dir ()) :
+  return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
+    g_strdup (ephy_profile_dir ()) :
     g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
 }
 
@@ -298,8 +298,8 @@ ephy_default_dot_dir (void)
 char *
 ephy_default_cache_dir (void)
 {
-  return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
-    g_build_filename (ephy_dot_dir (), "cache", NULL) :
+  return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
+    g_build_filename (ephy_profile_dir (), "cache", NULL) :
     g_build_filename (g_get_user_cache_dir (), "epiphany", NULL);
 }
 
@@ -336,18 +336,18 @@ ephy_file_helpers_init (const char          *profile_dir,
 
   if (profile_dir != NULL && !steal_data_from_profile) {
     if (g_path_is_absolute (profile_dir)) {
-      dot_dir = g_strdup (profile_dir);
+      profile_dir_global = g_strdup (profile_dir);
     } else {
       GFile *file = g_file_new_for_path (profile_dir);
-      dot_dir = g_file_get_path (file);
+      profile_dir_global = g_file_get_path (file);
       g_object_unref (file);
     }
 
     g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
     if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
-      const char *app_name = ephy_web_application_get_program_name_from_profile_directory (dot_dir);
+      const char *app_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir_global);
       cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);
-      dot_dir_type = EPHY_PROFILE_DIR_WEB_APP;
+      profile_dir_type = EPHY_PROFILE_DIR_WEB_APP;
     }
   } else if (private_profile) {
     if (ephy_file_tmp_dir () == NULL) {
@@ -359,27 +359,26 @@ ephy_file_helpers_init (const char          *profile_dir,
       return FALSE;
     }
 
-    dot_dir = g_build_filename (ephy_file_tmp_dir (),
-                                "epiphany",
-                                NULL);
-    cache_dir = g_build_filename (dot_dir, "cache", NULL);
+    profile_dir_global = g_build_filename (ephy_file_tmp_dir (),
+                                           "epiphany",
+                                           NULL);
+    cache_dir = g_build_filename (profile_dir_global, "cache", NULL);
     if (flags & EPHY_FILE_HELPERS_TESTING_MODE)
-      dot_dir_type = EPHY_PROFILE_DIR_TEST;
+      profile_dir_type = EPHY_PROFILE_DIR_TEST;
   }
 
-  if (dot_dir == NULL) {
-    dot_dir_type = EPHY_PROFILE_DIR_DEFAULT;
-    dot_dir = ephy_default_dot_dir ();
+  if (profile_dir_global == NULL) {
+    profile_dir_type = EPHY_PROFILE_DIR_DEFAULT;
+    profile_dir_global = ephy_default_profile_dir ();
   }
 
   if (cache_dir == NULL)
     cache_dir = ephy_default_cache_dir ();
 
   if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) {
-    ret = ephy_ensure_dir_exists (ephy_dot_dir (), error);
+    ret = ephy_ensure_dir_exists (ephy_profile_dir (), error);
     ephy_ensure_dir_exists (ephy_cache_dir (), NULL);
   }
-
 
   if (steal_data_from_profile && profile_dir) {
     guint i;
@@ -396,7 +395,7 @@ ephy_file_helpers_init (const char          *profile_dir,
       source = g_file_new_for_path (filename);
       g_free (filename);
 
-      filename = g_build_filename (dot_dir,
+      filename = g_build_filename (profile_dir_global,
                                    files_to_copy[i],
                                    NULL);
       destination = g_file_new_for_path (filename);
@@ -434,9 +433,7 @@ ephy_file_helpers_shutdown (void)
     mime_table = NULL;
   }
 
-  g_free (dot_dir);
-  dot_dir = NULL;
-
+  g_clear_pointer (&profile_dir_global, g_free);
   g_clear_pointer (&cache_dir, g_free);
 
   if (tmp_dir != NULL) {
@@ -480,7 +477,7 @@ ephy_ensure_dir_exists (const char *dir,
 
   if (!g_file_test (dir, G_FILE_TEST_EXISTS)) {
     if (g_mkdir_with_parents (dir, 488) == 0) {
-      if (dir == ephy_dot_dir ()) {
+      if (dir == ephy_profile_dir ()) {
         /* We need to set the .migrated file to the
          * current profile migration version,
          * otherwise the next time the browser runs
@@ -789,7 +786,7 @@ ephy_open_incognito_window (const char *uri)
   char *command;
   GError *error = NULL;
 
-  command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_dot_dir ());
+  command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_profile_dir ());
 
   if (uri) {
     char *str = g_strconcat (command, uri, NULL);
