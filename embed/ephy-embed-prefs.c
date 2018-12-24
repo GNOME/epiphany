@@ -98,7 +98,7 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
     GFile *file;
     char *filename;
 
-    filename = g_build_filename (ephy_dot_dir (), USER_STYLESHEET_FILENAME, NULL);
+    filename = g_build_filename (ephy_profile_dir (), USER_STYLESHEET_FILENAME, NULL);
     file = g_file_new_for_path (filename);
     g_free (filename);
 

@@ -69,7 +69,7 @@ test_web_app_lifetime (void)
     /* Test creation */
     id = ephy_web_application_get_app_id_from_name (test.name);
     desktop_file = ephy_web_application_create (id, test.url, test.name, NULL);
-    g_assert (g_str_has_prefix (desktop_file, ephy_dot_dir ()));
+    g_assert (g_str_has_prefix (desktop_file, ephy_profile_dir ()));
     g_assert (g_file_test (desktop_file, G_FILE_TEST_EXISTS));
 
     /* Test the desktop file */
@@ -92,7 +92,7 @@ test_web_app_lifetime (void)
     /* test profile directory */
     profile_dir = ephy_web_application_get_profile_directory (id);
     g_assert (g_str_has_prefix (desktop_file, profile_dir));
-    g_assert (g_str_has_prefix (profile_dir, ephy_dot_dir ()));
+    g_assert (g_str_has_prefix (profile_dir, ephy_profile_dir ()));
     g_assert (g_file_test (profile_dir, G_FILE_TEST_EXISTS));
 
     /* Test proper symlink */
@@ -151,7 +151,7 @@ main (int argc, char *argv[])
   /* Set $XDG_DATA_HOME to point to a directory inside our disposable
    * profile directory. This allows us to test cleanly and safely.
    * Note: $XDG_DATA_HOME default value is $HOME/.local/share/ */
-  xdg_data_home = g_build_filename (ephy_dot_dir (), "xdg_share", NULL);
+  xdg_data_home = g_build_filename (ephy_profile_dir (), "xdg_share", NULL);
   g_setenv ("XDG_DATA_HOME", xdg_data_home, TRUE);
 
   gtk_test_init (&argc, &argv);

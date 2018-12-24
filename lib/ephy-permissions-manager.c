@@ -115,7 +115,7 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   if (settings)
     return settings;
 
-  filename = g_build_filename (ephy_dot_dir (), PERMISSIONS_FILENAME, NULL);
+  filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
   backend = g_keyfile_settings_backend_new (filename, "/", NULL);
   g_free (filename);
 
@@ -373,7 +373,7 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
   /* Not cached. Load results from GSettings keyfile. Do it manually because the
    * GSettings API is not designed to be used for enumerating settings. */
   file = g_key_file_new ();
-  filename = g_build_filename (ephy_dot_dir (), PERMISSIONS_FILENAME, NULL);
+  filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
 
   g_key_file_load_from_file (file, filename, G_KEY_FILE_NONE, &error);
   if (error != NULL) {

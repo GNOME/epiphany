@@ -100,7 +100,7 @@ typedef void (*EphyProfileMigrator) (void);
 static gboolean
 profile_dir_exists (void)
 {
-  if (g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+  if (g_file_test (ephy_profile_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
     return TRUE;
 
   if (g_file_test (legacy_profile_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
@@ -590,7 +590,7 @@ migrate_settings (void)
    * so if the profile dir is not the default one, it's a web app.
    * If not a web app, migrate deprecated settings.
    */
-  if (ephy_dot_dir_is_default () || legacy_dir_is_default ()) {
+  if (ephy_profile_dir_is_default () || legacy_dir_is_default ()) {
     migrate_deprecated_settings ();
     return;
   }
@@ -1347,7 +1347,7 @@ migrate_profile_directories (void)
 
   /* The default profile also changed directories */
   g_autoptr(GFile) old_directory = g_file_new_for_path (legacy_default_profile_dir ());
-  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_dot_dir ());
+  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
 
   if (!move_directory_contents (old_directory, new_directory))
     return;
