@@ -37,7 +37,9 @@ typedef struct {
 } PrefData;
 
 #define DEFAULT_ENCODING_SETTING "default-charset"
+// FIXME: Refactor this code to remove the need of those globals
 static WebKitSettings *webkit_settings = NULL;
+static GFileMonitor *user_style_sheet_monitor = NULL;
 
 static void
 user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
@@ -60,9 +62,9 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
 }
 
 static void
-user_style_seet_read_cb (GFile        *file,
-                         GAsyncResult *result,
-                         gpointer      user_data)
+user_style_sheet_read_cb (GFile        *file,
+                          GAsyncResult *result,
+                          gpointer      user_data)
 {
   GFileInputStream *input_stream;
   GOutputStream *output_stream;
@@ -84,6 +86,21 @@ user_style_seet_read_cb (GFile        *file,
 }
 
 static void
+user_style_sheet_file_changed (GFileMonitor      *monitor,
+                               GFile             *file,
+                               GFile             *other_file,
+                               GFileMonitorEvent  event_type,
+                               gpointer           user_data)
+{
+  if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) {
+    webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
+
+    g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
+                       (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
+  }
+}
+
+static void
 webkit_pref_callback_user_stylesheet (GSettings  *settings,
                                       const char *key,
                                       gpointer    data)
@@ -92,10 +109,12 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
 
   value = g_settings_get_boolean (settings, key);
 
-  if (!value)
+  if (!value) {
+    g_clear_object (&user_style_sheet_monitor);
     webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
-  else {
+  } else {
     GFile *file;
+    GError *error = NULL;
     char *filename;
 
     filename = g_build_filename (ephy_dot_dir (), USER_STYLESHEET_FILENAME, NULL);
@@ -103,7 +122,16 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
     g_free (filename);
 
     g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
-                       (GAsyncReadyCallback)user_style_seet_read_cb, NULL);
+                       (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
+
+    user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+    if (user_style_sheet_monitor == NULL) {
+      g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+      g_error_free (error);
+    } else {
+      g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
+    }
+
     g_object_unref (file);
   }
 }
