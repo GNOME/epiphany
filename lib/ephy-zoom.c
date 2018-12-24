@@ -21,20 +21,58 @@
 #include "config.h"
 #include "ephy-zoom.h"
 
+#define NUM_ZOOM_STEPS 14
+
+static float
+zoom_steps [NUM_ZOOM_STEPS] =
+{
+  0.30f,
+  0.50f,
+  0.67f,
+  0.80f,
+  0.90f,
+  1.00f,
+  1.10f,
+  1.20f,
+  1.33f,
+  1.50f,
+  1.70f,
+  2.00f,
+  2.40f,
+  3.00f
+};
+
 float
 ephy_zoom_get_changed_zoom_level (float level, int steps)
 {
-  float new_level = level;
+  float new_level;
+  gint i;
 
-  if (steps == -1) {
-    new_level -= 0.25;
-    if (new_level < ZOOM_MINIMAL)
-      new_level = ZOOM_MINIMAL;
-  } else if (steps == 1) {
-    new_level += 0.25;
-    if (new_level > ZOOM_MAXIMAL)
-      new_level = ZOOM_MAXIMAL;
+  for (i = 0; i < NUM_ZOOM_STEPS; i++) {
+    if (zoom_steps[i] == level)
+      break;
   }
 
+  if (i == NUM_ZOOM_STEPS) {
+    /* No exact step found, try to find the nearest value */
+    for (i = 0; i < NUM_ZOOM_STEPS - 1; i++) {
+      if (zoom_steps[i] > level && zoom_steps[i + 1] < level)
+        break;
+    }
+  }
+
+  if (i == NUM_ZOOM_STEPS) {
+    /* Still no match? Set it to default (1.0) */
+    i = 5;
+  }
+
+  if (steps == -1 && i > 0) {
+    new_level = zoom_steps[i - 1];
+  } else if (steps == 1 && i < NUM_ZOOM_STEPS - 1) {
+    new_level = zoom_steps[i + 1];
+  } else {
+    /* Ensure that we have a consistent value */
+    new_level = level;
+  }
   return new_level;
 }

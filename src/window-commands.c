@@ -2462,6 +2462,28 @@ window_cmd_tabs_reload (GSimpleAction *action,
 }
 
 void
+window_cmd_tabs_reload_all_tabs (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  WebKitWebView *view;
+  GtkWidget *notebook;
+  int n_pages;
+
+  notebook = ephy_window_get_notebook (window);
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < n_pages; i++) {
+    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+
+    view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_reload (view);
+  }
+}
+
+void
 window_cmd_tabs_reopen_closed_tab (GSimpleAction *action,
                                    GVariant      *parameter,
                                    gpointer       user_data)
@@ -2518,4 +2540,21 @@ window_cmd_toggle_reader_mode (GSimpleAction *action,
   active = ephy_web_view_get_reader_mode_state (web_view);
 
   ephy_web_view_toggle_reader_mode (web_view, !active);
+}
+
+void
+window_cmd_open_application_manager (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  web_view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_load_url (web_view, "about:applications");
 }

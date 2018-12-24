@@ -16,7 +16,8 @@ need to stick to in order to get your patch accepted:
 
  * Use K&R style for the braces.
 
- * No braces for one line control clauses.
+ * No braces for one line control clauses except when another clause in the
+   chain contains more than one line.
 
  * Callback functions have a suffix _cb.
 

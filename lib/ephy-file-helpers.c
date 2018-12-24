@@ -57,8 +57,6 @@
 #define DELAY_MAX_TICKS 64
 #define INITIAL_TICKS   2
 
-#define EPHY_MIME_TYPE_PERMISSIONS_URI "/org/gnome/epiphany/mime-types-permissions.xml"
-
 typedef enum {
   EPHY_PROFILE_DIR_UNKNOWN,
   EPHY_PROFILE_DIR_DEFAULT,
@@ -542,86 +540,6 @@ ephy_file_delete_on_exit (GFile *file)
   /* does nothing now */
 }
 
-static void
-load_mime_from_xml (void)
-{
-  xmlTextReaderPtr reader;
-  const xmlChar *xml_file;
-  int ret;
-  GBytes *bytes;
-  EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
-
-  g_assert (mime_table == NULL);
-
-  mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                      xmlFree, NULL);
-
-  bytes = g_resources_lookup_data (EPHY_MIME_TYPE_PERMISSIONS_URI, 0, NULL);
-  xml_file = (xmlChar *)g_bytes_get_data (bytes, NULL);
-  reader = xmlReaderForDoc (xml_file, EPHY_MIME_TYPE_PERMISSIONS_URI, NULL, 0);
-  if (reader == NULL) {
-    g_warning ("Could not load MIME types permissions file!\n");
-    return;
-  }
-
-  ret = xmlTextReaderRead (reader);
-  while (ret == 1) {
-    const xmlChar *tag;
-    xmlReaderTypes type;
-
-    tag = xmlTextReaderConstName (reader);
-    type = xmlTextReaderNodeType (reader);
-
-    if (xmlStrEqual (tag, (const xmlChar *)"safe") && type == XML_READER_TYPE_ELEMENT) {
-      permission = EPHY_MIME_PERMISSION_SAFE;
-    } else if (xmlStrEqual (tag, (const xmlChar *)"unsafe") && type == XML_READER_TYPE_ELEMENT) {
-      permission = EPHY_MIME_PERMISSION_UNSAFE;
-    } else if (xmlStrEqual (tag, (const xmlChar *)"mime-type")) {
-      xmlChar *t;
-
-      t = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
-      g_hash_table_insert (mime_table, t,
-                           GINT_TO_POINTER (permission));
-    }
-
-    ret = xmlTextReaderRead (reader);
-  }
-
-  xmlFreeTextReader (reader);
-  g_bytes_unref (bytes);
-}
-
-/**
- * ephy_file_check_mime:
- * @mime_type: a mime type
- *
- * Checks @mime_type against our safe/unsafe database of types, returns an
- * #EphyMimePermission.
- *
- * Returns: an #EphyMimePermission
- **/
-EphyMimePermission
-ephy_file_check_mime (const char *mime_type)
-{
-  EphyMimePermission permission;
-  gpointer tmp;
-
-  g_assert (mime_type != NULL);
-
-  if (mime_table == NULL) {
-    load_mime_from_xml ();
-  }
-
-  tmp = g_hash_table_lookup (mime_table, mime_type);
-  if (tmp == NULL) {
-    permission = EPHY_MIME_PERMISSION_UNKNOWN;
-  } else {
-    permission = GPOINTER_TO_INT (tmp);
-  }
-
-  return permission;
-}
-
 /**
  * ephy_file_launch_application:
  * @app: the application to launch
@@ -727,8 +645,7 @@ ephy_file_launcher_get_app_info_for_file (GFile      *file,
 
     g_object_unref (file_info);
 
-    if (type != NULL && type[0] != '\0' &&
-        ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE) {
+    if (type != NULL && type[0] != '\0') {
       app = g_app_info_get_default_for_type (type, FALSE);
     }
     g_free (type);

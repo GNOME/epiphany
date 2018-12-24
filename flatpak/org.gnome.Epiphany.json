@@ -44,6 +44,25 @@
     ],
     "modules" : [
         {
+            "name" : "gtk",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtk.git",
+                    "branch" : "gtk-3-24"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtk-debug.patch"
+                }
+            ]
+        },
+        {
             "name" : "libdazzle",
             "config-opts" : [
                 "--libdir=/app/lib",

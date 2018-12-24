@@ -308,7 +308,7 @@ static char *
 ensure_host_name_is_lowercase (const char *address)
 {
   g_autofree gchar *host = ephy_string_get_host_name (address);
-  g_autofree gchar *lowercase_host;
+  g_autofree gchar *lowercase_host = NULL;
   char *ret = NULL;
 
   if (host == NULL) {

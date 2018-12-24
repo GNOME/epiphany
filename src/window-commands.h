@@ -191,6 +191,9 @@ void window_cmd_tabs_close_right                (GSimpleAction *action,
 void window_cmd_tabs_reload                     (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_tabs_reload_all_tabs            (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_tabs_reopen_closed_tab          (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
@@ -204,6 +207,9 @@ void window_cmd_change_show_tab_state           (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);
 void window_cmd_toggle_reader_mode              (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
+void window_cmd_open_application_manager        (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
 

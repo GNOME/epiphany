@@ -85,6 +85,7 @@ const struct {
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
+  { "win.open-application-manager", { "<shift><Primary>C", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
   { "win.redo", { "<shift><Primary>Z", NULL } },
   { "win.copy", { "<Primary>C", NULL } },
@@ -774,6 +775,7 @@ static const GActionEntry window_entries [] =
   { "open", window_cmd_open },
   { "save-as", window_cmd_save_as },
   { "save-as-application", window_cmd_save_as_application },
+  { "open-application-manager", window_cmd_open_application_manager },
   { "undo", window_cmd_undo },
   { "redo", window_cmd_redo },
   { "cut", window_cmd_cut },
@@ -819,6 +821,7 @@ static const GActionEntry tab_entries [] = {
   { "close-others", window_cmd_tabs_close_others },
   { "reload", window_cmd_tabs_reload },
   { "reopen", window_cmd_tabs_reopen_closed_tab },
+  { "reload-all", window_cmd_tabs_reload_all_tabs },
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -1591,6 +1594,11 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
                                 "select-all", window);
+
+    if (can_search_selection)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  search_selection_action_name, window);
+
     if (input_methods_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -2462,6 +2470,10 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close-others");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "reload-all");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
 
     gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
