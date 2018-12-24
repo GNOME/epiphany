@@ -31,6 +31,7 @@
 #include <libsoup/soup.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 /* Web Apps are installed in the default config dir of the user.
  * Every app has its own profile directory. To create a web app
@@ -114,8 +115,20 @@ ephy_web_application_get_program_name_from_profile_directory (const char *profil
 {
   const char *name;
 
-  name = strstr (profile_dir, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
-  if (!name) {
+  // Just get the basename
+  name = strrchr (profile_dir, G_DIR_SEPARATOR);
+  if (name == NULL) {
+    g_warning ("Profile directoroy %s is not a valid path", profile_dir);
+    return NULL;
+  }
+
+  name++; // Strip '/'
+
+  // Legacy web app support
+  if (g_str_has_prefix (name, "app-"))
+    name += strlen ("app-");
+
+  if (!g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX)) {
     g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
     return NULL;
   }
@@ -341,9 +354,19 @@ ephy_web_application_create (const char *id,
   }
 
   /* Create the profile directory, populate it. */
-  if (g_mkdir (profile_dir, 488) == -1) {
+  if (g_mkdir_with_parents (profile_dir, 488) == -1) {
     LOG ("Failed to create directory %s", profile_dir);
     goto out;
+  }
+
+  /* Create an .app file. */
+  g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
+  int fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+  if (fd < 0) {
+    LOG ("Failed to create .app file: %s", g_strerror (errno));
+    goto out;
+  } else {
+    close (fd);
   }
 
   /* Create the deskop file. */
