@@ -160,7 +160,7 @@ ephy_web_application_get_profile_directory (const char *id)
   if (!app_dir)
     return NULL;
 
-  dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
+  dot_dir = !ephy_profile_dir_is_default () ? ephy_default_profile_dir () : NULL;
   profile_dir = g_build_filename (dot_dir ? dot_dir : g_get_user_data_dir (), app_dir, NULL);
   g_free (app_dir);
   g_free (dot_dir);
@@ -544,7 +544,7 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   char *default_dot_dir;
   g_autofree char *profile_base = NULL;
 
-  default_dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
+  default_dot_dir = !ephy_profile_dir_is_default () ? ephy_default_profile_dir () : NULL;
   if (only_legacy) {
     profile_base = g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
     dot_dir = g_file_new_for_path (profile_base);

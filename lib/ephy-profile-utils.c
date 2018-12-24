@@ -50,8 +50,8 @@ ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_di
 
     if (result != 1)
       latest = 0;
-  } else if (strcmp (ephy_dot_dir (), profile_directory) == 0 &&
-             ephy_dot_dir_is_default () == FALSE) {
+  } else if (strcmp (ephy_profile_dir (), profile_directory) == 0 &&
+             ephy_profile_dir_is_default () == FALSE) {
     /* Since version 8, we need to migrate also profile directories
        other than the default one. Profiles in such directories work
        perfectly fine without going through the first 7 migration
@@ -69,7 +69,7 @@ ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_di
 int
 ephy_profile_utils_get_migration_version (void)
 {
-  return ephy_profile_utils_get_migration_version_for_profile_dir (ephy_dot_dir ());
+  return ephy_profile_utils_get_migration_version_for_profile_dir (ephy_profile_dir ());
 }
 
 gboolean
@@ -78,7 +78,7 @@ ephy_profile_utils_set_migration_version (int version)
   char *migrated_file, *contents;
   gboolean result = FALSE;
 
-  migrated_file = g_build_filename (ephy_dot_dir (),
+  migrated_file = g_build_filename (ephy_profile_dir (),
                                     PROFILE_MIGRATION_FILE,
                                     NULL);
   contents = g_strdup_printf ("%d", version);
@@ -86,7 +86,7 @@ ephy_profile_utils_set_migration_version (int version)
 
   if (result == FALSE)
     LOG ("Couldn't store migration version %d in %s (%s, %s)",
-         version, migrated_file, ephy_dot_dir (), PROFILE_MIGRATION_FILE);
+         version, migrated_file, ephy_profile_dir (), PROFILE_MIGRATION_FILE);
 
   g_free (contents);
   g_free (migrated_file);

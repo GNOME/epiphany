@@ -42,7 +42,7 @@ ephy_settings_init (void)
   if (settings != NULL)
     return;
 
-  profile_directory = ephy_dot_dir ();
+  profile_directory = ephy_profile_dir ();
   if (!profile_directory)
     g_error ("ephy-settings used before ephy_file_helpers_init");
 
@@ -50,7 +50,7 @@ ephy_settings_init (void)
                                     g_str_equal, g_free,
                                     g_object_unref);
 
-  if (ephy_dot_dir_is_web_application ()) {
+  if (ephy_profile_dir_is_web_application ()) {
     const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (profile_directory);
     base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
   } else {
@@ -60,7 +60,7 @@ ephy_settings_init (void)
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++) {
     char *path;
 
-    if (!ephy_dot_dir_is_web_application () && ephy_prefs_relocatable_schemas[i].is_webapp_only)
+    if (!ephy_profile_dir_is_web_application () && ephy_prefs_relocatable_schemas[i].is_webapp_only)
       continue;
 
     path = g_build_path ("/", base_path, ephy_prefs_relocatable_schemas[i].path, NULL);
@@ -144,8 +144,8 @@ get_relocatable_path (const char *schema)
 {
   g_autofree char *base_path = NULL;
 
-  if (ephy_dot_dir_is_web_application ()) {
-    const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (ephy_dot_dir ());
+  if (ephy_profile_dir_is_web_application ()) {
+    const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (ephy_profile_dir ());
     base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
   } else
     base_path = g_strdup ("/org/gnome/epiphany/");
@@ -195,7 +195,7 @@ ephy_settings_get_for_web_extension (const char *schema)
       return gsettings;
     }
 
-    g_autofree char *keyfile_path = g_build_filename (ephy_dot_dir (), "web-extension-settings.ini", NULL);
+    g_autofree char *keyfile_path = g_build_filename (ephy_profile_dir (), "web-extension-settings.ini", NULL);
     backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
 
     GSettings *web_gsettings;

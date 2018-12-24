@@ -205,7 +205,7 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
 static void
 ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 {
-  self->gvdb_filename = g_build_filename (ephy_dot_dir (),
+  self->gvdb_filename = g_build_filename (ephy_profile_dir (),
                                           EPHY_BOOKMARKS_FILE,
                                           NULL);
 

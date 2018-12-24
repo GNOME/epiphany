@@ -762,7 +762,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     else
       mode = EPHY_SQLITE_CONNECTION_MODE_READWRITE;
 
-    filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+    filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
     priv->global_history_service = ephy_history_service_new (filename, mode);
     g_free (filename);
     g_assert (priv->global_history_service);
@@ -961,7 +961,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
   user_data = g_variant_new ("(smsssbb)",
                              priv->guid,
                              address,
-                             ephy_dot_dir (),
+                             ephy_profile_dir (),
                              ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
                              private_profile,
                              browser_mode);
@@ -1091,8 +1091,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   WebKitWebsiteDataManager *manager;
-  char *data_dir;
-  char *cache_dir;
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     priv->web_context = webkit_web_context_new_ephemeral ();
@@ -1105,18 +1103,9 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
     return;
   }
 
-  data_dir = g_build_filename (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
-                               ephy_dot_dir () : g_get_user_data_dir (),
-                               g_get_prgname (), NULL);
-  cache_dir = g_build_filename (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
-                                ephy_dot_dir () : g_get_user_cache_dir (),
-                                g_get_prgname (), NULL);
-
-  manager = webkit_website_data_manager_new ("base-data-directory", data_dir,
-                                             "base-cache-directory", cache_dir,
+  manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
+                                             "base-cache-directory", ephy_cache_dir (),
                                              NULL);
-  g_free (data_dir);
-  g_free (cache_dir);
 
   priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
   g_object_unref (manager);
@@ -1294,7 +1283,7 @@ ephy_embed_shell_startup (GApplication *application)
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
   if (!webkit_web_context_is_ephemeral (priv->web_context)) {
-    filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+    filename = g_build_filename (ephy_profile_dir (), "cookies.sqlite", NULL);
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
     g_free (filename);
@@ -1576,7 +1565,7 @@ ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
 
   priv->page_setup = page_setup;
 
-  path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+  path = g_build_filename (ephy_profile_dir (), PAGE_SETUP_FILENAME, NULL);
   gtk_page_setup_to_file (page_setup, path, NULL);
   g_free (path);
 }
@@ -1597,7 +1586,7 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
     GError *error = NULL;
     char *path;
 
-    path = g_build_filename (ephy_dot_dir (), PAGE_SETUP_FILENAME, NULL);
+    path = g_build_filename (ephy_profile_dir (), PAGE_SETUP_FILENAME, NULL);
     priv->page_setup = gtk_page_setup_new_from_file (path, &error);
     g_free (path);
 
@@ -1637,7 +1626,7 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell   *shell,
 
   priv->print_settings = settings ? settings : gtk_print_settings_new ();
 
-  path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+  path = g_build_filename (ephy_profile_dir (), PRINT_SETTINGS_FILENAME, NULL);
   gtk_print_settings_to_file (settings, path, NULL);
   g_free (path);
 }
@@ -1661,7 +1650,7 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
     GError *error = NULL;
     char *path;
 
-    path = g_build_filename (ephy_dot_dir (), PRINT_SETTINGS_FILENAME, NULL);
+    path = g_build_filename (ephy_profile_dir (), PRINT_SETTINGS_FILENAME, NULL);
     priv->print_settings = gtk_print_settings_new_from_file (path, &error);
     g_free (path);
 
