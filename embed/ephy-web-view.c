@@ -2727,7 +2727,8 @@ zoom_changed_cb (WebKitWebView *web_view,
     return;
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-  if (ephy_embed_utils_address_has_web_scheme (address)) {
+  if (ephy_embed_utils_address_has_web_scheme (address) &&
+      zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL)) {
     ephy_history_service_set_url_zoom_level (EPHY_WEB_VIEW (web_view)->history_service,
                                              address, zoom,
                                              NULL, NULL, NULL);

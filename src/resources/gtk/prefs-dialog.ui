@@ -506,6 +506,7 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -539,6 +540,38 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="spacing">24</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
+                            <property name="label" translatable="yes">Default zoom level:</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="default_zoom_spin_button">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="input_purpose">number</property>
+                            <property name="adjustment">zoom_adjustment</property>
+                            <property name="max_width_chars">5</property>
+                            <property name="value">100</property>
+                            <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+                            <signal name="output" handler="on_default_zoom_spin_button_output"/>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox" id="reader_mode_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -550,7 +583,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="margin_top">6</property>
                             <property name="label" translatable="yes">Reader Mode</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -629,7 +661,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
@@ -1317,5 +1349,18 @@
       <widget name="sync_now_button"/>
       <widget name="sync_device_name_change_button"/>
     </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="css_edit_button"/>
+      <widget name="default_zoom_spin_button"/>
+    </widgets>
+  </object>
+  <object class="GtkAdjustment" id="zoom_adjustment">
+    <property name="lower">33</property>
+    <property name="upper">300</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
