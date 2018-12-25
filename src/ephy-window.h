@@ -77,5 +77,6 @@ void              ephy_window_set_default_size         (EphyWindow *window,
 void              ephy_window_set_default_position     (EphyWindow *window,
                                                         gint        x,
                                                         gint        y);
+void              ephy_window_show_fullscreen_header_bar (EphyWindow *window);
 
 G_END_DECLS
