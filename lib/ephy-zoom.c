@@ -56,7 +56,7 @@ ephy_zoom_get_changed_zoom_level (float level, int steps)
   if (i == NUM_ZOOM_STEPS) {
     /* No exact step found, try to find the nearest value */
     for (i = 0; i < NUM_ZOOM_STEPS - 1; i++) {
-      if (zoom_steps[i] > level && zoom_steps[i + 1] < level)
+      if (zoom_steps[i] < level && zoom_steps[i + 1] > level)
         break;
     }
   }

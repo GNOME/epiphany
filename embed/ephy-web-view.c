@@ -1731,7 +1731,11 @@ get_host_for_url_cb (gpointer service,
 
   current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
-  if (host->visit_count == 0) {
+  /* Use default zoom level in case web page is
+   *  - not visited before
+   *  - uses default zoom level (0)
+   */
+  if (host->visit_count == 0 || !host->zoom_level) {
     set_zoom = g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
   } else {
     set_zoom = host->zoom_level;
@@ -2732,7 +2736,8 @@ zoom_changed_cb (WebKitWebView *web_view,
     return;
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-  if (ephy_embed_utils_address_has_web_scheme (address)) {
+  if (ephy_embed_utils_address_has_web_scheme (address) &&
+      zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL)) {
     ephy_history_service_set_url_zoom_level (EPHY_WEB_VIEW (web_view)->history_service,
                                              address, zoom,
                                              NULL, NULL, NULL);

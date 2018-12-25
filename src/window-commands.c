@@ -1743,7 +1743,7 @@ window_cmd_zoom_normal (GSimpleAction *action,
                         gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  ephy_window_set_zoom (window, 1.0);
+  ephy_window_set_zoom (window, 0.0);
 }
 
 void

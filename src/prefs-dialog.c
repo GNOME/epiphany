@@ -104,6 +104,7 @@ struct _PrefsDialog {
   GtkWidget *mono_fontbutton;
   GtkWidget *css_checkbox;
   GtkWidget *css_edit_button;
+  GtkWidget *default_zoom_spin_button;
   GtkWidget *reader_mode_box;
   GtkWidget *reader_mode_font_style;
   GtkWidget *reader_mode_color_scheme;
@@ -927,6 +928,34 @@ on_search_engine_dialog_button_clicked (GtkWidget   *button,
   gtk_window_present (search_engine_dialog);
 }
 
+static gboolean
+on_default_zoom_spin_button_output (GtkSpinButton *spin,
+                                    gpointer       user_data)
+{
+  GtkAdjustment *adjustment;
+  g_autofree gchar *text = NULL;
+  gdouble value;
+
+  adjustment = gtk_spin_button_get_adjustment (spin);
+  value = (int)gtk_adjustment_get_value (adjustment);
+  text = g_strdup_printf ("%.f%%", value);
+  gtk_entry_set_text (GTK_ENTRY (spin), text);
+
+  return TRUE;
+}
+
+static void
+on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
+                                           gpointer       user_data)
+{
+  GtkAdjustment *adjustment;
+  gdouble value;
+
+  adjustment = gtk_spin_button_get_adjustment (spin);
+  value = gtk_adjustment_get_value (adjustment);
+  g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value / 100.0f);
+}
+
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
@@ -970,6 +999,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, default_zoom_spin_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_style);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_color_scheme);
@@ -1027,6 +1057,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_change_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_output);
+  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_value_changed);
 }
 
 static void
@@ -2157,6 +2189,9 @@ setup_fonts_page (PrefsDialog *dialog)
                     "clicked",
                     G_CALLBACK (css_edit_button_clicked_cb),
                     dialog);
+
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->default_zoom_spin_button),
+                             g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL) * 100);
 }
 
 static void
