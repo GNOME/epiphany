@@ -750,6 +750,7 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_no_show_all (embed->floating_bar, TRUE);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
+  gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (embed->overlay), embed->floating_bar, TRUE);
 
   if (embed->progress_bar_enabled) {
     embed->progress = gtk_progress_bar_new ();
