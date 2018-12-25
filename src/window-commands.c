@@ -2204,13 +2204,16 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
                                     GVariant      *state,
                                     gpointer       user_data)
 {
+  EphyWindow *window = EPHY_WINDOW (user_data);
   gboolean active;
 
   active = g_variant_get_boolean (state);
+  ephy_window_show_fullscreen_header_bar (window);
+
   if (active)
-    gtk_window_fullscreen (GTK_WINDOW (user_data));
+    gtk_window_fullscreen (GTK_WINDOW (window));
   else
-    gtk_window_unfullscreen (GTK_WINDOW (user_data));
+    gtk_window_unfullscreen (GTK_WINDOW (window));
 
   g_simple_action_set_state (action, g_variant_new_boolean (active));
 }

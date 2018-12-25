@@ -153,6 +153,8 @@ struct _EphyWindow {
   EphyLocationController *location_controller;
   guint modified_forms_timeout_id;
 
+  gboolean show_fullscreen_header_bar;
+
   gint current_width;
   gint current_height;
   gint current_x;
@@ -3007,7 +3009,11 @@ ephy_window_state_event (GtkWidget           *widget,
     } else {
       ephy_window_unfullscreen (window);
     }
-    dzl_application_window_set_fullscreen (DZL_APPLICATION_WINDOW (window), fullscreen);
+
+    if (window->show_fullscreen_header_bar)
+      dzl_application_window_set_fullscreen (DZL_APPLICATION_WINDOW (window), fullscreen);
+
+    window->show_fullscreen_header_bar = FALSE;
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
@@ -3872,4 +3878,10 @@ ephy_window_get_chrome (EphyWindow *window)
   g_assert (EPHY_IS_WINDOW (window));
 
   return window->chrome;
+}
+
+void
+ephy_window_show_fullscreen_header_bar (EphyWindow *window)
+{
+  window->show_fullscreen_header_bar = TRUE;
 }
