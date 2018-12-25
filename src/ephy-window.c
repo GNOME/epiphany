@@ -1066,7 +1066,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
     can_zoom_out = FALSE;
   }
 
-  if (zoom != 1.0) {
+  if (zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL)) {
     can_zoom_normal = TRUE;
   }
 
@@ -3639,6 +3639,10 @@ ephy_window_set_zoom (EphyWindow *window,
     zoom = ephy_zoom_get_changed_zoom_level (current_zoom, 1);
   else if (zoom == ZOOM_OUT)
     zoom = ephy_zoom_get_changed_zoom_level (current_zoom, -1);
+
+  /* Use default zoom value if zoom is not set */
+  if (!zoom)
+    zoom = g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
 
   if (zoom != current_zoom)
     webkit_web_view_set_zoom_level (web_view, zoom);

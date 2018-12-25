@@ -19,6 +19,11 @@
  */
 
 #include "config.h"
+
+#include <glib.h>
+
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-zoom.h"
 
 #define NUM_ZOOM_STEPS 14
@@ -56,14 +61,14 @@ ephy_zoom_get_changed_zoom_level (float level, int steps)
   if (i == NUM_ZOOM_STEPS) {
     /* No exact step found, try to find the nearest value */
     for (i = 0; i < NUM_ZOOM_STEPS - 1; i++) {
-      if (zoom_steps[i] > level && zoom_steps[i + 1] < level)
+      if (zoom_steps[i] < level && zoom_steps[i + 1] > level)
         break;
     }
   }
 
   if (i == NUM_ZOOM_STEPS) {
-    /* Still no match? Set it to default (1.0) */
-    i = 5;
+    /* Still no match? Return default */
+    return g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
   }
 
   if (steps == -1 && i > 0) {

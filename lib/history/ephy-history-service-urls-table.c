@@ -213,7 +213,7 @@ create_url_from_statement (EphySQLiteStatement *statement)
                                               ephy_sqlite_statement_get_column_as_int64 (statement, 5));
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
-  url->host = ephy_history_host_new (NULL, NULL, 0, 1.0);
+  url->host = ephy_history_host_new (NULL, NULL, 0, 0.0);
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
   url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 7);
   url->sync_id = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 8));
