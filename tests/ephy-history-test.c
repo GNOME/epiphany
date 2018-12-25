@@ -19,6 +19,8 @@
  */
 
 #include "config.h"
+#include "ephy-debug.h"
+#include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 
 #include <glib/gstdio.h>
@@ -497,7 +499,18 @@ test_clear (void)
 int
 main (int argc, char *argv[])
 {
+  int ret;
+
   gtk_test_init (&argc, &argv);
+
+  ephy_debug_init ();
+
+  if (!ephy_file_helpers_init (NULL,
+                               EPHY_FILE_HELPERS_TESTING_MODE | EPHY_FILE_HELPERS_ENSURE_EXISTS,
+                               NULL)) {
+    g_debug ("Something wrong happened with ephy_file_helpers_init()");
+    return -1;
+  }
 
   g_test_add_func ("/embed/history/test_create_history_service", test_create_history_service);
   g_test_add_func ("/embed/history/test_create_history_service_and_destroy_later", test_create_history_service_and_destroy_later);
@@ -513,5 +526,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/embed/history/test_complex_url_query_with_time_range", test_complex_url_query_with_time_range);
   g_test_add_func ("/embed/history/test_clear", test_clear);
 
-  return g_test_run ();
+  ret = g_test_run ();
+
+  ephy_file_helpers_shutdown ();
+
+  return ret;
 }

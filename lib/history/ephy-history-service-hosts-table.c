@@ -22,6 +22,8 @@
 
 #include "ephy-history-service.h"
 #include "ephy-history-service-private.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 #include <glib/gi18n.h>
 
@@ -39,7 +41,7 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
                                   "url LONGVARCAR,"
                                   "title LONGVARCAR,"
                                   "visit_count INTEGER DEFAULT 0 NOT NULL,"
-                                  "zoom_level REAL DEFAULT 1.0)", &error);
+                                  "zoom_level REAL DEFAULT 0.0)", &error);
 
   if (error) {
     g_warning ("Could not create hosts table: %s", error->message);
@@ -94,6 +96,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
+  gdouble zoom_level;
 
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
@@ -107,10 +110,16 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
     return;
   }
 
+  zoom_level = host->zoom_level;
+
+  /* Ensure that a change value which equals default zoom level is stored as 0.0 */
+  if (zoom_level == g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
+    zoom_level = 0.0f;
+
   if (ephy_sqlite_statement_bind_string (statement, 0, host->url, &error) == FALSE ||
       ephy_sqlite_statement_bind_string (statement, 1, host->title, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE ||
+      ephy_sqlite_statement_bind_double (statement, 3, zoom_level, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 4, host->id, &error) == FALSE) {
     g_warning ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
@@ -176,7 +185,7 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   }
 
   if (host == NULL) {
-    host = ephy_history_host_new (NULL, NULL, 0, 1.0);
+    host = ephy_history_host_new (NULL, NULL, 0, 0.0);
   } else {
     if (host->url)
       g_free (host->url);
@@ -408,7 +417,7 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
   }
 
   if (host == NULL) {
-    host = ephy_history_host_new (host_locations->data, hostname, 0, 1.0);
+    host = ephy_history_host_new (host_locations->data, hostname, 0, 0.0);
     if (!self->read_only)
       ephy_history_service_add_host_row (self, host);
   }
