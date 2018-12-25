@@ -1226,6 +1226,50 @@ migrate_nothing (void)
    */
 }
 
+static void
+migrate_zoom_level (void)
+{
+  EphySQLiteConnection *history_db = NULL;
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  char *history_filename;
+  const char *sql_query;
+
+  history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
+    LOG ("There is no history to migrate...");
+    goto out;
+  }
+
+  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
+                                           history_filename);
+  ephy_sqlite_connection_open (history_db, &error);
+  if (error) {
+    g_warning ("Failed to open history database: %s", error->message);
+    g_clear_object (&history_db);
+    goto out;
+  }
+
+  /* Update zoom level values. */
+  sql_query = "UPDATE hosts SET zoom_level = 0.0 WHERE zoom_level = 1.0";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to update zoom level: %s", error->message);
+    goto out;
+  }
+
+out:
+  g_free (history_filename);
+  if (history_db) {
+    ephy_sqlite_connection_close (history_db);
+    g_object_unref (history_db);
+  }
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+}
+
 /* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
  * in ephy-profile-utils.h. */
 const EphyProfileMigrator migrators[] = {
@@ -1256,7 +1300,8 @@ const EphyProfileMigrator migrators[] = {
   /* 25 */ migrate_passwords_timestamp,
   /* 26 */ migrate_nothing,
   /* 27 */ migrate_search_engines,
-  /* 28 */ migrate_annoyance_list
+  /* 28 */ migrate_annoyance_list,
+  /* 29 */ migrate_zoom_level
 };
 
 static gboolean

@@ -1731,7 +1731,11 @@ get_host_for_url_cb (gpointer service,
 
   current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
-  if (host->visit_count == 0) {
+  /* Use default zoom level in case web page is
+   *  - not visited before
+   *  - uses default zoom level (0)
+   */
+  if (host->visit_count == 0 || !host->zoom_level) {
     set_zoom = g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
   } else {
     set_zoom = host->zoom_level;
