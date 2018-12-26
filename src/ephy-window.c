@@ -40,6 +40,7 @@
 #include "ephy-header-bar.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
+#include "ephy-mouse-gesture.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-security-popover.h"
@@ -152,6 +153,7 @@ struct _EphyWindow {
   guint idle_worker;
   EphyLocationController *location_controller;
   guint modified_forms_timeout_id;
+  EphyMouseGesture *mouse_gesture;
 
   gint current_width;
   gint current_height;
@@ -2265,6 +2267,8 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            G_CALLBACK (ephy_window_mouse_target_changed_cb),
                            window, 0);
 
+  ephy_mouse_gesture_set_web_view (window->mouse_gesture, web_view);
+
   g_object_notify (G_OBJECT (window), "active-child");
 }
 
@@ -2282,6 +2286,8 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   view = EPHY_WEB_VIEW (web_view);
 
   ephy_embed_detach_notification_container (window->active_embed);
+
+  ephy_mouse_gesture_unset_web_view (window->mouse_gesture, web_view);
 
   g_signal_handlers_disconnect_by_func (web_view,
                                         G_CALLBACK (progress_update),
@@ -2875,6 +2881,7 @@ ephy_window_dispose (GObject *object)
 
     g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
+    g_clear_object (&window->mouse_gesture);
 
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
@@ -3407,6 +3414,8 @@ ephy_window_constructed (GObject *object)
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           SENS_FLAG_CHROME, TRUE);
   }
+
+  window->mouse_gesture = ephy_mouse_gesture_new (window);
 
   ephy_window_set_chrome (window, chrome);
 }

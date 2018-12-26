@@ -75,7 +75,7 @@ endif
 # available in Ubuntu 18.04. Please check before bumping the required version
 # of any dependency.
 glib_requirement = '>= 2.56.0'
-gtk_requirement = '>= 3.22.13'
+gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.21.92'
 
