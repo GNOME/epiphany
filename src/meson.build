@@ -32,6 +32,7 @@ libephymain_sources = [
   'ephy-link.c',
   'ephy-location-controller.c',
   'ephy-lockdown.c',
+  'ephy-mouse-gesture-controller.c',
   'ephy-notebook.c',
   'ephy-search-engine-dialog.c',
   'ephy-session.c',
