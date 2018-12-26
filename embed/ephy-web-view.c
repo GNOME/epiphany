@@ -1853,9 +1853,6 @@ update_security_status_for_committed_load (EphyWebView *view,
 
   if (!soup_uri ||
       strcmp (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
-      // Warning: we do not whitelist localhost because it could be redirected by DNS.
-      strcmp (soup_uri_get_host (soup_uri), "127.0.0.1") == 0 ||
-      strcmp (soup_uri_get_host (soup_uri), "::1") == 0 ||
       webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme) ||
       webkit_security_manager_uri_scheme_is_empty_document (security_manager, soup_uri->scheme)) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;

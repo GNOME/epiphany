@@ -583,9 +583,7 @@ Ephy.FormManager = class FormManager
 
     _sensitiveElementFocused(event)
     {
-        let url = new URL(this._form.action);
-        // Warning: we do not whitelist localhost because it could be redirected by DNS.
-        let isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
+        let isInsecureAction = this._form.action.startsWith('http://');
         window.webkit.messageHandlers.sensitiveFormFocused.postMessage(this._sensitiveElementMessageSerializer(this._pageID, isInsecureAction));
     }
 
