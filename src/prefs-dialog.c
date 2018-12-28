@@ -88,11 +88,13 @@ struct _PrefsDialog {
   GtkWidget *download_box;
   GtkWidget *search_box;
   GtkWidget *session_box;
+  GtkWidget *browsing_box;
   GtkWidget *restore_session_checkbutton;
   GtkWidget *popups_allow_checkbutton;
   GtkWidget *adblock_allow_checkbutton;
   GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_checkbutton;
+  GtkWidget *enable_smooth_scrolling_checkbutton;
 
   /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
@@ -950,10 +952,12 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_title);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, browsing_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_smooth_scrolling_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_hbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
@@ -1981,6 +1985,11 @@ setup_general_page (PrefsDialog *dialog)
                     "clicked",
                     G_CALLBACK (do_not_track_button_clicked_cb),
                     dialog);
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
+                   dialog->enable_smooth_scrolling_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
 
   if (ephy_is_running_inside_flatpak ())
     gtk_widget_hide (dialog->download_box);
@@ -2345,7 +2354,11 @@ prefs_dialog_init (PrefsDialog *dialog)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->browsing_box,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->do_not_track_checkbutton,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->enable_smooth_scrolling_checkbutton,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
