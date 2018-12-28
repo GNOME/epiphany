@@ -729,6 +729,14 @@ button_box_size_allocated_cb (GtkWidget    *widget,
   g_free (css);
 }
 
+static gboolean
+event_button_press_event_cb (GtkWidget *widget,
+                             GdkEvent  *event,
+                             gpointer   user_data)
+{
+  return GDK_EVENT_STOP;
+}
+
 static void
 ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
                                           DzlSuggestion      *arg1,
@@ -767,6 +775,7 @@ suggestion_selected (DzlSuggestionEntry *entry,
 static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
+  GtkWidget *event;
   GtkWidget *button_box;
   GtkStyleContext *context;
 
@@ -788,15 +797,22 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_show (GTK_WIDGET (entry->url_entry));
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), GTK_WIDGET (entry->url_entry));
 
+  /* Event box */
+  event = gtk_event_box_new ();
+  gtk_widget_set_halign (event, GTK_ALIGN_END);
+  gtk_widget_show (event);
+  g_signal_connect (G_OBJECT (event), "button-press-event", G_CALLBACK (event_button_press_event_cb), entry);
+  gtk_overlay_add_overlay (GTK_OVERLAY (entry), event);
+
   /* Button Box */
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (event), button_box);
   gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
   g_signal_connect (G_OBJECT (button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_EXPAND);
   gtk_widget_set_halign (button_box, GTK_ALIGN_END);
   gtk_widget_set_margin_end (button_box, 5);
   gtk_widget_show (button_box);
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), button_box);
 
   /* Bookmark */
   entry->bookmark_event_box = gtk_event_box_new ();
