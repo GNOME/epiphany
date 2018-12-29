@@ -2251,22 +2251,15 @@ window_cmd_tabs_move_left (GSimpleAction *action,
 {
   GtkWidget *child;
   GtkNotebook *notebook;
-  int page, n_pages, to;
+  int page;
 
   notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
   page = gtk_notebook_get_current_page (notebook);
-  n_pages = gtk_notebook_get_n_pages (notebook) - 1;
-
-  if (!n_pages)
+  if (page < 1)
     return;
 
-  if (page < 1)
-    to = n_pages;
-  else
-    to = page - 1;
-
   child = gtk_notebook_get_nth_page (notebook, page);
-  gtk_notebook_reorder_child (notebook, child, to);
+  gtk_notebook_reorder_child (notebook, child, page - 1);
 }
 
 void window_cmd_tabs_move_right (GSimpleAction *action,
@@ -2275,22 +2268,16 @@ void window_cmd_tabs_move_right (GSimpleAction *action,
 {
   GtkWidget *child;
   GtkNotebook *notebook;
-  int page, n_pages, to;
+  int page, n_pages;
 
   notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
   page = gtk_notebook_get_current_page (notebook);
   n_pages = gtk_notebook_get_n_pages (notebook) - 1;
-
-  if (!n_pages)
+  if (page > n_pages - 1)
     return;
 
-  if (page > n_pages - 1)
-    to = 0;
-  else
-    to = page + 1;
-
   child = gtk_notebook_get_nth_page (notebook, page);
-  gtk_notebook_reorder_child (notebook, child, to);
+  gtk_notebook_reorder_child (notebook, child, page + 1);
 }
 
 void
