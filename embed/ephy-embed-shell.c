@@ -25,6 +25,7 @@
 #include "ephy-about-handler.h"
 #include "ephy-dbus-util.h"
 #include "ephy-debug.h"
+#include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-type-builtins.h"
@@ -1135,6 +1136,36 @@ adblock_filters_dir (EphyEmbedShell *shell)
 }
 
 static void
+download_started_cb (WebKitWebContext *web_context,
+                     WebKitDownload   *download,
+                     EphyEmbedShell   *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  EphyDownload *ephy_download;
+  gboolean ephy_download_set;
+
+  /* Is download locked down? */
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
+    webkit_download_cancel (download);
+    return;
+  }
+
+  /* Only create an EphyDownload for the WebKitDownload if it doesn't exist yet.
+   * This can happen when the download has been started automatically by WebKit,
+   * due to a context menu action or policy checker decision. Downloads started
+   * explicitly by Epiphany are marked with ephy-download-set GObject data.
+   */
+  ephy_download_set = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (download), "ephy-download-set"));
+  if (ephy_download_set)
+    return;
+
+  ephy_download = ephy_download_new (download);
+  ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
+  g_object_unref (ephy_download);
+}
+
+static void
 ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
@@ -1283,6 +1314,9 @@ ephy_embed_shell_startup (GApplication *application)
   filters_dir = adblock_filters_dir (shell);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
   g_free (filters_dir);
+
+  g_signal_connect (priv->web_context, "download-started",
+                    G_CALLBACK (download_started_cb), shell);
 }
 
 static void
