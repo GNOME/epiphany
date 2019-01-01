@@ -41,6 +41,10 @@ need to stick to in order to get your patch accepted:
  * There's no space between a type cast and the variable name:  Right:
    `(int *)foo`. Wrong: `(int*) foo`.
 
+ * Avoid explicit comparisons against TRUE, FALSE, and NULL. Right:
+   `if (!condition)`, `if (!pointer)`, `if (integer == 0)`. Wrong:
+   `if (condition == FALSE)`, `if (pointer == NULL)`, `if (!integer)`.
+
 # Code Structure
 
 ## Layering
