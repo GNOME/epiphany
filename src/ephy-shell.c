@@ -24,7 +24,6 @@
 #include "ephy-shell.h"
 
 #include "ephy-debug.h"
-#include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -281,36 +280,6 @@ static GActionEntry app_mode_app_entries[] = {
 };
 
 static void
-download_started_cb (WebKitWebContext *web_context,
-                     WebKitDownload   *download,
-                     EphyShell        *shell)
-{
-  EphyDownload *ephy_download;
-  gboolean ephy_download_set;
-
-  /* Is download locked down? */
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
-    webkit_download_cancel (download);
-    return;
-  }
-
-  /* Only create an EphyDownload for the WebKitDownload if it doesn't exist yet.
-   * This can happen when the download has been started automatically by WebKit,
-   * due to a context menu action or policy checker decision. Downloads started
-   * explicitly by Epiphany are marked with ephy-download-set GObject data.
-   */
-  ephy_download_set = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (download), "ephy-download-set"));
-  if (ephy_download_set)
-    return;
-
-  ephy_download = ephy_download_new (download);
-  ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell)),
-                                       ephy_download);
-  g_object_unref (ephy_download);
-}
-
-static void
 register_synchronizable_managers (EphyShell       *shell,
                                   EphySyncService *service)
 {
@@ -396,10 +365,6 @@ ephy_shell_startup (GApplication *application)
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
-  g_signal_connect (ephy_embed_shell_get_web_context (embed_shell),
-                    "download-started",
-                    G_CALLBACK (download_started_cb),
-                    application);
 
   mode = ephy_embed_shell_get_mode (embed_shell);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
