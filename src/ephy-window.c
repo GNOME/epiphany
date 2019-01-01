@@ -603,7 +603,17 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
   if ((event->state & state_mask) == GDK_MOD1_MASK)
     return keyval != GDK_KEY_Left &&      /* Back */
            keyval != GDK_KEY_Right &&     /* Forward */
-           keyval != GDK_KEY_Home;        /* Homepage */
+           keyval != GDK_KEY_Home &&      /* Homepage */
+           keyval != GDK_KEY_1 &&         /* Switch To Tab 1 */
+           keyval != GDK_KEY_2 &&         /* Switch To Tab 2 */
+           keyval != GDK_KEY_3 &&         /* Switch To Tab 3 */
+           keyval != GDK_KEY_4 &&         /* Switch To Tab 4 */
+           keyval != GDK_KEY_5 &&         /* Switch To Tab 5 */
+           keyval != GDK_KEY_6 &&         /* Switch To Tab 6 */
+           keyval != GDK_KEY_7 &&         /* Switch To Tab 7 */
+           keyval != GDK_KEY_8 &&         /* Switch To Tab 8 */
+           keyval != GDK_KEY_9 &&         /* Switch To Tab 9 */
+           keyval != GDK_KEY_0;           /* Switch To Tab 10 */
 
   return TRUE;
 }
