@@ -461,15 +461,13 @@ ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
 
-  /*
-   * We get here on each new instance (remote or not). Autoresume the
-   * session and queue the commands if we are a secondary instance. Otherwise,
-   * execute the commands immediately, before the remote startup context
-   * can be invalidated by another remote instance.
-   */
   if (shell->remote_startup_context == NULL) {
     EphySession *session = ephy_shell_get_session (shell);
 
+    /* We are activating the primary instance for the first time. If we
+     * have a saved session, resume it first, then run any startup
+     * commands in session_load_cb. Otherwise, run them now.
+     */
     if (session) {
       ephy_session_resume (session,
                            shell->local_startup_context->user_time,
@@ -477,6 +475,12 @@ ephy_shell_activate (GApplication *application)
     } else
       ephy_shell_startup_continue (shell, shell->local_startup_context);
   } else {
+    /* We are activating the primary instance in response to the launch
+     * of a secondary instance. Execute the commands immediately. We
+     * have to be careful because if we don't handle the commands
+     * immediately, the remote startup context could be invalidated by
+     * the launch of another remote instance.
+     */
     ephy_shell_startup_continue (shell, shell->remote_startup_context);
     g_clear_pointer (&shell->remote_startup_context, ephy_shell_startup_context_free);
   }
