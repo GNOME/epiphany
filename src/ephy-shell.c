@@ -776,7 +776,8 @@ ephy_shell_new_tab_full (EphyShell      *shell,
 
   embed_shell = EPHY_EMBED_SHELL (shell);
 
-  if (flags & EPHY_NEW_TAB_JUMP) jump_to = TRUE;
+  if (flags & EPHY_NEW_TAB_JUMP)
+    jump_to = TRUE;
 
   LOG ("Opening new tab window %p parent-embed %p jump-to:%s",
        window, previous_embed, jump_to ? "t" : "f");
