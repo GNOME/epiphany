@@ -373,7 +373,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
 
     snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (snapshot_service, url->url);
     if (snapshot)
-      thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
+      thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat; background-size: 100%%;\"", snapshot);
     else
       ephy_embed_shell_schedule_thumbnail_update (shell, url);
 
