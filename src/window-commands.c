@@ -1418,25 +1418,31 @@ get_suggested_filename (EphyEmbed *embed)
   const char *mimetype;
   WebKitURIResponse *response;
   WebKitWebResource *web_resource;
+  SoupURI *soup_uri;
 
   view = ephy_embed_get_web_view (embed);
   web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
   response = webkit_web_resource_get_response (web_resource);
   mimetype = webkit_uri_response_get_mime_type (response);
+  soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
 
-  if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0) {
+  if (g_ascii_strncasecmp (mimetype, "text/html", 9) == 0 && g_strcmp0 (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) != 0) {
     /* Web Title will be used as suggested filename */
     suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
   } else {
     suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
     if (!suggested_filename) {
-      SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
       char *last_slash = strrchr (soup_uri->path, '/');
       suggested_filename = soup_uri_decode (last_slash ? (last_slash + 1) : soup_uri->path);
-      soup_uri_free (soup_uri);
+
+      if (!strlen (suggested_filename)) {
+        g_free (suggested_filename);
+        suggested_filename = g_strdup ("index.html");
+      }
     }
   }
 
+  soup_uri_free (soup_uri);
   return suggested_filename;
 }
 
