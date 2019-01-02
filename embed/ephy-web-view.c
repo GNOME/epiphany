@@ -317,6 +317,7 @@ open_response_cb (GtkFileChooser           *dialog,
     webkit_file_chooser_request_select_files (request, (const char * const *)file_array->pdata);
     g_slist_free_full (file_list, g_free);
     g_ptr_array_free (file_array, FALSE);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
   } else {
     webkit_file_chooser_request_cancel (request);
   }
@@ -343,6 +344,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   if (filter)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY));
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allows_multiple_selection);
 
   g_signal_connect (dialog, "response",
