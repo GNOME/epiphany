@@ -205,15 +205,16 @@ Ephy.Overview.Item = class OverviewItem
             return null;
 
         if (background.startsWith('url("file://'))
-            return background.replace('url("file://', '').replace('") no-repeat', '');
+            return background.replace('url("file://', '').replace('"); background-size: 100%', '');
 
         return null;
     }
 
     setThumbnailPath(path)
     {
-        if (path)
-            this._thumbnail.style.background = 'url(file://' + path + ') no-repeat';
+        if (path) {
+            this._thumbnail.style.background = 'url(file://' + path + '); background-size: 100%';
+        }
         else
             this._thumbnail.style.background = null;
     }
