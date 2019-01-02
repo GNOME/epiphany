@@ -161,6 +161,7 @@ filename_suggested_cb (EphyDownload        *download,
                                      GTK_FILE_CHOOSER_ACTION_SAVE,
                                      EPHY_FILE_FILTER_NONE);
   gtk_file_chooser_set_do_overwrite_confirmation (dialog, TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
 
   sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
   gtk_file_chooser_set_current_name (dialog, sanitized_filename);
@@ -179,6 +180,7 @@ filename_suggested_cb (EphyDownload        *download,
 
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          download);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
   } else {
     g_idle_add_full (G_PRIORITY_DEFAULT,
                      (GSourceFunc)cancel_download_idle_cb,

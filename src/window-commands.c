@@ -1458,6 +1458,8 @@ save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
       g_free (converted);
       g_free (uri);
     }
+
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
   }
 
   g_object_unref (dialog);
@@ -1482,6 +1484,7 @@ window_cmd_save_as (GSimpleAction *action,
                                      EPHY_FILE_FILTER_NONE);
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
 
   suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
 

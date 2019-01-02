@@ -120,6 +120,8 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL          "default-zoom-level"
 #define EPHY_PREFS_WEB_ENABLE_AUTOSEARCH           "enable-autosearch"
 #define EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES       "enable-mouse-gestures"
+#define EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY       "last-upload-directory"
+#define EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY     "last-download-directory"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -146,7 +148,9 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_GSB_API_KEY,
   EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL,
   EPHY_PREFS_WEB_ENABLE_AUTOSEARCH,
-  EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES
+  EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES,
+  EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY,
+  EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
