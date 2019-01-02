@@ -1427,8 +1427,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
     g_signal_new ("window-restored",
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (EphyEmbedShellClass, restored_window),
-                  NULL, NULL, NULL,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -1723,6 +1722,51 @@ ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   webkit_web_context_clear_cache (priv->web_context);
+}
+
+static WebKitWebView *
+automation_create_web_view_cb (WebKitAutomationSession *session,
+                               EphyEmbedShell          *shell)
+{
+  EphyEmbed *new_embed = EPHY_EMBED_SHELL_GET_CLASS (shell)->create_automated_tab (shell);
+
+  return WEBKIT_WEB_VIEW (ephy_embed_get_web_view (new_embed));
+}
+
+static void
+automation_started_cb (WebKitWebContext        *context,
+                       WebKitAutomationSession *session,
+                       EphyEmbedShell          *shell)
+{
+  WebKitApplicationInfo *info = webkit_application_info_new ();
+  webkit_application_info_set_name (info, "Epiphany");
+  webkit_application_info_set_version (info, EPHY_MAJOR_VERSION, EPHY_MINOR_VERSION, EPHY_MICRO_VERSION);
+  webkit_automation_session_set_application_info (session, info);
+  webkit_application_info_unref (info);
+
+  g_signal_connect_object (session, "create-web-view",
+                           G_CALLBACK (automation_create_web_view_cb), shell, 0);
+}
+
+void
+ephy_embed_shell_enable_automation (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  g_assert (priv->web_context);
+  g_assert (!webkit_web_context_is_automation_allowed (priv->web_context));
+
+  webkit_web_context_set_automation_allowed (priv->web_context, TRUE);
+  g_signal_connect_object (priv->web_context, "automation-started",
+                           G_CALLBACK (automation_started_cb), shell, 0);
+}
+
+gboolean
+ephy_embed_shell_is_automation_enabled (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return webkit_web_context_is_automation_allowed (priv->web_context);
 }
 
 WebKitUserContentManager *

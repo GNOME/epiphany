@@ -77,7 +77,8 @@ typedef void (* EphyPasswordSaveRequestCallback) (int      response_id,
 GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
 GtkWidget *                ephy_web_view_new                      (void);
-GtkWidget                 *ephy_web_view_new_with_related_view    (WebKitWebView             *related_view);
+GtkWidget *                ephy_web_view_new_automated            (void);
+GtkWidget *                ephy_web_view_new_with_related_view    (WebKitWebView             *related_view);
 void                       ephy_web_view_load_request             (EphyWebView               *view,
                                                                    WebKitURIRequest          *request);
 void                       ephy_web_view_load_url                 (EphyWebView               *view,

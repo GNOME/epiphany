@@ -2902,10 +2902,28 @@ ephy_web_view_new (void)
 }
 
 GtkWidget *
+ephy_web_view_new_automated (void)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  g_assert (ephy_embed_shell_is_automation_enabled (shell));
+
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+                       "web-context", ephy_embed_shell_get_web_context (shell),
+                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
+                       "settings", ephy_embed_prefs_get_settings (),
+                       "is-controlled-by-automation", TRUE,
+                       NULL);
+}
+
+GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
+  /* Note: web-context and is-controlled-by-automation are automatically
+   * set from the related view.
+   */
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
                        "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),

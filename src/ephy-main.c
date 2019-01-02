@@ -57,6 +57,7 @@ static char *application_to_delete = NULL;
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
+static gboolean automation_mode = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
 
@@ -128,6 +129,8 @@ static const GOptionEntry option_entries[] =
   { "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
     G_OPTION_ARG_CALLBACK, application_mode_cb,
     N_("Start the browser in application mode"), NULL },
+  { "automation-mode", 0, 0, G_OPTION_ARG_NONE, &automation_mode,
+    N_("Start the browser in automation mode"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
@@ -179,6 +182,8 @@ get_startup_flags (void)
     flags |= EPHY_STARTUP_NEW_TAB;
   if (open_in_new_window)
     flags |= EPHY_STARTUP_NEW_WINDOW;
+  if (automation_mode)
+    flags |= EPHY_STARTUP_AUTOMATION_MODE;
 
   return flags;
 }

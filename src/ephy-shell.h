@@ -53,6 +53,7 @@ G_DECLARE_FINAL_TYPE (EphyShell, ephy_shell, EPHY, SHELL, EphyEmbedShell)
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.
+ * @EPHY_NEW_TAB_AUTOMATED: the new tab will be controlled by WebDriver
  *
  * Controls how new tabs/windows are created and handled.
  */
@@ -64,12 +65,14 @@ typedef enum {
   EPHY_NEW_TAB_FIRST        = 1 << 1,
   EPHY_NEW_TAB_APPEND_LAST  = 1 << 2,
   EPHY_NEW_TAB_APPEND_AFTER = 1 << 3,
-  EPHY_NEW_TAB_JUMP   = 1 << 4,
+  EPHY_NEW_TAB_JUMP         = 1 << 4,
+  EPHY_NEW_TAB_AUTOMATED    = 1 << 5,
 } EphyNewTabFlags;
 
 typedef enum {
   EPHY_STARTUP_NEW_TAB          = 1 << 0,
   EPHY_STARTUP_NEW_WINDOW       = 1 << 1,
+  EPHY_STARTUP_AUTOMATION_MODE  = 1 << 2,
 } EphyStartupFlags;
 
 typedef struct {

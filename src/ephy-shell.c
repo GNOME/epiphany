@@ -70,6 +70,7 @@ static EphyShell *ephy_shell = NULL;
 
 static void ephy_shell_dispose (GObject *object);
 static void ephy_shell_finalize (GObject *object);
+static EphyEmbed *ephy_shell_create_automated_tab (EphyEmbedShell *shell);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
@@ -665,6 +666,7 @@ ephy_shell_class_init (EphyShellClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
+  EphyEmbedShellClass *embed_class = EPHY_EMBED_SHELL_CLASS (klass);
 
   object_class->dispose = ephy_shell_dispose;
   object_class->finalize = ephy_shell_finalize;
@@ -674,6 +676,8 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
+
+  embed_class->create_automated_tab = ephy_shell_create_automated_tab;
 }
 
 static void
@@ -796,6 +800,8 @@ ephy_shell_new_tab_full (EphyShell      *shell,
 
   if (related_view)
     web_view = ephy_web_view_new_with_related_view (related_view);
+  else if (flags & EPHY_NEW_TAB_AUTOMATED)
+    web_view = ephy_web_view_new_automated ();
   else
     web_view = ephy_web_view_new ();
 
@@ -835,6 +841,14 @@ ephy_shell_new_tab (EphyShell      *shell,
   return ephy_shell_new_tab_full (shell, NULL, NULL, parent_window,
                                   previous_embed, flags,
                                   0);
+}
+
+static EphyEmbed *
+ephy_shell_create_automated_tab (EphyEmbedShell *embed_shell)
+{
+  EphyShell *shell = EPHY_SHELL (embed_shell);
+
+  return ephy_shell_new_tab (shell, NULL, NULL, EPHY_NEW_TAB_AUTOMATED);
 }
 
 /**

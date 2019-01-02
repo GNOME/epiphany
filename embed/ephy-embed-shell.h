@@ -38,6 +38,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (EphyEmbedShell, ephy_embed_shell, EPHY, EMBED_SHELL, DzlApplication)
 
+typedef struct _EphyEmbed EphyEmbed;
+
 typedef enum
 {
   EPHY_EMBED_SHELL_MODE_BROWSER,
@@ -53,7 +55,7 @@ struct _EphyEmbedShellClass
 {
   DzlApplicationClass parent_class;
 
-  void    (* restored_window)  (EphyEmbedShell *shell);
+  EphyEmbed * (* create_automated_tab) (EphyEmbedShell *shell);
 };
 
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
@@ -81,6 +83,8 @@ void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell  
                                                                 const char       *path);
 void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell   *shell,
                                                                 EphyHistoryURL   *url);
+void               ephy_embed_shell_enable_automation          (EphyEmbedShell *shell);
+gboolean           ephy_embed_shell_is_automation_enabled      (EphyEmbedShell *shell);
 WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
