@@ -1614,6 +1614,16 @@ populate_context_menu (WebKitWebView       *web_view,
 
     update_edit_actions_sensitivity (window, TRUE);
 
+    if (should_show_copy_outside_editable (web_view))
+      add_action_to_context_menu (context_menu, window_action_group, "copy",
+                                  window);
+    if (can_search_selection)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  search_selection_action_name, window);
+    if (should_show_copy_outside_editable (web_view) || can_search_selection)
+      webkit_context_menu_append (context_menu,
+                                  webkit_context_menu_item_new_separator ());
+
     if (!is_image && !is_media) {
       add_action_to_context_menu (context_menu, toolbar_action_group,
                                   "navigation-back", window);
@@ -1625,16 +1635,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     }
 
-    if (should_show_copy_outside_editable (web_view))
-      add_action_to_context_menu (context_menu, window_action_group,
-                                  "copy", window);
-    if (can_search_selection)
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  search_selection_action_name, window);
-
     if (!app_mode && !is_image && !is_media) {
-      webkit_context_menu_append (context_menu,
-                                  webkit_context_menu_item_new_separator ());
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "context-bookmark-page", window);
     }
