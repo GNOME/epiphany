@@ -67,9 +67,9 @@ typedef enum {
   EPHY_NEW_TAB_JUMP   = 1 << 4,
 } EphyNewTabFlags;
 
+// FIXME: doesn't make sense to keep this with only one flag remaining.
 typedef enum {
-  EPHY_STARTUP_NEW_TAB          = 1 << 0,
-  EPHY_STARTUP_NEW_WINDOW       = 1 << 1,
+  EPHY_STARTUP_NEW_WINDOW       = 1 << 0,
 } EphyStartupFlags;
 
 typedef struct {
