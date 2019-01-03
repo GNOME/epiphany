@@ -2664,8 +2664,6 @@ static void
 ephy_window_close_tab (EphyWindow *window,
                        EphyEmbed  *tab)
 {
-  EphyWebView *web_view;
-
   /* This function can be called many times for the same embed if the
    * web process (or network process) has hung. E.g. the user could
    * click the close button several times. This is difficult to guard
@@ -2687,21 +2685,16 @@ ephy_window_close_tab (EphyWindow *window,
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "ephy-window-close-tab-closed")))
     return;
 
-  web_view = ephy_embed_get_web_view (tab);
-  if (gtk_notebook_get_n_pages (window->notebook) > 1 || ephy_web_view_is_overview (web_view)) {
-    g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
-    gtk_widget_destroy (GTK_WIDGET (tab));
+  g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
+  gtk_widget_destroy (GTK_WIDGET (tab));
 
-    /* If that was the last tab, destroy the window.
-     *
-     * Beware: window->closing could be true now, after destroying the
-     * tab, even if it wasn't at the start of this function.
-     */
-    if (!window->closing && gtk_notebook_get_n_pages (window->notebook) == 0)
-      gtk_widget_destroy (GTK_WIDGET (window));
-  } else {
-    ephy_web_view_load_url (web_view, "about:overview");
-  }
+  /* If that was the last tab, destroy the window.
+   *
+   * Beware: window->closing could be true now, after destroying the
+   * tab, even if it wasn't at the start of this function.
+   */
+  if (!window->closing && gtk_notebook_get_n_pages (window->notebook) == 0)
+   gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 typedef struct {
