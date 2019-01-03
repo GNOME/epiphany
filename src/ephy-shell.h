@@ -67,13 +67,13 @@ typedef enum {
   EPHY_NEW_TAB_JUMP   = 1 << 4,
 } EphyNewTabFlags;
 
-// FIXME: doesn't make sense to keep this with only one flag remaining.
 typedef enum {
-  EPHY_STARTUP_NEW_WINDOW       = 1 << 0,
-} EphyStartupFlags;
+  EPHY_STARTUP_NEW_TAB,
+  EPHY_STARTUP_NEW_WINDOW
+} EphyStartupMode;
 
 typedef struct {
-  EphyStartupFlags startup_flags;
+  EphyStartupMode startup_mode;
   char *session_filename;
   char **arguments;
   guint32 user_time;
@@ -118,13 +118,13 @@ void            ephy_shell_try_quit                     (EphyShell *shell);
 
 void            ephy_shell_open_uris                    (EphyShell *shell,
                                                          const char **uris,
-                                                         EphyStartupFlags startup_flags,
+                                                         EphyStartupMode startup_mode,
                                                          guint32 user_time);
 
 void            ephy_shell_set_startup_context          (EphyShell               *shell,
                                                          EphyShellStartupContext *ctx);
 
-EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupFlags  startup_flags,
+EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupMode   startup_mode,
                                                          char             *session_filename,
                                                          char            **arguments,
                                                          guint32           user_time);
