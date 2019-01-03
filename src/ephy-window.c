@@ -312,6 +312,14 @@ impl_get_is_popup (EphyEmbedContainer *container)
   return EPHY_WINDOW (container)->is_popup;
 }
 
+static guint
+impl_get_n_children (EphyEmbedContainer *container)
+{
+  EphyWindow *window = EPHY_WINDOW (container);
+
+  return gtk_notebook_get_n_pages (window->notebook);
+}
+
 static void
 ephy_window_embed_container_iface_init (EphyEmbedContainerInterface *iface)
 {
@@ -321,6 +329,7 @@ ephy_window_embed_container_iface_init (EphyEmbedContainerInterface *iface)
   iface->get_active_child = impl_get_active_child;
   iface->get_children = impl_get_children;
   iface->get_is_popup = impl_get_is_popup;
+  iface->get_n_children = impl_get_n_children;
 }
 
 static EphyEmbed *
@@ -1159,6 +1168,7 @@ sync_tab_bookmarked_status (EphyWebView   *view,
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode;
   EphyLocationEntryBookmarkIconState state;
   GtkWidget *widget;
   EphyBookmark *bookmark;
@@ -1170,10 +1180,12 @@ sync_tab_bookmarked_status (EphyWebView   *view,
     return;
 
   address = ephy_web_view_get_address (view);
+  mode = ephy_embed_shell_get_mode (shell);
 
   if (!address ||
       ephy_embed_utils_is_no_show_address (address) ||
-      ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+      mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
+      mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     state = EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN;
   } else {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
@@ -2771,6 +2783,11 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
       return;
     }
 
+    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+      /* Never prompt the user before closing in automation mode */
+      ephy_window_close_tab (window, embed);
+    }
+
     /* Last window, check ongoing downloads before closing the tab */
     if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
       EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
@@ -3377,6 +3394,8 @@ ephy_window_constructed (GObject *object)
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (window)), "incognito-mode");
+  else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (window)), "automation-mode");
 
   /* Setup the toolbar. */
   window->header_bar = setup_header_bar (window);
@@ -3448,6 +3467,8 @@ ephy_window_constructed (GObject *object)
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           SENS_FLAG_CHROME, TRUE);
+  } else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    g_object_set (window->location_controller, "editable", FALSE, NULL);
   }
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
