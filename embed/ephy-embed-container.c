@@ -165,3 +165,22 @@ ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_is_popup (container);
 }
+
+/**
+ * ephy_embed_container_get_n_children:
+ * @container: a #EphyEmbedContainer
+ *
+ * Returns the number of #EphyEmbed:s in the container.
+ *
+ * Returns: the number of children
+ */
+guint
+ephy_embed_container_get_n_children (EphyEmbedContainer *container)
+{
+  EphyEmbedContainerInterface *iface;
+
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
+
+  iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
+  return iface->get_n_children (container);
+}

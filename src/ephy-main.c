@@ -57,6 +57,7 @@ static char *application_to_delete = NULL;
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
+static gboolean automation_mode = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
 
@@ -128,6 +129,8 @@ static const GOptionEntry option_entries[] =
   { "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
     G_OPTION_ARG_CALLBACK, application_mode_cb,
     N_("Start the browser in application mode"), NULL },
+  { "automation-mode", 0, 0, G_OPTION_ARG_NONE, &automation_mode,
+    N_("Start an instance in automation mode"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
@@ -306,6 +309,11 @@ main (int   argc,
     exit (1);
   }
 
+  if (automation_mode && (private_instance || incognito_mode || application_mode || profile_directory)) {
+    g_print ("Cannot use --automation-mode and --private-instance, --incognito-mode, --application-mode or --profile at the same time\n");
+    exit (1);
+  }
+
   if (application_mode && profile_directory && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
     g_print ("--profile must be an existing directory when --application-mode is requested\n");
     exit (1);
@@ -336,7 +344,7 @@ main (int   argc,
   /* Start our services */
   flags = !application_mode ? EPHY_FILE_HELPERS_ENSURE_EXISTS : 0;
 
-  if (incognito_mode || private_instance || application_mode)
+  if (incognito_mode || private_instance || application_mode || automation_mode)
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
   if (incognito_mode)
     flags |= EPHY_FILE_HELPERS_STEAL_DATA;
@@ -349,14 +357,18 @@ main (int   argc,
 
   /* Run the migration in all cases, except when running a private
      instance without a given profile directory or running in
-     incognito mode. */
-  if (!(private_instance && profile_directory == NULL) && incognito_mode == FALSE) {
+     incognito or automation mode. */
+  if (!(private_instance && profile_directory == NULL) && !incognito_mode && !automation_mode) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.\n");
       exit (1);
     }
   }
+
+  /* Ignore arguments in automation mode */
+  if (automation_mode)
+    g_clear_pointer (&arguments, g_strfreev);
 
   arbitrary_url = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                           EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
@@ -397,6 +409,8 @@ main (int   argc,
     startup_flags |= EPHY_STARTUP_NEW_TAB;
   } else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
+  } else if (automation_mode) {
+    mode = EPHY_EMBED_SHELL_MODE_AUTOMATION;
   } else if (application_mode) {
     mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
 

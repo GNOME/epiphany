@@ -372,7 +372,8 @@ ephy_shell_startup (GApplication *application)
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      application);
 
-    if (mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    if (mode != EPHY_EMBED_SHELL_MODE_INCOGNITO &&
+        mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
       g_action_map_add_action_entries (G_ACTION_MAP (application),
                                        non_incognito_extra_app_entries, G_N_ELEMENTS (non_incognito_extra_app_entries),
                                        application);
@@ -409,6 +410,41 @@ ephy_shell_startup (GApplication *application)
   set_accel_for_action (shell, "app.quit", "<Primary>q");
 }
 
+static GtkWidget *
+create_web_view_for_automation_cb (WebKitAutomationSession *session,
+                                   EphyShell               *shell)
+{
+  EphyEmbed *embed;
+  EphyWindow *window;
+  EphyWebView *web_view;
+  guint n_embeds;
+
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  n_embeds = ephy_embed_container_get_n_children (EPHY_EMBED_CONTAINER (window));
+  web_view = ephy_embed_get_web_view (embed);
+  if (n_embeds == 1 && ephy_web_view_get_visit_type (web_view) == EPHY_PAGE_VISIT_HOMEPAGE)
+    return GTK_WIDGET (web_view);
+
+  embed = ephy_shell_new_tab (shell, window, NULL, EPHY_NEW_TAB_JUMP);
+  return GTK_WIDGET (ephy_embed_get_web_view (embed));
+}
+
+static void
+automation_started_cb (WebKitWebContext        *web_context,
+                       WebKitAutomationSession *session,
+                       EphyShell               *shell)
+{
+  WebKitApplicationInfo *info = webkit_application_info_new ();
+  webkit_application_info_set_name (info, "Epiphany");
+  webkit_application_info_set_version (info, EPHY_MAJOR_VERSION, EPHY_MINOR_VERSION, EPHY_MICRO_VERSION);
+  webkit_automation_session_set_application_info (session, info);
+  webkit_application_info_unref (info);
+
+  g_signal_connect (session, "create-web-view", G_CALLBACK (create_web_view_for_automation_cb), shell);
+}
+
+
 static void
 session_load_cb (GObject      *object,
                  GAsyncResult *result,
@@ -425,6 +461,12 @@ static void
 ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (shell);
+
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    WebKitWebContext *web_context = ephy_embed_shell_get_web_context (embed_shell);
+    g_signal_connect (web_context, "automation-started", G_CALLBACK(automation_started_cb), shell);
+  }
 
   if (shell->remote_startup_context == NULL) {
     EphySession *session = ephy_shell_get_session (shell);
@@ -819,7 +861,7 @@ ephy_shell_get_session (EphyShell *shell)
   g_assert (EPHY_IS_SHELL (shell));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
-  if (mode ==  EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+  if (mode ==  EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     return NULL;
 
   if (shell->session == NULL)

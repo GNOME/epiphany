@@ -49,6 +49,11 @@ conf.set10('TECH_PREVIEW', tech_preview)
 
 conf.set_quoted('VERSION', meson.project_version())
 
+version_array = meson.project_version().split('.')
+conf.set('EPHY_MAJOR_VERSION', version_array[0].to_int())
+conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
+conf.set('EPHY_MICRO_VERSION', version_array[2].to_int())
+
 configure_file(
   output: 'config.h',
   configuration: conf

@@ -252,7 +252,8 @@ window_added_cb (GtkApplication *application,
   g_settings_bind_writable (settings, "picture-filename",
                             action, "enabled", FALSE);
 
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
     bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
   }
