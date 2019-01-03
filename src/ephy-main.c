@@ -49,8 +49,6 @@ static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 
 static char *session_filename = NULL;
-static char *bookmark_url = NULL;
-static char *bookmarks_file = NULL;
 static char **arguments = NULL;
 static char *application_to_delete = NULL;
 
@@ -115,12 +113,8 @@ static const GOptionEntry option_entries[] =
     N_("Open a new tab in an existing browser window"), NULL },
   { "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
     N_("Open a new browser window"), NULL },
-  { "import-bookmarks", '\0', 0, G_OPTION_ARG_FILENAME, &bookmarks_file,
-    N_("Import bookmarks from the given file"), N_("FILE") },
   { "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
     N_("Load the given session file"), N_("FILE") },
-  { "add-bookmark", 't', 0, G_OPTION_ARG_STRING, &bookmark_url,
-    N_("Add a bookmark"), N_("URL") },
   { "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
     N_("Start a private instance"), NULL },
   { "incognito-mode", 'i', 0, G_OPTION_ARG_NONE, &incognito_mode,
@@ -426,9 +420,7 @@ main (int   argc,
   _ephy_shell_create_instance (mode);
 
   ctx = ephy_shell_startup_context_new (startup_flags,
-                                        bookmarks_file,
                                         session_filename,
-                                        bookmark_url,
                                         arguments,
                                         user_time);
   g_strfreev (arguments);
