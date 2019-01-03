@@ -52,6 +52,8 @@ struct _EphyEmbedContainerInterface
   GList * (* get_children)         (EphyEmbedContainer *container);
 
   gboolean (* get_is_popup)        (EphyEmbedContainer *container);
+
+  guint (* get_n_children)         (EphyEmbedContainer *container);
 };
 
 gint              ephy_embed_container_add_child        (EphyEmbedContainer *container,
@@ -65,5 +67,6 @@ void              ephy_embed_container_remove_child     (EphyEmbedContainer *con
 EphyEmbed *       ephy_embed_container_get_active_child (EphyEmbedContainer *container);
 GList *           ephy_embed_container_get_children     (EphyEmbedContainer *container);
 gboolean          ephy_embed_container_get_is_popup     (EphyEmbedContainer *container);
+guint             ephy_embed_container_get_n_children   (EphyEmbedContainer *container);
 
 G_END_DECLS

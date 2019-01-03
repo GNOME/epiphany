@@ -2900,6 +2900,7 @@ ephy_web_view_new (void)
                        "web-context", ephy_embed_shell_get_web_context (shell),
                        "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
                        "settings", ephy_embed_prefs_get_settings (),
+                       "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
                        NULL);
 }
 
@@ -3687,7 +3688,8 @@ ephy_web_view_load_homepage (EphyWebView *view)
   shell = ephy_embed_shell_get_default ();
   mode = ephy_embed_shell_get_mode (shell);
 
-  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
+      mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     ephy_web_view_load_new_tab_page (view);
     return;
   }
@@ -3718,6 +3720,8 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
   ephy_web_view_set_visit_type (view, EPHY_PAGE_VISIT_HOMEPAGE);
   if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     ephy_web_view_load_url (view, "about:incognito");
+  else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+    ephy_web_view_load_url (view, "about:blank");
   else
     ephy_web_view_load_url (view, "about:overview");
 }
