@@ -6,7 +6,7 @@
 
 .incognito-mode {
   headerbar {
-    @include headerbar_fill($incognito_color, $edge_color, -gtk-icontheme($incognito_icon) 160px 0 / 64px 64px no-repeat);
+    @include headerbar_fill($incognito_color, $incognito_edge_color, -gtk-icontheme($incognito_icon) 160px 0 / 64px 64px no-repeat);
 
     border-color: _border_color($incognito_color);
 
@@ -20,7 +20,7 @@
 
     &:backdrop {
       background-image: -gtk-icontheme($incognito_icon), image($incognito_color);
-      box-shadow: inset 0 1px $edge_color;
+      box-shadow: inset 0 1px $incognito_edge_color;
       color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
     }
 
@@ -68,6 +68,68 @@
   }
 }
 
+.automation-mode {
+  headerbar {
+    @include headerbar_fill($automation_color, $automation_edge_color);
+
+    border-color: _border_color($automation_color);
+
+    color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
+
+    > * {
+      color: $fg_color;
+
+      &:backdrop { color: $backdrop_fg_color }
+    }
+
+    &:backdrop {
+      box-shadow: inset 0 1px $automation_edge_color;
+      color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
+    }
+
+    button { // changing the headerbar background color requires changing widget borders accordingly
+      @include button(normal, $automation_color);
+
+      &.flat, &.titlebutton { @include button(undecorated); }
+
+      &.titlebutton { @include _button_text_shadow($fg_color, $automation_color); }
+
+      &:hover { @include button(hover, $automation_color); }
+
+      &:active, &:checked { @include button(active, $automation_color); }
+
+      &:disabled { @include button(insensitive, $automation_color); }
+
+      &:backdrop {
+        @include button(backdrop, $automation_color);
+        border-color: _border_color($automation_color);
+
+        &:active {
+          @include button(backdrop-active, $automation_color);
+          border-color: _border_color($automation_color);
+        }
+
+        &:disabled {
+          @include button(backdrop-insensitive, $automation_color);
+          border-color: _border_color($automation_color);
+        }
+      }
+
+      &.flat:backdrop, &.titlebutton:backdrop { @include button(undecorated); }
+    }
+
+    entry {
+      border-color: _border_color($automation_color);
+
+      &:focus {
+        border-color: entry_focus_border($selected_bg_color);
+        box-shadow: entry_focus_shadow($selected_bg_color);
+      }
+
+      &:backdrop { box-shadow: none; }
+    }
+  }
+}
 
 $close_button_fg_color: lighten($fg_color, 10%);
 .bookmark-tag-widget {

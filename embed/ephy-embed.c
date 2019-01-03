@@ -808,6 +808,20 @@ ephy_embed_constructed (GObject *object)
   g_signal_connect (inspector, "closed",
                     G_CALLBACK (ephy_embed_close_inspector_cb),
                     embed);
+
+  if (webkit_web_view_is_controlled_by_automation (embed->web_view)) {
+    GtkWidget *info_bar;
+    GtkWidget *label;
+
+    info_bar = gtk_info_bar_new ();
+    gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_INFO);
+    label = gtk_label_new (_("Web is being controlled by automation"));
+    gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))), label, FALSE, FALSE, 0);
+    gtk_widget_show (label);
+
+    ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
+    gtk_widget_show (info_bar);
+  }
 }
 
 static void

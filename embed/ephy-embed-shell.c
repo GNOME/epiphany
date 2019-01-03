@@ -756,6 +756,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     EphySQLiteConnectionMode mode;
 
     if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
+        priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION ||
         priv->mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
       mode = EPHY_SQLITE_CONNECTION_MODE_READ_ONLY;
     else
@@ -958,7 +959,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
 
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
-  private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO;
+  private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
   browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
   user_data = g_variant_new ("(smsssbb)",
                              priv->guid,
@@ -1098,6 +1099,12 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     priv->web_context = webkit_web_context_new_ephemeral ();
+    return;
+  }
+
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    priv->web_context = webkit_web_context_new_ephemeral ();
+    webkit_web_context_set_automation_allowed (priv->web_context, TRUE);
     return;
   }
 
@@ -1258,17 +1265,21 @@ ephy_embed_shell_startup (GApplication *application)
 
   priv->password_manager = ephy_password_manager_new ();
 
-  /* Favicon Database */
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
-    favicon_db_path = g_build_filename (ephy_dot_dir (), "icondatabase", NULL);
-  else
-    favicon_db_path = g_build_filename (g_get_user_cache_dir (), "epiphany", "icondatabase", NULL);
-  webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
-  g_free (favicon_db_path);
+  /* Do not cache favicons in automation mode. Don't change the TLS policy either, since that's
+   * handled by session capabilities in automation mode.
+   */
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    /* Favicon Database */
+    if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
+      favicon_db_path = g_build_filename (ephy_dot_dir (), "icondatabase", NULL);
+    else
+      favicon_db_path = g_build_filename (g_get_user_cache_dir (), "epiphany", "icondatabase", NULL);
+    webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
+    g_free (favicon_db_path);
 
-  /* Do not ignore TLS errors. */
-  webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
-
+    /* Do not ignore TLS errors. */
+    webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
+  }
 
   /* about: URIs handler */
   priv->about_handler = ephy_about_handler_new ();
@@ -1299,7 +1310,7 @@ ephy_embed_shell_startup (GApplication *application)
 
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
-  if (priv->mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+  if (!webkit_web_context_is_ephemeral (priv->web_context)) {
     filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
