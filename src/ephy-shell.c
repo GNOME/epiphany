@@ -1086,7 +1086,6 @@ open_uris_data_new (EphyShell       *shell,
 {
   OpenURIsData *data;
   gboolean fullscreen_lockdown;
-  gboolean have_uris;
   EphySession *session = ephy_shell_get_session (shell);
 
   data = g_new0 (OpenURIsData, 1);
@@ -1098,9 +1097,7 @@ open_uris_data_new (EphyShell       *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
-  have_uris = uris && !(g_strv_length ((char **)uris) == 1 && !g_strcmp0 (uris[0], ""));
-
-  if (((startup_flags & EPHY_STARTUP_NEW_WINDOW) && !fullscreen_lockdown) || !have_uris) {
+  if ((startup_flags & EPHY_STARTUP_NEW_WINDOW) && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
   } else {
     data->flags |= EPHY_NEW_TAB_JUMP;
