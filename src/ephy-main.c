@@ -128,7 +128,7 @@ static const GOptionEntry option_entries[] =
     "", N_("URL …") },
   { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
     G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
-  { "delete-application", 0, 0, G_OPTION_ARG_STRING | G_OPTION_FLAG_HIDDEN,
+  { "delete-application", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,
     &application_to_delete, NULL, NULL },
   { NULL }
 };
