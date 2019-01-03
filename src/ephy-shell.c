@@ -1043,7 +1043,6 @@ open_uris_data_new (EphyShell       *shell,
                     guint32          user_time)
 {
   OpenURIsData *data;
-  gboolean new_windows_in_tabs;
   gboolean fullscreen_lockdown;
   gboolean have_uris;
   EphySession *session = ephy_shell_get_session (shell);
@@ -1054,21 +1053,17 @@ open_uris_data_new (EphyShell       *shell,
   data->uris = g_strdupv ((char **)uris);
   data->user_time = user_time;
 
-  new_windows_in_tabs = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-                                                EPHY_PREFS_NEW_WINDOWS_IN_TABS);
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
   have_uris = uris && !(g_strv_length ((char **)uris) == 1 && !g_strcmp0 (uris[0], ""));
 
-  if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
+  if (((startup_flags & EPHY_STARTUP_NEW_WINDOW) && !fullscreen_lockdown) || !have_uris) {
     data->window = ephy_window_new ();
-  } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
+  } else {
     data->flags |= EPHY_NEW_TAB_JUMP;
     data->window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
     data->reuse_empty_tab = TRUE;
-  } else if (!have_uris) {
-    data->window = ephy_window_new ();
   }
 
   g_application_hold (G_APPLICATION (shell));

@@ -45,7 +45,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 
 static char *session_filename = NULL;
@@ -109,8 +108,6 @@ option_version_cb (const gchar *option_name,
 /* If you're modifying this array then you need to update the manpage. */
 static const GOptionEntry option_entries[] =
 {
-  { "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
-    N_("Open a new tab in an existing browser window"), NULL },
   { "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
     N_("Open a new browser window"), NULL },
   { "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
@@ -162,19 +159,6 @@ get_startup_id (void)
   }
 
   return retval;
-}
-
-static EphyStartupFlags
-get_startup_flags (void)
-{
-  EphyStartupFlags flags = 0;
-
-  if (open_in_new_tab)
-    flags |= EPHY_STARTUP_NEW_TAB;
-  if (open_in_new_window)
-    flags |= EPHY_STARTUP_NEW_WINDOW;
-
-  return flags;
 }
 
 int
@@ -381,14 +365,11 @@ main (int   argc,
     exit (0);
   }
 
-  startup_flags = get_startup_flags ();
+  startup_flags =  open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : 0;
 
   /* Now create the shell */
   if (private_instance) {
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
-    /* In private mode the session autoresume will always open an empty window.
-     * If there are arguments, we want the URIs to be opened in thet existing window. */
-    startup_flags |= EPHY_STARTUP_NEW_TAB;
   } else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
   } else if (application_mode) {
