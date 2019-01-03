@@ -1,34 +1,40 @@
 .\" Epiphany manpage.
-.\" Copyright © 2006 GNOME Foundation, Inc.
+.\" Copyright © 2006-2019 GNOME Foundation, Inc.
 .\"
-.TH EPIPHANY "1" "2018-01-23" "GNOME" ""
+.TH EPIPHANY "1" "January 2019"
 .SH NAME
-epiphany \- simple to use web browser for GNOME
+epiphany \- a simple, clean, beautiful view of the web
 .SH SYNOPSIS
 .B epiphany
 [\fIOPTION\fR...] [url]
 .SH DESCRIPTION
-Help options
+\fBepiphany\fR is the codename of GNOME Web, the web browser designed for the
+GNOME desktop and elementary OS.  It offers a simple, clean, beautiful view of
+the web featuring first-class GNOME and Pantheon desktop integration, using
+WebKitGTK+ for web rendering.
+.SH OPTIONS
+.TP
+\fB\-\-new\-window\fR
+Open a new browser window instead of a new tab
+.TP
+\fB\-l\fR, \fB\-\-load\-session\fR=\fIFILE\fR
+Load the given session state file
+.TP
+\fB\-p\fR, \fB\-\-private\-instance\fR
+Start a private instance with separate user data
+.TP
+\fB\-\-incognito\-mode\fR
+Start an incognito instance with a read-only view of user data
+.TP
+\fB\-a\fR, \fB\-\-application\-mode\fR[=\fIBASENAME\fR]
+Start a private instance in web application mode (requires passing either desktop file basename or
+.B \-\-profile)
+.TP
+\fB\-\-profile\fR=\fIFILE\fR
+Profile directory to use in the private instance (optional)
 .TP
 -?, \fB\-\-help\fR
 Show help options
-.PP
-Application options
-.TP
-\fB\-\-new\-window\fR
-Open a new browser window
-.TP
-\fB\-l\fR, \fB\-\-load\-session\fR=\fIFILE\fR
-Load the given session file
-.TP
-\fB\-p\fR, \fB\-\-private\-instance\fR
-Start a private instance (temporary profile directory, not private browsing mode)
-.TP
-\fB\-\-incognito\-mode\fR
-Start a private instance in incognito mode
-.TP
-\fB\-\-profile\fR=\fIFILE\fR
-Profile directory to use in the private instance
 .TP
 \fB\-\-version\fR
 Show version
@@ -36,4 +42,6 @@ Show version
 Epiphany has a comprehensive help system.  Run the browser
 and select \fBHelp\fR from the menu.
 .SH AUTHOR
-Written by Marco Pesenti Gritti, Christian Persch and others.
+Written by Marco Pesenti Gritti (in memoriam), Christian Persch, Xan Lopez,
+Carlos Garcia Campos, Claudio Saavedra, Michael Catanzaro, Jan-Michael Brummer,
+and many others.
