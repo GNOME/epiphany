@@ -74,9 +74,7 @@ G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
 /**
  * ephy_shell_startup_context_new:
- * @bookmarks_filename: A bookmarks file to import.
  * @session_filename: A session to restore.
- * @bookmark_url: A URL to be added to the bookmarks.
  * @arguments: A %NULL-terminated array of URLs and file URIs to be opened.
  * @user_time: The user time when the EphyShell startup was invoked.
  *
@@ -87,22 +85,15 @@ G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
  **/
 EphyShellStartupContext *
 ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
-                                char *bookmarks_filename,
                                 char *session_filename,
-                                char *bookmark_url,
                                 char **arguments,
                                 guint32 user_time)
 {
   EphyShellStartupContext *ctx = g_new0 (EphyShellStartupContext, 1);
 
   ctx->startup_flags = startup_flags;
-
-  ctx->bookmarks_filename = g_strdup (bookmarks_filename);
   ctx->session_filename = g_strdup (session_filename);
-  ctx->bookmark_url = g_strdup (bookmark_url);
-
   ctx->arguments = g_strdupv (arguments);
-
   ctx->user_time = user_time;
 
   return ctx;
@@ -113,12 +104,8 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 {
   g_assert (ctx != NULL);
 
-  g_free (ctx->bookmarks_filename);
   g_free (ctx->session_filename);
-  g_free (ctx->bookmark_url);
-
   g_strfreev (ctx->arguments);
-
   g_free (ctx);
 }
 
@@ -500,9 +487,7 @@ ephy_shell_activate (GApplication *application)
  */
 typedef enum {
   CTX_STARTUP_FLAGS,
-  CTX_BOOKMARKS_FILENAME,
   CTX_SESSION_FILENAME,
-  CTX_BOOKMARK_URL,
   CTX_ARGUMENTS,
   CTX_USER_TIME
 } CtxEnum;
@@ -535,20 +520,10 @@ ephy_shell_add_platform_data (GApplication    *application,
                              CTX_STARTUP_FLAGS,
                              g_variant_new_byte (ctx->startup_flags));
 
-    if (ctx->bookmarks_filename)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_BOOKMARKS_FILENAME,
-                             g_variant_new_string (ctx->bookmarks_filename));
-
     if (ctx->session_filename)
       g_variant_builder_add (ctx_builder, "{iv}",
                              CTX_SESSION_FILENAME,
                              g_variant_new_string (ctx->session_filename));
-
-    if (ctx->bookmark_url)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_BOOKMARK_URL,
-                             g_variant_new_string (ctx->bookmark_url));
 
     /*
      * If there are no URIs specified, pass an empty string, so that
@@ -602,14 +577,8 @@ ephy_shell_before_emit (GApplication *application,
           case CTX_STARTUP_FLAGS:
             ctx->startup_flags = g_variant_get_byte (ctx_value);
             break;
-          case CTX_BOOKMARKS_FILENAME:
-            ctx->bookmarks_filename = g_variant_dup_string (ctx_value, NULL);
-            break;
           case CTX_SESSION_FILENAME:
             ctx->session_filename = g_variant_dup_string (ctx_value, NULL);
-            break;
-          case CTX_BOOKMARK_URL:
-            ctx->bookmark_url = g_variant_dup_string (ctx_value, NULL);
             break;
           case CTX_ARGUMENTS:
             ctx->arguments = g_variant_dup_strv (ctx_value, NULL);
