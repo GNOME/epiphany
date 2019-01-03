@@ -171,7 +171,6 @@ main (int   argc,
   guint32 user_time;
   gboolean arbitrary_url;
   EphyShellStartupContext *ctx;
-  EphyStartupFlags startup_flags;
   EphyEmbedShellMode mode;
   int status;
   EphyFileHelpersFlags flags;
@@ -365,8 +364,6 @@ main (int   argc,
     exit (0);
   }
 
-  startup_flags =  open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : 0;
-
   /* Now create the shell */
   if (private_instance) {
     mode = EPHY_EMBED_SHELL_MODE_PRIVATE;
@@ -400,7 +397,7 @@ main (int   argc,
 
   _ephy_shell_create_instance (mode);
 
-  ctx = ephy_shell_startup_context_new (startup_flags,
+  ctx = ephy_shell_startup_context_new (open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : EPHY_STARTUP_NEW_TAB,
                                         session_filename,
                                         arguments,
                                         user_time);

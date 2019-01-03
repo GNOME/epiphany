@@ -74,6 +74,7 @@ G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
 /**
  * ephy_shell_startup_context_new:
+ * @startup_mode: An #EphyStartupMode (new tab or new window)
  * @session_filename: A session to restore.
  * @arguments: A %NULL-terminated array of URLs and file URIs to be opened.
  * @user_time: The user time when the EphyShell startup was invoked.
@@ -84,14 +85,14 @@ G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
  * Returns: a newly allocated #EphyShellStartupContext
  **/
 EphyShellStartupContext *
-ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
+ephy_shell_startup_context_new (EphyStartupMode startup_mode,
                                 char *session_filename,
                                 char **arguments,
                                 guint32 user_time)
 {
   EphyShellStartupContext *ctx = g_new0 (EphyShellStartupContext, 1);
 
-  ctx->startup_flags = startup_flags;
+  ctx->startup_mode = startup_mode;
   ctx->session_filename = g_strdup (session_filename);
   ctx->arguments = g_strdupv (arguments);
   ctx->user_time = user_time;
@@ -122,7 +123,7 @@ ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
-                          ctx->startup_flags, ctx->user_time);
+                          ctx->startup_mode, ctx->user_time);
   }
 }
 
@@ -444,7 +445,7 @@ ephy_shell_activate (GApplication *application)
  * instance.
  */
 typedef enum {
-  CTX_STARTUP_FLAGS,
+  CTX_STARTUP_MODE,
   CTX_SESSION_FILENAME,
   CTX_ARGUMENTS,
   CTX_USER_TIME
@@ -473,10 +474,10 @@ ephy_shell_add_platform_data (GApplication    *application,
     ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
     ctx = app->local_startup_context;
 
-    if (ctx->startup_flags)
+    if (ctx->startup_mode)
       g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_STARTUP_FLAGS,
-                             g_variant_new_byte (ctx->startup_flags));
+                             CTX_STARTUP_MODE,
+                             g_variant_new_byte (ctx->startup_mode));
 
     if (ctx->session_filename)
       g_variant_builder_add (ctx_builder, "{iv}",
@@ -532,8 +533,8 @@ ephy_shell_before_emit (GApplication *application,
       g_variant_iter_init (&ctx_iter, value);
       while (g_variant_iter_loop (&ctx_iter, "{iv}", &ctx_key, &ctx_value)) {
         switch (ctx_key) {
-          case CTX_STARTUP_FLAGS:
-            ctx->startup_flags = g_variant_get_byte (ctx_value);
+          case CTX_STARTUP_MODE:
+            ctx->startup_mode = g_variant_get_byte (ctx_value);
             break;
           case CTX_SESSION_FILENAME:
             ctx->session_filename = g_variant_dup_string (ctx_value, NULL);
@@ -1037,10 +1038,10 @@ typedef struct {
 } OpenURIsData;
 
 static OpenURIsData *
-open_uris_data_new (EphyShell       *shell,
-                    const char     **uris,
-                    EphyStartupFlags startup_flags,
-                    guint32          user_time)
+open_uris_data_new (EphyShell        *shell,
+                    const char      **uris,
+                    EphyStartupMode   startup_mode,
+                    guint32           user_time)
 {
   OpenURIsData *data;
   gboolean fullscreen_lockdown;
@@ -1055,7 +1056,7 @@ open_uris_data_new (EphyShell       *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
-  if ((startup_flags & EPHY_STARTUP_NEW_WINDOW) && !fullscreen_lockdown) {
+  if (startup_mode == EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
   } else {
     data->flags |= EPHY_NEW_TAB_JUMP;
@@ -1148,7 +1149,7 @@ ephy_shell_open_uris_idle_done (OpenURIsData *data)
 void
 ephy_shell_open_uris (EphyShell       *shell,
                       const char     **uris,
-                      EphyStartupFlags startup_flags,
+                      EphyStartupMode  startup_mode,
                       guint32          user_time)
 {
   OpenURIsData *data;
@@ -1156,7 +1157,7 @@ ephy_shell_open_uris (EphyShell       *shell,
 
   g_assert (EPHY_IS_SHELL (shell));
 
-  data = open_uris_data_new (shell, uris, startup_flags, user_time);
+  data = open_uris_data_new (shell, uris, startup_mode, user_time);
   id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
                         (GSourceFunc)ephy_shell_open_uris_idle,
                         data,
