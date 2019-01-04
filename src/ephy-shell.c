@@ -85,10 +85,10 @@ G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
  * Returns: a newly allocated #EphyShellStartupContext
  **/
 EphyShellStartupContext *
-ephy_shell_startup_context_new (EphyStartupMode startup_mode,
-                                char *session_filename,
-                                char **arguments,
-                                guint32 user_time)
+ephy_shell_startup_context_new (EphyStartupMode   startup_mode,
+                                char             *session_filename,
+                                char            **arguments,
+                                guint32           user_time)
 {
   EphyShellStartupContext *ctx = g_new0 (EphyShellStartupContext, 1);
 
@@ -111,7 +111,8 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 }
 
 static void
-ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
+ephy_shell_startup_continue (EphyShell               *shell,
+                             EphyShellStartupContext *ctx)
 {
   EphySession *session = ephy_shell_get_session (shell);
 
@@ -733,13 +734,13 @@ ephy_shell_get_default (void)
  * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
-ephy_shell_new_tab_full (EphyShell      *shell,
-                         const char     *title,
-                         WebKitWebView  *related_view,
-                         EphyWindow     *window,
-                         EphyEmbed      *previous_embed,
-                         EphyNewTabFlags flags,
-                         guint32         user_time)
+ephy_shell_new_tab_full (EphyShell       *shell,
+                         const char      *title,
+                         WebKitWebView   *related_view,
+                         EphyWindow      *window,
+                         EphyEmbed       *previous_embed,
+                         EphyNewTabFlags  flags,
+                         guint32          user_time)
 {
   EphyEmbedShell *embed_shell;
   GtkWidget *web_view;
@@ -805,10 +806,10 @@ ephy_shell_new_tab_full (EphyShell      *shell,
  * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
-ephy_shell_new_tab (EphyShell      *shell,
-                    EphyWindow     *parent_window,
-                    EphyEmbed      *previous_embed,
-                    EphyNewTabFlags flags)
+ephy_shell_new_tab (EphyShell       *shell,
+                    EphyWindow      *parent_window,
+                    EphyEmbed       *previous_embed,
+                    EphyNewTabFlags  flags)
 {
   return ephy_shell_new_tab_full (shell, NULL, NULL, parent_window,
                                   previous_embed, flags,
@@ -1189,10 +1190,10 @@ ephy_shell_open_uris_idle_done (OpenURIsData *data)
 }
 
 void
-ephy_shell_open_uris (EphyShell       *shell,
-                      const char     **uris,
-                      EphyStartupMode  startup_mode,
-                      guint32          user_time)
+ephy_shell_open_uris (EphyShell        *shell,
+                      const char      **uris,
+                      EphyStartupMode   startup_mode,
+                      guint32           user_time)
 {
   OpenURIsData *data;
   guint id;
