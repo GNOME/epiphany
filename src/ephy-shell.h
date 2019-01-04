@@ -79,56 +79,48 @@ typedef struct {
   guint32 user_time;
 } EphyShellStartupContext;
 
-EphyShell      *ephy_shell_get_default                  (void);
+EphyShell               *ephy_shell_get_default           (void);
 
-EphyEmbed      *ephy_shell_new_tab                      (EphyShell *shell,
-                                                         EphyWindow *parent_window,
-                                                         EphyEmbed *previous_embed,
-                                                         EphyNewTabFlags flags);
+EphyEmbed               *ephy_shell_new_tab               (EphyShell        *shell,
+                                                           EphyWindow       *parent_window,
+                                                           EphyEmbed        *previous_embed,
+                                                           EphyNewTabFlags   flags);
 
-EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
-                                                         const char *title,
-                                                         WebKitWebView *related_view,
-                                                         EphyWindow *parent_window,
-                                                         EphyEmbed *previous_embed,
-                                                         EphyNewTabFlags flags,
-                                                         guint32 user_time);
+EphyEmbed               *ephy_shell_new_tab_full          (EphyShell        *shell,
+                                                           const char       *title,
+                                                           WebKitWebView    *related_view,
+                                                           EphyWindow       *parent_window,
+                                                           EphyEmbed        *previous_embed,
+                                                           EphyNewTabFlags   flags,
+                                                           guint32           user_time);
 
-EphySession     *ephy_shell_get_session                  (EphyShell *shell);
+EphySession             *ephy_shell_get_session           (EphyShell        *shell);
+GNetworkMonitor         *ephy_shell_get_net_monitor       (EphyShell        *shell);
+EphyBookmarksManager    *ephy_shell_get_bookmarks_manager (EphyShell        *shell);
+EphyHistoryManager      *ephy_shell_get_history_manager   (EphyShell        *shell);
+EphyOpenTabsManager     *ephy_shell_get_open_tabs_manager (EphyShell        *shell);
+EphySyncService         *ephy_shell_get_sync_service      (EphyShell        *shell);
 
-GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
+GtkWidget               *ephy_shell_get_history_dialog    (EphyShell        *shell);
+GObject                 *ephy_shell_get_prefs_dialog      (EphyShell        *shell);
 
-EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
+guint                    ephy_shell_get_n_windows         (EphyShell        *shell);
+gboolean                 ephy_shell_close_all_windows     (EphyShell        *shell);
 
-EphyHistoryManager *ephy_shell_get_history_manager       (EphyShell *shell);
+void                     ephy_shell_try_quit              (EphyShell        *shell);
 
-EphyOpenTabsManager *ephy_shell_get_open_tabs_manager    (EphyShell *shell);
+void                     ephy_shell_open_uris             (EphyShell        *shell,
+                                                           const char      **uris,
+                                                           EphyStartupMode   startup_mode,
+                                                           guint32           user_time);
 
-EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
+void                     ephy_shell_set_startup_context   (EphyShell                *shell,
+                                                           EphyShellStartupContext  *ctx);
+EphyShellStartupContext *ephy_shell_startup_context_new   (EphyStartupMode           startup_mode,
+                                                           char                     *session_filename,
+                                                           char                    **arguments,
+                                                           guint32                   user_time);
 
-GtkWidget       *ephy_shell_get_history_dialog           (EphyShell *shell);
-
-GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
-
-guint           ephy_shell_get_n_windows                (EphyShell *shell);
-
-gboolean        ephy_shell_close_all_windows            (EphyShell *shell);
-
-void            ephy_shell_try_quit                     (EphyShell *shell);
-
-void            ephy_shell_open_uris                    (EphyShell *shell,
-                                                         const char **uris,
-                                                         EphyStartupMode startup_mode,
-                                                         guint32 user_time);
-
-void            ephy_shell_set_startup_context          (EphyShell               *shell,
-                                                         EphyShellStartupContext *ctx);
-
-EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupMode   startup_mode,
-                                                         char             *session_filename,
-                                                         char            **arguments,
-                                                         guint32           user_time);
-
-void            _ephy_shell_create_instance             (EphyEmbedShellMode mode);
+void                     _ephy_shell_create_instance      (EphyEmbedShellMode mode);
 
 G_END_DECLS
