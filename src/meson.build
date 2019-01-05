@@ -53,6 +53,7 @@ libephymain_sources = [
 ]
 
 libephymain_deps = [
+  config_h,
   ephyembed_dep,
   ephymisc_dep,
   ephysync_dep,

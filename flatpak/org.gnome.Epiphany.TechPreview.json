@@ -1,11 +1,11 @@
 {
-    "app-id" : "org.gnome.Epiphany",
+    "app-id" : "org.gnome.Epiphany.TechPreview",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "command" : "epiphany",
     "tags" : [
-        "development"
+        "TechPreview"
     ],
     "finish-args" : [
         "--share=ipc",
@@ -36,6 +36,25 @@
     ],
     "modules" : [
         {
+            "name" : "gtk",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtk.git",
+                    "branch" : "gtk-3-24"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtk-debug.patch"
+                }
+            ]
+        },
+        {
             "name" : "libdazzle",
             "config-opts" : [
                 "--libdir=/app/lib",
@@ -47,6 +66,10 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                },
+                {
+                    "type" : "patch" ,
+                    "path" : "dazzle-dse-test-fix.patch"
                 }
             ]
         },
@@ -55,8 +78,8 @@
             "buildsystem" : "meson",
             "config-opts" : [
                 "-Dexamples=false",
-                "-Dglade_catalog=disabled",
-                "-Dintrospection=disabled",
+                "-Dglade_catalog=false",
+                "-Dintrospection=false",
                 "-Dtests=false",
                 "-Dvapi=false"
             ],
@@ -64,6 +87,32 @@
                 {
                     "type" : "git",
                     "url" : "https://source.puri.sm/Librem5/libhandy.git"
+                }
+            ]
+        },
+        {
+            "name": "openjpeg2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/szukw000/openjpeg.git",
+                    "branch": "v2.1.2"
+                }
+            ]
+        },
+        {
+            "name" : "poppler",
+            "buildsystem" : "cmake-ninja",
+            "builddir": true,
+            "config-opts" : [
+                "-DENABLE_TESTING=OFF"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://anongit.freedesktop.org/git/poppler/poppler.git"
                 }
             ]
         },
@@ -95,7 +144,7 @@
         {
             "name" : "epiphany",
             "config-opts" : [
-                "-Dprofile=Devel"
+                "-Dprofile=TechPreview"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
