@@ -1,0 +1,119 @@
+{
+    "app-id" : "org.gnome.EpiphanyDevel",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "epiphany",
+    "tags" : [
+        "devel",
+        "development",
+        "nightly"
+    ],
+    "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--share=network",
+        "--socket=pulseaudio",
+        "--system-talk-name=org.freedesktop.GeoClue2",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--talk-name=org.freedesktop.secrets",
+        "--filesystem=xdg-download",
+        "--talk-name=org.freedesktop.Notifications"
+    ],
+    "build-options" : {
+        "cflags" : "-O2 -g",
+        "cxxflags" : "-O2 -g",
+        "env" : {
+            "V" : "1"
+        }
+    },
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+        {
+            "name" : "gtk",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtk.git",
+                    "branch" : "gtk-3-24"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtk-debug.patch"
+                }
+            ]
+        },
+        {
+            "name" : "libdazzle",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "-Denable_tracing=true"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                },
+                {
+                    "type" : "patch" ,
+                    "path" : "dazzle-dse-test-fix.patch"
+                }
+            ]
+        },
+        {
+            "name" : "libhandy",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dexamples=false",
+                "-Dglade_catalog=false",
+                "-Dintrospection=false",
+                "-Dtests=false",
+                "-Dvapi=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://source.puri.sm/Librem5/libhandy.git"
+                }
+            ]
+        },
+        {
+            "name" : "epiphany",
+            "config-opts" : [
+                "-Dprofile=Devel"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "disable-shallow-clone" : true
+                }
+            ]
+        }
+    ]
+}

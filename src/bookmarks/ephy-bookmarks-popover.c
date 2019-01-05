@@ -242,7 +242,8 @@ create_tag_row (const char *tag)
     image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic", GTK_ICON_SIZE_MENU);
     label = gtk_label_new (_(EPHY_BOOKMARKS_FAVORITES_TAG));
   } else {
-    image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic", GTK_ICON_SIZE_MENU);
+    GError *error = NULL;
+    image = gtk_image_new_from_resource ("/org/gnome/Epiphany/icons/scalable/actions/ephy-bookmark-tag-symbolic.svg");
     label = gtk_label_new (tag);
   }
 
