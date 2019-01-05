@@ -1,7 +1,7 @@
 project('epiphany', 'c',
   license: 'GPL3+',
   version: '3.31.3',
-  meson_version: '>= 0.42.0',
+  meson_version: '>= 0.46.0',
   default_options: ['c_std=gnu11']
 )
 
@@ -17,6 +17,7 @@ endif
 
 prefix = get_option('prefix')
 datadir = join_paths(prefix, get_option('datadir'))
+desktopdir = join_paths(datadir, 'applications')
 libdir = join_paths(prefix, get_option('libdir'))
 libexecdir = join_paths(prefix, get_option('libexecdir'))
 liblocaledir = join_paths(prefix, libdir, 'locale')
@@ -24,57 +25,56 @@ localedir = join_paths(prefix, get_option('localedir'))
 pkgdatadir = join_paths(datadir, 'epiphany')
 pkglibdir = join_paths(libdir, 'epiphany')
 pkglibexecdir = join_paths(libexecdir, 'epiphany')
+servicedir = join_paths(datadir, 'dbus-1', 'services')
 webextensionsdir = join_paths(pkglibdir, 'web-extensions')
 
 iso_codes = dependency('iso-codes')
 iso_codes_prefix = iso_codes.get_pkgconfig_variable('prefix')
 
+profile = get_option('profile')
+name_suffix = ''
+
+if get_option('profile') == 'Devel'
+  name_suffix = ' (Epiphany Technology Preview)'
+endif
+
+application_id = 'org.gnome.Epiphany' + profile
+
 conf = configuration_data()
+conf.set_quoted('APPLICATION_ID', application_id)
 conf.set_quoted('BUILD_ROOT', meson.build_root())
+developer_mode = get_option('developer_mode')
+conf.set10('DEVELOPER_MODE', developer_mode)
 conf.set_quoted('DISTRIBUTOR_NAME', distributor_name)
 conf.set_quoted('EPHY_WEB_EXTENSIONS_DIR', webextensionsdir)
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf.set_quoted('ISO_CODES_PREFIX', iso_codes_prefix)
 conf.set_quoted('LIBLOCALEDIR', liblocaledir)
 conf.set_quoted('LOCALEDIR', localedir)
+conf.set_quoted('NAME_SUFFIX', name_suffix)
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)
+conf.set_quoted('PROFILE', profile)
 conf.set_quoted('SOURCE_ROOT', meson.source_root())
-
-developer_mode = get_option('developer_mode')
-conf.set10('DEVELOPER_MODE', developer_mode)
-
-tech_preview = get_option('tech_preview')
-conf.set10('TECH_PREVIEW', tech_preview)
-
-conf.set_quoted('VERSION', meson.project_version())
 
 version_array = meson.project_version().split('.')
 conf.set('EPHY_MAJOR_VERSION', version_array[0].to_int())
 conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
 conf.set('EPHY_MICRO_VERSION', version_array[2].to_int())
 
-configure_file(
-  output: 'config.h',
-  configuration: conf
+conf.set_quoted('VERSION', '@0@-@VCS_TAG@'.format(meson.project_version()))
+
+config_h = declare_dependency(
+  sources: vcs_tag(
+    command: ['git', 'rev-parse', '--short', 'HEAD'],
+    fallback: get_option('profile') != 'default'? 'devel' : 'stable',
+    input: configure_file(
+      output: 'config.h.in',
+      configuration: conf
+    ),
+    output: 'config.h'
+  )
 )
-
-if tech_preview or developer_mode
-  vcs_tag(
-    input: 'ephy-vcs-version.h.in',
-    output: 'ephy-vcs-version.h',
-    replace_string: '@VCSVERSION@'
-  )
-else
-  version_conf = configuration_data()
-  version_conf.set('VCSVERSION', meson.project_version())
-
-  configure_file(
-    input: 'ephy-vcs-version.h.in',
-    output: 'ephy-vcs-version.h',
-    configuration: version_conf
-  )
-endif
 
 # Dependencies policy: except for WebKitGTK+, all dependency versions must be
 # available in Ubuntu 18.04. Please check before bumping the required version
