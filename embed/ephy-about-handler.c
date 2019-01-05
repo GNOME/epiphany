@@ -31,7 +31,6 @@
 #include "ephy-settings.h"
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 
 #include <gio/gio.h>
@@ -163,10 +162,10 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
   char *version;
   GtkIconInfo *icon_info;
 
-  version = g_strdup_printf (_("Version %s"), VCSVERSION);
+  version = g_strdup_printf (_("Version %s"), VERSION);
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                          "org.gnome.Epiphany",
+                                          APPLICATION_ID,
                                           256,
                                           GTK_ICON_LOOKUP_FORCE_SVG);
 
@@ -343,9 +342,10 @@ history_service_query_urls_cb (EphyHistoryService     *history,
 
   if (g_list_length (urls) == 0 || !success) {
     GtkIconInfo *icon_info;
+    g_autofree gchar *icon = g_strconcat (APPLICATION_ID, "-symbolic", NULL);
 
     icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                            "org.gnome.Epiphany-symbolic",
+                                            icon,
                                             128,
                                             0);
     g_string_append_printf (data_str,

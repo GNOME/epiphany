@@ -10,10 +10,10 @@ option('network_tests',
   description: 'Enable tests that require network access, if unit_tests are enabled'
 )
 
-option('tech_preview',
-  type: 'boolean',
-  value: false,
-  description: 'Enable Epiphany Tech Preview branding'
+option('profile',
+  type: 'string',
+  value: '',
+  description: 'Build with appended profile to application ID'
 )
 
 option('unit_tests',
