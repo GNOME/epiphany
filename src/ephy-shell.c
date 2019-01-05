@@ -988,12 +988,14 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 void
 _ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
-  const char *id;
+  g_autofree gchar *id = NULL;
 
   g_assert (ephy_shell == NULL);
 
-  id = (mode == EPHY_EMBED_SHELL_MODE_APPLICATION ? "org.gnome.Epiphany.WebApp"
-                                                  : "org.gnome.Epiphany");
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    id = g_strconcat (APPLICATION_ID, ".WebApp", NULL);
+  else
+    id = g_strdup (APPLICATION_ID);
 
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
                                          "application-id", id,
