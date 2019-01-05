@@ -2400,6 +2400,8 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
+  gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
+
   setup_general_page (dialog);
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
