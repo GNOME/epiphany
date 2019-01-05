@@ -1731,6 +1731,7 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   GAppInfo *app;
   GList *list = NULL;
   gboolean ret = FALSE;
+  g_autofree gchar *app_id = NULL;
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
   g_assert (file);
@@ -1744,9 +1745,10 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 
   app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 
+  app_id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
   /* Do not allow recursive calls into the browser, they can lead to
    * infinite loops and they should never happen anyway. */
-  if (!app || g_strcmp0 (g_app_info_get_id (app), "org.gnome.Epiphany.desktop") == 0)
+  if (!app || g_strcmp0 (g_app_info_get_id (app), app_id) == 0)
     return ret;
 
   list = g_list_append (list, file);
