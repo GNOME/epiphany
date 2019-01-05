@@ -9,9 +9,7 @@ flatpak:
     MANIFEST_PATH: 'org.gnome.Epiphany.json'
     RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
     FLATPAK_MODULE: 'epiphany'
-    # Make sure to keep this in sync with the Flatpak manifest, all arguments
-    # are passed except the config-args because we build it ourselves
-    MESON_ARGS: '-Dunit_tests=enabled --werror'
+    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
     APP_ID: 'org.gnome.Epiphany'
 
 review:

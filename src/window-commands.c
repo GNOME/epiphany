@@ -52,7 +52,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "ephy-vcs-version.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
@@ -603,14 +602,14 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_program_name (dialog, _("Epiphany Technology Preview"));
 #endif
 
-  gtk_about_dialog_set_version (dialog, VCSVERSION);
+  gtk_about_dialog_set_version (dialog, VERSION);
   gtk_about_dialog_set_copyright (dialog, "Copyright © 2002–2004 Marco Pesenti Gritti\n"
                                           "Copyright © 2003–2019 The GNOME Web Developers");
   gtk_about_dialog_set_comments (dialog, comments);
   gtk_about_dialog_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
   gtk_about_dialog_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
   gtk_about_dialog_set_website_label (dialog, _("Website"));
-  gtk_about_dialog_set_logo_icon_name (dialog, "org.gnome.Epiphany");
+  gtk_about_dialog_set_logo_icon_name (dialog, APPLICATION_ID);
 
   /* We have to use add_credit_section() for documenters and artists to
    * ensure maintainers get sorted first. */
