@@ -1,13 +1,12 @@
 {
-    "app-id" : "org.gnome.Epiphany",
+    "app-id" : "org.gnome.Epiphany.Devel",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "command" : "epiphany",
     "tags" : [
-        "nightly"
+        "development"
     ],
-    "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
     "finish-args" : [
         "--share=ipc",
         "--socket=x11",
@@ -24,13 +23,6 @@
         "--filesystem=xdg-download",
         "--talk-name=org.freedesktop.Notifications"
     ],
-    "build-options" : {
-        "cflags" : "-O2 -g",
-        "cxxflags" : "-O2 -g",
-        "env" : {
-            "V" : "1"
-        }
-    },
     "cleanup" : [
         "/include",
         "/lib/pkgconfig",
@@ -152,7 +144,7 @@
         {
             "name" : "epiphany",
             "config-opts" : [
-                "-Dtech_preview=true"
+                "-Dprofile=Devel"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
