@@ -196,7 +196,7 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
                              "name", g_variant_new_take_string (g_strdup_printf (_("Search the Web for %s"),
                                                                                  results[i] + strlen ("special:search:"))));
       g_variant_builder_add (&builder, "{sv}",
-                             "gicon", g_variant_new_string ("org.gnome.Epiphany"));
+                             "gicon", g_variant_new_string (APPLICATION_ID));
       g_variant_builder_close (&builder);
     } else {
       EphySuggestion *suggestion;
@@ -421,7 +421,9 @@ ephy_search_provider_class_init (EphySearchProviderClass *klass)
 EphySearchProvider *
 ephy_search_provider_new (void)
 {
+  g_autofree gchar *app_id = g_strconcat (APPLICATION_ID, ".SearchProvider", NULL);
+
   return g_object_new (EPHY_TYPE_SEARCH_PROVIDER,
-                       "application-id", "org.gnome.Epiphany.SearchProvider",
+                       "application-id", app_id,
                        NULL);
 }

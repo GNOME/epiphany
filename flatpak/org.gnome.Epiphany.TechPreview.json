@@ -1,11 +1,11 @@
 {
-    "app-id" : "org.gnome.Epiphany",
+    "app-id" : "org.gnome.Epiphany.TechPreview",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "command" : "epiphany",
     "tags" : [
-        "development"
+        "TechPreview"
     ],
     "finish-args" : [
         "--share=ipc",
@@ -144,7 +144,7 @@
         {
             "name" : "epiphany",
             "config-opts" : [
-                "-Dprofile=Devel"
+                "-Dprofile=TechPreview"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
