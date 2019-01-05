@@ -1,18 +1,18 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
 variables:
-  BUNDLE: 'epiphany-git.flatpak'
+  BUNDLE: 'epiphany-dev.flatpak'
 
 flatpak:
   extends: '.flatpak'
   variables:
-    MANIFEST_PATH: 'flatpak/org.gnome.Epiphany.json'
-    RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
+    MANIFEST_PATH: 'flatpak/org.gnome.EpiphanyDevel.json'
     FLATPAK_MODULE: 'epiphany'
+    RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
     # Make sure to keep this in sync with the Flatpak manifest, all arguments
     # are passed except the config-args because we build it ourselves
-    MESON_ARGS: '-Dunit_tests=true'
-    APP_ID: 'org.gnome.Epiphany'
+    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=true -Db_coverage=true'
+    APP_ID: 'org.gnome.EpiphanyDevel'
 
 review:
   dependencies:
