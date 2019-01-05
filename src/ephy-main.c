@@ -29,7 +29,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 
 #include <errno.h>
@@ -101,7 +100,7 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_print ("%s %s\n", _("Web"), VCSVERSION);
+  g_print ("%s %s\n", _("Web"), VERSION);
 
   exit (EXIT_SUCCESS);
   return FALSE;
@@ -405,7 +404,7 @@ main (int   argc,
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
 
-    gtk_window_set_default_icon_name ("org.gnome.Epiphany");
+    gtk_window_set_default_icon_name (APPLICATION_ID);
   }
 
   hdy_init (&argc, &argv);

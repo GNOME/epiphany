@@ -1,13 +1,32 @@
-install_subdir('icons/hicolor',
-  install_dir: join_paths(datadir, 'icons')
+po_dir = join_paths(meson.source_root(), 'po')
+
+icondir = join_paths('icons', 'hicolor', 'scalable', 'apps')
+install_data(
+  join_paths(icondir, 'org.gnome.Epiphany.svg'),
+  install_dir: join_paths(datadir, icondir),
+  rename: '@0@.svg'.format(application_id)
 )
 
-desktop_file = i18n.merge_file('desktop-file',
-  input: 'org.gnome.Epiphany.desktop.in',
-  output: 'org.gnome.Epiphany.desktop',
+icondir = join_paths('icons', 'hicolor', 'symbolic', 'apps')
+install_data(
+  join_paths(icondir, 'org.gnome.Epiphany-symbolic.svg'),
+  install_dir: join_paths(datadir, icondir),
+  rename: '@0@-symbolic.svg'.format(application_id)
+)
+
+desktop_conf = configuration_data()
+desktop_conf.set('icon', application_id)
+desktop = i18n.merge_file(
+  'desktop',
+  input: configure_file(
+    input: files('org.gnome.Epiphany.desktop.in.in'),
+    output: 'org.gnome.Epiphany.desktop.in',
+    configuration: desktop_conf
+  ),
+  output: '@0@.desktop'.format(application_id),
   install: true,
-  install_dir: join_paths(datadir, 'applications'),
-  po_dir: '../po',
+  install_dir: desktopdir,
+  po_dir: po_dir,
   type: 'desktop'
 )
 desktop_file_validate = find_program ('desktop-file-validate', required: false)
@@ -21,12 +40,19 @@ if desktop_file_validate.found()
   )
 endif
 
-appdata_file = i18n.merge_file('appdata-file',
-  input: 'org.gnome.Epiphany.appdata.xml.in',
-  output: 'org.gnome.Epiphany.appdata.xml',
+appdata_conf = configuration_data()
+appdata_conf.set('appid', application_id)
+appdata = i18n.merge_file(
+  'appdata',
+  input: configure_file(
+    input: files('org.gnome.Epiphany.appdata.xml.in.in'),
+    output: 'org.gnome.Epiphany.appdata.xml.in',
+    configuration: appdata_conf
+  ),
+  output: '@0@.appdata.xml'.format(application_id),
   install: true,
   install_dir: join_paths(datadir, 'metainfo'),
-  po_dir: '../po'
+  po_dir: po_dir
 )
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
@@ -81,17 +107,24 @@ install_data('org.gnome.epiphany.gschema.xml',
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
 
-serviceconf = configuration_data()
-serviceconf.set('libexecdir', libexecdir)
+service_conf = configuration_data()
+service_conf.set('appid', application_id)
+service_conf.set('libexecdir', libexecdir)
 configure_file(
   input: 'org.gnome.Epiphany.SearchProvider.service.in',
-  output: 'org.gnome.Epiphany.SearchProvider.service',
-  configuration: serviceconf,
-  install: true,
-  install_dir: join_paths(datadir, 'dbus-1', 'services')
+  output: '@0@.SearchProvider.service'.format(application_id),
+  configuration: service_conf,
+  install_dir: servicedir
 )
-install_data('org.gnome.Epiphany.search-provider.ini',
-  install_dir: join_paths(datadir, 'gnome-shell', 'search-providers')
+
+search_provider_conf = configuration_data()
+search_provider_conf.set('appid', application_id)
+search_provider_conf.set('profile', profile)
+configure_file(
+  configuration: search_provider_conf,
+  input: files('org.gnome.Epiphany.SearchProvider.ini.in'),
+  install_dir: join_paths(datadir, 'gnome-shell', 'search-providers'),
+  output: '@0@.SearchProvider.ini'.format(application_id)
 )
 
 bookmarksconf = configuration_data()
@@ -105,3 +138,24 @@ configure_file(
 )
 
 install_man('epiphany.1')
+
+desktop_file_validate = find_program('desktop-file-validate', required: false)
+if desktop_file_validate.found()
+  test(
+    'validate-desktop',
+    desktop_file_validate,
+    args: [
+      desktop.full_path()
+    ]
+  )
+endif
+
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test(
+    'validate-appdata', appstream_util,
+    args: [
+      'validate-relax', appdata.full_path()
+    ]
+  )
+endif

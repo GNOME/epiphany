@@ -1,0 +1,160 @@
+{
+    "app-id" : "org.gnome.Epiphany.TechPreview",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "epiphany",
+    "tags" : [
+        "TechPreview"
+    ],
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--share=network",
+        "--socket=pulseaudio",
+        "--system-talk-name=org.freedesktop.GeoClue2",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--talk-name=org.freedesktop.secrets",
+        "--filesystem=xdg-download",
+        "--talk-name=org.freedesktop.Notifications"
+    ],
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+        {
+            "name" : "gtk",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtk.git",
+                    "branch" : "gtk-3-24"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtk-debug.patch"
+                }
+            ]
+        },
+        {
+            "name" : "libdazzle",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "-Denable_tracing=true"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                },
+                {
+                    "type" : "patch" ,
+                    "path" : "dazzle-dse-test-fix.patch"
+                }
+            ]
+        },
+        {
+            "name" : "libhandy",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dexamples=false",
+                "-Dglade_catalog=false",
+                "-Dintrospection=false",
+                "-Dtests=false",
+                "-Dvapi=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://source.puri.sm/Librem5/libhandy.git"
+                }
+            ]
+        },
+        {
+            "name": "openjpeg2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/szukw000/openjpeg.git",
+                    "branch": "v2.1.2"
+                }
+            ]
+        },
+        {
+            "name" : "poppler",
+            "buildsystem" : "cmake-ninja",
+            "builddir": true,
+            "config-opts" : [
+                "-DENABLE_TESTING=OFF"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://anongit.freedesktop.org/git/poppler/poppler.git"
+                }
+            ]
+        },
+        {
+            "name" : "evince",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dplatform=gnome",
+                "-Dviewer=false",
+                "-Dpreviewer=false",
+                "-Dthumbnailer=false",
+                "-Dnautilus=false",
+                "-Dgtk_doc=false",
+                "-Dintrospection=false",
+                "-Ddbus=false",
+                "-Dkeyring=disabled",
+                "-Dgtk_unix_print=disabled",
+                "-Dthumbnail_cache=disabled",
+                "-Dgspell=disabled",
+                "-Dsystemduserunitdir=no"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/evince.git"
+                }
+            ]
+        },
+        {
+            "name" : "epiphany",
+            "config-opts" : [
+                "-Dprofile=TechPreview"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "disable-shallow-clone" : true
+                }
+            ]
+        }
+    ]
+}
