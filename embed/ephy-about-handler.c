@@ -31,7 +31,6 @@
 #include "ephy-settings.h"
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 
 #include <gio/gio.h>
@@ -162,14 +161,16 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
   char *data;
   char *version;
   GtkIconInfo *icon_info;
+  g_autofree gchar *name = NULL;
 
-  version = g_strdup_printf (_("Version %s"), VCSVERSION);
+  version = g_strdup_printf (_("Version %s"), VERSION);
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                           "org.gnome.Epiphany",
                                           256,
                                           GTK_ICON_LOOKUP_FORCE_SVG);
 
+  name = g_strconcat (_("Web"), NAME_SUFFIX, NULL);
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
@@ -185,11 +186,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "</div></body></html>",
                           _("About Web"),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
-#if !TECH_PREVIEW
-                         _("Web"),
-#else
-                         _("Epiphany Technology Preview"),
-#endif
+                          name,
                           version,
                           _("A simple, clean, beautiful view of the web"),
                           "WebKitGTK+", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());

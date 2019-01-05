@@ -827,7 +827,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
-  entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
+  entry->reader_mode = gtk_image_new_from_resource ("/org/gnome/Epiphany/icons/scalable/actions/ephy-reader-mode-symbolic.svg");
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER(entry->reader_mode_event_box), entry->reader_mode);
   gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);

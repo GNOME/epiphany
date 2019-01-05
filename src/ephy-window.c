@@ -3487,6 +3487,14 @@ ephy_window_constructed (GObject *object)
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
 
   ephy_window_set_chrome (window, chrome);
+
+  if (g_strcmp0 (PROFILE, "") != 0) {
+    GtkStyleContext *style_context;
+
+    style_context = gtk_widget_get_style_context (GTK_WIDGET (window));
+
+    gtk_style_context_add_class (style_context, "devel");
+  }
 }
 
 static void
