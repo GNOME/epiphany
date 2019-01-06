@@ -382,6 +382,11 @@ ephy_file_helpers_init (const char          *profile_dir,
       cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);
       config_dir = g_build_filename (g_get_user_config_dir (), app_name, NULL);
       profile_dir_type = EPHY_PROFILE_DIR_WEB_APP;
+    } else {
+      /* Custom profiles store these locally but note this cannot work with the sandbox
+         since it bases file permissions on prgname which is still "epiphany" */
+      cache_dir = g_build_filename (profile_dir_global, "cache", NULL);
+      config_dir = g_build_filename (profile_dir_global, "config", NULL);
     }
   } else if (private_profile) {
     if (ephy_file_tmp_dir () == NULL) {
