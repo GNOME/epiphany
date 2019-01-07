@@ -99,9 +99,10 @@ ephy_bookmark_set_property (GObject      *object,
       ephy_bookmark_set_url (self, g_value_get_string (value));
       break;
     case PROP_TAGS:
-      if (self->tags != NULL)
-        g_sequence_free (self->tags);
+      g_sequence_free (self->tags);
       self->tags = g_value_get_pointer (value);
+      if (!self->tags)
+        self->tags = g_sequence_new (g_free);
       break;
     case PROP_TYPE:
       g_free (self->type);
@@ -176,8 +177,7 @@ ephy_bookmark_finalize (GObject *object)
   g_free (self->title);
   g_free (self->id);
 
-  if (self->tags)
-    g_sequence_free (self->tags);
+  g_sequence_free (self->tags);
 
   G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
@@ -279,6 +279,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
+  self->tags = g_sequence_new (g_free);
 }
 
 EphyBookmark *
@@ -456,6 +457,7 @@ GSequence *
 ephy_bookmark_get_tags (EphyBookmark *self)
 {
   g_assert (EPHY_IS_BOOKMARK (self));
+  g_assert (self->tags);
 
   return self->tags;
 }
