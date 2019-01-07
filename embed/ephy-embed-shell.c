@@ -812,7 +812,7 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
     char *db_path;
 
     api_key = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_GSB_API_KEY);
-    db_path = g_build_filename (ephy_cache_dir (), EPHY_GSB_FILE, NULL);
+    db_path = g_build_filename (ephy_default_cache_dir (), EPHY_GSB_FILE, NULL);
     priv->global_gsb_service = ephy_gsb_service_new (api_key, db_path);
 
     g_free (api_key);
