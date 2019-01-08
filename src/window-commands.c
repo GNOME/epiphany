@@ -1872,7 +1872,7 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
     goto out;
   }
 
-  if (!ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ())) {
+  if (!ephy_file_launch_handler (file, gtk_get_current_event_time ())) {
     /* Fallback to view the source inside the browser */
     EphyEmbed *embed;
 
@@ -2059,7 +2059,7 @@ window_cmd_page_source (GSimpleAction *action,
     GFile *file;
 
     file = g_file_new_for_uri (address);
-    ephy_file_launch_handler ("text/plain", file, user_time);
+    ephy_file_launch_handler (file, user_time);
 
     g_object_unref (file);
   } else {

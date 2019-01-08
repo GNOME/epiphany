@@ -444,8 +444,7 @@ ephy_download_do_download_action (EphyDownload          *download,
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
-      ret = ephy_embed_shell_launch_handler (ephy_embed_shell_get_default (),
-                                             destination, NULL, user_time);
+      ret = ephy_file_launch_handler (destination, user_time);
       if (!ret)
         ret = ephy_file_browse_to (destination, user_time);
       break;
