@@ -336,13 +336,13 @@ ephy_web_application_create (const char *id,
    * view, do nothing. */
   profile_dir = ephy_web_application_get_profile_directory (id);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
-    LOG ("Profile directory %s already exists", profile_dir);
+    g_warning ("Profile directory %s already exists", profile_dir);
     goto out;
   }
 
   /* Create the profile directory, populate it. */
   if (g_mkdir (profile_dir, 488) == -1) {
-    LOG ("Failed to create directory %s", profile_dir);
+    g_warning ("Failed to create directory %s", profile_dir);
     goto out;
   }
 
