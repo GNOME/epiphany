@@ -48,6 +48,11 @@ typedef enum
   EPHY_FILE_HELPERS_TESTING_MODE     = 1 << 5
 } EphyFileHelpersFlags;
 
+typedef enum
+{
+  EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK
+} EphyFileHelpersNotFlatpakTag;
+
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
                                                              EphyFileHelpersFlags   flags,
                                                              GError               **error);
@@ -63,21 +68,29 @@ char       *       ephy_file_tmp_filename                   (const char         
                                                              const char            *extension);
 gboolean           ephy_ensure_dir_exists                   (const char            *dir,
                                                              GError               **error);
-gboolean           ephy_file_launch_desktop_file            (const char            *filename,
-                                                             const char            *parameter,
-                                                             guint32                user_time,
-                                                             GtkWidget             *widget);
 gboolean           ephy_file_launch_handler                 (GFile                 *file,
-                                                             guint32                user_time);
-gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
-                                                             guint32                timestamp,
-                                                             GdkScreen             *screen);
-gboolean           ephy_file_browse_to                      (GFile                 *file,
                                                              guint32                user_time);
 gboolean           ephy_file_delete_dir_recursively         (const char            *directory,
                                                              GError               **error);
 char       *       ephy_sanitize_filename                   (char                  *filename);
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
+
+/* These functions attempt to launch a particular application chosen by
+ * Epiphany, which is not possible to do when running inside flatpak. Be
+ * careful!
+ */
+gboolean           ephy_file_launch_desktop_file            (const char                   *filename,
+                                                             const char                   *parameter,
+                                                             guint32                       user_time,
+                                                             GtkWidget                    *widget,
+                                                             EphyFileHelpersNotFlatpakTag  tag);
+gboolean           ephy_file_open_uri_in_default_browser    (const char                   *uri,
+                                                             guint32                       timestamp,
+                                                             GdkScreen                    *screen,
+                                                             EphyFileHelpersNotFlatpakTag  tag);
+gboolean           ephy_file_browse_to                      (GFile                        *file,
+                                                             guint32                       user_time,
+                                                             EphyFileHelpersNotFlatpakTag  tag);
 
 G_END_DECLS
