@@ -67,7 +67,7 @@ test_ephy_embed_shell_web_view_created (void)
                     G_CALLBACK (web_view_created_cb), &web_view_created);
 
   view = ephy_web_view_new ();
-  g_assert (web_view_created);
+  g_assert_true (web_view_created);
   gtk_widget_destroy (view);
 }
 

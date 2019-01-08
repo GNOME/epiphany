@@ -100,23 +100,23 @@ test_ephy_session_load (void)
   disable_delayed_loading ();
 
   session = ephy_shell_get_session (ephy_shell_get_default ());
-  g_assert (session);
+  g_assert_nonnull (session);
 
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   ret = load_session_from_string (session, session_data);
-  g_assert (ret);
+  g_assert_true (ret);
 
   ephy_test_utils_ensure_web_views_are_loaded (loop);
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, 1);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
-  g_assert (embed);
+  g_assert_nonnull (embed);
   view = ephy_embed_get_web_view (embed);
-  g_assert (view);
+  g_assert_nonnull (view);
   ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:memory");
 
   ephy_session_clear (session);
@@ -157,8 +157,8 @@ test_ephy_session_clear (void)
 
   ephy_session_clear (session);
 
-  g_assert (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ())) == NULL);
-  g_assert (ephy_session_get_can_undo_tab_closed (session) == FALSE);
+  g_assert_null (gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ())));
+  g_assert_false (ephy_session_get_can_undo_tab_closed (session));
 }
 
 const char *session_data_empty =
@@ -178,12 +178,12 @@ test_ephy_session_load_empty_session (void)
   disable_delayed_loading ();
 
   session = ephy_shell_get_session (ephy_shell_get_default ());
-  g_assert (session);
+  g_assert_nonnull (session);
 
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   ret = load_session_from_string (session, session_data_empty);
-  g_assert (ret == FALSE);
+  g_assert_false (ret);
 
   /* Loading the session should have failed, but we should still get
    * the default empty window. Got to spin the mainloop though,
@@ -192,13 +192,13 @@ test_ephy_session_load_empty_session (void)
   ephy_test_utils_ensure_web_views_are_loaded (loop);
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, 1);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (l->data));
-  g_assert (embed);
+  g_assert_nonnull (embed);
   view = ephy_embed_get_web_view (embed);
-  g_assert (view);
+  g_assert_nonnull (view);
   ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:overview");
 
   enable_delayed_loading ();
@@ -219,26 +219,26 @@ test_ephy_session_load_many_windows (void)
   disable_delayed_loading ();
 
   session = ephy_shell_get_session (ephy_shell_get_default ());
-  g_assert (session);
+  g_assert_nonnull (session);
 
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   ret = load_session_from_string (session, session_data_many_windows);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), >=, 0);
   g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), <=, 2);
 
   ephy_test_utils_ensure_web_views_are_loaded (loop);
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, 2);
 
   for (p = l; p; p = p->next) {
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->data));
-    g_assert (embed);
+    g_assert_nonnull (embed);
     view = ephy_embed_get_web_view (embed);
-    g_assert (view);
+    g_assert_nonnull (view);
   }
 
   enable_delayed_loading ();
@@ -259,14 +259,14 @@ open_uris_after_loading_session (const char **uris, int final_num_windows)
   disable_delayed_loading ();
 
   session = ephy_shell_get_session (ephy_shell_get_default ());
-  g_assert (session);
+  g_assert_nonnull (session);
 
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   user_time = gdk_x11_display_get_user_time (gdk_display_get_default ());
 
   ret = load_session_from_string (session, session_data_many_windows);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), >=, 0);
   g_assert_cmpint (ephy_test_utils_get_web_view_ready_counter (), <=, 2);
 
@@ -274,14 +274,14 @@ open_uris_after_loading_session (const char **uris, int final_num_windows)
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
 
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, 2);
 
   for (p = l; p; p = p->next) {
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (p->data));
-    g_assert (embed);
+    g_assert_nonnull (embed);
     view = ephy_embed_get_web_view (embed);
-    g_assert (view);
+    g_assert_nonnull (view);
   }
 
   /* Causing a session load here should not create new windows, since we
@@ -296,7 +296,7 @@ open_uris_after_loading_session (const char **uris, int final_num_windows)
     gtk_main_iteration_do (FALSE);
 
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, 2);
 
   /* We should still have only 2 windows after the session load
@@ -312,7 +312,7 @@ open_uris_after_loading_session (const char **uris, int final_num_windows)
    * in a new tab of an existing window.
    */
   l = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-  g_assert (l);
+  g_assert_nonnull (l);
   g_assert_cmpint (g_list_length (l), ==, final_num_windows);
 
   enable_delayed_loading ();
@@ -354,7 +354,7 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
-  g_assert (ephy_shell_get_default ());
+  g_assert_nonnull (ephy_shell_get_default ());
 
   g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
 

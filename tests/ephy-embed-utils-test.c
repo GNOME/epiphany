@@ -101,13 +101,13 @@ static const IsEmptyTest tests_is_empty[] = {
 static void
 test_address_no_web_scheme (const char *test)
 {
-  g_assert (ephy_embed_utils_address_has_web_scheme (test) == FALSE);
+  g_assert_false (ephy_embed_utils_address_has_web_scheme (test));
 }
 
 static void
 test_address_has_web_scheme (const char *test)
 {
-  g_assert (ephy_embed_utils_address_has_web_scheme (test) == TRUE);
+  g_assert_true (ephy_embed_utils_address_has_web_scheme (test));
 }
 
 static void
@@ -124,7 +124,7 @@ test_normalize_address (const NormalizeTest *test)
 static void
 test_is_empty (const IsEmptyTest *test)
 {
-  g_assert (ephy_embed_utils_url_is_empty (test->test) == test->result);
+  g_assert_true (ephy_embed_utils_url_is_empty (test->test) == test->result);
 }
 
 int
