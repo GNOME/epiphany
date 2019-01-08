@@ -108,7 +108,7 @@ typedef struct {
 
 static const DownloadsDirTest downloads_tests[] =
 {
-  { "Desktop", NULL, G_USER_DIRECTORY_DESKTOP, TRUE },
+  { "Desktop", NULL, G_USER_DIRECTORY_DESKTOP, FALSE },
 
   { "Downloads", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
   { "invalid-keyword", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
