@@ -31,8 +31,8 @@ test_entry_new (void)
   GtkWidget *entry;
   entry = ephy_location_entry_new ();
 
-  g_assert (GTK_IS_WIDGET (entry));
-  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+  g_assert_true (GTK_IS_WIDGET (entry));
+  g_assert_true (EPHY_IS_LOCATION_ENTRY (entry));
 }
 
 static void
@@ -44,7 +44,7 @@ test_entry_get_entry (void)
   lentry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
   entry = ephy_location_entry_get_entry (lentry);
 
-  g_assert (GTK_IS_ENTRY (entry));
+  g_assert_true (GTK_IS_ENTRY (entry));
 }
 
 static void

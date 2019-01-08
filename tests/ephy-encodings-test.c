@@ -39,7 +39,7 @@ test_ephy_encodings_create (void)
 
   encoding = ephy_encoding_new ("UTF-8", "Unicode (UTF-8)",
                                 LG_UNICODE);
-  g_assert (encoding);
+  g_assert_nonnull (encoding);
   g_assert_cmpstr (ephy_encoding_get_encoding (encoding), ==, "UTF-8");
   g_assert_cmpstr (ephy_encoding_get_title (encoding), ==, "Unicode (UTF-8)");
   g_assert_cmpstr (ephy_encoding_get_title_elided (encoding), ==, "Unicode (UTF-8)");
@@ -57,16 +57,16 @@ test_ephy_encodings_get (void)
   GList *all, *p;
 
   encodings = ephy_embed_shell_get_encodings (embed_shell);
-  g_assert (encodings);
+  g_assert_nonnull (encodings);
 
   all = ephy_encodings_get_all (encodings);
-  g_assert (all);
+  g_assert_nonnull (all);
   g_assert_cmpint (g_list_length (all), ==, NUM_ENCODINGS);
 
   for (p = all; p; p = p->next) {
     EphyEncoding *encoding = EPHY_ENCODING (p->data);
-    g_assert (encoding);
-    g_assert (EPHY_IS_ENCODING (encoding));
+    g_assert_nonnull (encoding);
+    g_assert_true (EPHY_IS_ENCODING (encoding));
   }
 
   g_list_free (all);
@@ -89,7 +89,7 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
-  g_assert (ephy_shell_get_default ());
+  g_assert_nonnull (ephy_shell_get_default ());
 
   g_test_add_func ("/src/ephy-encodings/create",
                    test_ephy_encodings_create);
