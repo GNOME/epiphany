@@ -62,11 +62,7 @@ const char *       ephy_file_tmp_dir                        (void);
 char       *       ephy_file_tmp_filename                   (const char            *base,
                                                              const char            *extension);
 gboolean           ephy_ensure_dir_exists                   (const char            *dir,
-                                                             GError **);
-GSList     *       ephy_file_find                           (const char            *path,
-                                                             const char            *fname,
-                                                             gint                   maxdepth);
-void               ephy_file_delete_on_exit                 (GFile                 *file);
+                                                             GError               **error);
 gboolean           ephy_file_launch_desktop_file            (const char            *filename,
                                                              const char            *parameter,
                                                              guint32                user_time,
@@ -80,11 +76,6 @@ gboolean           ephy_file_browse_to                      (GFile              
                                                              guint32                user_time);
 gboolean           ephy_file_delete_dir_recursively         (const char            *directory,
                                                              GError               **error);
-void               ephy_file_delete_uri                     (const char            *uri);
-gboolean           ephy_file_move_uri                       (const char            *source_uri,
-                                                             const char            *dest_uri);
-char       *       ephy_file_create_data_uri_for_filename   (const char            *filename,
-                                                             const char            *mime_type);
 char       *       ephy_sanitize_filename                   (char                  *filename);
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);

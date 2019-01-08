@@ -221,6 +221,21 @@ test_ephy_file_desktop_dir (void)
 }
 
 static void
+delete_uri (const char *uri)
+{
+  GFile *file;
+  gboolean ret;
+
+  g_assert (uri);
+
+  file = g_file_new_for_uri (uri);
+
+  ret = g_file_delete (file, NULL, NULL);
+  g_assert (ret);
+  g_object_unref (file);
+}
+
+static void
 test_ephy_file_create_delete_tmp (void)
 {
   char *tmp_file = NULL;
@@ -250,7 +265,7 @@ test_ephy_file_create_delete_tmp (void)
   g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
 
   tmp_uri = g_filename_to_uri (tmp_path, NULL, NULL);
-  ephy_file_delete_uri (tmp_uri);
+  delete_uri (tmp_uri);
 
   g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS) == FALSE);
 
@@ -273,7 +288,7 @@ test_ephy_file_create_delete_tmp (void)
   g_assert (g_str_has_prefix (tmp_path, tmp_path_prefix));
 
   tmp_uri = g_filename_to_uri (tmp_path, NULL, NULL);
-  ephy_file_delete_uri (tmp_uri);
+  delete_uri (tmp_uri);
 
   g_assert (g_file_test (tmp_file, G_FILE_TEST_EXISTS) == FALSE);
 
