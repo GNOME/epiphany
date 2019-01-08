@@ -53,7 +53,7 @@ on_snapshot_ready (GObject      *source,
 
   pixbuf = ephy_snapshot_service_get_snapshot_finish (EPHY_SNAPSHOT_SERVICE (source),
                                                       res, NULL, &error);
-  g_assert (GDK_IS_PIXBUF (pixbuf) || error != NULL);
+  g_assert_true (GDK_IS_PIXBUF (pixbuf) || error != NULL);
 
   if (error) {
     g_warning ("Error loading pixbuf: %s", error->message);

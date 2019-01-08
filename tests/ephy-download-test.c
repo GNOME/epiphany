@@ -123,14 +123,14 @@ static void
 completed_cb (EphyDownload *download,
               Fixture      *fixture)
 {
-  g_assert (test_file_was_downloaded (download));
+  g_assert_true (test_file_was_downloaded (download));
   g_main_loop_quit (fixture->loop);
 }
 
 static void
 test_ephy_download_new (Fixture *fixture, gconstpointer data)
 {
-  g_assert (EPHY_IS_DOWNLOAD (fixture->download));
+  g_assert_true (EPHY_IS_DOWNLOAD (fixture->download));
 }
 
 static void
@@ -139,7 +139,7 @@ test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
   WebKitDownload *download = ephy_download_get_webkit_download (fixture->download);
   WebKitURIRequest *request = webkit_download_get_request (download);
 
-  g_assert (request);
+  g_assert_nonnull (request);
   g_assert_cmpstr (fixture->source, ==, webkit_uri_request_get_uri (request));
 }
 

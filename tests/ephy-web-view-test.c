@@ -71,7 +71,7 @@ load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loo
     return;
 
   expected_url = g_object_get_data (G_OBJECT (view), "test.expected_url");
-  g_assert (expected_url != NULL);
+  g_assert_nonnull (expected_url);
 
   loaded_url = webkit_web_view_get_uri (view);
   g_assert_cmpstr (loaded_url, ==, expected_url);
@@ -213,7 +213,7 @@ test_ephy_web_view_non_search_regex (void)
     g_test_message ("Regex failed: %s", error->message);
     g_error_free (error);
   }
-  g_assert (regex_non_search);
+  g_assert_nonnull (regex_non_search);
 
   regex_domain = g_regex_new (EPHY_WEB_VIEW_DOMAIN_REGEX,
                               0, G_REGEX_MATCH_NOTEMPTY, &error);
@@ -222,7 +222,7 @@ test_ephy_web_view_non_search_regex (void)
     g_test_message ("Regex failed: %s", error->message);
     g_error_free (error);
   }
-  g_assert (regex_domain);
+  g_assert_nonnull (regex_domain);
 
   for (i = 0; i < G_N_ELEMENTS (test_non_search_regex); i++) {
     RegexTest test;
@@ -233,8 +233,8 @@ test_ephy_web_view_non_search_regex (void)
                     test.match ? "NO SEARCH" : "SEARCH",
                     test.url);
 
-    g_assert (g_regex_match (regex_non_search, test.url, 0, NULL) == test.match ||
-              g_regex_match (regex_domain, test.url, 0, NULL) == test.match);
+    g_assert_true (g_regex_match (regex_non_search, test.url, 0, NULL) == test.match ||
+                   g_regex_match (regex_domain, test.url, 0, NULL) == test.match);
   }
 
   g_regex_unref (regex_non_search);
@@ -307,7 +307,7 @@ test_ephy_web_view_normalize_or_autosearch (void)
                                          "org.gnome.Epiphany.EphyWebViewTest",
                                          "http://duckduckgo.com/?q=%s&t=epiphany",
                                          "");
-  g_assert (ephy_search_engine_manager_set_default_engine (manager, "org.gnome.Epiphany.EphyWebViewTest"));
+  g_assert_true (ephy_search_engine_manager_set_default_engine (manager, "org.gnome.Epiphany.EphyWebViewTest"));
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg, G_N_ELEMENTS (normalize_or_autosearch_test_ddg));
 
   ephy_search_engine_manager_modify_engine (manager,
@@ -315,7 +315,7 @@ test_ephy_web_view_normalize_or_autosearch (void)
                                             "http://www.google.com/?q=%s",
                                             "");
 
-  g_assert (ephy_search_engine_manager_set_default_engine (manager, default_engine));
+  g_assert_true (ephy_search_engine_manager_set_default_engine (manager, default_engine));
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
   ephy_search_engine_manager_delete_engine (manager, "org.gnome.Epiphany.EphyWebViewTest");
@@ -395,8 +395,7 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 
   ensure_back_forward_list_changes (loop);
 
-  g_assert (webkit_back_forward_list_get_current_item (
-              webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
+  g_assert_nonnull (webkit_back_forward_list_get_current_item (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
 
   g_assert_cmpstr (bad_url, ==, webkit_back_forward_list_item_get_uri (
                      webkit_back_forward_list_get_current_item (
@@ -429,7 +428,7 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
   bad_url = "http://localhost:2984375932/";
 
   history_service = ephy_embed_shell_get_global_history_service (embed_shell);
-  g_assert (history_service);
+  g_assert_nonnull (history_service);
   g_signal_connect (history_service, "visit-url",
                     G_CALLBACK (visit_url_cb), NULL);
 

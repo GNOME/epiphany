@@ -34,22 +34,22 @@ test_create_connection (void)
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (ephy_sqlite_connection_open (connection, &error));
-  g_assert (!error);
-  g_assert (g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
+  g_assert_true (ephy_sqlite_connection_open (connection, &error));
+  g_assert_no_error (error);
+  g_assert_true (g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
 
   ephy_sqlite_connection_close (connection);
   ephy_sqlite_connection_delete_database (connection);
-  g_assert (!g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
+  g_assert_false (g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
 
   g_free (temporary_file);
   g_object_unref (connection);
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "directory-that-does-not-exist", "epiphany_sqlite_test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (!ephy_sqlite_connection_open (connection, &error));
-  g_assert (error);
-  g_assert (!g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
+  g_assert_false (ephy_sqlite_connection_open (connection, &error));
+  g_assert_nonnull (error);
+  g_assert_false (g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
 
   g_free (temporary_file);
   g_object_unref (connection);
@@ -65,17 +65,17 @@ test_create_statement (void)
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (ephy_sqlite_connection_open (connection, &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_connection_open (connection, &error));
+  g_assert_no_error (error);
 
   statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE TEST (id INTEGER)", &error);
-  g_assert (statement);
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
   g_object_unref (statement);
 
   statement = ephy_sqlite_connection_create_statement (connection, "BLAHBLAHBLAHBA", &error);
-  g_assert (!statement);
-  g_assert (error);
+  g_assert_null (statement);
+  g_assert_nonnull (error);
 
   ephy_sqlite_connection_close (connection);
   ephy_sqlite_connection_delete_database (connection);
@@ -89,32 +89,32 @@ create_table_and_insert_row (EphySQLiteConnection *connection)
 {
   GError *error = NULL;
   EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", &error);
-  g_assert (statement);
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
   ephy_sqlite_statement_step (statement, &error);
-  g_assert (!error);
+  g_assert_no_error (error);
   g_object_unref (statement);
 
   statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
-  g_assert (statement);
-  g_assert (!error);
-  g_assert (!ephy_sqlite_statement_step (statement, &error));
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
+  g_assert_false (ephy_sqlite_statement_step (statement, &error));
+  g_assert_no_error (error);
   g_object_unref (statement);
 
   statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (3, \"test\")", &error);
-  g_assert (statement);
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
   ephy_sqlite_statement_step (statement, &error);
-  g_assert (!error);
+  g_assert_no_error (error);
   g_object_unref (statement);
 
   statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
-  g_assert (statement);
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
 
-  g_assert (ephy_sqlite_statement_step (statement, &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_statement_step (statement, &error));
+  g_assert_no_error (error);
 
   g_assert_cmpint (ephy_sqlite_connection_get_last_insert_id (connection), ==, 1);
   g_assert_cmpint (ephy_sqlite_statement_get_column_count (statement), ==, 2);
@@ -122,7 +122,7 @@ create_table_and_insert_row (EphySQLiteConnection *connection)
   g_assert_cmpint (ephy_sqlite_statement_get_column_type (statement, 1), ==, EPHY_SQLITE_COLUMN_TYPE_STRING);
 
   /* Step will return false here since there is only one row. */
-  g_assert (!ephy_sqlite_statement_step (statement, &error));
+  g_assert_false (ephy_sqlite_statement_step (statement, &error));
   g_object_unref (statement);
 }
 
@@ -135,8 +135,8 @@ test_create_table_and_insert_row (void)
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (ephy_sqlite_connection_open (connection, &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_connection_open (connection, &error));
+  g_assert_no_error (error);
 
   create_table_and_insert_row (connection);
 
@@ -157,8 +157,8 @@ test_bind_data (void)
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (ephy_sqlite_connection_open (connection, &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_connection_open (connection, &error));
+  g_assert_no_error (error);
 
   ephy_sqlite_connection_execute (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", &error);
 
@@ -201,14 +201,14 @@ test_table_exists (void)
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, temporary_file);
-  g_assert (ephy_sqlite_connection_open (connection, &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_connection_open (connection, &error));
+  g_assert_no_error (error);
 
-  g_assert (!ephy_sqlite_connection_table_exists (connection, "test"));
-  g_assert (!ephy_sqlite_connection_table_exists (connection, "something_fakey"));
+  g_assert_false (ephy_sqlite_connection_table_exists (connection, "test"));
+  g_assert_false (ephy_sqlite_connection_table_exists (connection, "something_fakey"));
   create_table_and_insert_row (connection);
-  g_assert (ephy_sqlite_connection_table_exists (connection, "test"));
-  g_assert (!ephy_sqlite_connection_table_exists (connection, "something_fakey"));
+  g_assert_true (ephy_sqlite_connection_table_exists (connection, "test"));
+  g_assert_false (ephy_sqlite_connection_table_exists (connection, "something_fakey"));
 
   ephy_sqlite_connection_close (connection);
   ephy_sqlite_connection_delete_database (connection);
