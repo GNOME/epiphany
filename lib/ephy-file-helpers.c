@@ -70,7 +70,6 @@ static GHashTable *mime_table;
 static gboolean keep_directory;
 static char *dot_dir;
 static char *tmp_dir;
-static GList *del_on_exit;
 static EphyProfileDirType dot_dir_type;
 
 GQuark ephy_file_helpers_error_quark;
@@ -381,14 +380,6 @@ ephy_file_helpers_init (const char          *profile_dir,
   return ret;
 }
 
-static void
-delete_files (GList *l)
-{
-  for (; l != NULL; l = l->next) {
-    unlink (l->data);
-  }
-}
-
 /**
  * ephy_file_helpers_shutdown:
  *
@@ -398,12 +389,6 @@ void
 ephy_file_helpers_shutdown (void)
 {
   g_hash_table_destroy (files);
-
-  del_on_exit = g_list_reverse (del_on_exit);
-  delete_files (del_on_exit);
-  g_list_foreach (del_on_exit, (GFunc)g_free, NULL);
-  g_list_free (del_on_exit);
-  del_on_exit = NULL;
 
   if (mime_table != NULL) {
     LOG ("Destroying mime type hashtable");
@@ -474,68 +459,6 @@ ephy_ensure_dir_exists (const char *dir,
   }
 
   return TRUE;
-}
-
-static void
-ephy_find_file_recursive (const char *path,
-                          const char *fname,
-                          GSList    **list,
-                          gint        depth,
-                          gint        maxdepth)
-{
-  GDir *dir;
-  const gchar *file;
-
-  dir = g_dir_open (path, 0, NULL);
-  if (dir != NULL) {
-    while ((file = g_dir_read_name (dir))) {
-      if (depth < maxdepth) {
-        char *new_path = g_build_filename (path, file, NULL);
-        ephy_find_file_recursive (new_path, fname, list,
-                                  depth + 1, maxdepth);
-        g_free (new_path);
-      }
-      if (strcmp (file, fname) == 0) {
-        char *new_path = g_build_filename (path, file, NULL);
-        *list = g_slist_prepend (*list, new_path);
-      }
-    }
-
-    g_dir_close (dir);
-  }
-}
-
-/**
- * ephy_file_find:
- * @path: path to search for @fname
- * @fname: filename to search for
- * @maxdepth: maximum directory depth when searching @path
- *
- * Searchs for @fname in @path with a maximum depth of @maxdepth.
- *
- * Returns: a GSList of matches
- **/
-GSList *
-ephy_file_find (const char *path,
-                const char *fname,
-                gint        maxdepth)
-{
-  GSList *ret = NULL;
-  ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
-  return ret;
-}
-
-/**
- * ephy_file_delete_on_exit:
- * @file: a #GFile
- *
- * Schedules @file to be deleted when Epiphany exits. This function currently
- * does nothing.
- **/
-void
-ephy_file_delete_on_exit (GFile *file)
-{
-  /* does nothing now */
 }
 
 /**
@@ -813,118 +736,6 @@ ephy_file_delete_dir_recursively (const char *directory, GError **error)
   }
 
   return !failed;
-}
-
-/**
- * ephy_file_delete_uri
- * @uri: URI of the file to be deleted
- *
- * Remove the given URI.
- */
-void
-ephy_file_delete_uri (const char *uri)
-{
-  GFile *file;
-  gboolean ret;
-
-  g_assert (uri);
-
-  file = g_file_new_for_uri (uri);
-
-  ret = g_file_delete (file, NULL, NULL);
-
-  if (ret == TRUE) {
-    LOG ("Deleted file at URI '%s'", uri);
-  } else {
-    LOG ("Couldn't file at URI '%s'", uri);
-  }
-  g_object_unref (file);
-}
-
-/**
- * ephy_file_move_uri
- * @source_uri: URI of the file to be moved
- * @dest_uri: URI of the destination
- *
- * Move from source_uri to dest_uri, overwriting if necessary.
- *
- * Returns: %TRUE on successful move, %FALSE otherwise.
- */
-gboolean
-ephy_file_move_uri (const char *source_uri, const char *dest_uri)
-{
-  GFile *src;
-  GFile *dest;
-  gboolean ret;
-
-  g_assert (source_uri && dest_uri);
-
-  src = g_file_new_for_uri (source_uri);
-  dest = g_file_new_for_uri (dest_uri);
-
-  ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE | G_FILE_COPY_ALL_METADATA,
-                     NULL, NULL, NULL, NULL);
-
-  if (ret == TRUE) {
-    LOG ("Moved file '%s' to '%s'", source_uri, dest_uri);
-  } else {
-    LOG ("Couldn't move file '%s' to '%s'", source_uri, dest_uri);
-  }
-  g_object_unref (src);
-  g_object_unref (dest);
-  return ret;
-}
-
-/**
- * ephy_file_create_data_uri_for_filename:
- * @filename: the filename of a local path
- * @mime_type: the MIME type of the filename, or %NULL
- *
- * Create a data uri using the contents of @filename.
- * If @mime_type is %NULL, the %G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE
- * attribute of @filename will be used.
- *
- * Returns: a new allocated string containg the data uri, or %NULL if the
- *   data uri could not be created
- */
-char *
-ephy_file_create_data_uri_for_filename (const char *filename,
-                                        const char *mime_type)
-{
-  gchar *data;
-  gsize data_length;
-  gchar *base64;
-  gchar *uri = NULL;
-  GFileInfo *file_info = NULL;
-
-  g_assert (filename != NULL);
-
-  if (!g_file_get_contents (filename, &data, &data_length, NULL))
-    return NULL;
-
-  base64 = g_base64_encode ((const guchar *)data, data_length);
-  g_free (data);
-
-  if (!mime_type) {
-    GFile *file;
-
-    file = g_file_new_for_path (filename);
-    file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                   G_FILE_QUERY_INFO_NONE, NULL, NULL);
-    if (file_info)
-      mime_type = g_file_info_get_content_type (file_info);
-
-    g_object_unref (file);
-  }
-
-  if (mime_type)
-    uri = g_strdup_printf ("data:%s;charset=utf8;base64,%s", mime_type, base64);
-  g_free (base64);
-
-  if (file_info)
-    g_object_unref (file_info);
-
-  return uri;
 }
 
 /**
