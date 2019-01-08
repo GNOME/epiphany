@@ -2676,7 +2676,9 @@ static void
 ephy_window_close_tab (EphyWindow *window,
                        EphyEmbed  *tab)
 {
-  gboolean keep_window_open;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
+  gboolean keep_window_open = FALSE;
 
   /* This function can be called many times for the same embed if the
    * web process (or network process) has hung. E.g. the user could
@@ -2699,7 +2701,8 @@ ephy_window_close_tab (EphyWindow *window,
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "ephy-window-close-tab-closed")))
     return;
 
-  keep_window_open = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_KEEP_WINDOW_OPEN);
+  if (mode != EPHY_EMBED_SHELL_MODE_AUTOMATION)
+    keep_window_open = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_KEEP_WINDOW_OPEN);
 
   if (keep_window_open && gtk_notebook_get_n_pages (window->notebook) == 1) {
     EphyWebView *view = ephy_embed_get_web_view (tab);
