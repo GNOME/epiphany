@@ -1168,10 +1168,10 @@ get_special_case_application_title_for_host (const char *host)
 
 static void
 set_default_application_title (EphyApplicationDialogData *data,
-                               char                      *title)
+                               const char                *title)
 {
   if (title == NULL || title[0] == '\0') {
-    SoupURI *uri;
+    g_autoptr(SoupURI) uri = NULL;
     const char *host;
 
     uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)));
@@ -1187,8 +1187,6 @@ set_default_application_title (EphyApplicationDialogData *data,
           title = g_strdup (host);
       }
     }
-
-    soup_uri_free (uri);
   }
 
   if (title == NULL || title[0] == '\0') {
@@ -1196,7 +1194,6 @@ set_default_application_title (EphyApplicationDialogData *data,
   }
 
   gtk_entry_set_text (GTK_ENTRY (data->entry), title);
-  g_free (title);
 }
 
 static void
@@ -1205,7 +1202,7 @@ fill_default_application_title_cb (GObject      *source,
                                    gpointer      user_data)
 {
   EphyApplicationDialogData *data = user_data;
-  char *title;
+  g_autofree char *title = NULL;
 
   title = ephy_web_view_get_web_app_title_finish (EPHY_WEB_VIEW (source), async_result, NULL);
   set_default_application_title (data, title);
