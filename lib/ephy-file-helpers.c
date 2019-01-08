@@ -512,6 +512,7 @@ ephy_file_launch_application (GAppInfo  *app,
  * @parameter: path to an optional parameter file to pass to the application
  * @user_time: user time to prevent focus stealing
  * @widget: an optional widget for ephy_file_launch_application()
+ * @tag: used to guard against improper usage
  *
  * Calls ephy_file_launch_application() for the application described by the
  * .desktop file @filename. Can pass @parameter as optional file arguments.
@@ -519,10 +520,11 @@ ephy_file_launch_application (GAppInfo  *app,
  * Returns: %TRUE if the application launch was successful
  **/
 gboolean
-ephy_file_launch_desktop_file (const char *filename,
-                               const char *parameter,
-                               guint32     user_time,
-                               GtkWidget  *widget)
+ephy_file_launch_desktop_file (const char                   *filename,
+                               const char                   *parameter,
+                               guint32                       user_time,
+                               GtkWidget                    *widget,
+                               EphyFileHelpersNotFlatpakTag  tag)
 {
   GDesktopAppInfo *app;
   GFile *file = NULL;
@@ -532,6 +534,7 @@ ephy_file_launch_desktop_file (const char *filename,
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
    */
+  g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
   g_assert (!ephy_is_running_inside_flatpak ());
 
   app = g_desktop_app_info_new (filename);
@@ -611,9 +614,10 @@ ephy_file_launch_handler (GFile   *file,
 }
 
 gboolean
-ephy_file_open_uri_in_default_browser (const char *uri,
-                                       guint32     timestamp,
-                                       GdkScreen  *screen)
+ephy_file_open_uri_in_default_browser (const char                   *uri,
+                                       guint32                       timestamp,
+                                       GdkScreen                    *screen,
+                                       EphyFileHelpersNotFlatpakTag  tag)
 {
   GdkAppLaunchContext *context;
   GAppInfo *appinfo;
@@ -624,6 +628,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
    */
+  g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
   g_assert (!ephy_is_running_inside_flatpak ());
 
   context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
@@ -650,6 +655,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
  * ephy_file_browse_to:
  * @file: a #GFile
  * @user_time: user_time to prevent focus stealing
+ * @tag: used to guard against improper usage
  *
  * Launches the default application for browsing directories, with @file's
  * parent directory as its target. Passes @user_time to
@@ -658,14 +664,16 @@ ephy_file_open_uri_in_default_browser (const char *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile  *file,
-                     guint32 user_time)
+ephy_file_browse_to (GFile                        *file,
+                     guint32                       user_time,
+                     EphyFileHelpersNotFlatpakTag  tag)
 {
   g_autoptr(GFile) parent = NULL;
 
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
    */
+  g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
   g_assert (!ephy_is_running_inside_flatpak ());
 
   parent = g_file_get_parent (file);
