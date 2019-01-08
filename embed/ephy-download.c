@@ -27,6 +27,7 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-evince-document-view.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
@@ -440,13 +441,16 @@ ephy_download_do_download_action (EphyDownload          *download,
   switch ((action ? action : download->action)) {
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
-      ret = ephy_file_browse_to (destination, user_time);
+      /* Must not use this action type under flatpak! */
+      ret = ephy_file_browse_to (destination, user_time,
+                                 EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
       ret = ephy_file_launch_handler (destination, user_time);
-      if (!ret)
-        ret = ephy_file_browse_to (destination, user_time);
+      if (!ret && !ephy_is_running_inside_flatpak ())
+        ret = ephy_file_browse_to (destination, user_time,
+                                   EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");
