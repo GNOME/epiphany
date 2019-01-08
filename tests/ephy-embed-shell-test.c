@@ -31,24 +31,6 @@
 #include <gtk/gtk.h>
 
 static void
-test_ephy_embed_shell_launch_handler (void)
-{
-  EphyEmbedShell *embed_shell;
-  gboolean ret;
-  GFile *file;
-
-  embed_shell = ephy_embed_shell_get_default ();
-
-  file = g_file_new_for_path (TEST_DIR "/data/test.html");
-  g_assert (file);
-
-  ret = ephy_embed_shell_launch_handler (embed_shell, file, NULL, 0);
-  g_assert (ret == FALSE);
-
-  g_object_unref (file);
-}
-
-static void
 web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, gpointer user_data)
 {
   gboolean *web_view_created = (gboolean *)user_data;
@@ -113,9 +95,6 @@ main (int argc, char *argv[])
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
   g_application_register (G_APPLICATION (ephy_embed_shell_get_default ()), NULL, NULL);
-
-  g_test_add_func ("/embed/ephy-embed-shell/launch_handler",
-                   test_ephy_embed_shell_launch_handler);
 
   g_test_add_func ("/embed/ephy-embed-shell/web-view-created",
                    test_ephy_embed_shell_web_view_created);

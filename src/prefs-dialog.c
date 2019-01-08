@@ -1114,8 +1114,7 @@ css_edit_button_clicked_cb (GtkWidget   *button,
   if (ephy_is_running_inside_flatpak ()) {
     g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
   } else {
-    ephy_file_launch_handler ("text/plain", css_file,
-                              gtk_get_current_event_time ());
+    ephy_file_launch_handler (css_file, gtk_get_current_event_time ());
     g_object_unref (css_file);
   }
 }

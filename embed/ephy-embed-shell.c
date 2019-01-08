@@ -1718,53 +1718,6 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 }
 
 /**
- * ephy_embed_shell_launch_handler:
- * @shell: an #EphyEmbedShell
- * @file: a #GFile to open
- * @mime_type: the mime type of @file or %NULL
- * @user_time: user time to prevent focus stealing
- *
- * Tries to open @file with the right application, making sure we will
- * not call ourselves in the process. This is needed to avoid
- * potential infinite loops when opening unknown file types.
- *
- * Returns: %TRUE on success
- **/
-gboolean
-ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
-                                 GFile          *file,
-                                 const char     *mime_type,
-                                 guint32         user_time)
-{
-  GAppInfo *app;
-  GList *list = NULL;
-  gboolean ret = FALSE;
-
-  g_assert (EPHY_IS_EMBED_SHELL (shell));
-  g_assert (file);
-
-  if (mime_type == NULL)
-    return ret;
-
-  if (ephy_is_running_inside_flatpak ()) {
-    return ephy_file_launch_file_via_uri_handler (file);
-  }
-
-  app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
-
-  /* Do not allow recursive calls into the browser, they can lead to
-   * infinite loops and they should never happen anyway. */
-  if (!app || g_strcmp0 (g_app_info_get_id (app), "org.gnome.Epiphany.desktop") == 0)
-    return ret;
-
-  list = g_list_append (list, file);
-  ret = ephy_file_launch_application (app, list, user_time, NULL);
-  g_list_free (list);
-
-  return ret;
-}
-
-/**
  * ephy_embed_shell_clear_cache:
  * @shell: an #EphyEmbedShell
  *

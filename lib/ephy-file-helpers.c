@@ -551,7 +551,7 @@ ephy_file_delete_on_exit (GFile *file)
  *
  * Returns: %TRUE if g_app_info_launch() succeeded
  **/
-gboolean
+static gboolean
 ephy_file_launch_application (GAppInfo  *app,
                               GList     *list,
                               guint32    user_time,
@@ -604,6 +604,11 @@ ephy_file_launch_desktop_file (const char *filename,
   GList *list = NULL;
   gboolean ret;
 
+  /* This is impossible to implement inside flatpak. Higher layers must
+   * ensure we don't get here.
+   */
+  g_assert (!ephy_is_running_inside_flatpak ());
+
   app = g_desktop_app_info_new (filename);
   if (parameter) {
     file = g_file_new_for_path (parameter);
@@ -617,44 +622,30 @@ ephy_file_launch_desktop_file (const char *filename,
   return ret;
 }
 
-GAppInfo *
-ephy_file_launcher_get_app_info_for_file (GFile      *file,
-                                          const char *mime_type)
+static gboolean
+launch_via_uri_handler (GFile *file)
 {
-  GAppInfo *app = NULL;
+  const char *uri;
+  GdkDisplay *display;
+  GdkAppLaunchContext *context;
+  g_autoptr(GError) error = NULL;
 
-  g_assert (file || mime_type);
+  display = gdk_display_get_default ();
+  context = gdk_display_get_app_launch_context (display);
 
-  if (mime_type != NULL) {
-    app = g_app_info_get_default_for_type (mime_type,
-                                           FALSE);
-  } else {
-    GFileInfo *file_info;
-    char *type;
+  uri = g_file_get_uri (file);
 
-    /* Sniff mime type and check if it's safe to open */
-    file_info = g_file_query_info (file,
-                                   G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                   0, NULL, NULL);
-    if (file_info == NULL) {
-      return FALSE;
-    }
-    type = g_strdup (g_file_info_get_content_type (file_info));
-
-    g_object_unref (file_info);
-
-    if (type != NULL && type[0] != '\0') {
-      app = g_app_info_get_default_for_type (type, FALSE);
-    }
-    g_free (type);
+  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
+  if (error) {
+    g_warning ("Failed to launch handler for URI %s: %s", uri, error->message);
+    return FALSE;
   }
 
-  return app;
+  return TRUE;
 }
 
 /**
  * ephy_file_launch_handler:
- * @mime_type: the mime type of @file or %NULL
  * @file: a #GFile to pass as argument
  * @user_time: user time to prevent focus stealing
  *
@@ -664,24 +655,32 @@ ephy_file_launcher_get_app_info_for_file (GFile      *file,
  * Returns: %TRUE on success
  **/
 gboolean
-ephy_file_launch_handler (const char *mime_type,
-                          GFile      *file,
-                          guint32     user_time)
+ephy_file_launch_handler (GFile   *file,
+                          guint32  user_time)
 {
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
+  g_autoptr(GList) list = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (file != NULL);
 
-  app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
+  /* Launch via URI handler only under flatpak, because this way loses
+   * focus stealing prevention. There's no other way to open a file
+   * under flatpak, and focus stealing prevention becomes the
+   * responsibility of the portal in this case anyway. */
+  if (ephy_is_running_inside_flatpak ())
+    return launch_via_uri_handler (file);
 
-  if (app != NULL) {
-    GList *list = NULL;
-
-    list = g_list_append (list, file);
-    ret = ephy_file_launch_application (app, list, user_time, NULL);
-    g_list_free (list);
+  app = g_file_query_default_handler (file, NULL, &error);
+  if (!app) {
+    g_autofree char *path = g_file_get_path (file);
+    g_warning ("No available application to open %s: %s", path, error->message);
+    return FALSE;
   }
+
+  list = g_list_append (list, file);
+  ret = ephy_file_launch_application (app, list, user_time, NULL);
 
   return ret;
 }
@@ -696,6 +695,11 @@ ephy_file_open_uri_in_default_browser (const char *uri,
   GList uris;
   gboolean retval = TRUE;
   GError *error = NULL;
+
+  /* This is impossible to implement inside flatpak. Higher layers must
+   * ensure we don't get here.
+   */
+  g_assert (!ephy_is_running_inside_flatpak ());
 
   context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
   gdk_app_launch_context_set_screen (context, screen);
@@ -732,7 +736,21 @@ gboolean
 ephy_file_browse_to (GFile  *file,
                      guint32 user_time)
 {
-  return ephy_file_launch_handler ("inode/directory", file, user_time);
+  g_autoptr(GFile) parent = NULL;
+
+  /* This is impossible to implement inside flatpak. Higher layers must
+   * ensure we don't get here.
+   */
+  g_assert (!ephy_is_running_inside_flatpak ());
+
+  parent = g_file_get_parent (file);
+
+  /* If parent is NULL, then the file is / and that would be nuts. This
+   * function is not for directories, anyway.
+   */
+  g_assert (parent);
+
+  return ephy_file_launch_handler (parent, user_time);
 }
 
 /**
@@ -965,34 +983,4 @@ ephy_open_incognito_window (const char *uri)
   }
 
   g_free (command);
-}
-
-gboolean
-ephy_file_launch_via_uri_handler (const char *uri)
-{
-  GdkDisplay *display;
-  GdkAppLaunchContext *context;
-  GError *error = NULL;
-
-  display = gdk_display_get_default ();
-  context = gdk_display_get_app_launch_context (display);
-
-  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
-
-  if (error != NULL) {
-    g_warning ("Failed to launch handler for URI %s: %s", uri, error->message);
-    g_error_free (error);
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-gboolean
-ephy_file_launch_file_via_uri_handler (GFile *file)
-{
-  const char *uri;
-
-  uri = g_file_get_uri (file);
-  return ephy_file_launch_via_uri_handler (uri);
 }

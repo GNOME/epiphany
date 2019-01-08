@@ -72,10 +72,6 @@ void               ephy_embed_shell_set_print_settings         (EphyEmbedShell  
                                                                 GtkPrintSettings *settings);
 GtkPrintSettings  *ephy_embed_shell_get_print_settings         (EphyEmbedShell   *shell);
 EphyEmbedShellMode ephy_embed_shell_get_mode                   (EphyEmbedShell   *shell);
-gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell   *shell,
-                                                                GFile            *file,
-                                                                const char       *mime_type,
-                                                                guint32           user_time);
 void               ephy_embed_shell_clear_cache                (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell   *shell,
                                                                 const char       *url,
