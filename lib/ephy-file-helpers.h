@@ -71,12 +71,7 @@ gboolean           ephy_file_launch_desktop_file            (const char         
                                                              const char            *parameter,
                                                              guint32                user_time,
                                                              GtkWidget             *widget);
-gboolean           ephy_file_launch_application             (GAppInfo              *app,
-                                                             GList                 *files,
-                                                             guint32                user_time,
-                                                             GtkWidget             *widget);
-gboolean           ephy_file_launch_handler                 (const char            *mime_type,
-                                                             GFile                 *file,
+gboolean           ephy_file_launch_handler                 (GFile                 *file,
                                                              guint32                user_time);
 gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
                                                              guint32                timestamp,
@@ -91,11 +86,7 @@ gboolean           ephy_file_move_uri                       (const char         
 char       *       ephy_file_create_data_uri_for_filename   (const char            *filename,
                                                              const char            *mime_type);
 char       *       ephy_sanitize_filename                   (char                  *filename);
-GAppInfo   *       ephy_file_launcher_get_app_info_for_file (GFile                 *file,
-                                                             const char            *mime_type);
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
-gboolean           ephy_file_launch_via_uri_handler         (const char            *uri);
-gboolean           ephy_file_launch_file_via_uri_handler    (GFile                 *file);
 
 G_END_DECLS
