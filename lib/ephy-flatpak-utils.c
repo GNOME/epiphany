@@ -37,7 +37,15 @@
 gboolean
 ephy_is_running_inside_flatpak (void)
 {
-  return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
+  static _Thread_local gboolean decided = FALSE;
+  static _Thread_local gboolean under_flatpak = FALSE;
+
+  if (decided)
+    return under_flatpak;
+
+  under_flatpak = g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
+  decided = TRUE;
+  return under_flatpak;
 }
 
 static void
