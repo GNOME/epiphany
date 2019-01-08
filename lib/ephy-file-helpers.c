@@ -478,45 +478,33 @@ ephy_ensure_dir_exists (const char *dir,
   return TRUE;
 }
 
-/**
- * ephy_file_launch_application:
- * @app: the application to launch
- * @list: files to pass to @app
- * @user_time: user time to prevent focus stealing
- * @widget: a relevant widget from where to get the #GdkScreen and #GdkDisplay
- *
- * Launches @app to open @files. If @widget is set the screen and display from
- * it will be used to launch the application, otherwise the defaults will be
- * used.
- *
- * Returns: %TRUE if g_app_info_launch() succeeded
- **/
 static gboolean
-ephy_file_launch_application (GAppInfo  *app,
-                              GList     *list,
-                              guint32    user_time,
-                              GtkWidget *widget)
+launch_application (GAppInfo  *app,
+                    GList     *files,
+                    guint32    user_time)
 {
-  GdkAppLaunchContext *context;
+  g_autoptr(GdkAppLaunchContext) context = NULL;
+  g_autoptr(GError) error = NULL;
   GdkDisplay *display;
   GdkScreen *screen;
   gboolean res;
 
-  if (widget) {
-    display = gtk_widget_get_display (widget);
-    screen = gtk_widget_get_screen (widget);
-  } else {
-    display = gdk_display_get_default ();
-    screen = gdk_screen_get_default ();
-  }
+  /* This is impossible to implement inside flatpak. Higher layers must
+   * ensure we don't get here.
+   */
+  g_assert (!ephy_is_running_inside_flatpak ());
+
+  display = gdk_display_get_default ();
+  screen = gdk_screen_get_default ();
 
   context = gdk_display_get_app_launch_context (display);
   gdk_app_launch_context_set_screen (context, screen);
   gdk_app_launch_context_set_timestamp (context, user_time);
 
-  res = g_app_info_launch (app, list,
-                           G_APP_LAUNCH_CONTEXT (context), NULL);
-  g_object_unref (context);
+  res = g_app_info_launch (app, files,
+                           G_APP_LAUNCH_CONTEXT (context), &error);
+  if (!res)
+    g_warning ("Failed to launch %s: %s", g_app_info_get_display_name (app), error->message);
 
   return res;
 }
@@ -524,27 +512,18 @@ ephy_file_launch_application (GAppInfo  *app,
 /**
  * ephy_file_launch_desktop_file:
  * @filename: the path to the .desktop file
- * @parameter: path to an optional parameter file to pass to the application
- * @user_time: user time to prevent focus stealing
- * @widget: an optional widget for ephy_file_launch_application()
  * @tag: used to guard against improper usage
  *
- * Calls ephy_file_launch_application() for the application described by the
- * .desktop file @filename. Can pass @parameter as optional file arguments.
+ * Launches the application described by the desktop file @filename.
  *
  * Returns: %TRUE if the application launch was successful
  **/
 gboolean
 ephy_file_launch_desktop_file (const char                   *filename,
-                               const char                   *parameter,
                                guint32                       user_time,
-                               GtkWidget                    *widget,
                                EphyFileHelpersNotFlatpakTag  tag)
 {
-  GDesktopAppInfo *app;
-  GFile *file = NULL;
-  GList *list = NULL;
-  gboolean ret;
+  g_autoptr(GDesktopAppInfo) app = NULL;
 
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
@@ -553,16 +532,8 @@ ephy_file_launch_desktop_file (const char                   *filename,
   g_assert (!ephy_is_running_inside_flatpak ());
 
   app = g_desktop_app_info_new (filename);
-  if (parameter) {
-    file = g_file_new_for_path (parameter);
-    list = g_list_append (list, file);
-  }
 
-  ret = ephy_file_launch_application (G_APP_INFO (app), list, user_time, widget);
-  g_list_free (list);
-  if (file)
-    g_object_unref (file);
-  return ret;
+  return launch_application (G_APP_INFO (app), NULL, user_time);
 }
 
 static gboolean
@@ -623,7 +594,7 @@ ephy_file_launch_handler (GFile   *file,
   }
 
   list = g_list_append (list, file);
-  ret = ephy_file_launch_application (app, list, user_time, NULL);
+  ret = launch_application (app, list, user_time);
 
   return ret;
 }

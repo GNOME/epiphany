@@ -81,9 +81,7 @@ void               ephy_open_incognito_window               (const char         
  * careful!
  */
 gboolean           ephy_file_launch_desktop_file            (const char                   *filename,
-                                                             const char                   *parameter,
                                                              guint32                       user_time,
-                                                             GtkWidget                    *widget,
                                                              EphyFileHelpersNotFlatpakTag  tag);
 gboolean           ephy_file_open_uri_in_default_browser    (const char                   *uri,
                                                              guint32                       timestamp,
