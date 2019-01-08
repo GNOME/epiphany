@@ -1177,14 +1177,15 @@ set_default_application_title (EphyApplicationDialogData *data,
     uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)));
     host = soup_uri_get_host (uri);
 
-    if (host != NULL && host[0] != '\0')
+    if (host != NULL && host[0] != '\0') {
       title = get_special_case_application_title_for_host (host);
 
-    if (title == NULL || title[0] == '\0') {
-      if (g_str_has_prefix (host, "www."))
-        title = g_strdup (host + strlen ("www."));
-      else
-        title = g_strdup (host);
+      if (title == NULL || title[0] == '\0') {
+        if (g_str_has_prefix (host, "www."))
+          title = g_strdup (host + strlen ("www."));
+        else
+          title = g_strdup (host);
+      }
     }
 
     soup_uri_free (uri);
