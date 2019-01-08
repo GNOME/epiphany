@@ -582,17 +582,17 @@ ephy_file_launch_handler (GFile   *file,
   return ret;
 }
 
-gboolean
-ephy_file_open_uri_in_default_browser (const char                   *uri,
-                                       guint32                       timestamp,
-                                       GdkScreen                    *screen,
-                                       EphyFileHelpersNotFlatpakTag  tag)
+static gboolean
+open_in_default_handler (const char                   *uri,
+                         const char                   *mime_type,
+                         guint32                       timestamp,
+                         GdkScreen                    *screen,
+                         EphyFileHelpersNotFlatpakTag  tag)
 {
-  GdkAppLaunchContext *context;
-  GAppInfo *appinfo;
+  g_autoptr(GdkAppLaunchContext) context = NULL;
+  g_autoptr(GAppInfo) appinfo = NULL;
+  g_autoptr(GError) error = NULL;
   GList uris;
-  gboolean retval = TRUE;
-  GError *error = NULL;
 
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
@@ -604,20 +604,25 @@ ephy_file_open_uri_in_default_browser (const char                   *uri,
   gdk_app_launch_context_set_screen (context, screen);
   gdk_app_launch_context_set_timestamp (context, timestamp);
 
-  appinfo = g_app_info_get_default_for_type ("x-scheme-handler/http", TRUE);
+  appinfo = g_app_info_get_default_for_type (mime_type, TRUE);
   uris.data = (gpointer)uri;
   uris.next = uris.prev = NULL;
 
   if (!g_app_info_launch_uris (appinfo, &uris, G_APP_LAUNCH_CONTEXT (context), &error)) {
     g_warning ("Failed to launch %s: %s", uri, error->message);
-    g_error_free (error);
-    retval = FALSE;
+    return FALSE;
   }
 
-  g_object_unref (context);
-  g_object_unref (appinfo);
+  return TRUE;
+}
 
-  return retval;
+gboolean
+ephy_file_open_uri_in_default_browser (const char                   *uri,
+                                       guint32                       user_time,
+                                       GdkScreen                    *screen,
+                                       EphyFileHelpersNotFlatpakTag  tag)
+{
+  return open_in_default_handler (uri, "x-scheme-handler/http", user_time, screen, tag);
 }
 
 /**
@@ -626,9 +631,9 @@ ephy_file_open_uri_in_default_browser (const char                   *uri,
  * @user_time: user_time to prevent focus stealing
  * @tag: used to guard against improper usage
  *
- * Launches the default application for browsing directories, with @file's
- * parent directory as its target. Passes @user_time to
- * ephy_file_launch_handler() to prevent focus stealing.
+ * Launches the default application for browsing directories to point to
+ * @file. E.g. nautilus will jump to @file within its directory and
+ * select it.
  *
  * Returns: %TRUE if the launch succeeded
  **/
@@ -637,22 +642,9 @@ ephy_file_browse_to (GFile                        *file,
                      guint32                       user_time,
                      EphyFileHelpersNotFlatpakTag  tag)
 {
-  g_autoptr(GFile) parent = NULL;
+  g_autofree char *uri = g_file_get_uri (file);
 
-  /* This is impossible to implement inside flatpak. Higher layers must
-   * ensure we don't get here.
-   */
-  g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
-  g_assert (!ephy_is_running_inside_flatpak ());
-
-  parent = g_file_get_parent (file);
-
-  /* If parent is NULL, then the file is / and that would be nuts. This
-   * function is not for directories, anyway.
-   */
-  g_assert (parent);
-
-  return ephy_file_launch_handler (parent, user_time);
+  return open_in_default_handler (uri, "inode/directory", user_time, NULL, tag);
 }
 
 /**
