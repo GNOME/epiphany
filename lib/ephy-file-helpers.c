@@ -123,6 +123,8 @@ ephy_file_download_dir (void)
  * Returns a proper downloads destination by checking the
  * EPHY_PREFS_STATE_DOWNLOAD_DIR GSettings key and following this logic:
  *
+ *  - Under flatpak, always use the XDG downloads directory
+ *
  *  - An absolute path: considered user-set, use this value directly.
  *
  *  - "Desktop" keyword in GSettings: the directory returned by
@@ -136,24 +138,20 @@ ephy_file_download_dir (void)
 char *
 ephy_file_get_downloads_dir (void)
 {
-  char *download_dir;
+  g_autofree char *download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
+                                                         EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-  download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
-                                        EPHY_PREFS_STATE_DOWNLOAD_DIR);
+  if (ephy_is_running_inside_flatpak ())
+    return ephy_file_download_dir ();
 
-  if (g_strcmp0 (download_dir, "Desktop") == 0) {
-    g_free (download_dir);
+  if (g_strcmp0 (download_dir, "Desktop") == 0)
     return ephy_file_desktop_dir ();
-  }
 
   if (g_strcmp0 (download_dir, "Downloads") == 0 ||
-      !g_path_is_absolute (download_dir) ||
-      ephy_is_running_inside_flatpak ()) {
-    g_free (download_dir);
+      !g_path_is_absolute (download_dir))
     return ephy_file_download_dir ();
-  }
 
-  return download_dir;
+  return g_steal_pointer (&download_dir);
 }
 
 /**
