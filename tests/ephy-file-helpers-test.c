@@ -65,31 +65,31 @@ test_ephy_file_helpers_init (void)
                     keep_dir ? "TRUE" : "FALSE",
                     ensure_exists ? "TRUE" : "FALSE");
 
-    g_assert (ephy_dot_dir () == NULL);
-    g_assert (ephy_file_helpers_init (NULL, test.flags, NULL));
+    g_assert_null (ephy_dot_dir ());
+    g_assert_true (ephy_file_helpers_init (NULL, test.flags, NULL));
 
     tmp_dir = g_strdup (ephy_file_tmp_dir ());
     dot_dir = g_strdup (ephy_dot_dir ());
 
-    g_assert (tmp_dir != NULL);
-    g_assert (dot_dir != NULL);
+    g_assert_nonnull (tmp_dir);
+    g_assert_nonnull (dot_dir);
 
     /* Should always exist after ephy_file_tmp_dir(). */
-    g_assert (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
-    g_assert (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == ensure_exists);
+    g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
+    g_assert_true (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == ensure_exists);
 
     ephy_file_helpers_shutdown ();
 
     /* Private profiles have their dot_dir inside tmp_dir. */
-    g_assert (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_dir);
-    g_assert (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
+    g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_dir);
+    g_assert_true (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
 
     /* Cleanup dir left behind. */
     if (keep_dir) {
       /* As a safety measure, only try recursive delete on paths
        * prefixed with /tmp. */
       if (g_str_has_prefix (tmp_dir, "/tmp"))
-        g_assert (ephy_file_delete_dir_recursively (tmp_dir, NULL));
+        g_assert_true (ephy_file_delete_dir_recursively (tmp_dir, NULL));
       else
         g_warning ("INIT: dangerous path returned as tmp_dir: %s", tmp_dir);
     }
@@ -188,16 +188,16 @@ test_ephy_file_create_delete_dir (void)
 
     g_test_message ("DIR: testing for %s", test.dir);
 
-    g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) == test.exists);
-    g_assert (ephy_ensure_dir_exists (test.dir, NULL) == (test.exists || test.can_create));
-    g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) == (test.exists || test.can_create));
+    g_assert_true (g_file_test (test.dir, G_FILE_TEST_EXISTS) == test.exists);
+    g_assert_true (ephy_ensure_dir_exists (test.dir, NULL) == (test.exists || test.can_create));
+    g_assert_true (g_file_test (test.dir, G_FILE_TEST_EXISTS) == (test.exists || test.can_create));
 
-    g_assert (ephy_file_delete_dir_recursively (test.dir, &error) == test.can_delete);
+    g_assert_true (ephy_file_delete_dir_recursively (test.dir, &error) == test.can_delete);
     if (error)
       g_error_free (error);
 
     if (test.exists)
-      g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) != test.can_delete);
+      g_assert_true (g_file_test (test.dir, G_FILE_TEST_EXISTS) != test.can_delete);
   }
 
   ephy_file_helpers_shutdown ();
@@ -234,8 +234,8 @@ test_ephy_file_create_delete_tmp (void)
   tmp_file = ephy_file_tmp_filename ("test-ephy", NULL);
   tmp_path = g_build_filename (ephy_file_tmp_dir (), "test-ephy", NULL);
 
-  g_assert (tmp_file == NULL);
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS) == FALSE);
+  g_assert_null (tmp_file);
+  g_assert_false (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
 
   g_free (tmp_path);
   g_free (tmp_file);
@@ -245,14 +245,14 @@ test_ephy_file_create_delete_tmp (void)
   tmp_path = g_build_filename (ephy_file_tmp_dir (), tmp_file, NULL);
 
   g_test_message ("TMP: %s", tmp_path);
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS) == FALSE);
-  g_assert (g_file_set_contents (tmp_path, "test", -1, NULL));
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
+  g_assert_false (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
+  g_assert_true (g_file_set_contents (tmp_path, "test", -1, NULL));
+  g_assert_true (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
 
   tmp_uri = g_filename_to_uri (tmp_path, NULL, NULL);
   ephy_file_delete_uri (tmp_uri);
 
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS) == FALSE);
+  g_assert_false (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
 
   g_free (tmp_uri);
   g_free (tmp_path);
@@ -262,20 +262,20 @@ test_ephy_file_create_delete_tmp (void)
   tmp_file = ephy_file_tmp_filename ("test-ephy-XXXXXX", "test-ext");
   tmp_path = g_build_filename (ephy_file_tmp_dir (), tmp_file, NULL);
 
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS) == FALSE);
-  g_assert (g_file_set_contents (tmp_path, "test", -1, NULL));
-  g_assert (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
+  g_assert_false (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
+  g_assert_true (g_file_set_contents (tmp_path, "test", -1, NULL));
+  g_assert_true (g_file_test (tmp_path, G_FILE_TEST_EXISTS));
 
   tmp_path_prefix = g_build_filename (ephy_file_tmp_dir (), "test-ephy-", NULL);
 
   g_test_message ("TMP: %s", tmp_path);
-  g_assert (g_str_has_suffix (tmp_path, "test-ext"));
-  g_assert (g_str_has_prefix (tmp_path, tmp_path_prefix));
+  g_assert_true (g_str_has_suffix (tmp_path, "test-ext"));
+  g_assert_true (g_str_has_prefix (tmp_path, tmp_path_prefix));
 
   tmp_uri = g_filename_to_uri (tmp_path, NULL, NULL);
   ephy_file_delete_uri (tmp_uri);
 
-  g_assert (g_file_test (tmp_file, G_FILE_TEST_EXISTS) == FALSE);
+  g_assert_false (g_file_test (tmp_file, G_FILE_TEST_EXISTS));
 
   g_free (tmp_uri);
   g_free (tmp_path_prefix);

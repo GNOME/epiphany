@@ -73,7 +73,7 @@ test_do_migration_invalid (void)
 
   tmpdir = create_test_profile_dir ();
   ret = ephy_profile_utils_do_migration (tmpdir, EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
-  g_assert_false (ret);
+  g_assert_true (ret);
 
   delete_test_profile_dir (tmpdir);
   g_free (tmpdir);

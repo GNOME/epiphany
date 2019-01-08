@@ -49,7 +49,6 @@ static gboolean
 destroy_history_service_and_end_main_loop (EphyHistoryService *service)
 {
   g_object_unref (service);
-  g_assert (TRUE);
   gtk_main_quit ();
 
   return FALSE;
@@ -70,12 +69,12 @@ static void
 page_vist_created (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
   if (user_data != NULL) {
-    g_assert (EPHY_IS_HISTORY_SERVICE (user_data));
+    g_assert_true (EPHY_IS_HISTORY_SERVICE (user_data));
     g_object_unref (user_data);
   }
   g_object_unref (service);
-  g_assert (result_data == NULL);
-  g_assert (success);
+  g_assert_null (result_data);
+  g_assert_true (success);
   gtk_main_quit ();
 }
 
@@ -132,15 +131,15 @@ verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, g
   GList *current = visits;
   GList *current_baseline = baseline_visits;
 
-  g_assert (user_data == NULL);
-  g_assert (success);
-  g_assert (visits != NULL);
+  g_assert_null (user_data);
+  g_assert_true (success);
+  g_assert_nonnull (visits);
   g_assert_cmpint (g_list_length (visits), ==, g_list_length (baseline_visits));
 
   while (current_baseline) {
     EphyHistoryPageVisit *visit, *baseline_visit;
 
-    g_assert (current);
+    g_assert_nonnull (current);
     visit = (EphyHistoryPageVisit *)current->data;
     baseline_visit = (EphyHistoryPageVisit *)current_baseline->data;
 
@@ -163,9 +162,9 @@ verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, g
 static void
 verify_create_history_entry (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  g_assert (result_data == NULL);
+  g_assert_null (result_data);
   g_assert_cmpint (42, ==, GPOINTER_TO_INT (user_data));
-  g_assert (success);
+  g_assert_true (success);
   ephy_history_service_find_visits_in_time (service, 0, 8, NULL, verify_create_history_entry_cb, NULL);
 }
 
@@ -190,8 +189,8 @@ get_url (EphyHistoryService *service, gboolean success, gpointer result_data, gp
 {
   EphyHistoryURL *url = (EphyHistoryURL *)result_data;
 
-  g_assert (success == TRUE);
-  g_assert (url != NULL);
+  g_assert_true (success);
+  g_assert_nonnull (url);
   g_assert_cmpstr (url->title, ==, "GNOME");
 
   ephy_history_url_free (url);
@@ -203,7 +202,7 @@ static void
 set_url_title (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
   gboolean test_result = GPOINTER_TO_INT (user_data);
-  g_assert (success == TRUE);
+  g_assert_true (success);
 
   if (test_result == FALSE) {
     g_object_unref (service);
@@ -247,7 +246,7 @@ test_set_url_title_is_correct (void)
 static void
 set_url_title_url_not_existent (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  g_assert (success == FALSE);
+  g_assert_false (success);
   g_object_unref (service);
   gtk_main_quit ();
 }
@@ -272,15 +271,15 @@ test_get_url_done (EphyHistoryService *service, gboolean success, gpointer resul
 
   url = (EphyHistoryURL *)result_data;
 
-  g_assert (success == expected_success);
+  g_assert_true (success == expected_success);
 
   if (expected_success == TRUE) {
-    g_assert (url != NULL);
+    g_assert_nonnull (url);
     g_assert_cmpstr (url->url, ==, "http://www.gnome.org");
     g_assert_cmpint (url->id, !=, -1);
     ephy_history_url_free (url);
   } else
-    g_assert (url == NULL);
+    g_assert_null (url);
 
   g_object_unref (service);
   gtk_main_quit ();
@@ -289,7 +288,7 @@ test_get_url_done (EphyHistoryService *service, gboolean success, gpointer resul
 static void
 test_get_url_visit_added (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  g_assert (success == TRUE);
+  g_assert_true (success);
 
   ephy_history_service_get_url (service, "http://www.gnome.org", NULL, test_get_url_done, user_data);
 }
@@ -375,7 +374,7 @@ perform_complex_url_query (EphyHistoryService *service,
   EphyHistoryQuery *query;
   EphyHistoryURL *url;
 
-  g_assert (success == TRUE);
+  g_assert_true (success);
 
   /* Get the most visited site that contains 'k'. */
   query = ephy_history_query_new ();
@@ -415,7 +414,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
   EphyHistoryQuery *query;
   EphyHistoryURL *url;
 
-  g_assert (success == TRUE);
+  g_assert_true (success);
 
   /* Get the most visited site that contains 'k' that was visited since timestamp 500. */
   query = ephy_history_query_new ();
@@ -471,7 +470,7 @@ perform_query_after_clear (EphyHistoryService *service,
 {
   EphyHistoryQuery *query;
 
-  g_assert (success == TRUE);
+  g_assert_true (success);
 
   /* Get 10 random sites, the query should fail. */
   query = ephy_history_query_new ();
