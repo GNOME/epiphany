@@ -256,6 +256,7 @@ test_ephy_gsb_service_verify_url (void)
 int
 main (int argc, char *argv[])
 {
+  int ret;
   GError *error = NULL;
 
   gtk_test_init (&argc, &argv);
@@ -276,5 +277,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/lib/safe-browsing/test_ephy_gsb_service_verify_url",
                    test_ephy_gsb_service_verify_url);
 
-  return g_test_run ();
+  ret = g_test_run ();
+
+  ephy_file_helpers_shutdown ();
+
+  return ret;
 }
