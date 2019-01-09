@@ -1262,14 +1262,57 @@ confirm_web_application_overwrite (GtkWindow *parent, const char *title)
 }
 
 static void
+focus_app_done (GObject      *source,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+}
+
+static void
+session_bus_ready_cb (GObject      *source,
+                      GAsyncResult *res,
+                      gpointer      user_data)
+{
+  GDBusConnection *connection = g_bus_get_finish (res, NULL);
+  g_autofree gchar *desktop_file = user_data;
+  g_autofree gchar *app_id = NULL;
+  GVariant *app;
+
+  if (!connection)
+    return;
+
+  app_id = g_path_get_basename (desktop_file);
+  app = g_variant_new_string (app_id);
+
+  g_dbus_connection_call (connection,
+                          "org.gnome.Shell",
+                          "/org/gnome/Shell",
+                          "org.gnome.Shell",
+                          "FocusApp",
+                          g_variant_new_tuple (&app, 1),
+                          NULL,
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1,
+                          NULL,
+                          (GAsyncReadyCallback) focus_app_done,
+                          NULL);
+}
+
+static void
+ephy_focus_desktop_app (gchar *desktop_file)
+{
+  g_bus_get (G_BUS_TYPE_SESSION, NULL, session_bus_ready_cb, g_strdup (desktop_file));
+}
+
+static void
 dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                         gint                       response,
                                         EphyApplicationDialogData *data)
 {
   if (response == GTK_RESPONSE_OK) {
     const char *app_name;
-    char *app_id;
-    char *desktop_file;
+    g_autofree gchar *app_id = NULL;
+    g_autofree gchar *desktop_file = NULL;
     char *message;
     NotifyNotification *notification;
 
@@ -1279,10 +1322,8 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
     if (ephy_web_application_exists (app_id)) {
       if (confirm_web_application_overwrite (GTK_WINDOW (dialog), app_name))
         ephy_web_application_delete (app_id);
-      else {
-        g_free (app_id);
+      else
         return;
-      }
     }
 
     /* Create Web Application, including a new profile and .desktop file. */
@@ -1290,7 +1331,6 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
                                                 app_name,
                                                 gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
-    g_free (app_id);
 
     if (desktop_file)
       message = g_strdup_printf (_("The application “%s” is ready to be used"),
@@ -1309,7 +1349,8 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                       g_path_get_basename (desktop_file),
                                       NULL);
       notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
-      g_free (desktop_file);
+
+      ephy_focus_desktop_app (desktop_file);
     }
 
     notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
