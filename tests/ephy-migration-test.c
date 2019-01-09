@@ -82,6 +82,7 @@ test_do_migration_invalid (void)
 int
 main (int argc, char *argv[])
 {
+  int ret;
   gtk_test_init (&argc, &argv);
 
   ephy_debug_init ();
@@ -98,5 +99,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/lib/ephy-profile-utils/do_migration_invalid",
                    test_do_migration_invalid);
 
-  return g_test_run ();
+  ret = g_test_run ();
+
+  ephy_file_helpers_shutdown ();
+
+  return ret;
 }
