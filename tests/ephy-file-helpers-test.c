@@ -165,7 +165,6 @@ typedef struct {
 
 static const DirTest dir_tests[] =
 {
-  { "/tmp", TRUE, FALSE, FALSE },
   { "/tmp/ephy-test-dir", FALSE, TRUE, TRUE },
   /* Unreadable */
   { "/root/ephy-test-dir", FALSE, FALSE, FALSE },
