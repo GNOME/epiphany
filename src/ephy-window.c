@@ -2770,6 +2770,9 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
 
+  /* Cancel timer so it doesn't close while waiting for the user. */
+  g_source_remove (data->id);
+
   if (data->id != 0 &&
       data->window != NULL &&
       data->embed != NULL &&
@@ -2777,6 +2780,7 @@ tab_has_modified_forms_cb (EphyWebView             *view,
     ephy_window_close_tab (data->window, data->embed);
   }
 
+  data->id = 0;
   tab_has_modified_forms_data_free (data);
 }
 
