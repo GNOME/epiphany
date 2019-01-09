@@ -246,6 +246,8 @@ test_ephy_gsb_service_verify_url (void)
   test_verify_url_loop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run (test_verify_url_loop);
 
+  g_assert_cmpint (g_unlink (db_path), ==, 0);
+
   g_free (db_path);
   g_object_unref (service);
   g_main_loop_unref (test_verify_url_loop);
