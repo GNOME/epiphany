@@ -130,6 +130,7 @@ test_is_empty (const IsEmptyTest *test)
 int
 main (int argc, char *argv[])
 {
+  int ret;
   guint i;
   gtk_test_init (&argc, &argv);
 
@@ -192,5 +193,9 @@ main (int argc, char *argv[])
     g_free (test_name);
   }
 
-  return g_test_run ();
+  ret = g_test_run ();
+
+  ephy_file_helpers_shutdown ();
+
+  return ret;
 }
