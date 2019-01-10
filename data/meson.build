@@ -2,7 +2,7 @@ install_subdir('icons/hicolor',
   install_dir: join_paths(datadir, 'icons')
 )
 
-i18n.merge_file('desktop-file',
+desktop_file = i18n.merge_file('desktop-file',
   input: 'org.gnome.Epiphany.desktop.in',
   output: 'org.gnome.Epiphany.desktop',
   install: true,
@@ -10,14 +10,33 @@ i18n.merge_file('desktop-file',
   po_dir: '../po',
   type: 'desktop'
 )
+desktop_file_validate = find_program ('desktop-file-validate', required: false)
+if desktop_file_validate.found()
+  test(
+    'validate-desktop',
+    desktop_file_validate,
+    args: [
+      desktop_file.full_path()
+    ]
+  )
+endif
 
-i18n.merge_file('appdata-file',
+appdata_file = i18n.merge_file('appdata-file',
   input: 'org.gnome.Epiphany.appdata.xml.in',
   output: 'org.gnome.Epiphany.appdata.xml',
   install: true,
   install_dir: join_paths(datadir, 'metainfo'),
   po_dir: '../po'
 )
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test(
+    'validate-appdata', appstream_util,
+    args: [
+      'validate-relax', '--nonet', appdata_file.full_path()
+    ]
+  )
+endif
 
 # We need three custom_target() calls because Meson doesn't have very
 # good support for GSettings yet. First, generate our GSettings enums
