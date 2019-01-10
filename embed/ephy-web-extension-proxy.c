@@ -298,7 +298,8 @@ ephy_web_extension_proxy_history_clear (EphyWebExtensionProxy *web_extension)
 void
 ephy_web_extension_proxy_password_cached_users_response (EphyWebExtensionProxy *web_extension,
                                                          GList                 *users,
-                                                         gint32                 id)
+                                                         gint32                 promise_id,
+                                                         guint64                page_id)
 {
   if (!web_extension->proxy)
     return;
@@ -310,7 +311,7 @@ ephy_web_extension_proxy_password_cached_users_response (EphyWebExtensionProxy *
 
   g_dbus_proxy_call (web_extension->proxy,
                      "PasswordQueryUsernamesResponse",
-                     g_variant_new ("(asi)", &builder, id),
+                     g_variant_new ("(asit)", &builder, promise_id, page_id),
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      web_extension->cancellable,
@@ -321,14 +322,15 @@ void
 ephy_web_extension_proxy_password_query_response (EphyWebExtensionProxy *web_extension,
                                                   const char            *username,
                                                   const char            *password,
-                                                  gint32                 id)
+                                                  gint32                 promise_id,
+                                                  guint64                page_id)
 {
   if (!web_extension->proxy)
     return;
 
   g_dbus_proxy_call (web_extension->proxy,
                      "PasswordQueryResponse",
-                     g_variant_new ("(ssi)", username ?: "", password ?: "", id),
+                     g_variant_new ("(ssit)", username ?: "", password ?: "", promise_id, page_id),
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      web_extension->cancellable,
