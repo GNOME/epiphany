@@ -55,7 +55,6 @@ struct _EphyWebExtension {
   EphyUriTester *uri_tester;
 
   WebKitScriptWorld *script_world;
-  WebKitWebPage *web_page;
 
   gboolean is_private_profile;
 };
@@ -87,11 +86,13 @@ static const char introspection_xml[] =
   "  <method name='PasswordQueryResponse'>"
   "    <arg type='s' name='username' direction='in'/>"
   "    <arg type='s' name='password' direction='in'/>"
-  "    <arg type='i' name='id' direction='in'/>"
+  "    <arg type='i' name='promise_id' direction='in'/>"
+  "    <arg type='t' name='page_id' direction='in'/>"
   "  </method>"
   "  <method name='PasswordQueryUsernamesResponse'>"
   "    <arg type='as' name='users' direction='in'/>"
-  "    <arg type='i' name='id' direction='in'/>"
+  "    <arg type='i' name='promise_id' direction='in'/>"
+  "    <arg type='t' name='page_id' direction='in'/>"
   "  </method>"
   " </interface>"
   "</node>";
@@ -388,7 +389,6 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
   g_object_unref (js_context);
 
   page_id = webkit_web_page_get_id (web_page);
-  extension->web_page = web_page;
   if (extension->dbus_connection)
     ephy_web_extension_emit_page_created (extension, page_id);
   else
@@ -409,11 +409,10 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
 }
 
 static JSCValue *
-get_password_manager (EphyWebExtension *self)
+get_password_manager (EphyWebExtension *self, guint64 page_id)
 {
-  g_assert (self->web_page);
-
-  WebKitFrame *frame = webkit_web_page_get_main_frame (self->web_page);
+  WebKitWebPage *page = webkit_web_extension_get_page (self->extension, page_id);
+  WebKitFrame *frame = webkit_web_page_get_main_frame (page);
   JSCContext *context = webkit_frame_get_js_context_for_script_world (frame,
                           self->script_world);
   g_autoptr(JSCValue) ephy = jsc_context_get_value (context, "Ephy");
@@ -494,26 +493,30 @@ handle_method_call (GDBusConnection       *connection,
   } else if (g_strcmp0 (method_name, "PasswordQueryUsernamesResponse") == 0) {
     g_autofree const char **users;
     g_autoptr(JSCValue) ret;
-    gint32 id;
+    gint32 promise_id;
+    guint64 page_id;
 
     users = g_variant_get_strv (g_variant_get_child_value (parameters, 0), NULL);
-    g_variant_get_child (parameters, 1, "i", &id);
+    g_variant_get_child (parameters, 1, "i", &promise_id);
+    g_variant_get_child (parameters, 2, "t", &page_id);
 
-    g_autoptr(JSCValue) password_manager = get_password_manager (extension);
+    g_autoptr(JSCValue) password_manager = get_password_manager (extension, page_id);
     ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
-                                          G_TYPE_STRV, users, G_TYPE_INT, id, G_TYPE_NONE);
+                                          G_TYPE_STRV, users, G_TYPE_INT, promise_id, G_TYPE_NONE);
   } else if (g_strcmp0 (method_name, "PasswordQueryResponse") == 0) {
     const char *username;
     const char *password;
-    gint32 id;
+    gint32 promise_id;
+    guint64 page_id;
     g_autoptr(JSCValue) ret;
 
-    g_variant_get (parameters, "(&s&si)", &username, &password, &id);
-    g_autoptr(JSCValue) password_manager = get_password_manager (extension);
+
+    g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &page_id);
+    g_autoptr(JSCValue) password_manager = get_password_manager (extension, page_id);
     ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
                                           G_TYPE_STRING, username,
                                           G_TYPE_STRING, password,
-                                          G_TYPE_INT, id, G_TYPE_NONE);
+                                          G_TYPE_INT, promise_id, G_TYPE_NONE);
   }
 }
 
