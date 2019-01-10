@@ -349,7 +349,7 @@ typedef struct {
   EphyEmbedShell *shell;
   char *origin;
   gint32 promise_id;
-  gint32 page_id;
+  guint64 page_id;
 } PasswordManagerData;
 
 static void
@@ -370,7 +370,7 @@ password_manager_query_finished_cb (GList               *records,
                                                                                    data->page_id,
                                                                                    data->origin);
   if (proxy)
-    ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id);
+    ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id, data->page_id);
 
   g_object_unref (data->shell);
   g_free (data->origin);
@@ -395,6 +395,14 @@ property_to_int32 (JSCValue   *value,
   return jsc_value_to_int32 (prop);
 }
 
+static int
+property_to_uint64 (JSCValue   *value,
+                    const char *name)
+{
+  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  return (guint64)jsc_value_to_double (prop);
+}
+
 static void
 web_extension_password_manager_query_received_cb (WebKitUserContentManager *manager,
                                                   WebKitJavascriptResult   *message,
@@ -408,7 +416,7 @@ web_extension_password_manager_query_received_cb (WebKitUserContentManager *mana
   g_autofree char *username_field = property_to_string_or_null (value, "usernameField");
   g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
   gint32 promise_id = property_to_int32 (value, "promiseID");
-  gint32 page_id = property_to_int32 (value, "pageID");
+  guint64 page_id = property_to_uint64 (value, "pageID");
 
   PasswordManagerData *data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
@@ -483,7 +491,7 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
   g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
   g_autoptr(JSCValue) is_new_prop = jsc_value_object_get_property (value, "isNew");
   gboolean is_new = jsc_value_to_boolean (is_new_prop);
-  gint32 page_id = property_to_int32 (value, "pageID");
+  guint64 page_id = property_to_uint64 (value, "pageID");
   EphyWebView *view;
 
   /* Both password and password field are required. */
@@ -553,9 +561,9 @@ web_extension_password_manager_cached_users_received_cb (WebKitUserContentManage
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   JSCValue *value = webkit_javascript_result_get_js_value (message);
-  g_autofree char *origin = jsc_value_to_string (jsc_value_object_get_property (value, "origin"));
-  gint32 promise_id = jsc_value_to_int32 (jsc_value_object_get_property (value, "promiseID"));
-  gint32 page_id = jsc_value_to_int32 (jsc_value_object_get_property (value, "pageID"));
+  g_autofree char *origin = property_to_string_or_null (value, "origin");
+  gint32 promise_id = property_to_int32 (value, "promiseID");
+  guint64 page_id = property_to_uint64 (value, "pageID");
 
   GList *cached_users;
   cached_users = ephy_password_manager_get_cached_users (priv->password_manager, origin);
@@ -563,7 +571,7 @@ web_extension_password_manager_cached_users_received_cb (WebKitUserContentManage
   EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (
                                     shell, page_id, origin);
   if (proxy)
-    ephy_web_extension_proxy_password_cached_users_response (proxy, cached_users, promise_id);
+    ephy_web_extension_proxy_password_cached_users_response (proxy, cached_users, promise_id, page_id);
 }
 
 static void
