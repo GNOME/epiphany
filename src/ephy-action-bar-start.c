@@ -484,6 +484,10 @@ ephy_action_bar_start_constructed (GObject *object)
   }
   g_signal_connect (action_bar_start->homepage_button, "button-release-event",
                     G_CALLBACK (homepage_button_release_event_cb), action_bar_start);
+
+  /* New Tab Button */
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    gtk_widget_set_visible (action_bar_start->new_tab_button, FALSE);
 }
 
 static void
