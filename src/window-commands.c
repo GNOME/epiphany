@@ -2602,3 +2602,44 @@ window_cmd_homepage_new_tab (GSimpleAction *action,
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 }
+
+static void
+clipboard_text_received (GtkClipboard *clipboard,
+                         const gchar  *text,
+                         EphyWindow   *window)
+{
+  EphyEmbed *embed;
+  EphyWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                              EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                              NULL,
+                              0);
+
+  web_view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_load_url (web_view, text);
+
+  ephy_embed_container_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  g_object_unref (window);
+}
+
+void
+window_cmd_new_tab_from_clipboard (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
+{
+  EphyWindow *ephy_window = EPHY_WINDOW (user_data);
+  GtkClipboard *clipboard;
+
+  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
+  gtk_clipboard_request_text (clipboard,
+                              (GtkClipboardTextReceivedFunc)clipboard_text_received,
+                              g_object_ref (ephy_window));
+}
