@@ -1123,10 +1123,11 @@ ephy_web_view_set_address (EphyWebView *view,
 static void
 uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec    *spec,
-                gpointer       data)
+                EphyWebView   *ephy_web_view)
 {
-  ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
-                             webkit_web_view_get_uri (web_view));
+  if (!ephy_web_view->ever_committed)
+    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
+                               webkit_web_view_get_uri (web_view));
 }
 
 static void
@@ -2663,6 +2664,7 @@ load_failed_cb (WebKitWebView  *web_view,
         prev_uri = webkit_web_view_get_uri (web_view);
         ephy_web_view_set_address (view, prev_uri);
       }
+
     }
     break;
     case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
@@ -2872,7 +2874,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::uri",
                     G_CALLBACK (uri_changed_cb),
-                    NULL);
+                    web_view);
 
   g_signal_connect (web_view, "mouse-target-changed",
                     G_CALLBACK (mouse_target_changed_cb),
