@@ -147,7 +147,7 @@ start_retrieving_filter_file (EphyFiltersManager *manager,
   AdblockFilterRetrieveData *data;
   char *path;
 
-  download = ephy_download_new_for_uri (filter_url);
+  download = ephy_download_new_for_uri_internal (filter_url);
   path = g_file_get_uri (destination);
   ephy_download_set_destination_uri (download, path);
   ephy_download_disable_desktop_notification (download);

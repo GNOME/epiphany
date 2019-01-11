@@ -25,6 +25,7 @@
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"
@@ -745,16 +746,51 @@ download_failed_cb (WebKitDownload *wk_download,
   g_signal_emit (download, signals[ERROR], 0, download->error);
 }
 
-/**
- * ephy_download_new:
- * @download: a #WebKitDownload to wrap
- *
- * Wraps @download in an #EphyDownload.
- *
- * Returns: an #EphyDownload.
- **/
+static void
+filename_suggested_cb (EphyDownload *download,
+                       const char   *suggested_filename,
+                       gpointer      user_data)
+{
+  GtkFileChooser *dialog = NULL;
+  g_autofree gchar *sanitized_filename = NULL;
+  GApplication *application;
+  GtkWindow *toplevel;
+
+  application = G_APPLICATION (ephy_embed_shell_get_default ());
+  toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
+
+  dialog = ephy_create_file_chooser (_("Save as"),
+                                     GTK_WIDGET (toplevel),
+                                     GTK_FILE_CHOOSER_ACTION_SAVE,
+                                     EPHY_FILE_FILTER_NONE);
+  gtk_file_chooser_set_do_overwrite_confirmation (dialog, TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
+
+  sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
+  gtk_file_chooser_set_current_name (dialog, sanitized_filename);
+
+  if (gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+    g_autofree gchar *uri = NULL;
+    WebKitDownload *webkit_download;
+
+    uri = gtk_file_chooser_get_uri (dialog);
+    ephy_download_set_destination_uri (download, uri);
+
+    webkit_download = ephy_download_get_webkit_download (download);
+    webkit_download_set_allow_overwrite (webkit_download, TRUE);
+
+    ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
+                                         download);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
+  } else {
+    ephy_download_cancel (download);
+  }
+
+  g_object_unref (dialog);
+}
+
 EphyDownload *
-ephy_download_new (WebKitDownload *download)
+ephy_download_new_internal (WebKitDownload *download)
 {
   EphyDownload *ephy_download;
 
@@ -785,6 +821,30 @@ ephy_download_new (WebKitDownload *download)
 }
 
 /**
+ * ephy_download_new:
+ * @download: a #WebKitDownload to wrap
+ *
+ * Wraps @download in an #EphyDownload.
+ *
+ * Returns: an #EphyDownload.
+ **/
+EphyDownload *
+ephy_download_new (WebKitDownload *download)
+{
+  EphyDownload *ephy_download;
+
+  ephy_download = ephy_download_new_internal (download);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
+    g_signal_connect (ephy_download, "filename-suggested",
+                      G_CALLBACK (filename_suggested_cb),
+                      NULL);
+  }
+
+  return ephy_download;
+}
+
+/**
  * ephy_download_new_for_uri:
  * @uri: a source URI from where to download
  *
@@ -804,6 +864,21 @@ ephy_download_new_for_uri (const char *uri)
   download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
   ephy_download = ephy_download_new (download);
   g_object_unref (download);
+
+  return ephy_download;
+}
+
+EphyDownload *
+ephy_download_new_for_uri_internal (const char *uri)
+{
+  EphyDownload *ephy_download;
+  g_autoptr(WebKitDownload) download = NULL;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  g_assert (uri != NULL);
+
+  download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
+  ephy_download = ephy_download_new_internal (download);
 
   return ephy_download;
 }
