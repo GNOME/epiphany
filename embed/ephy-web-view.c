@@ -1125,8 +1125,14 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec    *spec,
                 gpointer       data)
 {
-  ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
-                             webkit_web_view_get_uri (web_view));
+  EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
+
+  /* Only allow address updates before view has been load committed.
+   * Fixes: CVE-2018-8383
+   */
+  if (!ephy_web_view->ever_committed)
+    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
+                               webkit_web_view_get_uri (web_view));
 }
 
 static void
