@@ -104,3 +104,22 @@
 .bookmark-tag-widget-selected button:last-child:hover image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; text-shadow: 0 -1px rgba(0, 0, 0, 0.495529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.495529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5); }
 
 .bookmark-tag-widget-selected button:last-child:active image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; background-image: image(#3180d4); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+
+/* Here we use the .button background-image colors from Adwaita, but ligthen them,
+ * since is not possible to use lighten () in common css. */
+@keyframes needs_attention_keyframes {
+    0% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: @borders; }
+    /* can't do animation-direction, so holding the color on two keyframes */
+    30% {background-image: linear-gradient(to bottom, @theme_base_color, @theme_base_color, @theme_base_color); border-color: @theme_fg_color; }
+    90% {background-image: linear-gradient(to bottom, @theme_base_color, @theme_base_color, @theme_base_color); border-color: @theme_fg_color; }
+    100% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: @borders; }
+}
+
+.epiphany-downloads-button-needs-attention {
+  animation: needs_attention_keyframes 2s ease-in-out;
+}
+
+.epiphany-downloads-button-needs-attention-multiple {
+  animation: needs_attention_keyframes 3s ease-in-out;
+  animation-iteration-count: 3;
+}
