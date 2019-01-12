@@ -28,6 +28,10 @@
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
+#define NEEDS_ATTENTION_ANIMATION_TIMEOUT 2000 /*ms */
+#define ANIMATION_X_GROW 30
+#define ANIMATION_Y_GROW 30
+
 struct _EphyActionBarEnd {
   GtkBox parent_instance;
 
@@ -35,22 +39,12 @@ struct _EphyActionBarEnd {
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
+  GtkWidget *downloads_image;
+
+  guint downloads_button_attention_timeout_id;
 };
 
 G_DEFINE_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
-
-static gboolean
-is_for_active_window (EphyActionBarEnd *action_bar_end)
-{
-  EphyShell *shell = ephy_shell_get_default ();
-  GtkWidget *ancestor;
-  GtkWindow *active_window;
-
-  ancestor = gtk_widget_get_ancestor (GTK_WIDGET (action_bar_end), GTK_TYPE_WINDOW);
-  active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  return active_window == GTK_WINDOW (ancestor);
-}
 
 static gboolean
 is_document_view_active (void)
@@ -66,10 +60,47 @@ is_document_view_active (void)
 }
 
 static void
+remove_downloads_button_attention_style (EphyActionBarEnd *self)
+{
+  GtkStyleContext *style_context;
+
+  style_context = gtk_widget_get_style_context (self->downloads_button);
+  gtk_style_context_remove_class (style_context, "epiphany-downloads-button-needs-attention");
+}
+
+static gboolean
+on_remove_downloads_button_attention_style_timeout_cb (EphyActionBarEnd *self)
+{
+  remove_downloads_button_attention_style (self);
+  self->downloads_button_attention_timeout_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+add_attention (EphyActionBarEnd *self)
+{
+  GtkStyleContext *style_context;
+
+  style_context = gtk_widget_get_style_context (self->downloads_button);
+
+  g_clear_handle_id (&self->downloads_button_attention_timeout_id, g_source_remove);
+  remove_downloads_button_attention_style (self);
+
+  gtk_style_context_add_class (style_context, "epiphany-downloads-button-needs-attention");
+  self->downloads_button_attention_timeout_id = g_timeout_add (NEEDS_ATTENTION_ANIMATION_TIMEOUT,
+                                                               (GSourceFunc) on_remove_downloads_button_attention_style_timeout_cb,
+                                                               self);
+}
+
+static void
 download_added_cb (EphyDownloadsManager *manager,
                    EphyDownload         *download,
                    EphyActionBarEnd     *action_bar_end)
 {
+  GtkAllocation rect;
+  DzlBoxTheatric *theatric;
+
   if (is_document_view_active ())
     return;
 
@@ -79,11 +110,38 @@ download_added_cb (EphyDownloadsManager *manager,
                                  action_bar_end->downloads_popover);
   }
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), TRUE);
+  if (gtk_revealer_get_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer)))
+    return;
 
-  if (is_for_active_window (action_bar_end) &&
-      gtk_widget_get_mapped (GTK_WIDGET (action_bar_end)))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->downloads_button), TRUE);
+  add_attention (action_bar_end);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), TRUE);
+  gtk_widget_queue_draw (action_bar_end->downloads_image);
+
+  if (gtk_widget_is_visible (GTK_WIDGET (action_bar_end))) {
+    gtk_widget_get_allocation (GTK_WIDGET (action_bar_end->downloads_button), &rect);
+    theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
+                             "alpha", 0.9,
+                             "background", "#fdfdfd",
+                             "target", action_bar_end->downloads_button,
+                             "height", rect.height,
+                             "width", rect.width,
+                             "x", rect.x,
+                             "y", rect.y,
+                            NULL);
+
+    dzl_object_animate_full (theatric,
+                             DZL_ANIMATION_EASE_IN_CUBIC,
+                             250,
+                             gtk_widget_get_frame_clock (GTK_WIDGET (action_bar_end->downloads_button)),
+                             g_object_unref,
+                             theatric,
+                             "x", rect.x - ANIMATION_X_GROW,
+                             "width", rect.width + (ANIMATION_X_GROW * 2),
+                             "y", rect.y - ANIMATION_Y_GROW,
+                             "height", rect.height + (ANIMATION_Y_GROW * 2),
+                             "alpha", 0.0,
+                             NULL);
+  }
 }
 
 static void
@@ -91,9 +149,6 @@ download_completed_cb (EphyDownloadsManager *manager,
                        EphyDownload         *download,
                        EphyActionBarEnd     *action_bar_end)
 {
-  if (is_for_active_window (action_bar_end) &&
-      gtk_widget_get_mapped (GTK_WIDGET (action_bar_end)))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->downloads_button), TRUE);
 }
 
 static void
@@ -129,6 +184,9 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
                                         downloads_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarEnd,
+                                        downloads_image);
 }
 
 static void
