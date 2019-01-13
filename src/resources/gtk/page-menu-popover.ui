@@ -17,14 +17,16 @@
                 <class name="linked"/>
             </style>
             <child>
-              <object class="GtkModelButton">
-                <property name="text" translatable="yes">Zoom Out</property>
+              <object class="GtkButton">
                 <property name="tooltip_text" translatable="yes" context="tooltip">Zoom Out</property>
                 <property name="action-name">win.zoom-out</property>
-                <property name="iconic">True</property>
-                <property name="centered">True</property>
-                <property name="icon">zoom_out</property>
                 <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon_name">zoom-out-symbolic</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -33,13 +35,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkModelButton" id="zoom-level">
-                <property name="text">100%</property>
+              <object class="GtkButton" id="zoom-level">
+                <property name="label">100%</property>
                 <property name="tooltip_text" translatable="yes">Restore Zoom</property>
                 <property name="action-name">win.zoom-normal</property>
-                <property name="iconic">True</property>
                 <property name="xalign">0.5</property>
-                <property name="centered">True</property>
                 <property name="visible">True</property>
               </object>
               <packing>
@@ -49,14 +49,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkModelButton">
-                <property name="text" translatable="yes">Zoom In</property>
+              <object class="GtkButton">
                 <property name="tooltip_text" translatable="yes" context="tooltip">Zoom In</property>
                 <property name="action-name">win.zoom-in</property>
-                <property name="iconic">True</property>
-                <property name="centered">True</property>
-                <property name="icon">zoom_in</property>
                 <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon_name">zoom-in-symbolic</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
