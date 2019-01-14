@@ -1125,8 +1125,17 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec    *spec,
                 gpointer       data)
 {
-  ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
-                             webkit_web_view_get_uri (web_view));
+  /* When the user has typed the address, we want to update the address
+   * whenever it changes (e.g. due to redirection) so that the browser
+   * feels more "responsive." But we must not do this when a load is
+   * triggered by JavaScript, to avoid CVE-2018-8383. This check is
+   * safe because the visit type is reset in load_changed_cb() when the
+   * load is finished.
+   */
+  if (EPHY_WEB_VIEW (web_view)->visit_type == EPHY_PAGE_VISIT_TYPED) {
+    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
+                               webkit_web_view_get_uri (web_view));
+  }
 }
 
 static void
@@ -1980,7 +1989,9 @@ load_changed_cb (WebKitWebView  *web_view,
       /* Ensure we load the icon for this web view, if available. */
       _ephy_web_view_update_icon (view);
 
-      /* Reset visit type. */
+      /* Reset visit type. Careful if changing this: it's security-
+       * sensitive. See the comment in uri_changed_cb() for details.
+       */
       view->visit_type = EPHY_PAGE_VISIT_NONE;
 
       if (!ephy_web_view_is_history_frozen (view) &&
