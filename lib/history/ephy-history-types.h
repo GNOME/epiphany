@@ -24,20 +24,13 @@
 
 G_BEGIN_DECLS
 
-/*
- * Page transition types heavily inspired by those used in Chromium. See:
- * src/chrome/common/page_transition_types.h in the Chromium source code.
- */
+
 typedef enum {
-  EPHY_PAGE_VISIT_NONE,
+  EPHY_PAGE_VISIT_NONE = 0,
   EPHY_PAGE_VISIT_LINK,
   EPHY_PAGE_VISIT_TYPED,
-  EPHY_PAGE_VISIT_MANUAL_SUBFRAME,
-  EPHY_PAGE_VISIT_AUTO_SUBFRAME,
-  EPHY_PAGE_VISIT_STARTUP,
-  EPHY_PAGE_VISIT_FORM_SUBMISSION,
-  EPHY_PAGE_VISIT_FORM_RELOAD,
-  EPHY_PAGE_VISIT_BOOKMARK,
+  /* We jump to 8 to avoid changing the visits table format. */
+  EPHY_PAGE_VISIT_BOOKMARK = 8,
   EPHY_PAGE_VISIT_HOMEPAGE
 } EphyHistoryPageVisitType;
 
