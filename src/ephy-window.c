@@ -980,8 +980,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GAction *action;
   int i;
 
-  const char *action_group_actions[] = { "save-as", "save-as-application",
-                                         "zoom-in", "zoom-out", "print",
+  const char *action_group_actions[] = { "save-as", "save-as-application", "print",
                                          "find", "find-prev", "find-next",
                                          "bookmark-page", "encoding", "page-source",
                                          "send-to",
