@@ -820,7 +820,7 @@ ephy_embed_constructed (GObject *object)
     info_bar = gtk_info_bar_new ();
     gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_INFO);
     /* Translators: this means WebDriver control. */
-    label = gtk_label_new (_("Web is being controlled by automation"));
+    label = gtk_label_new (_("Web is being controlled by automation."));
     gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))), label, FALSE, FALSE, 0);
     gtk_widget_show (label);
 
