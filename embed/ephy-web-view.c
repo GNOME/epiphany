@@ -1053,9 +1053,10 @@ static gboolean
 run_readability_js_if_needed (gpointer data)
 {
   EphyWebView *web_view = data;
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
-  /* Internal pages should never receive reader mode. */
-  if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
+  /* Internal pages and document mode should never receive reader mode. */
+  if (!ephy_embed_utils_is_no_show_address (web_view->address) && ephy_embed_get_mode (embed) != EPHY_EMBED_MODE_EVINCE_DOCUMENT) {
     webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
                                                    "/org/gnome/epiphany/readability.js",
                                                    NULL,
