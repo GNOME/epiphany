@@ -320,9 +320,7 @@ ephy_evince_document_view_load_uri (EphyEvinceDocumentView *self,
   self->uri = soup_uri_new (uri);
 
   self->job = ev_job_load_new (uri);
-  g_signal_connect (self->job, "finished",
-                    G_CALLBACK (document_load_job_finished),
-                    self);
+  g_signal_connect_object (self->job, "finished", G_CALLBACK (document_load_job_finished), self, 0);
   ev_job_scheduler_push_job (self->job, EV_JOB_PRIORITY_NONE);
 }
 
