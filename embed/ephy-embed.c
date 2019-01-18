@@ -77,6 +77,7 @@ struct _EphyEmbed {
   GSList *keys;
 
   EphyEmbedMode mode;
+  char *saved_title;
 
   guint seq_context_id;
   guint seq_message_id;
@@ -391,6 +392,7 @@ ephy_embed_dispose (GObject *object)
     embed->fullscreen_message_id = 0;
   }
 
+  g_clear_pointer (&embed->saved_title, g_free);
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
@@ -1038,6 +1040,11 @@ ephy_embed_set_mode (EphyEmbed *embed, EphyEmbedMode mode)
       embed->document_view = NULL;
     }
     gtk_widget_set_visible (GTK_WIDGET (embed->paned), TRUE);
+
+    if (embed->saved_title) {
+      ephy_embed_set_title (embed, embed->saved_title);
+      g_clear_pointer (&embed->saved_title, g_free);
+    }
     break;
   case EPHY_EMBED_MODE_EVINCE_DOCUMENT:
     gtk_widget_set_visible (GTK_WIDGET (embed->paned), FALSE);
@@ -1060,23 +1067,43 @@ ephy_embed_get_mode (EphyEmbed *embed)
 }
 
 static void
+document_download_failed_cb (WebKitDownload *download,
+                             GError         *error,
+                             EphyEmbed      *embed)
+{
+  /* Error occured: Switch back to web view */
+  ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
+}
+
+static void
 document_download_finished_cb (WebKitDownload *download,
                                EphyEmbed      *embed)
 {
   const char *document_uri = webkit_download_get_destination (download);
 
+  if (!embed->document_view)
+    return;
+
   ephy_evince_document_view_load_uri (EPHY_EVINCE_DOCUMENT_VIEW (embed->document_view),
                                       document_uri);
+
+  embed->saved_title = g_strdup (embed->title);
+  ephy_embed_set_title (embed, g_path_get_basename (document_uri));
 }
 
-void
+gboolean
 ephy_embed_download_started (EphyEmbed    *embed,
                              EphyDownload *ephy_download)
 {
   WebKitDownload *download = ephy_download_get_webkit_download (ephy_download);
+  gboolean ret = FALSE;
 
   if (embed->mode == EPHY_EMBED_MODE_EVINCE_DOCUMENT) {
     ephy_download_enable_evince_document_mode (ephy_download);
+    g_signal_connect (download, "failed", G_CALLBACK (document_download_failed_cb), embed);
     g_signal_connect (download, "finished", G_CALLBACK (document_download_finished_cb), embed);
+    ret = TRUE;
   }
+
+  return ret;
 }

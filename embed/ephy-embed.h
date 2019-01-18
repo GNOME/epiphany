@@ -62,7 +62,7 @@ void             ephy_embed_detach_notification_container (EphyEmbed *embed);
 void             ephy_embed_set_mode                      (EphyEmbed     *embed,
                                                            EphyEmbedMode  mode);
 EphyEmbedMode    ephy_embed_get_mode                      (EphyEmbed *embed);
-void             ephy_embed_download_started              (EphyEmbed    *embed,
+gboolean         ephy_embed_download_started              (EphyEmbed    *embed,
                                                            EphyDownload *ephy_download);
 
 G_END_DECLS
