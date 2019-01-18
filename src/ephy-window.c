@@ -2600,12 +2600,18 @@ static void
 download_only_load_cb (EphyWebView *view,
                        EphyWindow  *window)
 {
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+  /* Do not close tab if evince document mode is active */
+  if (ephy_embed_get_mode (embed) == EPHY_EMBED_MODE_EVINCE_DOCUMENT)
+    return;
+
   if (gtk_notebook_get_n_pages (window->notebook) == 1) {
     ephy_web_view_load_homepage (view);
     return;
   }
 
-  g_idle_add (delayed_remove_child, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
+  g_idle_add (delayed_remove_child, embed);
 }
 
 static void
