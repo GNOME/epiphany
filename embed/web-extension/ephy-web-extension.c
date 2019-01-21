@@ -494,7 +494,7 @@ handle_method_call (GDBusConnection       *connection,
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "PasswordQueryUsernamesResponse") == 0) {
     g_autofree const char **users;
-    g_autoptr(JSCValue) ret;
+    g_autoptr(JSCValue) ret = NULL;
     gint32 promise_id;
     guint64 page_id;
 
@@ -511,7 +511,7 @@ handle_method_call (GDBusConnection       *connection,
     const char *password;
     gint32 promise_id;
     guint64 page_id;
-    g_autoptr(JSCValue) ret;
+    g_autoptr(JSCValue) ret = NULL;
 
 
     g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &page_id);
