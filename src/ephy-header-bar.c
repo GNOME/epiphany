@@ -140,6 +140,9 @@ is_desktop_pantheon (void)
 {
   const gchar *xdg_current_desktop = g_environ_getenv (g_get_environ (), "XDG_CURRENT_DESKTOP");
 
+  if (!xdg_current_desktop)
+      return FALSE;
+
   return strstr (xdg_current_desktop, "Pantheon") != NULL;
 }
 
