@@ -8,6 +8,8 @@
     <property name="destroy-with-parent">True</property>
     <property name="icon-name">gtk-preferences</property>
     <property name="type-hint">dialog</property>
+    <property name="default-width">600</property>
+    <property name="default-height">700</property>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Preferences</property>
@@ -21,9 +23,24 @@
         <property name="spacing">2</property>
         <property name="border_width">0</property>
         <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="show_border">False</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <child>
+              <object class="HdyColumn">
+                <property name="visible">True</property>
+                <property name="maximum_width">600</property>
+                <property name="linear_growth_width">400</property>
+                <property name="margin_top">32</property>
+                <property name="margin_bottom">32</property>
+                <property name="margin_start">12</property>
+                <property name="margin_end">12</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">18</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -486,15 +503,6 @@
                 </child>
               </object>
             </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">General</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -729,16 +737,6 @@
                 <property name="position">1</property>
               </packing>
             </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Fonts &amp; Style</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -959,16 +957,6 @@
                 <property name="position">2</property>
               </packing>
             </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Stored Data</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -1185,16 +1173,6 @@
               </object>
               <packing>
                 <property name="position">3</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Language</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
@@ -1513,19 +1491,14 @@
                 </child>
               </object>
             </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Sync</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">True</property>
           </packing>
+        </child>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
