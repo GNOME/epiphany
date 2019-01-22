@@ -1083,12 +1083,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
 }
 
-static char *
-adblock_filters_dir (EphyEmbedShell *shell)
-{
-  return g_build_filename (ephy_cache_dir (), "adblock", NULL);
-}
-
 static void
 download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload   *download,
@@ -1127,7 +1121,6 @@ ephy_embed_shell_startup (GApplication *application)
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
   g_autofree char *cookie_policy = NULL;
-  g_autofree char *filters_dir = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
@@ -1263,8 +1256,16 @@ ephy_embed_shell_startup (GApplication *application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
 
-  filters_dir = adblock_filters_dir (shell);
+  g_autofree char *filters_dir =
+    g_build_filename (ephy_cache_dir (), "adblock", NULL);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
+
+  g_signal_connect_swapped (priv->filters_manager, "filters-disabled",
+                            G_CALLBACK (webkit_user_content_manager_remove_all_filters),
+                            priv->user_content);
+  g_signal_connect_swapped (priv->filters_manager, "filter-ready",
+                            G_CALLBACK (webkit_user_content_manager_add_filter),
+                            priv->user_content);
 
   g_signal_connect (priv->web_context, "download-started",
                     G_CALLBACK (download_started_cb), shell);

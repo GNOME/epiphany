@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, EPHY, FILTERS_MANAGER, GObject)
 
-EphyFiltersManager *ephy_filters_manager_new                     (const char *adblock_filters_dir);
+EphyFiltersManager *ephy_filters_manager_new                     (const char         *adblock_filters_dir);
 const char         *ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager);
 
 G_END_DECLS
