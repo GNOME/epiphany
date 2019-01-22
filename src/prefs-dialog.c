@@ -72,8 +72,6 @@ enum {
 struct _PrefsDialog {
   HdyDialog parent_instance;
 
-  GtkWidget *notebook;
-
   /* general */
   GtkWidget *homepage_box;
   GtkWidget *homepage_list;
@@ -988,8 +986,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
-
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
 
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
@@ -2388,7 +2384,7 @@ prefs_dialog_init (PrefsDialog *dialog)
   if (mode == EPHY_EMBED_SHELL_MODE_BROWSER)
     setup_sync_page (dialog);
   else
-    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
+    gtk_widget_destroy (dialog->sync_page_box);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",
