@@ -68,7 +68,7 @@ enum {
 };
 
 struct _PrefsDialog {
-  GtkDialog parent_instance;
+  HdyDialog parent_instance;
 
   GtkWidget *notebook;
 
@@ -166,7 +166,7 @@ enum {
   NUM_COLS
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (PrefsDialog, prefs_dialog, HDY_TYPE_DIALOG)
 
 static void
 prefs_dialog_finalize (GObject *object)
