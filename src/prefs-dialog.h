@@ -22,12 +22,13 @@
 #pragma once
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_PREFS_DIALOG (prefs_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (PrefsDialog, prefs_dialog, EPHY, PREFS_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (PrefsDialog, prefs_dialog, EPHY, PREFS_DIALOG, HdyDialog)
 
 G_END_DECLS
