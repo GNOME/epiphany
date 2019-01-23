@@ -390,14 +390,14 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
-                                        GTK_WINDOW (window),
-                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
-                                        _("_Cancel"),
-                                        GTK_RESPONSE_CANCEL,
-                                        _("Ch_oose File"),
-                                        GTK_RESPONSE_OK,
-                                        NULL);
+  dialog = hdy_dialog_new (GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Bookmarks"));
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"),
+                          GTK_RESPONSE_CANCEL,
+                          _("Ch_oose File"),
+                          GTK_RESPONSE_OK,
+                          NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
