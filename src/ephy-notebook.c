@@ -29,6 +29,7 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-link.h"
+#include "ephy-pages-popover.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -478,6 +479,7 @@ ephy_notebook_constructed (GObject *object)
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
   GtkWidget *hbox;
   GtkWidget *button;
+  EphyPagesPopover *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
 
@@ -494,8 +496,11 @@ ephy_notebook_constructed (GObject *object)
 
   notebook->tab_menu = g_menu_new ();
   /* Remove this when popover menus become scrollable. */
-  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), G_MENU_MODEL (notebook->tab_menu));
+  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
+
+  popover = ephy_pages_popover_new (GTK_WIDGET (button));
+  ephy_pages_popover_set_notebook (popover, notebook);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (popover));
 }
 
 static void
