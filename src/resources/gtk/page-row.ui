@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="EphyPageRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="margin_end">12</property>
+        <property name="margin_start">12</property>
+        <property name="spacing">12</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="ellipsize">end</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <property name="valign">center</property>
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="can_focus">True</property>
+            <property name="halign">end</property>
+            <property name="relief">none</property>
+            <property name="valign">center</property>
+            <property name="visible">True</property>
+            <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">window-close-symbolic</property>
+                <property name="icon_size">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
