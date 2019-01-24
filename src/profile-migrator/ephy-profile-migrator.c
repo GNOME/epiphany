@@ -516,149 +516,6 @@ migrate_permissions (void)
   g_object_unref (file);
 }
 
-static const char * const deprecated_settings[] = {
-  EPHY_PREFS_DEPRECATED_USER_AGENT,
-  EPHY_PREFS_DEPRECATED_REMEMBER_PASSWORDS,
-  EPHY_PREFS_DEPRECATED_ENABLE_SMOOTH_SCROLLING,
-};
-
-static void
-migrate_deprecated_settings (void)
-{
-  for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
-    GVariant *value;
-
-    value = g_settings_get_value (EPHY_SETTINGS_MAIN, deprecated_settings[i]);
-    g_settings_set_value (EPHY_SETTINGS_WEB, deprecated_settings[i], value);
-    g_variant_unref (value);
-  }
-
-  g_settings_sync ();
-}
-
-static gboolean
-is_deprecated_setting (const char *setting)
-{
-  for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
-    if (!strcmp (setting, deprecated_settings[i]))
-      return TRUE;
-  }
-
-  return FALSE;
-}
-
-static void
-migrate_settings (void)
-{
-  int default_profile_migration_version;
-
-  /* The migrator is only run for the main profile and web apps,
-   * so if the profile dir is not the default one, it's a web app.
-   * If not a web app, migrate deprecated settings.
-   */
-  if (ephy_dot_dir_is_default ()) {
-    migrate_deprecated_settings ();
-    return;
-  }
-
-  /* If it's a web app, inherit settings from the default profile. */
-  /* If the default profile hasn't been migrated yet, use the deprecated settings. */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
-  if (default_profile_migration_version < EPHY_SETTINGS_MIGRATION_VERSION) {
-    GSettings *settings;
-
-    settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/org/gnome/epiphany/web/");
-
-    for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_web_schema); i++) {
-      GVariant *value;
-
-      if (is_deprecated_setting (ephy_prefs_web_schema[i]))
-        continue;
-
-      value = g_settings_get_value (settings, ephy_prefs_web_schema[i]);
-      g_settings_set_value (EPHY_SETTINGS_WEB, ephy_prefs_web_schema[i], value);
-      g_variant_unref (value);
-    }
-
-    g_object_unref (settings);
-
-    for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
-      GVariant *value;
-
-      value = g_settings_get_value (EPHY_SETTINGS_MAIN, deprecated_settings[i]);
-      g_settings_set_value (EPHY_SETTINGS_WEB, deprecated_settings[i], value);
-      g_variant_unref (value);
-    }
-  } else
-    ephy_web_application_initialize_settings (ephy_dot_dir ());
-
-  g_settings_sync ();
-}
-
-/* Originally migrator #17, but moved to spot #27 because it uses the
- * bookmarks manager, which requires that we have already run #24.
- */
-static void
-migrate_search_engines (void)
-{
-  EphyBookmarksManager *bookmarks_manager;
-  EphySearchEngineManager *search_engine_manager;
-  GSequence *bookmarks;
-  GSequenceIter *iter;
-  GList *smart_bookmarks = NULL;
-  const char *address;
-  const char *title;
-  char *default_search_engine_address;
-  const char *default_search_engine_name = _("Search the Web");
-
-  /* Search engine settings are only used in browser mode, so no need to migrate
-   * if we are not in browser mode. */
-  if (!ephy_dot_dir_is_default ())
-    return;
-
-  bookmarks_manager = ephy_bookmarks_manager_new ();
-  search_engine_manager = ephy_search_engine_manager_new ();
-
-  default_search_engine_address = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                                         EPHY_PREFS_KEYWORD_SEARCH_URL);
-  if (default_search_engine_address != NULL) {
-      ephy_search_engine_manager_add_engine (search_engine_manager,
-                                             default_search_engine_name,
-                                             default_search_engine_address,
-                                             "");
-      ephy_search_engine_manager_set_default_engine (search_engine_manager,
-                                                     default_search_engine_name);
-      g_free (default_search_engine_address);
-  }
-
-  bookmarks = ephy_bookmarks_manager_get_bookmarks (bookmarks_manager);
-  for (iter = g_sequence_get_begin_iter (bookmarks);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    EphyBookmark *bookmark;
-
-    bookmark = g_sequence_get (iter);
-    address = ephy_bookmark_get_url (bookmark);
-
-    if (strstr (address, "%s") != NULL) {
-      title = ephy_bookmark_get_title (bookmark);
-      ephy_search_engine_manager_add_engine (search_engine_manager,
-                                             title,
-                                             address,
-                                             "");
-      smart_bookmarks = g_list_append (smart_bookmarks, bookmark);
-   }
-  }
-
-  for (GList *l = smart_bookmarks; l != NULL; l = l->next)
-    ephy_bookmarks_manager_remove_bookmark (bookmarks_manager,
-                                            (EphyBookmark *)(l->data));
-
-  g_list_free (smart_bookmarks);
-  g_object_unref (bookmarks_manager);
-  g_object_unref (search_engine_manager);
-}
-
 static void
 migrate_icon_database (void)
 {
@@ -879,69 +736,6 @@ out:
     g_error_free (error);
   g_hash_table_unref (attributes);
   g_list_free_full (passwords, g_object_unref);
-}
-
-static const char * const old_sync_settings[] = {
-    EPHY_PREFS_SYNC_USER,
-    EPHY_PREFS_SYNC_TIME,
-    EPHY_PREFS_SYNC_DEVICE_ID,
-    EPHY_PREFS_SYNC_DEVICE_NAME,
-    EPHY_PREFS_SYNC_FREQUENCY,
-    EPHY_PREFS_SYNC_WITH_FIREFOX,
-    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
-    EPHY_PREFS_SYNC_BOOKMARKS_TIME,
-    EPHY_PREFS_SYNC_BOOKMARKS_INITIAL,
-    EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
-    EPHY_PREFS_SYNC_PASSWORDS_TIME,
-    EPHY_PREFS_SYNC_PASSWORDS_INITIAL,
-    EPHY_PREFS_SYNC_HISTORY_ENABLED,
-    EPHY_PREFS_SYNC_HISTORY_TIME,
-    EPHY_PREFS_SYNC_HISTORY_INITIAL,
-    EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
-    EPHY_PREFS_SYNC_OPEN_TABS_TIME
-};
-
-static void
-migrate_sync_settings_path (void)
-{
-  GSettings *deprecated_settings = ephy_settings_get ("org.gnome.Epiphany.sync.DEPRECATED");
-
-  /* Sync settings are only used in browser mode, so no need to migrate if we
-   * are not in browser mode. */
-  if (!ephy_dot_dir_is_default ())
-    return;
-
-  for (guint i = 0; i < G_N_ELEMENTS (old_sync_settings); i++) {
-    GVariant *user_value;
-
-    /* Has the setting been changed from its default? */
-    user_value = g_settings_get_user_value (deprecated_settings, old_sync_settings[i]);
-
-    if (user_value != NULL) {
-      GVariant *value;
-      const GVariantType *type;
-
-      value = g_settings_get_value (deprecated_settings, old_sync_settings[i]);
-      type = g_variant_get_type (value);
-
-      /* All double values in the old sync schema have been converted to gint64 in the new schema. */
-      if (g_variant_type_equal (type, G_VARIANT_TYPE_DOUBLE)) {
-        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i],
-                              g_variant_new_int64 (ceil (g_variant_get_double (value))));
-      } else {
-        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i], value);
-      }
-
-      /* We do not want to ever run this migration again, to avoid writing old
-       * values over new ones. So be cautious and reset the old settings. */
-      g_settings_reset (deprecated_settings, old_sync_settings[i]);
-
-      g_variant_unref (value);
-      g_variant_unref (user_value);
-    }
-  }
-
-  g_settings_sync ();
 }
 
 static void
@@ -1322,18 +1116,18 @@ const EphyProfileMigrator migrators[] = {
   /* 13 */ migrate_adblock_filters,
   /* 14 */ migrate_initial_state,
   /* 15 */ migrate_permissions,
-  /* 16 */ migrate_settings,
+  /* 16 */ migrate_nothing,
   /* 17 */ migrate_nothing,
   /* 18 */ migrate_icon_database,
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
   /* 20 */ migrate_history_to_firefox_sync_history,
   /* 21 */ migrate_passwords_add_target_origin,
-  /* 22 */ migrate_sync_settings_path,
+  /* 22 */ migrate_nothing,
   /* 23 */ migrate_sync_device_info,
   /* 24 */ migrate_bookmarks_timestamp,
   /* 25 */ migrate_passwords_timestamp,
   /* 26 */ migrate_nothing,
-  /* 27 */ migrate_search_engines,
+  /* 27 */ migrate_nothing,
   /* 28 */ migrate_annoyance_list,
   /* 29 */ migrate_zoom_level
 };
