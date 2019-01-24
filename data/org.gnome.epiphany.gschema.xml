@@ -85,17 +85,6 @@
                         <summary>Whether to delay loading of tabs that are not immediately visible on session restore</summary>
                         <description>When this option is set to true, tabs will not start loading until the user switches to them, upon session restore.</description>
                 </key>
-                <key name="process-model" enum="org.gnome.Epiphany.EphyPrefsProcessModel">
-                        <default>'one-secondary-process-per-web-view'</default>
-                        <summary>Process model</summary>
-                        <description>This option allows to set the process model used. Use “shared-secondary-process” to use a single web process shared by all the tabs and “one-secondary-process-per-web-view” to use a different web process for each tab.</description>
-                </key>
-                <key type="u" name="max-processes">
-                        <default>0</default>
-                        <summary>Maximum number of web processes created at the same time when using “one-secondary-process-per-web-view” model</summary>
-                        <description>This option sets a limit to the number of web processes that will be used at the same time for the “one-secondary-process-per-web-view” model. The default value is “0” and means no limit.</description>
-
-                </key>
                 <key type="as" name="adblock-filters">
                         <default>['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt']</default>
                         <summary>List of adblock filters</summary>

@@ -1071,33 +1071,6 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyPrefsProcessModel process_model;
-  guint max_processes;
-
-  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-    process_model = EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS;
-  else
-    process_model = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_PROCESS_MODEL);
-
-  switch (process_model) {
-    case EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS:
-      max_processes = 1;
-      break;
-    case EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW:
-      max_processes = g_settings_get_uint (EPHY_SETTINGS_MAIN, EPHY_PREFS_MAX_PROCESSES);
-      break;
-    default:
-      g_assert_not_reached ();
-  }
-
-  webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
-  webkit_web_context_set_web_process_count_limit (priv->web_context, max_processes);
-}
-
-static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -1269,7 +1242,8 @@ ephy_embed_shell_startup (GApplication *application)
                     G_CALLBACK (web_extension_password_manager_request_save_received_cb),
                     shell);
 
-  ephy_embed_shell_setup_process_model (shell);
+  webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_extensions),
                            shell, 0);

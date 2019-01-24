@@ -64,12 +64,6 @@ typedef enum
   EPHY_PREFS_WEB_COOKIES_POLICY_NEVER
 } EphyPrefsWebCookiesPolicy;
 
-typedef enum
-{
-  EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS,
-  EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW
-} EphyPrefsProcessModel;
-
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_EXPAND_TABS_BAR            "expand-tabs-bar"
 #define EPHY_PREFS_UI_TABS_BAR_POSITION          "tabs-bar-position"
@@ -166,8 +160,6 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE               "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY             "restore-session-policy"
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS     "restore-session-delaying-loads"
-#define EPHY_PREFS_PROCESS_MODEL                      "process-model"
-#define EPHY_PREFS_MAX_PROCESSES                      "max-processes"
 #define EPHY_PREFS_ADBLOCK_FILTERS                    "adblock-filters"
 #define EPHY_PREFS_SEARCH_ENGINES                     "search-engines"
 #define EPHY_PREFS_DEFAULT_SEARCH_ENGINE              "default-search-engine"
