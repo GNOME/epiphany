@@ -41,332 +41,459 @@
                     <property name="margin_start">12</property>
                     <property name="margin_end">12</property>
                     <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkBox" id="browsing_box">
-                    <property name="visible">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Browsing</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="browsing_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">18</property>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">enable_smooth_scrolling_switch</property>
-                            <property name="title" translatable="yes">Enable sm_ooth scrolling</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="enable_smooth_scrolling_switch">
-                                <property name="valign">center</property>
+                          <object class="GtkBox" id="browsing_box">
+                            <property name="visible">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Browsing</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="download_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Downloads</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="downloads_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow" id="download_folder_row">
-                            <property name="title" translatable="yes">_Download folder</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="homepage_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Homepage</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="homepage_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">new_tab_homepage_radiobutton</property>
-                            <property name="title" translatable="yes">Most _visited pages</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="new_tab_homepage_radiobutton">
-                                <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkListBox" id="browsing_list">
+                                <property name="selection_mode">none</property>
                                 <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">blank_homepage_radiobutton</property>
-                            <property name="title" translatable="yes">_Blank page</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="blank_homepage_radiobutton">
-                                <property name="can_focus">False</property>
-                                <property name="group">new_tab_homepage_radiobutton</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">custom_homepage_radiobutton</property>
-                            <property name="title" translatable="yes">_Custom</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="custom_homepage_radiobutton">
-                                <property name="can_focus">False</property>
-                                <property name="group">new_tab_homepage_radiobutton</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                            <child type="action">
-                              <object class="GtkEntry" id="custom_homepage_entry">
-                                <property name="hexpand">True</property>
-                                <property name="secondary-icon-name">edit-clear-symbolic</property>
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="webapp_box">
-                    <property name="visible">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Web Application</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="webapp_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="title" translatable="yes">_Manage Additional URLs</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton" id="webapp_additional_urls_dialog_button">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                                <signal name="clicked" handler="on_manage_webapp_additional_urls_button_clicked"/>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">emblem-system-symbolic</property>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">enable_smooth_scrolling_switch</property>
+                                    <property name="title" translatable="yes">Enable sm_ooth scrolling</property>
+                                    <property name="use_underline">True</property>
                                     <property name="visible">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkListBoxRow">
-                            <property name="activatable">False</property>
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkGrid">
-                                <property name="column-spacing">12</property>
-                                <property name="margin-bottom">8</property>
-                                <property name="margin-end">12</property>
-                                <property name="margin-start">12</property>
-                                <property name="margin-top">8</property>
-                                <property name="row-spacing">6</property>
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkButton" id="webapp_icon_button">
-                                    <property name="visible">true</property>
-                                    <property name="halign">center</property>
-                                    <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
-                                    <child>
-                                      <object class="GtkImage" id="webapp_icon">
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="enable_smooth_scrolling_switch">
+                                        <property name="valign">center</property>
                                         <property name="visible">True</property>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                    <property name="height">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Homepage:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="webapp_url">
-                                    <property name="visible">True</property>
-                                    <property name="hexpand">True</property>
-                                    <signal name="changed" handler="on_webapp_entry_changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Title:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="webapp_title">
-                                    <property name="visible">True</property>
-                                    <property name="hexpand">True</property>
-                                    <signal name="changed" handler="on_webapp_entry_changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="search_box">
-                    <property name="visible">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Search Engines</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="search_engines_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="subtitle" translatable="yes">You can select different search engines to use</property>
-                            <property name="title" translatable="yes">_Manage Search Engines</property>
-                            <property name="use_underline">True</property>
+                          <object class="GtkBox" id="download_box">
                             <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton" id="search_engine_dialog_button">
-                                <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <signal name="clicked" handler="on_search_engine_dialog_button_clicked"/>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Downloads</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="downloads_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">emblem-system-symbolic</property>
+                                  <object class="HdyActionRow" id="download_folder_row">
+                                    <property name="title" translatable="yes">_Download folder</property>
+                                    <property name="use_underline">True</property>
                                     <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="homepage_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Homepage</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="homepage_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">new_tab_homepage_radiobutton</property>
+                                    <property name="title" translatable="yes">Most _visited pages</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="new_tab_homepage_radiobutton">
+                                        <property name="can_focus">False</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">blank_homepage_radiobutton</property>
+                                    <property name="title" translatable="yes">_Blank page</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="blank_homepage_radiobutton">
+                                        <property name="can_focus">False</property>
+                                        <property name="group">new_tab_homepage_radiobutton</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">custom_homepage_radiobutton</property>
+                                    <property name="title" translatable="yes">_Custom</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="custom_homepage_radiobutton">
+                                        <property name="can_focus">False</property>
+                                        <property name="group">new_tab_homepage_radiobutton</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                    <child type="action">
+                                      <object class="GtkEntry" id="custom_homepage_entry">
+                                        <property name="hexpand">True</property>
+                                        <property name="secondary-icon-name">edit-clear-symbolic</property>
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="webapp_box">
+                            <property name="visible">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">Web Application</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="webapp_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">_Manage Additional URLs</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton" id="webapp_additional_urls_dialog_button">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <signal name="clicked" handler="on_manage_webapp_additional_urls_button_clicked"/>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">emblem-system-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBoxRow">
+                                    <property name="activatable">False</property>
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkGrid">
+                                        <property name="column-spacing">12</property>
+                                        <property name="margin-bottom">8</property>
+                                        <property name="margin-end">12</property>
+                                        <property name="margin-start">12</property>
+                                        <property name="margin-top">8</property>
+                                        <property name="row-spacing">6</property>
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <object class="GtkButton" id="webapp_icon_button">
+                                            <property name="visible">true</property>
+                                            <property name="halign">center</property>
+                                            <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
+                                            <child>
+                                              <object class="GtkImage" id="webapp_icon">
+                                                <property name="visible">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">0</property>
+                                            <property name="top-attach">0</property>
+                                            <property name="height">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes">Homepage:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">1</property>
+                                            <property name="top-attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="webapp_url">
+                                            <property name="visible">True</property>
+                                            <property name="hexpand">True</property>
+                                            <signal name="changed" handler="on_webapp_entry_changed"/>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">2</property>
+                                            <property name="top-attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes">Title:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">1</property>
+                                            <property name="top-attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="webapp_title">
+                                            <property name="visible">True</property>
+                                            <property name="hexpand">True</property>
+                                            <signal name="changed" handler="on_webapp_entry_changed"/>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">2</property>
+                                            <property name="top-attach">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="search_box">
+                            <property name="visible">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">Search Engines</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="search_engines_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="subtitle" translatable="yes">You can select different search engines to use</property>
+                                    <property name="title" translatable="yes">_Manage Search Engines</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton" id="search_engine_dialog_button">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <signal name="clicked" handler="on_search_engine_dialog_button_clicked"/>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">emblem-system-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="session_box">
+                            <property name="visible">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Session</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="session_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">restore_session_switch</property>
+                                    <property name="title" translatable="yes">_Remember previous tabs on startup</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="restore_session_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Web Content</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="web_content_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow" id="adblock_allow_row">
+                                    <property name="activatable_widget">adblock_allow_switch</property>
+                                    <property name="title" translatable="yes">Try to block _advertisements</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="adblock_allow_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow" id="do_not_track_row">
+                                    <property name="activatable_widget">do_not_track_switch</property>
+                                    <property name="margin-start">24</property>
+                                    <property name="title" translatable="yes">Try to block web _trackers</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="do_not_track_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">popups_allow_switch</property>
+                                    <property name="title" translatable="yes">Block popup _windows</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="popups_allow_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">enable_safe_browsing_switch</property>
+                                    <property name="title" translatable="yes">Try to block dangerous web_sites</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="enable_safe_browsing_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -375,133 +502,6 @@
                         </child>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="session_box">
-                    <property name="visible">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Session</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="session_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">restore_session_switch</property>
-                            <property name="title" translatable="yes">_Remember previous tabs on startup</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="restore_session_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Web Content</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="web_content_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow" id="adblock_allow_row">
-                            <property name="activatable_widget">adblock_allow_switch</property>
-                            <property name="title" translatable="yes">Try to block _advertisements</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="adblock_allow_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow" id="do_not_track_row">
-                            <property name="activatable_widget">do_not_track_switch</property>
-                            <property name="margin-start">24</property>
-                            <property name="title" translatable="yes">Try to block web _trackers</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="do_not_track_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">popups_allow_switch</property>
-                            <property name="title" translatable="yes">Block popup _windows</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="popups_allow_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">enable_safe_browsing_switch</property>
-                            <property name="title" translatable="yes">Try to block dangerous web_sites</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="enable_safe_browsing_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
                   </object>
                 </child>
               </object>
@@ -530,233 +530,233 @@
                     <property name="margin_start">12</property>
                     <property name="margin_end">12</property>
                     <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Fonts</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="fonts_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">18</property>
                         <child>
-                          <object class="HdyExpanderRow" id="use_gnome_fonts_row">
-                            <property name="show_enable_switch">True</property>
-                            <property name="title" translatable="yes">Use custom fonts</property>
+                          <object class="GtkBox">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkSeparator">
-                                <property name="margin-start">24</property>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Fonts</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkListBox" id="use_custom_fonts_list">
-                                <property name="margin-start">24</property>
+                              <object class="GtkListBox" id="fonts_list">
                                 <property name="selection_mode">none</property>
                                 <property name="visible">True</property>
-                                <child>
-                                  <object class="HdyActionRow">
-                                    <property name="activatable">False</property>
-                                    <property name="title" translatable="yes">Sans serif font</property>
-                                    <property name="visible">True</property>
-                                    <child type="action">
-                                      <object class="GtkFontButton" id="sans_fontbutton">
-                                        <property name="font">Sans 12</property>
-                                        <property name="use-font">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="visible">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="HdyActionRow">
-                                    <property name="activatable">False</property>
-                                    <property name="title" translatable="yes">Serif font</property>
-                                    <property name="visible">True</property>
-                                    <child type="action">
-                                      <object class="GtkFontButton" id="serif_fontbutton">
-                                        <property name="font">Sans 12</property>
-                                        <property name="use-font">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="visible">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="HdyActionRow">
-                                    <property name="activatable">False</property>
-                                    <property name="title" translatable="yes">Monospace font</property>
-                                    <property name="visible">True</property>
-                                    <child type="action">
-                                      <object class="GtkFontButton" id="mono_fontbutton">
-                                        <property name="font">Sans 12</property>
-                                        <property name="use-font">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="visible">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="reader_mode_box">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Reader Mode</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="reader_mode_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyComboRow" id="reader_mode_font_style">
-                            <property name="title" translatable="yes">Font style</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyComboRow" id="reader_mode_color_scheme">
-                            <property name="title" translatable="yes">Color scheme</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="css_list">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Style</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">css_switch</property>
-                            <property name="title" translatable="yes">Use custom stylesheet</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton" id="css_edit_button">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">document-edit-symbolic</property>
+                                  <object class="HdyExpanderRow" id="use_gnome_fonts_row">
+                                    <property name="show_enable_switch">True</property>
+                                    <property name="title" translatable="yes">Use custom fonts</property>
                                     <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkSeparator">
+                                        <property name="margin-start">24</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkListBox" id="use_custom_fonts_list">
+                                        <property name="margin-start">24</property>
+                                        <property name="selection_mode">none</property>
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <object class="HdyActionRow">
+                                            <property name="activatable">False</property>
+                                            <property name="title" translatable="yes">Sans serif font</property>
+                                            <property name="visible">True</property>
+                                            <child type="action">
+                                              <object class="GtkFontButton" id="sans_fontbutton">
+                                                <property name="font">Sans 12</property>
+                                                <property name="use-font">True</property>
+                                                <property name="valign">center</property>
+                                                <property name="visible">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="HdyActionRow">
+                                            <property name="activatable">False</property>
+                                            <property name="title" translatable="yes">Serif font</property>
+                                            <property name="visible">True</property>
+                                            <child type="action">
+                                              <object class="GtkFontButton" id="serif_fontbutton">
+                                                <property name="font">Sans 12</property>
+                                                <property name="use-font">True</property>
+                                                <property name="valign">center</property>
+                                                <property name="visible">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="HdyActionRow">
+                                            <property name="activatable">False</property>
+                                            <property name="title" translatable="yes">Monospace font</property>
+                                            <property name="visible">True</property>
+                                            <child type="action">
+                                              <object class="GtkFontButton" id="mono_fontbutton">
+                                                <property name="font">Sans 12</property>
+                                                <property name="use-font">True</property>
+                                                <property name="valign">center</property>
+                                                <property name="visible">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child type="action">
-                              <object class="GtkSeparator">
-                                <property name="margin_bottom">8</property>
-                                <property name="margin_top">8</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                            <child type="action">
-                              <object class="GtkSwitch" id="css_switch">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
                               </object>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="title" translatable="yes">Default zoom level</property>
+                          <object class="GtkBox" id="reader_mode_box">
                             <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSpinButton" id="default_zoom_spin_button">
-                                <property name="adjustment">zoom_adjustment</property>
-                                <property name="can_focus">True</property>
-                                <property name="input_purpose">number</property>
-                                <property name="max_width_chars">5</property>
-                                <property name="valign">center</property>
-                                <property name="value">100</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <signal name="output" handler="on_default_zoom_spin_button_output"/>
-                                <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Reader Mode</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="reader_mode_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyComboRow" id="reader_mode_font_style">
+                                    <property name="title" translatable="yes">Font style</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyComboRow" id="reader_mode_color_scheme">
+                                    <property name="title" translatable="yes">Color scheme</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="css_list">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Style</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="frame"/>
+                                </style>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">css_switch</property>
+                                    <property name="title" translatable="yes">Use custom stylesheet</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton" id="css_edit_button">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">document-edit-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="action">
+                                      <object class="GtkSeparator">
+                                        <property name="margin_bottom">8</property>
+                                        <property name="margin_top">8</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="css_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Default zoom level</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSpinButton" id="default_zoom_spin_button">
+                                        <property name="adjustment">zoom_adjustment</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="input_purpose">number</property>
+                                        <property name="max_width_chars">5</property>
+                                        <property name="valign">center</property>
+                                        <property name="value">100</property>
+                                        <property name="visible">True</property>
+                                        <signal name="output" handler="on_default_zoom_spin_button_output"/>
+                                        <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
                     </child>
                   </object>
                 </child>
@@ -790,51 +790,97 @@
                     <property name="margin_start">12</property>
                     <property name="margin_end">12</property>
                     <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Cookies</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="cookies_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">18</property>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="title" translatable="yes">Manage _Cookies</property>
-                            <property name="use_underline">True</property>
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton">
-                                <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
+                                <property name="halign">start</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">Cookies</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="cookies_list">
+                                <property name="selection_mode">none</property>
+                                <property name="visible">True</property>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">emblem-system-symbolic</property>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Manage _Cookies</property>
+                                    <property name="use_underline">True</property>
                                     <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">emblem-system-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">always</property>
+                                    <property name="title" translatable="yes">_Always accept</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="always">
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">no_third_party</property>
+                                    <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
+                                    <property name="title" translatable="yes">Only _from sites you visit</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="no_third_party">
+                                        <property name="group">always</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">never</property>
+                                    <property name="title" translatable="yes">_Never accept</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="prefix">
+                                      <object class="GtkRadioButton" id="never">
+                                        <property name="group">always</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -842,92 +888,64 @@
                           </object>
                         </child>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">always</property>
-                            <property name="title" translatable="yes">_Always accept</property>
-                            <property name="use_underline">True</property>
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="always">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">Passwords</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">no_third_party</property>
-                            <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
-                            <property name="title" translatable="yes">Only _from sites you visit</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="no_third_party">
-                                <property name="group">always</property>
+                            <child>
+                              <object class="GtkListBox" id="passwords_list">
+                                <property name="selection_mode">none</property>
                                 <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">never</property>
-                            <property name="title" translatable="yes">_Never accept</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="prefix">
-                              <object class="GtkRadioButton" id="never">
-                                <property name="group">always</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Passwords</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="passwords_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="title" translatable="yes">Manage _Passwords</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton">
-                                <property name="valign">center</property>
-                                <property name="visible">True</property>
-                                <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">emblem-system-symbolic</property>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Manage _Passwords</property>
+                                    <property name="use_underline">True</property>
                                     <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">emblem-system-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable_widget">remember_passwords_switch</property>
+                                    <property name="title" translatable="yes">_Remember passwords</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkSwitch" id="remember_passwords_switch">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -935,63 +953,49 @@
                           </object>
                         </child>
                         <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable_widget">remember_passwords_switch</property>
-                            <property name="title" translatable="yes">_Remember passwords</property>
-                            <property name="use_underline">True</property>
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkSwitch" id="remember_passwords_switch">
-                                <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Personal Data</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Personal Data</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox" id="personal_data_list">
-                        <property name="selection_mode">none</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                        <child>
-                          <object class="HdyActionRow">
-                            <property name="activatable">False</property>
-                            <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
-                            <property name="title" translatable="yes">Manage Personal _Data</property>
-                            <property name="use_underline">True</property>
-                            <property name="visible">True</property>
-                            <child type="action">
-                              <object class="GtkButton" id="clear_personal_data_button">
-                                <property name="valign">center</property>
+                            <child>
+                              <object class="GtkListBox" id="personal_data_list">
+                                <property name="selection_mode">none</property>
                                 <property name="visible">True</property>
                                 <style>
-                                  <class name="image-button"/>
+                                  <class name="frame"/>
                                 </style>
                                 <child>
-                                  <object class="GtkImage">
-                                    <property name="icon_name">emblem-system-symbolic</property>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
+                                    <property name="title" translatable="yes">Manage Personal _Data</property>
+                                    <property name="use_underline">True</property>
                                     <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkButton" id="clear_personal_data_button">
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon_name">emblem-system-symbolic</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -999,10 +1003,6 @@
                           </object>
                         </child>
                       </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
                     </child>
                   </object>
                 </child>
@@ -1036,161 +1036,165 @@
                     <property name="margin_start">12</property>
                     <property name="margin_end">12</property>
                     <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Languages</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkBox">
+                        <property name="visible">True</property>
                         <property name="orientation">vertical</property>
-                        <property name="visible">True</property>
+                        <property name="spacing">18</property>
                         <child>
-                          <object class="GtkFrame">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <property name="hexpand">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkTreeView" id="lang_treeview">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="headers-visible">False</property>
-                                <property name="fixed-height-mode">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection"/>
-                                </child>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Languages</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkToolbar">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">1</property>
-                            <style>
-                              <class name="inline-toolbar"/>
-                            </style>
                             <child>
-                              <object class="GtkToolItem">
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkFrame">
+                                    <property name="visible">True</property>
+                                    <property name="hexpand">True</property>
+                                    <child>
+                                      <object class="GtkTreeView" id="lang_treeview">
+                                        <property name="visible">True</property>
+                                        <property name="headers-visible">False</property>
+                                        <property name="fixed-height-mode">True</property>
+                                        <child internal-child="selection">
+                                          <object class="GtkTreeSelection" id="treeview-selection"/>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolbar">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
+                                    <property name="icon_size">1</property>
+                                    <style>
+                                      <class name="inline-toolbar"/>
+                                    </style>
                                     <child>
-                                      <object class="GtkButton" id="lang_add_button">
+                                      <object class="GtkToolItem">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Add language</property>
-                                          </object>
-                                        </child>
+                                        <property name="can_focus">False</property>
                                         <child>
-                                          <object class="GtkImage">
+                                          <object class="GtkBox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="icon_name">list-add-symbolic</property>
-                                            <property name="icon-size">1</property>
+                                            <child>
+                                              <object class="GtkButton" id="lang_add_button">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject">
+                                                    <property name="accessible-name" translatable="yes">Add language</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="icon_name">list-add-symbolic</property>
+                                                    <property name="icon-size">1</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkButton" id="lang_remove_button">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject">
+                                                    <property name="accessible-name" translatable="yes">Remove language</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="icon_name">list-remove-symbolic</property>
+                                                    <property name="icon-size">1</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkButton" id="lang_remove_button">
+                                      <object class="GtkSeparatorToolItem">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Remove language</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">list-remove-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
+                                        <property name="can_focus">False</property>
+                                        <property name="draw">False</property>
                                       </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparatorToolItem">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="draw">False</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolItem">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <child>
-                                      <object class="GtkButton" id="lang_up_button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Move language up</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">go-up-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
-                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                      </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkButton" id="lang_down_button">
+                                      <object class="GtkToolItem">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Move language down</property>
-                                          </object>
-                                        </child>
+                                        <property name="can_focus">False</property>
                                         <child>
-                                          <object class="GtkImage">
+                                          <object class="GtkBox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="icon_name">go-down-symbolic</property>
-                                            <property name="icon-size">1</property>
+                                            <child>
+                                              <object class="GtkButton" id="lang_up_button">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject">
+                                                    <property name="accessible-name" translatable="yes">Move language up</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="icon_name">go-up-symbolic</property>
+                                                    <property name="icon-size">1</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkButton" id="lang_down_button">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject">
+                                                    <property name="accessible-name" translatable="yes">Move language down</property>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="icon_name">go-down-symbolic</property>
+                                                    <property name="icon-size">1</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
@@ -1201,42 +1205,42 @@
                             </child>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Spell Checking</property>
-                        <property name="use-underline">True</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkFrame">
-                        <property name="visible">True</property>
                         <child>
-                          <object class="GtkListBox" id="spell_checking_list">
-                            <property name="selection_mode">none</property>
+                          <object class="GtkBox">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="HdyActionRow">
-                                <property name="title" translatable="yes">_Enable spell checking</property>
-                                <property name="use_underline">True</property>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <child type="action">
-                                  <object class="GtkSwitch" id="enable_spell_checking_switch">
-                                    <property name="valign">center</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Spell Checking</property>
+                                <property name="use-underline">True</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkListBox" id="spell_checking_list">
+                                    <property name="selection_mode">none</property>
                                     <property name="visible">True</property>
+                                    <child>
+                                      <object class="HdyActionRow">
+                                        <property name="title" translatable="yes">_Enable spell checking</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="visible">True</property>
+                                        <child type="action">
+                                          <object class="GtkSwitch" id="enable_spell_checking_switch">
+                                            <property name="valign">center</property>
+                                            <property name="visible">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1244,10 +1248,6 @@
                           </object>
                         </child>
                       </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
                     </child>
                   </object>
                 </child>
@@ -1281,321 +1281,321 @@
                     <property name="margin_start">12</property>
                     <property name="margin_end">12</property>
                     <child>
-              <object class="GtkBox" id="sync_page_box">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Firefox Sync</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="max-width-chars">48</property>
-                        <property name="wrap">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Sign in with your Firefox account to sync your data with Web and Firefox on other computers. Web is not produced or endorsed by Mozilla.</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="sync_firefox_iframe_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="sync_firefox_iframe_label">
-                        <property name="visible">False</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="sync_firefox_account_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Firefox Account</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="sync_sign_out_button">
-                            <property name="label" translatable="yes">Sign _out</property>
-                            <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="on_sync_sign_out_button_clicked"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="sync_page_box">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="margin-start">12</property>
-                        <child>
-                          <object class="GtkLabel" id="sync_firefox_account_label">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="sync_options_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Sync Options</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
-                        <property name="margin-start">12</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Collections</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="synced_tabs_button">
-                                <property name="label" translatable="yes">S_ynced tabs</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_synced_tabs_button_clicked"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_bookmarks_checkbutton">
-                                <property name="label" translatable="yes">_Bookmarks</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_passwords_checkbutton">
-                                <property name="label" translatable="yes">_Passwords</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_history_checkbutton">
-                                <property name="label" translatable="yes">_History</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
-                                <property name="label" translatable="yes">Open _Tabs</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Frequency</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_now_button">
-                                <property name="label" translatable="yes">Sync _now</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
-                            <child>
-                              <object class="GtkBox">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_5_min_radiobutton">
-                                    <property name="label" translatable="yes">_5 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_15_min_radiobutton">
-                                    <property name="label" translatable="yes">_15 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_30_min_radiobutton">
-                                    <property name="label" translatable="yes">_30 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_60_min_radiobutton">
-                                    <property name="label" translatable="yes">_60 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="sync_last_sync_time_box">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkLabel" id="sync_last_sync_time_label">
-                                    <property name="visible">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Device name</property>
+                                <property name="label" translatable="yes">Firefox Sync</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkButton" id="sync_device_name_change_button">
-                                <property name="label" translatable="yes">_Change</property>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_change_button_clicked"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_device_name_save_button">
-                                <property name="label" translatable="yes">_Save</property>
-                                <property name="visible">False</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_save_button_clicked"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_device_name_cancel_button">
-                                <property name="label" translatable="yes">_Cancel</property>
-                                <property name="visible">False</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_cancel_button_clicked"/>
+                                <property name="halign">start</property>
+                                <property name="max-width-chars">48</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Sign in with your Firefox account to sync your data with Web and Firefox on other computers. Web is not produced or endorsed by Mozilla.</property>
                               </object>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkBox" id="sync_firefox_iframe_box">
                             <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
                             <child>
-                              <object class="GtkEntry" id="sync_device_name_entry">
-                                <property name="visible">True</property>
-                                <property name="hexpand">True</property>
+                              <object class="GtkLabel" id="sync_firefox_iframe_label">
+                                <property name="visible">False</property>
                                 <property name="halign">start</property>
-                                <property name="width-request">250</property>
-                                <property name="sensitive">False</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_firefox_account_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="label" translatable="yes">Firefox Account</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="sync_sign_out_button">
+                                    <property name="label" translatable="yes">Sign _out</property>
+                                    <property name="visible">True</property>
+                                    <property name="use-underline">True</property>
+                                    <signal name="clicked" handler="on_sync_sign_out_button_clicked"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="margin-start">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="sync_firefox_account_label">
+                                    <property name="visible">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_options_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Sync Options</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">4</property>
+                                <property name="margin-start">12</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label" translatable="yes">Collections</property>
+                                        <attributes>
+                                          <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="synced_tabs_button">
+                                        <property name="label" translatable="yes">S_ynced tabs</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                        <signal name="clicked" handler="on_sync_synced_tabs_button_clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="sync_bookmarks_checkbutton">
+                                        <property name="label" translatable="yes">_Bookmarks</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="sync_passwords_checkbutton">
+                                        <property name="label" translatable="yes">_Passwords</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="sync_history_checkbutton">
+                                        <property name="label" translatable="yes">_History</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
+                                        <property name="label" translatable="yes">Open _Tabs</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label" translatable="yes">Frequency</property>
+                                        <attributes>
+                                          <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="sync_now_button">
+                                        <property name="label" translatable="yes">Sync _now</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                        <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <object class="GtkRadioButton" id="sync_frequency_5_min_radiobutton">
+                                            <property name="label" translatable="yes">_5 min</property>
+                                            <property name="visible">True</property>
+                                            <property name="use-underline">True</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="sync_frequency_15_min_radiobutton">
+                                            <property name="label" translatable="yes">_15 min</property>
+                                            <property name="visible">True</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="group">sync_frequency_5_min_radiobutton</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="sync_frequency_30_min_radiobutton">
+                                            <property name="label" translatable="yes">_30 min</property>
+                                            <property name="visible">True</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="group">sync_frequency_5_min_radiobutton</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="sync_frequency_60_min_radiobutton">
+                                            <property name="label" translatable="yes">_60 min</property>
+                                            <property name="visible">True</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="group">sync_frequency_5_min_radiobutton</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="sync_last_sync_time_box">
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <object class="GtkLabel" id="sync_last_sync_time_label">
+                                            <property name="visible">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="hexpand">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label" translatable="yes">Device name</property>
+                                        <attributes>
+                                          <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="sync_device_name_change_button">
+                                        <property name="label" translatable="yes">_Change</property>
+                                        <property name="visible">True</property>
+                                        <property name="use-underline">True</property>
+                                        <signal name="clicked" handler="on_sync_device_name_change_button_clicked"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="sync_device_name_save_button">
+                                        <property name="label" translatable="yes">_Save</property>
+                                        <property name="visible">False</property>
+                                        <property name="use-underline">True</property>
+                                        <signal name="clicked" handler="on_sync_device_name_save_button_clicked"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="sync_device_name_cancel_button">
+                                        <property name="label" translatable="yes">_Cancel</property>
+                                        <property name="visible">False</property>
+                                        <property name="use-underline">True</property>
+                                        <signal name="clicked" handler="on_sync_device_name_cancel_button_clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <child>
+                                      <object class="GtkEntry" id="sync_device_name_entry">
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="width-request">250</property>
+                                        <property name="sensitive">False</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
                     </child>
-                  </object>
-                </child>
-              </object>
-            </child>
                   </object>
                 </child>
               </object>
