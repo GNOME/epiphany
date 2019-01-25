@@ -8,6 +8,8 @@
     <property name="destroy-with-parent">True</property>
     <property name="icon-name">gtk-preferences</property>
     <property name="type-hint">dialog</property>
+    <property name="default-width">500</property>
+    <property name="default-height">650</property>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Preferences</property>
@@ -25,9 +27,22 @@
             <property name="visible">True</property>
             <property name="show_border">False</property>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <child>
+                  <object class="HdyColumn">
+                    <property name="visible">True</property>
+                    <property name="maximum_width">600</property>
+                    <property name="linear_growth_width">400</property>
+                    <property name="margin_top">32</property>
+                    <property name="margin_bottom">32</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
@@ -487,6 +502,10 @@
                 </child>
               </object>
             </child>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child type="tab">
               <object class="GtkLabel">
                 <property name="visible">True</property>
@@ -497,9 +516,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <child>
+                  <object class="HdyColumn">
+                    <property name="visible">True</property>
+                    <property name="maximum_width">600</property>
+                    <property name="linear_growth_width">400</property>
+                    <property name="margin_top">32</property>
+                    <property name="margin_bottom">32</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
@@ -725,6 +757,10 @@
                   </object>
                 </child>
               </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="position">1</property>
               </packing>
@@ -740,9 +776,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <child>
+                  <object class="HdyColumn">
+                    <property name="visible">True</property>
+                    <property name="maximum_width">600</property>
+                    <property name="linear_growth_width">400</property>
+                    <property name="margin_top">32</property>
+                    <property name="margin_bottom">32</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
@@ -954,6 +1003,10 @@
                   </object>
                 </child>
               </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="position">2</property>
               </packing>
@@ -969,9 +1022,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <child>
+                  <object class="HdyColumn">
+                    <property name="visible">True</property>
+                    <property name="maximum_width">600</property>
+                    <property name="linear_growth_width">400</property>
+                    <property name="margin_top">32</property>
+                    <property name="margin_bottom">32</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
@@ -1182,6 +1248,10 @@
                   </object>
                 </child>
               </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="position">3</property>
               </packing>
@@ -1197,9 +1267,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <child>
+                  <object class="HdyColumn">
+                    <property name="visible">True</property>
+                    <property name="maximum_width">600</property>
+                    <property name="linear_growth_width">400</property>
+                    <property name="margin_top">32</property>
+                    <property name="margin_bottom">32</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <child>
               <object class="GtkBox" id="sync_page_box">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
@@ -1509,6 +1592,10 @@
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
                   </object>
                 </child>
               </object>
