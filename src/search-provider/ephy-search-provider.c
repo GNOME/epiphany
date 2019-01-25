@@ -193,7 +193,7 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       g_variant_builder_add (&builder, "{sv}",
                              "id", g_variant_new_string ("special:search"));
       g_variant_builder_add (&builder, "{sv}",
-                             "name", g_variant_new_take_string (g_strdup_printf (_("Search the Web for %s"),
+                             "name", g_variant_new_take_string (g_strdup_printf (_("Search the web for “%s”"),
                                                                                  results[i] + strlen ("special:search:"))));
       g_variant_builder_add (&builder, "{sv}",
                              "gicon", g_variant_new_string ("org.gnome.Epiphany"));
