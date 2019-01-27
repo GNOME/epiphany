@@ -201,11 +201,11 @@ $close_button_fg_color: lighten($fg_color, 10%);
 }
 
 @keyframes needs_attention_keyframes {
-    0% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: @borders; }
+    0% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: themecolor(borders); }
     /* can't do animation-direction, so holding the color on two keyframes */
-    30% {background-image: linear-gradient(to bottom, @theme_base_color, @theme_base_color, @theme_base_color); border-color: @theme_fg_color; }
-    90% {background-image: linear-gradient(to bottom, @theme_base_color, @theme_base_color, @theme_base_color); border-color: @theme_fg_color; }
-    100% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: @borders; }
+    30% {background-image: linear-gradient(to bottom, themecolor(theme_base_color), themecolor(theme_base_color), themecolor(theme_base_color)); border-color: themecolor(theme_fg_color); }
+    90% {background-image: linear-gradient(to bottom, themecolor(theme_base_color), themecolor(theme_base_color), themecolor(theme_base_color)); border-color: themecolor(theme_fg_color); }
+    100% {background-image: linear-gradient(to bottom, #fafafa, #ededed 40%,  #e0e0e0); border-color: themecolor(borders); }
 }
 
 .epiphany-downloads-button-needs-attention {
