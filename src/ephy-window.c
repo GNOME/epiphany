@@ -49,7 +49,6 @@
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
-#include "ephy-touchpad-gesture-controller.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
@@ -156,7 +155,6 @@ struct _EphyWindow {
   EphyLocationController *location_controller;
   guint modified_forms_timeout_id;
   EphyMouseGestureController *mouse_gesture_controller;
-  EphyTouchpadGestureController *touchpad_gesture_controller;
 
   gboolean show_fullscreen_header_bar;
 
@@ -2966,7 +2964,6 @@ ephy_window_dispose (GObject *object)
     g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
     g_clear_object (&window->mouse_gesture_controller);
-    g_clear_object (&window->touchpad_gesture_controller);
 
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
@@ -3512,7 +3509,6 @@ ephy_window_constructed (GObject *object)
   }
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
-  window->touchpad_gesture_controller = ephy_touchpad_gesture_controller_new (window);
 
   ephy_window_set_chrome (window, chrome);
 }
