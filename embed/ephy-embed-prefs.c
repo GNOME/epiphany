@@ -492,6 +492,9 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-dns-prefetching", TRUE,
                                                        "enable-mediasource", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
+#if WEBKIT_CHECK_VERSION(2, 23, 4)
+                                                       "enable-back-forward-navigation-gestures", TRUE,
+#endif
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
