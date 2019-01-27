@@ -40,7 +40,6 @@ libephymain_sources = [
   'ephy-session.c',
   'ephy-shell.c',
   'ephy-suggestion-model.c',
-  'ephy-touchpad-gesture-controller.c',
   'ephy-window.c',
   'passwords-dialog.c',
   'popup-commands.c',
