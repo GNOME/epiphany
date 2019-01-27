@@ -1,0 +1,27 @@
+From d269f09162f62d359a69559db332f24feba0a684 Mon Sep 17 00:00:00 2001
+From: Alexander Mikhaylenko <exalm7659@gmail.com>
+Date: Sun, 27 Jan 2019 19:30:22 +0500
+Subject: [PATCH 2/2] Enable back/forward gesture in WebKit
+
+WebKit 2.24 has a built-in gesture for back/forward navigation, so enable
+it.
+
+---
+ embed/ephy-embed-prefs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/embed/ephy-embed-prefs.c b/embed/ephy-embed-prefs.c
+index e7884c334..5ace757b7 100644
+--- a/embed/ephy-embed-prefs.c
++++ b/embed/ephy-embed-prefs.c
+@@ -462,6 +462,7 @@ ephy_embed_prefs_init (gpointer user_data)
+                                                        "enable-dns-prefetching", TRUE,
+                                                        "enable-mediasource", TRUE,
+                                                        "javascript-can-open-windows-automatically", TRUE,
++                                                       "enable-back-forward-navigation-gestures", TRUE,
+                                                        NULL);
+ 
+   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
+-- 
+2.20.1
+
