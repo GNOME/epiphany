@@ -1,9 +1,15 @@
 // incognito mode
 
-//$incognito_color: #c5cfd8;
-$incognito_color: #cbd2d9;
+$variant: 'light';
+
+@import 'colors';
+@import 'drawing';
+
+$incognito_base_color: #d7e3f0;
+$incognito_color: lighten($incognito_base_color, 5%);
 $incognito_icon: 'user-not-tracked-symbolic';
-$incognito_edge_color: lighten($incognito_color, 13%);
+$incognito_edge_color: transparentize(white, 0.2);
+$incognito_borders_color: darken($incognito_color, 11%);
 
 // automation mode
 $automation_color: #ff9600;
@@ -14,8 +20,3 @@ $automation_edge_color: lighten($automation_color, 13%);
 @function themecolor($s) {
   @return unquote("@" + "#{$s}");
 }
-
-$variant: 'light';
-
-@import 'colors';
-@import 'drawing';

@@ -6,9 +6,9 @@
 
 .incognito-mode {
   headerbar {
-    @include headerbar_fill($incognito_color, $incognito_edge_color, -gtk-icontheme($incognito_icon) 180px 0 / 64px 64px no-repeat);
+    @include headerbar_fill(darken($incognito_color, 10%), $incognito_edge_color, -gtk-icontheme($incognito_icon) 180px 0 / 64px 64px no-repeat);
 
-    border-color: _border_color($incognito_color);
+    border-color: _border_color($incognito_borders_color);
 
     color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
 
@@ -52,11 +52,20 @@
         }
       }
 
+      &:checked {
+        background: image(darken($incognito_color, 17%));
+        border-color: darken($incognito_borders_color, 3%);
+        border-top-color: darken($incognito_borders_color, 8%);
+        &:backdrop {
+          @include button(backdrop-active, $incognito_color);
+        }
+      }
+
       &.flat:backdrop, &.titlebutton:backdrop { @include button(undecorated); }
     }
 
     entry {
-      border-color: _border_color($incognito_color);
+      border-color: _border_color($incognito_borders_color);
 
       &:focus {
         border-color: entry_focus_border($selected_bg_color);
@@ -153,7 +162,7 @@ $close_button_fg_color: lighten($fg_color, 10%);
       &:hover {
         image {
           border: 1px solid;
-          border-radius: 3px;
+          border-radius: 5px;
           @include button(normal, $bg_color, $close_button_fg_color);
           @include button(hover, $bg_color, $close_button_fg_color);
         }
