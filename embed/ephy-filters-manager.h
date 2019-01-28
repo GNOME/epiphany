@@ -24,6 +24,9 @@
 
 G_BEGIN_DECLS
 
+#define ADBLOCK_DEFAULT_FILTER_URL "https://easylist.to/easylist/easylist.txt"
+#define ADBLOCK_PRIVACY_FILTER_URL "https://easylist.to/easylist/easyprivacy.txt"
+
 #define EPHY_TYPE_FILTERS_MANAGER (ephy_filters_manager_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, EPHY, FILTERS_MANAGER, GObject)
