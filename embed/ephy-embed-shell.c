@@ -41,7 +41,6 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-tabs-catalog.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-uri-tester-shared.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
