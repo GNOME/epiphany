@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-utils.h"
 #include "ephy-page-row.h"
 
 enum {
@@ -33,12 +34,47 @@ struct _EphyPageRow {
   GtkPopover parent_instance;
 
   GtkBox *box;
+  GtkImage *icon;
+  GtkStack *icon_stack;
+  GtkImage *speaker_icon;
+  GtkSpinner *spinner;
   GtkLabel *title;
 };
 
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyPageRow, ephy_page_row, GTK_TYPE_LIST_BOX_ROW)
+
+static void
+sync_load_status (EphyWebView *view,
+                  GParamSpec  *pspec,
+                  EphyPageRow *self)
+{
+  EphyEmbed *embed;
+
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_PAGE_ROW (self));
+
+  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+  g_assert (EPHY_IS_EMBED (embed));
+
+  if (ephy_web_view_is_loading (view) && !ephy_embed_has_load_pending (embed)) {
+    gtk_stack_set_visible_child (self->icon_stack, GTK_WIDGET (self->spinner));
+    gtk_spinner_start (GTK_SPINNER (self->spinner));
+  } else {
+    gtk_stack_set_visible_child (self->icon_stack, GTK_WIDGET (self->icon));
+    gtk_spinner_stop (GTK_SPINNER (self->spinner));
+  }
+}
+
+static void
+load_changed_cb (EphyWebView     *view,
+                 WebKitLoadEvent  load_event,
+                 EphyPageRow     *self)
+{
+  sync_load_status (view, NULL, self);
+}
 
 static void
 close_clicked_cb (EphyPageRow *self)
@@ -60,6 +96,10 @@ ephy_page_row_class_init (EphyPageRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/page-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, box);
+  gtk_widget_class_bind_template_child (widget_class, EphyPageRow, icon);
+  gtk_widget_class_bind_template_child (widget_class, EphyPageRow, icon_stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyPageRow, speaker_icon);
+  gtk_widget_class_bind_template_child (widget_class, EphyPageRow, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, title);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
 }
@@ -71,23 +111,31 @@ ephy_page_row_init (EphyPageRow *self)
 }
 
 EphyPageRow *
-ephy_page_row_new (GMenuModel *menu_model,
-                   gint        position)
+ephy_page_row_new (EphyNotebook *notebook,
+                   gint          position)
 {
   EphyPageRow *self;
-  GVariant *label;
+  GtkWidget *embed;
+  EphyWebView *view;
 
-  g_assert (menu_model != NULL);
+  g_assert (notebook != NULL);
   g_assert (position >= 0);
-  g_assert (position < g_menu_model_get_n_items (menu_model));
 
   self = g_object_new (EPHY_TYPE_PAGE_ROW, NULL);
 
-  label = g_menu_model_get_item_attribute_value (menu_model,
-                                                 position,
-                                                 G_MENU_ATTRIBUTE_LABEL,
-                                                 G_VARIANT_TYPE_STRING);
-  gtk_label_set_text (self->title, g_variant_get_string (label, NULL));
+  embed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), position);
+
+  g_assert (EPHY_IS_EMBED (embed));
+
+  view = ephy_embed_get_web_view (EPHY_EMBED (embed));
+
+  g_object_bind_property (view, "icon", self->icon, "pixbuf", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (embed, "title", self->title, "label", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (embed, "title", self->title, "tooltip-text", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (view, "is-playing-audio", self->speaker_icon, "visible", G_BINDING_SYNC_CREATE);
+  sync_load_status (view, NULL, self);
+  g_signal_connect_object (view, "load-changed",
+                           G_CALLBACK (load_changed_cb), self, 0);
 
   return self;
 }
