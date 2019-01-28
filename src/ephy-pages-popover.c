@@ -129,7 +129,7 @@ items_changed_cb (EphyPagesPopover *self,
   EphyPageRow **items = g_new (EphyPageRow *, added);
 
   for (int i = 0; i < added; i++) {
-    items[i] = ephy_page_row_new (menu_model, position + i);
+    items[i] = ephy_page_row_new (self->notebook, position + i);
     ephy_page_row_set_adaptive_mode (EPHY_PAGE_ROW (items[i]),
                                      self->adaptive_mode);
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
