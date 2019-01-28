@@ -585,6 +585,7 @@ on_listbox_button_press_event (GtkWidget         *widget,
     return TRUE;
   }
 
+  gtk_popover_popdown (GTK_POPOVER (self->popover_menu));
   return FALSE;
 }
 
