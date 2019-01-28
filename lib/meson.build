@@ -39,7 +39,6 @@ libephymisc_sources = [
   'ephy-sync-utils.c',
   'ephy-time-helpers.c',
   'ephy-uri-helpers.c',
-  'ephy-uri-tester-shared.c',
   'ephy-user-agent.c',
   'ephy-web-app-utils.c',
   'ephy-zoom.c',
