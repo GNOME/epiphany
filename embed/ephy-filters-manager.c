@@ -24,7 +24,6 @@
 #include "ephy-download.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-uri-tester-shared.h"
 
 #include <gio/gio.h>
 
