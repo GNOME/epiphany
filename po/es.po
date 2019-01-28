@@ -7,21 +7,21 @@
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # 
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2018, 2018, 2019.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-01-15 23:13+0000\n"
-"PO-Revision-Date: 2019-01-16 09:49+0100\n"
+"POT-Creation-Date: 2019-01-25 19:26+0000\n"
+"PO-Revision-Date: 2019-01-28 12:36+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Gtranslator 3.31.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
@@ -583,7 +583,6 @@ msgstr ""
 "búsqueda en el menú desplegable."
 
 #: data/org.gnome.epiphany.gschema.xml:259
-#| msgid "Enable Web Inspector"
 msgid "Enable mouse gesture"
 msgstr "Activar gestos del ratón"
 
@@ -596,17 +595,14 @@ msgstr ""
 "comportamiento de Ópera y se activan usando el botón central + gesto."
 
 #: data/org.gnome.epiphany.gschema.xml:264
-#| msgid "Select a directory"
 msgid "Last upload directory"
 msgstr "Carpeta de la última subida"
 
 #: data/org.gnome.epiphany.gschema.xml:265
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
 msgstr "Recordar la carpeta de la última subida"
 
 #: data/org.gnome.epiphany.gschema.xml:269
-#| msgid "Select a directory"
 msgid "Last download directory"
 msgstr "Carpeta de la última descarga"
 
@@ -1434,8 +1430,6 @@ msgid "Unknown (%s)"
 msgstr "Desconocido (%s)"
 
 #: embed/ephy-evince-document-view.c:82
-#| msgctxt "shortcut window"
-#| msgid "Save page"
 msgid "Save File"
 msgstr "Guardar Archivo"
 
@@ -1452,13 +1446,10 @@ msgid "Free"
 msgstr "Liberar"
 
 #: embed/ephy-evince-document-view.c:182
-#| msgid "_Automatic"
 msgid "Automatic"
 msgstr "Automático"
 
 #: embed/ephy-evince-document-view.c:258
-#| msgctxt "shortcut window"
-#| msgid "Copy"
 msgid "Copy"
 msgstr "Copiar"
 
@@ -1476,15 +1467,15 @@ msgstr "Texto no encontrado"
 msgid "Search wrapped back to the top"
 msgstr "La búsqueda volvió al principio"
 
-#: embed/ephy-find-toolbar.c:364
+#: embed/ephy-find-toolbar.c:370
 msgid "Type to search…"
 msgstr "Escribir para buscar…"
 
-#: embed/ephy-find-toolbar.c:370
+#: embed/ephy-find-toolbar.c:376
 msgid "Find previous occurrence of the search string"
 msgstr "Busca la aparición anterior de la cadena de búsqueda"
 
-#: embed/ephy-find-toolbar.c:378
+#: embed/ephy-find-toolbar.c:384
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
@@ -2220,7 +2211,7 @@ msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:909
+#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:911
 msgid "_Undo"
 msgstr "_Deshacer"
 
@@ -2362,12 +2353,10 @@ msgid "It is not possible to modify history when in incognito mode."
 msgstr "No se puede modificar el histórico cuando está en modo incógnito."
 
 #: src/ephy-main.c:114
-#| msgid "Open a new browser window"
 msgid "Open a new browser window instead of a new tab"
 msgstr "Abre una ventana nueva del navegador en lugar de una pestaña nueva"
 
 #: src/ephy-main.c:116
-#| msgid "Load the given session file"
 msgid "Load the given session state file"
 msgstr "Cargar el archivo de sesión dado"
 
@@ -2376,27 +2365,22 @@ msgid "FILE"
 msgstr "ARCHIVO"
 
 #: src/ephy-main.c:118
-#| msgid "Start an instance in netbank mode"
 msgid "Start an instance with user data read-only"
 msgstr "Iniciar una instancia con datos de usuario en sólo lectura"
 
 #: src/ephy-main.c:120
-#| msgid "Start a private instance"
 msgid "Start a private instance with separate user data"
 msgstr "Iniciar una instancia privada con datos de usuario separados"
 
 #: src/ephy-main.c:123
-#| msgid "Start the browser in application mode"
 msgid "Start a private instance in web application mode"
 msgstr "Iniciar una instancia privada en modo aplicación web"
 
 #: src/ephy-main.c:125
-#| msgid "Start a private instance"
 msgid "Start a private instance for WebDriver control"
 msgstr "Iniciar una instancia privada para"
 
 #: src/ephy-main.c:127
-#| msgid "Profile directory to use in the private instance"
 msgid "Custom profile directory for private instance"
 msgstr "Carpeta personalizada de perfiles que usar en la instancia privada"
 
@@ -2413,11 +2397,11 @@ msgid "Web options"
 msgstr "Opciones de Web"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:488
+#: src/ephy-notebook.c:493
 msgid "View open tabs"
 msgstr "Ver las pestañas abiertas"
 
-#: src/ephy-notebook.c:749
+#: src/ephy-notebook.c:757
 msgid "Close tab"
 msgstr "Cerrar pestaña"
 
@@ -2458,134 +2442,134 @@ msgstr "Si sale, se cancelarán las descargas"
 msgid "Quit and cancel downloads"
 msgstr "Salir y cancelar las descargas"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:912
 msgid "Re_do"
 msgstr "_Rehacer"
 
 #. Edit.
-#: src/ephy-window.c:913
+#: src/ephy-window.c:915
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:916
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:917
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:918
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 # Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
-#: src/ephy-window.c:918
+#: src/ephy-window.c:920
 msgid "S_end Link by Email…"
 msgstr "_Enviar enlace por correo-e…"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:922
 msgid "_Reload"
 msgstr "Re_cargar"
 
-#: src/ephy-window.c:921
+#: src/ephy-window.c:923
 msgid "_Back"
 msgstr "_Atrás"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:924
 msgid "_Forward"
 msgstr "A_delante"
 
 #. Bookmarks
-#: src/ephy-window.c:925
+#: src/ephy-window.c:927
 msgid "Add Boo_kmark…"
 msgstr "Añadir _marcador…"
 
 #. Links.
-#: src/ephy-window.c:929
+#: src/ephy-window.c:931
 msgid "Open Link in New _Window"
 msgstr "Abrir enlace en una _ventana nueva"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:932
 msgid "Open Link in New _Tab"
 msgstr "Abrir enlace en una pe_staña nueva"
 
-#: src/ephy-window.c:931
+#: src/ephy-window.c:933
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir enlace en una ventana de i_ncógnito"
 
-#: src/ephy-window.c:932
+#: src/ephy-window.c:934
 msgid "_Save Link As…"
 msgstr "Guardar _enlace como…"
 
-#: src/ephy-window.c:933
+#: src/ephy-window.c:935
 msgid "_Copy Link Address"
 msgstr "_Copiar dirección del enlace"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:936
 msgid "_Copy E-mail Address"
 msgstr "_Copiar dirección de correo-e"
 
 #. Images.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:940
 msgid "View _Image in New Tab"
 msgstr "Ver _imagen en una pestaña nueva"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:941
 msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:942
 msgid "_Save Image As…"
 msgstr "_Guardar imagen como…"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:943
 msgid "Set as _Wallpaper"
 msgstr "Establecer como _fondo"
 
 #. Video.
-#: src/ephy-window.c:945
+#: src/ephy-window.c:947
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo en una _ventana nueva"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:948
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo en una _pestaña nueva"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:949
 msgid "_Save Video As…"
 msgstr "Guardar _vídeo como…"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:950
 msgid "_Copy Video Address"
 msgstr "_Copiar la dirección del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:952
+#: src/ephy-window.c:954
 msgid "Open Audio in New _Window"
 msgstr "Abrir sonido en una _ventana nueva"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:955
 msgid "Open Audio in New _Tab"
 msgstr "Abrir sonido en una _pestaña nueva"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:956
 msgid "_Save Audio As…"
 msgstr "Guardar _sonido como…"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:957
 msgid "_Copy Audio Address"
 msgstr "_Copiar la dirección del sonido"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:962
 msgid "Save Pa_ge As…"
 msgstr "Guardar pá_gina como…"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:963
 msgid "_Page Source"
 msgstr "Código _fuente"
 
-#: src/ephy-window.c:1345
+#: src/ephy-window.c:1346
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Buscar «%s» en la web"
@@ -2713,6 +2697,12 @@ msgstr "Ir página de inicio"
 #: src/resources/gtk/action-bar-start.ui:96
 msgid "Open a new tab"
 msgstr "Abrir una pestaña nueva"
+
+#. Translators: tooltip for the page switcher menu button
+#: src/resources/gtk/action-bar.ui:21
+#| msgid "View open tabs"
+msgid "View open pages"
+msgstr "Ver las páginas abiertas"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:11
 msgid "Bookmark"
@@ -2983,7 +2973,6 @@ msgid "Install Site as Web _Application…"
 msgstr "Instalar página como aplicación _web…"
 
 #: src/resources/gtk/page-menu-popover.ui:220
-#| msgid "Web Application Icon"
 msgid "Open Appli_cation Manager"
 msgstr "Gestor de apli_caciones abiertas"
 
@@ -3049,7 +3038,6 @@ msgid "Preferences"
 msgstr "Preferencias"
 
 #: src/resources/gtk/prefs-dialog.ui:42
-#| msgid "Private Browsing"
 msgid "Browsing"
 msgstr "Examinar"
 
@@ -3062,7 +3050,6 @@ msgid "Homepage"
 msgstr "Página de inicio"
 
 #: src/resources/gtk/prefs-dialog.ui:93
-#| msgid "Most Visited"
 msgid "Most _visited pages"
 msgstr "Páginas más _visitadas"
 
@@ -3172,7 +3159,6 @@ msgid "_Edit Stylesheet"
 msgstr "Editar hoja de estilos"
 
 #: src/resources/gtk/prefs-dialog.ui:584
-#| msgid "Default zoom level for new pages"
 msgid "Default zoom level:"
 msgstr "Nivel de ampliación predeterminado:"
 
@@ -3647,8 +3633,9 @@ msgstr "Quita los URL seleccionados"
 
 #: src/search-provider/ephy-search-provider.c:196
 #, c-format
-msgid "Search the Web for %s"
-msgstr "Buscar %s en la web"
+#| msgid "Search the Web for “%s”"
+msgid "Search the web for “%s”"
+msgstr "Buscar «%s» en la web"
 
 #: src/synced-tabs-dialog.c:184
 msgid "Local Tabs"
@@ -3687,7 +3674,7 @@ msgstr "Seleccionar archivo"
 msgid "Bookmarks successfully imported!"
 msgstr "Marcadores importados satisfactoriamente."
 
-#: src/window-commands.c:393
+#: src/window-commands.c:394
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
@@ -3812,6 +3799,9 @@ msgstr ""
 #: src/window-commands.c:2234
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Search the Web for %s"
+#~ msgstr "Buscar %s en la web"
 
 #~ msgid "Open a new tab in an existing browser window"
 #~ msgstr "Abre una pestaña nueva en una ventana existente del navegador"
