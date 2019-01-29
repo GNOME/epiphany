@@ -12,16 +12,26 @@
 
     color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
 
-    > * {
-      color: $fg_color;
-
-      &:backdrop { color: $backdrop_fg_color }
-    }
-
     &:backdrop {
       background-image: -gtk-icontheme($incognito_icon), image($incognito_color);
       box-shadow: inset 0 1px $incognito_edge_color;
       color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
+    }
+  }
+
+  actionbar {
+    background: $incognito_color;
+
+    > revealer > box {
+      border-color: $incognito_borders_color;
+    }
+  }
+
+  headerbar, actionbar {
+    > * {
+      color: $fg_color;
+
+      &:backdrop { color: $backdrop_fg_color }
     }
 
     button { // changing the headerbar background color requires changing widget borders accordingly
