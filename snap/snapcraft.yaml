@@ -1,0 +1,148 @@
+name: epiphany
+version: 3.30.2
+summary: Web browser for GNOME
+description: |
+  The web browser for GNOME, featuring tight integration with the desktop
+  and a simple and intuitive user interface that allows you to focus on your
+  web pages. If you’re looking for a simple, clean, beautiful view of the
+  web, this is the browser for you.
+
+  GNOME Web is often referred to by its code name, Epiphany.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+base: core18
+
+plugs:
+  browser-sandbox:
+    interface: browser-support
+    allow-sandbox: true
+  gnome-3-28-1804:
+    interface: content
+    target: $SNAP/gnome-platform
+    default-provider: gnome-3-28-1804
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes
+
+slots:
+  # for GtkApplication registration
+  epiphany:
+    interface: dbus
+    bus: session
+    name: org.gnome.Epiphany
+
+passthrough:
+  layout:
+    /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:
+      symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0
+
+apps:
+  epiphany:
+    command: desktop-launch epiphany
+    plugs:
+      - browser-sandbox
+      - camera
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - mount-observe
+      - network
+      - opengl
+      - pulseaudio
+      - removable-media
+      - unity7
+      - wayland
+    desktop: usr/share/applications/org.gnome.Epiphany.desktop
+    environment:
+      GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/lib/epiphany
+
+parts:
+  desktop-gnome-platform:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - build-essential
+      - libgtk-3-dev
+    override-build: |
+      snapcraftctl build
+      mkdir -pv $SNAPCRAFT_PART_INSTALL/gnome-platform
+
+  epiphany:
+    after: [desktop-gnome-platform]
+    source: .
+    source-type: git
+    source-tag: 3.30.2
+    plugin: meson
+    meson-parameters: [--prefix=/snap/epiphany/current/usr]
+    organize:
+      snap/epiphany/current/usr: usr
+    override-build: |
+      sed -i.bak -e 's|Icon=org.gnome.Epiphany$|Icon=${SNAP}/meta/gui/org.gnome.Epiphany.png|g' data/org.gnome.Epiphany.desktop.in
+      snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/meta/gui/
+      cp ../src/data/icons/hicolor/512x512/apps/org.gnome.Epiphany.png $SNAPCRAFT_PART_INSTALL/meta/gui/
+      cp ../install/snap/epiphany/current/usr/share/applications/org.gnome.Epiphany.desktop $SNAPCRAFT_PART_INSTALL/meta/gui/
+#    build-environment:
+#      - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/pkgconfig
+    organize:
+      snap/epiphany/current/usr: usr
+    build-packages:
+      - gettext
+      - gobject-introspection
+      - iso-codes
+      - itstool
+      - libdazzle-1.0-dev
+      - libgcr-3-dev
+      - libglu1-mesa
+      - libgtk-3-dev
+      - libjson-glib-dev
+      - libnotify-dev
+      - libsecret-1-dev
+      - libsoup-gnome2.4-dev
+      - libsqlite3-dev
+      - libwebkit2gtk-4.0-dev
+      - libxml-parser-perl
+      - libxml2-utils
+      - libxml2-dev
+      - libxslt1-dev
+      - libx11-dev
+      - nettle-dev
+      - python3
+      - python-gi-dev
+      - libgirepository1.0-dev
+    stage-packages:
+      - gstreamer1.0-clutter-3.0
+      - gstreamer1.0-gl
+      - gstreamer1.0-gtk3
+      - gstreamer1.0-libav
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-pulseaudio
+      - iso-codes
+      - libdazzle-1.0-0
+      - libgcr-base-3-1
+      - libgcr-ui-3-1
+      - libhogweed4
+      - libicu60
+      - libjavascriptcoregtk-4.0-18
+      - libnettle6
+      - libsoup2.4-1
+      - libsqlite3-0
+      - libwebkit2gtk-4.0-37
+      - libxml2
