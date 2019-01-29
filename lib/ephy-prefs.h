@@ -150,12 +150,8 @@ static const char * const ephy_prefs_web_schema[] = {
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
 #define EPHY_PREFS_HOMEPAGE_URL                       "homepage-url"
-#define EPHY_PREFS_DEPRECATED_USER_AGENT              "user-agent"
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS                "new-windows-in-tabs"
 #define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA     "warn-on-close-unsubmitted-data"
-#define EPHY_PREFS_DEPRECATED_REMEMBER_PASSWORDS      "remember-passwords"
-#define EPHY_PREFS_KEYWORD_SEARCH_URL                 "keyword-search-url"
-#define EPHY_PREFS_DEPRECATED_ENABLE_SMOOTH_SCROLLING "enable-smooth-scrolling"
 #define EPHY_PREFS_ENABLE_CARET_BROWSING              "enable-caret-browsing"
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE               "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY             "restore-session-policy"
