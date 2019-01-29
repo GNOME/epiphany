@@ -174,7 +174,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body>"
                           "<div class=\"dialog\">"
-                          "<img src=\"file://%s\"/>"
+                          "<img id=\"about-icon\" src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
                           "<h2 id=\"about-subtitle\">%s</h2>"
                           "<p id=\"about-tagline\">%s</p>"
