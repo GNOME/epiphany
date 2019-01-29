@@ -67,6 +67,10 @@
     entry {
       border-color: _border_color($incognito_borders_color);
 
+      &:not(:hover):not(:focus) {
+        background-color: transparentize($base_color, 0.25);
+      }
+
       &:focus {
         border-color: entry_focus_border($selected_bg_color);
         box-shadow: entry_focus_shadow($selected_bg_color);
