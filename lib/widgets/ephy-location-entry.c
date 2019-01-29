@@ -773,6 +773,22 @@ suggestion_selected (DzlSuggestionEntry *entry,
 }
 
 static void
+enter_notify_cb (GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer   user_data)
+{
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+}
+
+static void
+leave_notify_cb (GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer   user_data)
+{
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
@@ -796,6 +812,11 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   g_signal_connect (G_OBJECT (entry->url_entry), "suggestion-selected", G_CALLBACK (suggestion_selected), entry);
   gtk_widget_show (GTK_WIDGET (entry->url_entry));
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), GTK_WIDGET (entry->url_entry));
+
+  /* Custom hover state. FIXME: Remove this for GTK4 */
+  gtk_widget_add_events (GTK_WIDGET (entry->url_entry), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
+  g_signal_connect (G_OBJECT (entry->url_entry), "enter-notify-event", G_CALLBACK (enter_notify_cb), entry);
+  g_signal_connect (G_OBJECT (entry->url_entry), "leave-notify-event", G_CALLBACK (leave_notify_cb), entry);
 
   /* Event box */
   event = gtk_event_box_new ();
