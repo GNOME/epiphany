@@ -1091,8 +1091,12 @@ css_file_created_cb (GObject      *source,
   stream = g_file_create_finish (file, result, &error);
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
-  else
-    ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, css_file_opened_cb, NULL);
+  else {
+    if (ephy_is_running_inside_flatpak ())
+      ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, css_file_opened_cb, NULL);
+    else
+      ephy_file_launch_handler (file, gtk_get_current_event_time ());
+  }
 
   if (error != NULL)
     g_error_free (error);
@@ -1111,12 +1115,7 @@ css_edit_button_clicked_cb (GtkWidget   *button,
                                                     USER_STYLESHEET_FILENAME,
                                                     NULL));
 
-  if (ephy_is_running_inside_flatpak ()) {
-    g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
-  } else {
-    ephy_file_launch_handler (css_file, gtk_get_current_event_time ());
-    g_object_unref (css_file);
-  }
+  g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
 }
 
 static void
