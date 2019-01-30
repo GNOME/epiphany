@@ -14,9 +14,6 @@ confinement: strict
 base: core18
 
 plugs:
-  browser-sandbox:
-    interface: browser-support
-    allow-sandbox: true
   gnome-3-28-1804:
     interface: content
     target: $SNAP/gnome-platform
@@ -48,9 +45,8 @@ passthrough:
 
 apps:
   epiphany:
-    command: desktop-launch epiphany
+    command: desktop-launch snapcraft-preload epiphany
     plugs:
-      - browser-sandbox
       - camera
       - cups-control
       - desktop
@@ -62,7 +58,9 @@ apps:
       - opengl
       - pulseaudio
       - removable-media
+      - screen-inhibit-control
       - unity7
+      - upower-observe
       - wayland
     desktop: usr/share/applications/org.gnome.Epiphany.desktop
     environment:
@@ -70,6 +68,14 @@ apps:
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/lib/epiphany
 
 parts:
+# epiphany needs access to /dev/shm/
+  snapcraft-preload:
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+      - gcc-multilib
+      - g++-multilib
+
   desktop-gnome-platform:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
     source-subdir: gtk
@@ -83,7 +89,7 @@ parts:
       mkdir -pv $SNAPCRAFT_PART_INSTALL/gnome-platform
 
   epiphany:
-    after: [desktop-gnome-platform]
+    after: [desktop-gnome-platform, snapcraft-preload]
     source: .
     source-type: git
     source-tag: 3.30.2
@@ -97,8 +103,6 @@ parts:
       mkdir -p $SNAPCRAFT_PART_INSTALL/meta/gui/
       cp ../src/data/icons/hicolor/512x512/apps/org.gnome.Epiphany.png $SNAPCRAFT_PART_INSTALL/meta/gui/
       cp ../install/snap/epiphany/current/usr/share/applications/org.gnome.Epiphany.desktop $SNAPCRAFT_PART_INSTALL/meta/gui/
-#    build-environment:
-#      - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/pkgconfig
     organize:
       snap/epiphany/current/usr: usr
     build-packages:
@@ -108,7 +112,6 @@ parts:
       - itstool
       - libdazzle-1.0-dev
       - libgcr-3-dev
-      - libglu1-mesa
       - libgtk-3-dev
       - libjson-glib-dev
       - libnotify-dev
@@ -138,10 +141,13 @@ parts:
       - libdazzle-1.0-0
       - libgcr-base-3-1
       - libgcr-ui-3-1
+      - libglu1-mesa
+      - libgpm2
       - libhogweed4
       - libicu60
       - libjavascriptcoregtk-4.0-18
       - libnettle6
+      - libslang2
       - libsoup2.4-1
       - libsqlite3-0
       - libwebkit2gtk-4.0-37
