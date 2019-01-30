@@ -77,10 +77,6 @@
     entry {
       border-color: _border_color($incognito_borders_color);
 
-      &:not(:hover):not(:focus) {
-        background-color: transparentize($base_color, 0.25);
-      }
-
       &:focus {
         border-color: entry_focus_border($selected_bg_color);
         box-shadow: entry_focus_shadow($selected_bg_color);
@@ -152,6 +148,10 @@
       &:backdrop { box-shadow: none; }
     }
   }
+}
+
+.url_entry:not(:hover):not(:focus) {
+  background-color: transparentize($base_color, 0.25);
 }
 
 $close_button_fg_color: lighten($fg_color, 10%);
