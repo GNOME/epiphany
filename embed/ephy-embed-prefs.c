@@ -395,6 +395,32 @@ webkit_pref_callback_enable_spell_checking (GSettings  *settings,
   }
 }
 
+static void
+webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
+                                                   const char *key,
+                                                   gpointer    data)
+{
+  EphyPrefsWebHardwareAccelerationPolicy value;
+
+  value = g_settings_get_enum (settings, key);
+  switch (value) {
+    case EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY_ALWAYS:
+      webkit_settings_set_hardware_acceleration_policy (webkit_settings,
+                                                        WEBKIT_HARDWARE_ACCELERATION_POLICY_ALWAYS);
+      break;
+    case EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY_NEVER:
+      webkit_settings_set_hardware_acceleration_policy (webkit_settings,
+                                                        WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER);
+      break;
+    case EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY_ON_DEMAND:
+      /* Fallthrough */
+    default:
+      webkit_settings_set_hardware_acceleration_policy (webkit_settings,
+                                                        WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND);
+      break;
+  }
+}
+
 static const PrefData webkit_pref_entries[] =
 {
   /* Epiphany font settings */
@@ -449,6 +475,10 @@ static const PrefData webkit_pref_entries[] =
     EPHY_PREFS_WEB_COOKIES_POLICY,
     "accept-policy",
     webkit_pref_callback_cookie_accept_policy },
+  { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
+    "hardware-acceleration-policy",
+    webkit_pref_callback_hardware_acceleration_policy },
 };
 
 static gpointer
