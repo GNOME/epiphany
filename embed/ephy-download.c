@@ -25,7 +25,6 @@
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
-#include "ephy-evince-document-view.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"
@@ -44,7 +43,6 @@ struct _EphyDownload {
   char *content_type;
 
   gboolean show_notification;
-  gboolean in_document_mode;
 
   EphyDownloadActionType action;
   guint32 start_time;
@@ -635,16 +633,6 @@ download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar    *suggested_filename,
                                 EphyDownload   *download)
 {
-  if (download->in_document_mode) {
-    g_autofree gchar *tmp_file = g_strdup_printf ("%s/%s", g_get_user_cache_dir (), suggested_filename);
-    g_autofree gchar *file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
-
-    webkit_download_set_allow_overwrite (wk_download, TRUE);
-    webkit_download_set_destination (wk_download, file_uri);
-
-    return TRUE;
-  }
-
   if (webkit_download_get_destination (wk_download))
     return TRUE;
 
@@ -826,10 +814,4 @@ ephy_download_disable_desktop_notification (EphyDownload *download)
   g_assert (EPHY_IS_DOWNLOAD (download));
 
   download->show_notification = FALSE;
-}
-
-void
-ephy_download_enable_evince_document_mode (EphyDownload *download)
-{
-  download->in_document_mode = TRUE;
 }
