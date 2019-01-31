@@ -1,5 +1,6 @@
 name: epiphany
 version: 3.30.2
+license: GPL-3.0+
 summary: Web browser for GNOME
 description: |
   The web browser for GNOME, featuring tight integration with the desktop
@@ -9,7 +10,7 @@ description: |
 
   GNOME Web is often referred to by its code name, Epiphany.
 
-grade: stable # must be 'stable' to release into candidate/stable channels
+grade: stable
 confinement: strict
 base: core18
 
@@ -47,7 +48,6 @@ apps:
   epiphany:
     command: desktop-launch snapcraft-preload epiphany
     plugs:
-      - camera
       - cups-control
       - desktop
       - desktop-legacy
