@@ -464,17 +464,6 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
-  /* Accelerated compositing mode is pretty broken right now.
-   * Disable it entirely as a workaround for these bugs:
-   *
-   * https://bugs.webkit.org/show_bug.cgi?id=192230
-   * https://bugs.webkit.org/show_bug.cgi?id=192276
-   * https://gitlab.gnome.org/GNOME/gtk/issues/1401
-   *
-   * Of course this should be reverted when the bugs are fixed.
-   */
-  webkit_settings_set_hardware_acceleration_policy (webkit_settings, WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER);
-
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
     GSettings *settings;
     char *key;
