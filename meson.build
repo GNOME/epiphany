@@ -85,8 +85,6 @@ nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.21.92'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
-evince_document_dep = dependency('evince-document-3.0')
-evince_view_dep = dependency('evince-view-3.0')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
 gdk_dep = dependency('gdk-3.0', version: gtk_requirement)
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')

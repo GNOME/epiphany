@@ -36,33 +36,32 @@ typedef enum
   EPHY_DOWNLOAD_ACTION_OPEN
 } EphyDownloadActionType;
 
-EphyDownload *ephy_download_new                        (WebKitDownload *download);
-EphyDownload *ephy_download_new_for_uri                (const char     *uri);
+EphyDownload *ephy_download_new                   (WebKitDownload *download);
+EphyDownload *ephy_download_new_for_uri           (const char     *uri);
 
-void          ephy_download_cancel                     (EphyDownload *download);
-gboolean      ephy_download_is_active                  (EphyDownload *download);
-gboolean      ephy_download_succeeded                  (EphyDownload *download);
-gboolean      ephy_download_failed                     (EphyDownload *download,
-                                                        GError      **error);
+void          ephy_download_cancel                (EphyDownload *download);
+gboolean      ephy_download_is_active             (EphyDownload *download);
+gboolean      ephy_download_succeeded             (EphyDownload *download);
+gboolean      ephy_download_failed                (EphyDownload *download,
+                                                   GError      **error);
 
-void          ephy_download_set_destination_uri        (EphyDownload *download,
-                                                        const char *destination);
+void          ephy_download_set_destination_uri   (EphyDownload *download,
+                                                   const char *destination);
 
-WebKitDownload *ephy_download_get_webkit_download      (EphyDownload *download);
+WebKitDownload *ephy_download_get_webkit_download (EphyDownload *download);
 
-const char   *ephy_download_get_destination_uri        (EphyDownload *download);
-const char   *ephy_download_get_content_type           (EphyDownload *download);
+const char   *ephy_download_get_destination_uri   (EphyDownload *download);
+const char   *ephy_download_get_content_type      (EphyDownload *download);
 
-guint32       ephy_download_get_start_time             (EphyDownload *download);
+guint32       ephy_download_get_start_time        (EphyDownload *download);
 
-EphyDownloadActionType ephy_download_get_action        (EphyDownload *download);
-void          ephy_download_set_action                 (EphyDownload *download,
-                                                        EphyDownloadActionType action);
-gboolean      ephy_download_do_download_action         (EphyDownload          *download,
-                                                        EphyDownloadActionType action,
-                                                        guint32                user_time);
+EphyDownloadActionType ephy_download_get_action   (EphyDownload *download);
+void          ephy_download_set_action            (EphyDownload *download,
+                                                   EphyDownloadActionType action);
+gboolean      ephy_download_do_download_action    (EphyDownload          *download,
+                                                   EphyDownloadActionType action,
+                                                   guint32                user_time);
 void          ephy_download_disable_desktop_notification
-                                                        (EphyDownload *download);
-void          ephy_download_enable_evince_document_mode (EphyDownload *download);
+                                                  (EphyDownload *download);
 
 G_END_DECLS

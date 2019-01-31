@@ -29,7 +29,6 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-evince-document-view.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-notification-container.h"
 #include "ephy-prefs.h"
@@ -66,7 +65,6 @@ struct _EphyEmbed {
   GtkWidget *floating_bar;
   GtkWidget *progress;
   GtkWidget *fullscreen_message_label;
-  GtkWidget *document_view;
 
   char *title;
   WebKitURIRequest *delayed_request;
@@ -75,9 +73,6 @@ struct _EphyEmbed {
 
   GSList *messages;
   GSList *keys;
-
-  EphyEmbedMode mode;
-  char *saved_title;
 
   guint seq_context_id;
   guint seq_message_id;
@@ -392,7 +387,6 @@ ephy_embed_dispose (GObject *object)
     embed->fullscreen_message_id = 0;
   }
 
-  g_clear_pointer (&embed->saved_title, g_free);
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
@@ -1023,87 +1017,4 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
      * from the container. */
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
-}
-
-void
-ephy_embed_set_mode (EphyEmbed *embed, EphyEmbedMode mode)
-{
-  g_assert (EPHY_IS_EMBED (embed));
-
-  if (embed->mode == mode)
-    return;
-
-  switch (mode) {
-  case EPHY_EMBED_MODE_WEB_VIEW:
-    if (embed->document_view != NULL) {
-      gtk_widget_destroy (embed->document_view);
-      embed->document_view = NULL;
-    }
-    gtk_widget_set_visible (GTK_WIDGET (embed->paned), TRUE);
-
-    if (embed->saved_title) {
-      ephy_embed_set_title (embed, embed->saved_title);
-      g_clear_pointer (&embed->saved_title, g_free);
-    }
-    break;
-  case EPHY_EMBED_MODE_EVINCE_DOCUMENT:
-    gtk_widget_set_visible (GTK_WIDGET (embed->paned), FALSE);
-    embed->document_view = ephy_evince_document_view_new ();
-    ephy_evince_document_set_embed (EPHY_EVINCE_DOCUMENT_VIEW (embed->document_view), embed);
-    gtk_box_pack_start (GTK_BOX (embed),
-                        embed->document_view,
-                        TRUE, TRUE, 0);
-    gtk_widget_show_all (embed->document_view);
-    break;
-  }
-
-  embed->mode = mode;
-}
-
-EphyEmbedMode
-ephy_embed_get_mode (EphyEmbed *embed)
-{
-  return embed->mode;
-}
-
-static void
-document_download_failed_cb (WebKitDownload *download,
-                             GError         *error,
-                             EphyEmbed      *embed)
-{
-  /* Error occured: Switch back to web view */
-  ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
-}
-
-static void
-document_download_finished_cb (WebKitDownload *download,
-                               EphyEmbed      *embed)
-{
-  const char *document_uri = webkit_download_get_destination (download);
-
-  if (!embed->document_view)
-    return;
-
-  ephy_evince_document_view_load_uri (EPHY_EVINCE_DOCUMENT_VIEW (embed->document_view),
-                                      document_uri);
-
-  embed->saved_title = g_strdup (embed->title);
-  ephy_embed_set_title (embed, g_path_get_basename (document_uri));
-}
-
-gboolean
-ephy_embed_download_started (EphyEmbed    *embed,
-                             EphyDownload *ephy_download)
-{
-  WebKitDownload *download = ephy_download_get_webkit_download (ephy_download);
-  gboolean ret = FALSE;
-
-  if (embed->mode == EPHY_EMBED_MODE_EVINCE_DOCUMENT) {
-    ephy_download_enable_evince_document_mode (ephy_download);
-    g_signal_connect (download, "failed", G_CALLBACK (document_download_failed_cb), embed);
-    g_signal_connect (download, "finished", G_CALLBACK (document_download_finished_cb), embed);
-    ret = TRUE;
-  }
-
-  return ret;
 }
