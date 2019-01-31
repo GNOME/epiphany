@@ -1,6 +1,5 @@
 name: epiphany
 version: 3.30.2
-license: GPL-3.0+
 summary: Web browser for GNOME
 description: |
   The web browser for GNOME, featuring tight integration with the desktop
@@ -13,6 +12,11 @@ description: |
 grade: stable
 confinement: strict
 base: core18
+
+# Launchpad doesn't recognize these fields yet
+passthrough:
+  license: GPL-3.0+
+  title: GNOME Web
 
 plugs:
   gnome-3-28-1804:
