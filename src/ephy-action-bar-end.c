@@ -23,8 +23,6 @@
 
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
-#include "ephy-embed.h"
-#include "ephy-embed-container.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
@@ -45,19 +43,6 @@ struct _EphyActionBarEnd {
 };
 
 G_DEFINE_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
-
-static gboolean
-is_document_view_active (void)
-{
-  EphyShell *shell = ephy_shell_get_default ();
-  GtkWindow *window;
-  EphyEmbed *embed;
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-
-  return ephy_embed_get_mode (embed) == EPHY_EMBED_MODE_EVINCE_DOCUMENT;
-}
 
 static void
 remove_downloads_button_attention_style (EphyActionBarEnd *self)
@@ -100,9 +85,6 @@ download_added_cb (EphyDownloadsManager *manager,
 {
   GtkAllocation rect;
   DzlBoxTheatric *theatric;
-
-  if (is_document_view_active ())
-    return;
 
   if (!action_bar_end->downloads_popover) {
     action_bar_end->downloads_popover = ephy_downloads_popover_new (action_bar_end->downloads_button);

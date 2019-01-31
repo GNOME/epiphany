@@ -22,7 +22,6 @@ libephyembed_sources = [
   'ephy-embed-utils.c',
   'ephy-encoding.c',
   'ephy-encodings.c',
-  'ephy-evince-document-view.c',
   'ephy-file-monitor.c',
   'ephy-filters-manager.c',
   'ephy-find-toolbar.c',
@@ -35,8 +34,6 @@ libephyembed_sources = [
 libephyembed_deps = [
   libdazzle_dep,
   ephymisc_dep,
-  evince_document_dep,
-  evince_view_dep,
   gio_dep,
   glib_dep,
   gtk_dep,

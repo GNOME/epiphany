@@ -37,11 +37,6 @@ typedef enum {
   EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION
 } EphyEmbedTopWidgetPolicy;
 
-typedef enum {
-  EPHY_EMBED_MODE_WEB_VIEW,
-  EPHY_EMBED_MODE_EVINCE_DOCUMENT
-} EphyEmbedMode;
-
 EphyWebView*     ephy_embed_get_web_view                  (EphyEmbed  *embed);
 EphyFindToolbar* ephy_embed_get_find_toolbar              (EphyEmbed  *embed);
 void             ephy_embed_add_top_widget                (EphyEmbed                *embed,
@@ -59,10 +54,5 @@ gboolean         ephy_embed_inspector_is_loaded           (EphyEmbed *embed);
 const char      *ephy_embed_get_title                     (EphyEmbed *embed);
 void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
-void             ephy_embed_set_mode                      (EphyEmbed     *embed,
-                                                           EphyEmbedMode  mode);
-EphyEmbedMode    ephy_embed_get_mode                      (EphyEmbed *embed);
-gboolean         ephy_embed_download_started              (EphyEmbed    *embed,
-                                                           EphyDownload *ephy_download);
 
 G_END_DECLS
