@@ -1113,25 +1113,30 @@ migrate_profile_directories (void)
     else
       close (fd);
 
+    // Update Exec and Icon to point to the new profile dir
+    g_autofree char *old_profile_prefix = g_build_filename (legacy_profile_dir (), "app-epiphany-", NULL);
+    g_autofree char *new_profile_prefix = g_build_filename (g_get_user_data_dir (), "epiphany-", NULL);
     g_autoptr(GKeyFile) file = g_key_file_new ();
     g_autofree char *desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
     g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
+
     g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
     if (exec == NULL) {
       g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
       continue;
     }
-
-    g_autoptr(GRegex) re = g_regex_new ("epiphany/app-epiphany-", 0, 0, NULL);
-    g_autofree char *new_exec = g_regex_replace (re, exec, -1, 0, "epiphany-", 0, &error);
-
-    if (error != NULL) {
-      g_warning ("Failed to replace Exec line %s: %s", exec, error->message);
-      g_clear_error (&error);
-    }
-
+    g_autofree char *new_exec = ephy_string_find_and_replace (exec, old_profile_prefix, new_profile_prefix);
     LOG ("migrate_profile_directories: setting Exec to %s", new_exec);
     g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
+
+    g_autofree char *icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
+    if (exec == NULL) {
+      g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
+      continue;
+    }
+    g_autofree char *new_icon = ephy_string_find_and_replace (icon, old_profile_prefix, new_profile_prefix);
+    LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
+    g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
 
     if (!g_key_file_save_to_file (file, desktop_file_path, &error))
       g_warning ("Failed to save desktop file %s", error->message);
