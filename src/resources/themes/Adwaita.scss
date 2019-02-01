@@ -150,11 +150,35 @@
   }
 }
 
+$close_button_fg_color: lighten($fg_color, 10%);
+@mixin close_button($bg:$bg_color, $fg:$close_button_fg_color) {
+  background: none;
+  border: none;
+  box-shadow: none;
+
+  &:last-child {
+    image {
+      color: $fg;
+      border: 1px solid transparent;
+      border-radius: 5px;
+    }
+
+    &:hover image {
+      @include button(normal, $bg, $fg);
+      @include button(hover, $bg, $fg);
+    }
+
+    &:active image {
+      @include button(normal, $bg, $fg);
+      @include button(active, $bg, $fg);
+    }
+  }
+}
+
 .url_entry:not(:hover):not(:focus) {
   background-color: transparentize($base_color, 0.25);
 }
 
-$close_button_fg_color: lighten($fg_color, 10%);
 .bookmark-tag-widget {
   background-color: darken($bg_color, 10%);
 
@@ -164,31 +188,7 @@ $close_button_fg_color: lighten($fg_color, 10%);
   }
 
   button {
-    background: none;
-    border: none;
-    box-shadow: none;
-
-    &:last-child {
-      image {
-        color: $close_button_fg_color;
-      }
-
-      &:hover {
-        image {
-          border: 1px solid;
-          border-radius: 5px;
-          @include button(normal, $bg_color, $close_button_fg_color);
-          @include button(hover, $bg_color, $close_button_fg_color);
-        }
-      }
-
-      &:active {
-        image {
-          @include button(normal, $bg_color, $close_button_fg_color);
-          @include button(active, $bg_color, $close_button_fg_color);
-        }
-      }
-    }
+    @include close_button();
   }
 }
 
@@ -201,25 +201,19 @@ $close_button_fg_color: lighten($fg_color, 10%);
   }
 
   button {
-    &:last-child {
-      image {
-        color: themecolor(theme_selected_fg_color);
-      }
+    @include close_button($selected_bg_color, $selected_fg_color);
+  }
+}
 
-      &:hover {
-        image {
-          @include button(normal, $selected_bg_color, $selected_fg_color);
-          @include button(hover, $selected_bg_color, $selected_fg_color);
-        }
-      }
+.page-row-close-button {
+  @include close_button();
 
-      &:active {
-        image {
-          @include button(normal, $selected_bg_color, $selected_fg_color);
-          @include button(active, $selected_bg_color, $selected_fg_color);
-        }
-      }
-    }
+  row:selected & {
+    @include close_button($selected_bg_color, $selected_fg_color);
+  }
+
+  row.narrow & image {
+    padding: 6px;
   }
 }
 
