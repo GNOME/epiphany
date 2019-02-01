@@ -3,11 +3,11 @@
 
 // incognito mode
 
-$incognito_base_color: #d7e3f0;
+$incognito_base_color: if($variant == 'light', #d7e3f0, #1c2438);
 $incognito_color: lighten($incognito_base_color, 5%);
 $incognito_icon: 'user-not-tracked-symbolic';
-$incognito_edge_color: transparentize(white, 0.2);
-$incognito_borders_color: darken($incognito_color, 11%);
+$incognito_edge_color: if($variant == 'light', transparentize(white, 0.2), transparentize($fg_color, 0.93));
+$incognito_borders_color: if($variant == 'light', darken($incognito_color, 11%), darken($incognito_color, 5%));
 
 // automation mode
 $automation_color: #ff9600;

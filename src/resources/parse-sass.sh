@@ -12,4 +12,6 @@ SASSC_OPT="-M -t compact"
 sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
 	themes/Adwaita.scss themes/Adwaita.css
 sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
+	themes/Adwaita-dark.scss themes/Adwaita-dark.css
+sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
 	themes/shared.scss themes/shared.css

@@ -60,7 +60,7 @@
       }
 
       &:checked {
-        background: image(darken($incognito_color, 17%));
+        background: if($variant == 'light', image(darken($incognito_color, 17%)), image(darken($incognito_color, 9%)));
         border-color: darken($incognito_borders_color, 3%);
         border-top-color: darken($incognito_borders_color, 8%);
         &:backdrop {
@@ -147,7 +147,7 @@
   }
 }
 
-$close_button_fg_color: lighten($fg_color, 10%);
+$close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken($fg_color, 10%));
 @mixin close_button($bg:$bg_color, $fg:$close_button_fg_color) {
   background: none;
   border: none;
