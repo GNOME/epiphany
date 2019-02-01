@@ -144,15 +144,29 @@ void
 ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
                                  EphyAdaptiveMode  adaptive_mode)
 {
+  GtkStyleContext *context;
+
   g_assert (EPHY_IS_PAGE_ROW (self));
+
+  context = gtk_widget_get_style_context(GTK_WIDGET (self));
 
   switch (adaptive_mode) {
   case EPHY_ADAPTIVE_MODE_NORMAL:
     gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, -1);
+    gtk_widget_set_margin_end (GTK_WIDGET (self->box), 0);
+    gtk_widget_set_margin_start (GTK_WIDGET (self->box), 4);
+    gtk_box_set_spacing (self->box, 0);
+
+    gtk_style_context_remove_class (context, "narrow");
 
     break;
   case EPHY_ADAPTIVE_MODE_NARROW:
     gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, 50);
+    gtk_widget_set_margin_end (GTK_WIDGET (self->box), 4);
+    gtk_widget_set_margin_start (GTK_WIDGET (self->box), 8);
+    gtk_box_set_spacing (self->box, 4);
+
+    gtk_style_context_add_class (context, "narrow");
 
     break;
   }
