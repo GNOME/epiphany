@@ -4,13 +4,12 @@
   <template class="EphyPageRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkBox" id="box">
-        <property name="margin_end">12</property>
-        <property name="margin_start">12</property>
-        <property name="spacing">12</property>
         <property name="visible">True</property>
         <child>
           <object class="GtkStack" id="icon_stack">
             <property name="visible">True</property>
+            <property name="margin_start">4</property>
+            <property name="margin_end">4</property>
             <child>
               <object class="GtkImage" id="icon">
                 <property name="icon_size">1</property>
@@ -33,6 +32,7 @@
             <property name="valign">center</property>
             <property name="visible">True</property>
             <property name="xalign">0</property>
+            <property name="margin_start">4</property>
           </object>
         </child>
         <child>
@@ -40,6 +40,7 @@
             <property name="icon_name">audio-volume-high-symbolic</property>
             <property name="icon_size">1</property>
             <property name="visible">True</property>
+            <property name="margin_start">8</property>
           </object>
         </child>
         <child>
@@ -53,7 +54,9 @@
             <property name="visible">True</property>
             <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
             <style>
+              <class name="flat"/>
               <class name="image-button"/>
+              <class name="page-row-close-button"/>
             </style>
             <child>
               <object class="GtkImage">
