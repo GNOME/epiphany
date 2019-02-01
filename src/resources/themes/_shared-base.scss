@@ -1,0 +1,143 @@
+@import 'definitions';
+
+// floating status bar
+.floating-bar {
+  background-color: themecolor(theme_base_color);
+  border-width: 1px;
+  border-style: solid solid none;
+  border-color: themecolor(borders);
+  border-radius: 3px 3px 0 0;
+
+  &.left {
+    border-left-style: none;
+    border-top-left-radius: 0;
+  }
+
+  &.right {
+    border-right-style: none;
+    border-top-right-radius: 0;
+  }
+
+  &:backdrop {
+    background-color: themecolor(theme_unfocused_base_color);
+    border-color: themecolor(unfocused_borders);
+  }
+}
+
+// incognito mode
+.incognito-mode {
+  headerbar {
+    background-image: -gtk-icontheme($incognito_icon);
+    background-repeat: no-repeat;
+    background-position: 157px 0;
+    background-size: 64px 64px;
+    color: rgba(0, 0, 0, 0.35);
+  }
+}
+
+// automation mode
+.automation-mode {
+  headerbar {
+    background-color: $automation_color;
+    color: rgba(0, 0, 0, 0.35);
+  }
+}
+
+// entry icons colors
+.entry_icon {
+  color: #{"mix(" + themecolor(theme_fg_color) + ", " + themecolor(theme_base_color) + ", 0.2)"};
+
+  &:hover {
+    color: themecolor(theme_fg_color);
+  }
+
+  &:active {
+    color: themecolor(theme_selected_bg_color);
+  }
+
+  &:backdrop {
+    color: #{"mix(" + themecolor(theme_unfocused_fg_color) + ", " + themecolor(theme_unfocused_base_color) + ", 0.2)"};
+  }
+
+  // Reader mode
+  &.selected {
+    color: themecolor(theme_selected_bg_color);
+  }
+
+  // Bookmarks
+  &.starred {
+    color: orange;
+  }
+}
+
+.bookmarks-row {
+  button {
+    opacity: 0.25;
+  }
+
+  &:hover {
+    button {
+      opacity: 1;
+    }
+  }
+}
+
+.bookmark-tag-widget {
+  padding-left: 8px;
+  background-color: #{"darker(" + themecolor(theme_bg_color) + ")"};
+
+  label {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  image,
+  label {
+    // FIXME: This should be theme_text_color, but HighContrast doesn't export it
+    color: themecolor(theme_fg_color);
+  }
+
+  button:hover image {
+    color: themecolor(theme_fg_color);
+  }
+}
+
+.bookmark-tag-widget-selected {
+  background-color: themecolor(theme_selected_bg_color);
+
+  image,
+  label {
+    color: themecolor(theme_selected_fg_color);
+  }
+}
+
+// "Press $KEY to exit fullscreen" overlay text
+#fullscreen-popup {
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+}
+
+.url_progress {
+  border: none;
+  background-color: transparent;
+  background-image: none;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 6px;
+
+  progress {
+    background-color: themecolor(theme_selected_bg_color);
+    background-image: none;
+    border: none;
+    min-height: 2px;
+  }
+
+  trough {
+    border: none;
+    background-color: transparent;
+    background-image: none;
+  }
+}
