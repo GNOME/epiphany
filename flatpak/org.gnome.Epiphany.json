@@ -38,9 +38,6 @@
     "modules" : [
         {
             "name" : "libdazzle",
-            "config-opts" : [
-                "--libdir=/app/lib"
-            ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
@@ -53,6 +50,7 @@
         {
             "name" : "libhandy",
             "buildsystem" : "meson",
+            "builddir" : true,
             "config-opts" : [
                 "-Dexamples=false",
                 "-Dglade_catalog=disabled",
