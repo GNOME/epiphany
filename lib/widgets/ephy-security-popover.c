@@ -26,6 +26,8 @@
 
 #include "ephy-certificate-dialog.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 
 /**
  * SECTION:ephy-security-popover
@@ -182,7 +184,6 @@ ephy_security_popover_constructed (GObject *object)
   certificate_button = gtk_button_new_with_mnemonic (_("_View Certificate…"));
   gtk_widget_set_halign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_valign (certificate_button, GTK_ALIGN_END);
-  gtk_widget_set_margin_top (certificate_button, 5);
   gtk_widget_set_receives_default (certificate_button, FALSE);
   gtk_widget_show (certificate_button);
   g_signal_connect (certificate_button, "clicked",
@@ -322,7 +323,8 @@ static void
 ephy_security_popover_init (EphySecurityPopover *popover)
 {
   popover->grid = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 15);
+  gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (popover->grid), 6);
   g_object_set (popover->grid, "margin", 10, NULL);
 
   popover->lock_image = gtk_image_new ();
@@ -339,6 +341,30 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_grid_attach (GTK_GRID (popover->grid), popover->lock_image, 0, 0, 1, 3);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->host_label, 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->security_label, 1, 1, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (popover->grid), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 3, 2, 1);
+
+  GtkWidget *adblocker = gtk_label_new ("");
+  gtk_label_set_markup (GTK_LABEL (adblocker), _("<b>Web Content</b>"));
+  gtk_label_set_xalign (GTK_LABEL (adblocker), 0.0);
+  gtk_grid_attach (GTK_GRID (popover->grid), adblocker, 0, 4, 2, 1);
+
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_grid_attach (GTK_GRID (popover->grid), box, 0, 5, 2, 1);
+
+  GtkWidget *adblock_desc = gtk_label_new (_("Try to block advertisements"));
+  gtk_label_set_xalign (GTK_LABEL (adblock_desc), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), adblock_desc, TRUE, TRUE, 6);
+
+  GtkWidget *ad_switch = gtk_switch_new ();
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                   ad_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+   gtk_box_pack_start (GTK_BOX (box), ad_switch, FALSE, FALSE, 6);
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
