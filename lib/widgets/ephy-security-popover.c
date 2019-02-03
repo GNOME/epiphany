@@ -67,21 +67,17 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
                                    const char          *address)
 {
   SoupURI *uri;
-  char *label_text;
-  char *uri_text;
+  g_autofree gchar *uri_text = NULL;
 
   uri = soup_uri_new (address);
-  uri_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>.", uri->host);
+  uri_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", uri->host);
   /* Label when clicking the lock icon on a secure page. %s is the website's hostname. */
-  label_text = g_strdup_printf (_("You are connected to %s"), uri_text);
-  gtk_label_set_markup (GTK_LABEL (popover->host_label), label_text);
+  gtk_label_set_markup (GTK_LABEL (popover->host_label), uri_text);
 
   popover->address = g_strdup (address);
   popover->hostname = g_strdup (uri->host);
 
   soup_uri_free (uri);
-  g_free (label_text);
-  g_free (uri_text);
 }
 
 static void
@@ -97,12 +93,13 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
                                           EphySecurityLevel    security_level)
 {
   GIcon *icon;
-  char *address_text;
-  char *label_text = NULL;
+  g_autofree gchar *address_text = NULL;
+  g_autofree gchar *label_text = NULL;
 
   popover->security_level = security_level;
 
   address_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", popover->hostname);
+  gtk_label_set_markup (GTK_LABEL (popover->host_label), address_text);
 
   switch (security_level) {
     case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
@@ -111,27 +108,22 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
                                       "You may have connected to an attacker pretending to be %s."),
                                     address_text);
       gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
-      gtk_widget_hide (popover->host_label);
       break;
     case EPHY_SECURITY_LEVEL_NO_SECURITY:
       /* Label in certificate popover when site uses HTTP. %s is a URL. */
-      label_text = g_strdup_printf (_("%s has no security. An attacker could see any information "
-                                      "you send, or control the content that you see."),
-                                    address_text);
+      label_text = g_strdup_printf (_("This site has no security. An attacker could see any information "
+                                      "you send, or control the content that you see."));
       gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
-      gtk_widget_hide (popover->host_label);
       break;
     case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
       gtk_label_set_text (GTK_LABEL (popover->security_label),
                           /* Label in certificate popover when site sends mixed content. */
                           _("This web site did not properly secure your connection."));
-      gtk_widget_show (popover->host_label);
       break;
     case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
       gtk_label_set_text (GTK_LABEL (popover->security_label),
                           /* Label in certificate popover on secure sites. */
                           _("Your connection seems to be secure."));
-      gtk_widget_show (popover->host_label);
       break;
     case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
     case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
@@ -140,10 +132,8 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
   }
 
   icon = g_themed_icon_new_with_default_fallbacks (ephy_security_level_to_icon_name (security_level));
-  gtk_image_set_from_gicon (GTK_IMAGE (popover->lock_image), icon, GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_from_gicon (GTK_IMAGE (popover->lock_image), icon, GTK_ICON_SIZE_BUTTON);
 
-  g_free (address_text);
-  g_free (label_text);
   g_object_unref (icon);
 }
 
@@ -180,7 +170,7 @@ ephy_security_popover_constructed (GObject *object)
     return;
 
   certificate_button = gtk_button_new_with_mnemonic (_("_View Certificate…"));
-  gtk_widget_set_halign (certificate_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_valign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_margin_top (certificate_button, 5);
   gtk_widget_set_receives_default (certificate_button, FALSE);
@@ -189,7 +179,7 @@ ephy_security_popover_constructed (GObject *object)
                     G_CALLBACK (certificate_button_clicked_cb),
                     popover);
 
-  gtk_grid_attach (GTK_GRID (popover->grid), certificate_button, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (popover->grid), certificate_button, 1, 2, 1, 1);
 }
 
 static void
@@ -248,8 +238,8 @@ ephy_security_popover_get_preferred_width (GtkWidget *widget,
                                                                               minimum_width,
                                                                               natural_width);
 
-  if (*natural_width > 600)
-    *natural_width = MAX (600, *minimum_width);
+  if (*natural_width > 360)
+    *natural_width = MAX (360, *minimum_width);
 }
 
 static void
@@ -321,22 +311,32 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
 static void
 ephy_security_popover_init (EphySecurityPopover *popover)
 {
+  GtkWidget *box;
+
   popover->grid = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 15);
+  gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (popover->grid), 6);
   g_object_set (popover->grid, "margin", 10, NULL);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (box, TRUE);
+
   popover->lock_image = gtk_image_new ();
+  gtk_box_pack_start (GTK_BOX (box), popover->lock_image, FALSE, FALSE, 0);
 
   popover->host_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (popover->host_label, GTK_ALIGN_START);
+  gtk_label_set_line_wrap (GTK_LABEL (popover->host_label), TRUE);
+  gtk_label_set_line_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
+  gtk_label_set_xalign (GTK_LABEL (popover->host_label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), popover->host_label, FALSE, FALSE, 0);
 
   popover->security_label = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (popover->security_label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (popover->security_label), 0.0);
 
-  gtk_grid_attach (GTK_GRID (popover->grid), popover->lock_image, 0, 0, 1, 2);
-  gtk_grid_attach (GTK_GRID (popover->grid), popover->host_label, 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (popover->grid), popover->security_label, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (popover->grid), box, 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (popover->grid), popover->security_label, 0, 1, 2, 1);
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
