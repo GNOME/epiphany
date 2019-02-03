@@ -180,7 +180,7 @@ ephy_security_popover_constructed (GObject *object)
     return;
 
   certificate_button = gtk_button_new_with_mnemonic (_("_View Certificate…"));
-  gtk_widget_set_halign (certificate_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_valign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_margin_top (certificate_button, 5);
   gtk_widget_set_receives_default (certificate_button, FALSE);
@@ -189,7 +189,7 @@ ephy_security_popover_constructed (GObject *object)
                     G_CALLBACK (certificate_button_clicked_cb),
                     popover);
 
-  gtk_grid_attach (GTK_GRID (popover->grid), certificate_button, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (popover->grid), certificate_button, 1, 2, 1, 1);
 }
 
 static void
@@ -248,8 +248,8 @@ ephy_security_popover_get_preferred_width (GtkWidget *widget,
                                                                               minimum_width,
                                                                               natural_width);
 
-  if (*natural_width > 600)
-    *natural_width = MAX (600, *minimum_width);
+  if (*natural_width > 360)
+    *natural_width = MAX (360, *minimum_width);
 }
 
 static void
@@ -328,13 +328,15 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->lock_image = gtk_image_new ();
 
   popover->host_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (popover->host_label, GTK_ALIGN_START);
+  gtk_label_set_line_wrap (GTK_LABEL (popover->host_label), TRUE);
+  gtk_label_set_line_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
+  gtk_label_set_xalign (GTK_LABEL (popover->host_label), 0.0);
 
   popover->security_label = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (popover->security_label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (popover->security_label), 0.0);
 
-  gtk_grid_attach (GTK_GRID (popover->grid), popover->lock_image, 0, 0, 1, 2);
+  gtk_grid_attach (GTK_GRID (popover->grid), popover->lock_image, 0, 0, 1, 3);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->host_label, 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->security_label, 1, 1, 1, 1);
 
