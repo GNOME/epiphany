@@ -2774,8 +2774,10 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
 
-  /* Cancel timer so it doesn't close while waiting for the user. */
-  g_source_remove (data->id);
+  if (data->id != 0) {
+    /* Ensure tab doesn't close while waiting for the user. */
+    g_source_remove (data->id);
+  }
 
   if (data->id != 0 &&
       data->window != NULL &&
