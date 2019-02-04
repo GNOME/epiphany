@@ -104,7 +104,7 @@ const struct {
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
-  { "win.toggle-reader-mode", { "<shift><Primary>r", NULL } },
+  { "win.toggle-reader-mode", { "<alt><Primary>r", NULL } },
 
   { "win.select-all", { "<Primary>A", NULL } },
 
@@ -119,7 +119,8 @@ const struct {
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
-  { "toolbar.reload", { "<Primary>R", "<shift><Primary>R", "F5", "<Primary>F5", "<shift>F5", "<shift><Primary>F5", "Refresh", "Reload", NULL } },
+  { "toolbar.reload", { "<Primary>R", "F5", "Refresh", "Reload", NULL } },
+  { "toolbar.reload-bypass-cache", { "<shift><Primary>R", "<shift>F5" } },
   { "toolbar.combined-stop-reload", { NULL } },
 
   /* Tabs */
@@ -863,6 +864,7 @@ static const GActionEntry toolbar_entries [] = {
 
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },
+  { "reload-bypass-cache", window_cmd_reload_bypass_cache },
   { "always-stop", window_cmd_stop },
   { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", change_combined_stop_reload_state }
 };

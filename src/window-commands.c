@@ -746,29 +746,6 @@ window_cmd_stop (GSimpleAction *action,
   webkit_web_view_stop_loading (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
-static gboolean
-event_with_shift (void)
-{
-  GdkEvent *event;
-  GdkEventType type = 0;
-  guint state = 0;
-
-  event = gtk_get_current_event ();
-  if (event) {
-    type = event->type;
-
-    if (type == GDK_BUTTON_RELEASE) {
-      state = event->button.state;
-    } else if (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE) {
-      state = event->key.state;
-    }
-
-    gdk_event_free (event);
-  }
-
-  return (state & GDK_SHIFT_MASK) != 0;
-}
-
 void
 window_cmd_reload (GSimpleAction *action,
                    GVariant      *parameter,
@@ -778,17 +755,31 @@ window_cmd_reload (GSimpleAction *action,
   EphyEmbed *embed;
   WebKitWebView *view;
 
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  if (event_with_shift ())
-    webkit_web_view_reload_bypass_cache (view);
-  else
-    webkit_web_view_reload (view);
+  webkit_web_view_reload (view);
+}
+
+void
+window_cmd_reload_bypass_cache (GSimpleAction *action,
+                                GVariant      *parameter,
+                                gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  WebKitWebView *view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  webkit_web_view_reload_bypass_cache (view);
 }
 
 void window_cmd_combined_stop_reload (GSimpleAction *action,

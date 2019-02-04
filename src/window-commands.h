@@ -71,6 +71,9 @@ void window_cmd_stop                            (GSimpleAction *action,
 void window_cmd_reload                          (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_reload_bypass_cache             (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_combined_stop_reload            (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
