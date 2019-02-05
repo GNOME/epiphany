@@ -151,6 +151,16 @@ web_page_send_request (WebKitWebPage     *web_page,
   page_uri = webkit_web_page_get_uri (web_page);
   redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
 
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+    SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
+    if (headers) {
+      /* Do Not Track header. '1' means 'opt-out'. See:
+       * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
+      soup_message_headers_append (headers, "DNT", "1");
+    }
+    modified_uri = ephy_remove_tracking_from_uri (request_uri);
+  }
+
   if (should_use_adblocker (request_uri, page_uri, redirected_response_uri)) {
     char *result;
 
