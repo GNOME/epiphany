@@ -145,21 +145,14 @@ web_page_send_request (WebKitWebPage     *web_page,
   const char *request_uri;
   const char *redirected_response_uri;
   const char *page_uri;
-  char *modified_uri = NULL;
+  g_autofree char *modified_uri = NULL;
 
   request_uri = webkit_uri_request_get_uri (request);
   page_uri = webkit_web_page_get_uri (web_page);
   redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
-    SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
-    if (headers) {
-      /* Do Not Track header. '1' means 'opt-out'. See:
-       * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
-      soup_message_headers_append (headers, "DNT", "1");
-    }
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
-  }
 
   if (should_use_adblocker (request_uri, page_uri, redirected_response_uri)) {
     char *result;
@@ -168,13 +161,12 @@ web_page_send_request (WebKitWebPage     *web_page,
     result = ephy_uri_tester_rewrite_uri (extension->uri_tester,
                                           modified_uri ? modified_uri : request_uri,
                                           page_uri);
-    g_free (modified_uri);
-
     if (!result) {
       LOG ("Refused to load %s", request_uri);
       return TRUE;
     }
 
+    g_free (modified_uri);
     modified_uri = result;
   } else if (!modified_uri) {
     return FALSE;
@@ -184,8 +176,6 @@ web_page_send_request (WebKitWebPage     *web_page,
     LOG ("Rewrote %s to %s", request_uri, modified_uri);
     webkit_uri_request_set_uri (request, modified_uri);
   }
-
-  g_free (modified_uri);
 
   return FALSE;
 }
