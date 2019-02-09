@@ -62,7 +62,6 @@ libephymisc_deps = [
   glib_dep,
   gsettings_desktop_schemas,
   gtk_dep,
-  icu_uc_dep,
   json_glib_dep,
   libdazzle_dep,
   libsecret_dep,
