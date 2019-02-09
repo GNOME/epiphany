@@ -82,7 +82,7 @@ endif
 glib_requirement = '>= 2.56.0'
 gtk_requirement = '>= 3.22.13'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.21.92'
+webkitgtk_requirement = '>= 2.23.90'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
@@ -95,7 +95,6 @@ gsettings_desktop_schemas = dependency('gsettings-desktop-schemas')
 gtk_dep = dependency('gtk+-3.0', version: gtk_requirement)
 gtk_unix_print_dep = dependency('gtk+-unix-print-3.0', version: gtk_requirement)
 hogweed_dep = dependency('hogweed', version: nettle_requirement)
-icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', required: false)
