@@ -8,6 +8,12 @@ $incognito_color: lighten($incognito_base_color, 5%);
 $incognito_icon: 'user-not-tracked-symbolic';
 $incognito_edge_color: if($variant == 'light', transparentize(white, 0.2), transparentize($fg_color, 0.93));
 $incognito_borders_color: if($variant == 'light', darken($incognito_color, 11%), darken($incognito_color, 5%));
+$incognito_dark_fill: mix($incognito_borders_color, $incognito_color, 50%);
+$incognito_insensitive_fg_color: mix($fg_color, $incognito_color, 50%);
+$incognito_backdrop_bg_color: $incognito_color;
+$incognito_backdrop_fg_color: mix($fg_color, $incognito_backdrop_bg_color, 50%);
+$incognito_backdrop_borders_color: mix($incognito_borders_color, $incognito_color, 80%);
+$incognito_backdrop_dark_fill: mix($incognito_backdrop_borders_color, $incognito_backdrop_bg_color, 35%);
 
 // automation mode
 $automation_color: #ff9600;
@@ -17,4 +23,8 @@ $automation_edge_color: lighten($automation_color, 13%);
 
 @function themecolor($s) {
   @return unquote("@" + "#{$s}");
+}
+
+@function gtkalpha($c,$a) {
+  @return unquote("alpha(#{$c},#{$a})");
 }
