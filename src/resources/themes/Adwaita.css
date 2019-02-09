@@ -48,55 +48,77 @@
 
 .incognito-mode headerbar { background: #c4d6e9 -gtk-icontheme("user-not-tracked-symbolic") 180px 0/64px 64px no-repeat, linear-gradient(to top, #bdd1e6, #c8d9ea); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #9cb9da; color: rgba(46, 52, 54, 0.2); }
 
-.incognito-mode headerbar:backdrop { background-image: -gtk-icontheme("user-not-tracked-symbolic"), image(#eaf0f7); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: rgba(146, 149, 149, 0.1); }
+.incognito-mode headerbar:backdrop { background-image: -gtk-icontheme("user-not-tracked-symbolic"), image(#eaf0f7); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: rgba(140, 146, 150, 0.1); }
 
 .incognito-mode actionbar { background: #eaf0f7; }
 
 .incognito-mode actionbar > revealer > box { border-color: #c1d3e8; }
 
-.incognito-mode headerbar > *, .incognito-mode actionbar > * { color: #2e3436; }
+.incognito-mode notebook > header { border-color: #c1d3e8; background-color: #d5e2ef; }
 
-.incognito-mode headerbar > *:backdrop, .incognito-mode actionbar > *:backdrop { color: #929595; }
+.incognito-mode notebook > header:backdrop { border-color: #c9d9eb; background-color: #dee8f3; }
 
-.incognito-mode headerbar button, .incognito-mode actionbar button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; background-image: linear-gradient(to top, #dbe6f1 2px, #eaf0f7); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.07); }
+.incognito-mode notebook > header > tabs > tab { color: #8c9296; }
 
-.incognito-mode headerbar button.flat, .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.flat, .incognito-mode actionbar button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode notebook > header > tabs > tab button.flat:hover { color: currentColor; }
 
-.incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
+.incognito-mode notebook > header > tabs > tab button.flat, .incognito-mode notebook > header > tabs > tab button.flat:backdrop { color: alpha(currentColor,0.3); }
 
-.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #eaf0f7, #edf3f8 1px); }
+.incognito-mode notebook > header > tabs > tab:hover { color: #5d6366; border-color: rgba(193, 211, 232, 0.3); background-color: rgba(234, 240, 247, 0.2); box-shadow: inset 0 -3px #c1d3e8; }
 
-.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; background-image: image(#b6cce3); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode notebook > header > tabs > tab:backdrop { color: #b1b8bd; border-color: transparent; background-color: transparent; box-shadow: none; }
 
-.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled { border-color: #c4d6e9; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode notebook > header > tabs > tab:checked { color: #2e3436; border-color: rgba(193, 211, 232, 0.5); background-color: rgba(234, 240, 247, 0.5); box-shadow: inset 0 -3px #3584e4; }
 
-.incognito-mode headerbar button:disabled label, .incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled label, .incognito-mode actionbar button:disabled { color: #929595; }
+.incognito-mode notebook > header > tabs > tab:checked:hover { background-color: rgba(234, 240, 247, 0.7); }
 
-.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop { border-color: #eaf0f7; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode notebook > header > tabs > tab:backdrop:checked { color: #8c9296; border-color: #c9d9eb; background-color: #eaf0f7; }
 
-.incognito-mode headerbar button:backdrop label, .incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop label, .incognito-mode actionbar button:backdrop { color: #929595; }
+.incognito-mode notebook > header > tabs > arrow:active { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; background-image: image(#b6cce3); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; border-color: #c1d3e8; }
 
-.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode headerbar > *, .incognito-mode actionbar > *, .incognito-mode notebook > header > * { color: #2e3436; }
 
-.incognito-mode headerbar button:backdrop:active label, .incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active label, .incognito-mode actionbar button:backdrop:active { color: #929595; }
+.incognito-mode headerbar > *:backdrop, .incognito-mode actionbar > *:backdrop, .incognito-mode notebook > header > *:backdrop { color: #8c9296; }
 
-.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled { border-color: #edf2f8; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode headerbar button, .incognito-mode actionbar button, .incognito-mode notebook > header button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; background-image: linear-gradient(to top, #dbe6f1 2px, #eaf0f7); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.07); }
 
-.incognito-mode headerbar button:backdrop:disabled label, .incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled label, .incognito-mode actionbar button:backdrop:disabled { color: #aab0b4; }
+.incognito-mode headerbar button.flat, .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.flat, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.flat, .incognito-mode notebook > header button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode headerbar button:checked, .incognito-mode actionbar button:checked { background: image(#aac4df); border-color: #b6cce3; border-top-color: #a3bfdd; }
+.incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
-.incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover, .incognito-mode notebook > header button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #eaf0f7, #edf3f8 1px); }
 
-.incognito-mode headerbar button:checked:backdrop label, .incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop label, .incognito-mode actionbar button:checked:backdrop { color: #929595; }
+.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:active, .incognito-mode notebook > header button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; background-image: image(#b6cce3); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode headerbar button.flat:backdrop, .incognito-mode headerbar button.titlebutton:backdrop, .incognito-mode actionbar button.flat:backdrop, .incognito-mode actionbar button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled { border-color: #c4d6e9; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode headerbar entry, .incognito-mode actionbar entry { border-color: #9cb9da; }
+.incognito-mode headerbar button:disabled label, .incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled label, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled label, .incognito-mode notebook > header button:disabled { color: #929595; }
 
-.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop { border-color: #eaf0f7; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
 
-.incognito-mode headerbar entry:backdrop, .incognito-mode actionbar entry:backdrop { box-shadow: none; }
+.incognito-mode headerbar button:backdrop label, .incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop label, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop label, .incognito-mode notebook > header button:backdrop { color: #929595; }
+
+.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+
+.incognito-mode headerbar button:backdrop:active label, .incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active label, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active label, .incognito-mode notebook > header button:backdrop:active { color: #929595; }
+
+.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled { border-color: #edf2f8; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+
+.incognito-mode headerbar button:backdrop:disabled label, .incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled label, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled label, .incognito-mode notebook > header button:backdrop:disabled { color: #aab0b4; }
+
+.incognito-mode headerbar button:checked, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:checked { background: image(#aac4df); border-color: #b6cce3; border-top-color: #a3bfdd; }
+
+.incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+
+.incognito-mode headerbar button:checked:backdrop label, .incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop label, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop label, .incognito-mode notebook > header button:checked:backdrop { color: #929595; }
+
+.incognito-mode headerbar button.flat:backdrop, .incognito-mode headerbar button.titlebutton:backdrop, .incognito-mode actionbar button.flat:backdrop, .incognito-mode actionbar button.titlebutton:backdrop, .incognito-mode notebook > header button.flat:backdrop, .incognito-mode notebook > header button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+
+.incognito-mode headerbar entry, .incognito-mode actionbar entry, .incognito-mode notebook > header entry { border-color: #9cb9da; }
+
+.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus, .incognito-mode notebook > header entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+
+.incognito-mode headerbar entry:backdrop, .incognito-mode actionbar entry:backdrop, .incognito-mode notebook > header entry:backdrop { box-shadow: none; }
 
 .automation-mode headerbar { background: #ff9600 linear-gradient(to top, #f59000, #ff9805); box-shadow: inset 0 1px #ffb142; border-color: #cc7800; color: rgba(46, 52, 54, 0.2); }
 
