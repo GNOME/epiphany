@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-05 03:26+0000\n"
-"PO-Revision-Date: 2019-02-05 17:37+0300\n"
+"POT-Creation-Date: 2019-02-10 14:19+0000\n"
+"PO-Revision-Date: 2019-02-10 20:14+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -433,14 +433,13 @@ msgstr "Beni İzleme"
 
 #: data/org.gnome.epiphany.gschema.xml:180
 msgid ""
-"Enables DNT headers and tracking query parameter removal. Note that when "
-"changing this setting from the preferences dialog, the adblock-filters "
-"setting will additionally be updated to add/remove EasyPrivacy filters."
+"Enables tracking query parameter removal. Note that when changing this "
+"setting from the preferences dialog, the adblock-filters setting will "
+"additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
-"DNT başlıklarını ve izleme parametre sorgusunun kaldırılmasını "
-"etkinleştirir. Tercihlerden bu ayarı değiştirdiğinizde, reklam engelleyici "
-"süzgeçleri ayarına EasyPrivacy süzgeçleri kendiliğinden eklenecek ya da "
-"kaldırılacak."
+"İzleme sorgusu parametresinin kaldırılmasını sağlar. Bu ayarı tercihler "
+"iletişim kutusundan değiştirirken, adblock-filters ayarının EasyPrivacy "
+"süzgeçleri eklemek/kaldırmak için ayrıca güncelleneceğini unutmayın."
 
 #: data/org.gnome.epiphany.gschema.xml:184
 msgid "Enable adblock"
@@ -512,6 +511,19 @@ msgstr ""
 "Eğer ayar devre dışıysa aşağı inen menüden özellikle arama motoru "
 "seçilmedikçe her şey URL olarak yüklenir."
 
+#: data/org.gnome.epiphany.gschema.xml:218
+msgid "Enable mouse gesture"
+msgstr "Fare hareketini etkinleştir"
+
+#: data/org.gnome.epiphany.gschema.xml:219
+msgid ""
+"Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
+"behaviour and are activated using the middle mouse button + gesture."
+msgstr ""
+"Fare hareketlerinin etkinleştirilip etkinleştirilmeyeceği. Fare hareketleri, "
+"Opera’nın davranışına dayanır ve orta fare tuşu + hareketi kullanılarak "
+"etkinleştirilir."
+
 #: data/org.gnome.epiphany.gschema.xml:223
 msgid "Last upload directory"
 msgstr "Son karşıya yükleme dizini"
@@ -527,6 +539,27 @@ msgstr "Son indirme dizini"
 #: data/org.gnome.epiphany.gschema.xml:229
 msgid "Keep track of last download directory"
 msgstr "Son indirilenler dizininin kaydını tut"
+
+#: data/org.gnome.epiphany.gschema.xml:233
+msgid "Hardware acceleration policy"
+msgstr "Donanım hızlandırma ilkesi"
+
+#: data/org.gnome.epiphany.gschema.xml:234
+msgid ""
+"Whether to enable hardware acceleration. Possible values are “on-demand”, "
+"“always”, and “never”. Hardware acceleration may be required to achieve "
+"acceptable performance on embedded devices, but increases memory usage "
+"requirements and could expose severe hardware-specific graphics driver bugs. "
+"When the policy is “on-demand”, hardware acceleration will be used only when "
+"required to display 3D transforms."
+msgstr ""
+"Donanım hızlandırmanın etkinleştirilip etkinleştirilmeyeceği. Olası değerler "
+"“on-demand” (istek üzerine), “always” (her zaman) ve “never” (asla). Gömülü "
+"aygıtlarda kabul edilebilir bir performans elde etmek için donanım "
+"hızlandırması gerekebilir, ancak bellek kullanımı gereksinimlerini artırır "
+"ve donanımın özel grafik sürücüsü hatalarını açığa çıkarabilir. Değer “on-"
+"demand” (istek üzerine) olduğunda donanım ivmesi yalnızca 3B dönüştürmeleri "
+"görüntülemek için gerekli olduğunda kullanılacaktır."
 
 #: data/org.gnome.epiphany.gschema.xml:240
 msgid "Web application additional URLs"
@@ -947,9 +980,8 @@ msgstr "F11"
 
 #. Translators: this means WebDriver control.
 #: embed/ephy-embed.c:819
-#, fuzzy
 msgid "Web is being controlled by automation."
-msgstr "Web, artık otomasyonla denetleniyor."
+msgstr "Web otomasyon tarafından denetleniyor."
 
 #: embed/ephy-embed-utils.c:65
 #, c-format
@@ -2054,9 +2086,6 @@ msgstr ""
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:114
 #, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
@@ -2509,7 +2538,6 @@ msgstr "Yeni sekme aç"
 
 #. Translators: tooltip for the page switcher menu button
 #: src/resources/gtk/action-bar.ui:21
-#| msgid "View open tabs"
 msgid "View open pages"
 msgstr "Açık sayfaları gör"
 
@@ -2805,7 +2833,6 @@ msgid "_About Web"
 msgstr "Web _Hakkında"
 
 #: src/resources/gtk/page-row.ui:52
-#| msgid "Home page"
 msgid "Close page"
 msgstr "Sayfayı kapat"
 
@@ -2863,7 +2890,6 @@ msgid "Homepage"
 msgstr "Başlangıç sayfası"
 
 #: src/resources/gtk/prefs-dialog.ui:93
-#| msgid "Most Visited"
 msgid "Most _visited pages"
 msgstr "En çok _ziyaret edilen sayfalar"
 
@@ -3065,9 +3091,6 @@ msgid "Firefox Sync"
 msgstr "Firefox Eşzamanlama"
 
 #: src/resources/gtk/prefs-dialog.ui:1059
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3235,7 +3258,7 @@ msgstr "Geçerli sayfayı yeniden yükle"
 #: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
-msgstr ""
+msgstr "Önbelleği atlayarak yeniden yükle"
 
 #: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
@@ -3455,7 +3478,6 @@ msgstr "Seçili URLʼleri kaldır"
 
 #: src/search-provider/ephy-search-provider.c:196
 #, c-format
-#| msgid "Search the Web for “%s”"
 msgid "Search the web for “%s”"
 msgstr "“%s” için webde ara"
 
