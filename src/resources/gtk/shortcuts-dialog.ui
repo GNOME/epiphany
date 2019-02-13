@@ -6,7 +6,7 @@
       <object class="GtkShortcutsSection">
         <property name="visible">True</property>
         <property name="section-name">shortcuts</property>
-        <property name="max-height">17</property>
+        <property name="max-height">10</property>
 
         <!-- General shortcuts -->
         <child>
@@ -117,6 +117,20 @@
                 <property name="visible">True</property>
                 <property name="title" translatable="yes" context="shortcut window">Go forward to the next page</property>
                 <property name="accelerator">&lt;alt&gt;Right</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
+                <property name="title" translatable="yes" context="shortcut window">Go back to the previous page</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">True</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
+                <property name="title" translatable="yes" context="shortcut window">Go forward to the next page</property>
               </object>
             </child>
           </object>
