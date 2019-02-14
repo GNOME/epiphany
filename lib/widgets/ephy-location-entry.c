@@ -162,7 +162,8 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
   GtkClipboard *clipboard;
   const char *text;
-  char *effective_text = NULL, *selection = NULL;
+  g_autofree char *effective_text = NULL;
+  g_autofree char *selection = NULL;
   int start, end;
 
   g_assert (widget);
@@ -204,7 +205,6 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
 
   dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
   entry->block_update = FALSE;
-  g_free (effective_text);
 
   /* We need to call update_address_state() here, as the 'changed' signal
    * may not get called if the user has typed in the exact correct url */
@@ -216,7 +216,6 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   if (selection != NULL) {
     gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
                             selection, strlen (selection));
-    g_free (selection);
   }
 }
 
@@ -331,7 +330,7 @@ ephy_location_entry_get_preferred_height (GtkWidget *widget,
 static void
 ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
 {
-  char *text;
+  g_autofree char *text = NULL;
   gint start;
   gint end;
 
@@ -341,15 +340,13 @@ ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
 
   if (start == 0) {
-    char *tmp = text;
+    g_autofree char *tmp = text;
     text = ephy_uri_normalize (tmp);
-    g_free (tmp);
   }
 
   gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
                                                     GDK_SELECTION_CLIPBOARD),
                           text, -1);
-  g_free (text);
 }
 
 static void
@@ -704,7 +701,7 @@ button_box_size_allocated_cb (GtkWidget    *widget,
                               gpointer      user_data)
 {
   EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
-  gchar *css;
+  g_autofree gchar *css = NULL;
 
   if (lentry->allocation_width == allocation->width)
     return;
@@ -725,8 +722,6 @@ button_box_size_allocated_cb (GtkWidget    *widget,
                          lentry->allocation_width + 5,
                          lentry->allocation_width);
   gtk_css_provider_load_from_data (lentry->css_provider, css, -1, NULL);
-
-  g_free (css);
 }
 
 static gboolean
@@ -922,12 +917,11 @@ proxy_resolver_ready_cb (GObject      *object,
 {
   PrefetchHelper *helper = user_data;
   GProxyResolver *resolver = G_PROXY_RESOLVER (object);
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   g_auto(GStrv) proxies = NULL;
 
   proxies = g_proxy_resolver_lookup_finish (resolver, result, &error);
   if (error != NULL) {
-    g_error_free (error);
     free_prefetch_helper (helper);
     return;
   }
@@ -1010,7 +1004,7 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
                                     gboolean           notify)
 {
   const char *text, *old_text;
-  char *url = NULL;
+  g_autofree char *url = NULL;
   gboolean retval;
 
   g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
@@ -1025,7 +1019,6 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
   retval = g_str_hash (text) != g_str_hash (old_text);
 
   ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
-  g_free (url);
 
   if (notify) {
     g_signal_emit (entry, signals[USER_CHANGED], 0);
