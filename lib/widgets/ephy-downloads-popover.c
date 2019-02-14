@@ -100,7 +100,8 @@ static void
 download_removed_cb (EphyDownloadsPopover *popover,
                      EphyDownload         *download)
 {
-  GList *children, *l;
+  g_autolist(GList) children = NULL;
+  GList *l;
   EphyDownloadsManager *manager;
 
   children = gtk_container_get_children (GTK_CONTAINER (popover->downloads_box));
@@ -125,7 +126,6 @@ download_removed_cb (EphyDownloadsPopover *popover,
       break;
     }
   }
-  g_list_free (children);
 
   manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
@@ -134,7 +134,8 @@ download_removed_cb (EphyDownloadsPopover *popover,
 static void
 clear_button_clicked_cb (EphyDownloadsPopover *popover)
 {
-  GList *children, *l;
+  g_autolist(GList) children = NULL;
+  GList *l;
   EphyDownloadsManager *manager;
 
   gtk_widget_hide (GTK_WIDGET (popover));
@@ -160,7 +161,6 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
       gtk_widget_destroy (l->data);
     }
   }
-  g_list_free (children);
   gtk_widget_set_sensitive (popover->clear_button, FALSE);
 
   g_signal_handlers_unblock_by_func (manager, download_removed_cb, popover);
