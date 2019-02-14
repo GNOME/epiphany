@@ -58,7 +58,7 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
   WebKitDownload *download;
   const char *dest;
   char *basename;
-  char *decoded;
+  g_autofree char *decoded = NULL;
 
   download = ephy_download_get_webkit_download (ephy_download);
   dest = webkit_download_get_destination (download);
@@ -67,7 +67,6 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
 
   decoded = ephy_uri_decode (dest);
   basename = g_filename_display_basename (decoded);
-  g_free (decoded);
 
   return basename;
 }
@@ -119,7 +118,7 @@ get_remaining_time (guint64 content_length,
 static void
 update_download_icon (EphyDownloadWidget *widget)
 {
-  GIcon *icon;
+  g_autoptr(GIcon) icon = NULL;
   const char *content_type;
 
   content_type = ephy_download_get_content_type (widget->download);
@@ -138,32 +137,28 @@ update_download_icon (EphyDownloadWidget *widget)
     icon = g_icon_new_for_string ("package-x-generic-symbolic", NULL);
 
   gtk_image_set_from_gicon (GTK_IMAGE (widget->icon), icon, GTK_ICON_SIZE_MENU);
-  g_object_unref (icon);
 }
 
 static void
 update_download_destination (EphyDownloadWidget *widget)
 {
-  char *dest;
+  g_autofree char *dest = NULL;
 
   dest = get_destination_basename_from_download (widget->download);
   if (!dest)
     return;
 
   gtk_label_set_label (GTK_LABEL (widget->filename), dest);
-
-  g_free (dest);
 }
 
 static void
 update_status_label (EphyDownloadWidget *widget,
                      const char         *download_label)
 {
-  char *markup;
+  g_autofree char *markup = NULL;
 
   markup = g_markup_printf_escaped ("<span size='small'>%s</span>", download_label);
   gtk_label_set_markup (GTK_LABEL (widget->status), markup);
-  g_free (markup);
 }
 
 static void
@@ -175,7 +170,7 @@ download_progress_cb (WebKitDownload     *download,
   WebKitURIResponse *response;
   guint64 content_length;
   guint64 received_length;
-  char *download_label = NULL;
+  g_autofree char *download_label = NULL;
 
   if (!webkit_download_get_destination (download))
     return;
@@ -187,9 +182,9 @@ download_progress_cb (WebKitDownload     *download,
 
   if (content_length > 0 && received_length > 0) {
     gdouble time;
-    char *remaining;
-    char *received;
-    char *total;
+    g_autofree char *remaining = NULL;
+    g_autofree char *received = NULL;
+    g_autofree char *total = NULL;
 
     received = g_format_size (received_length);
     total = g_format_size (content_length);
@@ -198,9 +193,6 @@ download_progress_cb (WebKitDownload     *download,
                                webkit_download_get_elapsed_time (download));
     remaining = duration_to_string ((guint)time);
     download_label = g_strdup_printf ("%s / %s — %s", received, total, remaining);
-    g_free (received);
-    g_free (total);
-    g_free (remaining);
 
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget->progress),
                                    progress);
@@ -211,7 +203,6 @@ download_progress_cb (WebKitDownload     *download,
 
   if (download_label) {
     update_status_label (widget, download_label);
-    g_free (download_label);
   }
 }
 
@@ -231,7 +222,7 @@ download_failed_cb (EphyDownload       *download,
                     GError             *error,
                     EphyDownloadWidget *widget)
 {
-  char *error_msg;
+  g_autofree char *error_msg = NULL;
 
   g_signal_handlers_disconnect_by_func (download, download_progress_cb, widget);
 
@@ -239,7 +230,6 @@ download_failed_cb (EphyDownload       *download,
 
   error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
   update_status_label (widget, error_msg);
-  g_free (error_msg);
   gtk_image_set_from_icon_name (GTK_IMAGE (gtk_button_get_image (GTK_BUTTON (widget->action_button))),
                                 "list-remove-symbolic",
                                 GTK_ICON_SIZE_MENU);
@@ -398,11 +388,10 @@ ephy_download_widget_constructed (GObject *object)
   gtk_label_set_max_width_chars (GTK_LABEL (widget->status), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->status), PANGO_ELLIPSIZE_END);
   if (ephy_download_failed (widget->download, &error)) {
-    char *error_msg;
+    g_autofree char *error_msg = NULL;
 
     error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
     update_status_label (widget, error_msg);
-    g_free (error_msg);
   } else if (ephy_download_succeeded (widget->download)) {
     update_status_label (widget, _("Finished"));
   } else {
