@@ -104,7 +104,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
   gint preview_width = 0;
   gint preview_height = 0;
   struct g_stat st_buf;
-  g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr(GdkPixbuf) pixbuf = NULL;
 
   GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
                                                               &preview_width,
@@ -150,7 +150,7 @@ ephy_create_file_chooser (const char           *title,
 {
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
-  char *downloads_dir;
+  g_autofree char *downloads_dir = NULL;
   GtkWidget *preview = gtk_image_new ();
 
   g_assert (GTK_IS_WINDOW (parent));
@@ -165,7 +165,6 @@ ephy_create_file_chooser (const char           *title,
 
   downloads_dir = ephy_file_get_downloads_dir ();
   gtk_file_chooser_add_shortcut_folder (dialog, downloads_dir, NULL);
-  g_free (downloads_dir);
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
