@@ -243,12 +243,15 @@ ephy_mouse_gesture_controller_init (EphyMouseGestureController *self)
 void
 ephy_mouse_gesture_controller_unset_web_view (EphyMouseGestureController *self)
 {
-  g_signal_handlers_disconnect_by_func (self->web_view,
-                                        G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb),
-                                        self);
-  g_signal_handlers_disconnect_by_func (self->web_view,
-                                        G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb),
-                                        self);
+  if (self->web_view) {
+    g_signal_handlers_disconnect_by_func (self->web_view,
+                                          G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb),
+                                          self);
+    g_signal_handlers_disconnect_by_func (self->web_view,
+                                          G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb),
+                                          self);
+    g_clear_object (&self->web_view);
+  }
 }
 
 static void
@@ -256,13 +259,8 @@ ephy_mouse_gesture_controller_dispose (GObject *object)
 {
   EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (object);
 
-  if (self->controller != NULL && self->window != NULL)
-    g_signal_handlers_disconnect_by_func (self->controller,
-                                          G_CALLBACK (ephy_mouse_gesture_controller_motion_cb),
-                                          self);
-  ephy_mouse_gesture_controller_unset_web_view (self);
-
   g_clear_object (&self->controller);
+  ephy_mouse_gesture_controller_unset_web_view (self);
 
   G_OBJECT_CLASS (ephy_mouse_gesture_controller_parent_class)->dispose (object);
 }
@@ -314,8 +312,10 @@ void
 ephy_mouse_gesture_controller_set_web_view (EphyMouseGestureController *self,
                                             WebKitWebView              *web_view)
 {
-  g_signal_connect (web_view, "button-press-event", G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb), self);
-  g_signal_connect (web_view, "button-release-event", G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb), self);
+  ephy_mouse_gesture_controller_unset_web_view (self);
 
-  self->web_view = web_view;
+  g_signal_connect_object (web_view, "button-press-event", G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb), self, 0);
+  g_signal_connect_object (web_view, "button-release-event", G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb), self, 0);
+
+  self->web_view = g_object_ref (web_view);
 }
