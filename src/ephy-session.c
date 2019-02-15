@@ -1156,13 +1156,21 @@ session_parse_embed (SessionParserContext *context,
    */
   if ((!was_loading || is_blank_page) && !crashed) {
     EphyNewTabFlags flags;
+    EphyEmbedShell *shell;
+    EphyEmbedShellMode mode;
     EphyEmbed *embed;
     EphyWebView *web_view;
-    gboolean delay_loading;
+    gboolean delay_loading = FALSE;
     WebKitWebViewSessionState *state = NULL;
 
-    delay_loading = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-                                            EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS);
+    shell = ephy_embed_shell_get_default ();
+    mode = ephy_embed_shell_get_mode (shell);
+
+    if (mode == EPHY_EMBED_SHELL_MODE_BROWSER ||
+        mode == EPHY_EMBED_SHELL_MODE_STANDALONE) {
+      delay_loading = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                              EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS);
+    }
 
     flags = EPHY_NEW_TAB_APPEND_LAST;
 
