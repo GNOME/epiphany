@@ -30,8 +30,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-05 17:48+0000\n"
-"PO-Revision-Date: 2019-02-09 15:57-0200\n"
+"POT-Creation-Date: 2019-02-19 12:54+0000\n"
+"PO-Revision-Date: 2019-02-19 20:23-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese - Brazil <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -437,15 +437,19 @@ msgid "Do Not Track"
 msgstr "Não rastrear"
 
 #: data/org.gnome.epiphany.gschema.xml:180
+#| msgid ""
+#| "Enables DNT headers and tracking query parameter removal. Note that when "
+#| "changing this setting from the preferences dialog, the adblock-filters "
+#| "setting will additionally be updated to add/remove EasyPrivacy filters."
 msgid ""
-"Enables DNT headers and tracking query parameter removal. Note that when "
-"changing this setting from the preferences dialog, the adblock-filters "
-"setting will additionally be updated to add/remove EasyPrivacy filters."
+"Enables tracking query parameter removal. Note that when changing this "
+"setting from the preferences dialog, the adblock-filters setting will "
+"additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
-"Habilita remoção de parâmetro de consulta de rastreamento e cabeçalhos de "
-"DNT. Note que ao alterar essa configuração a partir de um diálogo de "
-"preferências, a configuração de filtros de adblock serão atualizados "
-"adicionalmente para adição/remoção de filtros."
+"Habilita remoção de parâmetro de consulta de rastreamento. Note que ao "
+"alterar essa configuração a partir de um diálogo de preferências, a "
+"configuração de filtros de adblock serão atualizados para adição/remoção de "
+"filtros do EasyPrivacy."
 
 #: data/org.gnome.epiphany.gschema.xml:184
 msgid "Enable adblock"
@@ -533,17 +537,14 @@ msgstr ""
 "gesto."
 
 #: data/org.gnome.epiphany.gschema.xml:223
-#| msgid "Select a directory"
 msgid "Last upload directory"
 msgstr "Último diretório de upload"
 
 #: data/org.gnome.epiphany.gschema.xml:224
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
 msgstr "Mantém rastro do último diretório de upload"
 
 #: data/org.gnome.epiphany.gschema.xml:228
-#| msgid "Select a directory"
 msgid "Last download directory"
 msgstr "Último diretório de download"
 
@@ -1726,7 +1727,6 @@ msgid "_OK"
 msgstr "_OK"
 
 #: lib/contrib/gnome-languages.c:713
-#| msgid "None specified"
 msgid "Unspecified"
 msgstr "Não especificado"
 
@@ -1785,7 +1785,6 @@ msgstr "Hoje, %I∶%M %p"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
 #: lib/ephy-time-helpers.c:240
-#| msgid "Today %I∶%M %p"
 msgid "Today %H∶%M"
 msgstr "Hoje, %H∶%M"
 
@@ -1800,7 +1799,6 @@ msgstr "Ontem, %I∶%M %p"
 #. * strftime format. e.g. "Yesterday 15∶34"
 #.
 #: lib/ephy-time-helpers.c:260
-#| msgid "Yesterday %I∶%M %p"
 msgid "Yesterday %H∶%M"
 msgstr "Ontem, %H∶%M"
 
@@ -1815,7 +1813,6 @@ msgstr "%a, %I∶%M %p"
 #. * strftime format. e.g. "Wed 15∶34"
 #.
 #: lib/ephy-time-helpers.c:283
-#| msgid "%a %I∶%M %p"
 msgid "%a %H∶%M"
 msgstr "%a, %H∶%M"
 
@@ -1830,7 +1827,6 @@ msgstr "%d de %b, %I∶%M %p"
 #. * strftime format. e.g. "Feb 12 15∶34"
 #.
 #: lib/ephy-time-helpers.c:302
-#| msgid "%b %d %I∶%M %p"
 msgid "%b %d %H∶%M"
 msgstr "%d de %b, %H∶%M"
 
@@ -2126,9 +2122,6 @@ msgstr ""
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:114
 #, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
@@ -2244,12 +2237,10 @@ msgid "It is not possible to modify history when in incognito mode."
 msgstr "Não é possível modificar o histórico no modo anônimo."
 
 #: src/ephy-main.c:113
-#| msgid "Open a new browser window"
 msgid "Open a new browser window instead of a new tab"
 msgstr "Abre uma nova janela do navegador em vez de uma nova aba"
 
 #: src/ephy-main.c:115
-#| msgid "Load the given session file"
 msgid "Load the given session state file"
 msgstr "Carrega o arquivo de estado de sessão especificado"
 
@@ -2258,27 +2249,22 @@ msgid "FILE"
 msgstr "ARQUIVO"
 
 #: src/ephy-main.c:117
-#| msgid "Start an instance in netbank mode"
 msgid "Start an instance with user data read-only"
 msgstr "Inicia uma instância com dados de usuário somente leitura"
 
 #: src/ephy-main.c:119
-#| msgid "Start a private instance"
 msgid "Start a private instance with separate user data"
 msgstr "Inicia uma instância privativa com dados de usuário separados"
 
 #: src/ephy-main.c:122
-#| msgid "Start the browser in application mode"
 msgid "Start a private instance in web application mode"
 msgstr "Inicia uma instância privativa no modo de aplicativo web"
 
 #: src/ephy-main.c:124
-#| msgid "Start a private instance"
 msgid "Start a private instance for WebDriver control"
 msgstr "Inicia uma instância privativa para controle WebDriver"
 
 #: src/ephy-main.c:126
-#| msgid "Profile directory to use in the private instance"
 msgid "Custom profile directory for private instance"
 msgstr "Diretório de perfil personalizado para instância privativa"
 
@@ -2529,7 +2515,6 @@ msgid "Sans"
 msgstr "Sans"
 
 #: src/prefs-dialog.c:2115
-#| msgid "Serif font:"
 msgid "Serif"
 msgstr "Serif"
 
@@ -2593,7 +2578,6 @@ msgstr "Abre em nova aba"
 
 #. Translators: tooltip for the page switcher menu button
 #: src/resources/gtk/action-bar.ui:21
-#| msgid "View open tabs"
 msgid "View open pages"
 msgstr "Visualiza as páginas abertas"
 
@@ -2762,7 +2746,6 @@ msgid "History"
 msgstr "Histórico"
 
 #: src/resources/gtk/history-dialog.ui:22
-#| msgid "C_lear All"
 msgid "C_lear all"
 msgstr "_Limpar tudo"
 
@@ -2779,37 +2762,30 @@ msgid "_Delete"
 msgstr "E_xcluir"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
-#| msgid "Reload"
 msgid "R_eload"
 msgstr "R_ecarregar"
 
 #: src/resources/gtk/notebook-context-menu.ui:11
-#| msgid "Reload Anyway"
 msgid "Reload _All Tabs"
 msgstr "Recarregar todas _abas"
 
 #: src/resources/gtk/notebook-context-menu.ui:15
-#| msgid "Du_plicate"
 msgid "_Duplicate"
 msgstr "_Duplicar"
 
 #: src/resources/gtk/notebook-context-menu.ui:19
-#| msgid "Reopen Closed _Tab"
 msgid "Reo_pen Closed Tab"
 msgstr "_Reabrir aba fechada"
 
 #: src/resources/gtk/notebook-context-menu.ui:23
-#| msgid "Move Tab _Left"
 msgid "Close Tabs to the _Left"
 msgstr "Fechar abas à e_squerda"
 
 #: src/resources/gtk/notebook-context-menu.ui:27
-#| msgid "Move Tab _Right"
 msgid "Close Tabs to the _Right"
 msgstr "Fechar abas à d_ireita"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
-#| msgid "Close tab"
 msgid "Close _Other Tabs"
 msgstr "Fechar _outras abas"
 
@@ -2862,12 +2838,10 @@ msgid "_History"
 msgstr "_Histórico"
 
 #: src/resources/gtk/page-menu-popover.ui:187
-#| msgid "_Import Bookmarks…"
 msgid "I_mport Bookmarks…"
 msgstr "I_mportar favoritos…"
 
 #: src/resources/gtk/page-menu-popover.ui:195
-#| msgid "_Export Bookmarks…"
 msgid "E_xport Bookmarks…"
 msgstr "E_xportar favoritos…"
 
@@ -2876,12 +2850,10 @@ msgid "Install Site as Web _Application…"
 msgstr "Instalar página como _aplicativo web…"
 
 #: src/resources/gtk/page-menu-popover.ui:220
-#| msgid "Web Application Icon"
 msgid "Open Appli_cation Manager"
 msgstr "Abrir geren_ciador de aplicativo"
 
 #: src/resources/gtk/page-menu-popover.ui:237
-#| msgid "Text Encoding"
 msgid "_Override Text Encoding…"
 msgstr "S_obrescrever codificação de texto"
 
@@ -2898,12 +2870,10 @@ msgid "_Help"
 msgstr "Aj_uda"
 
 #: src/resources/gtk/page-menu-popover.ui:280
-#| msgid "About Web"
 msgid "_About Web"
 msgstr "_Sobre o web"
 
 #: src/resources/gtk/page-row.ui:52
-#| msgid "Home page"
 msgid "Close page"
 msgstr "Fechar página"
 
@@ -2949,12 +2919,10 @@ msgid "Preferences"
 msgstr "Preferências"
 
 #: src/resources/gtk/prefs-dialog.ui:42
-#| msgid "Private Browsing"
 msgid "Browsing"
 msgstr "Navegação"
 
 #: src/resources/gtk/prefs-dialog.ui:56
-#| msgid "Enable smooth scrolling"
 msgid "Enable sm_ooth scrolling"
 msgstr "Habilitar r_olagem suave"
 
@@ -2963,7 +2931,6 @@ msgid "Homepage"
 msgstr "Página inicial"
 
 #: src/resources/gtk/prefs-dialog.ui:93
-#| msgid "Most Visited"
 msgid "Most _visited pages"
 msgstr "Páginas mais _visitadas"
 
@@ -3072,7 +3039,6 @@ msgid "_Edit Stylesheet"
 msgstr "_Editar folha de estilo"
 
 #: src/resources/gtk/prefs-dialog.ui:584
-#| msgid "Default zoom level for new pages"
 msgid "Default zoom level:"
 msgstr "Nível de ampliação padrão:"
 
@@ -3081,7 +3047,6 @@ msgid "Reader Mode"
 msgstr "Modo de leitura"
 
 #: src/resources/gtk/prefs-dialog.ui:644
-#| msgid "Fonts & Style"
 msgid "Font style:"
 msgstr "Estilo da fonte:"
 
@@ -3167,9 +3132,6 @@ msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
 #: src/resources/gtk/prefs-dialog.ui:1059
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3560,7 +3522,6 @@ msgstr "Remover as URLs selecionadas"
 
 #: src/search-provider/ephy-search-provider.c:196
 #, c-format
-#| msgid "Search the Web for “%s”"
 msgid "Search the web for “%s”"
 msgstr "Pesquisar na web por “%s”"
 
@@ -3664,12 +3625,10 @@ msgstr ""
 "Ricardo Silva Veloso <ricvelozo@gmail.com>"
 
 #: src/window-commands.c:619
-#| msgid "Current maintainers:"
 msgid "Current maintainers"
 msgstr "Mantenedores atuais"
 
 #: src/window-commands.c:620
-#| msgid "Past maintainers:"
 msgid "Past maintainers"
 msgstr "Mantenedores anteriores"
 
@@ -3682,7 +3641,6 @@ msgid "Artwork by"
 msgstr "Arte por"
 
 #: src/window-commands.c:623
-#| msgid "Contributors:"
 msgid "Contributors"
 msgstr "Contribuidores"
 
