@@ -125,6 +125,7 @@ if not libhandy_dep.found()
                                                           'glade_catalog=disabled',
                                                           'introspection=disabled',
                                                           'package_subdir=epiphany',
+                                                          'static=true',
                                                           'tests=false',
                                                           'vapi=false']).get_variable('libhandy_dep')
 endif
