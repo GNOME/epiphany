@@ -5,7 +5,7 @@ envs = [
   'GSETTINGS_BACKEND=memory',
 ]
 
-if get_option('unit_tests')
+if get_option('unit_tests').enabled()
   # FIXME: The tests that need ephy-test-utils are all disabled....
   #
   # libephytestutils = static_library('ephytestutils',
@@ -169,7 +169,7 @@ if get_option('unit_tests')
   #      env: envs
   # )
 
-  if get_option('network_tests')
+  if get_option('network_tests').enabled()
     gsb_service_test = executable('test-ephy-gsb-service',
       'ephy-gsb-service-test.c',
       dependencies: ephymain_dep
