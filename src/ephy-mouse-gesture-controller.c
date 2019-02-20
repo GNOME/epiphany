@@ -272,10 +272,8 @@ ephy_mouse_gesture_controller_constructed (GObject *object)
 
   ephy_mouse_gesture_controller_reset (self);
 
-#if GTK_CHECK_VERSION (3, 24, 0)
   self->controller = gtk_event_controller_motion_new (GTK_WIDGET (self->window));
   g_signal_connect (self->controller, "motion", G_CALLBACK (ephy_mouse_gesture_controller_motion_cb), self);
-#endif
 }
 
 static void
