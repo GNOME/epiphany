@@ -8,10 +8,10 @@ For tips for hacking on Epiphany, see the HACKING.md file.
 Please include the following in your issue report:
 
  * Epiphany version
- * WebKitGTK+ version
+ * WebKitGTK version
  * Operating system and version
 
-Check the About dialog if you're not sure what Epiphany or WebKitGTK+ versions
+Check the About dialog if you're not sure what Epiphany or WebKitGTK versions
 you have.
 
 # Web Content Bugs
@@ -22,11 +22,11 @@ issues, web inspector issues, or generally anything at all wrong with a
 website). These problems should all be reported directly on
 [WebKit Bugzilla](https://bugs.webkit.org) instead. The Epiphany developers are
 also WebKit developers, and we will see your WebKit bug reports so long as you
-are careful to select the WebKitGTK+ Bugzilla component when reporting the
+are careful to select the WebKitGTK Bugzilla component when reporting the
 issue. Don't forget! Please also add the `[GTK]` prefix to the title of your
 bug.
 
-In general, only problems with the GTK+ user interface around the web content
+In general, only problems with the GTK user interface around the web content
 view (e.g. menus, preferences dialog, window chrome, history, bookmarks, tabs)
 or Epiphany features (e.g. Firefox Sync, adblocker, password manager, web apps)
 should be reported on Epiphany's GitLab issue tracker.

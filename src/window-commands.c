@@ -587,7 +587,7 @@ window_cmd_show_about (GSimpleAction *action,
   g_key_file_free (key_file);
 
   comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
-                                "Powered by WebKitGTK+ %d.%d.%d"),
+                                "Powered by WebKitGTK %d.%d.%d"),
                               webkit_get_major_version (),
                               webkit_get_minor_version (),
                               webkit_get_micro_version ());

@@ -99,14 +99,14 @@ or more tabs, and each tab is an `EphyEmbed`. That's worth repeating: an
 `EphyWebView` (subclass of `WebKitWebView`). This is the object that actually
 displays the web page, where all the web browser magic happens.
 
-## Important WebKitGTK+ Objects
+## Important WebKitGTK Objects
 
-WebKitGTK+ is a WebKit port that provides a GTK+ API wrapper around WebKit.
+WebKitGTK is a WebKit port that provides a GTK API wrapper around WebKit.
 
 WebKit is really nice. It encapsulates 95% of the complexity of building a web
 browser, like the JavaScript engine, HTML layout engine, and actually rendering
 the webpage. Epiphany only has to deal with the remaining 5%. The most important
-WebKitGTK+ objects are:
+WebKitGTK objects are:
 
  * `WebKitWebView` (superclass of `EphyWebView`). Displays the web.
  * `WebKitWebContext`, a global object that manages shared state among web views.
@@ -118,9 +118,9 @@ expects a `WebKitWebContext`. Do not use WebKit's default `WebKitWebContext`;
 that is, do not pass `NULL` to any `WebKitWebContext *` parameter, and do not
 use `webkit_web_context_get_default()`.
 
-There is separate documentation for the [main WebKitGTK+ API](https://webkitgtk.org/reference/webkit2gtk/unstable/index.html),
-for the [WebKitGTK+ DOM API](https://webkitgtk.org/reference/webkitdomgtk/unstable/index.html),
-and for the [WebKitGTK+ JavaScriptCore API](https://webkitgtk.org/reference/jsc-glib/unstable/index.html).
+There is separate documentation for the [main WebKitGTK API](https://webkitgtk.org/reference/webkit2gtk/unstable/index.html),
+for the [WebKitGTK DOM API](https://webkitgtk.org/reference/webkitdomgtk/unstable/index.html),
+and for the [WebKitGTK JavaScriptCore API](https://webkitgtk.org/reference/jsc-glib/unstable/index.html).
 
 ## Modern WebKit Process Architecture
 
@@ -132,7 +132,7 @@ several subprocesses:
  * One WebKitNetworkProcess, which handles most network requests
  * One or zero WebKitDatabaseProcesses, which handles IndexedDB
 
-In WebKitGTK+, by default each WebKitWebView shares the same WebKitWebProcess.
+In WebKitGTK, by default each WebKitWebView shares the same WebKitWebProcess.
 This can reduce overall resource usage, but it results in a less-stable browser
 as a crash in one tab will crash all other tabs, and the effects of memory leaks
 are greatly amplified. So Epiphany runs a separate WebKitWebProcess for each

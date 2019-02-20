@@ -192,7 +192,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
 #endif
                           version,
                           _("A simple, clean, beautiful view of the web"),
-                          "WebKitGTK+", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
+                          "WebKitGTK", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
   g_free (version);
   if (icon_info)
     g_object_unref (icon_info);

@@ -416,7 +416,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
 
   /* The expected result. */
   url = ephy_history_url_new ("http://www.webkitgtk.org",
-                              "WebKitGTK+",
+                              "WebKitGTK",
                               2, 2, 0);
 
   ephy_history_service_query_urls (service, query, NULL, verify_complex_url_query, url);
