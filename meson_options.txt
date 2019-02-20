@@ -5,8 +5,8 @@ option('developer_mode',
 )
 
 option('network_tests',
-  type: 'boolean',
-  value: false,
+  type: 'feature',
+  value: 'disabled',
   description: 'Enable tests that require network access, if unit_tests are enabled'
 )
 
@@ -17,7 +17,7 @@ option('tech_preview',
 )
 
 option('unit_tests',
-  type: 'boolean',
-  value: true,
+  type: 'feature',
+  value: 'enabled',
   description: 'Enable unit tests'
 )
