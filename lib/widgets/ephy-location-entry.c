@@ -303,9 +303,7 @@ ephy_location_entry_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
 
-#if GTK_CHECK_VERSION(3, 22, 20)
   gtk_entry_set_input_hints (GTK_ENTRY (entry->url_entry), GTK_INPUT_HINT_NO_EMOJI);
-#endif
 }
 
 static void
