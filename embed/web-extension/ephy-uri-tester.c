@@ -359,7 +359,7 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
                                  char          *line,
                                  gboolean       whitelist)
 {
-  char **data;
+  GStrv data;
   char *patt;
   GString *format_patt;
   const char *opts;
@@ -429,7 +429,7 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
                                    const char    *line,
                                    const char    *sep)
 {
-  char **data;
+  GStrv data;
   data = g_strsplit (line, sep, 2);
 
   if (!(data[1] && *data[1])
@@ -441,7 +441,7 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
   }
 
   if (strchr (data[0], ',')) {
-    char **domains;
+    GStrv domains;
     int i;
 
     domains = g_strsplit (data[0], ",", -1);
@@ -632,7 +632,7 @@ static void
 ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
                                                GList         **monitors)
 {
-  char **filters;
+  GStrv filters;
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB_EXTENSION_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
   tester->adblock_filters_to_load = g_strv_length (filters);
