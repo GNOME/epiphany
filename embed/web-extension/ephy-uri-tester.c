@@ -139,8 +139,8 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester *tester,
   char *uri;
   int len;
   int pos = 0;
-  GList *regex_bl = NULL;
-  GString *guri;
+  g_autoptr(GList) regex_bl = NULL;
+  g_autoptr(GString) guri = NULL;
   gboolean ret = FALSE;
   char sig[SIGNATURE_SIZE + 1];
   GHashTable *keys = tester->keys;
@@ -166,8 +166,6 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester *tester,
       break;
     regex_bl = g_list_prepend (regex_bl, regex);
   }
-  g_string_free (guri, TRUE);
-  g_list_free (regex_bl);
   return ret;
 }
 
@@ -289,7 +287,7 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
   GHashTable *keys;
   GHashTable *optslist;
   GRegex *regex;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   char *patt;
   int len;
 
@@ -304,7 +302,6 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
                        G_REGEX_MATCH_NOTEMPTY, &error);
   if (error) {
     g_warning ("%s: %s", G_STRFUNC, error->message);
-    g_error_free (error);
     return;
   }
 
@@ -320,7 +317,7 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
   if (!g_regex_match (tester->regex_pattern, patt, 0, NULL)) {
     int signature_count = 0;
     int pos = 0;
-    char *sig;
+    g_autofree char *sig = NULL;
 
     for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--) {
       sig = g_strndup (patt + pos, SIGNATURE_SIZE);
@@ -338,7 +335,6 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
           g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
         }
       }
-      g_free (sig);
     }
     g_regex_unref (regex);
 
@@ -359,16 +355,14 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
                                  char          *line,
                                  gboolean       whitelist)
 {
-  GStrv data;
+  g_auto(GStrv) data;
   char *patt;
-  GString *format_patt;
+  g_autoptr(GString) format_patt = NULL;
   const char *opts;
 
   data = g_strsplit (line, "$", -1);
-  if (!data || !data[0]) {
-    g_strfreev (data);
+  if (!data || !data[0])
     return;
-  }
 
   if (data[1] && data[2]) {
     patt = g_strconcat (data[0], data[1], NULL);
@@ -386,7 +380,6 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
       g_free (patt);
     if (data[1])
       g_free ((char *)opts);
-    g_strfreev (data);
     return;
   }
 
@@ -403,9 +396,6 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
     g_free (patt);
   if (data[1])
     g_free ((char *)opts);
-  g_strfreev (data);
-
-  g_string_free (format_patt, TRUE);
 }
 
 static inline void
@@ -429,19 +419,18 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
                                    const char    *line,
                                    const char    *sep)
 {
-  GStrv data;
+  g_auto(GStrv) data;
   data = g_strsplit (line, sep, 2);
 
   if (!(data[1] && *data[1])
       || strchr (data[1], '\'')
       || (strchr (data[1], ':')
           && !g_regex_match (tester->regex_frame_add, data[1], 0, NULL))) {
-    g_strfreev (data);
     return;
   }
 
   if (strchr (data[0], ',')) {
-    GStrv domains;
+    g_auto(GStrv) domains;
     int i;
 
     domains = g_strsplit (data[0], ",", -1);
@@ -449,12 +438,10 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
       g_string_append_printf (tester->blockcssprivate, ";sites['%s']+=',%s'",
                               g_strstrip (domains[i]), data[1]);
     }
-    g_strfreev (domains);
   } else {
     g_string_append_printf (tester->blockcssprivate, ";sites['%s']+=',%s'",
                             data[0], data[1]);
   }
-  g_strfreev (data);
 }
 
 static void
@@ -537,14 +524,13 @@ ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
 static void
 file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *tester)
 {
-  char *line;
-  GError *error = NULL;
+  g_autofree char *line = NULL;
+  g_autoptr(GError) error = NULL;
 
   line = g_data_input_stream_read_line_finish (stream, result, NULL, &error);
   if (!line) {
     if (error) {
       g_warning ("Error parsing file: %s\n", error->message);
-      g_error_free (error);
     }
 
     ephy_uri_tester_adblock_loaded (tester);
@@ -552,7 +538,6 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *te
   }
 
   ephy_uri_tester_parse_line (tester, line, FALSE);
-  g_free (line);
 
   g_data_input_stream_read_line_async (stream, G_PRIORITY_DEFAULT_IDLE, NULL,
                                        (GAsyncReadyCallback)file_parse_cb, tester);
@@ -561,29 +546,25 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *te
 static void
 file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
 {
-  GFileInputStream *stream;
-  GDataInputStream *data_stream;
-  GError *error = NULL;
+  g_autoptr(GFileInputStream) stream = NULL;
+  g_autoptr(GDataInputStream) data_stream = NULL;
+  g_autoptr(GError) error = NULL;
 
   stream = g_file_read_finish (file, result, &error);
   if (!stream) {
-    char *path;
+    g_autofree char *path = NULL;
 
     path = g_file_get_path (file);
     g_warning ("Error opening file %s for parsing: %s\n", path, error->message);
-    g_free (path);
-    g_error_free (error);
 
     ephy_uri_tester_adblock_loaded (tester);
     return;
   }
 
   data_stream = g_data_input_stream_new (G_INPUT_STREAM (stream));
-  g_object_unref (stream);
 
   g_data_input_stream_read_line_async (data_stream, G_PRIORITY_DEFAULT_IDLE, NULL,
                                        (GAsyncReadyCallback)file_parse_cb, tester);
-  g_object_unref (data_stream);
 }
 
 static gboolean
@@ -632,17 +613,17 @@ static void
 ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
                                                GList         **monitors)
 {
-  GStrv filters;
+  g_auto(GStrv) filters;
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB_EXTENSION_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
   tester->adblock_filters_to_load = g_strv_length (filters);
   for (guint i = 0; filters[i]; i++) {
-    GFile *filter_file;
+    g_autoptr(GFile) filter_file = NULL;
 
     filter_file = ephy_uri_tester_get_adblock_filter_file (tester->adblock_data_dir, filters[i]);
     if (!g_file_query_exists (filter_file, NULL)) {
       GFileMonitor *monitor;
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
 
       monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
       if (monitor) {
@@ -650,7 +631,6 @@ ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
         g_signal_connect (monitor, "changed", G_CALLBACK (adblock_file_monitor_changed), tester);
       } else {
         g_warning ("Failed to monitor adblock file: %s\n", error->message);
-        g_error_free (error);
         ephy_uri_tester_adblock_loaded (tester);
       }
     } else {
@@ -658,9 +638,7 @@ ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
                          (GAsyncReadyCallback)file_read_cb,
                          tester);
     }
-    g_object_unref (filter_file);
   }
-  g_strfreev (filters);
 }
 
 static void
@@ -847,7 +825,7 @@ ephy_uri_tester_enable_adblock_changed_cb (GSettings     *settings,
 void
 ephy_uri_tester_load (EphyUriTester *tester)
 {
-  GTask *task;
+  g_autoptr(GTask) task = NULL;
   GStrv trash;
 
   g_assert (EPHY_IS_URI_TESTER (tester));
@@ -863,7 +841,6 @@ ephy_uri_tester_load (EphyUriTester *tester)
 
   task = g_task_new (tester, NULL, NULL, NULL);
   g_task_run_in_thread_sync (task, (GTaskThreadFunc)ephy_uri_tester_load_sync);
-  g_object_unref (task);
 
   g_signal_connect (EPHY_SETTINGS_MAIN, "changed::" EPHY_PREFS_ADBLOCK_FILTERS,
                     G_CALLBACK (ephy_uri_tester_adblock_filters_changed_cb), tester);
