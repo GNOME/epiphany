@@ -514,8 +514,23 @@ entry_key_press_cb (GtkEntry          *entry,
 
   if (event->keyval == GDK_KEY_Return ||
       event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter)
+      event->keyval == GDK_KEY_ISO_Enter) {
+
+    if (state == GDK_CONTROL_MASK) {
+      g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
+      gchar *url = g_strstrip (text);
+
+      if (!g_utf8_strchr (url, -1, ' ') && !g_utf8_strchr (url, -1, '.')) {
+        g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
+
+        g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+        gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
+        g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+      }
+    }
+
     ephy_location_entry_activate (location_entry);
+  }
 
   return FALSE;
 }
