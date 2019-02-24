@@ -82,6 +82,19 @@ close_clicked_cb (EphyPageRow *self)
   g_signal_emit (self, signals[CLOSED], 0);
 }
 
+static gboolean
+button_release_event (GtkWidget   *widget,
+                      GdkEvent    *event,
+                      EphyPageRow *self)
+{
+  GdkEventButton *button_event = (GdkEventButton *)event;
+
+  if (button_event->button == GDK_BUTTON_MIDDLE)
+    g_signal_emit (self, signals[CLOSED], 0);
+
+  return FALSE;
+}
+
 static void
 ephy_page_row_class_init (EphyPageRowClass *klass)
 {
@@ -102,6 +115,7 @@ ephy_page_row_class_init (EphyPageRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, title);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, button_release_event);
 }
 
 static void
