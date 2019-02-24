@@ -1,70 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.16 -->
+  <requires lib="gtk+" version="3.16"/>
   <template class="EphyPageRow" parent="GtkListBoxRow">
+    <property name="can_focus">True</property>
     <child>
-      <object class="GtkBox" id="box">
+      <object class="GtkEventBox">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <signal name="button-release-event" handler="button_release_event" swapped="no"/>
         <child>
-          <object class="GtkStack" id="icon_stack">
+          <object class="GtkBox" id="box">
             <property name="visible">True</property>
-            <property name="margin_start">4</property>
-            <property name="margin_end">4</property>
+            <property name="can_focus">False</property>
             <child>
-              <object class="GtkImage" id="icon">
-                <property name="icon_size">1</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSpinner" id="spinner">
-                <property name="visible">True</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="title">
-            <property name="ellipsize">end</property>
-            <property name="halign">start</property>
-            <property name="hexpand">True</property>
-            <property name="single_line_mode">True</property>
-            <property name="valign">center</property>
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="margin_start">4</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkImage" id="speaker_icon">
-            <property name="icon_name">audio-volume-high-symbolic</property>
-            <property name="icon_size">1</property>
-            <property name="visible">True</property>
-            <property name="margin_start">8</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="close_button">
-            <property name="can_focus">True</property>
-            <property name="focus_on_click">False</property>
-            <property name="halign">end</property>
-            <property name="relief">none</property>
-            <property name="tooltip-text" translatable="yes">Close page</property>
-            <property name="valign">center</property>
-            <property name="visible">True</property>
-            <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
-            <style>
-              <class name="flat"/>
-              <class name="image-button"/>
-              <class name="page-row-close-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
+              <object class="GtkStack" id="icon_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon_name">window-close-symbolic</property>
+                <property name="margin_start">4</property>
+                <property name="margin_end">4</property>
+                <child>
+                  <object class="GtkImage" id="icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_size">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSpinner" id="spinner">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="title">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="margin_start">4</property>
+                <property name="hexpand">True</property>
+                <property name="ellipsize">end</property>
+                <property name="single_line_mode">True</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="speaker_icon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_start">8</property>
+                <property name="icon_name">audio-volume-high-symbolic</property>
                 <property name="icon_size">1</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="close_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="focus_on_click">False</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">Close page</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="relief">none</property>
+                <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">window-close-symbolic</property>
+                    <property name="icon_size">1</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="flat"/>
+                  <class name="image-button"/>
+                  <class name="page-row-close-button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
             </child>
           </object>
         </child>
