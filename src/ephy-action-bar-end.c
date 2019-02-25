@@ -44,6 +44,8 @@ struct _EphyActionBarEnd {
 
 G_DEFINE_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
 
+static void begin_complete_theatrics (EphyActionBarEnd *self);
+
 static void
 remove_downloads_button_attention_style (EphyActionBarEnd *self)
 {
@@ -123,11 +125,71 @@ download_added_cb (EphyDownloadsManager *manager,
   }
 }
 
+static gboolean
+begin_complete_theatrics_from_main (gpointer user_data)
+{
+  EphyActionBarEnd *self = user_data;
+  GtkAllocation rect;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self->downloads_button), &rect);
+  if (rect.x != -1 && rect.y != -1)
+    begin_complete_theatrics (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+begin_complete_theatrics (EphyActionBarEnd *self)
+{
+  g_autoptr(GIcon) icon = NULL;
+  DzlBoxTheatric *theatric;
+  GtkAllocation rect;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self->downloads_button), &rect);
+
+  if (rect.x == -1 && rect.y == -1) {
+    /* Delay this until our widget has been mapped/realized/displayed */
+    gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                               begin_complete_theatrics_from_main,
+                               g_object_ref (self), g_object_unref);
+    return;
+  }
+
+  rect.x = 0;
+  rect.y = 0;
+
+  icon = g_themed_icon_new ("folder-download-symbolic");
+
+  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
+                           "alpha", 1.0,
+                           "height", rect.height,
+                           "icon", icon,
+                           "target", self,
+                           "width", rect.width,
+                           "x", rect.x,
+                           "y", rect.y,
+                           NULL);
+
+  dzl_object_animate_full (theatric,
+                           DZL_ANIMATION_EASE_OUT_CUBIC,
+                           750,
+                           gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                           g_object_unref,
+                           theatric,
+                           "x", rect.x - 60,
+                           "width", rect.width + 120,
+                           "y", rect.y,
+                           "height", rect.height + 120,
+                           "alpha", 0.0,
+                           NULL);
+}
+
 static void
 download_completed_cb (EphyDownloadsManager *manager,
                        EphyDownload         *download,
                        EphyActionBarEnd     *action_bar_end)
 {
+  begin_complete_theatrics (action_bar_end);
 }
 
 static void
