@@ -50,7 +50,7 @@ struct _EphyHistoryDialog {
 
   GtkWidget *listbox;
   GtkWidget *forget_all_button;
-  GtkWidget *popover_menu;
+  GtkWidget *popup_menu;
 
   GActionGroup *action_group;
 
@@ -565,27 +565,31 @@ on_listbox_button_press_event (GtkWidget         *widget,
                                GdkEventButton    *event,
                                EphyHistoryDialog *self)
 {
-  if (event->button == 3) {
-    GList *rows = gtk_list_box_get_selected_rows ( GTK_LIST_BOX (self->listbox));
+  if (event->button == GDK_BUTTON_SECONDARY) {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), event->y);
+    GList *rows = NULL;
+    guint state = event->state & gtk_accelerator_get_default_mod_mask ();
     int n;
 
+    if (!row)
+      return GDK_EVENT_PROPAGATE;
+
+    if (state != GDK_CONTROL_MASK)
+      gtk_list_box_unselect_all (GTK_LIST_BOX (self->listbox));
+
+    gtk_list_box_select_row (GTK_LIST_BOX (self->listbox), row);
+    rows = gtk_list_box_get_selected_rows (GTK_LIST_BOX (self->listbox));
     n = g_list_length (rows);
+    g_list_free (rows);
 
-    if (n <= 0) {
-      g_list_free (rows);
+    update_popup_menu_actions (self->action_group, n == 1);
 
-      return FALSE;
-    }
+    gtk_menu_popup_at_pointer (GTK_MENU (self->popup_menu), (GdkEvent *)event);
 
-    update_popup_menu_actions (self->action_group, (n == 1));
-
-    gtk_popover_set_relative_to (GTK_POPOVER (self->popover_menu), GTK_WIDGET (rows->data));
-    gtk_popover_popup (GTK_POPOVER (self->popover_menu));
-
-    return TRUE;
+    return GDK_EVENT_STOP;
   }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 
@@ -740,7 +744,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
                                                "/org/gnome/epiphany/gtk/history-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, forget_all_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, popover_menu);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, popup_menu);
 
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_selected);
@@ -798,6 +802,8 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (self->listbox), box_header_func, NULL, NULL);
   ephy_gui_ensure_window_group (GTK_WINDOW (self));
+
+  gtk_menu_attach_to_widget (GTK_MENU (self->popup_menu), GTK_WIDGET (self), NULL);
 
   self->action_group = create_action_group (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "history", self->action_group);
