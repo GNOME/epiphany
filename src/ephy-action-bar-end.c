@@ -93,6 +93,7 @@ download_added_cb (EphyDownloadsManager *manager,
   }
 
   add_attention (action_bar_end);
+  gtk_widget_set_visible (action_bar_end->downloads_revealer, TRUE);
   gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), TRUE);
   gtk_widget_queue_draw (action_bar_end->downloads_image);
 
@@ -135,8 +136,10 @@ download_removed_cb (EphyDownloadsManager *manager,
                      EphyDownload         *download,
                      EphyActionBarEnd     *action_bar_end)
 {
-  if (!ephy_downloads_manager_get_downloads (manager))
+  if (!ephy_downloads_manager_get_downloads (manager)) {
+    gtk_widget_set_visible (action_bar_end->downloads_revealer, FALSE);
     gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), FALSE);
+  }
 }
 
 static void
@@ -182,6 +185,7 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
+  gtk_widget_set_visible (action_bar_end->downloads_revealer, ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
   gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer),
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
 
