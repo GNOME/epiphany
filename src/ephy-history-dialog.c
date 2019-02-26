@@ -34,6 +34,7 @@
 #include "ephy-time-helpers.h"
 #include "ephy-window.h"
 
+#include <ctype.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -51,6 +52,8 @@ struct _EphyHistoryDialog {
   GtkWidget *listbox;
   GtkWidget *forget_all_button;
   GtkWidget *popover_menu;
+  GtkWidget *search_bar;
+  GtkWidget *search_button;
 
   GActionGroup *action_group;
 
@@ -516,6 +519,26 @@ on_search_entry_changed (GtkSearchEntry    *entry,
   filter_now (self);
 }
 
+static gboolean
+on_key_press_event (EphyHistoryDialog *self,
+                    GdkEvent          *event,
+                    gpointer           user_data)
+{
+  GdkEventKey *key = (GdkEventKey *)event;
+  gint ret;
+
+  ret = gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->search_bar), event);
+
+  if (ret != GDK_EVENT_STOP) {
+    if (key->keyval == GDK_KEY_Escape)
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+    else if (isprint (key->keyval))
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), TRUE);
+  }
+
+  return ret;
+}
+
 static void
 update_selection_actions (GActionGroup *action_group,
                           gboolean      has_selection)
@@ -741,11 +764,14 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, forget_all_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, popover_menu);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_button_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_key_press_event);
+  gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_edge_reached);
 }
