@@ -3,6 +3,11 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-find-symbolic</property>
+  </object>
   <template class="EphyHistoryDialog" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
@@ -11,6 +16,7 @@
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
@@ -31,6 +37,19 @@
             </style>
           </object>
         </child>
+        <child>
+          <object class="GtkToggleButton" id="search_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">image1</property>
+            <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child>
@@ -39,10 +58,10 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkSearchBar">
+          <object class="GtkSearchBar" id="search_bar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="search_mode_enabled">True</property>
+            <property name="search_mode_enabled">False</property>
             <child>
               <object class="GtkSearchEntry">
                 <property name="width_request">280</property>
