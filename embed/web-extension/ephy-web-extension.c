@@ -191,10 +191,10 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
 {
   EphyWebExtension *extension;
   gboolean form_submit_handled;
-  JSCContext *js_context;
-  JSCValue *js_ephy;
-  JSCValue *js_form;
-  JSCValue *js_result;
+  g_autoptr(JSCContext) js_context = NULL;
+  g_autoptr(JSCValue) js_ephy = NULL;
+  g_autoptr(JSCValue) js_form = NULL;
+  g_autoptr(JSCValue) js_result = NULL;
 
   form_submit_handled =
     GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dom_form),
@@ -215,10 +215,6 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
                                               JSC_TYPE_VALUE, js_form,
                                               G_TYPE_NONE);
-  g_object_unref (js_result);
-  g_object_unref (js_form);
-  g_object_unref (js_ephy);
-  g_object_unref (js_context);
 }
 
 static char *
@@ -241,11 +237,11 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                    EphyWebExtension *extension)
 {
   WebKitFrame *frame;
-  GPtrArray *form_controls;
-  JSCContext *js_context;
-  JSCValue *js_ephy;
-  JSCValue *js_serializer;
-  JSCValue *js_result;
+  g_autoptr(GPtrArray) form_controls = NULL;
+  g_autoptr(JSCContext) js_context = NULL;
+  g_autoptr(JSCValue) js_ephy = NULL;
+  g_autoptr(JSCValue) js_serializer = NULL;
+  g_autoptr(JSCValue) js_result = NULL;
   gboolean remember_passwords;
   guint i;
 
@@ -274,11 +270,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                               JSC_TYPE_VALUE, js_serializer,
                                               G_TYPE_BOOLEAN, remember_passwords,
                                               G_TYPE_NONE);
-  g_object_unref (js_result);
-  g_ptr_array_unref (form_controls);
-  g_object_unref (js_serializer);
-  g_object_unref (js_ephy);
-  g_object_unref (js_context);
 }
 
 static gboolean
@@ -288,11 +279,11 @@ web_page_context_menu (WebKitWebPage          *web_page,
                        gpointer                user_data)
 {
   EphyWebExtension *extension;
-  char *string = NULL;
+  g_autofree char *string = NULL;
   GVariantBuilder builder;
   WebKitFrame *frame;
-  JSCContext *js_context;
-  JSCValue *js_value;
+  g_autoptr(JSCContext) js_context = NULL;
+  g_autoptr(JSCValue) js_value = NULL;
 
   extension = ephy_web_extension_get ();
   frame = webkit_web_page_get_main_frame (web_page);
@@ -301,21 +292,14 @@ web_page_context_menu (WebKitWebPage          *web_page,
   js_value = jsc_context_evaluate (js_context, "window.getSelection().toString();", -1);
   if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
     string = jsc_value_to_string (js_value);
-  g_object_unref (js_value);
 
-  g_object_unref (js_context);
-
-  if (!string || *string == '\0') {
-    g_free (string);
+  if (!string || *string == '\0')
     return FALSE;
-  }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
   g_variant_builder_add (&builder, "{sv}", "SelectedText", g_variant_new_string (g_strstrip (string)));
   webkit_context_menu_set_user_data (context_menu,
                                      g_variant_builder_end (&builder));
-
-  g_free (string);
 
   return TRUE;
 }
@@ -324,7 +308,7 @@ static void
 ephy_web_extension_emit_page_created (EphyWebExtension *extension,
                                       guint64           page_id)
 {
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_dbus_connection_emit_signal (extension->dbus_connection,
                                  NULL,
@@ -333,10 +317,8 @@ ephy_web_extension_emit_page_created (EphyWebExtension *extension,
                                  "PageCreated",
                                  g_variant_new ("(t)", page_id),
                                  &error);
-  if (error) {
+  if (error)
     g_warning ("Error emitting signal PageCreated: %s\n", error->message);
-    g_error_free (error);
-  }
 }
 
 static void
@@ -372,11 +354,10 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
                                     WebKitWebPage    *web_page)
 {
   guint64 page_id;
-  JSCContext *js_context;
+  g_autoptr(JSCContext) js_context = NULL;
 
   /* Enforce the creation of the script world global context in the main frame */
   js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
-  g_object_unref (js_context);
 
   page_id = webkit_web_page_get_id (web_page);
   if (extension->dbus_connection)
@@ -401,14 +382,20 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
 static JSCValue *
 get_password_manager (EphyWebExtension *self, guint64 page_id)
 {
-  WebKitWebPage *page = webkit_web_extension_get_page (self->extension, page_id);
+  WebKitWebPage *page;
+  WebKitFrame *frame;
+  g_autoptr(JSCContext) js_context = NULL;
+  g_autoptr(JSCValue) js_ephy = NULL;
+
+  page = webkit_web_extension_get_page (self->extension, page_id);
   if (page == NULL)
     return NULL;
-  WebKitFrame *frame = webkit_web_page_get_main_frame (page);
-  JSCContext *context = webkit_frame_get_js_context_for_script_world (frame,
-                          self->script_world);
-  g_autoptr(JSCValue) ephy = jsc_context_get_value (context, "Ephy");
-  return jsc_value_object_get_property (ephy, "passwordManager");
+
+  frame = webkit_web_page_get_main_frame (page);
+  js_context = webkit_frame_get_js_context_for_script_world (frame, self->script_world);
+  js_ephy = jsc_context_get_value (js_context, "Ephy");
+
+  return jsc_value_object_get_property (js_ephy, "passwordManager");
 }
 
 static void
@@ -429,7 +416,7 @@ handle_method_call (GDBusConnection       *connection,
   if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
     if (extension->overview_model) {
       GVariantIter iter;
-      GVariant *array;
+      g_autoptr(GVariant) array = NULL;
       const char *url;
       const char *title;
       GList *items = NULL;
@@ -439,7 +426,6 @@ handle_method_call (GDBusConnection       *connection,
 
       while (g_variant_iter_loop (&iter, "(&s&s)", &url, &title))
         items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
-      g_variant_unref (array);
 
       ephy_web_overview_model_set_urls (extension->overview_model, g_list_reverse (items));
     }
@@ -485,6 +471,7 @@ handle_method_call (GDBusConnection       *connection,
   } else if (g_strcmp0 (method_name, "PasswordQueryUsernamesResponse") == 0) {
     g_autofree const char **users;
     g_autoptr(JSCValue) ret = NULL;
+    g_autoptr(JSCValue) password_manager = NULL;
     gint32 promise_id;
     guint64 page_id;
 
@@ -492,7 +479,7 @@ handle_method_call (GDBusConnection       *connection,
     g_variant_get_child (parameters, 1, "i", &promise_id);
     g_variant_get_child (parameters, 2, "t", &page_id);
 
-    g_autoptr(JSCValue) password_manager = get_password_manager (extension, page_id);
+    password_manager = get_password_manager (extension, page_id);
     if (password_manager != NULL)
       ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
                                             G_TYPE_STRV, users, G_TYPE_INT, promise_id, G_TYPE_NONE);
@@ -502,10 +489,10 @@ handle_method_call (GDBusConnection       *connection,
     gint32 promise_id;
     guint64 page_id;
     g_autoptr(JSCValue) ret = NULL;
-
+    g_autoptr(JSCValue) password_manager = NULL;
 
     g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &page_id);
-    g_autoptr(JSCValue) password_manager = get_password_manager (extension, page_id);
+    password_manager = get_password_manager (extension, page_id);
     if (password_manager != NULL)
       ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
                                             G_TYPE_STRING, username,
@@ -574,9 +561,9 @@ dbus_connection_created_cb (GObject          *source_object,
                             EphyWebExtension *extension)
 {
   static GDBusNodeInfo *introspection_data = NULL;
-  GDBusConnection *connection;
+  g_autoptr(GDBusConnection) connection = NULL;
   guint registration_id;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!introspection_data)
     introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
@@ -584,7 +571,6 @@ dbus_connection_created_cb (GObject          *source_object,
   connection = g_dbus_connection_new_for_address_finish (result, &error);
   if (error) {
     g_warning ("Failed to connect to UI process: %s", error->message);
-    g_error_free (error);
     return;
   }
 
@@ -598,8 +584,6 @@ dbus_connection_created_cb (GObject          *source_object,
                                        &error);
   if (!registration_id) {
     g_warning ("Failed to register web extension object: %s\n", error->message);
-    g_error_free (error);
-    g_object_unref (connection);
     return;
   }
 
@@ -654,13 +638,11 @@ static void
 js_exception_handler (JSCContext   *context,
                       JSCException *exception)
 {
-  JSCValue *js_console;
-  JSCValue *js_result;
+  g_autoptr(JSCValue) js_console = NULL;
+  g_autoptr(JSCValue) js_result = NULL;
 
   js_console = jsc_context_get_value (context, "console");
   js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
-  g_object_unref (js_result);
-  g_object_unref (js_console);
 
   g_warning ("JavaScriptException: %s", jsc_exception_get_message (exception));
 
@@ -674,12 +656,12 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                           EphyWebExtension  *extension)
 {
   JSCContext *js_context;
-  GBytes *bytes;
+  g_autoptr(GBytes) bytes = NULL;
   const char* data;
   gsize data_size;
-  JSCValue *js_ephy;
-  JSCValue *js_function;
-  JSCValue *result;
+  g_autoptr(JSCValue) js_ephy = NULL;
+  g_autoptr(JSCValue) js_function = NULL;
+  g_autoptr(JSCValue) result = NULL;
 
   if (!webkit_frame_is_main_frame (frame))
     return;
@@ -690,8 +672,8 @@ window_object_cleared_cb (WebKitScriptWorld *world,
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/ephy.js", 1);
-  g_bytes_unref (bytes);
-  g_object_unref (result);
+  g_clear_pointer (&bytes, g_bytes_unref);
+  g_clear_object (&result);
 
   js_ephy = jsc_context_get_value (js_context, "Ephy");
 
@@ -701,7 +683,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_NONE, 1,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_ephy, "log", js_function);
-  g_object_unref (js_function);
+  g_clear_object (&js_function);
 
   js_function = jsc_value_new_function (js_context,
                                         "gettext",
@@ -709,18 +691,18 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_STRING, 1,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_ephy, "_", js_function);
-  g_object_unref (js_function);
+  g_clear_object (&js_function);
 
   if (g_strcmp0 (webkit_web_page_get_uri (page), "ephy-about:overview") == 0) {
-    JSCValue *js_overview;
-    JSCValue *js_overview_ctor;
-    JSCValue *jsc_overview_model;
+    g_autoptr(JSCValue) js_overview = NULL;
+    g_autoptr(JSCValue) js_overview_ctor = NULL;
+    g_autoptr(JSCValue) jsc_overview_model = NULL;
 
     bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/overview.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
     data = g_bytes_get_data (bytes, &data_size);
     result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/overview.js", 1);
-    g_bytes_unref (bytes);
-    g_object_unref (result);
+    g_clear_pointer (&bytes, g_bytes_unref);
+    g_clear_object (&result);
 
     jsc_overview_model = ephy_web_overview_model_export_to_js_context (extension->overview_model,
                                                                        js_context);
@@ -730,10 +712,6 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                               JSC_TYPE_VALUE, jsc_overview_model,
                                               G_TYPE_NONE);
     jsc_value_object_set_property (js_ephy, "overview", js_overview);
-
-    g_object_unref (js_overview);
-    g_object_unref (jsc_overview_model);
-    g_object_unref (js_overview_ctor);
   }
 
   ephy_permissions_manager_export_to_js_context (extension->permissions_manager,
@@ -755,7 +733,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                           G_TYPE_NONE, 2,
                                           JSC_TYPE_VALUE, G_TYPE_STRING);
     jsc_value_object_set_property (js_ephy, "autoFill", js_function);
-    g_object_unref (js_function);
+    g_clear_object (&js_function);
   }
 
   js_function = jsc_value_new_function (js_context,
@@ -764,7 +742,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_BOOLEAN, 0,
                                         G_TYPE_NONE);
   jsc_value_object_set_property (js_ephy, "isWebApplication", js_function);
-  g_object_unref (js_function);
+  g_clear_object (&js_function);
 
   js_function = jsc_value_new_function (js_context,
                                         "isEdited",
@@ -772,10 +750,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_BOOLEAN, 1,
                                         JSC_TYPE_VALUE);
   jsc_value_object_set_property (js_ephy, "isEdited", js_function);
-  g_object_unref (js_function);
-
-  g_object_unref (js_ephy);
-  g_object_unref (js_context);
+  g_clear_object (&js_function);
 }
 
 void
@@ -787,7 +762,7 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                gboolean            is_private_profile,
                                gboolean            is_browser_mode)
 {
-  GDBusAuthObserver *observer;
+  g_autoptr(GDBusAuthObserver) observer = NULL;
 
   g_assert (EPHY_IS_WEB_EXTENSION (extension));
 
@@ -822,7 +797,6 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                      NULL,
                                      (GAsyncReadyCallback)dbus_connection_created_cb,
                                      extension);
-  g_object_unref (observer);
 
   extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
 }
