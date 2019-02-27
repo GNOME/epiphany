@@ -700,11 +700,24 @@ button_box_size_allocated_cb (GtkWidget    *widget,
 {
   EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   g_autofree gchar *css = NULL;
+  GtkStyleContext *style_context;
+  GtkTextDirection text_direction;
+  GtkStateFlags state_flags;
+  GtkBorder padding;
 
   if (lentry->allocation_width == allocation->width)
     return;
 
   lentry->allocation_width = allocation->width;
+  style_context = gtk_widget_get_style_context (widget);
+  text_direction = gtk_widget_get_direction (widget);
+
+  if (text_direction == GTK_TEXT_DIR_RTL)
+    state_flags = GTK_STATE_FLAG_DIR_RTL;
+  else
+    state_flags = GTK_STATE_FLAG_DIR_LTR;
+
+  gtk_style_context_get_padding (style_context, state_flags, &padding);
 
   /* We are using the CSS provider here to solve UI displaying issues:
    *  - padding-right is used to prevent text below the icons on the right side
@@ -716,8 +729,11 @@ button_box_size_allocated_cb (GtkWidget    *widget,
    * FIXME: Loading CSS during size_allocate is ILLEGAL and BROKEN.
    */
   css = g_strdup_printf (".url_entry { padding-right: %dpx; }"\
+                         ".url_entry:dir(rtl) { padding-left: %dpx; padding-right: %dpx; }"\
                          ".url_entry progress { margin-right: -%dpx; }",
                          lentry->allocation_width + 5,
+                         lentry->allocation_width + 5,
+                         padding.right + 10,
                          lentry->allocation_width);
   gtk_css_provider_load_from_data (lentry->css_provider, css, -1, NULL);
 }
