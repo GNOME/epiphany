@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-19 12:54+0000\n"
-"PO-Revision-Date: 2019-02-19 20:25+0100\n"
+"POT-Creation-Date: 2019-02-26 20:53+0000\n"
+"PO-Revision-Date: 2019-02-27 19:35+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -180,18 +180,51 @@ msgstr ""
 "nie będą wczytywane, dopóki użytkownik nie przełączy na nie."
 
 #: data/org.gnome.epiphany.gschema.xml:60
+msgid "Process model"
+msgstr "Model procesów"
+
+#: data/org.gnome.epiphany.gschema.xml:61
+msgid ""
+"This option allows to set the process model used. Use “shared-secondary-"
+"process” to use a single web process shared by all the tabs and “one-"
+"secondary-process-per-web-view” to use a different web process for each tab."
+msgstr ""
+"Ta opcja umożliwia ustawienie modelu procesów. Należy użyć „shared-secondary-"
+"process”, aby jeden proces sieciowy był współdzielony przez wszystkie karty, "
+"a „one-secondary-process-per-web-view”, aby na każdą kartę użyty został inny "
+"proces sieciowy."
+
+#: data/org.gnome.epiphany.gschema.xml:65
+msgid ""
+"Maximum number of web processes created at the same time when using “one-"
+"secondary-process-per-web-view” model"
+msgstr ""
+"Maksymalna liczba procesów sieciowych tworzonych w tym samym czasie podczas "
+"używania modelu „one-secondary-process-per-web-view”"
+
+#: data/org.gnome.epiphany.gschema.xml:66
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the “one-secondary-process-per-web-view” model. The "
+"default value is “0” and means no limit."
+msgstr ""
+"Ta opcja ustawia ograniczenie liczby procesów sieciowych używanych w tym "
+"samym czasie dla modelu „one-secondary-process-per-web-view”. Domyślna "
+"wartość „0” oznacza brak ograniczenia."
+
+#: data/org.gnome.epiphany.gschema.xml:71
 msgid "List of adblock filters"
 msgstr "Lista filtrów blokowania reklam"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr "Lista adresów z regułami filtrowania używanymi do blokowania reklam."
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Rozszerzanie kart, aby wypełniały dostępne miejsce na pasku kart."
 
-#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -199,11 +232,11 @@ msgstr ""
 "Jeśli jest włączone, karty będą rozszerzane tak, aby używały całego "
 "dostępnego wolnego miejsca na pasku kart."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The position of the tabs bar."
 msgstr "Położenie paska kart."
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -213,11 +246,11 @@ msgstr ""
 "„top” (góra, domyślne), „bottom” (dół), „left” (pionowy pasek po lewej) "
 "i „right” (pionowy pasek po prawej)."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "Polityka widoczności paska kart."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -228,21 +261,21 @@ msgstr ""
 "wyświetlany tylko, jeśli otwarte są dwie lub więcej kart) i „never” (pasek "
 "nigdy nie jest wyświetlany)."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
 msgstr "Bez zamykania okna po zamknięciu ostatniej karty"
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Jeśli jest włączone, to okno programu nie jest zamykane po zamknięciu "
 "ostatniej karty."
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
 msgstr "Styl czcionki artykułów w trybie zwiększonej czytelności."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -250,11 +283,11 @@ msgstr ""
 "Wybiera styl głównego tekstu artykułów w trybie zwiększonej czytelności. "
 "Możliwe wartości to „sans” (bezszeryfowa) i „serif” (szeryfowa)."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
 msgstr "Schemat kolorów trybu zwiększonej czytelności."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -264,23 +297,23 @@ msgstr ""
 "czytelności. Możliwe wartości to „light” (ciemny tekst na jasnym tle) "
 "i „dark” (jasny tekst na ciemnym tle)."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "Minimalny rozmiar czcionki"
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "Użycie czcionek środowiska GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "Używa ustawień czcionki środowiska GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "Niestandardowa czcionka bezszeryfowa"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -288,11 +321,11 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki bezszeryfowej środowiska, kiedy "
 "ustawiona jest opcja „use-gnome-fonts”."
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "Niestandardowa czcionka szeryfowa"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -300,11 +333,11 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki szeryfowej środowiska, kiedy "
 "ustawiona jest opcja „use-gnome-fonts”."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "Niestandardowa czcionka o stałej szerokości"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -312,50 +345,50 @@ msgstr ""
 "Wartość używana do zastąpienia czcionki o stałej szerokości środowiska, "
 "kiedy ustawiona jest opcja „use-gnome-fonts”."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "Użycie niestandardowych stylów CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Używa niestandardowego pliku stylów CSS, aby zmodyfikować styl strony."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Sprawdzanie pisowni"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr "Sprawdza pisownię tekstu wpisanego w pola tekstowe."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Domyślne kodowanie"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Domyślne kodowanie. Przyjmowane są tylko wartości, które rozpoznaje "
-"biblioteka WebKitGTK+."
+"biblioteka WebKitGTK."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:151
 #: src/resources/gtk/prefs-dialog.ui:910
 msgid "Languages"
 msgstr "Języki"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Preferowane języki. Tablica kodów lokalizacji lub wartość „system”, aby "
 "używać bieżącej lokalizacji."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Cookie accept"
 msgstr "Przyjmowanie ciasteczek"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -364,50 +397,50 @@ msgstr ""
 "wszystkich ciasteczek), „no-third-party” (nieprzyjmowanie ciasteczek od "
 "podmiotów zewnętrznych) i „never” (nieprzyjmowanie wszystkich ciasteczek)."
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Zezwalanie na otwieranie wyskakujących okien"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Zezwala stronom na otwieranie nowych okien za pomocą języka JavaScript "
 "(jeśli jest włączony)."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable Plugins"
 msgstr "Obsługa wtyczek"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Enable WebGL"
 msgstr "Obsługa WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Czy włączyć obsługę kontekstów WebGL."
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Enable WebAudio"
 msgstr "Obsługa protokołu WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Whether to enable support for WebAudio."
 msgstr "Czy włączyć obsługę protokołu WebAudio."
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable smooth scrolling"
 msgstr "Płynne przewijanie"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Whether to enable smooth scrolling."
 msgstr "Czy włączyć płynne przewijanie."
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "User agent"
 msgstr "Agent użytkownika"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -415,11 +448,11 @@ msgstr ""
 "Ciąg używany jako agent użytkownika do identyfikacji przeglądarki przez "
 "serwery."
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Do Not Track"
 msgstr "Bez śledzenia"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
 "Enables tracking query parameter removal. Note that when changing this "
 "setting from the preferences dialog, the adblock-filters setting will "
@@ -429,29 +462,29 @@ msgstr ""
 "że ustawienie tego z okna preferencji spowoduje także zaktualizowanie "
 "ustawienia filtrów blokowania reklam, aby dodać/usunąć filtry EasyPrivacy."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Enable adblock"
 msgstr "Blokowanie reklam"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Czy blokować osadzone reklamy na stronach."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Remember passwords"
 msgstr "Zapamiętywanie haseł"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Czy przechowywać i wypełniać hasła na stronach."
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable site-specific quirks"
 msgstr "Ustawienia zgodności dla pewnych stron"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -459,11 +492,11 @@ msgstr ""
 "Włącza ustawienia zgodności, aby pewne strony lepiej działały. Należy to "
 "wyłączyć podczas debugowania problemów."
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable safe browsing"
 msgstr "Bezpieczne przeglądanie"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -471,25 +504,25 @@ msgstr ""
 "Czy włączyć bezpieczne przeglądanie, działające przez czwartą wersję API "
 "bezpiecznego przeglądania Google."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Google Safe Browsing API key"
 msgstr "Klucz API bezpiecznego przeglądania Google"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
 "Klucz API używany do dostępu do czwartej wersji API bezpiecznego "
 "przeglądania Google."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Default zoom level for new pages"
 msgstr "Domyślny poziom powiększenia nowych stron"
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid "Enable autosearch"
 msgstr "Automatyczne wyszukiwanie"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -501,11 +534,11 @@ msgstr ""
 "będzie wczytywane jako adres, chyba że z rozwijanego menu wybrano "
 "wyszukiwarkę."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid "Enable mouse gesture"
 msgstr "Gesty myszy"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -513,27 +546,27 @@ msgstr ""
 "Czy włączyć gesty myszą. Są oparte na zachowaniu przeglądarki Opera. Włącza "
 "się je za pomocą środkowego przycisku myszy i gestu."
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Last upload directory"
 msgstr "Ostatni katalog wysyłania"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Keep track of last upload directory"
 msgstr "Pamiętanie ostatniego katalogu wysyłania"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Last download directory"
 msgstr "Ostatni katalog pobierania"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Keep track of last download directory"
 msgstr "Pamiętanie ostatniego katalogu pobierania"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Hardware acceleration policy"
 msgstr "Zasada przyspieszenia sprzętowego"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -550,19 +583,19 @@ msgstr ""
 "to „on-demand”, to przyspieszenie sprzętowe będzie używane tylko wtedy, "
 "kiedy jest wymagane do wyświetlania przekształceń 3D."
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid "Web application additional URLs"
 msgstr "Dodatkowe adresy programu WWW"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Lista adresów otwieranych przez program WWW"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "The downloads folder"
 msgstr "Katalog pobierania"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -571,11 +604,11 @@ msgstr ""
 "spowoduje użycie domyślnego katalogu pobierania, a wartość „Desktop” "
 "spowoduje użyciu katalogu pulpitu."
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:266
 msgid "Window position"
 msgstr "Położenie okna"
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -583,11 +616,11 @@ msgstr ""
 "Położenie używane dla nowego okna, które nie zostało przywrócone "
 "z poprzedniej sesji."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:271
 msgid "Window size"
 msgstr "Rozmiar okna"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -595,11 +628,11 @@ msgstr ""
 "Rozmiar używany dla nowego okna, które nie zostało przywrócone z poprzedniej "
 "sesji."
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:276
 msgid "Is maximized"
 msgstr "Maksymalizacja"
 
-#: data/org.gnome.epiphany.gschema.xml:266
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -607,11 +640,11 @@ msgstr ""
 "Czy nowe okno, które nie zostało przywrócone z poprzedniej sesji, ma być "
 "początkowo zmaksymalizowane."
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Disable forward and back buttons"
 msgstr "Wyłączenie przycisków dalej i wstecz"
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -620,11 +653,11 @@ msgstr ""
 "wyłączone, uniemożliwiając użytkownikom dostęp do bezpośredniej historii "
 "przeglądarki"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "Currently signed in sync user"
 msgstr "Obecnie zalogowany użytkownik synchronizacji"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -632,144 +665,144 @@ msgstr ""
 "Adres e-mail powiązany z kontem Firefoksa używanym do synchronizowania "
 "danych z serwerami Mozilli."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "Last sync timestamp"
 msgstr "Czas ostatniej synchronizacji"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Czas ostatniej synchronizacji w formacie systemu UNIX (w sekundach)."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "Sync device ID"
 msgstr "Identyfikator urządzenia synchronizacji"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "The sync device ID of the current device."
 msgstr "Identyfikator obecnego urządzenia synchronizacji."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "Sync device name"
 msgstr "Nazwa urządzenia synchronizacji"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "The sync device name of the current device."
 msgstr "Nazwa obecnego urządzenia synchronizacji."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "The sync frequency in minutes"
 msgstr "Częstość synchronizacji w minutach"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Minuty między synchronizacjami."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "Sync data with Firefox"
 msgstr "Synchronizowanie danych z Firefoksem"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr "Włączenie spowoduje synchronizowanie przeglądarki WWW z Firefoksem."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "Enable bookmarks sync"
 msgstr "Synchronizowanie zakładek"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "Włączenie spowoduje synchronizowanie zakładek."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "Bookmarks sync timestamp"
 msgstr "Czas synchronizacji zakładek"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Czas ostatniej synchronizacji zakładek."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "Initial sync or normal sync"
 msgstr "Początkowa czy zwykła synchronizacja"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "Włączone, jeśli zakładki muszą zostać zsynchronizowane po raz pierwszy."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "Enable passwords sync"
 msgstr "Synchronizowanie haseł"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "Włączenie spowoduje synchronizowanie haseł."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "Passwords sync timestamp"
 msgstr "Czas synchronizacji haseł"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Czas ostatniej synchronizacji haseł."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "Włączone, jeśli hasła muszą zostać zsynchronizowane po raz pierwszy."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "Enable history sync"
 msgstr "Synchronizowanie historii"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "Włączenie spowoduje synchronizowanie historii."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "History sync timestamp"
 msgstr "Czas synchronizacji historii"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last history sync was made."
 msgstr "Czas ostatniej synchronizacji historii."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "Włączone, jeśli historia musi zostać zsynchronizowana po raz pierwszy."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "Enable open tabs sync"
 msgstr "Synchronizowanie otwartych kart"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "Włączenie spowoduje synchronizowanie otwartych kart."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "Open tabs sync timestamp"
 msgstr "Czas synchronizacji otwartych kart"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Czas ostatniej synchronizacji otwartych kart."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decyzja podejmowana po żądaniu uprawnienia na dostęp do mikrofonu dla tego "
 "adresu"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -782,14 +815,14 @@ msgstr ""
 "„allow” (zezwalanie) i „deny” (odmawianie) oznaczają automatyczne "
 "podejmowanie decyzji po żądaniu."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decyzja podejmowana po żądaniu uprawnienia na dostęp do geolokalizacji dla "
 "tego adresu"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -802,14 +835,14 @@ msgstr ""
 "„allow” (zezwalanie) i „deny” (odmawianie) oznaczają automatyczne "
 "podejmowanie decyzji po żądaniu."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decyzja podejmowana po żądaniu uprawnienia na dostęp do powiadomień dla tego "
 "adresu"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -822,14 +855,14 @@ msgstr ""
 "„allow” (zezwalanie) i „deny” (odmawianie) oznaczają automatyczne "
 "podejmowanie decyzji po żądaniu."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decyzja podejmowana po żądaniu uprawnienia na dostęp do zapisywania haseł "
 "dla tego adresu"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -842,13 +875,13 @@ msgstr ""
 "„allow” (zezwalanie) i „deny” (odmawianie) oznaczają automatyczne "
 "podejmowanie decyzji po żądaniu."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decyzja podejmowana po żądaniu uprawnienia na dostęp do kamerki dla tego "
 "adresu"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -2053,20 +2086,20 @@ msgstr "Wszystkie pliki"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:605 src/ephy-history-dialog.c:389
+#: lib/widgets/ephy-location-entry.c:603 src/ephy-history-dialog.c:389
 msgid "Cl_ear"
 msgstr "_Wyczyść"
 
-#: lib/widgets/ephy-location-entry.c:625
+#: lib/widgets/ephy-location-entry.c:623
 msgid "Paste and _Go"
 msgstr "W_klej i przejdź"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:913
+#: lib/widgets/ephy-location-entry.c:644 src/ephy-window.c:914
 msgid "_Undo"
 msgstr "Cof_nij"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:651
 msgid "_Redo"
 msgstr "P_onów"
 
@@ -2283,133 +2316,133 @@ msgstr "Jeśli program zostanie zakończony, pobierania zostaną anulowane"
 msgid "Quit and cancel downloads"
 msgstr "Zakończ program i anuluj pobierania"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "_Ponów"
 
 #. Edit.
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:920
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:921
 msgid "Select _All"
 msgstr "_Zaznacz wszystko"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "Wyślij _odnośnik pocztą…"
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "W_czytaj ponownie"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "_Wstecz"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "_Dalej"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "_Dodaj zakładkę…"
 
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Otwórz odnośnik w _nowym oknie"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Otwórz odnośnik w nowej _karcie"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Otwórz odnośnik w oknie in_cognito"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "_Zapisz odnośnik jako…"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "Skopiuj adres _e-mail"
 
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "Wyświetl o_braz w nowej karcie"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Skopiuj adres ob_razu"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "Zapisz _obraz jako…"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Ustaw jako _tapetę"
 
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Otwórz plik wi_deo w nowym oknie"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Otwórz plik wid_eo w nowej karcie"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "Zapisz plik _wideo jako…"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "Skopiuj adres pliku wide_o"
 
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Otwórz plik dźwiękowy w _nowym oknie"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Otwórz plik dźwiękowy w nowej k_arcie"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "Zapisz plik dźwiękowy ja_ko…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "Skopiuj ad_res pliku dźwiękowego"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Save Pa_ge As…"
 msgstr "Zapisz _stronę jako…"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Page Source"
 msgstr "Ź_ródło strony"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Wyszukaj „%s” w Internecie"
@@ -2731,23 +2764,23 @@ msgstr "Wczytaj p_onownie wszystkie karty"
 msgid "_Duplicate"
 msgstr "_Powiel"
 
-#: src/resources/gtk/notebook-context-menu.ui:19
+#: src/resources/gtk/notebook-context-menu.ui:21
 msgid "Reo_pen Closed Tab"
 msgstr "P_rzywróć zamkniętą kartę"
 
-#: src/resources/gtk/notebook-context-menu.ui:23
+#: src/resources/gtk/notebook-context-menu.ui:27
 msgid "Close Tabs to the _Left"
 msgstr "Zamknij karty po _lewej"
 
-#: src/resources/gtk/notebook-context-menu.ui:27
+#: src/resources/gtk/notebook-context-menu.ui:31
 msgid "Close Tabs to the _Right"
 msgstr "Zamknij _karty po prawej"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.ui:35
 msgid "Close _Other Tabs"
 msgstr "Zamk_nij pozostałe karty"
 
-#: src/resources/gtk/notebook-context-menu.ui:35
+#: src/resources/gtk/notebook-context-menu.ui:39
 msgid "_Close"
 msgstr "Za_mknij"
 
@@ -2830,7 +2863,7 @@ msgstr "Pomo_c"
 msgid "_About Web"
 msgstr "_O programie"
 
-#: src/resources/gtk/page-row.ui:52
+#: src/resources/gtk/page-row.ui:83
 msgid "Close page"
 msgstr "Zamyka stronę"
 
@@ -3544,7 +3577,7 @@ msgid ""
 "Powered by WebKitGTK+ %d.%d.%d"
 msgstr ""
 "Prosta i łatwa w użyciu przeglądarka WWW.\n"
-"Używa biblioteki WebKitGTK+ %d.%d.%d"
+"Używa biblioteki WebKitGTK %d.%d.%d"
 
 #: src/window-commands.c:612
 msgid "Website"
