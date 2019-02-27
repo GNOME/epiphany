@@ -40,7 +40,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   const char *adblock_data_dir;
   gboolean private_profile;
   gboolean browser_mode;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_variant_get (user_data, "(&sm&s&s&sbb)", &guid, &server_address, &dot_dir, &adblock_data_dir, &private_profile, &browser_mode);
 
@@ -49,10 +49,8 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
     return;
   }
 
-  if (!ephy_file_helpers_init (dot_dir, 0, &error)) {
+  if (!ephy_file_helpers_init (dot_dir, 0, &error))
     g_warning ("Failed to initialize file helpers: %s", error->message);
-    g_error_free (error);
-  }
 
   ephy_debug_init ();
 
