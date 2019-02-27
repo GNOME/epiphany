@@ -97,16 +97,16 @@ ephy_web_overview_model_urls_to_js_value (EphyWebOverviewModel *model,
   urls = g_ptr_array_new_with_free_func (g_object_unref);
   for (l = model->items; l; l = g_list_next (l)) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
-    JSCValue *js_item, *value;
+    g_autoptr(JSCValue) js_item = NULL;
+    g_autoptr(JSCValue) value = NULL;
 
     js_item = jsc_value_new_object (js_context, NULL, NULL);
     value = jsc_value_new_string (js_context, item->url);
     jsc_value_object_set_property (js_item, "url", value);
-    g_object_unref (value);
 
+    g_clear_object (&value);
     value = jsc_value_new_string (js_context, item->title);
     jsc_value_object_set_property (js_item, "title", value);
-    g_object_unref (value);
 
     g_ptr_array_add (urls, js_item);
   }
@@ -119,26 +119,20 @@ ephy_web_overview_model_notify_urls_changed (EphyWebOverviewModel *model)
 {
   GHashTableIter iter;
   gpointer key;
-  GPtrArray *urls = NULL;
+  g_autoptr(GPtrArray) urls = NULL;
 
   g_hash_table_iter_init (&iter, model->urls_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    JSCValue *value;
-    JSCValue *ret;
+    g_autoptr(JSCValue) value = NULL;
+    g_autoptr(JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value && jsc_value_is_function (value)) {
       if (!urls)
         urls = ephy_web_overview_model_urls_to_js_value (model, jsc_value_get_context (value));
       ret = jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
-      g_object_unref (ret);
     }
-    if (value)
-      g_object_unref (value);
   }
-
-  if (urls)
-    g_ptr_array_unref (urls);
 }
 
 static void
@@ -151,16 +145,13 @@ ephy_web_overview_model_notify_thumbnail_changed (EphyWebOverviewModel *model,
 
   g_hash_table_iter_init (&iter, model->thumbnail_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    JSCValue *value;
-    JSCValue *ret;
+    g_autoptr(JSCValue) value = NULL;
+    g_autoptr(JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
-      if (jsc_value_is_function (value)) {
+      if (jsc_value_is_function (value))
         ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
-        g_object_unref (ret);
-      }
-      g_object_unref (value);
     }
   }
 }
@@ -175,16 +166,13 @@ ephy_web_overview_model_notify_title_changed (EphyWebOverviewModel *model,
 
   g_hash_table_iter_init (&iter, model->title_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    JSCValue *value;
-    JSCValue *ret;
+    g_autoptr(JSCValue) value = NULL;
+    g_autoptr(JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
-      if (jsc_value_is_function (value)) {
+      if (jsc_value_is_function (value))
         ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
-        g_object_unref (ret);
-      }
-      g_object_unref (value);
     }
   }
 }
