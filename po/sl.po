@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-10 17:12+0000\n"
-"PO-Revision-Date: 2019-02-12 18:31+0100\n"
+"POT-Creation-Date: 2019-02-25 18:18+0000\n"
+"PO-Revision-Date: 2019-02-26 20:20+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -226,11 +226,12 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:82
 msgid "Keep window open when closing last tab"
-msgstr ""
+msgstr "Ohrani okno odprto po zapiranju zadnjega zavihka"
 
 #: data/org.gnome.epiphany.gschema.xml:83
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"Izbrana možnost omogoča, da ostane okno po zaprtju zadnjega zavihka odprto."
 
 #: data/org.gnome.epiphany.gschema.xml:89
 msgid "Reader mode article font style."
@@ -414,10 +415,15 @@ msgid "Do Not Track"
 msgstr "Ne sledi"
 
 #: data/org.gnome.epiphany.gschema.xml:180
+#, fuzzy
+#| msgid ""
+#| "Enables DNT headers and tracking query parameter removal. Note that when "
+#| "changing this setting from the preferences dialog, the adblock-filters "
+#| "setting will additionally be updated to add/remove EasyPrivacy filters."
 msgid ""
-"Enables DNT headers and tracking query parameter removal. Note that when "
-"changing this setting from the preferences dialog, the adblock-filters "
-"setting will additionally be updated to add/remove EasyPrivacy filters."
+"Enables tracking query parameter removal. Note that when changing this "
+"setting from the preferences dialog, the adblock-filters setting will "
+"additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
 "Omogoča odstranjevanje glav DNT in odstranitev parametrov poizvedbe. Ob "
 "spremembi te nastavitve, bodo posodobljene tudi nastavitve filtrov adblock "
@@ -498,39 +504,35 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:218
 msgid "Enable mouse gesture"
-msgstr ""
+msgstr "Omogoči poteze miške"
 
 #: data/org.gnome.epiphany.gschema.xml:219
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
+"Ali naj program omogoči poteze miške. Te so zasnovane na predlogi programa "
+"Opera in jih je mogoče zagnati z uporabo srednjega gumba miške + poteza."
 
 #: data/org.gnome.epiphany.gschema.xml:223
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Last upload directory"
-msgstr "Izbor mape"
+msgstr "Zadnja mapa za pošiljanje"
 
 #: data/org.gnome.epiphany.gschema.xml:224
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
-msgstr "Izbor mape"
+msgstr "Zapomni si nazadnje izbrano mapo za pošiljanje"
 
 #: data/org.gnome.epiphany.gschema.xml:228
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Last download directory"
-msgstr "Izbor mape"
+msgstr "Zadnja mapa za prejemanje"
 
 #: data/org.gnome.epiphany.gschema.xml:229
 msgid "Keep track of last download directory"
-msgstr ""
+msgstr "Zapomni si nazadnje izbrano mapo za prejem"
 
 #: data/org.gnome.epiphany.gschema.xml:233
 msgid "Hardware acceleration policy"
-msgstr ""
+msgstr "Pravila strojnega pospeševanja"
 
 #: data/org.gnome.epiphany.gschema.xml:234
 msgid ""
@@ -963,7 +965,7 @@ msgstr "F11"
 #. Translators: this means WebDriver control.
 #: embed/ephy-embed.c:819
 msgid "Web is being controlled by automation."
-msgstr ""
+msgstr "Program upravlja sistem WebDriver."
 
 #: embed/ephy-embed-utils.c:65
 #, c-format
@@ -1837,7 +1839,6 @@ msgstr "%a %I∶%M %p"
 #. * strftime format. e.g. "Wed 15∶34"
 #.
 #: lib/ephy-time-helpers.c:283
-#| msgid "%a %I∶%M %p"
 msgid "%a %H∶%M"
 msgstr "%a %H∶%M"
 
@@ -1852,7 +1853,6 @@ msgstr "%b %d %I∶%M %p"
 #. * strftime format. e.g. "Feb 12 15∶34"
 #.
 #: lib/ephy-time-helpers.c:302
-#| msgid "%b %d %I∶%M %p"
 msgid "%b %d %H∶%M"
 msgstr "%b %d %H∶%M"
 
@@ -2130,21 +2130,21 @@ msgstr "Vse datoteke"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:605 src/ephy-history-dialog.c:389
+#: lib/widgets/ephy-location-entry.c:603 src/ephy-history-dialog.c:389
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: lib/widgets/ephy-location-entry.c:625
+#: lib/widgets/ephy-location-entry.c:623
 msgid "Paste and _Go"
 msgstr "Prilepi in _pojdi"
 
 # G:5 K:1 O:2
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:913
+#: lib/widgets/ephy-location-entry.c:644 src/ephy-window.c:914
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:651
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
@@ -2160,16 +2160,14 @@ msgstr ""
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:114
-#, fuzzy, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
+#, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
 msgstr ""
-"%s nima omogočene varnosti. Ker vsebina ni šifrirana, lahko nepovabljeni "
-"uporabniki vidijo poslane podatke in nadzirajo vsebino, ki jo vidite."
+"Spletna stran nima omogočenih varnostnih protokolov. Ker vsebina ni "
+"šifrirana, lahko nepovabljeni uporabniki prestrežejo poslane podatke in "
+"nadzirajo vsebino sp letne strani."
 
 #. Label in certificate popover when site sends mixed content.
 #: lib/widgets/ephy-security-popover.c:121
@@ -2281,10 +2279,8 @@ msgstr "Ni mogoče spremeniti zgodovine v načinu brez beleženja podatkov."
 
 # G:4 K:0 O:1
 #: src/ephy-main.c:113
-#, fuzzy
-#| msgid "Open a new browser window"
 msgid "Open a new browser window instead of a new tab"
-msgstr "Odpri novo okno brskalnika"
+msgstr "Odpri novo okno brskalnika in ne novega zavihka"
 
 #: src/ephy-main.c:115
 msgid "Load the given session state file"
@@ -2296,34 +2292,24 @@ msgid "FILE"
 msgstr "DATOTEKA"
 
 #: src/ephy-main.c:117
-#, fuzzy
-#| msgid "Start an instance in netbank mode"
 msgid "Start an instance with user data read-only"
-msgstr "Zaženi brskalnik v načinu spletnega bančništva"
+msgstr "Zaženi brskalnik v načinu podatkov le za branje"
 
 #: src/ephy-main.c:119
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance with separate user data"
-msgstr "Zaženi zasebno sejo"
+msgstr "Zaženi zasebno sejo z ločenimi podatki uporabnika"
 
 #: src/ephy-main.c:122
-#, fuzzy
-#| msgid "Start the browser in application mode"
 msgid "Start a private instance in web application mode"
-msgstr "Zaženi brskalnik v programskem načinu"
+msgstr "Zaženi zasebno sejo v spletnem programskem načinu"
 
 #: src/ephy-main.c:124
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance for WebDriver control"
-msgstr "Zaženi zasebno sejo"
+msgstr "Zaženi zasebno sejo s podporo WebDriver"
 
 #: src/ephy-main.c:126
-#, fuzzy
-#| msgid "Profile directory to use in the private instance"
 msgid "Custom profile directory for private instance"
-msgstr "Mapa profila, ki ga želite uporabiti v zasebni seji"
+msgstr "Mapa profila po meri za uporabo zasebne seje"
 
 #: src/ephy-main.c:126
 msgid "DIR"
@@ -2385,151 +2371,151 @@ msgstr "Če končate program, bodo prejemi preklicani"
 msgid "Quit and cancel downloads"
 msgstr "Končaj in prekliči dejavni prejem"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "_Uveljavi"
 
 #. Edit.
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Cu_t"
 msgstr "_Izreži"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:919
+#: src/ephy-window.c:920
 msgid "_Paste"
 msgstr "_Prilepi"
 
 # G:9 K:0 O:0
-#: src/ephy-window.c:920
+#: src/ephy-window.c:921
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "P_ošlji povezavo po elektronski pošti ..."
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:924
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "_Znova naloži"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "_Nazaj"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "_Naprej"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "_Dodaj zaznamek ..."
 
 # G:1 K:2 O:0
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Odpri povezavo v _novem oknu"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:934
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Odpri povezavo v novem _zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Odpri povezavo v _zasebnem oknu"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:936
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "Shrani povezavo _kot ..."
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "_Kopiraj elektronski naslov"
 
 # G:1 K:0 O:0
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "Odpri _sliko v novem zavihku"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Kopiraj n_aslov slike"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:944
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "S_hrani sliko kot ..."
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Nastavi kot sliko _ozadja"
 
 # G:1 K:0 O:0
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Odpri _video v novem oknu"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Odpri video v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:951
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "Shrani video povezavo _kot ..."
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "Kopiraj _naslov video povezave"
 
 # G:1 K:0 O:0
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Odpri _zvok v novem oknu"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Odpri zvok v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "Shrani zvočno povezavo _kot ..."
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "Kopiraj _naslov zvočne povezave"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Save Pa_ge As…"
 msgstr "Shrani s_tran kot ..."
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Page Source"
 msgstr "_Izvorna koda strani"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Preišči splet za »%s«"
@@ -2861,24 +2847,24 @@ msgstr "Ponovno naloži _vse zavihke"
 msgid "_Duplicate"
 msgstr "Po_dvoji"
 
-#: src/resources/gtk/notebook-context-menu.ui:19
+#: src/resources/gtk/notebook-context-menu.ui:21
 msgid "Reo_pen Closed Tab"
 msgstr "Ponovno odpri _zaprt zavihek"
 
 # G:0 K:1 O:0
-#: src/resources/gtk/notebook-context-menu.ui:23
+#: src/resources/gtk/notebook-context-menu.ui:27
 msgid "Close Tabs to the _Left"
 msgstr "Zapri zavihke na _levii"
 
-#: src/resources/gtk/notebook-context-menu.ui:27
+#: src/resources/gtk/notebook-context-menu.ui:31
 msgid "Close Tabs to the _Right"
 msgstr "Zapri zavihke na _desni"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.ui:35
 msgid "Close _Other Tabs"
 msgstr "Zapri _preostale zavihke"
 
-#: src/resources/gtk/notebook-context-menu.ui:35
+#: src/resources/gtk/notebook-context-menu.ui:39
 msgid "_Close"
 msgstr "_Zapri"
 
@@ -2965,7 +2951,7 @@ msgstr "Pomo_č"
 msgid "_About Web"
 msgstr "_O programu"
 
-#: src/resources/gtk/page-row.ui:52
+#: src/resources/gtk/page-row.ui:83
 msgid "Close page"
 msgstr "Zapri stran"
 
@@ -3228,18 +3214,14 @@ msgid "Firefox Sync"
 msgstr "Usklajevalnik Firefox"
 
 #: src/resources/gtk/prefs-dialog.ui:1059
-#, fuzzy
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
 "Mozilla."
 msgstr ""
 "S prijavo z računom Firefox lahko uskladite podatke nastavitev tudi z "
-"drugimi napravami. Program Web ni izdelan in podprt s strani Fundacije "
-"Mozilla."
+"drugimi napravami. Program Web, sicer podpira spletni račun Firefox, vendar "
+"ni izdelan in podprt s strani Fundacije Mozilla."
 
 #: src/resources/gtk/prefs-dialog.ui:1093
 msgid "Firefox Account"
@@ -3404,7 +3386,7 @@ msgstr "Ponovno naloži trenutno stran"
 #: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
-msgstr ""
+msgstr "Ponovno naloži obvodni predpomnilnik"
 
 #: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
