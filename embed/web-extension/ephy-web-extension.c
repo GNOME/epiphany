@@ -100,11 +100,24 @@ static const char introspection_xml[] =
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean
-should_use_adblocker (const char *request_uri,
-                      const char *page_uri,
-                      const char *redirected_request_uri)
+should_use_adblocker (const char       *request_uri,
+                      const char       *page_uri,
+                      const char       *redirected_request_uri,
+                      EphyWebExtension *extension)
 {
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+  g_autofree gchar *origin = ephy_uri_to_security_origin (page_uri);
+  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+
+  /* Check page setting first in case it overwrites global setting */
+  if (origin) {
+    permission = ephy_permissions_manager_get_permission (extension->permissions_manager,
+                                                          EPHY_PERMISSION_TYPE_SHOW_ADS,
+                                                          origin);
+    if (permission == EPHY_PERMISSION_PERMIT)
+      return FALSE;
+  }
+
+  if (permission == EPHY_PERMISSION_UNDECIDED && !g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     return FALSE;
 
   /* Always load the main resource... */
@@ -154,7 +167,7 @@ web_page_send_request (WebKitWebPage     *web_page,
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
 
-  if (should_use_adblocker (request_uri, page_uri, redirected_response_uri)) {
+  if (should_use_adblocker (request_uri, page_uri, redirected_response_uri, extension)) {
     char *result;
 
     ephy_uri_tester_load (extension->uri_tester);
