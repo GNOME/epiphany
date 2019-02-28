@@ -25,7 +25,11 @@
 #include <libsoup/soup.h>
 
 #include "ephy-certificate-dialog.h"
+#include "ephy-embed-shell.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-permissions-manager.h"
+#include "ephy-settings.h"
+#include "ephy-uri-helpers.h"
 
 /**
  * SECTION:ephy-security-popover
@@ -54,6 +58,7 @@ struct _EphySecurityPopover {
   GtkWidget *lock_image;
   GtkWidget *host_label;
   GtkWidget *security_label;
+  GtkWidget *ad_switch;
   GtkWidget *grid;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
@@ -66,7 +71,11 @@ static void
 ephy_security_popover_set_address (EphySecurityPopover *popover,
                                    const char          *address)
 {
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   SoupURI *uri;
+  g_autofree gchar *origin = NULL;
   g_autofree gchar *uri_text = NULL;
 
   uri = soup_uri_new (address);
@@ -78,6 +87,28 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
   popover->hostname = g_strdup (uri->host);
 
   soup_uri_free (uri);
+
+  origin = ephy_uri_to_security_origin (address);
+  if (!origin)
+    return;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        EPHY_PERMISSION_TYPE_SHOW_ADS,
+                                                        origin);
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch),
+                             !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
+      break;
+    case EPHY_PERMISSION_DENY:
+      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), FALSE);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), TRUE);
+      break;
+  }
 }
 
 static void
@@ -308,9 +339,40 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
+static gboolean
+on_ad_switch_state_set (GtkSwitch           *widget,
+                        gboolean             state,
+                        EphySecurityPopover *popover)
+{
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+  gboolean global_flag = !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  if (global_flag != state)
+    permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_SHOW_ADS,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
 static void
 ephy_security_popover_init (EphySecurityPopover *popover)
 {
+  GtkWidget *adblocker;
+  GtkWidget *adblock_desc;
+  GtkWidget *hbox;
   GtkWidget *box;
 
   popover->grid = gtk_grid_new ();
@@ -337,6 +399,25 @@ ephy_security_popover_init (EphySecurityPopover *popover)
 
   gtk_grid_attach (GTK_GRID (popover->grid), box, 0, 0, 2, 1);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->security_label, 0, 1, 2, 1);
+
+  gtk_grid_attach (GTK_GRID (popover->grid), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 3, 2, 1);
+
+  /* Permissions */
+  adblocker = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (adblocker), _("<b>Permissions</b>"));
+  gtk_label_set_xalign (GTK_LABEL (adblocker), 0.0);
+  gtk_grid_attach (GTK_GRID (popover->grid), adblocker, 0, 4, 2, 1);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, 5, 2, 1);
+
+  adblock_desc = gtk_label_new (_("Allow advertisements"));
+  gtk_label_set_xalign (GTK_LABEL (adblock_desc), 0.0);
+  gtk_box_pack_start (GTK_BOX (hbox), adblock_desc, TRUE, TRUE, 6);
+
+  popover->ad_switch = gtk_switch_new ();
+  gtk_box_pack_start (GTK_BOX (hbox), popover->ad_switch, FALSE, FALSE, 6);
+  g_signal_connect (popover->ad_switch, "state-set", G_CALLBACK (on_ad_switch_state_set), popover);
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
