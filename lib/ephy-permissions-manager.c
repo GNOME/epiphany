@@ -164,6 +164,8 @@ permission_type_to_string (EphyPermissionType type)
     return "audio-device-permission";
   case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
     return "video-device-permission";
+  case EPHY_PERMISSION_TYPE_SHOW_ADS:
+    return "advertisement-permission";
   default:
     g_assert_not_reached ();
   }
@@ -474,6 +476,9 @@ ephy_permissions_manager_export_to_js_context (EphyPermissionsManager *manager,
   g_object_unref (js_enum_value);
   js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
   jsc_value_object_set_property (js_enum, "ACCESS_WEBCAM", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_SHOW_ADS);
+  jsc_value_object_set_property (js_enum, "SHOW_ADS", js_enum_value);
   g_object_unref (js_enum_value);
   jsc_value_object_set_property (js_namespace, "PermissionType", js_enum);
   g_object_unref (js_enum);
