@@ -409,5 +409,10 @@
 			<summary>Decision to apply when webcam permission is requested for this host</summary>
 			<description>This option is used to save whether a given host has been given permission to access the user’s webcam. The “undecided” default means the browser needs to ask the user for permission, while “allow” and “deny” tell it to automatically make the decision upon request.</description>
 		</key>
+		<key name="advertisement-permission" enum="org.gnome.Epiphany.Permission">
+			<default>'undecided'</default>
+			<summary>Decision to apply when advertisment permission is requested for this host</summary>
+			<description>This option is used to save whether a given host has been given permission to allow advertisments. The “undecided” default means the browser global setting is used, while “allow” and “deny” tell it to automatically make the decision upon request.</description>
+		</key>
 	</schema>
 </schemalist>
