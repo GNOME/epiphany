@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-18 23:50+0000\n"
+"POT-Creation-Date: 2019-03-01 17:08+0000\n"
 "PO-Revision-Date: 2019-02-19 08:53+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -187,22 +187,55 @@ msgstr ""
 "sekmeler kullanıcı tıklamadıkça yüklenmeyecektir."
 
 #: data/org.gnome.epiphany.gschema.xml:60
+msgid "Process model"
+msgstr "İşlem modeli"
+
+#: data/org.gnome.epiphany.gschema.xml:61
+msgid ""
+"This option allows to set the process model used. Use “shared-secondary-"
+"process” to use a single web process shared by all the tabs and “one-"
+"secondary-process-per-web-view” to use a different web process for each tab."
+msgstr ""
+"Bu seçenek, kullanılan işlem modelini belirlemenizi sağlar. Tüm sekmeler "
+"tarafından paylaşılan tek web işlemi kullanmak için “shared-secondary-"
+"process” ve her sekme için ayrı web işlemi kullanmak içinse “one-secondary-"
+"process-per-web-view” ayarını kullanın."
+
+#: data/org.gnome.epiphany.gschema.xml:65
+msgid ""
+"Maximum number of web processes created at the same time when using “one-"
+"secondary-process-per-web-view” model"
+msgstr ""
+"“one-secondary-process-per-web-view” modeli kullanıldığında aynı anda "
+"oluşturulan en yüksek web süreci sayısı"
+
+#: data/org.gnome.epiphany.gschema.xml:66
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the “one-secondary-process-per-web-view” model. The "
+"default value is “0” and means no limit."
+msgstr ""
+"Bu seçenek, “one-secondary-process-per-web-view” modeli için aynı anda "
+"kullanılacak web süreçlerinin sayısına sınır koyar. Öntanımlı değeri “0”dır "
+"ve sınırsız olduğu anlamına gelir."
+
+#: data/org.gnome.epiphany.gschema.xml:71
 msgid "List of adblock filters"
 msgstr "Reklam engelleyici süzgeçlerinin listesi"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr ""
 "Reklam engelleyicinin kullanacağı süzgeç kurallarıyla birlikte URL’lerin "
 "listesi."
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Sekmelerin boyutunu, sekmeler çubuğundaki boş alanı dolduracak biçimde "
 "genişlet."
 
-#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -210,11 +243,11 @@ msgstr ""
 "Eğer etkinleştirilirse; sekmeler, çubuktaki kullanılabilir alanın tamamını "
 "kullanacak biçimde genişler."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The position of the tabs bar."
 msgstr "Sekmeler çubuğunun konumu."
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -225,11 +258,11 @@ msgstr ""
 "solda olacak biçimde yatay sekmeler) ve “right” (sağ) (çubuk sağda olacak "
 "biçimde yatay sekmeler)."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "Sekme çubuğunun görünürlük politikası."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -240,21 +273,21 @@ msgstr ""
 "one” (iki veya daha çok sekme olduğunda gösterilir) ve “never” (sekme çubuğu "
 "asla gösterilmez)."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
 msgstr "Son sekme kapatıldığında uygulama penceresi açık tutulur"
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Eğer etkinleştirilirse, son sekme kapatıldığında uygulama penceresi açık "
 "tutulur"
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
 msgstr "Okuyucu kipi makale yazı tipi biçemi."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -262,11 +295,11 @@ msgstr ""
 "Okuyucu kipindeki makaleler için ana gövde metninin biçemini seçer. Olası "
 "değerler “sans” ve “serif”tir."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
 msgstr "Okuyucu kipi renk şeması."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -276,23 +309,23 @@ msgstr ""
 "değerler “light” (aydınlık arka planda karanlık metin) ve “dark” (karanlık "
 "arka planda aydınlık metin)."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "En küçük yazı tipi boyutu"
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "GNOME yazı tiplerini kullan"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "GNOME yazı tipi ayarlarını kullan."
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "Özel sans-serif yazı tipi"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -300,11 +333,11 @@ msgstr ""
 "use-gnome-fonts ayarlandığında sans-serif masaüstü yazı tipini geçersiz "
 "kılmaya yarayan değer."
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "Özel serif yazı tipi"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -312,11 +345,11 @@ msgstr ""
 "use-gnome-fonts ayarlandığında serif masaüstü yazı tipini geçersiz kılmaya "
 "yarayan değer."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "Özel eşaralıklı yazı tipi"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -324,51 +357,51 @@ msgstr ""
 "use-gnome-fonts ayarlandığında eşaralıklı masaüstü yazı tipini geçersiz "
 "kılmaya yarayan değer."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "Özelleştirilmiş CSS kullan"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "İnternet sitelerinin CSS kaynaklarını değiştirmek için özelleştirilmiş CSS "
 "kullan."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Yazım denetimini etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr "Düzenlenebilir alanlara yazılanları denetle."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Öntanımlı kodlama"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Öntanımlı kodlama. Kabul edilen değerler WebKitGTK+’ın anlayabilecekleridir."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:151
 #: src/resources/gtk/prefs-dialog.ui:910
 msgid "Languages"
 msgstr "Diller"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Tercih edilen diller. Yerel ayar kodları dizisi ya da geçerli yerel ayarı "
 "kullanmak için “system”."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Cookie accept"
 msgstr "Çerez kabulü"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -376,50 +409,50 @@ msgstr ""
 "Çerezlerin kabul edileceği yerler. Olası değerler “always” (her zaman), “no-"
 "third-party” (üçüncü taraf yok) ve “never” (asla)."
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Beliren pencerelere izin ver"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Sitelerin JavaScript kullanarak yeni pencere açmasına izin ver (JavaScript "
 "etkin ise)."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable Plugins"
 msgstr "Eklentileri Etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Enable WebGL"
 msgstr "WebGL Etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Whether to enable support for WebGL contexts."
 msgstr "WebGL bağlam desteğinin etkinleştirilip etkinleştirilmeyeceği."
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Enable WebAudio"
 msgstr "WebAudio’yu Etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Whether to enable support for WebAudio."
 msgstr "WebAudio desteğinin etkinleştirilip etkinleştirilmeyeceği."
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable smooth scrolling"
 msgstr "Yumuşak kaydırmayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Whether to enable smooth scrolling."
 msgstr "Yumuşak kaydırmanın etkinleştirilip etkinleştirilmeyeceği."
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "User agent"
 msgstr "Kullanıcı aracısı"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -427,11 +460,11 @@ msgstr ""
 "Web tarayıcıyı sunuculara tanımlamaya yarayan, kullanıcı aracısı olarak "
 "kullanılacak dizge."
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Do Not Track"
 msgstr "Beni İzleme"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
 "Enables tracking query parameter removal. Note that when changing this "
 "setting from the preferences dialog, the adblock-filters setting will "
@@ -441,29 +474,29 @@ msgstr ""
 "iletişim kutusundan değiştirirken, adblock süzgeçleri ayarının EasyPrivacy "
 "süzgeçleri eklemek/kaldırmak için ayrıca güncelleneceğini unutmayın."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Enable adblock"
 msgstr "Reklam engelleyiciyi etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "İnternet sitelerinin göstermek istediği gömülü reklamları engeller."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Remember passwords"
 msgstr "Parolaları anımsa"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Web sitelerindeki parolaların saklanması ve önceden doldurulması."
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable site-specific quirks"
 msgstr "Sitelere özgü uyumluluk kipini etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -472,11 +505,11 @@ msgstr ""
 "etkinleştir. Eğer özel bir sorun üzerinde hata ayıklıyorsanız bu seçeneği "
 "devre dışı bırakmak isteyebilirsiniz."
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable safe browsing"
 msgstr "Güvenli taramayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -484,23 +517,23 @@ msgstr ""
 "Güvenli taramanın etkinleştirilip etkinleştirilmeyeceği. Güvenli tarama, "
 "Google Güvenli Tarama API v4 aracılığıyla çalışır."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Google Safe Browsing API key"
 msgstr "Google Güvenli Tarama API anahtarı"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "Google Güvenli Tarama API v4ʼe erişmek için kullanılan API anahtarı."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Default zoom level for new pages"
 msgstr "Yeni sayfalar için öntanımlı yakınlaştırma düzeyi"
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid "Enable autosearch"
 msgstr "Kendiliğinden aramayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -511,11 +544,11 @@ msgstr ""
 "Eğer ayar devre dışıysa aşağı inen menüden özellikle arama motoru "
 "seçilmedikçe her şey URL olarak yüklenir."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid "Enable mouse gesture"
 msgstr "Fare hareketini etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -524,27 +557,27 @@ msgstr ""
 "Opera’nın davranışına dayanır ve orta fare tuşu + hareketi kullanılarak "
 "etkinleştirilir."
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Last upload directory"
 msgstr "Son karşıya yükleme dizini"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Keep track of last upload directory"
 msgstr "Son karşıya yükleme dizininin kaydını tut"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Last download directory"
 msgstr "Son indirme dizini"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Keep track of last download directory"
 msgstr "Son indirilenler dizininin kaydını tut"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Hardware acceleration policy"
 msgstr "Donanım hızlandırma ilkesi"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -561,19 +594,19 @@ msgstr ""
 "demand” (istek üzerine) olduğunda donanım ivmesi yalnızca 3B dönüştürmeleri "
 "görüntülemek için gerekli olduğunda kullanılacaktır."
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid "Web application additional URLs"
 msgstr "Web uygulaması ek URLʼleri"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Web uygulaması tarafından açılması gereken URLʼlerin listesi"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "The downloads folder"
 msgstr "İndirilen dosya klasörü"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -582,31 +615,31 @@ msgstr ""
 "klasörünü kullanmak için “İndirilenler”, ya da masaüstü klasörünü kullanmak "
 "için “Masaüstü”."
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:266
 msgid "Window position"
 msgstr "Pencere konumu"
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "Yeni pencere için kullanılacak konum önceki oturumdan kurtarılamadı."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:271
 msgid "Window size"
 msgstr "Pencere boyutu"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "Yeni pencere için kullanılacak boyut önceki oturumdan kurtarılamadı."
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:276
 msgid "Is maximized"
 msgstr "Tam ekran"
 
-#: data/org.gnome.epiphany.gschema.xml:266
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -614,11 +647,11 @@ msgstr ""
 "Önceki oturumdan kurtarılamayan yeni pencerenin başlangıçta tam ekran açılıp "
 "açılmayacağı."
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Disable forward and back buttons"
 msgstr "İleri ve geri düğmelerini devre dışı bırak"
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -626,11 +659,11 @@ msgstr ""
 "Eğer “true” (doğru) olarak ayarlanırsa ileri ve geri düğmeleri devre dışı "
 "bırakılır, kullanıcının tarayıcı geçmişine anında erişimini engeller"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "Currently signed in sync user"
 msgstr "Şu anda oturum açmış eşzamanlama kullanıcısı"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -638,43 +671,43 @@ msgstr ""
 "Mozilla sunucularıyla verilerin eşzamanlanması için kullanılan Firefox "
 "Hesabına bağlı e-posta adresi."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "Last sync timestamp"
 msgstr "Son eşzamanlama zaman damgası"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Saniye cinsinden son eşzamanlamanın yapıldığı UNIX zamanı."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "Sync device ID"
 msgstr "Eşzamanlama aygıt kimliği"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "The sync device ID of the current device."
 msgstr "Geçerli aygıtın eşzamanlama aygıt kimliği."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "Sync device name"
 msgstr "Eşzamanlama aygıt adı"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "The sync device name of the current device."
 msgstr "Geçerli aygıtın eşzamanlama aygıt adı."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "The sync frequency in minutes"
 msgstr "Dakika cinsinden eşzamanlama sıklığı"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Ardışık iki eşzamanlama arasındaki dakika sayısı."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "Sync data with Firefox"
 msgstr "Verileri Firefox ile eşzamanla"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -682,31 +715,31 @@ msgstr ""
 "Eğer Ephy derlemeleri ile Firefox derlemeleri eşzamanlanacaksa DOĞRU (TRUE), "
 "aksi halde YANLIŞ (FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "Enable bookmarks sync"
 msgstr "Yer imi eşzamanlamayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "Eğer yer imi derlemeleri eşzamanlanacaksa DOĞRU (TRUE), aksi halde YANLIŞ "
 "(FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "Bookmarks sync timestamp"
 msgstr "Yer imi eşzamanlama zaman damgası"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Son yer imi eşzamanlamasının yapıldığı zamana ait zaman damgası."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "Initial sync or normal sync"
 msgstr "İlk eşzamanlama veya normal eşzamanlama"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -714,25 +747,25 @@ msgstr ""
 "Eğer yer imi derlemeleri ilk defa eşzamanlanacaksa DOĞRU (TRUE), aksi halde "
 "YANLIŞ (FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "Enable passwords sync"
 msgstr "Parola eşzamanlamayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "Eğer parola derlemeleri eşzamanlanacaksa DOĞRU (TRUE), aksi halde YANLIŞ "
 "(FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "Passwords sync timestamp"
 msgstr "Parola eşzamanlama zaman damgası"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Son parola eşzamanlamasının yapıldığı zamana ait zaman damgası."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -740,25 +773,25 @@ msgstr ""
 "Eğer parola derlemeleri ilk defa eşzamanlanacaksa DOĞRU (TRUE), aksi halde "
 "YANLIŞ (FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "Enable history sync"
 msgstr "Geçmiş eşzamanlamayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "Eğer geçmiş derlemeleri eşzamanlanacaksa DOĞRU (TRUE), aksi halde YANLIŞ "
 "(FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "History sync timestamp"
 msgstr "Geçmiş eşzamanlama zaman damgası"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last history sync was made."
 msgstr "Son geçmiş eşzamanlamasının yapıldığı zamana ait zaman damgası."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -766,29 +799,29 @@ msgstr ""
 "Eğer geçmis derlemeleri ilk defa eşzamanlanacaksa DOĞRU (TRUE), aksi halde "
 "YANLIS (FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "Enable open tabs sync"
 msgstr "Açık sekmeleri eşzamanlamayı etkinleştir"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "Eğer açık sekme derlemeleri eşzamanlanacaksa DOĞRU (TRUE), aksi halde YANLIŞ "
 "(FALSE)."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "Open tabs sync timestamp"
 msgstr "Açık sekme eşzamanlama zaman damgası"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Son açık sekme eşzamanlamasının yapıldığı zamana ait zaman damgası."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Bu ana makina için mikrofon izni istendiğinde uygulanacak seçim"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -800,12 +833,12 @@ msgstr ""
 "tarayıcının izin için kullanıcıya sormasını gerektirir, “izin ver” ve "
 "“reddet” ise istek yapıldığı gibi bu yanıtı kendiliğinden verir."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Bu ana makina için coğrafi konum izni istendiğinde uygulanacak seçim"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -817,12 +850,12 @@ msgstr ""
 "izin için kullanıcıya sormasını gerektirir, “izin ver” ve “reddet” ise istek "
 "yapıldığı gibi bu yanıtı kendiliğinden verir."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Bu ana mekine için bildirim izni istendiğinde uygulanacak seçim"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -834,12 +867,12 @@ msgstr ""
 "kullanıcıya sormasını gerektirir, “izin ver” ve “reddet” ise istek yapıldığı "
 "gibi bu yanıtı kendiliğinden verir."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "Bu ana makine için parola kaydetme izni istendiğinde uygulanacak karar"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -851,11 +884,11 @@ msgstr ""
 "kullanıcıya sormasını gerektirir, “izin ver” ve “reddet” ise istek yapıldığı "
 "gibi bu yanıtı kendiliğinden verir."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Bu ana makine için web kamerası izni istendiğinde uygulanacak seçim"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -2056,20 +2089,20 @@ msgstr "Tüm dosyalar"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:605 src/ephy-history-dialog.c:389
+#: lib/widgets/ephy-location-entry.c:603 src/ephy-history-dialog.c:389
 msgid "Cl_ear"
 msgstr "_Temizle"
 
-#: lib/widgets/ephy-location-entry.c:625
+#: lib/widgets/ephy-location-entry.c:623
 msgid "Paste and _Go"
 msgstr "Yapıştır ve _Git"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:913
+#: lib/widgets/ephy-location-entry.c:644 src/ephy-window.c:914
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:651
 msgid "_Redo"
 msgstr "_Yinele"
 
@@ -2287,133 +2320,133 @@ msgstr "Eğer kapatırsanız, indirmeler iptal edilecek"
 msgid "Quit and cancel downloads"
 msgstr "Kapat ve indirmeleri iptal et"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "_Yinele"
 
 #. Edit.
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Cu_t"
 msgstr "K_es"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:920
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:921
 msgid "Select _All"
 msgstr "Tümünü _Seç"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "Bağlantıyı E-posta ile _Gönder…"
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "_Yeniden Yükle"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "_Geri"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "_İleri"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "_Yer İmi Ekle…"
 
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Bağlantıyı Yeni _Pencerede Aç"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Bağlantıyı Yeni _Sekmede Aç"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Bağlantıyı _Gizli Pencerede Aç"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "Bağlantıyı _Farklı Kaydet…"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "Bağlantı Adresini _Kopyala"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "_E-posta Adresini Kopyala"
 
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "_Resmi Yeni Sekmede Görüntüle"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Res_min Adresini Kopyala"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "Re_smi Farklı Kaydet…"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Duvar Ka_ğıdı Olarak Ayarla"
 
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Videoyu Yeni _Pencerede Aç"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Videoyu Yeni _Sekmede Aç"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "Videoyu _Farklı Kaydet…"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "Video Adresini _Kopyala"
 
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Sesi Yeni _Pencerede Aç"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Sesi Yeni _Sekmede Aç"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "Sesi _Farklı Kaydet…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "Ses Adresini _Kopyala"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Save Pa_ge As…"
 msgstr "Sa_yfayı Farklı Kaydet…"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Page Source"
 msgstr "_Sayfa Kaynak Kodu"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "“%s” için internette ara"
@@ -2689,15 +2722,15 @@ msgstr "Metin Kodlaması"
 msgid "Use the encoding specified by the document"
 msgstr "Belgenin tanımladığı kodlamayı kullan"
 
-#: src/resources/gtk/encoding-dialog.ui:98
+#: src/resources/gtk/encoding-dialog.ui:99
 msgid "Recent encodings"
 msgstr "En son kodlamalar"
 
-#: src/resources/gtk/encoding-dialog.ui:150
+#: src/resources/gtk/encoding-dialog.ui:151
 msgid "Related encodings"
 msgstr "İlgili kodlamalar"
 
-#: src/resources/gtk/encoding-dialog.ui:192
+#: src/resources/gtk/encoding-dialog.ui:193
 msgid "Show all…"
 msgstr "Tümünü göster…"
 
@@ -2733,23 +2766,23 @@ msgstr "_Tüm Sekmeleri Yeniden Yükle"
 msgid "_Duplicate"
 msgstr "_Çokla"
 
-#: src/resources/gtk/notebook-context-menu.ui:19
+#: src/resources/gtk/notebook-context-menu.ui:21
 msgid "Reo_pen Closed Tab"
 msgstr "Kapatılan Sekmeyi _Yeniden Aç"
 
-#: src/resources/gtk/notebook-context-menu.ui:23
+#: src/resources/gtk/notebook-context-menu.ui:27
 msgid "Close Tabs to the _Left"
 msgstr "Sekmeleri S_ola Doğru Kapat"
 
-#: src/resources/gtk/notebook-context-menu.ui:27
+#: src/resources/gtk/notebook-context-menu.ui:31
 msgid "Close Tabs to the _Right"
 msgstr "Sekmeleri S_ağa Doğru Kapat"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.ui:35
 msgid "Close _Other Tabs"
 msgstr "_Diğer Sekmeleri Kapat"
 
-#: src/resources/gtk/notebook-context-menu.ui:35
+#: src/resources/gtk/notebook-context-menu.ui:39
 msgid "_Close"
 msgstr "_Kapat"
 
@@ -2832,7 +2865,7 @@ msgstr "_Yardım"
 msgid "_About Web"
 msgstr "Web _Hakkında"
 
-#: src/resources/gtk/page-row.ui:52
+#: src/resources/gtk/page-row.ui:83
 msgid "Close page"
 msgstr "Sayfayı kapat"
 
@@ -3684,36 +3717,6 @@ msgstr "_Etkinleştir"
 #~ msgstr ""
 #~ "ARTIK KULLANILMIYOR: Bu anahtar artık kullanılmıyor ve yok sayılmıştır. "
 #~ "Bunun yerine /org/gnome/epiphany/web/enable-smooth-scrolling kullanın."
-
-#~ msgid "Process model"
-#~ msgstr "İşlem modeli"
-
-#~ msgid ""
-#~ "This option allows to set the process model used. Use “shared-secondary-"
-#~ "process” to use a single web process shared by all the tabs and “one-"
-#~ "secondary-process-per-web-view” to use a different web process for each "
-#~ "tab."
-#~ msgstr ""
-#~ "Bu seçenek, kullanılan işlem modelini belirlemenizi sağlar. Tüm sekmeler "
-#~ "tarafından paylaşılan tek web işlemi kullanmak için “shared-secondary-"
-#~ "process” ve her sekme için ayrı web işlemi kullanmak içinse “one-"
-#~ "secondary-process-per-web-view” ayarını kullanın."
-
-#~ msgid ""
-#~ "Maximum number of web processes created at the same time when using “one-"
-#~ "secondary-process-per-web-view” model"
-#~ msgstr ""
-#~ "“one-secondary-process-per-web-view” modeli kullanıldığında aynı anda "
-#~ "oluşturulan en yüksek web süreci sayısı"
-
-#~ msgid ""
-#~ "This option sets a limit to the number of web processes that will be used "
-#~ "at the same time for the “one-secondary-process-per-web-view” model. The "
-#~ "default value is “0” and means no limit."
-#~ msgstr ""
-#~ "Bu seçenek, “one-secondary-process-per-web-view” modeli için aynı anda "
-#~ "kullanılacak web süreçlerinin sayısına sınır koyar. Öntanımlı değeri "
-#~ "“0”dır ve sınırsız olduğu anlamına gelir."
 
 #~ msgid ""
 #~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
