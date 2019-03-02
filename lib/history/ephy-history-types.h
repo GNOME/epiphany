@@ -117,4 +117,9 @@ EphyHistoryQuery *              ephy_history_query_new (void);
 void                            ephy_history_query_free (EphyHistoryQuery *query);
 EphyHistoryQuery *              ephy_history_query_copy (EphyHistoryQuery *query);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(EphyHistoryHost, ephy_history_host_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(EphyHistoryURL, ephy_history_url_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(EphyHistoryPageVisit, ephy_history_page_visit_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(EphyHistoryQuery, ephy_history_query_free)
+
 G_END_DECLS
