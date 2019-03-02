@@ -151,11 +151,11 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (catalog);
   WebKitFaviconDatabase *database;
   GList *windows;
-  GList *tabs;
+  g_autoptr(GList) tabs = NULL;
   GList *tabs_info = NULL;
   const char *title;
   const char *url;
-  char *favicon;
+  g_autofree char *favicon = NULL;
 
   windows = gtk_application_get_windows (GTK_APPLICATION (embed_shell));
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (embed_shell));
@@ -174,11 +174,7 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
 
       tabs_info = g_list_prepend (tabs_info,
                                   ephy_tab_info_new (title, url, favicon));
-
-      g_free (favicon);
     }
-
-    g_list_free (tabs);
   }
 
   return tabs_info;
@@ -232,17 +228,15 @@ web_extension_sensitive_form_focused_message_received_cb (WebKitUserContentManag
 {
   guint64 page_id;
   gboolean insecure_action;
-  GVariant *variant;
-  char *message_str;
+  g_autoptr(GVariant) variant = NULL;
+  g_autofree char *message_str = NULL;
 
   message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
-  g_free (message_str);
 
   g_variant_get (variant, "(tb)", &page_id, &insecure_action);
   g_signal_emit (shell, signals[SENSITIVE_FORM_FOCUSED], 0,
                  page_id, insecure_action);
-  g_variant_unref (variant);
 }
 
 static void
@@ -271,13 +265,12 @@ static void
 ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyHistoryQuery *query;
+  g_autoptr(EphyHistoryQuery) query = NULL;
 
   query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (priv->global_history_service, query, NULL,
                                    (EphyHistoryJobCallback)history_service_query_urls_cb,
                                    shell);
-  ephy_history_query_free (query);
 }
 
 static void
@@ -305,7 +298,7 @@ web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
                                             EphyEmbedShell           *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  char *url_to_remove;
+  g_autofree char *url_to_remove = NULL;
 
   url_to_remove = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
 
@@ -313,7 +306,6 @@ web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback)history_set_url_hidden_cb,
                                        shell);
-  g_free (url_to_remove);
 }
 
 static void
@@ -343,11 +335,10 @@ web_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
                                               WebKitJavascriptResult   *message,
                                               EphyEmbedShell           *shell)
 {
-  char *app_id;
+  g_autofree char *app_id = NULL;
 
   app_id = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   ephy_web_application_delete (app_id);
-  g_free (app_id);
 }
 
 typedef struct {
@@ -356,6 +347,14 @@ typedef struct {
   gint32 promise_id;
   guint64 page_id;
 } PasswordManagerData;
+
+static void
+password_manager_data_free (PasswordManagerData *data)
+{
+  g_object_unref (data->shell);
+  g_free (data->origin);
+  g_free (data);
+}
 
 static void
 password_manager_query_finished_cb (GList               *records,
@@ -377,9 +376,7 @@ password_manager_query_finished_cb (GList               *records,
   if (proxy)
     ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id, data->page_id);
 
-  g_object_unref (data->shell);
-  g_free (data->origin);
-  g_free (data);
+  password_manager_data_free (data);
 }
 
 static char *
@@ -500,15 +497,15 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
   EphyWebView *view;
 
   /* Both password and password field are required. */
-  if (password == NULL || password_field == NULL)
+  if (!password || !password_field)
     return;
 
   /* The username field is required if username is present. */
-  if (username != NULL && username_field == NULL)
+  if (username && !username_field)
     g_clear_pointer (&username_field, g_free);
 
   /* The username is required if username field is present. */
-  if (username == NULL && username_field != NULL)
+  if (!username && username_field)
     g_clear_pointer (&username, g_free);
 
   /* This also sanity checks that a page isn't saving websites for
@@ -516,7 +513,7 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
    * process and we have to make sure it's not being evil here.
    */
   view = ephy_embed_shell_get_view_for_page_id (shell, page_id, origin);
-  if (view == NULL)
+  if (!view)
     return;
 
   if (!is_request) {
@@ -617,7 +614,7 @@ history_service_host_deleted_cb (EphyHistoryService *service,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
-  SoupURI *deleted_uri;
+  g_autoptr(SoupURI) deleted_uri = NULL;
 
   deleted_uri = soup_uri_new (deleted_url);
 
@@ -626,8 +623,6 @@ history_service_host_deleted_cb (EphyHistoryService *service,
 
     ephy_web_extension_proxy_history_delete_host (web_extension, soup_uri_get_host (deleted_uri));
   }
-
-  soup_uri_free (deleted_uri);
 }
 
 static void
@@ -715,18 +710,17 @@ got_snapshot_path_for_url_cb (EphySnapshotService *service,
                               GAsyncResult        *result,
                               char                *url)
 {
-  char *snapshot;
-  GError *error = NULL;
+  g_autofree char *snapshot = NULL;
+  g_autoptr(GError) error = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, &error);
   if (snapshot) {
     ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), url, snapshot);
-    g_free (snapshot);
   } else {
     /* Bad luck, not something to warn about. */
     g_info ("Failed to get snapshot for URL %s: %s", url, error->message);
-    g_error_free (error);
   }
+
   g_free (url);
 }
 
@@ -764,8 +758,8 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (priv->global_history_service == NULL) {
-    char *filename;
+  if (!priv->global_history_service) {
+    g_autofree char *filename = NULL;
     EphySQLiteConnectionMode mode;
 
     if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
@@ -777,8 +771,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 
     filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
     priv->global_history_service = ephy_history_service_new (filename, mode);
-    g_free (filename);
-    g_assert (priv->global_history_service);
+
     g_signal_connect_object (priv->global_history_service, "urls-visited",
                              G_CALLBACK (history_service_urls_visited_cb),
                              shell, 0);
@@ -812,16 +805,13 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-  if (priv->global_gsb_service == NULL) {
-    char *api_key;
-    char *db_path;
+  if (!priv->global_gsb_service) {
+    g_autofree char *api_key = NULL;
+    g_autofree char *db_path = NULL;
 
     api_key = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_GSB_API_KEY);
     db_path = g_build_filename (ephy_default_cache_dir (), EPHY_GSB_FILE, NULL);
     priv->global_gsb_service = ephy_gsb_service_new (api_key, db_path);
-
-    g_free (api_key);
-    g_free (db_path);
   }
 
   return priv->global_gsb_service;
@@ -840,7 +830,7 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (priv->encodings == NULL)
+  if (!priv->encodings)
     priv->encodings = ephy_encodings_new ();
 
   return priv->encodings;
@@ -874,34 +864,30 @@ static void
 ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
-  GInputStream *stream;
   gsize size;
-  GError *error = NULL;
+  g_autoptr(GInputStream) stream = NULL;
+  g_autoptr(GError) error = NULL;
 
   path = webkit_uri_scheme_request_get_path (request);
   if (!g_resources_get_info (path, 0, &size, NULL, &error)) {
     webkit_uri_scheme_request_finish_error (request, error);
-    g_error_free (error);
     return;
   }
 
   stream = g_resources_open_stream (path, 0, &error);
-  if (stream) {
+  if (stream)
     webkit_uri_scheme_request_finish (request, stream, size, NULL);
-    g_object_unref (stream);
-  } else {
+  else
     webkit_uri_scheme_request_finish_error (request, error);
-    g_error_free (error);
-  }
 }
 
 static void
 ftp_request_cb (WebKitURISchemeRequest *request)
 {
-  GDesktopAppInfo *app_info;
+  g_autoptr(GDesktopAppInfo) app_info = NULL;
+  g_autoptr(GList) list = NULL;
+  g_autoptr(GError) error = NULL;
   const char *uri;
-  GList *list = NULL;
-  GError *error = NULL;
 
   uri = webkit_uri_scheme_request_get_uri (request);
   g_app_info_launch_default_for_uri (uri, NULL, &error);
@@ -919,10 +905,6 @@ ftp_request_cb (WebKitURISchemeRequest *request)
     g_signal_emit_by_name (webkit_uri_scheme_request_get_web_view (request), "close", NULL);
   else
     webkit_uri_scheme_request_finish_error (request, error);
-
-  g_list_free (list);
-  g_error_free (error);
-  g_object_unref (app_info);
 }
 
 static void
@@ -930,7 +912,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
                            EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  GVariant *user_data;
+  g_autoptr(GVariant) user_data = NULL;
   gboolean private_profile;
   gboolean browser_mode;
   const char *address;
@@ -952,7 +934,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
                              ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
                              private_profile,
                              browser_mode);
-  webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
+  webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
 static void
@@ -995,15 +977,16 @@ new_connection_cb (GDBusServer     *server,
                    EphyEmbedShell  *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyWebExtensionProxy *extension;
+  g_autoptr(EphyWebExtensionProxy) extension = NULL;
 
   extension = ephy_web_extension_proxy_new (connection);
-  priv->web_extensions = g_list_prepend (priv->web_extensions, extension);
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);
   g_signal_connect_object (extension, "connection-closed",
                            G_CALLBACK (web_extension_connection_closed), shell, 0);
+
+  priv->web_extensions = g_list_prepend (priv->web_extensions, g_steal_pointer (&extension));
 
   return TRUE;
 }
@@ -1021,9 +1004,9 @@ static void
 ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  GDBusAuthObserver *observer;
-  char *address;
-  GError *error = NULL;
+  g_autoptr(GDBusAuthObserver) observer = NULL;
+  g_autofree char *address = NULL;
+  g_autoptr(GError) error = NULL;
 
   address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
 
@@ -1046,24 +1029,19 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 
   if (error) {
     g_warning ("Failed to start web extension server on %s: %s", address, error->message);
-    g_error_free (error);
-    goto out;
+    return;
   }
 
   g_signal_connect_object (priv->dbus_server, "new-connection",
                            G_CALLBACK (new_connection_cb), shell, 0);
   g_dbus_server_start (priv->dbus_server);
-
- out:
-  g_free (address);
-  g_object_unref (observer);
 }
 
 static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  WebKitWebsiteDataManager *manager;
+  g_autoptr(WebKitWebsiteDataManager) manager = NULL;
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     priv->web_context = webkit_web_context_new_ephemeral ();
@@ -1081,7 +1059,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
                                              NULL);
 
   priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
-  g_object_unref (manager);
 }
 
 static char *
@@ -1096,7 +1073,7 @@ download_started_cb (WebKitWebContext *web_context,
                      EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyDownload *ephy_download;
+  g_autoptr(EphyDownload) ephy_download = NULL;
   gboolean ephy_download_set;
 
   /* Is download locked down? */
@@ -1117,7 +1094,6 @@ download_started_cb (WebKitWebContext *web_context,
 
   ephy_download = ephy_download_new (download);
   ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
-  g_object_unref (ephy_download);
 }
 
 static void
@@ -1125,11 +1101,11 @@ ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  char *favicon_db_path;
+  g_autofree char *favicon_db_path = NULL;
   WebKitCookieManager *cookie_manager;
-  char *filename;
-  char *cookie_policy;
-  char *filters_dir;
+  g_autofree char *filename = NULL;
+  g_autofree char *cookie_policy = NULL;
+  g_autofree char *filters_dir = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
@@ -1221,7 +1197,6 @@ ephy_embed_shell_startup (GApplication *application)
     /* Favicon Database */
     favicon_db_path = g_build_filename (ephy_cache_dir (), "icondatabase", NULL);
     webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
-    g_free (favicon_db_path);
 
     /* Do not ignore TLS errors. */
     webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
@@ -1260,17 +1235,14 @@ ephy_embed_shell_startup (GApplication *application)
     filename = g_build_filename (ephy_profile_dir (), "cookies.sqlite", NULL);
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
-    g_free (filename);
   }
 
   cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
-  g_free (cookie_policy);
 
   filters_dir = adblock_filters_dir (shell);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
-  g_free (filters_dir);
 
   g_signal_connect (priv->web_context, "download-started",
                     G_CALLBACK (download_started_cb), shell);
@@ -1375,7 +1347,7 @@ static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
   /* globally accessible singleton */
-  g_assert (embed_shell == NULL);
+  g_assert (!embed_shell);
   embed_shell = shell;
 }
 
@@ -1523,23 +1495,22 @@ ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
                                  GtkPageSetup   *page_setup)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  char *path;
+  g_autofree char *path = NULL;
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (page_setup != NULL)
+  if (page_setup)
     g_object_ref (page_setup);
   else
     page_setup = gtk_page_setup_new ();
 
-  if (priv->page_setup != NULL)
+  if (priv->page_setup)
     g_object_unref (priv->page_setup);
 
   priv->page_setup = page_setup;
 
   path = g_build_filename (ephy_profile_dir (), PAGE_SETUP_FILENAME, NULL);
   gtk_page_setup_to_file (page_setup, path, NULL);
-  g_free (path);
 }
 
 /**
@@ -1554,19 +1525,14 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (priv->page_setup == NULL) {
-    GError *error = NULL;
-    char *path;
+  if (!priv->page_setup) {
+    g_autofree char *path = NULL;
 
     path = g_build_filename (ephy_profile_dir (), PAGE_SETUP_FILENAME, NULL);
-    priv->page_setup = gtk_page_setup_new_from_file (path, &error);
-    g_free (path);
-
-    if (error)
-      g_error_free (error);
+    priv->page_setup = gtk_page_setup_new_from_file (path, NULL);
 
     /* If that still didn't work, create a new, empty one */
-    if (priv->page_setup == NULL)
+    if (!priv->page_setup)
       priv->page_setup = gtk_page_setup_new ();
   }
 
@@ -1586,21 +1552,20 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell   *shell,
                                      GtkPrintSettings *settings)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  char *path;
+  g_autofree char *path = NULL;
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (settings != NULL)
+  if (settings)
     g_object_ref (settings);
 
-  if (priv->print_settings != NULL)
+  if (priv->print_settings)
     g_object_unref (priv->print_settings);
 
   priv->print_settings = settings ? settings : gtk_print_settings_new ();
 
   path = g_build_filename (ephy_profile_dir (), PRINT_SETTINGS_FILENAME, NULL);
   gtk_print_settings_to_file (settings, path, NULL);
-  g_free (path);
 }
 
 /**
@@ -1618,19 +1583,17 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
-  if (priv->print_settings == NULL) {
-    GError *error = NULL;
-    char *path;
+  if (!priv->print_settings) {
+    g_autofree char *path = NULL;
 
     path = g_build_filename (ephy_profile_dir (), PRINT_SETTINGS_FILENAME, NULL);
-    priv->print_settings = gtk_print_settings_new_from_file (path, &error);
-    g_free (path);
+    priv->print_settings = gtk_print_settings_new_from_file (path, NULL);
 
     /* Note: the gtk print settings file format is the same as our
      * legacy one, so no need to migrate here.
      */
 
-    if (priv->print_settings == NULL)
+    if (!priv->print_settings)
       priv->print_settings = gtk_print_settings_new ();
   }
 
