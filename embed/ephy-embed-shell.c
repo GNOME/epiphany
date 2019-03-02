@@ -200,6 +200,11 @@ ephy_embed_shell_dispose (GObject *object)
     g_clear_object (&priv->cancellable);
   }
 
+  if (priv->web_extensions) {
+    g_list_free_full (priv->web_extensions, g_object_unref);
+    priv->web_extensions = NULL;
+  }
+
   g_clear_object (&priv->encodings);
   g_clear_object (&priv->page_setup);
   g_clear_object (&priv->print_settings);
@@ -921,32 +926,6 @@ ftp_request_cb (WebKitURISchemeRequest *request)
 }
 
 static void
-web_extension_destroyed (EphyEmbedShell *shell,
-                         GObject        *web_extension)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  priv->web_extensions = g_list_remove (priv->web_extensions, web_extension);
-}
-
-static void
-ephy_embed_shell_watch_web_extension (EphyEmbedShell        *shell,
-                                      EphyWebExtensionProxy *web_extension)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  priv->web_extensions = g_list_prepend (priv->web_extensions, web_extension);
-  g_object_weak_ref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
-}
-
-static void
-ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
-                                        EphyEmbedShell        *shell)
-{
-  g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
-}
-
-static void
 initialize_web_extensions (WebKitWebContext *web_context,
                            EphyEmbedShell   *shell)
 {
@@ -1000,18 +979,31 @@ web_extension_page_created (EphyWebExtensionProxy *extension,
   g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, extension);
 }
 
+static void
+web_extension_connection_closed (EphyWebExtensionProxy *extension,
+                                 EphyEmbedShell        *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->web_extensions = g_list_remove (priv->web_extensions, extension);
+  g_object_unref (extension);
+}
+
 static gboolean
 new_connection_cb (GDBusServer     *server,
                    GDBusConnection *connection,
                    EphyEmbedShell  *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyWebExtensionProxy *extension;
 
   extension = ephy_web_extension_proxy_new (connection);
-  ephy_embed_shell_watch_web_extension (shell, extension);
+  priv->web_extensions = g_list_prepend (priv->web_extensions, extension);
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);
+  g_signal_connect_object (extension, "connection-closed",
+                           G_CALLBACK (web_extension_connection_closed), shell, 0);
 
   return TRUE;
 }
@@ -1317,8 +1309,6 @@ ephy_embed_shell_shutdown (GApplication *application)
   webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
                                                                           "passwordManagerQueryUsernames",
                                                                           priv->guid);
-
-  g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
   g_object_unref (ephy_embed_prefs_get_settings ());
   ephy_embed_utils_shutdown ();
