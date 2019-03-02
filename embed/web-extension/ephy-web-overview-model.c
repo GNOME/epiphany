@@ -108,7 +108,7 @@ ephy_web_overview_model_urls_to_js_value (EphyWebOverviewModel *model,
     value = jsc_value_new_string (js_context, item->title);
     jsc_value_object_set_property (js_item, "title", value);
 
-    g_ptr_array_add (urls, js_item);
+    g_ptr_array_add (urls, g_steal_pointer (&js_item));
   }
 
   return urls;
