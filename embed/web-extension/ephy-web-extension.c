@@ -587,7 +587,7 @@ dbus_connection_created_cb (GObject          *source_object,
     return;
   }
 
-  extension->dbus_connection = connection;
+  extension->dbus_connection = g_steal_pointer (&connection);
   ephy_web_extension_emit_page_created_signals_pending (extension);
 }
 
