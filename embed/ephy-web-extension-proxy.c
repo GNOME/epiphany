@@ -113,13 +113,12 @@ web_extension_proxy_created_cb (GDBusProxy            *proxy,
                                 GAsyncResult          *result,
                                 EphyWebExtensionProxy *web_extension)
 {
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   web_extension->proxy = g_dbus_proxy_new_finish (result, &error);
   if (!web_extension->proxy) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error creating web extension proxy: %s", error->message);
-    g_error_free (error);
 
     /* Attempt to trigger connection_closed_cb, which will destroy us, and ensure that
      * that EphyEmbedShell will remove us from its extensions list.
@@ -152,10 +151,8 @@ connection_closed_cb (GDBusConnection       *connection,
                       GError                *error,
                       EphyWebExtensionProxy *web_extension)
 {
-  if (error) {
-    if (!remote_peer_vanished)
-      g_warning ("Unexpectedly lost connection to web extension: %s", error->message);
-  }
+  if (error && !remote_peer_vanished)
+    g_warning ("Unexpectedly lost connection to web extension: %s", error->message);
 
   g_object_unref (web_extension);
 }
