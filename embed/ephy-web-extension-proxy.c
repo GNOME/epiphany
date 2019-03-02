@@ -36,6 +36,7 @@ struct _EphyWebExtensionProxy {
 
 enum {
   PAGE_CREATED,
+  CONNECTION_CLOSED,
 
   LAST_SIGNAL
 };
@@ -78,13 +79,6 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
 
   object_class->dispose = ephy_web_extension_proxy_dispose;
 
-  /**
-   * EphyWebExtensionProxy::page-created:
-   * @web_extension: the #EphyWebExtensionProxy
-   * @page_id: the identifier of the web page created
-   *
-   * Emitted when a web page is created in the web process.
-   */
   signals[PAGE_CREATED] =
     g_signal_new ("page-created",
                   EPHY_TYPE_WEB_EXTENSION_PROXY,
@@ -92,6 +86,13 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_UINT64);
+
+  signals[CONNECTION_CLOSED] =
+    g_signal_new ("connection-closed",
+                  EPHY_TYPE_WEB_EXTENSION_PROXY,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -120,8 +121,9 @@ web_extension_proxy_created_cb (GDBusProxy            *proxy,
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error creating web extension proxy: %s", error->message);
 
-    /* Attempt to trigger connection_closed_cb, which will destroy us, and ensure that
-     * that EphyEmbedShell will remove us from its extensions list.
+    /* Attempt to trigger connection_closed_cb, which will emit the
+     * connection-closed signal, ensuring that EphyEmbedShell will
+     * remove us from its extensions list.
      */
     g_dbus_connection_close (web_extension->connection,
                              web_extension->cancellable,
@@ -154,7 +156,7 @@ connection_closed_cb (GDBusConnection       *connection,
   if (error && !remote_peer_vanished)
     g_warning ("Unexpectedly lost connection to web extension: %s", error->message);
 
-  g_object_unref (web_extension);
+  g_signal_emit (web_extension, signals[CONNECTION_CLOSED], 0);
 }
 
 EphyWebExtensionProxy *
