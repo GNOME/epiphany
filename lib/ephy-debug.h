@@ -25,9 +25,10 @@
 G_BEGIN_DECLS
 
 #if DEVELOPER_MODE
-#define LOG(msg, args...)		 g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,		\
-                                    "[ %s ] " msg,				\
-                                    __FILE__ , ## args)
+#define LOG(msg, args...) G_STMT_START { \
+    g_autofree char *ephy_log_file_basename = g_path_get_basename (__FILE__); \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "[ %s ] " msg, ephy_log_file_basename, ## args); \
+  } G_STMT_END
 #else
 #define LOG(...) G_STMT_START { } G_STMT_END
 #endif
