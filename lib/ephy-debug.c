@@ -54,7 +54,8 @@ build_modules (const char *name,
   *is_all = FALSE;
 
   env = g_getenv (name);
-  if (env == NULL) return NULL;
+  if (env == NULL)
+    return NULL;
 
   if (strcmp (env, "all") == 0) {
     *is_all = TRUE;
@@ -75,7 +76,8 @@ log_module (const gchar   *log_domain,
 {
   gboolean should_log = ephy_log_all_modules;
 
-  if (!ephy_log_all_modules && !ephy_log_modules) return;
+  if (!ephy_log_all_modules && !ephy_log_modules)
+    return;
 
   if (ephy_log_modules != NULL) {
     guint i;
@@ -88,9 +90,8 @@ log_module (const gchar   *log_domain,
     }
   }
 
-  if (should_log) {
+  if (should_log)
     g_print ("%s\n", message);
-  }
 }
 
 #define MAX_DEPTH 200
@@ -165,7 +166,8 @@ ephy_should_profile (const char *module)
   slash = strrchr (module, '/');
 
   /* Happens on builddir != srcdir builds */
-  if (slash != NULL) module = slash + 1;
+  if (slash != NULL)
+    module = slash + 1;
 
   for (i = 0; ephy_profile_modules[i] != NULL; i++) {
     if (strcmp (ephy_profile_modules[i], module) == 0) {
@@ -221,7 +223,8 @@ ephy_profiler_start (const char *name, const char *module)
   }
 
   if (!ephy_profile_all_modules &&
-      (ephy_profile_modules == NULL || !ephy_should_profile (module))) return;
+      (ephy_profile_modules == NULL || !ephy_should_profile (module)))
+    return;
 
   profiler = ephy_profiler_new (name, module);
 
@@ -240,7 +243,9 @@ ephy_profiler_stop (const char *name)
   EphyProfiler *profiler;
 
   profiler = g_hash_table_lookup (ephy_profilers_hash, name);
-  if (profiler == NULL) return;
+  if (profiler == NULL)
+    return;
+
   g_hash_table_remove (ephy_profilers_hash, name);
 
   ephy_profiler_dump (profiler);
