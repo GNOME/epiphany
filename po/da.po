@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-05 17:48+0000\n"
-"PO-Revision-Date: 2019-02-09 11:19+0100\n"
+"POT-Creation-Date: 2019-02-26 20:53+0000\n"
+"PO-Revision-Date: 2019-02-28 19:58+0100\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -200,18 +200,51 @@ msgstr ""
 "indlæse sig før brugeren skifter til dem, ved gendannelse af session."
 
 #: data/org.gnome.epiphany.gschema.xml:60
+msgid "Process model"
+msgstr "Procesmodel"
+
+#: data/org.gnome.epiphany.gschema.xml:61
+msgid ""
+"This option allows to set the process model used. Use “shared-secondary-"
+"process” to use a single web process shared by all the tabs and “one-"
+"secondary-process-per-web-view” to use a different web process for each tab."
+msgstr ""
+"Denne indstilling gør det muligt at vælge den procesmodel, der vil blive "
+"brugt. Brug “shared-secondary-process” for at lade alle faneblade dele en "
+"enkelt proces og “one-secondary-process-per-web-view” for at få en proces "
+"pr. faneblad."
+
+#: data/org.gnome.epiphany.gschema.xml:65
+msgid ""
+"Maximum number of web processes created at the same time when using “one-"
+"secondary-process-per-web-view” model"
+msgstr ""
+"Maksimalt antal samtidige webprocesser som oprettes ved brug af “one-"
+"secondary-process-per-web-view”-modellen"
+
+#: data/org.gnome.epiphany.gschema.xml:66
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the “one-secondary-process-per-web-view” model. The "
+"default value is “0” and means no limit."
+msgstr ""
+"Denne indstilling angiver en grænse for antallet af webprocesser, som kan "
+"bruges på samme tid med “one-secondary-process-per-web-view”-modellen. "
+"Standardværdien er “0” og betyder ubegrænset."
+
+#: data/org.gnome.epiphany.gschema.xml:71
 msgid "List of adblock filters"
 msgstr "Liste over reklameblokeringsfiltre"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr "Liste over URL'er med filterregler der bruges af reklameblokeringen."
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Udvid fanebladsstørrelsen så al plads i fanebladslinjen bruges."
 
-#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -219,11 +252,11 @@ msgstr ""
 "Hvis aktiveret vil faneblade udvide sig, så de bruger al tilgængelig plads i "
 "fanebladslinjen."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The position of the tabs bar."
 msgstr "Fanebladslinjens placering."
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -233,11 +266,11 @@ msgstr ""
 "“top” (forvalgt), “bottom”, “left” (lodrette faneblade med linjen til "
 "venstre) og “right” (lodrette faneblade med linjen til højre)."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "Synlighedspolitikken for fanebladslinjen."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -248,19 +281,19 @@ msgstr ""
 "one” (fanebladslinjer bliver altid vist hvis der er mere end et faneblad) og "
 "“never” (fanebladslinjen bliver aldrig vist)."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
 msgstr "Lad vinduet forblive åbent, når sidste faneblad lukkes"
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr "Hvis aktiveret, forbliver vinduet åbent, når sidste faneblad lukkes."
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
 msgstr "Skriftsnit for artikler i læsertilstand."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -268,12 +301,12 @@ msgstr ""
 "Vælger hovedbrødtekstens stil for artikler i læsertilstand. Mulige værdier "
 "er “sans” og “serif”."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
 msgstr "Farveskema for læsertilstand."
 
 # lys og mørk oversættes senere
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -282,23 +315,23 @@ msgstr ""
 "Vælger farvestilen for artikler vist i læsertilstand. Mulige værdier er "
 "“lys” (mørk tekst på lys baggrund) og “mørk” (lys tekst på mørk baggrund)."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "Mindste skriftstørrelse"
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "Brug GNOME-skrifttyper"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "Brug GNOME-skrifttypeindstillinger."
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "Tilpasset sans serif-skrifttype"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -306,11 +339,11 @@ msgstr ""
 "En værdi som vil blive brugt til at overskrive sans serif-"
 "skrivebordsskrifttype når use-gnome-fonts er indstillet."
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "Tilpasset serif-skrifttype"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -318,11 +351,11 @@ msgstr ""
 "En værdi som vil blive brugt til at overskrive serif-skrivebordsskrifttypen "
 "når use-gnome-fonts er indstillet."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "Tilpasset skrifttype med fast bredde"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -330,48 +363,48 @@ msgstr ""
 "En værdi som vil blive brugt til at tilsidesætte skrivebordsskrifttypen med "
 "fast bredde når use-gnome-fonts er indstillet."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "Brug en tilpasset CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Brug en tilpasset CSS-fil til at modificere webstedernes egne CSS'er."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Aktivér stavekontrol"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr "Kontroller stavning af al tekst indtastet i redigerbare områder."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Standardkodning"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr "Forvalgt kodning. Gyldige værdier er dem som WebKitGTK+ kan forstå."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:151
 #: src/resources/gtk/prefs-dialog.ui:910
 msgid "Languages"
 msgstr "Sprog"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Foretrukne sprog. Tabel med regionskoder eller “system” for at bruge den "
 "nuværende region."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Cookie accept"
 msgstr "Acceptér cookie fra"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -379,50 +412,50 @@ msgstr ""
 "Hvor cookies skal accepteres fra. Mulige værdier er “always”, “no-third-"
 "party”, “never”."
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Tillad pop op-vinduer"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Tillad sider at åbne nye vinduer vha. JavaScript (hvis JavaScript er "
 "aktiveret)."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable Plugins"
 msgstr "Aktivér udvidelsesmoduler"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Enable WebGL"
 msgstr "Aktivér WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Hvorvidt understøttelse for WebGL-kontekster skal aktiveres."
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Enable WebAudio"
 msgstr "Aktivér WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Whether to enable support for WebAudio."
 msgstr "Hvorvidt der skal aktiveres understøttelse for WebAudio."
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable smooth scrolling"
 msgstr "Slå blød rulning til"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Whether to enable smooth scrolling."
 msgstr "Om blød rulning skal aktiveres."
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "User agent"
 msgstr "Brugeragent"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -430,27 +463,26 @@ msgstr ""
 "Streng som vil blive brugt som brugeragent til at identificere browseren "
 "overfor webservere."
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Do Not Track"
 msgstr "Spor ikke"
 
 # forespørgselsparamtre til sporing?
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
-"Enables DNT headers and tracking query parameter removal. Note that when "
-"changing this setting from the preferences dialog, the adblock-filters "
-"setting will additionally be updated to add/remove EasyPrivacy filters."
+"Enables tracking query parameter removal. Note that when changing this "
+"setting from the preferences dialog, the adblock-filters setting will "
+"additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
-"Aktiverer DNT-overskrifter og fjernelse af parametre til "
-"sporingsforespørgsel. Bemærk, at når denne indstilling ændres i dialogen "
-"“Indstillinger”, vil indstillingerne for reklameblokeringsfiltre blive "
-"opdateret til tilføj/fjern EasyPrivacy-filtre."
+"Aktiverer fjernelse af parametre til sporingsforespørgsel. Bemærk, at når "
+"denne indstilling ændres i dialogen “Indstillinger”, vil indstillingerne for "
+"reklameblokeringsfiltre blive opdateret til tilføj/fjern EasyPrivacy-filtre."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Enable adblock"
 msgstr "Aktivér reklameblokering"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -458,20 +490,20 @@ msgstr ""
 "Om der skal blokeres for indlejrede reklamer som websider måske gerne vil "
 "vise."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Remember passwords"
 msgstr "Husk adgangskoder"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Om adgangskoder på websteder skal gemmes og udfyldes på forhånd."
 
 # Kan ikke finde nogen anden (relevant) betydning af quirk, selvom det lyder underligt
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable site-specific quirks"
 msgstr "Aktivér sitespecifik bagudkompatibilitet"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -480,11 +512,11 @@ msgstr ""
 "bedre. Du vil måske deaktivere denne indstilling, hvis du fejlsøger et "
 "specifik problem."
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable safe browsing"
 msgstr "Aktivér sikker browsing"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -492,24 +524,24 @@ msgstr ""
 "Om sikker browsing skal aktiveres. Sikker browsing foregår gennem Google "
 "Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Google Safe Browsing API key"
 msgstr "Nøgle til Google Safe Browsing API"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "API-nøgle der bruges til at få adgang til Google Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Default zoom level for new pages"
 msgstr "Standardzoomniveau for nye sider"
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid "Enable autosearch"
 msgstr "Aktivér automatisk søgning"
 
 # Bar er tidligere oversat med linje i forbindelse med faneblade
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -522,11 +554,11 @@ msgstr ""
 "rullegardinsmenuen."
 
 # MS oversætter med bevægelse
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid "Enable mouse gesture"
 msgstr "Aktivér musebevægelser"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -534,27 +566,27 @@ msgstr ""
 "Om musebevægelser skal aktiveres. Musebevægelser er baseret på Operas "
 "opførsel og aktiveres med brug af midterste museknap + bevægelse."
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Last upload directory"
 msgstr "Seneste mappe til overførsel"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Keep track of last upload directory"
 msgstr "Hold styr på seneste mappe til overførsel"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Last download directory"
 msgstr "Seneste mappe til hentning"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Keep track of last download directory"
 msgstr "Hold styr på seneste mappe til hentning"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Hardware acceleration policy"
 msgstr "Politik for hardwareacceleration"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -571,19 +603,19 @@ msgstr ""
 "hardwareacceleration kun blive brugt, når det kræves til at vise 3D-"
 "transformeringer."
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid "Web application additional URLs"
 msgstr "Yderligere URL'er til webprogram"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Listen over URL'er som skal åbnes af webprogrammet"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "The downloads folder"
 msgstr "Overførselsmappe"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -592,33 +624,33 @@ msgstr ""
 "at bruge den forvalgte overførselsmappen, eller “Desktop” for at bruge "
 "skrivebordsmappen."
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:266
 msgid "Window position"
 msgstr "Vinduesplacering"
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "Placeringen af et nyt vindue som ikke gendannes fra en tidligere session."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:271
 msgid "Window size"
 msgstr "Vinduesstørrelse"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "Størrelsen på et nyt vindue som ikke gendannes fra en tidligere session."
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:276
 msgid "Is maximized"
 msgstr "Er maksimeret"
 
-#: data/org.gnome.epiphany.gschema.xml:266
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -626,11 +658,11 @@ msgstr ""
 "Om et nyt vindue, som ikke gendannes fra en tidligere session, skal være "
 "maksimeret fra starten."
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Disable forward and back buttons"
 msgstr "Deaktivér frem- og tilbageknapper"
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -638,11 +670,11 @@ msgstr ""
 "Hvis sat til “true” (sand), er frem- og tilbageknapperne deaktiverede, "
 "hvilket forhindrer brugeres adgang til nylig browserhistorik"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "Currently signed in sync user"
 msgstr "Synkroniseret bruger, som er logget ind i øjeblikket"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -650,44 +682,44 @@ msgstr ""
 "Den e-mail, som er forbundet med den Firefox-konto, der bruges til at "
 "synkronisere data med Mozillas servere."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "Last sync timestamp"
 msgstr "Seneste synkroniseringstidsstempel"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX-tiden (i sekunder) hvor seneste synkronisering blev foretaget."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "Sync device ID"
 msgstr "Synkroniseringsenheds-ID"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "The sync device ID of the current device."
 msgstr "Synkroniseringsenheds-ID'et for den aktuelle enhed."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "Sync device name"
 msgstr "Synkroniseringsenhedens navn"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "The sync device name of the current device."
 msgstr "Synkroniseringsenhedsnavnet for den aktuelle enhed."
 
 # Der er ikke tale om en frekvens, men et interval: frekvens har dimensionen reciprok tid
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "The sync frequency in minutes"
 msgstr "Synkroniseringsintervallet i minutter"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Antal minutter mellem to på hinanden følgende synkroniseringer."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "Sync data with Firefox"
 msgstr "Synkronisér data med Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -695,30 +727,30 @@ msgstr ""
 "TRUE (sand) hvis Ephy-samlinger skal synkroniseres med Firefox-samlinger, "
 "ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "Enable bookmarks sync"
 msgstr "Aktivér synkronisering af bogmærker"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sand) hvis bogmærkesamlingen skal synkroniseres, ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "Bookmarks sync timestamp"
 msgstr "Tidsstempel for synkronisering af bogmærker"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Tidsstemplet hvor seneste synkronisering af bogmærker blev foretaget."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "Initial sync or normal sync"
 msgstr "Indledende synkronisering eller normal synkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -726,26 +758,26 @@ msgstr ""
 "TRUE (sand) hvis bogmærkesamlingen skal synkroniseres for første gang, "
 "ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "Enable passwords sync"
 msgstr "Aktivér synkronisering af adgangskoder"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sand) hvis adgangskodesamlingen skal synkroniseres, ellers FALSE "
 "(falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "Passwords sync timestamp"
 msgstr "Tidsstempel for synkronisering af adgangskoder"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 "Tidsstemplet hvor seneste synkronisering af adgangskoder blev foretaget."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -753,25 +785,25 @@ msgstr ""
 "TRUE (sand) hvis adgangskodesamlingen skal synkroniseres for første gang, "
 "ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "Enable history sync"
 msgstr "Aktivér synkronisering af historik"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sand) hvis historiksamlingen skal synkroniseres, ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "History sync timestamp"
 msgstr "Tidsstempel for synkronisering af historik"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 "Tidsstemplet hvor seneste synkronisering af historikken blev foretaget."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -779,33 +811,33 @@ msgstr ""
 "TRUE (sand) hvis historiksamlingen skal synkroniseres for første gang, "
 "ellers FALSE (falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "Enable open tabs sync"
 msgstr "Aktivér synkronisering af åbne faneblade"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sand) hvis åbne fanebladesamlingen skal synkroniseres, ellers FALSE "
 "(falsk)."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "Open tabs sync timestamp"
 msgstr "Tidsstempel for synkronisering af åbne faneblade"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "Tidsstemplet hvor seneste synkronisering af åbne faneblade blev foretaget."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Beslutning, der skal anvendes, når der anmodes om mikrofontilladelse til "
 "denne vært"
 
 # upon request er overflødig at oversætte (det fremgår af forrige streng)
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -817,14 +849,14 @@ msgstr ""
 "at browseren skal spørge brugeren om lov, mens “allow” (tillad) og "
 "“deny” (nægt) betyder, at beslutningen tages automatisk."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Beslutning, der skal anvendes, når der anmodes om placeringstilladelse til "
 "denne vært"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -836,14 +868,14 @@ msgstr ""
 "besluttet) betyder, at browseren skal spørge brugeren om lov, mens "
 "“allow” (tillad) og “deny” (nægt) betyder, at beslutningen tages automatisk."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Beslutning, der skal anvendes, når der anmodes om påmindelsestilladelse til "
 "denne vært"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -855,14 +887,14 @@ msgstr ""
 "browseren skal spørge brugeren om lov, mens “allow” (tillad) og "
 "“deny” (nægt) betyder, at beslutningen tages automatisk."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Beslutning, der skal anvendes, når der anmodes om tilladelse til at gemme "
 "adgangskode til denne vært"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -874,13 +906,13 @@ msgstr ""
 "browseren skal spørge brugeren om lov, mens “allow” (tillad) og "
 "“deny” (nægt) betyder, at beslutningen tages automatisk."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Beslutning, der skal anvendes, når der anmodes om webcamtilladelse til denne "
 "vært"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -2084,20 +2116,20 @@ msgstr "Alle filer"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:605 src/ephy-history-dialog.c:389
+#: lib/widgets/ephy-location-entry.c:603 src/ephy-history-dialog.c:389
 msgid "Cl_ear"
 msgstr "_Ryd"
 
-#: lib/widgets/ephy-location-entry.c:625
+#: lib/widgets/ephy-location-entry.c:623
 msgid "Paste and _Go"
 msgstr "Indsæt og _indlæs"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:913
+#: lib/widgets/ephy-location-entry.c:644 src/ephy-window.c:914
 msgid "_Undo"
 msgstr "For_tryd"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:651
 msgid "_Redo"
 msgstr "_Omgør"
 
@@ -2321,133 +2353,133 @@ msgstr "Hvis du afslutter, vil disse downloads blive afbrudt"
 msgid "Quit and cancel downloads"
 msgstr "Afslut og afbryd downloads"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "O_mgør"
 
 #. Edit.
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Cu_t"
 msgstr "_Klip"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Copy"
 msgstr "K_opiér"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:920
 msgid "_Paste"
 msgstr "Ind_sæt"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:921
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "S_end adresse med e-mail …"
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "_Opdatér"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "_Tilbage"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "_Frem"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "Tilføj _bogmærke …"
 
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Gå til adressen i nyt _vindue"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Gå til adressen i nyt _faneblad"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Åbn adressen i i_ncognitovindue"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "_Gem adresse som …"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "_Kopiér adresse"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "_Kopiér e-mailadresse"
 
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "Vis _billede i nyt faneblad"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Kopiér b_illedadresse"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "_Gem billede som …"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Brug som _baggrundstapet"
 
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Åbn video i nyt _vindue"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Åbn video i nyt _faneblad"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "_Gem video som …"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "_Kopiér videoadresse"
 
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Åbn lyd i nyt _vindue"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Åbn lyd i nyt _faneblad"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "_Gem lyd som …"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "_Kopiér lydadresse"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Save Pa_ge As…"
 msgstr "_Gem side som …"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Page Source"
 msgstr "_Kildetekst"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Søg på nettet efter ”%s”"
@@ -2770,27 +2802,26 @@ msgid "Reload _All Tabs"
 msgstr "Op_datér alle faneblade"
 
 #: src/resources/gtk/notebook-context-menu.ui:15
-#| msgid "Du_plicate"
 msgid "_Duplicate"
 msgstr "D_uplikér"
 
-#: src/resources/gtk/notebook-context-menu.ui:19
+#: src/resources/gtk/notebook-context-menu.ui:21
 msgid "Reo_pen Closed Tab"
 msgstr "Genåben lukket _faneblad"
 
-#: src/resources/gtk/notebook-context-menu.ui:23
+#: src/resources/gtk/notebook-context-menu.ui:27
 msgid "Close Tabs to the _Left"
 msgstr "Luk faneblade til _venstre"
 
-#: src/resources/gtk/notebook-context-menu.ui:27
+#: src/resources/gtk/notebook-context-menu.ui:31
 msgid "Close Tabs to the _Right"
 msgstr "Luk faneblade til _højre"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.ui:35
 msgid "Close _Other Tabs"
 msgstr "Lu_k andre faneblade"
 
-#: src/resources/gtk/notebook-context-menu.ui:35
+#: src/resources/gtk/notebook-context-menu.ui:39
 msgid "_Close"
 msgstr "_Luk"
 
@@ -2874,7 +2905,7 @@ msgstr "_Hjælp"
 msgid "_About Web"
 msgstr "_Om Web"
 
-#: src/resources/gtk/page-row.ui:52
+#: src/resources/gtk/page-row.ui:83
 msgid "Close page"
 msgstr "Luk side"
 
@@ -3737,36 +3768,6 @@ msgstr "_Aktivér"
 #~ msgstr ""
 #~ "FORÆLDET: Denne nøgle er forældet og ignoreres. Brug /org/gnome/epiphany/"
 #~ "web/enable-smooth-scrolling i stedet for."
-
-#~ msgid "Process model"
-#~ msgstr "Procesmodel"
-
-#~ msgid ""
-#~ "This option allows to set the process model used. Use “shared-secondary-"
-#~ "process” to use a single web process shared by all the tabs and “one-"
-#~ "secondary-process-per-web-view” to use a different web process for each "
-#~ "tab."
-#~ msgstr ""
-#~ "Denne indstilling gør det muligt at vælge den procesmodel, der vil blive "
-#~ "brugt. Brug “shared-secondary-process” for at lade alle faneblade dele en "
-#~ "enkelt proces og “one-secondary-process-per-web-view” for at få en proces "
-#~ "pr. faneblad."
-
-#~ msgid ""
-#~ "Maximum number of web processes created at the same time when using “one-"
-#~ "secondary-process-per-web-view” model"
-#~ msgstr ""
-#~ "Maksimalt antal samtidige webprocesser som oprettes ved brug af “one-"
-#~ "secondary-process-per-web-view”-modellen"
-
-#~ msgid ""
-#~ "This option sets a limit to the number of web processes that will be used "
-#~ "at the same time for the “one-secondary-process-per-web-view” model. The "
-#~ "default value is “0” and means no limit."
-#~ msgstr ""
-#~ "Denne indstilling angiver en grænse for antallet af webprocesser, som kan "
-#~ "bruges på samme tid med “one-secondary-process-per-web-view”-modellen. "
-#~ "Standardværdien er “0” og betyder ubegrænset."
 
 #~ msgid ""
 #~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
