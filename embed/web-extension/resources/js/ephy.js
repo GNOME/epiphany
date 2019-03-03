@@ -1,67 +1,5 @@
 var Ephy = {};
 
-Ephy.formControlsAssociated = function(pageID, forms, serializer, rememberPasswords)
-{
-    Ephy.formManagers = [];
-
-    for (let i = 0; i < forms.length; i++) {
-        if (!(forms[i] instanceof HTMLFormElement))
-            continue;
-        let formManager = new Ephy.FormManager(pageID, forms[i]);
-        formManager.handleSensitiveElement(serializer);
-        if (rememberPasswords)
-            formManager.preFillForms();
-        Ephy.formManagers.push(formManager);
-    }
-}
-
-Ephy.handleFormSubmission = function(pageID, form, formAuthRequester)
-{
-    let formManager = null;
-    for (let i = 0; i < Ephy.formManagers.length; i++) {
-        let manager = Ephy.formManagers[i];
-        if (manager.pageID() == pageID && manager.form() == form) {
-            formManager = manager;
-            break;
-        }
-    }
-
-    if (!formManager) {
-        formManager = new Ephy.FormManager(pageID, form);
-        Ephy.formManagers.push(formManager);
-    }
-
-    formManager.handleFormSubmission(formAuthRequester);
-}
-
-Ephy.hasModifiedForms = function()
-{
-    for (let i = 0; i < document.forms.length; i++) {
-        let form = document.forms[i];
-        let modifiedInputElement = false;
-        for (let j = 0; j < form.elements.length; j++) {
-            let element = form.elements[j];
-            if (!Ephy.isEdited(element))
-                continue;
-
-            if (element instanceof HTMLTextAreaElement)
-                return !!element.value;
-
-            if (element instanceof HTMLInputElement) {
-                // A small heuristic here. If there's only one input element
-                // modified and it does not have a lot of text the user is
-                // likely not very interested in saving this work, so do
-                // nothing (eg, google search input).
-                if (element.value.length > 50)
-                    return true;
-                if (modifiedInputElement)
-                    return true;
-                modifiedInputElement = true;
-            }
-        }
-    }
-}
-
 Ephy.getWebAppTitle = function()
 {
     let metas = document.getElementsByTagName('meta');
@@ -307,7 +245,69 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         if (menu)
             menu.parentNode.removeChild(menu);
     }
-};
+}
+
+Ephy.formControlsAssociated = function(pageID, forms, serializer, rememberPasswords)
+{
+    Ephy.formManagers = [];
+
+    for (let i = 0; i < forms.length; i++) {
+        if (!(forms[i] instanceof HTMLFormElement))
+            continue;
+        let formManager = new Ephy.FormManager(pageID, forms[i]);
+        formManager.handleSensitiveElement(serializer);
+        if (rememberPasswords)
+            formManager.preFillForms();
+        Ephy.formManagers.push(formManager);
+    }
+}
+
+Ephy.handleFormSubmission = function(pageID, form, formAuthRequester)
+{
+    let formManager = null;
+    for (let i = 0; i < Ephy.formManagers.length; i++) {
+        let manager = Ephy.formManagers[i];
+        if (manager.pageID() == pageID && manager.form() == form) {
+            formManager = manager;
+            break;
+        }
+    }
+
+    if (!formManager) {
+        formManager = new Ephy.FormManager(pageID, form);
+        Ephy.formManagers.push(formManager);
+    }
+
+    formManager.handleFormSubmission(formAuthRequester);
+}
+
+Ephy.hasModifiedForms = function()
+{
+    for (let i = 0; i < document.forms.length; i++) {
+        let form = document.forms[i];
+        let modifiedInputElement = false;
+        for (let j = 0; j < form.elements.length; j++) {
+            let element = form.elements[j];
+            if (!Ephy.isEdited(element))
+                continue;
+
+            if (element instanceof HTMLTextAreaElement)
+                return !!element.value;
+
+            if (element instanceof HTMLInputElement) {
+                // A small heuristic here. If there's only one input element
+                // modified and it does not have a lot of text the user is
+                // likely not very interested in saving this work, so do
+                // nothing (eg, google search input).
+                if (element.value.length > 50)
+                    return true;
+                if (modifiedInputElement)
+                    return true;
+                modifiedInputElement = true;
+            }
+        }
+    }
+}
 
 Ephy.PasswordManager = class PasswordManager
 {
@@ -328,7 +328,7 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryResponse(username, password, id)
     {
-        let element = this._takePendingPromise(id)
+        let element = this._takePendingPromise(id);
         if (element) {
             if (username !== '' && password !== '')
                 element.resolver({username, password});
@@ -367,7 +367,7 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryUsernamesResponse(users, id)
     {
-        let element = this._takePendingPromise(id)
+        let element = this._takePendingPromise(id);
         if (element)
             element.resolver(users);
     }
@@ -685,4 +685,4 @@ Ephy.FormManager = class FormManager
 
         return { 'usernameNode' : usernameNode, 'passwordNode' : passwordNode };
     }
-};
+}
