@@ -483,9 +483,6 @@ Ephy.FormManager = class FormManager
 
     handleFormSubmission()
     {
-        if (!this._formAuth)
-            return;
-
         this._formAuth = this._generateFormAuth(false);
         if (!this._formAuth)
             return;
