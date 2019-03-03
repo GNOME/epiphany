@@ -298,7 +298,7 @@ Ephy.hasModifiedForms = function()
                 // A small heuristic here. If there's only one input element
                 // modified and it does not have a lot of text the user is
                 // likely not very interested in saving this work, so do
-                // nothing (eg, google search input).
+                // nothing (e.g. google search input).
                 if (element.value.length > 50)
                     return true;
                 if (modifiedInputElement)
