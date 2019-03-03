@@ -426,9 +426,8 @@ Ephy.FormManager = class FormManager
     preFillForms()
     {
         this._formAuth = this._findFormAuthElements(true);
-        if (!this._formAuth || !this._formAuth.passwordNode) {
+        if (!this._formAuth) {
             Ephy.log('No pre-fillable/hookable form found');
-            this._formAuth = null;
             return;
         }
 
@@ -495,10 +494,8 @@ Ephy.FormManager = class FormManager
             return;
 
         this._formAuth = this._findFormAuthElements(false);
-        if (!this._formAuth || !this._formAuth.passwordNode) {
-            this._formAuth = null;
+        if (!this._formAuth)
             return;
-        }
 
         if (!this._formAuth.passwordNode.value || !this._formAuth.passwordNode.name)
             return;
@@ -682,6 +679,9 @@ Ephy.FormManager = class FormManager
         let passwordNode = null;
         if (passwordNodeIndex >= 0)
             passwordNode = passwordNodes[passwordNodeIndex].element;
+
+        if (!passwordNode)
+            return null;
 
         return { 'usernameNode' : usernameNode, 'passwordNode' : passwordNode };
     }
