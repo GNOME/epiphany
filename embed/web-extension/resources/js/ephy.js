@@ -484,10 +484,7 @@ Ephy.FormManager = class FormManager
     handleFormSubmission()
     {
         this._formAuth = this._generateFormAuth(false);
-        if (!this._formAuth)
-            return;
-
-        if (!this._formAuth.password)
+        if (!this._formAuth || !this._formAuth.password)
             return;
 
         let permission = Ephy.permissionsManager.permission(Ephy.PermissionType.SAVE_PASSWORD, this._formAuth.origin);
