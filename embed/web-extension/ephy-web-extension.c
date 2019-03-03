@@ -654,15 +654,14 @@ static void
 js_exception_handler (JSCContext   *context,
                       JSCException *exception)
 {
-  JSCValue *js_console;
-  JSCValue *js_result;
+  g_autoptr(JSCValue) js_console = NULL;
+  g_autoptr(JSCValue) js_result = NULL;
+  g_autofree char *report = NULL;
 
   js_console = jsc_context_get_value (context, "console");
   js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
-  g_object_unref (js_result);
-  g_object_unref (js_console);
-
-  g_warning ("JavaScriptException: %s", jsc_exception_get_message (exception));
+  report = jsc_exception_report (exception);
+  g_warning ("%s", report);
 
   jsc_context_throw_exception (context, exception);
 }
