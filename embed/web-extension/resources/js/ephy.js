@@ -456,9 +456,9 @@ Ephy.FormManager = class FormManager
         Ephy.passwordManager.query(
             this._formAuth.origin,
             this._formAuth.targetOrigin,
-            this._formAuth.usernameNode && this._formAuth.usernameNode.value ? this._formAuth.usernameNode.value : null,
-            this._formAuth.usernameNode ? this._formAuth.usernameNode.name : null,
-            this._formAuth.passwordNode.name).then(function (authInfo) {
+            this._formAuth.username,
+            this._formAuth.usernameField,
+            this._formAuth.passwordField).then(function (authInfo) {
                 if (!authInfo) {
                     Ephy.log('No result');
                     return;
@@ -487,18 +487,8 @@ Ephy.FormManager = class FormManager
         if (!this._formAuth)
             return;
 
-        if (!this._formAuth.passwordNode.value || !this._formAuth.passwordNode.name)
+        if (!this._formAuth.password)
             return;
-
-        let password = this._formAuth.passwordNode.value;
-        let passwordField = this._formAuth.passwordNode.name;
-
-        let username = null;
-        let usernameField = null;
-        if (this._formAuth.usernameNode && this._formAuth.usernameNode.value && this._formAuth.usernameNode.name) {
-            username = this._formAuth.usernameNode.value;
-            usernameField = this._formAuth.usernameNode.name;
-        }
 
         let permission = Ephy.permissionsManager.permission(Ephy.PermissionType.SAVE_PASSWORD, this._formAuth.origin);
         if (permission == Ephy.Permission.DENY) {
@@ -513,11 +503,11 @@ Ephy.FormManager = class FormManager
         Ephy.passwordManager.query(
             this._formAuth.origin,
             this._formAuth.targetOrigin,
-            username,
-            usernameField,
-            passwordField).then(function (authInfo) {
+            this._formAuth.username,
+            this._formAuth.usernameField,
+            this._formAuth.passwordField).then(function (authInfo) {
                 if (authInfo) {
-                    if (authInfo.username == username && authInfo.password == password) {
+                    if (authInfo.username == self._formAuth.username && authInfo.password == self._formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
                     }
@@ -526,8 +516,10 @@ Ephy.FormManager = class FormManager
                         Ephy.log('User/password not yet stored. Storing.');
                         Ephy.passwordManager.save(self._formAuth.origin,
                                                   self._formAuth.targetOrigin,
-                                                  username, password,
-                                                  usernameField, passwordField,
+                                                  self._formAuth.username,
+                                                  self._formAuth.password,
+                                                  self._formAuth.usernameField,
+                                                  self._formAuth.passwordField,
                                                   false);
                         return;
                     }
@@ -539,8 +531,10 @@ Ephy.FormManager = class FormManager
 
                 Ephy.passwordManager.requestSave(self._formAuth.origin,
                                                  self._formAuth.targetOrigin,
-                                                 username, password,
-                                                 usernameField, passwordField,
+                                                 self._formAuth.username,
+                                                 self._formAuth.password,
+                                                 self._formAuth.usernameField,
+                                                 self._formAuth.passwordField,
                                                  authInfo == null,
                                                  self._pageID);
             }
@@ -680,6 +674,20 @@ Ephy.FormManager = class FormManager
         } catch {
             formAuth.targetOrigin = formAuth.origin;
         }
+
+        formAuth.username = null;
+        if (formAuth.usernameNode && formAuth.usernameNode.value)
+            username = formAuth.usernameNode.value;
+
+        formAuth.usernameField = null;
+        if (formAuth.usernameNode && formAuth.usernameNode.name)
+            usernameField = formAuth.usernameNode.name;
+
+        if (!formAuth.passwordNode.name)
+            return null;
+
+        formAuth.password = formAuth.passwordNode.value;
+        formAuth.passwordField = formAuth.passwordNode.name;
 
         return formAuth;
     }
