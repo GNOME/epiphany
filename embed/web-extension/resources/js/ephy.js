@@ -466,7 +466,7 @@ Ephy.FormManager = class FormManager
             this._formAuth.targetURL.origin,
             this._formAuth.usernameNode && this._formAuth.usernameNode.value ? this._formAuth.usernameNode.value : null,
             this._formAuth.usernameNode ? this._formAuth.usernameNode.name : null,
-            this._formAuth.passwordNode.name ? this._formAuth.passwordNode.name : null).then(function (authInfo) {
+            this._formAuth.passwordNode.name).then(function (authInfo) {
                 if (!authInfo) {
                     Ephy.log('No result');
                     return;
