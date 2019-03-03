@@ -1,3 +1,5 @@
+'use strict';
+
 var Ephy = {};
 
 Ephy.getWebAppTitle = function()

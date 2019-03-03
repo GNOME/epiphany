@@ -1,3 +1,5 @@
+'use strict';
+
 Ephy.Overview = class Overview
 {
     constructor(model)
