@@ -226,12 +226,11 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             anchor.textContent = user;
             li.appendChild(anchor);
 
-            const self = this;
-            li.addEventListener('mousedown', function (event) {
-                self._userElement.value = user;
-                self._selected = li;
-                self._removeMenu();
-                self._manager.preFill();
+            li.addEventListener('mousedown', event => {
+                this._userElement.value = user;
+                this._selected = li;
+                this._removeMenu();
+                this._manager.preFill();
             }, true);
         }
 
@@ -454,13 +453,12 @@ Ephy.FormManager = class FormManager
 
     preFill()
     {
-        const self = this;
         Ephy.passwordManager.query(
             this._formAuth.origin,
             this._formAuth.targetOrigin,
             this._formAuth.username,
             this._formAuth.usernameField,
-            this._formAuth.passwordField).then(function (authInfo) {
+            this._formAuth.passwordField).then(authInfo => {
                 if (!authInfo) {
                     Ephy.log('No result');
                     return;
@@ -468,16 +466,16 @@ Ephy.FormManager = class FormManager
 
                 Ephy.log('Found: user ' + authInfo.username + ' pass (hidden)');
 
-                if (self._formAuth.usernameNode && authInfo.username) {
-                    self._elementBeingAutoFilled = self._formAuth.usernameNode;
-                    Ephy.autoFill(self._formAuth.usernameNode, authInfo.username);
-                    self._elementBeingAutoFilled = null;
+                if (this._formAuth.usernameNode && authInfo.username) {
+                    this._elementBeingAutoFilled = this._formAuth.usernameNode;
+                    Ephy.autoFill(this._formAuth.usernameNode, authInfo.username);
+                    this._elementBeingAutoFilled = null;
                 }
 
                 if (authInfo.password) {
-                    self._elementBeingAutoFilled = self._formAuth.passwordNode;
-                    Ephy.autoFill(self._formAuth.passwordNode, authInfo.password);
-                    self._elementBeingAutoFilled = null;
+                    this._elementBeingAutoFilled = this._formAuth.passwordNode;
+                    Ephy.autoFill(this._formAuth.passwordNode, authInfo.password);
+                    this._elementBeingAutoFilled = null;
                 }
             }
         );
@@ -501,27 +499,26 @@ Ephy.FormManager = class FormManager
         if (permission == Ephy.Permission.UNDECIDED && Ephy.isWebApplication())
             permission = Ephy.Permission.PERMIT;
 
-        const self = this;
         Ephy.passwordManager.query(
             this._formAuth.origin,
             this._formAuth.targetOrigin,
             this._formAuth.username,
             this._formAuth.usernameField,
-            this._formAuth.passwordField).then(function (authInfo) {
+            this._formAuth.passwordField).then(authInfo => {
                 if (authInfo) {
-                    if (authInfo.username == self._formAuth.username && authInfo.password == self._formAuth.password) {
+                    if (authInfo.username == this._formAuth.username && authInfo.password == this._formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
                     }
 
                     if (permission == Ephy.Permission.PERMIT) {
                         Ephy.log('User/password not yet stored. Storing.');
-                        Ephy.passwordManager.save(self._formAuth.origin,
-                                                  self._formAuth.targetOrigin,
-                                                  self._formAuth.username,
-                                                  self._formAuth.password,
-                                                  self._formAuth.usernameField,
-                                                  self._formAuth.passwordField,
+                        Ephy.passwordManager.save(this._formAuth.origin,
+                                                  this._formAuth.targetOrigin,
+                                                  this._formAuth.username,
+                                                  this._formAuth.password,
+                                                  this._formAuth.usernameField,
+                                                  this._formAuth.passwordField,
                                                   false);
                         return;
                     }
@@ -531,14 +528,14 @@ Ephy.FormManager = class FormManager
                     Ephy.log('No result on query; asking whether we should store.');
                 }
 
-                Ephy.passwordManager.requestSave(self._formAuth.origin,
-                                                 self._formAuth.targetOrigin,
-                                                 self._formAuth.username,
-                                                 self._formAuth.password,
-                                                 self._formAuth.usernameField,
-                                                 self._formAuth.passwordField,
+                Ephy.passwordManager.requestSave(this._formAuth.origin,
+                                                 this._formAuth.targetOrigin,
+                                                 this._formAuth.username,
+                                                 this._formAuth.password,
+                                                 this._formAuth.usernameField,
+                                                 this._formAuth.passwordField,
                                                  authInfo == null,
-                                                 self._pageID);
+                                                 this._pageID);
             }
         );
     }
