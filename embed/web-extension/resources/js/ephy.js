@@ -425,23 +425,16 @@ Ephy.FormManager = class FormManager
 
     preFillForms()
     {
-        this._formAuth = this._findFormAuthElements(true);
+        this._formAuth = this._generateFormAuth(true);
         if (!this._formAuth) {
             Ephy.log('No pre-fillable/hookable form found');
             return;
         }
 
-        this._formAuth.url = new URL(String(window.location));
-        try {
-            this._formAuth.targetURL = new URL(this._form.action);
-        } catch(err) {
-            this._formAuth.targetURL = this._formAuth.url;
-        }
-
         Ephy.log('Hooking and pre-filling a form');
 
         if (this._formAuth.usernameNode) {
-            Ephy.passwordManager.queryUsernames(this._formAuth.url.origin).then((users) => {
+            Ephy.passwordManager.queryUsernames(this._formAuth.origin).then((users) => {
                 if (users.length > 1) {
                     Ephy.log('More than one password saved, hooking menu for choosing which on focus');
                     this._preFillUserMenu = new Ephy.PreFillUserMenu(this, this._formAuth.usernameNode, users, this._formAuth.passwordNode);
@@ -461,8 +454,8 @@ Ephy.FormManager = class FormManager
     {
         const self = this;
         Ephy.passwordManager.query(
-            this._formAuth.url.origin,
-            this._formAuth.targetURL.origin,
+            this._formAuth.origin,
+            this._formAuth.targetOrigin,
             this._formAuth.usernameNode && this._formAuth.usernameNode.value ? this._formAuth.usernameNode.value : null,
             this._formAuth.usernameNode ? this._formAuth.usernameNode.name : null,
             this._formAuth.passwordNode.name).then(function (authInfo) {
@@ -493,7 +486,7 @@ Ephy.FormManager = class FormManager
         if (!this._formAuth)
             return;
 
-        this._formAuth = this._findFormAuthElements(false);
+        this._formAuth = this._generateFormAuth(false);
         if (!this._formAuth)
             return;
 
@@ -510,14 +503,7 @@ Ephy.FormManager = class FormManager
             usernameField = this._formAuth.usernameNode.name;
         }
 
-        this._formAuth.url = new URL(String(window.location));
-        try {
-            this._formAuth.targetURL = new URL(this._form.action);
-        } catch {
-            this._formAuth.targetURL = this._formAuth.url;
-        }
-
-        let permission = Ephy.permissionsManager.permission(Ephy.PermissionType.SAVE_PASSWORD, this._formAuth.url.origin);
+        let permission = Ephy.permissionsManager.permission(Ephy.PermissionType.SAVE_PASSWORD, this._formAuth.origin);
         if (permission == Ephy.Permission.DENY) {
             Ephy.log('User/password storage permission previously denied. Not asking about storing.');
             return;
@@ -528,8 +514,8 @@ Ephy.FormManager = class FormManager
 
         const self = this;
         Ephy.passwordManager.query(
-            this._formAuth.url.origin,
-            this._formAuth.targetURL.origin,
+            this._formAuth.origin,
+            this._formAuth.targetOrigin,
             username,
             usernameField,
             passwordField).then(function (authInfo) {
@@ -541,8 +527,8 @@ Ephy.FormManager = class FormManager
 
                     if (permission == Ephy.Permission.PERMIT) {
                         Ephy.log('User/password not yet stored. Storing.');
-                        Ephy.passwordManager.save(self._formAuth.url.origin,
-                                                  self._formAuth.targetURL.origin,
+                        Ephy.passwordManager.save(self._formAuth.origin,
+                                                  self._formAuth.targetOrigin,
                                                   username, password,
                                                   usernameField, passwordField,
                                                   false);
@@ -554,8 +540,8 @@ Ephy.FormManager = class FormManager
                     Ephy.log('No result on query; asking whether we should store.');
                 }
 
-                Ephy.passwordManager.requestSave(self._formAuth.url.origin,
-                                                 self._formAuth.targetURL.origin,
+                Ephy.passwordManager.requestSave(self._formAuth.origin,
+                                                 self._formAuth.targetOrigin,
                                                  username, password,
                                                  usernameField, passwordField,
                                                  authInfo == null,
@@ -684,5 +670,20 @@ Ephy.FormManager = class FormManager
             return null;
 
         return { 'usernameNode' : usernameNode, 'passwordNode' : passwordNode };
+    }
+
+    _generateFormAuth(forAutofill) {
+        let formAuth = this._findFormAuthElements(forAutofill);
+        if (formAuth == null)
+            return null;
+
+        formAuth.origin = new URL(String(window.location)).origin;
+        try {
+            formAuth.targetOrigin = new URL(this._form.action).origin;
+        } catch {
+            formAuth.targetOrigin = formAuth.origin;
+        }
+
+        return formAuth;
     }
 }
