@@ -445,7 +445,7 @@ Ephy.FormManager = class FormManager
                 this.preFill();
             });
         } else {
-            Ephy.log('No items in username list, not hooking menu for choosing.');
+            Ephy.log('No username field, not hooking menu for choosing.');
             this.preFill();
         }
     }
