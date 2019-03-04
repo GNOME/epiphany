@@ -65,58 +65,6 @@ test_ephy_uri_helpers_remove_tracking (void)
   }
 }
 
-static void
-test_ephy_uri_helpers_uri_decode (void)
-{
-  struct {
-    const char *input;
-    const char *output;
-  } const items[] = {
-    /* Latin-only, OK. */
-    { "http://abcdef.com/", "http://abcdef.com/" },
-    /* Greek-only, OK. */
-    { "http://xn--mxacd4ffg.com/", "http://αβγχψω.com/" },
-    /* Latin + Greek, NOT OK. */
-    { "http://xn--abcxyz-oxejk5rman.com/", "http://xn--abcxyz-oxejk5rman.com/" },
-    /* Cyrillic-only, OK. */
-    { "http://xn--80acgefg.com/", "http://абгдеж.com/" },
-    /* Latin + Cyrillic, NOT OK. */
-    { "http://xn--abcdef-2nfjtlmn.com/", "http://xn--abcdef-2nfjtlmn.com/" },
-    /* Greek + Cyrillic, NOT OK. */
-    { "http://xn--mxacd4ffg03ejatlmn.com/", "http://xn--mxacd4ffg03ejatlmn.com/" },
-    /* Japanese mix, OK. */
-    { "http://xn--t8jcd20bfag.com/", "http://おかがキギク.com/" },
-    /* Latin + Japanese mix, OK. */
-    { "http://xn--abcdef-253ejak58gman.com/", "http://おaかbがcキdギeクf.com/" },
-    /* Chinese mix, OK. */
-    { "http://xn--2xjf20oeaf2262d.com/", "http://ㄈㄉㄊ⻕⻒夕.com/" },
-    /* Latin + Chinese mix, OK. */
-    { "http://xn--abcdef-z01ewa771clam1314j.com/", "http://ㄈaㄉbㄊc⻕d⻒e夕f.com/" },
-    /* Korean mix, OK. */
-    { "http://xn--8pdcdefg.com/", "http://ᄊᄋᄌᄍᄎᄏ.com/" },
-    /* Latin + Korean mix, OK. */
-    { "http://xn--abcdef-2gyjklmn.com/", "http://ᄊaᄋbᄌcᄍdᄎeᄏf.com/" },
-    /* Chinese + Japanese, NOT OK. */
-    { "http://xn--t8jcd36efag.com/", "http://xn--t8jcd36efag.com/" },
-    /* Chinese + Korean, NOT OK. */
-    { "http://xn--8pdcd3683afag.com/", "http://xn--8pdcd3683afag.com/" },
-    /* Japanese + Korean, NOT OK. */
-    { "http://xn--8pdcd3013afag.com/", "http://xn--8pdcd3013afag.com/" },
-    /* Latin + Lisu + Cherokee (3 scripts), NOT OK. */
-    { "http://xn--ab-u9le7496pga.com/", "http://xn--ab-u9le7496pga.com/" },
-    /* Lisu + Cherokee, NOT OK. */
-    { "http://xn--g9dcd5779lfag.com/", "http://xn--g9dcd5779lfag.com/" },
-    /* Latin + single scrip except Greek or Cyrillic, OK. */
-    { "http://xn--abc-dn1tfag.com/", "http://abc𐒊𐒋𐒌.com/" },
-  };
-
-  for (guint i = 0; i < G_N_ELEMENTS (items); i++) {
-    char *decoded = ephy_uri_decode (items[i].input);
-    g_assert_cmpstr (decoded, ==, items[i].output);
-    g_free (decoded);
-  }
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -132,8 +80,6 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/lib/ephy-uri-helpers/remove_tracking",
                    test_ephy_uri_helpers_remove_tracking);
-  g_test_add_func ("/lib/ephy-uri-helpers/uri_decode",
-                   test_ephy_uri_helpers_uri_decode);
 
   ret = g_test_run ();
 
