@@ -47,7 +47,7 @@ G_DECLARE_FINAL_TYPE (EphyPasswordManager, ephy_password_manager, EPHY, PASSWORD
 typedef void (*EphyPasswordManagerQueryCallback) (GList *records, gpointer user_data);
 
 EphyPasswordManager *ephy_password_manager_new                      (void);
-GList               *ephy_password_manager_get_cached_users         (EphyPasswordManager *self,
+GList               *ephy_password_manager_get_usernames_for_origin (EphyPasswordManager *self,
                                                                      const char          *origin);
 void                 ephy_password_manager_save                     (EphyPasswordManager *self,
                                                                      const char          *origin,

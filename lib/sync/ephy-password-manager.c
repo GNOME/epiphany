@@ -341,8 +341,8 @@ ephy_password_manager_new (void)
 }
 
 GList *
-ephy_password_manager_get_cached_users (EphyPasswordManager *self,
-                                        const char          *origin)
+ephy_password_manager_get_usernames_for_origin (EphyPasswordManager *self,
+                                                const char          *origin)
 {
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (origin);
