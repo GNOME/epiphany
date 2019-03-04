@@ -672,17 +672,24 @@ Ephy.FormManager = class FormManager
 
         formAuth.username = null;
         if (formAuth.usernameNode && formAuth.usernameNode.value)
-            username = formAuth.usernameNode.value;
+            formAuth.username = formAuth.usernameNode.value;
 
         formAuth.usernameField = null;
-        if (formAuth.usernameNode && formAuth.usernameNode.name)
-            usernameField = formAuth.usernameNode.name;
-
-        if (!formAuth.passwordNode.name)
-            return null;
+        if (formAuth.usernameNode) {
+            if (formAuth.usernameNode.id)
+                formAuth.usernameField = formAuth.usernameNode.id;
+            else if (formAuth.usernameNode.name)
+                formAuth.usernameField = formAuth.usernameNode.name;
+        }
 
         formAuth.password = formAuth.passwordNode.value;
-        formAuth.passwordField = formAuth.passwordNode.name;
+
+        if (formAuth.passwordNode.id)
+            formAuth.passwordField = formAuth.passwordNode.id;
+        else if (formAuth.passwordNode.name)
+            formAuth.passwordField = formAuth.passwordNode.name;
+        else
+            return null;
 
         return formAuth;
     }
