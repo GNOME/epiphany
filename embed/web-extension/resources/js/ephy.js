@@ -672,17 +672,28 @@ Ephy.FormManager = class FormManager
 
         formAuth.username = null;
         if (formAuth.usernameNode && formAuth.usernameNode.value)
-            username = formAuth.usernameNode.value;
+            formAuth.username = formAuth.usernameNode.value;
 
         formAuth.usernameField = null;
-        if (formAuth.usernameNode && formAuth.usernameNode.name)
-            usernameField = formAuth.usernameNode.name;
-
-        if (!formAuth.passwordNode.name)
-            return null;
+        if (formAuth.usernameNode) {
+            // The name attribute is obsoleted by ID, but lots of websites have
+            // missed that memo, so we should check both. We'll check name
+            // before ID for compatibility with passwords saved by old versions
+            // of Epiphany.
+            if (formAuth.usernameNode.name)
+                formAuth.usernameField = formAuth.usernameNode.name;
+            else if (formAuth.usernameNode.id)
+                formAuth.usernameField = formAuth.usernameNode.id;
+        }
 
         formAuth.password = formAuth.passwordNode.value;
-        formAuth.passwordField = formAuth.passwordNode.name;
+
+        if (formAuth.passwordNode.name)
+            formAuth.passwordField = formAuth.passwordNode.name;
+        else if (formAuth.passwordNode.id)
+            formAuth.passwordField = formAuth.passwordNode.id;
+        else
+            return null;
 
         return formAuth;
     }
