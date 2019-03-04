@@ -22,8 +22,6 @@
 
 #include "ephy-history-service.h"
 #include "ephy-history-service-private.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
 #include "ephy-string.h"
 #include <glib/gi18n.h>
 
@@ -111,10 +109,6 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
   }
 
   zoom_level = host->zoom_level;
-
-  /* Ensure that a change value which equals default zoom level is stored as 0.0 */
-  if (zoom_level == g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
-    zoom_level = 0.0f;
 
   if (ephy_sqlite_statement_bind_string (statement, 0, host->url, &error) == FALSE ||
       ephy_sqlite_statement_bind_string (statement, 1, host->title, &error) == FALSE ||

@@ -24,6 +24,8 @@
 #include "ephy-history-service-private.h"
 #include "ephy-history-types.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
 #include "ephy-sync-utils.h"
 
@@ -877,7 +879,7 @@ ephy_history_service_execute_set_url_zoom_level (EphyHistoryService *self,
 void
 ephy_history_service_set_url_zoom_level (EphyHistoryService    *self,
                                          const char            *url,
-                                         const double           zoom_level,
+                                         double                 zoom_level,
                                          GCancellable          *cancellable,
                                          EphyHistoryJobCallback callback,
                                          gpointer               user_data)
@@ -887,6 +889,10 @@ ephy_history_service_set_url_zoom_level (EphyHistoryService    *self,
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (url != NULL);
+
+  /* Ensure that a change value which equals default zoom level is stored as 0.0 */
+  if (zoom_level == g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
+    zoom_level = 0.0f;
 
   variant = g_variant_new ("(sd)", url, zoom_level);
 
