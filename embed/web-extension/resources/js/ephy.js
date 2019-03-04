@@ -465,8 +465,8 @@ Ephy.FormManager = class FormManager
             this._formAuth.url.origin,
             this._formAuth.targetURL.origin,
             this._formAuth.usernameNode && this._formAuth.usernameNode.value ? this._formAuth.usernameNode.value : null,
-            this._formAuth.usernameNode ? this._formAuth.usernameNode.name : null,
-            this._formAuth.passwordNode.name ? this._formAuth.passwordNode.name : null).then(function (authInfo) {
+            this._formAuth.usernameNode ? (this._formAuth.usernameNode.id ? this._formAuth.usernameNode.id : this._formAuth.usernameNode.name) : null,
+            this._formAuth.passwordNode.id ? this._formAuth.passwordNode.id : this._formAuth.passwordNode.name).then(function (authInfo) {
                 if (!authInfo) {
                     Ephy.log('No result');
                     return;
@@ -500,17 +500,17 @@ Ephy.FormManager = class FormManager
             return;
         }
 
-        if (!this._formAuth.passwordNode.value || !this._formAuth.passwordNode.name)
+        if (!this._formAuth.passwordNode.value || (!this._formAuth.passwordNode.id && !this._formAuth.passwordNode.name))
             return;
 
         let password = this._formAuth.passwordNode.value;
-        let passwordField = this._formAuth.passwordNode.name;
+        let passwordField = this._formAuth.passwordNode.id ? this._formAuth.passwordNode.id : this._formAuth.passwordNode.name;
 
         let username = null;
         let usernameField = null;
-        if (this._formAuth.usernameNode && this._formAuth.usernameNode.value && this._formAuth.usernameNode.name) {
+        if (this._formAuth.usernameNode && this._formAuth.usernameNode.value && (this._formAuth.usernameNode.id || this._formAuth.usernameNode.name)) {
             username = this._formAuth.usernameNode.value;
-            usernameField = this._formAuth.usernameNode.name;
+            usernameField = this._formAuth.usernameNode.id ? this._formAuth.usernameNode.id : this._formAuth.usernameNode.name;
         }
 
         this._formAuth.url = new URL(String(window.location));
