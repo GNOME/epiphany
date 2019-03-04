@@ -554,9 +554,9 @@ web_extension_password_manager_request_save_received_cb (WebKitUserContentManage
 }
 
 static void
-web_extension_password_manager_cached_users_received_cb (WebKitUserContentManager *manager,
-                                                         WebKitJavascriptResult   *message,
-                                                         EphyEmbedShell           *shell)
+web_extension_password_manager_query_usernames_received_cb (WebKitUserContentManager *manager,
+                                                            WebKitJavascriptResult   *message,
+                                                            EphyEmbedShell           *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
@@ -565,13 +565,12 @@ web_extension_password_manager_cached_users_received_cb (WebKitUserContentManage
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
 
-  GList *cached_users;
-  cached_users = ephy_password_manager_get_cached_users (priv->password_manager, origin);
+  GList *usernames;
+  usernames = ephy_password_manager_get_usernames_for_origin (priv->password_manager, origin);
 
-  EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (
-                                    shell, page_id, origin);
+  EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
   if (proxy)
-    ephy_web_extension_proxy_password_cached_users_response (proxy, cached_users, promise_id, page_id);
+    ephy_web_extension_proxy_password_query_usernames_response (proxy, usernames, promise_id, page_id);
 }
 
 static void
@@ -1192,7 +1191,7 @@ ephy_embed_shell_startup (GApplication *application)
                                                                         "passwordManagerQueryUsernames",
                                                                         priv->guid);
   g_signal_connect (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
-                    G_CALLBACK (web_extension_password_manager_cached_users_received_cb),
+                    G_CALLBACK (web_extension_password_manager_query_usernames_received_cb),
                     shell);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,

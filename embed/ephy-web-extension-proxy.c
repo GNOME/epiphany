@@ -296,10 +296,10 @@ ephy_web_extension_proxy_history_clear (EphyWebExtensionProxy *web_extension)
 }
 
 void
-ephy_web_extension_proxy_password_cached_users_response (EphyWebExtensionProxy *web_extension,
-                                                         GList                 *users,
-                                                         gint32                 promise_id,
-                                                         guint64                page_id)
+ephy_web_extension_proxy_password_query_usernames_response (EphyWebExtensionProxy *web_extension,
+                                                            GList                 *users,
+                                                            gint32                 promise_id,
+                                                            guint64                page_id)
 {
   if (!web_extension->proxy)
     return;
