@@ -434,7 +434,7 @@ Ephy.FormManager = class FormManager
         Ephy.log('Hooking and pre-filling a form');
 
         if (formAuth.usernameNode) {
-            Ephy.passwordManager.queryUsernames(formAuth.origin).then((users) => {
+            Ephy.passwordManager.queryUsernames(formAuth.origin).then(users => {
                 if (users.length > 1) {
                     Ephy.log('More than one saved username, hooking menu for choosing which one to select');
                     this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth.usernameNode, users, formAuth.passwordNode);
