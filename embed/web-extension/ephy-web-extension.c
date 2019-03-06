@@ -740,12 +740,10 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                                  js_ephy);
 
   if (!extension->is_private_profile) {
-    guint64 page_id = webkit_web_page_get_id (page);
-    g_assert (page_id < G_MAXINT32);
-
     g_autoptr(JSCValue) js_password_manager_ctor = jsc_value_object_get_property (js_ephy, "PasswordManager");
     g_autoptr(JSCValue) js_password_manager = jsc_value_constructor_call (js_password_manager_ctor,
-                                                                          G_TYPE_INT, page_id, G_TYPE_NONE);
+                                                                          G_TYPE_UINT64, webkit_web_page_get_id (page),
+                                                                          G_TYPE_NONE);
     jsc_value_object_set_property (js_ephy, "passwordManager", js_password_manager);
 
     js_function = jsc_value_new_function (js_context,
