@@ -1601,7 +1601,7 @@ create_language_section (PrefsDialog *dialog)
       if (normalized_locale != NULL) {
         g_autofree char *language_name = language_for_locale (normalized_locale);
         if (language_name == NULL)
-            language_name = g_strdup (normalized_locale);
+          language_name = g_strdup (normalized_locale);
         language_editor_add (dialog, normalized_locale, language_name);
       }
     }
@@ -1635,7 +1635,8 @@ download_path_changed_cb (GtkFileChooser *button)
   char *dir;
 
   dir = gtk_file_chooser_get_filename (button);
-  if (dir == NULL) return;
+  if (dir == NULL)
+    return;
 
   g_settings_set_string (EPHY_SETTINGS_STATE,
                          EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
