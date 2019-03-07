@@ -1600,6 +1600,8 @@ create_language_section (PrefsDialog *dialog)
       g_autofree char *normalized_locale = normalize_locale (code);
       if (normalized_locale != NULL) {
         g_autofree char *language_name = language_for_locale (normalized_locale);
+        if (language_name == NULL)
+          language_name = g_strdup (normalized_locale);
         language_editor_add (dialog, normalized_locale, language_name);
       }
     }
