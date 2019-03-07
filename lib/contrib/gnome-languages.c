@@ -710,6 +710,8 @@ get_translated_language (const char *code,
 
                 if (locale != NULL) {
                         loc = newlocale (LC_MESSAGES_MASK, locale, (locale_t) 0);
+                        if (loc == (locale_t) 0)
+                                return NULL;
                         old_locale = uselocale (loc);
                 }
 
@@ -767,6 +769,8 @@ get_translated_territory (const char *code,
 
                 if (locale != NULL) {
                         loc = newlocale (LC_MESSAGES_MASK, locale, (locale_t) 0);
+                        if (loc == (locale_t) 0)
+                                return NULL;
                         old_locale = uselocale (loc);
                 }
 
