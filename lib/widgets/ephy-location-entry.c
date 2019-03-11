@@ -132,6 +132,7 @@ editable_changed_cb (GtkEditable       *editable,
 static void
 ephy_location_entry_activate (EphyLocationEntry *entry)
 {
+  dzl_suggestion_entry_set_suggestion (DZL_SUGGESTION_ENTRY (entry->url_entry), NULL);
   g_signal_emit_by_name (entry->url_entry, "activate");
 }
 
