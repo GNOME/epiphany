@@ -374,6 +374,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   GtkWidget *adblock_desc;
   GtkWidget *hbox;
   GtkWidget *box;
+  g_autofree char *label = g_strdup_printf ("<b>%s</b>", _("Permissions"));
 
   popover->grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 12);
@@ -404,7 +405,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
 
   /* Permissions */
   adblocker = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (adblocker), _("<b>Permissions</b>"));
+  gtk_label_set_markup (GTK_LABEL (adblocker), label);
   gtk_label_set_xalign (GTK_LABEL (adblocker), 0.0);
   gtk_grid_attach (GTK_GRID (popover->grid), adblocker, 0, 4, 2, 1);
 
