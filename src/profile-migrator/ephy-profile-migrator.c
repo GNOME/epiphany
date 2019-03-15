@@ -1069,16 +1069,20 @@ move_directory_contents (GFile *source,
     if (!info)
       break;
 
-    g_autoptr(GFile) source_f = g_file_get_child (source, g_file_info_get_name (info));
-    g_autoptr(GFile) dest_f = g_file_get_child (dest, g_file_info_get_name (info));
-    if (!g_file_move (source_f, dest_f, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
-      g_warning ("Failed to move %s: %s", g_file_info_get_name (info), error->message);
+    g_autoptr(GFile) source_file = g_file_get_child (source, g_file_info_get_name (info));
+    g_autoptr(GFile) dest_file = g_file_get_child (dest, g_file_info_get_name (info));
+    if (!g_file_move (source_file, dest_file, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
+      g_autofree char *source_path = g_file_get_path (source_file);
+      g_autofree char *dest_path = g_file_get_path (dest_file);
+      g_warning ("Failed to move %s to %s: %s", source_path, dest_path, error->message);
       return FALSE;
     }
   }
 
-  if (!g_file_delete (source, NULL, &error))
-    g_warning ("Failed to delete left-over source: %s", error->message);
+  if (!g_file_delete (source, NULL, &error)) {
+    g_autofree char *source_path = g_file_get_path (source);
+    g_warning ("Failed to delete leftover source directory %s: %s", source_path, error->message);
+  }
 
   return TRUE;
 }
