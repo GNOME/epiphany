@@ -167,18 +167,15 @@ get_app_id_from_profile_directory (const char *profile_dir)
 char *
 ephy_web_application_get_profile_directory (const char *id)
 {
-  char *dot_dir, *app_dir, *profile_dir;
+  g_autofree char *app_dir = NULL;
+  g_autofree char *profile_dir = NULL;
 
   app_dir = get_app_profile_directory_name (id);
   if (!app_dir)
     return NULL;
 
-  dot_dir = !ephy_profile_dir_is_default () ? ephy_default_profile_dir () : NULL;
-  profile_dir = g_build_filename (dot_dir ? dot_dir : g_get_user_data_dir (), app_dir, NULL);
-  g_free (app_dir);
-  g_free (dot_dir);
-
-  return profile_dir;
+  profile_dir = g_build_filename (g_get_user_data_dir (), app_dir, NULL);
+  return g_steal_pointer (&profile_dir);
 }
 
 /**
