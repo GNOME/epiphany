@@ -273,7 +273,7 @@ ephy_session_undo_close_tab (EphySession *session)
   }
 
   gtk_widget_grab_focus (GTK_WIDGET (new_tab));
-  gtk_window_present_with_time (GTK_WINDOW (window), gtk_get_current_event_time ());
+  gtk_window_present (GTK_WINDOW (window));
 
   closed_tab_free (tab);
 
