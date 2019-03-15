@@ -109,41 +109,6 @@ profile_dir_exists (void)
   return FALSE;
 }
 
-static void
-migrate_app_desktop_file_categories (void)
-{
-  GList *web_apps, *l;
-
-  web_apps = ephy_web_application_get_legacy_application_list ();
-
-  for (l = web_apps; l; l = l->next) {
-    EphyWebApplication *app = (EphyWebApplication *)l->data;
-    GKeyFile *file;
-    char *data = NULL;
-    char *app_path;
-    char *desktop_file_path;
-
-    file = g_key_file_new ();
-
-    app_path = ephy_web_application_get_profile_directory (app->id);
-    desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
-    g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
-
-    LOG ("migrate_app_desktop_file_categories: adding Categories to %s", app->name);
-    g_key_file_set_value (file, "Desktop Entry", "Categories", "Network;GNOME;GTK;");
-
-    data = g_key_file_to_data (file, NULL, NULL);
-    g_file_set_contents (desktop_file_path, data, -1, NULL);
-
-    g_free (app_path);
-    g_free (desktop_file_path);
-    g_free (data);
-    g_key_file_free (file);
-  }
-
-  ephy_web_application_free_application_list (web_apps);
-}
-
 /* https://bugzilla.gnome.org/show_bug.cgi?id=752738 */
 static void
 migrate_insecure_password (SecretItem *item)
@@ -1277,7 +1242,7 @@ const EphyProfileMigrator migrators[] = {
   /*  7 */ migrate_nothing,
   /*  8 */ migrate_nothing,
   /*  9 */ migrate_nothing,
-  /* 10 */ migrate_app_desktop_file_categories,
+  /* 10 */ migrate_nothing,
   /* 11 */ migrate_insecure_passwords,
   /* 12 */ migrate_bookmarks,
   /* 13 */ migrate_adblock_filters,
