@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 
 #include <errno.h>
@@ -391,6 +392,9 @@ ephy_web_application_create (const char *id,
     g_warning ("Failed to create directory %s", profile_dir);
     goto out;
   }
+
+  /* Skip migration for new web apps. */
+  ephy_profile_utils_set_migration_version_for_profile_dir (EPHY_PROFILE_MIGRATION_VERSION, profile_dir);
 
   /* Create an .app file. */
   g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
