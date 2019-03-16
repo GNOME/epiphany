@@ -190,51 +190,41 @@ ephy_web_application_get_profile_directory (const char *id)
 gboolean
 ephy_web_application_delete (const char *id)
 {
-  char *profile_dir;
-  char *desktop_file = NULL, *desktop_path = NULL;
-  GFile *launcher = NULL;
-  gboolean return_value = FALSE;
+  g_autofree char *profile_dir = NULL;
+  g_autofree char *desktop_file = NULL;
+  g_autofree char *desktop_path = NULL;
+  g_autoptr(GFile) launcher = NULL;
 
   g_assert (id);
 
   profile_dir = ephy_web_application_get_profile_directory (id);
   if (!profile_dir)
-    goto out;
+    return FALSE;
 
   /* If there's no profile dir for this app, it means it does not
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
     g_warning ("No application with id '%s' is installed.\n", id);
-    goto out;
+    return FALSE;
   }
 
   if (!ephy_file_delete_dir_recursively (profile_dir, NULL))
-    goto out;
+    return FALSE;
   LOG ("Deleted application profile.\n");
 
   desktop_file = get_app_desktop_filename (id);
   if (!desktop_file)
-    goto out;
+    return FALSE;
 
   desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
   if (g_file_test (desktop_path, G_FILE_TEST_IS_SYMLINK)) {
     launcher = g_file_new_for_path (desktop_path);
     if (!g_file_delete (launcher, NULL, NULL))
-      goto out;
+      return FALSE;
     LOG ("Deleted application launcher.\n");
   }
-  return_value = TRUE;
 
- out:
-
-  g_free (profile_dir);
-
-  if (launcher)
-    g_object_unref (launcher);
-  g_free (desktop_file);
-  g_free (desktop_path);
-
-  return return_value;
+  return TRUE;
 }
 
 static char *
