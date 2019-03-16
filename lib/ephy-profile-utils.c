@@ -50,15 +50,6 @@ ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_di
 
     if (result != 1)
       latest = 0;
-  } else if (strcmp (ephy_profile_dir (), profile_directory) == 0 &&
-             ephy_profile_dir_is_default () == FALSE) {
-    /* Since version 8, we need to migrate also profile directories
-       other than the default one. Profiles in such directories work
-       perfectly fine without going through the first 7 migration
-       steps, so it is safe to assume that any non-default profile
-       directory without a migration file can be migrated starting
-       from the step 8. */
-    latest = 7;
   }
 
   g_free (migrated_file);
