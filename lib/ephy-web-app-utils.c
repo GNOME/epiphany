@@ -156,6 +156,19 @@ get_app_id_from_profile_directory (const char *profile_dir)
   return program_name ? get_app_id_from_program_name (program_name) : NULL;
 }
 
+static char *
+ephy_web_application_get_directory_under (const char *id,
+                                          const char *path)
+{
+  g_autofree char *app_dir = NULL;
+
+  app_dir = get_app_profile_directory_name (id);
+  if (!app_dir)
+    return NULL;
+
+  return g_build_filename (path, app_dir, NULL);
+}
+
 /**
  * ephy_web_application_get_profile_directory:
  * @id: the application identifier
@@ -167,15 +180,19 @@ get_app_id_from_profile_directory (const char *profile_dir)
 char *
 ephy_web_application_get_profile_directory (const char *id)
 {
-  g_autofree char *app_dir = NULL;
-  g_autofree char *profile_dir = NULL;
+  return ephy_web_application_get_directory_under (id, g_get_user_data_dir ());
+}
 
-  app_dir = get_app_profile_directory_name (id);
-  if (!app_dir)
-    return NULL;
+static char *
+ephy_web_application_get_cache_directory (const char *id)
+{
+  return ephy_web_application_get_directory_under (id, g_get_user_cache_dir ());
+}
 
-  profile_dir = g_build_filename (g_get_user_data_dir (), app_dir, NULL);
-  return g_steal_pointer (&profile_dir);
+static char *
+ephy_web_application_get_config_directory (const char *id)
+{
+  return ephy_web_application_get_directory_under (id, g_get_user_config_dir ());
 }
 
 /**
@@ -191,6 +208,8 @@ gboolean
 ephy_web_application_delete (const char *id)
 {
   g_autofree char *profile_dir = NULL;
+  g_autofree char *cache_dir = NULL;
+  g_autofree char *config_dir = NULL;
   g_autofree char *desktop_file = NULL;
   g_autofree char *desktop_path = NULL;
   g_autoptr(GFile) launcher = NULL;
@@ -214,6 +233,24 @@ ephy_web_application_delete (const char *id)
     return FALSE;
   }
   LOG ("Deleted application profile.\n");
+
+  cache_dir = ephy_web_application_get_cache_directory (id);
+  if (g_file_test (cache_dir, G_FILE_TEST_IS_DIR)) {
+    if (!ephy_file_delete_dir_recursively (cache_dir, &error)) {
+      g_warning ("Failed to recursively delete %s: %s", cache_dir, error->message);
+      return FALSE;
+    }
+    LOG ("Deleted application cache directory.\n");
+  }
+
+  config_dir = ephy_web_application_get_config_directory (id);
+  if (g_file_test (config_dir, G_FILE_TEST_IS_DIR)) {
+    if (!ephy_file_delete_dir_recursively (config_dir, &error)) {
+      g_warning ("Failed to recursively delete %s: %s", config_dir, error->message);
+      return FALSE;
+    }
+    LOG ("Deleted application config directory.\n");
+  }
 
   desktop_file = get_app_desktop_filename (id);
   if (!desktop_file) {
