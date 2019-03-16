@@ -40,6 +40,7 @@ int ephy_profile_utils_get_migration_version (void);
 int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);
 
 gboolean ephy_profile_utils_set_migration_version (int version);
+gboolean ephy_profile_utils_set_migration_version_for_profile_dir (int version, const char *profile_directory);
 
 gboolean ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug);
 
