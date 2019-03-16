@@ -194,6 +194,7 @@ ephy_web_application_delete (const char *id)
   g_autofree char *desktop_file = NULL;
   g_autofree char *desktop_path = NULL;
   g_autoptr(GFile) launcher = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (id);
 
@@ -208,19 +209,25 @@ ephy_web_application_delete (const char *id)
     return FALSE;
   }
 
-  if (!ephy_file_delete_dir_recursively (profile_dir, NULL))
+  if (!ephy_file_delete_dir_recursively (profile_dir, &error)) {
+    g_warning ("Failed to recursively delete %s: %s", profile_dir, error->message);
     return FALSE;
+  }
   LOG ("Deleted application profile.\n");
 
   desktop_file = get_app_desktop_filename (id);
-  if (!desktop_file)
+  if (!desktop_file) {
+    g_warning ("Failed to compute desktop filename for app %s", id);
     return FALSE;
+  }
 
   desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
   if (g_file_test (desktop_path, G_FILE_TEST_IS_SYMLINK)) {
     launcher = g_file_new_for_path (desktop_path);
-    if (!g_file_delete (launcher, NULL, NULL))
+    if (!g_file_delete (launcher, NULL, &error)) {
+      g_warning ("Failed to delete %s: %s", desktop_path, error->message);
       return FALSE;
+    }
     LOG ("Deleted application launcher.\n");
   }
 
