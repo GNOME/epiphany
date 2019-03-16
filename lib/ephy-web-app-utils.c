@@ -560,22 +560,18 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   GFileEnumerator *children = NULL;
   GFileInfo *info;
   GList *applications = NULL;
-  GFile *dot_dir;
-  char *default_dot_dir;
-  g_autofree char *profile_base = NULL;
+  g_autofree char *parent_directory_path = NULL;
+  g_autoptr(GFile) parent_directory = NULL;
 
-  default_dot_dir = !ephy_profile_dir_is_default () ? ephy_default_profile_dir () : NULL;
-  if (only_legacy) {
-    profile_base = g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
-    dot_dir = g_file_new_for_path (profile_base);
-  } else {
-    profile_base = g_strdup (g_get_user_data_dir ());
-    dot_dir = g_file_new_for_path (default_dot_dir ? default_dot_dir : g_get_user_data_dir ());
-  }
-  children = g_file_enumerate_children (dot_dir,
+  if (only_legacy)
+    parent_directory_path = g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+  else
+    parent_directory_path = g_strdup (g_get_user_data_dir ());
+
+  parent_directory = g_file_new_for_path (parent_directory_path);
+  children = g_file_enumerate_children (parent_directory,
                                         "standard::name",
                                         0, NULL, NULL);
-  g_object_unref (dot_dir);
 
   info = g_file_enumerator_next_file (children, NULL, NULL);
   while (info) {
@@ -587,7 +583,7 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
       EphyWebApplication *app;
       char *profile_dir;
 
-      profile_dir = g_build_filename (profile_base, name, NULL);
+      profile_dir = g_build_filename (parent_directory_path, name, NULL);
       app = ephy_web_application_for_profile_directory (profile_dir);
       if (app) {
         if (!only_legacy) {
@@ -609,7 +605,6 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   }
 
   g_object_unref (children);
-  g_free (default_dot_dir);
 
   return g_list_reverse (applications);
 }
