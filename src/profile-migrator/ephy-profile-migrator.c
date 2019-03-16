@@ -1278,6 +1278,7 @@ ephy_migrator (void)
 {
   int latest, i;
   EphyProfileMigrator m;
+  g_autofree char *legacy_migration_file = NULL;
 
   /* If after this point there's no profile dir, there's no point in
    * running anything because Epiphany has never run in this system, so
@@ -1301,8 +1302,11 @@ ephy_migrator (void)
     return TRUE;
   }
 
-  latest = MAX (ephy_profile_utils_get_migration_version (),
-                ephy_profile_utils_get_migration_version_for_profile_dir (legacy_profile_dir ()));
+  legacy_migration_file = g_build_filename (legacy_profile_dir (), ".migrated", NULL);
+  if (g_file_test (legacy_migration_file, G_FILE_TEST_EXISTS))
+    latest = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_profile_dir ());
+  else
+    latest = ephy_profile_utils_get_migration_version ();
 
   LOG ("Running migrators up to version %d, current migration version is %d.",
        EPHY_PROFILE_MIGRATION_VERSION, latest);
