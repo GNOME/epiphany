@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-03-04 21:46+0000\n"
-"PO-Revision-Date: 2019-03-05 07:44+0100\n"
+"POT-Creation-Date: 2019-03-16 10:40+0000\n"
+"PO-Revision-Date: 2019-03-16 23:20+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -852,6 +852,24 @@ msgstr ""
 "„allow” (engedélyezés) és a „deny” (tiltás) azt mondja, hogy kéréskor "
 "automatikusan végezze el a döntést."
 
+#: data/org.gnome.epiphany.gschema.xml:414
+msgid ""
+"Decision to apply when advertisement permission is requested for this host"
+msgstr "Választandó döntés, amikor reklámengedélyt kérnek ehhez a géphez"
+
+#: data/org.gnome.epiphany.gschema.xml:415
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to allow advertisements. The “undecided” default means the browser global "
+"setting is used, while “allow” and “deny” tell it to automatically make the "
+"decision upon request."
+msgstr ""
+"Ez a beállítás annak a mentésére szolgál, hogy gép engedélyt ad-e a "
+"reklámok engedélyezésére. Az „undecided” alapértelmezés azt jelenti, hogy "
+"a böngésző globális beállítása lesz használva, míg az „allow” (engedélyezés) "
+"és a „deny” (tiltás) azt mondja, hogy kéréskor automatikusan végezze el a "
+"döntést."
+
 #: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
 msgstr "Memóriahasználat"
@@ -901,7 +919,7 @@ msgstr ""
 "Kezdjen böngészni, és a legtöbbet látogatott oldalai itt fognak megjelenni."
 
 #: embed/ephy-about-handler.c:386
-#: embed/web-extension/resources/js/overview.js:101
+#: embed/web-extension/resources/js/overview.js:103
 msgid "Remove from overview"
 msgstr "Eltávolítás az áttekintésből"
 
@@ -1688,7 +1706,7 @@ msgstr "Technikai információk"
 msgid "_OK"
 msgstr "_OK"
 
-#: lib/contrib/gnome-languages.c:717
+#: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
 msgstr "Nincs megadva"
 
@@ -1803,11 +1821,11 @@ msgstr "%Y. %b. %-d."
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: lib/history/ephy-history-service-hosts-table.c:365
+#: lib/history/ephy-history-service-hosts-table.c:359
 msgid "Others"
 msgstr "Egyéb"
 
-#: lib/history/ephy-history-service-hosts-table.c:369
+#: lib/history/ephy-history-service-hosts-table.c:363
 msgid "Local files"
 msgstr "Helyi fájlok"
 
@@ -2049,25 +2067,25 @@ msgstr "Minden fájl"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:616 src/ephy-history-dialog.c:392
+#: lib/widgets/ephy-location-entry.c:634 src/ephy-history-dialog.c:392
 msgid "Cl_ear"
 msgstr "_Törlés"
 
-#: lib/widgets/ephy-location-entry.c:636
+#: lib/widgets/ephy-location-entry.c:654
 msgid "Paste and _Go"
 msgstr "Beillesztés és _ugrás"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:657 src/ephy-window.c:916
+#: lib/widgets/ephy-location-entry.c:675 src/ephy-window.c:912
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: lib/widgets/ephy-location-entry.c:664
+#: lib/widgets/ephy-location-entry.c:682
 msgid "_Redo"
 msgstr "Új_ra"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:107
+#: lib/widgets/ephy-security-popover.c:138
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -2077,7 +2095,7 @@ msgstr ""
 "olyan támadóhoz csatlakozott, aki %s néven adja ki magát."
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:114
+#: lib/widgets/ephy-security-popover.c:145
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -2087,18 +2105,26 @@ msgstr ""
 "vagy irányíthatja a tartalmat, amit Ön lát."
 
 #. Label in certificate popover when site sends mixed content.
-#: lib/widgets/ephy-security-popover.c:121
+#: lib/widgets/ephy-security-popover.c:152
 msgid "This web site did not properly secure your connection."
 msgstr "Ez a webhely nem megfelelően biztosította a kapcsolatot."
 
 #. Label in certificate popover on secure sites.
-#: lib/widgets/ephy-security-popover.c:126
+#: lib/widgets/ephy-security-popover.c:157
 msgid "Your connection seems to be secure."
 msgstr "A kapcsolata biztonságosnak látszik."
 
-#: lib/widgets/ephy-security-popover.c:172
+#: lib/widgets/ephy-security-popover.c:203
 msgid "_View Certificate…"
 msgstr "_Tanúsítvány megtekintése…"
+
+#: lib/widgets/ephy-security-popover.c:377
+msgid "Permissions"
+msgstr "Jogosultságok"
+
+#: lib/widgets/ephy-security-popover.c:415
+msgid "Allow advertisements"
+msgstr "Reklámok engedélyezése"
 
 #: src/bookmarks/ephy-bookmark-row.c:61
 msgid "Bookmark Properties"
@@ -2257,157 +2283,157 @@ msgstr "Új cím"
 msgid "Bang"
 msgstr "Rövidítés"
 
-#: src/ephy-window.c:261
+#: src/ephy-window.c:257
 msgid "Do you want to leave this website?"
 msgstr "El akarja hagyni ezt a weboldalt?"
 
-#: src/ephy-window.c:262
+#: src/ephy-window.c:258
 msgid "A form you modified has not been submitted."
 msgstr "Egy módosított űrlap nem lett elküldve."
 
-#: src/ephy-window.c:263
+#: src/ephy-window.c:259
 msgid "_Discard form"
 msgstr "Űrlap _elvetése"
 
-#: src/ephy-window.c:278
+#: src/ephy-window.c:274
 msgid "There are ongoing downloads"
 msgstr "Letöltések vannak folyamatban"
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:275
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Ha kilép, akkor a letöltések megszakadnak"
 
-#: src/ephy-window.c:280
+#: src/ephy-window.c:276
 msgid "Quit and cancel downloads"
 msgstr "Kilépés, és letöltések megszakítása"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:913
 msgid "Re_do"
 msgstr "Mé_gis"
 
 #. Edit.
-#: src/ephy-window.c:920
+#: src/ephy-window.c:916
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/ephy-window.c:921
+#: src/ephy-window.c:917
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:918
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/ephy-window.c:923
+#: src/ephy-window.c:919
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:921
 msgid "S_end Link by Email…"
 msgstr "Hivatkozás _küldése e-mailben…"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:923
 msgid "_Reload"
 msgstr "_Frissítés"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:924
 msgid "_Back"
 msgstr "_Vissza"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:925
 msgid "_Forward"
 msgstr "_Előre"
 
 #. Bookmarks
-#: src/ephy-window.c:932
+#: src/ephy-window.c:928
 msgid "Add Boo_kmark…"
 msgstr "_Könyvjelző hozzáadása…"
 
 #. Links.
-#: src/ephy-window.c:936
+#: src/ephy-window.c:932
 msgid "Open Link in New _Window"
 msgstr "Hivatkozás megnyitása új _ablakban"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:933
 msgid "Open Link in New _Tab"
 msgstr "Hivatkozás megnyitása új _lapon"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:934
 msgid "Open Link in I_ncognito Window"
 msgstr "Hivatkozás megnyitása i_nkognitó ablakban"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:935
 msgid "_Save Link As…"
 msgstr "Hivatkozás _mentése másként…"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:936
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:937
 msgid "_Copy E-mail Address"
 msgstr "E-_mail cím másolása"
 
 #. Images.
-#: src/ephy-window.c:945
+#: src/ephy-window.c:941
 msgid "View _Image in New Tab"
 msgstr "_Kép megtekintése új lapon"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:942
 msgid "Copy I_mage Address"
 msgstr "Kép címé_nek másolása"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:943
 msgid "_Save Image As…"
 msgstr "Ké_p mentése másként…"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:944
 msgid "Set as _Wallpaper"
 msgstr "Beállítás _háttérképként"
 
 #. Video.
-#: src/ephy-window.c:952
+#: src/ephy-window.c:948
 msgid "Open Video in New _Window"
 msgstr "Videó megnyitása új _ablakban"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:949
 msgid "Open Video in New _Tab"
 msgstr "Videó megnyitása új _lapon"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:950
 msgid "_Save Video As…"
 msgstr "Videó _mentése másként…"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:951
 msgid "_Copy Video Address"
 msgstr "Videó _címének másolása"
 
 #. Audio.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:955
 msgid "Open Audio in New _Window"
 msgstr "Hang megnyitás új _ablakban"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:956
 msgid "Open Audio in New _Tab"
 msgstr "Hang megnyitása új _lapon"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:957
 msgid "_Save Audio As…"
 msgstr "Hang _mentése másként…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:958
 msgid "_Copy Audio Address"
 msgstr "Hang _címének másolása"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:963
 msgid "Save Pa_ge As…"
 msgstr "_Oldal mentése másként…"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:964
 msgid "_Page Source"
 msgstr "Oldal fo_rrása"
 
-#: src/ephy-window.c:1351
+#: src/ephy-window.c:1347
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "„%s” keresése a világhálón"
@@ -2433,7 +2459,7 @@ msgid "Last synchronized: %s"
 msgstr "Legutóbbi szinkronizáció: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:298 src/prefs-dialog.c:2278
+#: src/prefs-dialog.c:298 src/prefs-dialog.c:2281
 #, c-format
 msgid "Logged in as %s"
 msgstr "Bejelentkezve mint: %s"
@@ -2461,43 +2487,43 @@ msgstr[1] "Rendszer nyelvei (%s)"
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/prefs-dialog.c:1651
+#: src/prefs-dialog.c:1654
 msgid "Select a directory"
 msgstr "Válasszon egy könyvtárat"
 
-#: src/prefs-dialog.c:2114
+#: src/prefs-dialog.c:2117
 msgid "Sans"
 msgstr "Talpatlan"
 
-#: src/prefs-dialog.c:2115
+#: src/prefs-dialog.c:2118
 msgid "Serif"
 msgstr "Talpas"
 
-#: src/prefs-dialog.c:2119
+#: src/prefs-dialog.c:2122
 msgid "Light"
 msgstr "Világos"
 
-#: src/prefs-dialog.c:2120
+#: src/prefs-dialog.c:2123
 msgid "Dark"
 msgstr "Sötét"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1355
+#: src/profile-migrator/ephy-profile-migrator.c:1359
 msgid "Executes only the n-th migration step"
 msgstr "Csak az n. költöztetési lépés végrehajtása"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1357
+#: src/profile-migrator/ephy-profile-migrator.c:1361
 msgid "Specifies the required version for the migrator"
 msgstr "Megadja a szükséges verziót a költöztetőnek"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1359
+#: src/profile-migrator/ephy-profile-migrator.c:1363
 msgid "Specifies the profile where the migrator should run"
 msgstr "Megadja a költöztető futtatásához használandó profilt"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1379
+#: src/profile-migrator/ephy-profile-migrator.c:1383
 msgid "Web profile migrator"
 msgstr "Web profilköltöztető"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1380
+#: src/profile-migrator/ephy-profile-migrator.c:1384
 msgid "Web profile migrator options"
 msgstr "Web profilköltöztető beállításai"
 
@@ -3261,171 +3287,173 @@ msgid "Stop loading current page"
 msgstr "Jelenlegi oldal betöltésének leállítása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Ugrás vissza az előző oldalra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Ugrás előre a következő oldalra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:129
+#: src/resources/gtk/shortcuts-dialog.ui:143
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Lapok"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Új lap"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Jelenlegi lap bezárása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Bezárt lap újranyitása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Ugrás a következő lapra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Ugrás az előző lapra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:182
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Jelenlegi lap mozgatása balra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:189
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Jelenlegi lap mozgatása jobbra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
+#: src/resources/gtk/shortcuts-dialog.ui:200
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Előzmények"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:218
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Jelenlegi oldal könyvjelzőzése"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Kurzoros böngészés be- vagy kikapcsolása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:222
+#: src/resources/gtk/shortcuts-dialog.ui:236
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Nézet"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Nagyítás"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Kicsinyítés"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Nagyítás visszaállítása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:268
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Oldal forrásának megtekintése"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:275
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Vizsgáló be- vagy kikapcsolása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:268
+#: src/resources/gtk/shortcuts-dialog.ui:282
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Olvasó mód ki- és bekapcsolása"
 
-#: src/resources/gtk/shortcuts-dialog.ui:279
+#: src/resources/gtk/shortcuts-dialog.ui:293
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Szerkesztés"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Kivágás"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Másolás"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Visszavonás"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Újra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Oldal URL kijelölése"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Keresés"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:353
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Következő keresési eredmény"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
+#: src/resources/gtk/shortcuts-dialog.ui:360
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Előző keresési eredmény"
