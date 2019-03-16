@@ -31,7 +31,8 @@
 int
 ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory)
 {
-  char *migrated_file, *contents = NULL;
+  g_autofree char *migrated_file = NULL;
+  g_autofree char *contents = NULL;
   gsize size;
   int result = 0;
   int latest = 0;
@@ -46,13 +47,9 @@ ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_di
     if (contents != NULL)
       result = sscanf (contents, "%d", &latest);
 
-    g_free (contents);
-
     if (result != 1)
       latest = 0;
   }
-
-  g_free (migrated_file);
 
   return latest;
 }
@@ -67,7 +64,8 @@ gboolean
 ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
                                                           const char *profile_directory)
 {
-  char *migrated_file, *contents;
+  g_autofree char *migrated_file;
+  g_autofree char *contents;
   gboolean result = FALSE;
 
   migrated_file = g_build_filename (profile_directory,
@@ -79,9 +77,6 @@ ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
   if (result == FALSE)
     LOG ("Couldn't store migration version %d in %s (%s, %s)",
          version, migrated_file, profile_directory, PROFILE_MIGRATION_FILE);
-
-  g_free (contents);
-  g_free (migrated_file);
 
   return result;
 }
@@ -97,13 +92,13 @@ ephy_profile_utils_set_migration_version (int version)
 gboolean
 ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug)
 {
-  gboolean ret;
-  GError *error = NULL;
-  char *index = NULL, *version = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *index = NULL;
+  g_autofree char *version = NULL;
   int status;
   const char *argv[8] = { PKGLIBEXECDIR "/" EPHY_PROFILE_MIGRATOR, "-v" };
   int i = 2; /* index for argv, start filling at 2. */
-  char **envp;
+  g_auto(GStrv) envp = NULL;
 
   envp = g_environ_setenv (g_get_environ (),
                            "EPHY_LOG_MODULES", "ephy-profile",
@@ -115,7 +110,6 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
      is nothing to migrate, don't spawn the migrator at all. */
   if (test_to_run == -1 &&
       EPHY_PROFILE_MIGRATION_VERSION == ephy_profile_utils_get_migration_version ()) {
-    g_strfreev (envp);
     return TRUE;
   }
 
@@ -140,20 +134,13 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
     argv[0] = BUILD_ROOT "/src/" EPHY_PROFILE_MIGRATOR;
 #endif
 
-  ret = g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
-                      NULL, NULL, NULL, NULL,
-                      &status, &error);
-  g_free (index);
-  g_free (version);
-  g_strfreev (envp);
-
+  g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
+                NULL, NULL, NULL, NULL,
+                &status, &error);
   if (error) {
     g_warning ("Failed to run migrator: %s", error->message);
-    g_error_free (error);
+    return FALSE;
   }
 
-  if (status != 0)
-    ret = FALSE;
-
-  return ret;
+  return status == 0;
 }
