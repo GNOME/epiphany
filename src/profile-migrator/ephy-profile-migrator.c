@@ -1305,8 +1305,10 @@ ephy_migrator (void)
     return TRUE;
   }
 
-  latest = MAX (ephy_profile_utils_get_migration_version (),
-                ephy_profile_utils_get_migration_version_for_profile_dir (legacy_profile_dir ()));
+  if (g_file_test (legacy_profile_dir (), G_FILE_TEST_EXISTS))
+    latest = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_profile_dir ());
+  else
+    latest = ephy_profile_utils_get_migration_version ();
 
   LOG ("Running migrators up to version %d, current migration version is %d.",
        EPHY_PROFILE_MIGRATION_VERSION, latest);
