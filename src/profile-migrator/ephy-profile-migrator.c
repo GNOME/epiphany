@@ -1057,7 +1057,10 @@ migrate_profile_directories (void)
 {
   GList *web_apps, *l;
 
-  /* Web app profiles moved from config to data dirs */
+  /* Web app profiles moved from config to data dirs. If this migration has
+   * already been run for a separate profile, then the legacy application list
+   * should be empty, so it's harmless to run this multiple times.
+   */
   web_apps = ephy_web_application_get_legacy_application_list ();
   for (l = web_apps; l; l = l->next) {
     EphyWebApplication *app = (EphyWebApplication *)l->data;
@@ -1129,7 +1132,12 @@ migrate_profile_directories (void)
 
   ephy_web_application_free_application_list (web_apps);
 
-  /* The default profile also changed directories */
+  /* The default profile also changed directories. This needs to run only once,
+   * for the main browser instance.
+   */
+  if (!ephy_profile_dir_is_default ())
+    return;
+
   g_autoptr(GFile) old_directory = g_file_new_for_path (legacy_default_profile_dir ());
   g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
 
