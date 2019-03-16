@@ -64,12 +64,13 @@ ephy_profile_utils_get_migration_version (void)
 }
 
 gboolean
-ephy_profile_utils_set_migration_version (int version)
+ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
+                                                          const char *profile_directory)
 {
   char *migrated_file, *contents;
   gboolean result = FALSE;
 
-  migrated_file = g_build_filename (ephy_profile_dir (),
+  migrated_file = g_build_filename (profile_directory,
                                     PROFILE_MIGRATION_FILE,
                                     NULL);
   contents = g_strdup_printf ("%d", version);
@@ -77,12 +78,18 @@ ephy_profile_utils_set_migration_version (int version)
 
   if (result == FALSE)
     LOG ("Couldn't store migration version %d in %s (%s, %s)",
-         version, migrated_file, ephy_profile_dir (), PROFILE_MIGRATION_FILE);
+         version, migrated_file, profile_directory, PROFILE_MIGRATION_FILE);
 
   g_free (contents);
   g_free (migrated_file);
 
   return result;
+}
+
+gboolean
+ephy_profile_utils_set_migration_version (int version)
+{
+  return ephy_profile_utils_set_migration_version_for_profile_dir (version, ephy_profile_dir ());
 }
 
 #define EPHY_PROFILE_MIGRATOR "ephy-profile-migrator"
