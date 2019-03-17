@@ -47,7 +47,7 @@ test_ephy_file_helpers_init (void)
     FileInitTest test;
 
     char *tmp_dir = NULL;
-    char *dot_dir = NULL;
+    char *profile_dir = NULL;
 
     gboolean private_profile = FALSE;
     gboolean keep_dir = FALSE;
@@ -69,20 +69,20 @@ test_ephy_file_helpers_init (void)
     g_assert_true (ephy_file_helpers_init (NULL, test.flags, NULL));
 
     tmp_dir = g_strdup (ephy_file_tmp_dir ());
-    dot_dir = g_strdup (ephy_profile_dir ());
+    profile_dir = g_strdup (ephy_profile_dir ());
 
     g_assert_nonnull (tmp_dir);
-    g_assert_nonnull (dot_dir);
+    g_assert_nonnull (profile_dir);
 
     /* Should always exist after ephy_file_tmp_dir(). */
     g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
-    g_assert_true (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == ensure_exists);
+    g_assert_true (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == ensure_exists);
 
     ephy_file_helpers_shutdown ();
 
-    /* Private profiles have their dot_dir inside tmp_dir. */
+    /* Private profiles have their profile_dir inside tmp_dir. */
     g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_dir);
-    g_assert_true (g_file_test (dot_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
+    g_assert_true (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
 
     /* Cleanup dir left behind. */
     if (keep_dir) {
@@ -95,7 +95,7 @@ test_ephy_file_helpers_init (void)
     }
 
     g_free (tmp_dir);
-    g_free (dot_dir);
+    g_free (profile_dir);
   }
 }
 
