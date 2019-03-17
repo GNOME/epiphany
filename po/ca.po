@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-02-05 17:48+0000\n"
-"PO-Revision-Date: 2019-02-10 14:41+0100\n"
+"POT-Creation-Date: 2019-02-26 20:53+0000\n"
+"PO-Revision-Date: 2019-03-17 14:41+0100\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -38,7 +38,7 @@ msgid ""
 "pages. If you’re looking for a simple, clean, beautiful view of the web, "
 "this is the browser for you."
 msgstr ""
-"El navegador web del GNOME, amb una estreta integració amb l'escriptori iuna "
+"El navegador web del GNOME, amb una estreta integració amb l'escriptori i una "
 "interfície d'usuari simple i intuïtiva que us permet centrar-vos en les "
 "pàgines web. Si busqueu una visualització senzilla, neta i bonica de la web, "
 "aquest és el vostre navegador."
@@ -179,21 +179,56 @@ msgstr ""
 "restaurada."
 
 #: data/org.gnome.epiphany.gschema.xml:60
+msgid "Process model"
+msgstr "Model de procés"
+
+#: data/org.gnome.epiphany.gschema.xml:61
+msgid ""
+"This option allows to set the process model used. Use “shared-secondary-"
+"process” to use a single web process shared by all the tabs and “one-"
+"secondary-process-per-web-view” to use a different web process for each tab."
+msgstr ""
+"Aquesta opció permet configurar el model de procés utilitzat. Utilitzeu "
+"«shared-secondary-process» («procés-secundari-compartit») per utilitzar un "
+"únic procés web compartit per totes les pestanyes i «one-secondary-process-"
+"per-web-view» («un-procés-secundari-per-cada-visualització») per usar un "
+"procés web diferent per a cada pestanya."
+
+#: data/org.gnome.epiphany.gschema.xml:65
+msgid ""
+"Maximum number of web processes created at the same time when using “one-"
+"secondary-process-per-web-view” model"
+msgstr ""
+"Nombre màxim de processos web creats al mateix temps en usar el model «one-"
+"secondary-process-per-web-view» («un-procés-secundari-per-visualització-web»)"
+
+#: data/org.gnome.epiphany.gschema.xml:66
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the “one-secondary-process-per-web-view” model. The "
+"default value is “0” and means no limit."
+msgstr ""
+"Aquesta opció configura un límit al nombre de processos web que es poden "
+"usar al mateix temps pel model  «one-secondary-process-per-web-view» («un-"
+"procés-secundari-per-visualització-web»). El valor per defecte és «0» i vol "
+"dir que no hi ha límit."
+
+#: data/org.gnome.epiphany.gschema.xml:71
 msgid "List of adblock filters"
 msgstr "Llista de filtres de bloqueig publicitari"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr ""
 "Llista d'URL amb regles de filtrat a usar pel filtre de bloqueig publicitari."
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Expandeix la mida de les pestanyes per omplir l'espai disponible a la barra "
 "de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -201,11 +236,11 @@ msgstr ""
 "Si l'habilitació de les pestanyes permetrà l'ús de tot l'espai disponible a "
 "la barra de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The position of the tabs bar."
 msgstr "La posició de la barra de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -216,11 +251,11 @@ msgstr ""
 "verticals amb la barra a l'esquerra) i «dreta» (pestanyes verticals amb la "
 "barra a la dreta)."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "La política de visibilitat de la barra de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -231,52 +266,52 @@ msgstr ""
 "de pestanyes només es mostra si hi ha dues o més pestanyes) i «mai» (la "
 "barra de pestanyes no és mostra mai)."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
 "dark background)."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "Mida mínima del tipus de lletra"
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "Useu tipus de lletra GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "Useu paràmetres del tipus de lletra GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "Personalitza el tipus de lletra Sans-serif"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -284,11 +319,11 @@ msgstr ""
 "Un valor que s'utilitzarà per sobreescriure el tipus de lletra d'escriptori "
 "sans-serif quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "Personalitza el tipus de lletra serif"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -296,11 +331,11 @@ msgstr ""
 "Un valor que s'utilitzarà per sobreescriure el tipus de lletra d'escriptori "
 "serif quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "Personalitza el tipus de lletra monospace"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -308,51 +343,51 @@ msgstr ""
 "Un valor que s'utilitzarà per sobreescriure el tipus de lletra d'escriptori "
 "monospace quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "Usa un CSS personalitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Useu un fitxer CSS personalitzat per modificar llocs web propis de CSS."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Habilita el verificador ortogràfic"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr "Corregeix l'ortografia de qualsevol text escrit en àrees editables."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Codificació per defecte"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Codificació per defecte. Els valors acceptats són els que WebKitGTK+ pugui "
 "entendre."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:151
 #: src/resources/gtk/prefs-dialog.ui:910
 msgid "Languages"
 msgstr "Llengües"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Llengües preferides. Matriu amb els codis localitzats o «sistema» per usar "
 "com localització actual."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Cookie accept"
 msgstr "Accepta galetes"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -360,50 +395,50 @@ msgstr ""
 "Si s'hauria d'habilitar acceptar galetes. Els valors possibles són «sempre», "
 "«no d'un tercer», i «mai»."
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Habilita finestres emergents"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permet als llocs que obrin finestres noves usant JavaScript (si JavaScript "
 "està habilitat)."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable Plugins"
 msgstr "Habilita connectors"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Enable WebGL"
 msgstr "Habilita WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Si s'hauria d'habilitar el suport en contexts a WebGL."
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Enable WebAudio"
 msgstr "Habilita WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Whether to enable support for WebAudio."
 msgstr "Si s'hauria d'habilitar el suport a WebAudio."
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable smooth scrolling"
 msgstr "Habilita desplaçament suau"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Whether to enable smooth scrolling."
 msgstr "Si s'hauria d'habilitar el desplaçament suau."
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "User agent"
 msgstr "Agent d'usuari"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -411,26 +446,26 @@ msgstr ""
 "Cadena que s'usarà com agent d'usuari per identificar el navegador als "
 "servidors web."
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Do Not Track"
 msgstr "No vull ser seguit"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
-"Enables DNT headers and tracking query parameter removal. Note that when "
-"changing this setting from the preferences dialog, the adblock-filters "
-"setting will additionally be updated to add/remove EasyPrivacy filters."
+"Enables tracking query parameter removal. Note that when changing this "
+"setting from the preferences dialog, the adblock-filters setting will "
+"additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
-"Habilita els encapçalaments DNT i elimina els paràmetres de consulta de "
+"Habilita la supressió dels paràmetres de consulta de "
 "seguiment. Tingueu en compte que en canviar aquesta configuració des del "
 "diàleg de preferències, la configuració dels filtres de bloqueig publicitari "
-"també s'actualitzarà per afegir/eliminar el filtres EasyPrivacy."
+"també s'actualitzarà per afegir/eliminar els filtres EasyPrivacy."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Enable adblock"
 msgstr "Habilita el bloqueig publicitari"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -438,19 +473,19 @@ msgstr ""
 "Si s'hauria de bloquejar els advertiments incrustats que les pàgines web "
 "poden mostrar."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Remember passwords"
 msgstr "Recorda les contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Si s'haurien d'emmagatzemar i pre-omplir contrasenyes en llocs web."
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable site-specific quirks"
 msgstr "Habilita peculiaritats en llocs web específics"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -459,11 +494,11 @@ msgstr ""
 "possible que vulgueu desactivar aquest paràmetre si depureu un problema "
 "específic."
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable safe browsing"
 msgstr "Habilita la navegació segura"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -471,23 +506,23 @@ msgstr ""
 "Si s'hauria d'habilitar la navegació segura. La navegació segura opera "
 "mitjançant la «API Google Safe Browsing v4»."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Google Safe Browsing API key"
 msgstr "Clau de l'API Google Safe Browsing"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "La clau de l'API usada per accedir a l'API Google Safe Browsing v4."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Default zoom level for new pages"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid "Enable autosearch"
 msgstr "Habilita la cerca automàtica"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -495,39 +530,37 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid "Enable mouse gesture"
 msgstr "Habilitat el gest del ratolí"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Last upload directory"
 msgstr "Últim directori de pujada"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Keep track of last upload directory"
 msgstr "Fes un seguiment de l'últim directori de pujada"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Last download directory"
 msgstr "Últim directori de descàrrega"
 
-#: data/org.gnome.epiphany.gschema.xml:229
-#, fuzzy
-#| msgid "Select a directory"
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Keep track of last download directory"
-msgstr "Seleccioneu un directori"
+msgstr "Fes un seguiment de l'últim directori de baixada"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Hardware acceleration policy"
 msgstr "Política d'acceleració de maquinari"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -537,23 +570,23 @@ msgid ""
 "required to display 3D transforms."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:251
 #, fuzzy
 #| msgid "Create Web Application"
 msgid "Web application additional URLs"
 msgstr "Crea una aplicació web"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:252
 #, fuzzy
 #| msgid "List of installed web applications"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Llista d'aplicacions web instal·lades"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "The downloads folder"
 msgstr "La carpeta de baixades"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -562,11 +595,11 @@ msgstr ""
 "carpeta de baixades per defecte, o «Escriptori» per usar la carpeta de "
 "l'escriptori."
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:266
 msgid "Window position"
 msgstr "Posició de la finestra"
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -574,22 +607,22 @@ msgstr ""
 "La posició per usar una finestra nova que no es restaura des d'una sessió "
 "prèvia."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:271
 msgid "Window size"
 msgstr "Mida de la finestra"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "La mida a usar per una finestra nova que no restaura des d'una sessió prèvia."
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:276
 msgid "Is maximized"
 msgstr "està maximitzada"
 
-#: data/org.gnome.epiphany.gschema.xml:266
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -597,21 +630,21 @@ msgstr ""
 "Si s'hauria de permetre que una finestra nova que no ha estat restaurada des "
 "d'una sessió prèvia estigui maximitzada inicialment."
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Disable forward and back buttons"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "Currently signed in sync user"
 msgstr "S'ha iniciat la sessió en la sincronització de l'usuari"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -619,43 +652,43 @@ msgstr ""
 "El correu electrònic enllaçat al compte de Firefox utilitza per sincronitzar "
 "dades amb els servidors de Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "Last sync timestamp"
 msgstr "Marca horària de la darrera sincronització"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "L'hora UNIX en segons a la qual es va fer la darrera sincronització."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "Sync device ID"
 msgstr "ID del dispositiu sincronitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "The sync device ID of the current device."
 msgstr "L'ID del dispositiu sincronitzat del dispositiu actual."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "Sync device name"
 msgstr "Nom del dispositiu sincronitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "The sync device name of the current device."
 msgstr "El nom del dispositiu sincronitzat del dispositiu actual."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "The sync frequency in minutes"
 msgstr "La freqüència de sincronització en minuts"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The number of minutes between two consecutive syncs."
 msgstr "El nombre de minuts entre dues sincronitzacions consecutives."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "Sync data with Firefox"
 msgstr "Sincronitza les dades amb Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -663,33 +696,33 @@ msgstr ""
 "CERT si les col·leccions d'Ephy s'han de sincronitzar amb les col·leccions "
 "de Firefox, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "Enable bookmarks sync"
 msgstr "Habilita la sincronització de les adreces d'interès"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció d'adreces d'interès ha de ser sincronitzada, FALS en "
 "cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "Bookmarks sync timestamp"
 msgstr "Marca horària de la sincronització de les adreces d'interès"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "La marca horària a la qual les darreres adreces d'interès van ser "
 "sincronitzades."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "Initial sync or normal sync"
 msgstr "Sincronització inicial o sincronització normal"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -697,26 +730,26 @@ msgstr ""
 "CERT si les col·leccions d'adreces d'interès necessiten ser sincronitzades "
 "per primera vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "Enable passwords sync"
 msgstr "Habilita la sincronització de contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció de contrasenyes han de ser sincronitzades, FALS en cas "
 "contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "Passwords sync timestamp"
 msgstr "Marca horària de la sincronització de contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 "La marca horària a la qual les darreres contrasenyes es van sincronitzar."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -724,25 +757,25 @@ msgstr ""
 "CERT si la col·lecció de contrasenyes necessiten sincronitzar-se per primera "
 "vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "Enable history sync"
 msgstr "Habilita la sincronització de l'historial"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció de l'historial s'ha de sincronitzar, FALS en cas "
 "contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "History sync timestamp"
 msgstr "Marca horària de sincronització de l'historial"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last history sync was made."
 msgstr "La marca horària a la qual el darrer historial va ser sincronitzat."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -750,32 +783,32 @@ msgstr ""
 "CERT si la col·lecció de l'historial ha de ser sincronitzada per primera "
 "vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "Enable open tabs sync"
 msgstr "Habilita la sincronització de les pestanyes obertes"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció de pestanyes obertes ha de ser sincronitzada, FALS en "
 "cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "Open tabs sync timestamp"
 msgstr "Marca horària de sincronització de les pestanyes obertes"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "La marca horària a la qual es va sincronitzar per última vegada les "
 "pestanyes obertes."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana el permís del micròfon per a aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -787,14 +820,14 @@ msgstr ""
 "navegador necessita demanar permís a l'usuari, mentre que «Permet» i "
 "«Denega», vol dir que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es sol·liciti el permís de geolocalització per a "
 "aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -806,13 +839,13 @@ msgstr ""
 "navegador necessita demanar permís a l'usuari, mentre que «Permet» i "
 "«Denega», vol dir que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana permís de notificació per a aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -824,14 +857,14 @@ msgstr ""
 "necessita demanar permís a l'usuari, mentre que «Permet» i «Denega», vol dir "
 "que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana el permís de desar la contrasenya per a "
 "aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -843,13 +876,13 @@ msgstr ""
 "demanar permís a l'usuari, mentre que «Permet» i «Denega», vol dir que "
 "prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana el permís per la càmera web per a aquest "
 "servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -902,7 +935,7 @@ msgstr "Instal·lat a:"
 #. Displayed when opening the browser for the first time.
 #: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
-msgstr "Benvingut a la web"
+msgstr "Us donem la benvinguda al Web"
 
 #: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
@@ -1374,9 +1407,8 @@ msgstr ""
 "no es mantindrà privada."
 
 #: embed/ephy-web-view.c:1153
-#, fuzzy
 msgid "Web process crashed"
-msgstr "El procés web ha fallat"
+msgstr "El procés Web ha fallat"
 
 #: embed/ephy-web-view.c:1156
 msgid "Web process terminated due to exceeding memory limit"
@@ -1479,8 +1511,8 @@ msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
 msgstr ""
-"La identificació del lloc web sols és vàlida per dates futures. Comproveu "
-"la data del calendari del vostre ordinador."
+"La identificació del lloc web sols és vàlida per dates futures. Comproveu la "
+"data del calendari del vostre ordinador."
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
@@ -1788,7 +1820,7 @@ msgstr "%a a les %-H:%M"
 #.
 #: lib/ephy-time-helpers.c:297
 msgid "%b %d %I∶%M %p"
-msgstr "%d %b %I:%M %p"
+msgstr "%-d %b %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
@@ -1802,7 +1834,7 @@ msgstr "%-d %b %-H:%M"
 #.
 #: lib/ephy-time-helpers.c:308
 msgid "%b %d %Y"
-msgstr "%d %b del %Y"
+msgstr "%-d %b del %Y"
 
 #. impossible time or broken locale settings
 #: lib/ephy-time-helpers.c:318
@@ -2059,20 +2091,20 @@ msgstr "Tots els fitxers"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:605 src/ephy-history-dialog.c:389
+#: lib/widgets/ephy-location-entry.c:603 src/ephy-history-dialog.c:389
 msgid "Cl_ear"
 msgstr "_Esborra"
 
-#: lib/widgets/ephy-location-entry.c:625
+#: lib/widgets/ephy-location-entry.c:623
 msgid "Paste and _Go"
 msgstr "Enganxa i _vés"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:646 src/ephy-window.c:913
+#: lib/widgets/ephy-location-entry.c:644 src/ephy-window.c:914
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:651
 msgid "_Redo"
 msgstr "_Refés"
 
@@ -2088,15 +2120,12 @@ msgstr ""
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:114
-#, fuzzy, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
+#,  c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
 msgstr ""
-"%s no té seguretat. Un atacant podria veure la informació que envieu o "
+"Aquest lloc no té seguretat. Un atacant podria veure la informació que envieu o "
 "controlar el contingut que veieu."
 
 #. Label in certificate popover when site sends mixed content.
@@ -2211,10 +2240,8 @@ msgid "Open a new browser window instead of a new tab"
 msgstr "Obre una finestra de navegador nova en comptes d'una pestanya nova"
 
 #: src/ephy-main.c:115
-#, fuzzy
-#| msgid "Load the given session file"
 msgid "Load the given session state file"
-msgstr "Carrega el fitxer de sessió especificat"
+msgstr "Carrega el fitxer d'estat de sessió especificat"
 
 #: src/ephy-main.c:115
 msgid "FILE"
@@ -2304,133 +2331,133 @@ msgstr "Si sortiu, les baixades es cancel·laran"
 msgid "Quit and cancel downloads"
 msgstr "Surt i cancel·la les baixades"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "_Refés"
 
 #. Edit.
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Cu_t"
 msgstr "_Retalla"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Copy"
 msgstr "_Copia"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:920
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:921
 msgid "Select _All"
 msgstr "_Selecciona-ho tot"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "Envia un en_llaç per correu..."
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "_Torna a carregar"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "E_nrere"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "Se_güent"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
-msgstr "Afegeix una adreça d'_interès"
+msgstr "Afege_ix una adreça d'interès…"
 
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Obre l'enllaç en una _finestra nova"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Obre l'enllaç en una _pestanya nova"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Obre l'enllaç en una finestra _incògnita"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "_Anomena i desa l'enllaç..."
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça del correu"
 
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "Mostra la _imatge en una pestanya nova"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Copia l'adreça de la _imatge"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "Anomena i de_sa la imatge..."
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Estableix com _fons de pantalla"
 
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Obre el vídeo en una _finestra nova"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Obre el vídeo en una _pestanya nova"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "Anomena i de_sa el vídeo..."
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "_Copia l'adreça del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Obre l'àudio en una _finestra nova"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Obre l'àudio en una _pestanya nova"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "Anomena i de_sa l'àudio..."
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "_Copia l'adreça de l'àudio"
 
-#: src/ephy-window.c:964
-msgid "Save Pa_ge As…"
-msgstr "Anomena i de_sa la pàgina"
-
 #: src/ephy-window.c:965
+msgid "Save Pa_ge As…"
+msgstr "Anomena i de_sa la pàgina…"
+
+#: src/ephy-window.c:966
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cerca al web «%s»"
@@ -2466,10 +2493,8 @@ msgid "Something went wrong, please try again later."
 msgstr "Alguna cosa ha anat malament, torneu-ho a intentar en un moment."
 
 #: src/prefs-dialog.c:830
-#, fuzzy
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
-msgstr "Crea una aplicació web"
+msgstr "Icona de l'aplicació Web"
 
 #: src/prefs-dialog.c:835
 msgid "Supported Image Files"
@@ -2753,23 +2778,23 @@ msgstr "_Torna a carregar totes les pestanyes"
 msgid "_Duplicate"
 msgstr "_Duplica"
 
-#: src/resources/gtk/notebook-context-menu.ui:19
+#: src/resources/gtk/notebook-context-menu.ui:21
 msgid "Reo_pen Closed Tab"
 msgstr "Torna a obrir la _pestanya tancada"
 
-#: src/resources/gtk/notebook-context-menu.ui:23
+#: src/resources/gtk/notebook-context-menu.ui:27
 msgid "Close Tabs to the _Left"
 msgstr "Mou la pestanya a l'_esquerra"
 
-#: src/resources/gtk/notebook-context-menu.ui:27
+#: src/resources/gtk/notebook-context-menu.ui:31
 msgid "Close Tabs to the _Right"
 msgstr "Mou la pestanya a la d_reta"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.ui:35
 msgid "Close _Other Tabs"
 msgstr "_Tanca les altres pestanyes"
 
-#: src/resources/gtk/notebook-context-menu.ui:35
+#: src/resources/gtk/notebook-context-menu.ui:39
 msgid "_Close"
 msgstr "_Tanca"
 
@@ -2852,7 +2877,7 @@ msgstr "A_juda"
 msgid "_About Web"
 msgstr "Quant al Web"
 
-#: src/resources/gtk/page-row.ui:52
+#: src/resources/gtk/page-row.ui:83
 msgid "Close page"
 msgstr "Tanca la pàgina"
 
@@ -3111,18 +3136,14 @@ msgid "Firefox Sync"
 msgstr "Sincronització de Firefox"
 
 #: src/resources/gtk/prefs-dialog.ui:1059
-#, fuzzy
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
 "Mozilla."
 msgstr ""
 "Inicieu la sessió amb el vostre compte de Firefox per sincronitzar les "
-"vostres dades amb la Web i Firefox en altres equips. La web no està produïda "
-"ni recolzada per Mozilla."
+"vostres dades amb la Web i Firefox en altres equips. Web no està produït "
+"ni recolzat per Mozilla."
 
 #: src/resources/gtk/prefs-dialog.ui:1093
 msgid "Firefox Account"
@@ -3614,8 +3635,8 @@ msgstr "Cancel·la"
 msgid "Replace"
 msgstr "Reemplaça"
 
-#: src/window-commands.c:1243
 #
+#: src/window-commands.c:1243
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3668,2597 +3689,3 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Habilita"
 
-#~ msgid "You are connected to %s"
-#~ msgstr "Esteu connectats a %s"
-
-#~ msgid "URL Search"
-#~ msgstr "Cerca URL"
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "search-engines instead."
-#~ msgstr ""
-#~ "OBSOLET: Aquesta tecla està obsoleta i s'ignora. Useu al seu lloc /org/"
-#~ "gnome/epiphany/search-engines."
-
-#~ msgid ""
-#~ "String that will be used as user agent, to identify the browser to the "
-#~ "web servers. DEPRECATED: This key is deprecated and ignored. Use /org/"
-#~ "gnome/epiphany/web/user-agent instead."
-#~ msgstr ""
-#~ "Cadena que s'usarà com agent d'usuari, per identificar el navegador als "
-#~ "servidors web. OBSOLET: Aquesta clau està obsoleta i s'ignora. Useu al "
-#~ "seu lloc /org/gnome/epiphany/web/user-agent."
-
-#~ msgid ""
-#~ "Whether to store and prefill passwords in websites. DEPRECATED: This key "
-#~ "is deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords "
-#~ "instead."
-#~ msgstr ""
-#~ "Si s'hauria d'emmagatzemar i omplir contrasenyes a llocs web. OBSOLET: "
-#~ "Aquesta clau està obsoleta i s'ignora. Useu al seu lloc /org/gnome/"
-#~ "epiphany/web/remember-passwords. "
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "web/enable-smooth-scrolling instead."
-#~ msgstr ""
-#~ "OBSOLETA: Aquesta clau és obsoleta i s'ignora. Useu al seu lloc /org/"
-#~ "gnome/epiphany/web/enable-smooth-scrolling."
-
-#~ msgid "Process model"
-#~ msgstr "Model de procés"
-
-#~ msgid ""
-#~ "This option allows to set the process model used. Use “shared-secondary-"
-#~ "process” to use a single web process shared by all the tabs and “one-"
-#~ "secondary-process-per-web-view” to use a different web process for each "
-#~ "tab."
-#~ msgstr ""
-#~ "Aquesta opció permet configurar el model de procés utilitzat. Utilitzeu "
-#~ "«shared-secondary-process» («procés-secundari-compartit») per utilitzar "
-#~ "un únic procés web compartit per totes les pestanyes i «one-secondary-"
-#~ "process-per-web-view» («un-procés-secundari-per-cada-visualització») per "
-#~ "usar un procés web diferent per a cada pestanya."
-
-#~ msgid ""
-#~ "Maximum number of web processes created at the same time when using “one-"
-#~ "secondary-process-per-web-view” model"
-#~ msgstr ""
-#~ "Nombre màxim de processos web creats al mateix temps en usar el model "
-#~ "«one-secondary-process-per-web-view» («un-procés-secundari-per-"
-#~ "visualització-web»)"
-
-#~ msgid ""
-#~ "This option sets a limit to the number of web processes that will be used "
-#~ "at the same time for the “one-secondary-process-per-web-view” model. The "
-#~ "default value is “0” and means no limit."
-#~ msgstr ""
-#~ "Aquesta opció configura un límit al nombre de processos web que es poden "
-#~ "usar al mateix temps pel model  «one-secondary-process-per-web-view» («un-"
-#~ "procés-secundari-per-visualització-web»). El valor per defecte és «0» i "
-#~ "vol dir que no hi ha límit."
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "sync/ instead."
-#~ msgstr ""
-#~ "OBSOLET: Aquesta tecla està obsoleta i s'ignora. Useu al seu lloc /org/"
-#~ "gnome/epiphany/sync/."
-
-#~ msgid "Save File"
-#~ msgstr "Desa el fitxer"
-
-#~ msgid "Fit Page"
-#~ msgstr "Ajusta a la pàgina"
-
-#~ msgid "Fit Width"
-#~ msgstr "Ajusta l'amplada"
-
-#~ msgid "Free"
-#~ msgstr "Lliure"
-
-#~ msgid "Automatic"
-#~ msgstr "Automàtic"
-
-#~ msgid "Copy"
-#~ msgstr "Copia"
-
-#~ msgid "of %d"
-#~ msgstr "de %d"
-
-#~ msgid "Search the Web"
-#~ msgstr "Cerca al web"
-
-#~ msgid "Search the Web for %s"
-#~ msgstr "Cerca a la web per %s"
-
-#~ msgid ""
-#~ "When files cannot be opened by the browser they are automatically "
-#~ "downloaded to the download folder and opened with the appropriate "
-#~ "application."
-#~ msgstr ""
-#~ "Quan el navegador no pugui obrir els fitxers, es descarreguen "
-#~ "automàticamenta la carpeta de baixades i s'obren amb l'aplicació "
-#~ "apropiada."
-
-#~ msgid "Installed plugins"
-#~ msgstr "Connectors instal·lats"
-
-#~ msgid "Plugins"
-#~ msgstr "Connectors"
-
-#~ msgid "Plugins are disabled in the preferences"
-#~ msgstr "Els connectors estan deshabilitats a les preferències"
-
-#~| msgid "_Enabled"
-#~ msgid "Enabled"
-#~ msgstr "Habilitat"
-
-#~ msgid "Yes"
-#~ msgstr "Sí"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#~ msgid "MIME type"
-#~ msgstr "Tipus MIME"
-
-#~| msgid "Description:"
-#~ msgid "Description"
-#~ msgstr "Descripció"
-
-#~ msgid "Suffixes"
-#~ msgstr "Sufixos"
-
-#~ msgid "Open in browser"
-#~ msgstr "Obre en el navegador"
-
-#~ msgid "Open the page in your default browser"
-#~ msgstr "Obre la pàgina en el vostre navegador per defecte"
-
-#~| msgid "Open new chats in separate windows"
-#~ msgid "Open a new tab in an existing browser window"
-#~ msgstr "Obriu una pestanya nova en una finestra del navegador existent"
-
-#~ msgid "Import bookmarks from the given file"
-#~ msgstr "Importa les adreces d'interès d'un fitxer"
-
-#~ msgid "Add a bookmark"
-#~ msgstr "Afegeix una adreça d'interès"
-
-#~ msgid "Start an instance in incognito mode"
-#~ msgstr "Inicia una instància en mode incògnit"
-
-#~| msgid "%s (%s)"
-#~ msgctxt "language"
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgctxt "language"
-#~ msgid "User defined (%s)"
-#~ msgstr "Usuari definit (%s)"
-
-#~| msgid "About"
-#~ msgid "_About"
-#~ msgstr "Quant a"
-
-#~ msgid "_Quit"
-#~ msgstr "_Surt"
-
-#~ msgid "Date"
-#~ msgstr "Data"
-
-#~ msgid "Location"
-#~ msgstr "Ubicació"
-
-#~ msgid "Open the selected pages in new tabs"
-#~ msgstr "Obre les pàgines seleccionades en pestanyes noves"
-
-#~| msgid "_Next Tab"
-#~ msgid "_New Tab"
-#~ msgstr "Pestanya  _nova"
-
-#~| msgid "new _windows"
-#~ msgid "New _Window"
-#~ msgstr "_Finestra nova"
-
-#~ msgid "Text _Encoding"
-#~ msgstr "Codificació del t_ext"
-
-#~ msgid "New _tab page"
-#~ msgstr "Pàgina de _pestanya nova"
-
-#~| msgid "_Automatically connect on startup"
-#~ msgid "A_utomatically open downloaded files"
-#~ msgstr "Obre de forma _automàtica els fitxers baixats"
-
-#~ msgid "Enable _plugins"
-#~ msgstr "Habilita els _connectors"
-
-#~| msgid "Contact List"
-#~ msgid "Contact us at:"
-#~ msgstr "Contacteu-nos a:"
-
-#~ msgid "Web Website"
-#~ msgstr "Lloc web de «Web»"
-
-#~ msgid "Empathy"
-#~ msgstr "Empathy"
-
-#~ msgid "IM Client"
-#~ msgstr "Client de missatgeria instantània"
-
-#~ msgid "Empathy Internet Messaging"
-#~ msgstr "Missatgeria d'Internet Empathy"
-
-#~ msgid "Chat on Google Talk, Facebook, MSN and many other chat services"
-#~ msgstr ""
-#~ "Conversa a través del Google Talk, el Facebook, el MSN i molts altres "
-#~ "serveis de xat"
-
-#~ msgid "chat;talk;im;message;irc;voip;gtalk;facebook;jabber;"
-#~ msgstr ""
-#~ "xat;parla;missatgeria instantània;missatge;irc;veuip;gtalk;facebook;"
-#~ "jabber;"
-
-#~ msgid ""
-#~ "Empathy is the official instant messaging application of the GNOME "
-#~ "desktop environment. Empathy can connect to AIM, MSN, Jabber (including "
-#~ "Facebook and Google Talk), IRC, and many other messaging networks."
-#~ msgstr ""
-#~ "L'Empathy és l'aplicació oficial de missatgeria instantània de l'entorn "
-#~ "d'escriptori GNOME. L'Empathy pot connectar-se a les xarxes de "
-#~ "missatgeria AIM, MSN, Jabber (incloent Facebook i Google Talk), IRC i "
-#~ "moltes altres."
-
-#~ msgid ""
-#~ "You can chat with text, make audio and video calls, or even transfer "
-#~ "files, depending on what your contact’s chat application allows."
-#~ msgstr ""
-#~ "Podeu  fer xat amb text, fer àudio o vídeo trucades, o transferir "
-#~ "fitxers, depenent del que la vostra aplicació de contactes de xat permeti."
-
-#~ msgid ""
-#~ "Empathy provides integrated messaging for the GNOME desktop, so you’ll "
-#~ "never miss a message. You can respond to your contacts without even "
-#~ "having to open Empathy!"
-#~ msgstr ""
-#~ "L'Empathy proporciona una missatgeria integrada amb l'escriptori GNOME, "
-#~ "per així assegurar-se que mai perdreu un missatge. Podeu respondre als "
-#~ "vostres contactes fins i tot sense obrir l'Empathy!"
-
-#~ msgid "Connection managers should be used"
-#~ msgstr "S'haurien d'utilitzar gestors de connexions"
-
-#~ msgid ""
-#~ "Whether connectivity managers should be used to automatically disconnect/"
-#~ "reconnect."
-#~ msgstr ""
-#~ "Si s'ha d'utilitzar el gestor de connexions per desconnectar/tornar a "
-#~ "connectar automàticament."
-
-#~ msgid "Empathy should auto-connect on startup"
-#~ msgstr "Fes que l'Empathy es connecti automàticament en iniciar-se"
-
-#~ msgid ""
-#~ "Whether Empathy should automatically log into your accounts on startup."
-#~ msgstr ""
-#~ "Si l'Empathy ha d'entrar en els comptes automàticament en iniciar-se."
-
-#~ msgid "Empathy should auto-away when idle"
-#~ msgstr ""
-#~ "Fes que l'Empathy canviï automàticament a absent quan estigui inactiu"
-
-#~ msgid ""
-#~ "Whether Empathy should go into away mode automatically if the user is "
-#~ "idle."
-#~ msgstr ""
-#~ "Si l'Empathy ha de canviar automàticament al mode absent quan l'usuari "
-#~ "està inactiu."
-
-#~ msgid "The default folder to save file transfers in."
-#~ msgstr "La carpeta predeterminada on es desaran els fitxers transferits."
-
-#~ msgid "Magic number used to check if sanity cleaning tasks should be run"
-#~ msgstr ""
-#~ "Número màgic per comprovar si s'han d'executar les tasques de neteja"
-
-#~ msgid ""
-#~ "empathy-sanity-cleaning.c uses this number to check if the cleaning tasks "
-#~ "should be executed or not. Users should not change this key manually."
-#~ msgstr ""
-#~ "L'empathy-sanity-cleaning.c utilitza aquest número per comprovar si s'han "
-#~ "d'executar les tasques de neteja. Els usuaris no haurien de canviar "
-#~ "aquesta clau manualment."
-
-#~ msgid "Show offline contacts"
-#~ msgstr "Mostra els contactes fora de línia"
-
-#~ msgid "Whether to show contacts that are offline in the contact list."
-#~ msgstr ""
-#~ "Si s'han de mostrar els contactes que estan fora de línia a la llista de "
-#~ "contactes."
-
-#~ msgid "Show Balance in contact list"
-#~ msgstr "Mostra el saldo a la llista de contactes"
-
-#~ msgid "Whether to show account balances in the contact list."
-#~ msgstr ""
-#~ "Si s'han de mostrar els saldos dels comptes a la llista de contactes."
-
-#~ msgid "Hide the main window."
-#~ msgstr "Oculta la finestra principal."
-
-#~ msgid "Default directory to select an avatar image from"
-#~ msgstr "El directori predeterminat des d'on seleccionar una imatge d'avatar"
-
-#~ msgid "The last directory that an avatar image was chosen from."
-#~ msgstr "L'últim directori des d'on es va seleccionar una imatge d'avatar."
-
-#~ msgid "Always open a separate chat window for new chats."
-#~ msgstr "Obre sempre una finestra de xat separada per a xats nous."
-
-#~ msgid "Display incoming events in the status area"
-#~ msgstr "Mostra els esdeveniments d'entrada en l'àrea d'estat"
-
-#~ msgid ""
-#~ "Display incoming events in the status area. If false, present them to the "
-#~ "user immediately."
-#~ msgstr ""
-#~ "Mostra els esdeveniments d'entrada en l'àrea d'estat. Si és "
-#~ "«false» (fals) mostra'ls immediatament a l'usuari."
-
-#~ msgid "The stored position (in pixels) of the chat window side pane."
-#~ msgstr ""
-#~ "La posició emmagatzemada (en píxels) de la subfinestra lateral de la "
-#~ "finestra de xat."
-
-#~ msgid "Show contact groups"
-#~ msgstr "Mostra els grups de contactes"
-
-#~ msgid "Whether to show groups in the contact list."
-#~ msgstr "Si s'han de mostrar els grups a la llista de contactes."
-
-#~ msgid "Use notification sounds"
-#~ msgstr "Utilitza sons de notificació"
-
-#~ msgid "Whether to play a sound to notify of events."
-#~ msgstr "Si s'ha de reproduir un so per notificar esdeveniments."
-
-#~ msgid "Disable sounds when away"
-#~ msgstr "Inhabilita els sons quan s'estigui absent"
-
-#~ msgid "Whether to play sound notifications when away or busy."
-#~ msgstr ""
-#~ "Si s'han de reproduir notificacions de so quan s'estigui absent o ocupat."
-
-#~ msgid "Play a sound for incoming messages"
-#~ msgstr "Reprodueix un so quan arribin missatges"
-
-#~ msgid "Whether to play a sound to notify of incoming messages."
-#~ msgstr "Si s'ha de reproduir un so quan arribin missatges."
-
-#~ msgid "Play a sound for outgoing messages"
-#~ msgstr "Reprodueix un so per als missatges de sortida"
-
-#~ msgid "Whether to play a sound to notify of outgoing messages."
-#~ msgstr "Si s'ha de reproduir un so quan s'enviïn missatges."
-
-#~ msgid "Play a sound for new conversations"
-#~ msgstr "Reprodueix un so per a les converses noves"
-
-#~ msgid "Whether to play a sound to notify of new conversations."
-#~ msgstr "Si s'ha de reproduir un so quan s'iniciïn converses noves."
-
-#~ msgid "Play a sound when a contact logs in"
-#~ msgstr "Reprodueix un so quan entri algun contacte"
-
-#~ msgid ""
-#~ "Whether to play a sound to notify of contacts logging into the network."
-#~ msgstr ""
-#~ "Si s'ha de reproduir un so per notificar que els contactes entren a la "
-#~ "xarxa."
-
-#~ msgid "Play a sound when a contact logs out"
-#~ msgstr "Reprodueix un so quan surti algun contacte"
-
-#~ msgid ""
-#~ "Whether to play a sound to notify of contacts logging out of the network."
-#~ msgstr ""
-#~ "Si s'ha de reproduir un so per notificar que els contactes surten de la "
-#~ "xarxa."
-
-#~ msgid "Play a sound when we log in"
-#~ msgstr "Reprodueix un so en entrar"
-
-#~ msgid "Whether to play a sound when logging into a network."
-#~ msgstr "Si s'ha de reproduir un so quan s'entri a una xarxa."
-
-#~ msgid "Play a sound when we log out"
-#~ msgstr "Reprodueix un so en sortir"
-
-#~ msgid "Whether to play a sound when logging out of a network."
-#~ msgstr "Si s'ha de reproduir un so quan se surti d'una xarxa."
-
-#~ msgid "Enable popup notifications for new messages"
-#~ msgstr "Habilita les notificacions per als missatges nous"
-
-#~ msgid "Whether to show a popup notification when receiving a new message."
-#~ msgstr ""
-#~ "Si s'ha de mostrar una notificació emergent quan es rebin missatges nous."
-
-#~ msgid "Disable popup notifications when away"
-#~ msgstr "Inhabilita les notificacions quan s'estigui absent"
-
-#~ msgid "Whether to show popup notifications when away or busy."
-#~ msgstr ""
-#~ "Si s'han de mostrar notificacions emergents quan s'estigui absent o "
-#~ "ocupat."
-
-#~ msgid "Pop up notifications if the chat isn’t focused"
-#~ msgstr "Mostra notificacions emergents si el xat no és la finestra activa"
-
-#~ msgid ""
-#~ "Whether to show a popup notification when receiving a new message even if "
-#~ "the chat is already opened, but not focused."
-#~ msgstr ""
-#~ "Si s'han de mostrar notificacions emergents quan es rebi un esdeveniment "
-#~ "de missatge nou i el xat ja estigui obert però no tingui el focus."
-
-#~ msgid "Pop up notifications when a contact logs in"
-#~ msgstr "Mostra notificacions si entra un contacte"
-
-#~ msgid "Whether to show a popup notification when a contact goes online."
-#~ msgstr ""
-#~ "Si s'ha de mostrar una notificació emergent quan es connecti un contacte."
-
-#~ msgid "Pop up notifications when a contact logs out"
-#~ msgstr "Mostra notificacions si surt un contacte"
-
-#~ msgid "Whether to show a popup notification when a contact goes offline."
-#~ msgstr ""
-#~ "Si s'ha de mostrar una notificació emergent quan es desconnecti un "
-#~ "contacte."
-
-#~ msgid "Use graphical smileys"
-#~ msgstr "Utilitza emoticones gràfiques"
-
-#~ msgid "Whether to convert smileys into graphical images in conversations."
-#~ msgstr ""
-#~ "Si s'han de convertir les emoticones a imatges gràfiques a les converses."
-
-#~ msgid "Show contact list in rooms"
-#~ msgstr "Mostra la llista de contactes a les sales"
-
-#~ msgid "Whether to show the contact list in chat rooms."
-#~ msgstr "Si s'ha de mostrar la llista de contactes a les sales de xat."
-
-#~ msgid "Chat window theme"
-#~ msgstr "Tema de la finestra de xat"
-
-#~ msgid "The theme that is used to display the conversation in chat windows."
-#~ msgstr ""
-#~ "El tema que s'utilitza per mostrar la conversa a les finestres de xat."
-
-#~ msgid "Chat window theme variant"
-#~ msgstr "Variant del tema de la finestra de xat"
-
-#~ msgid ""
-#~ "The theme variant that is used to display the conversation in chat "
-#~ "windows."
-#~ msgstr ""
-#~ "La variant del tema que s'utilitza per mostrar la conversa a les "
-#~ "finestres de xat."
-
-#~ msgid "Path of the Adium theme to use"
-#~ msgstr "Camí al tema Adium a utilitzar"
-
-#~ msgid ""
-#~ "Path of the Adium theme to use if the theme used for chat is Adium. "
-#~ "Deprecated."
-#~ msgstr ""
-#~ "Camí al tema Adium a utilitzar si el tema utilitzat per al xat és "
-#~ "l'Adium. Desfasat."
-
-#~ msgid "Enable WebKit Developer Tools"
-#~ msgstr "Habilita les eines de desenvolupador del WebKit"
-
-#~ msgid ""
-#~ "Whether WebKit developer tools, such as the Web Inspector, should be "
-#~ "enabled."
-#~ msgstr ""
-#~ "Si s'han d'habilitar les eines de desenvolupament del WebKit, com ara "
-#~ "l'inspector web."
-
-#~ msgid "Inform other users when you are typing to them"
-#~ msgstr "Informa als usuaris quan els hi estigueu escrivint"
-
-#~ msgid ""
-#~ "Whether to send the “composing” or “paused” chat states. Does not "
-#~ "currently affect the “gone” state."
-#~ msgstr ""
-#~ "Si s'han d'enviar els estats de xat «escrivint» o «en pausa». No afecta "
-#~ "l'estat de «desaparegut»."
-
-#~ msgid "Use theme for chat rooms"
-#~ msgstr "Utilitza el tema per a les sales de xat"
-
-#~ msgid "Whether to use the theme for chat rooms."
-#~ msgstr "Si s'ha d'utilitzar el tema per a les sales de xat."
-
-#~ msgid "Spell checking languages"
-#~ msgstr "Llengües per a la verificació ortogràfica"
-
-#~ msgid ""
-#~ "Comma-separated list of spell checker languages to use (e.g. “en, fr, "
-#~ "nl”)."
-#~ msgstr ""
-#~ "Llista separada per comes de les llengües del verificador ortogràfic a "
-#~ "utilitzar (p. ex. «ca, en, es, fr»)."
-
-#~ msgid ""
-#~ "Whether to check words typed against the languages you want to check with."
-#~ msgstr ""
-#~ "Si s'han de verificar les paraules introduïdes comparant-les amb les "
-#~ "llengües triades per a la verificació ortogràfica."
-
-#~ msgid "Nick completed character"
-#~ msgstr "Caràcter de compleció de sobrenom"
-
-#~ msgid ""
-#~ "Character to add after nickname when using nick completion (tab) in group "
-#~ "chat."
-#~ msgstr ""
-#~ "Caràcter que s'afegirà després del sobrenom quan s'utilitzi la compleció "
-#~ "de sobrenom (tabulació) en els xats de grup."
-
-#~ msgid "Empathy should use the avatar of the contact as the chat window icon"
-#~ msgstr ""
-#~ "Fes que l'Empathy utilitzi l'avatar del contacte com a icona de la "
-#~ "finestra de xat"
-
-#~ msgid ""
-#~ "Whether Empathy should use the avatar of the contact as the chat window "
-#~ "icon."
-#~ msgstr ""
-#~ "Si l'Empathy ha d'utilitzar l'avatar del contacte com a icona de la "
-#~ "finestra de xat."
-
-#~ msgid "Last account selected in Join Room dialog"
-#~ msgstr "Últim compte seleccionat en el diàleg d'unir-se a una sala"
-
-#~ msgid "D-Bus object path of the last account selected to join a room."
-#~ msgstr ""
-#~ "El camí a l'objecte de D-Bus de l'últim compte seleccionat per unir-se a "
-#~ "una sala."
-
-#~ msgid "Camera device"
-#~ msgstr "Dispositiu de la càmera"
-
-#~ msgid "Default camera device to use in video calls, e.g. /dev/video0."
-#~ msgstr ""
-#~ "Dispositiu de càmera per defecte a utilitzar en les trucades de vídeo, "
-#~ "per exemple /dev/video0."
-
-#~ msgid "Position the camera preview should be during a call."
-#~ msgstr ""
-#~ "Posició on s'hauria de mostrar la previsualització de la càmera durant "
-#~ "una trucada."
-
-#~ msgid "Echo cancellation support"
-#~ msgstr "Utilitza la cancel·lació de l'eco"
-
-#~ msgid "Show hint about closing the main window"
-#~ msgstr "Mostra un consell sobre el tancament de la finestra principal"
-
-#~ msgid ""
-#~ "Whether to show the message dialog about closing the main window with the "
-#~ "“x” button in the title bar."
-#~ msgstr ""
-#~ "Si s'ha de mostrar el diàleg de missatge sobre el tancament de la "
-#~ "finestra principal amb el botó «x» de la barra de títol."
-
-#~ msgid "Empathy can publish the user’s location"
-#~ msgstr "L'Empathy pot publicar la ubicació de l'usuari"
-
-#~ msgid "Whether Empathy can publish the user’s location to their contacts."
-#~ msgstr ""
-#~ "Si l'Empathy ha de publicar la ubicació de l'usuari als seus contactes."
-
-#~ msgid "Empathy should reduce the location’s accuracy"
-#~ msgstr "L'Empathy hauria de reduir la precisió de la ubicació"
-
-#~ msgid ""
-#~ "Whether Empathy should reduce the location’s accuracy for privacy reasons."
-#~ msgstr ""
-#~ "Si l'Empathy ha de reduir la precisió de la ubicació per motius de "
-#~ "privadesa."
-
-#~ msgid "No reason was specified"
-#~ msgstr "No s'ha especificat el motiu"
-
-#~ msgid "The change in state was requested"
-#~ msgstr "S'ha demanat el canvi d'estat"
-
-#~ msgid "You canceled the file transfer"
-#~ msgstr "Heu cancel·lat la transferència del fitxer"
-
-#~ msgid "The other participant canceled the file transfer"
-#~ msgstr "L'interlocutor ha cancel·lat la transferència del fitxer"
-
-#~ msgid "Error while trying to transfer the file"
-#~ msgstr "S'ha produït un error en enviar el fitxer"
-
-#~ msgid "The other participant is unable to transfer the file"
-#~ msgstr "L'interlocutor no pot enviar el fitxer"
-
-#~ msgid "Unknown reason"
-#~ msgstr "Motiu desconegut"
-
-#~ msgid "File transfer completed, but the file was corrupted"
-#~ msgstr "S'ha completat la transferència però el fitxer és malmès"
-
-#~ msgid "File transfer not supported by remote contact"
-#~ msgstr "El contacte remot no admet la transferència de fitxers"
-
-#~ msgid "The selected file is not a regular file"
-#~ msgstr "El fitxer seleccionat no és un fitxer normal"
-
-#~ msgid "The selected file is empty"
-#~ msgstr "El fitxer seleccionat és buit"
-
-#~ msgid "Missed call from %s"
-#~ msgstr "Us ha trucat %s però no hi éreu"
-
-#~ msgid "Called %s"
-#~ msgstr "Trucada de %s"
-
-#~ msgid "Call from %s"
-#~ msgstr "Trucada des de %s"
-
-#~ msgid "Available"
-#~ msgstr "Disponible"
-
-#~ msgid "Busy"
-#~ msgstr "Ocupat"
-
-#~ msgid "Away"
-#~ msgstr "Absent"
-
-#~ msgid "Invisible"
-#~ msgstr "Invisible"
-
-#~ msgid "Offline"
-#~ msgstr "Fora de línia"
-
-#~ msgctxt "presence"
-#~ msgid "Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "Status is set to offline"
-#~ msgstr "S'ha establert l'estat a desconnectat"
-
-#~ msgid "Network error"
-#~ msgstr "Error de la xarxa"
-
-#~ msgid "Authentication failed"
-#~ msgstr "Ha fallat l'autenticació"
-
-#~ msgid "Encryption error"
-#~ msgstr "Error de xifratge"
-
-#~ msgid "Name in use"
-#~ msgstr "Nom ja utilitzat"
-
-#~ msgid "Certificate not provided"
-#~ msgstr "No s'ha proporcionat el certificat"
-
-#~ msgid "Certificate untrusted"
-#~ msgstr "El certificat no és de confiança"
-
-#~ msgid "Certificate expired"
-#~ msgstr "El certificat ha vençut"
-
-#~ msgid "Certificate not activated"
-#~ msgstr "El certificat no està activat"
-
-#~ msgid "Certificate hostname mismatch"
-#~ msgstr "No coincideix el nom de la màquina del certificat"
-
-#~ msgid "Certificate fingerprint mismatch"
-#~ msgstr "No coincideix l'empremta digital del certificat"
-
-#~ msgid "Certificate self-signed"
-#~ msgstr "Certificat signat per un mateix"
-
-#~ msgid "Certificate error"
-#~ msgstr "Error en el certificat"
-
-#~ msgid "Encryption is not available"
-#~ msgstr "L'encriptació no està disponible"
-
-#~ msgid "Certificate is invalid"
-#~ msgstr "El certificat no és vàlid"
-
-#~ msgid "Connection can’t be established"
-#~ msgstr "No es pot establir la connexió"
-
-#~ msgid "Connection has been lost"
-#~ msgstr "S'ha perdut la connexió"
-
-#~ msgid "This account is already connected to the server"
-#~ msgstr "Aquest compte ja està connectat al servidor"
-
-#~ msgid ""
-#~ "Connection has been replaced by a new connection using the same resource"
-#~ msgstr ""
-#~ "S'ha reemplaçat la connexió per una altra de nova fent servir el mateix "
-#~ "recurs"
-
-#~ msgid "The account already exists on the server"
-#~ msgstr "Ja existeix aquest compte al servidor"
-
-#~ msgid "Server is currently too busy to handle the connection"
-#~ msgstr "El servidor està massa ocupat per gestionar la connexió"
-
-#~ msgid ""
-#~ "Certificate uses an insecure cipher algorithm or is cryptographically weak"
-#~ msgstr ""
-#~ "El certificat utilitza un algorisme criptogràfic no segur o la seva "
-#~ "fortalesa criptogràfica és feble"
-
-#~ msgid ""
-#~ "The length of the server certificate, or the depth of the server "
-#~ "certificate chain, exceed the limits imposed by the cryptography library"
-#~ msgstr ""
-#~ "La llargada del certificat del servidor o la profunditat de la cadena de "
-#~ "certificació excedeix els límits de la biblioteca criptogràfica"
-
-#~ msgid "Your software is too old"
-#~ msgstr "El programari és massa vell"
-
-#~ msgid "Internal error"
-#~ msgstr "Error intern"
-
-#~ msgid "All accounts"
-#~ msgstr "Tots els comptes"
-
-#~ msgid "Click to enlarge"
-#~ msgstr "Feu clic per fer-la més gran"
-
-#~ msgid "Authentication failed for account <b>%s</b>"
-#~ msgstr "Ha fallat l'autenticació del compte <b>%s</b>"
-
-#~ msgid "Retry"
-#~ msgstr "Torna-ho a intentar"
-
-#~ msgid ""
-#~ "Enter your password for account\n"
-#~ "<b>%s</b>"
-#~ msgstr ""
-#~ "Introduïu la contrasenya per al compte\n"
-#~ "<b>%s</b>"
-
-#~ msgid "There was an error starting the call"
-#~ msgstr "S'ha produït un error en iniciar la trucada"
-
-#~ msgid "The specified contact doesn’t support calls"
-#~ msgstr "El contacte que heu especificat no permet trucades"
-
-#~ msgid "The specified contact is offline"
-#~ msgstr "El contacte seleccionat està fora de línia"
-
-#~ msgid "The specified contact is not valid"
-#~ msgstr "El contacte seleccionat no és vàlid"
-
-#~ msgid "Emergency calls are not supported on this protocol"
-#~ msgstr "Aquest protocol no permet fer trucades d'emergència"
-
-#~ msgid "You don’t have enough credit in order to place this call"
-#~ msgstr "No teniu prou saldo per fer aquesta trucada"
-
-#~ msgid "Topic not supported on this conversation"
-#~ msgstr "No es pot establir el tema en aquesta conversa"
-
-#~ msgid "You are not allowed to change the topic"
-#~ msgstr "No podeu canviar el tema"
-
-#~ msgid "Invalid contact ID"
-#~ msgstr "L'ID del contacte no és vàlid"
-
-#~ msgid "/clear: clear all messages from the current conversation"
-#~ msgstr "/clear: neteja tots els missatges de la conversa actual"
-
-#~ msgid "/topic <topic>: set the topic of the current conversation"
-#~ msgstr "/topic <tema>: estableix el tema de la conversa actual"
-
-#~ msgid "/join <chat room ID>: join a new chat room"
-#~ msgstr "/join <ID sala de xat>: entra a una sala de xat nova"
-
-#~ msgid "/j <chat room ID>: join a new chat room"
-#~ msgstr "/j <ID sala de xat>: entra a una sala de xat nova"
-
-#~ msgid ""
-#~ "/part [<chat room ID>] [<reason>]: leave the chat room, by default the "
-#~ "current one"
-#~ msgstr ""
-#~ "/part [<identificador de la sala de xat>] [<motiu>]: sortiu de la sala de "
-#~ "xat, si no s'indica el contrari, l'actual"
-
-#~ msgid "/query <contact ID> [<message>]: open a private chat"
-#~ msgstr "/query <ID d'un contacte> [missatge]: obre un xat privat"
-
-#~ msgid "/msg <contact ID> <message>: open a private chat"
-#~ msgstr "/msg <ID d'un contacte> <missatge>: obre un xat privat"
-
-#~ msgid "/nick <nickname>: change your nickname on the current server"
-#~ msgstr "/nick <sobrenom>: canvieu el vostre sobrenom en el servidor actual"
-
-#~ msgid "/me <message>: send an ACTION message to the current conversation"
-#~ msgstr "/me <missatge>: envia un missatge d'ACCIÓ a la conversa actual"
-
-#~ msgid ""
-#~ "/say <message>: send <message> to the current conversation. This is used "
-#~ "to send a message starting with a “/”. For example: “/say /join is used "
-#~ "to join a new chat room”"
-#~ msgstr ""
-#~ "/say <missatge>: envia el <missatge> a la conversa actual. S'utilitza per "
-#~ "enviar un missatge que comenci per «/». Per exemple: «/say /join "
-#~ "s'utilitza per entrar a una sala de xat nova»"
-
-#~ msgid "/whois <contact ID>: display information about a contact"
-#~ msgstr ""
-#~ "/whois <identificador del contacte>: mostra informació sobre el contacte"
-
-#~ msgid ""
-#~ "/help [<command>]: show all supported commands. If <command> is defined, "
-#~ "show its usage."
-#~ msgstr ""
-#~ "/help [<ordre>]: mostra totes les ordres possibles. Si s'indica una "
-#~ "<ordre> es mostra com s'ha d'utilitzar."
-
-#~ msgid "Usage: %s"
-#~ msgstr "Forma d'ús: %s"
-
-#~ msgid "Unknown command"
-#~ msgstr "Ordre desconeguda"
-
-#~ msgid "Unknown command; see /help for the available commands"
-#~ msgstr "Ordre desconeguda, vegeu /help per a la llista d'ordres disponibles"
-
-#~ msgid "insufficient balance to send message"
-#~ msgstr "no hi ha prou saldo per enviar el missatge"
-
-#~ msgid "insufficient balance to send message. <a href='%s'>Top up</a>."
-#~ msgstr ""
-#~ "no hi ha prou saldo per enviar el missatge. <a href='%s'>Recarrega</a>."
-
-#~ msgid "not capable"
-#~ msgstr "no es pot realitzar"
-
-#~ msgid "offline"
-#~ msgstr "desconnectat"
-
-#~ msgid "invalid contact"
-#~ msgstr "contacte no vàlid"
-
-#~ msgid "permission denied"
-#~ msgstr "s'ha denegat el permís"
-
-#~ msgid "too long message"
-#~ msgstr "el missatge és massa llarg"
-
-#~ msgid "not implemented"
-#~ msgstr "no implementat"
-
-#~ msgid "unknown"
-#~ msgstr "desconegut"
-
-#~ msgid "Topic:"
-#~ msgstr "Tema:"
-
-#~ msgid "Topic set to: %s"
-#~ msgstr "Tema establert a: %s"
-
-#~ msgid "Topic set by %s to: %s"
-#~ msgstr "Tema establert per %s a: %s"
-
-#~ msgid "No topic defined"
-#~ msgstr "No s'ha definit cap tema"
-
-#~ msgid "(No Suggestions)"
-#~ msgstr "(Cap suggeriment)"
-
-#~ msgid "Add “%s” to Dictionary"
-#~ msgstr "Afegeix «%s» al diccionari"
-
-#~ msgid "Add “%s” to %s Dictionary"
-#~ msgstr "Afegeix «%s» al diccionari %s"
-
-#~ msgid "Insert Smiley"
-#~ msgstr "Insereix una emoticona"
-
-#~ msgid "_Send"
-#~ msgstr "_Envia"
-
-#~ msgid "_Spelling Suggestions"
-#~ msgstr "_Suggeriments d'ortografia"
-
-#~ msgid "%s has disconnected"
-#~ msgstr "En/na %s s'ha desconnectat"
-
-#~ msgid "%1$s was kicked by %2$s"
-#~ msgstr "En/na %2$s ha expulsat en/na %1$s"
-
-#~ msgid "%s was kicked"
-#~ msgstr "S'ha expulsat en/na %s"
-
-#~ msgid "%1$s was banned by %2$s"
-#~ msgstr "En/na %2$s ha bandejat en/na %1$s"
-
-#~ msgid "%s was banned"
-#~ msgstr "s'ha bandejat en/na %s"
-
-#~ msgid "%s has left the room"
-#~ msgstr "En/na %s ha sortit de la sala"
-
-#~ msgid " (%s)"
-#~ msgstr " (%s)"
-
-#~ msgid "%s has joined the room"
-#~ msgstr "En/na %s ha entrat a la sala"
-
-#~ msgid "%s is now known as %s"
-#~ msgstr "En/na %s ara es diu %s"
-
-#~ msgid "Disconnected"
-#~ msgstr "Fora de línia"
-
-#~ msgid "Would you like to store this password?"
-#~ msgstr "Voleu emmagatzemar aquesta contrasenya?"
-
-#~ msgid "Remember"
-#~ msgstr "Recorda-la"
-
-#~ msgid "Wrong password; please try again:"
-#~ msgstr "Contrasenya errònia, torneu-ho a intentar:"
-
-#~ msgid "This room is protected by a password:"
-#~ msgstr "Aquesta sala és protegida per una contrasenya:"
-
-#~ msgid "Join"
-#~ msgstr "Uneix-m'hi"
-
-#~ msgid "Connected"
-#~ msgstr "Connectat"
-
-#~ msgid "Conversation"
-#~ msgstr "Conversa"
-
-#~ msgid "%s (SMS)"
-#~ msgstr "%s (SMS)"
-
-#~ msgid "Unknown or invalid identifier"
-#~ msgstr "Identificador desconegut o no vàlid"
-
-#~ msgid "Contact blocking temporarily unavailable"
-#~ msgstr "No està disponible, temporalment, el blocatge de contactes"
-
-#~ msgid "Contact blocking unavailable"
-#~ msgstr "No es poden blocar contactes"
-
-#~ msgid "Permission Denied"
-#~ msgstr "S'ha denegat el permís"
-
-#~ msgid "Could not block contact"
-#~ msgstr "No s'ha pogut blocar el contacte"
-
-#~ msgid "Edit Blocked Contacts"
-#~ msgstr "Editeu els contactes blocats"
-
-#~ msgid "Account:"
-#~ msgstr "Compte:"
-
-#~ msgid "Blocked Contacts"
-#~ msgstr "Contactes blocats"
-
-#~ msgid "Remove"
-#~ msgstr "Suprimeix"
-
-#~ msgid "_Add Contact"
-#~ msgstr "_Afegeix un contacte"
-
-#~ msgid "No contacts found"
-#~ msgstr "No s'ha trobat cap contacte"
-
-#~ msgid "Contact search is not supported on this account"
-#~ msgstr "Aquest compte no permet la cerca de contactes"
-
-#~ msgid "Your message introducing yourself:"
-#~ msgstr "El vostre missatge d'introducció:"
-
-#~ msgid "Please let me see when you’re online. Thanks!"
-#~ msgstr "Permeteu-me veure quan esteu en línia. Gràcies."
-
-#~ msgid "Save Avatar"
-#~ msgstr "Desa l'avatar"
-
-#~ msgid "Unable to save avatar"
-#~ msgstr "No s'ha pogut desar l'avatar"
-
-#~ msgid "Account"
-#~ msgstr "Compte"
-
-#~ msgid "Identifier"
-#~ msgstr "Identificador"
-
-#~ msgid "Alias"
-#~ msgstr "Àlies"
-
-#~ msgid "Contact Details"
-#~ msgstr "Detalls del contacte"
-
-#~ msgid "Information requested…"
-#~ msgstr "S'ha demanat la informació…"
-
-#~ msgid "<b>Location</b> at (date)\t"
-#~ msgstr "<b>Ubicació</b> a (data)\t"
-
-#~ msgid "OS"
-#~ msgstr "SO"
-
-#~ msgid "Client"
-#~ msgstr "Client"
-
-#~ msgid "Groups"
-#~ msgstr "Grups"
-
-#~ msgid ""
-#~ "Select the groups you want this contact to appear in.  Note that you can "
-#~ "select more than one group or no groups."
-#~ msgstr ""
-#~ "Seleccioneu els grups en els quals voleu que hi hagi aquest contacte. "
-#~ "Podeu seleccionar-ne més d'un o bé cap."
-
-#~ msgid "_Add Group"
-#~ msgstr "_Afegeix un grup"
-
-#~ msgid "Group"
-#~ msgstr "Grup"
-
-#~ msgid "New Contact"
-#~ msgstr "Contacte nou"
-
-#~ msgid "Block %s?"
-#~ msgstr "Voleu blocar %s?"
-
-#~ msgid "Are you sure you want to block “%s” from contacting you again?"
-#~ msgstr "Segur que voleu blocar «%s» perquè no us contacti més?"
-
-#~ msgid "The following identity will be blocked:"
-#~ msgid_plural "The following identities will be blocked:"
-#~ msgstr[0] "Es blocarà la identitat següent:"
-#~ msgstr[1] "Es blocaran les identitats següents:"
-
-#~ msgid "The following identity can not be blocked:"
-#~ msgid_plural "The following identities can not be blocked:"
-#~ msgstr[0] "No es pot blocar la identitat següent:"
-#~ msgstr[1] "No es poden blocar les identitats següents:"
-
-#~ msgid "_Block"
-#~ msgstr "_Bloca"
-
-#~ msgid "_Report this contact as abusive"
-#~ msgid_plural "_Report these contacts as abusive"
-#~ msgstr[0] "_Informa que aquest contacte es comporta incorrectament"
-#~ msgstr[1] "_Informa que aquests contactes es comporten incorrectament"
-
-#~ msgid "Edit Contact Information"
-#~ msgstr "Edita la informació del contacte"
-
-#~ msgid "Linked Contacts"
-#~ msgstr "Metacontactes"
-
-#~ msgid "gnome-contacts not installed"
-#~ msgstr "El Contactes del GNOME no està instal·lat"
-
-#~ msgid "Please install gnome-contacts to access contacts details."
-#~ msgstr ""
-#~ "Instal·leu el Contactes del GNOME per accedir a les dades dels contactes."
-
-#~ msgid "Select account to use to place the call"
-#~ msgstr "Seleccioneu el compte amb el que voleu fer la trucada"
-
-#~ msgid "Call"
-#~ msgstr "Trucada"
-
-#~ msgid "Work"
-#~ msgstr "Feina"
-
-#~ msgid "HOME"
-#~ msgstr "Casa"
-
-#~ msgid "Call %s (%s)"
-#~ msgstr "Trucada de %s (%s)"
-
-#~ msgid "Call %s"
-#~ msgstr "Trucada de %s"
-
-#~ msgid "_Block Contact"
-#~ msgstr "_Bloca el contacte"
-
-#~ msgid "Remove from _Group “%s”"
-#~ msgstr "Suprimeix-lo del _grup «%s»"
-
-#~ msgid "Do you really want to remove the contact “%s”?"
-#~ msgstr "Segur que voleu suprimir el contacte «%s»?"
-
-#~ msgid ""
-#~ "Do you really want to remove the linked contact “%s”? Note that this will "
-#~ "remove all the contacts which make up this linked contact."
-#~ msgstr ""
-#~ "Segur que voleu suprimir el metacontacte «%s»? Tingueu en compte que se "
-#~ "suprimiran tots els contactes que formen aquest metacontacte."
-
-#~ msgid "Removing contact"
-#~ msgstr "Suprimeix el contacte"
-
-#~ msgid "_SMS"
-#~ msgstr "_SMS"
-
-#~ msgctxt "menu item"
-#~ msgid "_Audio Call"
-#~ msgstr "Trucada de _veu"
-
-#~ msgctxt "menu item"
-#~ msgid "_Video Call"
-#~ msgstr "_Trucada de vídeo"
-
-#~ msgid "_Previous Conversations"
-#~ msgstr "Converses _anteriors"
-
-#~ msgid "Infor_mation"
-#~ msgstr "Infor_mació"
-
-#~ msgctxt "Edit individual (contextual menu)"
-#~ msgid "_Edit"
-#~ msgstr "_Edita"
-
-#~ msgid "Inviting you to this room"
-#~ msgstr "Se us està convidant a aquesta sala"
-
-#~ msgid "_Invite to Chat Room"
-#~ msgstr "_Convida a la sala de xat"
-
-#~ msgid "Removing group"
-#~ msgstr "S'està suprimint el grup"
-
-#~ msgid "Re_name"
-#~ msgstr "Rea_nomena"
-
-#~ msgid "Channels:"
-#~ msgstr "Canals:"
-
-#~ msgid "Country ISO Code:"
-#~ msgstr "Codi ISO del país:"
-
-#~ msgid "Country:"
-#~ msgstr "País:"
-
-#~ msgid "State:"
-#~ msgstr "Estat:"
-
-#~ msgid "City:"
-#~ msgstr "Ciutat:"
-
-#~ msgid "Area:"
-#~ msgstr "Àrea:"
-
-#~ msgid "Postal Code:"
-#~ msgstr "Codi postal:"
-
-#~ msgid "Street:"
-#~ msgstr "Carrer:"
-
-#~ msgid "Building:"
-#~ msgstr "Edifici:"
-
-#~ msgid "Floor:"
-#~ msgstr "Planta:"
-
-#~ msgid "Room:"
-#~ msgstr "Habitació:"
-
-#~ msgid "Text:"
-#~ msgstr "Text:"
-
-#~ msgid "URI:"
-#~ msgstr "URI:"
-
-#~ msgid "Accuracy Level:"
-#~ msgstr "Nivell de precisió:"
-
-#~ msgid "Error:"
-#~ msgstr "Error:"
-
-#~ msgid "Vertical Error (meters):"
-#~ msgstr "Error vertical (metres):"
-
-#~ msgid "Horizontal Error (meters):"
-#~ msgstr "Error horitzontal (metres):"
-
-#~ msgid "Speed:"
-#~ msgstr "Velocitat:"
-
-#~ msgid "Bearing:"
-#~ msgstr "Direcció:"
-
-#~ msgid "Climb Speed:"
-#~ msgstr "Velocitat de pujada:"
-
-#~ msgid "Longitude:"
-#~ msgstr "Longitud:"
-
-#~ msgid "Latitude:"
-#~ msgstr "Latitud:"
-
-#~ msgid "Altitude:"
-#~ msgstr "Altitud:"
-
-#~ msgid "%s, %s"
-#~ msgstr "%s el %s"
-
-#~ msgid "%B %e, %Y at %R UTC"
-#~ msgstr "%e de %B de %Y a les %R UTC"
-
-#~ msgid "Alias:"
-#~ msgstr "Àlies:"
-
-#~ msgid "Identifier:"
-#~ msgstr "Identificador:"
-
-#~ msgid "Linked contact containing %u contact"
-#~ msgid_plural "Linked contacts containing %u contacts"
-#~ msgstr[0] "Metacontacte que conté %u contacte"
-#~ msgstr[1] "Metacontactes que contenen %u contactes"
-
-#~ msgid "<b>Location</b> at (date)"
-#~ msgstr "<b>Ubicació</b> a (data)"
-
-#~ msgid "Online from a phone or mobile device"
-#~ msgstr "En línia des d'un telèfon o dispositiu mòbil"
-
-#~ msgid ""
-#~ "Empathy can automatically discover and chat with the people connected on "
-#~ "the same network as you. If you want to use this feature, please check "
-#~ "that the details below are correct."
-#~ msgstr ""
-#~ "L'Empathy pot descobrir i conversar automàticament amb les persones que "
-#~ "estiguin connectades a la mateixa xarxa. Si voleu utilitzar aquesta "
-#~ "funció comproveu que les dades d'aquí a sota siguin correctes."
-
-#~ msgid "People nearby"
-#~ msgstr "Gent propera"
-
-#~ msgid ""
-#~ "You can change these details later or disable this feature by choosing "
-#~ "<span style=\"italic\">Edit → Accounts</span> in the Contact List."
-#~ msgstr ""
-#~ "Podeu canviar-les fàcilment més endavant o inhabilitar aquesta funció si "
-#~ "seleccioneu <span style=\"italic\">Edita → Comptes</span> a la llista de "
-#~ "contactes."
-
-#~ msgid "Show"
-#~ msgstr "Mostra"
-
-#~ msgid "Chat in %s"
-#~ msgstr "Xat a %s"
-
-#~ msgid "Chat with %s"
-#~ msgstr "Xat amb %s"
-
-#~ msgctxt "A date with the time"
-#~ msgid "%A, %e %B %Y %X"
-#~ msgstr "%A %e de %B de %Y a les %X"
-
-#~ msgid "<i>* %s %s</i>"
-#~ msgstr "<i>* %s %s</i>"
-
-#~ msgid "<b>%s:</b> %s"
-#~ msgstr "<b>%s:</b> %s"
-
-#~ msgid "Call took %s, ended at %s"
-#~ msgstr "La trucada va durar %s i es va acabar a les %s"
-
-#~ msgid "Today"
-#~ msgstr "Avui"
-
-#~ msgid "%e %B %Y"
-#~ msgstr "%e de %B de %Y"
-
-#~ msgid "Anytime"
-#~ msgstr "En qualsevol moment"
-
-#~ msgid "Anyone"
-#~ msgstr "Qualsevol"
-
-#~ msgid "Who"
-#~ msgstr "Qui"
-
-#~ msgid "When"
-#~ msgstr "Quan"
-
-#~ msgid "Anything"
-#~ msgstr "El que sigui"
-
-#~ msgid "Text chats"
-#~ msgstr "Xats de text"
-
-#~ msgid "Calls"
-#~ msgstr "Trucades"
-
-#~ msgid "Incoming calls"
-#~ msgstr "Trucades entrants"
-
-#~ msgid "Outgoing calls"
-#~ msgstr "Trucades de sortida"
-
-#~ msgid "Missed calls"
-#~ msgstr "Trucades perdudes"
-
-#~ msgid "What"
-#~ msgstr "Què"
-
-#~ msgid "Are you sure you want to delete all logs of previous conversations?"
-#~ msgstr ""
-#~ "Segur que voleu suprimir tots els registres de les converses anteriors?"
-
-#~ msgid "_File"
-#~ msgstr "_Fitxer"
-
-#~ msgid "Delete All History…"
-#~ msgstr "Suprimeix tot l'historial…"
-
-#~ msgid "Profile"
-#~ msgstr "Perfil"
-
-#~ msgid "Chat"
-#~ msgstr "Xat"
-
-#~ msgid "Video"
-#~ msgstr "Vídeo"
-
-#~ msgid "page 2"
-#~ msgstr "pàgina 2"
-
-#~ msgid "<span size=\"x-large\">Loading…</span>"
-#~ msgstr "<span size=\"x-large\">S'està carregant…</span>"
-
-#~ msgid "What kind of chat account do you have?"
-#~ msgstr "Quin tipus de compte de xat teniu?"
-
-#~ msgid "Enter a contact identifier or phone number:"
-#~ msgstr "Introduïu l'identificador del contacte o un número de telèfon:"
-
-#~ msgid "_Video Call"
-#~ msgstr "_Trucada de vídeo"
-
-#~ msgid "_Audio Call"
-#~ msgstr "Trucada de _veu"
-
-#~ msgid "New Call"
-#~ msgstr "Trucada nova"
-
-#~ msgid "The contact is offline"
-#~ msgstr "El contacte està fora de línia"
-
-#~ msgid "The specified contact is either invalid or unknown"
-#~ msgstr "El contacte especificat o no és vàlid o es desconeix"
-
-#~ msgid "The contact does not support this kind of conversation"
-#~ msgstr "El contacte no pot establir aquest tipus de conversa"
-
-#~ msgid "The requested functionality is not implemented for this protocol"
-#~ msgstr ""
-#~ "La funcionalitat sol·licitada no està disponible per aquest protocol"
-
-#~ msgid "Could not start a conversation with the given contact"
-#~ msgstr "No s'ha pogut iniciar una conversa amb aquest contacte"
-
-#~ msgid "You are banned from this channel"
-#~ msgstr "Heu estat bandejat d'aquesta sala de xat"
-
-#~ msgid "This channel is full"
-#~ msgstr "El canal està ple"
-
-#~ msgid "You must be invited to join this channel"
-#~ msgstr "Us han de convidar per entrar en aquest canal"
-
-#~ msgid "Can’t proceed while disconnected"
-#~ msgstr "No es pot procedir mentre s'estigui desconnectat"
-
-#~ msgid "Permission denied"
-#~ msgstr "S'ha denegat el permís"
-
-#~ msgid "There was an error starting the conversation"
-#~ msgstr "S'ha produït un error en iniciar la conversa"
-
-#~ msgid "_Done"
-#~ msgstr "_Fet"
-
-#~ msgid "New Conversation"
-#~ msgstr "Conversa nova"
-
-#~ msgid "Password Required"
-#~ msgstr "Es requereix una contrasenya"
-
-#~ msgid "Custom Message…"
-#~ msgstr "Missatge personalitzat…"
-
-#~ msgid "Edit Custom Messages…"
-#~ msgstr "Edita els missatges personalitzats…"
-
-#~ msgid "Click to remove this status as a favorite"
-#~ msgstr "Feu clic per suprimir aquest estat com a preferit"
-
-#~ msgid "Click to make this status a favorite"
-#~ msgstr "Feu clic per fer que aquest estat sigui un preferit"
-
-#~ msgid ""
-#~ "<b>Current message: %s</b>\n"
-#~ "<small><i>Press Enter to set the new message or Esc to cancel.</i></small>"
-#~ msgstr ""
-#~ "<b>Missatge actual: %s</b>\n"
-#~ "<small><i>Premeu la tecla de retorn per establir el missatge nou o premeu "
-#~ "la tecla d'escapada per cancel·lar-ho.</i></small>"
-
-#~ msgid "Set status"
-#~ msgstr "Estableix l'estat"
-
-#~ msgid "Custom messages…"
-#~ msgstr "Missatges personalitzats…"
-
-#~ msgid "_Match case"
-#~ msgstr "Coincidència de _majúscules i minúscules"
-
-#~ msgid "_Previous"
-#~ msgstr "_Anterior"
-
-#~ msgid "_Next"
-#~ msgstr "Següe_nt"
-
-#~ msgid "Mat_ch case"
-#~ msgstr "_Coincidència de majúscules i minúscules"
-
-#~ msgid "Received an instant message"
-#~ msgstr "Heu rebut un missatge instantani"
-
-#~ msgid "Sent an instant message"
-#~ msgstr "Heu enviat un missatge instantani"
-
-#~ msgid "Incoming chat request"
-#~ msgstr "Sol·licitud de xat"
-
-#~ msgid "Contact connected"
-#~ msgstr "S'ha connectat un contacte"
-
-#~ msgid "Contact disconnected"
-#~ msgstr "S'ha desconnectat un contacte"
-
-#~ msgid "Connected to server"
-#~ msgstr "Connectat al servidor"
-
-#~ msgid "Disconnected from server"
-#~ msgstr "Desconnectat del servidor"
-
-#~ msgid "Incoming voice call"
-#~ msgstr "Trucada de veu entrant"
-
-#~ msgid "Outgoing voice call"
-#~ msgstr "Trucada de veu de sortida"
-
-#~ msgid "Voice call ended"
-#~ msgstr "La trucada de veu ha finalitzat"
-
-#~ msgid "Edit Custom Messages"
-#~ msgstr "Edita els missatges personalitzats"
-
-#~ msgid "Subscription Request"
-#~ msgstr "Sol·licitud de subscripció"
-
-#~ msgid "%s would like permission to see when you are online"
-#~ msgstr "%s vol poder saber quan esteu en línia"
-
-#~ msgid "_Decline"
-#~ msgstr "_Declina"
-
-#~ msgid "Message edited at %s"
-#~ msgstr "S'ha editat el missatge a les %s"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "The certificate hasn’t yet been activated."
-#~ msgstr "Encara no s'ha activat el certificat."
-
-#~ msgid ""
-#~ "The hostname verified by the certificate doesn’t match the server name."
-#~ msgstr ""
-#~ "El nom d'ordinador verificat pel certificat no correspon al nom del "
-#~ "servidor."
-
-#~ msgid "The certificate is self-signed."
-#~ msgstr "El certificat està signat pel propi servidor."
-
-#~ msgid "The certificate is cryptographically weak."
-#~ msgstr "La fortalesa criptogràfica del certificat és feble."
-
-#~ msgid "The certificate length exceeds verifiable limits."
-#~ msgstr "La llargada del certificat sobrepassa els límits verificables."
-
-#~ msgid "The certificate is malformed."
-#~ msgstr "El certificat està mal format."
-
-#~ msgid "Expected hostname: %s"
-#~ msgstr "S'esperava el nom d'ordinador: %s"
-
-#~ msgid "Certificate hostname: %s"
-#~ msgstr "Nom de l'ordinador del certificat: %s"
-
-#~ msgid "C_ontinue"
-#~ msgstr "_Continua"
-
-#~ msgid "Untrusted connection"
-#~ msgstr "Connexió no confiable"
-
-#~ msgid "This connection is untrusted. Would you like to continue anyway?"
-#~ msgstr "No es pot confiar en aquesta connexió. Tot i això, voleu continuar?"
-
-#~ msgid "Remember this choice for future connections"
-#~ msgstr "Recorda aquesta decisió per a connexions futures"
-
-#~ msgid "Certificate Details"
-#~ msgstr "Dades del certificat"
-
-#~ msgid "Unable to open URI"
-#~ msgstr "No s'ha pogut obrir l'URI"
-
-#~ msgid "Insufficient free space to save file"
-#~ msgstr "No hi ha prou espai lliure per desar el fitxer"
-
-#~ msgid ""
-#~ "%s of free space are required to save this file, but only %s is "
-#~ "available. Please choose another location."
-#~ msgstr ""
-#~ "Es necessita %s d'espai lliure per desar el fitxer, però només hi ha %s."
-#~ "Seleccioneu una altra ubicació."
-
-#~ msgid "Incoming file from %s"
-#~ msgstr "%s us envia un fitxer"
-
-#~ msgid "Top Contacts"
-#~ msgstr "Contactes més freqüents"
-
-#~ msgid "People Nearby"
-#~ msgstr "Gent propera"
-
-#~ msgid "Ungrouped"
-#~ msgstr "Sense grup"
-
-#~ msgid "Server cannot find contact: %s"
-#~ msgstr "El servidor no pot trobar el contacte: %s"
-
-#~ msgid "An Instant Messaging client for GNOME"
-#~ msgstr "Un client de missatgeria instantània per al GNOME"
-
-#~ msgid "Don’t display any dialogs; do any work (e.g. importing) and exit"
-#~ msgstr "No mostris cap diàleg, realitza la tasca (p. ex. importar) i surt"
-
-#~ msgid ""
-#~ "Don’t display any dialogs unless there are only “People Nearby” accounts"
-#~ msgstr "No mostris cap diàleg llevat que hi hagi comptes de «Gent propera»"
-
-#~ msgid ""
-#~ "Initially select given account (eg, gabble/jabber/foo_40example_2eorg0)"
-#~ msgstr ""
-#~ "Selecciona inicialment el compte especificat (p. ex. gabble/jabber/"
-#~ "exemple)"
-
-#~ msgid "<account-id>"
-#~ msgstr "<identificador-del-compte>"
-
-#~ msgid "— Empathy Accounts"
-#~ msgstr "— Comptes de l'Empathy"
-
-#~ msgid "Empathy Accounts"
-#~ msgstr "Comptes de l'Empathy"
-
-#~ msgid "There are unsaved modifications to your %.50s account."
-#~ msgstr "Hi ha modificacions no desades en el compte %.50s."
-
-#~ msgid "Your new account has not been saved yet."
-#~ msgstr "Encara no heu desat el vostre compte nou."
-
-#~ msgid "Offline — %s"
-#~ msgstr "Fora de línia — %s"
-
-#~ msgid "Disconnected — %s"
-#~ msgstr "Fora de línia — %s"
-
-#~ msgid "Offline — No Network Connection"
-#~ msgstr "Fora de línia — No hi ha connexió de xarxa"
-
-#~ msgid "Unknown Status"
-#~ msgstr "Estat desconegut"
-
-#~ msgid ""
-#~ "This account has been disabled because it relies on an old, unsupported "
-#~ "backend. Please install telepathy-haze and restart your session to "
-#~ "migrate the account."
-#~ msgstr ""
-#~ "S'ha inhabilitat el compte degut perquè depèn d'un rerefons vell que s'ha "
-#~ "discontinuat. Instal·leu el telepathy-haze i reinicieu la sessió per "
-#~ "migrar el compte."
-
-#~ msgid "Offline — Account Disabled"
-#~ msgstr "Fora de línia — Compte inhabilitat"
-
-#~ msgid "Edit Connection Parameters"
-#~ msgstr "Edició dels paràmetres de la connexió"
-
-#~ msgid "_Edit Connection Parameters…"
-#~ msgstr "_Edita els paràmetres de connexió…"
-
-#~ msgid "Do you want to remove %.50s from your computer?"
-#~ msgstr "Voleu suprimir %.50s de l'ordinador?"
-
-#~ msgid "This will not remove your account on the server."
-#~ msgstr "Amb això no se suprimirà el vostre compte del servidor."
-
-#~ msgid ""
-#~ "You are about to select another account, which will discard\n"
-#~ "your changes. Are you sure you want to proceed?"
-#~ msgstr ""
-#~ "Esteu a punt de seleccionar un altre compte i perdreu els\n"
-#~ "canvis fets fins ara. Segur que voleu continuar?"
-
-#~ msgid "Rename"
-#~ msgstr "Reanomena"
-
-#~ msgid "_Skip"
-#~ msgstr "_Omet"
-
-#~ msgid "_Connect"
-#~ msgstr "_Connecta"
-
-#~ msgid ""
-#~ "You are about to close the window, which will discard\n"
-#~ "your changes. Are you sure you want to proceed?"
-#~ msgstr ""
-#~ "Esteu a punt de tancar la finestra i perdreu els canvis\n"
-#~ "fets fins ara. Segur que voleu continuar?"
-
-#~ msgid "Messaging and VoIP Accounts"
-#~ msgstr "Comptes de missatgeria i VoIP"
-
-#~ msgid "_Import…"
-#~ msgstr "_Importa…"
-
-#~ msgid "Loading account information"
-#~ msgstr "S'està carregant la informació del contacte"
-
-#~ msgid ""
-#~ "To add a new account, you first have to install a backend for each "
-#~ "protocol you want to use."
-#~ msgstr ""
-#~ "Per afegir un compte nou, primer heu d'instal·lar el rerefons de cada "
-#~ "protocol que vulgueu utilitzar."
-
-#~ msgid "No protocol backends installed"
-#~ msgstr "No hi ha cap protocol de rerefons instal·lat"
-
-#~ msgid " — Empathy authentication client"
-#~ msgstr "— Client d'autenticació de l'Empathy"
-
-#~ msgid "Empathy authentication client"
-#~ msgstr "Client d'autenticació de l'Empathy"
-
-#~ msgid "Don’t connect on startup"
-#~ msgstr "No connectis en iniciar"
-
-#~ msgid "Don’t display the contact list or any other dialogs on startup"
-#~ msgstr "No mostris la llista de contactes ni  cap altre diàleg en iniciar"
-
-#~ msgid "— Empathy IM Client"
-#~ msgstr "—  Client de missatgeria instantània Empathy"
-
-#~ msgid ""
-#~ "There was an error while trying to connect to the Telepathy Account "
-#~ "Manager. The error was:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "S'ha produït un error en intentar connectar amb el gestor de comptes "
-#~ "Telepathy. L'error ha sigut:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "In a call"
-#~ msgstr "En una trucada"
-
-#~ msgid "— Empathy Audio/Video Client"
-#~ msgstr "—  Client d'àudio/vídeo de l'Empathy"
-
-#~ msgid "Empathy Audio/Video Client"
-#~ msgstr "Client d'àudio/vídeo de l'Empathy"
-
-#~ msgid "%s just tried to call you, but you were in another call."
-#~ msgstr "%s us ha intentat trucar però estàveu en una altra conversa."
-
-#~ msgid "Incoming call"
-#~ msgstr "Trucada entrant"
-
-#~ msgid "Incoming video call from %s"
-#~ msgstr "Trucada de videoconferència d'en/na %s"
-
-#~ msgid "Incoming call from %s"
-#~ msgstr "Trucada entrant d'en/na %s"
-
-#~ msgid "Reject"
-#~ msgstr "Rebutja"
-
-#~ msgid "Answer"
-#~ msgstr "Contesta"
-
-#~ msgid "Call with %s"
-#~ msgstr "Trucada amb %s"
-
-#~ msgid "The IP address as seen by the machine"
-#~ msgstr "L'adreça IP des del punt de vista de la màquina"
-
-#~ msgid "The IP address as seen by a server on the Internet"
-#~ msgstr "L'adreça IP des del punt de vista d'un servidor d'Internet"
-
-#~ msgid "The IP address of the peer as seen by the other side"
-#~ msgstr "L'adreça IP d'un igual vist per l'altre l'igual"
-
-#~ msgid "The IP address of a relay server"
-#~ msgstr "L'adreça IP d'un servidor de repetició"
-
-#~ msgid "The IP address of the multicast group"
-#~ msgstr "L'adreça IP del grup de multidestinació"
-
-#~ msgid "On hold"
-#~ msgstr "En espera"
-
-#~ msgid "Mute"
-#~ msgstr "Silenci"
-
-#~ msgid "Duration"
-#~ msgstr "Durada"
-
-#~ msgid "%s — %d∶%02dm"
-#~ msgstr "%s — %d:%02dm"
-
-#~ msgid "Technical Details"
-#~ msgstr "Detalls tècnics"
-
-#~ msgid ""
-#~ "%s’s software does not understand any of the audio formats supported by "
-#~ "your computer"
-#~ msgstr ""
-#~ "El programari de %s no suporta cap format d'àudio dels que teniu en el "
-#~ "vostre ordinador"
-
-#~ msgid ""
-#~ "%s’s software does not understand any of the video formats supported by "
-#~ "your computer"
-#~ msgstr ""
-#~ "El programari de %s no suporta cap format de vídeo dels que teniu en el "
-#~ "vostre ordinador"
-
-#~ msgid ""
-#~ "Can’t establish a connection to %s. One of you might be on a network that "
-#~ "does not allow direct connections."
-#~ msgstr ""
-#~ "No s'ha pogut connectar amb en/na %s. Algú dels dos deu estar en una "
-#~ "xarxa que no permet connexions directes."
-
-#~ msgid "There was a failure on the network"
-#~ msgstr "Hi ha hagut una fallada en la xarxa"
-
-#~ msgid ""
-#~ "The audio formats necessary for this call are not installed on your "
-#~ "computer"
-#~ msgstr ""
-#~ "Els formats d'àudio necessaris per a aquesta trucada no estan instal·lats "
-#~ "en aquest ordinador"
-
-#~ msgid ""
-#~ "The video formats necessary for this call are not installed on your "
-#~ "computer"
-#~ msgstr ""
-#~ "Els formats de vídeo necessaris per a aquesta trucada no estan "
-#~ "instal·lats en aquest ordinador"
-
-#~ msgid ""
-#~ "Something unexpected happened in a Telepathy component. Please <a href="
-#~ "\"%s\">report this bug</a> and attach logs gathered from the “Debug” "
-#~ "window in the Help menu."
-#~ msgstr ""
-#~ "Ha ocorregut quelcom inesperat en un component de la Telepathy. <a href="
-#~ "\"%s\">Informeu d'aquesta errada</a> i adjunteu-hi els registres "
-#~ "recollits a la finestra «Depuració» del menú Ajuda."
-
-#~ msgid "There was a failure in the call engine"
-#~ msgstr "Hi ha hagut una fallada en el motor de trucada"
-
-#~ msgid "The end of the stream was reached"
-#~ msgstr "S'ha arribat al final del flux"
-
-#~ msgid "Can’t establish audio stream"
-#~ msgstr "No s'ha pogut establir el flux d'àudio"
-
-#~ msgid "Can’t establish video stream"
-#~ msgstr "No s'ha pogut establir el flux de vídeo"
-
-#~ msgid "Your current balance is %s."
-#~ msgstr "El saldo actual és de %s."
-
-#~ msgid "Sorry, you don’t have enough credit for that call."
-#~ msgstr "No teniu prou saldo per fer aquesta trucada."
-
-#~ msgid "Top Up"
-#~ msgstr "Recarrega"
-
-#~ msgid "_Call"
-#~ msgstr "Tru_ca"
-
-#~ msgid "_Microphone"
-#~ msgstr "_Micròfon"
-
-#~ msgid "_Camera"
-#~ msgstr "_Càmera"
-
-#~ msgid "_Debug"
-#~ msgstr "_Depura"
-
-#~ msgid "_GStreamer"
-#~ msgstr "_GStreamer"
-
-#~ msgid "_Telepathy"
-#~ msgstr "_Telepathy"
-
-#~ msgid "Swap camera"
-#~ msgstr "Canvia la càmera"
-
-#~ msgid "Minimise me"
-#~ msgstr "Minimitza'm"
-
-#~ msgid "Maximise me"
-#~ msgstr "Maximitza'm"
-
-#~ msgid "Disable camera"
-#~ msgstr "Inhabilita la càmera"
-
-#~ msgid "Hang up"
-#~ msgstr "Penja"
-
-#~ msgid "Hang up current call"
-#~ msgstr "Penja la trucada actual"
-
-#~ msgid "Video call"
-#~ msgstr "Trucada de vídeo"
-
-#~ msgid "Start a video call"
-#~ msgstr "Inicia una trucada de vídeo"
-
-#~ msgid "Start an audio call"
-#~ msgstr "Inicia una trucada d'àudio"
-
-#~ msgid "Show dialpad"
-#~ msgstr "Mostra el marcador"
-
-#~ msgid "Display the dialpad"
-#~ msgstr "Mostra el marcador"
-
-#~ msgid "Toggle video transmission"
-#~ msgstr "Commuta la transmissió de vídeo"
-
-#~ msgid "Toggle audio transmission"
-#~ msgstr "Commuta la transmissió d'àudio"
-
-#~ msgid "Encoding Codec:"
-#~ msgstr "Còdec de codificació:"
-
-#~ msgid "Decoding Codec:"
-#~ msgstr "Còdec de descodificació:"
-
-#~ msgid "Remote Candidate:"
-#~ msgstr "Candidat remot:"
-
-#~ msgid "Local Candidate:"
-#~ msgstr "Candidat local:"
-
-#~ msgid "Audio"
-#~ msgstr "Àudio"
-
-#~ msgid "Room"
-#~ msgstr "Sala"
-
-#~ msgid "Auto-Connect"
-#~ msgstr "Connecta automàticament"
-
-#~ msgid "Manage Favorite Rooms"
-#~ msgstr "Gestiona les sales preferides"
-
-#~ msgid "Close this window?"
-#~ msgstr "Voleu tancar aquesta finestra?"
-
-#~ msgid ""
-#~ "Closing this window will leave %s. You will not receive any further "
-#~ "messages until you rejoin it."
-#~ msgstr ""
-#~ "Si tanqueu la finestra sortireu de %s. No rebreu cap més missatge fins "
-#~ "que no hi torneu a entrar."
-
-#~ msgid ""
-#~ "Closing this window will leave a chat room. You will not receive any "
-#~ "further messages until you rejoin it."
-#~ msgid_plural ""
-#~ "Closing this window will leave %u chat rooms. You will not receive any "
-#~ "further messages until you rejoin them."
-#~ msgstr[0] ""
-#~ "Si tanqueu la finestra sortireu d'una sala de xat. No rebreu més "
-#~ "missatges fins que no hi torneu a entrar."
-#~ msgstr[1] ""
-#~ "Si tanqueu la finestra sortireu de %u sales de xat. No rebreu més "
-#~ "missatges fins que no hi torneu a entrar."
-
-#~ msgid "Leave %s?"
-#~ msgstr "Voleu sortir de %s?"
-
-#~ msgid ""
-#~ "You will not receive any further messages from this chat room until you "
-#~ "rejoin it."
-#~ msgstr ""
-#~ "No rebreu cap més missatge d'aquesta sala de xat fins que no hi torneu a "
-#~ "entrar-hi."
-
-#~ msgid "Close window"
-#~ msgstr "Tanca la finestra"
-
-#~ msgid "Leave room"
-#~ msgstr "Surt de la sala"
-
-#~ msgid "%s (%d unread)"
-#~ msgid_plural "%s (%d unread)"
-#~ msgstr[0] "%s (%d sense llegir)"
-#~ msgstr[1] "%s (%d sense llegir)"
-
-#~ msgid "%s (and %u other)"
-#~ msgid_plural "%s (and %u others)"
-#~ msgstr[0] "%s (i %u altre)"
-#~ msgstr[1] "%s (i %u altres)"
-
-#~ msgid "%s (%d unread from others)"
-#~ msgid_plural "%s (%d unread from others)"
-#~ msgstr[0] "%s (%d sense llegir d'altres)"
-#~ msgstr[1] "%s (%d sense llegir d'altres)"
-
-#~ msgid "%s (%d unread from all)"
-#~ msgid_plural "%s (%d unread from all)"
-#~ msgstr[0] "%s (%d sense llegir de tots)"
-#~ msgstr[1] "%s (%d sense llegir de tots)"
-
-#~ msgid "SMS:"
-#~ msgstr "SMS:"
-
-#~ msgid "Sending %d message"
-#~ msgid_plural "Sending %d messages"
-#~ msgstr[0] "S'està enviant %d missatge"
-#~ msgstr[1] "S'estan enviant %d missatges"
-
-#~ msgid "Typing a message."
-#~ msgstr "S'està escrivint un missatge."
-
-#~ msgid "_Conversation"
-#~ msgstr "_Conversa"
-
-#~ msgid "Insert _Smiley"
-#~ msgstr "Insereix una e_moticona"
-
-#~ msgid "_Favorite Chat Room"
-#~ msgstr "Sala de xat _preferida"
-
-#~ msgid "Notify for All Messages"
-#~ msgstr "Notifica tots els missatges"
-
-#~ msgid "_Show Contact List"
-#~ msgstr "_Mostra la llista de contactes"
-
-#~ msgid "Invite _Participant…"
-#~ msgstr "Convida un _participant…"
-
-#~ msgid "_Join Chat"
-#~ msgstr "_Entra al xat"
-
-#~ msgid "Le_ave Chat"
-#~ msgstr "_Surt del xat"
-
-#~ msgid "C_ontact"
-#~ msgstr "C_ontacte"
-
-#~ msgid "_Previous Tab"
-#~ msgstr "_Pestanya anterior"
-
-#~ msgid "_Detach Tab"
-#~ msgstr "D_esenganxa la pestanya"
-
-#~ msgid "Show a particular service"
-#~ msgstr "Mostra un servei en concret"
-
-#~ msgid "— Empathy Debugger"
-#~ msgstr "—  Depurador de l'Empathy"
-
-#~ msgid "Empathy Debugger"
-#~ msgstr "Depurador de l'Empathy"
-
-#~ msgid "Pastebin link"
-#~ msgstr "Enllaç al Pastebin"
-
-#~ msgid "Pastebin response"
-#~ msgstr "Resposta del Pastebin"
-
-#~ msgid "Data too large for a single paste. Please save logs to file."
-#~ msgstr ""
-#~ "Hi ha massa dades per un sol Pastebin. Deseu els registres a un fitxer."
-
-#~ msgid "Send to pastebin"
-#~ msgstr "Envia-ho a Pastebin"
-
-#~ msgid "Pause"
-#~ msgstr "Fes una pausa"
-
-#~ msgid "Level "
-#~ msgstr "Nivell "
-
-#~ msgid "Debug"
-#~ msgstr "Depura"
-
-#~ msgid "Info"
-#~ msgstr "Informació"
-
-#~ msgid "Critical"
-#~ msgstr "Crític"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid ""
-#~ "Even if they don’t display passwords, logs can contain sensitive "
-#~ "information such as your list of contacts or the messages you recently "
-#~ "sent or received.\n"
-#~ "If you don’t want to see such information available in a public bug "
-#~ "report, you can choose to limit the visibility of your bug to Empathy "
-#~ "developers when reporting it by displaying the advanced fields in the <a "
-#~ "href=\"https://bugzilla.gnome.org/enter_bug.cgi?product=empathy\">bug "
-#~ "report</a>."
-#~ msgstr ""
-#~ "Encara que no s'hi mostrin contrasenyes, en els registres pot haver-hi "
-#~ "informació personal, com ara la vostra llista de contactes o els "
-#~ "missatges que heu enviat o rebut últimament.\n"
-#~ "Si no voleu que aquesta informació estigui disponible en un informe "
-#~ "d'errada públic, quan envieu l'<a href=\"https://bugzilla.gnome.org/"
-#~ "enter_bug.cgi?product=empathy\">informe d'errada</a> utilitzeu els camps "
-#~ "avançats del formulari per limitar la visibilitat del vostre informe als "
-#~ "desenvolupadors de l'Empathy."
-
-#~ msgid "Time"
-#~ msgstr "Hora"
-
-#~ msgid "Domain"
-#~ msgstr "Domini"
-
-#~ msgid "Category"
-#~ msgstr "Categoria"
-
-#~ msgid "Level"
-#~ msgstr "Nivell"
-
-#~ msgid ""
-#~ "The selected connection manager does not support the remote debugging "
-#~ "extension."
-#~ msgstr ""
-#~ "El gestor de connexions seleccionat no permet utilitzar l'extensió de "
-#~ "depuració remota."
-
-#~ msgid "Incoming video call"
-#~ msgstr "Trucada de vídeo entrant"
-
-#~ msgid "%s is video calling you. Do you want to answer?"
-#~ msgstr "En/na %s us està trucant per videoconferència, voleu contestar?"
-
-#~ msgid "%s is calling you. Do you want to answer?"
-#~ msgstr "En/na %s us està trucant, voleu contestar?"
-
-#~ msgid "_Reject"
-#~ msgstr "_Refusa"
-
-#~ msgid "_Answer"
-#~ msgstr "_Contesta"
-
-#~ msgid "_Answer with video"
-#~ msgstr "_Contesta amb vídeo"
-
-#~ msgid "Room invitation"
-#~ msgstr "Invitació a la sala"
-
-#~ msgid "Invitation to join %s"
-#~ msgstr "Us han convidat a entrar a %s"
-
-#~ msgid "%s is inviting you to join %s"
-#~ msgstr "En/na %s us convida a entrar a %s"
-
-#~ msgid "_Join"
-#~ msgstr "_Uneix-m'hi"
-
-#~ msgid "%s invited you to join %s"
-#~ msgstr "En/na %s us ha convidat a entrar a %s"
-
-#~ msgid "Incoming file transfer from %s"
-#~ msgstr "Transferència de fitxers entrant d'en/na %s"
-
-#~ msgid "Password required"
-#~ msgstr "Cal la contrasenya"
-
-#~ msgid ""
-#~ "\n"
-#~ "Message: %s"
-#~ msgstr ""
-#~ "\n"
-#~ "Missatge: %s"
-
-#~ msgid "%u∶%02u.%02u"
-#~ msgstr "%u∶%02u.%02u"
-
-#~ msgid "%02u.%02u"
-#~ msgstr "%02u.%02u"
-
-#~ msgctxt "file transfer percent"
-#~ msgid "Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "%s of %s at %s/s"
-#~ msgstr "%s de %s a %s/s"
-
-#~ msgid "Receiving “%s” from %s"
-#~ msgstr "S'està rebent «%s» d'en/na %s"
-
-#~ msgid "Sending “%s” to %s"
-#~ msgstr "S'està enviant «%s» a en/na %s"
-
-#~ msgid "Error receiving “%s” from %s"
-#~ msgstr "S'ha produït un error en rebre «%s» d'en/na %s"
-
-#~ msgid "Error receiving a file"
-#~ msgstr "S'ha produït un error en rebre el fitxer"
-
-#~ msgid "Error sending “%s” to %s"
-#~ msgstr "S'ha produït un error en enviar «%s» a en/na %s"
-
-#~ msgid "Error sending a file"
-#~ msgstr "S'ha produït un error en enviar el fitxer"
-
-#~ msgid "“%s” received from %s"
-#~ msgstr "S'ha rebut «%s» d'en/na %s"
-
-#~ msgid "“%s” sent to %s"
-#~ msgstr "S'ha enviat «%s» a en/na %s"
-
-#~ msgid "File transfer completed"
-#~ msgstr "S'ha completat la transferència"
-
-#~ msgid "Waiting for the other participant’s response"
-#~ msgstr "S'està esperant que l'interlocutor respongui"
-
-#~ msgid "Checking integrity of “%s”"
-#~ msgstr "S'està comprovant la integritat de «%s»"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "Remaining"
-#~ msgstr "Restant"
-
-#~ msgid "File Transfers"
-#~ msgstr "Transferències de fitxers"
-
-#~ msgid "Remove completed, canceled and failed file transfers from the list"
-#~ msgstr ""
-#~ "Treu de la llista les transferències de fitxers completades, cancel·lades "
-#~ "i fallades"
-
-#~ msgid "_Import"
-#~ msgstr "_Importa"
-
-#~ msgid ""
-#~ "No accounts to import could be found. Empathy currently only supports "
-#~ "importing accounts from Pidgin."
-#~ msgstr ""
-#~ "No s'han trobat comptes per importar. L'Empathy de moment només pot "
-#~ "importar comptes del Pidgin."
-
-#~ msgid "Import Accounts"
-#~ msgstr "Importa els comptes"
-
-#~ msgid "Protocol"
-#~ msgstr "Protocol"
-
-#~ msgid "Invite Participant"
-#~ msgstr "Convida un participant"
-
-#~ msgid "Choose a contact to invite into the conversation:"
-#~ msgstr "Seleccioneu un contacte per convidar-lo a la conversa:"
-
-#~ msgid "Invite"
-#~ msgstr "Convida"
-
-#~ msgid "Chat Room"
-#~ msgstr "Sala de xat"
-
-#~ msgid "Members"
-#~ msgstr "Membres"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "Invite required: %s\n"
-#~ "Password required: %s\n"
-#~ "Members: %s"
-#~ msgstr ""
-#~ "%s\n"
-#~ "Cal invitació: %s\n"
-#~ "Cal contrasenya: %s\n"
-#~ "Membres: %s"
-
-#~ msgid "Join Room"
-#~ msgstr "Entra a la sala"
-
-#~ msgid ""
-#~ "Enter the room name to join here or click on one or more rooms in the "
-#~ "list."
-#~ msgstr ""
-#~ "Introduïu el nom de la sala a la qual us voleu unir o feu clic en una o "
-#~ "més sales de la llista."
-
-#~ msgid "_Room:"
-#~ msgstr "Sa_la:"
-
-#~ msgid ""
-#~ "Enter the server which hosts the room, or leave it empty if the room is "
-#~ "on the current account&apos;s server"
-#~ msgstr ""
-#~ "Introduïu el servidor que hostatja la sala, o deixeu-lo en blanc si la "
-#~ "sala és en el servidor del compte actual"
-
-#~ msgid ""
-#~ "Enter the server which hosts the room, or leave it empty if the room is "
-#~ "on the current account’s server"
-#~ msgstr ""
-#~ "Introduïu el servidor que hostatja la sala, o deixeu-lo en blanc si la "
-#~ "sala és en el servidor del compte actual"
-
-#~ msgid "_Server:"
-#~ msgstr "_Servidor:"
-
-#~ msgid "Couldn’t load room list"
-#~ msgstr "No s'ha pogut carregar el llistat de sales"
-
-#~ msgid "Respond"
-#~ msgstr "Respon"
-
-#~ msgid "Answer with video"
-#~ msgstr "Contesta amb vídeo"
-
-#~ msgid "Decline"
-#~ msgstr "Declina"
-
-#~ msgid "Accept"
-#~ msgstr "Accepta"
-
-#~ msgid "Provide"
-#~ msgstr "Proporciona"
-
-#~ msgid "Message received"
-#~ msgstr "Missatge rebut"
-
-#~ msgid "Message sent"
-#~ msgstr "Missatge enviat"
-
-#~ msgid "New conversation"
-#~ msgstr "Conversa nova"
-
-#~ msgid "Contact comes online"
-#~ msgstr "El contacte s'ha connectat"
-
-#~ msgid "Contact goes offline"
-#~ msgstr "El contacte s'ha desconnectat"
-
-#~ msgid "Account connected"
-#~ msgstr "Compte connectat"
-
-#~ msgid "Account disconnected"
-#~ msgstr "Compte desconnectat"
-
-#~ msgid "Juliet"
-#~ msgstr "Julieta"
-
-#~ msgid "Romeo"
-#~ msgstr "Romeu"
-
-#~ msgid "O Romeo, Romeo, wherefore art thou Romeo?"
-#~ msgstr "O Romeu, Romeu! Per què ets tu Romeu?"
-
-#~ msgid "Deny thy father and refuse thy name;"
-#~ msgstr "Nega el teu pare i rebutja el teu nom."
-
-#~ msgid "Or if thou wilt not, be but sworn my love"
-#~ msgstr "O, si no vols, jura'm el teu amor"
-
-#~ msgid "And I’ll no longer be a Capulet."
-#~ msgstr "I deixaré jo de ser una Capulet."
-
-#~ msgid "Shall I hear more, or shall I speak at this?"
-#~ msgstr "L'escolto més estona, o li responc?"
-
-#~ msgid "Juliet has disconnected"
-#~ msgstr "La Julieta s'ha desconnectat"
-
-#~ msgid "Show groups"
-#~ msgstr "Mostra els grups"
-
-#~ msgid "Show account balances"
-#~ msgstr "Mostra el saldo dels comptes"
-
-#~ msgid "Start chats in:"
-#~ msgstr "Inicia un xat amb:"
-
-#~ msgid "Show _smileys as images"
-#~ msgstr "Mo_stra les emoticones com a imatges"
-
-#~ msgid "Show contact _list in rooms"
-#~ msgstr "Mostra la _llista de contactes a les sales"
-
-#~ msgid "Log conversations"
-#~ msgstr "Enregistra les converses"
-
-#~ msgid "Display incoming events in the notification area"
-#~ msgstr "Mostra els esdeveniments d'entrada a l'àrea de notificació"
-
-#~ msgid "Behavior"
-#~ msgstr "Comportament"
-
-#~ msgid "_Enable bubble notifications"
-#~ msgstr "_Habilita les notificacions"
-
-#~ msgid "Disable notifications when _away or busy"
-#~ msgstr "Inhabilita les notificacions quan s'estigui _absent o ocupat"
-
-#~ msgid "Enable notifications when the _chat is not focused"
-#~ msgstr "Habilita les notificacions quan el _xat no tingui el focus"
-
-#~ msgid "Enable notifications when a contact comes online"
-#~ msgstr "Habilita les notificacions quan es connecti un contacte"
-
-#~ msgid "Enable notifications when a contact goes offline"
-#~ msgstr "Habilita les notificacions quan es desconnecti un contacte"
-
-#~ msgid "_Enable sound notifications"
-#~ msgstr "_Habilita les notificacions de so"
-
-#~ msgid "Disable sounds when _away or busy"
-#~ msgstr "Inhabilita els sons quan s'estigui _absent o ocupat"
-
-#~ msgid "Play sound for events"
-#~ msgstr "Reprodueix un so per als esdeveniments"
-
-#~ msgid "Sounds"
-#~ msgstr "Sons"
-
-#~ msgid "Use _echo cancellation to improve call quality"
-#~ msgstr ""
-#~ "Utilitzeu la cancel·lació de l'_eco per millorar la qualitat de la trucada"
-
-#~ msgid ""
-#~ "Echo cancellation helps to make your voice sound clearer to the other "
-#~ "person, but may cause problems on some computers. If you or the other "
-#~ "person hear strange noises or glitches during calls, try turning echo "
-#~ "cancellation off and restarting the call."
-#~ msgstr ""
-#~ "La cancel·lació de l'eco permet que l'altra persona senti la vostra veu "
-#~ "millor, però pot no funcionar bé en alguns ordinadors. Si sentiu o senten "
-#~ "alguns sorolls estranys o petits talls, proveu a desactivar la "
-#~ "cancel·lació de l'eco i tornar a trucar."
-
-#~ msgid "_Publish location to my contacts"
-#~ msgstr "_Publica la ubicació per als meus contactes"
-
-#~ msgid ""
-#~ "Reduced location accuracy means that nothing more precise than your city, "
-#~ "state and country will be published.  GPS coordinates will be accurate to "
-#~ "1 decimal place."
-#~ msgstr ""
-#~ "La reducció de la precisió de la ubicació significa que no es publicarà "
-#~ "res més precís que la ciutat, el país o l'estat. Les coordenades del GPS "
-#~ "es truncaran a una posició decimal."
-
-#~ msgid "_Reduce location accuracy"
-#~ msgstr "_Redueix la precisió de la ubicació"
-
-#~ msgid "Privacy"
-#~ msgstr "Privadesa"
-
-#~ msgid ""
-#~ "The list of languages reflects only the languages for which you have a "
-#~ "dictionary installed."
-#~ msgstr ""
-#~ "La llista de llengües només mostrarà les llengües per a les quals tingueu "
-#~ "un diccionari instal·lat."
-
-#~ msgid "Enable spell checking for languages:"
-#~ msgstr "Habilita la verificació ortogràfica per a les llengües:"
-
-#~ msgid "Chat Th_eme:"
-#~ msgstr "T_ema de xat:"
-
-#~ msgid "Variant:"
-#~ msgstr "Variant:"
-
-#~ msgid "Themes"
-#~ msgstr "Temes"
-
-#~ msgid "Disconnect"
-#~ msgstr "Desconnecta"
-
-#~ msgid "You need to set up an account to see contacts here."
-#~ msgstr "Heu de configurar un compte per veure'n els contactes aquí."
-
-#~ msgid "Sorry, %s accounts can’t be used until your %s software is updated."
-#~ msgstr ""
-#~ "No podeu utilitzar els comptes de %s fins que no actualitzeu el "
-#~ "programari de %s."
-
-#~ msgid "Google Talk"
-#~ msgstr "Google Talk"
-
-#~ msgid "Facebook"
-#~ msgstr "Facebook"
-
-#~ msgid "%s account requires authorisation"
-#~ msgstr "El compte %s requereix una autorització"
-
-#~ msgid "Update software…"
-#~ msgstr "Actualitza el programari…"
-
-#~ msgid "Reconnect"
-#~ msgstr "Torna a connectar"
-
-#~ msgid "Edit Account"
-#~ msgstr "Edita el compte"
-
-#~ msgid "Top up account"
-#~ msgstr "Recarrega el compte"
-
-#~ msgid "You need to enable one of your accounts to see contacts here."
-#~ msgstr "Heu d'habilitar com a mínim un compte per veure contactes aquí."
-
-#~ msgid "You need to enable %s to see contacts here."
-#~ msgstr "Heu d'habilitar %s per veure contactes aquí."
-
-#~ msgid "You haven’t added any contacts yet"
-#~ msgstr "Encara no heu afegit cap contacte"
-
-#~ msgid "No online contacts"
-#~ msgstr "No hi ha cap contacte en línia"
-
-#~ msgid "Contacts"
-#~ msgstr "Contactes"
-
-#~ msgid "_Add Contacts…"
-#~ msgstr "_Afegeix contactes…"
-
-#~ msgid "_Search for Contacts…"
-#~ msgstr "_Cerca contactes…"
-
-#~ msgid "_Blocked Contacts"
-#~ msgstr "Contactes _blocats"
-
-#~ msgid "_Rooms"
-#~ msgstr "_Sales"
-
-#~ msgid "_Join…"
-#~ msgstr "_Uneix-m'hi…"
-
-#~ msgid "Join _Favorites"
-#~ msgstr "Uneix-te als _preferits"
-
-#~ msgid "_File Transfers"
-#~ msgstr "Transferències de _fitxers"
-
-#~ msgid "_Accounts"
-#~ msgstr "_Comptes"
-
-#~ msgid "P_references"
-#~ msgstr "P_referències"
-
-#~ msgid "Go _Online"
-#~ msgstr "_Connecta't"
-
-#~ msgid "Show _Offline Contacts"
-#~ msgstr "Mostra els contactes _fora de línia"
-
-#~ msgid "Status"
-#~ msgstr "Estat"
-
-#~ msgid "Done"
-#~ msgstr "Fet"
-
-#~ msgid "Please enter your account details"
-#~ msgstr "Introduïu les dades del compte"
-
-#~ msgid "Edit %s account options"
-#~ msgstr "Edita les opcions del compte %s"
-
-#~ msgid "Integrate your IM accounts"
-#~ msgstr "Integreu els vostres comptes de missatgeria instantània"
-
-#~ msgid "- Empathy Chat Client"
-#~ msgstr "- Client de xat Empathy"
-
-#~ msgid "Change your presence to see contacts here"
-#~ msgstr "Canvieu el vostre estat per veure els contactes"
-
-#~ msgid "Inspect HTML"
-#~ msgstr "Inspecciona l'HTML"
-
-#~ msgid "No error message"
-#~ msgstr "No hi ha missatge d'error"
-
-#~ msgid "Instant Message (Empathy)"
-#~ msgstr "Missatgeria instantània (Empathy)"
-
-#~ msgid ""
-#~ "Empathy is free software; you can redistribute it and/or modify it under "
-#~ "the terms of the GNU General Public License as published by the Free "
-#~ "Software Foundation; either version 2 of the License, or (at your option) "
-#~ "any later version."
-#~ msgstr ""
-#~ "L'Empathy és programari lliure; podeu redistribuir-lo i/o modificar-lo "
-#~ "sota els termes de la Llicència Pública General GNU tal com ha estat "
-#~ "publicada per la Free Software Foundation; bé sota la versió 2 de la "
-#~ "Llicència o bé (si ho preferiu) sota qualsevol versió posterior."
-
-#~ msgid ""
-#~ "Empathy is distributed in the hope that it will be useful, but WITHOUT "
-#~ "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
-#~ "FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-#~ "more details."
-#~ msgstr ""
-#~ "L'Empathy es distribueix amb l'expectativa que serà útil, però SENSE CAP "
-#~ "GARANTIA; fins i tot la garantia implícita de COMERCIALITZACIÓ o "
-#~ "ADEQUACIÓ PER UN PROPÒSIT PARTICULAR.  Vegeu la Llicència Pública General "
-#~ "GNU per obtenir-ne més detalls."
-
-#~ msgid ""
-#~ "You should have received a copy of the GNU General Public License along "
-#~ "with Empathy; if not, write to the Free Software Foundation, Inc., 51 "
-#~ "Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
-#~ msgstr ""
-#~ "Hauríeu d'haver rebut una còpia de la Llicència Pública General GNU "
-#~ "juntament amb l'Empathy; en cas contrari, escriviu a la Free Software "
-#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
-#~ "02110-130159 USA"
-
-#~ msgid "About Empathy"
-#~ msgstr "Quant a l'Empathy"
