@@ -95,7 +95,7 @@ hogweed_dep = dependency('hogweed', version: nettle_requirement)
 icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.31.90')
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.31.90', required: false)
 libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.9', required: false)
 libnotify_dep = dependency('libnotify', version: '>= 0.5.1')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.14')
@@ -105,6 +105,14 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
+
+# Debian Buster wants to ship Ephy 3.32 but libdazzle 3.30, which is too old.
+if not libdazzle_dep.found()
+  libdazzle_dep = subproject('libdazzle', default_options: ['package_subdir=epiphany',
+                                                            'enable_tools=false',
+                                                            'with_introspection=false',
+                                                            'with_vapi=false']).get_variable('libdazzle_dep')
+endif
 
 # Ubuntu 18.04 doesn't have libhandy at all, and we need 0.0.5, so bundle it if
 # the system copy is missing or too old.
