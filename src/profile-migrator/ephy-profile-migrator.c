@@ -1084,16 +1084,20 @@ out:
 }
 
 static gboolean
-move_directory_contents (GFile *source,
-                         GFile *dest)
+move_directory_contents (const char *source_path,
+                         const char *dest_path)
 {
+  g_autoptr(GFile) source = g_file_new_for_path (source_path);
+  g_autoptr(GFile) dest = g_file_new_for_path (dest_path);
+  g_autoptr(GFileEnumerator) direnum = NULL;
+  g_autoptr(GError) error = NULL;
+
   /* Just a sanity check as it should already exist */
   g_file_make_directory (dest, NULL, NULL);
 
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GFileEnumerator) direnum = g_file_enumerate_children (source, G_FILE_ATTRIBUTE_STANDARD_NAME,
-                                                                  G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
-                                                                  NULL, &error);
+  direnum = g_file_enumerate_children (source, G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                       G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                       NULL, &error);
   if (error) {
     g_warning ("Failed to enumerate files: %s", error->message);
     return FALSE;
@@ -1143,12 +1147,9 @@ migrate_profile_directories (void)
 
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
     g_autofree char *old_path = g_build_filename (legacy_profile_dir (), old_name, NULL);
-    g_autoptr(GFile) old_directory = g_file_new_for_path (old_path);
-
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
-    g_autoptr(GFile) new_directory = g_file_new_for_path (app_path);
 
-    if (!move_directory_contents (old_directory, new_directory))
+    if (!move_directory_contents (old_path, app_path))
       continue;
 
     // Create an empty file to indicate it's an app
@@ -1212,13 +1213,11 @@ migrate_profile_directories (void)
   if (!ephy_profile_dir_is_default ())
     return;
 
-  g_autoptr(GFile) old_directory = g_file_new_for_path (legacy_default_profile_dir ());
-  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
-
-  if (!move_directory_contents (old_directory, new_directory))
+  if (!move_directory_contents (legacy_default_profile_dir (), ephy_default_profile_dir ()))
     return;
 
   /* We are also moving some cache directories so just remove the old ones */
+  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
   g_autoptr(GFile) adblock_directory = g_file_get_child (new_directory, "adblock");
   g_file_delete (adblock_directory, NULL, NULL);
   g_autoptr(GFile) gsb_file = g_file_get_child (new_directory, "gsb-threats.db");
