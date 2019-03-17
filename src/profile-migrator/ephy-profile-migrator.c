@@ -1150,6 +1150,17 @@ migrate_profile_directories (void)
 }
 
 static void
+migrate_web_extension_config_dir (void)
+{
+  /* Epiphany 3.32.0 web process created its config dir in the wrong place by
+   * mistake for default profile dirs. It only contains read-only data copied
+   * from dconf, so we can just delete it.
+   */
+  g_autofree char *path = g_build_filename (ephy_default_profile_dir (), "config", NULL);
+  ephy_file_delete_dir_recursively (path, NULL);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1271,6 +1282,7 @@ const EphyProfileMigrator migrators[] = {
   /* 28 */ migrate_annoyance_list,
   /* 29 */ migrate_zoom_level,
   /* 30 */ migrate_profile_directories,
+  /* 31 */ migrate_web_extension_config_dir,
 };
 
 static gboolean
