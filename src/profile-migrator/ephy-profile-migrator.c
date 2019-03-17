@@ -1007,6 +1007,82 @@ migrate_annoyance_list (void)
   g_strfreev (modified_filters);
 }
 
+static void
+migrate_zoom_level (void)
+{
+  EphySQLiteConnection *history_db = NULL;
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  char *history_filename;
+  const char *sql_query;
+
+  history_filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS))
+    goto out;
+
+  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
+                                           history_filename);
+  ephy_sqlite_connection_open (history_db, &error);
+  if (error) {
+    g_warning ("Failed to open history database: %s", error->message);
+    g_clear_object (&history_db);
+    goto out;
+  }
+
+  /* Update zoom level values. */
+  sql_query = "UPDATE hosts SET zoom_level = 0.0 WHERE zoom_level = 1.0";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to update zoom level: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "CREATE TABLE hosts_backup ("
+              "id INTEGER PRIMARY KEY,"
+              "url LONGVARCAR,"
+              "title LONGVARCAR,"
+              "visit_count INTEGER DEFAULT 0 NOT NULL,"
+              "zoom_level REAL DEFAULT 0.0)";
+
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to create host backup table: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "INSERT INTO hosts_backup SELECT id,url,title,visit_count,zoom_level FROM hosts";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to copy data from hosts to hosts_backup: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "DROP TABLE hosts";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to remove table hosts: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "ALTER TABLE hosts_backup RENAME TO hosts";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to rename hosts_backup to hosts: %s", error->message);
+    goto out;
+  }
+
+out:
+  g_free (history_filename);
+  if (history_db) {
+    ephy_sqlite_connection_close (history_db);
+    g_object_unref (history_db);
+  }
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+}
+
 static gboolean
 move_directory_contents (GFile *source,
                          GFile *dest)
@@ -1161,82 +1237,6 @@ migrate_nothing (void)
    * Note that you cannot simply remove a migrator from the migrators struct,
    * as that would mess up tracking of which migrators have been run.
    */
-}
-
-static void
-migrate_zoom_level (void)
-{
-  EphySQLiteConnection *history_db = NULL;
-  EphySQLiteStatement *statement = NULL;
-  GError *error = NULL;
-  char *history_filename;
-  const char *sql_query;
-
-  history_filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
-  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS))
-    goto out;
-
-  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
-                                           history_filename);
-  ephy_sqlite_connection_open (history_db, &error);
-  if (error) {
-    g_warning ("Failed to open history database: %s", error->message);
-    g_clear_object (&history_db);
-    goto out;
-  }
-
-  /* Update zoom level values. */
-  sql_query = "UPDATE hosts SET zoom_level = 0.0 WHERE zoom_level = 1.0";
-  ephy_sqlite_connection_execute (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to update zoom level: %s", error->message);
-    goto out;
-  }
-
-  sql_query = "CREATE TABLE hosts_backup ("
-              "id INTEGER PRIMARY KEY,"
-              "url LONGVARCAR,"
-              "title LONGVARCAR,"
-              "visit_count INTEGER DEFAULT 0 NOT NULL,"
-              "zoom_level REAL DEFAULT 0.0)";
-
-  ephy_sqlite_connection_execute (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to create host backup table: %s", error->message);
-    goto out;
-  }
-
-  sql_query = "INSERT INTO hosts_backup SELECT id,url,title,visit_count,zoom_level FROM hosts";
-  ephy_sqlite_connection_execute (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to copy data from hosts to hosts_backup: %s", error->message);
-    goto out;
-  }
-
-  sql_query = "DROP TABLE hosts";
-  ephy_sqlite_connection_execute (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to remove table hosts: %s", error->message);
-    goto out;
-  }
-
-  sql_query = "ALTER TABLE hosts_backup RENAME TO hosts";
-  ephy_sqlite_connection_execute (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to rename hosts_backup to hosts: %s", error->message);
-    goto out;
-  }
-
-out:
-  g_free (history_filename);
-  if (history_db) {
-    ephy_sqlite_connection_close (history_db);
-    g_object_unref (history_db);
-  }
-  if (statement)
-    g_object_unref (statement);
-  if (error)
-    g_error_free (error);
 }
 
 /* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
