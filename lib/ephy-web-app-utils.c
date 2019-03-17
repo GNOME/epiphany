@@ -612,6 +612,8 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   children = g_file_enumerate_children (parent_directory,
                                         "standard::name",
                                         0, NULL, NULL);
+  if (!children)
+    return NULL;
 
   info = g_file_enumerator_next_file (children, NULL, NULL);
   while (info) {
