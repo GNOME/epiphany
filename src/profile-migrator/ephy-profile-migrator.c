@@ -616,10 +616,8 @@ migrate_history_to_firefox_sync_history (void)
   const char *sql_query;
 
   history_filename = g_build_filename (legacy_profile_dir (), EPHY_HISTORY_FILE, NULL);
-  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
-    LOG ("There is no history to migrate...");
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS))
     goto out;
-  }
 
   history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
                                            history_filename);
@@ -843,7 +841,8 @@ migrate_bookmarks_timestamp (void)
   filename = g_build_filename (legacy_profile_dir (), EPHY_BOOKMARKS_FILE, NULL);
   root_table_in = gvdb_table_new (filename, TRUE, &error);
   if (error) {
-    g_warning ("Failed to create Gvdb table: %s", error->message);
+    if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+      g_warning ("Failed to create Gvdb table: %s", error->message);
     goto out;
   }
 
@@ -1174,10 +1173,8 @@ migrate_zoom_level (void)
   const char *sql_query;
 
   history_filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
-  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
-    LOG ("There is no history to migrate...");
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS))
     goto out;
-  }
 
   history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
                                            history_filename);
