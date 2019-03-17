@@ -42,7 +42,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   gboolean browser_mode;
   g_autoptr(GError) error = NULL;
 
-  g_variant_get (user_data, "(&sm&s&s&sbb)", &guid, &server_address, &profile_dir, &adblock_data_dir, &private_profile, &browser_mode);
+  g_variant_get (user_data, "(&sm&sm&s&sbb)", &guid, &server_address, &profile_dir, &adblock_data_dir, &private_profile, &browser_mode);
 
   if (!server_address) {
     g_warning ("UI process did not start D-Bus server, giving up.");
