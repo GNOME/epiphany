@@ -234,7 +234,7 @@
                   <object class="GtkBox" id="download_box">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">18</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -251,11 +251,20 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="ask_on_download_checkbutton">
+                            <property name="label" translatable="yes">Always ask o_n download</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <property name="margin-start">12</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
+                            <property name="margin-start">24</property>
+                            <property name="sensitive" bind-source="ask_on_download_checkbutton" bind-property="active" bind-flags="sync-create|invert-boolean"/>
                             <child>
                               <object class="GtkBox" id="download_button_hbox">
                                 <property name="visible">True</property>

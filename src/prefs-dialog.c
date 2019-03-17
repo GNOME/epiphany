@@ -96,6 +96,7 @@ struct _PrefsDialog {
   GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_checkbutton;
   GtkWidget *enable_smooth_scrolling_checkbutton;
+  GtkWidget *ask_on_download_checkbutton;
 
   /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
@@ -992,6 +993,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_hbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, ask_on_download_checkbutton);
 
   /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
@@ -2023,6 +2025,11 @@ setup_general_page (PrefsDialog *dialog)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
                    dialog->enable_smooth_scrolling_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
+                   dialog->ask_on_download_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
