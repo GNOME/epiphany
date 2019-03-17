@@ -290,6 +290,9 @@ add_bookmarks (EphySuggestionModel *self,
     url = ephy_bookmark_get_url (bookmark);
     title = ephy_bookmark_get_title (bookmark);
 
+    if (strlen (title) == 0)
+      title = url;
+
     if (should_add_bookmark_to_model (self, query, title, url)) {
       EphySuggestion *suggestion;
       g_autofree gchar *escaped_title = NULL;
@@ -320,8 +323,13 @@ add_history (EphySuggestionModel *self,
     EphySuggestion *suggestion;
     g_autofree gchar *escaped_title = NULL;
     g_autofree gchar *markup = NULL;
+    const gchar *title = url->title;
 
-    escaped_title = g_markup_escape_text (url->title, -1);
+    if (strlen (url->title) == 0)
+      title = url->url;
+
+    escaped_title = g_markup_escape_text (title, -1);
+
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
     suggestion = ephy_suggestion_new (markup, url->url);
     load_favicon (self, suggestion, url->url);
