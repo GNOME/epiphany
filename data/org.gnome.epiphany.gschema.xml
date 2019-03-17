@@ -233,6 +233,11 @@
 			<summary>Hardware acceleration policy</summary>
 			<description>Whether to enable hardware acceleration. Possible values are “on-demand”, “always”, and “never”. Hardware acceleration may be required to achieve acceptable performance on embedded devices, but increases memory usage requirements and could expose severe hardware-specific graphics driver bugs. When the policy is “on-demand”, hardware acceleration will be used only when required to display 3D transforms.</description>
 		</key>
+		<key type="b" name="ask-on-download">
+			<default>false</default>
+			<summary>Always ask for download directory</summary>
+			<description>Whether to present a directory chooser dialog for every download.</description>
+		</key>
 	</schema>
         <schema id="org.gnome.Epiphany.webapp">
                 <key type="as" name="additional-urls">

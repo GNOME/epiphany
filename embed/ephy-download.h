@@ -38,6 +38,7 @@ typedef enum
 
 EphyDownload *ephy_download_new                   (WebKitDownload *download);
 EphyDownload *ephy_download_new_for_uri           (const char     *uri);
+EphyDownload *ephy_download_new_for_uri_internal  (const char     *uri);
 
 void          ephy_download_cancel                (EphyDownload *download);
 gboolean      ephy_download_is_active             (EphyDownload *download);
