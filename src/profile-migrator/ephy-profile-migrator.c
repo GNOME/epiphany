@@ -1148,9 +1148,8 @@ migrate_profile_directories (void)
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
     g_autoptr(GFile) new_directory = g_file_new_for_path (app_path);
 
-    if (!move_directory_contents (old_directory, new_directory)) {
+    if (!move_directory_contents (old_directory, new_directory))
       continue;
-    }
 
     // Create an empty file to indicate it's an app
     g_autofree char *app_file = g_build_filename (app_path, ".app", NULL);
