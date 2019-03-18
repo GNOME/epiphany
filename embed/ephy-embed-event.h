@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyEmbedEvent, ephy_embed_event, EPHY, EMBED_EVENT, GObject)
 
-EphyEmbedEvent *     ephy_embed_event_new                 (GdkEventButton      *event,
+EphyEmbedEvent *     ephy_embed_event_new                 (GdkEvent            *event,
                                                            WebKitHitTestResult *hit_test_result);
 guint                ephy_embed_event_get_context         (EphyEmbedEvent      *event);
 guint                ephy_embed_event_get_button          (EphyEmbedEvent      *event);

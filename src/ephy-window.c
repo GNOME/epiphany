@@ -1541,7 +1541,7 @@ populate_context_menu (WebKitWebView       *web_view,
 
   webkit_context_menu_remove_all (context_menu);
 
-  embed_event = ephy_embed_event_new ((GdkEventButton *)event, hit_test_result);
+  embed_event = ephy_embed_event_new (event, hit_test_result);
   _ephy_window_set_context_event (window, embed_event);
   g_object_unref (embed_event);
 
