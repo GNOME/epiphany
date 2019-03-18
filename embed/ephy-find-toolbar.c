@@ -567,8 +567,6 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
   toolbar->typing_ahead = typing_ahead;
   toolbar->links_only = links_only;
 
-  clear_status (toolbar);
-
   gtk_editable_select_region (GTK_EDITABLE (toolbar->entry), 0, -1);
 
   hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar), TRUE);
