@@ -58,17 +58,28 @@ ephy_embed_event_init (EphyEmbedEvent *embed_event)
 }
 
 EphyEmbedEvent *
-ephy_embed_event_new (GdkEventButton *event, WebKitHitTestResult *hit_test_result)
+ephy_embed_event_new (GdkEvent            *event,
+                      WebKitHitTestResult *hit_test_result)
 {
   EphyEmbedEvent *embed_event;
 
   embed_event = g_object_new (EPHY_TYPE_EMBED_EVENT, NULL);
 
   embed_event->hit_test_result = g_object_ref (hit_test_result);
-  embed_event->button = event->button;
-  embed_event->modifier = event->state;
-  embed_event->x = event->x;
-  embed_event->y = event->y;
+
+  switch (event->type) {
+  case GDK_BUTTON_PRESS:
+    embed_event->button = ((GdkEventButton *)event)->button;
+    embed_event->modifier = ((GdkEventButton *)event)->state;
+    embed_event->x = ((GdkEventButton *)event)->x;
+    embed_event->y = ((GdkEventButton *)event)->y;
+    break;
+  case GDK_KEY_PRESS:
+    embed_event->modifier = ((GdkEventKey *)event)->state;
+    break;
+  default:
+    break;
+  }
 
   return embed_event;
 }
