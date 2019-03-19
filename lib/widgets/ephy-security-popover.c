@@ -55,10 +55,16 @@ struct _EphySecurityPopover {
   GtkPopover parent_instance;
   char *address;
   char *hostname;
+  guint permission_pos;
   GtkWidget *lock_image;
   GtkWidget *host_label;
   GtkWidget *security_label;
   GtkWidget *ad_switch;
+  GtkWidget *notification_switch;
+  GtkWidget *save_password_switch;
+  GtkWidget *access_location_switch;
+  GtkWidget *access_microphone_switch;
+  GtkWidget *access_webcam_switch;
   GtkWidget *grid;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
@@ -68,12 +74,37 @@ struct _EphySecurityPopover {
 G_DEFINE_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
 static void
+set_permission_switch_state (EphyPermissionsManager *permissions_manager,
+                             gint                    permission_id,
+                             gchar                  *origin,
+                             GtkWidget              *widget)
+{
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  EphyPermission permission;
+
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        permission_id,
+                                                        origin);
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      gtk_switch_set_active (GTK_SWITCH (widget),
+                             !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
+      break;
+    case EPHY_PERMISSION_DENY:
+      gtk_switch_set_active (GTK_SWITCH (widget), FALSE);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      gtk_switch_set_active (GTK_SWITCH (widget), TRUE);
+      break;
+  }
+}
+
+static void
 ephy_security_popover_set_address (EphySecurityPopover *popover,
                                    const char          *address)
 {
   EphyPermissionsManager *permissions_manager;
-  EphyPermission permission;
-  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   SoupURI *uri;
   g_autofree gchar *origin = NULL;
   g_autofree gchar *uri_text = NULL;
@@ -93,22 +124,12 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
     return;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
-  permission = ephy_permissions_manager_get_permission (permissions_manager,
-                                                        EPHY_PERMISSION_TYPE_SHOW_ADS,
-                                                        origin);
-
-  switch (permission) {
-    case EPHY_PERMISSION_UNDECIDED:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch),
-                             !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
-      break;
-    case EPHY_PERMISSION_DENY:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), FALSE);
-      break;
-    case EPHY_PERMISSION_PERMIT:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), TRUE);
-      break;
-  }
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_ADS, origin, popover->ad_switch);
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS, origin, popover->notification_switch);
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_SAVE_PASSWORD, origin, popover->save_password_switch);
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, popover->access_location_switch);
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, popover->access_microphone_switch);
+  set_permission_switch_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, popover->access_webcam_switch);
 }
 
 static void
@@ -367,12 +388,158 @@ on_ad_switch_state_set (GtkSwitch           *widget,
   return FALSE;
 }
 
+static gboolean
+on_notification_switch_state_set (GtkSwitch           *widget,
+                                  gboolean             state,
+                                  EphySecurityPopover *popover)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
+static gboolean
+on_save_password_switch_state_set (GtkSwitch           *widget,
+                                   gboolean             state,
+                                   EphySecurityPopover *popover)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
+static gboolean
+on_access_location_switch_state_set (GtkSwitch           *widget,
+                                     gboolean             state,
+                                     EphySecurityPopover *popover)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_ACCESS_LOCATION,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
+static gboolean
+on_access_microphone_switch_state_set (GtkSwitch           *widget,
+                                       gboolean             state,
+                                       EphySecurityPopover *popover)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
+static gboolean
+on_access_webcam_switch_state_set (GtkSwitch           *widget,
+                                   gboolean             state,
+                                   EphySecurityPopover *popover)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
+static GtkWidget *
+add_permission_switch (EphySecurityPopover *popover,
+                       const gchar         *name,
+                       gpointer             callback)
+{
+  GtkWidget *widget;
+  GtkWidget *hbox;
+  GtkWidget *tmp;
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, popover->permission_pos++, 2, 1);
+
+  tmp = gtk_label_new (name);
+  gtk_label_set_xalign (GTK_LABEL (tmp), 0.0);
+  gtk_box_pack_start (GTK_BOX (hbox), tmp, TRUE, TRUE, 6);
+
+  widget = gtk_switch_new ();
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
+  g_signal_connect (widget, "state-set", G_CALLBACK (callback), popover);
+
+  return widget;
+}
+
 static void
 ephy_security_popover_init (EphySecurityPopover *popover)
 {
-  GtkWidget *adblocker;
-  GtkWidget *adblock_desc;
-  GtkWidget *hbox;
+  GtkWidget *permissions;
   GtkWidget *box;
   g_autofree char *label = g_strdup_printf ("<b>%s</b>", _("Permissions"));
 
@@ -404,21 +571,18 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_grid_attach (GTK_GRID (popover->grid), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 3, 2, 1);
 
   /* Permissions */
-  adblocker = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (adblocker), label);
-  gtk_label_set_xalign (GTK_LABEL (adblocker), 0.0);
-  gtk_grid_attach (GTK_GRID (popover->grid), adblocker, 0, 4, 2, 1);
+  permissions = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (permissions), label);
+  gtk_label_set_xalign (GTK_LABEL (permissions), 0.0);
+  gtk_grid_attach (GTK_GRID (popover->grid), permissions, 0, 4, 2, 1);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, 5, 2, 1);
-
-  adblock_desc = gtk_label_new (_("Allow advertisements"));
-  gtk_label_set_xalign (GTK_LABEL (adblock_desc), 0.0);
-  gtk_box_pack_start (GTK_BOX (hbox), adblock_desc, TRUE, TRUE, 6);
-
-  popover->ad_switch = gtk_switch_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), popover->ad_switch, FALSE, FALSE, 6);
-  g_signal_connect (popover->ad_switch, "state-set", G_CALLBACK (on_ad_switch_state_set), popover);
+  popover->permission_pos = 5;
+  popover->ad_switch = add_permission_switch (popover, _("Allow advertisements"), on_ad_switch_state_set);
+  popover->notification_switch = add_permission_switch (popover, _("Allow notifications"), on_notification_switch_state_set);
+  popover->save_password_switch = add_permission_switch (popover, _("Allow password saving"), on_save_password_switch_state_set);
+  popover->access_location_switch = add_permission_switch (popover, _("Allow location access"), on_access_location_switch_state_set);
+  popover->access_microphone_switch = add_permission_switch (popover, _("Allow microphone access"), on_access_microphone_switch_state_set);
+  popover->access_webcam_switch = add_permission_switch (popover, _("Allow webcam access"), on_access_webcam_switch_state_set);
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
