@@ -55,10 +55,16 @@ struct _EphySecurityPopover {
   GtkPopover parent_instance;
   char *address;
   char *hostname;
+  guint permission_pos;
   GtkWidget *lock_image;
   GtkWidget *host_label;
   GtkWidget *security_label;
-  GtkWidget *ad_switch;
+  GtkWidget *ad_combobox;
+  GtkWidget *notification_combobox;
+  GtkWidget *save_password_combobox;
+  GtkWidget *access_location_combobox;
+  GtkWidget *access_microphone_combobox;
+  GtkWidget *access_webcam_combobox;
   GtkWidget *grid;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
@@ -68,12 +74,62 @@ struct _EphySecurityPopover {
 G_DEFINE_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
 static void
+set_permission_ads_combobox_state (EphyPermissionsManager *permissions_manager,
+                                   gint                    permission_id,
+                                   gchar                  *origin,
+                                   GtkWidget              *widget)
+{
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  EphyPermission permission;
+
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        permission_id,
+                                                        origin);
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget),
+                                g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
+      break;
+    case EPHY_PERMISSION_DENY:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+      break;
+  }
+}
+
+static void
+set_permission_combobox_state (EphyPermissionsManager *permissions_manager,
+                               gint                    permission_id,
+                               gchar                  *origin,
+                               GtkWidget              *widget)
+{
+  EphyPermission permission;
+
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        permission_id,
+                                                        origin);
+
+  switch (permission) {
+    case EPHY_PERMISSION_PERMIT:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+      break;
+    case EPHY_PERMISSION_DENY:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+      break;
+    case EPHY_PERMISSION_UNDECIDED:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 2);
+      break;
+  }
+}
+
+static void
 ephy_security_popover_set_address (EphySecurityPopover *popover,
                                    const char          *address)
 {
   EphyPermissionsManager *permissions_manager;
-  EphyPermission permission;
-  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   SoupURI *uri;
   g_autofree gchar *origin = NULL;
   g_autofree gchar *uri_text = NULL;
@@ -93,22 +149,12 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
     return;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
-  permission = ephy_permissions_manager_get_permission (permissions_manager,
-                                                        EPHY_PERMISSION_TYPE_SHOW_ADS,
-                                                        origin);
-
-  switch (permission) {
-    case EPHY_PERMISSION_UNDECIDED:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch),
-                             !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
-      break;
-    case EPHY_PERMISSION_DENY:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), FALSE);
-      break;
-    case EPHY_PERMISSION_PERMIT:
-      gtk_switch_set_active (GTK_SWITCH (popover->ad_switch), TRUE);
-      break;
-  }
+  set_permission_ads_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_ADS, origin, popover->ad_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS, origin, popover->notification_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SAVE_PASSWORD, origin, popover->save_password_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, popover->access_location_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, popover->access_microphone_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, popover->access_webcam_combobox);
 }
 
 static void
@@ -340,8 +386,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
 }
 
 static gboolean
-on_ad_switch_state_set (GtkSwitch           *widget,
-                        gboolean             state,
+on_ad_combobox_changed (GtkComboBox         *widget,
                         EphySecurityPopover *popover)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
@@ -349,6 +394,7 @@ on_ad_switch_state_set (GtkSwitch           *widget,
   EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
   gboolean global_flag = !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
   g_autofree gchar *origin = NULL;
+  gboolean state = gtk_combo_box_get_active (widget) == 1;
 
   origin = ephy_uri_to_security_origin (popover->address);
   if (!origin)
@@ -368,11 +414,108 @@ on_ad_switch_state_set (GtkSwitch           *widget,
 }
 
 static void
+handle_permission_combobox_changed (EphySecurityPopover *popover,
+                                    gint                 action,
+                                    EphyPermissionType   permission_type)
+{
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission;
+  g_autofree gchar *origin = NULL;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  switch (action) {
+  case 0:
+    permission = EPHY_PERMISSION_PERMIT;
+    break;
+  default:
+  case 1:
+    permission = EPHY_PERMISSION_DENY;
+    break;
+  case 2:
+    permission = EPHY_PERMISSION_UNDECIDED;
+    break;
+  }
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           permission_type,
+                                           origin,
+                                           permission);
+}
+
+static void
+on_notification_combobox_changed (GtkComboBox         *box,
+                                  EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
+}
+
+static void
+on_save_password_combobox_changed (GtkComboBox         *box,
+                                   EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_SAVE_PASSWORD);
+}
+
+static void
+on_access_location_combobox_changed (GtkComboBox         *box,
+                                     EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_ACCESS_LOCATION);
+}
+
+static void
+on_access_microphone_combobox_changed (GtkComboBox         *box,
+                                       EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE);
+}
+
+static void
+on_access_webcam_combobox_changed (GtkComboBox         *box,
+                                   EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
+}
+
+static GtkWidget *
+add_permission_combobox (EphySecurityPopover *popover,
+                         const gchar         *name,
+                         gpointer             callback,
+                         gboolean             no_ask)
+{
+  GtkWidget *widget;
+  GtkWidget *hbox;
+  GtkWidget *tmp;
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, popover->permission_pos++, 2, 1);
+
+  tmp = gtk_label_new (name);
+  gtk_label_set_xalign (GTK_LABEL (tmp), 0.0);
+  gtk_box_pack_start (GTK_BOX (hbox), tmp, TRUE, TRUE, 6);
+
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Yes"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("No"));
+
+  if (!no_ask)
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Ask"));
+
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
+  g_signal_connect (widget, "changed", G_CALLBACK (callback), popover);
+
+  return widget;
+}
+
+static void
 ephy_security_popover_init (EphySecurityPopover *popover)
 {
-  GtkWidget *adblocker;
-  GtkWidget *adblock_desc;
-  GtkWidget *hbox;
+  GtkWidget *permissions;
   GtkWidget *box;
   g_autofree char *label = g_strdup_printf ("<b>%s</b>", _("Permissions"));
 
@@ -404,21 +547,18 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_grid_attach (GTK_GRID (popover->grid), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 3, 2, 1);
 
   /* Permissions */
-  adblocker = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (adblocker), label);
-  gtk_label_set_xalign (GTK_LABEL (adblocker), 0.0);
-  gtk_grid_attach (GTK_GRID (popover->grid), adblocker, 0, 4, 2, 1);
+  permissions = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (permissions), label);
+  gtk_label_set_xalign (GTK_LABEL (permissions), 0.0);
+  gtk_grid_attach (GTK_GRID (popover->grid), permissions, 0, 4, 2, 1);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, 5, 2, 1);
-
-  adblock_desc = gtk_label_new (_("Allow advertisements"));
-  gtk_label_set_xalign (GTK_LABEL (adblock_desc), 0.0);
-  gtk_box_pack_start (GTK_BOX (hbox), adblock_desc, TRUE, TRUE, 6);
-
-  popover->ad_switch = gtk_switch_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), popover->ad_switch, FALSE, FALSE, 6);
-  g_signal_connect (popover->ad_switch, "state-set", G_CALLBACK (on_ad_switch_state_set), popover);
+  popover->permission_pos = 5;
+  popover->ad_combobox = add_permission_combobox (popover, _("Advertisements"), on_ad_combobox_changed, TRUE);
+  popover->notification_combobox = add_permission_combobox (popover, _("Notifications"), on_notification_combobox_changed, FALSE);
+  popover->save_password_combobox = add_permission_combobox (popover, _("Password saving"), on_save_password_combobox_changed, FALSE);
+  popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, FALSE);
+  popover->access_microphone_combobox = add_permission_combobox (popover, _("Microphone access"), on_access_microphone_combobox_changed, FALSE);
+  popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, FALSE);
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
