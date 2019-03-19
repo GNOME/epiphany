@@ -677,7 +677,7 @@ on_sync_synced_tabs_button_clicked (GtkWidget   *button,
   synced_tabs_dialog = synced_tabs_dialog_new (manager);
   gtk_window_set_transient_for (GTK_WINDOW (synced_tabs_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (synced_tabs_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (synced_tabs_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (synced_tabs_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -885,7 +885,7 @@ on_manage_webapp_additional_urls_button_clicked (GtkWidget   *button,
   urls_dialog = ephy_webapp_additional_urls_dialog_new ();
   gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (urls_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (urls_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -898,7 +898,7 @@ on_manage_cookies_button_clicked (GtkWidget   *button,
 
   gtk_window_set_transient_for (GTK_WINDOW (cookies_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (cookies_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (cookies_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (cookies_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -913,7 +913,7 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
 
   gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (passwords_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (passwords_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -926,7 +926,7 @@ on_search_engine_dialog_button_clicked (GtkWidget   *button,
 
   gtk_window_set_transient_for (search_engine_dialog, GTK_WINDOW (dialog));
   gtk_window_set_modal (search_engine_dialog, TRUE);
-  gtk_window_present (search_engine_dialog);
+  gtk_window_present_with_time (search_engine_dialog, gtk_get_current_event_time ());
 }
 
 static gboolean
@@ -1410,7 +1410,7 @@ language_editor_add_button_clicked_cb (GtkWidget   *button,
       (gpointer *)add_lang_dialog);
   }
 
-  gtk_window_present (GTK_WINDOW (pd->add_lang_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (pd->add_lang_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -1711,7 +1711,7 @@ clear_personal_data_button_clicked_cb (GtkWidget   *button,
                                NULL);
   gtk_window_set_transient_for (GTK_WINDOW (clear_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (clear_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (clear_dialog));
+  gtk_window_present_with_time (GTK_WINDOW (clear_dialog), gtk_get_current_event_time ());
 }
 
 static gboolean

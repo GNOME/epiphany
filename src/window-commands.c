@@ -498,7 +498,7 @@ window_cmd_show_history (GSimpleAction *action,
   if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   GTK_WINDOW (user_data));
-  gtk_window_present (GTK_WINDOW (dialog));
+  gtk_window_present_with_time (GTK_WINDOW (dialog), gtk_get_current_event_time ());
 }
 
 void
@@ -514,7 +514,7 @@ window_cmd_show_preferences (GSimpleAction *action,
     gtk_window_set_transient_for (dialog,
                                   GTK_WINDOW (user_data));
 
-  gtk_window_present (dialog);
+  gtk_window_present_with_time (dialog, gtk_get_current_event_time ());
 }
 
 void
@@ -541,7 +541,7 @@ window_cmd_show_shortcuts (GSimpleAction *action,
   if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (user_data))
     gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (user_data));
 
-  gtk_window_present (GTK_WINDOW (shortcuts_window));
+  gtk_window_present_with_time (GTK_WINDOW (shortcuts_window), gtk_get_current_event_time ());
 }
 
 void
@@ -2373,7 +2373,7 @@ window_cmd_tabs_detach (GSimpleAction *action,
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (new_window), embed, 0, FALSE);
   g_object_unref (embed);
 
-  gtk_window_present (GTK_WINDOW (new_window));
+  gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
 
 void
