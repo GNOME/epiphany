@@ -1000,6 +1000,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
                                          "application-id", id,
                                          "mode", mode,
+                                         "resource-base-path", "/org/gnome/Epiphany",
                                          NULL));
   /* FIXME weak ref */
   g_assert (ephy_shell != NULL);
