@@ -79,7 +79,7 @@ endif
 glib_requirement = '>= 2.56.0'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.23.90'
+webkitgtk_requirement = '>= 2.24.1'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
