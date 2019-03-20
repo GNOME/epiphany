@@ -248,7 +248,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     }
 }
 
-Ephy.formControlsAssociated = function(pageID, forms, serializer, rememberPasswords)
+Ephy.formControlsAssociated = function(pageID, forms, serializer)
 {
     Ephy.formManagers = [];
 
@@ -257,8 +257,7 @@ Ephy.formControlsAssociated = function(pageID, forms, serializer, rememberPasswo
             continue;
         let formManager = new Ephy.FormManager(pageID, forms[i]);
         formManager.handleSensitiveElement(serializer);
-        if (rememberPasswords)
-            formManager.preFillForms();
+        formManager.preFillForms();
         Ephy.formManagers.push(formManager);
     }
 }
@@ -425,6 +424,9 @@ Ephy.FormManager = class FormManager
 
     preFillForms()
     {
+        if (!Ephy.shouldRememberPasswords())
+            return;
+
         let formAuth = this._generateFormAuth(true);
         if (!formAuth) {
             Ephy.log('No pre-fillable/hookable form found');
@@ -448,6 +450,9 @@ Ephy.FormManager = class FormManager
 
     preFill(formAuth)
     {
+        if (!Ephy.shouldRememberPasswords())
+            return;
+
         Ephy.passwordManager.query(
             formAuth.origin,
             formAuth.targetOrigin,
@@ -478,6 +483,9 @@ Ephy.FormManager = class FormManager
 
     handleFormSubmission()
     {
+        if (!Ephy.shouldRememberPasswords())
+            return;
+
         let formAuth = this._generateFormAuth(false);
         if (!formAuth || !formAuth.password)
             return;
