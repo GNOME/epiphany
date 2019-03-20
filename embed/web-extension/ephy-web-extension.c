@@ -640,6 +640,12 @@ js_auto_fill (JSCValue   *js_element,
 }
 
 static gboolean
+js_is_web_application (void)
+{
+  return ephy_profile_dir_is_web_application ();
+}
+
+static gboolean
 js_is_edited (JSCValue *js_element)
 {
   WebKitDOMNode *node = webkit_dom_node_for_js_value (js_element);
@@ -750,7 +756,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 
   js_function = jsc_value_new_function (js_context,
                                         "isWebApplication",
-                                        G_CALLBACK (ephy_profile_dir_is_web_application), NULL, NULL,
+                                        G_CALLBACK (js_is_web_application), NULL, NULL,
                                         G_TYPE_BOOLEAN, 0);
   jsc_value_object_set_property (js_ephy, "isWebApplication", js_function);
   g_clear_object (&js_function);
