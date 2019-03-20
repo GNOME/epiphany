@@ -751,8 +751,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
   js_function = jsc_value_new_function (js_context,
                                         "isWebApplication",
                                         G_CALLBACK (ephy_profile_dir_is_web_application), NULL, NULL,
-                                        G_TYPE_BOOLEAN, 0,
-                                        G_TYPE_NONE);
+                                        G_TYPE_BOOLEAN, 0);
   jsc_value_object_set_property (js_ephy, "isWebApplication", js_function);
   g_clear_object (&js_function);
 
