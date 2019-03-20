@@ -255,7 +255,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   g_autoptr(JSCValue) js_ephy = NULL;
   g_autoptr(JSCValue) js_serializer = NULL;
   g_autoptr(JSCValue) js_result = NULL;
-  gboolean remember_passwords;
   guint i;
 
   frame = webkit_web_page_get_main_frame (web_page);
@@ -272,16 +271,13 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   js_serializer = jsc_value_new_function (js_context,
                                           "sensitiveFormMessageSerializer",
                                           G_CALLBACK (sensitive_form_message_serializer), NULL, NULL,
-                                          G_TYPE_STRING, 2,
-                                          G_TYPE_UINT64, G_TYPE_BOOLEAN);
-  remember_passwords = !extension->is_private_profile &&
-                       g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+                                          G_TYPE_STRING, 1,
+                                          G_TYPE_UINT64);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "formControlsAssociated",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
                                               G_TYPE_PTR_ARRAY, form_controls,
                                               JSC_TYPE_VALUE, js_serializer,
-                                              G_TYPE_BOOLEAN, remember_passwords,
                                               G_TYPE_NONE);
 }
 
@@ -653,6 +649,14 @@ js_is_edited (JSCValue *js_element)
   return webkit_dom_element_html_input_element_is_user_edited (WEBKIT_DOM_ELEMENT (node));
 }
 
+static gboolean
+js_should_remember_passwords (EphyWebExtension *extension)
+{
+  g_assert (EPHY_IS_WEB_EXTENSION (extension));
+
+  return !extension->is_private_profile && g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+}
+
 static void
 js_exception_handler (JSCContext   *context,
                       JSCException *exception)
@@ -767,6 +771,14 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_BOOLEAN, 1,
                                         JSC_TYPE_VALUE);
   jsc_value_object_set_property (js_ephy, "isEdited", js_function);
+  g_clear_object (&js_function);
+
+  js_function = jsc_value_new_function (js_context,
+                                        "shouldRememberPasswords",
+                                        G_CALLBACK (js_should_remember_passwords),
+                                        g_object_ref (extension), g_object_unref,
+                                        G_TYPE_BOOLEAN, 0);
+  jsc_value_object_set_property (js_ephy, "shouldRememberPasswords", js_function);
   g_clear_object (&js_function);
 }
 
