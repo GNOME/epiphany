@@ -378,6 +378,17 @@ ephy_gsb_storage_open_db (EphyGSBStorage *self)
   return TRUE;
 }
 
+static void
+ephy_gsb_storage_clear_db (EphyGSBStorage *self)
+{
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (EPHY_IS_SQLITE_CONNECTION (self->db));
+
+  ephy_sqlite_connection_close (self->db);
+  ephy_sqlite_connection_delete_database (self->db);
+  g_clear_object (&self->db);
+}
+
 static gboolean
 ephy_gsb_storage_init_db (EphyGSBStorage *self)
 {
@@ -394,13 +405,19 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
             ephy_gsb_storage_init_hash_prefix_table (self) &&
             ephy_gsb_storage_init_hash_full_table (self);
 
-  if (!success) {
-    ephy_sqlite_connection_close (self->db);
-    ephy_sqlite_connection_delete_database (self->db);
-    g_clear_object (&self->db);
-  }
+  if (!success)
+    ephy_gsb_storage_clear_db (self);
 
   return success;
+}
+
+static gboolean
+ephy_gsb_storage_recreate_db (EphyGSBStorage *self)
+{
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+
+  ephy_gsb_storage_clear_db (self);
+  return ephy_gsb_storage_init_db (self);
 }
 
 static inline gboolean
@@ -481,10 +498,7 @@ ephy_gsb_storage_constructed (GObject *object)
     success = ephy_gsb_storage_open_db (self);
     if (success && !ephy_gsb_storage_check_schema_version (self)) {
       LOG ("GSB database schema incompatibility, recreating database...");
-      ephy_sqlite_connection_close (self->db);
-      ephy_sqlite_connection_delete_database (self->db);
-      g_clear_object (&self->db);
-      success = ephy_gsb_storage_init_db (self);
+      success = ephy_gsb_storage_recreate_db (self);
     }
   }
 
@@ -585,6 +599,7 @@ ephy_gsb_storage_get_metadata (EphyGSBStorage *self,
     g_warning ("Failed to execute select metadata statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
+    ephy_gsb_storage_recreate_db (self);
     return default_value;
   }
 
@@ -645,6 +660,7 @@ ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
   if (error) {
     g_warning ("Failed to execute update metadata statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 }
 
@@ -693,6 +709,7 @@ ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
   if (error) {
     g_warning ("Failed to execute select threat lists statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -753,6 +770,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   if (error) {
     g_warning ("Failed to execute select hash prefix statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
     goto out;
   }
 
@@ -821,6 +839,7 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   if (error) {
     g_warning ("Failed to execute update threat statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -863,6 +882,7 @@ ephy_gsb_storage_clear_hash_prefixes (EphyGSBStorage    *self,
   if (error) {
     g_warning ("Failed to execute clear hash prefix statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -915,6 +935,7 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
   if (error) {
     g_warning ("Failed to execute select prefix value statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -997,6 +1018,7 @@ ephy_gsb_storage_delete_hash_prefixes_batch (EphyGSBStorage      *self,
   if (error) {
     g_warning ("Failed to execute delete hash prefix statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
 out:
@@ -1178,6 +1200,7 @@ ephy_gsb_storage_insert_hash_prefixes_batch (EphyGSBStorage      *self,
   if (error) {
     g_warning ("Failed to execute insert hash prefix statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
 out:
@@ -1355,6 +1378,7 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
     g_error_free (error);
     g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_prefix_lookup_free);
     retval = NULL;
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -1439,6 +1463,7 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
     g_error_free (error);
     g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
     retval = NULL;
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -1496,6 +1521,7 @@ ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
     g_warning ("Failed to execute insert full hash statement: %s", error->message);
+    ephy_gsb_storage_recreate_db (self);
     goto out;
   }
 
@@ -1523,8 +1549,10 @@ ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
     goto out;
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute insert full hash statement: %s", error->message);
+    ephy_gsb_storage_recreate_db (self);
+  }
 
 out:
   if (statement)
@@ -1573,6 +1601,7 @@ ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
   if (error) {
     g_warning ("Failed to execute delete full hash statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
@@ -1631,6 +1660,7 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
   if (error) {
     g_warning ("Failed to execute update hash prefix statement: %s", error->message);
     g_error_free (error);
+    ephy_gsb_storage_recreate_db (self);
   }
 
   g_object_unref (statement);
