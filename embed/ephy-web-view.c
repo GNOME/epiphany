@@ -3585,14 +3585,15 @@ ephy_web_view_print (EphyWebView *view)
                     G_CALLBACK (print_operation_failed_cb),
                     view);
   webkit_print_operation_set_page_setup (operation, ephy_embed_shell_get_page_setup (shell));
-  settings = gtk_print_settings_new ();
+  settings = ephy_embed_shell_get_print_settings (shell);
   gtk_print_settings_set (settings,
                           GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
                           webkit_web_view_get_title (WEBKIT_WEB_VIEW (view)));
   webkit_print_operation_set_print_settings (operation, settings);
-  webkit_print_operation_run_dialog (operation, NULL);
+  if (webkit_print_operation_run_dialog (operation, NULL) == WEBKIT_PRINT_OPERATION_RESPONSE_PRINT)
+    ephy_embed_shell_set_print_settings (shell, webkit_print_operation_get_print_settings (operation));
+
   g_object_unref (operation);
-  g_object_unref (settings);
 }
 
 static void
