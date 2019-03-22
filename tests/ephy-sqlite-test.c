@@ -163,24 +163,24 @@ test_bind_data (void)
   ephy_sqlite_connection_execute (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", &error);
 
   statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (?, ?)", &error);
-  g_assert (statement);
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
 
-  g_assert (ephy_sqlite_statement_bind_int (statement, 0, 3, &error));
-  g_assert (!error);
-  g_assert (ephy_sqlite_statement_bind_string (statement, 1, "foo", &error));
-  g_assert (!error);
+  g_assert_true (ephy_sqlite_statement_bind_int (statement, 0, 3, &error));
+  g_assert_no_error (error);
+  g_assert_true (ephy_sqlite_statement_bind_string (statement, 1, "foo", &error));
+  g_assert_no_error (error);
 
   /* Will return false since there are no resulting rows. */
-  g_assert (!ephy_sqlite_statement_step (statement, &error));
-  g_assert (!error);
+  g_assert_false (ephy_sqlite_statement_step (statement, &error));
+  g_assert_no_error (error);
   g_object_unref (statement);
 
   statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
-  g_assert (statement);
-  g_assert (!error);
-  g_assert (ephy_sqlite_statement_step (statement, &error));
-  g_assert (!error);
+  g_assert_nonnull (statement);
+  g_assert_no_error (error);
+  g_assert_true (ephy_sqlite_statement_step (statement, &error));
+  g_assert_no_error (error);
   g_assert_cmpint (ephy_sqlite_statement_get_column_count (statement), ==, 2);
   g_assert_cmpint (ephy_sqlite_statement_get_column_as_int (statement, 0), ==, 3);
   g_assert_cmpstr (ephy_sqlite_statement_get_column_as_string (statement, 1), ==, "foo");
