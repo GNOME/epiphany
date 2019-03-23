@@ -59,6 +59,7 @@
 #include <gio/gio.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 #include <libsoup/soup.h>
@@ -2673,4 +2674,84 @@ window_cmd_new_tab_from_clipboard (GSimpleAction *action,
   gtk_clipboard_request_text (clipboard,
                               (GtkClipboardTextReceivedFunc)clipboard_text_received_cb,
                               g_object_ref (ephy_window));
+}
+
+static void
+save_snapshot (cairo_surface_t *surface)
+{
+  g_autoptr(GdkPixbuf) pixbuf = NULL;
+  g_autofree char *snapshot_path = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *picture_dir;
+  int width;
+  int height;
+  int tmp_fd;
+  gboolean ret;
+
+  /* Create a pixbuf */
+  width = cairo_image_surface_get_width (surface);
+  height = cairo_image_surface_get_height (surface);
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+  if (!pixbuf)
+    return;
+
+  picture_dir = g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
+  if (!picture_dir)
+    return;
+
+  snapshot_path = g_build_filename (picture_dir, "Snapshot-XXXXXX.png", NULL);
+  tmp_fd = g_mkstemp (snapshot_path);
+  if (tmp_fd == -1)
+    return;
+
+  g_close (tmp_fd, &error);
+
+  ret = gdk_pixbuf_save (pixbuf, snapshot_path, "png", &error, NULL);
+  if (!ret) {
+    g_warning ("Failed to save image to %s: %s", snapshot_path, error->message);
+    return;
+  }
+}
+
+static void
+take_snapshot_full_cb (GObject      *source,
+                       GAsyncResult *res,
+                       gpointer      user_data)
+{
+  WebKitWebView *view = user_data;
+  GError *error = NULL;
+  cairo_surface_t *surface;
+
+  surface = webkit_web_view_get_snapshot_finish (view, res, &error);
+  if (error) {
+    g_warning ("Failed to take snapshot: %s", error->message);
+    return;
+  }
+
+  save_snapshot (surface);
+  cairo_surface_destroy (surface);
+
+  g_object_unref (view);
+}
+
+void
+window_cmd_tabs_take_snapshot_full (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  WebKitWebView *view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  webkit_web_view_get_snapshot (view,
+                                WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
+                                WEBKIT_SNAPSHOT_OPTIONS_NONE,
+                                NULL,
+                                take_snapshot_full_cb,
+                                g_object_ref (view));
 }
