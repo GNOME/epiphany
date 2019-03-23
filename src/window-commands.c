@@ -1475,6 +1475,76 @@ get_suggested_filename (EphyEmbed *embed)
   return suggested_filename;
 }
 
+
+static void
+save_snapshot (cairo_surface_t *surface,
+               const char      *file)
+{
+  g_autoptr(GdkPixbuf) pixbuf = NULL;
+  g_autofree char *snapshot_path = NULL;
+  g_autoptr(GError) error = NULL;
+  int width;
+  int height;
+  gboolean ret;
+
+  /* Create a pixbuf */
+  width = cairo_image_surface_get_width (surface);
+  height = cairo_image_surface_get_height (surface);
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+  if (!pixbuf)
+    return;
+
+  ret = gdk_pixbuf_save (pixbuf, file, "png", &error, NULL);
+  if (!ret) {
+    g_warning ("Failed to save image to %s: %s", snapshot_path, error->message);
+    return;
+  }
+}
+
+static void
+take_snapshot_full_cb (GObject      *source,
+                       GAsyncResult *res,
+                       gpointer      user_data)
+{
+  WebKitWebView *view = WEBKIT_WEB_VIEW (source);
+  GError *error = NULL;
+  cairo_surface_t *surface;
+  gchar *file = user_data;
+
+  if (!file)
+    return;
+
+  surface = webkit_web_view_get_snapshot_finish (view, res, &error);
+  if (error) {
+    g_warning ("Failed to take snapshot: %s", error->message);
+    return;
+  }
+
+  save_snapshot (surface, file);
+  cairo_surface_destroy (surface);
+
+  g_free (file);
+  g_object_unref (view);
+}
+
+void
+take_snapshot (EphyEmbed *embed,
+               char      *file)
+{
+  WebKitWebView *view;
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  g_object_ref (view);
+  webkit_web_view_get_snapshot (view,
+                                WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
+                                WEBKIT_SNAPSHOT_OPTIONS_NONE,
+                                NULL,
+                                take_snapshot_full_cb,
+                                g_filename_from_uri (file, NULL, NULL));
+}
+
+
 static void
 save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
 {
@@ -1486,8 +1556,12 @@ save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
       converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
       if (converted != NULL) {
-        EphyWebView *web_view = ephy_embed_get_web_view (embed);
-        ephy_web_view_save (web_view, converted);
+        if (g_str_has_suffix (converted, ".png")) {
+          take_snapshot (embed, converted);
+        } else {
+          EphyWebView *web_view = ephy_embed_get_web_view (embed);
+          ephy_web_view_save (web_view, converted);
+        }
       }
 
       g_free (converted);
@@ -1530,6 +1604,11 @@ window_cmd_save_as (GSimpleAction *action,
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("MHTML"));
   gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.mhtml");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("PNG"));
+  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
   suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
