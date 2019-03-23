@@ -1508,6 +1508,7 @@ window_cmd_save_as (GSimpleAction *action,
   EphyWindow *window = user_data;
   EphyEmbed *embed;
   GtkFileChooser *dialog;
+  GtkFileFilter *filter;
   char *suggested_filename;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
@@ -1520,6 +1521,16 @@ window_cmd_save_as (GSimpleAction *action,
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("HTML"));
+  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.html");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("MHTML"));
+  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.mhtml");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
   suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
 
