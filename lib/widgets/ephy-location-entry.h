@@ -45,8 +45,6 @@ gboolean        ephy_location_entry_get_can_undo               (EphyLocationEntr
 
 gboolean        ephy_location_entry_get_can_redo               (EphyLocationEntry *entry);
 
-GSList         *ephy_location_entry_get_search_terms           (EphyLocationEntry *entry);
-
 gboolean        ephy_location_entry_reset                      (EphyLocationEntry *entry);
 
 void            ephy_location_entry_undo_reset                 (EphyLocationEntry *entry);

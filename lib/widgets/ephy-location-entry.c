@@ -60,9 +60,6 @@ struct _EphyLocationEntry {
   GtkWidget *bookmark_event_box;
   GtkWidget *reader_mode;
   GtkWidget *reader_mode_event_box;
-  GtkTreeModel *model;
-
-  GSList *search_terms;
 
   GBinding *paste_binding;
 
@@ -71,16 +68,7 @@ struct _EphyLocationEntry {
 
   gboolean reader_mode_active;
 
-  char *before_completion;
   char *saved_text;
-
-  guint text_col;
-  guint action_col;
-  guint keywords_col;
-  guint relevance_col;
-  guint url_col;
-  guint extra_col;
-  guint favicon_col;
 
   guint hash;
 
@@ -94,8 +82,6 @@ struct _EphyLocationEntry {
   guint can_redo : 1;
   guint block_update : 1;
   guint original_address : 1;
-  guint apply_colors : 1;
-  guint needs_reset : 1;
 
   EphySecurityLevel security_level;
 };
@@ -1200,22 +1186,6 @@ GtkPopover *
 ephy_location_entry_get_add_bookmark_popover (EphyLocationEntry *entry)
 {
   return entry->add_bookmark_popover;
-}
-
-/**
- * ephy_location_entry_get_search_terms:
- * @entry: an #EphyLocationEntry widget
- *
- * Return the internal #GSList containing the search terms as #GRegex
- * instances, formed in @entry on user changes.
- *
- * Return value: the internal #GSList
- *
- **/
-GSList *
-ephy_location_entry_get_search_terms (EphyLocationEntry *entry)
-{
-  return entry->search_terms;
 }
 
 GtkWidget *
