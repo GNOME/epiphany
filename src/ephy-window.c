@@ -128,7 +128,8 @@ const struct {
   { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
   { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
   { "tab.duplicate", { NULL } },
-  { "tab.close", { "<Primary>W", NULL } }
+  { "tab.close", { "<Primary>W", NULL } },
+  { "tab.take_snapshot_full", { "<Primary>F9", NULL }},
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Back", NULL } },
   { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Forward", NULL } }
@@ -851,6 +852,7 @@ static const GActionEntry tab_entries [] = {
   { "reload", window_cmd_tabs_reload },
   { "reopen", window_cmd_tabs_reopen_closed_tab },
   { "reload-all", window_cmd_tabs_reload_all_tabs },
+  { "take_snapshot_full", window_cmd_tabs_take_snapshot_full },
 };
 
 static const GActionEntry toolbar_entries [] = {
