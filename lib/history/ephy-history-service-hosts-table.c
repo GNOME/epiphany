@@ -355,14 +355,14 @@ get_hostname_and_locations (const gchar *url, gchar **hostname)
     *hostname = ephy_string_get_host_name (url);
   }
   /* Build an host name */
-  if (scheme == NULL || *hostname == NULL) {
+  if (scheme != NULL && strcmp (scheme, "file") == 0) {
+    *hostname = g_strdup (_("Local files"));
+    host_locations = g_list_append (host_locations,
+                                    g_strdup (url));
+  } else if (scheme == NULL || *hostname == NULL) {
     *hostname = g_strdup (_("Others"));
     host_locations = g_list_append (host_locations,
                                     g_strdup ("about:blank"));
-  }  else if (strcmp (scheme, "file") == 0) {
-    *hostname = g_strdup (_("Local files"));
-    host_locations = g_list_append (host_locations,
-                                    g_strdup ("file:///"));
   } else {
     char *location;
     char *tmp;
