@@ -33,6 +33,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-tab-label.h"
 #include "ephy-window.h"
 
 #include <glib/gi18n.h>
@@ -560,7 +561,6 @@ get_nth_tab_label_text (GtkNotebook *notebook,
 {
   GtkWidget *page;
   GtkWidget *tab_label;
-  GtkWidget *label;
 
   g_assert (n >= 0);
 
@@ -568,12 +568,9 @@ get_nth_tab_label_text (GtkNotebook *notebook,
   g_assert (page != NULL);
 
   tab_label = gtk_notebook_get_tab_label (notebook, page);
-  g_assert (GTK_IS_BOX (tab_label));
+  g_assert (EPHY_IS_TAB_LABEL (tab_label));
 
-  label = g_object_get_data (G_OBJECT (tab_label), "label");
-  g_assert (GTK_IS_LABEL (label));
-
-  return gtk_label_get_text (GTK_LABEL (label));
+  return ephy_tab_label_get_text (tab_label);
 }
 
 static char *
@@ -635,65 +632,11 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
 }
 
 static void
-sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
-{
-  GtkWidget *spinner, *icon;
-  EphyEmbed *embed;
-
-  spinner = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "spinner"));
-  icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
-  g_assert (spinner != NULL && icon != NULL);
-
-  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-  if (ephy_web_view_is_loading (view) && !ephy_embed_has_load_pending (embed)) {
-    gtk_widget_hide (icon);
-    gtk_widget_show (spinner);
-    gtk_spinner_start (GTK_SPINNER (spinner));
-  } else {
-    gtk_spinner_stop (GTK_SPINNER (spinner));
-    gtk_widget_hide (spinner);
-    gtk_widget_show (icon);
-  }
-}
-
-static void
-load_changed_cb (EphyWebView *view, WebKitLoadEvent load_event, GtkWidget *proxy)
-{
-  sync_load_status (view, NULL, proxy);
-}
-
-static void
-sync_icon (EphyWebView *view,
-           GParamSpec  *pspec,
-           GtkImage    *icon)
-{
-  gtk_image_set_from_pixbuf (icon, ephy_web_view_get_icon (view));
-}
-
-static void
-sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
-{
-  const char *title;
-
-  title = ephy_embed_get_title (embed);
-  gtk_label_set_text (GTK_LABEL (label), title);
-  gtk_widget_set_tooltip_text (label, title);
-}
-
-static void
 rebuild_tab_menu_cb (EphyEmbed    *embed,
                      GParamSpec   *pspec,
                      EphyNotebook *notebook)
 {
   ephy_notebook_rebuild_tab_menu (notebook);
-}
-
-static void
-sync_is_playing_audio (WebKitWebView *view,
-                       GParamSpec    *pspec,
-                       GtkWidget     *speaker_icon)
-{
-  gtk_widget_set_visible (speaker_icon, webkit_web_view_is_playing_audio (view));
 }
 
 static void
@@ -705,133 +648,35 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
   g_signal_emit (notebook, signals[TAB_CLOSE_REQUEST], 0, tab);
 }
 
-static void
-tab_label_style_set_cb (GtkWidget *hbox,
-                        GtkStyle  *previous_style,
-                        gpointer   user_data)
-{
-  PangoFontMetrics *metrics;
-  PangoContext *context;
-  GtkStyleContext *style;
-  PangoFontDescription *font_desc;
-  GtkWidget *button;
-  int char_width, h, w;
-
-  context = gtk_widget_get_pango_context (hbox);
-  style = gtk_widget_get_style_context (hbox);
-  gtk_style_context_get (style, gtk_style_context_get_state (style),
-                         "font", &font_desc, NULL);
-  metrics = pango_context_get_metrics (context,
-                                       font_desc,
-                                       pango_context_get_language (context));
-  pango_font_description_free (font_desc);
-  char_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  pango_font_metrics_unref (metrics);
-
-  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
-
-  gtk_widget_set_size_request (hbox, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width) + 2 * w, -1);
-
-  button = g_object_get_data (G_OBJECT (hbox), "close-button");
-  gtk_widget_set_size_request (button, w + 2, h + 2);
-}
-
 static GtkWidget *
 build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
 {
-  GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon, *speaker_icon;
-  GtkWidget *box;
+  GtkWidget *tab_label;
   EphyWebView *view;
-  GtkPositionType type = ephy_settings_get_tabs_bar_position ();
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_widget_show (box);
-
-  /* set hbox spacing and label padding (see below) so that there's an
-   * equal amount of space around the label */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_show (hbox);
-  box_set_halign (hbox, type);
-  gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
-
-  /* setup load feedback */
-  spinner = gtk_spinner_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, FALSE, 0);
-
-  /* setup site icon, empty by default */
-  icon = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
-  /* don't show the icon */
-
-  /* setup label */
-  label = gtk_label_new (NULL);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
-
-  /* setup speaker icon */
-  speaker_icon = gtk_image_new_from_icon_name ("audio-volume-high-symbolic",
-                                               GTK_ICON_SIZE_MENU);
-  gtk_box_pack_start (GTK_BOX (hbox), speaker_icon, FALSE, FALSE, 0);
-
-  /* setup close button */
-  close_button = gtk_button_new ();
-  gtk_button_set_relief (GTK_BUTTON (close_button),
-                         GTK_RELIEF_NONE);
-  /* don't allow focus on the close button */
-  gtk_widget_set_focus_on_click (close_button, FALSE);
-
-  gtk_widget_set_name (close_button, "ephy-tab-close-button");
-
-  image = gtk_image_new_from_icon_name ("window-close-symbolic",
-                                        GTK_ICON_SIZE_MENU);
-  gtk_widget_set_tooltip_text (close_button, _("Close tab"));
-  g_signal_connect (close_button, "clicked",
-                    G_CALLBACK (close_button_clicked_cb), embed);
-
-  gtk_container_add (GTK_CONTAINER (close_button), image);
-  gtk_widget_show (image);
-
-  gtk_box_pack_start (GTK_BOX (box), close_button, FALSE, FALSE, 0);
-  gtk_widget_show (close_button);
-
-  /* Set minimal size */
-  g_signal_connect (box, "style-set",
-                    G_CALLBACK (tab_label_style_set_cb), NULL);
+  tab_label = ephy_tab_label_new ();
+  g_signal_connect (tab_label, "close-clicked", G_CALLBACK (close_button_clicked_cb), embed);
 
   /* Set up drag-and-drop target */
-  g_signal_connect (box, "drag-data-received",
+  g_signal_connect (tab_label, "drag-data-received",
                     G_CALLBACK (notebook_drag_data_received_cb), embed);
-  gtk_drag_dest_set (box, GTK_DEST_DEFAULT_ALL,
+  gtk_drag_dest_set (tab_label, GTK_DEST_DEFAULT_ALL,
                      url_drag_types, G_N_ELEMENTS (url_drag_types),
                      GDK_ACTION_MOVE | GDK_ACTION_COPY);
-  gtk_drag_dest_add_text_targets (box);
-
-  g_object_set_data (G_OBJECT (box), "label", label);
-  g_object_set_data (G_OBJECT (box), "spinner", spinner);
-  g_object_set_data (G_OBJECT (box), "icon", icon);
-  g_object_set_data (G_OBJECT (box), "close-button", close_button);
-  g_object_set_data (G_OBJECT (box), "speaker-icon", speaker_icon);
+  gtk_drag_dest_add_text_targets (tab_label);
 
   /* Hook the label up to the tab properties */
   view = ephy_embed_get_web_view (embed);
-  sync_icon (view, NULL, GTK_IMAGE (icon));
-  sync_label (embed, NULL, label);
-  sync_load_status (view, NULL, box);
-  sync_is_playing_audio (WEBKIT_WEB_VIEW (view), NULL, speaker_icon);
 
-  g_signal_connect_object (view, "notify::icon",
-                           G_CALLBACK (sync_icon), icon, 0);
-  g_signal_connect_object (embed, "notify::title",
-                           G_CALLBACK (sync_label), label, 0);
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (rebuild_tab_menu_cb), nb, 0);
-  g_signal_connect_object (view, "load-changed",
-                           G_CALLBACK (load_changed_cb), box, 0);
-  g_signal_connect_object (view, "notify::is-playing-audio",
-                           G_CALLBACK (sync_is_playing_audio), speaker_icon, 0);
-  return box;
+
+  g_object_bind_property (view, "title", tab_label, "label-text", G_BINDING_DEFAULT);
+  g_object_bind_property (view, "icon", tab_label, "icon-buf", G_BINDING_DEFAULT);
+  g_object_bind_property (view, "is-loading", tab_label, "spinning", G_BINDING_DEFAULT);
+  g_object_bind_property (view, "is-playing-audio", tab_label, "audio", G_BINDING_DEFAULT);
+
+  return tab_label;
 }
 
 void
@@ -945,9 +790,7 @@ ephy_notebook_remove (GtkContainer *container,
 {
   GtkNotebook *gnotebook = GTK_NOTEBOOK (container);
   EphyNotebook *notebook = EPHY_NOTEBOOK (container);
-  GtkWidget *tab_label, *tab_label_label, *tab_label_icon, *tab_label_speaker_icon;
   int position, curr;
-  EphyWebView *view;
 
   if (!EPHY_IS_EMBED (tab_widget))
     return;
@@ -961,25 +804,6 @@ ephy_notebook_remove (GtkContainer *container,
   if (position == curr) {
     smart_tab_switching_on_closure (notebook, tab_widget);
   }
-
-  /* Prepare tab label for destruction */
-  tab_label = gtk_notebook_get_tab_label (gnotebook, tab_widget);
-  tab_label_icon = g_object_get_data (G_OBJECT (tab_label), "icon");
-  tab_label_label = g_object_get_data (G_OBJECT (tab_label), "label");
-  tab_label_speaker_icon = g_object_get_data (G_OBJECT (tab_label), "speaker-icon");
-
-  view = ephy_embed_get_web_view (EPHY_EMBED (tab_widget));
-
-  g_signal_handlers_disconnect_by_func
-    (view, G_CALLBACK (sync_icon), tab_label_icon);
-  g_signal_handlers_disconnect_by_func
-    (tab_widget, G_CALLBACK (sync_label), tab_label_label);
-  g_signal_handlers_disconnect_by_func
-    (tab_widget, G_CALLBACK (sync_label), notebook);
-  g_signal_handlers_disconnect_by_func
-    (view, G_CALLBACK (sync_load_status), tab_label);
-  g_signal_handlers_disconnect_by_func
-    (view, G_CALLBACK (sync_is_playing_audio), tab_label_speaker_icon);
 
   GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 

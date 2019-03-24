@@ -40,6 +40,7 @@ libephymain_sources = [
   'ephy-session.c',
   'ephy-shell.c',
   'ephy-suggestion-model.c',
+  'ephy-tab-label.c',
   'ephy-window.c',
   'passwords-dialog.c',
   'popup-commands.c',
