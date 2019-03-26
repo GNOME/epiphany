@@ -2819,13 +2819,13 @@ ephy_web_view_init (EphyWebView *web_view)
   web_view->history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   web_view->history_service_cancellable = g_cancellable_new ();
 
-  g_signal_connect (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
-                    G_CALLBACK (reader_setting_changed_cb),
-                    web_view);
+  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, 0);
 
-  g_signal_connect (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
-                    G_CALLBACK (reader_setting_changed_cb),
-                    web_view);
+  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, 0);
 
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
