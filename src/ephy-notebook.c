@@ -388,9 +388,10 @@ expand_tabs_changed_cb (GSettings    *settings,
   tabs = gtk_container_get_children (GTK_CONTAINER (nb));
 
   for (l = tabs; l != NULL; l = l->next) {
+    gboolean pinned = ephy_notebook_tab_is_pinned (nb, l->data);
     gtk_container_child_set (GTK_CONTAINER (nb),
                              l->data,
-                             "tab-expand", expand,
+                             "tab-expand", pinned ? FALSE : expand,
                              NULL);
   }
 
@@ -465,6 +466,36 @@ show_tabs_changed_cb (GSettings    *settings,
   update_tabs_visibility (nb, FALSE);
 }
 
+static guint
+get_last_pinned_tab_pos (GtkNotebook *notebook)
+{
+  gint pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+  gint i;
+  gint found = -1;
+
+  for (i = 0; i < pages; i++) {
+    GtkWidget *child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (child)))
+      found = i;
+  }
+
+  return found;
+}
+
+static void
+page_reordered_cb (GtkNotebook *notebook,
+                   GtkWidget   *child,
+                   guint        page_num,
+                   gpointer     user_data)
+{
+  guint last_pinned_tab_pos = get_last_pinned_tab_pos (notebook);
+
+  /* Ensure that pinned tabs will always stay at the beginning of tab bar */
+  if (page_num <= last_pinned_tab_pos)
+    gtk_notebook_reorder_child (notebook, child, last_pinned_tab_pos);
+}
+
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
@@ -484,6 +515,8 @@ ephy_notebook_init (EphyNotebook *notebook)
   g_signal_connect_after (notebook, "switch-page",
                           G_CALLBACK (ephy_notebook_switch_page_cb),
                           NULL);
+  g_signal_connect (notebook, "page-reordered",
+                    (GCallback)page_reordered_cb, NULL);
 
   /* Set up drag-and-drop target */
   g_signal_connect (notebook, "drag-data-received",
@@ -921,4 +954,57 @@ ephy_notebook_set_adaptive_mode (EphyNotebook     *notebook,
 
   notebook->adaptive_mode = adaptive_mode;
   update_tabs_visibility (notebook, FALSE);
+}
+
+void
+ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
+                              EphyEmbed    *embed,
+                              gboolean      is_pinned)
+{
+  gint num_pages;
+
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < num_pages; i++) {
+    GtkWidget *cur = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (cur == GTK_WIDGET (embed)) {
+      GtkWidget *tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), cur);
+      gboolean expanded;
+
+      if (is_pinned) {
+        gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), cur, 0);
+        expanded = FALSE;
+      } else {
+        expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
+      }
+
+      gtk_container_child_set (GTK_CONTAINER (notebook), GTK_WIDGET (embed), "tab-expand", expanded, NULL);
+
+      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), cur, !is_pinned);
+      ephy_tab_label_set_pin (tab_label, is_pinned);
+      break;
+    }
+  }
+}
+
+gboolean
+ephy_notebook_tab_is_pinned (EphyNotebook *notebook,
+                             EphyEmbed    *embed)
+{
+  gint num_pages;
+
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < num_pages; i++) {
+    GtkWidget *cur = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (cur == GTK_WIDGET (embed)) {
+      GtkWidget *tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), cur);
+
+      return ephy_tab_label_get_pin (tab_label);
+    }
+  }
+
+  return FALSE;
 }
