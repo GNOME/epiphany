@@ -33,6 +33,8 @@ struct _EphyTabLabel {
   GtkWidget *label;
   GtkWidget *close_button;
   GtkWidget *audio_button;
+
+  gboolean pinned;
 };
 
 enum {
@@ -144,6 +146,11 @@ style_updated_cb (GtkWidget *widget,
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
   int char_width, h, w;
 
+  if (self->pinned) {
+    gtk_widget_set_size_request (widget, -1, -1);
+    return;
+  }
+
   context = gtk_widget_get_pango_context (widget);
   style = gtk_widget_get_style_context (widget);
   gtk_style_context_get (style, gtk_style_context_get_state (style), "font", &font_desc, NULL);
@@ -229,4 +236,31 @@ ephy_tab_label_get_text (GtkWidget *widget)
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
 
   return gtk_label_get_text (GTK_LABEL (self->label));
+}
+
+static void
+update_label (EphyTabLabel *self)
+{
+  gtk_widget_set_visible (self->close_button, !self->pinned);
+  gtk_widget_set_visible (self->label, !self->pinned);
+  gtk_widget_set_halign (GTK_WIDGET (self), self->pinned ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
+  g_signal_emit_by_name (self, "style-updated", G_TYPE_NONE);
+}
+
+void
+ephy_tab_label_set_pin (GtkWidget *widget,
+                        gboolean   pinned)
+{
+  EphyTabLabel *self = EPHY_TAB_LABEL (widget);
+
+  self->pinned = pinned;
+  update_label (self);
+}
+
+gboolean
+ephy_tab_label_get_pin (GtkWidget *widget)
+{
+  EphyTabLabel *self = EPHY_TAB_LABEL (widget);
+
+  return self->pinned;
 }

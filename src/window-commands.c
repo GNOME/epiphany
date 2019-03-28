@@ -2474,6 +2474,7 @@ window_cmd_tabs_close (GSimpleAction *action,
   EphyWindow *window = user_data;
   GtkWidget *notebook;
   EphyEmbed *embed;
+  gboolean pinned;
 
   notebook = ephy_window_get_notebook (window);
 
@@ -2486,7 +2487,10 @@ window_cmd_tabs_close (GSimpleAction *action,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
-  g_signal_emit_by_name (notebook, "tab-close-request", embed);
+  pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed);
+
+  if (!pinned)
+    g_signal_emit_by_name (notebook, "tab-close-request", embed);
 }
 
 void
@@ -2752,4 +2756,38 @@ window_cmd_new_tab_from_clipboard (GSimpleAction *action,
   gtk_clipboard_request_text (clipboard,
                               (GtkClipboardTextReceivedFunc)clipboard_text_received_cb,
                               g_object_ref (ephy_window));
+}
+
+void
+window_cmd_tabs_pin (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyNotebook *notebook;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
+
+  ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), TRUE);
+}
+
+void
+window_cmd_tabs_unpin (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyNotebook *notebook;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
+
+  ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), FALSE);
 }

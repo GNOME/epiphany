@@ -128,7 +128,8 @@ const struct {
   { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
   { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
   { "tab.duplicate", { NULL } },
-  { "tab.close", { "<Primary>W", NULL } }
+  { "tab.close", { "<Primary>W", NULL } },
+  { "tab.pin", { NULL } }
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Back", NULL } },
   { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Forward", NULL } }
@@ -853,6 +854,8 @@ static const GActionEntry tab_entries [] = {
   { "reload", window_cmd_tabs_reload },
   { "reopen", window_cmd_tabs_reopen_closed_tab },
   { "reload-all", window_cmd_tabs_reload_all_tabs },
+  { "pin", window_cmd_tabs_pin },
+  { "unpin", window_cmd_tabs_unpin },
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -2518,6 +2521,7 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
   if (event != NULL) {
     int n_pages;
     int page_num;
+    gboolean pinned;
 
     tab = GTK_WIDGET (window->active_embed);
     n_pages = gtk_notebook_get_n_pages (notebook);
@@ -2539,6 +2543,19 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "reload-all");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
+
+    pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (tab));
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "pin");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pinned);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "unpin");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), pinned);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "close-tab");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pinned);
 
     gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
   } else {

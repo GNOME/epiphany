@@ -51,4 +51,9 @@ GMenu          *ephy_notebook_get_pages_menu    (EphyNotebook *notebook);
 void            ephy_notebook_set_adaptive_mode (EphyNotebook     *notebook,
                                                  EphyAdaptiveMode  adaptive_mode);
 
+void           ephy_notebook_tab_set_pinned    (EphyNotebook *notebook,
+                                                GtkWidget    *embed,
+                                                gboolean      is_pinned);
+gboolean       ephy_notebook_tab_is_pinned     (EphyNotebook *notebook,
+                                                EphyEmbed    *embed);
 G_END_DECLS

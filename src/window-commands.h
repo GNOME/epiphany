@@ -221,5 +221,11 @@ void window_cmd_homepage_new_tab                (GSimpleAction *action,
 void window_cmd_new_tab_from_clipboard          (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_tabs_pin                        (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
+void window_cmd_tabs_unpin                      (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS

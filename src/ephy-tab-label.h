@@ -32,5 +32,8 @@ G_DECLARE_FINAL_TYPE (EphyTabLabel, ephy_tab_label, EPHY, TAB_LABEL, GtkBox);
 
 GtkWidget   *ephy_tab_label_new      (void);
 const gchar *ephy_tab_label_get_text (GtkWidget *self);
+void         ephy_tab_label_set_pin  (GtkWidget *self,
+                                      gboolean pin);
+gboolean     ephy_tab_label_get_pin  (GtkWidget *self);
 
 G_END_DECLS
