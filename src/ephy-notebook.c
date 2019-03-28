@@ -922,3 +922,49 @@ ephy_notebook_set_adaptive_mode (EphyNotebook     *notebook,
   notebook->adaptive_mode = adaptive_mode;
   update_tabs_visibility (notebook, FALSE);
 }
+
+void
+ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
+                              EphyEmbed    *embed,
+                              gboolean      is_pinned)
+{
+  gint num_pages;
+
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < num_pages; i++) {
+    GtkWidget *cur = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (cur == GTK_WIDGET (embed)) {
+      GtkWidget *tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), cur);
+
+      if (is_pinned)
+        gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), cur, 0);
+
+      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), cur, !is_pinned);
+      ephy_tab_label_set_pin (tab_label, is_pinned);
+      break;
+    }
+  }
+}
+
+gboolean
+ephy_notebook_tab_is_pinned (EphyNotebook *notebook,
+                             EphyEmbed    *embed)
+{
+  gint num_pages;
+
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < num_pages; i++) {
+    GtkWidget *cur = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (cur == GTK_WIDGET (embed)) {
+      GtkWidget *tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), cur);
+
+      return ephy_tab_label_get_pin (tab_label);
+    }
+  }
+
+  return FALSE;
+}

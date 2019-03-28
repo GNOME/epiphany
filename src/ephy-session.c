@@ -545,12 +545,14 @@ typedef struct {
   char *title;
   gboolean loading;
   gboolean crashed;
+  gboolean pin;
   WebKitWebViewSessionState *state;
 } SessionTab;
 
 static SessionTab *
 session_tab_new (EphyEmbed   *embed,
-                 EphySession *session)
+                 EphySession *session,
+                 GtkNotebook *notebook)
 {
   SessionTab *session_tab;
   const char *address;
@@ -579,6 +581,7 @@ session_tab_new (EphyEmbed   *embed,
   session_tab->crashed = (error_page == EPHY_WEB_VIEW_ERROR_PAGE_CRASH ||
                           error_page == EPHY_WEB_VIEW_ERROR_PROCESS_CRASH);
   session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
+  session_tab->pin = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed);
 
   return session_tab;
 }
@@ -620,17 +623,17 @@ session_window_new (EphyWindow  *window,
   session_window = g_new0 (SessionWindow, 1);
   get_window_geometry (GTK_WINDOW (window), &session_window->geometry);
   session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
+  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
 
   for (l = tabs; l != NULL; l = l->next) {
     SessionTab *tab;
 
-    tab = session_tab_new (EPHY_EMBED (l->data), session);
+    tab = session_tab_new (EPHY_EMBED (l->data), session, notebook);
     session_window->tabs = g_list_prepend (session_window->tabs, tab);
   }
   g_list_free (tabs);
   session_window->tabs = g_list_reverse (session_window->tabs);
 
-  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
   session_window->active_tab = gtk_notebook_get_current_page (notebook);
 
   return session_window;
@@ -707,6 +710,14 @@ write_tab (xmlTextWriterPtr writer,
   if (tab->loading) {
     ret = xmlTextWriterWriteAttribute (writer,
                                        (const xmlChar *)"loading",
+                                       (const xmlChar *)"true");
+    if (ret < 0)
+      return ret;
+  }
+
+  if (tab->pin) {
+    ret = xmlTextWriterWriteAttribute (writer,
+                                       (const xmlChar *)"pin",
                                        (const xmlChar *)"true");
     if (ret < 0)
       return ret;
@@ -1125,13 +1136,17 @@ session_parse_embed (SessionParserContext *context,
                      const gchar         **names,
                      const gchar         **values)
 {
+  GtkWidget *notebook;
   const char *url = NULL;
   const char *title = NULL;
   const char *history = NULL;
   gboolean was_loading = FALSE;
   gboolean crashed = FALSE;
   gboolean is_blank_page = FALSE;
+  gboolean is_pin = FALSE;
   guint i;
+
+  notebook = ephy_window_get_notebook (context->window);
 
   for (i = 0; names[i]; i++) {
     if (strcmp (names[i], "url") == 0) {
@@ -1146,6 +1161,8 @@ session_parse_embed (SessionParserContext *context,
       crashed = strcmp (values[i], "true") == 0;
     } else if (strcmp (names[i], "history") == 0) {
       history = values[i];
+    } else if (strcmp (names[i], "pin") == 0) {
+      is_pin = strcmp (values[i], "true") == 0;
     }
   }
 
@@ -1178,6 +1195,8 @@ session_parse_embed (SessionParserContext *context,
                                      title, NULL,
                                      context->window, NULL, flags,
                                      0);
+
+    ephy_notebook_tab_set_pinned (EPHY_NOTEBOOK (notebook), embed, is_pin);
 
     web_view = ephy_embed_get_web_view (embed);
     if (history) {

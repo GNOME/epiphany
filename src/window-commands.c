@@ -2674,3 +2674,23 @@ window_cmd_new_tab_from_clipboard (GSimpleAction *action,
                               (GtkClipboardTextReceivedFunc)clipboard_text_received_cb,
                               g_object_ref (ephy_window));
 }
+
+void
+window_cmd_tabs_pin (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyNotebook *notebook;
+  gboolean pinned;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
+
+  pinned = ephy_notebook_tab_is_pinned (notebook, embed);
+
+  ephy_notebook_tab_set_pinned (notebook, embed, !pinned);
+}
