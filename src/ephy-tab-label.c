@@ -171,7 +171,7 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
   obj_properties[PROP_LABEL_TEXT] = g_param_spec_string ("label-text",
                                                          "Label Text",
                                                          "The displayed text",
-                                                         "",
+                                                         _("New Tab"),
                                                          G_PARAM_READWRITE |
                                                          G_PARAM_CONSTRUCT);
 
