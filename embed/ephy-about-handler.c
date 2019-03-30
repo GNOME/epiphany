@@ -447,7 +447,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                           "</head>\n"
                           "<body class=\"incognito-body\">\n"
                           "  <div id=\"mainblock\">\n"
-                          "    <div style=\"background: transparent url(ephy-resource:///org/gnome/epiphany/incognito.png) no-repeat 10px center;\">\n" \
+                          "    <div style=\"background: transparent url(ephy-resource:///org/gnome/epiphany/private-mode.svg) no-repeat 10px center;\">\n" \
                           "      <h1>%s</h1>\n"
                           "      <p>%s</p>\n"
                           "      <p><strong>%s</strong> %s</p>\n"

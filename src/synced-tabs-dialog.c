@@ -28,7 +28,7 @@
 
 #include <json-glib/json-glib.h>
 
-#define PIXBUF_MISSING_PATH "/org/gnome/epiphany/missing-thumbnail.png"
+#define PIXBUF_MISSING_PATH "/org/gnome/epiphany/web-watermark.svg"
 
 struct _SyncedTabsDialog {
   GtkDialog parent_instance;
