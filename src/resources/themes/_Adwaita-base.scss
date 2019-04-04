@@ -290,3 +290,48 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
     margin-left: 6px;
   }
 }
+
+// Pinned tabs
+.main-notebook {
+  tab:not(.reorderable-page) {
+    min-width: 16;
+
+    &:hover {
+      border-color: transparentize($borders_color, 0.7);
+      background-color: transparentize($bg_color, 0.8);
+    }
+
+    &:backdrop {
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    &:checked {
+      border-color: transparentize($borders_color, 0.5);
+      background-color: transparentize($bg_color, 0.5);
+
+      &:hover { background-color: transparentize($bg_color, 0.3); }
+    }
+
+    &:backdrop:checked {
+      border-color: $backdrop_borders_color;
+      background-color: $backdrop_bg_color;
+    }
+  }
+
+  header {
+    &.top,
+    &.bottom {
+      tab {
+        border-style: none solid;
+      }
+    }
+
+    &.left,
+    &.right {
+      tab {
+        border-style: solid none;
+      }
+    }
+  }
+}

@@ -223,3 +223,19 @@ row.narrow .page-row-close-button image { padding: 6px; }
 dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > list > row > box { margin-left: 3px; }
 
 dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > list > row > box .title { margin-left: 6px; }
+
+.main-notebook tab:not(.reorderable-page) { min-width: 16; }
+
+.main-notebook tab:not(.reorderable-page):hover { border-color: rgba(205, 199, 194, 0.3); background-color: rgba(246, 245, 244, 0.2); }
+
+.main-notebook tab:not(.reorderable-page):backdrop { border-color: transparent; background-color: transparent; }
+
+.main-notebook tab:not(.reorderable-page):checked { border-color: rgba(205, 199, 194, 0.5); background-color: rgba(246, 245, 244, 0.5); }
+
+.main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(246, 245, 244, 0.7); }
+
+.main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #d5d0cc; background-color: #f6f5f4; }
+
+.main-notebook header.top tab, .main-notebook header.bottom tab { border-style: none solid; }
+
+.main-notebook header.left tab, .main-notebook header.right tab { border-style: solid none; }
