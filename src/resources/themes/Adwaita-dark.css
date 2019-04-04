@@ -226,16 +226,16 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .main-notebook tab:not(.reorderable-page) { min-width: 16; }
 
-.main-notebook tab:not(.reorderable-page):hover { border-color: rgba(27, 27, 27, 0.3); background-color: rgba(53, 53, 53, 0.2); }
-
-.main-notebook tab:not(.reorderable-page):backdrop { border-color: transparent; background-color: transparent; }
-
-.main-notebook tab:not(.reorderable-page):checked { border-color: rgba(27, 27, 27, 0.5); background-color: rgba(53, 53, 53, 0.5); }
-
-.main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(53, 53, 53, 0.7); }
-
-.main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #202020; background-color: #353535; }
-
 .main-notebook header.top tab, .main-notebook header.bottom tab { border-style: none solid; }
 
 .main-notebook header.left tab, .main-notebook header.right tab { border-style: solid none; }
+
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):hover { border-color: rgba(27, 27, 27, 0.3); background-color: rgba(53, 53, 53, 0.2); }
+
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop { border-color: transparent; background-color: transparent; }
+
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked { border-color: rgba(27, 27, 27, 0.5); background-color: rgba(53, 53, 53, 0.5); }
+
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(53, 53, 53, 0.7); }
+
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #202020; background-color: #353535; }
