@@ -536,6 +536,8 @@ ephy_notebook_init (EphyNotebook *notebook)
   g_signal_connect (EPHY_SETTINGS_UI,
                     "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
                     G_CALLBACK (show_tabs_changed_cb), notebook);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "main-notebook");
 }
 
 static void
