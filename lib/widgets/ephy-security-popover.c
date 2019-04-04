@@ -392,7 +392,7 @@ on_ad_combobox_changed (GtkComboBox         *widget,
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   EphyPermissionsManager *permissions_manager;
   EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
-  gboolean global_flag = !g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
+  gboolean global_flag = g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
   g_autofree gchar *origin = NULL;
   gboolean state = gtk_combo_box_get_active (widget) == 1;
 
@@ -403,7 +403,7 @@ on_ad_combobox_changed (GtkComboBox         *widget,
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
 
   if (global_flag != state)
-    permission = state ? EPHY_PERMISSION_PERMIT : EPHY_PERMISSION_DENY;
+    permission = state ? EPHY_PERMISSION_DENY : EPHY_PERMISSION_PERMIT;
 
   ephy_permissions_manager_set_permission (permissions_manager,
                                            EPHY_PERMISSION_TYPE_SHOW_ADS,
