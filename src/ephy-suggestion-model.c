@@ -300,7 +300,7 @@ add_bookmarks (EphySuggestionModel *self,
 
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-      suggestion = ephy_suggestion_new (markup, url);
+      suggestion = ephy_suggestion_new (markup, title, url);
       load_favicon (self, suggestion, url);
 
       g_sequence_append (self->items, suggestion);
@@ -331,7 +331,7 @@ add_history (EphySuggestionModel *self,
     escaped_title = g_markup_escape_text (title, -1);
 
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new (markup, url->url);
+    suggestion = ephy_suggestion_new (markup, title, url->url);
     load_favicon (self, suggestion, url->url);
 
     g_sequence_append (self->items, suggestion);
@@ -363,7 +363,7 @@ add_search_engines (EphySuggestionModel *self,
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     escaped_title = g_markup_escape_text (engines[i], -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new_without_subtitle (markup, address);
+    suggestion = ephy_suggestion_new_without_subtitle (markup, engines[i], address);
     load_favicon (self, suggestion, address);
 
     g_sequence_append (self->items, suggestion);
