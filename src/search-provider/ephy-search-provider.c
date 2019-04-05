@@ -202,7 +202,7 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       EphySuggestion *suggestion;
       const char *title;
       const char *uri;
-      char *decoded_uri;
+      g_autofree char *decoded_uri = NULL;
 
       suggestion = ephy_suggestion_model_get_suggestion_with_uri (self->model, results[i]);
       if (!suggestion)
@@ -220,8 +220,6 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       g_variant_builder_add (&builder, "{sv}",
                              "gicon", g_variant_new_string ("text-html"));
       g_variant_builder_close (&builder);
-
-      g_free (decoded_uri);
     }
   }
 
@@ -238,12 +236,11 @@ static void
 launch_uri (const char *uri,
             guint       timestamp)
 {
-  char *str;
+  g_autofree char *str = NULL;
 
   /* TODO: Handle the timestamp */
   str = g_strdup_printf ("epiphany %s", uri);
   g_spawn_command_line_async (str, NULL);
-  g_free (str);
 }
 
 static void
@@ -251,10 +248,10 @@ launch_search (EphySearchProvider *self,
                char              **terms,
                guint               timestamp)
 {
-  char *search_string;
+  g_autofree char *search_string = NULL;
+  g_autofree char *query_param = NULL;
+  g_autofree char *effective_url = NULL;
   const char *address_search;
-  char *query_param;
-  char *effective_url;
   EphyEmbedShell *shell;
   EphySearchEngineManager *search_engine_manager;
 
@@ -273,10 +270,6 @@ launch_search (EphySearchProvider *self,
 #pragma GCC diagnostic pop
 
   launch_uri (effective_url, timestamp);
-
-  g_free (query_param);
-  g_free (effective_url);
-  g_free (search_string);
 }
 
 static gboolean
@@ -322,7 +315,7 @@ handle_launch_search (EphyShellSearchProvider2 *skeleton,
 static void
 ephy_search_provider_init (EphySearchProvider *self)
 {
-  char *filename;
+  g_autofree char *filename = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
@@ -333,7 +326,6 @@ ephy_search_provider_init (EphySearchProvider *self)
   self->bookmarks_manager = ephy_bookmarks_manager_new ();
   self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
                                            self->bookmarks_manager);
-  g_free (filename);
 
   self->cancellable = g_cancellable_new ();
 
