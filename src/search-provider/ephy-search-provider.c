@@ -205,6 +205,9 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       char *decoded_uri;
 
       suggestion = ephy_suggestion_model_get_suggestion_with_uri (self->model, results[i]);
+      if (!suggestion)
+        continue;
+
       title = ephy_suggestion_get_unescaped_title (suggestion);
       uri = ephy_suggestion_get_uri (suggestion);
       decoded_uri = ephy_uri_decode (uri);
