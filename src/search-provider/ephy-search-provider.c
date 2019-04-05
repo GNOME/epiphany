@@ -327,19 +327,6 @@ ephy_search_provider_init (EphySearchProvider *self)
 
   g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
 
-  self->skeleton = ephy_shell_search_provider2_skeleton_new ();
-
-  g_signal_connect (self->skeleton, "handle-get-initial-result-set",
-                    G_CALLBACK (handle_get_initial_result_set), self);
-  g_signal_connect (self->skeleton, "handle-get-subsearch-result-set",
-                    G_CALLBACK (handle_get_subsearch_result_set), self);
-  g_signal_connect (self->skeleton, "handle-get-result-metas",
-                    G_CALLBACK (handle_get_result_metas), self);
-  g_signal_connect (self->skeleton, "handle-activate-result",
-                    G_CALLBACK (handle_activate_result), self);
-  g_signal_connect (self->skeleton, "handle-launch-search",
-                    G_CALLBACK (handle_launch_search), self);
-
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
   filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
@@ -360,7 +347,6 @@ ephy_search_provider_dbus_register (GApplication    *application,
                                     GError         **error)
 {
   EphySearchProvider *self;
-  GDBusInterfaceSkeleton *skeleton;
 
   if (!G_APPLICATION_CLASS (ephy_search_provider_parent_class)->dbus_register (application,
                                                                                connection,
@@ -369,9 +355,21 @@ ephy_search_provider_dbus_register (GApplication    *application,
     return FALSE;
 
   self = EPHY_SEARCH_PROVIDER (application);
-  skeleton = G_DBUS_INTERFACE_SKELETON (self->skeleton);
+  self->skeleton = ephy_shell_search_provider2_skeleton_new ();
 
-  return g_dbus_interface_skeleton_export (skeleton, connection, object_path, error);
+  g_signal_connect (self->skeleton, "handle-get-initial-result-set",
+                    G_CALLBACK (handle_get_initial_result_set), self);
+  g_signal_connect (self->skeleton, "handle-get-subsearch-result-set",
+                    G_CALLBACK (handle_get_subsearch_result_set), self);
+  g_signal_connect (self->skeleton, "handle-get-result-metas",
+                    G_CALLBACK (handle_get_result_metas), self);
+  g_signal_connect (self->skeleton, "handle-activate-result",
+                    G_CALLBACK (handle_activate_result), self);
+  g_signal_connect (self->skeleton, "handle-launch-search",
+                    G_CALLBACK (handle_launch_search), self);
+
+  return g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (self->skeleton),
+                                           connection, object_path, error);
 }
 
 static void
