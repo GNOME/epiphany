@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ephy-bookmarks-manager.h"
+#include "ephy-embed.h"
 #include "ephy-embed-event.h"
 #include "ephy-location-controller.h"
 #include "ephy-web-view.h"
@@ -78,5 +79,8 @@ void              ephy_window_set_default_position     (EphyWindow *window,
                                                         gint        x,
                                                         gint        y);
 void              ephy_window_show_fullscreen_header_bar (EphyWindow *window);
+
+int               ephy_window_get_last_opened_embed      (EphyWindow *window,
+                                                          EphyEmbed  *embed);
 
 G_END_DECLS

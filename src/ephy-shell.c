@@ -761,12 +761,9 @@ ephy_shell_new_tab_full (EphyShell       *shell,
        window, previous_embed, jump_to ? "t" : "f");
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
-    if (previous_embed) {
-      GtkWidget *nb = ephy_window_get_notebook (window);
-      /* FIXME this assumes the tab is the  direct notebook child */
-      position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
-                                        GTK_WIDGET (previous_embed)) + 1;
-    } else
+    if (previous_embed)
+      position = ephy_window_get_last_opened_embed (window, previous_embed);
+    else
       g_warning ("Requested to append new tab after parent, but 'previous_embed' was NULL");
   }
 
