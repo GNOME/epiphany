@@ -156,7 +156,8 @@ struct _EphyWindow {
   EphyLocationController *location_controller;
   guint modified_forms_timeout_id;
   EphyMouseGestureController *mouse_gesture_controller;
-
+  EphyEmbed *last_opened_embed;
+  int last_opened_pos;
   gboolean show_fullscreen_header_bar;
 
   gint current_width;
@@ -3985,4 +3986,26 @@ void
 ephy_window_show_fullscreen_header_bar (EphyWindow *window)
 {
   window->show_fullscreen_header_bar = TRUE;
+}
+
+int
+ephy_window_get_last_opened_position (EphyWindow *window,
+                                      EphyEmbed  *embed)
+{
+  GtkWidget *nb = ephy_window_get_notebook (window);
+  int position;
+
+  if (embed == window->last_opened_embed)
+    return window->last_opened_pos++;
+
+  position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET (embed)) + 1;
+
+  if (window->last_opened_embed)
+    g_object_remove_weak_pointer (G_OBJECT (window->last_opened_embed), (gpointer *)&window->last_opened_embed);
+
+  g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *)&window->last_opened_embed);
+  window->last_opened_embed = embed;
+  window->last_opened_pos = position + 1;
+
+  return position;
 }
