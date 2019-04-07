@@ -746,6 +746,8 @@ ephy_shell_new_tab_full (EphyShell       *shell,
   GtkWidget *web_view;
   EphyEmbed *embed = NULL;
   gboolean jump_to = FALSE;
+  static int last_pos = -1;
+  static EphyEmbed *last_embed = NULL;
   int position = -1;
 
   g_assert (EPHY_IS_SHELL (shell));
@@ -762,10 +764,16 @@ ephy_shell_new_tab_full (EphyShell       *shell,
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
     if (previous_embed) {
-      GtkWidget *nb = ephy_window_get_notebook (window);
-      /* FIXME this assumes the tab is the  direct notebook child */
-      position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
-                                        GTK_WIDGET (previous_embed)) + 1;
+      if (previous_embed == last_embed) {
+        position = last_pos++;
+      } else {
+        GtkWidget *nb = ephy_window_get_notebook (window);
+
+        position = gtk_notebook_page_num (GTK_NOTEBOOK (nb),
+                                          GTK_WIDGET (previous_embed)) + 1;
+        last_embed = previous_embed;
+        last_pos = position + 1;
+      }
     } else
       g_warning ("Requested to append new tab after parent, but 'previous_embed' was NULL");
   }
