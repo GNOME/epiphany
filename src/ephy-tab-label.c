@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-embed.h"
+#include "ephy-settings.h"
 #include "ephy-tab-label.h"
 
 #define TAB_WIDTH_N_CHARS 15
@@ -144,9 +145,12 @@ style_updated_cb (GtkWidget *widget,
   GtkStyleContext *style;
   PangoFontDescription *font_desc;
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
+  gboolean expanded;
   int char_width, h, w;
 
   if (self->pinned) {
+    gtk_widget_set_hexpand (self->icon, FALSE);
+    gtk_widget_set_halign (self->icon, GTK_ALIGN_FILL);
     gtk_widget_set_size_request (widget, -1, -1);
     return;
   }
@@ -164,6 +168,10 @@ style_updated_cb (GtkWidget *widget,
   gtk_widget_set_size_request (widget, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width) + 2 * w, -1);
 
   gtk_widget_set_size_request (self->close_button, w + 2, h + 2);
+
+  expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
+  gtk_widget_set_hexpand (self->icon, expanded ? TRUE : FALSE);
+  gtk_widget_set_halign (self->icon, expanded ? GTK_ALIGN_END : GTK_ALIGN_FILL);
 }
 
 static void
