@@ -63,7 +63,7 @@
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key type="b" name="expand-tabs-bar">
-			<default>true</default>
+			<default>false</default>
 			<summary>Expand tabs size to fill the available space on the tabs bar.</summary>
 			<description>If enabled the tabs will expand to use the entire available space in the tabs bar.</description>
 		</key>
@@ -73,7 +73,7 @@
 			<description>Controls where the tabs bar is shown. Possible values are “top” (the default), “bottom”, “left” (vertical tabs with bar on the left) and “right” (vertical tabs with bar on the right).</description>
 		</key>
 		<key name="tabs-bar-visibility-policy" enum="org.gnome.Epiphany.EphyPrefsUITabsBarVisibilityPolicy">
-			<default>'more-than-one'</default>
+			<default>'always'</default>
 			<summary>The visibility policy for the tabs  bar.</summary>
 			<description>Controls when the tabs bar is shown. Possible values are “always” (the tabs bar is always shown), “more-than-one” (the tabs bar is only shown if there’s two or more tabs) and “never” (the tabs bar is never shown).</description>
 		</key>
