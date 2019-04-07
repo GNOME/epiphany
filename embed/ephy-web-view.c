@@ -2806,6 +2806,24 @@ reader_setting_changed_cb (GSettings   *settings,
   g_free (js_snippet);
 }
 
+static gboolean
+authenticate_cb (WebKitWebView               *web_view,
+                 WebKitAuthenticationRequest *request,
+                 gpointer                     user_data)
+{
+  gboolean res = FALSE;
+  g_autoptr(WebKitCredential) credential = NULL;
+
+  credential = webkit_authentication_request_get_proposed_credential (request);
+
+  if (credential && !webkit_authentication_request_is_retry (request)) {
+    webkit_authentication_request_authenticate (request, credential);
+    res = TRUE;
+  }
+
+  return res;
+}
+
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -2880,6 +2898,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "new-window",
                     G_CALLBACK (new_window_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "authenticate",
+                    G_CALLBACK (authenticate_cb),
                     NULL);
 
   g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
