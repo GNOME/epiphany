@@ -116,6 +116,7 @@ struct _PrefsDialog {
   GtkWidget *no_third_party;
   GtkWidget *never;
   GtkWidget *remember_passwords_checkbutton;
+  GtkWidget *no_auth_dialog_for_saved_passwords_checkbutton;
   GtkWidget *do_not_track_checkbutton;
   GtkWidget *clear_personal_data_button;
 
@@ -1013,6 +1014,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_auth_dialog_for_saved_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
 
@@ -2241,6 +2243,12 @@ setup_stored_data_page (PrefsDialog *dialog)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
                    dialog->remember_passwords_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_NO_AUTH_DIALOG_FOR_SAVED_PASSWORDS,
+                   dialog->no_auth_dialog_for_saved_passwords_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
