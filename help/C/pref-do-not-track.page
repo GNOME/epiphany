@@ -7,6 +7,7 @@
     <link type="guide" xref="index#privacy" />
     <link type="guide" xref="pref"/>
     <revision pkgversion="3.12" date="2014-02-24" status="candidate"/>
+    <revision pkgversion="3.33" date="2019-04-08" status="candidate"/>
 
     <credit type="author copyright">
       <name>Baptiste Mille-Mathias</name>
@@ -21,7 +22,7 @@
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>How do I tell websites that I do not want them to monitor my online
+    <desc>How do I make it harder for websites to monitor my online
     activities?</desc>
   </info>
 
@@ -31,22 +32,24 @@
   they may want to know which pages you view or what you have searched for.
   This information can be used to improve your web browsing experience, but it
   can also be sold or shared with other companies which may use it in a
-  malicious way. You can ask websites which you visit to not monitor your
-  activity by enabling <gui>Do Not Track</gui>.</p>
+  malicious way. Although it is not possible to prevent individual websites from
+  tracking you, <app>Web</app> makes it harder for websites to track your
+  behavior across a large number of other websites.</p>
 
   <steps>
     <item>
-      <p>Open
-      <guiseq><gui style="menu">Web</gui><gui style="menuitem">Preferences</gui><gui style="tab">Privacy</gui></guiseq>.</p>
+      <p>Press the menu button in the top-right corner of the window and select
+      <gui style="menuitem">Preferences</gui>.</p>
     </item>
     <item>
-      <p>Tick the <gui style="checkbox">Tell web sites I do no want to
-      be tracked</gui> checkbox.</p>
+      <p>Ensure the <gui style="checkbox">Try to block advertisements</gui>
+      checkbox is ticked. (Advertising companies track the pages you visit
+      across the web.)</p>
+    </item>
+    <item>
+      <p>Tick the <gui style="checkbox">Try to block web trackers</gui>
+      checkbox.</p>
     </item>
   </steps>
-
-  <note style="important">
-    <p>Websites do not have to honor this preference.</p>
-  </note>
 
 </page>
