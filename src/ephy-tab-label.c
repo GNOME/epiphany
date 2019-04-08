@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-embed.h"
+#include "ephy-embed-utils.h"
 #include "ephy-settings.h"
 #include "ephy-tab-label.h"
 
@@ -35,7 +36,8 @@ struct _EphyTabLabel {
   GtkWidget *close_button;
   GtkWidget *audio_button;
 
-  gboolean pinned;
+  gboolean is_pinned;
+  gboolean is_loading;
 };
 
 enum {
@@ -46,6 +48,7 @@ enum {
 enum {
   PROP_0,
   PROP_LABEL_TEXT,
+  PROP_LABEL_URI,
   PROP_ICON_BUF,
   PROP_SPINNING,
   PROP_AUDIO,
@@ -64,6 +67,8 @@ ephy_tab_label_set_spinning (EphyTabLabel *tab_label,
   g_object_set (tab_label->spinner, "active", is_spinning, NULL);
   g_object_set (tab_label->icon, "visible", !is_spinning, NULL);
   g_object_set (tab_label->spinner, "visible", is_spinning, NULL);
+
+  tab_label->is_loading = is_spinning;
 }
 
 static void
@@ -73,11 +78,22 @@ ephy_tab_label_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   EphyTabLabel *self = EPHY_TAB_LABEL (object);
+  const gchar *str;
 
   switch (prop_id) {
   case PROP_LABEL_TEXT:
-    gtk_label_set_text (GTK_LABEL (self->label), g_value_get_string((value)));
-    gtk_widget_set_tooltip_text (GTK_WIDGET (self), g_value_get_string((value)));
+    str = g_value_get_string (value);
+    if (str && strlen (str) != 0) {
+      gtk_label_set_text (GTK_LABEL (self->label), str);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+    }
+    break;
+  case PROP_LABEL_URI:
+    str = g_value_get_string (value);
+    if (self->is_loading && !ephy_embed_utils_is_no_show_address (str)) {
+      gtk_label_set_text (GTK_LABEL (self->label), str);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+    }
     break;
   case PROP_ICON_BUF:
     gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object(value));
@@ -148,7 +164,7 @@ style_updated_cb (GtkWidget *widget,
   gboolean expanded;
   int char_width, h, w;
 
-  if (self->pinned) {
+  if (self->is_pinned) {
     gtk_widget_set_hexpand (self->icon, FALSE);
     gtk_widget_set_halign (self->icon, GTK_ALIGN_FILL);
     gtk_widget_set_size_request (widget, -1, -1);
@@ -189,6 +205,13 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
                                                          _("New Tab"),
                                                          G_PARAM_READWRITE |
                                                          G_PARAM_CONSTRUCT);
+
+  obj_properties[PROP_LABEL_URI] = g_param_spec_string ("label-uri",
+                                                        "Label URI",
+                                                        "The displayed uri",
+                                                        "",
+                                                        G_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT);
 
   obj_properties[PROP_ICON_BUF] = g_param_spec_object ("icon-buf",
                                                        "Icon Buffer",
@@ -249,26 +272,26 @@ ephy_tab_label_get_text (GtkWidget *widget)
 static void
 update_label (EphyTabLabel *self)
 {
-  gtk_widget_set_visible (self->close_button, !self->pinned);
-  gtk_widget_set_visible (self->label, !self->pinned);
-  gtk_widget_set_halign (GTK_WIDGET (self), self->pinned ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
+  gtk_widget_set_visible (self->close_button, !self->is_pinned);
+  gtk_widget_set_visible (self->label, !self->is_pinned);
+  gtk_widget_set_halign (GTK_WIDGET (self), self->is_pinned ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
   g_signal_emit_by_name (self, "style-updated", G_TYPE_NONE);
 }
 
 void
-ephy_tab_label_set_pin (GtkWidget *widget,
-                        gboolean   pinned)
+ephy_tab_label_set_pinned (GtkWidget *widget,
+                           gboolean   is_pinned)
 {
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
 
-  self->pinned = pinned;
+  self->is_pinned = is_pinned;
   update_label (self);
 }
 
 gboolean
-ephy_tab_label_get_pin (GtkWidget *widget)
+ephy_tab_label_is_pinned (GtkWidget *widget)
 {
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
 
-  return self->pinned;
+  return self->is_pinned;
 }

@@ -157,6 +157,7 @@ enum {
   PROP_TYPED_ADDRESS,
   PROP_IS_BLANK,
   PROP_READER_MODE,
+  PROP_DISPLAY_ADDRESS,
   LAST_PROP
 };
 
@@ -484,6 +485,9 @@ ephy_web_view_get_property (GObject    *object,
     case PROP_READER_MODE:
       g_value_set_boolean (value, view->reader_content != NULL);
       break;
+    case PROP_DISPLAY_ADDRESS:
+      g_value_set_string (value, view->display_address);
+      break;
     default:
       break;
   }
@@ -513,6 +517,7 @@ ephy_web_view_set_property (GObject      *object,
     case PROP_STATUS_MESSAGE:
     case PROP_IS_BLANK:
     case PROP_READER_MODE:
+    case PROP_DISPLAY_ADDRESS:
       /* read only */
       break;
     default:
@@ -1120,6 +1125,7 @@ ephy_web_view_set_address (EphyWebView *view,
     ephy_web_view_set_typed_address (view, NULL);
 
   g_object_notify_by_pspec (object, obj_properties[PROP_ADDRESS]);
+  g_object_notify_by_pspec (object, obj_properties[PROP_DISPLAY_ADDRESS]);
 }
 
 static void
@@ -1346,6 +1352,18 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                           "If the EphyWebView is in reader mode",
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:display-address:
+ *
+ * View's current display address.
+ **/
+  obj_properties[PROP_DISPLAY_ADDRESS] =
+    g_param_spec_string ("display-address",
+                         "Display address",
+                         "The view's display address",
+                         "",
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 
