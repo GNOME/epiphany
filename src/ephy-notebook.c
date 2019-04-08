@@ -707,6 +707,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
                            G_CALLBACK (rebuild_tab_menu_cb), nb, 0);
 
   g_object_bind_property (view, "title", tab_label, "label-text", G_BINDING_DEFAULT);
+  g_object_bind_property (view, "uri", tab_label, "label-uri", G_BINDING_DEFAULT);
   g_object_bind_property (view, "icon", tab_label, "icon-buf", G_BINDING_DEFAULT);
   g_object_bind_property (view, "is-loading", tab_label, "spinning", G_BINDING_DEFAULT);
   g_object_bind_property (view, "is-playing-audio", tab_label, "audio", G_BINDING_DEFAULT);

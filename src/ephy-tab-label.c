@@ -45,6 +45,7 @@ enum {
 enum {
   PROP_0,
   PROP_LABEL_TEXT,
+  PROP_LABEL_URI,
   PROP_ICON_BUF,
   PROP_SPINNING,
   PROP_AUDIO,
@@ -72,11 +73,25 @@ ephy_tab_label_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   EphyTabLabel *self = EPHY_TAB_LABEL (object);
+  const gchar *str;
 
   switch (prop_id) {
   case PROP_LABEL_TEXT:
-    gtk_label_set_text (GTK_LABEL (self->label), g_value_get_string((value)));
-    gtk_widget_set_tooltip_text (GTK_WIDGET (self), g_value_get_string((value)));
+    str = g_value_get_string((value));
+    if (strlen (str) != 0) {
+      gtk_label_set_text (GTK_LABEL (self->label), str);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+    }
+    break;
+  case PROP_LABEL_URI:
+    str = g_value_get_string((value));
+    if (!g_str_has_prefix (str, "about:") && !g_str_has_prefix (str, "ephy-about:")) {
+      gtk_label_set_text (GTK_LABEL (self->label), str);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+    } else {
+      gtk_label_set_text (GTK_LABEL (self->label), "");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), "");
+    }
     break;
   case PROP_ICON_BUF:
     gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object(value));
@@ -181,6 +196,13 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
                                                          _("New Tab"),
                                                          G_PARAM_READWRITE |
                                                          G_PARAM_CONSTRUCT);
+
+  obj_properties[PROP_LABEL_URI] = g_param_spec_string ("label-uri",
+                                                        "Label URI",
+                                                        "The displayed uri",
+                                                        "",
+                                                        G_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT);
 
   obj_properties[PROP_ICON_BUF] = g_param_spec_object ("icon-buf",
                                                        "Icon Buffer",
