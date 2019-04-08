@@ -879,7 +879,7 @@ ephy_download_new (WebKitDownload *download)
 
   ephy_download = ephy_download_new_internal (download);
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
+  if (!ephy_is_running_inside_flatpak() && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
     g_signal_connect (ephy_download, "filename-suggested",
                       G_CALLBACK (filename_suggested_cb),
                       NULL);
