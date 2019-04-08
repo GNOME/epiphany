@@ -8,6 +8,7 @@
     <link type="guide" xref="pref"/>
     <revision pkgversion="3.10" date="2013-07-06" status="review"/>
     <revision pkgversion="3.12" date="2014-01-28" status="candidate"/>
+    <revision pkgversion="3.33" date="2019-04-08" status="candidate"/>
 
     <credit type="author copyright">
       <name>Ekaterina Gerasimova</name>
@@ -33,8 +34,8 @@
 
   <steps>
     <item>
-      <p>Open
-      <guiseq><gui style="menu">Web</gui><gui style="menuitem">Preferences</gui><gui style="tab">General</gui></guiseq>.</p>
+      <p>Open the menu at the top-right of the window, then select
+      <guiseq><gui style="menuitem">Preferences</gui><gui style="tab">General</gui></guiseq>.</p>
     </item>
     <item>
       <p>Press the <gui>Download folder</gui> name to select a different folder
@@ -42,12 +43,18 @@
       select <gui>Other…</gui> to browse for it.</p>
     </item>
     <item>
-      <p>If you want the downloaded file to open automatically, tick the
-      <gui>Automatically open downloaded files</gui> checkbox.</p>
+      <p>If you want to choose which directory to use each time you download
+      a file, tick the <gui>Always ask on download</gui> checkbox.</p>
     </item>
   </steps>
 
   <p>If you <em>save</em> a file instead of downloading it, you will still need
   to specify where you want to save it to.</p>
+
+  <note style="important">
+    <p>It is not possible to choose where to save downloads if you are using Flatpak
+    to run <app>Web</app>. Downloads will always be saved in your
+    <file>Downloads</file> folder.</p>
+  </note>
 
 </page>
