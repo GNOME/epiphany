@@ -341,8 +341,10 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      EPHY_FILE_FILTER_ALL);
 
-  if (filter)
+  if (filter) {
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+  }
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY));
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allows_multiple_selection);
