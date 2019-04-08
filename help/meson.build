@@ -12,6 +12,7 @@ help_files = [
   'cookies.xml',
   'data-cookies.page',
   'data-passwords.page',
+  'data-personal-data.page',
   'history.page',
   'history-delete.page',
   'pref.page',

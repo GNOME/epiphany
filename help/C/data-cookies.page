@@ -6,6 +6,7 @@
   <info>
     <link type="guide" xref="index#privacy"/>
     <revision pkgversion="3.12" date="2014-01-28" status="final"/>
+    <revision pkgversion="3.33" date="2019-04-08" status="final"/>
 
     <credit type="author copyright">
       <name>Ekaterina Gerasimova</name>
@@ -20,7 +21,7 @@
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>How do I delete a cookie if I don't want a website to track me anymore?</desc>
+    <desc>How do I delete browser cookies?</desc>
   </info>
 
   <title>Delete a cookie</title>
@@ -28,13 +29,13 @@
   <!-- Include an explanation about cookies. -->
   <include href="cookies.xml" xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:page/mal:p)" xmlns="http://www.w3.org/2001/XInclude"/>
 
-  <p>If you no longer want a specific website to track you, you can check if it
-  left a cookie and delete it.</p>
+  <p>You can check if it left a cookie and delete it, but be aware that websites
+  will usually install the same cookie again if you visit that website again.</p>
 
   <steps>
     <item>
-      <p>Open
-      <guiseq><gui style="menu">Web</gui><gui style="menuitem">Preferences</gui><gui style="tab">Privacy</gui><gui style="button">Manage
+      <p>Press the menu button in the top-right corner of the window and select
+      <guiseq><gui style="menuitem">Preferences</gui><gui style="tab">Stored Data</gui><gui style="button">Manage
       Cookies</gui></guiseq>.</p>
     </item>
     <item>
@@ -48,5 +49,11 @@
 
   <p>You can also delete all of your cookies using the
   <gui style="button">Clear All</gui> button.</p>
+
+
+  <note style="important">
+    <p>If you wish to delete the cookies a website has stored, you probably also
+    wish to delete <link xref="data-personal-data">other data stored by that website</link>.</p>
+  </note>
 
 </page>
