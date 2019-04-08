@@ -101,7 +101,7 @@ configure_file(
 
 search_provider_conf = configuration_data()
 search_provider_conf.set('appid', application_id)
-search_provider_conf.set('profile', profile)
+search_provider_conf.set('profile', profile != '' ? '/' + profile : profile)
 configure_file(
   configuration: search_provider_conf,
   input: files('org.gnome.Epiphany.SearchProvider.ini.in'),
