@@ -7,6 +7,7 @@
     <link type="guide" xref="index#adv" />
     <link type="seealso" xref="browse-webapps" />
     <revision pkgversion="3.16" date="2014-01-26" status="review"/>
+    <revision pkgversion="3.33" date="2019-04-08" status="review"/>
 
     <credit type="author copyright">
       <name>Ekaterina Gerasimova</name>
@@ -30,8 +31,8 @@
 
   <steps>
     <item>
-      <p>Press on the window header and type
-      <input>about:applications</input>.</p>
+      <p>Open the menu at the top-right of the window, then select
+      <gui style="menuitem">Open Application Manager</gui></p>
     </item>
     <item>
       <p>Press <gui>Delete</gui> next to the application which you want to
@@ -39,7 +40,9 @@
     </item>
   </steps>
 
-  <p>If you have <app>Software</app> installed, you can also delete Web
-  Applications from there.</p>
+  <note style="important">
+    <p>It is not possible to delete Web Applications if you are using Flatpak
+    to run <app>Web</app>.</p>
+  </note>
 
 </page>
