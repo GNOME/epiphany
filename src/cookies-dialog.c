@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2013 Red Hat, Inc.
+ *  Copyright © 2019 Jan-Michael Brummer
  *
  *  This file is part of Epiphany.
  *
@@ -32,20 +33,12 @@
 
 #include "cookies-dialog.h"
 
-enum {
-  COL_COOKIES_HOST,
-  COL_COOKIES_HOST_KEY,
-  COL_COOKIES_DATA,
-};
-
 struct _EphyCookiesDialog {
   GtkDialog parent_instance;
 
-  GtkWidget *cookies_treeview;
-  GtkTreeSelection *tree_selection;
-  GtkWidget *liststore;
-  GtkWidget *treemodelfilter;
-  GtkWidget *treemodelsort;
+  GtkWidget *cookies_listbox;
+  GtkWidget *search_bar;
+  GtkWidget *search_entry;
 
   GActionGroup *action_group;
 
@@ -57,24 +50,38 @@ struct _EphyCookiesDialog {
 
 G_DEFINE_TYPE (EphyCookiesDialog, ephy_cookies_dialog, GTK_TYPE_DIALOG)
 
-static void populate_model (EphyCookiesDialog *dialog);
+static void populate_model (EphyCookiesDialog *self);
 static void cookie_changed_cb (WebKitCookieManager *cookie_manager,
-                               EphyCookiesDialog   *dialog);
+                               EphyCookiesDialog   *self);
 
 static void
-reload_model (EphyCookiesDialog *dialog)
+clear_listbox (GtkWidget *listbox)
 {
-  g_signal_handlers_disconnect_by_func (webkit_website_data_manager_get_cookie_manager (dialog->data_manager), cookie_changed_cb, dialog);
-  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
-  dialog->filled = FALSE;
-  populate_model (dialog);
+  GList *children, *iter;
+
+  children = gtk_container_get_children (GTK_CONTAINER (listbox));
+
+  for (iter = children; iter != NULL; iter = g_list_next (iter)) {
+    gtk_widget_destroy (GTK_WIDGET (iter->data));
+  }
+
+  g_list_free (children);
+}
+
+static void
+reload_model (EphyCookiesDialog *self)
+{
+  g_signal_handlers_disconnect_by_func (webkit_website_data_manager_get_cookie_manager (self->data_manager), cookie_changed_cb, self);
+  clear_listbox (self->cookies_listbox);
+  self->filled = FALSE;
+  populate_model (self);
 }
 
 static void
 cookie_changed_cb (WebKitCookieManager *cookie_manager,
-                   EphyCookiesDialog   *dialog)
+                   EphyCookiesDialog   *self)
 {
-  reload_model (dialog);
+  reload_model (self);
 }
 
 static void
@@ -92,125 +99,36 @@ ephy_cookies_dialog_finalize (GObject *object)
 }
 
 static void
-forget (GSimpleAction *action,
-        GVariant      *parameter,
-        gpointer       user_data)
+forget_clicked (GtkButton *button,
+                gpointer   user_data)
 {
-  EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
-  GList *llist, *rlist = NULL, *l, *r;
+  EphyCookiesDialog *self = EPHY_COOKIES_DIALOG (user_data);
+  GtkListBoxRow *row = g_object_get_data (G_OBJECT (button), "row");
   GList *data_to_remove = NULL;
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter, iter2;
-  GtkTreeRowReference *row_ref = NULL;
+  WebKitWebsiteData *data = NULL;
 
-  llist = gtk_tree_selection_get_selected_rows (dialog->tree_selection, &model);
-
-  if (llist == NULL) {
-    /* nothing to delete, return early */
-    return;
-  }
-
-  for (l = llist; l != NULL; l = l->next) {
-    rlist = g_list_prepend (rlist, gtk_tree_row_reference_new (model, (GtkTreePath *)l->data));
-  }
-
-  /* Intelligent selection logic, no actual selection yet */
-
-  path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)g_list_first (rlist)->data);
-
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_path_free (path);
-  iter2 = iter;
-
-  if (gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter)) {
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
-    row_ref = gtk_tree_row_reference_new (model, path);
-  } else {
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter2);
-    if (gtk_tree_path_prev (path)) {
-      row_ref = gtk_tree_row_reference_new (model, path);
-    }
-  }
-  gtk_tree_path_free (path);
-
-  /* Removal */
-  for (r = rlist; r != NULL; r = r->next) {
-    GValue val = { 0, };
-
-    GtkTreeIter filter_iter;
-    GtkTreeIter child_iter;
-
-    path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
-    gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get_value (model, &iter, COL_COOKIES_DATA, &val);
-    data_to_remove = g_list_prepend (data_to_remove, g_value_dup_boxed (&val));
-    g_value_unset (&val);
-
-    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (dialog->treemodelsort),
-                                                    &filter_iter,
-                                                    &iter);
-
-    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter),
-                                                      &child_iter,
-                                                      &filter_iter);
-
-    gtk_list_store_remove (GTK_LIST_STORE (dialog->liststore), &child_iter);
-
-    gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
-    gtk_tree_path_free (path);
-  }
-
-  g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
-  g_list_free (llist);
-  g_list_free (rlist);
+  gtk_list_box_select_row (GTK_LIST_BOX (self->cookies_listbox), row);
+  data = g_object_get_data (G_OBJECT (row), "data");
+  data_to_remove = g_list_append (data_to_remove, data);
 
   if (data_to_remove) {
-    webkit_website_data_manager_remove (dialog->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, data_to_remove, NULL, NULL, NULL);
+    webkit_website_data_manager_remove (self->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, data_to_remove, NULL, NULL, NULL);
     g_list_free_full (data_to_remove, (GDestroyNotify)webkit_website_data_unref);
+    reload_model (self);
   }
-
-  /* Selection */
-  if (row_ref != NULL) {
-    path = gtk_tree_row_reference_get_path (row_ref);
-
-    if (path != NULL) {
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (dialog->cookies_treeview), path, NULL, FALSE);
-      gtk_tree_path_free (path);
-    }
-
-    gtk_tree_row_reference_free (row_ref);
-  }
-}
-
-static void
-update_selection_actions (GActionMap *action_map,
-                          gboolean    has_selection)
-{
-  GAction *forget_action;
-
-  forget_action = g_action_map_lookup_action (action_map, "forget");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
-}
-
-static void
-on_treeview_selection_changed (GtkTreeSelection  *selection,
-                               EphyCookiesDialog *dialog)
-{
-  update_selection_actions (G_ACTION_MAP (dialog->action_group),
-                            gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
 static void
 on_search_entry_changed (GtkSearchEntry    *entry,
-                         EphyCookiesDialog *dialog)
+                         EphyCookiesDialog *self)
 {
   const char *text;
 
   text = gtk_entry_get_text (GTK_ENTRY (entry));
-  g_free (dialog->search_text);
-  dialog->search_text = g_strdup (text);
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter));
+  g_free (self->search_text);
+  self->search_text = g_strdup (text);
+
+  //filter_now (self);
 }
 
 static void
@@ -218,10 +136,10 @@ forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
+  EphyCookiesDialog *self = EPHY_COOKIES_DIALOG (user_data);
 
-  webkit_website_data_manager_clear (dialog->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, 0, NULL, NULL, NULL);
-  reload_model (dialog);
+  webkit_website_data_manager_clear (self->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, 0, NULL, NULL, NULL);
+  reload_model (self);
 }
 
 static void
@@ -238,97 +156,73 @@ ephy_cookies_dialog_class_init (EphyCookiesDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/cookies-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, liststore);
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, treemodelfilter);
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, treemodelsort);
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, cookies_treeview);
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, tree_selection);
+  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, cookies_listbox);
+  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, search_entry);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }
 
-static gboolean
-cookie_search_equal (GtkTreeModel *model,
-                     int           column,
-                     const gchar  *key,
-                     GtkTreeIter  *iter,
-                     gpointer      search_data)
-{
-  GValue value = { 0, };
-  gboolean retval;
-
-  /* Note that this is function has to return FALSE for a *match* ! */
-
-  gtk_tree_model_get_value (model, iter, column, &value);
-  retval = strstr (g_value_get_string (&value), key) == NULL;
-  g_value_unset (&value);
-
-  return retval;
-}
-
 static void
-cookie_add (EphyCookiesDialog *dialog,
+cookie_add (EphyCookiesDialog *self,
             WebKitWebsiteData *data)
 {
+  GtkWidget *row;
+  GtkWidget *grid;
+  GtkWidget *title;
+  GtkWidget *separator;
+  GtkWidget *button;
+  PangoAttrList *attrlist;
+  PangoAttribute *attr;
   const char *domain;
-  GtkListStore *store;
-  GtkTreeIter iter;
-  int column[3] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_DATA };
-  GValue value[3] = { { 0, }, { 0, }, { 0, } };
-
-  store = GTK_LIST_STORE (dialog->liststore);
-
-  /* NOTE: We use this strange method to insert the row, because
-   * we want to use g_value_take_string but all the row data needs to
-   * be inserted in one call as it's needed when the new row is sorted
-   * into the model.
-   */
-
-  g_value_init (&value[0], G_TYPE_STRING);
-  g_value_init (&value[1], G_TYPE_STRING);
-  g_value_init (&value[2], WEBKIT_TYPE_WEBSITE_DATA);
 
   domain = webkit_website_data_get_name (data);
-  g_value_set_string (&value[0], domain);
-  g_value_take_string (&value[1], ephy_string_collate_key_for_domain (domain, -1));
-  g_value_take_boxed (&value[2], data);
 
-  gtk_list_store_insert_with_valuesv (store, &iter, -1,
-                                      column, value,
-                                      G_N_ELEMENTS (value));
+  /* Row */
+  row = gtk_list_box_row_new ();
+  g_object_set_data (G_OBJECT (row), "data", data);
 
-  g_value_unset (&value[0]);
-  g_value_unset (&value[1]);
-  g_value_unset (&value[2]);
-}
+  /* Grid */
+  grid = gtk_grid_new ();
+  gtk_widget_set_margin_start (grid, 6);
+  gtk_widget_set_margin_end (grid, 6);
+  gtk_widget_set_margin_top (grid, 6);
+  gtk_widget_set_margin_bottom (grid, 6);
+  gtk_grid_set_column_spacing (GTK_GRID(grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID(grid), 6);
+  gtk_widget_set_tooltip_text (grid, domain);
 
-static int
-compare_cookie_host_keys (GtkTreeModel *model,
-                          GtkTreeIter  *a,
-                          GtkTreeIter  *b,
-                          gpointer      user_data)
-{
-  GValue a_value = { 0, };
-  GValue b_value = { 0, };
-  int retval;
+  /* Title */
+  title = gtk_label_new (domain);
+  gtk_label_set_ellipsize (GTK_LABEL(title), PANGO_ELLIPSIZE_END);
+  gtk_widget_set_hexpand (title, TRUE);
+  gtk_label_set_xalign (GTK_LABEL(title), 0);
 
-  gtk_tree_model_get_value (model, a, COL_COOKIES_HOST_KEY, &a_value);
-  gtk_tree_model_get_value (model, b, COL_COOKIES_HOST_KEY, &b_value);
+  gtk_grid_attach (GTK_GRID (grid), title, 0, 0, 1, 1);
 
-  retval = strcmp (g_value_get_string (&a_value),
-                   g_value_get_string (&b_value));
+  /* Separator */
+  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+  gtk_grid_attach (GTK_GRID (grid), separator, 1, 0, 1, 1);
 
-  g_value_unset (&a_value);
-  g_value_unset (&b_value);
+  /* Button */
+  button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  g_object_set_data (G_OBJECT (button), "row", row);
+  gtk_widget_set_tooltip_text (button, _("Remove cookie"));
+  g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), self);
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 1);
 
-  return retval;
+  gtk_container_add (GTK_CONTAINER (row), grid);
+  gtk_widget_show_all (row);
+
+  gtk_list_box_insert (GTK_LIST_BOX (self->cookies_listbox), row, -1);
 }
 
 static void
 get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
                              GAsyncResult             *result,
-                             EphyCookiesDialog        *dialog)
+                             EphyCookiesDialog        *self)
 {
   GList *data_list;
 
@@ -337,116 +231,89 @@ get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
     return;
 
   for (GList *l = data_list; l && l->data; l = g_list_next (l))
-    cookie_add (dialog, (WebKitWebsiteData *)l->data);
+    cookie_add (self, (WebKitWebsiteData *)l->data);
 
   /* The list items have been consumed, so we need only to free the list. */
   g_list_free (data_list);
 
-  /* Now turn on sorting */
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (dialog->liststore),
-                                   COL_COOKIES_HOST_KEY,
-                                   (GtkTreeIterCompareFunc)compare_cookie_host_keys,
-                                   NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (dialog->liststore),
-                                        COL_COOKIES_HOST_KEY,
-                                        GTK_SORT_ASCENDING);
-
   g_signal_connect (webkit_website_data_manager_get_cookie_manager (data_manager),
                     "changed",
                     G_CALLBACK (cookie_changed_cb),
-                    dialog);
+                    self);
 
-  dialog->filled = TRUE;
-}
-
-static gboolean
-row_visible_func (GtkTreeModel      *model,
-                  GtkTreeIter       *iter,
-                  EphyCookiesDialog *dialog)
-{
-  gboolean visible = FALSE;
-  gchar *host;
-
-  if (dialog->search_text == NULL)
-    return TRUE;
-
-  gtk_tree_model_get (model, iter,
-                      COL_COOKIES_HOST, &host,
-                      -1);
-
-  if (host != NULL && strstr (host, dialog->search_text) != NULL)
-    visible = TRUE;
-
-  g_free (host);
-
-  return visible;
+  self->filled = TRUE;
 }
 
 static void
-populate_model (EphyCookiesDialog *dialog)
+populate_model (EphyCookiesDialog *self)
 {
-  g_assert (dialog->filled == FALSE);
+  g_assert (self->filled == FALSE);
 
-  webkit_website_data_manager_fetch (dialog->data_manager,
+  webkit_website_data_manager_fetch (self->data_manager,
                                      WEBKIT_WEBSITE_DATA_COOKIES,
                                      NULL,
                                      (GAsyncReadyCallback)get_domains_with_cookies_cb,
-                                     dialog);
-}
-
-static void
-setup_page (EphyCookiesDialog *dialog)
-{
-  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (dialog->cookies_treeview),
-                                       (GtkTreeViewSearchEqualFunc)cookie_search_equal,
-                                       dialog, NULL);
-  populate_model (dialog);
+                                     self);
 }
 
 static GActionGroup *
-create_action_group (EphyCookiesDialog *dialog)
+create_action_group (EphyCookiesDialog *self)
 {
   const GActionEntry entries[] = {
-    { "forget", forget },
     { "forget-all", forget_all }
   };
 
   GSimpleActionGroup *group;
 
   group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), dialog);
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), self);
 
   return G_ACTION_GROUP (group);
 }
 
 static void
-ephy_cookies_dialog_init (EphyCookiesDialog *dialog)
+box_header_func (GtkListBoxRow *row,
+                 GtkListBoxRow *before,
+                 gpointer       user_data)
+{
+  GtkWidget *current;
+ 
+  if (!before) {
+    gtk_list_box_row_set_header (row, NULL);
+    return;
+  }
+
+  current = gtk_list_box_row_get_header (row);
+  if (!current) {
+    current = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+    gtk_widget_show (current);
+    gtk_list_box_row_set_header (row, current);
+  }
+}
+
+static void
+ephy_cookies_dialog_init (EphyCookiesDialog *self)
 {
   WebKitWebContext *web_context;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  gtk_widget_init_template (GTK_WIDGET (dialog));
-
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter),
-                                          (GtkTreeModelFilterVisibleFunc)row_visible_func,
-                                          dialog,
-                                          NULL);
+  gtk_widget_init_template (GTK_WIDGET (self));
 
   web_context = ephy_embed_shell_get_web_context (shell);
-  dialog->data_manager = webkit_web_context_get_website_data_manager (web_context);
+  self->data_manager = webkit_web_context_get_website_data_manager (web_context);
 
-  setup_page (dialog);
+  populate_model (self);
 
-  dialog->action_group = create_action_group (dialog);
-  gtk_widget_insert_action_group (GTK_WIDGET (dialog), "cookies", dialog->action_group);
+  self->action_group = create_action_group (self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "cookies", self->action_group);
 
-  update_selection_actions (G_ACTION_MAP (dialog->action_group), FALSE);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (self->cookies_listbox), box_header_func, NULL, NULL);
+
+  hdy_search_bar_connect_entry (self->search_bar, self->search_entry);
 }
 
 EphyCookiesDialog *
 ephy_cookies_dialog_new (void)
 {
-  return g_object_new (EPHY_TYPE_COOKIES_DIALOG,
-                       "use-header-bar", TRUE,
-                       NULL);
+  return g_object_new (EPHY_TYPE_COOKIES_DIALOG, "use-header-bar", TRUE, NULL);
 }
