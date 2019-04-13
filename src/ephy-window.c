@@ -3369,6 +3369,113 @@ browse_with_caret_get_mapping (GValue   *value,
   return TRUE;
 }
 
+#define CONTENT_TYPE "x-scheme-handler/http"
+
+static void
+set_as_default_browser ()
+{
+  g_autoptr(GError) error = NULL;
+  GAppInfo *info = NULL;
+  GList *recommended;
+  g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
+  const char *const *mime_types;
+  int i;
+
+  recommended = g_app_info_get_recommended_for_type (CONTENT_TYPE);
+  while (recommended) {
+    GAppInfo *tmp_info = recommended->data;
+
+    if (!strcmp (g_app_info_get_id (tmp_info), id)) {
+      info = tmp_info;
+      break;
+    }
+
+    recommended = recommended->next;
+  }
+
+  if (!info)
+    return;
+
+  if (!g_app_info_set_as_default_for_type (info, CONTENT_TYPE, &error)) {
+    g_warning ("Faild to set '%s' as the default for content type '%s': %s\n",
+               g_app_info_get_name (info), CONTENT_TYPE, error->message);
+
+    return;
+  }
+
+  mime_types = g_app_info_get_supported_types (info);
+
+  for (i = 0; mime_types && mime_types[i]; i++) {
+    if (!g_app_info_set_as_default_for_type (info, mime_types[i], &error)) {
+      g_warning ("Failed to set '%s' as the default application for secondary content type '%s': %s",
+                 g_app_info_get_name (info), mime_types[i], error->message);
+    } else {
+      g_debug ("Set '%s' as the default application for '%s'",
+               g_app_info_get_name (info), mime_types[i]);
+    }
+  }
+}
+
+static void
+on_default_browser_question_response (GtkInfoBar *info_bar,
+                                      gint        response_id,
+                                      gpointer    user_data)
+{
+  if (response_id == GTK_RESPONSE_YES)
+    set_as_default_browser ();
+  else if (response_id == GTK_RESPONSE_NO)
+    g_settings_set_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT, FALSE);
+
+  gtk_widget_destroy (GTK_WIDGET (info_bar));
+}
+
+static void
+add_default_browser_question (GtkBox *box)
+{
+  GtkWidget *label;
+  GtkWidget *info_bar;
+  GtkWidget *content_area;
+
+#if !TECH_PREVIEW
+  label = gtk_label_new (_("Set Web as your default browser?"));
+#else
+  label = gtk_label_new (_("Set Epiphany Technology Preview as your default browser?"));
+#endif
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_widget_show (label);
+
+  info_bar = gtk_info_bar_new ();
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_QUESTION);
+  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), label);
+
+  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Yes"), GTK_RESPONSE_YES);
+  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_No"), GTK_RESPONSE_NO);
+
+  g_signal_connect (info_bar, "response", G_CALLBACK (on_default_browser_question_response), NULL);
+
+  gtk_box_pack_start (box, info_bar, FALSE, FALSE, 0);
+
+  gtk_widget_show (info_bar);
+}
+
+static gboolean
+is_browser_default (void)
+{
+  g_autoptr(GAppInfo) info = g_app_info_get_default_for_type (CONTENT_TYPE, TRUE);
+
+  if (info) {
+    g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
+
+    if (!strcmp (g_app_info_get_id (info), id))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_window_constructed (GObject *object)
 {
@@ -3468,6 +3575,10 @@ ephy_window_constructed (GObject *object)
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
   window->action_bar = setup_action_bar (window);
   box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT) && !is_browser_default ())
+    add_default_browser_question (box);
+
   gtk_box_pack_start (box, GTK_WIDGET (window->notebook), TRUE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
