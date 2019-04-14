@@ -170,6 +170,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_ADBLOCK_FILTERS                    "adblock-filters"
 #define EPHY_PREFS_SEARCH_ENGINES                     "search-engines"
 #define EPHY_PREFS_DEFAULT_SEARCH_ENGINE              "default-search-engine"
+#define EPHY_PREFS_START_IN_INCOGNITO_MODE            "start-in-incognito-mode"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"

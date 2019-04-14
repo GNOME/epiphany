@@ -97,6 +97,7 @@ struct _PrefsDialog {
   GtkWidget *enable_safe_browsing_checkbutton;
   GtkWidget *enable_smooth_scrolling_checkbutton;
   GtkWidget *ask_on_download_checkbutton;
+  GtkWidget *start_in_privacy_mode_checkbutton;
 
   /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
@@ -994,6 +995,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, ask_on_download_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, start_in_privacy_mode_checkbutton);
 
   /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
@@ -2032,6 +2034,18 @@ setup_general_page (PrefsDialog *dialog)
                    dialog->ask_on_download_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (settings,
+                   EPHY_PREFS_START_IN_INCOGNITO_MODE,
+                   dialog->start_in_privacy_mode_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (settings,
+                   EPHY_PREFS_START_IN_INCOGNITO_MODE,
+                   dialog->restore_session_checkbutton,
+                   "sensitive",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   if (ephy_is_running_inside_flatpak ())
     gtk_widget_hide (dialog->download_box);
