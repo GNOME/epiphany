@@ -355,10 +355,18 @@
                         <property name="spacing">6</property>
                         <property name="margin-start">12</property>
                         <child>
+                          <object class="GtkCheckButton" id="start_in_incognito_mode_checkbutton">
+                            <property name="label" translatable="yes">Always start browser in _incognito mode</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="restore_session_checkbutton">
                             <property name="label" translatable="yes">_Remember previous tabs on startup</property>
                             <property name="visible">True</property>
                             <property name="use-underline">True</property>
+                            <property name="margin-start">12</property>
                           </object>
                         </child>
                       </object>
