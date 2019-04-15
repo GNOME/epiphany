@@ -499,12 +499,12 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
     return;
 
   /* The username field is required if username is present. */
-  if (username != NULL && username_field == NULL)
-    g_clear_pointer (&username_field, g_free);
+  if (username && !username_field)
+    g_clear_pointer (&username, g_free);
 
   /* The username is required if username field is present. */
-  if (username == NULL && username_field != NULL)
-    g_clear_pointer (&username, g_free);
+  if (!username && username_field)
+    g_clear_pointer (&username_field, g_free);
 
   /* This also sanity checks that a page isn't saving websites for
    * other origins. Remember the request comes from the untrusted web
