@@ -271,8 +271,8 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   js_serializer = jsc_value_new_function (js_context,
                                           "sensitiveFormMessageSerializer",
                                           G_CALLBACK (sensitive_form_message_serializer), NULL, NULL,
-                                          G_TYPE_STRING, 1,
-                                          G_TYPE_UINT64);
+                                          G_TYPE_STRING, 2,
+                                          G_TYPE_UINT64, G_TYPE_BOOLEAN);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "formControlsAssociated",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
