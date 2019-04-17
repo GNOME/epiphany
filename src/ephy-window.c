@@ -2706,6 +2706,9 @@ notebook_page_removed_cb (EphyNotebook *notebook,
     (ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
 
   tab_accels_update (window);
+
+  if (gtk_notebook_get_n_pages (window->notebook) == 0)
+    ephy_window_close (window);
 }
 
 static void
