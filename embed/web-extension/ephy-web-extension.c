@@ -548,9 +548,9 @@ handle_method_call (GDBusConnection       *connection,
       ephy_password_manager_save (extension->password_manager,
                                   request->origin,
                                   request->target_origin,
-                                  request->username,
+                                  request->username && request->username_field_name ? request->username : NULL,
                                   request->password,
-                                  request->username_field_name,
+                                  request->username_field_name && request->username ? request->username_field_name : NULL,
                                   request->password_field_name,
                                   request->is_new);
     }
