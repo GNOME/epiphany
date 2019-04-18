@@ -530,8 +530,12 @@ on_key_press_event (EphyHistoryDialog *self,
   ret = gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->search_bar), event);
 
   if (ret != GDK_EVENT_STOP) {
-    if (key->keyval == GDK_KEY_Escape)
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+    if (key->keyval == GDK_KEY_Escape) {
+      if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button)))
+        gtk_widget_destroy (GTK_WIDGET (self));
+      else
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+    }
     else if (isprint (key->keyval))
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), TRUE);
   }
