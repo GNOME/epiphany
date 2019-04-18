@@ -377,16 +377,16 @@ ephy_shell_startup (GApplication *application)
         /* Create the sync service. */
         ephy_shell_get_sync_service (shell);
       }
-
-      /* Actions that are disabled in app mode */
-      set_accel_for_action (shell, "app.new-window", "<Primary>n");
-      set_accel_for_action (shell, "app.new-incognito", "<Primary><Shift>n");
-      set_accel_for_action (shell, "app.reopen-closed-tab", "<Primary><Shift>t");
-      set_accel_for_action (shell, "app.import-bookmarks", "<Primary><Shift>m");
-      set_accel_for_action (shell, "app.export-bookmarks", "<Primary><Shift>x");
-      set_accel_for_action (shell, "app.shortcuts", "<Primary>F1");
-      set_accel_for_action (shell, "app.help", "F1");
     }
+
+    /* Actions that are disabled in app mode */
+    set_accel_for_action (shell, "app.new-window", "<Primary>n");
+    set_accel_for_action (shell, "app.new-incognito", "<Primary><Shift>n");
+    set_accel_for_action (shell, "app.reopen-closed-tab", "<Primary><Shift>t");
+    set_accel_for_action (shell, "app.import-bookmarks", "<Primary><Shift>m");
+    set_accel_for_action (shell, "app.export-bookmarks", "<Primary><Shift>x");
+    set_accel_for_action (shell, "app.shortcuts", "<Primary>F1");
+    set_accel_for_action (shell, "app.help", "F1");
   } else {
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
