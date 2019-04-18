@@ -292,6 +292,8 @@ out:
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 
   ephy_gsb_storage_set_metadata (self->storage, "next_list_updates_time", self->next_list_updates_time);
+
+  g_object_unref (self);
 }
 
 static void
@@ -313,7 +315,7 @@ ephy_gsb_service_update (EphyGSBService *self)
   g_assert (ephy_gsb_storage_is_operable (self->storage));
 
   g_atomic_int_set (&self->is_updating, TRUE);
-  task = g_task_new (self, NULL,
+  task = g_task_new (g_object_ref (self), NULL,
                      (GAsyncReadyCallback)ephy_gsb_service_update_finished_cb,
                      NULL);
   g_task_run_in_thread (task, (GTaskThreadFunc)ephy_gsb_service_update_thread);
