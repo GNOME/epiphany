@@ -660,6 +660,12 @@ window_cmd_navigation (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
   WebKitWebView *web_view;
+  EphyLinkFlags flags = ephy_link_flags_from_current_event ();
+
+  if (flags & EPHY_LINK_NEW_TAB) {
+    window_cmd_navigation_new_tab (action, parameter, user_data);
+    return;
+  }
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
