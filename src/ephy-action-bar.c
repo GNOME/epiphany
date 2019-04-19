@@ -39,7 +39,6 @@ struct _EphyActionBar {
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   GtkMenuButton *pages_button;
-  EphyPagesPopover *pages_popover;
 };
 
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
@@ -134,9 +133,6 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                                         pages_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
-                                        pages_popover);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBar,
                                         action_bar_end);
 }
 
@@ -154,9 +150,6 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   gtk_widget_set_visible (GTK_WIDGET (action_bar->pages_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-
-  ephy_pages_popover_set_adaptive_mode (action_bar->pages_popover,
-                                        EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 EphyActionBar *
@@ -177,13 +170,6 @@ EphyActionBarEnd *
 ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
 {
   return action_bar->action_bar_end;
-}
-
-void
-ephy_action_bar_set_notebook (EphyActionBar *action_bar,
-                              EphyNotebook  *notebook)
-{
-  ephy_pages_popover_set_notebook (action_bar->pages_popover, notebook);
 }
 
 void
