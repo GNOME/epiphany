@@ -446,11 +446,13 @@ ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "</head>\n"
                           "<body class=\"incognito-body\">\n"
-                          "  <div id=\"mainblock\">\n"
-                          "    <div style=\"background: transparent url(ephy-resource:///org/gnome/epiphany/private-mode.svg) no-repeat 10px center;\">\n" \
+                          "  <div class=\"incognito-body-mainblock\">\n"
+                          "    <div class=\"incognito-body-image\" style=\"background-image:url(ephy-resource:///org/gnome/epiphany/private-mode.svg);\">\n" \
+                          "    </div>\n"
+                          "    <div class=\"incognito-body-desc\">\n"
                           "      <h1>%s</h1>\n"
                           "      <p>%s</p>\n"
-                          "      <p><strong>%s</strong> %s</p>\n"
+                          "      <p><strong>%s</strong><br/> %s</p>\n"
                           "    </div>\n"
                           "  </div>\n"
                           "</body>\n"
