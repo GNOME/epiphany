@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="EphyPagesView" parent="GtkScrolledWindow">
+    <property name="hscrollbar_policy">never</property>
+    <property name="propagate_natural_height">True</property>
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkListBox" id="list_box">
+        <property name="margin_bottom">12</property>
+        <property name="margin_end">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_top">12</property>
+        <property name="selection_mode">single</property>
+        <property name="visible">True</property>
+        <property name="width_request">300</property>
+        <signal name="row-selected" handler="row_selected_cb" swapped="true"/>
+      </object>
+    </child>
+  </template>
+</interface>
