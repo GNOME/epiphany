@@ -178,27 +178,23 @@ html.epiphany-html {
 /* about:incognito */
 
 .incognito-body {
-    margin: 0;
-    padding: 0;
-}
-
-.incognito-body div#mainblock {
-    display: table;
-    max-width: 40em;
-    margin-left: auto;
-    margin-right: auto;
-    height: 75%;
-}
-
-.incognito-body div#mainblock>div {
-    margin: 0 10px;
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0 20px 0 160px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width:36em;
+    margin: 30px auto 60px;
+    text-align:block;
 }
 
 .incognito-body h1 {
     color: #888a85;
+    text-align:center;
+}
+
+.incognito-body-image {
+    margin:auto;
+    display:block;
 }
 
 /* about:overview */
