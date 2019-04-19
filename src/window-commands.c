@@ -831,11 +831,15 @@ window_cmd_new_tab (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
+  GtkWidget *stack;
   EphyWindow *window = user_data;
+
+  stack = ephy_window_get_stack (window);
 
   ephy_link_open (EPHY_LINK (window),
                   NULL, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
 }
 
 static void
