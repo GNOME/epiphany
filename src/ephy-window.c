@@ -42,11 +42,13 @@
 #include "ephy-location-entry.h"
 #include "ephy-mouse-gesture-controller.h"
 #include "ephy-notebook.h"
+#include "ephy-pages-view.h"
 #include "ephy-prefs.h"
 #include "ephy-security-popover.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-tab-header-bar.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
@@ -110,6 +112,7 @@ const struct {
   { "win.send-to", { "Send", NULL } },
   { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
   { "win.home", { "<alt>Home", NULL } },
+  { "win.content", { "Escape", NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -144,6 +147,8 @@ struct _EphyWindow {
   DzlApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
+  GtkWidget *main_stack;
+  EphyPagesView *pages_view;
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   GtkNotebook *notebook;
@@ -831,6 +836,8 @@ static const GActionEntry window_entries [] =
   { "send-to", window_cmd_send_to },
   { "location", window_cmd_go_location },
   { "home", window_cmd_go_home },
+  { "content", window_cmd_go_content },
+  { "tabs-view", window_cmd_go_tabs_view },
 
   { "show-tab", window_cmd_show_tab, "u", "uint32 0", window_cmd_change_show_tab_state },
 
@@ -3308,11 +3315,32 @@ static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
   GtkWidget *header_bar;
+  GtkWidget *tab_header_bar;
+  GtkWidget *header_stack;
   EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
-  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
+  tab_header_bar = ephy_tab_header_bar_new ();
+  header_stack = gtk_stack_new ();
+
+  gtk_stack_add_named (GTK_STACK (header_stack), header_bar, "content");
+  gtk_stack_add_named (GTK_STACK (header_stack), tab_header_bar, "tabs");
+
+  g_object_bind_property (G_OBJECT (window->main_stack),
+                          "visible-child-name", G_OBJECT (header_stack),
+                          "visible-child-name", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (G_OBJECT (window->main_stack),
+                          "transition-type", G_OBJECT (header_stack),
+                          "transition-type", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (G_OBJECT (window->main_stack),
+                          "transition-duration", G_OBJECT (header_stack),
+                          "transition-duration", G_BINDING_SYNC_CREATE);
+
+  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_stack);
   gtk_widget_show (header_bar);
+  gtk_widget_show (header_stack);
+
+  gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "content");
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_widget, "lock-clicked",
@@ -3348,9 +3376,6 @@ setup_action_bar (EphyWindow *window)
   action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_widget_show (action_bar);
-
-  ephy_action_bar_set_notebook (EPHY_ACTION_BAR (action_bar),
-                                EPHY_NOTEBOOK (window->notebook));
 
   return action_bar;
 }
@@ -3553,6 +3578,10 @@ ephy_window_constructed (GObject *object)
   setup_tab_accels (window);
 
   window->notebook = setup_notebook (window);
+  window->main_stack = gtk_stack_new ();
+  window->pages_view = ephy_pages_view_new ();
+
+  ephy_pages_view_set_notebook (window->pages_view, EPHY_NOTEBOOK (window->notebook));
 
   /* Setup incognito mode style */
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
@@ -3574,9 +3603,16 @@ ephy_window_constructed (GObject *object)
 
   gtk_box_pack_start (box, GTK_WIDGET (window->notebook), TRUE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
+  gtk_stack_add_named (GTK_STACK (window->main_stack), GTK_WIDGET (box), "content");
+  gtk_stack_add_named (GTK_STACK (window->main_stack), GTK_WIDGET (window->pages_view), "tabs");
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->main_stack));
+  gtk_widget_show_all (GTK_WIDGET (window->pages_view));
+  gtk_widget_show (GTK_WIDGET (window->main_stack));
   gtk_widget_show (GTK_WIDGET (box));
   gtk_widget_show (GTK_WIDGET (window->notebook));
+
+  gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
+  gtk_stack_set_transition_type (GTK_STACK (window->main_stack), GTK_STACK_TRANSITION_TYPE_CROSSFADE);
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
@@ -3725,6 +3761,21 @@ ephy_window_get_notebook (EphyWindow *window)
   return GTK_WIDGET (window->notebook);
 }
 
+/**
+ * ephy_window_get_stack:
+ * @window: an #EphyWindow
+ *
+ * Returns the #GtkStack housing the content and tab views
+ *
+ * Return value: (transfer none): the @window's #GtkStack
+ **/
+GtkWidget *
+ephy_window_get_stack (EphyWindow *window)
+{
+  g_assert (EPHY_IS_WINDOW (window));
+
+  return GTK_WIDGET (window->main_stack);
+}
 /**
  * ephy_window_get_find_toolbar:
  * @window: an #EphyWindow
