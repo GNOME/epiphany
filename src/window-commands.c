@@ -2293,6 +2293,30 @@ window_cmd_go_home (GSimpleAction *action,
 }
 
 void
+window_cmd_go_content (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  GtkWidget *stack;
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  stack = ephy_window_get_stack (window);
+  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+}
+
+void
+window_cmd_go_tabs_view (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
+{
+  GtkWidget *stack;
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  stack = ephy_window_get_stack (window);
+  gtk_stack_set_visible_child_name (GTK_STACK (stack), "tabs");
+}
+
+void
 window_cmd_change_browse_with_caret_state (GSimpleAction *action,
                                            GVariant      *state,
                                            gpointer       user_data)

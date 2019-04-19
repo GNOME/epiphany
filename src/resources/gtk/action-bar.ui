@@ -14,12 +14,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkMenuButton" id="pages_button">
+          <object class="GtkButton" id="pages_button">
             <property name="visible">True</property>
             <property name="valign">center</property>
-            <!-- Translators: tooltip for the page switcher menu button -->
+            <!-- Translators: tooltip for the page switcher button -->
             <property name="tooltip_text" translatable="yes">View open pages</property>
-            <property name="popover">pages_popover</property>
+            <property name="action_name">win.tabs-view</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -46,7 +46,4 @@
       </object>
     </child>
   </template>
-  <object class="EphyPagesPopover" id="pages_popover">
-    <property name="visible">True</property>
-  </object>
 </interface>
