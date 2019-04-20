@@ -284,6 +284,23 @@ confirm_close_with_downloads (EphyWindow *window)
   return response == GTK_RESPONSE_ACCEPT;
 }
 
+static gboolean
+confirm_close_with_multiple_tabs (EphyWindow *window)
+{
+  GtkWidget *dialog;
+  int response;
+
+  dialog = construct_confirm_close_dialog (window,
+                                           _("There are multiple tabs open"),
+                                           _("If you close, all tabs are lost"),
+                                           _("Close tabs"));
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  gtk_widget_destroy (dialog);
+
+  return response == GTK_RESPONSE_ACCEPT;
+}
+
 static void
 impl_remove_child (EphyEmbedContainer *container,
                    EphyEmbed          *child)
@@ -3946,9 +3963,17 @@ ephy_window_close (EphyWindow *window)
       g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                               EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA) &&
       gtk_notebook_get_n_pages (window->notebook) > 0) {
+
     ephy_window_check_modified_forms (window);
     /* stop window close */
     return FALSE;
+  }
+
+  if (ephy_shell_get_n_windows (ephy_shell_get_default ()) > 1 &&
+      gtk_notebook_get_n_pages (window->notebook) > 1 &&
+      !confirm_close_with_multiple_tabs (window)) {
+      /* stop window close */
+      return FALSE;
   }
 
   /* If this is the last window, check ongoing downloads and save its state in the session. */
