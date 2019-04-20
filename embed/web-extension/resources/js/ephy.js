@@ -262,7 +262,7 @@ Ephy.formControlsAssociated = function(pageID, forms, serializer)
     }
 }
 
-Ephy.handleFormSubmission = function(pageID, form, formAuthRequester)
+Ephy.handleFormSubmission = function(pageID, form)
 {
     let formManager = null;
     for (let i = 0; i < Ephy.formManagers.length; i++) {
@@ -278,7 +278,7 @@ Ephy.handleFormSubmission = function(pageID, form, formAuthRequester)
         Ephy.formManagers.push(formManager);
     }
 
-    formManager.handleFormSubmission(formAuthRequester);
+    formManager.handleFormSubmission();
 }
 
 Ephy.hasModifiedForms = function()
