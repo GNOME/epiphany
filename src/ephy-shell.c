@@ -1212,3 +1212,14 @@ ephy_shell_open_uris (EphyShell        *shell,
 
   shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
+
+gboolean
+is_desktop_pantheon (void)
+{
+  const gchar *xdg_current_desktop = g_environ_getenv (g_get_environ (), "XDG_CURRENT_DESKTOP");
+
+  if (!xdg_current_desktop)
+      return FALSE;
+
+  return strstr (xdg_current_desktop, "Pantheon") != NULL;
+}

@@ -256,6 +256,11 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar_end->downloads_button), action_bar_end->downloads_popover);
   }
 
+  if (is_desktop_pantheon ())
+    gtk_button_set_image (GTK_BUTTON (action_bar_end->bookmarks_button),
+                          gtk_image_new_from_icon_name ("user-bookmarks",
+                          GTK_ICON_SIZE_LARGE_TOOLBAR));
+
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
                            object, 0);
