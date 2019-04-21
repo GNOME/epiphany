@@ -1209,3 +1209,4 @@ ephy_shell_open_uris (EphyShell        *shell,
 
   shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
+

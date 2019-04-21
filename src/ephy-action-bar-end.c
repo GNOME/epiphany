@@ -20,7 +20,7 @@
  */
 
 #include "ephy-action-bar-end.h"
-
+#include "ephy-desktop-utils.h"
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
 #include "ephy-shell.h"
@@ -254,6 +254,12 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
     action_bar_end->downloads_popover = ephy_downloads_popover_new (action_bar_end->downloads_button);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar_end->downloads_button), action_bar_end->downloads_popover);
+  }
+
+  if (is_desktop_pantheon ()) {
+    gtk_button_set_image (GTK_BUTTON (action_bar_end->bookmarks_button),
+                          gtk_image_new_from_icon_name ("user-bookmarks",
+                          GTK_ICON_SIZE_LARGE_TOOLBAR));
   }
 
   g_signal_connect_object (downloads_manager, "download-added",
