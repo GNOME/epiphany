@@ -1574,14 +1574,15 @@ populate_context_menu (WebKitWebView       *web_view,
     if (!app_mode) {
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "open-link-in-new-tab", window);
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-link-in-new-window", window);
-      if (!incognito_mode)
-        add_action_to_context_menu (context_menu, popup_action_group,
-                                    "open-link-in-incognito-window", window);
-      webkit_context_menu_append (context_menu,
-                                  webkit_context_menu_item_new_separator ());
     }
+
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "open-link-in-new-window", window);
+    if (!incognito_mode)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-link-in-incognito-window", window);
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_separator ());
 
     if (should_show_copy_outside_editable (web_view))
       add_action_to_context_menu (context_menu, window_action_group,
