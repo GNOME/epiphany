@@ -21,6 +21,7 @@
 
 #include "ephy-action-bar-start.h"
 
+#include "ephy-desktop-utils.h"
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -467,6 +468,15 @@ ephy_action_bar_start_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_action_bar_start_parent_class)->dispose (object);
 }
 
+static GtkIconSize
+get_icon_size (void)
+{
+  if (is_desktop_pantheon ())
+    return GTK_ICON_SIZE_LARGE_TOOLBAR;
+
+  return GTK_ICON_SIZE_BUTTON;
+}
+
 static void
 ephy_action_bar_start_constructed (GObject *object)
 {
@@ -514,6 +524,18 @@ ephy_action_bar_start_constructed (GObject *object)
 
   g_signal_connect (action_bar_start->new_tab_button, "button-release-event",
                     G_CALLBACK (new_tab_button_release_event_cb), action_bar_start);
+
+  if (is_desktop_pantheon ()) {
+    gtk_button_set_image (GTK_BUTTON (action_bar_start->navigation_back),
+                          gtk_image_new_from_icon_name ("go-previous-symbolic",
+                          get_icon_size ()));
+    gtk_button_set_image (GTK_BUTTON (action_bar_start->navigation_forward),
+                          gtk_image_new_from_icon_name ("go-next-symbolic",
+                          get_icon_size ()));
+    gtk_button_set_image (GTK_BUTTON (action_bar_start->homepage_button),
+                          gtk_image_new_from_icon_name ("go-home-symbolic",
+                          get_icon_size ()));
+  }
 }
 
 static void
@@ -574,16 +596,16 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
                                                          gboolean            loading)
 {
   if (loading) {
-        gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
+    gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
                                   "process-stop-symbolic",
-                                  GTK_ICON_SIZE_BUTTON);
+                                  get_icon_size());
     /* Translators: tooltip for the stop button */
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _("Stop loading the current page"));
   } else {
-        gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
-                                      "view-refresh-symbolic",
-                                      GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
+                                  "view-refresh-symbolic",
+                                  get_icon_size());
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
