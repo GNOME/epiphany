@@ -141,3 +141,30 @@
     background-image: none;
   }
 }
+
+.pages-button {
+  > label {
+    text-shadow: none;
+    font-weight: bold;
+    color: themecolor(theme_selected_fg_color);
+    background-color: themecolor(theme_text_color);
+    font-size: smaller;
+    border-radius: 4px;
+
+    &:backdrop {
+      background-color: #{"mix(" + themecolor(theme_unfocused_fg_color) + ", " + themecolor(theme_unfocused_base_color) + ", 0.2)"};
+    }
+  }
+}
+
+button.text-button.pages-button {
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 24px;
+
+  // Enforces .image-button-like sizing
+  > label {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

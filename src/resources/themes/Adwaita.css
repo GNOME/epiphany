@@ -46,7 +46,15 @@
 
 .url_progress trough { border: none; background-color: transparent; background-image: none; }
 
-.incognito-mode headerbar { background: #c4d6e9 -gtk-icontheme("user-not-tracked-symbolic") 180px 0/64px 64px no-repeat, linear-gradient(to top, #bdd1e6, #c8d9ea); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #9cb9da; color: rgba(46, 52, 54, 0.2); }
+.pages-button > label { text-shadow: none; font-weight: bold; color: @theme_selected_fg_color; background-color: @theme_text_color; font-size: smaller; border-radius: 4px; }
+
+.pages-button > label:backdrop { background-color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.2); }
+
+button.text-button.pages-button { padding-left: 5px; padding-right: 5px; min-width: 24px; }
+
+button.text-button.pages-button > label { padding-left: 8px; padding-right: 8px; }
+
+.incognito-mode headerbar { background: #c4d6e9 -gtk-icontheme("user-not-tracked-symbolic") 180px 0/64px 64px no-repeat, linear-gradient(to top, #94b4d7, #bdd1e6 2px, #c4d6e9 3px); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #779fcc; color: rgba(46, 52, 54, 0.2); }
 
 .incognito-mode headerbar:backdrop { background-image: -gtk-icontheme("user-not-tracked-symbolic"), image(#eaf0f7); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: rgba(140, 146, 150, 0.1); }
 
@@ -68,41 +76,41 @@
 
 .incognito-mode notebook > header > tabs > tab:backdrop { color: #b1b8bd; border-color: transparent; background-color: transparent; box-shadow: none; }
 
-.incognito-mode notebook > header > tabs > tab:checked { color: #2e3436; border-color: rgba(193, 211, 232, 0.5); background-color: rgba(234, 240, 247, 0.5); box-shadow: inset 0 -3px #3584e4; }
+.incognito-mode notebook > header > tabs > tab:checked { color: #2e3436; border-color: rgba(193, 211, 232, 0.5); background-color: rgba(234, 240, 247, 0.5); box-shadow: inset 0 -3px #4a90d9; }
 
 .incognito-mode notebook > header > tabs > tab:checked:hover { background-color: rgba(234, 240, 247, 0.7); }
 
 .incognito-mode notebook > header > tabs > tab:backdrop:checked { color: #8c9296; border-color: #c9d9eb; background-color: #eaf0f7; }
 
-.incognito-mode notebook > header > tabs > arrow:active { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; background-image: image(#b6cce3); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode notebook > header > tabs > arrow:active { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #9fbcdb; background-image: image(#d3e0ef); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 .incognito-mode headerbar > *, .incognito-mode actionbar > *, .incognito-mode notebook > header > * { color: #2e3436; }
 
 .incognito-mode headerbar > *:backdrop, .incognito-mode actionbar > *:backdrop, .incognito-mode notebook > header > *:backdrop { color: #8c9296; }
 
-.incognito-mode headerbar button, .incognito-mode actionbar button, .incognito-mode notebook > header button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; background-image: linear-gradient(to top, #dbe6f1 2px, #eaf0f7); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.07); }
+.incognito-mode headerbar button, .incognito-mode actionbar button, .incognito-mode notebook > header button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #9fbcdb; border-bottom-color: #7aa2cd; background-image: linear-gradient(to bottom, #eaf0f7, #dbe6f1 60%, #c4d6e9); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
 
 .incognito-mode headerbar button.flat, .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.flat, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.flat, .incognito-mode notebook > header button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
-.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover, .incognito-mode notebook > header button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; border-bottom-color: #9fbcdb; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #eaf0f7, #edf3f8 1px); }
+.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover, .incognito-mode notebook > header button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #9fbcdb; border-bottom-color: #7aa2cd; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white; background-image: linear-gradient(to bottom, white, #eaf0f7 60%, #dbe6f1); }
 
-.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:active, .incognito-mode notebook > header button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #c4d6e9; background-image: image(#b6cce3); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:active, .incognito-mode notebook > header button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #9fbcdb; background-image: image(#d3e0ef); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled { border-color: #c4d6e9; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled { border-color: #9fbcdb; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode headerbar button:disabled label, .incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled label, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled label, .incognito-mode notebook > header button:disabled { color: #929595; }
+.incognito-mode headerbar button:disabled label, .incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled label, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled label, .incognito-mode notebook > header button:disabled { color: #8b8e8f; }
 
-.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop { border-color: #eaf0f7; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop { border-color: #eaf0f7; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #9fbcdb; }
 
-.incognito-mode headerbar button:backdrop label, .incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop label, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop label, .incognito-mode notebook > header button:backdrop { color: #929595; }
+.incognito-mode headerbar button:backdrop label, .incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop label, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop label, .incognito-mode notebook > header button:backdrop { color: #8b8e8f; }
 
-.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #9fbcdb; }
 
-.incognito-mode headerbar button:backdrop:active label, .incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active label, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active label, .incognito-mode notebook > header button:backdrop:active { color: #929595; }
+.incognito-mode headerbar button:backdrop:active label, .incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active label, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active label, .incognito-mode notebook > header button:backdrop:active { color: #8b8e8f; }
 
-.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled { border-color: #edf2f8; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #c4d6e9; }
+.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled { border-color: #edf2f8; background-image: image(#edf2f8); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #9fbcdb; }
 
 .incognito-mode headerbar button:backdrop:disabled label, .incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled label, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled label, .incognito-mode notebook > header button:backdrop:disabled { color: #aab0b4; }
 
@@ -110,61 +118,61 @@
 
 .incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop { border-color: #d0dded; background-image: image(#d0dded); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode headerbar button:checked:backdrop label, .incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop label, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop label, .incognito-mode notebook > header button:checked:backdrop { color: #929595; }
+.incognito-mode headerbar button:checked:backdrop label, .incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop label, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop label, .incognito-mode notebook > header button:checked:backdrop { color: #8b8e8f; }
 
 .incognito-mode headerbar button.flat:backdrop, .incognito-mode headerbar button.titlebutton:backdrop, .incognito-mode actionbar button.flat:backdrop, .incognito-mode actionbar button.titlebutton:backdrop, .incognito-mode notebook > header button.flat:backdrop, .incognito-mode notebook > header button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode headerbar entry, .incognito-mode actionbar entry, .incognito-mode notebook > header entry { border-color: #9cb9da; }
+.incognito-mode headerbar entry, .incognito-mode actionbar entry, .incognito-mode notebook > header entry { border-color: #779fcc; }
 
-.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus, .incognito-mode notebook > header entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus, .incognito-mode notebook > header entry:focus { border-color: #4a90d9; box-shadow: inset 0 0 0 1px #4a90d9; }
 
 .incognito-mode headerbar entry:backdrop, .incognito-mode actionbar entry:backdrop, .incognito-mode notebook > header entry:backdrop { box-shadow: none; }
 
-.automation-mode headerbar { background: #ff9600 linear-gradient(to top, #f59000, #ff9805); box-shadow: inset 0 1px #ffb142; border-color: #cc7800; color: rgba(46, 52, 54, 0.2); }
+.automation-mode headerbar { background: #ff9600 linear-gradient(to top, #bd6f00, #f59000 2px, #ff9600 3px); box-shadow: inset 0 1px #ffb142; border-color: #995a00; color: rgba(46, 52, 54, 0.2); }
 
 .automation-mode headerbar > * { color: #2e3436; }
 
-.automation-mode headerbar > *:backdrop { color: #929595; }
+.automation-mode headerbar > *:backdrop { color: #8b8e8f; }
 
-.automation-mode headerbar:backdrop { box-shadow: inset 0 1px #ffb142; color: rgba(146, 149, 149, 0.1); }
+.automation-mode headerbar:backdrop { box-shadow: inset 0 1px #ffb142; color: rgba(139, 142, 143, 0.1); }
 
-.automation-mode headerbar button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #cc7800; border-bottom-color: #995a00; background-image: linear-gradient(to top, #eb8a00 2px, #ff9600); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.07); }
+.automation-mode headerbar button { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #995a00; border-bottom-color: #663c00; background-image: linear-gradient(to bottom, #ff9600, #eb8a00 60%, #cc7800); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2); }
 
 .automation-mode headerbar button.flat, .automation-mode headerbar button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 .automation-mode headerbar button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
-.automation-mode headerbar button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #cc7800; border-bottom-color: #995a00; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #ff9600, #ff9805 1px); }
+.automation-mode headerbar button:hover { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #995a00; border-bottom-color: #663c00; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); background-image: linear-gradient(to bottom, #ffa31f, #ff9600 60%, #eb8a00); }
 
-.automation-mode headerbar button:active, .automation-mode headerbar button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #cc7800; background-image: image(#b86c00); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.automation-mode headerbar button:active, .automation-mode headerbar button:checked { color: #2e3436; outline-color: rgba(46, 52, 54, 0.3); border-color: #995a00; background-image: image(#e08400); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.automation-mode headerbar button:disabled { border-color: #cc7800; background-image: image(#ffa626); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode headerbar button:disabled { border-color: #995a00; background-image: image(#ffa626); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode headerbar button:disabled label, .automation-mode headerbar button:disabled { color: #929595; }
+.automation-mode headerbar button:disabled label, .automation-mode headerbar button:disabled { color: #8b8e8f; }
 
-.automation-mode headerbar button:backdrop { border-color: #ff9600; background-image: image(#ff9600); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #cc7800; }
+.automation-mode headerbar button:backdrop { border-color: #ff9600; background-image: image(#ff9600); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #995a00; }
 
-.automation-mode headerbar button:backdrop label, .automation-mode headerbar button:backdrop { color: #929595; }
+.automation-mode headerbar button:backdrop label, .automation-mode headerbar button:backdrop { color: #8b8e8f; }
 
-.automation-mode headerbar button:backdrop:active { border-color: #fc9500; background-image: image(#fc9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #cc7800; }
+.automation-mode headerbar button:backdrop:active { border-color: #fc9500; background-image: image(#fc9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #995a00; }
 
-.automation-mode headerbar button:backdrop:active label, .automation-mode headerbar button:backdrop:active { color: #929595; }
+.automation-mode headerbar button:backdrop:active label, .automation-mode headerbar button:backdrop:active { color: #8b8e8f; }
 
-.automation-mode headerbar button:backdrop:disabled { border-color: #ffa626; background-image: image(#ffa626); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #cc7800; }
+.automation-mode headerbar button:backdrop:disabled { border-color: #ffa626; background-image: image(#ffa626); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #995a00; }
 
 .automation-mode headerbar button:backdrop:disabled label, .automation-mode headerbar button:backdrop:disabled { color: #b67e2c; }
 
 .automation-mode headerbar button.flat:backdrop, .automation-mode headerbar button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.automation-mode headerbar entry { border-color: #cc7800; }
+.automation-mode headerbar entry { border-color: #995a00; }
 
-.automation-mode headerbar entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+.automation-mode headerbar entry:focus { border-color: #4a90d9; box-shadow: inset 0 0 0 1px #4a90d9; }
 
 .automation-mode headerbar entry:backdrop { box-shadow: none; }
 
 .url_entry:not(:hover):not(:focus) { background-color: rgba(255, 255, 255, 0.75); }
 
-.bookmark-tag-widget { background-color: #dfdcd8; }
+.bookmark-tag-widget { background-color: #cfcfcd; }
 
 .bookmark-tag-widget image, .bookmark-tag-widget label { color: #2e3436; }
 
@@ -172,9 +180,9 @@
 
 .bookmark-tag-widget button:last-child image { color: #454f52; border: 1px solid transparent; border-radius: 5px; }
 
-.bookmark-tag-widget button:last-child:hover image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; background-image: linear-gradient(to top, #edebe9 2px, #f6f5f4); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #f6f5f4, #f8f8f7 1px); }
+.bookmark-tag-widget button:last-child:hover image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white; background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd); }
 
-.bookmark-tag-widget button:last-child:active image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; background-image: linear-gradient(to top, #edebe9 2px, #f6f5f4); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; background-image: image(#d6d1cd); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.bookmark-tag-widget button:last-child:active image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; background-image: image(#d9d9d7); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 .bookmark-tag-widget-selected { background-color: @theme_selected_bg_color; }
 
@@ -184,25 +192,25 @@
 
 .bookmark-tag-widget-selected button:last-child image { color: #ffffff; border: 1px solid transparent; border-radius: 5px; }
 
-.bookmark-tag-widget-selected button:last-child:hover image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; background-image: linear-gradient(to top, #2379e2 2px, #3584e4); text-shadow: 0 -1px rgba(0, 0, 0, 0.559216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.559216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; text-shadow: 0 -1px rgba(0, 0, 0, 0.511216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.511216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #3584e4, #3987e5 1px); }
+.bookmark-tag-widget-selected button:last-child:hover image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; text-shadow: 0 -1px rgba(0, 0, 0, 0.495529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.495529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5); }
 
-.bookmark-tag-widget-selected button:last-child:active image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; background-image: linear-gradient(to top, #2379e2 2px, #3584e4); text-shadow: 0 -1px rgba(0, 0, 0, 0.559216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.559216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; background-image: image(#1961b9); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.bookmark-tag-widget-selected button:last-child:active image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; background-image: image(#3180d4); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 .page-row-close-button { background: none; border: none; box-shadow: none; }
 
 .page-row-close-button:last-child image { color: #454f52; border: 1px solid transparent; border-radius: 5px; }
 
-.page-row-close-button:last-child:hover image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; background-image: linear-gradient(to top, #edebe9 2px, #f6f5f4); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #f6f5f4, #f8f8f7 1px); }
+.page-row-close-button:last-child:hover image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white; background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd); }
 
-.page-row-close-button:last-child:active image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; border-bottom-color: #bfb8b1; background-image: linear-gradient(to top, #edebe9 2px, #f6f5f4); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #cdc7c2; background-image: image(#d6d1cd); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.page-row-close-button:last-child:active image { color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; border-bottom-color: #91918c; background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); color: #454f52; outline-color: rgba(69, 79, 82, 0.3); border-color: #b6b6b3; background-image: image(#d9d9d7); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 row:selected .page-row-close-button { background: none; border: none; box-shadow: none; }
 
 row:selected .page-row-close-button:last-child image { color: #ffffff; border: 1px solid transparent; border-radius: 5px; }
 
-row:selected .page-row-close-button:last-child:hover image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; background-image: linear-gradient(to top, #2379e2 2px, #3584e4); text-shadow: 0 -1px rgba(0, 0, 0, 0.559216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.559216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; text-shadow: 0 -1px rgba(0, 0, 0, 0.511216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.511216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); background-image: linear-gradient(to top, #3584e4, #3987e5 1px); }
+row:selected .page-row-close-button:last-child:hover image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; text-shadow: 0 -1px rgba(0, 0, 0, 0.495529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.495529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5); }
 
-row:selected .page-row-close-button:last-child:active image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; border-bottom-color: #15539e; background-image: linear-gradient(to top, #2379e2 2px, #3584e4); text-shadow: 0 -1px rgba(0, 0, 0, 0.559216); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.559216); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #1b6acb; background-image: image(#1961b9); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+row:selected .page-row-close-button:last-child:active image { color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; border-bottom-color: #184472; background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6); text-shadow: 0 -1px rgba(0, 0, 0, 0.543529); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.543529); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); color: #ffffff; outline-color: rgba(255, 255, 255, 0.3); border-color: #215d9c; background-image: image(#3180d4); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
 row.narrow .page-row-close-button image { padding: 6px; }
 
@@ -230,12 +238,12 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .main-notebook header.left tab, .main-notebook header.right tab { border-style: solid none; }
 
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):hover { border-color: rgba(205, 199, 194, 0.3); background-color: rgba(246, 245, 244, 0.2); }
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):hover { border-color: rgba(182, 182, 179, 0.3); background-color: rgba(232, 232, 231, 0.2); }
 
 window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop { border-color: transparent; background-color: transparent; }
 
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked { border-color: rgba(205, 199, 194, 0.5); background-color: rgba(246, 245, 244, 0.5); }
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked { border-color: rgba(182, 182, 179, 0.5); background-color: rgba(232, 232, 231, 0.5); }
 
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(246, 245, 244, 0.7); }
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(232, 232, 231, 0.7); }
 
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #d5d0cc; background-color: #f6f5f4; }
+window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #c0c0bd; background-color: #e8e8e7; }

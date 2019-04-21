@@ -20,6 +20,7 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-notebook.h"
 #include "ephy-pages-popover.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -36,6 +37,7 @@ struct _EphyActionBar {
   GtkRevealer parent_instance;
 
   EphyWindow *window;
+  EphyNotebook *notebook;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   GtkMenuButton *pages_button;
@@ -54,6 +56,15 @@ sync_chromes_visibility (EphyActionBar *action_bar)
                           chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
   ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
                                                  chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+}
+
+static void
+update_num_pages (EphyActionBar *action_bar)
+{
+  g_autofree gchar *text = NULL;
+
+  text = g_strdup_printf ("%u", gtk_notebook_get_n_pages (GTK_NOTEBOOK (action_bar->notebook)));
+  gtk_button_set_label (GTK_BUTTON (action_bar->pages_button), text);
 }
 
 static void
@@ -94,10 +105,21 @@ ephy_action_bar_get_property (GObject    *object,
 static void
 ephy_action_bar_constructed (GObject *object)
 {
+  g_autofree gchar *text = NULL;
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
+
+  action_bar->notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (action_bar->window));
+  text = g_strdup_printf ("%u", gtk_notebook_get_n_pages (GTK_NOTEBOOK (action_bar->notebook)));
+  gtk_button_set_label (GTK_BUTTON (action_bar->pages_button), text);
 
   g_signal_connect_object (action_bar->window, "notify::chrome",
                            G_CALLBACK (sync_chromes_visibility), action_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (action_bar->notebook, "page-added",
+                           G_CALLBACK (update_num_pages), action_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (action_bar->notebook, "page-removed",
+                           G_CALLBACK (update_num_pages), action_bar,
                            G_CONNECT_SWAPPED);
 }
 

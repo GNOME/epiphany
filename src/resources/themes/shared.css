@@ -45,3 +45,11 @@
 .url_progress progress { background-color: @theme_selected_bg_color; background-image: none; border: none; min-height: 2px; }
 
 .url_progress trough { border: none; background-color: transparent; background-image: none; }
+
+.pages-button > label { text-shadow: none; font-weight: bold; color: @theme_selected_fg_color; background-color: @theme_text_color; font-size: smaller; border-radius: 4px; }
+
+.pages-button > label:backdrop { background-color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.2); }
+
+button.text-button.pages-button { padding-left: 5px; padding-right: 5px; min-width: 24px; }
+
+button.text-button.pages-button > label { padding-left: 8px; padding-right: 8px; }
