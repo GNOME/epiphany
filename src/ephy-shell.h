@@ -123,4 +123,6 @@ EphyShellStartupContext *ephy_shell_startup_context_new   (EphyStartupMode      
 
 void                     _ephy_shell_create_instance      (EphyEmbedShellMode mode);
 
+gboolean                 is_desktop_pantheon              (void);
+
 G_END_DECLS
