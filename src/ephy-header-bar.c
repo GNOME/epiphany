@@ -24,6 +24,7 @@
 #include "ephy-header-bar.h"
 
 #include "ephy-add-bookmark-popover.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-utils.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-location-entry.h"
@@ -135,17 +136,6 @@ update_revealer_visibility (GtkRevealer *revealer)
                           gtk_revealer_get_child_revealed (revealer));
 }
 
-static gboolean
-is_desktop_pantheon (void)
-{
-  const gchar *xdg_current_desktop = g_environ_getenv (g_get_environ (), "XDG_CURRENT_DESKTOP");
-
-  if (!xdg_current_desktop)
-      return FALSE;
-
-  return strstr (xdg_current_desktop, "Pantheon") != NULL;
-}
-
 static void
 ephy_header_bar_constructed (GObject *object)
 {
@@ -237,8 +227,14 @@ ephy_header_bar_constructed (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
   }
 
-  if (is_desktop_pantheon ())
+  if (is_desktop_pantheon ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "about-button")));
+
+    gtk_button_set_image (GTK_BUTTON (button),
+                          gtk_image_new_from_icon_name ("open-menu",
+                          GTK_ICON_SIZE_LARGE_TOOLBAR));
+
+  }
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
