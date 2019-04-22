@@ -201,7 +201,7 @@ ephy_pages_view_init (EphyPagesView *self)
 
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 
-  ephy_pages_view_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NORMAL);
+  ephy_pages_view_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NARROW);
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->list_store),
                            create_row,
