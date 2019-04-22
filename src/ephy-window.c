@@ -3359,6 +3359,7 @@ ephy_window_constructed (GObject *object)
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
   guint i;
+  EphyShell *shell;
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
@@ -3437,8 +3438,10 @@ ephy_window_constructed (GObject *object)
 
   window->notebook = setup_notebook (window);
 
+  shell = ephy_shell_get_default ();
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
+
   /* Setup incognito mode style */
-  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (window)), "incognito-mode");
   else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
@@ -3516,6 +3519,18 @@ ephy_window_constructed (GObject *object)
                                           SENS_FLAG_CHROME, TRUE);
   } else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
+  }
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "reopen");
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  } else {
+    g_object_bind_property (G_OBJECT (ephy_shell_get_session (shell)),
+                            "can-undo-tab-closed",
+                            action,
+                            "enabled",
+                            G_BINDING_SYNC_CREATE);
   }
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
