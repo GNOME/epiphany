@@ -280,7 +280,7 @@ confirm_close_with_downloads (EphyWindow *window)
   int response;
 
   dialog = construct_confirm_close_dialog (window,
-                                           _("There are ongoing downloads"),
+                                           _("There are ongoing downloads."),
                                            _("If you quit, the downloads will be cancelled"),
                                            _("Quit and cancel downloads"));
   response = gtk_dialog_run (GTK_DIALOG (dialog));
