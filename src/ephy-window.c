@@ -543,6 +543,12 @@ update_adaptive_mode (EphyWindow *window)
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
   ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
   ephy_notebook_set_adaptive_mode (notebook, adaptive_mode);
+
+  /* When switching to desktop sizes, drop the tabs view and go back
+   * to the main view.
+   */
+  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL)
+    gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
 }
 
 static void
