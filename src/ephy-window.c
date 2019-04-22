@@ -1861,10 +1861,12 @@ ephy_window_configure_for_view (EphyWindow    *window,
     chrome |= EPHY_WINDOW_CHROME_HEADER_BAR;
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    GtkWidget *entry;
+    GtkWidget *title_widget;
+    EphyLocationEntry *lentry;
 
-    entry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+    title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+    lentry = EPHY_LOCATION_ENTRY (title_widget);
+    gtk_editable_set_editable (GTK_EDITABLE (ephy_location_entry_get_entry (lentry)), FALSE);
 
     if (webkit_window_properties_get_menubar_visible (properties))
       chrome |= EPHY_WINDOW_CHROME_MENU;
