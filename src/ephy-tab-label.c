@@ -38,6 +38,7 @@ struct _EphyTabLabel {
 
   gboolean is_pinned;
   gboolean is_loading;
+  gboolean has_icon;
 };
 
 enum {
@@ -72,6 +73,17 @@ ephy_tab_label_set_spinning (EphyTabLabel *tab_label,
 }
 
 static void
+ephy_tab_label_update_icon (EphyTabLabel *self)
+{
+  if (!self->has_icon) {
+    if (self->is_pinned)
+      gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), "folder-documents-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    else
+      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), NULL);
+  }
+}
+
+static void
 ephy_tab_label_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -97,9 +109,17 @@ ephy_tab_label_set_property (GObject      *object,
     break;
   case PROP_ICON_BUF:
     gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object(value));
+    if (g_value_get_object(value))
+      self->has_icon = TRUE;
+
+    ephy_tab_label_update_icon (self);
     break;
   case PROP_SPINNING:
     ephy_tab_label_set_spinning (self, g_value_get_boolean(value));
+    if (self->is_loading)
+      self->has_icon = FALSE;
+
+    ephy_tab_label_update_icon (self);
     break;
   case PROP_AUDIO:
     gtk_widget_set_visible (self->audio_button, g_value_get_boolean(value));
@@ -143,6 +163,7 @@ static void
 ephy_tab_label_init (EphyTabLabel *self)
 {
    gtk_widget_init_template (GTK_WIDGET (self));
+   self->has_icon = FALSE;
 }
 
 static void
@@ -285,6 +306,9 @@ ephy_tab_label_set_pinned (GtkWidget *widget,
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
 
   self->is_pinned = is_pinned;
+
+  ephy_tab_label_update_icon (self);
+
   update_label (self);
 }
 
