@@ -38,6 +38,7 @@ struct _EphyTabLabel {
 
   gboolean is_pinned;
   gboolean is_loading;
+  gboolean has_icon;
 };
 
 enum {
@@ -72,6 +73,19 @@ ephy_tab_label_set_spinning (EphyTabLabel *tab_label,
 }
 
 static void
+ephy_tab_label_update_icon (EphyTabLabel *self)
+{
+  if (!self->has_icon) {
+    g_autoptr(GdkPixbuf) pixbuf = NULL;
+
+    if (self->is_pinned)
+      pixbuf = gdk_pixbuf_new_from_resource ("/org/gnome/epiphany/no-favicon-symbolic.svg", NULL);
+
+    gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), pixbuf);
+  }
+}
+
+static void
 ephy_tab_label_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -96,13 +110,16 @@ ephy_tab_label_set_property (GObject      *object,
     }
     break;
   case PROP_ICON_BUF:
-    gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object(value));
+    gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object (value));
+    self->has_icon = g_value_get_object (value) != NULL;
+
+    ephy_tab_label_update_icon (self);
     break;
   case PROP_SPINNING:
-    ephy_tab_label_set_spinning (self, g_value_get_boolean(value));
+    ephy_tab_label_set_spinning (self, g_value_get_boolean (value));
     break;
   case PROP_AUDIO:
-    gtk_widget_set_visible (self->audio_button, g_value_get_boolean(value));
+    gtk_widget_set_visible (self->audio_button, g_value_get_boolean (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -143,6 +160,7 @@ static void
 ephy_tab_label_init (EphyTabLabel *self)
 {
    gtk_widget_init_template (GTK_WIDGET (self));
+   self->has_icon = FALSE;
 }
 
 static void
@@ -285,6 +303,9 @@ ephy_tab_label_set_pinned (GtkWidget *widget,
   EphyTabLabel *self = EPHY_TAB_LABEL (widget);
 
   self->is_pinned = is_pinned;
+
+  ephy_tab_label_update_icon (self);
+
   update_label (self);
 }
 
