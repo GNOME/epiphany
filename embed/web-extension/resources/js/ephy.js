@@ -357,11 +357,11 @@ Ephy.PasswordManager = class PasswordManager
         });
     }
 
-    requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
+    requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
     {
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID,
+            pageID: this._pageID,
         });
     }
 
@@ -534,8 +534,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo == null,
-                                                 this._pageID);
+                                                 authInfo == null);
             }
         );
     }
