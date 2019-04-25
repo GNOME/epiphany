@@ -248,33 +248,34 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     }
 }
 
-Ephy.formControlsAssociated = function(pageID, forms, serializer)
+Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
 {
     Ephy.formManagers = [];
 
     for (let i = 0; i < forms.length; i++) {
         if (!(forms[i] instanceof HTMLFormElement))
             continue;
-        let formManager = new Ephy.FormManager(pageID, forms[i]);
+        let formManager = new Ephy.FormManager(pageID, frameID, forms[i]);
         formManager.handlePasswordForms(serializer);
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
     }
 }
 
-Ephy.handleFormSubmission = function(pageID, form)
+Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
+    // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
     for (let i = 0; i < Ephy.formManagers.length; i++) {
         let manager = Ephy.formManagers[i];
-        if (manager.pageID() == pageID && manager.form() == form) {
+        if (manager.frameID() == frameID && manager.form() == form) {
             formManager = manager;
             break;
         }
     }
 
     if (!formManager) {
-        formManager = new Ephy.FormManager(pageID, form);
+        formManager = new Ephy.FormManager(pageID, frameID, form);
         Ephy.formManagers.push(formManager);
     }
 
@@ -311,9 +312,10 @@ Ephy.hasModifiedForms = function()
 
 Ephy.PasswordManager = class PasswordManager
 {
-    constructor(pageID)
+    constructor(pageID, frameID)
     {
         this._pageID = pageID;
+        this._frameID = frameID;
         this._pendingPromises = [];
         this._promiseCounter = 0;
     }
@@ -345,7 +347,7 @@ Ephy.PasswordManager = class PasswordManager
             let promiseID = this._promiseCounter++;
             window.webkit.messageHandlers.passwordManagerQuery.postMessage({
                 origin, targetOrigin, username, usernameField, passwordField, promiseID,
-                pageID: this._pageID,
+                pageID: this._pageID, frameID: this._frameID
             });
             this._pendingPromises.push({promiseID, resolver});
         });
@@ -355,15 +357,16 @@ Ephy.PasswordManager = class PasswordManager
     {
         window.webkit.messageHandlers.passwordManagerSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID: this._pageID,
+            pageID: this._pageID
         });
     }
 
+    // FIXME: Why is pageID a parameter here?
     requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
     {
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID,
+            pageID
         });
     }
 
@@ -379,7 +382,7 @@ Ephy.PasswordManager = class PasswordManager
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
             window.webkit.messageHandlers.passwordManagerQueryUsernames.postMessage({
-                origin, promiseID, pageID: this._pageID,
+                origin, promiseID, pageID: this._pageID, frameID: this._frameID
             });
             this._pendingPromises.push({promiseID, resolver});
         });
@@ -388,9 +391,10 @@ Ephy.PasswordManager = class PasswordManager
 
 Ephy.FormManager = class FormManager
 {
-    constructor(pageID, form)
+    constructor(pageID, frameID, form)
     {
         this._pageID = pageID;
+        this._frameID = frameID;
         this._form = form;
         this._passwordFormMessageSerializer = null;
         this._preFillUserMenu = null;
@@ -399,9 +403,9 @@ Ephy.FormManager = class FormManager
 
     // Public
 
-    pageID()
+    frameID()
     {
-        return this._pageID;
+        return this._frameID;
     }
 
     form()
@@ -561,7 +565,7 @@ Ephy.FormManager = class FormManager
         let url = new URL(this._form.action);
         // Warning: we do not whitelist localhost because it could be redirected by DNS.
         let isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
-        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._pageID, isInsecureAction));
+        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._frameID, isInsecureAction));
     }
 
     _findPasswordFields()
