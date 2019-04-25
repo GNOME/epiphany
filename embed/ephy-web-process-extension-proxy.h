@@ -45,10 +45,10 @@ void                          ephy_web_process_extension_proxy_history_clear    
 void                          ephy_web_process_extension_proxy_password_query_usernames_response (EphyWebProcessExtensionProxy *web_process_extension,
                                                                                                   GList                        *users,
                                                                                                   gint32                        promise_id,
-                                                                                                  guint64                       page_id);
+                                                                                                  guint64                       frame_id);
 void                          ephy_web_process_extension_proxy_password_query_response           (EphyWebProcessExtensionProxy *web_process_extension,
                                                                                                   const char                   *username,
                                                                                                   const char                   *password,
                                                                                                   gint32                        promise_id,
-                                                                                                  guint64                       page_id);
+                                                                                                  guint64                       frame_id);
 G_END_DECLS
