@@ -346,6 +346,7 @@ typedef struct {
   char *origin;
   gint32 promise_id;
   guint64 page_id;
+  guint64 frame_id;
 } PasswordManagerData;
 
 static void
@@ -374,7 +375,7 @@ password_manager_query_finished_cb (GList               *records,
                                                                                    data->page_id,
                                                                                    data->origin);
   if (proxy)
-    ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id, data->page_id);
+    ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id, data->frame_id);
 
   password_manager_data_free (data);
 }
@@ -419,11 +420,13 @@ web_extension_password_manager_query_received_cb (WebKitUserContentManager *mana
   g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
+  guint64 frame_id = property_to_uint64 (value, "frameID");
 
   PasswordManagerData *data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
   data->page_id = page_id;
+  data->frame_id = frame_id;
   data->origin = g_steal_pointer (&origin);
 
   ephy_password_manager_query (priv->password_manager,
@@ -510,7 +513,10 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
 
   /* This also sanity checks that a page isn't saving websites for
    * other origins. Remember the request comes from the untrusted web
-   * process and we have to make sure it's not being evil here.
+   * process and we have to make sure it's not being evil here. This
+   * could also happen even without malice if the origin of a subframe
+   * doesn't match the origin of the main frame (in which case we'll
+   * refuse to save the password).
    */
   view = ephy_embed_shell_get_view_for_page_id (shell, page_id, origin);
   if (!view)
@@ -566,13 +572,14 @@ web_extension_password_manager_query_usernames_received_cb (WebKitUserContentMan
   g_autofree char *origin = property_to_string_or_null (value, "origin");
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
+  guint64 frame_id = property_to_uint64 (value, "frameID");
 
   GList *usernames;
   usernames = ephy_password_manager_get_usernames_for_origin (priv->password_manager, origin);
 
   EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
   if (proxy)
-    ephy_web_extension_proxy_password_query_usernames_response (proxy, usernames, promise_id, page_id);
+    ephy_web_extension_proxy_password_query_usernames_response (proxy, usernames, promise_id, frame_id);
 }
 
 static void

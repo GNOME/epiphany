@@ -57,6 +57,8 @@ struct _EphyWebExtension {
   WebKitScriptWorld *script_world;
 
   gboolean is_private_profile;
+
+  GHashTable *frames_map;
 };
 
 static const char introspection_xml[] =
@@ -87,12 +89,12 @@ static const char introspection_xml[] =
   "    <arg type='s' name='username' direction='in'/>"
   "    <arg type='s' name='password' direction='in'/>"
   "    <arg type='i' name='promise_id' direction='in'/>"
-  "    <arg type='t' name='page_id' direction='in'/>"
+  "    <arg type='t' name='frame_id' direction='in'/>"
   "  </method>"
   "  <method name='PasswordQueryUsernamesResponse'>"
   "    <arg type='as' name='users' direction='in'/>"
   "    <arg type='i' name='promise_id' direction='in'/>"
-  "    <arg type='t' name='page_id' direction='in'/>"
+  "    <arg type='t' name='frame_id' direction='in'/>"
   "  </method>"
   " </interface>"
   "</node>";
@@ -197,8 +199,8 @@ static void
 web_page_will_submit_form (WebKitWebPage            *web_page,
                            WebKitDOMHTMLFormElement *dom_form,
                            WebKitFormSubmissionStep  step,
-                           WebKitFrame              *frame,
                            WebKitFrame              *source_frame,
+                           WebKitFrame              *target_frame,
                            GPtrArray                *text_field_names,
                            GPtrArray                *text_field_values)
 {
@@ -222,34 +224,56 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
   extension = ephy_web_extension_get ();
   js_context = webkit_frame_get_js_context_for_script_world (source_frame, extension->script_world);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
-  js_form = webkit_frame_get_js_value_for_dom_object_in_script_world (frame, WEBKIT_DOM_OBJECT (dom_form), extension->script_world);
+  js_form = webkit_frame_get_js_value_for_dom_object_in_script_world (source_frame, WEBKIT_DOM_OBJECT (dom_form), extension->script_world);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "handleFormSubmission",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
+                                              G_TYPE_UINT64, webkit_frame_get_id (source_frame),
                                               JSC_TYPE_VALUE, js_form,
                                               G_TYPE_NONE);
 }
 
 static char *
-sensitive_form_message_serializer (guint64  page_id,
+sensitive_form_message_serializer (guint64  frame_id,
                                    gboolean is_insecure_action)
 {
   GVariant *variant;
   char *message;
 
-  variant = g_variant_new ("(tb)", page_id, is_insecure_action);
+  variant = g_variant_new ("(tb)", frame_id, is_insecure_action);
   message = g_variant_print (variant, FALSE);
   g_variant_unref (variant);
 
   return message;
 }
 
+static gboolean
+remove_if_value_matches_user_data (gpointer key,
+                                   gpointer value,
+                                   gpointer user_data)
+{
+  return value == user_data;
+}
+
+static void
+frame_destroyed_notify (EphyWebExtension *extension,
+                        GObject          *where_the_object_was)
+{
+  /* This is awkward. We can't just remove the frame from the table
+   * directly since we don't have any way to get its ID except by
+   * checking every entry in the map....
+   */
+  g_hash_table_foreach_remove (extension->frames_map,
+                               remove_if_value_matches_user_data,
+                               where_the_object_was);
+}
+
 static void
 web_page_form_controls_associated (WebKitWebPage    *web_page,
                                    GPtrArray        *elements,
+                                   WebKitFrame      *frame,
                                    EphyWebExtension *extension)
 {
-  WebKitFrame *frame;
   g_autoptr(GPtrArray) form_controls = NULL;
   g_autoptr(JSCContext) js_context = NULL;
   g_autoptr(JSCValue) js_ephy = NULL;
@@ -257,7 +281,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   g_autoptr(JSCValue) js_result = NULL;
   guint i;
 
-  frame = webkit_web_page_get_main_frame (web_page);
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
 
   form_controls = g_ptr_array_new_with_free_func (g_object_unref);
@@ -276,9 +299,15 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "formControlsAssociated",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
+                                              G_TYPE_UINT64, webkit_frame_get_id (frame),
                                               G_TYPE_PTR_ARRAY, form_controls,
                                               JSC_TYPE_VALUE, js_serializer,
                                               G_TYPE_NONE);
+
+  if (!g_hash_table_contains (extension->frames_map, GINT_TO_POINTER (webkit_frame_get_id (frame)))) {
+    g_hash_table_insert (extension->frames_map, GINT_TO_POINTER (webkit_frame_get_id (frame)), frame);
+    g_object_weak_ref (G_OBJECT (frame), (GWeakNotify)frame_destroyed_notify, extension);
+  }
 }
 
 static gboolean
@@ -295,6 +324,9 @@ web_page_context_menu (WebKitWebPage          *web_page,
   g_autoptr(JSCValue) js_value = NULL;
 
   extension = ephy_web_extension_get ();
+  /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
+   * We need a way to get the right frame to use here.
+   */
   frame = webkit_web_page_get_main_frame (web_page);
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
 
@@ -383,24 +415,22 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
   g_signal_connect (web_page, "will-submit-form",
                     G_CALLBACK (web_page_will_submit_form),
                     extension);
-  g_signal_connect (web_page, "form-controls-associated",
+  g_signal_connect (web_page, "form-controls-associated-for-frame",
                     G_CALLBACK (web_page_form_controls_associated),
                     extension);
 }
 
 static JSCValue *
-get_password_manager (EphyWebExtension *self, guint64 page_id)
+get_password_manager (EphyWebExtension *self, guint64 frame_id)
 {
-  WebKitWebPage *page;
   WebKitFrame *frame;
   g_autoptr(JSCContext) js_context = NULL;
   g_autoptr(JSCValue) js_ephy = NULL;
 
-  page = webkit_web_extension_get_page (self->extension, page_id);
-  if (page == NULL)
+  frame = g_hash_table_lookup (self->frames_map, GINT_TO_POINTER (frame_id));
+  if (!frame)
     return NULL;
 
-  frame = webkit_web_page_get_main_frame (page);
   js_context = webkit_frame_get_js_context_for_script_world (frame, self->script_world);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
 
@@ -482,13 +512,13 @@ handle_method_call (GDBusConnection       *connection,
     g_autoptr(JSCValue) ret = NULL;
     g_autoptr(JSCValue) password_manager = NULL;
     gint32 promise_id;
-    guint64 page_id;
+    guint64 frame_id;
 
     users = g_variant_get_strv (g_variant_get_child_value (parameters, 0), NULL);
     g_variant_get_child (parameters, 1, "i", &promise_id);
-    g_variant_get_child (parameters, 2, "t", &page_id);
+    g_variant_get_child (parameters, 2, "t", &frame_id);
 
-    password_manager = get_password_manager (extension, page_id);
+    password_manager = get_password_manager (extension, frame_id);
     if (password_manager != NULL)
       ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
                                             G_TYPE_STRV, users, G_TYPE_INT, promise_id, G_TYPE_NONE);
@@ -496,12 +526,12 @@ handle_method_call (GDBusConnection       *connection,
     const char *username;
     const char *password;
     gint32 promise_id;
-    guint64 page_id;
+    guint64 frame_id;
     g_autoptr(JSCValue) ret = NULL;
     g_autoptr(JSCValue) password_manager = NULL;
 
-    g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &page_id);
-    password_manager = get_password_manager (extension, page_id);
+    g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &frame_id);
+    password_manager = get_password_manager (extension, frame_id);
     if (password_manager != NULL)
       ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
                                             G_TYPE_STRING, username,
@@ -515,6 +545,12 @@ static const GDBusInterfaceVTable interface_vtable = {
   NULL,
   NULL
 };
+
+static void
+drop_frame_weak_ref (gpointer key, gpointer value, gpointer extension)
+{
+  g_object_weak_unref (G_OBJECT (value), (GWeakNotify)frame_destroyed_notify, extension);
+}
 
 static void
 ephy_web_extension_dispose (GObject *object)
@@ -533,6 +569,11 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_object (&extension->script_world);
   g_clear_object (&extension->dbus_connection);
   g_clear_object (&extension->extension);
+
+  if (extension->frames_map) {
+    g_hash_table_foreach (extension->frames_map, drop_frame_weak_ref, extension);
+    g_clear_pointer (&extension->frames_map, g_hash_table_unref);
+  }
 
   G_OBJECT_CLASS (ephy_web_extension_parent_class)->dispose (object);
 }
@@ -687,9 +728,6 @@ window_object_cleared_cb (WebKitScriptWorld *world,
   g_autoptr(JSCValue) js_function = NULL;
   g_autoptr(JSCValue) result = NULL;
 
-  if (!webkit_frame_is_main_frame (frame))
-    return;
-
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
 
@@ -746,6 +784,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
     g_autoptr(JSCValue) js_password_manager_ctor = jsc_value_object_get_property (js_ephy, "PasswordManager");
     g_autoptr(JSCValue) js_password_manager = jsc_value_constructor_call (js_password_manager_ctor,
                                                                           G_TYPE_UINT64, webkit_web_page_get_id (page),
+                                                                          G_TYPE_UINT64, webkit_frame_get_id (frame),
                                                                           G_TYPE_NONE);
     jsc_value_object_set_property (js_ephy, "passwordManager", js_password_manager);
 
@@ -828,4 +867,7 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                      extension);
 
   extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
+
+  extension->frames_map = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                                 NULL, NULL);
 }
