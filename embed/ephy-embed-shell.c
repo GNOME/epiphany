@@ -424,7 +424,7 @@ web_extension_password_manager_query_received_cb (WebKitUserContentManager *mana
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
   data->page_id = page_id;
-  data->origin = g_steal_pointer (&origin);
+  data->origin = g_strdup (origin);
 
   ephy_password_manager_query (priv->password_manager,
                                NULL,
