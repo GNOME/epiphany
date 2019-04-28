@@ -256,7 +256,7 @@ Ephy.formControlsAssociated = function(pageID, forms, serializer)
         if (!(forms[i] instanceof HTMLFormElement))
             continue;
         let formManager = new Ephy.FormManager(pageID, forms[i]);
-        formManager.handleSensitiveElement(serializer);
+        formManager.handlePasswordForms(serializer);
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
     }
@@ -390,7 +390,7 @@ Ephy.FormManager = class FormManager
     {
         this._pageID = pageID;
         this._form = form;
-        this._sensitiveElementMessageSerializer = null;
+        this._passwordFormMessageSerializer = null;
         this._preFillUserMenu = null;
         this._elementBeingAutoFilled = null;
     }
@@ -407,14 +407,14 @@ Ephy.FormManager = class FormManager
         return this._form;
     }
 
-    handleSensitiveElement(serializer)
+    handlePasswordForms(serializer)
     {
-        if (!this._containsSensitiveElement())
+        if (!this._containsPasswordElement())
             return;
 
-        Ephy.log('Sensitive form element detected, hooking sensitive form focused callback');
-        this._sensitiveElementMessageSerializer = serializer;
-        this._form.addEventListener('focus', this._sensitiveElementFocused.bind(this), true);
+        Ephy.log('Password form element detected, hooking password form focused callback');
+        this._passwordFormMessageSerializer = serializer;
+        this._form.addEventListener('focus', this._passwordFormFocused.bind(this), true);
     }
 
     isAutoFilling(element)
@@ -542,7 +542,7 @@ Ephy.FormManager = class FormManager
 
     // Private
 
-    _containsSensitiveElement()
+    _containsPasswordElement()
     {
         for (let i = 0; i < this._form.elements.length; i++) {
             let element = this._form.elements[i];
@@ -554,12 +554,12 @@ Ephy.FormManager = class FormManager
         return false;
     }
 
-    _sensitiveElementFocused(event)
+    _passwordFormFocused(event)
     {
         let url = new URL(this._form.action);
         // Warning: we do not whitelist localhost because it could be redirected by DNS.
         let isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
-        window.webkit.messageHandlers.sensitiveFormFocused.postMessage(this._sensitiveElementMessageSerializer(this._pageID, isInsecureAction));
+        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._pageID, isInsecureAction));
     }
 
     _findPasswordFields()

@@ -231,8 +231,8 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
 }
 
 static char *
-sensitive_form_message_serializer (guint64  page_id,
-                                   gboolean is_insecure_action)
+password_form_message_serializer (guint64  page_id,
+                                  gboolean is_insecure_action)
 {
   GVariant *variant;
   char *message;
@@ -269,8 +269,8 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
 
   js_ephy = jsc_context_get_value (js_context, "Ephy");
   js_serializer = jsc_value_new_function (js_context,
-                                          "sensitiveFormMessageSerializer",
-                                          G_CALLBACK (sensitive_form_message_serializer), NULL, NULL,
+                                          "passwordFormMessageSerializer",
+                                          G_CALLBACK (password_form_message_serializer), NULL, NULL,
                                           G_TYPE_STRING, 2,
                                           G_TYPE_UINT64, G_TYPE_BOOLEAN);
   js_result = jsc_value_object_invoke_method (js_ephy,

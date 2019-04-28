@@ -111,7 +111,7 @@ struct _EphyWebView {
   GtkWidget *microphone_info_bar;
   GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
-  GtkWidget *sensitive_form_info_bar;
+  GtkWidget *password_form_info_bar;
 
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
@@ -835,16 +835,16 @@ icon_changed_cb (EphyWebView *view,
 }
 
 static void
-sensitive_form_focused_cb (EphyEmbedShell *shell,
-                           guint64         page_id,
-                           gboolean        insecure_action,
-                           EphyWebView    *web_view)
+password_form_focused_cb (EphyEmbedShell *shell,
+                          guint64         page_id,
+                          gboolean        insecure_action,
+                          EphyWebView    *web_view)
 {
   GtkWidget *info_bar;
   GtkWidget *label;
   GtkWidget *content_area;
 
-  if (web_view->sensitive_form_info_bar)
+  if (web_view->password_form_info_bar)
     return;
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
@@ -864,7 +864,7 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
 
   g_signal_connect (info_bar, "response", G_CALLBACK (gtk_widget_hide), NULL);
 
-  track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
+  track_info_bar (info_bar, &web_view->password_form_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar,
@@ -917,8 +917,8 @@ page_created_cb (EphyEmbedShell        *shell,
   view->web_extension = web_extension;
   g_object_add_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
 
-  g_signal_connect_object (shell, "sensitive-form-focused",
-                           G_CALLBACK (sensitive_form_focused_cb),
+  g_signal_connect_object (shell, "password-form-focused",
+                           G_CALLBACK (password_form_focused_cb),
                            view, 0);
 
   g_signal_connect_object (shell, "allow-tls-certificate",
@@ -945,7 +945,7 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->microphone_info_bar);
   untrack_info_bar (&view->webcam_info_bar);
   untrack_info_bar (&view->password_info_bar);
-  untrack_info_bar (&view->sensitive_form_info_bar);
+  untrack_info_bar (&view->password_form_info_bar);
 
   g_clear_object (&view->file_monitor);
 
