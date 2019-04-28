@@ -81,7 +81,7 @@ enum {
   PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
   ALLOW_UNSAFE_BROWSING,
-  SENSITIVE_FORM_FOCUSED,
+  PASSWORD_FORM_FOCUSED,
 
   LAST_SIGNAL
 };
@@ -222,9 +222,9 @@ ephy_embed_shell_dispose (GObject *object)
 }
 
 static void
-web_extension_sensitive_form_focused_message_received_cb (WebKitUserContentManager *manager,
-                                                          WebKitJavascriptResult   *message,
-                                                          EphyEmbedShell           *shell)
+web_extension_password_form_focused_message_received_cb (WebKitUserContentManager *manager,
+                                                         WebKitJavascriptResult   *message,
+                                                         EphyEmbedShell           *shell)
 {
   guint64 page_id;
   gboolean insecure_action;
@@ -235,7 +235,7 @@ web_extension_sensitive_form_focused_message_received_cb (WebKitUserContentManag
   variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
 
   g_variant_get (variant, "(tb)", &page_id, &insecure_action);
-  g_signal_emit (shell, signals[SENSITIVE_FORM_FOCUSED], 0,
+  g_signal_emit (shell, signals[PASSWORD_FORM_FOCUSED], 0,
                  page_id, insecure_action);
 }
 
@@ -1136,10 +1136,10 @@ ephy_embed_shell_startup (GApplication *application)
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "sensitiveFormFocused",
+                                                                        "passwordFormFocused",
                                                                         priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::sensitiveFormFocused",
-                           G_CALLBACK (web_extension_sensitive_form_focused_message_received_cb),
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordFormFocused",
+                           G_CALLBACK (web_extension_password_form_focused_message_received_cb),
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
@@ -1268,7 +1268,7 @@ ephy_embed_shell_shutdown (GApplication *application)
                                                                           "passwordManagerRequestSave",
                                                                           priv->guid);
   webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "sensitiveFormFocused",
+                                                                          "passwordFormFocused",
                                                                           priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
   webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
@@ -1459,15 +1459,15 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_UINT64);
 
   /**
-   * EphyEmbedShell::sensitive-form-focused
+   * EphyEmbedShell::password-form-focused
    * @shell: the #EphyEmbedShell
    * @page_id: the identifier of the web page
    * @insecure_action: whether the target of the form is http://
    *
    * Emitted when a form in a web page gains focus.
    */
-  signals[SENSITIVE_FORM_FOCUSED] =
-    g_signal_new ("sensitive-form-focused",
+  signals[PASSWORD_FORM_FOCUSED] =
+    g_signal_new ("password-form-focused",
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
