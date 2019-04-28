@@ -420,6 +420,9 @@ web_extension_password_manager_query_received_cb (WebKitUserContentManager *mana
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
 
+  if (!origin || !target_origin || !password_field)
+    return;
+
   PasswordManagerData *data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
@@ -496,6 +499,10 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
   guint64 page_id = property_to_uint64 (value, "pageID");
   EphyWebView *view;
 
+  /* Both origin and target origin are required. */
+  if (!origin || !target_origin)
+    return;
+
   /* Both password and password field are required. */
   if (!password || !password_field)
     return;
@@ -566,8 +573,11 @@ web_extension_password_manager_query_usernames_received_cb (WebKitUserContentMan
   g_autofree char *origin = property_to_string_or_null (value, "origin");
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
-
   GList *usernames;
+
+  if (!origin)
+    return;
+
   usernames = ephy_password_manager_get_usernames_for_origin (priv->password_manager, origin);
 
   EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
