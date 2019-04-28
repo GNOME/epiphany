@@ -330,7 +330,9 @@ Ephy.PasswordManager = class PasswordManager
     {
         let element = this._takePendingPromise(id);
         if (element) {
-            if (username !== '' && password !== '')
+            if (username == '')
+                username = null;
+            if (password !== '')
                 element.resolver({username, password});
             else
                 element.resolver(null);
