@@ -586,6 +586,9 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   GHashTable *attributes;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (origin);
+  g_assert (target_origin);
+  g_assert (password_field);
 
   LOG ("Querying password records for (%s, %s, %s, %s)",
        origin, username, username_field, password_field);
