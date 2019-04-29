@@ -91,9 +91,11 @@ url_visited_cb (EphyHistoryService *service,
 {
   EphyHistoryRecord *record;
 
-  record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
-  g_signal_emit_by_name (self, "synchronizable-modified", record, TRUE);
-  g_object_unref (record);
+  if (url->sync_id) {
+    record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
+    g_signal_emit_by_name (self, "synchronizable-modified", record, TRUE);
+    g_object_unref (record);
+  }
 }
 
 static void
@@ -103,9 +105,11 @@ url_deleted_cb (EphyHistoryService *service,
 {
   EphyHistoryRecord *record;
 
-  record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
-  g_signal_emit_by_name (self, "synchronizable-deleted", record);
-  g_object_unref (record);
+  if (url->sync_id) {
+    record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
+    g_signal_emit_by_name (self, "synchronizable-deleted", record);
+    g_object_unref (record);
+  }
 }
 
 static void
