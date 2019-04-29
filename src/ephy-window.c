@@ -572,6 +572,11 @@ static void
 ephy_window_fullscreen (EphyWindow *window)
 {
   EphyEmbed *embed;
+  GActionGroup *action_group;
+  GAction *action;
+
+  ephy_window_show_fullscreen_header_bar (window);
+  gtk_window_fullscreen (GTK_WINDOW (window));
 
   window->is_fullscreen = TRUE;
 
@@ -583,16 +588,30 @@ ephy_window_fullscreen (EphyWindow *window)
   update_adaptive_mode (window);
   sync_chromes_visibility (window);
   ephy_embed_entering_fullscreen (embed);
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (TRUE));
 }
 
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
+  GActionGroup *action_group;
+  GAction *action;
+
+  ephy_window_show_fullscreen_header_bar (window);
+  gtk_window_unfullscreen (GTK_WINDOW (window));
+
   window->is_fullscreen = FALSE;
 
   update_adaptive_mode (window);
   sync_chromes_visibility (window);
   ephy_embed_leaving_fullscreen (window->active_embed);
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (FALSE));
 }
 
 static gboolean
