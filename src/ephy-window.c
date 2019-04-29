@@ -1861,6 +1861,14 @@ ephy_window_mouse_target_changed_cb (WebKitWebView       *web_view,
 }
 
 static void
+web_process_terminated_cb (EphyWebView                       *web_view,
+                           WebKitWebProcessTerminationReason  reason,
+                           EphyWindow                        *window)
+{
+  ephy_window_unfullscreen (window);
+}
+
+static void
 ephy_window_set_is_popup (EphyWindow *window,
                           gboolean    is_popup)
 {
@@ -2380,6 +2388,9 @@ ephy_window_connect_active_embed (EphyWindow *window)
   g_signal_connect_object (view, "mouse-target-changed",
                            G_CALLBACK (ephy_window_mouse_target_changed_cb),
                            window, 0);
+  g_signal_connect_object (view, "web-process-terminated",
+                           G_CALLBACK (web_process_terminated_cb),
+                           window, 0);
 
   ephy_mouse_gesture_controller_set_web_view (window->mouse_gesture_controller, web_view);
 
@@ -2442,12 +2453,14 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (sync_tab_address),
                                         window);
-
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (populate_context_menu),
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (ephy_window_mouse_target_changed_cb),
+                                        window);
+  g_signal_handlers_disconnect_by_func (view,
+                                        G_CALLBACK (web_process_terminated_cb),
                                         window);
 }
 
