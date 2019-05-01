@@ -206,23 +206,7 @@ should_add_bookmark_to_model (EphySuggestionModel *self,
                               const char          *title,
                               const char          *location)
 {
-  gboolean ret = TRUE;
-
-  if (self->search_terms) {
-    guint len = g_strv_length (self->search_terms);
-    guint i;
-
-    for (i = 0; i < len; i++) {
-      gchar *str = self->search_terms[i];
-
-      if (!strstr (str, title ? title : "") && !strstr (str, location ? location : "")) {
-        ret = FALSE;
-        break;
-      }
-    }
-  }
-
-  return ret;
+  return strstr (title, search_string) || strstr (location, search_string);
 }
 
 static void
