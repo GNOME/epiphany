@@ -33,7 +33,6 @@ struct _EphySuggestionModel {
   EphyHistoryService   *history_service;
   EphyBookmarksManager *bookmarks_manager;
   GSequence            *items;
-  gchar               **search_terms;
   GCancellable         *icon_cancellable;
 };
 
@@ -62,8 +61,6 @@ ephy_suggestion_model_finalize (GObject *object)
 
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
-
-  g_strfreev (self->search_terms);
 
   G_OBJECT_CLASS (ephy_suggestion_model_parent_class)->finalize (object);
 }
@@ -189,40 +186,13 @@ ephy_suggestion_model_new (EphyHistoryService   *history_service,
                        NULL);
 }
 
-static void
-update_search_terms (EphySuggestionModel *self,
-                     const char          *text)
-{
-  g_assert (EPHY_IS_SUGGESTION_MODEL (self));
-
-  g_strfreev (self->search_terms);
-
-  self->search_terms = g_strsplit (text, " ", -1);
-}
-
 static gboolean
 should_add_bookmark_to_model (EphySuggestionModel *self,
                               const char          *search_string,
                               const char          *title,
                               const char          *location)
 {
-  gboolean ret = TRUE;
-
-  if (self->search_terms) {
-    guint len = g_strv_length (self->search_terms);
-    guint i;
-
-    for (i = 0; i < len; i++) {
-      gchar *str = self->search_terms[i];
-
-      if (!strstr (str, title ? title : "") && !strstr (str, location ? location : "")) {
-        ret = FALSE;
-        break;
-      }
-    }
-  }
-
-  return ret;
+  return strstr (title, search_string) || strstr (location, search_string);
 }
 
 static void
@@ -439,8 +409,6 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   strings = g_strsplit (query, " ", -1);
   for (guint i = 0; strings[i]; i++)
     qlist = g_list_append (qlist, g_strdup (strings[i]));
-
-  update_search_terms (self, query);
 
   ephy_history_service_find_urls (self->history_service,
                                   0, 0,
