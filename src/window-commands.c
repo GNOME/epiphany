@@ -2370,6 +2370,11 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
   gboolean active;
 
   active = g_variant_get_boolean (state);
+
+  /* This is performed only here because we don't want it occuring when a window
+   * enters fullscreen mode for some other reason other than action activation.
+   * E.g. we don't want it appearing for fullscreen video.
+   */
   ephy_window_show_fullscreen_header_bar (window);
 
   if (active)
