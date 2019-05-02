@@ -1,3 +1,124 @@
+3.33.1 - May 2, 2019
+====================
+
+- Change Tech Preview app ID to org.gnome.Epiphany.Devel (#20)
+- Improve tab order when opening links in new tabs (#49)
+- Use elementary-style headerbar icons in Pantheon (#67)
+- Remember zoom state for file URIs (#102)
+- Prompt to set as default browser (#112)
+- Add preference to ask where to save downloads (#147)
+- Fix yellow search highlight disappearing when repeating search (#166)
+- Allow pinning tabs (#248)
+- Expose saving pages as HTML or PNGs in addition to MHTML (#259, #412)
+- Warn user when closing window with multiple tabs (#276)
+- Comprehensively update user help (#293)
+- Add preference to always start in incognito mode (#300)
+- Add open in new incognito window to web app context menu (#313)
+- Allow setting per-site permissions from security popover (#331, #467)
+- Allow writing HTTP and HTTPS URLs without slashes (#377)
+- Fix tab list alignment with tabs not on top (#456)
+- Fix low-resolution overview thumbnails in hidpi (#605)
+- Add Ctrl+Enter shortcut to prepend www. and append .com to URL (#645)
+- Always show tabs bar (#650)
+- Incognito mode landing page is now adaptive (#653)
+- Add drop shadow to icon in about:web (#654)
+- Add empty state to about:applications (#663)
+- Keep URL entry centered (#666)
+- Fix icons overlapping with URL entry in right-to-left locales (#686)
+- Adjust margins of suggestions popover (#692)
+- Allow Ctrl+click to open new tab in back/forward lists (#727)
+- Remove process model and process count settings (Spectre mitigation)
+- Use page instead of popover for mobile tab menu (Christopher Davis)
+- Always try saved HTTP auth credentials before prompting user
+- Use WebKit's code for processing punycode and IDN
+- Add swipe gesture to keyboard shortcuts dialog
+- Update reader mode to latest readibility.js
+- libdazzle is now required as a system dependency
+
+3.32.2 - May 2, 2019
+====================
+
+- Fix remembering printer settings (#138)
+- Fix fuzzy incognito mode icon in hidpi (#257)
+- Add search button and allow type to search on history dialog (#632)
+- Fix critical deleting URLs from history dialog (#691)
+- Fix crash changing reader mode preferences (#706)
+- Fix many actions being disabled by mistake in incognito mode (#724)
+- Fix password manager asking to remember passwords when disabled (#725)
+- Close history dialog on Escape (#728)
+- Fix crash during Safe Browsing update (#736)
+- Unfullscreen automatically when web process crashes (#752)
+- Fix markup appearing in search provider results
+- Fix a search provider crash
+- Fix password manager crash on certain websites
+- Fix password manager autofill when form has no username
+- Fix tab bar context menu reopen closed tab action crash and sensitivity
+- Fix websites opening file choosers under flatpak
+- Fix searching for bookmarks in top bar
+
+3.32.1.2 - March 21, 2019
+=========================
+
+- Recreate Safe Browsing database when it might be corrupted (#57)
+- Update libdazzle subproject to improve compatibility with new meson versions (#699)
+
+3.32.1.1 - March 20, 2019
+=========================
+
+- Really bring back libdazzle subproject, for 3.32 branch only (#699)
+
+3.32.1 - March 20, 2019
+=======================
+
+- Switch to WebKit's two-finger back/forward swipe gesture (Alexander Mikhaylenko)
+- Fix search highlight disappearing when repeating search (#166)
+- Fix pages without title always appearing first in address bar dropdown (#579)
+- Bring back libdazzle subproject for 3.32 branch only (#699)
+- Fix new web apps being saved in wrong place under certain circumstances (!224)
+- Fix web process settings being saved in the wrong place (!224)
+
+3.32.0 - March 11, 2019
+=======================
+
+Major changes since 3.30:
+
+- Redesigned address bar dropdown with new dazzling
+- Redesigned open tabs menu, now displays tab favicons and allows closing tabs
+- Greatly improved adaptive mode support for small displays
+- Three-finger swipe touchpad gesture now available for back/forward navigation
+- Automation mode, for running WebDriver tests (useful for website developers)
+
+Changes since 3.31.92:
+
+- Fix preferences dialog crash
+- Fix password manager crash on 32-bit systems
+- Bump to libhandy 0.0.9 (Adrien Plazas)
+
+3.31.92 - March 4, 2019
+=======================
+
+- Add animation when download completes (#629)
+- New tab popover should close tabs on middle-click (#643)
+- Fix context menu in history dialog (#651)
+- Add separators to tab bar context menu (#652)
+- Fix crash in mouse gesture controller (#679)
+- Disable safe browsing test by default (#684)
+- Improve reliability of password form detection
+- Fix encoding dialog (Arnaud B.)
+- Restore unsafe process model and process count settings for 3.32 branch only
+- Change -Dunit_tests meson option to feature rather than bool type
+- Require system libdazzle and recent GTK 3.24
+- Build libhandy as static lib (Jeremy Bicha)
+- Bundle newer libhandy to fix i18n (Adrien Plazas)
+- Fix licence in appstream metadata to GPLv3+
+
+3.31.91 - February 18, 2019
+===========================
+
+- Fix test failure when not installed (#675)
+- libhandy and libdazzle now use git submodules (#676)
+- Improve tab bar style in incognito mode (Alexander Mikhaylenko)
+
 3.31.90 - February 4, 2019
 ==========================
 
