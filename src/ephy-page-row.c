@@ -23,6 +23,7 @@
 
 #include "ephy-embed-utils.h"
 #include "ephy-page-row.h"
+#include "ephy-web-view.h"
 
 enum {
   CLOSED,
@@ -127,6 +128,22 @@ ephy_page_row_init (EphyPageRow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
+static void
+sync_favicon (EphyWebView *view,
+              GParamSpec  *pspec,
+              EphyPageRow *self)
+{
+  g_autoptr(GdkPixbuf) pixbuf = NULL;
+
+  if (ephy_web_view_get_icon (view))
+    pixbuf = gdk_pixbuf_copy (ephy_web_view_get_icon (view));
+
+  if (!pixbuf)
+    pixbuf = gdk_pixbuf_new_from_resource ("/org/gnome/epiphany/missing-favicon-symbolic.svg", NULL);
+
+  gtk_image_set_from_pixbuf (self->icon, pixbuf);
+}
+
 EphyPageRow *
 ephy_page_row_new (EphyNotebook *notebook,
                    gint          position)
@@ -146,7 +163,8 @@ ephy_page_row_new (EphyNotebook *notebook,
 
   view = ephy_embed_get_web_view (EPHY_EMBED (embed));
 
-  g_object_bind_property (view, "icon", self->icon, "pixbuf", G_BINDING_SYNC_CREATE);
+  sync_favicon (view, NULL, self);
+  g_signal_connect_object (view, "notify::icon", G_CALLBACK (sync_favicon), self, 0);
   g_object_bind_property (embed, "title", self->title, "label", G_BINDING_SYNC_CREATE);
   g_object_bind_property (embed, "title", self->title, "tooltip-text", G_BINDING_SYNC_CREATE);
   g_object_bind_property (view, "is-playing-audio", self->speaker_icon, "visible", G_BINDING_SYNC_CREATE);
