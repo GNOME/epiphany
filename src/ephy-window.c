@@ -2044,8 +2044,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
       referrer = (char *)g_object_get_data (G_OBJECT (window), "referrer");
 
-      if (ephy_embed_utils_urls_have_same_origin (uri, referrer) ||
-          ephy_web_application_is_uri_allowed (uri)) {
+      if (ephy_web_application_is_uri_allowed (uri, referrer)) {
         gtk_widget_show (GTK_WIDGET (window));
       } else {
         /* We can't get here under flatpak because this code only
@@ -2064,10 +2063,8 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED ||
         (navigation_type == WEBKIT_NAVIGATION_TYPE_OTHER && webkit_navigation_action_is_user_gesture (navigation_action))) {
-      if (ephy_embed_utils_urls_have_same_origin (uri, webkit_web_view_get_uri (web_view)) ||
-          ephy_web_application_is_uri_allowed (uri)) {
+      if (ephy_web_application_is_uri_allowed (uri, webkit_web_view_get_uri (web_view)))
         return FALSE;
-      }
 
       /* We can't get here under flatpak because this code only
        * executes in web app mode.
