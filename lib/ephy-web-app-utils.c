@@ -759,13 +759,48 @@ ephy_web_application_initialize_settings (const char *profile_directory)
   g_free (name);
 }
 
+static gboolean
+is_data_or_blob_url (const char *url)
+{
+  return g_str_has_prefix (url, "blob:") || g_str_has_prefix (url, "data:");
+}
+
+static gboolean
+urls_have_same_origin (const char *a_url,
+                       const char *b_url)
+{
+  SoupURI *a_uri, *b_uri;
+  gboolean retval = FALSE;
+
+  a_uri = soup_uri_new (a_url);
+  if (!a_uri)
+    return retval;
+
+  b_uri = soup_uri_new (b_url);
+  if (b_uri) {
+    retval = a_uri->host && b_uri->host && soup_uri_host_equal (a_uri, b_uri);
+    soup_uri_free (b_uri);
+  }
+
+  soup_uri_free (a_uri);
+
+  return retval;
+}
+
 gboolean
-ephy_web_application_is_uri_allowed (const char* uri)
+ephy_web_application_is_uri_allowed (const char *uri,
+                                     const char *referrer)
 {
   SoupURI *request_uri;
   char **urls;
   guint i;
   gboolean matched = FALSE;
+
+  if (is_data_or_blob_url (uri))
+    return TRUE;
+
+  if (urls_have_same_origin (uri, referrer))
+    return TRUE;
 
   if (g_strcmp0 (uri, "about:blank") == 0)
     return TRUE;
