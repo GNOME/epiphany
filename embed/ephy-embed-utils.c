@@ -387,18 +387,36 @@ ephy_embed_utils_get_title_from_address (const char *address)
   return ephy_string_get_host_name (address);
 }
 
+static
+gint url_prefix_offset (const char *url)
+{
+  gint offset = 0;
+
+  if (g_str_has_prefix (url, "blob:"))
+    offset += 5;
+  else if (g_str_has_prefix (url, "data:"))
+    offset += 5;
+
+  return offset;
+}
+
 gboolean
 ephy_embed_utils_urls_have_same_origin (const char *a_url,
                                         const char *b_url)
 {
   SoupURI *a_uri, *b_uri;
   gboolean retval = FALSE;
+  gint a_offset = 0;
+  gint b_offset = 0;
 
-  a_uri = soup_uri_new (a_url);
+  a_offset = url_prefix_offset (a_url);
+  b_offset = url_prefix_offset (b_url);
+
+  a_uri = soup_uri_new (a_url + a_offset);
   if (!a_uri)
     return retval;
 
-  b_uri = soup_uri_new (b_url);
+  b_uri = soup_uri_new (b_url + b_offset);
   if (b_uri) {
     retval = a_uri->host && b_uri->host && soup_uri_host_equal (a_uri, b_uri);
     soup_uri_free (b_uri);
