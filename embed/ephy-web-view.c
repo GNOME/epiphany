@@ -67,6 +67,8 @@
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
 #define EPHY_PAGE_TEMPLATE_ERROR_CSS     "/org/gnome/epiphany/page-templates/error.css"
 
+static guint64 web_view_uid = 1;
+
 struct _EphyWebView {
   WebKitWebView parent_instance;
 
@@ -125,6 +127,8 @@ struct _EphyWebView {
   char *tls_error_failing_uri;
 
   EphyWebViewErrorPage error_page;
+
+  guint64 uid;
 };
 
 enum {
@@ -1427,6 +1431,11 @@ update_security_status_for_committed_load (EphyWebView *view,
   if (view->loading_error_page)
     return;
 
+  if (g_str_has_prefix (uri, "webextension://")) {
+    /* Hidden WebExtension webview, ignoring */
+    return;
+  }
+
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
   if (EPHY_IS_EMBED_CONTAINER (toplevel))
     embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
@@ -2725,6 +2734,19 @@ scale_factor_changed_cb (EphyWebView *web_view,
   _ephy_web_view_update_icon (web_view);
 }
 
+GtkWidget *
+ephy_web_view_new_with_user_content_manager (WebKitUserContentManager *ucm)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+                       "web-context", ephy_embed_shell_get_web_context (shell),
+                       "user-content-manager", ucm,
+                       "settings", ephy_embed_prefs_get_settings (),
+                       "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
+                       NULL);
+}
+
 /**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
@@ -3771,6 +3793,8 @@ ephy_web_view_init (EphyWebView *web_view)
 
   shell = ephy_embed_shell_get_default ();
 
+  web_view->uid = web_view_uid++;
+
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
   web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
@@ -4119,4 +4143,10 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
                        "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
+}
+
+guint64
+ephy_web_view_get_uid (EphyWebView *web_view)
+{
+  return web_view->uid;
 }

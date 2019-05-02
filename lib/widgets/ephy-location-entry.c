@@ -57,6 +57,8 @@ struct _EphyLocationEntry {
   GtkOverlay parent_instance;
 
   GtkWidget *url_entry;
+  GtkWidget *button_box;
+  GtkWidget *page_action_box;
   GtkWidget *bookmark;
   GtkWidget *bookmark_event_box;
   GtkWidget *reader_mode;
@@ -990,7 +992,6 @@ static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
-  GtkWidget *box;
   GtkStyleContext *context;
   DzlShortcutController *controller;
 
@@ -1030,14 +1031,26 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), event);
 
   /* Button Box */
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (event), box);
-  g_signal_connect (G_OBJECT (box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
-  gtk_widget_set_halign (box, GTK_ALIGN_END);
-  gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
-  gtk_widget_show (box);
+  entry->button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (event), entry->button_box);
+  gtk_box_set_homogeneous (GTK_BOX (entry->button_box), FALSE);
+  g_signal_connect (G_OBJECT (entry->button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (entry->button_box), GTK_BUTTONBOX_EXPAND);
+  gtk_widget_set_valign (entry->button_box, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (entry->button_box, GTK_ALIGN_END);
+  gtk_widget_set_margin_end (entry->button_box, 5);
+  gtk_widget_show (entry->button_box);
 
-  context = gtk_widget_get_style_context (box);
+  /* Page action box */
+  entry->page_action_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_set_homogeneous (GTK_BOX (entry->page_action_box), FALSE);
+  gtk_widget_show (entry->page_action_box);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (entry->page_action_box), GTK_BUTTONBOX_EXPAND);
+  gtk_widget_set_valign (entry->page_action_box, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (entry->page_action_box, GTK_ALIGN_END);
+  gtk_box_pack_start (GTK_BOX (entry->button_box), entry->page_action_box, FALSE, FALSE, 0);
+
+  context = gtk_widget_get_style_context (entry->button_box);
   gtk_style_context_add_class (context, "entry_icon_box");
 
   /* Bookmark */
@@ -1048,7 +1061,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_show (entry->bookmark);
   g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
   gtk_container_add (GTK_CONTAINER (entry->bookmark_event_box), entry->bookmark);
-  gtk_box_pack_end (GTK_BOX (box), entry->bookmark_event_box, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (entry->button_box), entry->bookmark_event_box, FALSE, FALSE, 6);
 
   context = gtk_widget_get_style_context (entry->bookmark);
   gtk_style_context_add_class (context, "entry_icon");
@@ -1066,7 +1079,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_set_valign (entry->reader_mode, GTK_ALIGN_CENTER);
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER (entry->reader_mode_event_box), entry->reader_mode);
-  gtk_box_pack_end (GTK_BOX (box), entry->reader_mode_event_box, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (entry->button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
 
   context = gtk_widget_get_style_context (entry->reader_mode);
   gtk_style_context_add_class (context, "entry_icon");
@@ -1504,4 +1517,36 @@ ephy_location_entry_set_mobile_popdown (EphyLocationEntry *entry,
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
   else
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
+}
+
+void
+ephy_location_entry_page_action_add (EphyLocationEntry *entry,
+                                     GtkWidget         *action)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (action);
+  gtk_style_context_add_class (context, "entry_icon");
+
+  gtk_box_pack_end (GTK_BOX (entry->page_action_box), action, FALSE, FALSE, 6);
+}
+
+static
+void clear_page_actions (GtkWidget *child,
+                         gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (child);
+
+  gtk_style_context_remove_class (context, "entry_icon");
+
+  gtk_container_remove (GTK_CONTAINER (entry->page_action_box), child);
+}
+
+void
+ephy_location_entry_page_action_clear (EphyLocationEntry *entry)
+{
+  gtk_container_foreach (GTK_CONTAINER (entry->page_action_box), clear_page_actions, entry);
 }

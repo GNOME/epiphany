@@ -87,4 +87,7 @@ gboolean           ephy_file_open_uri_in_default_browser    (const char         
 gboolean           ephy_file_browse_to                      (GFile                        *file,
                                                              guint32                       user_time);
 
+void               ephy_copy_directory                      (const char                   *source,
+                                                             const char                   *target);
+
 G_END_DECLS

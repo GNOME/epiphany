@@ -72,10 +72,10 @@ gsb_api_key = get_option('gsb_api_key')
 conf.set_quoted('GSB_API_KEY', gsb_api_key)
 conf.set10('ENABLE_GSB', gsb_api_key != '')
 
-glib_requirement = '>= 2.61.2'
+glib_requirement = '>= 2.64.0'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.29.3'
+webkitgtk_requirement = '>= 2.31.1'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
@@ -90,6 +90,7 @@ gtk_unix_print_dep = dependency('gtk+-unix-print-3.0', version: gtk_requirement)
 hogweed_dep = dependency('hogweed', version: nettle_requirement)
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
+libarchive_dep = dependency('libarchive')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.1')
 libhandy_dep = dependency('libhandy-1', version: '>= 1.0.0')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')

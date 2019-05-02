@@ -3,6 +3,18 @@
   <template class="EphyActionBarEnd" parent="GtkBox">
     <property name="spacing">6</property>
     <child>
+      <object class="GtkButtonBox" id="browser_action_box">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <property name="halign">end</property>
+        <property name="homogeneous">False</property>
+        <property name="layout-style">expand</property>
+      </object>
+      <packing>
+        <property name="pack-type">start</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkMenuButton" id="bookmarks_button">
         <property name="visible">True</property>
         <property name="valign">center</property>

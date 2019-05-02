@@ -9,6 +9,7 @@ web_process_extension_sources = [
   'ephy-web-process-extension.c',
   'ephy-web-process-extension-main.c',
   'ephy-web-overview-model.c',
+  'ephy-webextension-api.c',
   resources
 ]
 

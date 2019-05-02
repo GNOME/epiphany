@@ -305,6 +305,7 @@ ephy_header_bar_constructed (GObject *object)
                           gtk_image_new_from_icon_name ("open-menu",
                                                         GTK_ICON_SIZE_LARGE_TOOLBAR));
   }
+  g_settings_bind (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS, gtk_builder_get_object (builder, "extensions-button"), "visible", G_SETTINGS_BIND_DEFAULT);
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
@@ -457,4 +458,11 @@ ephy_header_bar_set_zoom_level (EphyHeaderBar *header_bar,
   g_autofree gchar *zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
 
   gtk_label_set_label (GTK_LABEL (header_bar->zoom_level_label), zoom_level);
+}
+
+void
+ephy_header_bar_add_browser_action (EphyHeaderBar *header_bar,
+                                    GtkWidget     *action)
+{
+  ephy_action_bar_end_add_browser_action (header_bar->action_bar_end, action);
 }

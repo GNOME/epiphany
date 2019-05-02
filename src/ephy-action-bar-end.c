@@ -39,6 +39,7 @@ struct _EphyActionBarEnd {
   GtkWidget *downloads_popover;
   GtkWidget *downloads_icon;
   GtkWidget *downloads_progress;
+  GtkWidget *browser_action_box;
 
   guint downloads_button_attention_timeout_id;
 };
@@ -242,6 +243,9 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
                                         downloads_progress);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarEnd,
+                                        browser_action_box);
 }
 
 static void
@@ -318,4 +322,11 @@ GtkWidget *
 ephy_action_bar_end_get_downloads_revealer (EphyActionBarEnd *action_bar_end)
 {
   return action_bar_end->downloads_revealer;
+}
+
+void
+ephy_action_bar_end_add_browser_action (EphyActionBarEnd *action_bar_end,
+                                        GtkWidget        *action)
+{
+  gtk_container_add (GTK_CONTAINER (action_bar_end->browser_action_box), action);
 }

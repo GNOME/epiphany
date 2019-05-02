@@ -79,6 +79,10 @@ gboolean        ephy_location_entry_get_reader_mode_state      (EphyLocationEntr
 void            ephy_location_entry_set_progress               (EphyLocationEntry *entry,
                                                                 gdouble            progress,
                                                                 gboolean           loading);
+void            ephy_location_entry_page_action_add            (EphyLocationEntry *entry,
+                                                                GtkWidget         *action);
+
+void            ephy_location_entry_page_action_clear          (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_mobile_popdown         (EphyLocationEntry *entry,
                                                                 gboolean           mobile_popdown);

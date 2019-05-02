@@ -61,6 +61,7 @@ struct _EphyShell {
   EphyBookmarksManager *bookmarks_manager;
   EphyHistoryManager *history_manager;
   EphyOpenTabsManager *open_tabs_manager;
+  EphyWebExtensionManager *web_extension_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
   GtkWidget *firefox_sync_dialog;
@@ -1534,4 +1535,63 @@ gboolean
 ephy_shell_startup_finished (EphyShell *shell)
 {
   return shell->startup_finished;
+}
+
+EphyWebExtensionManager *
+ephy_shell_get_web_extension_manager (EphyShell *shell)
+{
+  g_assert (EPHY_IS_SHELL (shell));
+
+  if (shell->web_extension_manager == NULL)
+    shell->web_extension_manager = ephy_web_extension_manager_new ();
+
+  return shell->web_extension_manager;
+}
+
+
+/* Helper functions: better place for this? */
+EphyWebView *
+ephy_shell_get_web_view (EphyShell *shell,
+                         guint64    id)
+{
+  GList *windows;
+  GtkWindow *window;
+  GtkWidget *notebook;
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+
+  for (GList *list = windows; list && list->data; list = list->next) {
+    window = GTK_WINDOW (list->data);
+    notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+
+    for (int i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)); i++) {
+      GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+      EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
+
+      if (ephy_web_view_get_uid (web_view) == id)
+        return web_view;
+    }
+  }
+
+  return NULL;
+}
+
+EphyWebView *
+ephy_shell_get_active_web_view (EphyShell *shell)
+{
+  GtkWindow *window;
+  GtkWidget *notebook;
+  GtkWidget *page;
+  gint page_num;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+  if (!window)
+    return NULL;
+
+  notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+
+  page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+  page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
+
+  return ephy_embed_get_web_view (EPHY_EMBED (page));
 }

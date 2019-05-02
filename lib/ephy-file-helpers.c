@@ -854,3 +854,53 @@ ephy_open_incognito_window (const char *uri)
 
   g_free (command);
 }
+
+void
+ephy_copy_directory (const char *source,
+                     const char *target)
+{
+  g_autoptr (GError) error = NULL;
+  GFileType type;
+  g_autoptr (GFile) src_file = g_file_new_for_path (source);
+  g_autoptr (GFile) dest_file = g_file_new_for_path (target);
+
+  type = g_file_query_file_type (src_file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+
+  if (type == G_FILE_TYPE_DIRECTORY) {
+    g_autoptr (GFileEnumerator) enumerator = NULL;
+    g_autoptr (GFileInfo) info = NULL;
+
+    if (!g_file_make_directory_with_parents (dest_file, NULL, &error)) {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+        g_warning ("Could not create target directory for webextension: %s", error->message);
+        return;
+      }
+
+      g_error_free (error);
+    }
+
+    if (!g_file_copy_attributes (src_file, dest_file, G_FILE_COPY_NONE, NULL, &error)) {
+      g_warning ("Could not copy file attributes for webextension: %s", error->message);
+      return;
+    }
+
+    enumerator = g_file_enumerate_children (src_file, G_FILE_ATTRIBUTE_STANDARD_NAME, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &error);
+    if (!enumerator) {
+      g_warning ("Could not create file enumberator for webextensions: %s", error->message);
+      return;
+    }
+
+    for (info = g_file_enumerator_next_file (enumerator, NULL, NULL); info != NULL; info = g_file_enumerator_next_file (enumerator, NULL, NULL)) {
+      ephy_copy_directory (
+        g_build_filename (source, g_file_info_get_name (info), NULL),
+        g_build_filename (target, g_file_info_get_name (info), NULL));
+    }
+  } else if (type == G_FILE_TYPE_REGULAR) {
+    if (!g_file_copy (src_file, dest_file, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+        g_warning ("Could not copy file for webextensions: %s", error->message);
+        return;
+      }
+    }
+  }
+}

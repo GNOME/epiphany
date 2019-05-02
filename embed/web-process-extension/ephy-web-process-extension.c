@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-web-process-extension.h"
+#include "ephy-webextension-api.h"
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
@@ -56,9 +57,16 @@ struct _EphyWebProcessExtension {
   gboolean is_private_profile;
 
   GHashTable *frames_map;
+  GHashTable *translation_table;
 };
 
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
+
+GHashTable *
+ephy_web_process_extension_get_translations (EphyWebProcessExtension *extension)
+{
+  return extension->translation_table;
+}
 
 static void
 web_page_will_submit_form (WebKitWebPage            *web_page,
@@ -326,6 +334,18 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       return;
 
     g_variant_get (parameters, "b", &extension->should_remember_passwords);
+  } else if (g_strcmp0 (name, "WebExtension.Add") == 0) {
+    GVariant *parameters;
+    const char *name;
+    const char *data;
+    guint64 length;
+
+    parameters = webkit_user_message_get_parameters (message);
+    if (!parameters)
+      return;
+
+    g_variant_get (parameters, "(&s&st)", &name, &data, &length);
+    webextensions_add_translation (extension, name, data, length);
   }
 }
 
@@ -645,6 +665,8 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
 
+  set_up_webextensions (extension, page, js_context);
+
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy.js", 1);
@@ -771,7 +793,12 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->initialized = TRUE;
 
-  extension->script_world = webkit_script_world_new_with_name (guid);
+  /* Note: An empty guid is used ONLY for WebExtensions which do have an own initialization function */
+  if (strlen (guid) > 0)
+    extension->script_world = webkit_script_world_new_with_name (guid);
+  else
+    extension->script_world = webkit_script_world_get_default ();
+
   g_signal_connect (extension->script_world,
                     "window-object-cleared",
                     G_CALLBACK (window_object_cleared_cb),
@@ -793,4 +820,12 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
                                                  g_free, NULL);
+
+  extension->translation_table = g_hash_table_new (g_str_hash, NULL);
+}
+
+void
+ephy_web_process_extension_deinitialize (EphyWebProcessExtension *extension)
+{
+  g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
 }

@@ -182,4 +182,8 @@ void                       ephy_web_view_show_auth_form_save_request (EphyWebVie
                                                                       gpointer                        response_data,
                                                                       GDestroyNotify                  response_destroy);
 
+GtkWidget                 *ephy_web_view_new_with_user_content_manager (WebKitUserContentManager *ucm);
+
+guint64                    ephy_web_view_get_uid                       (EphyWebView *web_view);
+
 G_END_DECLS

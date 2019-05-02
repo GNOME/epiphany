@@ -55,6 +55,7 @@
 #include "ephy-string.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-web-extension-dialog.h"
 #include "ephy-zoom.h"
 
 #include <gio/gio.h>
@@ -3076,4 +3077,17 @@ window_cmd_change_tabs_mute_state (GSimpleAction *action,
   webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), mute);
 
   g_simple_action_set_state (action, g_variant_new_boolean (mute));
+}
+
+void
+window_cmd_extensions (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkWidget *dialog;
+
+  dialog = ephy_web_extension_dialog_new ();
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_widget_show_all (dialog);
 }

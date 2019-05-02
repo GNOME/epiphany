@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2018 Purism SPC
- *  Copyright © 2018 Adrien Plazas <kekun.plazas@laposte.net>
+ *  Copyright © 2019-2020 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -23,18 +22,14 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-window.h"
+
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ACTION_BAR_END (ephy_action_bar_end_get_type ())
+#define EPHY_TYPE_WEB_EXTENSION_DIALOG (ephy_web_extension_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyActionBarEnd, ephy_action_bar_end, EPHY, ACTION_BAR_END, GtkBox);
+G_DECLARE_FINAL_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, EPHY, WEB_EXTENSION_DIALOG, HdyWindow)
 
-EphyActionBarEnd *ephy_action_bar_end_new                       (void);
-void              ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
-                                                                 gboolean          show);
-GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEnd *action_bar_end);
-
-void              ephy_action_bar_end_add_browser_action        (EphyActionBarEnd *action_bar_end,
-                                                                 GtkWidget        *action);
+GtkWidget *ephy_web_extension_dialog_new (void);
 
 G_END_DECLS

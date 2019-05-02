@@ -30,6 +30,7 @@
 #include "ephy-password-manager.h"
 #include "ephy-session.h"
 #include "ephy-sync-service.h"
+#include "ephy-web-extension-manager.h"
 #include "ephy-window.h"
 
 #include <webkit2/webkit2.h>
@@ -129,5 +130,12 @@ void                     ephy_shell_send_notification       (EphyShell        *s
                                                              GNotification    *notification);
 
 gboolean                 ephy_shell_startup_finished        (EphyShell *shell);
+
+EphyWebExtensionManager  *ephy_shell_get_web_extension_manager (EphyShell        *shell);
+
+EphyWebView              *ephy_shell_get_web_view              (EphyShell        *shell,
+                                                                guint64           id);
+
+EphyWebView              *ephy_shell_get_active_web_view       (EphyShell        *shell);
 
 G_END_DECLS

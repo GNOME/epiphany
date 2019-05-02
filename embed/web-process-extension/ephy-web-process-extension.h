@@ -36,4 +36,8 @@ void                     ephy_web_process_extension_initialize (EphyWebProcessEx
                                                                 gboolean                 should_remember_passwords,
                                                                 gboolean                 is_private_profile);
 
+void                     ephy_web_process_extension_deinitialize (EphyWebProcessExtension *extension);
+
+GHashTable             *ephy_web_process_extension_get_translations (EphyWebProcessExtension *extension);
+
 G_END_DECLS

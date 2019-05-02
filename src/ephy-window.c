@@ -117,6 +117,7 @@ const struct {
   { "win.location-search", {"<Primary>K", NULL} },
   { "win.home", { "<alt>Home", NULL } },
   { "win.content", { "Escape", NULL } },
+  { "win.extensions", { NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -859,6 +860,7 @@ static const GActionEntry window_entries [] = {
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
   { "toggle-reader-mode", window_cmd_toggle_reader_mode },
+  { "extensions", window_cmd_extensions },
 
   { "select-all", window_cmd_select_all },
 
@@ -1268,6 +1270,17 @@ sync_tab_title (EphyEmbed  *embed,
 
   gtk_window_set_title (GTK_WINDOW (window),
                         ephy_embed_get_title (embed));
+}
+
+static void
+sync_tab_page_action (EphyWebView *view,
+                      GParamSpec  *pspec,
+                      EphyWindow  *window)
+{
+  EphyWebExtensionManager *manager;
+
+  manager = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  ephy_web_extension_manager_update_location_entry (manager, window);
 }
 
 static gboolean
@@ -2419,6 +2432,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_popup_windows (view, NULL, window);
 
   sync_tab_zoom (web_view, NULL, window);
+  sync_tab_page_action (view, NULL, window);
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
@@ -3946,6 +3960,8 @@ ephy_window_constructed (GObject *object)
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
 
   ephy_window_set_chrome (window, chrome);
+
+  ephy_web_extension_manager_install_actions (ephy_shell_get_web_extension_manager (ephy_shell_get_default ()), window);
 }
 
 static void
