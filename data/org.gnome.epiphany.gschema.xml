@@ -429,5 +429,10 @@
 			<summary>Decision to apply when advertisement permission is requested for this host</summary>
 			<description>This option is used to save whether a given host has been given permission to allow advertisements. The “undecided” default means the browser global setting is used, while “allow” and “deny” tell it to automatically make the decision upon request.</description>
 		</key>
+		<key name="web-trackers-permission" enum="org.gnome.Epiphany.Permission">
+			<default>'undecided'</default>
+			<summary>Decision to apply when web tracker permission is requested for this host</summary>
+			<description>This option is used to save whether a given host has been given permission to use web trackers. The “undecided” default means the browser global setting is used, while “allow” and “deny” tell it to automatically make the decision upon request.</description>
+		</key>
 	</schema>
 </schemalist>

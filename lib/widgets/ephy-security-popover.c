@@ -60,6 +60,7 @@ struct _EphySecurityPopover {
   GtkWidget *host_label;
   GtkWidget *security_label;
   GtkWidget *ad_combobox;
+  GtkWidget *web_trackers_combobox;
   GtkWidget *notification_combobox;
   GtkWidget *save_password_combobox;
   GtkWidget *access_location_combobox;
@@ -90,6 +91,33 @@ set_permission_ads_combobox_state (EphyPermissionsManager *permissions_manager,
     case EPHY_PERMISSION_UNDECIDED:
       gtk_combo_box_set_active (GTK_COMBO_BOX (widget),
                                 g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_ENABLE_ADBLOCK));
+      break;
+    case EPHY_PERMISSION_DENY:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+      break;
+  }
+}
+
+static void
+set_permission_web_trackers_combobox_state (EphyPermissionsManager *permissions_manager,
+                                            gint                    permission_id,
+                                            gchar                  *origin,
+                                            GtkWidget              *widget)
+{
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  EphyPermission permission;
+
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        permission_id,
+                                                        origin);
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget),
+                                g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_DO_NOT_TRACK));
       break;
     case EPHY_PERMISSION_DENY:
       gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
@@ -150,6 +178,7 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
   set_permission_ads_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_ADS, origin, popover->ad_combobox);
+  set_permission_web_trackers_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_WEB_TRACKERS, origin, popover->web_trackers_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS, origin, popover->notification_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SAVE_PASSWORD, origin, popover->save_password_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, popover->access_location_combobox);
@@ -413,6 +442,34 @@ on_ad_combobox_changed (GtkComboBox         *widget,
   return FALSE;
 }
 
+static gboolean
+on_web_trackers_combobox_changed (GtkComboBox         *widget,
+                                  EphySecurityPopover *popover)
+{
+  GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  EphyPermissionsManager *permissions_manager;
+  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+  gboolean global_flag = g_settings_get_boolean (web_settings, EPHY_PREFS_WEB_DO_NOT_TRACK);
+  g_autofree gchar *origin = NULL;
+  gboolean state = gtk_combo_box_get_active (widget) == 1;
+
+  origin = ephy_uri_to_security_origin (popover->address);
+  if (!origin)
+    return FALSE;
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+
+  if (global_flag != state)
+    permission = state ? EPHY_PERMISSION_DENY : EPHY_PERMISSION_PERMIT;
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_WEB_TRACKERS,
+                                           origin,
+                                           permission);
+
+  return FALSE;
+}
+
 static void
 handle_permission_combobox_changed (EphySecurityPopover *popover,
                                     gint                 action,
@@ -554,6 +611,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
 
   popover->permission_pos = 5;
   popover->ad_combobox = add_permission_combobox (popover, _("Advertisements"), on_ad_combobox_changed, TRUE);
+  popover->web_trackers_combobox = add_permission_combobox (popover, _("Web Trackers"), on_web_trackers_combobox_changed, TRUE);
   popover->notification_combobox = add_permission_combobox (popover, _("Notifications"), on_notification_combobox_changed, FALSE);
   popover->save_password_combobox = add_permission_combobox (popover, _("Password saving"), on_save_password_combobox_changed, FALSE);
   popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, FALSE);
