@@ -161,13 +161,46 @@ ephy_pages_popover_dispose (GObject *object)
 }
 
 static void
+ephy_pages_popover_get_preferred_height (GtkWidget *widget,
+                                         gint      *minimum_height,
+                                         gint      *natural_height)
+{
+  EphyPagesPopover *self = EPHY_PAGES_POPOVER (widget);
+  int height;
+
+  GTK_WIDGET_CLASS (ephy_pages_popover_parent_class)->get_preferred_height (widget,
+                                                                            minimum_height,
+                                                                            natural_height);
+  /* Ensure that popover won't leave current window */
+  height = gtk_widget_get_allocated_height (GTK_WIDGET (self->notebook));
+  gtk_scrolled_window_set_max_content_height (self->scrolled_window, height);
+}
+
+static GtkSizeRequestMode
+ephy_pages_popover_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+}
+
+static void
 ephy_pages_popover_class_init (EphyPagesPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GdkDisplay *display;
 
   object_class->dispose = ephy_pages_popover_dispose;
   object_class->finalize = ephy_pages_popover_finalize;
+
+  display = gdk_display_get_default ();
+  if (display) {
+    const gchar *name = gdk_display_get_name (display);
+
+    if (name[0] == ':') {
+      widget_class->get_request_mode = ephy_pages_popover_get_request_mode;
+      widget_class->get_preferred_height = ephy_pages_popover_get_preferred_height;
+    }
+  }
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/pages-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyPagesPopover, list_box);
@@ -278,8 +311,7 @@ ephy_pages_popover_set_adaptive_mode (EphyPagesPopover *self,
   switch (adaptive_mode) {
   case EPHY_ADAPTIVE_MODE_NORMAL:
     gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-    /* This should be enough height in normal mode to fit in 900px hight screen. */
-    gtk_scrolled_window_set_max_content_height (self->scrolled_window, 700);
+    gtk_scrolled_window_set_max_content_height (self->scrolled_window, -1);
     gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
 
     break;
