@@ -779,7 +779,7 @@ filename_suggested_cb (EphyDownload *download,
                                    "%s",
                                    _("Download requested"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL, _("_Download"), GTK_RESPONSE_OK, NULL);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), suggested_filename);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", suggested_filename);
   message_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
 
   webkit_download = ephy_download_get_webkit_download (download);
