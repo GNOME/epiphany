@@ -236,40 +236,67 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
   GList *applications, *p;
 
   data_str = g_string_new (NULL);
-  g_string_append_printf (data_str, "<html><head><title>%s</title>"
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
-                          "<script>"
-                          "  function deleteWebApp(appID) {"
-                          "    window.webkit.messageHandlers.aboutApps.postMessage(appID);"
-                          "    var row = document.getElementById(appID);"
-                          "    row.parentNode.removeChild(row);"
-                          "  }"
-                          "</script>"
-                          "</head><body class=\"applications-body\"><h1>%s</h1>"
-                          "<p>%s</p>",
-                          _("Applications"),
-                          _("Applications"),
-                          _("List of installed web applications"));
-
-  g_string_append (data_str, "<table>");
-
   applications = g_task_propagate_pointer (G_TASK (result), NULL);
-  for (p = applications; p; p = p->next) {
-    EphyWebApplication *app = (EphyWebApplication *)p->data;
 
+  if (g_list_length (applications) > 0) {
+    g_string_append_printf (data_str, "<html><head><title>%s</title>"
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                            "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
+                            "<script>"
+                            "  function deleteWebApp(appID) {"
+                            "    window.webkit.messageHandlers.aboutApps.postMessage(appID);"
+                            "    var row = document.getElementById(appID);"
+                            "    row.parentNode.removeChild(row);"
+                            "  }"
+                            "</script>"
+                            "</head><body class=\"applications-body\"><h1>%s</h1>"
+                            "<p>%s</p>",
+                            _("Applications"),
+                            _("Applications"),
+                            _("List of installed web applications"));
+
+    g_string_append (data_str, "<table>");
+
+    for (p = applications; p; p = p->next) {
+      EphyWebApplication *app = (EphyWebApplication *)p->data;
+
+      g_string_append_printf (data_str,
+                              "<tbody><tr id =\"%s\">"
+                              "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
+                              "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
+                              "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\"></td>"
+                              "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
+                              app->id, app->icon_url, app->name, app->url, _("Delete"), app->id,
+                              /* Note for translators: this refers to the installation date. */
+                              _("Installed on:"), app->install_date);
+    }
+
+    g_string_append (data_str, "</table></body></html>");
+  } else {
+    g_autoptr(GtkIconInfo) icon_info = NULL;
+    g_autofree gchar *icon = g_strconcat ("application-x-addon-symbolic", NULL);
+
+    g_string_append_printf (data_str, "<html><head><title>%s</title>"
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                            "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
+                            "</head><body class=\"applications-body\">",
+                            _("Applications"));
+
+    icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                            icon,
+                                            128,
+                                            0);
     g_string_append_printf (data_str,
-                            "<tbody><tr id =\"%s\">"
-                            "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
-                            "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
-                            "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\"></td>"
-                            "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                            app->id, app->icon_url, app->name, app->url, _("Delete"), app->id,
-                            /* Note for translators: this refers to the installation date. */
-                            _("Installed on:"), app->install_date);
+                            "  <div id=\"overview\" class=\"overview-empty\">\n"
+                            "    <img src=\"file://%s\"/>\n"
+                            "    <div><h1>%s</h1></div>\n"
+                            "    <div><p>%s</p></div>\n"
+                            "  </div>\n"
+                            "</body></html>\n",
+                            icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                            /* Displayed when opening applications without any installed web apps. */
+                            _("Applications"), _("You can add your favorite website by clicking <b>Install Site as Web Application…</b> within page menu."));
   }
-
-  g_string_append (data_str, "</table></body></html>");
 
   ephy_web_application_free_application_list (applications);
 
