@@ -103,7 +103,6 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
-
 # Ubuntu 18.04 doesn't have libhandy at all, and we need 0.0.5, so bundle it if
 # the system copy is missing or too old.
 if not libhandy_dep.found()
@@ -115,6 +114,10 @@ if not libhandy_dep.found()
                                                           'tests=false',
                                                           'vapi=false']).get_variable('libhandy_dep')
 endif
+
+libgd_sp = subproject('libgd', default_options: ['with-tagged-entry=true',
+                                                 'static=true'])
+libgd_dep = libgd_sp.get_variable('libgd_dep')
 
 cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
