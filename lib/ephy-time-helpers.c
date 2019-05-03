@@ -67,10 +67,11 @@
 char *
 eel_strdup_strftime (const char *format, struct tm *time_pieces)
 {
-  GString *string;
+  g_autoptr(GString) string = NULL;
   const char *remainder, *percent;
   char code[4], buffer[512];
-  char *piece, *result, *converted;
+  char *piece, *result;
+  g_autofree gchar *converted = NULL;
   size_t string_length;
   gboolean strip_leading_zeros, turn_leading_zeros_to_spaces;
   char modifier;
@@ -79,13 +80,14 @@ eel_strdup_strftime (const char *format, struct tm *time_pieces)
   /* Format could be translated, and contain UTF-8 chars,
    * so convert to locale encoding which strftime uses */
   converted = g_locale_from_utf8 (format, -1, NULL, NULL, NULL);
-  g_assert (converted != NULL);
+  if (!converted)
+    converted = g_strdup (format);
 
   string = g_string_new ("");
   remainder = converted;
 
   /* Walk from % character to % character. */
-  for (;; ) {
+  for (;;) {
     percent = strchr (remainder, '%');
     if (percent == NULL) {
       g_string_append (string, remainder);
@@ -196,9 +198,6 @@ eel_strdup_strftime (const char *format, struct tm *time_pieces)
 
   /* Convert the string back into utf-8. */
   result = g_locale_to_utf8 (string->str, -1, NULL, NULL, NULL);
-
-  g_string_free (string, TRUE);
-  g_free (converted);
 
   return result;
 }
