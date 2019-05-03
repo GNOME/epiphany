@@ -782,9 +782,9 @@ urls_have_same_origin (const char *a_url,
 }
 
 gboolean
-ephy_web_application_is_uri_allowed (const char *uri,
-                                     const char *referrer)
+ephy_web_application_is_uri_allowed (const char *uri)
 {
+  EphyWebApplication *webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
   SoupURI *request_uri;
   char **urls;
   guint i;
@@ -793,7 +793,7 @@ ephy_web_application_is_uri_allowed (const char *uri,
   if (g_str_has_prefix (uri, "blob:") || g_str_has_prefix (uri, "data:"))
     return TRUE;
 
-  if (urls_have_same_origin (uri, referrer))
+  if (urls_have_same_origin (uri, webapp->url))
     return TRUE;
 
   if (g_strcmp0 (uri, "about:blank") == 0)

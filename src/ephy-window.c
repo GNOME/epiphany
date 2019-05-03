@@ -1931,17 +1931,6 @@ web_view_ready_cb (WebKitWebView *web_view,
     g_signal_emit_by_name (parent_web_view, "new-window", web_view);
   }
 
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
-      !webkit_web_view_get_uri (web_view)) {
-    /* Wait until we have a valid URL to decide whether to show the window
-     * or load the URL in the default web browser
-     */
-    g_object_set_data_full (G_OBJECT (window), "referrer",
-                            g_strdup (webkit_web_view_get_uri (parent_web_view)),
-                            g_free);
-    return TRUE;
-  }
-
   gtk_widget_show (GTK_WIDGET (window));
 
   return TRUE;
@@ -2075,11 +2064,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     if (!gtk_widget_is_visible (GTK_WIDGET (window))) {
-      char *referrer;
-
-      referrer = (char *)g_object_get_data (G_OBJECT (window), "referrer");
-
-      if (ephy_web_application_is_uri_allowed (uri, referrer)) {
+      if (ephy_web_application_is_uri_allowed (uri)) {
         gtk_widget_show (GTK_WIDGET (window));
       } else {
         /* We can't get here under flatpak because this code only
@@ -2098,7 +2083,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED ||
         (navigation_type == WEBKIT_NAVIGATION_TYPE_OTHER && webkit_navigation_action_is_user_gesture (navigation_action))) {
-      if (ephy_web_application_is_uri_allowed (uri, webkit_web_view_get_uri (web_view)))
+      if (ephy_web_application_is_uri_allowed (uri))
         return FALSE;
 
       /* We can't get here under flatpak because this code only

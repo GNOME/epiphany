@@ -67,7 +67,7 @@ void                ephy_web_application_free_application_list (GList *list);
 
 void                ephy_web_application_initialize_settings (const char *profile_directory);
 
-gboolean            ephy_web_application_is_uri_allowed (const char *uri, const char *referrer);
+gboolean            ephy_web_application_is_uri_allowed (const char *uri);
 
 gboolean            ephy_web_application_save (EphyWebApplication *app);
 
