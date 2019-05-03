@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-04-22 19:44+0000\n"
-"PO-Revision-Date: 2019-04-23 09:54+0200\n"
+"POT-Creation-Date: 2019-05-02 17:07+0000\n"
+"PO-Revision-Date: 2019-05-03 14:24+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -188,9 +188,6 @@ msgstr ""
 "Indica si se debe preguntar para establecer el navegador como predeterminado"
 
 #: data/org.gnome.epiphany.gschema.xml:66
-#| msgid ""
-#| "When this option is set to true, tabs will not start loading until the "
-#| "user switches to them, upon session restore."
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -199,14 +196,10 @@ msgstr ""
 "predeterminado, si no lo es."
 
 #: data/org.gnome.epiphany.gschema.xml:70
-#| msgid "Start an instance in incognito mode"
 msgid "Start in incognito mode"
 msgstr "Iniciar en modo incógnito"
 
 #: data/org.gnome.epiphany.gschema.xml:71
-#| msgid ""
-#| "When this option is set to true, tabs will not start loading until the "
-#| "user switches to them, upon session restore."
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
@@ -360,8 +353,6 @@ msgid "Default encoding"
 msgstr "Codificación predeterminada"
 
 #: data/org.gnome.epiphany.gschema.xml:146
-#| msgid ""
-#| "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
@@ -449,10 +440,6 @@ msgid "Do Not Track"
 msgstr "No rastrear"
 
 #: data/org.gnome.epiphany.gschema.xml:190
-#| msgid ""
-#| "Enables DNT headers and tracking query parameter removal. Note that when "
-#| "changing this setting from the preferences dialog, the adblock-filters "
-#| "setting will additionally be updated to add/remove EasyPrivacy filters."
 msgid ""
 "Enables tracking query parameter removal. Note that when changing this "
 "setting from the preferences dialog, the adblock-filters setting will "
@@ -587,7 +574,6 @@ msgstr ""
 "aceleración hardware se usará sólo cuando se requieran transformaciones 3D."
 
 #: data/org.gnome.epiphany.gschema.xml:248
-#| msgid "Last download directory"
 msgid "Always ask for download directory"
 msgstr "Preguntar siempre por la carpeta de descarga"
 
@@ -924,7 +910,6 @@ msgstr ""
 "indican automáticamente la respuesta."
 
 #: data/org.gnome.epiphany.gschema.xml:429
-#| msgid "Decision to apply when webcam permission is requested for this host"
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
@@ -932,11 +917,6 @@ msgstr ""
 "este equipo"
 
 #: data/org.gnome.epiphany.gschema.xml:430
-#| msgid ""
-#| "This option is used to save whether a given host has been given "
-#| "permission to show notifications. The “undecided” default means the "
-#| "browser needs to ask the user for permission, while “allow” and “deny” "
-#| "tell it to automatically make the decision upon request."
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -969,42 +949,52 @@ msgstr "Tecnología de vista previa de Epiphany"
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Una vista simple, limpia y bonita de la web"
 
-#: embed/ephy-about-handler.c:251 embed/ephy-about-handler.c:252
+#. Displayed when opening applications without any installed web apps.
+#: embed/ephy-about-handler.c:254 embed/ephy-about-handler.c:255
+#: embed/ephy-about-handler.c:283 embed/ephy-about-handler.c:298
 msgid "Applications"
 msgstr "Aplicaciones"
 
-#: embed/ephy-about-handler.c:253
+#: embed/ephy-about-handler.c:256
 msgid "List of installed web applications"
 msgstr "Lista de las aplicaciones web instaladas"
 
-#: embed/ephy-about-handler.c:267
+#: embed/ephy-about-handler.c:269
 msgid "Delete"
 msgstr "Eliminar"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:269
+#: embed/ephy-about-handler.c:271
 msgid "Installed on:"
 msgstr "Instalada el:"
 
+#: embed/ephy-about-handler.c:298
+msgid ""
+"You can add your favorite website by clicking <b>Install Site as Web "
+"Application…</b> within page menu."
+msgstr ""
+"Puede añadir su sitio web a favoritos pulsando <b>Instalar sitio como "
+"aplicación web…</b> en el menú de la página."
+
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:360
+#: embed/ephy-about-handler.c:387
 msgid "Welcome to Web"
 msgstr "Bienvenido a Web"
 
-#: embed/ephy-about-handler.c:360
+#: embed/ephy-about-handler.c:387
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Empiece a navegar y los sitios que más visite aparecerán aquí."
 
-#: embed/ephy-about-handler.c:386
+#: embed/ephy-about-handler.c:413
 #: embed/web-extension/resources/js/overview.js:103
 msgid "Remove from overview"
 msgstr "Quitar de la vista general"
 
-#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
+#: embed/ephy-about-handler.c:485 embed/ephy-about-handler.c:486
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: embed/ephy-about-handler.c:462
+#: embed/ephy-about-handler.c:487
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1015,14 +1005,14 @@ msgstr ""
 "información almacenada se limpiará cuando cierre la ventana. Los archivos "
 "que descargue se conservarán."
 
-#: embed/ephy-about-handler.c:466
+#: embed/ephy-about-handler.c:491
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "El modo de incógnito oculta su actividad sólo ante la gente que use este "
 "mismo equipo."
 
-#: embed/ephy-about-handler.c:468
+#: embed/ephy-about-handler.c:493
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1044,7 +1034,6 @@ msgid "Download finished"
 msgstr "Descarga finalizada"
 
 #: embed/ephy-download.c:780
-#| msgid "Download started"
 msgid "Download requested"
 msgstr "Descarga requerida"
 
@@ -1057,33 +1046,27 @@ msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: embed/ephy-download.c:781
-#| msgid "Downloads"
 msgid "_Download"
 msgstr "_Descargar"
 
 #: embed/ephy-download.c:794
 #, c-format
-#| msgctxt "language"
-#| msgid "%s (%s)"
 msgid "Type: %s (%s)"
 msgstr "Tipo: %s (%s)"
 
 #. From
 #: embed/ephy-download.c:800
 #, c-format
-#| msgid "From:"
 msgid "From: %s"
 msgstr "De: %s"
 
 #. Question
 #: embed/ephy-download.c:805
-#| msgid "Do you want to leave this website?"
 msgid "Where do you want to save the file?"
 msgstr "¿Dónde quiere guardar el archivo?"
 
 #. File Chooser Button
 #: embed/ephy-download.c:810
-#| msgid "Save File"
 msgid "Save file"
 msgstr "Guardar archivo"
 
@@ -2202,9 +2185,6 @@ msgstr ""
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:191
 #, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
@@ -2239,27 +2219,22 @@ msgid "Ask"
 msgstr "Preguntarme"
 
 #: lib/widgets/ephy-security-popover.c:520
-#| msgid "Session"
 msgid "Permissions"
 msgstr "Permisos"
 
 #: lib/widgets/ephy-security-popover.c:556
-#| msgid "Try to block _advertisements"
 msgid "Advertisements"
 msgstr "Anuncios"
 
 #: lib/widgets/ephy-security-popover.c:557
-#| msgid "Location"
 msgid "Notifications"
 msgstr "Notificaciones"
 
 #: lib/widgets/ephy-security-popover.c:558
-#| msgid "Passwords"
 msgid "Password saving"
 msgstr "Guardado de contraseñas"
 
 #: lib/widgets/ephy-security-popover.c:559
-#| msgid "Location"
 msgid "Location access"
 msgstr "Acceso a la ubicación"
 
@@ -2427,13 +2402,10 @@ msgid "Bang"
 msgstr "Bang"
 
 #: src/ephy-tab-header-bar.c:68
-#| msgctxt "shortcut window"
-#| msgid "Tabs"
 msgid "Tabs"
 msgstr "Pestañas"
 
-#: src/ephy-tab-label.c:205
-#| msgid "_New Tab"
+#: src/ephy-tab-label.c:222
 msgid "New Tab"
 msgstr "_Pestaña nueva"
 
@@ -2450,7 +2422,6 @@ msgid "_Discard form"
 msgstr "_Descartar formulario"
 
 #: src/ephy-window.c:283
-#| msgid "There are ongoing downloads"
 msgid "There are ongoing downloads."
 msgstr "Hay descargas en curso."
 
@@ -2471,7 +2442,6 @@ msgid "If you close this window, all open tabs will be lost"
 msgstr "Si cierra esta ventana se perderán todas las pestañas abiertas"
 
 #: src/ephy-window.c:302
-#| msgid "Close tab"
 msgid "C_lose tabs"
 msgstr "C_errar pestañas"
 
@@ -2607,24 +2577,21 @@ msgstr "Código _fuente"
 msgid "Search the Web for “%s”"
 msgstr "Buscar «%s» en la web"
 
-#: src/ephy-window.c:3482
-#| msgid "Open the page in your default browser"
+#: src/ephy-window.c:3495
 msgid "Set Web as your default browser?"
 msgstr "¿Establecer Web como su navegador predeterminado?"
 
-#: src/ephy-window.c:3484
-#| msgid "Epiphany Technology Preview"
+#: src/ephy-window.c:3497
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "¿Quiere establecer la tecnología de vista previa de Epiphany como su "
 "navegador predeterminado?"
 
-#: src/ephy-window.c:3496
+#: src/ephy-window.c:3509
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3497
-#| msgid "No"
+#: src/ephy-window.c:3510
 msgid "_No"
 msgstr "_No"
 
@@ -2947,7 +2914,6 @@ msgid "_Duplicate"
 msgstr "_Duplicar"
 
 #: src/resources/gtk/notebook-context-menu.ui:21
-#| msgid "_New Tab"
 msgid "P_in Tab"
 msgstr "F_ijar pestaña"
 
@@ -3055,7 +3021,6 @@ msgid "_About Web"
 msgstr "_Acerca de Web"
 
 #: src/resources/gtk/page-row.ui:83
-#| msgid "Home page"
 msgid "Close page"
 msgstr "Cerrar la página"
 
@@ -3165,7 +3130,6 @@ msgid "Session"
 msgstr "Sesión"
 
 #: src/resources/gtk/prefs-dialog.ui:359
-#| msgid "Start an instance in incognito mode"
 msgid "Always start browser in _incognito mode"
 msgstr "Iniciar siempre el navegador en modo _incógnito"
 
@@ -3324,9 +3288,6 @@ msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
 #: src/resources/gtk/prefs-dialog.ui:1077
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3687,8 +3648,7 @@ msgstr ""
 "dispositivos que usan Firefox Sync con esta cuenta. Abra una pestaña "
 "pulsando dos veces sobre su nombre (las pestañas locales no se pueden abrir)."
 
-#: src/resources/gtk/tab-label.ui:58
-#| msgid "Close _Document"
+#: src/resources/gtk/tab-label.ui:53
 msgid "Close Document"
 msgstr "Cerrar documento"
 
@@ -3784,9 +3744,6 @@ msgstr "Marcadores exportados satisfactoriamente."
 
 #: src/window-commands.c:588
 #, c-format
-#| msgid ""
-#| "A simple, clean, beautiful view of the web.\n"
-#| "Powered by WebKitGTK+ %d.%d.%d"
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
 "Powered by WebKitGTK %d.%d.%d"
