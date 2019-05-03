@@ -1612,7 +1612,6 @@ create_language_section (PrefsDialog *dialog)
   }
   g_object_unref (store);
 
-  language_editor_update_buttons (dialog);
   g_strfreev (list);
 
   /* Lockdown if key is not writable */
@@ -1631,6 +1630,8 @@ create_language_section (PrefsDialog *dialog)
   g_settings_bind_writable (EPHY_SETTINGS_WEB,
                             EPHY_PREFS_WEB_LANGUAGE,
                             dialog->lang_treeview, "sensitive", FALSE);
+
+  language_editor_update_buttons (dialog);
 }
 
 static void
