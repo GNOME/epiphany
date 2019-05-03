@@ -353,7 +353,7 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
        * the profile (he pressed Cancel), don't display the import info dialog
        * as no import took place
        */
-      if (profile) {
+      if (num_profiles == 1 || profile) {
         import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
                                                      GTK_DIALOG_MODAL,
                                                      imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
