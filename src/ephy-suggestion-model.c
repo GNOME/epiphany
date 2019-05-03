@@ -446,7 +446,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
                                   0, 0,
                                   MAX_COMPLETION_HISTORY_URLS, 0,
                                   qlist,
-                                  EPHY_HISTORY_SORT_MOST_VISITED,
+                                  EPHY_HISTORY_SORT_AUTOCOMPLETION,
                                   cancellable,
                                   (EphyHistoryJobCallback)query_completed_cb,
                                   task);
