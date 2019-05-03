@@ -103,7 +103,6 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
-
 # Ubuntu 18.04 doesn't have libhandy at all, and we need 0.0.5, so bundle it if
 # the system copy is missing or too old.
 if not libhandy_dep.found()
