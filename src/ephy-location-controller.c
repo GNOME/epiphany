@@ -146,6 +146,13 @@ entry_activate_cb (GtkEntry               *entry,
   if (content == NULL || content[0] == '\0')
     return;
 
+  if (g_str_has_prefix (content, "tab://")) {
+    guint64 page = g_ascii_strtoull (content + 6, NULL, 0);
+    GtkWidget *notebook = ephy_window_get_notebook (controller->window);
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+    return;
+  }
+
   address = g_strdup (content);
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
   g_free (address);
