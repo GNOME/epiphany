@@ -27,16 +27,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySuggestion, ephy_suggestion, EPHY, SUGGESTION, DzlSuggestion)
 
-EphySuggestion *ephy_suggestion_new                  (const char *title_markup,
-                                                      const char *unescaped_title,
-                                                      const char *uri);
-EphySuggestion *ephy_suggestion_new_without_subtitle (const char *title_markup,
-                                                      const char *unescaped_title,
-                                                      const char *uri);
-const char     *ephy_suggestion_get_unescaped_title  (EphySuggestion *self);
-const char     *ephy_suggestion_get_uri              (EphySuggestion *self);
+EphySuggestion *ephy_suggestion_new                      (const char *title_markup,
+                                                          const char *unescaped_title,
+                                                          const char *uri);
+EphySuggestion *ephy_suggestion_new_with_custom_subtitle (const char *title_markup,
+                                                          const char *unescaped_title,
+                                                          const char *subtitle,
+                                                          const char *uri);
+EphySuggestion *ephy_suggestion_new_without_subtitle     (const char *title_markup,
+                                                          const char *unescaped_title,
+                                                          const char *uri);
+const char     *ephy_suggestion_get_unescaped_title      (EphySuggestion *self);
+const char     *ephy_suggestion_get_uri                  (EphySuggestion *self);
 
-void            ephy_suggestion_set_favicon          (EphySuggestion  *self,
-                                                      cairo_surface_t *favicon);
+void            ephy_suggestion_set_favicon              (EphySuggestion  *self,
+                                                          cairo_surface_t *favicon);
 
 G_END_DECLS
