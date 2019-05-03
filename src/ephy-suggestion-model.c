@@ -22,6 +22,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-search-engine-manager.h"
 #include "ephy-suggestion.h"
+#include "ephy-window.h"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
@@ -347,6 +348,48 @@ add_search_engines (EphySuggestionModel *self,
   return added;
 }
 
+static guint
+add_tabs (EphySuggestionModel *self,
+          const char          *query)
+{
+  GApplication *application;
+  EphyEmbedShell *shell;
+  EphyWindow *window ;
+  GtkWidget *notebook;
+  int n_pages;
+  guint added = 0;
+
+  shell = ephy_embed_shell_get_default ();
+  application = G_APPLICATION (shell);
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
+
+  notebook = ephy_window_get_notebook (window);
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < n_pages; i++) {
+    EphyEmbed *embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+    EphyWebView *webview = ephy_embed_get_web_view (embed);
+    EphySuggestion *suggestion;
+    g_autofree gchar *escaped_title = NULL;
+    g_autofree gchar *markup = NULL;
+    const gchar *display_address = ephy_web_view_get_display_address (webview);
+    g_autofree gchar *address = g_strdup_printf ("tab://%d", i);
+    const gchar *title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
+
+    if ((title && strstr (title, query)) || strstr (display_address, query)) {
+      escaped_title = g_markup_escape_text (title, -1);
+      markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+      suggestion = ephy_suggestion_new (markup, title, address);
+      load_favicon (self, suggestion, display_address);
+
+      g_sequence_append (self->items, suggestion);
+      added++;
+    }
+  }
+
+  return added;
+}
+
 static void
 query_completed_cb (EphyHistoryService *service,
                     gboolean            success,
@@ -375,7 +418,8 @@ query_completed_cb (EphyHistoryService *service,
   self->items = g_sequence_new (g_object_unref);
 
   if (strlen (query) > 0) {
-    added = add_bookmarks (self, query);
+    added = add_tabs (self, query);
+    added += add_bookmarks (self, query);
     added += add_history (self, urls, query);
     added += add_search_engines (self, query);
   }
