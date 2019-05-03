@@ -69,6 +69,7 @@ struct _EphyLocationEntry {
   gboolean reader_mode_active;
 
   char *saved_text;
+  char *jump_tab;
 
   guint hash;
 
@@ -375,6 +376,7 @@ ephy_location_entry_dispose (GObject *object)
     entry->progress_timeout = 0;
   }
 
+  g_clear_pointer (&entry->jump_tab, g_free);
   g_clear_object (&entry->css_provider);
 
   gtk_widget_destroy (GTK_WIDGET (entry->add_bookmark_popover));
@@ -503,34 +505,43 @@ entry_key_press_cb (GtkEntry          *entry,
   if (event->keyval == GDK_KEY_Return ||
       event->keyval == GDK_KEY_KP_Enter ||
       event->keyval == GDK_KEY_ISO_Enter) {
-    g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
-    gchar *url = g_strstrip (text);
-    g_autofree gchar *new_url = NULL;
-
-    if (strlen (url) > 5 && g_str_has_prefix (url, "http:") && url[5] != '/')
-      new_url = g_strdup_printf ("http://%s", url + 5);
-    else if (strlen (url) > 6 && g_str_has_prefix (url, "https:") && url[6] != '/')
-      new_url = g_strdup_printf ("https://%s", url + 6);
-
-    if (new_url) {
+    if (location_entry->jump_tab) {
       g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-      gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
+      gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), location_entry->jump_tab);
       g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-    }
-
-    if (state == GDK_CONTROL_MASK) {
+      g_clear_pointer (&location_entry->jump_tab, g_free);
+    } else {
       g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
       gchar *url = g_strstrip (text);
+      g_autofree gchar *new_url = NULL;
 
-      /* Remove control mask to prevent opening address in a new window */
-      event->state &= ~GDK_CONTROL_MASK;
+      gtk_entry_set_text (GTK_ENTRY (entry), location_entry->jump_tab ? location_entry->jump_tab : text);
 
-      if (!g_utf8_strchr (url, -1, ' ') && !g_utf8_strchr (url, -1, '.')) {
-        g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
+      if (strlen (url) > 5 && g_str_has_prefix (url, "http:") && url[5] != '/')
+        new_url = g_strdup_printf ("http://%s", url + 5);
+      else if (strlen (url) > 6 && g_str_has_prefix (url, "https:") && url[6] != '/')
+        new_url = g_strdup_printf ("https://%s", url + 6);
 
+      if (new_url) {
         g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
         gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
         g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+      }
+
+      if (state == GDK_CONTROL_MASK) {
+        g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
+        gchar *url = g_strstrip (text);
+
+        /* Remove control mask to prevent opening address in a new window */
+        event->state &= ~GDK_CONTROL_MASK;
+
+        if (!g_utf8_strchr (url, -1, ' ') && !g_utf8_strchr (url, -1, '.')) {
+          g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
+
+          g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+          gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
+          g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+        }
       }
     }
 
@@ -775,8 +786,11 @@ ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
 {
   EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   DzlSuggestion *suggestion = dzl_suggestion_entry_get_suggestion (entry);
+  const gchar *text = ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion));
+
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
-  gtk_entry_set_text (GTK_ENTRY (entry), ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion)));
+  gtk_entry_set_text (GTK_ENTRY (entry), lentry->jump_tab ? lentry->jump_tab : text);
+  g_clear_pointer (&lentry->jump_tab, g_free);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
 
   g_signal_stop_emission_by_name (entry, "suggestion-activated");
@@ -796,7 +810,14 @@ suggestion_selected (DzlSuggestionEntry *entry,
   const gchar *uri = dzl_suggestion_get_id (suggestion);
 
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
-  gtk_entry_set_text (GTK_ENTRY (entry), uri);
+  g_clear_pointer (&lentry->jump_tab, g_free);
+
+  if (g_str_has_prefix (uri, "ephy-tab://")) {
+    lentry->jump_tab = g_strdup (uri);
+    gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_subtitle (suggestion));
+  } else {
+    gtk_entry_set_text (GTK_ENTRY (entry), uri);
+  }
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
 
