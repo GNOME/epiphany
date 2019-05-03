@@ -425,7 +425,7 @@ ephy_sync_crypto_rsa_key_pair_new (void)
                                   NULL, ephy_sync_utils_generate_random_bytes,
                                   NULL, NULL, 2048, 0);
   /* Given correct parameters, this never fails. */
-  g_assert (success);
+  g_assert_cmpint (success, !=, 0);
 
   key_pair = g_new (SyncCryptoRSAKeyPair, 1);
   key_pair->public = public;
@@ -889,7 +889,7 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
                                        NULL, ephy_sync_utils_generate_random_bytes,
                                        digest, signature);
   /* Given correct parameters, this never fails. */
-  g_assert (success);
+  g_assert_cmpint (success, !=, 0);
 
   expected_size = (mpz_sizeinbase (signature, 2) + 7) / 8;
   sig = g_malloc (expected_size);

@@ -1751,7 +1751,7 @@ window_cmd_delete (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+    g_assert_nonnull (embed);
 
     /* FIXME: TODO */
 #if 0
