@@ -2454,6 +2454,47 @@ format_unsafe_browsing_error_page (EphyWebView *view,
   g_free (first_paragraph);
 }
 
+static void
+format_no_such_file_error_page (EphyWebView  *view,
+                                char        **page_title,
+                                char        **message_title,
+                                char        **message_body,
+                                char        **button_label,
+                                char        **button_action,
+                                const char  **button_accesskey,
+                                const char  **icon_name,
+                                const char  **style)
+{
+  g_autofree gchar *formatted_origin = NULL;
+  g_autofree gchar *first_paragraph = NULL;
+  g_autofree gchar *second_paragraph = NULL;
+
+  /* Page title on no such file error page */
+  *page_title = g_strdup_printf (_("File not found"));
+
+  /* Message title on the no such file error page. */
+  *message_title = g_strdup (_("File not found"));
+
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", view->address);
+
+  first_paragraph = g_strdup_printf (_("%s could not be found."),
+                                     formatted_origin);
+  second_paragraph = g_strdup_printf (_("Please check the file name for "
+                                       "capitalization or other typing errors. Also check if "
+                                       "it has been moved, renamed or deleted."));
+
+  *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>", first_paragraph, second_paragraph);
+
+  /* The button on no such file error page. DO NOT ADD MNEMONICS HERE. */
+  *button_label = g_strdup (_("Go Back"));
+  *button_action = g_strdup ("window.history.back();");
+  /* Mnemonic for the Go Back button on the no such file error page. */
+  *button_accesskey = C_("back-access-key", "B");
+
+  *icon_name = "computer-fail-symbolic.png";
+  *style = "default";
+}
+
 /**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
@@ -2582,6 +2623,17 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                                          &icon_name,
                                          &style);
       break;
+    case EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE:
+      format_no_such_file_error_page (view,
+                                      &page_title,
+                                      &msg_title,
+                                      &msg_body,
+                                      &button_label,
+                                      &button_action,
+                                      &button_accesskey,
+                                      &icon_name,
+                                      &style);
+      break;
 
     case EPHY_WEB_VIEW_ERROR_PAGE_NONE:
     default:
@@ -2647,7 +2699,11 @@ load_failed_cb (WebKitWebView  *web_view,
   if (error->domain != WEBKIT_NETWORK_ERROR &&
       error->domain != WEBKIT_POLICY_ERROR &&
       error->domain != WEBKIT_PLUGIN_ERROR) {
-    ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
+
+    if (view->address && g_str_has_prefix (view->address, "file:"))
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error, NULL);
+    else
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
     return TRUE;
   }
 
