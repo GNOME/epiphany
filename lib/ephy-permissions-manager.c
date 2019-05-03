@@ -169,6 +169,8 @@ permission_type_to_string (EphyPermissionType type)
   default:
     g_assert_not_reached ();
   }
+
+  return "";
 }
 
 EphyPermission

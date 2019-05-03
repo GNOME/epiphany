@@ -417,6 +417,8 @@ ephy_settings_get_tabs_bar_position (void)
     default:
       g_assert_not_reached ();
   }
+
+  return GTK_POS_TOP;
 }
 
 static void
