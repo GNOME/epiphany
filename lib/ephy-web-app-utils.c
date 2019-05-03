@@ -790,6 +790,9 @@ ephy_web_application_is_uri_allowed (const char *uri,
   guint i;
   gboolean matched = FALSE;
 
+  if (!referrer)
+    return TRUE;
+
   if (g_str_has_prefix (uri, "blob:") || g_str_has_prefix (uri, "data:"))
     return TRUE;
 
