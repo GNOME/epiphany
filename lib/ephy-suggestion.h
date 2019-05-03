@@ -29,10 +29,11 @@ G_DECLARE_FINAL_TYPE (EphySuggestion, ephy_suggestion, EPHY, SUGGESTION, DzlSugg
 
 EphySuggestion *ephy_suggestion_new                  (const char *title_markup,
                                                       const char *unescaped_title,
-                                                      const char *uri);
+                                                      const char *subtitle,
+                                                      const char *id);
 EphySuggestion *ephy_suggestion_new_without_subtitle (const char *title_markup,
                                                       const char *unescaped_title,
-                                                      const char *uri);
+                                                      const char *id);
 const char     *ephy_suggestion_get_unescaped_title  (EphySuggestion *self);
 const char     *ephy_suggestion_get_uri              (EphySuggestion *self);
 

@@ -22,6 +22,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-search-engine-manager.h"
 #include "ephy-suggestion.h"
+#include "ephy-window.h"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
@@ -192,7 +193,11 @@ should_add_bookmark_to_model (EphySuggestionModel *self,
                               const char          *title,
                               const char          *location)
 {
-  return strstr (title, search_string) || strstr (location, search_string);
+  g_autofree gchar *search_casefold = g_utf8_casefold (search_string, -1);
+  g_autofree gchar *title_casefold = g_utf8_casefold (title, -1);
+  g_autofree gchar *location_casefold = g_utf8_casefold (location, -1);
+
+  return strstr (title_casefold, search_casefold) || strstr (location_casefold, search_casefold);
 }
 
 static void
@@ -270,7 +275,7 @@ add_bookmarks (EphySuggestionModel *self,
 
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-      suggestion = ephy_suggestion_new (markup, title, url);
+      suggestion = ephy_suggestion_new (markup, title, url, url);
       load_favicon (self, suggestion, url);
 
       g_sequence_append (self->items, suggestion);
@@ -301,7 +306,7 @@ add_history (EphySuggestionModel *self,
     escaped_title = g_markup_escape_text (title, -1);
 
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new (markup, title, url->url);
+    suggestion = ephy_suggestion_new (markup, title, url->url, url->url);
     load_favicon (self, suggestion, url->url);
 
     g_sequence_append (self->items, suggestion);
@@ -347,6 +352,67 @@ add_search_engines (EphySuggestionModel *self,
   return added;
 }
 
+static guint
+add_tabs (EphySuggestionModel *self,
+          const char          *query)
+{
+  GApplication *application;
+  EphyEmbedShell *shell;
+  EphyWindow *window ;
+  GtkWidget *notebook;
+  gint n_pages;
+  gint current;
+  guint added = 0;
+
+  shell = ephy_embed_shell_get_default ();
+  application = G_APPLICATION (shell);
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
+
+  notebook = ephy_window_get_notebook (window);
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+  current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < n_pages; i++) {
+    EphyEmbed *embed;
+    EphyWebView *webview;
+    EphySuggestion *suggestion;
+    g_autofree gchar *escaped_title = NULL;
+    g_autofree gchar *markup = NULL;
+    const gchar *display_address;
+    g_autofree gchar *address = NULL;
+    const gchar *title;
+    g_autofree gchar *title_casefold = NULL;
+    g_autofree gchar *display_address_casefold = NULL;
+    g_autofree gchar *query_casefold = NULL;
+
+    if (i == current)
+      continue;
+
+    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+    webview = ephy_embed_get_web_view (embed);
+    display_address = ephy_web_view_get_display_address (webview);
+    address = g_strdup_printf ("ephy-tab://%d", i);
+    title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
+
+    display_address_casefold = g_utf8_casefold (display_address, -1);
+    query_casefold = g_utf8_casefold (query, -1);
+    if (title)
+      title_casefold = g_utf8_casefold (title, -1);
+
+    if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
+      escaped_title = g_markup_escape_text (title, -1);
+      markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+      suggestion = ephy_suggestion_new (markup, title, _("Switch to Tab"), address);
+      load_favicon (self, suggestion, display_address);
+
+      g_sequence_append (self->items, suggestion);
+      added++;
+    }
+  }
+
+  return added;
+}
+
 static void
 query_completed_cb (EphyHistoryService *service,
                     gboolean            success,
@@ -375,7 +441,8 @@ query_completed_cb (EphyHistoryService *service,
   self->items = g_sequence_new (g_object_unref);
 
   if (strlen (query) > 0) {
-    added = add_bookmarks (self, query);
+    added = add_tabs (self, query);
+    added += add_bookmarks (self, query);
     added += add_history (self, urls, query);
     added += add_search_engines (self, query);
   }
@@ -447,7 +514,7 @@ ephy_suggestion_model_get_suggestion_with_uri (EphySuggestionModel *self,
     EphySuggestion *suggestion;
 
     suggestion = g_sequence_get (iter);
-    if (strcmp (ephy_suggestion_get_uri (suggestion), uri) == 0)
+    if (strcasecmp (ephy_suggestion_get_uri (suggestion), uri) == 0)
       return suggestion;
   }
 
