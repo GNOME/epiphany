@@ -42,6 +42,7 @@ libephyembed_deps = [
   libsoup_dep,
   m_dep,
   webkit2gtk_dep,
+  libgd_dep,
 ]
 
 libephyembed_includes = include_directories(

@@ -24,6 +24,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-web-view.h"
+#include "libgd/gd.h"
 
 #include <math.h>
 
@@ -38,9 +39,12 @@ struct _EphyFindToolbar {
 
   WebKitWebView *web_view;
   WebKitFindController *controller;
-  GtkWidget *entry;
+  GdTaggedEntry *entry;
+  GdTaggedEntryTag *entry_tag;
   GtkWidget *next;
   GtkWidget *prev;
+  guint num_matches;
+  guint current_match;
   guint find_again_source_id;
   guint find_source_id;
   char *find_string;
@@ -84,11 +88,23 @@ typedef enum {
 static void ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar, WebKitWebView *web_view);
 
 static void
+update_search_tag (EphyFindToolbar *toolbar)
+{
+  g_autofree gchar *label;
+
+  label = g_strdup_printf ("%d/%d", toolbar->current_match, toolbar->num_matches);
+  gd_tagged_entry_tag_set_label (toolbar->entry_tag, label);
+  gd_tagged_entry_add_tag (toolbar->entry, toolbar->entry_tag);
+}
+
+static void
 set_status (EphyFindToolbar *toolbar,
             EphyFindResult   result)
 {
   const char *icon_name = "edit-find-symbolic";
   const char *tooltip = NULL;
+
+  update_search_tag (toolbar);
 
   switch (result) {
     case EPHY_FIND_RESULT_FOUND:
@@ -126,6 +142,8 @@ clear_status (EphyFindToolbar *toolbar)
                 "primary-icon-name", "edit-find-symbolic",
                 NULL);
 
+  gd_tagged_entry_remove_tag (toolbar->entry, toolbar->entry_tag);
+
   gtk_widget_set_sensitive (toolbar->prev, FALSE);
   gtk_widget_set_sensitive (toolbar->next, FALSE);
 
@@ -147,6 +165,7 @@ real_find (EphyFindToolbar  *toolbar,
     options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
 
   webkit_find_controller_search (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
+  webkit_find_controller_count_matches (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
 }
 
 static gboolean
@@ -166,6 +185,8 @@ found_text_cb (WebKitFindController *controller,
 {
   WebKitFindOptions options;
   EphyFindResult result;
+
+  update_search_tag (toolbar);
 
   options = webkit_find_controller_get_options (controller);
   /* FIXME: it's not possible to remove the wrap flag, so the status is now always wrapped. */
@@ -267,7 +288,7 @@ ephy_find_toolbar_grab_focus (GtkWidget *widget)
 {
   EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (widget);
 
-  gtk_widget_grab_focus (toolbar->entry);
+  gtk_widget_grab_focus (GTK_WIDGET (toolbar->entry));
 }
 
 static gboolean
@@ -364,11 +385,15 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
                                GTK_STYLE_CLASS_LINKED);
   gtk_container_add (GTK_CONTAINER (column), box);
 
-  toolbar->entry = gtk_entry_new ();
+  toolbar->entry = gd_tagged_entry_new ();
+  toolbar->entry_tag = gd_tagged_entry_tag_new ("");
+  gd_tagged_entry_tag_set_style (toolbar->entry_tag, "search-entry-occurrences-tag");
+  gd_tagged_entry_tag_set_has_close_button (toolbar->entry_tag, FALSE);
+
   gtk_widget_set_hexpand (GTK_WIDGET (toolbar->entry), TRUE);
   gtk_entry_set_max_length (GTK_ENTRY (toolbar->entry), 512);
   gtk_entry_set_placeholder_text (GTK_ENTRY (toolbar->entry), _("Type to search…"));
-  gtk_container_add (GTK_CONTAINER (box), toolbar->entry);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toolbar->entry));
 
   /* Prev */
   toolbar->prev = gtk_button_new_from_icon_name ("go-up-symbolic", GTK_ICON_SIZE_MENU);
@@ -385,7 +410,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_container_add (GTK_CONTAINER (box), toolbar->next);
   gtk_widget_set_sensitive (toolbar->next, FALSE);
 
-  gtk_size_group_add_widget (size_group, toolbar->entry);
+  gtk_size_group_add_widget (size_group, GTK_WIDGET (toolbar->entry));
   gtk_size_group_add_widget (size_group, toolbar->next);
   gtk_size_group_add_widget (size_group, toolbar->prev);
   g_object_unref (size_group);
@@ -517,6 +542,19 @@ ephy_find_toolbar_get_text (EphyFindToolbar *toolbar)
 }
 
 static void
+counted_matches_cb (WebKitFindController *find_controller,
+                    guint                 match_count,
+                    gpointer              user_data)
+{
+  EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (user_data);
+
+  toolbar->num_matches = match_count;
+  toolbar->current_match = 1;
+
+  update_search_tag (toolbar);
+}
+
+static void
 ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
                                 WebKitWebView   *web_view)
 {
@@ -537,6 +575,9 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
     g_signal_connect_object (toolbar->controller, "failed-to-find-text",
                              G_CALLBACK (failed_to_find_text_cb),
                              toolbar, 0);
+    g_signal_connect_object (toolbar->controller, "counted_matches",
+                             G_CALLBACK (counted_matches_cb),
+                             toolbar, 0);
     g_signal_connect (web_view, "load-changed",
                       G_CALLBACK (ephy_find_toolbar_load_changed_cb),
                       toolbar);
@@ -548,12 +589,19 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
+  toolbar->current_match++;
+  if (toolbar->current_match > toolbar->num_matches)
+    toolbar->current_match = 1;
   webkit_find_controller_search_next (toolbar->controller);
 }
 
 void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
+  toolbar->current_match--;
+  if (toolbar->current_match < 1)
+    toolbar->current_match = toolbar->num_matches;
+
   webkit_find_controller_search_previous (toolbar->controller);
 }
 
@@ -571,7 +619,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
   hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar), TRUE);
   hdy_search_bar_set_show_close_button (HDY_SEARCH_BAR (toolbar), TRUE);
-  gtk_widget_grab_focus (toolbar->entry);
+  gtk_widget_grab_focus (GTK_WIDGET (toolbar->entry));
 }
 
 void
