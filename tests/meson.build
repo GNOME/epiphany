@@ -5,6 +5,8 @@ envs = [
   'GSETTINGS_BACKEND=memory',
 ]
 
+test_cargs = ['-UG_DISABLE_ASSERT']
+
 if get_option('unit_tests').enabled()
   # FIXME: The tests that need ephy-test-utils are all disabled....
   #
@@ -20,7 +22,8 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
   # download_test = executable('test-ephy-download',
   #   'ephy-download-test.c',
-  #   dependencies: ephymain_dep
+  #   dependencies: ephymain_dep,
+  #   c_args: test_cargs,
   # )
   # test('Download test',
   #      download_test,
@@ -30,7 +33,7 @@ if get_option('unit_tests').enabled()
   embed_shell_test = executable('test-ephy-embed-shell',
     'ephy-embed-shell-test.c',
     dependencies: ephymain_dep,
-    c_args : '-DTEST_DIR="' + meson.current_source_dir() + '"'
+    c_args: test_cargs + ['-DTEST_DIR="' + meson.current_source_dir() + '"'],
   )
   test('Embed shell test',
        embed_shell_test,
@@ -39,7 +42,8 @@ if get_option('unit_tests').enabled()
 
   embed_utils_test = executable('test-ephy-embed-utils',
     'ephy-embed-utils-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('Embed utils test',
        embed_utils_test,
@@ -48,7 +52,8 @@ if get_option('unit_tests').enabled()
 
   encodings_test = executable('test-ephy-encodings',
     'ephy-encodings-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('Encodings test',
        encodings_test,
@@ -57,7 +62,8 @@ if get_option('unit_tests').enabled()
 
   file_helpers_test = executable('test-ephy-file-helpers',
     'ephy-file-helpers-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('File helpers test',
        file_helpers_test,
@@ -66,7 +72,8 @@ if get_option('unit_tests').enabled()
 
   history_test = executable('test-ephy-history',
     'ephy-history-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('History test',
        history_test,
@@ -75,7 +82,8 @@ if get_option('unit_tests').enabled()
 
   location_entry_test = executable('test-location-entry',
     'ephy-location-entry-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('Location entry test',
        location_entry_test,
@@ -84,7 +92,8 @@ if get_option('unit_tests').enabled()
 
   migration_test = executable('test-ephy-migration',
     'ephy-migration-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('Migration test',
        migration_test,
@@ -94,7 +103,8 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707220
   # session_test = executable('test-ephy-session',
   #   'ephy-session-test.c',
-  #   dependencies: ephytestutils_dep
+  #   dependencies: ephytestutils_dep,
+  #    c_args: test_cargs,
   # )
   # test('Session test',
   #      session_test,
@@ -106,7 +116,8 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707217
   # shell_test = executable('test-ephy-shell',
   #   'ephy-shell-test.c',
-  #   dependencies: ephytestutils_dep
+  #   dependencies: ephytestutils_dep,
+  #    c_args: test_cargs,
   # )
   # test('Shell test',
   #      shell_test,
@@ -116,7 +127,8 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=762753
   # snapshot_service_test = executable('test-snapshot-service',
   #   'ephy-snapshot-service-test.c',
-  #   dependencies: ephymain_dep
+  #   dependencies: ephymain_dep,
+  #    c_args: test_cargs,
   # )
   # test('Snapshot service test',
   #      snapshot_service_test,
@@ -125,7 +137,8 @@ if get_option('unit_tests').enabled()
 
   sqlite_test = executable('test-ephy-sqlite',
     'ephy-sqlite-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('SQLite test',
        sqlite_test,
@@ -134,7 +147,8 @@ if get_option('unit_tests').enabled()
 
   string_test = executable('test-ephy-string',
     'ephy-string-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('String test',
        string_test,
@@ -143,7 +157,8 @@ if get_option('unit_tests').enabled()
 
   uri_helpers_test = executable('test-ephy-uri-helpers',
     'ephy-uri-helpers-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('URI helpers test',
        uri_helpers_test,
@@ -152,7 +167,8 @@ if get_option('unit_tests').enabled()
 
   web_app_utils_test = executable('test-ephy-web-app-utils',
     'ephy-web-app-utils-test.c',
-    dependencies: ephymain_dep
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
   )
   test('Web app utils test',
        web_app_utils_test,
@@ -162,7 +178,8 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=780280
   # web_view_test = executable('test-ephy-web-view',
   #   'ephy-web-view-test.c',
-  #   dependencies: ephymain_dep
+  #   dependencies: ephymain_dep,
+  #   c_args: test_cargs,
   # )
   # test('Web view test',
   #      web_view_test,
@@ -172,7 +189,8 @@ if get_option('unit_tests').enabled()
   if get_option('network_tests').enabled()
     gsb_service_test = executable('test-ephy-gsb-service',
       'ephy-gsb-service-test.c',
-      dependencies: ephymain_dep
+      dependencies: ephymain_dep,
+      c_args: test_cargs,
     )
     test('GSB service test',
          gsb_service_test,
