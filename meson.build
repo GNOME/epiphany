@@ -2,8 +2,15 @@ project('epiphany', 'c',
   license: 'GPL3+',
   version: '3.33.1',
   meson_version: '>= 0.46.0',
-  default_options: ['c_std=gnu11']
+  default_options: ['c_std=gnu11',
+                    'warning_level=2']
 )
+
+add_project_arguments('-Werror=format-security',
+                      '-Wno-cast-function-type',
+                      '-Wno-missing-field-initializers',
+                      '-Wno-unused-parameter',
+                      language: 'c')
 
 gnome = import('gnome')
 i18n = import('i18n')

@@ -49,7 +49,7 @@ static const WebAppTest test_web_app[] = {
 static void
 test_web_app_lifetime (void)
 {
-  int i;
+  guint i;
 
   for (i = 0; i < G_N_ELEMENTS (test_web_app); i++) {
     WebAppTest test = test_web_app[i];
