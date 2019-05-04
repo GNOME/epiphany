@@ -418,7 +418,7 @@ gvdb_table_get_names (GvdbTable *table,
                 }
             }
 
-          else if (parent < n_names && names[parent] != NULL)
+          else if (parent < (guint32)n_names && names[parent] != NULL)
             {
               /* It's a non-root item whose parent was filled in already.
                *
