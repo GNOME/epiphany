@@ -466,7 +466,7 @@ show_tabs_changed_cb (GSettings    *settings,
   update_tabs_visibility (nb, FALSE);
 }
 
-static guint
+static gint
 get_last_pinned_tab_pos (GtkNotebook *notebook)
 {
   gint pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
@@ -489,10 +489,10 @@ page_reordered_cb (GtkNotebook *notebook,
                    guint        page_num,
                    gpointer     user_data)
 {
-  guint last_pinned_tab_pos = get_last_pinned_tab_pos (notebook);
+  gint last_pinned_tab_pos = get_last_pinned_tab_pos (notebook);
 
   /* Ensure that pinned tabs will always stay at the beginning of tab bar */
-  if (last_pinned_tab_pos != -1 && page_num <= last_pinned_tab_pos)
+  if (last_pinned_tab_pos != -1 && page_num <= (guint)last_pinned_tab_pos)
     gtk_notebook_reorder_child (notebook, child, last_pinned_tab_pos);
 }
 
