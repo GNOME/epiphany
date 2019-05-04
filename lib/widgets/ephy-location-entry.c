@@ -725,7 +725,7 @@ button_box_size_allocated_cb (GtkWidget    *widget,
   GtkStateFlags state_flags;
   GtkBorder padding;
 
-  if (lentry->allocation_width == allocation->width)
+  if (lentry->allocation_width == (guint)allocation->width)
     return;
 
   lentry->allocation_width = allocation->width;
