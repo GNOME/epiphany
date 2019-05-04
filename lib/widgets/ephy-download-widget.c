@@ -218,6 +218,14 @@ download_finished_cb (EphyDownload       *download,
 }
 
 static void
+download_moved_cb (EphyDownload       *download,
+                   EphyDownloadWidget *widget)
+{
+  update_status_label (widget, _("Moved or deleted"));
+  gtk_widget_set_sensitive (widget->action_button, FALSE);
+}
+
+static void
 download_failed_cb (EphyDownload       *download,
                     GError             *error,
                     EphyDownloadWidget *widget)
@@ -429,6 +437,9 @@ ephy_download_widget_constructed (GObject *object)
                     widget);
   g_signal_connect (widget->download, "error",
                     G_CALLBACK (download_failed_cb),
+                    widget);
+  g_signal_connect (widget->download, "moved",
+                    G_CALLBACK (download_moved_cb),
                     widget);
   g_signal_connect (widget->download, "notify::content-type",
                     G_CALLBACK (download_content_type_changed_cb),

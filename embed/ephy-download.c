@@ -50,6 +50,7 @@ struct _EphyDownload {
   guint32 start_time;
   gboolean finished;
   GError *error;
+  GFileMonitor *file_monitor;
 };
 
 G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
@@ -70,6 +71,7 @@ enum {
   FILENAME_SUGGESTED,
   ERROR,
   COMPLETED,
+  MOVED,
   LAST_SIGNAL
 };
 
@@ -477,6 +479,7 @@ ephy_download_dispose (GObject *object)
     download->download = NULL;
   }
 
+  g_clear_object (&download->file_monitor);
   g_clear_error (&download->error);
   g_clear_pointer (&download->content_type, g_free);
 
@@ -584,6 +587,19 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                      NULL, NULL, NULL,
                                      G_TYPE_NONE,
                                      0);
+
+  /**
+   * EphyDownload::moved:
+   *
+   * The ::moved signal is emitted when a finished @download has been moved (or deleted).
+   **/
+  signals[MOVED] = g_signal_new ("moved",
+                                 G_OBJECT_CLASS_TYPE (object_class),
+                                 G_SIGNAL_RUN_LAST,
+                                 0,
+                                 NULL, NULL, NULL,
+                                 G_TYPE_NONE,
+                                 0);
   /**
    * EphyDownload::error:
    *
@@ -721,9 +737,23 @@ display_download_finished_notification (WebKitDownload *download)
 }
 
 static void
+download_file_monitor_changed (GFileMonitor      *monitor,
+                               GFile             *file,
+                               GFile             *other_file,
+                               GFileMonitorEvent  event_type,
+                               EphyDownload      *download)
+{
+  if (event_type == G_FILE_MONITOR_EVENT_DELETED || event_type == G_FILE_MONITOR_EVENT_MOVED)
+    g_signal_emit (download, signals[MOVED], 0);
+}
+
+static void
 download_finished_cb (WebKitDownload *wk_download,
                       EphyDownload   *download)
 {
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
+
   download->finished = TRUE;
 
   ephy_download_do_download_action (download, download->action, download->start_time);
@@ -732,6 +762,13 @@ download_finished_cb (WebKitDownload *wk_download,
     display_download_finished_notification (wk_download);
 
   g_signal_emit (download, signals[COMPLETED], 0);
+
+  file = g_file_new_for_uri (webkit_download_get_destination (wk_download));
+  download->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, &error);
+  if (!download->file_monitor)
+    g_warning ("Could not add a file monitor for %s, error: %s\n", g_file_get_uri (file), error->message);
+  else
+    g_signal_connect (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download);
 }
 
 static void
