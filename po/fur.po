@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany gnome-3-20\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-05-02 15:55+0000\n"
-"PO-Revision-Date: 2019-05-02 20:21+0200\n"
+"POT-Creation-Date: 2019-05-05 08:31+0000\n"
+"PO-Revision-Date: 2019-05-05 19:19+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <f.t.public@gmail.com>\n"
 "Language: fur\n"
@@ -1024,21 +1024,21 @@ msgstr ""
 "tu visitis e chei che a publichin publicitât a puedin ancjemò segnâti."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:711
+#: embed/ephy-download.c:727
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Discjariament di %s finît"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:713
+#: embed/ephy-download.c:729
 msgid "Download finished"
 msgstr "Discjariament finît"
 
-#: embed/ephy-download.c:780
+#: embed/ephy-download.c:817
 msgid "Download requested"
 msgstr "Discjariament domandât"
 
-#: embed/ephy-download.c:781 lib/widgets/ephy-file-chooser.c:163
+#: embed/ephy-download.c:818 lib/widgets/ephy-file-chooser.c:163
 #: src/resources/gtk/prefs-dialog.ui:1338
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:233
 #: src/window-commands.c:298 src/window-commands.c:395
@@ -1046,28 +1046,28 @@ msgstr "Discjariament domandât"
 msgid "_Cancel"
 msgstr "_Anule"
 
-#: embed/ephy-download.c:781
+#: embed/ephy-download.c:818
 msgid "_Download"
 msgstr "_Discjarie"
 
-#: embed/ephy-download.c:794
+#: embed/ephy-download.c:831
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Gjenar: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:800
+#: embed/ephy-download.c:837
 #, c-format
 msgid "From: %s"
 msgstr "Di: %s"
 
 #. Question
-#: embed/ephy-download.c:805
+#: embed/ephy-download.c:842
 msgid "Where do you want to save the file?"
 msgstr "Dulà si desiderie salvâ il file?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:810
+#: embed/ephy-download.c:847
 msgid "Save file"
 msgstr "Salve file"
 
@@ -1428,23 +1428,23 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "No cognossût (%s)"
 
-#: embed/ephy-find-toolbar.c:98
+#: embed/ephy-find-toolbar.c:114
 msgid "Text not found"
 msgstr "Test no cjatât"
 
-#: embed/ephy-find-toolbar.c:104
+#: embed/ephy-find-toolbar.c:120
 msgid "Search wrapped back to the top"
 msgstr "Ricercje tornade tal inizi"
 
-#: embed/ephy-find-toolbar.c:370
+#: embed/ephy-find-toolbar.c:395
 msgid "Type to search…"
 msgstr "Scrîf par cirî…"
 
-#: embed/ephy-find-toolbar.c:376
+#: embed/ephy-find-toolbar.c:401
 msgid "Find previous occurrence of the search string"
 msgstr "Cjate il precedent câs de stringhe di ricercje"
 
-#: embed/ephy-find-toolbar.c:384
+#: embed/ephy-find-toolbar.c:409
 msgid "Find next occurrence of the search string"
 msgstr "Cjate il sucessîf câs de stringhe di ricercje"
 
@@ -1708,13 +1708,17 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
+#. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
 #: embed/ephy-web-view.c:2349 embed/ephy-web-view.c:2438
+#: embed/ephy-web-view.c:2489
 msgid "Go Back"
 msgstr "Torne indaûr"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
+#. Mnemonic for the Go Back button on the no such file error page.
 #: embed/ephy-web-view.c:2352 embed/ephy-web-view.c:2441
+#: embed/ephy-web-view.c:2492
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
@@ -1797,15 +1801,36 @@ msgstr ""
 msgid "You can learn more about unwanted software at %s."
 msgstr "Si pues imparâ di plui sul software indesiderât su %s."
 
-#: embed/ephy-web-view.c:2504
+#. Page title on no such file error page
+#. Message title on the no such file error page.
+#: embed/ephy-web-view.c:2473 embed/ephy-web-view.c:2476
+#, c-format
+msgid "File not found"
+msgstr "File no cjatât"
+
+#: embed/ephy-web-view.c:2480
+#, c-format
+msgid "%s could not be found."
+msgstr "Impussibil cjatâ %s."
+
+#: embed/ephy-web-view.c:2482
+#, c-format
+msgid ""
+"Please check the file name for capitalization or other typing errors. Also "
+"check if it has been moved, renamed, or deleted."
+msgstr ""
+"Controle il non dal file pes maiusculis o par altris erôrs di batidure. "
+"Controle ancje che nol sedi stât mot, cambiât di non o eliminât."
+
+#: embed/ephy-web-view.c:2545
 msgid "None specified"
 msgstr "Nissun specificât"
 
-#: embed/ephy-web-view.c:2609
+#: embed/ephy-web-view.c:2661
 msgid "Technical information"
 msgstr "Informazions tecnichis"
 
-#: embed/ephy-web-view.c:3573
+#: embed/ephy-web-view.c:3629
 msgid "_OK"
 msgstr "_OK"
 
@@ -1861,66 +1886,66 @@ msgid "%s’s GNOME Web on %s"
 msgstr "GNOME Web di %s su %s"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
-#: lib/ephy-time-helpers.c:237
+#: lib/ephy-time-helpers.c:236
 msgid "Today %I∶%M %p"
 msgstr "Vuê aes %H:%M"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
-#: lib/ephy-time-helpers.c:240
+#: lib/ephy-time-helpers.c:239
 msgid "Today %H∶%M"
 msgstr "Vuê aes %H:%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:255
+#: lib/ephy-time-helpers.c:254
 msgid "Yesterday %I∶%M %p"
 msgstr "Îr aes %H:%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
 #.
-#: lib/ephy-time-helpers.c:260
+#: lib/ephy-time-helpers.c:259
 msgid "Yesterday %H∶%M"
 msgstr "Îr aes %H:%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:278
+#: lib/ephy-time-helpers.c:277
 msgid "%a %I∶%M %p"
 msgstr "%a %H:%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
 #.
-#: lib/ephy-time-helpers.c:283
+#: lib/ephy-time-helpers.c:282
 msgid "%a %H∶%M"
 msgstr "%a aes %H:%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:297
+#: lib/ephy-time-helpers.c:296
 msgid "%b %d %I∶%M %p"
 msgstr "%d di %b aes %H:%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
 #.
-#: lib/ephy-time-helpers.c:302
+#: lib/ephy-time-helpers.c:301
 msgid "%b %d %H∶%M"
 msgstr "%d di %b aes %H:%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
-#: lib/ephy-time-helpers.c:308
+#: lib/ephy-time-helpers.c:307
 msgid "%b %d %Y"
 msgstr "%d di %b dal %Y"
 
 #. impossible time or broken locale settings
-#: lib/ephy-time-helpers.c:318
+#: lib/ephy-time-helpers.c:317
 msgid "Unknown"
 msgstr "No cognossût"
 
@@ -2112,21 +2137,25 @@ msgstr[0] "al mancje %d mês"
 msgstr[1] "a mancjin %d mês"
 
 #: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:396
+#: lib/widgets/ephy-download-widget.c:404
 msgid "Finished"
 msgstr "Finît"
 
-#: lib/widgets/ephy-download-widget.c:231
-#: lib/widgets/ephy-download-widget.c:393
+#: lib/widgets/ephy-download-widget.c:224
+msgid "Moved or deleted"
+msgstr "Spostât o eliminât"
+
+#: lib/widgets/ephy-download-widget.c:239
+#: lib/widgets/ephy-download-widget.c:401
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Al è vignût fûr un erôr tal discjariament: %s"
 
-#: lib/widgets/ephy-download-widget.c:257
+#: lib/widgets/ephy-download-widget.c:265
 msgid "Cancelling…"
 msgstr "Anulament…"
 
-#: lib/widgets/ephy-download-widget.c:398
+#: lib/widgets/ephy-download-widget.c:406
 msgid "Starting…"
 msgstr "Daûr a tacâ…"
 
@@ -2577,19 +2606,19 @@ msgstr "Sorzint _pagjine"
 msgid "Search the Web for “%s”"
 msgstr "Cîr “%s” tal web"
 
-#: src/ephy-window.c:3495
+#: src/ephy-window.c:3492
 msgid "Set Web as your default browser?"
 msgstr "Stabilî Web come navigadôr predefinît?"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3494
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Meti Anteprime di Tecnologjie di Epiphany come navigadôr predefinît?"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3506
 msgid "_Yes"
 msgstr "_Sì"
 
-#: src/ephy-window.c:3510
+#: src/ephy-window.c:3507
 msgid "_No"
 msgstr "_No"
 
@@ -2614,7 +2643,7 @@ msgid "Last synchronized: %s"
 msgstr "Ultime volte sincronizât: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:300 src/prefs-dialog.c:2302
+#: src/prefs-dialog.c:300 src/prefs-dialog.c:2303
 #, c-format
 msgid "Logged in as %s"
 msgstr "Jentrât come %s"
@@ -2642,23 +2671,23 @@ msgstr[1] "Lenghis di sisteme (%s)"
 msgid "Language"
 msgstr "Lenghe"
 
-#: src/prefs-dialog.c:1658
+#: src/prefs-dialog.c:1659
 msgid "Select a directory"
 msgstr "Selezione une cartele"
 
-#: src/prefs-dialog.c:2138
+#: src/prefs-dialog.c:2139
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2139
+#: src/prefs-dialog.c:2140
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2143
+#: src/prefs-dialog.c:2144
 msgid "Light"
 msgstr "Clâr"
 
-#: src/prefs-dialog.c:2144
+#: src/prefs-dialog.c:2145
 msgid "Dark"
 msgstr "Scûr"
 
@@ -4114,9 +4143,6 @@ msgstr "_Abilite"
 # non è proprio disconnetti o esci... da valutare
 #~ msgid "Sign out if you wish to stop syncing."
 #~ msgstr "Scoleghiti se tu vûs fermâ la sincronizazion."
-
-#~ msgid "The sync tokens could not be found."
-#~ msgstr "Impussibil cjatâ i token di sincronie."
 
 #~ msgid "Found more than one set of sync tokens."
 #~ msgstr "Cjatât plui di une cumbinazion di token di sincronie."
