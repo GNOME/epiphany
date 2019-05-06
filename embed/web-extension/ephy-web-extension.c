@@ -34,6 +34,7 @@
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <jsc/jsc.h>
 #include <libsoup/soup.h>
@@ -98,6 +99,34 @@ static const char introspection_xml[] =
   "</node>";
 
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
+
+static void
+log_to_js_console (EphyWebExtension *extension,
+                   WebKitWebPage    *page,
+                   const char       *str,
+                   ...)
+{
+  g_autoptr(JSCContext) js_context = NULL;
+  g_autoptr(JSCValue) js_console = NULL;
+  g_autoptr(JSCValue) js_result = NULL;
+  g_autofree char *expanded_str = NULL;
+  WebKitFrame *frame;
+  va_list args;
+  int ret;
+
+  va_start (args, str);
+  ret = g_vasprintf (&expanded_str, str, args);
+  g_assert (ret > 0);
+  va_end (args);
+
+  frame = webkit_web_page_get_main_frame (page);
+  js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
+  js_console = jsc_context_get_value (js_context, "console");
+  js_result = jsc_value_object_invoke_method (js_console,
+                                              "log",
+                                              G_TYPE_STRING, expanded_str,
+                                              G_TYPE_NONE);
+}
 
 static gboolean
 should_use_adblocker (const char       *request_uri,
@@ -175,7 +204,8 @@ web_page_send_request (WebKitWebPage     *web_page,
                                              modified_uri ? modified_uri : request_uri,
                                              page_uri);
     if (!result) {
-      LOG ("Refused to load %s", request_uri);
+      LOG ("Adblocker refused to load %s", request_uri);
+      log_to_js_console (extension, web_page, _("Epiphany adblocker refused to load %s"), request_uri);
       return TRUE;
     }
   }
