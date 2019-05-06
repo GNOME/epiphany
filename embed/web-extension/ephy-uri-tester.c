@@ -566,30 +566,15 @@ file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
                                        (GAsyncReadyCallback)file_parse_cb, tester);
 }
 
-static gboolean
-ephy_uri_tester_block_uri (EphyUriTester *tester,
-                          const char    *req_uri,
-                          const char    *page_uri)
+gboolean
+ephy_uri_tester_is_uri_allowed (EphyUriTester *tester,
+                                const char    *req_uri,
+                                const char    *page_uri)
 {
   /* check whitelisting rules before the normal ones */
   if (ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, TRUE))
     return FALSE;
   return ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, FALSE);
-}
-
-char *
-ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
-                             const char       *request_uri,
-                             const char       *page_uri)
-{
-  /* Should we block the URL outright? */
-  if (ephy_uri_tester_block_uri (tester, request_uri, page_uri)) {
-    g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
-
-    return NULL;
-  }
-
-  return g_strdup (request_uri);
 }
 
 static void
