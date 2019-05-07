@@ -394,6 +394,8 @@ ephy_location_entry_dispose (GObject *object)
 
   g_clear_object (&entry->css_provider);
 
+  gtk_widget_destroy (GTK_WIDGET (entry->add_bookmark_popover));
+
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
 }
 
