@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="EphyPagesButton" parent="GtkButton">
+    <child>
+      <object class="GtkOverlay">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkImage" id="pages_icon">
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkLabel" id="pages_label">
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <property name="justify">center</property>
+            <property name="width-chars">2</property>
+            <attributes>
+              <attribute name="font-features" value="tnum=1"/>
+              <attribute name="size" value="7000"/>
+              <attribute name="weight" value="ultrabold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="pass_through">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

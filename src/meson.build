@@ -36,6 +36,7 @@ libephymain_sources = [
   'ephy-mouse-gesture-controller.c',
   'ephy-notebook.c',
   'ephy-page-row.c',
+  'ephy-pages-button.c',
   'ephy-pages-popover.c',
   'ephy-pages-view.c',
   'ephy-search-engine-dialog.c',
