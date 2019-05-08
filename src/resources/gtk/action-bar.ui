@@ -6,15 +6,15 @@
       <object class="GtkActionBar" id="action_bar">
         <property name="visible">True</property>
         <child>
-            <object class="EphyActionBarStart" id="action_bar_start">
-              <property name="visible">True</property>
-            </object>
+          <object class="EphyActionBarStart" id="action_bar_start">
+            <property name="visible">True</property>
+          </object>
           <packing>
             <property name="pack-type">start</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="pages_button">
+          <object class="EphyPagesButton" id="pages_button">
             <property name="visible">True</property>
             <property name="valign">center</property>
             <!-- Translators: tooltip for the page switcher button -->
@@ -23,13 +23,6 @@
             <style>
               <class name="image-button"/>
             </style>
-            <child>
-              <object class="GtkImage" id="bookmarks_image">
-                <property name="visible">True</property>
-                <property name="icon-name">view-paged-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="pack-type">end</property>

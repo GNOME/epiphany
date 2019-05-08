@@ -20,6 +20,7 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-pages-button.h"
 #include "ephy-pages-popover.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -38,7 +39,8 @@ struct _EphyActionBar {
   EphyWindow *window;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
-  GtkMenuButton *pages_button;
+  EphyPagesButton *pages_button;
+  GtkNotebook *notebook;
 };
 
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
@@ -54,6 +56,15 @@ sync_chromes_visibility (EphyActionBar *action_bar)
                           chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
   ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
                                                  chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+}
+
+static void
+update_pages_button (EphyActionBar *action_bar)
+{
+  int n_pages;
+
+  n_pages = gtk_notebook_get_n_pages (action_bar->notebook);
+  ephy_pages_button_set_n_pages (action_bar->pages_button, n_pages);
 }
 
 static void
@@ -98,8 +109,17 @@ ephy_action_bar_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_action_bar_parent_class)->constructed (object);
 
+  action_bar->notebook = GTK_NOTEBOOK (ephy_window_get_notebook (action_bar->window));
+  update_pages_button (action_bar);
+
   g_signal_connect_object (action_bar->window, "notify::chrome",
                            G_CALLBACK (sync_chromes_visibility), action_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (action_bar->notebook, "page-added",
+                           G_CALLBACK (update_pages_button), action_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (action_bar->notebook, "page-removed",
+                           G_CALLBACK (update_pages_button), action_bar,
                            G_CONNECT_SWAPPED);
 }
 
@@ -146,6 +166,7 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   /* Ensure the types used by the template have been initialized. */
   EPHY_TYPE_ACTION_BAR_END;
   EPHY_TYPE_ACTION_BAR_START;
+  EPHY_TYPE_PAGES_BUTTON;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
 
