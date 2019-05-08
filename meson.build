@@ -6,12 +6,6 @@ project('epiphany', 'c',
                     'warning_level=2']
 )
 
-add_project_arguments('-Werror=format-security',
-                      '-Wno-cast-function-type',
-                      '-Wno-missing-field-initializers',
-                      '-Wno-unused-parameter',
-                      language: 'c')
-
 gnome = import('gnome')
 i18n = import('i18n')
 
@@ -126,6 +120,13 @@ endif
 cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
+
+cflags = cc.get_supported_arguments(['-Werror=format-security',
+                                     '-Wno-cast-function-type',
+                                     '-Wno-missing-field-initializers',
+                                     '-Wno-unused-parameter'])
+add_project_arguments(cflags,
+                      language: 'c')
 
 subdir('data')
 subdir('help')
