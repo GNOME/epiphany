@@ -115,7 +115,6 @@ configure_file(
   input: 'default-bookmarks.rdf.in',
   output: 'default-bookmarks.rdf',
   configuration: bookmarksconf,
-  install: true,
   install_dir: pkgdatadir
 )
 
