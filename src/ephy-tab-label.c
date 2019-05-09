@@ -76,12 +76,12 @@ static void
 ephy_tab_label_update_icon (EphyTabLabel *self)
 {
   if (!self->has_icon) {
-    g_autoptr(GdkPixbuf) pixbuf = NULL;
-
     if (self->is_pinned)
-      pixbuf = gdk_pixbuf_new_from_resource ("/org/gnome/epiphany/missing-favicon-symbolic.svg", NULL);
-
-    gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), pixbuf);
+      gtk_image_set_from_icon_name (GTK_IMAGE (self->icon),
+                                    "ephy-missing-favicon-symbolic",
+                                    GTK_ICON_SIZE_MENU);
+    else
+      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), NULL);
   }
 }
 
