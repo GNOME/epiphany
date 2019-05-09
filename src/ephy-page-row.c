@@ -138,10 +138,11 @@ sync_favicon (EphyWebView *view,
   if (ephy_web_view_get_icon (view))
     pixbuf = gdk_pixbuf_copy (ephy_web_view_get_icon (view));
 
-  if (!pixbuf)
-    pixbuf = gdk_pixbuf_new_from_resource ("/org/gnome/epiphany/missing-favicon-symbolic.svg", NULL);
-
-  gtk_image_set_from_pixbuf (self->icon, pixbuf);
+  if (pixbuf)
+    gtk_image_set_from_pixbuf (self->icon, pixbuf);
+  else
+    gtk_image_set_from_icon_name (self->icon, "ephy-missing-favicon-symbolic",
+                                  GTK_ICON_SIZE_MENU);
 }
 
 EphyPageRow *
