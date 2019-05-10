@@ -743,6 +743,10 @@ download_file_monitor_changed (GFileMonitor      *monitor,
                                GFileMonitorEvent  event_type,
                                EphyDownload      *download)
 {
+  /* Skip messages for <file>.wkdownload */
+  if (strcmp (g_file_get_uri (file), webkit_download_get_destination (download->download)) != 0)
+    return;
+
   if (event_type == G_FILE_MONITOR_EVENT_DELETED || event_type == G_FILE_MONITOR_EVENT_MOVED)
     g_signal_emit (download, signals[MOVED], 0);
 }
