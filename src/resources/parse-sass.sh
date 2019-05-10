@@ -7,7 +7,7 @@ fi
 
 SASSC_OPT="-M -t compact"
 
-: ${GTK_SOURCE_PATH:="../../../gtk+-3"}
+: ${GTK_SOURCE_PATH:="../../../gtk"}
 
 sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
 	themes/Adwaita.scss themes/Adwaita.css
