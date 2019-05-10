@@ -549,7 +549,7 @@ counted_matches_cb (WebKitFindController *find_controller,
   EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (user_data);
 
   toolbar->num_matches = match_count;
-  toolbar->current_match = 1;
+  toolbar->current_match = toolbar->num_matches ? 1 : 0;
 
   update_search_tag (toolbar);
 }
