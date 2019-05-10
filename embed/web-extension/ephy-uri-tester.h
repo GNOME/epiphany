@@ -28,11 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
-EphyUriTester *ephy_uri_tester_new            (const char       *adblock_data_dir);
-void           ephy_uri_tester_load           (EphyUriTester    *tester);
-gboolean       ephy_uri_tester_is_uri_allowed (EphyUriTester    *tester,
-                                               const char       *request_uri,
-                                               const char       *page_uri);
+EphyUriTester *ephy_uri_tester_new         (const char       *adblock_data_dir);
+void           ephy_uri_tester_load        (EphyUriTester    *tester);
+char          *ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
+                                            const char       *request_uri,
+                                            const char       *page_uri);
 
 
 G_END_DECLS
