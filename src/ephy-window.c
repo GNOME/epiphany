@@ -2736,8 +2736,10 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 
   tab_accels_update (window);
 
-  if (gtk_notebook_get_n_pages (window->notebook) == 0)
-    gtk_window_close (GTK_WINDOW (window));
+  if (gtk_notebook_get_n_pages (window->notebook) == 0) {
+    ephy_window_close (window);
+    gtk_widget_destroy (GTK_WIDGET (window));
+  }
 }
 
 static void
