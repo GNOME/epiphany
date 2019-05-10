@@ -197,27 +197,17 @@ web_page_send_request (WebKitWebPage     *web_page,
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
 
   if (should_use_adblocker (request_uri, page_uri, redirected_response_uri, extension)) {
-    char *result;
+    gboolean result;
 
     ephy_uri_tester_load (extension->uri_tester);
-    result = ephy_uri_tester_rewrite_uri (extension->uri_tester,
-                                          modified_uri ? modified_uri : request_uri,
-                                          page_uri);
+    result = ephy_uri_tester_is_uri_allowed (extension->uri_tester,
+                                             modified_uri ? modified_uri : request_uri,
+                                             page_uri);
     if (!result) {
       LOG ("Adblocker refused to load %s", request_uri);
       log_to_js_console (extension, web_page, _("Epiphany adblocker refused to load %s"), request_uri);
       return TRUE;
     }
-
-    g_free (modified_uri);
-    modified_uri = result;
-  } else if (!modified_uri) {
-    return FALSE;
-  }
-
-  if (g_strcmp0 (request_uri, modified_uri) != 0) {
-    LOG ("Rewrote %s to %s", request_uri, modified_uri);
-    webkit_uri_request_set_uri (request, modified_uri);
   }
 
   return FALSE;
