@@ -133,8 +133,8 @@ struct _EphyWebView {
 
   EphyWebViewErrorPage error_page;
 
-  /* Web Extension */
-  EphyWebExtensionProxy *web_extension;
+  /* Web Process Extension */
+  EphyWebProcessExtensionProxy *web_process_extension;
 };
 
 typedef struct {
@@ -906,16 +906,16 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
 }
 
 static void
-page_created_cb (EphyEmbedShell        *shell,
-                 guint64                page_id,
-                 EphyWebExtensionProxy *web_extension,
-                 EphyWebView           *view)
+page_created_cb (EphyEmbedShell               *shell,
+                 guint64                       page_id,
+                 EphyWebProcessExtensionProxy *web_process_extension,
+                 EphyWebView                  *view)
 {
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
-  view->web_extension = web_extension;
-  g_object_add_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
+  view->web_process_extension = web_process_extension;
+  g_object_add_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
 
   g_signal_connect_object (shell, "password-form-focused",
                            G_CALLBACK (password_form_focused_cb),
@@ -935,9 +935,9 @@ ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
 
-  if (view->web_extension) {
-    g_object_remove_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
-    view->web_extension = NULL;
+  if (view->web_process_extension) {
+    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
+    view->web_process_extension = NULL;
   }
 
   untrack_info_bar (&view->geolocation_info_bar);
@@ -3943,8 +3943,8 @@ ephy_web_view_get_reader_mode_state (EphyWebView *view)
   return view->reader_active;
 }
 
-EphyWebExtensionProxy *
-ephy_web_view_get_web_extension_proxy (EphyWebView *view)
+EphyWebProcessExtensionProxy *
+ephy_web_view_get_web_process_extension_proxy (EphyWebView *view)
 {
-  return view->web_extension;
+  return view->web_process_extension;
 }

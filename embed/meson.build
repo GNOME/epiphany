@@ -1,4 +1,4 @@
-subdir('web-extension')
+subdir('web-process-extension')
 
 types_headers = [
   'ephy-download.h',
@@ -28,7 +28,7 @@ libephyembed_sources = [
   'ephy-find-toolbar.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
-  'ephy-web-extension-proxy.c',
+  'ephy-web-process-extension-proxy.c',
   enums
 ]
 
