@@ -1217,10 +1217,13 @@ void
 ephy_location_entry_set_reader_mode_state (EphyLocationEntry *entry,
                                            gboolean           active)
 {
-  if (active)
+  if (active) {
+    gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode), "x-office-address-book-symbolic", GTK_ICON_SIZE_MENU);
     gtk_style_context_add_class (gtk_widget_get_style_context (entry->reader_mode), "selected");
-  else
+  } else {
+    gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode), "ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
     gtk_style_context_remove_class (gtk_widget_get_style_context (entry->reader_mode), "selected");
+  }
 
   entry->reader_mode_active = active;
 }
