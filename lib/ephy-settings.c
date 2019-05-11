@@ -158,7 +158,7 @@ get_relocatable_path (const char *schema)
 }
 
 /**
- * ephy_settings_get_for_web_extension:
+ * ephy_settings_get_for_web_process_extension:
  *
  * Equivalent to ephy_settings_get() except it ensures that the
  * settings backend is always keyfile based instead of using DConf.
@@ -171,7 +171,7 @@ get_relocatable_path (const char *schema)
  * Returns: (transfer none): #GSettings
  */
 GSettings *
-ephy_settings_get_for_web_extension (const char *schema)
+ephy_settings_get_for_web_process_extension (const char *schema)
 {
   GSettings *gsettings = NULL;
   g_autofree char *key_name = NULL;

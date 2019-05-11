@@ -22,8 +22,8 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_WEB_EXTENSION_SERVICE_NAME "org.gnome.Epiphany.WebExtension"
-#define EPHY_WEB_EXTENSION_OBJECT_PATH  "/org/gnome/Epiphany/WebExtension"
-#define EPHY_WEB_EXTENSION_INTERFACE    "org.gnome.Epiphany.WebExtension"
+#define EPHY_WEB_PROCESS_EXTENSION_SERVICE_NAME "org.gnome.Epiphany.WebProcessExtension"
+#define EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH  "/org/gnome/Epiphany/WebProcessExtension"
+#define EPHY_WEB_PROCESS_EXTENSION_INTERFACE    "org.gnome.Epiphany.WebProcessExtension"
 
 G_END_DECLS
