@@ -257,7 +257,8 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
   GtkWidget *child;
 
   child = gtk_notebook_get_nth_page (notebook, page_num);
-  gtk_widget_grab_focus (child);
+  if (!ephy_web_view_is_in_auth_dialog (ephy_embed_get_web_view (EPHY_EMBED (child))))
+    gtk_widget_grab_focus (child);
 
   /* Remove the old page, we dont want to grow unnecessarily
    * the list */
