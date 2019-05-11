@@ -79,6 +79,7 @@ struct _EphyWebView {
   guint load_failed : 1;
   guint history_frozen : 1;
   guint ever_committed : 1;
+  guint in_auth_dialog : 1;
 
   char *address;
   char *display_address;
@@ -1909,6 +1910,8 @@ load_changed_cb (WebKitWebView  *web_view,
 
   g_object_freeze_notify (object);
 
+  view->in_auth_dialog = 0;
+
   switch (load_event) {
     case WEBKIT_LOAD_STARTED: {
       const char *loading_uri = NULL;
@@ -2887,6 +2890,7 @@ authenticate_cb (WebKitWebView               *web_view,
                  WebKitAuthenticationRequest *request,
                  gpointer                     user_data)
 {
+  EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   g_autoptr(WebKitCredential) credential = NULL;
 
   credential = webkit_authentication_request_get_proposed_credential (request);
@@ -2896,6 +2900,8 @@ authenticate_cb (WebKitWebView               *web_view,
     webkit_authentication_request_authenticate (request, credential);
     return TRUE;
   }
+
+  ephy_web_view->in_auth_dialog = 1;
 
   return FALSE;
 }
@@ -3947,4 +3953,10 @@ EphyWebExtensionProxy *
 ephy_web_view_get_web_extension_proxy (EphyWebView *view)
 {
   return view->web_extension;
+}
+
+gboolean
+ephy_web_view_is_in_auth_dialog (EphyWebView *view)
+{
+  return view->in_auth_dialog;
 }
