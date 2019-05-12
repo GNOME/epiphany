@@ -2865,6 +2865,26 @@ tab_has_modified_forms_timeout_cb (TabHasModifiedFormsData *data)
 }
 
 static void
+run_downloads_in_background (EphyWindow *window, gint num)
+{
+  g_autoptr(GNotification) notification = NULL;
+  g_autofree gchar *body = NULL;
+
+  notification = g_notification_new (_("Download operation"));
+  g_notification_set_default_action (notification, "app.show-downloads");
+  g_notification_add_button (notification, _("Show details"), "app.show-downloads");
+
+  body = g_strdup_printf (ngettext ("%'d download operation active",
+                                    "%'d download operations active",
+                                    num), num);
+  g_notification_set_body (notification, body);
+
+  ephy_shell_send_notification (ephy_shell_get_default (), "progress", notification);
+
+  gtk_widget_hide (GTK_WIDGET (window));
+}
+
+static void
 notebook_page_close_request_cb (EphyNotebook *notebook,
                                 EphyEmbed    *embed,
                                 EphyWindow   *window)
@@ -2884,9 +2904,11 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
     if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
       EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
-      if (ephy_downloads_manager_has_active_downloads (manager) &&
-          !confirm_close_with_downloads (window))
+      if (ephy_downloads_manager_has_active_downloads (manager)) {
+        GList *list = ephy_downloads_manager_get_downloads (manager);
+        run_downloads_in_background (window, g_list_length (list));
         return;
+      }
     }
   }
 
@@ -4161,8 +4183,10 @@ ephy_window_close (EphyWindow *window)
     EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
     EphySession *session;
 
-    if (ephy_downloads_manager_has_active_downloads (manager) &&
-        !confirm_close_with_downloads (window)) {
+    if (ephy_downloads_manager_has_active_downloads (manager)) {
+      GList *list = ephy_downloads_manager_get_downloads (manager);
+      run_downloads_in_background (window, g_list_length (list));
+
       /* stop window close */
       return FALSE;
     }

@@ -244,6 +244,18 @@ quit_application (GSimpleAction *action,
   window_cmd_quit (NULL, NULL, NULL);
 }
 
+static void
+show_downloads (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  gtk_widget_show (GTK_WIDGET (window));
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -255,6 +267,7 @@ static GActionEntry app_entries[] = {
   { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
+  { "show-downloads", show_downloads, NULL, NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {
@@ -1210,3 +1223,10 @@ ephy_shell_open_uris (EphyShell        *shell,
   shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
 
+void
+ephy_shell_send_notification (EphyShell     *shell,
+                              gchar         *id,
+                              GNotification *notification)
+{
+  g_application_send_notification (G_APPLICATION (shell), id, notification);
+}
