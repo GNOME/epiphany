@@ -768,7 +768,7 @@ download_finished_cb (WebKitDownload *wk_download,
   if (!download->file_monitor)
     g_warning ("Could not add a file monitor for %s, error: %s\n", g_file_get_uri (file), error->message);
   else
-    g_signal_connect_object (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download, 0);
+    g_signal_connect (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download);
 }
 
 static void
