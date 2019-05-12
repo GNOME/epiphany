@@ -29,6 +29,7 @@ enum {
   DOWNLOAD_REMOVED,
 
   ESTIMATED_PROGRESS_CHANGED,
+  SHOW_DOWNLOADS,
 
   LAST_SIGNAL
 };
@@ -127,6 +128,13 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
 
   signals[ESTIMATED_PROGRESS_CHANGED] =
     g_signal_new ("estimated-progress-changed",
+                  EPHY_TYPE_DOWNLOADS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
+  signals[SHOW_DOWNLOADS] =
+    g_signal_new ("show-downloads",
                   EPHY_TYPE_DOWNLOADS_MANAGER,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,

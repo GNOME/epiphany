@@ -274,23 +274,6 @@ confirm_close_with_modified_forms (EphyWindow *window)
 }
 
 static gboolean
-confirm_close_with_downloads (EphyWindow *window)
-{
-  GtkWidget *dialog;
-  int response;
-
-  dialog = construct_confirm_close_dialog (window,
-                                           _("There are ongoing downloads."),
-                                           _("If you quit, the downloads will be cancelled"),
-                                           _("Quit and cancel downloads"));
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
-  return response == GTK_RESPONSE_ACCEPT;
-}
-
-static gboolean
 confirm_close_with_multiple_tabs (EphyWindow *window)
 {
   GtkWidget *dialog;
@@ -2860,6 +2843,26 @@ tab_has_modified_forms_timeout_cb (TabHasModifiedFormsData *data)
 }
 
 static void
+run_downloads_in_background (EphyWindow *window, int num)
+{
+  g_autoptr(GNotification) notification = NULL;
+  g_autofree char *body = NULL;
+
+  notification = g_notification_new (_("Download operation"));
+  g_notification_set_default_action (notification, "app.show-downloads");
+  g_notification_add_button (notification, _("Show details"), "app.show-downloads");
+
+  body = g_strdup_printf (ngettext ("%d download operation active",
+                                    "%d download operations active",
+                                    num), num);
+  g_notification_set_body (notification, body);
+
+  ephy_shell_send_notification (ephy_shell_get_default (), "progress", notification);
+
+  gtk_widget_hide (GTK_WIDGET (window));
+}
+
+static void
 notebook_page_close_request_cb (EphyNotebook *notebook,
                                 EphyEmbed    *embed,
                                 EphyWindow   *window)
@@ -2879,9 +2882,11 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
     if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
       EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
-      if (ephy_downloads_manager_has_active_downloads (manager) &&
-          !confirm_close_with_downloads (window))
+      if (ephy_downloads_manager_has_active_downloads (manager)) {
+        GList *list = ephy_downloads_manager_get_downloads (manager);
+        run_downloads_in_background (window, g_list_length (list));
         return;
+      }
     }
   }
 
@@ -3511,9 +3516,28 @@ is_browser_default (void)
 }
 
 static void
+download_completed_cb (EphyDownload *download,
+                       gpointer      user_data)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  GtkWindow *window;
+
+  if (ephy_shell_get_n_windows (shell) != 1)
+    return;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+  if (gtk_widget_is_visible (GTK_WIDGET (window)))
+    return;
+
+  if (ephy_shell_close_all_windows (shell))
+    g_application_quit (G_APPLICATION (shell));
+}
+
+static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
+  EphyDownloadsManager *manager;
   GtkBox *box;
   GAction *action;
   GActionGroup *action_group;
@@ -3711,6 +3735,9 @@ ephy_window_constructed (GObject *object)
   }
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
+
+  manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+  g_signal_connect (manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);
 
   ephy_window_set_chrome (window, chrome);
 }
@@ -4156,8 +4183,10 @@ ephy_window_close (EphyWindow *window)
     EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
     EphySession *session;
 
-    if (ephy_downloads_manager_has_active_downloads (manager) &&
-        !confirm_close_with_downloads (window)) {
+    if (ephy_downloads_manager_has_active_downloads (manager)) {
+      GList *list = ephy_downloads_manager_get_downloads (manager);
+      run_downloads_in_background (window, g_list_length (list));
+
       /* stop window close */
       return FALSE;
     }
