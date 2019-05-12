@@ -63,6 +63,8 @@ struct _EphyShell {
   EphyShellStartupContext *local_startup_context;
   EphyShellStartupContext *remote_startup_context;
   GSList *open_uris_idle_ids;
+
+  gchar *open_notification_id;
 };
 
 static EphyShell *ephy_shell = NULL;
@@ -244,6 +246,20 @@ quit_application (GSimpleAction *action,
   window_cmd_quit (NULL, NULL, NULL);
 }
 
+static void
+show_downloads (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+  g_application_withdraw_notification (G_APPLICATION (ephy_shell), ephy_shell->open_notification_id);
+  g_clear_pointer (&ephy_shell->open_notification_id, g_free);
+
+  gtk_widget_show (GTK_WIDGET (window));
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -255,6 +271,7 @@ static GActionEntry app_entries[] = {
   { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
+  { "show-downloads", show_downloads, NULL, NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {
@@ -455,6 +472,11 @@ ephy_shell_activate (GApplication *application)
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     WebKitWebContext *web_context = ephy_embed_shell_get_web_context (embed_shell);
     g_signal_connect (web_context, "automation-started", G_CALLBACK (automation_started_cb), shell);
+  }
+
+  if (shell->open_notification_id) {
+    g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
+    g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
   if (shell->remote_startup_context == NULL) {
@@ -688,6 +710,11 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
+
+  if (shell->open_notification_id) {
+    g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
+    g_clear_pointer (&shell->open_notification_id, g_free);
+  }
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -1057,6 +1084,11 @@ ephy_shell_close_all_windows (EphyShell *shell)
       retval = FALSE;
   }
 
+  if (shell->open_notification_id) {
+    g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
+    g_clear_pointer (&shell->open_notification_id, g_free);
+  }
+
   return retval;
 }
 
@@ -1210,3 +1242,16 @@ ephy_shell_open_uris (EphyShell        *shell,
   shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
 
+void
+ephy_shell_send_notification (EphyShell     *shell,
+                              gchar         *id,
+                              GNotification *notification)
+{
+  if (ephy_shell->open_notification_id) {
+    g_application_withdraw_notification (G_APPLICATION (ephy_shell), ephy_shell->open_notification_id);
+    g_clear_pointer (&ephy_shell->open_notification_id, g_free);
+  }
+
+  shell->open_notification_id = g_strdup (id);
+  g_application_send_notification (G_APPLICATION (shell), id, notification);
+}
