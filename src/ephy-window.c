@@ -2864,6 +2864,70 @@ tab_has_modified_forms_timeout_cb (TabHasModifiedFormsData *data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+notification_server_has_persistence (void)
+{
+  static gboolean retval = FALSE;
+  GDBusConnection *conn;
+  GVariant *result;
+  char **cap, **caps;
+  static gboolean initialized = FALSE;
+
+  if (initialized)
+    return retval;
+
+  initialized = TRUE;
+
+  conn = g_application_get_dbus_connection (g_application_get_default ());
+  result = g_dbus_connection_call_sync (conn,
+                                        "org.freedesktop.Notifications",
+                                        "/org/freedesktop/Notifications",
+                                        "org.freedesktop.Notifications",
+                                        "GetCapabilities",
+                                        g_variant_new ("()"),
+                                        G_VARIANT_TYPE ("(as)"),
+                                        G_DBUS_CALL_FLAGS_NONE,
+                                        -1, NULL, NULL);
+
+  if (result == NULL)
+    return FALSE;
+
+  g_variant_get (result, "(^a&s)", &caps);
+
+  for (cap = caps; *cap != NULL; cap++) {
+    if (g_strcmp0 ("persistence", *cap) == 0) {
+      retval = TRUE;
+      break;
+    }
+  }
+
+  g_free (caps);
+  g_variant_unref (result);
+
+  return retval;
+}
+
+
+static void
+run_downloads_in_background (EphyWindow *window, gint num)
+{
+  g_autoptr(GNotification) notification = NULL;
+  g_autofree gchar *body = NULL;
+
+  notification = g_notification_new (_("Download operation"));
+  g_notification_set_default_action (notification, "app.show-downloads");
+  g_notification_add_button (notification, _("Show details"), "app.show-downloads");
+
+  body = g_strdup_printf (ngettext ("%'d download operation active",
+                                    "%'d download operations active",
+                                    num), num);
+  g_notification_set_body (notification, body);
+
+  ephy_shell_send_notification (ephy_shell_get_default (), "progress", notification);
+
+  gtk_widget_hide (GTK_WIDGET (window));
+}
+
 static void
 notebook_page_close_request_cb (EphyNotebook *notebook,
                                 EphyEmbed    *embed,
@@ -2884,9 +2948,15 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
     if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
       EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
-      if (ephy_downloads_manager_has_active_downloads (manager) &&
-          !confirm_close_with_downloads (window))
-        return;
+      if (ephy_downloads_manager_has_active_downloads (manager)) {
+        if (notification_server_has_persistence ()) {
+          GList *list = ephy_downloads_manager_get_downloads (manager);
+          run_downloads_in_background (window, g_list_length (list));
+          return;
+        } else if (!confirm_close_with_downloads (window)) {
+          return;
+        }
+      }
     }
   }
 
@@ -4161,10 +4231,18 @@ ephy_window_close (EphyWindow *window)
     EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
     EphySession *session;
 
-    if (ephy_downloads_manager_has_active_downloads (manager) &&
-        !confirm_close_with_downloads (window)) {
-      /* stop window close */
-      return FALSE;
+    if (ephy_downloads_manager_has_active_downloads (manager)) {
+      if (notification_server_has_persistence ()) {
+        GList *list = ephy_downloads_manager_get_downloads (manager);
+        run_downloads_in_background (window, g_list_length (list));
+
+        /* stop window close */
+        return FALSE;
+      } else if (!confirm_close_with_downloads (window)) {
+
+        /* stop window close */
+        return FALSE;
+      }
     }
 
     session = ephy_shell_get_session (ephy_shell_get_default ());
