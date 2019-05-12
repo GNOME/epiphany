@@ -212,6 +212,14 @@ downloads_estimated_progress_cb (EphyDownloadsManager *manager,
 }
 
 static void
+show_downloads_cb (EphyDownloadsManager *manager,
+                   EphyActionBarEnd     *action_bar_end)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (action_bar_end)))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->downloads_button), TRUE);
+}
+
+static void
 ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -273,6 +281,9 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                            object, 0);
   g_signal_connect_object (downloads_manager, "estimated-progress-changed",
                            G_CALLBACK (downloads_estimated_progress_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "show-downloads",
+                           G_CALLBACK (show_downloads_cb),
                            object, 0);
 }
 

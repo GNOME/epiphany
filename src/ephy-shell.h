@@ -123,4 +123,8 @@ EphyShellStartupContext *ephy_shell_startup_context_new   (EphyStartupMode      
 
 void                     _ephy_shell_create_instance      (EphyEmbedShellMode mode);
 
+void                     ephy_shell_send_notification     (EphyShell        *shell,
+                                                           gchar            *id,
+                                                           GNotification    *notification);
+
 G_END_DECLS
