@@ -139,9 +139,6 @@ items_changed_cb (EphyPagesPopover *self,
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
-  if (position + removed > added)
-    return;
-
   g_list_store_splice (self->list_store, position, removed, (gpointer) items, added);
 
   current_page_changed_cb (self);
