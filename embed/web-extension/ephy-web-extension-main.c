@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "ephy-web-process-extension.h"
+#include "ephy-web-extension.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
@@ -28,11 +28,11 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"
 
-static EphyWebProcessExtension *extension = NULL;
+static EphyWebExtension *extension = NULL;
 
 G_MODULE_EXPORT void
-webkit_web_process_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
-                                                        GVariant           *user_data)
+webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
+                                                GVariant           *user_data)
 {
   const char *guid;
   const char *server_address;
@@ -54,19 +54,19 @@ webkit_web_process_extension_initialize_with_user_data (WebKitWebExtension *webk
 
   ephy_debug_init ();
 
-  extension = ephy_web_process_extension_get ();
+  extension = ephy_web_extension_get ();
 
-  ephy_web_process_extension_initialize (extension,
-                                         webkit_extension,
-                                         guid,
-                                         server_address,
-                                         adblock_data_dir,
-                                         private_profile,
-                                         browser_mode);
+  ephy_web_extension_initialize (extension,
+                                 webkit_extension,
+                                 guid,
+                                 server_address,
+                                 adblock_data_dir,
+                                 private_profile,
+                                 browser_mode);
 }
 
 static void __attribute__((destructor))
-ephy_web_process_extension_shutdown (void)
+ephy_web_extension_shutdown (void)
 {
   if (extension)
     g_object_unref (extension);
