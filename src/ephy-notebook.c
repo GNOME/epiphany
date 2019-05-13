@@ -467,23 +467,6 @@ show_tabs_changed_cb (GSettings    *settings,
   update_tabs_visibility (nb, FALSE);
 }
 
-static gint
-get_last_pinned_tab_pos (GtkNotebook *notebook)
-{
-  gint pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-  gint i;
-  gint found = -1;
-
-  for (i = 0; i < pages; i++) {
-    GtkWidget *child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
-
-    if (ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (child)))
-      found = i;
-  }
-
-  return found;
-}
-
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
@@ -958,7 +941,6 @@ ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
     expanded = FALSE;
   } else {
     expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
-    page_reordered_cb (GTK_NOTEBOOK (notebook), embed, 0, NULL);
   }
 
   gtk_container_child_set (GTK_CONTAINER (notebook), embed, "tab-expand", expanded, NULL);
