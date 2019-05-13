@@ -2737,7 +2737,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
   tab_accels_update (window);
 
   if (gtk_notebook_get_n_pages (window->notebook) == 0)
-    gtk_window_close (GTK_WINDOW (window));
+    ephy_window_close (window);
 }
 
 static void
@@ -4170,7 +4170,6 @@ ephy_window_close (EphyWindow *window)
       ephy_session_close (session);
   }
 
-  /* FIXME: This function should close the window, not hide it */
   /* See bug #114689 */
   gtk_widget_hide (GTK_WIDGET (window));
 
