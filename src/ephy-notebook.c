@@ -485,19 +485,6 @@ get_last_pinned_tab_pos (GtkNotebook *notebook)
 }
 
 static void
-page_reordered_cb (GtkNotebook *notebook,
-                   GtkWidget   *child,
-                   guint        page_num,
-                   gpointer     user_data)
-{
-  gint last_pinned_tab_pos = get_last_pinned_tab_pos (notebook);
-
-  /* Ensure that pinned tabs will always stay at the beginning of tab bar */
-  if (last_pinned_tab_pos != -1 && page_num <= (guint)last_pinned_tab_pos)
-    gtk_notebook_reorder_child (notebook, child, last_pinned_tab_pos);
-}
-
-static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
@@ -516,8 +503,6 @@ ephy_notebook_init (EphyNotebook *notebook)
   g_signal_connect_after (notebook, "switch-page",
                           G_CALLBACK (ephy_notebook_switch_page_cb),
                           NULL);
-  g_signal_connect (notebook, "page-reordered",
-                    (GCallback)page_reordered_cb, NULL);
 
   /* Set up drag-and-drop target */
   g_signal_connect (notebook, "drag-data-received",
