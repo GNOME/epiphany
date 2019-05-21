@@ -54,8 +54,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#define HANDY_USE_UNSTABLE_API
-#include <handy.h>
 #include <JavaScriptCore/JavaScript.h>
 #include <json-glib/json-glib.h>
 #include <math.h>
@@ -70,9 +68,9 @@ enum {
 };
 
 struct _PrefsDialog {
-  GtkDialog parent_instance;
+  HdyPreferencesWindow parent_instance;
 
-  GtkWidget *notebook;
+  GtkWidget *sync_page;
 
   /* general */
   GtkWidget *homepage_box;
@@ -164,7 +162,7 @@ enum {
   NUM_COLS
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (PrefsDialog, prefs_dialog, HDY_TYPE_PREFERENCES_WINDOW)
 
 static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
 
@@ -293,14 +291,9 @@ sync_secrets_store_finished_cb (EphySyncService *service,
   if (!error) {
     hdy_action_row_set_title (HDY_ACTION_ROW (dialog->sync_firefox_account_row),
                               ephy_sync_utils_get_sync_user ());
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                          dialog->sync_firefox_iframe_box);
-    gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
-                        dialog->sync_firefox_account_box,
-                        FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
-                        dialog->sync_options_box,
-                        FALSE, FALSE, 0);
+    gtk_widget_hide (dialog->sync_firefox_iframe_box);
+    gtk_widget_show (dialog->sync_firefox_account_box);
+    gtk_widget_show (dialog->sync_options_box);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (dialog, error->message);
@@ -643,13 +636,9 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (dialog);
-  gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                        dialog->sync_firefox_account_box);
-  gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                        dialog->sync_options_box);
-  gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
-                      dialog->sync_firefox_iframe_box,
-                      FALSE, FALSE, 0);
+  gtk_widget_show (dialog->sync_firefox_iframe_box);
+  gtk_widget_hide (dialog->sync_firefox_account_box);
+  gtk_widget_hide (dialog->sync_options_box);
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (dialog->sync_firefox_account_row), NULL);
 }
 
@@ -966,7 +955,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page);
 
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
@@ -2318,15 +2307,12 @@ setup_sync_page (PrefsDialog *dialog)
 
   if (!user) {
     sync_setup_firefox_iframe (dialog);
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                          dialog->sync_firefox_account_box);
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                          dialog->sync_options_box);
+    gtk_widget_hide (dialog->sync_firefox_account_box);
+    gtk_widget_hide (dialog->sync_options_box);
   } else {
     sync_set_last_sync_time (dialog);
     hdy_action_row_set_title (HDY_ACTION_ROW (dialog->sync_firefox_account_row), user);
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
-                          dialog->sync_firefox_iframe_box);
+    gtk_widget_hide (dialog->sync_firefox_iframe_box);
   }
 
   g_settings_bind (sync_settings,
@@ -2429,7 +2415,7 @@ prefs_dialog_init (PrefsDialog *dialog)
   if (mode == EPHY_EMBED_SHELL_MODE_BROWSER)
     setup_sync_page (dialog);
   else
-    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
+    gtk_container_remove (GTK_CONTAINER (dialog), dialog->sync_page);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",
