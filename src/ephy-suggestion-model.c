@@ -368,6 +368,9 @@ add_tabs (EphySuggestionModel *self,
   application = G_APPLICATION (shell);
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
 
+  if (!window)
+    return 0;
+
   notebook = ephy_window_get_notebook (window);
   n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
