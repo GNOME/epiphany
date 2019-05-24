@@ -1083,6 +1083,17 @@ out:
     g_error_free (error);
 }
 
+static void
+migrate_web_extension_config_dir (void)
+{
+  /* Epiphany 3.32.0 web process created its config dir in the wrong place by
+   * mistake for default profile dirs. It only contains read-only data copied
+   * from dconf, so we can just delete it.
+   */
+  g_autofree char *path = g_build_filename (ephy_default_profile_dir (), "config", NULL);
+  ephy_file_delete_dir_recursively (path, NULL);
+}
+
 static gboolean
 move_directory_contents (const char *source_path,
                          const char *dest_path)
@@ -1129,6 +1140,93 @@ move_directory_contents (const char *source_path,
   }
 
   return TRUE;
+}
+
+static void
+migrate_webapps_harder (void)
+{
+  /* We created some webapps in the default profile directory by mistake.
+   * Whoopsie!
+   *
+   * This migrator used to come after migrate_profile_directories(), which
+   * contained this bug. But now migrate_profile_directories() has to be run
+   * later to correct a different bug in earlier versions.
+   */
+  g_autoptr(GFileEnumerator) children = NULL;
+  g_autoptr(GFileInfo) info;
+  g_autofree char *parent_directory_path = NULL;
+  g_autoptr(GFile) parent_directory = NULL;
+
+  parent_directory_path = g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
+
+  parent_directory = g_file_new_for_path (parent_directory_path);
+  children = g_file_enumerate_children (parent_directory,
+                                        "standard::name",
+                                        0, NULL, NULL);
+  if (!children)
+    return;
+
+  info = g_file_enumerator_next_file (children, NULL, NULL);
+  while (info) {
+    const char *name = g_file_info_get_name (info);
+
+    if (g_str_has_prefix (name, "epiphany-")) {
+      g_autofree char *incorrect_profile_dir = g_build_filename (parent_directory_path, name, NULL);
+      g_autofree char *correct_profile_dir = g_build_filename (g_get_user_data_dir (), name, NULL);
+      g_autofree char *app_file = g_build_filename (incorrect_profile_dir, ".app", NULL);
+
+      if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
+        g_autoptr(GKeyFile) file = g_key_file_new ();
+        g_autofree char *desktop_file_name = g_strconcat (name, ".desktop", NULL);
+        g_autofree char *desktop_file_path = g_build_filename (correct_profile_dir, desktop_file_name, NULL);
+        g_autoptr(GError) error = NULL;
+
+        move_directory_contents (incorrect_profile_dir, correct_profile_dir);
+
+        // Update Exec and Icon to point to the new profile dir
+        g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
+
+        g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
+        if (exec == NULL) {
+          g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
+          continue;
+        }
+        g_autofree char *new_exec = ephy_string_find_and_replace (exec, incorrect_profile_dir, correct_profile_dir);
+        LOG ("migrate_profile_directories: setting Exec to %s", new_exec);
+        g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
+
+        g_autofree char *icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
+        if (exec == NULL) {
+          g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
+          continue;
+        }
+        g_autofree char *new_icon = ephy_string_find_and_replace (icon, incorrect_profile_dir, correct_profile_dir);
+        LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
+        g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
+
+        if (!g_key_file_save_to_file (file, desktop_file_path, &error)) {
+          g_warning ("Failed to save desktop file %s", error->message);
+          g_clear_error (&error);
+        }
+
+        g_autofree char *desktop_symlink_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file_name, NULL);
+        g_autoptr(GFile) desktop_symlink = g_file_new_for_path (desktop_symlink_path);
+        LOG ("Symlinking %s to %s", desktop_symlink_path, desktop_file_path);
+
+        // Try removing old symlink, failure is ok assuming it doesn't exist.
+        if (!g_file_delete (desktop_symlink, NULL, &error)) {
+          g_warning ("Failed to remove old symbolic link: %s", error->message);
+          g_clear_error (&error);
+        }
+
+        if (!g_file_make_symbolic_link (desktop_symlink, desktop_file_path, NULL, &error))
+          g_warning ("Failed to make symbolic link: %s", error->message);
+      }
+    }
+
+    g_clear_object (&info);
+    info = g_file_enumerator_next_file (children, NULL, NULL);
+  }
 }
 
 static void
@@ -1224,100 +1322,6 @@ migrate_profile_directories (void)
   g_file_delete (gsb_file, NULL, NULL);
   g_autoptr(GFile) gsb_journal_file = g_file_get_child (new_directory, "gsb-threats.db-journal");
   g_file_delete (gsb_journal_file, NULL, NULL);
-}
-
-static void
-migrate_web_extension_config_dir (void)
-{
-  /* Epiphany 3.32.0 web process created its config dir in the wrong place by
-   * mistake for default profile dirs. It only contains read-only data copied
-   * from dconf, so we can just delete it.
-   */
-  g_autofree char *path = g_build_filename (ephy_default_profile_dir (), "config", NULL);
-  ephy_file_delete_dir_recursively (path, NULL);
-}
-
-static void
-migrate_webapps_harder (void)
-{
-  /* We created some webapps in the default profile directory by mistake.
-   * Whoopsie!
-   */
-  g_autoptr(GFileEnumerator) children = NULL;
-  g_autoptr(GFileInfo) info;
-  g_autofree char *parent_directory_path = NULL;
-  g_autoptr(GFile) parent_directory = NULL;
-
-  parent_directory_path = g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
-
-  parent_directory = g_file_new_for_path (parent_directory_path);
-  children = g_file_enumerate_children (parent_directory,
-                                        "standard::name",
-                                        0, NULL, NULL);
-  if (!children)
-    return;
-
-  info = g_file_enumerator_next_file (children, NULL, NULL);
-  while (info) {
-    const char *name = g_file_info_get_name (info);
-
-    if (g_str_has_prefix (name, "epiphany-")) {
-      g_autofree char *incorrect_profile_dir = g_build_filename (parent_directory_path, name, NULL);
-      g_autofree char *correct_profile_dir = g_build_filename (g_get_user_data_dir (), name, NULL);
-      g_autofree char *app_file = g_build_filename (incorrect_profile_dir, ".app", NULL);
-
-      if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
-        g_autoptr(GKeyFile) file = g_key_file_new ();
-        g_autofree char *desktop_file_name = g_strconcat (name, ".desktop", NULL);
-        g_autofree char *desktop_file_path = g_build_filename (correct_profile_dir, desktop_file_name, NULL);
-        g_autoptr(GError) error = NULL;
-
-        move_directory_contents (incorrect_profile_dir, correct_profile_dir);
-
-        // Update Exec and Icon to point to the new profile dir
-        g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
-
-        g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
-        if (exec == NULL) {
-          g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
-          continue;
-        }
-        g_autofree char *new_exec = ephy_string_find_and_replace (exec, incorrect_profile_dir, correct_profile_dir);
-        LOG ("migrate_profile_directories: setting Exec to %s", new_exec);
-        g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
-
-        g_autofree char *icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
-        if (exec == NULL) {
-          g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
-          continue;
-        }
-        g_autofree char *new_icon = ephy_string_find_and_replace (icon, incorrect_profile_dir, correct_profile_dir);
-        LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
-        g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
-
-        if (!g_key_file_save_to_file (file, desktop_file_path, &error)) {
-          g_warning ("Failed to save desktop file %s", error->message);
-          g_clear_error (&error);
-        }
-
-        g_autofree char *desktop_symlink_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file_name, NULL);
-        g_autoptr(GFile) desktop_symlink = g_file_new_for_path (desktop_symlink_path);
-        LOG ("Symlinking %s to %s", desktop_symlink_path, desktop_file_path);
-
-        // Try removing old symlink, failure is ok assuming it doesn't exist.
-        if (!g_file_delete (desktop_symlink, NULL, &error)) {
-          g_warning ("Failed to remove old symbolic link: %s", error->message);
-          g_clear_error (&error);
-        }
-
-        if (!g_file_make_symbolic_link (desktop_symlink, desktop_file_path, NULL, &error))
-          g_warning ("Failed to make symbolic link: %s", error->message);
-      }
-    }
-
-    g_clear_object (&info);
-    info = g_file_enumerator_next_file (children, NULL, NULL);
-  }
 }
 
 static void
