@@ -3700,7 +3700,9 @@ ephy_window_constructed (GObject *object)
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "reopen");
-  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
+      mode == EPHY_EMBED_SHELL_MODE_AUTOMATION ||
+      mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
   } else {
     g_object_bind_property (G_OBJECT (ephy_shell_get_session (shell)),
