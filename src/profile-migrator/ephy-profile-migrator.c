@@ -1016,7 +1016,7 @@ migrate_zoom_level (void)
   char *history_filename;
   const char *sql_query;
 
-  history_filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
+  history_filename = g_build_filename (legacy_profile_dir (), EPHY_HISTORY_FILE, NULL);
   if (!g_file_test (history_filename, G_FILE_TEST_EXISTS))
     goto out;
 
