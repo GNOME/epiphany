@@ -75,6 +75,8 @@ legacy_profile_dir (void)
   static char *dir = NULL;
   if (dir == NULL)
     {
+      /* FIXME: This is fragile and not correct.
+       */
       if (profile_dir != NULL)
         {
           dir = profile_dir;
