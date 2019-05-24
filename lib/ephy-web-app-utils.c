@@ -304,7 +304,7 @@ create_desktop_file (const char *id,
   g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
   g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
   g_key_file_set_value (file, "Desktop Entry", "Type", "Application");
-  g_key_file_set_value (file, "Desktop Entry", "Categories", "Network;GNOME;GTK;");
+  g_key_file_set_value (file, "Desktop Entry", "Categories", "GNOME;GTK;");
 
   if (icon) {
     GOutputStream *stream;
