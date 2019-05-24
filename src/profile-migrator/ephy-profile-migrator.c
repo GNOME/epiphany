@@ -1419,6 +1419,15 @@ ephy_migrator (void)
     m ();
   }
 
+  if (!g_file_test (ephy_profile_dir (), G_FILE_TEST_EXISTS)) {
+    LOG ("Original profile directory does not exist. This is an expected"
+         " failure. Probably a web app is being migrated before the default"
+         " profile, and its profile directory was moved during the migration."
+         " Epiphany must be restarted with the new profile directory. The"
+         " migration will be run again.");
+    return FALSE;
+  }
+
   if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE) {
     LOG ("Failed to store the current migration version");
     return FALSE;
