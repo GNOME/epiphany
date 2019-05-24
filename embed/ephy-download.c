@@ -759,21 +759,21 @@ ephy_download_new (WebKitDownload *download)
 
   ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, NULL);
 
-  g_signal_connect (download, "notify::response",
-                    G_CALLBACK (download_response_changed_cb),
-                    ephy_download);
-  g_signal_connect (download, "decide-destination",
-                    G_CALLBACK (download_decide_destination_cb),
-                    ephy_download);
-  g_signal_connect (download, "created-destination",
-                    G_CALLBACK (download_created_destination_cb),
-                    ephy_download);
-  g_signal_connect (download, "finished",
-                    G_CALLBACK (download_finished_cb),
-                    ephy_download);
-  g_signal_connect (download, "failed",
-                    G_CALLBACK (download_failed_cb),
-                    ephy_download);
+  g_signal_connect_object (download, "notify::response",
+                           G_CALLBACK (download_response_changed_cb),
+                           ephy_download, 0);
+  g_signal_connect_object (download, "decide-destination",
+                           G_CALLBACK (download_decide_destination_cb),
+                           ephy_download, 0);
+  g_signal_connect_object (download, "created-destination",
+                           G_CALLBACK (download_created_destination_cb),
+                           ephy_download, 0);
+  g_signal_connect_object (download, "finished",
+                           G_CALLBACK (download_finished_cb),
+                           ephy_download, 0);
+  g_signal_connect_object (download, "failed",
+                           G_CALLBACK (download_failed_cb),
+                           ephy_download, 0);
 
   ephy_download->download = g_object_ref (download);
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
