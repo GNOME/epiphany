@@ -1146,7 +1146,7 @@ migrate_profile_directories (void)
     g_autoptr(GError) error = NULL;
 
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
-    g_autofree char *old_path = g_build_filename (legacy_profile_dir (), old_name, NULL);
+    g_autofree char *old_path = g_build_filename (legacy_default_profile_dir (), old_name, NULL);
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
 
     if (!move_directory_contents (old_path, app_path))
@@ -1161,7 +1161,7 @@ migrate_profile_directories (void)
       close (fd);
 
     // Update Exec and Icon to point to the new profile dir
-    g_autofree char *old_profile_prefix = g_build_filename (legacy_profile_dir (), "app-epiphany-", NULL);
+    g_autofree char *old_profile_prefix = g_build_filename (legacy_default_profile_dir (), "app-epiphany-", NULL);
     g_autofree char *new_profile_prefix = g_build_filename (g_get_user_data_dir (), "epiphany-", NULL);
     g_autoptr(GKeyFile) file = g_key_file_new ();
     g_autofree char *desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
@@ -1363,9 +1363,10 @@ const EphyProfileMigrator migrators[] = {
   /* 27 */ migrate_nothing,
   /* 28 */ migrate_annoyance_list,
   /* 29 */ migrate_zoom_level,
-  /* 30 */ migrate_profile_directories,
+  /* 30 */ migrate_nothing,
   /* 31 */ migrate_web_extension_config_dir,
   /* 32 */ migrate_webapps_harder,
+  /* 33 */ migrate_profile_directories,
 };
 
 static gboolean
