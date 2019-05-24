@@ -57,8 +57,9 @@ static int do_step_n = -1;
 static int migration_version = -1;
 static char *profile_dir = NULL;
 
-/* The legacy dir is used by everything before version 29 which migrates
- * to the new directory */
+/* The legacy dir is used by everything before version 30, which migrates
+ * to the new directory.
+ */
 static const char *
 legacy_default_profile_dir (void)
 {
@@ -74,11 +75,14 @@ legacy_profile_dir (void)
   static char *dir = NULL;
   if (dir == NULL)
     {
-      /* If this isn't actually a legacy dir it starts at a later migrating step anyway */
       if (profile_dir != NULL)
-        dir = profile_dir;
+        {
+          dir = profile_dir;
+        }
       else
-        dir = (char *)legacy_default_profile_dir ();
+        {
+          dir = (char *)legacy_default_profile_dir ();
+        }
     }
   return dir;
 }
@@ -1146,7 +1150,7 @@ migrate_profile_directories (void)
     g_autoptr(GError) error = NULL;
 
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
-    g_autofree char *old_path = g_build_filename (legacy_profile_dir (), old_name, NULL);
+    g_autofree char *old_path = g_build_filename (legacy_default_profile_dir (), old_name, NULL);
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
 
     if (!move_directory_contents (old_path, app_path))
@@ -1161,7 +1165,7 @@ migrate_profile_directories (void)
       close (fd);
 
     // Update Exec and Icon to point to the new profile dir
-    g_autofree char *old_profile_prefix = g_build_filename (legacy_profile_dir (), "app-epiphany-", NULL);
+    g_autofree char *old_profile_prefix = g_build_filename (legacy_default_profile_dir (), "app-epiphany-", NULL);
     g_autofree char *new_profile_prefix = g_build_filename (g_get_user_data_dir (), "epiphany-", NULL);
     g_autoptr(GKeyFile) file = g_key_file_new ();
     g_autofree char *desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
