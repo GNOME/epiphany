@@ -858,7 +858,7 @@ ephy_shell_get_session (EphyShell *shell)
   g_assert (EPHY_IS_SHELL (shell));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
-  if (mode ==  EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     return NULL;
 
   if (shell->session == NULL)
