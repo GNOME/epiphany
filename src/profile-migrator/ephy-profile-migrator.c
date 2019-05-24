@@ -74,7 +74,8 @@ legacy_profile_dir (void)
   static char *dir = NULL;
   if (dir == NULL)
     {
-      /* If this isn't actually a legacy dir it starts at a later migrating step anyway */
+      /* FIXME: This is fragile and not correct.
+       */
       if (profile_dir != NULL)
         dir = profile_dir;
       else
