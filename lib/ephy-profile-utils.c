@@ -75,8 +75,7 @@ ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
   result = g_file_set_contents (migrated_file, contents, -1, NULL);
 
   if (result == FALSE)
-    LOG ("Couldn't store migration version %d in %s (%s, %s)",
-         version, migrated_file, profile_directory, PROFILE_MIGRATION_FILE);
+    LOG ("Couldn't store migration version %d in %s", version, migrated_file);
 
   return result;
 }
