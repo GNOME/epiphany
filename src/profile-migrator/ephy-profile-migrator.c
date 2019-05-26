@@ -1321,6 +1321,19 @@ migrate_webapps_harder (void)
 }
 
 static void
+migrate_gsb_db (void)
+{
+  g_autofree char *threats_db = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db", NULL);
+  g_autofree char *threats_db_journal = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db-journal", NULL);
+
+  if (g_unlink (threats_db) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", threats_db, g_strerror (errno));
+
+  if (g_unlink (threats_db_journal) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", threats_db_journal, g_strerror (errno));
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1366,6 +1379,7 @@ const EphyProfileMigrator migrators[] = {
   /* 30 */ migrate_profile_directories,
   /* 31 */ migrate_web_extension_config_dir,
   /* 32 */ migrate_webapps_harder,
+  /* 33 */ migrate_gsb_db
 };
 
 static gboolean
