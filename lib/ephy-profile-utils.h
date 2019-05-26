@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_PROFILE_MIGRATION_VERSION 32
+#define EPHY_PROFILE_MIGRATION_VERSION 33
 #define EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION 11
 #define EPHY_FIREFOX_SYNC_PASSWORDS_MIGRATION_VERSION 19
 #define EPHY_TARGET_ORIGIN_MIGRATION_VERSION 21
@@ -33,8 +33,6 @@ G_BEGIN_DECLS
 
 #define EPHY_BOOKMARKS_FILE     "bookmarks.gvdb"
 #define EPHY_HISTORY_FILE       "ephy-history.db"
-/* Threat list database for Google Safe Browsing. */
-#define EPHY_GSB_FILE           "gsb-threats.db"
 
 int ephy_profile_utils_get_migration_version (void);
 int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);
