@@ -34,7 +34,6 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
-#include "ephy-gsb-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-permissions-manager.h"
@@ -128,7 +127,6 @@ struct _EphyWebView {
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
 
-  gboolean bypass_safe_browsing;
   gboolean loading_error_page;
   char *tls_error_failing_uri;
 
@@ -895,18 +893,6 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
 }
 
 static void
-allow_unsafe_browsing_cb (EphyEmbedShell *shell,
-                          guint64         page_id,
-                          EphyWebView    *view)
-{
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
-    return;
-
-  ephy_web_view_set_should_bypass_safe_browsing (view, TRUE);
-  ephy_web_view_load_url (view, ephy_web_view_get_address (view));
-}
-
-static void
 page_created_cb (EphyEmbedShell               *shell,
                  guint64                       page_id,
                  EphyWebProcessExtensionProxy *web_process_extension,
@@ -924,10 +910,6 @@ page_created_cb (EphyEmbedShell               *shell,
 
   g_signal_connect_object (shell, "allow-tls-certificate",
                            G_CALLBACK (allow_tls_certificate_cb),
-                           view, 0);
-
-  g_signal_connect_object (shell, "allow-unsafe-browsing",
-                           G_CALLBACK (allow_unsafe_browsing_cb),
                            view, 0);
 }
 
@@ -2369,95 +2351,6 @@ format_tls_error_page (EphyWebView *view,
 }
 
 static void
-format_unsafe_browsing_error_page (EphyWebView *view,
-                                   const char  *origin,
-                                   const char  *threat_type,
-                                   char       **page_title,
-                                   char       **message_title,
-                                   char       **message_body,
-                                   char       **message_details,
-                                   char       **button_label,
-                                   char       **button_action,
-                                   const char **button_accesskey,
-                                   char       **hidden_button_label,
-                                   char       **hidden_button_action,
-                                   const char **hidden_button_accesskey,
-                                   const char **icon_name,
-                                   const char **style)
-{
-  char *formatted_origin;
-  char *first_paragraph;
-
-  /* Page title when a site is flagged by Google Safe Browsing verification. */
-  *page_title = g_strdup_printf (_("Security Warning"));
-
-  /* Message title on the unsafe browsing error page. */
-  *message_title = g_strdup (_("Unsafe website detected!"));
-
-  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
-  /* Error details on the unsafe browsing error page.
-   * https://developers.google.com/safe-browsing/v4/usage-limits#UserWarnings
-   */
-  if (!g_strcmp0 (threat_type, GSB_THREAT_TYPE_MALWARE)) {
-    first_paragraph = g_strdup_printf (_("Visiting %s may harm your computer. This "
-                                         "page appears to contain malicious code that could "
-                                         "be downloaded to your computer without your consent."),
-                                       formatted_origin);
-    *message_details = g_strdup_printf (_("You can learn more about harmful web content "
-                                          "including viruses and other malicious code "
-                                          "and how to protect your computer at %s."),
-                                        "<a href=\"https://www.stopbadware.org/\">"
-                                          "www.stopbadware.org"
-                                        "</a>");
-  } else if (!g_strcmp0 (threat_type, GSB_THREAT_TYPE_SOCIAL_ENGINEERING)) {
-    first_paragraph = g_strdup_printf (_("Attackers on %s may trick you into doing "
-                                         "something dangerous like installing software or "
-                                         "revealing your personal information (for example, "
-                                         "passwords, phone numbers, or credit cards)."),
-                                       formatted_origin);
-    *message_details = g_strdup_printf (_("You can find out more about social engineering "
-                                          "(phishing) at %s or from %s."),
-                                        "<a href=\"https://support.google.com/webmasters/answer/6350487\">"
-                                          "Social Engineering (Phishing and Deceptive Sites)"
-                                        "</a>",
-                                        "<a href=\"https://www.antiphishing.org/\">"
-                                          "www.antiphishing.org"
-                                        "</a>");
-  } else {
-    first_paragraph = g_strdup_printf (_("%s may contain harmful programs. Attackers might "
-                                         "attempt to trick you into installing programs that "
-                                         "harm your browsing experience (for example, by changing "
-                                         "your homepage or showing extra ads on sites you visit)."),
-                                       formatted_origin);
-    *message_details = g_strdup_printf (_("You can learn more about unwanted software at %s."),
-                                        "<a href=\"https://www.google.com/about/unwanted-software-policy.html\">"
-                                          "Unwanted Software Policy"
-                                        "</a>");
-  }
-
-  *message_body = g_strdup_printf ("<p>%s</p>", first_paragraph);
-
-  /* The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE. */
-  *button_label = g_strdup (_("Go Back"));
-  *button_action = g_strdup ("window.history.back();");
-  /* Mnemonic for the Go Back button on the unsafe browsing error page. */
-  *button_accesskey = C_("back-access-key", "B");
-
-  /* The hidden button on the unsafe browsing error page. Do not add mnemonics here. */
-  *hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
-  *hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.unsafeBrowsingErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
-                                           webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
-  /* Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page. */
-  *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
-
-  *icon_name = "security-high-symbolic.png";
-  *style = "danger";
-
-  g_free (formatted_origin);
-  g_free (first_paragraph);
-}
-
-static void
 format_no_such_file_error_page (EphyWebView  *view,
                                 char        **page_title,
                                 char        **message_title,
@@ -2608,23 +2501,6 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                              &hidden_button_accesskey,
                              &icon_name,
                              &style);
-      break;
-    case EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING:
-      format_unsafe_browsing_error_page (view,
-                                         origin,
-                                         user_data,
-                                         &page_title,
-                                         &msg_title,
-                                         &msg_body,
-                                         &msg_details,
-                                         &button_label,
-                                         &button_action,
-                                         &button_accesskey,
-                                         &hidden_button_label,
-                                         &hidden_button_action,
-                                         &hidden_button_accesskey,
-                                         &icon_name,
-                                         &style);
       break;
     case EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE:
       format_no_such_file_error_page (view,
@@ -3357,23 +3233,6 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   view->typed_address = g_strdup (address);
 
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_TYPED_ADDRESS]);
-}
-
-gboolean
-ephy_web_view_get_should_bypass_safe_browsing (EphyWebView *view)
-{
-  g_assert (EPHY_IS_WEB_VIEW (view));
-
-  return view->bypass_safe_browsing;
-}
-
-void
-ephy_web_view_set_should_bypass_safe_browsing (EphyWebView *view,
-                                               gboolean     bypass_safe_browsing)
-{
-  g_assert (EPHY_IS_WEB_VIEW (view));
-
-  view->bypass_safe_browsing = bypass_safe_browsing;
 }
 
 static void
