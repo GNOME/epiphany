@@ -994,3 +994,27 @@ ephy_notebook_tab_is_pinned (EphyNotebook *notebook,
 
   return ephy_tab_label_is_pinned (tab_label);
 }
+
+int
+ephy_notebook_get_first_unpinned_tab (EphyNotebook *notebook,
+                                      EphyEmbed    *embed)
+{
+  int position;
+
+  position = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed)) + 1;
+
+  /* Loop through all pages and skip all pinned tabs */
+  do  {
+    GtkWidget *page;
+
+    page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), position);
+    if (!page)
+      break;
+
+    if (!ephy_notebook_tab_is_pinned (notebook, EPHY_EMBED (page)))
+      break;
+  } while (++position < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)));
+
+  return position;
+}
+

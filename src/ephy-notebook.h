@@ -56,4 +56,8 @@ void           ephy_notebook_tab_set_pinned    (EphyNotebook *notebook,
                                                 gboolean      is_pinned);
 gboolean       ephy_notebook_tab_is_pinned     (EphyNotebook *notebook,
                                                 EphyEmbed    *embed);
+
+int            ephy_notebook_get_first_unpinned_tab (EphyNotebook *notebook,
+                                                     EphyEmbed    *embed);
+
 G_END_DECLS

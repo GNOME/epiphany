@@ -4229,7 +4229,7 @@ ephy_window_get_position_for_new_embed (EphyWindow *window,
   if (embed == window->last_opened_embed)
     return window->last_opened_pos++;
 
-  position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET (embed)) + 1;
+  position = ephy_notebook_get_first_unpinned_tab (EPHY_NOTEBOOK (nb), embed);
 
   if (window->last_opened_embed)
     g_object_remove_weak_pointer (G_OBJECT (window->last_opened_embed), (gpointer *)&window->last_opened_embed);
