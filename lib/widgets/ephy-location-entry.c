@@ -849,6 +849,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
+  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, _("Show site information"));
 
   /* Add special widget css provider */
   context = gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry));
@@ -888,6 +889,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   /* Bookmark */
   entry->bookmark_event_box = gtk_event_box_new ();
   entry->bookmark = gtk_image_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_widget_set_tooltip_text (entry->bookmark, _("Bookmark this page"));
   gtk_widget_show (entry->bookmark);
   g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
   gtk_container_add (GTK_CONTAINER(entry->bookmark_event_box), entry->bookmark);
@@ -899,6 +901,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
   entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_widget_set_tooltip_text (entry->reader_mode, _("Toggle reader mode"));
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER(entry->reader_mode_event_box), entry->reader_mode);
   gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
