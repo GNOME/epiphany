@@ -3358,6 +3358,7 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
+  EphySession *session;
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -3518,14 +3519,15 @@ ephy_window_constructed (GObject *object)
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "reopen");
-  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  } else {
-    g_object_bind_property (G_OBJECT (ephy_shell_get_session (shell)),
+  session = ephy_shell_get_session (shell);
+  if (session) {
+    g_object_bind_property (session,
                             "can-undo-tab-closed",
                             action,
                             "enabled",
                             G_BINDING_SYNC_CREATE);
+  } else {
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
   }
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
