@@ -99,27 +99,19 @@
                     <property name="maximum_width">600</property>
                     <property name="linear_growth_width">400</property>
                     <child>
-                      <object class="GtkFrame">
+                      <object class="GtkListBox" id="listbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">6</property>
                         <property name="margin_bottom">6</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkListBox" id="listbox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="selection_mode">multiple</property>
-                            <property name="activate_on_single_click">False</property>
-                            <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
-                            <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
-                            <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
-                          </object>
-                        </child>
-                        <child type="label_item">
-                          <placeholder/>
-                        </child>
+                        <property name="selection_mode">multiple</property>
+                        <property name="activate_on_single_click">False</property>
+                        <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
+                        <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
+                        <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
+                        <style>
+                          <class name="frame"/>
+                        </style>
                       </object>
                     </child>
                   </object>
