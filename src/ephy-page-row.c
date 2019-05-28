@@ -40,6 +40,7 @@ struct _EphyPageRow {
   GtkImage *speaker_icon;
   GtkSpinner *spinner;
   GtkLabel *title;
+  GtkButton *close_button;
 };
 
 static guint signals[LAST_SIGNAL];
@@ -118,6 +119,7 @@ ephy_page_row_class_init (EphyPageRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, speaker_icon);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, title);
+  gtk_widget_class_bind_template_child (widget_class, EphyPageRow, close_button);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, button_release_event);
 }
@@ -151,6 +153,7 @@ ephy_page_row_new (EphyNotebook *notebook,
 {
   EphyPageRow *self;
   GtkWidget *embed;
+  GtkWidget *tab_label;
   EphyWebView *view;
 
   g_assert (notebook != NULL);
@@ -162,6 +165,7 @@ ephy_page_row_new (EphyNotebook *notebook,
 
   g_assert (EPHY_IS_EMBED (embed));
 
+  tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), embed);
   view = ephy_embed_get_web_view (EPHY_EMBED (embed));
 
   sync_favicon (view, NULL, self);
@@ -169,6 +173,7 @@ ephy_page_row_new (EphyNotebook *notebook,
   g_object_bind_property (embed, "title", self->title, "label", G_BINDING_SYNC_CREATE);
   g_object_bind_property (embed, "title", self->title, "tooltip-text", G_BINDING_SYNC_CREATE);
   g_object_bind_property (view, "is-playing-audio", self->speaker_icon, "visible", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (tab_label, "pinned", self->close_button, "visible", G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
   sync_load_status (view, NULL, self);
   g_signal_connect_object (view, "load-changed",
                            G_CALLBACK (load_changed_cb), self, 0);
