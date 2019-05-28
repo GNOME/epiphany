@@ -4231,6 +4231,20 @@ ephy_window_get_position_for_new_embed (EphyWindow *window,
 
   position = gtk_notebook_page_num (GTK_NOTEBOOK (nb), GTK_WIDGET (embed)) + 1;
 
+  /* Loop through all pages and skip all pinned tabs */
+  do  {
+    GtkWidget *page;
+    GtkWidget *tab_label;
+
+    page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), position);
+    if (!page)
+      break;
+
+    tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), page);
+    if (!ephy_tab_label_is_pinned (tab_label))
+      break;
+  } while (++position < gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb)));
+
   if (window->last_opened_embed)
     g_object_remove_weak_pointer (G_OBJECT (window->last_opened_embed), (gpointer *)&window->last_opened_embed);
 
