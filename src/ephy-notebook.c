@@ -994,3 +994,4 @@ ephy_notebook_tab_is_pinned (EphyNotebook *notebook,
 
   return ephy_tab_label_is_pinned (tab_label);
 }
+
