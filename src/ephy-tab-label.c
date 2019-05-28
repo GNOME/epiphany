@@ -53,6 +53,7 @@ enum {
   PROP_ICON_BUF,
   PROP_SPINNING,
   PROP_AUDIO,
+  PROP_PINNED,
   LAST_PROP
 };
 
@@ -120,6 +121,9 @@ ephy_tab_label_set_property (GObject      *object,
   case PROP_AUDIO:
     gtk_widget_set_visible (self->audio_button, g_value_get_boolean (value));
     break;
+  case PROP_PINNED:
+    self->is_pinned = g_value_get_boolean (value);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -148,6 +152,9 @@ ephy_tab_label_get_property (GObject    *object,
     break;
   case PROP_AUDIO:
     g_value_set_boolean (value, gtk_widget_get_visible (self->audio_button));
+    break;
+  case PROP_PINNED:
+    g_value_set_boolean (value, self->is_pinned);
     break;
   default:
    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -248,6 +255,12 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
                                                      FALSE,
                                                      G_PARAM_READWRITE |
                                                      G_PARAM_CONSTRUCT);
+  obj_properties[PROP_PINNED] = g_param_spec_boolean ("pinned",
+                                                      "Pinned",
+                                                      "Is tab pinned",
+                                                      FALSE,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT);
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   signals[CLOSE_CLICKED] = g_signal_new ("close-clicked",
@@ -306,6 +319,8 @@ ephy_tab_label_set_pinned (GtkWidget *widget,
   ephy_tab_label_update_icon (self);
 
   update_label (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_PINNED]);
 }
 
 gboolean
