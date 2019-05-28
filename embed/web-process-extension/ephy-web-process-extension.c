@@ -700,7 +700,12 @@ window_object_cleared_cb (WebKitScriptWorld        *world,
                           WebKitFrame              *frame,
                           EphyWebProcessExtension  *extension)
 {
-  JSCContext *js_context;
+  /* FIXME: remove this check once we bump WebKit dependency */
+#if WEBKIT_CHECK_VERSION(2, 25, 1)
+  g_autoptr(JSCContext) js_context = NULL;
+#else
+  JSCContext *js_context:
+#endif
   g_autoptr(GBytes) bytes = NULL;
   const char* data;
   gsize data_size;
