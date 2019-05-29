@@ -54,6 +54,7 @@ struct _EphyHistoryDialog {
   GtkWidget *popup_menu;
   GtkWidget *search_bar;
   GtkWidget *search_button;
+  GtkWidget *stack;
 
   GActionGroup *action_group;
 
@@ -326,6 +327,16 @@ add_urls_source (EphyHistoryDialog *self)
   EphyHistoryURL *url;
   GList *element;
   GtkWidget *row;
+  GList *children;
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->listbox));
+  if (children == NULL) {
+    if (self->search_text == NULL || g_strcmp0 (self->search_text, "") == 0)
+      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "empty");
+    else
+      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "no-results");
+  }
+  g_list_free (children);
 
   if (self->urls == NULL || !self->num_fetch) {
     self->sorter_source = 0;
@@ -338,6 +349,7 @@ add_urls_source (EphyHistoryDialog *self)
 
   row = create_row (self, url);
   gtk_list_box_insert (GTK_LIST_BOX(self->listbox), row, -1);
+  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "results");
 
   self->urls = g_list_remove_link (self->urls, element);
   ephy_history_url_free (url);
@@ -774,6 +786,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, popup_menu);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_selected);
