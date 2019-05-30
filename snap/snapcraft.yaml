@@ -1,0 +1,218 @@
+name: epiphany
+version: git
+summary: Web browser for GNOME
+description: |
+  The web browser for GNOME, featuring tight integration with the desktop
+  and a simple and intuitive user interface that allows you to focus on your
+  web pages. If you’re looking for a simple, clean, beautiful view of the
+  web, this is the browser for you.
+
+  GNOME Web is often referred to by its code name, Epiphany.
+
+grade: stable
+confinement: strict
+base: core18
+
+# Launchpad doesn't recognize these fields yet
+passthrough:
+  license: GPL-3.0+
+  title: GNOME Web
+
+plugs:
+  gnome-3-28-1804:
+    interface: content
+    target: $SNAP/gnome-platform
+    default-provider: gnome-3-28-1804
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes
+
+slots:
+  # for GtkApplication registration
+  epiphany:
+    interface: dbus
+    bus: session
+    name: org.gnome.Epiphany
+
+layout:
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0
+
+apps:
+  epiphany:
+    command: desktop-launch snapcraft-preload epiphany
+    plugs:
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - hostname-control
+      - mount-observe
+      - network
+      - network-manager
+      - opengl
+      - password-manager-service
+      - pulseaudio
+      - removable-media
+      - screen-inhibit-control
+      - unity7
+      - upower-observe
+      - wayland
+    desktop: usr/share/applications/org.gnome.Epiphany.desktop
+    environment:
+      GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/lib/epiphany
+
+parts:
+# epiphany needs access to /dev/shm/
+  snapcraft-preload:
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+      - gcc-multilib
+      - g++-multilib
+
+  gtk:
+    source: https://gitlab.gnome.org/GNOME/gtk.git
+    source-branch: gtk-3-24
+    source-depth: 1
+    plugin: meson
+    meson-parameters:
+      - --prefix=/usr
+      - -Dbroadway_backend=true
+      - -Dx11_backend=true
+      - -Dwayland_backend=true
+      - -Dwin32_backend=false
+      - -Dquartz_backend=false
+      - -Dxinerama=yes
+      - -Dintrospection=true
+      - -Dbuiltin_immodules=yes
+      - -Ddemos=false
+      - -Dexamples=false
+    organize:
+      usr/lib/gtk-3.0: usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0
+      usr/bin/gtk-query-immodules-3.0: usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk-3-0/gtk-query-immodules-3.0
+    build-packages:
+      - libwayland-dev
+      - wayland-protocols
+      - libxkbcommon-dev
+      - libxinerama-dev
+      - libcups2-dev
+      - libcolord-dev
+      - libxrandr-dev
+      - libxcursor-dev
+      - libisocodes-dev
+      - libxcomposite-dev
+      - libxdamage-dev
+      - libxfixes-dev
+      - libxi-dev
+      - libxkbfile-dev
+      - libxml2-utils
+      - libmount-dev
+      - libthai-dev
+      - librest-dev
+
+  libdazzle:
+    source: https://gitlab.gnome.org/GNOME/libdazzle.git
+    source-depth: 1
+    plugin: meson
+    meson-parameters: [ --prefix=/usr ]
+    build-packages:
+      - valac
+
+  desktop-gnome-platform:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - build-essential
+    override-build: |
+      snapcraftctl build
+      mkdir -pv $SNAPCRAFT_PART_INSTALL/gnome-platform
+
+  epiphany:
+    after: [desktop-gnome-platform, libdazzle, gtk, snapcraft-preload]
+    source: .
+    plugin: meson
+    meson-parameters: [--prefix=/snap/epiphany/current/usr]
+    organize:
+      snap/epiphany/current/usr: usr
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version $(git describe --tags --abbrev=10)
+      sed -i.bak -e 's|Icon=org.gnome.Epiphany$|Icon=${SNAP}/meta/gui/org.gnome.Epiphany.png|g' data/org.gnome.Epiphany.desktop.in.in
+    override-build: |
+      snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/meta/gui/
+      cp ../src/data/icons/hicolor/scalable/apps/org.gnome.Epiphany.svg $SNAPCRAFT_PART_INSTALL/meta/gui/
+      cp ../install/snap/epiphany/current/usr/share/applications/org.gnome.Epiphany.desktop $SNAPCRAFT_PART_INSTALL/meta/gui/
+    organize:
+      snap/epiphany/current/usr: usr
+    build-packages:
+      - gettext
+      - gobject-introspection
+      - itstool
+      - libgcr-3-dev
+      - libjson-glib-dev
+      - libnotify-dev
+      - libsecret-1-dev
+      - libsoup-gnome2.4-dev
+      - libsqlite3-dev
+      - libwebkit2gtk-4.0-dev
+      - libxml-parser-perl
+      - libxml2-utils
+      - libxml2-dev
+      - libxslt1-dev
+      - libx11-dev
+      - nettle-dev
+      - python3
+      - python-gi-dev
+      - libgirepository1.0-dev
+      - gsettings-desktop-schemas-dev
+    stage-packages:
+      - gstreamer1.0-clutter-3.0
+      - gstreamer1.0-gl
+      - gstreamer1.0-gtk3
+      - gstreamer1.0-libav
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-pulseaudio
+      - libgcr-base-3-1
+      - libgcr-ui-3-1
+      - libglu1-mesa
+      - libgpm2
+      - libhogweed4
+      - libicu60
+      - libjavascriptcoregtk-4.0-18
+      - libnettle6
+      - libslang2
+      - libsoup2.4-1
+      - libsqlite3-0
+      - libwebkit2gtk-4.0-37
+      - libxml2
+      - libxft2
+    stage:
+      - -usr/bin/gtk-update-icon-cache
+      - -usr/lib/*/gtk-3.0/3.0.0/printbackends/libprintbackend*.so*
+      - -usr/lib/*/libfribidi.so.0
+      - -usr/lib/*/libgdk-3.so.0
+      - -usr/lib/*/libgio-2.0.so.0
+      - -usr/lib/*/libglib-2.0.so.0
+      - -usr/lib/*/libgmodule-2.0.so.0
+      - -usr/lib/*/libgobject-2.0.so.0
+      - -usr/lib/*/libgthread-2.0.so.0
+      - -usr/lib/*/libgtk-3.so.0
+      - -usr/lib/*/libgtk-3-0/gtk-query-immodules-3.0
+      - -usr/lib/*/libpango*.so*
