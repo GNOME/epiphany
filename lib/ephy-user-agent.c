@@ -30,6 +30,7 @@ ephy_user_agent_get_internal (void)
 {
   WebKitSettings *settings;
   static char *user_agent = NULL;
+  gboolean mobile = FALSE;
 
   if (user_agent)
     return user_agent;
@@ -41,8 +42,11 @@ ephy_user_agent_get_internal (void)
     g_free (user_agent);
   }
 
+  mobile = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_MOBILE);
   settings = webkit_settings_new ();
-  user_agent = g_strdup_printf ("%s Epiphany/605.1.15", webkit_settings_get_user_agent (settings));
+  user_agent = g_strdup_printf (mobile ? "%s Mobile Epiphany/605.1.15"
+                                       : "%s Epiphany/605.1.15",
+                                webkit_settings_get_user_agent (settings));
   g_object_unref (settings);
 
   return user_agent;
