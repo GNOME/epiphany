@@ -37,6 +37,8 @@
 #include <ctype.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 #include <string.h>
 #include <time.h>
 
@@ -83,8 +85,8 @@ static gboolean add_urls_source (EphyHistoryDialog *self);
 static EphyHistoryURL *
 get_url_from_row (GtkListBoxRow *row)
 {
-  return ephy_history_url_new (g_object_get_data (G_OBJECT (row), "url"),
-                               g_object_get_data (G_OBJECT (row), "title"),
+  return ephy_history_url_new (hdy_action_row_get_subtitle (HDY_ACTION_ROW (row)),
+                               hdy_action_row_get_title (HDY_ACTION_ROW (row)),
                                0,
                                0,
                                0);
@@ -246,63 +248,26 @@ create_row (EphyHistoryDialog *self,
             EphyHistoryURL    *url)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  GtkWidget *grid;
-  GtkWidget *title;
-  GtkWidget *address;
   GtkWidget *date;
   GtkWidget *row;
   GtkWidget *separator;
   GtkWidget *button;
-  PangoAttrList *attrlist;
-  PangoAttribute *attr;
 
   /* Row */
-  row = gtk_list_box_row_new ();
-  g_object_set_data (G_OBJECT (row), "title", g_strdup (url->title));
-  g_object_set_data (G_OBJECT (row), "url", g_strdup (url->url));
-
-  /* Grid */
-  grid = gtk_grid_new ();
-  gtk_widget_set_margin_start (grid, 6);
-  gtk_widget_set_margin_end (grid, 6);
-  gtk_widget_set_margin_top (grid, 6);
-  gtk_widget_set_margin_bottom (grid, 6);
-  gtk_grid_set_column_spacing (GTK_GRID(grid), 12);
-  gtk_grid_set_row_spacing (GTK_GRID(grid), 6);
-  gtk_widget_set_tooltip_text (grid, url->url);
-
-  /* Title */
-  title = gtk_label_new (url->title);
-  gtk_label_set_ellipsize (GTK_LABEL(title), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_hexpand (title, TRUE);
-  gtk_label_set_xalign (GTK_LABEL(title), 0);
-
-  attrlist = pango_attr_list_new ();
-  attr = pango_attr_weight_new (PANGO_WEIGHT_SEMIBOLD);
-  pango_attr_list_insert (attrlist, attr);
-  gtk_label_set_attributes (GTK_LABEL (title), attrlist);
-  pango_attr_list_unref (attrlist);
-
-  gtk_grid_attach (GTK_GRID (grid), title, 0, 0, 1, 1);
-
-  /* Address */
-  address = gtk_label_new (url->url);
-  gtk_label_set_ellipsize (GTK_LABEL(address), PANGO_ELLIPSIZE_END);
-  gtk_label_set_xalign (GTK_LABEL(address), 0);
-  gtk_widget_set_sensitive (address, FALSE);
-
-  gtk_grid_attach (GTK_GRID (grid), address, 0, 1, 1, 1);
+  row = GTK_WIDGET (hdy_action_row_new ());
+  hdy_action_row_set_title (HDY_ACTION_ROW (row), url->title);
+  hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), url->url);
+  gtk_widget_set_tooltip_text (row, url->url);
 
   /* Date */
   date = gtk_label_new (ephy_time_helpers_utf_friendly_time (url->last_visit_time / 1000000));
   gtk_label_set_ellipsize (GTK_LABEL(date), PANGO_ELLIPSIZE_END);
   gtk_label_set_xalign (GTK_LABEL (date), 0);
 
-  gtk_grid_attach (GTK_GRID (grid), date, 0, 2, 1, 1);
-
   /* Separator */
   separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-  gtk_grid_attach (GTK_GRID (grid), separator, 1, 0, 1, 3);
+  gtk_widget_set_margin_top (separator, 8);
+  gtk_widget_set_margin_bottom (separator, 8);
 
   /* Button */
   button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
@@ -311,11 +276,14 @@ create_row (EphyHistoryDialog *self,
   gtk_widget_set_tooltip_text (button, _("Remove the selected pages from history"));
   g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), self);
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 3);
+
+  /* Added in reverse order because actions are packed from the end. */
+  hdy_action_row_add_action (HDY_ACTION_ROW (row), button);
+  hdy_action_row_add_action (HDY_ACTION_ROW (row), separator);
+  hdy_action_row_add_action (HDY_ACTION_ROW (row), date);
 
   gtk_widget_set_sensitive (button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
-  gtk_container_add (GTK_CONTAINER (row), grid);
   gtk_widget_show_all (row);
 
   return row;
