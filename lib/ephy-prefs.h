@@ -111,6 +111,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_WEBAUDIO              "enable-webaudio"
 #define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING      "enable-smooth-scrolling"
 #define EPHY_PREFS_WEB_USER_AGENT                   "user-agent"
+#define EPHY_PREFS_WEB_MOBILE                       "mobile"
 #define EPHY_PREFS_WEB_COOKIES_POLICY               "cookies-policy"
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING             "default-encoding"
 #define EPHY_PREFS_WEB_DO_NOT_TRACK                 "do-not-track"
@@ -142,6 +143,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
   EPHY_PREFS_WEB_USER_AGENT,
+  EPHY_PREFS_WEB_MOBILE,
   EPHY_PREFS_WEB_COOKIES_POLICY,
   EPHY_PREFS_WEB_DEFAULT_ENCODING,
   EPHY_PREFS_WEB_DO_NOT_TRACK,
