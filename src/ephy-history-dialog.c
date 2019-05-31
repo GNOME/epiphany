@@ -258,8 +258,8 @@ create_row (EphyHistoryDialog *self,
 
   /* Row */
   row = gtk_list_box_row_new ();
-  g_object_set_data (G_OBJECT (row), "title", g_strdup (url->title));
-  g_object_set_data (G_OBJECT (row), "url", g_strdup (url->url));
+  g_object_set_data_full (G_OBJECT (row), "title", g_strdup (url->title), g_free);
+  g_object_set_data_full (G_OBJECT (row), "url", g_strdup (url->url), g_free);
 
   /* Grid */
   grid = gtk_grid_new ();
