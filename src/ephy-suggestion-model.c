@@ -331,20 +331,24 @@ add_search_engines (EphySuggestionModel *self,
 
   for (guint i = 0; engines[i] != NULL; i++) {
     EphySuggestion *suggestion;
-    char *address;
-    g_autofree gchar *escaped_title = NULL;
-    g_autofree gchar *markup = NULL;
+    g_autofree char *address = NULL;
+    g_autofree char *escaped_title = NULL;
+    g_autofree char *markup = NULL;
+    g_autoptr(SoupURI) uri = NULL;
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     escaped_title = g_markup_escape_text (engines[i], -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
     suggestion = ephy_suggestion_new_without_subtitle (markup, engines[i], address);
+
+    uri = soup_uri_new (address);
+    if (uri)
+      address = g_strdup_printf ("%s://%s/", soup_uri_get_scheme (uri), soup_uri_get_host (uri));
+
     load_favicon (self, suggestion, address);
 
     g_sequence_append (self->items, suggestion);
     added++;
-
-    g_free (address);
   }
 
   g_strfreev (engines);
