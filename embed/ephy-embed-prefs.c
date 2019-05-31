@@ -472,6 +472,11 @@ static const PrefData webkit_pref_entries[] =
     "user-agent",
     webkit_pref_callback_user_agent },
   { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_MOBILE_USER_AGENT,
+    "mobile-user-agent",
+    /* No need for a specific callback, we just want to update the user agent. */
+    webkit_pref_callback_user_agent },
+  { EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_COOKIES_POLICY,
     "accept-policy",
     webkit_pref_callback_cookie_accept_policy },
