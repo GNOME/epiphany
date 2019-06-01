@@ -233,5 +233,8 @@ void window_cmd_tabs_pin                        (GSimpleAction *action,
 void window_cmd_tabs_unpin                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_set_spell_checker               (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS
