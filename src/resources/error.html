@@ -35,17 +35,6 @@
     function hiddenButtonAction() {
       %s
     }
-    function toggleDetailsBox() {
-      let div = document.getElementById('reveal');
-      if (div.className == "hidden") {
-        div.className = "visible";
-        document.getElementById('pointer').innerHTML = "&#9660;";
-      }
-      else if (div.className == "visible") {
-        div.className = "hidden";
-        document.getElementById('pointer').innerHTML = "&#9658;";
-      }
-    }
   </script>
 </head>
 <body>
@@ -61,16 +50,13 @@
         %s
       </div>
       <div id="msg-details" class="%s">
-        <span class="clickable" onclick="javascript:toggleDetailsBox()">
-          <span id="pointer" style="color: black;">&#9658;</span>
-          %s
-        </span>
-        <div id="reveal" class="hidden">
+        <details>
+          <summary class="clickable">%s</summary>
           %s
           <button class="btn destructive-action %s" accesskey="%s" onclick="javascript:hiddenButtonAction()">
             <strong>%s</strong>
           </button>
-        </div>
+        </details>
       </div>
       <div id="footer">
         <button class="btn suggested-action visible" accesskey="%s" onclick="javascript:buttonAction()">
