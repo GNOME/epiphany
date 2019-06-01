@@ -2841,3 +2841,19 @@ window_cmd_tabs_unpin (GSimpleAction *action,
 
   ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), FALSE);
 }
+
+void
+window_cmd_set_spell_checker (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  WebKitWebContext *context = webkit_web_context_get_default ();
+  GPtrArray *languages = g_ptr_array_new ();
+  const gchar *lang = g_variant_get_string (parameter, NULL);
+
+  g_ptr_array_add (languages, (gchar *)lang);
+
+  webkit_web_context_set_spell_checking_languages (context, (const char * const *) languages->pdata);
+
+  g_ptr_array_free (languages, TRUE);
+}
