@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-langs.h"
+#include "gnome-languages.h"
 
 #include <string.h>
 
@@ -127,4 +128,62 @@ ephy_langs_get_languages (void)
   ephy_langs_sanitise (array);
 
   return (char **)(void *)g_array_free (array, FALSE);
+}
+
+char **
+ephy_langs_normalize_languages (char **languages)
+{
+  int i;
+  GPtrArray *langs;
+
+  langs = g_ptr_array_new ();
+
+  for (i = 0; languages && languages[i]; i++) {
+    if (!strcmp (languages[i], "system")) {
+      char **sys_langs = ephy_langs_get_languages ();
+      int j;
+
+      for (j = 0; sys_langs && sys_langs[j]; j++)
+        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
+
+      g_strfreev (sys_langs);
+    } else
+      g_ptr_array_add (langs, g_strdelimit (g_strdup (languages[i]), "-", '_'));
+  }
+
+  g_ptr_array_add (langs, NULL);
+
+  return (char **)g_ptr_array_free (langs, FALSE);
+}
+
+char *
+ephy_langs_normalize_locale (const char *locale)
+{
+  char *result = g_strdup (locale);
+
+  /* The result we store in prefs looks like es-ES or en-US. We don't
+   * store codeset (not used in Accept-Langs) and we store with hyphen
+   * instead of underscore (ditto). So here we just uppercase the
+   * country code, converting e.g. es-es to es-ES. We have to do this
+   * because older versions of Epiphany stored locales as entirely
+   * lowercase.
+   */
+  for (char *p = strchr (result, '-'); p != NULL && *p != '\0'; p++)
+    *p = g_ascii_toupper (*p);
+
+  return result;
+}
+
+char *
+ephy_langs_language_for_locale (const char *locale)
+{
+  g_autoptr(GString) string = g_string_new (locale);
+
+  /* Before calling gnome_get_language_from_locale() we have to convert
+   * from web locales (e.g. es-ES) to UNIX (e.g. es_ES.UTF-8).
+   */
+  g_strdelimit (string->str, "-", '_');
+  g_string_append (string, ".UTF-8");
+
+  return gnome_get_language_from_locale (string->str, string->str);
 }

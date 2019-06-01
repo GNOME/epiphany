@@ -218,32 +218,6 @@ webkit_pref_callback_font_family (GSettings  *settings,
   g_free (value);
 }
 
-static char **
-normalize_languages (char **languages)
-{
-  int i;
-  GPtrArray *langs;
-
-  langs = g_ptr_array_new ();
-
-  for (i = 0; languages && languages[i]; i++) {
-    if (!strcmp (languages[i], "system")) {
-      char **sys_langs = ephy_langs_get_languages ();
-      int j;
-
-      for (j = 0; sys_langs && sys_langs[j]; j++)
-        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
-
-      g_strfreev (sys_langs);
-    } else
-      g_ptr_array_add (langs, g_strdelimit (g_strdup (languages[i]), "-", '_'));
-  }
-
-  g_ptr_array_add (langs, NULL);
-
-  return (char **)g_ptr_array_free (langs, FALSE);
-}
-
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
 static void
@@ -278,12 +252,6 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
   g_object_set_data_full (G_OBJECT (web_context), "preferred-languages",
                           g_strdupv ((char **)(void *)array->data),
                           (GDestroyNotify)g_strfreev);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING)) {
-    char **normalized = normalize_languages ((char **)(void *)array->data);
-    webkit_web_context_set_spell_checking_languages (web_context, (const char * const *)normalized);
-    g_strfreev (normalized);
-  }
 
   for (i = 0; i < array->len; i++)
     g_free (g_array_index (array, char *, i));
@@ -376,13 +344,16 @@ webkit_pref_callback_enable_spell_checking (GSettings  *settings,
   webkit_web_context_set_spell_checking_enabled (web_context, value);
 
   if (value) {
-    char **languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
-    char **normalized = normalize_languages (languages);
+    gchar *lang = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SPELL_CHECKER_LANGUAGE);
 
-    webkit_web_context_set_spell_checking_languages (web_context, (const char * const *)normalized);
+    if (lang && strlen(lang) > 0) {
+      GPtrArray *languages = g_ptr_array_new ();
+      g_ptr_array_add (languages, (gchar *)lang);
 
-    g_strfreev (languages);
-    g_strfreev (normalized);
+      webkit_web_context_set_spell_checking_languages (web_context, (const char * const *) languages->pdata);
+
+      g_ptr_array_free (languages, TRUE);
+    }
   }
 }
 
