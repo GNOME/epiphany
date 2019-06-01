@@ -1509,7 +1509,7 @@ language_editor_selection_changed_cb (GtkTreeSelection *selection,
   language_editor_update_buttons (dialog);
 }
 
-static char *
+char *
 normalize_locale (const char *locale)
 {
   char *result = g_strdup (locale);
@@ -1527,7 +1527,7 @@ normalize_locale (const char *locale)
   return result;
 }
 
-static char *
+char *
 language_for_locale (const char *locale)
 {
   g_autoptr(GString) string = g_string_new (locale);

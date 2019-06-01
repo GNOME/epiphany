@@ -227,7 +227,7 @@ webkit_pref_callback_font_family (GSettings  *settings,
   g_free (value);
 }
 
-static char **
+char **
 normalize_languages (char **languages)
 {
   int i;

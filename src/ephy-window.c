@@ -850,7 +850,9 @@ static const GActionEntry window_entries [] =
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
   { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },
-  { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state }
+  { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state },
+
+  { "set-spell-checker", window_cmd_set_spell_checker, "s" }
 };
 
 static const GActionEntry tab_entries [] = {
@@ -1472,6 +1474,63 @@ parse_context_menu_user_data (WebKitContextMenu *context_menu,
   g_variant_dict_lookup (&dict, "SelectedText", "&s", selected_text);
 }
 
+static void
+add_language_menu (WebKitContextMenu *context_menu,
+                   GActionGroup      *window_action_group)
+{
+  WebKitContextMenuItem *item;
+  WebKitContextMenu *menu;
+  GAction *action;
+  GVariant *target;
+  GArray *array;
+  gchar **languages = NULL;
+
+  languages = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LANGUAGE);
+  if (g_strv_length (languages) == 0)
+    return;
+
+  array = g_array_new (TRUE, FALSE, sizeof (char *));
+
+  for (int i = 0; languages[i]; i++) {
+    if (!g_strcmp0 (languages[i], "system")) {
+      ephy_langs_append_languages (array);
+    } else if (languages[i][0] != '\0') {
+      char *str = g_strdup (languages[i]);
+      g_array_append_val (array, str);
+    }
+  }
+  g_strfreev (languages);
+
+  ephy_langs_sanitise (array);
+
+  languages = normalize_languages ((char **)(void *)array->data);
+
+  menu = webkit_context_menu_new ();
+  action = g_action_map_lookup_action (G_ACTION_MAP (window_action_group), "set-spell-checker");
+
+  for (int i = 0; languages[i]; i++) {
+    const char *code = languages[i];
+    g_autofree char *normalized_locale = normalize_locale (code);
+
+    if (normalized_locale != NULL) {
+      g_autofree char *language_name = language_for_locale (normalized_locale);
+
+      if (language_name == NULL)
+        continue;
+
+      target = g_variant_new_string (normalized_locale);
+
+      item = webkit_context_menu_item_new_from_gaction (action, language_name, target);
+      webkit_context_menu_append (menu, item);
+    }
+  }
+
+  item = webkit_context_menu_item_new_with_submenu (_("Languages"), menu);
+  webkit_context_menu_append (context_menu, item);
+
+  g_strfreev (languages);
+}
+
 static gboolean
 populate_context_menu (WebKitWebView       *web_view,
                        WebKitContextMenu   *context_menu,
@@ -1612,10 +1671,6 @@ populate_context_menu (WebKitWebView       *web_view,
     GList *l;
     gboolean has_guesses = FALSE;
 
-    /* FIXME: Add a Spelling Suggestions... submenu. Utilize
-     * WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND,
-     * WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING, and
-     * WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING. */
     for (l = spelling_guess_items; l; l = g_list_next (l)) {
       WebKitContextMenuItem *item = WEBKIT_CONTEXT_MENU_ITEM (l->data);
 
@@ -1626,6 +1681,14 @@ populate_context_menu (WebKitWebView       *web_view,
     g_list_free (spelling_guess_items);
 
     if (has_guesses) {
+      WebKitContextMenuItem *item;
+
+      item = webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING);
+      webkit_context_menu_append (context_menu, item);
+
+      item = webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING);
+      webkit_context_menu_append (context_menu, item);
+
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
@@ -1658,6 +1721,12 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     add_item_to_context_menu (context_menu, input_methods_item);
     add_item_to_context_menu (context_menu, unicode_item);
+
+    add_language_menu (context_menu, window_action_group);
+
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_separator ());
+
   } else {
     is_document = TRUE;
 
