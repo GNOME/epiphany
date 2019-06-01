@@ -25,10 +25,16 @@
 
 G_BEGIN_DECLS
 
-void			     ephy_langs_append_languages (GArray *array);
+void   ephy_langs_append_languages    (GArray *array);
 
-void			     ephy_langs_sanitise	       (GArray *array);
+void   ephy_langs_sanitise            (GArray *array);
 
-char			   **ephy_langs_get_languages	   (void);
+char **ephy_langs_get_languages       (void);
+
+char **ephy_langs_normalize_languages (char **languages);
+
+char  *ephy_langs_normalize_locale    (const char *locale);
+
+char  *ephy_langs_language_for_locale (const char *locale);
 
 G_END_DECLS
