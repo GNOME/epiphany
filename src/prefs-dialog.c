@@ -1491,38 +1491,6 @@ language_editor_selection_changed_cb (GtkTreeSelection *selection,
   language_editor_update_buttons (dialog);
 }
 
-static char *
-normalize_locale (const char *locale)
-{
-  char *result = g_strdup (locale);
-
-  /* The result we store in prefs looks like es-ES or en-US. We don't
-   * store codeset (not used in Accept-Langs) and we store with hyphen
-   * instead of underscore (ditto). So here we just uppercase the
-   * country code, converting e.g. es-es to es-ES. We have to do this
-   * because older versions of Epiphany stored locales as entirely
-   * lowercase.
-   */
-  for (char *p = strchr (result, '-'); p != NULL && *p != '\0'; p++)
-    *p = g_ascii_toupper (*p);
-
-  return result;
-}
-
-static char *
-language_for_locale (const char *locale)
-{
-  g_autoptr(GString) string = g_string_new (locale);
-
-  /* Before calling gnome_get_language_from_locale() we have to convert
-   * from web locales (e.g. es-ES) to UNIX (e.g. es_ES.UTF-8).
-   */
-  g_strdelimit (string->str, "-", '_');
-  g_string_append (string, ".UTF-8");
-
-  return gnome_get_language_from_locale (string->str, string->str);
-}
-
 static void
 create_language_section (PrefsDialog *dialog)
 {
@@ -1583,9 +1551,9 @@ create_language_section (PrefsDialog *dialog)
     if (strcmp (code, "system") == 0) {
       add_system_language_entry (store);
     } else if (code[0] != '\0') {
-      g_autofree char *normalized_locale = normalize_locale (code);
+      g_autofree char *normalized_locale = ephy_langs_normalize_locale (code);
       if (normalized_locale != NULL) {
-        g_autofree char *language_name = language_for_locale (normalized_locale);
+        g_autofree char *language_name = ephy_langs_language_for_locale (normalized_locale);
         if (language_name == NULL)
           language_name = g_strdup (normalized_locale);
         language_editor_add (dialog, normalized_locale, language_name);
