@@ -430,7 +430,7 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   data->promise_id = promise_id;
   data->page_id = page_id;
   data->frame_id = frame_id;
-  data->origin = g_steal_pointer (&origin);
+  data->origin = g_strdup (origin);
 
   ephy_password_manager_query (priv->password_manager,
                                NULL,
