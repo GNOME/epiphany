@@ -425,6 +425,13 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   if (!origin || !target_origin || !password_field)
     return;
 
+  /* Don't include username_field in queries unless we actually have a username
+   * to go along with it, or the query will fail because we don't save
+   * username_field without a corresponding username.
+   */
+  if (!username && username_field)
+    g_clear_pointer (&username_field, g_free);
+
   PasswordManagerData *data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
