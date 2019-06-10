@@ -1195,6 +1195,7 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+  webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
 
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
