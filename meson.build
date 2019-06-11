@@ -62,12 +62,10 @@ conf.set('EPHY_MAJOR_VERSION', version_array[0].to_int())
 conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
 conf.set('EPHY_MICRO_VERSION', version_array[2].to_int())
 
-conf.set_quoted('VERSION', '@0@-@VCS_TAG@'.format(meson.project_version()))
+conf.set_quoted('VERSION', '@VCS_TAG@')
 
 config_h = declare_dependency(
   sources: vcs_tag(
-    command: ['git', 'rev-parse', '--short', 'HEAD'],
-    fallback: get_option('profile') != 'default' ? 'devel' : 'stable',
     input: configure_file(
       output: 'config.h.in',
       configuration: conf
