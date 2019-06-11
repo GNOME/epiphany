@@ -55,6 +55,7 @@ libephymisc_sources = [
 ]
 
 libephymisc_deps = [
+  config_h,
   cairo_dep,
   gdk_pixbuf_dep,
   gio_dep,
