@@ -1202,7 +1202,17 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, PKGLIBDIR, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_file_tmp_dir (), TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_profile_dir (), TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_cache_dir (), TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_config_dir (), TRUE);
+
+#if DEVELOPER_MODE
+  webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
+#endif
 
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
