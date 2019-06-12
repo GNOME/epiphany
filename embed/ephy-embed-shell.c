@@ -46,9 +46,11 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-process-extension-proxy.h"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
@@ -1024,15 +1026,26 @@ authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
   return ephy_dbus_peer_is_authorized (credentials);
 }
 
+static char *
+dbus_server_socket_path (void)
+{
+  return g_build_filename (ephy_file_tmp_dir (), "embed-shell-socket", NULL);
+}
+
 static void
 ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr(GDBusAuthObserver) observer = NULL;
   g_autofree char *address = NULL;
+  g_autofree char *socket_path = NULL;
   g_autoptr(GError) error = NULL;
 
-  address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
+  /* Due to the bubblewrap sandbox, we cannot use any abstract sockets here.
+   * This means that unix:tmpdir= or unix:abstract= addresses will not work.
+   */
+  socket_path = dbus_server_socket_path ();
+  address = g_strdup_printf ("unix:path=%s", dbus_server_socket_path ());
 
   observer = g_dbus_auth_observer_new ();
 
@@ -1052,7 +1065,7 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
                                               &error);
 
   if (error) {
-    g_warning ("Failed to start web process extension server on %s: %s", address, error->message);
+    g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
     return;
   }
 
