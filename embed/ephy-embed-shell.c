@@ -1085,12 +1085,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
 }
 
-static char *
-adblock_filters_dir (EphyEmbedShell *shell)
-{
-  return g_build_filename (ephy_cache_dir (), "adblock", NULL);
-}
-
 static void
 download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload   *download,
@@ -1118,6 +1112,44 @@ download_started_cb (WebKitWebContext *web_context,
 
   ephy_download = ephy_download_new (download);
   ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
+}
+
+static char *
+adblock_filters_dir (void)
+{
+  return g_build_filename (ephy_cache_dir (), "adblock", NULL);
+}
+
+static void
+setup_sandbox (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  g_autofree char *filters_dir = NULL;
+  g_autofree char *permissions_path = NULL;
+  g_autofree char *safe_browsing_db_path = NULL;
+  g_autofree char *snapshot_thumbnails_dir = NULL;
+  g_autofree char *socket_path = NULL;
+  g_autofree char *web_extension_settings_path = NULL;
+
+  filters_dir = adblock_filters_dir ();
+  permissions_path = g_build_filename (ephy_profile_dir (), "permissions.ini", NULL);
+  safe_browsing_db_path = g_build_filename (ephy_cache_dir (), "gsb-threats.db", NULL);
+  snapshot_thumbnails_dir = g_build_filename (ephy_cache_dir (), "thumbnails", NULL);
+  socket_path = dbus_server_socket_path ();
+  web_extension_settings_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
+
+  webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, PKGLIBDIR, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, filters_dir, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, permissions_path, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, safe_browsing_db_path, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, snapshot_thumbnails_dir, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, socket_path, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, web_extension_settings_path, TRUE);
+
+#if DEVELOPER_MODE
+  webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
+#endif
 }
 
 static void
@@ -1202,7 +1234,8 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
-  webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
+
+  setup_sandbox (shell);
 
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
@@ -1266,7 +1299,7 @@ ephy_embed_shell_startup (GApplication *application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
 
-  filters_dir = adblock_filters_dir (shell);
+  filters_dir = adblock_filters_dir ();
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
 
   g_signal_connect (priv->web_context, "download-started",
