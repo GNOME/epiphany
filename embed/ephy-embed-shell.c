@@ -1032,7 +1032,11 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
   g_autofree char *address = NULL;
   g_autoptr(GError) error = NULL;
 
-  address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
+  /* Due to the bubblewrap sandbox, we cannot use any abstract sockets here.
+   * This means that unix:tmpdir= or unix:abstract= addresses will not work.
+   * Using unix:dir= guarantees that abstract sockets won't be used.
+   */
+  address = g_strdup_printf ("unix:dir=%s", ephy_file_tmp_dir ());
 
   observer = g_dbus_auth_observer_new ();
 
@@ -1052,7 +1056,7 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
                                               &error);
 
   if (error) {
-    g_warning ("Failed to start web process extension server on %s: %s", address, error->message);
+    g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
     return;
   }
 
