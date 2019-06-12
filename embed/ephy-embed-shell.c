@@ -1024,15 +1024,26 @@ authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
   return ephy_dbus_peer_is_authorized (credentials);
 }
 
+static char *
+dbus_server_socket_path (void)
+{
+  return g_build_filename (ephy_file_tmp_dir (), "embed-shell-socket", NULL);
+}
+
 static void
 ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr(GDBusAuthObserver) observer = NULL;
   g_autofree char *address = NULL;
+  g_autofree char *socket_path = NULL;
   g_autoptr(GError) error = NULL;
 
-  address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
+  /* Due to the bubblewrap sandbox, we cannot use any abstract sockets here.
+   * This means that unix:tmpdir= or unix:abstract= addresses will not work.
+   */
+  socket_path = dbus_server_socket_path ();
+  address = g_strdup_printf ("unix:path=%s", dbus_server_socket_path ());
 
   observer = g_dbus_auth_observer_new ();
 
@@ -1052,7 +1063,7 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
                                               &error);
 
   if (error) {
-    g_warning ("Failed to start web process extension server on %s: %s", address, error->message);
+    g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
     return;
   }
 
@@ -1139,7 +1150,6 @@ setup_sandbox (EphyEmbedShell *shell)
   web_extension_settings_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
 
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
-  webkit_web_context_add_path_to_sandbox (priv->web_context, PKGLIBDIR, TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, filters_dir, TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, permissions_path, TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, safe_browsing_db_path, TRUE);
