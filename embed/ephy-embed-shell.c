@@ -46,6 +46,7 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-process-extension-proxy.h"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -69,6 +70,7 @@ typedef struct {
   EphyViewSourceHandler *source_handler;
   char *guid;
   GDBusServer *dbus_server;
+  char *dbus_server_tmpdir;
   GList *web_process_extensions;
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
@@ -219,6 +221,18 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->search_engine_manager);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
+}
+
+static void
+ephy_embed_shell_finalize (GObject *object)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
+
+  if (rmdir (priv->dbus_server_tmpdir) != 0)
+    g_warning ("Failed to delete %s: %s", priv->dbus_server_tmpdir, g_strerror (errno));
+  g_free (priv->dbus_server_tmpdir);
+
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
 static void
@@ -1032,7 +1046,19 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
   g_autofree char *address = NULL;
   g_autoptr(GError) error = NULL;
 
-  address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
+  /* Due to the bubblewrap sandbox, we cannot use any abstract sockets here.
+   * This means that unix:tmpdir= or unix:abstract= addresses will not work.
+   * So we'll create our own tmp directory with unix:dir= instead, which is
+   * the same as tmpdir except guarantees abstract sockets won't be used.
+   */
+  priv->dbus_server_tmpdir = g_dir_make_tmp ("ephy-embed-shell-server-XXXXXX", &error);
+  if (error)
+    {
+      g_warning ("Failed to start embed shell D-Bus server: failed to create tmpdir for socket: %s", error->message);
+      return;
+    }
+
+  address = g_strdup_printf ("unix:dir=%s", priv->dbus_server_tmpdir);
 
   observer = g_dbus_auth_observer_new ();
 
@@ -1052,7 +1078,7 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
                                               &error);
 
   if (error) {
-    g_warning ("Failed to start web process extension server on %s: %s", address, error->message);
+    g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
     return;
   }
 
@@ -1205,6 +1231,7 @@ ephy_embed_shell_startup (GApplication *application)
 
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, PKGLIBDIR, TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, priv->dbus_server_tmpdir, TRUE);
 
 #if DEVELOPER_MODE
   webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
@@ -1389,6 +1416,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ephy_embed_shell_dispose;
+  object_class->finalize = ephy_embed_shell_finalize;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
   object_class->constructed = ephy_embed_shell_constructed;
