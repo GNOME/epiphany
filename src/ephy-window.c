@@ -28,6 +28,7 @@
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -3787,6 +3788,17 @@ static void
 ephy_window_init (EphyWindow *window)
 {
   LOG ("EphyWindow initialising %p", window);
+  if (is_desktop_pantheon ()) {
+    GtkSettings *settings = gtk_settings_get_default();
+    g_object_set(settings,
+                 "gtk-icon-theme-name",
+                 "elementary",
+                 NULL);
+    g_object_set(settings,
+             "gtk-theme-name",
+             "elementary",
+             NULL);
+  }
 }
 
 /**
