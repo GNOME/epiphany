@@ -89,14 +89,36 @@ ephy_settings_get (const char *schema)
   ephy_settings_init ();
 
   gsettings = g_hash_table_lookup (settings, schema);
+  if (gsettings)
+    return gsettings;
 
-  if (gsettings == NULL) {
-    gsettings = g_settings_new (schema);
-    if (gsettings == NULL)
-      g_warning ("Invalid schema %s requested", schema);
-    else
-      g_hash_table_insert (settings, g_strdup (schema), gsettings);
+  if (strcmp (schema, EPHY_PREFS_WEB_APP_SCHEMA) == 0) {
+    /* EPHY_PREFS_WEB_APP_SCHEMA won't be added to the settings table if the
+     * ephy_profile_dir_is_web_application() is FALSE. But we can still get
+     * here in EPHY_EMBED_SHELL_MODE_APPLICATION if the profile dir is broken
+     * such that its .app file is missing. This includes any web apps created by
+     * Epiphany 3.30 or earlier that were migrated to 3.32 before 3.32.3 before
+     * the main profile migration. This generally means anybody using Epiphany
+     * only for web apps has wound up with broken web apps after the migration.
+     *
+     * We can only crash, but it's nicer to crash here rather than crash later.
+     *
+     * https://gitlab.gnome.org/GNOME/epiphany/issues/713
+     */
+    g_error ("Epiphany is trying to access web app settings outside web app"
+             " mode. Your web app may be broken. If so, you must delete it and"
+             " recreate. See epiphany#713.");
   }
+
+  /* schema must not be relocatable, or g_settings_new() will crash. */
+  for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++)
+    g_assert (strcmp (schema, ephy_prefs_relocatable_schemas[i].schema) != 0);
+
+  gsettings = g_settings_new (schema);
+  if (gsettings == NULL)
+    g_warning ("Invalid schema %s requested", schema);
+  else
+    g_hash_table_insert (settings, g_strdup (schema), gsettings);
 
   return gsettings;
 }
