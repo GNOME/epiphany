@@ -99,7 +99,7 @@ clear_listbox (GtkWidget *listbox)
 
   children = gtk_container_get_children (GTK_CONTAINER (listbox));
 
-  for (iter = children; iter != NULL; iter = g_list_next (iter)) {
+  for (iter = children; iter; iter = g_list_next (iter)) {
     gtk_widget_destroy (GTK_WIDGET (iter->data));
   }
 
@@ -114,9 +114,8 @@ on_find_urls_cb (gpointer service,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
-  if (success != TRUE)
+  if (!success)
     return;
-
 
   self->urls = (GList *)result_data;
 
@@ -132,7 +131,7 @@ substrings_filter (EphyHistoryDialog *self)
   char **tokens, **p;
   GList *substrings = NULL;
 
-  if (self->search_text == NULL)
+  if (!self->search_text)
     return NULL;
 
   tokens = p = g_strsplit (self->search_text, " ", -1);
@@ -155,7 +154,7 @@ remove_pending_sorter_source (EphyHistoryDialog *self,
     self->sorter_source = 0;
   }
 
-  if (free_urls && self->urls != NULL) {
+  if (free_urls && self->urls) {
     g_list_free_full (self->urls, (GDestroyNotify)ephy_history_url_free);
     self->urls = NULL;
   }
@@ -191,10 +190,10 @@ get_selection (EphyHistoryDialog *self)
   GList *list = NULL;
   GList *tmp;
 
-  for (tmp = selected_rows; tmp != NULL; tmp = tmp->next) {
+  for (tmp = selected_rows; tmp; tmp = tmp->next) {
     EphyHistoryURL *url = get_url_from_row (tmp->data);
 
-    if (url == NULL) {
+    if (!url) {
       continue;
     }
 
@@ -212,7 +211,7 @@ on_browse_history_deleted_cb (gpointer service,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
-  if (success != TRUE)
+  if (!success)
     return;
 
   filter_now (self);
@@ -306,7 +305,7 @@ add_urls_source (EphyHistoryDialog *self)
   }
   g_list_free (children);
 
-  if (self->urls == NULL || !self->num_fetch) {
+  if (!self->urls || !self->num_fetch) {
     self->sorter_source = 0;
     gtk_widget_queue_draw (self->listbox);
     return G_SOURCE_REMOVE;
@@ -389,7 +388,7 @@ forget_all (GSimpleAction *action,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
-  if (self->confirmation_dialog == NULL) {
+  if (!self->confirmation_dialog) {
     GtkWidget **confirmation_dialog;
 
     self->confirmation_dialog = confirmation_dialog_construct (self);
@@ -545,7 +544,7 @@ on_listbox_row_selected (GtkListBox        *box,
                          GtkListBoxRow     *row,
                          EphyHistoryDialog *self)
 {
-  update_selection_actions (self->action_group, row != NULL);
+  update_selection_actions (self->action_group, !!row);
 }
 
 static void
@@ -559,7 +558,7 @@ on_listbox_row_activated (GtkListBox        *box,
 
   window = EPHY_WINDOW (get_target_window (self));
   url = get_url_from_row (row);
-  g_assert (url != NULL);
+  g_assert (url);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
                               window, NULL, EPHY_NEW_TAB_JUMP);
@@ -616,14 +615,14 @@ set_history_service (EphyHistoryDialog  *self,
   if (history_service == self->history_service)
     return;
 
-  if (self->history_service != NULL) {
+  if (self->history_service) {
     g_signal_handlers_disconnect_by_func (self->history_service,
                                           on_urls_visited_cb,
                                           self);
     g_clear_object (&self->history_service);
   }
 
-  if (history_service != NULL) {
+  if (history_service) {
     self->history_service = g_object_ref (history_service);
     g_signal_connect_after (self->history_service,
                             "urls-visited", G_CALLBACK (on_urls_visited_cb),
@@ -682,7 +681,7 @@ ephy_history_dialog_dispose (GObject *object)
     g_clear_object (&self->cancellable);
   }
 
-  if (self->history_service != NULL)
+  if (self->history_service)
     g_signal_handlers_disconnect_by_func (self->history_service,
                                           on_urls_visited_cb,
                                           self);
@@ -770,7 +769,7 @@ ephy_history_dialog_new (EphyHistoryService *history_service)
 {
   EphyHistoryDialog *self;
 
-  g_assert (history_service != NULL);
+  g_assert (history_service);
 
   self = g_object_new (EPHY_TYPE_HISTORY_DIALOG,
                        "history-service", history_service,
