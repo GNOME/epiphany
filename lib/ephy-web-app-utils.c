@@ -627,7 +627,7 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
           if (g_file_test (app_file, G_FILE_TEST_EXISTS))
             applications = g_list_prepend (applications, app);
           else
-            g_object_unref (app);
+            g_free (app);
         } else
           applications = g_list_prepend (applications, app);
       }
