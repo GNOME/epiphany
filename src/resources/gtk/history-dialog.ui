@@ -8,6 +8,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">edit-find-symbolic</property>
   </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">user-trash-symbolic</property>
+  </object>
   <template class="EphyHistoryDialog" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
@@ -25,15 +30,16 @@
         <property name="show_close_button">True</property>
         <child>
           <object class="GtkButton" id="forget_all_button">
-            <property name="label" translatable="yes">C_lear all</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="action_name">history.forget-all</property>
-            <property name="use_underline">True</property>
+            <property name="image">image2</property>
+            <property name="always_show_image">True</property>
+            <property name="tooltip_text" translatable="yes">Remove all history</property>
+            <accelerator key="Delete" signal="clicked" modifiers="GDK_SHIFT_MASK"/>
             <style>
               <class name="destructive-action"/>
-              <class name="text-button"/>
             </style>
           </object>
         </child>
