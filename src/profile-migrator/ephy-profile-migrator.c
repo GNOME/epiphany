@@ -353,6 +353,7 @@ migrate_bookmarks (void)
   xmlDocPtr doc;
   xmlNodePtr child;
   xmlNodePtr root;
+  GError *error;
 
   filename = g_build_filename (legacy_profile_dir (),
                                EPHY_BOOKMARKS_FILE,
@@ -385,10 +386,10 @@ migrate_bookmarks (void)
     child = child->next;
   }
 
-  /* FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=772668 */
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
-                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                             NULL);
+  if (!ephy_bookmarks_manager_save_sync (manager, &error)) {
+    g_warning ("Failed to save bookmarks: %s", error->message);
+    g_error_free (error);
+  }
 
   xmlFreeDoc (doc);
   g_object_unref (manager);

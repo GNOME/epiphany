@@ -421,9 +421,10 @@ ephy_bookmark_properties_grid_finalize (GObject *object)
   if (self->bookmark_is_modified && !self->bookmark_is_removed)
     g_signal_emit_by_name (self->manager, "synchronizable-modified", self->bookmark, FALSE);
 
-  ephy_bookmarks_manager_save_to_file_async (self->manager, NULL,
-                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                             NULL);
+  ephy_bookmarks_manager_save (self->manager,
+                               ephy_bookmarks_manager_save_warn_on_error_cancellable (self->manager),
+                               ephy_bookmarks_manager_save_warn_on_error_cb,
+                               NULL);
 
   G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->finalize (object);
 }

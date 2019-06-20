@@ -105,7 +105,12 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
   gsize length;
   guint i;
 
-  /* Create a new table to hold data stored in file. */
+  /* Create a new table to hold data stored in file.
+   *
+   * FIXME: This uses mmap so it's doing sync I/O, which is not cool. It's
+   * not straightforward to fix, but it would be nice to have an async
+   * constructor in GVDB. Then we could make ephy_bookmarks_import() async.
+   */
   root_table = gvdb_table_new (filename, TRUE, error);
   if (!root_table) {
     res = FALSE;

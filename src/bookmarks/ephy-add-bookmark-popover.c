@@ -123,9 +123,10 @@ ephy_add_bookmark_popover_closed_cb (GtkPopover *popover,
   self = EPHY_ADD_BOOKMARK_POPOVER (popover);
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
 
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
-                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                             NULL);
+  ephy_bookmarks_manager_save (manager,
+                               ephy_bookmarks_manager_save_warn_on_error_cancellable (manager),
+                               ephy_bookmarks_manager_save_warn_on_error_cb,
+                               NULL);
 
   g_clear_pointer (&self->address, g_free);
   g_clear_pointer (&self->grid, gtk_widget_destroy);
@@ -184,9 +185,10 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
                                                  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY);
   }
 
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
-                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                             NULL);
+  ephy_bookmarks_manager_save (manager,
+                               ephy_bookmarks_manager_save_warn_on_error_cancellable (manager),
+                               ephy_bookmarks_manager_save_warn_on_error_cb,
+                               NULL);
 
   gtk_widget_hide (GTK_WIDGET (self));
 }
