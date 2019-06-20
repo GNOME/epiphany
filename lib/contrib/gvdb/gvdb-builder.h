@@ -26,25 +26,35 @@
 
 typedef struct _GvdbItem GvdbItem;
 
-GHashTable *            gvdb_hash_table_new                             (GHashTable    *parent,
-                                                                         const gchar   *key);
+GHashTable *            gvdb_hash_table_new                             (GHashTable          *parent,
+                                                                         const gchar         *key);
 
-GvdbItem *              gvdb_hash_table_insert                          (GHashTable    *table,
-                                                                         const gchar   *key);
-void                    gvdb_hash_table_insert_string                   (GHashTable    *table,
-                                                                         const gchar   *key,
-                                                                         const gchar   *value);
+GvdbItem *              gvdb_hash_table_insert                          (GHashTable          *table,
+                                                                         const gchar         *key);
+void                    gvdb_hash_table_insert_string                   (GHashTable          *table,
+                                                                         const gchar         *key,
+                                                                         const gchar         *value);
 
-void                    gvdb_item_set_value                             (GvdbItem      *item,
-                                                                         GVariant      *value);
-void                    gvdb_item_set_hash_table                        (GvdbItem      *item,
-                                                                         GHashTable    *table);
-void                    gvdb_item_set_parent                            (GvdbItem      *item,
-                                                                         GvdbItem      *parent);
+void                    gvdb_item_set_value                             (GvdbItem            *item,
+                                                                         GVariant            *value);
+void                    gvdb_item_set_hash_table                        (GvdbItem            *item,
+                                                                         GHashTable          *table);
+void                    gvdb_item_set_parent                            (GvdbItem            *item,
+                                                                         GvdbItem            *parent);
 
-gboolean                gvdb_table_write_contents                       (GHashTable     *table,
-                                                                         const gchar    *filename,
-                                                                         gboolean        byteswap,
-                                                                         GError        **error);
+gboolean                gvdb_table_write_contents                       (GHashTable          *table,
+                                                                         const gchar         *filename,
+                                                                         gboolean             byteswap,
+                                                                         GError             **error);
+
+void                    gvdb_table_write_contents_async                 (GHashTable          *table,
+                                                                         const gchar         *filename,
+                                                                         gboolean             byteswap,
+                                                                         GCancellable        *cancellable,
+                                                                         GAsyncReadyCallback  callback,
+                                                                         gpointer             user_data);
+gboolean                gvdb_table_write_contents_finish                (GHashTable          *table,
+                                                                         GAsyncResult        *result,
+                                                                         GError             **error);
 
 #endif /* __gvdb_builder_h__ */

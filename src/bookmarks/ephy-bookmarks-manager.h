@@ -35,42 +35,44 @@ G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMA
 #define EPHY_BOOKMARKS_MOBILE_TAG       N_("Mobile")
 #define FIREFOX_BOOKMARKS_MOBILE_FOLDER "Mobile Bookmarks"
 
-EphyBookmarksManager *ephy_bookmarks_manager_new                  (void);
+EphyBookmarksManager *ephy_bookmarks_manager_new                    (void);
 
-void         ephy_bookmarks_manager_add_bookmark                  (EphyBookmarksManager *self,
-                                                                   EphyBookmark         *bookmark);
-void         ephy_bookmarks_manager_add_bookmarks                 (EphyBookmarksManager *self,
-                                                                   GSequence            *bookmarks);
-void         ephy_bookmarks_manager_remove_bookmark               (EphyBookmarksManager *self,
-                                                                   EphyBookmark         *bookmark);
-EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_url          (EphyBookmarksManager *self,
-                                                                   const char           *url);
-EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_id           (EphyBookmarksManager *self,
-                                                                   const char           *id);
+void         ephy_bookmarks_manager_add_bookmark                    (EphyBookmarksManager *self,
+                                                                     EphyBookmark         *bookmark);
+void         ephy_bookmarks_manager_add_bookmarks                   (EphyBookmarksManager *self,
+                                                                     GSequence            *bookmarks);
+void         ephy_bookmarks_manager_remove_bookmark                 (EphyBookmarksManager *self,
+                                                                     EphyBookmark         *bookmark);
+EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_url            (EphyBookmarksManager *self,
+                                                                     const char           *url);
+EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_id             (EphyBookmarksManager *self,
+                                                                     const char           *id);
 
-void         ephy_bookmarks_manager_create_tag                    (EphyBookmarksManager *self,
-                                                                   const char           *tag);
-void         ephy_bookmarks_manager_delete_tag                    (EphyBookmarksManager *self,
-                                                                   const char           *tag);
-gboolean     ephy_bookmarks_manager_tag_exists                    (EphyBookmarksManager *self,
-                                                                   const char           *tag);
+void         ephy_bookmarks_manager_create_tag                      (EphyBookmarksManager *self,
+                                                                     const char           *tag);
+void         ephy_bookmarks_manager_delete_tag                      (EphyBookmarksManager *self,
+                                                                     const char           *tag);
+gboolean     ephy_bookmarks_manager_tag_exists                      (EphyBookmarksManager *self,
+                                                                     const char           *tag);
 
-GSequence   *ephy_bookmarks_manager_get_bookmarks                 (EphyBookmarksManager *self);
-GSequence   *ephy_bookmarks_manager_get_bookmarks_with_tag        (EphyBookmarksManager *self,
-                                                                   const char           *tag);
-GSequence   *ephy_bookmarks_manager_get_tags                      (EphyBookmarksManager *self);
+GSequence   *ephy_bookmarks_manager_get_bookmarks                   (EphyBookmarksManager *self);
+GSequence   *ephy_bookmarks_manager_get_bookmarks_with_tag          (EphyBookmarksManager *self,
+                                                                     const char           *tag);
+GSequence   *ephy_bookmarks_manager_get_tags                        (EphyBookmarksManager *self);
 
-void        ephy_bookmarks_manager_save_to_file_async             (EphyBookmarksManager *self,
-                                                                   GCancellable         *cancellable,
-                                                                   GAsyncReadyCallback   callback,
-                                                                   gpointer              user_data);
-gboolean     ephy_bookmarks_manager_save_to_file_finish           (EphyBookmarksManager *self,
-                                                                   GAsyncResult         *result,
-                                                                   GError              **error);
-void         ephy_bookmarks_manager_load_from_file                (EphyBookmarksManager *self);
+gboolean     ephy_bookmarks_manager_save_sync                       (EphyBookmarksManager  *self,
+                                                                     GError               **error);
+void         ephy_bookmarks_manager_save                            (EphyBookmarksManager  *self,
+                                                                     GCancellable          *cancellable,
+                                                                     GAsyncReadyCallback    callback,
+                                                                     gpointer               user_data);
+gboolean     ephy_bookmarks_manager_save_finish                     (EphyBookmarksManager  *self,
+                                                                     GAsyncResult          *result,
+                                                                     GError               **error);
 
-void         ephy_bookmarks_manager_save_to_file_warn_on_error_cb (GObject      *object,
-                                                                   GAsyncResult *result,
-                                                                   gpointer      user_data);
+void          ephy_bookmarks_manager_save_warn_on_error_cb          (GObject               *object,
+                                                                     GAsyncResult          *result,
+                                                                     gpointer               user_data);
+GCancellable *ephy_bookmarks_manager_save_warn_on_error_cancellable (EphyBookmarksManager  *self);
 
 G_END_DECLS
