@@ -512,6 +512,9 @@ gvdb_table_write_contents (GHashTable   *table,
   FileBuilder *fb;
   GString *str;
 
+  g_return_val_if_fail (table != NULL, FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
+
   fb = file_builder_new (byteswap);
   file_builder_add_hash (fb, table, &root);
   str = file_builder_serialise (fb, root);
@@ -520,4 +523,94 @@ gvdb_table_write_contents (GHashTable   *table,
   g_string_free (str, TRUE);
 
   return status;
+}
+
+typedef struct {
+  GString *contents;
+  GFile *file;
+} WriteContentsData;
+
+static WriteContentsData *
+write_contents_data_new (GString    *contents,
+                         GFile      *file)
+{
+  WriteContentsData *data;
+
+  data = g_slice_new (WriteContentsData);
+  data->contents = contents;
+  data->file = file;
+
+  return data;
+}
+
+static void
+write_contents_data_free (WriteContentsData *data)
+{
+  g_string_free (data->contents, TRUE);
+  g_object_unref (data->file);
+  g_slice_free (WriteContentsData, data);
+}
+
+static void
+replace_contents_cb (GObject      *source_object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  GTask *task = user_data;
+  WriteContentsData *data = g_task_get_task_data (task);
+  GError *error = NULL;
+
+  if (!g_file_replace_contents_finish (data->file, result, NULL, &error))
+    {
+      g_task_return_error (task, error);
+      g_object_unref (task);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+  g_object_unref (task);
+}
+
+void
+gvdb_table_write_contents_async (GHashTable          *table,
+                                 const gchar         *filename,
+                                 gboolean             byteswap,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  struct gvdb_pointer root;
+  FileBuilder *fb;
+  WriteContentsData *data;
+  GString *str;
+  GFile *file;
+  GTask *task;
+
+  g_return_if_fail (table != NULL);
+  g_return_if_fail (filename != NULL);
+
+  fb = file_builder_new (byteswap);
+  file_builder_add_hash (fb, table, &root);
+  str = file_builder_serialise (fb, root);
+
+  file = g_file_new_for_path (filename);
+  data = write_contents_data_new (str, file);
+
+  task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_task_data (task, data, (GDestroyNotify)write_contents_data_free);
+
+  g_file_replace_contents_async (file, str->str, str->len,
+                                 NULL, FALSE,
+                                 G_FILE_CREATE_PRIVATE | G_FILE_CREATE_REPLACE_DESTINATION,
+                                 cancellable, replace_contents_cb, task);
+}
+
+gboolean
+gvdb_table_write_contents_finish (GHashTable    *table,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
