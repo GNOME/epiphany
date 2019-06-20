@@ -24,8 +24,13 @@
 
 G_BEGIN_DECLS
 
-gboolean        ephy_bookmarks_export       (EphyBookmarksManager  *manager,
-                                             const char            *filename,
-                                             GError               **error);
+void            ephy_bookmarks_export        (EphyBookmarksManager  *manager,
+                                              const char            *filename,
+                                              GCancellable          *cancellable,
+                                              GAsyncReadyCallback    callback,
+                                              gpointer               user_data);
+gboolean        ephy_bookmarks_export_finish (EphyBookmarksManager  *manager,
+                                              GAsyncResult          *result,
+                                              GError               **error);
 
 G_END_DECLS

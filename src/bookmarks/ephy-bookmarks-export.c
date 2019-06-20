@@ -63,7 +63,8 @@ build_variant (EphyBookmark *bookmark)
 }
 
 static void
-add_bookmark_to_table (EphyBookmark *bookmark, GHashTable *table)
+add_bookmark_to_table (EphyBookmark *bookmark,
+                       GHashTable   *table)
 {
   gvdb_hash_table_insert_variant (table,
                                   ephy_bookmark_get_url (bookmark),
@@ -71,19 +72,41 @@ add_bookmark_to_table (EphyBookmark *bookmark, GHashTable *table)
 }
 
 static void
-add_tag_to_table (const char *tag, GHashTable *table)
+add_tag_to_table (const char *tag,
+                  GHashTable *table)
 {
   gvdb_hash_table_insert (table, tag);
 }
 
-gboolean
-ephy_bookmarks_export (EphyBookmarksManager  *manager,
-                       const char            *filename,
-                       GError               **error)
+static void
+write_contents_cb (GObject      *source_object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  GHashTable *root_table;
+  GError *error = NULL;
+
+  root_table = g_task_get_task_data (task);
+
+  if (!gvdb_table_write_contents_finish (root_table, result, &error)) {
+    g_task_return_error (task, error);
+    return;
+  }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+void
+ephy_bookmarks_export (EphyBookmarksManager *manager,
+                       const char           *filename,
+                       GCancellable         *cancellable,
+                       GAsyncReadyCallback   callback,
+                       gpointer              user_data)
 {
   GHashTable *root_table;
   GHashTable *table;
-  gboolean result;
+  GTask *task;
 
   root_table = gvdb_hash_table_new (NULL, NULL);
 
@@ -95,8 +118,19 @@ ephy_bookmarks_export (EphyBookmarksManager  *manager,
   g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks (manager), (GFunc)add_bookmark_to_table, table);
   g_hash_table_unref (table);
 
-  result = gvdb_table_write_contents (root_table, filename, FALSE, error);
-  g_hash_table_unref (root_table);
+  task = g_task_new (manager, cancellable, callback, user_data);
+  g_task_set_task_data (task, root_table, (GDestroyNotify)g_hash_table_unref);
 
-  return result;
+  gvdb_table_write_contents_async (root_table, filename, FALSE,
+                                   cancellable, write_contents_cb, task);
+}
+
+gboolean
+ephy_bookmarks_export_finish (EphyBookmarksManager  *manager,
+                              GAsyncResult          *result,
+                              GError               **error)
+{
+  g_assert (g_task_is_valid (result, manager));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
