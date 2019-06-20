@@ -435,6 +435,29 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_widget_show_all (dialog);
 }
 
+static void
+bookmarks_export_cb (GObject      *source_object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (source_object);
+  GtkWidget *export_info_dialog;
+  gboolean exported;
+  g_autoptr(GError) error = NULL;
+
+  exported = ephy_bookmarks_export_finish (manager, result, &error);
+
+  export_info_dialog = gtk_message_dialog_new (GTK_WINDOW (user_data),
+                                               GTK_DIALOG_MODAL,
+                                               exported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                               GTK_BUTTONS_OK,
+                                               "%s",
+                                               exported ? _("Bookmarks successfully exported!") :
+                                                          error->message);
+  gtk_dialog_run (GTK_DIALOG (export_info_dialog));
+  gtk_widget_destroy (export_info_dialog);
+}
+
 void
 window_cmd_export_bookmarks (GSimpleAction *action,
                              GVariant      *parameter,
@@ -442,13 +465,12 @@ window_cmd_export_bookmarks (GSimpleAction *action,
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkFileChooser *dialog;
-  GtkWidget *export_info_dialog;
   int chooser_response;
-  gboolean exported;
   GtkFileFilter *filter;
+  GtkWindow *window = user_data;
 
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
-                                                          GTK_WINDOW (user_data),
+                                                          window,
                                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                                           _("_Save"),
                                                           _("_Cancel")));
@@ -463,24 +485,13 @@ window_cmd_export_bookmarks (GSimpleAction *action,
 
   chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
   if (chooser_response == GTK_RESPONSE_ACCEPT) {
-    GError *error = NULL;
     char *filename;
 
     gtk_native_dialog_hide (GTK_NATIVE_DIALOG (dialog));
 
     filename = gtk_file_chooser_get_filename (dialog);
-    exported = ephy_bookmarks_export (manager, filename, &error);
+    ephy_bookmarks_export (manager, filename, NULL, bookmarks_export_cb, window);
     g_free (filename);
-
-    export_info_dialog = gtk_message_dialog_new (GTK_WINDOW (user_data),
-                                                 GTK_DIALOG_MODAL,
-                                                 exported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
-                                                 GTK_BUTTONS_OK,
-                                                 "%s",
-                                                 exported ? _("Bookmarks successfully exported!") :
-                                                            error->message);
-    gtk_dialog_run (GTK_DIALOG (export_info_dialog));
-    gtk_widget_destroy (export_info_dialog);
   }
 
   g_object_unref (dialog);
