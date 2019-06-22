@@ -42,8 +42,8 @@ get_bookmarks_from_table (GvdbTable *table)
 {
   GSequence *bookmarks = NULL;
   char **list = NULL;
-  int length;
-  int i;
+  gsize length;
+  guint i;
 
   bookmarks = g_sequence_new (g_object_unref);
 
@@ -102,8 +102,8 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
   GSequence *bookmarks = NULL;
   char **list = NULL;
   gboolean res = TRUE;
-  int length;
-  int i;
+  gsize length;
+  guint i;
 
   /* Create a new table to hold data stored in file. */
   root_table = gvdb_table_new (filename, TRUE, error);

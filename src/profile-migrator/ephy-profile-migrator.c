@@ -842,7 +842,7 @@ migrate_bookmarks_timestamp (void)
   char **tags = NULL;
   char **urls = NULL;
   char *filename;
-  int length;
+  gsize length;
 
   filename = g_build_filename (legacy_profile_dir (), EPHY_BOOKMARKS_FILE, NULL);
   root_table_in = gvdb_table_new (filename, TRUE, &error);
@@ -869,11 +869,11 @@ migrate_bookmarks_timestamp (void)
   tags_table_out = gvdb_hash_table_new (root_table_out, "tags");
 
   tags = gvdb_table_get_names (tags_table_in, &length);
-  for (int i = 0; i < length; i++)
+  for (guint i = 0; i < length; i++)
     gvdb_hash_table_insert (tags_table_out, tags[i]);
 
   urls = gvdb_table_get_names (bookmarks_table_in, &length);
-  for (int i = 0; i < length; i++) {
+  for (guint i = 0; i < length; i++) {
     GVariant *value = gvdb_table_get_value (bookmarks_table_in, urls[i]);
     GVariant *new_value = convert_bookmark_timestamp (value);
     if (new_value != NULL) {
