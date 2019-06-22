@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-06-19 18:55+0000\n"
-"PO-Revision-Date: 2019-06-21 00:34+0200\n"
+"POT-Creation-Date: 2019-06-22 14:51+0000\n"
+"PO-Revision-Date: 2019-06-22 18:50+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -2134,7 +2134,7 @@ msgstr "Prekidanje…"
 msgid "Starting…"
 msgstr "Pokretanje…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:147
+#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:294
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -2158,7 +2158,7 @@ msgstr "Sve datoteke"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:631 src/ephy-history-dialog.c:392
+#: lib/widgets/ephy-location-entry.c:631 src/ephy-history-dialog.c:371
 msgid "Cl_ear"
 msgstr "Ob_riši"
 
@@ -2337,15 +2337,15 @@ msgstr "Ponovno učitaj trenutnu stranicu"
 msgid "Stop loading the current page"
 msgstr "Zaustavi učitavanje trenutne stranice"
 
-#: src/ephy-history-dialog.c:310
+#: src/ephy-history-dialog.c:275
 msgid "Remove the selected pages from history"
 msgstr "Ukloni odabrane stranice iz povijesti"
 
-#: src/ephy-history-dialog.c:382
+#: src/ephy-history-dialog.c:361
 msgid "Clear browsing history?"
 msgstr "Obriši povijest pregledavanja?"
 
-#: src/ephy-history-dialog.c:386
+#: src/ephy-history-dialog.c:365
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2353,7 +2353,7 @@ msgstr ""
 "Brisanje povijesti pregledavanja će trajno ukloniti sve poveznice iz "
 "povijesti."
 
-#: src/ephy-history-dialog.c:842
+#: src/ephy-history-dialog.c:822
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Nije moguće mijenjati povijest kada ste u anonimnom načinu rada."
 
@@ -2889,23 +2889,39 @@ msgstr "Povezana kôdiranja"
 msgid "Show all…"
 msgstr "Prikaži sve…"
 
-#: src/resources/gtk/history-dialog.ui:24
+#: src/resources/gtk/history-dialog.ui:29
 msgid "History"
 msgstr "Povijest"
 
-#: src/resources/gtk/history-dialog.ui:28
-msgid "C_lear all"
-msgstr "O_briši sve"
+#: src/resources/gtk/history-dialog.ui:39
+msgid "Remove all history"
+msgstr "Ukloni svu povijest"
 
-#: src/resources/gtk/history-dialog.ui:73
+#: src/resources/gtk/history-dialog.ui:79
 msgid "Search history"
 msgstr "Pretraži povijest"
 
-#: src/resources/gtk/history-dialog.ui:156
+#: src/resources/gtk/history-dialog.ui:135
+msgid "The History is Empty"
+msgstr "Povijest je prazna"
+
+#: src/resources/gtk/history-dialog.ui:150
+msgid "Visited pages will be listed here"
+msgstr "Posjećene stranice će biti navedene ovdje"
+
+#: src/resources/gtk/history-dialog.ui:244
+msgid "No Results Found"
+msgstr "Nema pronađenih rezultata"
+
+#: src/resources/gtk/history-dialog.ui:259
+msgid "Try a different search"
+msgstr "Pokušaj drugačiju pretragu"
+
+#: src/resources/gtk/history-dialog.ui:303
 msgid "_Copy Location"
 msgstr "_Kopiraj lokaciju"
 
-#: src/resources/gtk/history-dialog.ui:165
+#: src/resources/gtk/history-dialog.ui:312
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -3871,6 +3887,9 @@ msgstr ""
 #: src/window-commands.c:2346
 msgid "_Enable"
 msgstr "_Omogući"
+
+#~ msgid "C_lear all"
+#~ msgstr "O_briši sve"
 
 #~ msgid "There are ongoing downloads."
 #~ msgstr "Trenutno su preuzimanja u tijeku."
@@ -5908,9 +5927,6 @@ msgstr "_Omogući"
 #~ msgstr ""
 #~ "Adresa nije učitana, pošto pokazuje na nesiguran protokol te bi mogla "
 #~ "biti prijetnja sigurnosti vašeg sustava."
-
-#~ msgid "No address found."
-#~ msgstr "Adresa nije pronađena."
 
 #~ msgid "No web address could be found in this file."
 #~ msgstr "U ovoj datoteci ne postoje web adrese"
