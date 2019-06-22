@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
 "POT-Creation-Date: 2019-06-11 14:15+0000\n"
-"PO-Revision-Date: 2019-06-14 09:58+0300\n"
+"PO-Revision-Date: 2019-06-22 19:33+0300\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Greek, Modern (1453-) <opensuse-translation-el@opensuse.org>\n"
 "Language: el\n"
@@ -211,19 +211,15 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:65
 msgid "Whether to ask for setting browser as default"
 msgstr ""
+"Εάν θέλετε να γίνεται η ερώτηση για ορισμό του περιηγητή ως προεπιλεγμένου"
 
 #: data/org.gnome.epiphany.gschema.xml:66
-#, fuzzy
-#| msgid ""
-#| "When this option is set to true, tabs will not start loading until the "
-#| "user switches to them, upon session restore."
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr ""
-"Εάν αυτή η επιλογή οριστεί σε αληθή, οι καρτέλες δεν θα ξεκινούν να "
-"φορτώνονται μέχρι ο χρήστης να αλλάξει σε αυτές, κατά την επαναφορά της "
-"συνεδρίας."
+"Εάν αυτή η επιλογή οριστεί σε αληθή, ο περιηγητής θα ερωτά να γίνει "
+"προεπιλεγμένος εάν δεν είναι ήδη."
 
 #: data/org.gnome.epiphany.gschema.xml:70
 msgid "Start in incognito mode"
@@ -298,6 +294,8 @@ msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
+"Επιλέγει το στυλ του κύριου κειμένου για άρθρα σε λειτουργία ανάγνωσης. Οι "
+"πιθανές τιμές είναι «sans» και «serif»."
 
 #: data/org.gnome.epiphany.gschema.xml:104
 msgid "Reader mode color scheme."
@@ -591,20 +589,16 @@ msgid "Last upload directory"
 msgstr "Τελευταίος κατάλογος μεταφόρτωσης"
 
 #: data/org.gnome.epiphany.gschema.xml:239
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
-msgstr "Επιλογή ενός καταλόγου"
+msgstr "Να παρακολουθείται ο τελευταίος κατάλογος μεταφόρτωσης"
 
 #: data/org.gnome.epiphany.gschema.xml:243
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Last download directory"
-msgstr "Επιλογή ενός καταλόγου"
+msgstr "Τελευταίος κατάλογος λήψης"
 
 #: data/org.gnome.epiphany.gschema.xml:244
 msgid "Keep track of last download directory"
-msgstr ""
+msgstr "Να παρακολουθείται ο τελευταίος κατάλογος λήψης"
 
 #: data/org.gnome.epiphany.gschema.xml:248
 msgid "Hardware acceleration policy"
@@ -621,10 +615,8 @@ msgid ""
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:253
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Always ask for download directory"
-msgstr "Επιλογή ενός καταλόγου"
+msgstr "Να γίνεται πάντα ερώτηση για τον κατάλογο λήψης"
 
 #: data/org.gnome.epiphany.gschema.xml:254
 msgid "Whether to present a directory chooser dialog for every download."
@@ -960,12 +952,10 @@ msgstr ""
 "λάβει αυτόματα την απόφαση κατόπιν αιτήματος."
 
 #: data/org.gnome.epiphany.gschema.xml:434
-#, fuzzy
-#| msgid "Decision to apply when webcam permission is requested for this host"
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
-"Η απόφαση που εφαρμόζεται όταν ζητείται άδεια χρήσης κάμερας για αυτόν τον "
+"Η απόφαση που εφαρμόζεται όταν ζητείται άδεια διαφήμισης για αυτόν τον "
 "κεντρικό υπολογιστή"
 
 #: data/org.gnome.epiphany.gschema.xml:435
@@ -1095,10 +1085,8 @@ msgid "Download finished"
 msgstr "Η λήψη ολοκληρώθηκε"
 
 #: embed/ephy-download.c:821
-#, fuzzy
-#| msgid "Download started"
 msgid "Download requested"
-msgstr "Η λήψη ξεκίνησε"
+msgstr "Αιτήθηκε λήψη"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
 #: src/resources/gtk/prefs-dialog.ui:1338
@@ -1125,10 +1113,8 @@ msgstr "Από: %s"
 
 #. Question
 #: embed/ephy-download.c:846
-#, fuzzy
-#| msgid "Do you want to leave this website?"
 msgid "Where do you want to save the file?"
-msgstr "Θέλετε να εγκαταλείψετε αυτή την ιστοσελίδα;"
+msgstr "Που θέλετε να αποθηκεύσετε το αρχείο;"
 
 #. File Chooser Button
 #: embed/ephy-download.c:851
@@ -1890,6 +1876,9 @@ msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr ""
+"Ελέγξτε το όνομα του αρχείου για τη χρήση κεφαλαίων ή άλλα σφάλματα "
+"πληκτρολόγησης. Ελέγξτε επίσης εάν έχει μετακινηθεί, μετονομαστεί ή "
+"διαγραφεί."
 
 #: embed/ephy-web-view.c:2548
 msgid "None specified"
@@ -1906,7 +1895,7 @@ msgstr "_Εντάξει"
 #: embed/web-process-extension/ephy-web-process-extension.c:210
 #, c-format
 msgid "Epiphany adblocker refused to load %s"
-msgstr ""
+msgstr "Το Epiphany adblocker αρνήθηκε την φόρτωση του %s"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -2302,16 +2291,13 @@ msgstr ""
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: lib/widgets/ephy-security-popover.c:191
-#, fuzzy, c-format
-#| msgid ""
-#| "%s has no security. An attacker could see any information you send, or "
-#| "control the content that you see."
+#, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see."
 msgstr ""
-"Το %s δεν παρέχει ασφάλεια. Ο εισβολέας μπορεί να δει τις πληροφορίες που "
-"στέλνετε, ή να διαχειριστεί το περιεχόμενο που βλέπετε."
+"Αυτή η ιστοσελίδα δεν παρέχει ασφάλεια. Ο εισβολέας μπορεί να δει τις "
+"πληροφορίες που στέλνετε, ή να διαχειριστεί το περιεχόμενο που βλέπετε."
 
 #. Label in certificate popover when site sends mixed content.
 #: lib/widgets/ephy-security-popover.c:198
@@ -2337,7 +2323,7 @@ msgstr "Όχι"
 
 #: lib/widgets/ephy-security-popover.c:507
 msgid "Ask"
-msgstr ""
+msgstr "Ερώτηση"
 
 #: lib/widgets/ephy-security-popover.c:520
 msgid "Permissions"
@@ -2467,10 +2453,8 @@ msgstr ""
 "ανώνυμης περιήγησης."
 
 #: src/ephy-main.c:112
-#, fuzzy
-#| msgid "Open a new browser window"
 msgid "Open a new browser window instead of a new tab"
-msgstr "Άνοιγμα ενός νέου παραθύρου"
+msgstr "Άνοιγμα ενός νέου παραθύρου περιηγητή αντί μιας νέας καρτέλας"
 
 #: src/ephy-main.c:114
 #, fuzzy
@@ -2483,34 +2467,24 @@ msgid "FILE"
 msgstr "ΑΡΧΕΙΟ"
 
 #: src/ephy-main.c:116
-#, fuzzy
-#| msgid "Start an instance in netbank mode"
 msgid "Start an instance with user data read-only"
-msgstr "Έναρξη συνεδρίας σε κατάσταση δικτυακής τράπεζας"
+msgstr "Έναρξη συνεδρίας με τα δεδομένα χρήστη σε κατάσταση μόνο για ανάγνωση"
 
 #: src/ephy-main.c:118
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance with separate user data"
-msgstr "Έναρξη μιας ιδιωτικής συνεδρίας"
+msgstr "Έναρξη μιας ιδιωτικής συνεδρίας με ξεχωριστά δεδομένα χρήστη"
 
 #: src/ephy-main.c:121
-#, fuzzy
-#| msgid "Start the browser in application mode"
 msgid "Start a private instance in web application mode"
-msgstr "Εκκίνηση του περιηγητή σε κατάσταση εφαρμογής"
+msgstr "Έναρξη μιας ιδιωτικής συνεδρίας σε κατάσταση εφαρμογής ιστού"
 
 #: src/ephy-main.c:123
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance for WebDriver control"
-msgstr "Έναρξη μιας ιδιωτικής συνεδρίας"
+msgstr "Έναρξη μιας ιδιωτικής συνεδρίας για έλεγχο WebDriver"
 
 #: src/ephy-main.c:125
-#, fuzzy
-#| msgid "Profile directory to use in the private instance"
 msgid "Custom profile directory for private instance"
-msgstr "Κατάλογος προφίλ για χρήση σε ιδιωτική συνεδρία"
+msgstr "Προσαρμοσμένος κατάλογος προφίλ για ιδιωτική συνεδρία"
 
 #: src/ephy-main.c:125
 msgid "DIR"
@@ -2543,10 +2517,8 @@ msgid "Bang"
 msgstr "Χτύπημα"
 
 #: src/ephy-suggestion-model.c:414
-#, fuzzy
-#| msgid "Switch to this tab"
 msgid "Switch to Tab"
-msgstr "Αλλαγή σε αυτή την καρτέλα"
+msgstr "Εναλλαγή σε καρτέλα"
 
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
@@ -2570,7 +2542,7 @@ msgstr "_Απόρριψη φόρμας"
 
 #: src/ephy-window.c:283
 msgid "There are multiple tabs open."
-msgstr ""
+msgstr "Υπάρχουν ανοικτές πολλαπλές καρτέλες."
 
 #: src/ephy-window.c:284
 msgid "If you close this window, all open tabs will be lost"
@@ -2712,10 +2684,8 @@ msgid "Search the Web for “%s”"
 msgstr "Αναζήτηση στον Ιστό για «%s»"
 
 #: src/ephy-window.c:2852
-#, fuzzy
-#| msgid "Download Link"
 msgid "Download operation"
-msgstr "Λήψη δεσμού"
+msgstr "Λειτουργία λήψης"
 
 #: src/ephy-window.c:2854
 msgid "Show details"
@@ -2725,14 +2695,12 @@ msgstr "Εμφάνιση λεπτομερειών"
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ενεργή λειτουργία λήψης"
+msgstr[1] "%d ενεργές λειτουργίες λήψης"
 
 #: src/ephy-window.c:3480
-#, fuzzy
-#| msgid "Open the page in your default browser"
 msgid "Set Web as your default browser?"
-msgstr "Άνοιγμα της σελίδας στον προεπιλεγμένο περιηγητή"
+msgstr "Ορισμός του Ιστού ως προεπιλεγμένου περιηγητή;"
 
 #: src/ephy-window.c:3482
 #, fuzzy
@@ -2811,11 +2779,11 @@ msgstr "Serif"
 
 #: src/prefs-dialog.c:2144
 msgid "Light"
-msgstr ""
+msgstr "Ανοιχτό"
 
 #: src/prefs-dialog.c:2145
 msgid "Dark"
-msgstr ""
+msgstr "Σκούρο"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1427
 msgid "Executes only the n-th migration step"
@@ -3052,38 +3020,28 @@ msgid "_Duplicate"
 msgstr "_Διπλότυπο"
 
 #: src/resources/gtk/notebook-context-menu.ui:21
-#, fuzzy
-#| msgid "_New Tab"
 msgid "P_in Tab"
-msgstr "_Νέα καρτέλα"
+msgstr "_Καρφίτσωμα καρτέλας"
 
 #: src/resources/gtk/notebook-context-menu.ui:25
 msgid "Unpi_n Tab"
-msgstr ""
+msgstr "_Αναίρεση καρφιτσώματος καρτέλας"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
-#, fuzzy
-#| msgid "Reopen Closed _Tab"
 msgid "Reo_pen Closed Tab"
-msgstr "Επαναφορά των κλειστών _καρτελών"
+msgstr "_Επαναφορά των κλειστών καρτελών"
 
 #: src/resources/gtk/notebook-context-menu.ui:37
-#, fuzzy
-#| msgid "Move Tab _Left"
 msgid "Close Tabs to the _Left"
-msgstr "Μετακίνηση καρτέλας _αριστερά"
+msgstr "Κλείσιμο καρτελών προς τα _αριστερά"
 
 #: src/resources/gtk/notebook-context-menu.ui:41
-#, fuzzy
-#| msgid "Move Tab _Right"
 msgid "Close Tabs to the _Right"
-msgstr "Μετακίνηση καρτέλας _δεξιά"
+msgstr "Κλείσιμο καρτελών προς τα _δεξιά"
 
 #: src/resources/gtk/notebook-context-menu.ui:45
-#, fuzzy
-#| msgid "Close this tab"
 msgid "Close _Other Tabs"
-msgstr "Κλείσιμο αυτής της καρτέλας"
+msgstr "Κλείσιμο ό_λων των καρτελών"
 
 #: src/resources/gtk/notebook-context-menu.ui:49
 msgid "_Close"
@@ -3145,10 +3103,8 @@ msgid "Install Site as Web _Application…"
 msgstr "Εγκατάσταση ως διαδικτυακή _εφαρμογή…"
 
 #: src/resources/gtk/page-menu-popover.ui:220
-#, fuzzy
-#| msgid "Web Application Icon"
 msgid "Open Appli_cation Manager"
-msgstr "Εικονίδιο εφαρμογής Ιστού"
+msgstr "Άνοιγμα διαχειριστή _εφαρμογής"
 
 #: src/resources/gtk/page-menu-popover.ui:237
 #, fuzzy
@@ -3239,10 +3195,8 @@ msgid "Homepage"
 msgstr "Αρχική σελίδα"
 
 #: src/resources/gtk/prefs-dialog.ui:93
-#, fuzzy
-#| msgid "Most Visited"
 msgid "Most _visited pages"
-msgstr "Πιο δημοφιλή"
+msgstr "Πιο _δημοφιλής ιστοσελίδες"
 
 #: src/resources/gtk/prefs-dialog.ui:100
 msgid "_Blank page"
@@ -3270,7 +3224,7 @@ msgstr "Τίτλος:"
 
 #: src/resources/gtk/prefs-dialog.ui:255
 msgid "Always ask where to dow_nload files"
-msgstr ""
+msgstr "Να γίνεται ερώτηση για την τοποθεσία _λήψης αρχείων"
 
 #: src/resources/gtk/prefs-dialog.ui:275
 msgid "_Download folder:"
@@ -3293,10 +3247,8 @@ msgid "Session"
 msgstr "Συνεδρία"
 
 #: src/resources/gtk/prefs-dialog.ui:359
-#, fuzzy
-#| msgid "Start an instance in incognito mode"
 msgid "Always start browser in _incognito mode"
-msgstr "Έναρξη συνεδρίας σε κατάσταση ανώνυμης περιήγησης"
+msgstr "Έναρξη περιηγητή σε κατάσταση _ανώνυμης περιήγησης"
 
 #: src/resources/gtk/prefs-dialog.ui:366
 msgid "_Remember previous tabs on startup"
@@ -3452,10 +3404,6 @@ msgid "Firefox Sync"
 msgstr "Συγχρονισμός Firefox"
 
 #: src/resources/gtk/prefs-dialog.ui:1077
-#, fuzzy
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3463,7 +3411,7 @@ msgid ""
 msgstr ""
 "Συνδεθείτε με τον λογαριασμό σας στο Firefox για να συγχρονίσετε τα δεδομένα "
 "σας με την εφαρμογή Ιστός και το Firefox σε άλλους υπολογιστές. Η εφαρμογή "
-"Ιστός δεν παράγεται ή εγκρίνεται από την Mozilla."
+"Ιστός δεν είναι το Firefox και δεν παράγεται ή εγκρίνεται από την Mozilla."
 
 #: src/resources/gtk/prefs-dialog.ui:1111
 msgid "Firefox Account"
@@ -3950,7 +3898,7 @@ msgstr "Προηγούμενοι συντηρητές"
 
 #: src/window-commands.c:620
 msgid "Documented by"
-msgstr ""
+msgstr "Τεκμηρίωση από"
 
 #: src/window-commands.c:621
 msgid "Artwork by"
