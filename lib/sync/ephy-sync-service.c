@@ -1962,7 +1962,7 @@ ephy_sync_service_constructed (GObject *object)
 
   if (self->sync_periodically) {
     g_object_set (self->session,
-                  "user-agent", ephy_user_agent_get_internal (),
+                  "user-agent", ephy_user_agent_get (),
                   NULL);
 
     g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_FREQUENCY,

@@ -436,7 +436,7 @@ static void
 ephy_gsb_service_init (EphyGSBService *self)
 {
   self->session = soup_session_new ();
-  g_object_set (self->session, "user-agent", ephy_user_agent_get_internal (), NULL);
+  g_object_set (self->session, "user-agent", ephy_user_agent_get (), NULL);
 }
 
 static void

@@ -24,6 +24,6 @@
 
 G_BEGIN_DECLS
 
-const char *ephy_user_agent_get_internal (void);
+const char *ephy_user_agent_get (void);
 
 G_END_DECLS
