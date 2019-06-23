@@ -142,17 +142,8 @@ webkit_pref_callback_user_agent (GSettings  *settings,
                                  const char *key,
                                  gpointer    data)
 {
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  char *user_agent;
-
-  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-    user_agent = g_strdup_printf ("%s (Web App)", ephy_user_agent_get_internal ());
-  else
-    user_agent = g_strdup (ephy_user_agent_get_internal ());
-
-  webkit_settings_set_user_agent (webkit_settings, user_agent);
-
-  g_free (user_agent);
+  webkit_settings_set_user_agent (webkit_settings,
+                                  ephy_user_agent_get ());
 }
 
 static void
