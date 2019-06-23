@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-user-agent.h"
 
+#include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 
 #include <webkit2/webkit2.h>
@@ -28,9 +29,10 @@
 const char *
 ephy_user_agent_get_internal (void)
 {
-  WebKitSettings *settings;
   static char *user_agent = NULL;
-  gboolean mobile = FALSE;
+  WebKitSettings *settings;
+  gboolean mobile;
+  gboolean web_app;
 
   if (user_agent)
     return user_agent;
@@ -43,10 +45,13 @@ ephy_user_agent_get_internal (void)
   }
 
   mobile = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_MOBILE_USER_AGENT);
+  web_app = ephy_profile_dir_is_web_application ();
+
   settings = webkit_settings_new ();
-  user_agent = g_strdup_printf ("%s%s Epiphany/605.1.15",
+  user_agent = g_strdup_printf ("%s%s Epiphany/605.1.15%s",
                                 webkit_settings_get_user_agent (settings),
-                                mobile ? " Mobile" : "");
+                                mobile ? " Mobile" : "",
+                                web_app ? " (Web App)" : "");
   g_object_unref (settings);
 
   return user_agent;
