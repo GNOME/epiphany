@@ -140,3 +140,12 @@ if appstream_util.found()
     ]
   )
 endif
+
+line_up_parameters = executable(
+  'lineup-parameters',
+  'lineup-parameters.c',
+  dependencies: [
+    gio_dep,
+    gio_unix_dep,
+  ]
+)
