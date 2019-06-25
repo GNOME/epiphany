@@ -25,6 +25,7 @@ libephymain_sources = [
   'ephy-action-bar-end.c',
   'ephy-action-bar-start.c',
   'ephy-action-helper.c',
+  'ephy-data-dialog.c',
   'ephy-desktop-utils.c',
   'ephy-encoding-dialog.c',
   'ephy-encoding-row.c',
