@@ -681,7 +681,7 @@ ephy_bookmarks_manager_save_sync (EphyBookmarksManager  *self,
   gboolean result;
 
   context = g_main_context_new ();
-  data = g_new (SaveToFileData, 1);
+  data = g_new0 (SaveToFileData, 1);
   data->main_loop = g_main_loop_new (context, FALSE);
 
   g_main_context_push_thread_default (context);
@@ -690,7 +690,8 @@ ephy_bookmarks_manager_save_sync (EphyBookmarksManager  *self,
   g_main_context_pop_thread_default (context);
 
   result = data->result;
-  g_propagate_error (error, data->error);
+  if (data->error)
+    g_propagate_error (error, data->error);
 
   g_main_loop_unref (data->main_loop);
   g_free (data);
