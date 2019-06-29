@@ -64,6 +64,8 @@ G_DEFINE_TYPE_WITH_CODE (EphyPasswordManager, ephy_password_manager, G_TYPE_OBJE
 typedef struct {
   EphyPasswordManagerQueryCallback callback;
   gpointer user_data;
+  GList *records;
+  guint n_matches;
 } QueryAsyncData;
 
 typedef struct {
@@ -351,9 +353,9 @@ ephy_password_manager_get_usernames_for_origin (EphyPasswordManager *self,
 }
 
 static void
-secret_service_store_cb (SecretService         *service,
-                         GAsyncResult          *result,
-                         ManageRecordAsyncData *data)
+secret_password_store_cb (GObject               *source_object,
+                          GAsyncResult          *result,
+                          ManageRecordAsyncData *data)
 {
   GError *error = NULL;
   const char *origin;
@@ -362,7 +364,7 @@ secret_service_store_cb (SecretService         *service,
   origin = ephy_password_record_get_origin (data->record);
   username = ephy_password_record_get_username (data->record);
 
-  secret_service_store_finish (service, result, &error);
+  secret_password_store_finish (result, &error);
   if (error) {
     g_warning ("Failed to store password record for (%s, %s, %s, %s, %s): %s",
                origin,
@@ -384,7 +386,6 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                     EphyPasswordRecord  *record)
 {
   GHashTable *attributes;
-  SecretValue *value;
   const char *origin;
   const char *target_origin;
   const char *username;
@@ -424,14 +425,12 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                      username_field, password_field,
                                      modified);
 
-  value = secret_value_new (password, -1, "text/plain");
-  secret_service_store (NULL, EPHY_FORM_PASSWORD_SCHEMA,
-                        attributes, NULL, label, value, NULL,
-                        (GAsyncReadyCallback)secret_service_store_cb,
-                        manage_record_async_data_new (self, record));
+  secret_password_storev (EPHY_FORM_PASSWORD_SCHEMA,
+                          attributes, NULL, label, password, NULL,
+                          (GAsyncReadyCallback)secret_password_store_cb,
+                          manage_record_async_data_new (self, record));
 
   g_free (label);
-  secret_value_unref (value);
   g_hash_table_unref (attributes);
 }
 
@@ -511,63 +510,108 @@ ephy_password_manager_save (EphyPasswordManager *self,
 }
 
 static void
-secret_service_search_cb (SecretService  *service,
-                          GAsyncResult   *result,
-                          QueryAsyncData *data)
+retrieve_secret_cb (GObject        *source_object,
+                    GAsyncResult   *result,
+                    QueryAsyncData *data)
 {
-  GList *matches = NULL;
-  GList *records = NULL;
+  SecretRetrievable *retrievable = SECRET_RETRIEVABLE (source_object);
+  GHashTable *attributes = NULL;
+  const char *id;
+  const char *origin;
+  const char *target_origin;
+  const char *username;
+  const char *username_field;
+  const char *password_field;
+  const char *timestamp;
+  gint64 created;
+  gint64 modified;
+  const char *password;
+  gint64 server_time_modified;
+  EphyPasswordRecord *record;
+  SecretValue *value = NULL;
   GError *error = NULL;
 
-  matches = secret_service_search_finish (service, result, &error);
-  if (error) {
-    g_warning ("Failed to search secrets in password schema: %s", error->message);
+  value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
+  if (!value) {
+    g_warning ("Failed to retrieve password: %s", error->message);
     g_error_free (error);
     goto out;
   }
 
-  for (GList *l = matches; l && l->data; l = l->next) {
-    SecretItem *item = (SecretItem *)l->data;
-    GHashTable *attributes = secret_item_get_attributes (item);
-    SecretValue *value = secret_item_get_secret (item);
-    const char *id = g_hash_table_lookup (attributes, ID_KEY);
-    const char *origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
-    const char *target_origin = g_hash_table_lookup (attributes, TARGET_ORIGIN_KEY);
-    const char *username = g_hash_table_lookup (attributes, USERNAME_KEY);
-    const char *username_field = g_hash_table_lookup (attributes, USERNAME_FIELD_KEY);
-    const char *password_field = g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY);
-    const char *timestamp = g_hash_table_lookup (attributes, SERVER_TIME_MODIFIED_KEY);
-    const char *password = secret_value_get (value, NULL);
-    gint64 server_time_modified;
-    EphyPasswordRecord *record;
+  attributes = secret_retrievable_get_attributes (retrievable);
+  id = g_hash_table_lookup (attributes, ID_KEY);
+  origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
+  target_origin = g_hash_table_lookup (attributes, TARGET_ORIGIN_KEY);
+  username = g_hash_table_lookup (attributes, USERNAME_KEY);
+  username_field = g_hash_table_lookup (attributes, USERNAME_FIELD_KEY);
+  password_field = g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY);
+  timestamp = g_hash_table_lookup (attributes, SERVER_TIME_MODIFIED_KEY);
+  created = secret_retrievable_get_created (retrievable);
+  modified = secret_retrievable_get_modified (retrievable);
 
-    LOG ("Found password record for (%s, %s, %s, %s, %s)",
-         origin, target_origin, username, username_field, password_field);
+  LOG ("Found password record for (%s, %s, %s, %s, %s)",
+       origin, target_origin, username, username_field, password_field);
 
-    if (!id || !origin || !target_origin || !timestamp) {
-      LOG ("Password record is corrupted, skipping it...");
-      goto next;
-    }
-
-    record = ephy_password_record_new (id, origin, target_origin,
-                                       username, password,
-                                       username_field, password_field,
-                                       secret_item_get_created (item) * 1000,
-                                       secret_item_get_modified (item) * 1000);
-    server_time_modified = g_ascii_strtod (timestamp, NULL);
-    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),
-                                                  server_time_modified);
-    records = g_list_prepend (records, record);
-
-next:
-    secret_value_unref (value);
-    g_hash_table_unref (attributes);
+  if (!id || !origin || !target_origin || !timestamp) {
+    LOG ("Password record is corrupted, skipping it...");
+    goto out;
   }
 
+  password = secret_value_get_text (value);
+
+  record = ephy_password_record_new (id, origin, target_origin,
+                                     username, password,
+                                     username_field, password_field,
+                                     created * 1000,
+                                     modified * 1000);
+  server_time_modified = g_ascii_strtod (timestamp, NULL);
+  ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),
+                                                server_time_modified);
+  data->records = g_list_prepend (data->records, record);
+
 out:
-  if (data->callback)
-    data->callback (records, data->user_data);
-  query_async_data_free (data);
+  if (value)
+    secret_value_unref (value);
+  if (attributes)
+    g_hash_table_unref (attributes);
+  g_object_unref (retrievable);
+
+  if (--data->n_matches == 0) {
+    if (data->callback)
+      data->callback (data->records, data->user_data);
+    query_async_data_free (data);
+  }
+}
+
+static void
+secret_password_search_cb (GObject        *source_object,
+                           GAsyncResult   *result,
+                           QueryAsyncData *data)
+{
+  GList *matches;
+  GError *error = NULL;
+
+  matches = secret_password_search_finish (result, &error);
+  if (!matches) {
+    if (error) {
+      g_warning ("Failed to search secrets in password schema: %s", error->message);
+      g_error_free (error);
+    }
+    if (data->callback)
+      data->callback (NULL, data->user_data);
+    return;
+  }
+
+  data->n_matches = g_list_length (matches);
+
+  for (GList *l = matches; l; l = l->next) {
+    SecretRetrievable *retrievable = SECRET_RETRIEVABLE (l->data);
+    secret_retrievable_retrieve_secret (g_object_ref (retrievable),
+                                        NULL,
+                                        (GAsyncReadyCallback)retrieve_secret_cb,
+                                        data);
+  }
+
   g_list_free_full (matches, g_object_unref);
 }
 
@@ -594,25 +638,24 @@ ephy_password_manager_query (EphyPasswordManager              *self,
                                      username_field, password_field, -1);
   data = query_async_data_new (callback, user_data);
 
-  secret_service_search (NULL,
-                         EPHY_FORM_PASSWORD_SCHEMA,
-                         attributes,
-                         SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
-                         NULL,
-                         (GAsyncReadyCallback)secret_service_search_cb,
-                         data);
+  secret_password_searchv (EPHY_FORM_PASSWORD_SCHEMA,
+                           attributes,
+                           SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                           NULL,
+                           (GAsyncReadyCallback)secret_password_search_cb,
+                           data);
 
   g_hash_table_unref (attributes);
 }
 
 static void
-secret_service_clear_cb (SecretService *service,
-                         GAsyncResult  *result,
-                         gpointer       user_data)
+secret_password_clear_cb (GObject      *source_object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
 {
   GError *error = NULL;
 
-  secret_service_clear_finish (service, result, &error);
+  secret_password_clear_finish (result, &error);
   if (error) {
     g_warning ("Failed to clear secrets from password schema: %s", error->message);
     g_error_free (error);
@@ -651,9 +694,9 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
        ephy_password_record_get_username_field (record),
        ephy_password_record_get_password_field (record));
 
-  secret_service_clear (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
-                        (GAsyncReadyCallback)secret_service_clear_cb,
-                        replacement ? manage_record_async_data_new (self, replacement) : NULL);
+  secret_password_clearv (EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
+                          (GAsyncReadyCallback)secret_password_clear_cb,
+                          replacement ? manage_record_async_data_new (self, replacement) : NULL);
 
   ephy_password_manager_cache_remove (self,
                                       ephy_password_record_get_origin (record),
@@ -703,8 +746,8 @@ forget_all_cb (GList    *records,
   GHashTable *attributes;
 
   attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-  secret_service_clear (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
-                        (GAsyncReadyCallback)secret_service_clear_cb, NULL);
+  secret_password_clearv (EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
+                          (GAsyncReadyCallback)secret_password_clear_cb, NULL);
 
   for (GList *l = records; l && l->data; l = l->next)
     g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
