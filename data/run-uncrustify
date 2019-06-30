@@ -1,30 +1,27 @@
 #!/bin/bash
 
-DATA=$(dirname "$BASH_SOURCE")
-UNCRUSTIFY=$(command -v uncrustify)
+SOURCE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
+UNCRUSTIFY=$(command -v uncrustify)
 if [ -z "$UNCRUSTIFY" ];
 then
     echo "Uncrustify is not installed on your system."
     exit 1
 fi
 
-LINEUP_PARAMETERS="$DATA/../build/data/lineup-parameters"
-
+LINEUP_PARAMETERS="$SOURCE_ROOT/data/lineup-parameters"
 if [ ! -x "$LINEUP_PARAMETERS" ];
 then
-    echo "Script lineup-parameters does not exists here in (source directory)/data, probably because Epiphany was built in a different directory than the source directory.
-Copy the program in the (build directory)/data/lineup-parameters here in (source directory)/data and run again run-uncrustify.sh."
+    echo "lineup-parameters script is missing"
     exit 1
 fi
 
-
-for DIR in ../embed ../lib ../src ../tests
+for DIR in $SOURCE_ROOT/embed $SOURCE_ROOT/lib $SOURCE_ROOT/src $SOURCE_ROOT/tests
 do
    # Aligning prototypes is not working yet, so avoid headers
    for FILE in $(find "$DIR" -name "*.c" ! -path "*/contrib/*")
     do
-        "$UNCRUSTIFY" -c "$DATA/kr-gnome-indent.cfg" --no-backup "$FILE"
+        "$UNCRUSTIFY" -c "$SOURCE_ROOT/data/kr-gnome-indent.cfg" --no-backup "$FILE"
         "$LINEUP_PARAMETERS" "$FILE" > "$FILE.temp" && mv "$FILE.temp" "$FILE"
    done
 done
