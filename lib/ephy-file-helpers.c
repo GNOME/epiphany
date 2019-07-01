@@ -417,7 +417,6 @@ ephy_file_helpers_init (const char          *profile_dir,
     ret = ephy_ensure_dir_exists (ephy_profile_dir (), error);
     ephy_ensure_dir_exists (ephy_cache_dir (), NULL);
     ephy_ensure_dir_exists (ephy_config_dir (), NULL);
-    ephy_ensure_dir_exists (ephy_file_tmp_dir (), NULL);
   }
 
   if (steal_data_from_profile && profile_dir) {
