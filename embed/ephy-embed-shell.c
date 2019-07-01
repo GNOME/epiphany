@@ -48,6 +48,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
@@ -1024,19 +1025,24 @@ authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
   return ephy_dbus_peer_is_authorized (credentials);
 }
 
-static void
+static char *
 ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr(GDBusAuthObserver) observer = NULL;
+  g_autofree char *socket_basename = NULL;
+  g_autofree char *socket_path = NULL;
   g_autofree char *address = NULL;
   g_autoptr(GError) error = NULL;
 
   /* Due to the bubblewrap sandbox, we cannot use any abstract sockets here.
    * This means that unix:tmpdir= or unix:abstract= addresses will not work.
-   * Using unix:dir= guarantees that abstract sockets won't be used.
+   * Additionally, we cannot put the socket under /tmp because that won't work
+   * under a flatpak-spawn subsandbox.
    */
-  address = g_strdup_printf ("unix:dir=%s", ephy_file_tmp_dir ());
+  socket_basename = g_strdup_printf ("ephy-embed-server-%jd", (intmax_t)getpid ());
+  socket_path = g_build_filename ("/var/tmp", socket_basename, NULL);
+  address = g_strdup_printf ("unix:path=%s", socket_path);
 
   observer = g_dbus_auth_observer_new ();
 
@@ -1057,12 +1063,13 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
 
   if (error) {
     g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
-    return;
+    return NULL;
   }
 
   g_signal_connect_object (priv->dbus_server, "new-connection",
                            G_CALLBACK (new_connection_cb), shell, 0);
   g_dbus_server_start (priv->dbus_server);
+  return g_steal_pointer (&socket_path);
 }
 
 static void
@@ -1134,12 +1141,13 @@ ephy_embed_shell_startup (GApplication *application)
   g_autofree char *filename = NULL;
   g_autofree char *cookie_policy = NULL;
   g_autofree char *filters_dir = NULL;
+  g_autofree char *dbus_socket_path = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
   ephy_embed_shell_create_web_context (shell);
 
-  ephy_embed_shell_setup_web_process_extensions_server (shell);
+  dbus_socket_path = ephy_embed_shell_setup_web_process_extensions_server (shell);
 
   /* User content manager */
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
@@ -1208,7 +1216,7 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
-  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_file_tmp_dir (), TRUE);
+  webkit_web_context_add_path_to_sandbox (priv->web_context, dbus_socket_path, TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_profile_dir (), TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_cache_dir (), TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_config_dir (), TRUE);
