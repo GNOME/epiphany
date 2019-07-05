@@ -318,8 +318,8 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
                                                      imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
                                                      GTK_BUTTONS_OK,
                                                      "%s",
-                                                     imported ? _("Bookmarks successfully imported!") :
-                                                                error->message);
+                                                     imported ? _("Bookmarks successfully imported!")
+                                                              : error->message);
         gtk_dialog_run (GTK_DIALOG (import_info_dialog));
 
         gtk_widget_destroy (import_info_dialog);
@@ -359,8 +359,8 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
                                                      imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
                                                      GTK_BUTTONS_OK,
                                                      "%s",
-                                                     imported ? _("Bookmarks successfully imported!") :
-                                                                error->message);
+                                                     imported ? _("Bookmarks successfully imported!")
+                                                              : error->message);
         gtk_dialog_run (GTK_DIALOG (import_info_dialog));
         gtk_widget_destroy (import_info_dialog);
       }
