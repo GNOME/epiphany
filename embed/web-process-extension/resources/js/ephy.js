@@ -562,9 +562,12 @@ Ephy.FormManager = class FormManager
 
     _passwordFormFocused(event)
     {
-        let url = new URL(this._form.action);
-        // Warning: we do not whitelist localhost because it could be redirected by DNS.
-        let isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
+        let isInsecureAction = false;
+        if (this._form.action) {
+            let url = new URL(this._form.action);
+            // Warning: we do not whitelist localhost because it could be redirected by DNS.
+            isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
+        }
         window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._frameID, isInsecureAction));
     }
 
