@@ -131,9 +131,9 @@ web_resource_data_cb (WebKitWebResource     *resource,
   g_free (data_str);
 
   html = g_strdup_printf ("<body>"
-                            "<pre>"
-                              "<code class=\"language-html\">%s</code>"
-                            "</pre>"
+                          "  <pre>"
+                          "    <code class=\"language-html\">%s</code>"
+                          "  </pre>"
                           "</body>",
                           escaped_str);
   g_free (escaped_str);
