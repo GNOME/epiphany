@@ -21,7 +21,7 @@ do
    # Aligning prototypes is not working yet, so avoid headers
    for FILE in $(find "$DIR" -name "*.c" ! -path "*/contrib/*")
     do
-        "$UNCRUSTIFY" -c "$SOURCE_ROOT/data/kr-gnome-indent.cfg" --no-backup "$FILE"
+        "$UNCRUSTIFY" -c "$SOURCE_ROOT/data/uncrustify.cfg" --replace --no-backup "$FILE"
         "$LINEUP_PARAMETERS" "$FILE" > "$FILE.temp" && mv "$FILE.temp" "$FILE"
    done
 done
