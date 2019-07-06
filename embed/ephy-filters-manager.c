@@ -39,6 +39,7 @@ struct _EphyFiltersManager {
   char *filters_dir;
   GHashTable *filters;  /* (identifier, FilterInfo) */
   guint64 update_time;
+  guint update_timeout_id;
   GCancellable *cancellable;
   WebKitUserContentFilterStore *store;
 };
@@ -678,6 +679,8 @@ ephy_filters_manager_dispose (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
 
+  g_clear_handle_id (&manager->update_timeout_id, g_source_remove);
+
   if (manager->cancellable) {
     g_cancellable_cancel (manager->cancellable);
     g_clear_object (&manager->cancellable);
@@ -696,6 +699,14 @@ ephy_filters_manager_finalize (GObject *object)
   g_free (manager->filters_dir);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->finalize (object);
+}
+
+static gboolean
+update_timeout_cb (EphyFiltersManager *manager)
+{
+  g_assert (EPHY_IS_FILTERS_MANAGER (manager));
+  update_adblock_filter_files_cb (NULL, NULL, manager);
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -717,6 +728,10 @@ ephy_filters_manager_constructed (GObject *object)
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
 
   update_adblock_filter_files_cb (NULL, NULL, manager);
+
+  manager->update_timeout_id = g_timeout_add_seconds (ADBLOCK_FILTER_UPDATE_FREQUENCY,
+                                                      (GSourceFunc)update_timeout_cb,
+                                                      manager);
 }
 
 static void
