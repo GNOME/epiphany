@@ -2976,6 +2976,17 @@ notebook_switch_page_cb (GtkNotebook *notebook,
   update_reader_mode (window, view);
 }
 
+static void
+notebook_page_reordered_cb (GtkNotebook *notebook,
+                            GtkWidget   *child,
+                            guint        page_num,
+                            gpointer     user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  window->last_opened_embed = NULL;
+}
+
 static GtkNotebook *
 setup_notebook (EphyWindow *window)
 {
@@ -3001,6 +3012,8 @@ setup_notebook (EphyWindow *window)
                     G_CALLBACK (notebook_page_removed_cb), window);
   g_signal_connect (notebook, "tab-close-request",
                     G_CALLBACK (notebook_page_close_request_cb), window);
+  g_signal_connect (notebook, "page-reordered",
+                    G_CALLBACK (notebook_page_reordered_cb), window);
 
   g_signal_connect_swapped (notebook, "open-link",
                             G_CALLBACK (ephy_link_open), window);
