@@ -189,6 +189,7 @@ style_updated_cb (GtkWidget *widget,
   int char_width, h, w;
 
   if (self->is_pinned) {
+    gtk_widget_set_hexpand (self->spinner, FALSE);
     gtk_widget_set_hexpand (self->icon, FALSE);
     gtk_widget_set_halign (self->icon, GTK_ALIGN_FILL);
     gtk_widget_set_size_request (widget, -1, -1);
@@ -212,6 +213,8 @@ style_updated_cb (GtkWidget *widget,
   expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
   gtk_widget_set_hexpand (self->icon, expanded);
   gtk_widget_set_halign (self->icon, expanded ? GTK_ALIGN_END : GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand (self->spinner, expanded);
+  gtk_widget_set_halign (self->spinner, expanded ? GTK_ALIGN_END : GTK_ALIGN_FILL);
 }
 
 static void
