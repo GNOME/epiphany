@@ -347,3 +347,14 @@ window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page) {
   margin: 2px;
   padding: 2px;
 }
+
+.tab-attention {
+  background-image: -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, 0.5,
+                                  to(themecolor(theme_selected_bg_color)),
+                                  to(transparent));
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  background-position: 6px 24px;
+}
