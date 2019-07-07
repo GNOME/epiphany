@@ -255,10 +255,15 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 {
   EphyNotebook *nb = EPHY_NOTEBOOK (notebook);
   GtkWidget *child;
+  GtkWidget *tab_label;
 
   child = gtk_notebook_get_nth_page (notebook, page_num);
   if (!ephy_web_view_is_in_auth_dialog (ephy_embed_get_web_view (EPHY_EMBED (child))))
     gtk_widget_grab_focus (child);
+
+  tab_label = gtk_notebook_get_tab_label (notebook, page);
+  if (ephy_tab_label_is_pinned (tab_label))
+    ephy_tab_label_set_needs_attention (tab_label, FALSE);
 
   /* Remove the old page, we dont want to grow unnecessarily
    * the list */
@@ -671,11 +676,21 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
 }
 
 static void
-rebuild_tab_menu_cb (EphyEmbed    *embed,
-                     GParamSpec   *pspec,
-                     EphyNotebook *notebook)
+title_changed_cb (EphyEmbed    *embed,
+                  GParamSpec   *pspec,
+                  EphyNotebook *notebook)
 {
+  GtkWidget *tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
+
   ephy_notebook_rebuild_tab_menu (notebook);
+
+  if (ephy_tab_label_is_pinned (tab_label)) {
+    int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+    int page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
+
+    if (current_page != page_num)
+      ephy_tab_label_set_needs_attention (tab_label, TRUE);
+  }
 }
 
 static void
@@ -708,7 +723,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
   view = ephy_embed_get_web_view (embed);
 
   g_signal_connect_object (embed, "notify::title",
-                           G_CALLBACK (rebuild_tab_menu_cb), nb, 0);
+                           G_CALLBACK (title_changed_cb), nb, 0);
 
   g_object_bind_property (view, "title", tab_label, "label-text", G_BINDING_DEFAULT);
   g_object_bind_property (view, "display-address", tab_label, "label-uri", G_BINDING_DEFAULT);
