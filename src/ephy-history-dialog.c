@@ -598,16 +598,6 @@ on_listbox_button_press_event (GtkWidget         *widget,
   return GDK_EVENT_PROPAGATE;
 }
 
-
-static gboolean
-on_urls_visited_cb (EphyHistoryService *service,
-                    EphyHistoryDialog  *self)
-{
-  filter_now (self);
-
-  return FALSE;
-}
-
 static void
 set_history_service (EphyHistoryDialog  *self,
                      EphyHistoryService *history_service)
@@ -615,19 +605,11 @@ set_history_service (EphyHistoryDialog  *self,
   if (history_service == self->history_service)
     return;
 
-  if (self->history_service) {
-    g_signal_handlers_disconnect_by_func (self->history_service,
-                                          on_urls_visited_cb,
-                                          self);
+  if (self->history_service)
     g_clear_object (&self->history_service);
-  }
 
-  if (history_service) {
+  if (history_service)
     self->history_service = g_object_ref (history_service);
-    g_signal_connect_after (self->history_service,
-                            "urls-visited", G_CALLBACK (on_urls_visited_cb),
-                            self);
-  }
 
   filter_now (self);
 }
@@ -681,10 +663,6 @@ ephy_history_dialog_dispose (GObject *object)
     g_clear_object (&self->cancellable);
   }
 
-  if (self->history_service)
-    g_signal_handlers_disconnect_by_func (self->history_service,
-                                          on_urls_visited_cb,
-                                          self);
   g_clear_object (&self->history_service);
 
   remove_pending_sorter_source (self, TRUE);
