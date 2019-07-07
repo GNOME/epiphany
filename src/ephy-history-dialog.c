@@ -498,6 +498,15 @@ on_search_entry_changed (GtkSearchEntry    *entry,
   filter_now (self);
 }
 
+static void
+load_further_data (EphyHistoryDialog *self)
+{
+  remove_pending_sorter_source (self, FALSE);
+
+  self->num_fetch += NUM_FETCH_LIMIT;
+  self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+}
+
 static gboolean
 on_key_press_event (EphyHistoryDialog *self,
                     GdkEvent          *event,
@@ -514,9 +523,16 @@ on_key_press_event (EphyHistoryDialog *self,
         gtk_widget_destroy (GTK_WIDGET (self));
       else
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
-    }
-    else if (isprint (key->keyval))
+    } else if (isprint (key->keyval)) {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), TRUE);
+    } else if (key->keyval == GDK_KEY_Down || key->keyval == GDK_KEY_Page_Down) {
+      GList *childrens = gtk_container_get_children (GTK_CONTAINER (self->listbox));
+      GtkWidget *last = g_list_last (childrens)->data;
+      GtkWidget *focus = gtk_container_get_focus_child (GTK_CONTAINER (self->listbox));
+
+      if (focus == last)
+        load_further_data (self);
+    }
   }
 
   return ret;
@@ -720,10 +736,7 @@ on_edge_reached (GtkScrolledWindow *scrolled,
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
   if (pos == GTK_POS_BOTTOM) {
-    remove_pending_sorter_source (self, FALSE);
-
-    self->num_fetch += NUM_FETCH_LIMIT;
-    self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+    load_further_data (self);
   }
 }
 
