@@ -94,11 +94,21 @@ static void
 row_closed_cb (EphyPagesView *self,
                EphyPageRow   *row)
 {
+  GtkWindow *window;
+  GtkWidget *embed;
+  EphyEmbedShell *shell;
+
   g_assert (EPHY_IS_PAGES_VIEW (self));
   g_assert (EPHY_IS_PAGE_ROW (row));
 
-  gtk_notebook_remove_page (GTK_NOTEBOOK (self->notebook),
-                            gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)));
+  shell = ephy_embed_shell_get_default ();
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+
+  embed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (self->notebook),
+                                     gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)));
+  g_signal_emit_by_name (self->notebook,
+                         "tab-close-request",
+                         embed, window);
 }
 
 static void
