@@ -347,3 +347,16 @@ window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page) {
   margin: 2px;
   padding: 2px;
 }
+
+.tab-attention {
+  $_dot_color: if($variant=='light', $selected_bg_color,
+                                   lighten($selected_bg_color,15%));
+  background-image: -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, 0.5,
+                                  to($_dot_color),
+                                  to(transparent));
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
