@@ -473,6 +473,8 @@ ephy_action_bar_start_constructed (GObject *object)
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (object);
   EphyEmbedShell *embed_shell;
 
+  G_OBJECT_CLASS (ephy_action_bar_start_parent_class)->constructed (object);
+
   gtk_widget_init_template (GTK_WIDGET (action_bar_start));
 
   /* Back */
