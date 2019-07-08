@@ -22,13 +22,14 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-data-dialog.h"
 #include "ephy-history-service.h"
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_HISTORY_DIALOG (ephy_history_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, EPHY, HISTORY_DIALOG, GtkWindow)
+G_DECLARE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, EPHY, HISTORY_DIALOG, EphyDataDialog)
 
 GtkWidget      *ephy_history_dialog_new        (EphyHistoryService *history_service);
 
