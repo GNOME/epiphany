@@ -3,282 +3,44 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-find-symbolic</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-trash-symbolic</property>
-  </object>
-  <template class="EphyHistoryDialog" parent="GtkWindow">
-    <property name="can_focus">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">1000</property>
-    <property name="default_height">600</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
+  <template class="EphyHistoryDialog" parent="EphyDataDialog">
+    <property name="title" translatable="yes">History</property>
+    <property name="clear_all_action_name">history.forget-all</property>
+    <property name="clear_all_description" translatable="yes">Remove all history</property>
+    <property name="search_description" translatable="yes">Search history</property>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title" translatable="yes">History</property>
-        <property name="show_close_button">True</property>
-        <child>
-          <object class="GtkButton" id="forget_all_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="action_name">history.forget-all</property>
-            <property name="image">image2</property>
-            <property name="always_show_image">True</property>
-            <property name="tooltip_text" translatable="yes">Remove all history</property>
-            <accelerator key="Delete" signal="clicked" modifiers="GDK_SHIFT_MASK"/>
-            <style>
-              <class name="destructive-action"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleButton" id="search_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image1</property>
-            <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
+    <signal name="notify::search-text" handler="on_search_text_changed" swapped="yes"/>
     <child>
-      <object class="GtkBox">
+      <object class="GtkScrolledWindow" id="scrolled_window">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">True</property>
+        <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
         <child>
-          <object class="GtkSearchBar" id="search_bar">
+          <object class="HdyColumn">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="search_mode_enabled">False</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <property name="maximum_width">600</property>
+            <property name="linear_growth_width">400</property>
             <child>
-              <object class="GtkSearchEntry">
-                <property name="width_request">280</property>
+              <object class="GtkListBox" id="listbox">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">False</property>
-                <property name="placeholder_text" translatable="yes">Search history</property>
-                <signal name="search-changed" handler="on_search_entry_changed" swapped="no"/>
+                <property name="can_focus">False</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="valign">start</property>
+                <property name="selection_mode">multiple</property>
+                <property name="activate_on_single_click">False</property>
+                <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
+                <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
+                <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
+                <style>
+                  <class name="frame"/>
+                </style>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkStack" id="stack">
-            <property name="can_focus">False</property>
-            <property name="expand">True</property>
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="can_focus">False</property>
-                <property name="expand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="visible">True</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">web-browser-symbolic</property>
-                        <property name="icon_size">0</property>
-                        <property name="margin_bottom">18</property>
-                        <property name="pixel_size">128</property>
-                        <property name="valign">center</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="can_focus">False</property>
-                        <property name="margin_end">12</property>
-                        <property name="margin_start">12</property>
-                        <property name="orientation">vertical</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="justify">center</property>
-                            <property name="label" translatable="yes">The History is Empty</property>
-                            <property name="margin_bottom">12</property>
-                            <property name="opacity">0.5</property>
-                            <property name="visible">True</property>
-                            <property name="wrap">True</property>
-                            <attributes>
-                              <attribute name="scale" value="2"/>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="can_focus">False</property>
-                            <property name="justify">center</property>
-                            <property name="label" translatable="yes">Visited pages will be listed here</property>
-                            <property name="margin_bottom">6</property>
-                            <property name="opacity">0.5</property>
-                            <property name="use_markup">True</property>
-                            <property name="visible">True</property>
-                            <property name="wrap">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="name">empty</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolled_window">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
-                <child>
-                  <object class="HdyColumn">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_start">6</property>
-                    <property name="margin_end">6</property>
-                    <property name="maximum_width">600</property>
-                    <property name="linear_growth_width">400</property>
-                    <child>
-                      <object class="GtkListBox" id="listbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="margin_bottom">6</property>
-                        <property name="valign">start</property>
-                        <property name="selection_mode">multiple</property>
-                        <property name="activate_on_single_click">False</property>
-                        <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
-                        <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
-                        <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
-                        <style>
-                          <class name="frame"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="name">results</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="can_focus">False</property>
-                <property name="expand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="visible">True</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="valign">center</property>
-                    <property name="vexpand">True</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">edit-find-symbolic</property>
-                        <property name="icon_size">0</property>
-                        <property name="margin_bottom">18</property>
-                        <property name="pixel_size">128</property>
-                        <property name="valign">center</property>
-                        <property name="visible">True</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="can_focus">False</property>
-                        <property name="margin_end">12</property>
-                        <property name="margin_start">12</property>
-                        <property name="orientation">vertical</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="justify">center</property>
-                            <property name="label" translatable="yes">No Results Found</property>
-                            <property name="margin_bottom">12</property>
-                            <property name="opacity">0.5</property>
-                            <property name="visible">True</property>
-                            <property name="wrap">True</property>
-                            <attributes>
-                              <attribute name="scale" value="2"/>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="can_focus">False</property>
-                            <property name="justify">center</property>
-                            <property name="label" translatable="yes">Try a different search</property>
-                            <property name="margin_bottom">6</property>
-                            <property name="opacity">0.5</property>
-                            <property name="use_markup">True</property>
-                            <property name="visible">True</property>
-                            <property name="wrap">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="name">no-results</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
