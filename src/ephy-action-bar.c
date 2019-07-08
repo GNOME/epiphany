@@ -97,6 +97,8 @@ ephy_action_bar_constructed (GObject *object)
 {
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
 
+  G_OBJECT_CLASS (ephy_action_bar_parent_class)->constructed (object);
+
   g_signal_connect_object (action_bar->window, "notify::chrome",
                            G_CALLBACK (sync_chromes_visibility), action_bar,
                            G_CONNECT_SWAPPED);
