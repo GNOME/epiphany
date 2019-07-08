@@ -4,6 +4,7 @@
  *  Copyright © 2003, 2004 Christian Persch
  *  Copyright © 2012 Igalia S.L
  *  Copyright © 2018 Jan-Michael Brummer
+ *  Copyright © 2019 Purism SPC
  *
  *  This file is part of Epiphany.
  *
@@ -45,7 +46,7 @@
 #define NUM_FETCH_LIMIT 15
 
 struct _EphyHistoryDialog {
-  GtkWindow parent_instance;
+  EphyDataDialog parent_instance;
 
   EphySnapshotService *snapshot_service;
   EphyHistoryService *history_service;
@@ -54,23 +55,18 @@ struct _EphyHistoryDialog {
   GtkWidget *listbox;
   GtkWidget *forget_all_button;
   GtkWidget *popup_menu;
-  GtkWidget *search_bar;
-  GtkWidget *search_button;
-  GtkWidget *stack;
 
   GActionGroup *action_group;
 
   GList *urls;
   guint sorter_source;
 
-  char *search_text;
-
   gint num_fetch;
 
   GtkWidget *confirmation_dialog;
 };
 
-G_DEFINE_TYPE (EphyHistoryDialog, ephy_history_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE (EphyHistoryDialog, ephy_history_dialog, EPHY_TYPE_DATA_DIALOG)
 
 enum {
   PROP_0,
@@ -128,13 +124,14 @@ on_find_urls_cb (gpointer service,
 static GList *
 substrings_filter (EphyHistoryDialog *self)
 {
+  const gchar *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (self));
   char **tokens, **p;
   GList *substrings = NULL;
 
-  if (!self->search_text)
+  if (!search_text)
     return NULL;
 
-  tokens = p = g_strsplit (self->search_text, " ", -1);
+  tokens = p = g_strsplit (search_text, " ", -1);
 
   while (*p) {
     substrings = g_list_prepend (substrings, *p++);
@@ -297,12 +294,9 @@ add_urls_source (EphyHistoryDialog *self)
   GList *children;
 
   children = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-  if (!children) {
-    if (!self->search_text || g_strcmp0 (self->search_text, "") == 0)
-      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "empty");
-    else
-      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "no-results");
-  }
+  ephy_data_dialog_set_has_search_results (EPHY_DATA_DIALOG (self), !!children);
+  if (!children)
+    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), FALSE);
   g_list_free (children);
 
   if (!self->urls || !self->num_fetch) {
@@ -316,7 +310,7 @@ add_urls_source (EphyHistoryDialog *self)
 
   row = create_row (self, url);
   gtk_list_box_insert (GTK_LIST_BOX(self->listbox), row, -1);
-  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "results");
+  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), TRUE);
 
   self->urls = g_list_remove_link (self->urls, element);
   ephy_history_url_free (url);
@@ -486,15 +480,8 @@ update_popup_menu_actions (GActionGroup *action_group,
 }
 
 static void
-on_search_entry_changed (GtkSearchEntry    *entry,
-                         EphyHistoryDialog *self)
+on_search_text_changed (EphyHistoryDialog *self)
 {
-  const char *text;
-
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
-  g_free (self->search_text);
-  self->search_text = g_strdup (text);
-
   filter_now (self);
 }
 
@@ -513,29 +500,20 @@ on_key_press_event (EphyHistoryDialog *self,
                     gpointer           user_data)
 {
   GdkEventKey *key = (GdkEventKey *)event;
-  gint ret;
 
-  ret = gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->search_bar), event);
+  if (key->keyval == GDK_KEY_Down || key->keyval == GDK_KEY_Page_Down) {
+    GList *childrens = gtk_container_get_children (GTK_CONTAINER (self->listbox));
+    GtkWidget *last = g_list_last (childrens)->data;
+    GtkWidget *focus = gtk_container_get_focus_child (GTK_CONTAINER (self->listbox));
 
-  if (ret != GDK_EVENT_STOP) {
-    if (key->keyval == GDK_KEY_Escape) {
-      if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button)))
-        gtk_widget_destroy (GTK_WIDGET (self));
-      else
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
-    } else if (isprint (key->keyval)) {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), TRUE);
-    } else if (key->keyval == GDK_KEY_Down || key->keyval == GDK_KEY_Page_Down) {
-      GList *childrens = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-      GtkWidget *last = g_list_last (childrens)->data;
-      GtkWidget *focus = gtk_container_get_focus_child (GTK_CONTAINER (self->listbox));
+    if (focus == last) {
+      load_further_data (self);
 
-      if (focus == last)
-        load_further_data (self);
+      return GDK_EVENT_STOP;
     }
   }
 
-  return ret;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -670,9 +648,6 @@ ephy_history_dialog_dispose (GObject *object)
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
-  g_free (self->search_text);
-  self->search_text = NULL;
-
   if (self->cancellable) {
     g_cancellable_cancel (self->cancellable);
     g_clear_object (&self->cancellable);
@@ -739,18 +714,14 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/history-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, listbox);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, forget_all_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, popup_menu);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_bar);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_button_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_edge_reached);
 }
 
@@ -810,12 +781,14 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     tooltip = _("It is not possible to modify history when in incognito mode.");
-    gtk_widget_set_tooltip_text (self->forget_all_button, tooltip);
+    ephy_data_dialog_set_clear_all_description (EPHY_DATA_DIALOG (self), tooltip);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (self->action_group), "forget-all");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
     update_selection_actions (self->action_group, FALSE);
+  } else {
+    ephy_data_dialog_set_can_clear (EPHY_DATA_DIALOG (self), TRUE);
   }
 }
 
