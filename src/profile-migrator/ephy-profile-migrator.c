@@ -53,6 +53,8 @@
 #include <sys/types.h>
 #include <webkit2/webkit2.h>
 
+#define EPHY_PREFS_ADBLOCK_FILTERS_OLD "adblock-filters"
+
 static int do_step_n = -1;
 static int migration_version = -1;
 static char *profile_dir = NULL;
@@ -476,7 +478,7 @@ migrate_adblock_filters (void)
 
   if (filters_array) {
     g_settings_set_strv (EPHY_SETTINGS_MAIN,
-                         EPHY_PREFS_ADBLOCK_FILTERS,
+                         EPHY_PREFS_ADBLOCK_FILTERS_OLD,
                          (const gchar * const *)filters_array->pdata);
     g_settings_sync ();
     g_ptr_array_free (filters_array, TRUE);
@@ -1000,14 +1002,14 @@ migrate_annoyance_list (void)
   char **modified_filters;
 
   /* Has the filters setting been modified? If not, we're done. */
-  user_value = g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
+  user_value = g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS_OLD);
   if (!user_value)
     return;
 
   /* The annoyance list was causing a bunch of problems. Forcibly remove it. */
   filters = g_variant_get_strv (user_value, NULL);
   modified_filters = ephy_strv_remove (filters, "https://easylist.to/easylist/fanboy-annoyance.txt");
-  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)modified_filters);
+  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS_OLD, (const char * const *)modified_filters);
 
   g_variant_unref (user_value);
   g_free (filters);
@@ -1332,6 +1334,24 @@ migrate_profile_directories (void)
 }
 
 static void
+migrate_adblock_to_content_filters (void)
+{
+  /*
+   * Switching from the ABP-format rule sets to the JSON ones is done by
+   * completely removing the adblock/ subdirectory. During startup Epiphany
+   * will read the new setting and download the new filtering rules itself.
+   */
+  g_autofree char *directory = g_build_filename (ephy_cache_dir (), "adblock", NULL);
+
+  g_autoptr(GError) error = NULL;
+  if (!ephy_file_delete_dir_recursively (directory, &error))
+    g_warning ("Cannor delete adblock directory: %s", error->message);
+
+  /* Remove the old key, to save a little space in the dconf store. */
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS_OLD);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1377,6 +1397,7 @@ const EphyProfileMigrator migrators[] = {
   /* 30 */ migrate_profile_directories,
   /* 31 */ migrate_web_extension_config_dir,
   /* 32 */ migrate_webapps_harder,
+  /* 33 */ migrate_adblock_to_content_filters,
 };
 
 static gboolean
