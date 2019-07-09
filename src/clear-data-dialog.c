@@ -38,14 +38,12 @@ typedef enum {
 } Timespan;
 
 struct _ClearDataDialog {
-  GtkDialog parent_instance;
+  EphyDataDialog parent_instance;
 
-  GtkWidget *clear_button;
   GtkWidget *treeview;
   GtkTreeModel *treestore;
   GtkTreeModelFilter *treemodelfilter;
   GtkWidget *timespan_combo;
-  GtkWidget *search_entry;
   GtkSpinner *spinner;
   GtkStack *stack;
 
@@ -61,7 +59,7 @@ enum {
   SENSITIVE_COLUMN
 };
 
-G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, EPHY_TYPE_DATA_DIALOG)
 
 #define PERSISTENT_DATA_TYPES WEBKIT_WEBSITE_DATA_DISK_CACHE | \
   WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE | \
@@ -141,7 +139,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
     return;
   }
 
-  gtk_widget_set_sensitive (dialog->clear_button, TRUE);
+    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
   gtk_stack_set_visible_child_name (dialog->stack, "view");
 
   treestore = GTK_TREE_STORE (dialog->treestore);
@@ -191,20 +189,13 @@ all_children_visible (GtkTreeModel       *model,
 }
 
 static void
-clear_data_dialog_response_cb (GtkDialog       *widget,
-                               int              response,
-                               ClearDataDialog *dialog)
+on_clear_all_clicked (ClearDataDialog *dialog)
 {
   GtkTreeIter top_iter;
   WebKitWebsiteDataTypes types_to_clear = 0;
   GList *data_to_remove = NULL;
   WebKitWebsiteDataTypes types_to_remove = 0;
   GTimeSpan timespan;
-
-  if (response != GTK_RESPONSE_OK) {
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    return;
-  }
 
   if (!gtk_tree_model_get_iter_first (dialog->treestore, &top_iter)) {
     gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -361,8 +352,7 @@ timespan_combo_changed_cb (GtkComboBox     *combo,
 }
 
 static void
-search_entry_changed_cb (GtkSearchEntry  *entry,
-                         ClearDataDialog *dialog)
+search_text_changed_cb (ClearDataDialog *dialog)
 {
   gtk_tree_model_filter_refilter (dialog->treemodelfilter);
 }
@@ -379,7 +369,7 @@ row_visible_func (GtkTreeModel    *model,
   if (gtk_tree_model_iter_has_child (model, iter))
     return TRUE;
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (dialog->search_entry));
+  search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
   if (!search_text || search_text[0] == '\0')
     return TRUE;
 
@@ -427,18 +417,16 @@ clear_data_dialog_class_init (ClearDataDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/clear-data-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, clear_button);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treeview);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treestore);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treemodelfilter);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, timespan_combo);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, search_entry);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, spinner);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, stack);
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, timespan_combo_changed_cb);
-  gtk_widget_class_bind_template_callback (widget_class, clear_data_dialog_response_cb);
-  gtk_widget_class_bind_template_callback (widget_class, search_entry_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_all_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
 }
 
 static void
@@ -454,7 +442,6 @@ clear_data_dialog_init (ClearDataDialog *dialog)
   gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->timespan_combo),
                             dialog->timespan);
 
-  gtk_widget_set_sensitive (dialog->clear_button, FALSE);
   gtk_spinner_start (dialog->spinner);
   gtk_stack_set_visible_child_name (dialog->stack, "spinner");
 
