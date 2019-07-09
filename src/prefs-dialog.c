@@ -98,6 +98,7 @@ struct _PrefsDialog {
   GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_switch;
   GtkWidget *enable_smooth_scrolling_switch;
+  GtkWidget *enable_mouse_gesture_switch;
   GtkWidget *ask_on_download_switch;
   GtkWidget *start_in_incognito_mode_switch;
 
@@ -979,6 +980,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_smooth_scrolling_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_mouse_gesture_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, ask_on_download_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, start_in_incognito_mode_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_folder_row);
@@ -1991,6 +1993,11 @@ setup_general_page (PrefsDialog *dialog)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES,
+                   dialog->enable_mouse_gesture_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
                    dialog->ask_on_download_switch,
                    "active",
@@ -2375,6 +2382,8 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->do_not_track_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->enable_smooth_scrolling_switch,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->enable_mouse_gesture_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
