@@ -55,10 +55,10 @@
                         <summary>Whether to delay loading of tabs that are not immediately visible on session restore</summary>
                         <description>When this option is set to true, tabs will not start loading until the user switches to them, upon session restore.</description>
                 </key>
-                <key type="as" name="adblock-filters">
-                        <default>['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt']</default>
+                <key type="as" name="content-filters">
+                        <default>['https://easylist-downloads.adblockplus.org/easylist_min_content_blocker.json']</default>
                         <summary>List of adblock filters</summary>
-                        <description>List of URLs with filter rules to be used by the adblock.</description>
+                        <description>List of URLs with content filtering rules in JSON format to be used by the ad blocker.</description>
                 </key>
                 <key type="b" name="ask-for-default">
                         <default>true</default>
@@ -197,7 +197,7 @@
 		<key type="b" name="do-not-track">
 			<default>true</default>
 			<summary>Do Not Track</summary>
-			<description>Enables tracking query parameter removal. Note that when changing this setting from the preferences dialog, the adblock-filters setting will additionally be updated to add/remove EasyPrivacy filters.</description>
+			<description>Enables tracking query parameter removal. Note that when changing this setting from the preferences dialog.</description>
 		</key>
 		<key type="b" name="enable-adblock">
 			<default>true</default>
