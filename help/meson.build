@@ -22,6 +22,7 @@ help_files = [
   'pref-do-not-track.page',
   'pref-font.page',
   'pref-passwords.page',
+  'pref-mouse-gestures.page',
   'prob-restore-closed-page.page',
   'proxy.page'
 ]
