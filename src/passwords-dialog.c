@@ -39,7 +39,7 @@ typedef enum {
 } PasswordsDialogColumn;
 
 struct _EphyPasswordsDialog {
-  GtkDialog parent_instance;
+  EphyDataDialog parent_instance;
 
   EphyPasswordManager *manager;
   GList *records;
@@ -54,13 +54,9 @@ struct _EphyPasswordsDialog {
   GMenuModel *treeview_popup_menu_model;
 
   GActionGroup *action_group;
-
-  gboolean filled;
-
-  char *search_text;
 };
 
-G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY_TYPE_DATA_DIALOG)
 
 enum {
   PROP_0,
@@ -113,9 +109,6 @@ ephy_passwords_dialog_dispose (GObject *object)
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
 
   g_clear_object (&dialog->manager);
-
-  g_free (dialog->search_text);
-  dialog->search_text = NULL;
 
   g_list_free_full (dialog->records, g_object_unref);
   dialog->records = NULL;
@@ -248,14 +241,8 @@ on_treeview_selection_changed (GtkTreeSelection    *selection,
 }
 
 static void
-on_search_entry_changed (GtkSearchEntry      *entry,
-                         EphyPasswordsDialog *dialog)
+on_search_text_changed (EphyPasswordsDialog *dialog)
 {
-  const char *text;
-
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
-  g_free (dialog->search_text);
-  dialog->search_text = g_strdup (text);
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter));
 }
 
@@ -384,7 +371,7 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
 
 static void
@@ -397,7 +384,7 @@ forget_all (GSimpleAction *action,
   ephy_password_manager_forget_all (dialog->manager);
 
   gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
-  dialog->filled = FALSE;
+  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), FALSE);
 
   g_list_free_full (dialog->records, g_object_unref);
   dialog->records = NULL;
@@ -422,6 +409,7 @@ populate_model_cb (GList    *records,
                                        COL_PASSWORDS_INVISIBLE, "●●●●●●●●",
                                        COL_PASSWORDS_DATA, record,
                                        -1);
+    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
   }
 
   dialog->records = records;
@@ -431,7 +419,7 @@ static void
 populate_model (EphyPasswordsDialog *dialog)
 {
   g_assert (EPHY_IS_PASSWORDS_DIALOG (dialog));
-  g_assert (dialog->filled == FALSE);
+  g_assert (!ephy_data_dialog_get_has_data (EPHY_DATA_DIALOG (dialog)));
 
   /* Ask for all password records. */
   ephy_password_manager_query (dialog->manager,
@@ -447,8 +435,9 @@ row_visible_func (GtkTreeModel        *model,
   char *username;
   char *origin;
   gboolean visible = FALSE;
+  const char *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
 
-  if (dialog->search_text == NULL)
+  if (search_text == NULL)
     return TRUE;
 
   gtk_tree_model_get (model, iter,
@@ -456,9 +445,9 @@ row_visible_func (GtkTreeModel        *model,
                       COL_PASSWORDS_USER, &username,
                       -1);
 
-  if (origin != NULL && g_strrstr (origin, dialog->search_text) != NULL)
+  if (origin != NULL && g_strrstr (origin, search_text) != NULL)
     visible = TRUE;
-  else if (username != NULL && g_strrstr (username, dialog->search_text) != NULL)
+  else if (username != NULL && g_strrstr (username, search_text) != NULL)
     visible = TRUE;
 
   g_free (origin);
@@ -518,6 +507,5 @@ ephy_passwords_dialog_new (EphyPasswordManager *manager)
 {
   return EPHY_PASSWORDS_DIALOG (g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
                                               "password-manager", manager,
-                                              "use-header-bar", TRUE,
                                               NULL));
 }
