@@ -3,143 +3,41 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-find-symbolic</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-trash-symbolic</property>
-  </object>
-  <template class="EphyCookiesDialog" parent="GtkDialog">
-    <property name="can_focus">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center</property>
-    <property name="default_width">300</property>
-    <property name="default_height">600</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
-    <signal name="key-press-event" handler="hdy_search_bar_handle_event" object="search_bar" swapped="yes"/>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
+  <template class="EphyCookiesDialog" parent="EphyDataDialog">
+    <property name="title" translatable="yes">Cookies</property>
+    <property name="clear_all_action_name">cookies.forget-all</property>
+    <property name="clear_all_description" translatable="yes">Remove all cookies</property>
+    <property name="search_description" translatable="yes">Search cookies</property>
+    <property name="empty_title" translatable="yes">There are no Cookies</property>
+    <property name="empty_description" translatable="yes">Cookies left by visited pages will be listed here</property>
+    <property name="can_clear">True</property>
+    <signal name="notify::search-text" handler="on_search_text_changed" swapped="yes"/>
+    <child>
+      <object class="GtkScrolledWindow">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title" translatable="yes">Cookies</property>
-        <property name="show_close_button">True</property>
+        <property name="can_focus">True</property>
         <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="action_name">cookies.forget-all</property>
-            <property name="image">image2</property>
-            <property name="always_show_image">True</property>
-            <property name="tooltip_text" translatable="yes">Remove all cookies</property>
-            <accelerator key="Delete" signal="clicked" modifiers="GDK_SHIFT_MASK"/>
-            <style>
-              <class name="destructive-action"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleButton">
-            <property name="name">search_button</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image1</property>
-            <property name="always_show_image">True</property>
-            <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-            <child internal-child="accessible">
-              <object class="AtkObject">
-                <property name="AtkObject::accessible-name" translatable="yes">Search</property>
-                <property name="AtkObject::accessible-description" translatable="yes">Filter cookies</property>
-              </object>
-            </child>
-            <accelerator key="f" signal="clicked" modifiers="GDK_SHIFT_MASK"/>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="HdySearchBar" id="search_bar">
+          <object class="HdyColumn">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="show_close_button">False</property>
-                        <child>
-                          <object class="HdyColumn">
-                            <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="maximum-width">600</property>
-                            <child>
-                              <object class="GtkSearchEntry" id="search_entry">
-                                <property name="visible">True</property>
-                                <property name="hexpand">True</property>
-                                <signal name="changed" handler="on_search_entry_changed"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <property name="maximum_width">600</property>
+            <property name="linear_growth_width">400</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkListBox" id="cookies_listbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkListBox" id="cookies_listbox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                </child>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="valign">start</property>
+                <property name="selection_mode">none</property>
+                <style>
+                  <class name="frame"/>
+                </style>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
