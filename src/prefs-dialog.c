@@ -1661,9 +1661,7 @@ clear_personal_data_button_clicked_cb (GtkWidget   *button,
 {
   ClearDataDialog *clear_dialog;
 
-  clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG,
-                               "use-header-bar", TRUE,
-                               NULL);
+  clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (clear_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (clear_dialog), TRUE);
   gtk_window_present_with_time (GTK_WINDOW (clear_dialog), gtk_get_current_event_time ());
