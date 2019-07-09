@@ -644,8 +644,7 @@ update_adblock_filter_files_cb (GSettings          *settings G_GNUC_UNUSED,
                                             NULL,
                                             (GDestroyNotify)filter_info_free);
 
-  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN,
-                              EPHY_PREFS_ADBLOCK_FILTERS);
+  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
   for (unsigned i = 0; uris[i]; i++) {
     FilterInfo *filter_info = filter_info_new (uris[i], manager);
 
@@ -722,7 +721,7 @@ ephy_filters_manager_constructed (GObject *object)
   manager->store = webkit_user_content_filter_store_new (saved_filters_dir);
 
   /* Note: up here because we must connect *before* reading the settings. */
-  g_signal_connect_object (EPHY_SETTINGS_MAIN, "changed::" EPHY_PREFS_ADBLOCK_FILTERS,
+  g_signal_connect_object (EPHY_SETTINGS_MAIN, "changed::" EPHY_PREFS_CONTENT_FILTERS,
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
