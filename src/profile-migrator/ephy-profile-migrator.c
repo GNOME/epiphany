@@ -85,12 +85,6 @@ legacy_profile_dir (void)
   return dir;
 }
 
-static gboolean
-legacy_dir_is_default (void)
-{
-  return !strcmp (legacy_profile_dir (), legacy_default_profile_dir ());
-}
-
 /*
  * What to do to add new migration steps:
  *  - Bump EPHY_PROFILE_MIGRATION_VERSION in lib/ephy-profile-utils.h
@@ -402,83 +396,6 @@ migrate_bookmarks (void)
     g_warning ("Failed to delete %s: %s", filename, g_strerror (errno));
 out:
   g_free (filename);
-}
-
-static void
-migrate_adblock_filters (void)
-{
-  char *adblock_dir;
-  char *filters_filename;
-  char *contents;
-  gsize content_size;
-  GPtrArray *filters_array = NULL;
-  GError *error = NULL;
-
-  adblock_dir = g_build_filename (legacy_profile_dir (), "adblock", NULL);
-  if (!g_file_test (adblock_dir, G_FILE_TEST_IS_DIR)) {
-    g_free (adblock_dir);
-    return;
-  }
-
-  if (!legacy_dir_is_default ()) {
-    /* Adblock filters rules are now shared to save space */
-    ephy_file_delete_dir_recursively (adblock_dir, NULL);
-    g_free (adblock_dir);
-
-    adblock_dir = g_build_filename (legacy_default_profile_dir (), "adblock", NULL);
-  }
-
-  filters_filename = g_build_filename (adblock_dir, "filters.list", NULL);
-  g_free (adblock_dir);
-
-  if (!g_file_get_contents (filters_filename, &contents, &content_size, &error)) {
-    if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-      g_warning ("Failed to read filters file: %s: %s", filters_filename, error->message);
-    g_free (filters_filename);
-    g_error_free (error);
-    return;
-  }
-
-  if (content_size > 0) {
-    char **filter_list;
-    guint filter_list_length;
-    guint i;
-
-    filter_list = g_strsplit (contents, ";", -1);
-    filter_list_length = g_strv_length (filter_list);
-    if (filter_list_length > 0) {
-      filters_array = g_ptr_array_sized_new (MAX (2, filter_list_length) + 1);
-      g_ptr_array_set_free_func (filters_array, g_free);
-      g_ptr_array_add (filters_array, g_strdup (ADBLOCK_DEFAULT_FILTER_URL));
-
-      for (i = 0; filter_list[i]; i++) {
-        char *url;
-
-        url = g_strstrip (filter_list[i]);
-        if (url[0] != '\0' && strcmp (url, ADBLOCK_DEFAULT_FILTER_URL))
-          g_ptr_array_add (filters_array, g_strdup (url));
-      }
-
-      if (filters_array->len == 1) {
-        /* No additional filters, so do nothing. */
-        g_ptr_array_free (filters_array, TRUE);
-        filters_array = NULL;
-      } else {
-        g_ptr_array_add (filters_array, NULL);
-      }
-    }
-    g_strfreev (filter_list);
-  }
-
-  if (filters_array) {
-    g_settings_set_strv (EPHY_SETTINGS_MAIN,
-                         EPHY_PREFS_ADBLOCK_FILTERS,
-                         (const gchar * const *)filters_array->pdata);
-    g_settings_sync ();
-    g_ptr_array_free (filters_array, TRUE);
-  }
-
-  g_unlink (filters_filename);
 }
 
 static void
@@ -989,28 +906,6 @@ out:
 }
 
 static void
-migrate_annoyance_list (void)
-{
-  GVariant *user_value;
-  const char **filters;
-  char **modified_filters;
-
-  /* Has the filters setting been modified? If not, we're done. */
-  user_value = g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
-  if (!user_value)
-    return;
-
-  /* The annoyance list was causing a bunch of problems. Forcibly remove it. */
-  filters = g_variant_get_strv (user_value, NULL);
-  modified_filters = ephy_strv_remove (filters, "https://easylist.to/easylist/fanboy-annoyance.txt");
-  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)modified_filters);
-
-  g_variant_unref (user_value);
-  g_free (filters);
-  g_strfreev (modified_filters);
-}
-
-static void
 migrate_zoom_level (void)
 {
   EphySQLiteConnection *history_db = NULL;
@@ -1354,6 +1249,24 @@ migrate_profile_directories (void)
 }
 
 static void
+migrate_adblock_to_content_filters (void)
+{
+  /*
+   * Switching from the ABP-format rule sets to the JSON ones is done by
+   * completely removing the adblock/ subdirectory. During startup Epiphany
+   * will read the new setting and download the new filtering rules itself.
+   */
+  g_autofree char *directory = g_build_filename (ephy_cache_dir (), "adblock", NULL);
+
+  g_autoptr(GError) error = NULL;
+  if (!ephy_file_delete_dir_recursively (directory, &error))
+    g_warning ("Cannor delete adblock directory: %s", error->message);
+
+  /* Remove the old key, to save a little space in the dconf store. */
+  g_settings_reset (EPHY_SETTINGS_MAIN, "adblock-filters");
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1380,7 +1293,7 @@ const EphyProfileMigrator migrators[] = {
   /* 10 */ migrate_nothing,
   /* 11 */ migrate_insecure_passwords,
   /* 12 */ migrate_bookmarks,
-  /* 13 */ migrate_adblock_filters,
+  /* 13 */ migrate_nothing,
   /* 14 */ migrate_initial_state,
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_nothing,
@@ -1395,11 +1308,12 @@ const EphyProfileMigrator migrators[] = {
   /* 25 */ migrate_passwords_timestamp,
   /* 26 */ migrate_nothing,
   /* 27 */ migrate_nothing,
-  /* 28 */ migrate_annoyance_list,
+  /* 28 */ migrate_nothing,
   /* 29 */ migrate_zoom_level,
   /* 30 */ migrate_profile_directories,
   /* 31 */ migrate_web_extension_config_dir,
   /* 32 */ migrate_webapps_harder,
+  /* 33 */ migrate_adblock_to_content_filters,
 };
 
 static gboolean
