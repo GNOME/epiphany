@@ -23,10 +23,12 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "ephy-data-dialog.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_CLEAR_DATA_DIALOG (clear_data_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, EphyDataDialog)
 
 G_END_DECLS
