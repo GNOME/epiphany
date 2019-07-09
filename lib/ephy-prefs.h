@@ -171,7 +171,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_INTERNAL_VIEW_SOURCE               "internal-view-source"
 #define EPHY_PREFS_RESTORE_SESSION_POLICY             "restore-session-policy"
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS     "restore-session-delaying-loads"
-#define EPHY_PREFS_ADBLOCK_FILTERS                    "adblock-filters"
+#define EPHY_PREFS_ADBLOCK_FILTERS                    "content-filters"
 #define EPHY_PREFS_SEARCH_ENGINES                     "search-engines"
 #define EPHY_PREFS_DEFAULT_SEARCH_ENGINE              "default-search-engine"
 #define EPHY_PREFS_ASK_FOR_DEFAULT                    "ask-for-default"
