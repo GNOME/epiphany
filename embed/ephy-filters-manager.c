@@ -30,13 +30,14 @@
 #include <inttypes.h>
 
 #define ADBLOCK_FILTER_UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
+#define ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX ".filterinfo"
 
 struct _EphyFiltersManager {
   GObject parent_instance;
 
   char *filters_dir;
   GHashTable *filters;  /* (identifier, FilterInfo) */
-  guint64 last_update;
+  guint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
   WebKitUserContentFilterStore *store;
@@ -54,11 +55,14 @@ static guint s_signals[LAST_SIGNAL];
 
 typedef struct {
   EphyFiltersManager *manager;
-  gboolean found;        /* WebKitUserContentFilter found during lookup. */
   char *identifier;      /* Lazily derived from source_uri. */
   char *source_uri;      /* Saved. */
   char *checksum;        /* Saved. */
   guint64 last_update;   /* Saved, seconds. */
+
+  gboolean found   : 1;  /* WebKitUserContentFilter found during lookup. */
+  gboolean enabled : 1;  /* The filter is already enabled. */
+  gboolean local   : 1;  /* The source_uri is a local file URI. */
 } FilterInfo;
 
 /*
@@ -187,8 +191,10 @@ filter_info_get_sidecar_file (FilterInfo *self)
 {
   g_assert (self);
   const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
-  const char *identifier = filter_info_get_identifier (self);
-  return g_file_new_build_filename (filters_dir, identifier, NULL);
+  g_autofree char *sidecar_filename = g_strconcat (filter_info_get_identifier (self),
+                                                   ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX,
+                                                   NULL);
+  return g_file_new_build_filename (filters_dir, sidecar_filename, NULL);
 }
 
 static gboolean
@@ -284,6 +290,7 @@ filter_info_setup_enable_compiled_filter (FilterInfo              *self,
   g_debug ("Emitting EphyFiltersManager::filter-ready for %s.",
            filter_info_get_identifier (self));
   g_signal_emit (self->manager, s_signals[FILTER_READY], 0, wk_filter);
+  self->enabled = TRUE;
 }
 
 static inline gboolean
@@ -292,7 +299,7 @@ filter_info_needs_fetching (const FilterInfo *self)
   g_assert (self);
   g_return_val_if_fail (self->manager, TRUE);
 
-  return (self->manager->last_update - self->last_update) > ADBLOCK_FILTER_UPDATE_FREQUENCY;
+  return (self->manager->update_time - self->last_update) >= ADBLOCK_FILTER_UPDATE_FREQUENCY;
 }
 
 static void
@@ -355,12 +362,14 @@ filter_info_setup_load_file (FilterInfo *self,
                                                        FALSE,  /* writable */
                                                        &error);
 
-  /* Immediately unlink the file after it has been mapped. */
-  g_file_delete_async (json_file,
-                       G_PRIORITY_LOW,
-                       NULL,  /* cancellable */
-                       (GAsyncReadyCallback) file_removed_cb,
-                       NULL);
+  /* Immediately unlink a fetched file after it has been mapped. */
+  if (!self->local) {
+    g_file_delete_async (json_file,
+                         G_PRIORITY_LOW,
+                         NULL,  /* cancellable */
+                         (GAsyncReadyCallback) file_removed_cb,
+                         NULL);
+  }
 
   if (!file_map) {
     g_warning ("Cannot map filter %s source file %s: %s",
@@ -372,7 +381,7 @@ filter_info_setup_load_file (FilterInfo *self,
   g_autoptr(GBytes) json_data = g_mapped_file_get_bytes (file_map);
   g_autofree char *old_checksum = g_steal_pointer (&self->checksum);
   self->checksum = g_compute_checksum_for_bytes (G_CHECKSUM_SHA256, json_data);
-  self->last_update = self->manager->last_update;
+  self->last_update = self->manager->update_time;
 
   if (!filter_info_save_sidecar (self, &error)) {
     g_warning ("Cannot save sidecar for filter %s: %s",
@@ -468,7 +477,7 @@ filter_load_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
     g_debug ("Fetch %sneeded for filter %s (updated %" PRIu64 "s ago, interval %us)",
              filter_info_needs_fetching (self) ? "" : "not ",
              filter_info_get_identifier (self),
-             (self->manager->last_update - self->last_update),
+             (self->manager->update_time - self->last_update),
              ADBLOCK_FILTER_UPDATE_FREQUENCY);
   } else if (g_error_matches (error,
                               WEBKIT_USER_CONTENT_FILTER_ERROR,
@@ -489,11 +498,16 @@ filter_load_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
    * URIs we need to fetch a updated version. If an updated version is
    * fetched, it will replace the precompiled version found above (if
    * any) once it has been compiled.
-   *
-   * TODO: Check for local file:// URIs and skip straight to compilation.
    */
   g_debug ("Fetching filter %s from <%s>",
            filter_info_get_identifier (self), self->source_uri);
+
+  /* Skip fetching local file:// URIs; load them directly. */
+  g_autoptr(GFile) source_file = g_file_new_for_uri (self->source_uri);
+  if ((self->local = g_file_is_native (source_file))) {
+    filter_info_setup_load_file (self, source_file);
+    return;
+  }
 
   EphyDownload *download = ephy_download_new_for_uri (self->source_uri);
   g_autoptr(GFile) json_file = filter_info_get_source_file (self);
@@ -598,16 +612,6 @@ update_adblock_filter_files_cb (GSettings          *settings G_GNUC_UNUSED,
     return;
   }
 
-  const gint64 current_time = g_get_real_time () / G_USEC_PER_SEC;
-  g_assert (current_time >= 0);
-
-  if ((current_time - manager->last_update) < ADBLOCK_FILTER_UPDATE_FREQUENCY) {
-    g_debug ("No update needed, last was %" PRIi64 "s ago (interval %us)",
-             (current_time - manager->last_update),
-             ADBLOCK_FILTER_UPDATE_FREQUENCY);
-    return;
-  }
-
   g_debug ("Emitting EphyFiltersManager::filters-disabled.");
   g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
 
@@ -615,7 +619,10 @@ update_adblock_filter_files_cb (GSettings          *settings G_GNUC_UNUSED,
   g_cancellable_cancel (manager->cancellable);
   g_object_unref (manager->cancellable);
   manager->cancellable = g_cancellable_new ();
-  manager->last_update = current_time;
+
+  const gint64 update_time = g_get_real_time () / G_USEC_PER_SEC;
+  g_assert (update_time >= 0);
+  manager->update_time = update_time;
 
   g_autoptr(GHashTable) old_filters = g_steal_pointer (&manager->filters);
   manager->filters = g_hash_table_new_full (g_str_hash,
