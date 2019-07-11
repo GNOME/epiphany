@@ -408,7 +408,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     markup = g_markup_escape_text (url->title, -1);
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                            "  <div class=\"overview-close-button\" title=\"%s\">&#10006;</div>"
+                            "  <div class=\"overview-close-button\" title=\"%s\"></div>"
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",
