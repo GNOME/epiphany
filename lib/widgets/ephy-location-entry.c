@@ -497,7 +497,7 @@ entry_key_press_cb (GtkEntry          *entry,
     /* Make sure the location is activated on CTRL+l even when the
      * completion popup is shown and have an active keyboard grab.
      */
-    ephy_location_entry_focus (location_entry);
+    ephy_location_entry_focus (location_entry);   
   }
 
   if (event->keyval == GDK_KEY_Return ||
@@ -850,7 +850,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, _("Show website security status and permissions"));
-
+  
   /* Add special widget css provider */
   context = gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry));
   entry->css_provider = gtk_css_provider_new ();
@@ -1140,6 +1140,7 @@ ephy_location_entry_focus (EphyLocationEntry *entry)
                               0, -1);
   gtk_window_set_focus (GTK_WINDOW (toplevel),
                         widget);
+  gtk_entry_set_placeholder_text (GTK_ENTRY (entry->url_entry), _("Search for websites, bookmarks, and open tabs"));
 }
 
 void
