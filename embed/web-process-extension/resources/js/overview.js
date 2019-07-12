@@ -24,8 +24,7 @@ Ephy.Overview = class Overview
     _initialize()
     {
         let anchors = document.getElementsByTagName('a');
-        for (let i = 0; i < anchors.length; i++) {
-            let anchor = anchors[i];
+        for (let anchor of anchors) {
             if (anchor.className != 'overview-item')
                 continue;
 
@@ -132,8 +131,7 @@ Ephy.Overview = class Overview
 
     _onThumbnailChanged(url, path)
     {
-        for (let i = 0; i < this._items.length; i++) {
-            let item = this._items[i];
+        for (let item of items) {
             if (item.url() == url) {
                 item.setThumbnailPath(path);
                 return;
@@ -143,8 +141,7 @@ Ephy.Overview = class Overview
 
     _onTitleChanged(url, title)
     {
-        for (let i = 0; i < this._items.length; i++) {
-            let item = this._items[i];
+        for (let item of items) {
             if (item.url() == url) {
                 item.setTitle(title);
                 return;
@@ -161,8 +158,7 @@ Ephy.Overview.Item = class OverviewItem
         this._title = null;
         this._thumbnail = null;
 
-        for (let i = 0; i < this._item.childNodes.length; i++) {
-            let child = this._item.childNodes[i];
+        for (let child of this._item.childNodes) {
             if (!(child instanceof Element))
                 continue;
 

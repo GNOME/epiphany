@@ -5,8 +5,7 @@ var Ephy = {};
 Ephy.getWebAppTitle = function()
 {
     let metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-        let meta = metas[i];
+    for (let meta of metas) {
         if (meta.name == 'application-name')
             return meta.content;
 
@@ -28,8 +27,7 @@ Ephy.getWebAppIcon = function(baseURL)
     let appleTouchIconURL = null;
     let largestIconSize = 0;
     let links = document.getElementsByTagName('link');
-    for (let i = 0; i < links.length; i++) {
-        let link = links[i];
+    for (let link of links) {
         if (link.rel == 'icon' || link.rel == 'shortcut icon' || link.rel == 'icon shortcut' || link.rel == 'shortcut-icon') {
             let sizes = link.getAttribute('sizes');
             if (!sizes)
@@ -42,8 +40,8 @@ Ephy.getWebAppIcon = function(baseURL)
             }
 
             let sizesList = size.split(' ');
-            for (let j = 0; j < sizesList.length; j++) {
-                let size = sizesList[j].toLowerCase().split('x');
+            for (let i = 0; i < sizesList.length; i++) {
+                let size = sizesList[i].toLowerCase().split('x');
 
                 // Only accept square icons.
                 if (size.length != 2 || size[0] != size[1])
@@ -73,8 +71,7 @@ Ephy.getWebAppIcon = function(baseURL)
     let iconColor = null;
     let ogpIcon = null;
     let metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-        let meta = metas[i];
+    for (let meta of metas) {
         // FIXME: Ought to also search browserconfig.xml
         // See: http://stackoverflow.com/questions/24625305/msapplication-tileimage-favicon-backup
         if (meta.name == 'msapplication-TileImage')
@@ -200,8 +197,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         mainDiv.appendChild(ul);
 
         this._selected = null;
-        for (let i = 0; i < this._users.length; i++) {
-            let user = this._users[i];
+        for (let user of users) {
             if (!showAll && !user.startsWith(this._userElement.value))
                 continue;
 
@@ -252,10 +248,10 @@ Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
 {
     Ephy.formManagers = [];
 
-    for (let i = 0; i < forms.length; i++) {
-        if (!(forms[i] instanceof HTMLFormElement))
+    for (let form of forms) {
+        if (!(form instanceof HTMLFormElement))
             continue;
-        let formManager = new Ephy.FormManager(pageID, frameID, forms[i]);
+        let formManager = new Ephy.FormManager(pageID, frameID, form);
         formManager.handlePasswordForms(serializer);
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
@@ -266,8 +262,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
     // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
-    for (let i = 0; i < Ephy.formManagers.length; i++) {
-        let manager = Ephy.formManagers[i];
+    for (let manager of Ephy.formManagers) {
         if (manager.frameID() == frameID && manager.form() == form) {
             formManager = manager;
             break;
@@ -284,11 +279,9 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 
 Ephy.hasModifiedForms = function()
 {
-    for (let i = 0; i < document.forms.length; i++) {
-        let form = document.forms[i];
+    for (let form of document.forms) {
         let modifiedInputElement = false;
-        for (let j = 0; j < form.elements.length; j++) {
-            let element = form.elements[j];
+        for (let element of form.elements) {
             if (!Ephy.isEdited(element))
                 continue;
 
@@ -550,8 +543,7 @@ Ephy.FormManager = class FormManager
 
     _containsPasswordElement()
     {
-        for (let i = 0; i < this._form.elements.length; i++) {
-            let element = this._form.elements[i];
+        for (let element of this._form.elements) {
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'password' || element.type === 'adminpw')
                     return true;
@@ -574,8 +566,7 @@ Ephy.FormManager = class FormManager
     _findPasswordFields()
     {
         let passwordFields = [];
-        for (let i = 0; i < this._form.elements.length; i++) {
-            let element = this._form.elements[i];
+        for (let element of this._form.elements) {
             if (element instanceof HTMLInputElement && element.type === 'password') {
                 // We only want to process forms with 1-3 fields. A common
                 // case is to have a "change password" form with 3 fields:
