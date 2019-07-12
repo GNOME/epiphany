@@ -1140,6 +1140,7 @@ ephy_location_entry_focus (EphyLocationEntry *entry)
                               0, -1);
   gtk_window_set_focus (GTK_WINDOW (toplevel),
                         widget);
+  gtk_entry_set_placeholder_text (GTK_ENTRY (entry->url_entry), _("Search for websites, bookmarks, and open tabs"));
 }
 
 void
