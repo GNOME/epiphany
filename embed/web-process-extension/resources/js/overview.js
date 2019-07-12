@@ -237,10 +237,11 @@ Ephy.Overview.Item = class OverviewItem
     setThumbnailPath(path)
     {
         if (path) {
-            this._thumbnail.style.background = 'url(file://' + path + '); background-size: 100%';
+            this._thumbnail.style.backgroundImage = 'url(file://' + path + ')';
+            this._thumbnail.style.backgroundSize = '100%';
+        } else {
+            this._thumbnail.style.backgroundImage = '';
         }
-        else
-            this._thumbnail.style.background = null;
     }
 
     detachFromParent()
