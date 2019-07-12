@@ -393,6 +393,9 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   g_string_append (data_str,
                    "<div id=\"overview\">\n");
 
+  g_string_append (data_str,
+                   "<div class=\"most-visited-grid\">\n");
+
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
     const char *snapshot;
@@ -416,6 +419,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   }
 
   data_str = g_string_append (data_str,
+                              "  </div>\n"
                               "  </div>\n"
                               "</body></html>\n");
 
