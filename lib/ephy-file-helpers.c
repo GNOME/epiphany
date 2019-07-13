@@ -352,6 +352,7 @@ ephy_file_helpers_init (const char          *profile_dir,
   gboolean ret = TRUE;
   gboolean private_profile;
   gboolean steal_data_from_profile;
+  g_autofree char *app_file = NULL;
 
   ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
 
@@ -373,7 +374,7 @@ ephy_file_helpers_init (const char          *profile_dir,
       g_object_unref (file);
     }
 
-    g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
+    app_file = g_build_filename (profile_dir, ".app", NULL);
     if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
       const char *app_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir_global);
       cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);

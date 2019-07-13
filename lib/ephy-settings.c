@@ -205,6 +205,10 @@ ephy_settings_get_for_web_process_extension (const char *schema)
 
   if (gsettings == NULL) {
     g_autoptr(GSettingsBackend) backend = NULL;
+    g_autoptr(GSettings) web_gsettings = NULL;
+    g_autofree char *keyfile_path = NULL;
+    g_autofree char *path = NULL;
+
     gsettings = ephy_settings_get (schema);
     g_assert (gsettings != NULL);
 
@@ -217,11 +221,10 @@ ephy_settings_get_for_web_process_extension (const char *schema)
       return gsettings;
     }
 
-    g_autofree char *keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
+    keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
     backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
 
-    GSettings *web_gsettings;
-    g_autofree char *path = get_relocatable_path (schema);
+    path = get_relocatable_path (schema);
     if (path != NULL)
       web_gsettings = g_settings_new_with_backend_and_path (schema, backend, path);
     else
@@ -230,7 +233,7 @@ ephy_settings_get_for_web_process_extension (const char *schema)
     sync_settings (gsettings, web_gsettings);
     g_hash_table_insert (settings, g_steal_pointer (&key_name), web_gsettings);
 
-    return web_gsettings;
+    return g_steal_pointer (&web_gsettings);
   }
 
   return gsettings;

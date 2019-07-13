@@ -377,6 +377,7 @@ ephy_web_application_create (const char *id,
   g_autofree char *app_file = NULL;
   g_autofree char *profile_dir = NULL;
   g_autofree char *desktop_file_path = NULL;
+  int fd;
 
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
@@ -397,7 +398,7 @@ ephy_web_application_create (const char *id,
 
   /* Create an .app file. */
   app_file = g_build_filename (profile_dir, ".app", NULL);
-  int fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+  fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
   if (fd < 0) {
     g_warning ("Failed to create .app file: %s", g_strerror (errno));
     return NULL;

@@ -118,11 +118,12 @@ ephy_embed_shell_get_view_for_page_id (EphyEmbedShell *self,
     for (GList *t = tabs; t && t->data; t = t->next) {
       EphyWebView *ephy_view = ephy_embed_get_web_view (t->data);
       WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_view);
+      g_autofree char *real_origin = NULL;
 
       if (webkit_web_view_get_page_id (web_view) != page_id)
         continue;
 
-      g_autofree char *real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+      real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
 
       if (g_strcmp0 (real_origin, origin)) {
         g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
@@ -361,6 +362,7 @@ static void
 password_manager_query_finished_cb (GList               *records,
                                     PasswordManagerData *data)
 {
+  EphyWebProcessExtensionProxy *proxy;
   EphyPasswordRecord *record;
   const char *username = NULL;
   const char *password = NULL;
@@ -371,7 +373,7 @@ password_manager_query_finished_cb (GList               *records,
     password = ephy_password_record_get_password (record);
   }
 
-  EphyWebProcessExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (data->shell,
+  proxy = ephy_embed_shell_get_extension_proxy_for_page_id (data->shell,
                                                                                    data->page_id,
                                                                                    data->origin);
   if (proxy)
@@ -421,6 +423,7 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
   guint64 frame_id = property_to_uint64 (value, "frameID");
+  PasswordManagerData *data;
 
   if (!origin || !target_origin || !password_field)
     return;
@@ -432,7 +435,7 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   if (!username && username_field)
     g_clear_pointer (&username_field, g_free);
 
-  PasswordManagerData *data = g_new (PasswordManagerData, 1);
+  data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
   data->page_id = page_id;
@@ -508,6 +511,7 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
   gboolean is_new = jsc_value_to_boolean (is_new_prop);
   guint64 page_id = property_to_uint64 (value, "pageID");
   EphyWebView *view;
+  SaveAuthRequest *request;
 
   /* Both origin and target origin are required. */
   if (!origin || !target_origin)
@@ -542,7 +546,7 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
     return;
   }
 
-  SaveAuthRequest *request = g_new (SaveAuthRequest, 1);
+  request = g_new (SaveAuthRequest, 1);
   request->password_manager = g_object_ref (priv->password_manager);
   request->permissions_manager = g_object_ref (priv->permissions_manager);
   request->origin = g_steal_pointer (&origin);
@@ -581,21 +585,20 @@ web_process_extension_password_manager_query_usernames_received_cb (WebKitUserCo
                                                                     EphyEmbedShell           *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
   JSCValue *value = webkit_javascript_result_get_js_value (message);
   g_autofree char *origin = property_to_string_or_null (value, "origin");
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
   guint64 frame_id = property_to_uint64 (value, "frameID");
-
   GList *usernames;
+  EphyWebProcessExtensionProxy *proxy;
 
   if (!origin)
     return;
 
   usernames = ephy_password_manager_get_usernames_for_origin (priv->password_manager, origin);
 
-  EphyWebProcessExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
+  proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
   if (proxy)
     ephy_web_process_extension_proxy_password_query_usernames_response (proxy, usernames, promise_id, frame_id);
 }
