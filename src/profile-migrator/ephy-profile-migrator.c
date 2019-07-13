@@ -1124,15 +1124,19 @@ move_directory_contents (const char *source_path,
   while (TRUE) {
     GFileInfo *info;
     g_autoptr(GError) error = NULL;
+    g_autoptr(GFile) source_file = NULL;
+    g_autoptr(GFile) dest_file = NULL;
+
     if (!g_file_enumerator_iterate (direnum, &info, NULL, NULL, &error)) {
       g_warning ("Failed to enumerate dir: %s", error->message);
       return FALSE;
     }
+
     if (!info)
       break;
 
-    g_autoptr(GFile) source_file = g_file_get_child (source, g_file_info_get_name (info));
-    g_autoptr(GFile) dest_file = g_file_get_child (dest, g_file_info_get_name (info));
+    source_file = g_file_get_child (source, g_file_info_get_name (info));
+    dest_file = g_file_get_child (dest, g_file_info_get_name (info));
     if (!g_file_move (source_file, dest_file, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
       g_autofree char *source_path = g_file_get_path (source_file);
       g_autofree char *dest_path = g_file_get_path (dest_file);
@@ -1184,8 +1188,14 @@ migrate_webapps_harder (void)
 
       if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
         g_autoptr(GKeyFile) file = g_key_file_new ();
+        g_autoptr(GFile) desktop_symlink = NULL;
         g_autofree char *desktop_file_name = g_strconcat (name, ".desktop", NULL);
         g_autofree char *desktop_file_path = g_build_filename (correct_profile_dir, desktop_file_name, NULL);
+        g_autofree char *exec = NULL;
+        g_autofree char *new_exec = NULL;
+        g_autofree char *icon = NULL;
+        g_autofree char *new_icon = NULL;
+        g_autofree char *desktop_symlink_path = NULL;
         g_autoptr(GError) error = NULL;
 
         move_directory_contents (incorrect_profile_dir, correct_profile_dir);
@@ -1193,21 +1203,21 @@ migrate_webapps_harder (void)
         // Update Exec and Icon to point to the new profile dir
         g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
 
-        g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
+        exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
         if (exec == NULL) {
           g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
           continue;
         }
-        g_autofree char *new_exec = ephy_string_find_and_replace (exec, incorrect_profile_dir, correct_profile_dir);
+        new_exec = ephy_string_find_and_replace (exec, incorrect_profile_dir, correct_profile_dir);
         LOG ("migrate_profile_directories: setting Exec to %s", new_exec);
         g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
 
-        g_autofree char *icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
+        icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
         if (exec == NULL) {
           g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
           continue;
         }
-        g_autofree char *new_icon = ephy_string_find_and_replace (icon, incorrect_profile_dir, correct_profile_dir);
+        new_icon = ephy_string_find_and_replace (icon, incorrect_profile_dir, correct_profile_dir);
         LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
         g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
 
@@ -1216,8 +1226,8 @@ migrate_webapps_harder (void)
           g_clear_error (&error);
         }
 
-        g_autofree char *desktop_symlink_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file_name, NULL);
-        g_autoptr(GFile) desktop_symlink = g_file_new_for_path (desktop_symlink_path);
+        desktop_symlink_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file_name, NULL);
+        desktop_symlink = g_file_new_for_path (desktop_symlink_path);
         LOG ("Symlinking %s to %s", desktop_symlink_path, desktop_file_path);
 
         // Try removing old symlink, failure is ok assuming it doesn't exist.
@@ -1239,7 +1249,12 @@ migrate_webapps_harder (void)
 static void
 migrate_profile_directories (void)
 {
-  GList *web_apps, *l;
+  g_autoptr(GFile) new_directory = NULL;
+  g_autoptr(GFile) adblock_directory = NULL;
+  g_autoptr(GFile) gsb_file = NULL;
+  g_autoptr(GFile) gsb_journal_file = NULL;
+  GList *web_apps;
+  GList *l;
 
   /* Web app profiles moved from config to data dirs. If this migration has
    * already been run for a separate profile, then the legacy application list
@@ -1249,55 +1264,66 @@ migrate_profile_directories (void)
   for (l = web_apps; l; l = l->next) {
     EphyWebApplication *app = (EphyWebApplication *)l->data;
     g_autoptr(GError) error = NULL;
-
+    g_autoptr(GKeyFile) file = NULL;
+    g_autoptr(GFile) desktop_symlink = NULL;
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
     g_autofree char *old_path = g_build_filename (legacy_default_profile_dir (), old_name, NULL);
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
+    g_autofree char *app_file = NULL;
+    g_autofree char *old_profile_prefix = NULL;
+    g_autofree char *new_profile_prefix = NULL;
+    g_autofree char *desktop_file_path = NULL;
+    g_autofree char *exec = NULL;
+    g_autofree char *new_exec = NULL;
+    g_autofree char *icon = NULL;
+    g_autofree char *new_icon = NULL;
+    g_autofree char *desktop_symlink_path = NULL;
+    int fd;
 
     if (!move_directory_contents (old_path, app_path))
       continue;
 
     // Create an empty file to indicate it's an app
-    g_autofree char *app_file = g_build_filename (app_path, ".app", NULL);
-    int fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+    app_file = g_build_filename (app_path, ".app", NULL);
+    fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
     if (fd < 0)
       g_warning ("Failed to create .app file: %s", g_strerror (errno));
     else
       close (fd);
 
     // Update Exec and Icon to point to the new profile dir
-    g_autofree char *old_profile_prefix = g_build_filename (legacy_default_profile_dir (), "app-epiphany-", NULL);
-    g_autofree char *new_profile_prefix = g_build_filename (g_get_user_data_dir (), "epiphany-", NULL);
-    g_autoptr(GKeyFile) file = g_key_file_new ();
-    g_autofree char *desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
+    old_profile_prefix = g_build_filename (legacy_default_profile_dir (), "app-epiphany-", NULL);
+    new_profile_prefix = g_build_filename (g_get_user_data_dir (), "epiphany-", NULL);
+    file = g_key_file_new ();
+    desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
     g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
 
-    g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
+    exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
     if (exec == NULL) {
       g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
       continue;
     }
-    g_autofree char *new_exec = ephy_string_find_and_replace (exec, old_profile_prefix, new_profile_prefix);
+    new_exec = ephy_string_find_and_replace (exec, old_profile_prefix, new_profile_prefix);
     LOG ("migrate_profile_directories: setting Exec to %s", new_exec);
     g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
 
-    g_autofree char *icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
+    icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
     if (exec == NULL) {
       g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
       continue;
     }
-    g_autofree char *new_icon = ephy_string_find_and_replace (icon, old_profile_prefix, new_profile_prefix);
+    new_icon = ephy_string_find_and_replace (icon, old_profile_prefix, new_profile_prefix);
     LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
     g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
 
     if (!g_key_file_save_to_file (file, desktop_file_path, &error))
       g_warning ("Failed to save desktop file %s", error->message);
 
-    g_autofree char *desktop_symlink_path = g_build_filename (g_get_user_data_dir (),
-                                                              "applications",
-                                                              app->desktop_file,
-                                                              NULL);
-    g_autoptr(GFile) desktop_symlink = g_file_new_for_path (desktop_symlink_path);
+    desktop_symlink_path = g_build_filename (g_get_user_data_dir (),
+                                             "applications",
+                                             app->desktop_file,
+                                             NULL);
+    desktop_symlink = g_file_new_for_path (desktop_symlink_path);
     LOG ("Symlinking %s to %s", desktop_symlink_path, desktop_file_path);
 
     // Try removing old symlink, failure is ok assuming it doesn't exist.
@@ -1322,12 +1348,12 @@ migrate_profile_directories (void)
     return;
 
   /* We are also moving some cache directories so just remove the old ones */
-  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_profile_dir ());
-  g_autoptr(GFile) adblock_directory = g_file_get_child (new_directory, "adblock");
+  new_directory = g_file_new_for_path (ephy_default_profile_dir ());
+  adblock_directory = g_file_get_child (new_directory, "adblock");
   g_file_delete (adblock_directory, NULL, NULL);
-  g_autoptr(GFile) gsb_file = g_file_get_child (new_directory, "gsb-threats.db");
+  gsb_file = g_file_get_child (new_directory, "gsb-threats.db");
   g_file_delete (gsb_file, NULL, NULL);
-  g_autoptr(GFile) gsb_journal_file = g_file_get_child (new_directory, "gsb-threats.db-journal");
+  gsb_journal_file = g_file_get_child (new_directory, "gsb-threats.db-journal");
   g_file_delete (gsb_journal_file, NULL, NULL);
 }
 

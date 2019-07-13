@@ -300,11 +300,12 @@ ephy_web_process_extension_proxy_password_query_usernames_response (EphyWebProce
                                                                     gint32                        promise_id,
                                                                     guint64                       frame_id)
 {
+  GList *l;
+  g_auto(GVariantBuilder) builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
+
   if (!web_process_extension->proxy)
     return;
 
-  GList *l;
-  g_auto(GVariantBuilder) builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
   for (l = users; l != NULL; l = l->next)
     g_variant_builder_add (&builder, "s", l->data);
 
