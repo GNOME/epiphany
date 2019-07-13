@@ -620,6 +620,7 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"), origin);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
   g_free (message);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
@@ -856,6 +857,7 @@ password_form_focused_cb (EphyEmbedShell *shell,
   /* Translators: Message appears when insecure password form is focused. */
   label = gtk_label_new (_("Heads-up: this form is not secure. If you type your password, it will not be kept private."));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_widget_show (label);
 
   info_bar = gtk_info_bar_new ();
@@ -1631,6 +1633,7 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
   gtk_container_add (GTK_CONTAINER (content_area), label);
