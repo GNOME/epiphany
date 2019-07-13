@@ -670,10 +670,11 @@ ephy_web_view_show_auth_form_save_request (EphyWebView                    *web_v
                                            GDestroyNotify                  response_destroy)
 {
   GtkWidget *info_bar;
+  SaveRequestData *data;
 
   info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
 
-  SaveRequestData *data = g_new(SaveRequestData, 1);
+  data = g_new(SaveRequestData, 1);
   data->callback = response_callback;
   data->callback_data = response_data;
   data->callback_destroy = response_destroy;
