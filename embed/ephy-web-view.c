@@ -597,7 +597,6 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
                                                            const char  *username)
 {
   GtkWidget *info_bar;
-  GtkWidget *action_area;
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
@@ -608,10 +607,6 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
                                             _("_Never Save"), GTK_RESPONSE_REJECT,
                                             _("_Save"), GTK_RESPONSE_YES,
                                             NULL);
-
-  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
-                                  GTK_ORIENTATION_HORIZONTAL);
 
   label = gtk_label_new (NULL);
   /* Translators: The %s the hostname where this is happening.
@@ -1581,7 +1576,6 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 {
   PermissionRequestData *data;
   GtkWidget *info_bar;
-  GtkWidget *action_area;
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
@@ -1591,10 +1585,6 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
                                             NULL);
-
-  action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
-                                  GTK_ORIENTATION_HORIZONTAL);
 
   /* Label */
   origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
