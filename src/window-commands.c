@@ -576,7 +576,9 @@ window_cmd_show_about (GSimpleAction *action,
   GKeyFile *key_file;
   GBytes *bytes;
   GError *error = NULL;
-  char **authors, **maintainers, **past_maintainers, **contributors, **artists, **documenters;
+  char **orig_authors, **maintainers, **past_maintainers, **contributors, **artists, **documenters;
+  char **authors = NULL;
+  guint index;
 
   key_file = g_key_file_new ();
   bytes = g_resources_lookup_data ("/org/gnome/epiphany/about.ini", 0, NULL);
@@ -588,7 +590,7 @@ window_cmd_show_about (GSimpleAction *action,
   }
   g_bytes_unref (bytes);
 
-  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Author", NULL, NULL);
+  orig_authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Author", NULL, NULL);
   maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Maintainers", NULL, NULL);
   past_maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastMaintainers", NULL, NULL);
   contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", NULL, NULL);
@@ -623,15 +625,34 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_website_label (dialog, _("Website"));
   gtk_about_dialog_set_logo_icon_name (dialog, APPLICATION_ID);
 
-  /* We have to use add_credit_section() for documenters and artists to
-   * ensure maintainers get sorted first. */
+  authors = g_malloc0 (sizeof (char *));
+
+  for (index = 0; index < g_strv_length (orig_authors); index++) {
+    authors = ephy_strv_append ((const char * const *)authors, orig_authors[index]);
+  }
+
+  authors = ephy_strv_append ((const char * const *)authors, "");
+
+  for (index = 0; index < g_strv_length (maintainers); index++) {
+    authors = ephy_strv_append ((const char * const *)authors, maintainers[index]);
+  }
+
+  authors = ephy_strv_append ((const char * const *)authors, " ");
+
+  for (index = 0; index < g_strv_length (past_maintainers); index++) {
+    authors = ephy_strv_append ((const char * const *)authors, past_maintainers[index]);
+  }
+
+  authors = ephy_strv_append ((const char * const *)authors, "  ");
+
+  for (index = 0; index < g_strv_length (contributors); index++) {
+    authors = ephy_strv_append ((const char * const *)authors, contributors[index]);
+  }
+
   gtk_about_dialog_set_authors (dialog, (const char **)authors);
+  gtk_about_dialog_set_artists (dialog, (const char **)artists);
+  gtk_about_dialog_set_documenters (dialog, (const char **)documenters);
   gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
-  gtk_about_dialog_add_credit_section (dialog, _("Current maintainers"), (const char **)maintainers);
-  gtk_about_dialog_add_credit_section (dialog, _("Past maintainers"), (const char **)past_maintainers);
-  gtk_about_dialog_add_credit_section (dialog, _("Documented by"), (const char **)documenters);
-  gtk_about_dialog_add_credit_section (dialog, _("Artwork by"), (const char **)artists);
-  gtk_about_dialog_add_credit_section (dialog, _("Contributors"), (const char **)contributors);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (GTK_WIDGET (dialog));
