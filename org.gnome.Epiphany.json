@@ -9,18 +9,17 @@
     ],
     "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
     "finish-args" : [
-        "--share=ipc",
-        "--socket=fallback-x11",
-        "--socket=wayland",
         "--device=dri",
-        "--share=network",
-        "--socket=pulseaudio",
-        "--system-talk-name=org.freedesktop.GeoClue2",
-        "--talk-name=org.freedesktop.secrets",
         "--filesystem=xdg-download",
-        "--talk-name=org.freedesktop.Notifications",
         "--metadata=X-DConf=migrate-path=/org/gnome/epiphany/"
-
+        "--share=ipc",
+        "--share=network",
+        "--socket=fallback-x11",
+        "--socket=pulseaudio",
+        "--socket=wayland",
+        "--system-talk-name=org.freedesktop.GeoClue2",
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=org.freedesktop.secrets",
     ],
     "cleanup" : [
         "/include",
