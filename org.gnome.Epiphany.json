@@ -26,7 +26,6 @@
         {
             "name" : "libdazzle",
             "buildsystem" : "meson",
-            "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
@@ -37,7 +36,6 @@
         {
             "name" : "libhandy",
             "buildsystem" : "meson",
-            "builddir" : true,
             "config-opts" : [
                 "-Dexamples=false",
                 "-Dglade_catalog=disabled",
@@ -54,12 +52,11 @@
         },
         {
             "name" : "epiphany",
+            "buildsystem" : "meson",
             "config-opts" : [
                 "-Dtech_preview=true",
                 "-Dprofile=Devel"
             ],
-            "buildsystem" : "meson",
-            "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
