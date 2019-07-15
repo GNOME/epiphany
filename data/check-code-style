@@ -16,20 +16,28 @@ then
     exit 1
 fi
 
-patch=$(mktemp)
+# create a filename to store our generated patch
+prefix="epiphany-ccs"
+suffix="$(date +%C%y-%m-%d_%Hh%Mm%Ss)"
+patch="/tmp/$prefix-$suffix.patch"
 
-for DIR in $SOURCE_ROOT/embed $SOURCE_ROOT/lib $SOURCE_ROOT/src $SOURCE_ROOT/tests
+# clean up old patches
+rm -f /tmp/$prefix*.patch
+
+pushd $SOURCE_ROOT
+for DIR in embed lib src tests
 do
    # Aligning prototypes is not working yet, so avoid headers
    for FILE in $(find "$DIR" -name "*.c" ! -path "*/contrib/*")
     do
-        cp $FILE $FILE.check
-        "$UNCRUSTIFY" -c "$SOURCE_ROOT/data/uncrustify.cfg" --replace --no-backup "$FILE.check"
-        "$LINEUP_PARAMETERS" "$FILE.check" > "$FILE.temp" && mv "$FILE.temp" "$FILE.check"
-        diff -u "$FILE" "$FILE.check" | sed -e "1s|--- |--- a/|" -e "2s|+++ -|+++ b/$file|" >> "$patch"
-        rm $FILE.check
+        "$UNCRUSTIFY" -c "data/uncrustify.cfg" --no-backup "$FILE"
+        "$LINEUP_PARAMETERS" "$FILE.uncrustify" > "$FILE.temp" && mv "$FILE.temp" "$FILE.uncrustify"
+        diff -urN "$FILE" "$FILE.uncrustify" | \
+            sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
+        rm "$FILE.uncrustify"
    done
 done
+popd
 
 if [ ! -s "$patch" ] ; then
   printf "** Commit is valid. \\o/\n"
