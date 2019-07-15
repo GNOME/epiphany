@@ -119,8 +119,6 @@ struct _PrefsDialog {
   GtkWidget *no_third_party;
   GtkWidget *never;
   GtkWidget *remember_passwords_switch;
-  GtkWidget *do_not_track_row;
-  GtkWidget *do_not_track_switch;
   GtkWidget *clear_personal_data_button;
 
   /* language */
@@ -1003,8 +1001,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
 
   /* language */
@@ -1953,18 +1949,7 @@ setup_general_page (PrefsDialog *dialog)
                    dialog->adblock_allow_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   dialog->do_not_track_row,
-                   "sensitive",
-                   G_SETTINGS_BIND_DEFAULT);
 
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_DO_NOT_TRACK,
-                   dialog->do_not_track_switch,
-                   "active",
-                   /* Teensy hack: don't override the previous binding. */
-                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
                    dialog->enable_smooth_scrolling_switch,
@@ -2356,8 +2341,6 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->browsing_box,
-                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->do_not_track_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->enable_smooth_scrolling_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
