@@ -24,7 +24,7 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotification {
-  GtkFrame   parent_instance;
+  GtkFrame parent_instance;
 
   GtkWidget *grid;
 
@@ -32,8 +32,8 @@ struct _EphyNotification {
   GtkWidget *body;
   GtkWidget *close_button;
 
-  char      *head_msg;
-  char      *body_msg;
+  char *head_msg;
+  char *body_msg;
 };
 
 struct _EphyNotificationClass {

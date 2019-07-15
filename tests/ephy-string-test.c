@@ -57,7 +57,8 @@ test_ephy_string_get_hostname (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   gboolean ret;
 

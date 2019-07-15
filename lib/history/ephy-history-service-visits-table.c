@@ -49,7 +49,8 @@ ephy_history_service_initialize_visits_table (EphyHistoryService *self)
 }
 
 void
-ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVisit *visit)
+ephy_history_service_add_visit_row (EphyHistoryService   *self,
+                                    EphyHistoryPageVisit *visit)
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
@@ -99,7 +100,8 @@ create_page_visit_from_statement (EphySQLiteStatement *statement)
 }
 
 GList *
-ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery *query)
+ephy_history_service_find_visit_rows (EphyHistoryService *self,
+                                      EphyHistoryQuery   *query)
 {
   EphySQLiteStatement *statement = NULL;
   GList *substring;

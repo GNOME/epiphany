@@ -232,8 +232,7 @@ ephy_header_bar_constructed (GObject *object)
 
     gtk_button_set_image (GTK_BUTTON (button),
                           gtk_image_new_from_icon_name ("open-menu",
-                          GTK_ICON_SIZE_LARGE_TOOLBAR));
-
+                                                        GTK_ICON_SIZE_LARGE_TOOLBAR));
   }
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
@@ -334,15 +333,15 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
   switch (adaptive_mode) {
-  case EPHY_ADAPTIVE_MODE_NORMAL:
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
+    case EPHY_ADAPTIVE_MODE_NORMAL:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
+      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
 
-    break;
-  case EPHY_ADAPTIVE_MODE_NARROW:
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
+      break;
+    case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
+      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
 
-    break;
+      break;
   }
 }

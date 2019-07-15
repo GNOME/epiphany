@@ -200,13 +200,13 @@ ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
   switch (adaptive_mode) {
-  case EPHY_ADAPTIVE_MODE_NORMAL:
-    gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
+    case EPHY_ADAPTIVE_MODE_NORMAL:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
 
-    break;
-  case EPHY_ADAPTIVE_MODE_NARROW:
-    gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
+      break;
+    case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
 
-    break;
+      break;
   }
 }

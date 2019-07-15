@@ -31,7 +31,9 @@
 #include <gtk/gtk.h>
 
 static void
-web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, gpointer user_data)
+web_view_created_cb (EphyEmbedShell *shell,
+                     EphyWebView    *view,
+                     gpointer        user_data)
 {
   gboolean *web_view_created = (gboolean *)user_data;
   *web_view_created = TRUE;
@@ -54,7 +56,8 @@ test_ephy_embed_shell_web_view_created (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

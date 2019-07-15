@@ -68,21 +68,21 @@ typedef struct {
 
 typedef struct {
   EphyPasswordManager *manager;
-  char                *password;
+  char *password;
 } UpdatePasswordAsyncData;
 
 typedef struct {
   EphyPasswordManager *manager;
-  EphyPasswordRecord  *record;
+  EphyPasswordRecord *record;
 } ManageRecordAsyncData;
 
 typedef struct {
-  EphyPasswordManager                    *manager;
-  gboolean                                is_initial;
-  GList                                  *remotes_deleted;
-  GList                                  *remotes_updated;
-  EphySynchronizableManagerMergeCallback  callback;
-  gpointer                                user_data;
+  EphyPasswordManager *manager;
+  gboolean is_initial;
+  GList *remotes_deleted;
+  GList *remotes_updated;
+  EphySynchronizableManagerMergeCallback callback;
+  gpointer user_data;
 } MergePasswordsAsyncData;
 
 static QueryAsyncData *
@@ -220,7 +220,7 @@ get_attributes_table (const char *id,
   if (server_time_modified >= 0)
     g_hash_table_insert (attributes,
                          g_strdup (SERVER_TIME_MODIFIED_KEY),
-                         g_strdup_printf ("%"PRId64, server_time_modified));
+                         g_strdup_printf ("%" PRId64, server_time_modified));
 
   return attributes;
 }
@@ -688,8 +688,8 @@ ephy_password_manager_forget (EphyPasswordManager *self,
   g_assert (id);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
-   * therefore we need to obtain the password record first and then emit
-   * the signal before clearing the password from the secret schema. */
+  * therefore we need to obtain the password record first and then emit
+  * the signal before clearing the password from the secret schema. */
   ephy_password_manager_query (self, id,
                                NULL, NULL, NULL, NULL, NULL,
                                forget_cb, self);
@@ -926,7 +926,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
         local_timestamp = ephy_password_record_get_time_password_changed (record);
         if (local_timestamp > remote_timestamp) {
           /* Local record is newer. Keep it and upload it to server.
-           * Also, must keep the most recent server time modified. */
+          * Also, must keep the most recent server time modified. */
           local_server_time_modified = ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record));
           if (local_server_time_modified < remote_server_time_modified) {
             ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),

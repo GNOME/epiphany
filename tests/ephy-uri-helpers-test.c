@@ -66,7 +66,8 @@ test_ephy_uri_helpers_remove_tracking (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

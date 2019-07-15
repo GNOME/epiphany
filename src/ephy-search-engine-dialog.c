@@ -148,9 +148,9 @@ dialog_check_name_entry (const char             *name,
 
   /* Check if name already exist in the search_engine_manager */
   if (ephy_search_engine_manager_get_address (manager, name) != NULL &&
-      g_strcmp0 (name, search_engine_name) != 0 ) {
-      dialog_set_entry_error_state (dialog->search_engine_name_entry);
-      return FALSE;
+      g_strcmp0 (name, search_engine_name) != 0) {
+    dialog_set_entry_error_state (dialog->search_engine_name_entry);
+    return FALSE;
   }
 
   dialog_set_entry_normal_state (dialog->search_engine_name_entry);
@@ -164,8 +164,7 @@ dialog_check_address_entry (const char             *address,
   if (address == NULL || !soup_uri_new (address) || strstr (address, "%s") == NULL) {
     dialog_set_entry_error_state (dialog->search_engine_address_entry);
     return FALSE;
-  }
-  else
+  } else
     dialog_set_entry_normal_state (dialog->search_engine_address_entry);
 
   return TRUE;
@@ -274,7 +273,7 @@ ephy_search_engine_dialog_fill_list_box (EphySearchEngineDialog *dialog)
   GtkListBox *listbox;
   GtkWidget *list_box_row;
   EphySearchEngineManager *manager;
-  char **engines_names ;
+  char **engines_names;
 
   listbox = GTK_LIST_BOX (dialog->search_engine_list_box);
   manager = dialog->search_engine_manager;
@@ -359,13 +358,13 @@ on_search_engine_remove_button_clicked (GtkButton              *button,
   /* Select the previous row before removing the current one */
   index = gtk_list_box_row_get_index (list_box_row);
   if (index == 0)
-    index = 2; // Trick in order to select the futur first row
+    index = 2; /* Trick in order to select the futur first row */
   prev_list_box_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (dialog->search_engine_list_box),
                                                      index - 1);
   /* If the removed engine is the default, choose the newly selected as default */
   default_search_engine = ephy_search_engine_manager_get_default_engine (dialog->search_engine_manager);
 
-  if (g_strcmp0(default_search_engine, search_engine_name) == 0) {
+  if (g_strcmp0 (default_search_engine, search_engine_name) == 0) {
     search_engine_label = container_get_first_child (GTK_CONTAINER (prev_list_box_row));
     search_engine_name = gtk_label_get_text (GTK_LABEL (search_engine_label));
     ephy_search_engine_manager_set_default_engine (dialog->search_engine_manager,
@@ -401,7 +400,7 @@ on_default_search_engine_switch_state_modified (GtkWidget              *switch_w
   search_engine_name = gtk_label_get_text (GTK_LABEL (search_engine_label));
   default_search_engine = ephy_search_engine_manager_get_default_engine (dialog->search_engine_manager);
 
-  if ( g_strcmp0(default_search_engine, search_engine_name) != 0) {
+  if (g_strcmp0 (default_search_engine, search_engine_name) != 0) {
     is_set = ephy_search_engine_manager_set_default_engine (dialog->search_engine_manager,
                                                             search_engine_name);
 
@@ -415,8 +414,7 @@ on_default_search_engine_switch_state_modified (GtkWidget              *switch_w
                            TRUE);
     gtk_widget_set_sensitive (dialog->search_engine_default_switch, FALSE);
     return TRUE;
-  }
-  else
+  } else
     return FALSE;
 }
 
@@ -474,7 +472,7 @@ sort_list_box_by_engine_name (GtkListBoxRow *row1,
 }
 
 static void
-dialog_entry_change_on_event (GtkWidget *entry,
+dialog_entry_change_on_event (GtkWidget              *entry,
                               EphySearchEngineDialog *dialog)
 {
   EphySearchEngineManager *manager;
@@ -535,8 +533,8 @@ dialog_entry_change_on_event (GtkWidget *entry,
 
 static gboolean
 address_entry_on_focus_out_cb (GtkWidget *entry,
-                              GdkEvent  *event,
-                              gpointer   data)
+                               GdkEvent  *event,
+                               gpointer   data)
 {
   EphySearchEngineDialog *dialog;
   dialog = EPHY_SEARCH_ENGINE_DIALOG (data);
@@ -546,7 +544,7 @@ address_entry_on_focus_out_cb (GtkWidget *entry,
 
 static void
 address_entry_on_activate_cb (GtkWidget *entry,
-                             gpointer   data)
+                              gpointer   data)
 {
   EphySearchEngineDialog *dialog;
   dialog = EPHY_SEARCH_ENGINE_DIALOG (data);
@@ -595,7 +593,7 @@ name_entry_change_on_event (GtkWidget              *entry,
   search_engine_label = container_get_first_child (GTK_CONTAINER (list_box_row));
   search_engine_name = gtk_label_get_text (GTK_LABEL (search_engine_label));
   new_search_engine_name = gtk_entry_get_text (GTK_ENTRY (entry));
-  search_engine_address =  gtk_entry_get_text (GTK_ENTRY (dialog->search_engine_address_entry));
+  search_engine_address = gtk_entry_get_text (GTK_ENTRY (dialog->search_engine_address_entry));
   search_engine_bang = gtk_entry_get_text (GTK_ENTRY (dialog->search_engine_bang_entry));
 
   if (g_strcmp0 (search_engine_name, new_search_engine_name) == 0) {
@@ -624,7 +622,7 @@ name_entry_change_on_event (GtkWidget              *entry,
   /* Change the name of the default searche engine too*/
   default_search_engine = ephy_search_engine_manager_get_default_engine (dialog->search_engine_manager);
 
-  if (g_strcmp0(default_search_engine, search_engine_name) == 0)
+  if (g_strcmp0 (default_search_engine, search_engine_name) == 0)
     ephy_search_engine_manager_set_default_engine (dialog->search_engine_manager,
                                                    new_search_engine_name);
 

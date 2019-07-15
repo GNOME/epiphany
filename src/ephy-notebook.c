@@ -79,8 +79,7 @@ static void ephy_notebook_page_reordered (GtkNotebook *notebook,
                                           GtkWidget   *child,
                                           guint        page_num);
 
-static const GtkTargetEntry url_drag_types [] =
-{
+static const GtkTargetEntry url_drag_types [] = {
   { (char *)"GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
   { (char *)EPHY_DND_URI_LIST_TYPE, 0, 0 },
   { (char *)EPHY_DND_URL_TYPE, 0, 1 },
@@ -178,7 +177,9 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 }
 
 static gint
-find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
+find_tab_num_at_pos (EphyNotebook *notebook,
+                     gint          abs_x,
+                     gint          abs_y)
 {
   int page_num = 0;
   GtkNotebook *nb = GTK_NOTEBOOK (notebook);
@@ -372,7 +373,7 @@ update_tabs_visibility (EphyNotebook *nb,
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
       nb->adaptive_mode != EPHY_ADAPTIVE_MODE_NARROW &&
       ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
-        policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
+       policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
     show_tabs = TRUE;
 
   /* Only show the tabs when the "tabs-allowed" property is TRUE. */
@@ -694,7 +695,8 @@ title_changed_cb (EphyEmbed    *embed,
 }
 
 static void
-close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
+close_button_clicked_cb (GtkWidget *widget,
+                         GtkWidget *tab)
 {
   GtkWidget *notebook;
 
@@ -703,7 +705,8 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *tab)
 }
 
 static GtkWidget *
-build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
+build_tab_label (EphyNotebook *nb,
+                 EphyEmbed    *embed)
 {
   GtkWidget *tab_label;
   EphyWebView *view;

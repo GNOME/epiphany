@@ -136,9 +136,9 @@ base64_urlsafe_to_base64 (char *text)
 }
 
 guint8 *
-ephy_sync_utils_base64_urlsafe_decode (const char   *text,
-                                       gsize        *out_len,
-                                       gboolean      should_fill)
+ephy_sync_utils_base64_urlsafe_decode (const char *text,
+                                       gsize      *out_len,
+                                       gboolean    should_fill)
 {
   guint8 *out;
   char *to_decode;
@@ -249,7 +249,7 @@ ephy_sync_utils_make_client_record (const char *device_bso_id,
   g_assert (device_name);
 
   array = json_array_new ();
-  protocol = g_strdup_printf ("1.%"PRIu32, EPHY_SYNC_STORAGE_VERSION);
+  protocol = g_strdup_printf ("1.%" PRIu32, EPHY_SYNC_STORAGE_VERSION);
   json_array_add_string_element (array, protocol);
 
   object = json_object_new ();

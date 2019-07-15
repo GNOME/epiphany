@@ -197,7 +197,7 @@ save_thumbnail (GdkPixbuf  *pixbuf,
   chmod (tmp_path, 0600);
   rename (tmp_path, path);
 
- out:
+out:
   if (error != NULL) {
     g_warning ("Failed to create thumbnail %s: %s", tmp_path, error->message);
     g_error_free (error);
@@ -343,10 +343,10 @@ idle_cache_snapshot_path (gpointer user_data)
 }
 
 static void
-cache_snapshot_data_in_idle (EphySnapshotService  *service,
-                             const char           *url,
-                             const char           *path,
-                             EphySnapshotFreshness freshness)
+cache_snapshot_data_in_idle (EphySnapshotService   *service,
+                             const char            *url,
+                             const char            *path,
+                             EphySnapshotFreshness  freshness)
 {
   CacheData *data;
   data = g_new (CacheData, 1);
@@ -397,9 +397,9 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
 }
 
 static char *
-ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
-                                            GAsyncResult        *result,
-                                            GError             **error)
+ephy_snapshot_service_save_snapshot_finish (EphySnapshotService  *service,
+                                            GAsyncResult         *result,
+                                            GError              **error)
 {
   g_assert (g_task_is_valid (result, service));
 
@@ -490,29 +490,29 @@ webview_destroyed_cb (GtkWidget *web_view,
 }
 
 static void
-webview_load_changed_cb (WebKitWebView  *web_view,
-                         WebKitLoadEvent load_event,
-                         GTask          *task)
+webview_load_changed_cb (WebKitWebView   *web_view,
+                         WebKitLoadEvent  load_event,
+                         GTask           *task)
 {
   if (load_event != WEBKIT_LOAD_FINISHED)
     return;
 
   /* Load finished doesn't ensure that we actually have visible content yet,
-     so hold a bit before retrieving the snapshot. */
+   *  so hold a bit before retrieving the snapshot. */
   g_idle_add ((GSourceFunc)retrieve_snapshot_from_web_view, task);
 
   /* Some pages might end up causing this condition to happen twice, so remove
-     the handler in order to avoid calling the above idle function twice. */
+   *  the handler in order to avoid calling the above idle function twice. */
   g_signal_handlers_disconnect_by_func (web_view, webview_load_changed_cb, task);
   g_signal_handlers_disconnect_by_func (web_view, webview_destroyed_cb, task);
 }
 
 static gboolean
-webview_load_failed_cb (WebKitWebView  *web_view,
-                        WebKitLoadEvent load_event,
-                        const char      failing_uri,
-                        GError         *error,
-                        GTask          *task)
+webview_load_failed_cb (WebKitWebView   *web_view,
+                        WebKitLoadEvent  load_event,
+                        const char       failing_uri,
+                        GError          *error,
+                        GTask           *task)
 {
   g_signal_handlers_disconnect_by_func (web_view, webview_load_changed_cb, task);
   g_signal_handlers_disconnect_by_func (web_view, webview_load_failed_cb, task);
@@ -678,9 +678,9 @@ take_fresh_snapshot_in_background_if_stale (EphySnapshotService *service,
 }
 
 char *
-ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
-                                                        GAsyncResult        *result,
-                                                        GError             **error)
+ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService  *service,
+                                                        GAsyncResult         *result,
+                                                        GError              **error)
 {
   g_assert (g_task_is_valid (result, service));
 
@@ -743,9 +743,9 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
 }
 
 char *
-ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService *service,
-                                                GAsyncResult        *result,
-                                                GError             **error)
+ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService  *service,
+                                                GAsyncResult         *result,
+                                                GError              **error)
 {
   g_assert (g_task_is_valid (result, service));
 

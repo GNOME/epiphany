@@ -567,20 +567,20 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
 
   if (!dialog->fxa_web_view) {
     script =
-             /* Handle sign-in messages from the FxA content server. */
-             "function handleToChromeMessage(event) {"
-             "  let e = JSON.stringify({type: event.type, detail: event.detail});"
-             "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
-             "};"
-             "window.addEventListener('WebChannelMessageToChrome', handleToChromeMessage);"
-             /* Handle open-webmail click event. */
-             "function handleOpenWebmailClick(event) {"
-             "  if (event.target.id == 'open-webmail' && event.target.hasAttribute('href'))"
-             "    window.webkit.messageHandlers.openWebmailClickHandler.postMessage(event.target.getAttribute('href'));"
-             "};"
-             "var stage = document.getElementById('stage');"
-             "if (stage)"
-             "  stage.addEventListener('click', handleOpenWebmailClick);";
+      /* Handle sign-in messages from the FxA content server. */
+      "function handleToChromeMessage(event) {"
+      "  let e = JSON.stringify({type: event.type, detail: event.detail});"
+      "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
+      "};"
+      "window.addEventListener('WebChannelMessageToChrome', handleToChromeMessage);"
+      /* Handle open-webmail click event. */
+      "function handleOpenWebmailClick(event) {"
+      "  if (event.target.id == 'open-webmail' && event.target.hasAttribute('href'))"
+      "    window.webkit.messageHandlers.openWebmailClickHandler.postMessage(event.target.getAttribute('href'));"
+      "};"
+      "var stage = document.getElementById('stage');"
+      "if (stage)"
+      "  stage.addEventListener('click', handleOpenWebmailClick);";
 
     dialog->fxa_script = webkit_user_script_new (script,
                                                  WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
@@ -898,7 +898,7 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
   EphyPasswordsDialog *passwords_dialog;
   EphyPasswordManager *password_manager;
 
-  password_manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL(ephy_shell_get_default ()));
+  password_manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   passwords_dialog = ephy_passwords_dialog_new (password_manager);
 
   gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
@@ -944,7 +944,7 @@ on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
 
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = gtk_adjustment_get_value (adjustment);
-  value = roundf(value) / 100;
+  value = roundf (value) / 100;
   g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value);
 }
 
@@ -1298,7 +1298,7 @@ setup_add_language_dialog (PrefsDialog *dialog)
   GtkTreeIter iter;
   guint i, n;
   GtkBuilder *builder;
-  g_auto(GStrv) locales;
+  g_auto (GStrv) locales;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
@@ -1678,7 +1678,7 @@ sync_frequency_get_mapping (GValue   *value,
 {
   uint minutes = g_variant_get_uint32 (variant);
 
-  for (gint i = 0; i < (gint) G_N_ELEMENTS (sync_frequency_minutes); i++) {
+  for (gint i = 0; i < (gint)G_N_ELEMENTS (sync_frequency_minutes); i++) {
     if (sync_frequency_minutes[i] != minutes)
       continue;
 
@@ -1697,7 +1697,7 @@ sync_frequency_set_mapping (const GValue       *value,
 {
   gint i = g_value_get_int (value);
 
-  if (i >= (gint) G_N_ELEMENTS (sync_frequency_minutes))
+  if (i >= (gint)G_N_ELEMENTS (sync_frequency_minutes))
     return NULL;
 
   return g_variant_new_uint32 (sync_frequency_minutes[i]);
@@ -1785,7 +1785,7 @@ blank_homepage_get_mapping (GValue   *value,
 
   setting = g_variant_get_string (variant, NULL);
   if (g_strcmp0 (setting, "about:blank") == 0)
-      g_value_set_boolean (value, TRUE);
+    g_value_set_boolean (value, TRUE);
 
   return TRUE;
 }
@@ -1859,8 +1859,8 @@ custom_homepage_entry_changed (GtkEntry    *entry,
 }
 
 static void
-custom_homepage_entry_icon_released (GtkEntry            *entry,
-                                     GtkEntryIconPosition icon_pos)
+custom_homepage_entry_icon_released (GtkEntry             *entry,
+                                     GtkEntryIconPosition  icon_pos)
 {
   if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
     gtk_entry_set_text (entry, "");
@@ -2028,12 +2028,12 @@ reader_font_style_get_name (HdyEnumValueObject *value,
   g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
 
   switch (hdy_enum_value_object_get_value (value)) {
-  case EPHY_PREFS_READER_FONT_STYLE_SANS:
-    return g_strdup (N_("Sans"));
-  case EPHY_PREFS_READER_FONT_STYLE_SERIF:
-    return g_strdup (N_("Serif"));
-  default:
-    return NULL;
+    case EPHY_PREFS_READER_FONT_STYLE_SANS:
+      return g_strdup (N_("Sans"));
+    case EPHY_PREFS_READER_FONT_STYLE_SERIF:
+      return g_strdup (N_("Serif"));
+    default:
+      return NULL;
   }
 }
 
@@ -2058,12 +2058,12 @@ reader_font_style_set_mapping (const GValue       *value,
                                gpointer            user_data)
 {
   switch (g_value_get_int (value)) {
-  case EPHY_PREFS_READER_FONT_STYLE_SANS:
-    return g_variant_new_string ("sans");
-  case EPHY_PREFS_READER_FONT_STYLE_SERIF:
-    return g_variant_new_string ("serif");
-  default:
-    return g_variant_new_string ("crashed");
+    case EPHY_PREFS_READER_FONT_STYLE_SANS:
+      return g_variant_new_string ("sans");
+    case EPHY_PREFS_READER_FONT_STYLE_SERIF:
+      return g_variant_new_string ("serif");
+    default:
+      return g_variant_new_string ("crashed");
   }
 }
 
@@ -2074,12 +2074,12 @@ reader_color_scheme_get_name (HdyEnumValueObject *value,
   g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
 
   switch (hdy_enum_value_object_get_value (value)) {
-  case EPHY_PREFS_READER_COLORS_LIGHT:
-    return g_strdup (N_("Light"));
-  case EPHY_PREFS_READER_COLORS_DARK:
-    return g_strdup (N_("Dark"));
-  default:
-    return NULL;
+    case EPHY_PREFS_READER_COLORS_LIGHT:
+      return g_strdup (N_("Light"));
+    case EPHY_PREFS_READER_COLORS_DARK:
+      return g_strdup (N_("Dark"));
+    default:
+      return NULL;
   }
 }
 
@@ -2104,12 +2104,12 @@ reader_color_scheme_set_mapping (const GValue       *value,
                                  gpointer            user_data)
 {
   switch (g_value_get_int (value)) {
-  case EPHY_PREFS_READER_COLORS_LIGHT:
-    return g_variant_new_string ("light");
-  case EPHY_PREFS_READER_COLORS_DARK:
-    return g_variant_new_string ("dark");
-  default:
-    return g_variant_new_string ("crashed");
+    case EPHY_PREFS_READER_COLORS_LIGHT:
+      return g_variant_new_string ("light");
+    case EPHY_PREFS_READER_COLORS_DARK:
+      return g_variant_new_string ("dark");
+    default:
+      return g_variant_new_string ("crashed");
   }
 }
 
@@ -2254,7 +2254,7 @@ create_sync_frequency_minutes_model ()
 {
   GListStore *list_store = g_list_store_new (HDY_TYPE_VALUE_OBJECT);
   HdyValueObject *obj;
-  g_auto(GValue) value = G_VALUE_INIT;
+  g_auto (GValue) value = G_VALUE_INIT;
   guint i;
 
   g_value_init (&value, G_TYPE_UINT);
@@ -2282,7 +2282,7 @@ setup_sync_page (PrefsDialog *dialog)
   GSettings *sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
   char *user = ephy_sync_utils_get_sync_user ();
   char *name = ephy_sync_utils_get_device_name ();
-  g_autoptr(GListModel) sync_frequency_minutes_model = create_sync_frequency_minutes_model ();
+  g_autoptr (GListModel) sync_frequency_minutes_model = create_sync_frequency_minutes_model ();
 
   gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
 
@@ -2319,7 +2319,7 @@ setup_sync_page (PrefsDialog *dialog)
 
   hdy_combo_row_bind_name_model (HDY_COMBO_ROW (dialog->sync_frequency_row),
                                  sync_frequency_minutes_model,
-                                 (HdyComboRowGetNameFunc) get_sync_frequency_minutes_name,
+                                 (HdyComboRowGetNameFunc)get_sync_frequency_minutes_name,
                                  NULL,
                                  NULL);
   g_settings_bind_with_mapping (sync_settings,

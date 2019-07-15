@@ -344,10 +344,10 @@ ephy_window_embed_container_iface_init (EphyEmbedContainerInterface *iface)
 }
 
 static EphyEmbed *
-ephy_window_open_link (EphyLink     *link,
-                       const char   *address,
-                       EphyEmbed    *embed,
-                       EphyLinkFlags flags)
+ephy_window_open_link (EphyLink      *link,
+                       const char    *address,
+                       EphyEmbed     *embed,
+                       EphyLinkFlags  flags)
 {
   EphyWindow *window = EPHY_WINDOW (link);
   EphyEmbed *new_embed;
@@ -437,8 +437,8 @@ sync_chromes_visibility (EphyWindow *window)
 }
 
 static void
-ephy_window_set_chrome (EphyWindow      *window,
-                        EphyWindowChrome chrome)
+ephy_window_set_chrome (EphyWindow       *window,
+                        EphyWindowChrome  chrome)
 {
   if (window->chrome == chrome)
     return;
@@ -452,9 +452,9 @@ ephy_window_set_chrome (EphyWindow      *window,
 }
 
 static void
-sync_tab_load_status (EphyWebView    *view,
-                      WebKitLoadEvent load_event,
-                      EphyWindow     *window)
+sync_tab_load_status (EphyWebView     *view,
+                      WebKitLoadEvent  load_event,
+                      EphyWindow      *window)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -539,8 +539,8 @@ update_adaptive_mode (EphyWindow *window)
                         (gtk_window_is_maximized (GTK_WINDOW (window)) ||
                          window->is_fullscreen);
   adaptive_mode = is_narrow || is_mobile_landscape ?
-    EPHY_ADAPTIVE_MODE_NARROW :
-    EPHY_ADAPTIVE_MODE_NORMAL;
+                  EPHY_ADAPTIVE_MODE_NARROW :
+                  EPHY_ADAPTIVE_MODE_NORMAL;
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
   ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
   ephy_notebook_set_adaptive_mode (notebook, adaptive_mode);
@@ -619,7 +619,7 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
            keyval != GDK_KEY_Page_Down && /* Next Tab */
            keyval != GDK_KEY_KP_3 &&      /* Next Tab */
            keyval != GDK_KEY_Tab &&       /* Next Tab */
-           keyval != GDK_KEY_ISO_Left_Tab;/* Previous Tab (Shift+Tab -> ISO Left Tab) */
+           keyval != GDK_KEY_ISO_Left_Tab; /* Previous Tab (Shift+Tab -> ISO Left Tab) */
 
   if ((event->state & state_mask) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
     return keyval != GDK_KEY_n &&         /* New Incognito Window */
@@ -713,7 +713,10 @@ update_link_actions_sensitivity (EphyWindow *window,
 }
 
 static void
-update_edit_action_sensitivity (EphyWindow *window, const char *action_name, gboolean sensitive, gboolean hide)
+update_edit_action_sensitivity (EphyWindow *window,
+                                const char *action_name,
+                                gboolean    sensitive,
+                                gboolean    hide)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -727,7 +730,8 @@ update_edit_action_sensitivity (EphyWindow *window, const char *action_name, gbo
 }
 
 static void
-update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
+update_edit_actions_sensitivity (EphyWindow *window,
+                                 gboolean    hide)
 {
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
   gboolean can_cut, can_copy, can_undo, can_redo, can_paste;
@@ -810,8 +814,7 @@ change_combined_stop_reload_state (GSimpleAction *action,
   g_simple_action_set_state (action, loading);
 }
 
-static const GActionEntry window_entries [] =
-{
+static const GActionEntry window_entries [] = {
   { "page-menu", window_cmd_page_menu },
   { "new-tab", window_cmd_new_tab },
   { "open", window_cmd_open },
@@ -987,7 +990,8 @@ const struct {
 };
 
 static char *
-calculate_location (const char *typed_address, const char *address)
+calculate_location (const char *typed_address,
+                    const char *address)
 {
   const char *location;
 
@@ -1008,11 +1012,13 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GAction *action;
   int i;
 
-  const char *action_group_actions[] = { "save-as", "save-as-application", "print",
-                                         "find", "find-prev", "find-next",
-                                         "bookmark-page", "encoding", "page-source",
-                                         "send-to",
-                                         NULL };
+  const char *action_group_actions[] = {
+    "save-as", "save-as-application", "print",
+    "find", "find-prev", "find-next",
+    "bookmark-page", "encoding", "page-source",
+    "send-to",
+    NULL
+  };
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
 
@@ -1065,7 +1071,9 @@ sync_tab_address (EphyWebView *view,
 }
 
 static void
-sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
+sync_tab_zoom (WebKitWebView *web_view,
+               GParamSpec    *pspec,
+               EphyWindow    *window)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -1149,8 +1157,8 @@ sync_tab_document_type (EphyWebView *view,
 }
 
 static void
-_ephy_window_set_navigation_flags (EphyWindow                *window,
-                                   EphyWebViewNavigationFlags flags)
+_ephy_window_set_navigation_flags (EphyWindow                 *window,
+                                   EphyWebViewNavigationFlags  flags)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -1189,9 +1197,9 @@ sync_tab_is_blank (EphyWebView *view,
 }
 
 static void
-sync_tab_bookmarked_status (EphyWebView   *view,
-                            GParamSpec    *pspec,
-                            EphyWindow    *window)
+sync_tab_bookmarked_status (EphyWebView *view,
+                            GParamSpec  *pspec,
+                            EphyWindow  *window)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
@@ -1414,8 +1422,8 @@ add_item_to_context_menu (WebKitContextMenu     *context_menu,
 
 /* FIXME: Add webkit_context_menu_find() ? */
 static WebKitContextMenuItem *
-find_item_in_context_menu (WebKitContextMenu      *context_menu,
-                           WebKitContextMenuAction action)
+find_item_in_context_menu (WebKitContextMenu       *context_menu,
+                           WebKitContextMenuAction  action)
 {
   GList *items, *iter;
 
@@ -1466,8 +1474,8 @@ should_show_copy_outside_editable (WebKitWebView *view)
 }
 
 static void
-parse_context_menu_user_data (WebKitContextMenu *context_menu,
-                              const char       **selected_text)
+parse_context_menu_user_data (WebKitContextMenu  *context_menu,
+                              const char        **selected_text)
 {
   GVariantDict dict;
 
@@ -1723,7 +1731,6 @@ populate_context_menu (WebKitWebView       *web_view,
 
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-
   } else {
     is_document = TRUE;
 
@@ -2027,11 +2034,11 @@ create_web_view_cb (WebKitWebView          *web_view,
 }
 
 typedef struct {
-  EphyWindow               *window;
-  WebKitWebView            *web_view;
-  WebKitPolicyDecision     *decision;
-  WebKitPolicyDecisionType  decision_type;
-  char                     *request_uri;
+  EphyWindow *window;
+  WebKitWebView *web_view;
+  WebKitPolicyDecision *decision;
+  WebKitPolicyDecisionType decision_type;
+  char *request_uri;
 } VerifyUrlAsyncData;
 
 static inline VerifyUrlAsyncData *
@@ -2171,7 +2178,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     /* New background tab in existing window for middle click and
      * control+click */
     else if (button == GDK_BUTTON_MIDDLE ||
-            (button == GDK_BUTTON_PRIMARY && (state == GDK_CONTROL_MASK))) {
+             (button == GDK_BUTTON_PRIMARY && (state == GDK_CONTROL_MASK))) {
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
     }
     /* New active tab in existing window for control+shift+click */
@@ -2250,10 +2257,10 @@ verify_url_cb (EphyGSBService     *service,
 }
 
 static gboolean
-decide_policy_cb (WebKitWebView           *web_view,
-                  WebKitPolicyDecision    *decision,
-                  WebKitPolicyDecisionType decision_type,
-                  EphyWindow              *window)
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  EphyWindow               *window)
 {
   EphyGSBService *service;
   WebKitNavigationPolicyDecision *navigation_decision;
@@ -2477,7 +2484,8 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 }
 
 static void
-ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
+ephy_window_set_active_tab (EphyWindow *window,
+                            EphyEmbed  *new_embed)
 {
   EphyEmbed *old_embed;
 
@@ -2565,7 +2573,7 @@ setup_tab_accels (EphyWindow *window)
     g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (simple_action));
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
                                            action_name_with_tab,
-                                           (const gchar*[]) {accel, NULL});
+                                           (const gchar *[]) {accel, NULL});
 
     g_signal_connect (G_ACTION (simple_action), "activate",
                       G_CALLBACK (tab_accels_item_activate), window);
@@ -2912,7 +2920,7 @@ static void
 run_downloads_in_background (EphyWindow *window,
                              int         num)
 {
-  g_autoptr(GNotification) notification = NULL;
+  g_autoptr (GNotification) notification = NULL;
   g_autofree char *body = NULL;
 
   notification = g_notification_new (_("Download operation"));
@@ -2961,12 +2969,12 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
                               EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA)) {
     TabHasModifiedFormsData *data;
 
-     /* The modified forms check runs in the web process, which is problematic
-      * because we don't want our codepath for closing a web view to depend on
-      * executing web process code, in case the web process has hung. (This can
-      * also be caused by a network process hang!) We'll assume the process has
-      * been hung if there's no response after one second.
-      */
+    /* The modified forms check runs in the web process, which is problematic
+     * because we don't want our codepath for closing a web view to depend on
+     * executing web process code, in case the web process has hung. (This can
+     * also be caused by a network process hang!) We'll assume the process has
+     * been hung if there's no response after one second.
+     */
     data = tab_has_modified_forms_data_new (window, embed);
     data->id = g_timeout_add_seconds (1, (GSourceFunc)tab_has_modified_forms_timeout_cb, data);
     ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
@@ -2996,7 +3004,8 @@ notebook_create_window_cb (GtkNotebook *notebook,
 }
 
 static EphyEmbed *
-real_get_active_tab (EphyWindow *window, int page_num)
+real_get_active_tab (EphyWindow *window,
+                     int         page_num)
 {
   GtkWidget *embed;
 
@@ -3165,7 +3174,7 @@ ephy_window_get_property (GObject    *object,
 }
 
 static gboolean
-ephy_window_configure_event (GtkWidget *widget,
+ephy_window_configure_event (GtkWidget         *widget,
                              GdkEventConfigure *event)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
@@ -3483,12 +3492,14 @@ setup_action_bar (EphyWindow *window)
   return action_bar;
 }
 
-static const char *disabled_actions_for_app_mode[] = { "open",
-                                                       "save-as-application",
-                                                       "encoding",
-                                                       "bookmark-page",
-                                                       "new-tab",
-                                                       "home" };
+static const char *disabled_actions_for_app_mode[] = {
+  "open",
+  "save-as-application",
+  "encoding",
+  "bookmark-page",
+  "new-tab",
+  "home"
+};
 
 static gboolean
 browse_with_caret_get_mapping (GValue   *value,
@@ -3512,7 +3523,7 @@ const gchar *supported_mime_types[] = {
 static void
 set_as_default_browser ()
 {
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
   GDesktopAppInfo *desktop_info;
   GAppInfo *info = NULL;
   g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
@@ -3583,7 +3594,7 @@ add_default_browser_question (GtkBox *box)
 static gboolean
 is_browser_default (void)
 {
-  g_autoptr(GAppInfo) info = g_app_info_get_default_for_type (supported_mime_types[0], TRUE);
+  g_autoptr (GAppInfo) info = g_app_info_get_default_for_type (supported_mime_types[0], TRUE);
 
   if (info) {
     g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
@@ -3742,12 +3753,12 @@ ephy_window_constructed (GObject *object)
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                           "browse-with-caret");
+                                       "browse-with-caret");
 
   g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_ENABLE_CARET_BROWSING,
                                 G_SIMPLE_ACTION (action), "state",
-                                G_SETTINGS_BIND_GET|G_SETTINGS_BIND_GET_NO_CHANGES,
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_GET_NO_CHANGES,
                                 browse_with_caret_get_mapping,
                                 NULL,
                                 action, NULL);
@@ -4247,7 +4258,6 @@ ephy_window_close (EphyWindow *window)
       g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                               EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA) &&
       gtk_notebook_get_n_pages (window->notebook) > 0) {
-
     ephy_window_check_modified_forms (window);
     /* stop window close */
     return FALSE;
@@ -4256,8 +4266,8 @@ ephy_window_close (EphyWindow *window)
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) > 1 &&
       gtk_notebook_get_n_pages (window->notebook) > 1 &&
       !confirm_close_with_multiple_tabs (window)) {
-      /* stop window close */
-      return FALSE;
+    /* stop window close */
+    return FALSE;
   }
 
   /* If this is the last window, check ongoing downloads and save its state in the session. */

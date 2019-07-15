@@ -62,7 +62,7 @@ release_notebook (EphyPagesPopover *self)
     g_signal_handlers_disconnect_by_data (pages_menu, self);
     g_signal_handlers_disconnect_by_data (self->notebook, self);
 
-    g_object_weak_unref (G_OBJECT (self->notebook), (GWeakNotify) drop_notebook, self);
+    g_object_weak_unref (G_OBJECT (self->notebook), (GWeakNotify)drop_notebook, self);
     drop_notebook (self);
   }
 }
@@ -139,7 +139,7 @@ items_changed_cb (EphyPagesPopover *self,
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
-  g_list_store_splice (self->list_store, position, removed, (gpointer) items, added);
+  g_list_store_splice (self->list_store, position, removed, (gpointer)items, added);
 
   current_page_changed_cb (self);
 }
@@ -274,7 +274,7 @@ ephy_pages_popover_set_notebook (EphyPagesPopover *self,
   if (!notebook)
     return;
 
-  g_object_weak_ref (G_OBJECT (notebook), (GWeakNotify) drop_notebook, self);
+  g_object_weak_ref (G_OBJECT (notebook), (GWeakNotify)drop_notebook, self);
   self->notebook = notebook;
   pages_menu = ephy_notebook_get_pages_menu (EPHY_NOTEBOOK (notebook));
 
@@ -311,19 +311,19 @@ ephy_pages_popover_set_adaptive_mode (EphyPagesPopover *self,
   }
 
   switch (adaptive_mode) {
-  case EPHY_ADAPTIVE_MODE_NORMAL:
-    gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-    /* This should be enough height in normal mode to fit in 900px hight screen. */
-    gtk_scrolled_window_set_max_content_height (self->scrolled_window, 700);
-    gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
+    case EPHY_ADAPTIVE_MODE_NORMAL:
+      gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
+      /* This should be enough height in normal mode to fit in 900px hight screen. */
+      gtk_scrolled_window_set_max_content_height (self->scrolled_window, 700);
+      gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
 
-    break;
-  case EPHY_ADAPTIVE_MODE_NARROW:
-    gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-    /* Sets the max content to 0 and not -1 to ensure the popover doesn't pop out. */
-    gtk_scrolled_window_set_max_content_height (self->scrolled_window, 0);
-    gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
+      break;
+    case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
+      /* Sets the max content to 0 and not -1 to ensure the popover doesn't pop out. */
+      gtk_scrolled_window_set_max_content_height (self->scrolled_window, 0);
+      gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
 
-    break;
+      break;
   }
 }

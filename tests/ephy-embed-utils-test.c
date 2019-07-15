@@ -128,7 +128,8 @@ test_is_empty (const IsEmptyTest *test)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
   guint i;

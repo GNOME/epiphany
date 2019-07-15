@@ -206,9 +206,9 @@ navigation_menu_item_pressed_cb (GtkWidget *menuitem,
 }
 
 static GList *
-construct_webkit_history_list (WebKitWebView    *web_view,
-                               WebKitHistoryType hist_type,
-                               int               limit)
+construct_webkit_history_list (WebKitWebView     *web_view,
+                               WebKitHistoryType  hist_type,
+                               int                limit)
 {
   WebKitBackForwardList *back_forward_list;
 
@@ -219,8 +219,8 @@ construct_webkit_history_list (WebKitWebView    *web_view,
 }
 
 static GtkWidget *
-build_dropdown_menu (EphyWindow                    *window,
-                     EphyNavigationHistoryDirection direction)
+build_dropdown_menu (EphyWindow                     *window,
+                     EphyNavigationHistoryDirection  direction)
 {
   GtkMenuShell *menu;
   EphyEmbed *embed;
@@ -274,10 +274,10 @@ build_dropdown_menu (EphyWindow                    *window,
 }
 
 static void
-popup_history_menu (GtkWidget                     *widget,
-                    EphyWindow                    *window,
-                    EphyNavigationHistoryDirection direction,
-                    GdkEventButton                *event)
+popup_history_menu (GtkWidget                      *widget,
+                    EphyWindow                     *window,
+                    EphyNavigationHistoryDirection  direction,
+                    GdkEventButton                 *event)
 {
   GtkWidget *menu;
 
@@ -325,9 +325,9 @@ navigation_button_press_event_cb (GtkButton *button,
     data->event = (GdkEventButton *)event;
 
     action_bar_start->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
-                                                                      (GSourceFunc)menu_timeout_cb,
-                                                                      data,
-                                                                      (GDestroyNotify)g_free);
+                                                                            (GSourceFunc)menu_timeout_cb,
+                                                                            data,
+                                                                            (GDestroyNotify)g_free);
     g_source_set_name_by_id (action_bar_start->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
   }
 
@@ -530,13 +530,13 @@ ephy_action_bar_start_constructed (GObject *object)
   if (is_desktop_pantheon ()) {
     gtk_button_set_image (GTK_BUTTON (action_bar_start->navigation_back),
                           gtk_image_new_from_icon_name ("go-previous-symbolic",
-                          get_icon_size ()));
+                                                        get_icon_size ()));
     gtk_button_set_image (GTK_BUTTON (action_bar_start->navigation_forward),
                           gtk_image_new_from_icon_name ("go-next-symbolic",
-                          get_icon_size ()));
+                                                        get_icon_size ()));
     gtk_button_set_image (GTK_BUTTON (action_bar_start->homepage_button),
                           gtk_image_new_from_icon_name ("go-home-symbolic",
-                          get_icon_size ()));
+                                                        get_icon_size ()));
   }
 }
 
@@ -600,14 +600,14 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
   if (loading) {
     gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
                                   "process-stop-symbolic",
-                                  get_icon_size());
+                                  get_icon_size ());
     /* Translators: tooltip for the stop button */
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _("Stop loading the current page"));
   } else {
     gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_start->combined_stop_reload_image),
                                   "view-refresh-symbolic",
-                                  get_icon_size());
+                                  get_icon_size ());
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _(REFRESH_BUTTON_TOOLTIP));
   }

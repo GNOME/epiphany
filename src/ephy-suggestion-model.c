@@ -30,11 +30,11 @@
 #define MAX_COMPLETION_HISTORY_URLS 8
 
 struct _EphySuggestionModel {
-  GObject               parent;
-  EphyHistoryService   *history_service;
+  GObject parent;
+  EphyHistoryService *history_service;
   EphyBookmarksManager *bookmarks_manager;
-  GSequence            *items;
-  GCancellable         *icon_cancellable;
+  GSequence *items;
+  GCancellable *icon_cancellable;
 };
 
 enum {
@@ -334,7 +334,7 @@ add_search_engines (EphySuggestionModel *self,
     g_autofree char *address = NULL;
     g_autofree char *escaped_title = NULL;
     g_autofree char *markup = NULL;
-    g_autoptr(SoupURI) uri = NULL;
+    g_autoptr (SoupURI) uri = NULL;
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     escaped_title = g_markup_escape_text (engines[i], -1);
@@ -364,7 +364,7 @@ add_tabs (EphySuggestionModel *self,
 {
   GApplication *application;
   EphyEmbedShell *shell;
-  EphyWindow *window ;
+  EphyWindow *window;
   GtkWidget *notebook;
   gint n_pages;
   gint current;

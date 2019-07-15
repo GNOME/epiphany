@@ -247,7 +247,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   g_list_free_full (items, (GDestroyNotify)query_item_free);
   g_list_free (new_items);
 
- bail:
+bail:
   soup_uri_free (uri);
   return ret;
 }

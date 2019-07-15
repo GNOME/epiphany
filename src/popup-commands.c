@@ -43,9 +43,9 @@ typedef enum {
 } LinkDestination;
 
 static void
-view_in_destination (EphyWindow     *window,
-                     const char     *property_name,
-                     LinkDestination destination)
+view_in_destination (EphyWindow      *window,
+                     const char      *property_name,
+                     LinkDestination  destination)
 {
   EphyEmbedEvent *event;
   GValue value = { 0, };
@@ -102,7 +102,8 @@ popup_cmd_media_in_new_window (GSimpleAction *action,
 }
 
 static void
-popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
+popup_cmd_copy_to_clipboard (EphyWindow *window,
+                             const char *text)
 {
   gtk_clipboard_set_text (gtk_clipboard_get_default (gdk_display_get_default ()),
                           text, -1);

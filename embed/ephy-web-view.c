@@ -332,7 +332,6 @@ static gboolean
 ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                 WebKitFileChooserRequest *request)
 {
-
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
   GtkFileChooser *dialog;
   gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
@@ -527,7 +526,8 @@ ephy_web_view_set_property (GObject      *object,
 }
 
 static gboolean
-ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
+ephy_web_view_key_press_event (GtkWidget   *widget,
+                               GdkEventKey *event)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (widget);
   gboolean key_handled = FALSE;
@@ -543,7 +543,8 @@ ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 }
 
 static gboolean
-ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
+ephy_web_view_button_press_event (GtkWidget      *widget,
+                                  GdkEventButton *event)
 {
   /* These are the special cases WebkitWebView doesn't handle but we have an
    * interest in handling. */
@@ -648,9 +649,9 @@ save_auth_request_destroy (SaveRequestData *data,
 }
 
 static void
-info_bar_save_request_response_cb (GtkInfoBar          *info_bar,
-                                   gint                 response_id,
-                                   SaveRequestData     *data)
+info_bar_save_request_response_cb (GtkInfoBar      *info_bar,
+                                   gint             response_id,
+                                   SaveRequestData *data)
 {
   g_assert (data->callback);
   data->callback (response_id, data->callback_data);
@@ -658,19 +659,19 @@ info_bar_save_request_response_cb (GtkInfoBar          *info_bar,
 }
 
 void
-ephy_web_view_show_auth_form_save_request (EphyWebView                    *web_view,
-                                           const char                     *origin,
-                                           const char                     *username,
-                                           EphyPasswordSaveRequestCallback response_callback,
-                                           gpointer                        response_data,
-                                           GDestroyNotify                  response_destroy)
+ephy_web_view_show_auth_form_save_request (EphyWebView                     *web_view,
+                                           const char                      *origin,
+                                           const char                      *username,
+                                           EphyPasswordSaveRequestCallback  response_callback,
+                                           gpointer                         response_data,
+                                           GDestroyNotify                   response_destroy)
 {
   GtkWidget *info_bar;
   SaveRequestData *data;
 
   info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
 
-  data = g_new(SaveRequestData, 1);
+  data = g_new (SaveRequestData, 1);
   data->callback = response_callback;
   data->callback_data = response_data;
   data->callback_destroy = response_destroy;
@@ -1156,12 +1157,12 @@ process_terminated_cb (EphyWebView                       *web_view,
                        gpointer                           user_data)
 {
   switch (reason) {
-  case WEBKIT_WEB_PROCESS_CRASHED:
-    g_warning (_("Web process crashed"));
-    break;
-  case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
-    g_warning (_("Web process terminated due to exceeding memory limit"));
-    break;
+    case WEBKIT_WEB_PROCESS_CRASHED:
+      g_warning (_("Web process crashed"));
+      break;
+    case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
+      g_warning (_("Web process terminated due to exceeding memory limit"));
+      break;
   }
 
   if (!ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view))) {
@@ -1429,10 +1430,10 @@ new_window_cb (EphyWebView *view,
 }
 
 static gboolean
-decide_policy_cb (WebKitWebView           *web_view,
-                  WebKitPolicyDecision    *decision,
-                  WebKitPolicyDecisionType decision_type,
-                  gpointer                 user_data)
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  gpointer                  user_data)
 {
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
@@ -1450,7 +1451,7 @@ decide_policy_cb (WebKitWebView           *web_view,
   mime_type = webkit_uri_response_get_mime_type (response);
 
   /* If WebKit can't handle the mime type start the download
-     process */
+   *  process */
   if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
     return FALSE;
 
@@ -1520,9 +1521,9 @@ permission_request_info_bar_destroyed_cb (PermissionRequestData *data,
 }
 
 static void
-decide_on_permission_request (GtkWidget               *info_bar,
-                              int                      response,
-                              PermissionRequestData   *data)
+decide_on_permission_request (GtkWidget             *info_bar,
+                              int                    response,
+                              PermissionRequestData *data)
 {
   const char *address;
   EphyPermissionType permission_type;
@@ -1595,29 +1596,29 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   bold_origin = g_markup_printf_escaped ("<b>%s</b>", origin);
 
   switch (permission_type) {
-  case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    /* Translators: Notification policy for a specific site. */
-    message = g_strdup_printf (_("The page at %s wants to show desktop notifications."),
-                               bold_origin);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-    /* Translators: Geolocation policy for a specific site. */
-    message = g_strdup_printf (_("The page at %s wants to know your location."),
-                               bold_origin);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    /* Translators: Microphone policy for a specific site. */
-    message = g_strdup_printf (_("The page at %s wants to use your microphone."),
-                               bold_origin);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-    /* Translators: Webcam policy for a specific site. */
-    message = g_strdup_printf (_("The page at %s wants to use your webcam."),
-                               bold_origin);
-    break;
-  case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
-  default:
-    g_assert_not_reached ();
+    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+      /* Translators: Notification policy for a specific site. */
+      message = g_strdup_printf (_("The page at %s wants to show desktop notifications."),
+                                 bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
+      /* Translators: Geolocation policy for a specific site. */
+      message = g_strdup_printf (_("The page at %s wants to know your location."),
+                                 bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
+      /* Translators: Microphone policy for a specific site. */
+      message = g_strdup_printf (_("The page at %s wants to use your microphone."),
+                                 bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
+      /* Translators: Webcam policy for a specific site. */
+      message = g_strdup_printf (_("The page at %s wants to use your webcam."),
+                                 bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
+    default:
+      g_assert_not_reached ();
   }
 
   label = gtk_label_new (NULL);
@@ -1638,21 +1639,21 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
 
   switch (permission_type) {
-  case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
-    break;
-  case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
-    break;
-  case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
-  default:
-    g_assert_not_reached ();
+    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
+      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
+      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
+      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
+      break;
+    case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
+    default:
+      g_assert_not_reached ();
   }
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
@@ -1701,24 +1702,24 @@ permission_request_cb (WebKitWebView           *web_view,
                                                         origin);
 
   switch (permission) {
-  case EPHY_PERMISSION_PERMIT:
-    webkit_permission_request_allow (decision);
-    goto out;
-  case EPHY_PERMISSION_DENY:
-    webkit_permission_request_deny (decision);
-    goto out;
-  case EPHY_PERMISSION_UNDECIDED:
-    /* Application mode implies being OK with notifications. */
-    if (permission_type == EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS &&
-        ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-      ephy_permissions_manager_set_permission (permissions_manager,
-                                               permission_type,
-                                               origin,
-                                               EPHY_PERMISSION_PERMIT);
+    case EPHY_PERMISSION_PERMIT:
       webkit_permission_request_allow (decision);
-    } else {
-      show_permission_request_info_bar (web_view, decision, permission_type);
-    }
+      goto out;
+    case EPHY_PERMISSION_DENY:
+      webkit_permission_request_deny (decision);
+      goto out;
+    case EPHY_PERMISSION_UNDECIDED:
+      /* Application mode implies being OK with notifications. */
+      if (permission_type == EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS &&
+          ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+        ephy_permissions_manager_set_permission (permissions_manager,
+                                                 permission_type,
+                                                 origin,
+                                                 EPHY_PERMISSION_PERMIT);
+        webkit_permission_request_allow (decision);
+      } else {
+        show_permission_request_info_bar (web_view, decision, permission_type);
+      }
   }
 
 out:
@@ -1874,7 +1875,7 @@ update_security_status_for_committed_load (EphyWebView *view,
 
   if (!soup_uri ||
       strcmp (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
-      // Warning: we do not whitelist localhost because it could be redirected by DNS.
+      /* Warning: we do not whitelist localhost because it could be redirected by DNS. */
       g_strcmp0 (soup_uri_get_host (soup_uri), "127.0.0.1") == 0 ||
       g_strcmp0 (soup_uri_get_host (soup_uri), "::1") == 0 ||
       webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme) ||
@@ -1895,9 +1896,9 @@ update_security_status_for_committed_load (EphyWebView *view,
 }
 
 static void
-load_changed_cb (WebKitWebView  *web_view,
-                 WebKitLoadEvent load_event,
-                 gpointer        user_data)
+load_changed_cb (WebKitWebView   *web_view,
+                 WebKitLoadEvent  load_event,
+                 gpointer         user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
   GObject *object = G_OBJECT (web_view);
@@ -2197,7 +2198,7 @@ format_network_error_page (const char  *uri,
   g_free (first_paragraph);
   /* Technical details when a site cannot be loaded due to a network error. */
   first_paragraph = g_strdup_printf (_("The precise error was: %s"),
-                                      formatted_reason);
+                                     formatted_reason);
   *message_details = g_strdup_printf ("<p>%s</p>", first_paragraph);
 
   /* The button on the network error page. DO NOT ADD MNEMONICS HERE. */
@@ -2307,20 +2308,20 @@ format_process_crash_error_page (const char  *uri,
 }
 
 static void
-format_tls_error_page (EphyWebView *view,
-                       const char  *origin,
-                       char       **page_title,
-                       char       **message_title,
-                       char       **message_body,
-                       char       **message_details,
-                       char       **button_label,
-                       char       **button_action,
-                       const char **button_accesskey,
-                       char       **hidden_button_label,
-                       char       **hidden_button_action,
-                       const char **hidden_button_accesskey,
-                       const char **icon_name,
-                       const char **style)
+format_tls_error_page (EphyWebView  *view,
+                       const char   *origin,
+                       char        **page_title,
+                       char        **message_title,
+                       char        **message_body,
+                       char        **message_details,
+                       char        **button_label,
+                       char        **button_action,
+                       const char  **button_accesskey,
+                       char        **hidden_button_label,
+                       char        **hidden_button_action,
+                       const char  **hidden_button_accesskey,
+                       const char  **icon_name,
+                       const char  **style)
 {
   char *formatted_origin;
   char *first_paragraph;
@@ -2351,7 +2352,7 @@ format_tls_error_page (EphyWebView *view,
   /* The hidden button on the invalid TLS certificate error page. Do not add mnemonics here. */
   *hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
   *hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
-                                          webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
+                                           webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
   /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
   *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
@@ -2363,21 +2364,21 @@ format_tls_error_page (EphyWebView *view,
 }
 
 static void
-format_unsafe_browsing_error_page (EphyWebView *view,
-                                   const char  *origin,
-                                   const char  *threat_type,
-                                   char       **page_title,
-                                   char       **message_title,
-                                   char       **message_body,
-                                   char       **message_details,
-                                   char       **button_label,
-                                   char       **button_action,
-                                   const char **button_accesskey,
-                                   char       **hidden_button_label,
-                                   char       **hidden_button_action,
-                                   const char **hidden_button_accesskey,
-                                   const char **icon_name,
-                                   const char **style)
+format_unsafe_browsing_error_page (EphyWebView  *view,
+                                   const char   *origin,
+                                   const char   *threat_type,
+                                   char        **page_title,
+                                   char        **message_title,
+                                   char        **message_body,
+                                   char        **message_details,
+                                   char        **button_label,
+                                   char        **button_action,
+                                   const char  **button_accesskey,
+                                   char        **hidden_button_label,
+                                   char        **hidden_button_action,
+                                   const char  **hidden_button_accesskey,
+                                   const char  **icon_name,
+                                   const char  **style)
 {
   char *formatted_origin;
   char *first_paragraph;
@@ -2401,7 +2402,7 @@ format_unsafe_browsing_error_page (EphyWebView *view,
                                           "including viruses and other malicious code "
                                           "and how to protect your computer at %s."),
                                         "<a href=\"https://www.stopbadware.org/\">"
-                                          "www.stopbadware.org"
+                                        "www.stopbadware.org"
                                         "</a>");
   } else if (!g_strcmp0 (threat_type, GSB_THREAT_TYPE_SOCIAL_ENGINEERING)) {
     first_paragraph = g_strdup_printf (_("Attackers on %s may trick you into doing "
@@ -2412,10 +2413,10 @@ format_unsafe_browsing_error_page (EphyWebView *view,
     *message_details = g_strdup_printf (_("You can find out more about social engineering "
                                           "(phishing) at %s or from %s."),
                                         "<a href=\"https://support.google.com/webmasters/answer/6350487\">"
-                                          "Social Engineering (Phishing and Deceptive Sites)"
+                                        "Social Engineering (Phishing and Deceptive Sites)"
                                         "</a>",
                                         "<a href=\"https://www.antiphishing.org/\">"
-                                          "www.antiphishing.org"
+                                        "www.antiphishing.org"
                                         "</a>");
   } else {
     first_paragraph = g_strdup_printf (_("%s may contain harmful programs. Attackers might "
@@ -2425,7 +2426,7 @@ format_unsafe_browsing_error_page (EphyWebView *view,
                                        formatted_origin);
     *message_details = g_strdup_printf (_("You can learn more about unwanted software at %s."),
                                         "<a href=\"https://www.google.com/about/unwanted-software-policy.html\">"
-                                          "Unwanted Software Policy"
+                                        "Unwanted Software Policy"
                                         "</a>");
   }
 
@@ -2477,8 +2478,8 @@ format_no_such_file_error_page (EphyWebView  *view,
   first_paragraph = g_strdup_printf (_("%s could not be found."),
                                      formatted_origin);
   second_paragraph = g_strdup_printf (_("Please check the file name for "
-                                       "capitalization or other typing errors. Also check if "
-                                       "it has been moved, renamed, or deleted."));
+                                        "capitalization or other typing errors. Also check if "
+                                        "it has been moved, renamed, or deleted."));
 
   *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>", first_paragraph, second_paragraph);
 
@@ -2504,11 +2505,11 @@ format_no_such_file_error_page (EphyWebView  *view,
  *
  **/
 void
-ephy_web_view_load_error_page (EphyWebView         *view,
-                               const char          *uri,
-                               EphyWebViewErrorPage page,
-                               GError              *error,
-                               gpointer             user_data)
+ephy_web_view_load_error_page (EphyWebView          *view,
+                               const char           *uri,
+                               EphyWebViewErrorPage  page,
+                               GError               *error,
+                               gpointer              user_data)
 {
   GBytes *html_file;
   GString *html = g_string_new ("");
@@ -2682,11 +2683,11 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 }
 
 static gboolean
-load_failed_cb (WebKitWebView  *web_view,
-                WebKitLoadEvent load_event,
-                const char     *uri,
-                GError         *error,
-                gpointer        user_data)
+load_failed_cb (WebKitWebView   *web_view,
+                WebKitLoadEvent  load_event,
+                const char      *uri,
+                GError          *error,
+                gpointer         user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2696,7 +2697,6 @@ load_failed_cb (WebKitWebView  *web_view,
   if (error->domain != WEBKIT_NETWORK_ERROR &&
       error->domain != WEBKIT_POLICY_ERROR &&
       error->domain != WEBKIT_PLUGIN_ERROR) {
-
     if (view->address && g_str_has_prefix (view->address, "file:"))
       ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error, NULL);
     else
@@ -2720,8 +2720,7 @@ load_failed_cb (WebKitWebView  *web_view,
     case WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED:
       ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
       return TRUE;
-    case WEBKIT_NETWORK_ERROR_CANCELLED:
-    {
+    case WEBKIT_NETWORK_ERROR_CANCELLED: {
       if (!view->typed_address) {
         const char *prev_uri;
 
@@ -2747,11 +2746,11 @@ load_failed_cb (WebKitWebView  *web_view,
 }
 
 static gboolean
-load_failed_with_tls_error_cb (WebKitWebView       *web_view,
-                               const char          *uri,
-                               GTlsCertificate     *certificate,
-                               GTlsCertificateFlags errors,
-                               gpointer             user_data)
+load_failed_with_tls_error_cb (WebKitWebView        *web_view,
+                               const char           *uri,
+                               GTlsCertificate      *certificate,
+                               GTlsCertificateFlags  errors,
+                               gpointer              user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2768,9 +2767,9 @@ load_failed_with_tls_error_cb (WebKitWebView       *web_view,
 }
 
 static void
-mixed_content_detected_cb (WebKitWebView             *web_view,
-                           WebKitInsecureContentEvent event,
-                           gpointer                   user_data)
+mixed_content_detected_cb (WebKitWebView              *web_view,
+                           WebKitInsecureContentEvent  event,
+                           gpointer                    user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2835,17 +2834,17 @@ static const char *
 enum_nick (GType enum_type,
            int   value)
 {
-    GEnumClass *enum_class;
-    const GEnumValue *enum_value;
-    const char *nick = NULL;
+  GEnumClass *enum_class;
+  const GEnumValue *enum_value;
+  const char *nick = NULL;
 
-    enum_class = g_type_class_ref (enum_type);
-    enum_value = g_enum_get_value (enum_class, value);
-    if (enum_value)
-        nick = enum_value->value_nick;
+  enum_class = g_type_class_ref (enum_type);
+  enum_value = g_enum_get_value (enum_class, value);
+  if (enum_value)
+    nick = enum_value->value_nick;
 
-    g_type_class_unref (enum_class);
-    return nick;
+  g_type_class_unref (enum_class);
+  return nick;
 }
 
 static void
@@ -2885,7 +2884,7 @@ authenticate_cb (WebKitWebView               *web_view,
                  gpointer                     user_data)
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
-  g_autoptr(WebKitCredential) credential = NULL;
+  g_autoptr (WebKitCredential) credential = NULL;
 
   credential = webkit_authentication_request_get_proposed_credential (request);
 
@@ -3291,8 +3290,8 @@ ephy_web_view_set_link_message (EphyWebView *view,
  * Sets @view's security-level property to @level.
  **/
 void
-ephy_web_view_set_security_level (EphyWebView      *view,
-                                  EphySecurityLevel level)
+ephy_web_view_set_security_level (EphyWebView       *view,
+                                  EphySecurityLevel  level)
 {
   g_assert (EPHY_IS_WEB_VIEW (view));
 
@@ -3403,10 +3402,10 @@ has_modified_forms_cb (WebKitWebView *view,
  * Return value: %TRUE if @view has user-modified forms
  **/
 void
-ephy_web_view_has_modified_forms (EphyWebView        *view,
-                                  GCancellable       *cancellable,
-                                  GAsyncReadyCallback callback,
-                                  gpointer            user_data)
+ephy_web_view_has_modified_forms (EphyWebView         *view,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   GTask *task;
 
@@ -3422,9 +3421,9 @@ ephy_web_view_has_modified_forms (EphyWebView        *view,
 }
 
 gboolean
-ephy_web_view_has_modified_forms_finish (EphyWebView  *view,
-                                         GAsyncResult *result,
-                                         GError      **error)
+ephy_web_view_has_modified_forms_finish (EphyWebView   *view,
+                                         GAsyncResult  *result,
+                                         GError       **error)
 {
   g_assert (g_task_is_valid (result, view));
 
@@ -3479,10 +3478,10 @@ get_best_web_app_icon_cb (WebKitWebView *view,
 }
 
 void
-ephy_web_view_get_best_web_app_icon (EphyWebView        *view,
-                                     GCancellable       *cancellable,
-                                     GAsyncReadyCallback callback,
-                                     gpointer            user_data)
+ephy_web_view_get_best_web_app_icon (EphyWebView         *view,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
 {
   WebKitWebView *wk_view;
   GTask *task;
@@ -3503,11 +3502,11 @@ ephy_web_view_get_best_web_app_icon (EphyWebView        *view,
 }
 
 gboolean
-ephy_web_view_get_best_web_app_icon_finish (EphyWebView  *view,
-                                            GAsyncResult *result,
-                                            char        **icon_uri,
-                                            GdkRGBA      *icon_color,
-                                            GError      **error)
+ephy_web_view_get_best_web_app_icon_finish (EphyWebView   *view,
+                                            GAsyncResult  *result,
+                                            char         **icon_uri,
+                                            GdkRGBA       *icon_color,
+                                            GError       **error)
 {
   GetBestWebAppIconAsyncData *data;
   GTask *task = G_TASK (result);
@@ -3556,10 +3555,10 @@ get_web_app_title_cb (WebKitWebView *view,
 }
 
 void
-ephy_web_view_get_web_app_title (EphyWebView        *view,
-                                 GCancellable       *cancellable,
-                                 GAsyncReadyCallback callback,
-                                 gpointer            user_data)
+ephy_web_view_get_web_app_title (EphyWebView         *view,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
 {
   GTask *task;
 
@@ -3575,9 +3574,9 @@ ephy_web_view_get_web_app_title (EphyWebView        *view,
 }
 
 char *
-ephy_web_view_get_web_app_title_finish (EphyWebView  *view,
-                                        GAsyncResult *result,
-                                        GError      **error)
+ephy_web_view_get_web_app_title_finish (EphyWebView   *view,
+                                        GAsyncResult  *result,
+                                        GError       **error)
 {
   g_assert (g_task_is_valid (result, view));
 
@@ -3619,7 +3618,8 @@ ephy_web_view_get_security_level (EphyWebView           *view,
 }
 
 static void
-ephy_web_view_print_failed (EphyWebView *view, GError *error)
+ephy_web_view_print_failed (EphyWebView *view,
+                            GError      *error)
 {
   GtkWidget *info_bar;
   GtkWidget *label;
@@ -3752,7 +3752,8 @@ ephy_web_view_save_main_resource_cb (GFile         *file,
  * Saves the currently loaded page of @view to @uri.
  **/
 void
-ephy_web_view_save (EphyWebView *view, const char *uri)
+ephy_web_view_save (EphyWebView *view,
+                    const char  *uri)
 {
   GFile *file;
 
@@ -3799,7 +3800,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
   if (home == NULL || home[0] == '\0') {
-    ephy_web_view_load_new_tab_page(view);
+    ephy_web_view_load_new_tab_page (view);
   } else {
     ephy_web_view_freeze_history (view);
     ephy_web_view_set_visit_type (view, EPHY_PAGE_VISIT_HOMEPAGE);
@@ -3852,7 +3853,8 @@ ephy_web_view_get_visit_type (EphyWebView *view)
  * properly weighted in the history backend.
  **/
 void
-ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_type)
+ephy_web_view_set_visit_type (EphyWebView              *view,
+                              EphyHistoryPageVisitType  visit_type)
 {
   g_assert (EPHY_IS_WEB_VIEW (view));
 
@@ -3889,8 +3891,8 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
   }
 
   if (!ephy_web_view_is_reader_mode_available (view)) {
-   view->reader_active = FALSE;
-   return;
+    view->reader_active = FALSE;
+    return;
   }
 
   view->reader_url = g_strdup (ephy_web_view_get_address (view));
@@ -3904,22 +3906,22 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
                             g_settings_get_enum (EPHY_SETTINGS_READER,
                                                  EPHY_PREFS_READER_COLOR_SCHEME));
   g_string_append_printf (html, "<style>%s</style>"
-                                "<title>%s</title>"
-                                "<body class='%s %s'>"
-                                "<article>"
-                                "<h2>"
-                                "%s"
-                                "</h2>"
-                                "<i>"
-                                "%s"
-                                "</i>"
-                                "<hr>",
-                                (gchar *)g_bytes_get_data (style_css, NULL),
-                                title,
-                                font_style,
-                                color_scheme,
-                                title,
-                                view->reader_byline != NULL ? view->reader_byline : "");
+                          "<title>%s</title>"
+                          "<body class='%s %s'>"
+                          "<article>"
+                          "<h2>"
+                          "%s"
+                          "</h2>"
+                          "<i>"
+                          "%s"
+                          "</i>"
+                          "<hr>",
+                          (gchar *)g_bytes_get_data (style_css, NULL),
+                          title,
+                          font_style,
+                          color_scheme,
+                          title,
+                          view->reader_byline != NULL ? view->reader_byline : "");
   g_string_append (html, view->reader_content);
   g_string_append (html, "</article>");
 

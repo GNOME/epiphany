@@ -429,16 +429,16 @@ handle_permission_combobox_changed (EphySecurityPopover *popover,
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
 
   switch (action) {
-  case 0:
-    permission = EPHY_PERMISSION_PERMIT;
-    break;
-  default:
-  case 1:
-    permission = EPHY_PERMISSION_DENY;
-    break;
-  case 2:
-    permission = EPHY_PERMISSION_UNDECIDED;
-    break;
+    case 0:
+      permission = EPHY_PERMISSION_PERMIT;
+      break;
+    default:
+    case 1:
+      permission = EPHY_PERMISSION_DENY;
+      break;
+    case 2:
+      permission = EPHY_PERMISSION_UNDECIDED;
+      break;
   }
 
   ephy_permissions_manager_set_permission (permissions_manager,

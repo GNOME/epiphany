@@ -118,9 +118,9 @@ session_delete (EphySession *session)
 }
 
 static void
-load_changed_cb (WebKitWebView  *view,
-                 WebKitLoadEvent load_event,
-                 EphySession    *session)
+load_changed_cb (WebKitWebView   *view,
+                 WebKitLoadEvent  load_event,
+                 EphySession     *session)
 {
   if (!ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
     ephy_session_save (session);
@@ -179,7 +179,8 @@ closed_tab_get_notebook (ClosedTab *tab)
 }
 
 static int
-compare_func (ClosedTab *iter, EphyNotebook *notebook)
+compare_func (ClosedTab    *iter,
+              EphyNotebook *notebook)
 {
   return GTK_NOTEBOOK (closed_tab_get_notebook (iter)) - GTK_NOTEBOOK (notebook);
 }
@@ -688,8 +689,8 @@ save_data_free (SaveData *data)
 }
 
 static int
-write_tab (xmlTextWriterPtr writer,
-           SessionTab      *tab)
+write_tab (xmlTextWriterPtr  writer,
+           SessionTab       *tab)
 {
   int ret;
 
@@ -755,8 +756,8 @@ write_tab (xmlTextWriterPtr writer,
 }
 
 static int
-write_window_geometry (xmlTextWriterPtr writer,
-                       GdkRectangle    *geometry)
+write_window_geometry (xmlTextWriterPtr  writer,
+                       GdkRectangle     *geometry)
 {
   int ret;
 
@@ -782,8 +783,8 @@ write_window_geometry (xmlTextWriterPtr writer,
 }
 
 static int
-write_ephy_window (xmlTextWriterPtr writer,
-                   SessionWindow   *window)
+write_ephy_window (xmlTextWriterPtr  writer,
+                   SessionWindow    *window)
 {
   GList *l;
   int ret;
@@ -931,7 +932,7 @@ save_session_sync (GTask        *task,
 
   ret = xmlTextWriterEndDocument (writer);
 
- out:
+out:
   if (writer)
     xmlFreeTextWriter (writer);
 
@@ -1037,7 +1038,9 @@ ephy_session_save (EphySession *session)
 }
 
 static void
-confirm_before_recover (EphyWindow *window, const char *url, const char *title)
+confirm_before_recover (EphyWindow *window,
+                        const char *url,
+                        const char *title)
 {
   EphyEmbed *embed;
 
@@ -1096,9 +1099,9 @@ session_parser_context_free (SessionParserContext *context)
 }
 
 static void
-session_parse_window (SessionParserContext *context,
-                      const gchar         **names,
-                      const gchar         **values)
+session_parse_window (SessionParserContext  *context,
+                      const gchar          **names,
+                      const gchar          **values)
 {
   GdkRectangle geometry = { -1, -1, 0, 0 };
   guint i;
@@ -1132,9 +1135,9 @@ session_parse_window (SessionParserContext *context,
 }
 
 static void
-session_parse_embed (SessionParserContext *context,
-                     const gchar         **names,
-                     const gchar         **values)
+session_parse_embed (SessionParserContext  *context,
+                     const gchar          **names,
+                     const gchar          **values)
 {
   GtkWidget *notebook;
   const char *url = NULL;
@@ -1246,12 +1249,12 @@ session_parse_embed (SessionParserContext *context,
 }
 
 static void
-session_start_element (GMarkupParseContext *ctx,
-                       const gchar         *element_name,
-                       const gchar        **names,
-                       const gchar        **values,
-                       gpointer             user_data,
-                       GError             **error)
+session_start_element (GMarkupParseContext  *ctx,
+                       const gchar          *element_name,
+                       const gchar         **names,
+                       const gchar         **values,
+                       gpointer              user_data,
+                       GError              **error)
 {
   SessionParserContext *context = (SessionParserContext *)user_data;
 
@@ -1264,10 +1267,10 @@ session_start_element (GMarkupParseContext *ctx,
 }
 
 static void
-session_end_element (GMarkupParseContext *ctx,
-                     const gchar         *element_name,
-                     gpointer             user_data,
-                     GError             **error)
+session_end_element (GMarkupParseContext  *ctx,
+                     const gchar          *element_name,
+                     gpointer              user_data,
+                     GError              **error)
 {
   SessionParserContext *context = (SessionParserContext *)user_data;
 
@@ -1433,12 +1436,12 @@ load_stream_read_cb (GObject      *object,
  * the operation.
  **/
 void
-ephy_session_load_from_stream (EphySession        *session,
-                               GInputStream       *stream,
-                               guint32             user_time,
-                               GCancellable       *cancellable,
-                               GAsyncReadyCallback callback,
-                               gpointer            user_data)
+ephy_session_load_from_stream (EphySession         *session,
+                               GInputStream        *stream,
+                               guint32              user_time,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   GTask *task;
   SessionParserContext *context;
@@ -1480,9 +1483,9 @@ ephy_session_load_from_stream (EphySession        *session,
  * Returns: %TRUE if at least a window has been opened
  **/
 gboolean
-ephy_session_load_from_stream_finish (EphySession  *session,
-                                      GAsyncResult *result,
-                                      GError      **error)
+ephy_session_load_from_stream_finish (EphySession   *session,
+                                      GAsyncResult  *result,
+                                      GError       **error)
 {
   g_assert (g_task_is_valid (result, session));
 
@@ -1573,12 +1576,12 @@ session_read_cb (GObject      *object,
  * the operation.
  **/
 void
-ephy_session_load (EphySession        *session,
-                   const char         *filename,
-                   guint32             user_time,
-                   GCancellable       *cancellable,
-                   GAsyncReadyCallback callback,
-                   gpointer            user_data)
+ephy_session_load (EphySession         *session,
+                   const char          *filename,
+                   guint32              user_time,
+                   GCancellable        *cancellable,
+                   GAsyncReadyCallback  callback,
+                   gpointer             user_data)
 {
   GFile *save_to_file;
   GTask *task;
@@ -1616,9 +1619,9 @@ ephy_session_load (EphySession        *session,
  * Returns: %TRUE if at least a window has been opened
  **/
 gboolean
-ephy_session_load_finish (EphySession  *session,
-                          GAsyncResult *result,
-                          GError      **error)
+ephy_session_load_finish (EphySession   *session,
+                          GAsyncResult  *result,
+                          GError       **error)
 {
   g_assert (g_task_is_valid (result, session));
 
@@ -1660,11 +1663,11 @@ session_resumed_cb (GObject      *object,
 }
 
 void
-ephy_session_resume (EphySession        *session,
-                     guint32             user_time,
-                     GCancellable       *cancellable,
-                     GAsyncReadyCallback callback,
-                     gpointer            user_data)
+ephy_session_resume (EphySession         *session,
+                     guint32              user_time,
+                     GCancellable        *cancellable,
+                     GAsyncReadyCallback  callback,
+                     gpointer             user_data)
 {
   GTask *task;
   gboolean has_session_state;
@@ -1702,9 +1705,9 @@ ephy_session_resume (EphySession        *session,
 }
 
 gboolean
-ephy_session_resume_finish (EphySession  *session,
-                            GAsyncResult *result,
-                            GError      **error)
+ephy_session_resume_finish (EphySession   *session,
+                            GAsyncResult  *result,
+                            GError       **error)
 {
   g_assert (g_task_is_valid (result, session));
 

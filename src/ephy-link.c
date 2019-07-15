@@ -78,10 +78,10 @@ ephy_link_default_init (EphyLinkInterface *iface)
  * Returns: (transfer none): the #EphyEmbed where @link opened.
  */
 EphyEmbed *
-ephy_link_open (EphyLink     *link,
-                const char   *address,
-                EphyEmbed    *embed,
-                EphyLinkFlags flags)
+ephy_link_open (EphyLink      *link,
+                const char    *address,
+                EphyEmbed     *embed,
+                EphyLinkFlags  flags)
 {
   EphyEmbed *new_embed = NULL;
 

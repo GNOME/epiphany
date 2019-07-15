@@ -114,7 +114,7 @@ web_process_extension_proxy_created_cb (GDBusProxy                   *proxy,
                                         GAsyncResult                 *result,
                                         EphyWebProcessExtensionProxy *web_process_extension)
 {
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   web_process_extension->proxy = g_dbus_proxy_new_finish (result, &error);
   if (!web_process_extension->proxy) {
@@ -301,7 +301,7 @@ ephy_web_process_extension_proxy_password_query_usernames_response (EphyWebProce
                                                                     guint64                       frame_id)
 {
   GList *l;
-  g_auto(GVariantBuilder) builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
+  g_auto (GVariantBuilder) builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
 
   if (!web_process_extension->proxy)
     return;
@@ -330,7 +330,7 @@ ephy_web_process_extension_proxy_password_query_response (EphyWebProcessExtensio
 
   g_dbus_proxy_call (web_process_extension->proxy,
                      "PasswordQueryResponse",
-                     g_variant_new ("(ssit)", username ?: "", password ?: "", promise_id, frame_id),
+                     g_variant_new ("(ssit)", username ? : "", password ? : "", promise_id, frame_id),
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      web_process_extension->cancellable,

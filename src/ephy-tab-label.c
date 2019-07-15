@@ -96,37 +96,37 @@ ephy_tab_label_set_property (GObject      *object,
   const gchar *str;
 
   switch (prop_id) {
-  case PROP_LABEL_TEXT:
-    str = g_value_get_string (value);
-    if (str && strlen (str) != 0) {
-      gtk_label_set_text (GTK_LABEL (self->label), str);
-      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
-    }
-    break;
-  case PROP_LABEL_URI:
-    str = g_value_get_string (value);
-    if (self->is_loading && !ephy_embed_utils_is_no_show_address (str)) {
-      gtk_label_set_text (GTK_LABEL (self->label), str);
-      gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
-    }
-    break;
-  case PROP_ICON_BUF:
-    gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object (value));
-    self->has_icon = g_value_get_object (value) != NULL;
-    ephy_tab_label_update_icon (self);
-    break;
-  case PROP_SPINNING:
-    ephy_tab_label_set_spinning (self, g_value_get_boolean (value));
-    break;
-  case PROP_AUDIO:
-    gtk_widget_set_visible (self->audio_button, g_value_get_boolean (value));
-    break;
-  case PROP_PINNED:
-    self->is_pinned = g_value_get_boolean (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+    case PROP_LABEL_TEXT:
+      str = g_value_get_string (value);
+      if (str && strlen (str) != 0) {
+        gtk_label_set_text (GTK_LABEL (self->label), str);
+        gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+      }
+      break;
+    case PROP_LABEL_URI:
+      str = g_value_get_string (value);
+      if (self->is_loading && !ephy_embed_utils_is_no_show_address (str)) {
+        gtk_label_set_text (GTK_LABEL (self->label), str);
+        gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+      }
+      break;
+    case PROP_ICON_BUF:
+      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object (value));
+      self->has_icon = g_value_get_object (value) != NULL;
+      ephy_tab_label_update_icon (self);
+      break;
+    case PROP_SPINNING:
+      ephy_tab_label_set_spinning (self, g_value_get_boolean (value));
+      break;
+    case PROP_AUDIO:
+      gtk_widget_set_visible (self->audio_button, g_value_get_boolean (value));
+      break;
+    case PROP_PINNED:
+      self->is_pinned = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
@@ -140,38 +140,38 @@ ephy_tab_label_get_property (GObject    *object,
   gboolean spinning = FALSE;
 
   switch (prop_id) {
-  case PROP_LABEL_TEXT:
-    g_value_set_string (value, gtk_label_get_text (GTK_LABEL (self->label)));
-    break;
-  case PROP_ICON_BUF:
-    g_value_set_object (value, gtk_image_get_pixbuf (GTK_IMAGE (self->icon)));
-    break;
-  case PROP_SPINNING:
-    g_object_get (self->spinner, "active", &spinning, NULL);
-    g_value_set_boolean (value, spinning);
-    break;
-  case PROP_AUDIO:
-    g_value_set_boolean (value, gtk_widget_get_visible (self->audio_button));
-    break;
-  case PROP_PINNED:
-    g_value_set_boolean (value, self->is_pinned);
-    break;
-  default:
-   G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-   break;
+    case PROP_LABEL_TEXT:
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (self->label)));
+      break;
+    case PROP_ICON_BUF:
+      g_value_set_object (value, gtk_image_get_pixbuf (GTK_IMAGE (self->icon)));
+      break;
+    case PROP_SPINNING:
+      g_object_get (self->spinner, "active", &spinning, NULL);
+      g_value_set_boolean (value, spinning);
+      break;
+    case PROP_AUDIO:
+      g_value_set_boolean (value, gtk_widget_get_visible (self->audio_button));
+      break;
+    case PROP_PINNED:
+      g_value_set_boolean (value, self->is_pinned);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
 static void
 ephy_tab_label_init (EphyTabLabel *self)
 {
-   gtk_widget_init_template (GTK_WIDGET (self));
-   self->has_icon = FALSE;
+  gtk_widget_init_template (GTK_WIDGET (self));
+  self->has_icon = FALSE;
 }
 
 static void
-close_button_clicked_cb (GtkWidget     *widget,
-                         EphyTabLabel  *tab_label)
+close_button_clicked_cb (GtkWidget    *widget,
+                         EphyTabLabel *tab_label)
 {
   g_signal_emit (tab_label, signals[CLOSE_CLICKED], 0, NULL);
 }
@@ -276,7 +276,7 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
                                          0);
 
   /* Bind class to template */
-  gtk_widget_class_set_template_from_resource (widget_class,  "/org/gnome/epiphany/gtk/tab-label.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/tab-label.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, icon);

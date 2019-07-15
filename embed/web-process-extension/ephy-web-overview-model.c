@@ -97,8 +97,8 @@ ephy_web_overview_model_urls_to_js_value (EphyWebOverviewModel *model,
   urls = g_ptr_array_new_with_free_func (g_object_unref);
   for (l = model->items; l; l = g_list_next (l)) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
-    g_autoptr(JSCValue) js_item = NULL;
-    g_autoptr(JSCValue) value = NULL;
+    g_autoptr (JSCValue) js_item = NULL;
+    g_autoptr (JSCValue) value = NULL;
 
     js_item = jsc_value_new_object (js_context, NULL, NULL);
     value = jsc_value_new_string (js_context, item->url);
@@ -119,12 +119,12 @@ ephy_web_overview_model_notify_urls_changed (EphyWebOverviewModel *model)
 {
   GHashTableIter iter;
   gpointer key;
-  g_autoptr(GPtrArray) urls = NULL;
+  g_autoptr (GPtrArray) urls = NULL;
 
   g_hash_table_iter_init (&iter, model->urls_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    g_autoptr(JSCValue) value = NULL;
-    g_autoptr(JSCValue) ret = NULL;
+    g_autoptr (JSCValue) value = NULL;
+    g_autoptr (JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value && jsc_value_is_function (value)) {
@@ -145,8 +145,8 @@ ephy_web_overview_model_notify_thumbnail_changed (EphyWebOverviewModel *model,
 
   g_hash_table_iter_init (&iter, model->thumbnail_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    g_autoptr(JSCValue) value = NULL;
-    g_autoptr(JSCValue) ret = NULL;
+    g_autoptr (JSCValue) value = NULL;
+    g_autoptr (JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
@@ -166,8 +166,8 @@ ephy_web_overview_model_notify_title_changed (EphyWebOverviewModel *model,
 
   g_hash_table_iter_init (&iter, model->title_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
-    g_autoptr(JSCValue) value = NULL;
-    g_autoptr(JSCValue) ret = NULL;
+    g_autoptr (JSCValue) value = NULL;
+    g_autoptr (JSCValue) ret = NULL;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {

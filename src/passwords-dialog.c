@@ -260,8 +260,8 @@ on_search_entry_changed (GtkSearchEntry      *entry,
 }
 
 static char *
-get_selected_item (EphyPasswordsDialog  *dialog,
-                   PasswordsDialogColumn column)
+get_selected_item (EphyPasswordsDialog   *dialog,
+                   PasswordsDialogColumn  column)
 {
   GtkTreeModel *model;
   GList *selected;

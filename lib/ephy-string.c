@@ -30,7 +30,8 @@
 #include <sys/types.h>
 
 gboolean
-ephy_string_to_int (const char *string, gulong *integer)
+ephy_string_to_int (const char *string,
+                    gulong     *integer)
 {
   gulong result;
   char *parse_end;
@@ -89,8 +90,8 @@ ephy_string_blank_chr (char *source)
  * characters.
  */
 char *
-ephy_string_shorten (char *str,
-                     gsize target_length)
+ephy_string_shorten (char  *str,
+                     gsize  target_length)
 {
   char *new_str;
   glong actual_length;
@@ -126,9 +127,9 @@ ephy_string_shorten (char *str,
 }
 
 /* This is a collation key that is very very likely to sort before any
-   collation key that libc strxfrm generates. We use this before any
-   special case (dot or number) to make sure that its sorted before
-   anything else.
+ *  collation key that libc strxfrm generates. We use this before any
+ *  special case (dot or number) to make sure that its sorted before
+ *  anything else.
  */
 #define COLLATION_SENTINEL "\1\1\1"
 
@@ -212,7 +213,8 @@ ephy_string_get_host_name (const char *url)
  * UTF-8 strings.
  **/
 char **
-ephy_string_commandline_args_to_uris (char **arguments, GError **error)
+ephy_string_commandline_args_to_uris (char   **arguments,
+                                      GError **error)
 {
   gchar **args;
   GFile *file;

@@ -32,30 +32,30 @@
 #define BOOKMARK_LOAD_IN_SIDEBAR_VAL FALSE
 
 struct _EphyBookmark {
-  GObject      parent_instance;
+  GObject parent_instance;
 
-  char        *url;
-  char        *title;
-  GSequence   *tags;
-  gint64       time_added;
+  char *url;
+  char *title;
+  GSequence *tags;
+  gint64 time_added;
 
   /* Firefox Sync specific fields. */
-  char        *id;
-  char        *type;
-  char        *parent_id;
-  char        *parent_name;
-  gboolean     load_in_sidebar;
-  gint64       server_time_modified;
+  char *id;
+  char *type;
+  char *parent_id;
+  char *parent_name;
+  gboolean load_in_sidebar;
+  gint64 server_time_modified;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);
 static void ephy_synchronizable_iface_init (EphySynchronizableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT,
-                        G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
-                                               json_serializable_iface_init)
-                        G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
-                                               ephy_synchronizable_iface_init))
+                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
+                                                json_serializable_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
+                                                ephy_synchronizable_iface_init))
 
 enum {
   PROP_0,
@@ -78,7 +78,7 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
-static guint       signals[LAST_SIGNAL];
+static guint signals[LAST_SIGNAL];
 
 static void
 ephy_bookmark_set_property (GObject      *object,
@@ -321,7 +321,8 @@ ephy_bookmark_get_time_added (EphyBookmark *self)
 
 
 void
-ephy_bookmark_set_url (EphyBookmark *self, const char *url)
+ephy_bookmark_set_url (EphyBookmark *self,
+                       const char   *url)
 {
   g_assert (EPHY_IS_BOOKMARK (self));
 
@@ -338,7 +339,8 @@ ephy_bookmark_get_url (EphyBookmark *self)
 }
 
 void
-ephy_bookmark_set_title (EphyBookmark *self, const char *title)
+ephy_bookmark_set_title (EphyBookmark *self,
+                         const char   *title)
 {
   g_assert (EPHY_IS_BOOKMARK (self));
 
@@ -378,7 +380,6 @@ void
 ephy_bookmark_set_is_uploaded (EphyBookmark *self,
                                gboolean      uploaded)
 {
-
   /* FIXME: This is no longer used for Firefox Sync, but bookmarks import/export
    * expects it. We need to delete it and write a migrator for bookmarks. */
   g_assert (EPHY_IS_BOOKMARK (self));
@@ -438,7 +439,8 @@ ephy_bookmark_remove_tag (EphyBookmark *self,
 }
 
 gboolean
-ephy_bookmark_has_tag (EphyBookmark *self, const char *tag)
+ephy_bookmark_has_tag (EphyBookmark *self,
+                       const char   *tag)
 {
   GSequenceIter *tag_iter;
 
@@ -495,7 +497,8 @@ ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
 }
 
 int
-ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
+ephy_bookmark_tags_compare (const char *tag1,
+                            const char *tag2)
 {
   int result;
 

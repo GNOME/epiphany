@@ -31,8 +31,7 @@
 #include <string.h>
 #include <webkit2/webkit2.h>
 
-struct _EphyPermissionsManager
-{
+struct _EphyPermissionsManager {
   GObject parent_instance;
 
   GHashTable *origins_mapping;
@@ -104,7 +103,7 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   char *origin_path;
   char *trimmed_protocol;
   char *filename;
-  GSettingsBackend* backend;
+  GSettingsBackend *backend;
   GSettings *settings;
   WebKitSecurityOrigin *security_origin;
   char *pos;
@@ -154,20 +153,20 @@ static const char *
 permission_type_to_string (EphyPermissionType type)
 {
   switch (type) {
-  case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    return "notifications-permission";
-  case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
-    return "save-password-permission";
-  case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-    return "geolocation-permission";
-  case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    return "audio-device-permission";
-  case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-    return "video-device-permission";
-  case EPHY_PERMISSION_TYPE_SHOW_ADS:
-    return "advertisement-permission";
-  default:
-    g_assert_not_reached ();
+    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+      return "notifications-permission";
+    case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
+      return "save-password-permission";
+    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
+      return "geolocation-permission";
+    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
+      return "audio-device-permission";
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
+      return "video-device-permission";
+    case EPHY_PERMISSION_TYPE_SHOW_ADS:
+      return "advertisement-permission";
+    default:
+      g_assert_not_reached ();
   }
 }
 

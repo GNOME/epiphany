@@ -61,9 +61,9 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 typedef struct {
   SyncedTabsDialog *dialog;
-  char             *title;
-  char             *url;
-  guint             parent_index;
+  char *title;
+  char *url;
+  guint parent_index;
 } PopulateRowAsyncData;
 
 static PopulateRowAsyncData *

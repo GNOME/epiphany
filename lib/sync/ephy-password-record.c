@@ -26,16 +26,16 @@
 struct _EphyPasswordRecord {
   GObject parent_instance;
 
-  char    *id;
-  char    *origin;
-  char    *target_origin;
-  char    *username;
-  char    *password;
-  char    *username_field;
-  char    *password_field;
-  guint64  time_created;
-  guint64  time_password_changed;
-  gint64   server_time_modified;
+  char *id;
+  char *origin;
+  char *target_origin;
+  char *username;
+  char *password;
+  char *username_field;
+  char *password_field;
+  guint64 time_created;
+  guint64 time_password_changed;
+  gint64 server_time_modified;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);

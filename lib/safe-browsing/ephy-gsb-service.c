@@ -40,18 +40,18 @@
 struct _EphyGSBService {
   GObject parent_instance;
 
-  char           *api_key;
+  char *api_key;
   EphyGSBStorage *storage;
 
-  gboolean        is_updating;
-  guint           source_id;
+  gboolean is_updating;
+  guint source_id;
 
-  gint64          next_full_hashes_time;
-  gint64          next_list_updates_time;
-  gint64          back_off_exit_time;
-  gint64          back_off_num_fails;
+  gint64 next_full_hashes_time;
+  gint64 next_list_updates_time;
+  gint64 back_off_exit_time;
+  gint64 back_off_num_fails;
 
-  SoupSession    *session;
+  SoupSession *session;
 };
 
 G_DEFINE_TYPE (EphyGSBService, ephy_gsb_service, G_TYPE_OBJECT);

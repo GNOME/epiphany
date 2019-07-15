@@ -73,7 +73,7 @@ G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
 typedef struct {
   WebKitWebsiteDataTypes type;
   gboolean initial_state;
-  const char* name;
+  const char *name;
 } DataEntry;
 
 static const DataEntry data_entries[] = {
@@ -98,18 +98,18 @@ static inline GTimeSpan
 get_timespan_for_combo_value (Timespan timespan)
 {
   switch (timespan) {
-  case TIMESPAN_HOUR:
-    return G_TIME_SPAN_HOUR;
-  case TIMESPAN_DAY:
-    return G_TIME_SPAN_DAY;
-  case TIMESPAN_WEEK:
-    return G_TIME_SPAN_DAY * 7;
-  case TIMESPAN_MONTH:
-    return G_TIME_SPAN_DAY * 7 * 4;
-  case TIMESPAN_FOREVER:
-    return 0;
-  default:
-    break;
+    case TIMESPAN_HOUR:
+      return G_TIME_SPAN_HOUR;
+    case TIMESPAN_DAY:
+      return G_TIME_SPAN_DAY;
+    case TIMESPAN_WEEK:
+      return G_TIME_SPAN_DAY * 7;
+    case TIMESPAN_MONTH:
+      return G_TIME_SPAN_DAY * 7 * 4;
+    case TIMESPAN_FOREVER:
+      return 0;
+    default:
+      break;
   }
 
   g_assert_not_reached ();

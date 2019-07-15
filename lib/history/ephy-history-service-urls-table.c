@@ -53,7 +53,9 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
 }
 
 EphyHistoryURL *
-ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_string, EphyHistoryURL *url)
+ephy_history_service_get_url_row (EphyHistoryService *self,
+                                  const char         *url_string,
+                                  EphyHistoryURL     *url)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -106,7 +108,7 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
 
   /* Only get the URL and page title if we don't know it yet, as the version in the
-     history could be outdated. */
+   *  history could be outdated. */
   if (url->url == NULL)
     url->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1));
   if (url->title == NULL)
@@ -123,7 +125,8 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
 }
 
 void
-ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
+ephy_history_service_add_url_row (EphyHistoryService *self,
+                                  EphyHistoryURL     *url)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -165,7 +168,8 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
 }
 
 void
-ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *url)
+ephy_history_service_update_url_row (EphyHistoryService *self,
+                                     EphyHistoryURL     *url)
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
@@ -222,7 +226,8 @@ create_url_from_statement (EphySQLiteStatement *statement)
 }
 
 GList *
-ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *query)
+ephy_history_service_find_url_rows (EphyHistoryService *self,
+                                    EphyHistoryQuery   *query)
 {
   EphySQLiteStatement *statement = NULL;
   GList *substring;
@@ -387,7 +392,8 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 }
 
 void
-ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
+ephy_history_service_delete_url (EphyHistoryService *self,
+                                 EphyHistoryURL     *url)
 {
   EphySQLiteStatement *statement = NULL;
   const char *sql_statement;

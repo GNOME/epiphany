@@ -97,7 +97,7 @@ update_selection_actions (GActionMap *action_map,
 }
 
 static void
-on_treeview_selection_changed (GtkTreeSelection    *selection,
+on_treeview_selection_changed (GtkTreeSelection               *selection,
                                EphyWebappAdditionalURLsDialog *dialog)
 {
   update_selection_actions (G_ACTION_MAP (dialog->action_group),

@@ -26,8 +26,8 @@
 struct _EphyOpenTabsRecord {
   GObject parent_instance;
 
-  char  *id;
-  char  *client_name;
+  char *id;
+  char *client_name;
 
   /* List of JSON objects. Each object describes a tab and has the fields:
    * @title: a string representing the title of the current page

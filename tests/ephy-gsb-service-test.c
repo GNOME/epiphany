@@ -89,7 +89,7 @@ test_ephy_gsb_utils_canonicalize (void)
 
 typedef struct {
   const char *url;
-  guint       num_hashes;
+  guint num_hashes;
   const char *hashes_hex[64];
 } ComputeHashesTest;
 
@@ -177,23 +177,23 @@ test_ephy_gsb_utils_compute_hashes (void)
 
 typedef struct {
   const char *url;
-  gboolean    is_threat;
+  gboolean is_threat;
 } VerifyURLTest;
 
 static const VerifyURLTest verify_url_tests[] = {
-  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/MALWARE/URL/",                    TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/SOCIAL_ENGINEERING/URL/",         TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/UNWANTED_SOFTWARE/URL/",          TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/MALWARE/URL/",             TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/SOCIAL_ENGINEERING/URL/",  TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/UNWANTED_SOFTWARE/URL/",   TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/MALWARE/URL/",                  TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/SOCIAL_ENGINEERING/URL/",       TRUE},
-  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/UNWANTED_SOFTWARE/URL/",        TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/MALWARE/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/SOCIAL_ENGINEERING/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/UNWANTED_SOFTWARE/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/MALWARE/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/SOCIAL_ENGINEERING/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/UNWANTED_SOFTWARE/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/MALWARE/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/SOCIAL_ENGINEERING/URL/", TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/UNWANTED_SOFTWARE/URL/", TRUE},
 };
 
 static GMainLoop *test_verify_url_loop;
-static int        test_verify_url_counter;
+static int test_verify_url_counter;
 
 static void
 test_verify_url_cb (EphyGSBService *service,
@@ -254,7 +254,8 @@ test_ephy_gsb_service_verify_url (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
   GError *error = NULL;

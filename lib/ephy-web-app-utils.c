@@ -116,16 +116,16 @@ ephy_web_application_get_program_name_from_profile_directory (const char *profil
 {
   const char *name;
 
-  // Just get the basename
+  /* Just get the basename */
   name = strrchr (profile_dir, G_DIR_SEPARATOR);
   if (name == NULL) {
     g_warning ("Profile directoroy %s is not a valid path", profile_dir);
     return NULL;
   }
 
-  name++; // Strip '/'
+  name++; /* Strip '/' */
 
-  // Legacy web app support
+  /* Legacy web app support */
   if (g_str_has_prefix (name, "app-"))
     name += strlen ("app-");
 
@@ -213,8 +213,8 @@ ephy_web_application_delete (const char *id)
   g_autofree char *config_dir = NULL;
   g_autofree char *desktop_file = NULL;
   g_autofree char *desktop_path = NULL;
-  g_autoptr(GFile) launcher = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GFile) launcher = NULL;
+  g_autoptr (GError) error = NULL;
 
   g_assert (id);
 
@@ -398,7 +398,7 @@ ephy_web_application_create (const char *id,
 
   /* Create an .app file. */
   app_file = g_build_filename (profile_dir, ".app", NULL);
-  fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+  fd = g_open (app_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd < 0) {
     g_warning ("Failed to create .app file: %s", g_strerror (errno));
     return NULL;
@@ -596,7 +596,7 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   GFileInfo *info;
   GList *applications = NULL;
   g_autofree char *parent_directory_path = NULL;
-  g_autoptr(GFile) parent_directory = NULL;
+  g_autoptr (GFile) parent_directory = NULL;
 
   if (only_legacy)
     parent_directory_path = g_build_filename (g_get_user_config_dir (), "epiphany", NULL);

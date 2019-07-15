@@ -260,7 +260,7 @@ create_row (EphyHistoryDialog *self,
 
   /* Date */
   date = gtk_label_new (ephy_time_helpers_utf_friendly_time (url->last_visit_time / 1000000));
-  gtk_label_set_ellipsize (GTK_LABEL(date), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (date), PANGO_ELLIPSIZE_END);
   gtk_label_set_xalign (GTK_LABEL (date), 0);
 
   /* Separator */
@@ -315,7 +315,7 @@ add_urls_source (EphyHistoryDialog *self)
   url = element->data;
 
   row = create_row (self, url);
-  gtk_list_box_insert (GTK_LIST_BOX(self->listbox), row, -1);
+  gtk_list_box_insert (GTK_LIST_BOX (self->listbox), row, -1);
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "results");
 
   self->urls = g_list_remove_link (self->urls, element);
@@ -403,7 +403,7 @@ forget_all (GSimpleAction *action,
 static GtkWidget *
 get_target_window (EphyHistoryDialog *self)
 {
-    return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
+  return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
 }
 
 static void
@@ -818,4 +818,3 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
     update_selection_actions (self->action_group, FALSE);
   }
 }
-

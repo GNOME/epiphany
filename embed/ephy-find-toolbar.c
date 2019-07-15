@@ -85,7 +85,8 @@ typedef enum {
 
 /* private functions */
 
-static void ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar, WebKitWebView *web_view);
+static void ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
+                                            WebKitWebView   *web_view);
 
 static void
 update_search_tag (EphyFindToolbar *toolbar)
@@ -153,8 +154,8 @@ clear_status (EphyFindToolbar *toolbar)
 }
 
 static void
-real_find (EphyFindToolbar  *toolbar,
-           EphyFindDirection direction)
+real_find (EphyFindToolbar   *toolbar,
+           EphyFindDirection  direction)
 {
   WebKitFindOptions options = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
 

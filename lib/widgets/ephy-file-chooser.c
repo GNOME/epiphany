@@ -104,7 +104,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
   gint preview_width = 0;
   gint preview_height = 0;
   struct g_stat st_buf;
-  g_autoptr(GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
 
   GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
                                                               &preview_width,
@@ -112,7 +112,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
 
   if (!filename || g_stat (filename, &st_buf) || (!S_ISREG (st_buf.st_mode))) {
     gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
-    return; // stat failed or file is not regular
+    return; /* stat failed or file is not regular */
   }
 
   if (!preview_format ||
@@ -120,7 +120,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
       preview_width > MAX_PREVIEW_SOURCE_SIZE ||
       preview_height > MAX_PREVIEW_SOURCE_SIZE) {
     gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
-    return; // unpreviewable, 0px, or unsafely large
+    return; /* unpreviewable, 0px, or unsafely large */
   }
 
   if (preview_width > MAX_PREVIEW_SIZE || preview_height > MAX_PREVIEW_SIZE) {
@@ -143,10 +143,10 @@ update_preview_cb (GtkFileChooser *file_chooser,
 }
 
 GtkFileChooser *
-ephy_create_file_chooser (const char           *title,
-                          GtkWidget            *parent,
-                          GtkFileChooserAction  action,
-                          EphyFileFilterDefault default_filter)
+ephy_create_file_chooser (const char            *title,
+                          GtkWidget             *parent,
+                          GtkFileChooserAction   action,
+                          EphyFileFilterDefault  default_filter)
 {
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];

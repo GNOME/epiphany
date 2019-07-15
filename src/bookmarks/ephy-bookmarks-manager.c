@@ -34,17 +34,17 @@
 #define EPHY_BOOKMARKS_FILE "bookmarks.gvdb"
 
 struct _EphyBookmarksManager {
-  GObject       parent_instance;
+  GObject parent_instance;
 
   GCancellable *cancellable;
 
-  GSequence    *bookmarks;
-  GSequence    *tags;
+  GSequence *bookmarks;
+  GSequence *tags;
 
-  gchar        *gvdb_filename;
+  gchar *gvdb_filename;
 };
 
-static void list_model_iface_init     (GListModelInterface *iface);
+static void list_model_iface_init (GListModelInterface *iface);
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT,
@@ -65,7 +65,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint       signals[LAST_SIGNAL];
+static guint signals[LAST_SIGNAL];
 
 static void
 ephy_bookmarks_manager_copy_tags_from_bookmark (EphyBookmarksManager *self,
@@ -128,7 +128,7 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose  = ephy_bookmarks_manager_dispose;
+  object_class->dispose = ephy_bookmarks_manager_dispose;
   object_class->finalize = ephy_bookmarks_manager_finalize;
 
   signals[BOOKMARK_ADDED] =
@@ -210,7 +210,7 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
 static void
 ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 {
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   self->cancellable = g_cancellable_new ();
 
@@ -298,8 +298,8 @@ ephy_bookmarks_manager_unwatch_bookmark (EphyBookmarksManager *self,
 }
 
 static GSequenceIter *
-ephy_bookmarks_search_and_insert_bookmark (GSequence     *bookmarks,
-                                           EphyBookmark  *bookmark)
+ephy_bookmarks_search_and_insert_bookmark (GSequence    *bookmarks,
+                                           EphyBookmark *bookmark)
 {
   GSequenceIter *iter;
   GSequenceIter *prev_iter;
@@ -389,8 +389,8 @@ ephy_bookmarks_manager_remove_bookmark_internal (EphyBookmarksManager *self,
   g_assert (EPHY_IS_BOOKMARK (bookmark));
 
   for (iter = g_sequence_get_begin_iter (self->bookmarks);
-         !g_sequence_iter_is_end (iter);
-         iter = g_sequence_iter_next (iter)) {
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
     if (g_strcmp0 (ephy_bookmark_get_id (g_sequence_get (iter)),
                    ephy_bookmark_get_id (bookmark)) == 0)
       break;
@@ -435,8 +435,8 @@ ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
   g_assert (url != NULL);
 
   for (iter = g_sequence_get_begin_iter (self->bookmarks);
-         !g_sequence_iter_is_end (iter);
-         iter = g_sequence_iter_next (iter)) {
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
     EphyBookmark *bookmark = g_sequence_get (iter);
 
     if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0)
@@ -468,7 +468,8 @@ ephy_bookmarks_manager_get_bookmark_by_id (EphyBookmarksManager *self,
 }
 
 void
-ephy_bookmarks_manager_create_tag (EphyBookmarksManager *self, const char *tag)
+ephy_bookmarks_manager_create_tag (EphyBookmarksManager *self,
+                                   const char           *tag)
 {
   GSequenceIter *tag_iter;
   GSequenceIter *prev_tag_iter;
@@ -490,7 +491,8 @@ ephy_bookmarks_manager_create_tag (EphyBookmarksManager *self, const char *tag)
 }
 
 void
-ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
+ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self,
+                                   const char           *tag)
 {
   GSequenceIter *iter = NULL;
   int position;
@@ -518,7 +520,8 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
 }
 
 gboolean
-ephy_bookmarks_manager_tag_exists (EphyBookmarksManager *self, const char *tag)
+ephy_bookmarks_manager_tag_exists (EphyBookmarksManager *self,
+                                   const char           *tag)
 {
   GSequenceIter *iter;
 
@@ -597,7 +600,7 @@ ephy_bookmarks_manager_save_warn_on_error_cb (GObject      *object,
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (object);
   gboolean ret;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   ret = ephy_bookmarks_manager_save_finish (self, result, &error);
   if (ret == FALSE)
@@ -618,7 +621,7 @@ bookmarks_export_cb (GObject      *source_object,
                      gpointer      user_data)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (source_object);
-  g_autoptr(GTask) task = user_data;
+  g_autoptr (GTask) task = user_data;
   GError *error;
 
   if (!ephy_bookmarks_export_finish (self, result, &error)) {
@@ -644,9 +647,9 @@ ephy_bookmarks_manager_save (EphyBookmarksManager *self,
 }
 
 gboolean
-ephy_bookmarks_manager_save_finish (EphyBookmarksManager *self,
-                                    GAsyncResult         *result,
-                                    GError              **error)
+ephy_bookmarks_manager_save_finish (EphyBookmarksManager  *self,
+                                    GAsyncResult          *result,
+                                    GError               **error)
 {
   g_assert (g_task_is_valid (result, self));
 
@@ -655,8 +658,8 @@ ephy_bookmarks_manager_save_finish (EphyBookmarksManager *self,
 
 typedef struct {
   GMainLoop *main_loop;
-  gboolean   result;
-  GError    *error;
+  gboolean result;
+  GError *error;
 } SaveToFileData;
 
 static void
@@ -676,7 +679,7 @@ gboolean
 ephy_bookmarks_manager_save_sync (EphyBookmarksManager  *self,
                                   GError               **error)
 {
-  g_autoptr(GMainContext) context = NULL;
+  g_autoptr (GMainContext) context = NULL;
   SaveToFileData *data;
   gboolean result;
 

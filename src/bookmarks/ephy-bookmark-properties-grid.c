@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "config.h"
 
@@ -33,24 +33,24 @@
 #include <string.h>
 
 struct _EphyBookmarkPropertiesGrid {
-  GtkGrid                         parent_instance;
+  GtkGrid parent_instance;
 
-  EphyBookmarksManager           *manager;
-  EphyBookmark                   *bookmark;
-  gboolean                        bookmark_is_modified;
-  gboolean                        bookmark_is_removed;
+  EphyBookmarksManager *manager;
+  EphyBookmark *bookmark;
+  gboolean bookmark_is_modified;
+  gboolean bookmark_is_removed;
 
-  EphyBookmarkPropertiesGridType  type;
-  GtkWidget                      *parent;
+  EphyBookmarkPropertiesGridType type;
+  GtkWidget *parent;
 
-  GtkWidget                      *popover_bookmark_label;
-  GtkWidget                      *name_entry;
-  GtkWidget                      *address_entry;
-  GtkWidget                      *popover_tags_label;
-  GtkWidget                      *tags_box;
-  GtkWidget                      *add_tag_entry;
-  GtkWidget                      *add_tag_button;
-  GtkWidget                      *remove_bookmark_button;
+  GtkWidget *popover_bookmark_label;
+  GtkWidget *name_entry;
+  GtkWidget *address_entry;
+  GtkWidget *popover_tags_label;
+  GtkWidget *tags_box;
+  GtkWidget *add_tag_entry;
+  GtkWidget *add_tag_button;
+  GtkWidget *remove_bookmark_button;
 };
 
 G_DEFINE_TYPE (EphyBookmarkPropertiesGrid, ephy_bookmark_properties_grid, GTK_TYPE_GRID)
@@ -66,7 +66,8 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 static int
-flow_box_sort_func (GtkFlowBoxChild *child1, GtkFlowBoxChild *child2)
+flow_box_sort_func (GtkFlowBoxChild *child1,
+                    GtkFlowBoxChild *child2)
 {
   GtkWidget *box1;
   GtkWidget *box2;
@@ -482,7 +483,7 @@ static const GActionEntry entries[] = {
 static void
 ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 {
-  g_autoptr(GSimpleActionGroup) group = NULL;
+  g_autoptr (GSimpleActionGroup) group = NULL;
   GAction *action;
 
   gtk_widget_init_template (GTK_WIDGET (self));

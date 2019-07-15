@@ -68,17 +68,17 @@ ephy_embed_event_new (GdkEvent            *event,
   embed_event->hit_test_result = g_object_ref (hit_test_result);
 
   switch (event->type) {
-  case GDK_BUTTON_PRESS:
-    embed_event->button = ((GdkEventButton *)event)->button;
-    embed_event->modifier = ((GdkEventButton *)event)->state;
-    embed_event->x = ((GdkEventButton *)event)->x;
-    embed_event->y = ((GdkEventButton *)event)->y;
-    break;
-  case GDK_KEY_PRESS:
-    embed_event->modifier = ((GdkEventKey *)event)->state;
-    break;
-  default:
-    break;
+    case GDK_BUTTON_PRESS:
+      embed_event->button = ((GdkEventButton *)event)->button;
+      embed_event->modifier = ((GdkEventButton *)event)->state;
+      embed_event->x = ((GdkEventButton *)event)->x;
+      embed_event->y = ((GdkEventButton *)event)->y;
+      break;
+    case GDK_KEY_PRESS:
+      embed_event->modifier = ((GdkEventKey *)event)->state;
+      break;
+    default:
+      break;
   }
 
   return embed_event;
@@ -113,7 +113,8 @@ ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 
 void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
-                             guint *x, guint *y)
+                             guint          *x,
+                             guint          *y)
 {
   g_assert (EPHY_IS_EMBED_EVENT (event));
 
@@ -138,7 +139,7 @@ ephy_embed_event_get_property (EphyEmbedEvent *event,
   g_assert (name);
 
   /* FIXME: ugly hack! This only works for now because all properties
-     we have are strings */
+   *  we have are strings */
   g_value_init (value, G_TYPE_STRING);
 
   g_object_get_property (G_OBJECT (event->hit_test_result), name, value);

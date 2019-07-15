@@ -185,9 +185,9 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           _("About Web"),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
 #if !TECH_PREVIEW
-                         _("Web"),
+                          _("Web"),
 #else
-                         _("Epiphany Technology Preview"),
+                          _("Epiphany Technology Preview"),
 #endif
                           version,
                           _("A simple, clean, beautiful view of the web"),
@@ -273,7 +273,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
     g_string_append (data_str, "</table></body></html>");
   } else {
-    g_autoptr(GtkIconInfo) icon_info = NULL;
+    g_autoptr (GtkIconInfo) icon_info = NULL;
     g_autofree gchar *icon = g_strconcat ("application-x-addon-symbolic", NULL);
 
     g_string_append_printf (data_str, "<html><head><title>%s</title>"
@@ -419,7 +419,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                               "  </div>\n"
                               "</body></html>\n");
 
- out:
+out:
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
   g_object_unref (request);

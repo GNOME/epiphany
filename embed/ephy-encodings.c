@@ -54,8 +54,7 @@ struct {
   const char *code;
   EphyLanguageGroup groups;
 }
-encoding_entries [] =
-{
+encoding_entries [] = {
   { N_("Arabic (_IBM-864)"), "IBM864", LG_ARABIC },
   { N_("Arabic (ISO-_8859-6)"), "ISO-8859-6", LG_ARABIC },
   { N_("Arabic (_MacArabic)"), "x-mac-arabic", LG_ARABIC },
@@ -182,10 +181,10 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
 }
 
 static EphyEncoding *
-add_encoding (EphyEncodings    *encodings,
-              const char       *title,
-              const char       *code,
-              EphyLanguageGroup groups)
+add_encoding (EphyEncodings     *encodings,
+              const char        *title,
+              const char        *code,
+              EphyLanguageGroup  groups)
 {
   EphyEncoding *encoding;
 
@@ -244,8 +243,8 @@ get_encodings_foreach (gpointer key,
 }
 
 GList *
-ephy_encodings_get_encodings (EphyEncodings    *encodings,
-                              EphyLanguageGroup group_mask)
+ephy_encodings_get_encodings (EphyEncodings     *encodings,
+                              EphyLanguageGroup  group_mask)
 {
   GList *list = NULL;
   GetEncodingsData data;

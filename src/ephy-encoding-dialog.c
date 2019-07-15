@@ -183,7 +183,9 @@ ephy_encoding_dialog_attach_embed (EphyEncodingDialog *dialog)
 }
 
 static void
-ephy_encoding_dialog_sync_embed (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dialog)
+ephy_encoding_dialog_sync_embed (EphyWindow         *window,
+                                 GParamSpec         *pspec,
+                                 EphyEncodingDialog *dialog)
 {
   ephy_encoding_dialog_detach_embed (dialog);
   ephy_encoding_dialog_attach_embed (dialog);
@@ -220,7 +222,8 @@ ephy_encoding_dialog_response_cb (GtkWidget          *widget,
 }
 
 static void
-clean_selected_row (gpointer row, gpointer null_pointer)
+clean_selected_row (gpointer row,
+                    gpointer null_pointer)
 {
   EphyEncodingRow *ephy_encoding_row;
   ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
@@ -323,13 +326,15 @@ create_list_box_row (gpointer object,
 }
 
 static void
-add_list_item (EphyEncoding *encoding, GtkListBox *list_box)
+add_list_item (EphyEncoding *encoding,
+               GtkListBox   *list_box)
 {
   gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (ephy_encoding_row_new (encoding)));
 }
 
 static int
-sort_encodings (gconstpointer a, gconstpointer b)
+sort_encodings (gconstpointer a,
+                gconstpointer b)
 {
   EphyEncoding *enc1 = (EphyEncoding *)a;
   EphyEncoding *enc2 = (EphyEncoding *)b;

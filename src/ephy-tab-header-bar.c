@@ -26,8 +26,8 @@
 struct _EphyTabHeaderBar {
   GtkHeaderBar parent_instance;
 
-  GtkWidget    *back_button;
-  GtkWidget    *new_tab_button;
+  GtkWidget *back_button;
+  GtkWidget *new_tab_button;
 };
 
 G_DEFINE_TYPE (EphyTabHeaderBar, ephy_tab_header_bar, GTK_TYPE_HEADER_BAR)
@@ -42,7 +42,7 @@ G_DEFINE_TYPE (EphyTabHeaderBar, ephy_tab_header_bar, GTK_TYPE_HEADER_BAR)
 GtkWidget *
 ephy_tab_header_bar_new (void)
 {
-  return GTK_WIDGET(g_object_new(EPHY_TYPE_TAB_HEADER_BAR, NULL));
+  return GTK_WIDGET (g_object_new (EPHY_TYPE_TAB_HEADER_BAR, NULL));
 }
 
 static void
@@ -53,7 +53,7 @@ ephy_tab_header_bar_constructed (GObject *object)
   EphyTabHeaderBar *self = EPHY_TAB_HEADER_BAR (object);
 
   G_OBJECT_CLASS (ephy_tab_header_bar_parent_class)->constructed (object);
-  
+
   back_button = GTK_WIDGET (gtk_button_new_from_icon_name ("go-previous-symbolic", GTK_ICON_SIZE_BUTTON));
   new_tab_button = GTK_WIDGET (gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
 
@@ -64,7 +64,7 @@ ephy_tab_header_bar_constructed (GObject *object)
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (self), back_button);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (self), new_tab_button);
-  
+
   gtk_header_bar_set_title (GTK_HEADER_BAR (self), _("Tabs"));
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (self), TRUE);
 

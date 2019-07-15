@@ -62,7 +62,9 @@ server_callback (SoupServer        *server,
 }
 
 static void
-load_changed_cb (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
+load_changed_cb (WebKitWebView   *view,
+                 WebKitLoadEvent  load_event,
+                 GMainLoop       *loop)
 {
   char *expected_url;
   const char *loaded_url;
@@ -325,7 +327,9 @@ test_ephy_web_view_normalize_or_autosearch (void)
 }
 
 static void
-quit_main_loop_when_load_finished (WebKitWebView *view, WebKitLoadEvent load_event, GMainLoop *loop)
+quit_main_loop_when_load_finished (WebKitWebView   *view,
+                                   WebKitLoadEvent  load_event,
+                                   GMainLoop       *loop)
 {
   if (load_event != WEBKIT_LOAD_FINISHED)
     return;
@@ -445,7 +449,8 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
   SoupServer *server;

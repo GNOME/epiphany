@@ -218,7 +218,8 @@ test_table_exists (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   gtk_test_init (&argc, &argv);
 

@@ -87,7 +87,8 @@ struct _EphyLocationEntry {
   EphySecurityLevel security_level;
 };
 
-static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
+static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *,
+                                                    gboolean);
 
 enum {
   PROP_0,
@@ -106,7 +107,8 @@ enum signalsEnum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
-static void schedule_dns_prefetch (EphyLocationEntry *entry, const gchar *url);
+static void schedule_dns_prefetch (EphyLocationEntry *entry,
+                                   const gchar       *url);
 
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
@@ -217,8 +219,8 @@ ephy_location_entry_title_widget_get_security_level (EphyTitleWidget *widget)
 }
 
 static void
-ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
-                                                     EphySecurityLevel  security_level)
+ephy_location_entry_title_widget_set_security_level (EphyTitleWidget  *widget,
+                                                     EphySecurityLevel security_level)
 
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
@@ -689,10 +691,10 @@ entry_populate_popup_cb (GtkEntry          *entry,
 }
 
 static gboolean
-icon_button_icon_press_event_cb (GtkWidget           *widget,
-                                 GtkEntryIconPosition position,
-                                 GdkEventButton      *event,
-                                 EphyLocationEntry   *entry)
+icon_button_icon_press_event_cb (GtkWidget            *widget,
+                                 GtkEntryIconPosition  position,
+                                 GdkEventButton       *event,
+                                 EphyLocationEntry    *entry)
 {
   if (((event->type == GDK_BUTTON_PRESS &&
         event->button == 1) ||
@@ -711,14 +713,14 @@ icon_button_icon_press_event_cb (GtkWidget           *widget,
 }
 
 static gboolean
-bookmark_icon_button_press_event_cb (GtkWidget           *entry,
-                                     GdkEventButton      *event,
-                                     EphyLocationEntry   *lentry)
+bookmark_icon_button_press_event_cb (GtkWidget         *entry,
+                                     GdkEventButton    *event,
+                                     EphyLocationEntry *lentry)
 {
   if (((event->type == GDK_BUTTON_PRESS &&
         event->button == 1) ||
        (event->type == GDK_TOUCH_BEGIN))) {
-      g_signal_emit (lentry, signals[BOOKMARK_CLICKED], 0);
+    g_signal_emit (lentry, signals[BOOKMARK_CLICKED], 0);
   }
 
   return TRUE;
@@ -759,8 +761,8 @@ button_box_size_allocated_cb (GtkWidget    *widget,
    *
    * FIXME: Loading CSS during size_allocate is ILLEGAL and BROKEN.
    */
-  css = g_strdup_printf (".url_entry { padding-right: %dpx; }"\
-                         ".url_entry:dir(rtl) { padding-left: %dpx; padding-right: %dpx; }"\
+  css = g_strdup_printf (".url_entry { padding-right: %dpx; }" \
+                         ".url_entry:dir(rtl) { padding-left: %dpx; padding-right: %dpx; }" \
                          ".url_entry progress { margin-right: -%dpx; }",
                          lentry->allocation_width + 5,
                          lentry->allocation_width + 5,
@@ -892,7 +894,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_set_tooltip_text (entry->bookmark, _("Bookmark this page"));
   gtk_widget_show (entry->bookmark);
   g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
-  gtk_container_add (GTK_CONTAINER(entry->bookmark_event_box), entry->bookmark);
+  gtk_container_add (GTK_CONTAINER (entry->bookmark_event_box), entry->bookmark);
   gtk_box_pack_end (GTK_BOX (button_box), entry->bookmark_event_box, FALSE, FALSE, 6);
 
   context = gtk_widget_get_style_context (entry->bookmark);
@@ -903,7 +905,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
   gtk_widget_set_tooltip_text (entry->reader_mode, _("Toggle reader mode"));
   gtk_widget_show (entry->reader_mode);
-  gtk_container_add (GTK_CONTAINER(entry->reader_mode_event_box), entry->reader_mode);
+  gtk_container_add (GTK_CONTAINER (entry->reader_mode_event_box), entry->reader_mode);
   gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
 
   context = gtk_widget_get_style_context (entry->reader_mode);
@@ -916,7 +918,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                     NULL);
 
   g_signal_connect (entry->url_entry, "suggestion-activated",
-                          G_CALLBACK (ephy_location_entry_suggestion_activated), entry);
+                    G_CALLBACK (ephy_location_entry_suggestion_activated), entry);
 }
 
 static void
@@ -975,8 +977,8 @@ proxy_resolver_ready_cb (GObject      *object,
 {
   PrefetchHelper *helper = user_data;
   GProxyResolver *resolver = G_PROXY_RESOLVER (object);
-  g_autoptr(GError) error = NULL;
-  g_auto(GStrv) proxies = NULL;
+  g_autoptr (GError) error = NULL;
+  g_auto (GStrv) proxies = NULL;
 
   proxies = g_proxy_resolver_lookup_finish (resolver, result, &error);
   if (error != NULL) {
@@ -1309,7 +1311,7 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
   if (entry->progress_timeout) {
     g_source_remove (entry->progress_timeout);
     entry->progress_timeout = 0;
- }
+  }
 
   if (!loading) {
     /* Setting progress to 0 when it is already 0 can actually cause the

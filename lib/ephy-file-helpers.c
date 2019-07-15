@@ -299,8 +299,8 @@ char *
 ephy_default_profile_dir (void)
 {
   return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
-    g_strdup (ephy_profile_dir ()) :
-    g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
+         g_strdup (ephy_profile_dir ()) :
+         g_build_filename (g_get_user_data_dir (), "epiphany", NULL);
 }
 
 /**
@@ -314,8 +314,8 @@ char *
 ephy_default_cache_dir (void)
 {
   return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
-    g_build_filename (ephy_profile_dir (), "cache", NULL) :
-    g_build_filename (g_get_user_cache_dir (), "epiphany", NULL);
+         g_build_filename (ephy_profile_dir (), "cache", NULL) :
+         g_build_filename (g_get_user_cache_dir (), "epiphany", NULL);
 }
 
 /**
@@ -329,8 +329,8 @@ char *
 ephy_default_config_dir (void)
 {
   return profile_dir_type == EPHY_PROFILE_DIR_TEST ?
-    g_build_filename (ephy_profile_dir (), "config", NULL) :
-    g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+         g_build_filename (ephy_profile_dir (), "config", NULL) :
+         g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
 }
 
 /**
@@ -345,9 +345,9 @@ ephy_default_config_dir (void)
  * Returns: %FALSE if the profile dir couldn't be created or accessed
  **/
 gboolean
-ephy_file_helpers_init (const char          *profile_dir,
-                        EphyFileHelpersFlags flags,
-                        GError             **error)
+ephy_file_helpers_init (const char            *profile_dir,
+                        EphyFileHelpersFlags   flags,
+                        GError               **error)
 {
   gboolean ret = TRUE;
   gboolean private_profile;
@@ -502,8 +502,8 @@ ephy_file_helpers_shutdown (void)
  * Returns: %TRUE if @dir exists and is a directory
  **/
 gboolean
-ephy_ensure_dir_exists (const char *dir,
-                        GError    **error)
+ephy_ensure_dir_exists (const char  *dir,
+                        GError     **error)
 {
   if (g_file_test (dir, G_FILE_TEST_EXISTS) &&
       !g_file_test (dir, G_FILE_TEST_IS_DIR)) {
@@ -540,12 +540,12 @@ ephy_ensure_dir_exists (const char *dir,
 }
 
 static gboolean
-launch_application (GAppInfo  *app,
-                    GList     *files,
-                    guint32    user_time)
+launch_application (GAppInfo *app,
+                    GList    *files,
+                    guint32   user_time)
 {
-  g_autoptr(GdkAppLaunchContext) context = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GdkAppLaunchContext) context = NULL;
+  g_autoptr (GError) error = NULL;
   GdkDisplay *display;
   GdkScreen *screen;
   gboolean res;
@@ -584,7 +584,7 @@ ephy_file_launch_desktop_file (const char                   *filename,
                                guint32                       user_time,
                                EphyFileHelpersNotFlatpakTag  tag)
 {
-  g_autoptr(GDesktopAppInfo) app = NULL;
+  g_autoptr (GDesktopAppInfo) app = NULL;
 
   /* This is impossible to implement inside flatpak. Higher layers must
    * ensure we don't get here.
@@ -603,7 +603,7 @@ launch_via_uri_handler (GFile *file)
   const char *uri;
   GdkDisplay *display;
   GdkAppLaunchContext *context;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   display = gdk_display_get_default ();
   context = gdk_display_get_app_launch_context (display);
@@ -635,8 +635,8 @@ ephy_file_launch_handler (GFile   *file,
 {
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
-  g_autoptr(GList) list = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GList) list = NULL;
+  g_autoptr (GError) error = NULL;
 
   g_assert (file != NULL);
 
@@ -667,9 +667,9 @@ open_in_default_handler (const char                   *uri,
                          GdkScreen                    *screen,
                          EphyFileHelpersNotFlatpakTag  tag)
 {
-  g_autoptr(GdkAppLaunchContext) context = NULL;
-  g_autoptr(GAppInfo) appinfo = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GdkAppLaunchContext) context = NULL;
+  g_autoptr (GAppInfo) appinfo = NULL;
+  g_autoptr (GError) error = NULL;
   GList uris;
 
   /* This is impossible to implement inside flatpak. Higher layers must
@@ -735,7 +735,8 @@ ephy_file_browse_to (GFile                        *file,
  * Returns: %TRUE if delete succeeded
  **/
 gboolean
-ephy_file_delete_dir_recursively (const char *directory, GError **error)
+ephy_file_delete_dir_recursively (const char  *directory,
+                                  GError     **error)
 {
   GDir *dir;
   const char *file_name;

@@ -74,7 +74,8 @@ typedef struct {
 } Fixture;
 
 static void
-fixture_setup (Fixture *fixture, gconstpointer data)
+fixture_setup (Fixture       *fixture,
+               gconstpointer  data)
 {
   char *tmp_filename;
   char *dest_file;
@@ -94,7 +95,8 @@ fixture_setup (Fixture *fixture, gconstpointer data)
 }
 
 static void
-fixture_teardown (Fixture *fixture, gconstpointer data)
+fixture_teardown (Fixture       *fixture,
+                  gconstpointer  data)
 {
   g_free (fixture->destination);
   g_free (fixture->source);
@@ -128,13 +130,15 @@ completed_cb (EphyDownload *download,
 }
 
 static void
-test_ephy_download_new (Fixture *fixture, gconstpointer data)
+test_ephy_download_new (Fixture       *fixture,
+                        gconstpointer  data)
 {
   g_assert_true (EPHY_IS_DOWNLOAD (fixture->download));
 }
 
 static void
-test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
+test_ephy_download_new_for_uri (Fixture       *fixture,
+                                gconstpointer  data)
 {
   WebKitDownload *download = ephy_download_get_webkit_download (fixture->download);
   WebKitURIRequest *request = webkit_download_get_request (download);
@@ -144,7 +148,8 @@ test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
 }
 
 static void
-test_ephy_download_start (Fixture *fixture, gconstpointer data)
+test_ephy_download_start (Fixture       *fixture,
+                          gconstpointer  data)
 {
   g_signal_connect (G_OBJECT (fixture->download), "completed",
                     G_CALLBACK (completed_cb), fixture);
@@ -153,7 +158,8 @@ test_ephy_download_start (Fixture *fixture, gconstpointer data)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
   GSList *uris;

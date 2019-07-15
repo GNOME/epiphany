@@ -40,11 +40,11 @@ struct _EphySearchProvider {
   GApplication parent_instance;
 
   EphyShellSearchProvider2 *skeleton;
-  GCancellable             *cancellable;
+  GCancellable *cancellable;
 
-  GSettings                *settings;
-  EphyBookmarksManager     *bookmarks_manager;
-  EphySuggestionModel      *model;
+  GSettings *settings;
+  EphyBookmarksManager *bookmarks_manager;
+  EphySuggestionModel *model;
 };
 
 struct _EphySearchProviderClass {
@@ -91,19 +91,19 @@ on_model_updated (GObject      *source_object,
 }
 
 static char **
-gather_results_finish (EphySearchProvider *self,
-                       GAsyncResult       *result,
-                       GError            **error)
+gather_results_finish (EphySearchProvider  *self,
+                       GAsyncResult        *result,
+                       GError             **error)
 {
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
-gather_results_async (EphySearchProvider *self,
-                      char              **terms,
-                      GCancellable       *cancellable,
-                      GAsyncReadyCallback callback,
-                      gpointer            user_data)
+gather_results_async (EphySearchProvider   *self,
+                      char                **terms,
+                      GCancellable         *cancellable,
+                      GAsyncReadyCallback   callback,
+                      gpointer              user_data)
 {
   GTask *task;
   char *search_string;
@@ -143,10 +143,10 @@ complete_request (GObject      *object,
 }
 
 static gboolean
-handle_get_initial_result_set (EphyShellSearchProvider2 *skeleton,
-                               GDBusMethodInvocation    *invocation,
-                               char                    **terms,
-                               EphySearchProvider       *self)
+handle_get_initial_result_set (EphyShellSearchProvider2  *skeleton,
+                               GDBusMethodInvocation     *invocation,
+                               char                     **terms,
+                               EphySearchProvider        *self)
 {
   g_application_hold (G_APPLICATION (self));
   g_cancellable_reset (self->cancellable);
@@ -158,11 +158,11 @@ handle_get_initial_result_set (EphyShellSearchProvider2 *skeleton,
 }
 
 static gboolean
-handle_get_subsearch_result_set (EphyShellSearchProvider2 *skeleton,
-                                 GDBusMethodInvocation    *invocation,
-                                 char                    **previous_results,
-                                 char                    **terms,
-                                 EphySearchProvider       *self)
+handle_get_subsearch_result_set (EphyShellSearchProvider2  *skeleton,
+                                 GDBusMethodInvocation     *invocation,
+                                 char                     **previous_results,
+                                 char                     **terms,
+                                 EphySearchProvider        *self)
 {
   g_application_hold (G_APPLICATION (self));
   g_cancellable_reset (self->cancellable);
@@ -174,10 +174,10 @@ handle_get_subsearch_result_set (EphyShellSearchProvider2 *skeleton,
 }
 
 static gboolean
-handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
-                         GDBusMethodInvocation    *invocation,
-                         char                    **results,
-                         EphySearchProvider       *self)
+handle_get_result_metas (EphyShellSearchProvider2  *skeleton,
+                         GDBusMethodInvocation     *invocation,
+                         char                     **results,
+                         EphySearchProvider        *self)
 {
   int i;
   GVariantBuilder builder;
@@ -244,9 +244,9 @@ launch_uri (const char *uri,
 }
 
 static void
-launch_search (EphySearchProvider *self,
-               char              **terms,
-               guint               timestamp)
+launch_search (EphySearchProvider  *self,
+               char               **terms,
+               guint                timestamp)
 {
   g_autofree char *search_string = NULL;
   g_autofree char *query_param = NULL;
@@ -273,12 +273,12 @@ launch_search (EphySearchProvider *self,
 }
 
 static gboolean
-handle_activate_result (EphyShellSearchProvider2 *skeleton,
-                        GDBusMethodInvocation    *invocation,
-                        char                     *identifier,
-                        char                    **terms,
-                        guint                     timestamp,
-                        EphySearchProvider       *self)
+handle_activate_result (EphyShellSearchProvider2  *skeleton,
+                        GDBusMethodInvocation     *invocation,
+                        char                      *identifier,
+                        char                     **terms,
+                        guint                      timestamp,
+                        EphySearchProvider        *self)
 {
   g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
@@ -295,11 +295,11 @@ handle_activate_result (EphyShellSearchProvider2 *skeleton,
 }
 
 static gboolean
-handle_launch_search (EphyShellSearchProvider2 *skeleton,
-                      GDBusMethodInvocation    *invocation,
-                      char                    **terms,
-                      guint                     timestamp,
-                      EphySearchProvider       *self)
+handle_launch_search (EphyShellSearchProvider2  *skeleton,
+                      GDBusMethodInvocation     *invocation,
+                      char                     **terms,
+                      guint                      timestamp,
+                      EphySearchProvider        *self)
 {
   g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
@@ -333,10 +333,10 @@ ephy_search_provider_init (EphySearchProvider *self)
 }
 
 static gboolean
-ephy_search_provider_dbus_register (GApplication    *application,
-                                    GDBusConnection *connection,
-                                    const gchar     *object_path,
-                                    GError         **error)
+ephy_search_provider_dbus_register (GApplication     *application,
+                                    GDBusConnection  *connection,
+                                    const gchar      *object_path,
+                                    GError          **error)
 {
   EphySearchProvider *self;
 

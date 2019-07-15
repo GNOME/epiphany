@@ -36,24 +36,24 @@
 #include <string.h>
 
 struct _EphySyncService {
-  GObject      parent_instance;
+  GObject parent_instance;
 
   SoupSession *session;
-  guint        source_id;
+  guint source_id;
 
-  char        *user;
-  char        *crypto_keys;
-  GHashTable  *secrets;
-  GSList      *managers;
+  char *user;
+  char *crypto_keys;
+  GHashTable *secrets;
+  GSList *managers;
 
-  gboolean     locked;
-  char        *storage_endpoint;
-  char        *storage_credentials_id;
-  char        *storage_credentials_key;
-  gint64       storage_credentials_expiry_time;
-  GQueue      *storage_queue;
+  gboolean locked;
+  char *storage_endpoint;
+  char *storage_credentials_id;
+  char *storage_credentials_key;
+  gint64 storage_credentials_expiry_time;
+  GQueue *storage_queue;
 
-  char                 *certificate;
+  char *certificate;
   SyncCryptoRSAKeyPair *key_pair;
 
   gboolean sync_periodically;
@@ -96,51 +96,51 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 typedef struct {
-  char                *endpoint;
-  char                *method;
-  char                *request_body;
-  gint64               modified_since;
-  gint64               unmodified_since;
-  SoupSessionCallback  callback;
-  gpointer             user_data;
+  char *endpoint;
+  char *method;
+  char *request_body;
+  gint64 modified_since;
+  gint64 unmodified_since;
+  SoupSessionCallback callback;
+  gpointer user_data;
 } StorageRequestAsyncData;
 
 typedef struct {
   EphySyncService *service;
-  char            *email;
-  char            *uid;
-  char            *session_token;
-  char            *unwrap_kb;
-  char            *token_id_hex;
-  guint8          *req_hmac_key;
-  guint8          *resp_hmac_key;
-  guint8          *resp_xor_key;
+  char *email;
+  char *uid;
+  char *session_token;
+  char *unwrap_kb;
+  char *token_id_hex;
+  guint8 *req_hmac_key;
+  guint8 *resp_hmac_key;
+  guint8 *resp_xor_key;
 } SignInAsyncData;
 
 typedef struct {
-  EphySyncService           *service;
+  EphySyncService *service;
   EphySynchronizableManager *manager;
-  gboolean                   is_initial;
-  gboolean                   is_last;
-  GList                     *remotes_deleted;
-  GList                     *remotes_updated;
+  gboolean is_initial;
+  gboolean is_last;
+  GList *remotes_deleted;
+  GList *remotes_updated;
 } SyncCollectionAsyncData;
 
 typedef struct {
-  EphySyncService           *service;
+  EphySyncService *service;
   EphySynchronizableManager *manager;
-  EphySynchronizable        *synchronizable;
+  EphySynchronizable *synchronizable;
 } SyncAsyncData;
 
 typedef struct {
-  EphySyncService           *service;
+  EphySyncService *service;
   EphySynchronizableManager *manager;
-  GPtrArray                 *synchronizables;
-  guint                      start;
-  guint                      end;
-  char                      *batch_id;
-  gboolean                   batch_is_last;
-  gboolean                   sync_done;
+  GPtrArray *synchronizables;
+  guint start;
+  guint end;
+  char *batch_id;
+  gboolean batch_is_last;
+  gboolean sync_done;
 } BatchUploadAsyncData;
 
 static StorageRequestAsyncData *
@@ -546,12 +546,12 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
     soup_message_headers_append (msg->request_headers, "content-type", content_type);
 
   if (data->modified_since >= 0) {
-    if_modified_since = g_strdup_printf ("%"PRId64, data->modified_since);
+    if_modified_since = g_strdup_printf ("%" PRId64, data->modified_since);
     soup_message_headers_append (msg->request_headers, "X-If-Modified-Since", if_modified_since);
   }
 
   if (data->unmodified_since >= 0) {
-    if_unmodified_since = g_strdup_printf ("%"PRId64, data->unmodified_since);
+    if_unmodified_since = g_strdup_printf ("%" PRId64, data->unmodified_since);
     soup_message_headers_append (msg->request_headers, "X-If-Unmodified-Since", if_unmodified_since);
   }
 
@@ -1607,7 +1607,7 @@ ephy_sync_service_sync_collection (EphySyncService           *self,
   if (is_initial) {
     endpoint = g_strdup_printf ("storage/%s?full=true", collection);
   } else {
-    endpoint = g_strdup_printf ("storage/%s?newer=%"PRId64"&full=true", collection,
+    endpoint = g_strdup_printf ("storage/%s?newer=%" PRId64 "&full=true", collection,
                                 ephy_synchronizable_manager_get_sync_time (manager));
   }
 

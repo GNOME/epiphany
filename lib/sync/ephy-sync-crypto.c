@@ -543,18 +543,18 @@ ephy_sync_crypto_hkdf (const guint8 *in,
   prk = g_malloc (SHA256_DIGEST_SIZE);
   out = g_malloc (out_len);
 
-  hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, salt);
-  hkdf_extract(&ctx,
+  hmac_sha256_set_key (&ctx, SHA256_DIGEST_SIZE, salt);
+  hkdf_extract (&ctx,
+                (nettle_hash_update_func *)hmac_sha256_update,
+                (nettle_hash_digest_func *)hmac_sha256_digest,
+                SHA256_DIGEST_SIZE,
+                in_len, in, prk);
+  hmac_sha256_set_key (&ctx, SHA256_DIGEST_SIZE, prk);
+  hkdf_expand (&ctx,
                (nettle_hash_update_func *)hmac_sha256_update,
                (nettle_hash_digest_func *)hmac_sha256_digest,
                SHA256_DIGEST_SIZE,
-               in_len, in, prk);
-  hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, prk);
-  hkdf_expand(&ctx,
-              (nettle_hash_update_func *)hmac_sha256_update,
-              (nettle_hash_digest_func *)hmac_sha256_digest,
-              SHA256_DIGEST_SIZE,
-              info_len, info, out_len, out);
+               info_len, info, out_len, out);
 
   g_free (salt);
   g_free (prk);
@@ -874,7 +874,7 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
 
   /* Encode the header and body to base64 url safe and join them. */
   expires_at = g_get_real_time () / 1000 + seconds * 1000;
-  body = g_strdup_printf ("{\"exp\": %"PRIu64", \"aud\": \"%s\"}", expires_at, audience);
+  body = g_strdup_printf ("{\"exp\": %" PRIu64 ", \"aud\": \"%s\"}", expires_at, audience);
   body_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
   header_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
@@ -942,7 +942,7 @@ ephy_sync_crypto_aes_256_encrypt (const char   *text,
   guint8 *padded;
   guint8 *encrypted;
   gsize padded_len;
-  struct CBC_CTX(struct aes256_ctx, AES_BLOCK_SIZE) ctx;
+  struct CBC_CTX (struct aes256_ctx, AES_BLOCK_SIZE) ctx;
 
   g_assert (text);
   g_assert (key);
@@ -952,9 +952,9 @@ ephy_sync_crypto_aes_256_encrypt (const char   *text,
   padded = ephy_sync_crypto_pad (text, AES_BLOCK_SIZE, &padded_len);
   encrypted = g_malloc (padded_len);
 
-  aes256_set_encrypt_key(&ctx.ctx, key);
-  CBC_SET_IV(&ctx, iv);
-  CBC_ENCRYPT(&ctx, aes256_encrypt, padded_len, encrypted, padded);
+  aes256_set_encrypt_key (&ctx.ctx, key);
+  CBC_SET_IV (&ctx, iv);
+  CBC_ENCRYPT (&ctx, aes256_encrypt, padded_len, encrypted, padded);
 
   *out_len = padded_len;
   g_free (padded);
@@ -1070,7 +1070,7 @@ ephy_sync_crypto_aes_256_decrypt (const guint8 *data,
 {
   guint8 *decrypted;
   char *unpadded;
-  struct CBC_CTX(struct aes256_ctx, AES_BLOCK_SIZE) ctx;
+  struct CBC_CTX (struct aes256_ctx, AES_BLOCK_SIZE) ctx;
 
   g_assert (data);
   g_assert (key);

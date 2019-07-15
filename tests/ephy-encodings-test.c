@@ -73,7 +73,8 @@ test_ephy_encodings_get (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 
