@@ -248,12 +248,18 @@ html.epiphany-html {
 }
 
 .overview-thumbnail {
-    height: 120px;
+    height: 160px;
     display: block;
     border: 1px solid #ccc;
     background: url(ephy-resource:///org/gnome/epiphany/web-watermark.svg) center no-repeat, #fff;
     background-repeat: no-repeat;
     border-radius: 5px;
+}
+
+@media (min-width: 341px) {
+    .overview-thumbnail {
+        height: 120px;
+    }
 }
 
 @media (min-width: 450px) {
