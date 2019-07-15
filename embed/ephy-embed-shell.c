@@ -1179,30 +1179,30 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerQuery",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerQuery",
-                    G_CALLBACK (web_process_extension_password_manager_query_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQuery",
+                           G_CALLBACK (web_process_extension_password_manager_query_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerQueryUsernames",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
-                    G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
+                           G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerSave",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerSave",
-                    G_CALLBACK (web_process_extension_password_manager_save_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerSave",
+                           G_CALLBACK (web_process_extension_password_manager_save_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerRequestSave",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerRequestSave",
-                    G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerRequestSave",
+                           G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
+                           shell, 0);
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
@@ -1271,8 +1271,8 @@ ephy_embed_shell_startup (GApplication *application)
   filters_dir = adblock_filters_dir (shell);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
 
-  g_signal_connect (priv->web_context, "download-started",
-                    G_CALLBACK (download_started_cb), shell);
+  g_signal_connect_object (priv->web_context, "download-started",
+                           G_CALLBACK (download_started_cb), shell, 0);
 }
 
 static void
