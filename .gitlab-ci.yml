@@ -1,12 +1,17 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
+stages:
+  - check
+  - test
+  - deploy
+
 check-code-style:
-  stage: 'build'
-  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  stage: 'check'
+  image: alpine:latest
   before_script:
-    - dnf install -y uncrustify
+    - apk update && apk add uncrustify bash python3
   script:
-    - data/check-code-style
+    - bash data/check-code-style
 
 variables:
   BUNDLE: 'epiphany-git.flatpak'
