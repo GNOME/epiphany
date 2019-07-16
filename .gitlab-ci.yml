@@ -13,6 +13,15 @@ check-code-style:
   script:
     - bash data/check-code-style
 
+cppcheck:
+  stage: 'check'
+  image: alpine:latest
+  allow_failure: true
+  before_script:
+    - apk update && apk add cppcheck
+  script:
+    - cppcheck --enable=all --suppress=variableScope --suppress=unusedFunction --force -q . --error-exitcode=1 --library=gtk
+
 variables:
   BUNDLE: 'epiphany-git.flatpak'
 
