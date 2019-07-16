@@ -48,9 +48,9 @@ ephy_test_utils_check_ephy_embed_address (EphyEmbed   *embed,
 }
 
 static void
-load_changed_cb (WebKitWebView  *web_view,
-                 WebKitLoadEvent status,
-                 GMainLoop      *loop)
+load_changed_cb (WebKitWebView   *web_view,
+                 WebKitLoadEvent  status,
+                 GMainLoop       *loop)
 {
   if (status == WEBKIT_LOAD_COMMITTED) {
     web_view_ready_counter--;
@@ -62,13 +62,16 @@ load_changed_cb (WebKitWebView  *web_view,
 }
 
 static void
-wait_until_load_is_committed (WebKitWebView *web_view, GMainLoop *loop)
+wait_until_load_is_committed (WebKitWebView *web_view,
+                              GMainLoop     *loop)
 {
   g_signal_connect (web_view, "load-changed", G_CALLBACK (load_changed_cb), loop);
 }
 
 static void
-web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, GMainLoop *loop)
+web_view_created_cb (EphyEmbedShell *shell,
+                     EphyWebView    *view,
+                     GMainLoop      *loop)
 {
   web_view_ready_counter++;
   wait_until_load_is_committed (WEBKIT_WEB_VIEW (view), loop);

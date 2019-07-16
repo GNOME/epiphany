@@ -166,7 +166,7 @@ ephy_sync_debug_make_delete_body (const char          *id,
   g_assert (bundle);
 
   record = g_strdup_printf ("{\"id\": \"%s\", \"deleted\": true}", id);
-  payload = ephy_sync_crypto_encrypt_record (record,  bundle);
+  payload = ephy_sync_crypto_encrypt_record (record, bundle);
   json = json_object_new ();
   json_object_set_string_member (json, "id", id);
   json_object_set_string_member (json, "payload", payload);
@@ -242,7 +242,7 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
     soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY, body, strlen (body));
   }
 
-  if (!g_strcmp0 (method, "PUT") || !g_strcmp0(method, "POST"))
+  if (!g_strcmp0 (method, "PUT") || !g_strcmp0 (method, "POST"))
     soup_message_headers_append (msg->request_headers, "content-type", content_type);
 
   header = ephy_sync_crypto_hawk_header_new (url, method, hawk_id,

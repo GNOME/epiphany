@@ -71,7 +71,10 @@ test_create_history_service_and_destroy_later (void)
 }
 
 static void
-page_vist_created (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+page_vist_created (EphyHistoryService *service,
+                   gboolean            success,
+                   gpointer            result_data,
+                   gpointer            user_data)
 {
   if (user_data != NULL) {
     g_assert_true (EPHY_IS_HISTORY_SERVICE (user_data));
@@ -125,7 +128,10 @@ create_test_page_visit_list (void)
 }
 
 static void
-verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+verify_create_history_entry_cb (EphyHistoryService *service,
+                                gboolean            success,
+                                gpointer            result_data,
+                                gpointer            user_data)
 {
   GList *visits = (GList *)result_data;
   GList *baseline_visits = create_test_page_visit_list ();
@@ -161,7 +167,10 @@ verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, g
 }
 
 static void
-verify_create_history_entry (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+verify_create_history_entry (EphyHistoryService *service,
+                             gboolean            success,
+                             gpointer            result_data,
+                             gpointer            user_data)
 {
   g_assert_null (result_data);
   g_assert_cmpint (42, ==, GPOINTER_TO_INT (user_data));
@@ -184,7 +193,10 @@ test_create_history_entries (void)
 }
 
 static void
-get_url (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+get_url (EphyHistoryService *service,
+         gboolean            success,
+         gpointer            result_data,
+         gpointer            user_data)
 {
   EphyHistoryURL *url = (EphyHistoryURL *)result_data;
 
@@ -198,7 +210,10 @@ get_url (EphyHistoryService *service, gboolean success, gpointer result_data, gp
 }
 
 static void
-set_url_title (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+set_url_title (EphyHistoryService *service,
+               gboolean            success,
+               gpointer            result_data,
+               gpointer            user_data)
 {
   gboolean test_result = GPOINTER_TO_INT (user_data);
   g_assert_true (success);
@@ -211,7 +226,10 @@ set_url_title (EphyHistoryService *service, gboolean success, gpointer result_da
 }
 
 static void
-set_url_title_visit_created (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+set_url_title_visit_created (EphyHistoryService *service,
+                             gboolean            success,
+                             gpointer            result_data,
+                             gpointer            user_data)
 {
   ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", NULL, set_url_title, user_data);
 }
@@ -241,7 +259,10 @@ test_set_url_title_is_correct (void)
 }
 
 static void
-set_url_title_url_not_existent (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+set_url_title_url_not_existent (EphyHistoryService *service,
+                                gboolean            success,
+                                gpointer            result_data,
+                                gpointer            user_data)
 {
   g_assert_false (success);
   g_object_unref (service);
@@ -259,7 +280,10 @@ test_set_url_title_url_not_existent (void)
 }
 
 static void
-test_get_url_done (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+test_get_url_done (EphyHistoryService *service,
+                   gboolean            success,
+                   gpointer            result_data,
+                   gpointer            user_data)
 {
   EphyHistoryURL *url;
   gboolean expected_success = GPOINTER_TO_INT (user_data);
@@ -281,7 +305,10 @@ test_get_url_done (EphyHistoryService *service, gboolean success, gpointer resul
 }
 
 static void
-test_get_url_visit_added (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
+test_get_url_visit_added (EphyHistoryService *service,
+                          gboolean            success,
+                          gpointer            result_data,
+                          gpointer            user_data)
 {
   g_assert_true (success);
 
@@ -483,7 +510,8 @@ test_clear (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

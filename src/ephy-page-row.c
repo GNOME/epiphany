@@ -135,7 +135,7 @@ sync_favicon (EphyWebView *view,
               GParamSpec  *pspec,
               EphyPageRow *self)
 {
-  g_autoptr(GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
 
   if (ephy_web_view_get_icon (view))
     pixbuf = gdk_pixbuf_copy (ephy_web_view_get_icon (view));
@@ -192,23 +192,23 @@ ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   switch (adaptive_mode) {
-  case EPHY_ADAPTIVE_MODE_NORMAL:
-    gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, -1);
-    gtk_widget_set_margin_end (GTK_WIDGET (self->box), 0);
-    gtk_widget_set_margin_start (GTK_WIDGET (self->box), 4);
-    gtk_box_set_spacing (self->box, 0);
+    case EPHY_ADAPTIVE_MODE_NORMAL:
+      gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, -1);
+      gtk_widget_set_margin_end (GTK_WIDGET (self->box), 0);
+      gtk_widget_set_margin_start (GTK_WIDGET (self->box), 4);
+      gtk_box_set_spacing (self->box, 0);
 
-    gtk_style_context_remove_class (context, "narrow");
+      gtk_style_context_remove_class (context, "narrow");
 
-    break;
-  case EPHY_ADAPTIVE_MODE_NARROW:
-    gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, 50);
-    gtk_widget_set_margin_end (GTK_WIDGET (self->box), 4);
-    gtk_widget_set_margin_start (GTK_WIDGET (self->box), 8);
-    gtk_box_set_spacing (self->box, 4);
+      break;
+    case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_widget_set_size_request (GTK_WIDGET (self->box), -1, 50);
+      gtk_widget_set_margin_end (GTK_WIDGET (self->box), 4);
+      gtk_widget_set_margin_start (GTK_WIDGET (self->box), 8);
+      gtk_box_set_spacing (self->box, 4);
 
-    gtk_style_context_add_class (context, "narrow");
+      gtk_style_context_add_class (context, "narrow");
 
-    break;
+      break;
   }
 }

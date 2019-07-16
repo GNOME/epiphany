@@ -97,8 +97,8 @@ finish_uri_scheme_request (EphyViewSourceRequest *request,
   }
 
   request->source_handler->outstanding_requests =
-      g_list_remove (request->source_handler->outstanding_requests,
-                     request);
+    g_list_remove (request->source_handler->outstanding_requests,
+                   request);
 
   ephy_view_source_request_free (request);
 }
@@ -243,7 +243,7 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
   WebKitWebView *web_view;
 
   request->source_handler->outstanding_requests =
-      g_list_prepend (request->source_handler->outstanding_requests, request);
+    g_list_prepend (request->source_handler->outstanding_requests, request);
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
   soup_uri = soup_uri_new (original_uri);

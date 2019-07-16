@@ -208,9 +208,12 @@ test_snapshot_and_timed_cancellation (void)
 }
 
 static void
-server_callback (SoupServer *s, SoupMessage *msg,
-                 const char *path, GHashTable *query,
-                 SoupClientContext *context, gpointer data)
+server_callback (SoupServer        *s,
+                 SoupMessage       *msg,
+                 const char        *path,
+                 GHashTable        *query,
+                 SoupClientContext *context,
+                 gpointer           data)
 {
   const char *response = "<html><h1>This is a header</h1></html>";
 
@@ -224,7 +227,8 @@ server_callback (SoupServer *s, SoupMessage *msg,
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   gtk_test_init (&argc, &argv);
   ephy_debug_init ();

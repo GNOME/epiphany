@@ -42,7 +42,10 @@ struct _EphySQLiteStatement {
 G_DEFINE_TYPE (EphySQLiteStatement, ephy_sqlite_statement, G_TYPE_OBJECT);
 
 static void
-ephy_sqlite_statement_set_property (GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+ephy_sqlite_statement_set_property (GObject      *object,
+                                    guint         property_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
   EphySQLiteStatement *self = EPHY_SQLITE_STATEMENT (object);
 
@@ -108,7 +111,9 @@ ephy_sqlite_statement_init (EphySQLiteStatement *self)
 }
 
 gboolean
-ephy_sqlite_statement_bind_null (EphySQLiteStatement *self, int column, GError **error)
+ephy_sqlite_statement_bind_null (EphySQLiteStatement  *self,
+                                 int                   column,
+                                 GError              **error)
 {
   if (sqlite3_bind_null (self->prepared_statement, column) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -119,7 +124,10 @@ ephy_sqlite_statement_bind_null (EphySQLiteStatement *self, int column, GError *
 }
 
 gboolean
-ephy_sqlite_statement_bind_boolean (EphySQLiteStatement *self, int column, gboolean value, GError **error)
+ephy_sqlite_statement_bind_boolean (EphySQLiteStatement  *self,
+                                    int                   column,
+                                    gboolean              value,
+                                    GError              **error)
 {
   if (sqlite3_bind_int (self->prepared_statement, column + 1, value ? 1 : 0) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -130,7 +138,10 @@ ephy_sqlite_statement_bind_boolean (EphySQLiteStatement *self, int column, gbool
 }
 
 gboolean
-ephy_sqlite_statement_bind_int (EphySQLiteStatement *self, int column, int value, GError **error)
+ephy_sqlite_statement_bind_int (EphySQLiteStatement  *self,
+                                int                   column,
+                                int                   value,
+                                GError              **error)
 {
   if (sqlite3_bind_int (self->prepared_statement, column + 1, value) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -141,7 +152,10 @@ ephy_sqlite_statement_bind_int (EphySQLiteStatement *self, int column, int value
 }
 
 gboolean
-ephy_sqlite_statement_bind_int64 (EphySQLiteStatement *self, int column, gint64 value, GError **error)
+ephy_sqlite_statement_bind_int64 (EphySQLiteStatement  *self,
+                                  int                   column,
+                                  gint64                value,
+                                  GError              **error)
 {
   if (sqlite3_bind_int64 (self->prepared_statement, column + 1, value) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -152,7 +166,10 @@ ephy_sqlite_statement_bind_int64 (EphySQLiteStatement *self, int column, gint64 
 }
 
 gboolean
-ephy_sqlite_statement_bind_double (EphySQLiteStatement *self, int column, double value, GError **error)
+ephy_sqlite_statement_bind_double (EphySQLiteStatement  *self,
+                                   int                   column,
+                                   double                value,
+                                   GError              **error)
 {
   if (sqlite3_bind_double (self->prepared_statement, column + 1, value) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -163,7 +180,10 @@ ephy_sqlite_statement_bind_double (EphySQLiteStatement *self, int column, double
 }
 
 gboolean
-ephy_sqlite_statement_bind_string (EphySQLiteStatement *self, int column, const char *value, GError **error)
+ephy_sqlite_statement_bind_string (EphySQLiteStatement  *self,
+                                   int                   column,
+                                   const char           *value,
+                                   GError              **error)
 {
   if (sqlite3_bind_text (self->prepared_statement, column + 1, value, -1, SQLITE_TRANSIENT) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -174,7 +194,11 @@ ephy_sqlite_statement_bind_string (EphySQLiteStatement *self, int column, const 
 }
 
 gboolean
-ephy_sqlite_statement_bind_blob (EphySQLiteStatement *self, int column, const void *value, int length, GError **error)
+ephy_sqlite_statement_bind_blob (EphySQLiteStatement  *self,
+                                 int                   column,
+                                 const void           *value,
+                                 int                   length,
+                                 GError              **error)
 {
   if (sqlite3_bind_blob (self->prepared_statement, column + 1, value, length, SQLITE_TRANSIENT) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self->connection, error);
@@ -184,7 +208,8 @@ ephy_sqlite_statement_bind_blob (EphySQLiteStatement *self, int column, const vo
 }
 
 gboolean
-ephy_sqlite_statement_step (EphySQLiteStatement *self, GError **error)
+ephy_sqlite_statement_step (EphySQLiteStatement  *self,
+                            GError              **error)
 {
   int error_code = sqlite3_step (self->prepared_statement);
   if (error_code != SQLITE_OK && error_code != SQLITE_ROW && error_code != SQLITE_DONE) {
@@ -207,7 +232,8 @@ ephy_sqlite_statement_get_column_count (EphySQLiteStatement *self)
 }
 
 EphySQLiteColumnType
-ephy_sqlite_statement_get_column_type (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_type (EphySQLiteStatement *self,
+                                       int                  column)
 {
   int column_type = sqlite3_column_type (self->prepared_statement, column);
   switch (column_type) {
@@ -226,43 +252,50 @@ ephy_sqlite_statement_get_column_type (EphySQLiteStatement *self, int column)
 }
 
 int
-ephy_sqlite_statement_get_column_size (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_size (EphySQLiteStatement *self,
+                                       int                  column)
 {
   return sqlite3_column_bytes (self->prepared_statement, column);
 }
 
 int
-ephy_sqlite_statement_get_column_as_boolean (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_boolean (EphySQLiteStatement *self,
+                                             int                  column)
 {
   return ephy_sqlite_statement_get_column_as_int (self, column);
 }
 
 int
-ephy_sqlite_statement_get_column_as_int (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_int (EphySQLiteStatement *self,
+                                         int                  column)
 {
   return sqlite3_column_int (self->prepared_statement, column);
 }
 
 gint64
-ephy_sqlite_statement_get_column_as_int64 (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_int64 (EphySQLiteStatement *self,
+                                           int                  column)
 {
   return sqlite3_column_int64 (self->prepared_statement, column);
 }
 
 double
-ephy_sqlite_statement_get_column_as_double (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_double (EphySQLiteStatement *self,
+                                            int                  column)
 {
   return sqlite3_column_double (self->prepared_statement, column);
 }
 
 const char *
-ephy_sqlite_statement_get_column_as_string (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_string (EphySQLiteStatement *self,
+                                            int                  column)
 {
   return (const char *)sqlite3_column_text (self->prepared_statement, column);
 }
 
 const void *
-ephy_sqlite_statement_get_column_as_blob (EphySQLiteStatement *self, int column)
+ephy_sqlite_statement_get_column_as_blob (EphySQLiteStatement *self,
+                                          int                  column)
 {
   return sqlite3_column_blob (self->prepared_statement, column);
 }

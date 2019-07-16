@@ -31,7 +31,9 @@
  * GMC also fails to do this as well.
  */
 static void
-add_one_netscape_url (const char *url, const char *title, gpointer data)
+add_one_netscape_url (const char *url,
+                      const char *title,
+                      gpointer    data)
 {
   GString *result;
 
@@ -46,7 +48,9 @@ add_one_netscape_url (const char *url, const char *title, gpointer data)
 }
 
 static void
-add_one_uri (const char *uri, const char *title, gpointer data)
+add_one_uri (const char *uri,
+             const char *title,
+             gpointer    data)
 {
   GString *result;
 
@@ -57,7 +61,9 @@ add_one_uri (const char *uri, const char *title, gpointer data)
 }
 
 static void
-add_one_topic (const char *uri, const char *title, gpointer data)
+add_one_topic (const char *uri,
+               const char *title,
+               gpointer    data)
 {
   GString *result;
 
@@ -68,12 +74,12 @@ add_one_topic (const char *uri, const char *title, gpointer data)
 }
 
 gboolean
-ephy_dnd_drag_data_get (GtkWidget                       *widget,
-                        GdkDragContext                  *context,
-                        GtkSelectionData                *selection_data,
-                        guint32                          time,
-                        gpointer                         container_context,
-                        EphyDragEachSelectedItemIterator each_selected_item_iterator)
+ephy_dnd_drag_data_get (GtkWidget                        *widget,
+                        GdkDragContext                   *context,
+                        GtkSelectionData                 *selection_data,
+                        guint32                           time,
+                        gpointer                          container_context,
+                        EphyDragEachSelectedItemIterator  each_selected_item_iterator)
 {
   GString *result = NULL;
   GdkAtom target;

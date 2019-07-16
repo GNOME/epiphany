@@ -36,14 +36,12 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-struct _EphySearchEngineManager
-{
+struct _EphySearchEngineManager {
   GObject parent_instance;
   GHashTable *search_engines;
 };
 
-typedef struct
-{
+typedef struct {
   char *address;
   char *bang;
 } EphySearchEngineInfo;
@@ -303,7 +301,7 @@ ephy_search_engine_manager_engine_from_bang (EphySearchEngineManager *manager,
 
   while (g_hash_table_iter_next (&iter, &key, &value)) {
     info = (EphySearchEngineInfo *)value;
-    if (g_strcmp0(bang, info->bang) == 0)
+    if (g_strcmp0 (bang, info->bang) == 0)
       return (const char *)key;
   }
 

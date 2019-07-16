@@ -118,7 +118,7 @@ get_remaining_time (guint64 content_length,
 static void
 update_download_icon (EphyDownloadWidget *widget)
 {
-  g_autoptr(GIcon) icon = NULL;
+  g_autoptr (GIcon) icon = NULL;
   const char *content_type;
 
   content_type = ephy_download_get_content_type (widget->download);

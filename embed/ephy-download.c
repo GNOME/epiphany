@@ -199,7 +199,8 @@ parse_extension (const char *filename)
 }
 
 static gboolean
-set_destination_uri_for_suggested_filename (EphyDownload *download, const char *suggested_filename)
+set_destination_uri_for_suggested_filename (EphyDownload *download,
+                                            const char   *suggested_filename)
 {
   char *dest_dir;
   char *dest_name;
@@ -294,8 +295,8 @@ ephy_download_set_destination_uri (EphyDownload *download,
  * files" is set.
  **/
 void
-ephy_download_set_action (EphyDownload          *download,
-                          EphyDownloadActionType action)
+ephy_download_set_action (EphyDownload           *download,
+                          EphyDownloadActionType  action)
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
 
@@ -402,8 +403,8 @@ ephy_download_succeeded (EphyDownload *download)
 }
 
 gboolean
-ephy_download_failed (EphyDownload *download,
-                      GError      **error)
+ephy_download_failed (EphyDownload  *download,
+                      GError       **error)
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
 
@@ -429,9 +430,9 @@ ephy_download_failed (EphyDownload *download,
  *
  **/
 gboolean
-ephy_download_do_download_action (EphyDownload          *download,
-                                  EphyDownloadActionType action,
-                                  guint32                user_time)
+ephy_download_do_download_action (EphyDownload           *download,
+                                  EphyDownloadActionType  action,
+                                  guint32                 user_time)
 {
   GFile *destination;
   const char *destination_uri;
@@ -755,8 +756,8 @@ static void
 download_finished_cb (WebKitDownload *wk_download,
                       EphyDownload   *download)
 {
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GFile) file = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = NULL;
 
   download->finished = TRUE;
 
@@ -920,7 +921,7 @@ ephy_download_new (WebKitDownload *download)
 
   ephy_download = ephy_download_new_internal (download);
 
-  if (!ephy_is_running_inside_flatpak() && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
+  if (!ephy_is_running_inside_flatpak () && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
     g_signal_connect (ephy_download, "filename-suggested",
                       G_CALLBACK (filename_suggested_cb),
                       NULL);
@@ -957,7 +958,7 @@ EphyDownload *
 ephy_download_new_for_uri_internal (const char *uri)
 {
   EphyDownload *ephy_download;
-  g_autoptr(WebKitDownload) download = NULL;
+  g_autoptr (WebKitDownload) download = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_assert (uri != NULL);

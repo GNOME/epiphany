@@ -139,8 +139,8 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester *tester,
   char *uri;
   int len;
   int pos = 0;
-  g_autoptr(GList) regex_bl = NULL;
-  g_autoptr(GString) guri = NULL;
+  g_autoptr (GList) regex_bl = NULL;
+  g_autoptr (GString) guri = NULL;
   gboolean ret = FALSE;
   char sig[SIGNATURE_SIZE + 1];
   GHashTable *keys = tester->keys;
@@ -203,7 +203,8 @@ ephy_uri_tester_is_matched (EphyUriTester *tester,
 }
 
 static GString *
-ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
+ephy_uri_tester_fixup_regexp (const char *prefix,
+                              char       *src)
 {
   GString *str;
 
@@ -218,26 +219,26 @@ ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
   }
 
   /* NOTE: The '$' is used as separator for the rule options, so rule patterns
-     cannot ever contain them. If a rule needs to match it, it uses "%24".
-     Splitting the option is done in ephy_uri_tester_add_url_pattern().
-
-     The loop below always escapes square brackets. This way there is no chance
-     that they get interpreted as a character class, and it is NOT needed to
-     escape '-' because it's only special inside a character class. */
+   *  cannot ever contain them. If a rule needs to match it, it uses "%24".
+   *  Splitting the option is done in ephy_uri_tester_add_url_pattern().
+   *
+   *  The loop below always escapes square brackets. This way there is no chance
+   *  that they get interpreted as a character class, and it is NOT needed to
+   *  escape '-' because it's only special inside a character class. */
   do {
     switch (*src) {
       case '*':
         g_string_append (str, ".*");
         break;
       case '^':
-      /* Matches a separator character, defined as:
-       * "anything but a letter, a digit, or one of the following: _ - . %" */
+        /* Matches a separator character, defined as:
+         * "anything but a letter, a digit, or one of the following: _ - . %" */
         g_string_append (str, "([^a-zA-Z\\d]|[_\\-\\.%])");
         break;
       case '|':
-      /* If at the end of the pattern, the match is anchored at the end. In
-       * the middle of a pattern it matches a literal vertical bar and the
-       * character must be escaped. */
+        /* If at the end of the pattern, the match is anchored at the end. In
+         * the middle of a pattern it matches a literal vertical bar and the
+         * character must be escaped. */
         if (src[1] == '\0')
           g_string_append (str, "$");
         else
@@ -287,7 +288,7 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
   GHashTable *keys;
   GHashTable *optslist;
   GRegex *regex;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
   char *patt;
   int len;
 
@@ -354,9 +355,9 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
                                  char          *line,
                                  gboolean       whitelist)
 {
-  g_auto(GStrv) data;
+  g_auto (GStrv) data;
   char *patt;
-  g_autoptr(GString) format_patt = NULL;
+  g_autoptr (GString) format_patt = NULL;
   const char *opts;
 
   data = g_strsplit (line, "$", -1);
@@ -398,7 +399,8 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
 }
 
 static inline void
-ephy_uri_tester_frame_add (EphyUriTester *tester, char *line)
+ephy_uri_tester_frame_add (EphyUriTester *tester,
+                           char          *line)
 {
   const char *separator = " , ";
 
@@ -418,7 +420,7 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
                                    const char    *line,
                                    const char    *sep)
 {
-  g_auto(GStrv) data;
+  g_auto (GStrv) data;
   data = g_strsplit (line, sep, 2);
 
   if (!(data[1] && *data[1])
@@ -429,7 +431,7 @@ ephy_uri_tester_frame_add_private (EphyUriTester *tester,
   }
 
   if (strchr (data[0], ',')) {
-    g_auto(GStrv) domains;
+    g_auto (GStrv) domains;
     int i;
 
     domains = g_strsplit (data[0], ",", -1);
@@ -521,10 +523,12 @@ ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
 }
 
 static void
-file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *tester)
+file_parse_cb (GDataInputStream *stream,
+               GAsyncResult     *result,
+               EphyUriTester    *tester)
 {
   g_autofree char *line = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   line = g_data_input_stream_read_line_finish (stream, result, NULL, &error);
   if (!line) {
@@ -543,11 +547,13 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *te
 }
 
 static void
-file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
+file_read_cb (GFile         *file,
+              GAsyncResult  *result,
+              EphyUriTester *tester)
 {
-  g_autoptr(GFileInputStream) stream = NULL;
-  g_autoptr(GDataInputStream) data_stream = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GFileInputStream) stream = NULL;
+  g_autoptr (GDataInputStream) data_stream = NULL;
+  g_autoptr (GError) error = NULL;
 
   stream = g_file_read_finish (file, result, &error);
   if (!stream) {
@@ -578,11 +584,11 @@ ephy_uri_tester_is_uri_allowed (EphyUriTester *tester,
 }
 
 static void
-adblock_file_monitor_changed (GFileMonitor     *monitor,
-                              GFile            *file,
-                              GFile            *other_file,
-                              GFileMonitorEvent event_type,
-                              EphyUriTester    *tester)
+adblock_file_monitor_changed (GFileMonitor      *monitor,
+                              GFile             *file,
+                              GFile             *other_file,
+                              GFileMonitorEvent  event_type,
+                              EphyUriTester     *tester)
 {
   if (event_type != G_FILE_MONITOR_EVENT_RENAMED)
     return;
@@ -597,17 +603,17 @@ static void
 ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
                                                GList         **monitors)
 {
-  g_auto(GStrv) filters;
+  g_auto (GStrv) filters;
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
   tester->adblock_filters_to_load = g_strv_length (filters);
   for (guint i = 0; filters[i]; i++) {
-    g_autoptr(GFile) filter_file = NULL;
+    g_autoptr (GFile) filter_file = NULL;
 
     filter_file = ephy_uri_tester_get_adblock_filter_file (tester->adblock_data_dir, filters[i]);
     if (!g_file_query_exists (filter_file, NULL)) {
       GFileMonitor *monitor;
-      g_autoptr(GError) error = NULL;
+      g_autoptr (GError) error = NULL;
 
       monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
       if (monitor) {
@@ -809,7 +815,7 @@ ephy_uri_tester_enable_adblock_changed_cb (GSettings     *settings,
 void
 ephy_uri_tester_load (EphyUriTester *tester)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr (GTask) task = NULL;
   char **trash;
 
   g_assert (EPHY_IS_URI_TESTER (tester));

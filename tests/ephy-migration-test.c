@@ -80,7 +80,8 @@ test_do_migration_invalid (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
   gtk_test_init (&argc, &argv);

@@ -83,10 +83,10 @@ handle_shutdown_signal (gpointer user_data)
 }
 
 static gboolean
-application_mode_cb (const gchar *option_name,
-                     const gchar *value,
-                     gpointer     data,
-                     GError     **error)
+application_mode_cb (const gchar  *option_name,
+                     const gchar  *value,
+                     gpointer      data,
+                     GError      **error)
 {
   application_mode = TRUE;
   desktop_file_basename = g_strdup (value);
@@ -94,10 +94,10 @@ application_mode_cb (const gchar *option_name,
 }
 
 static gboolean
-option_version_cb (const gchar *option_name,
-                   const gchar *value,
-                   gpointer     data,
-                   GError     **error)
+option_version_cb (const gchar  *option_name,
+                   const gchar  *value,
+                   gpointer      data,
+                   GError      **error)
 {
   g_print ("%s %s\n", _("Web"), VERSION);
 
@@ -106,8 +106,7 @@ option_version_cb (const gchar *option_name,
 }
 
 /* If you're modifying this array then you need to update the manpage. */
-static const GOptionEntry option_entries[] =
-{
+static const GOptionEntry option_entries[] = {
   { "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
     N_("Open a new browser window instead of a new tab"), NULL },
   { "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
@@ -332,12 +331,12 @@ main (int   argc,
   }
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_START_IN_INCOGNITO_MODE)) {
-     incognito_mode = TRUE;
+    incognito_mode = TRUE;
   }
 
   /* Run the migration in all cases, except when running a private
-     instance without a given profile directory or running in
-     incognito or automation mode. */
+   *  instance without a given profile directory or running in
+   *  incognito or automation mode. */
   if (!(private_instance && profile_directory == NULL) && !incognito_mode && !automation_mode) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {

@@ -127,7 +127,7 @@ items_changed_cb (EphyPagesView *self,
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
-  g_list_store_splice (self->list_store, position, removed, (gpointer) items, added);
+  g_list_store_splice (self->list_store, position, removed, (gpointer)items, added);
 }
 
 static void
@@ -259,18 +259,18 @@ ephy_pages_view_set_adaptive_mode (EphyPagesView    *self,
   }
 
   switch (adaptive_mode) {
-  case EPHY_ADAPTIVE_MODE_NORMAL:
-    gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-    /* This should be enough height in normal mode to fit in 900px hight screen. */
-    gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW(self), 700);
-    gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
+    case EPHY_ADAPTIVE_MODE_NORMAL:
+      gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
+      /* This should be enough height in normal mode to fit in 900px hight screen. */
+      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 700);
+      gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
 
-    break;
-  case EPHY_ADAPTIVE_MODE_NARROW:
-    gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-    gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 0);
-    gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
+      break;
+    case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
+      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 0);
+      gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
 
-    break;
+      break;
   }
 }

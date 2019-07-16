@@ -29,8 +29,7 @@
 #define NUM_ZOOM_STEPS 14
 
 static float
-zoom_steps [NUM_ZOOM_STEPS] =
-{
+  zoom_steps [NUM_ZOOM_STEPS] = {
   0.30f,
   0.50f,
   0.67f,
@@ -48,7 +47,8 @@ zoom_steps [NUM_ZOOM_STEPS] =
 };
 
 float
-ephy_zoom_get_changed_zoom_level (float level, int steps)
+ephy_zoom_get_changed_zoom_level (float level,
+                                  int   steps)
 {
   float new_level;
   gint i;

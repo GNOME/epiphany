@@ -23,7 +23,9 @@
 #include "ephy-history-types.h"
 
 EphyHistoryPageVisit *
-ephy_history_page_visit_new_with_url (EphyHistoryURL *url, gint64 visit_time, EphyHistoryPageVisitType visit_type)
+ephy_history_page_visit_new_with_url (EphyHistoryURL           *url,
+                                      gint64                    visit_time,
+                                      EphyHistoryPageVisitType  visit_type)
 {
   EphyHistoryPageVisit *visit = g_new0 (EphyHistoryPageVisit, 1);
   visit->id = -1;
@@ -34,7 +36,9 @@ ephy_history_page_visit_new_with_url (EphyHistoryURL *url, gint64 visit_time, Ep
 }
 
 EphyHistoryPageVisit *
-ephy_history_page_visit_new (const char *url, gint64 visit_time, EphyHistoryPageVisitType visit_type)
+ephy_history_page_visit_new (const char               *url,
+                             gint64                    visit_time,
+                             EphyHistoryPageVisitType  visit_type)
 {
   return ephy_history_page_visit_new_with_url (ephy_history_url_new (url, url, 0, 0, 0),
                                                visit_time, visit_type);
@@ -78,7 +82,10 @@ ephy_history_page_visit_list_free (GList *list)
 }
 
 EphyHistoryHost *
-ephy_history_host_new (const char *url, const char *title, int visit_count, double zoom_level)
+ephy_history_host_new (const char *url,
+                       const char *title,
+                       int         visit_count,
+                       double      zoom_level)
 {
   EphyHistoryHost *host = g_new0 (EphyHistoryHost, 1);
 
@@ -120,7 +127,11 @@ ephy_history_host_free (EphyHistoryHost *host)
 }
 
 EphyHistoryURL *
-ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, gint64 last_visit_time)
+ephy_history_url_new (const char *url,
+                      const char *title,
+                      int         visit_count,
+                      int         typed_count,
+                      gint64      last_visit_time)
 {
   EphyHistoryURL *history_url = g_new0 (EphyHistoryURL, 1);
   history_url->id = -1;

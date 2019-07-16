@@ -1,6 +1,6 @@
 project('epiphany', 'c',
   license: 'GPL3+',
-  version: '3.33.3',
+  version: '3.33.4',
   meson_version: '>= 0.46.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
@@ -118,7 +118,9 @@ cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
 
-cflags = cc.get_supported_arguments(['-Werror=format-security',
+cflags = cc.get_supported_arguments(['-Werror=declaration-after-statement',
+                                     '-Werror=format-security',
+                                     '-Werror=implicit-function-declaration',
                                      '-Wno-cast-function-type',
                                      '-Wno-missing-field-initializers',
                                      '-Wno-unused-parameter'])

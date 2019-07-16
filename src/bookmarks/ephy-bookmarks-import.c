@@ -29,7 +29,7 @@
 #include <glib/gi18n.h>
 
 GQuark bookmarks_import_error_quark (void);
-G_DEFINE_QUARK (bookmarks-import-error-quark, bookmarks_import_error)
+G_DEFINE_QUARK (bookmarks - import - error - quark, bookmarks_import_error)
 #define BOOKMARKS_IMPORT_ERROR bookmarks_import_error_quark ()
 
 typedef enum {
@@ -149,21 +149,21 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
   bookmarks = get_bookmarks_from_table (table);
   ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
 
-  out:
-    if (table)
-      gvdb_table_free (table);
-    if (bookmarks)
-      g_sequence_free (bookmarks);
-    if (root_table)
-      gvdb_table_free (root_table);
+out:
+  if (table)
+    gvdb_table_free (table);
+  if (bookmarks)
+    g_sequence_free (bookmarks);
+  if (root_table)
+    gvdb_table_free (root_table);
 
   return res;
 }
 
 static void
-load_tags_for_bookmark (EphySQLiteConnection  *connection,
-                        EphyBookmark          *bookmark,
-                        int                    bookmark_id)
+load_tags_for_bookmark (EphySQLiteConnection *connection,
+                        EphyBookmark         *bookmark,
+                        int                   bookmark_id)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   EphySQLiteStatement *statement = NULL;
@@ -202,11 +202,11 @@ load_tags_for_bookmark (EphySQLiteConnection  *connection,
     goto out;
   }
 
-  out:
-    if (statement)
-      g_object_unref (statement);
-    if (error)
-      g_error_free (error);
+out:
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
 }
 
 gboolean
@@ -294,16 +294,16 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
 
   ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
 
-  out:
-    g_free (filename);
-    if (connection) {
-      ephy_sqlite_connection_close (connection);
-      g_object_unref (connection);
-    }
-    if (statement)
-      g_object_unref (statement);
-    if (bookmarks)
-      g_sequence_free (bookmarks);
+out:
+  g_free (filename);
+  if (connection) {
+    ephy_sqlite_connection_close (connection);
+    g_object_unref (connection);
+  }
+  if (statement)
+    g_object_unref (statement);
+  if (bookmarks)
+    g_sequence_free (bookmarks);
 
   return ret;
 }

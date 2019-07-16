@@ -55,7 +55,7 @@ adblock_filter_file_is_valid (GFile *file)
 
   /* Now check if the local file is too old. */
   file_info = g_file_query_info (file,
-                                 G_FILE_ATTRIBUTE_TIME_MODIFIED","G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                                 G_FILE_ATTRIBUTE_TIME_MODIFIED ","G_FILE_ATTRIBUTE_STANDARD_SIZE,
                                  G_FILE_QUERY_INFO_NONE,
                                  NULL,
                                  NULL);
@@ -90,7 +90,7 @@ adblock_filter_retrieve_data_new (EphyFiltersManager *manager,
                                   EphyDownload       *download,
                                   const char         *source_uri)
 {
-  AdblockFilterRetrieveData* data;
+  AdblockFilterRetrieveData *data;
   data = g_new (AdblockFilterRetrieveData, 1);
   data->manager = g_object_ref (manager);
   data->download = g_object_ref (download);
@@ -379,8 +379,8 @@ EphyFiltersManager *
 ephy_filters_manager_new (const char *filters_dir)
 {
   return EPHY_FILTERS_MANAGER (g_object_new (EPHY_TYPE_FILTERS_MANAGER,
-                                            "filters-dir", filters_dir,
-                                            NULL));
+                                             "filters-dir", filters_dir,
+                                             NULL));
 }
 
 const char *

@@ -69,10 +69,10 @@ static char **ephy_log_modules;
 static gboolean ephy_log_all_modules;
 
 static void
-log_module (const gchar   *log_domain,
-            GLogLevelFlags log_level,
-            const char    *message,
-            gpointer       user_data)
+log_module (const gchar    *log_domain,
+            GLogLevelFlags  log_level,
+            const char     *message,
+            gpointer        user_data)
 {
   gboolean should_log = ephy_log_all_modules;
 
@@ -97,10 +97,10 @@ log_module (const gchar   *log_domain,
 #define MAX_DEPTH 200
 
 static void
-trap_handler (const char    *log_domain,
-              GLogLevelFlags log_level,
-              const char    *message,
-              gpointer       user_data)
+trap_handler (const char     *log_domain,
+              GLogLevelFlags  log_level,
+              const char     *message,
+              gpointer        user_data)
 {
   g_log_default_handler (log_domain, log_level, message, user_data);
 
@@ -142,7 +142,8 @@ trap_handler (const char    *log_domain,
 }
 
 static EphyProfiler *
-ephy_profiler_new (const char *name, const char *module)
+ephy_profiler_new (const char *name,
+                   const char *module)
 {
   EphyProfiler *profiler;
 
@@ -212,7 +213,8 @@ ephy_profiler_free (EphyProfiler *profiler)
  * Starts a new profiler on @module naming it @name.
  **/
 void
-ephy_profiler_start (const char *name, const char *module)
+ephy_profiler_start (const char *name,
+                     const char *module)
 {
   EphyProfiler *profiler;
 

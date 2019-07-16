@@ -27,13 +27,13 @@
 #include "ephy-favicon-helpers.h"
 
 struct _EphyBookmarkRow {
-  GtkListBoxRow    parent_instance;
+  GtkListBoxRow parent_instance;
 
-  EphyBookmark    *bookmark;
+  EphyBookmark *bookmark;
 
-  GtkWidget       *favicon_image;
-  GtkWidget       *title_label;
-  GtkWidget       *properties_button;
+  GtkWidget *favicon_image;
+  GtkWidget *title_label;
+  GtkWidget *properties_button;
 };
 
 G_DEFINE_TYPE (EphyBookmarkRow, ephy_bookmark_row, GTK_TYPE_LIST_BOX_ROW)
@@ -82,10 +82,10 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  g_autoptr(EphyBookmarkRow) self = user_data;
+  g_autoptr (EphyBookmarkRow) self = user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   cairo_surface_t *icon_surface;
-  g_autoptr(GdkPixbuf) favicon = NULL;
+  g_autoptr (GdkPixbuf) favicon = NULL;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
@@ -109,32 +109,30 @@ ephy_bookmark_row_set_property (GObject      *object,
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
 
-  switch (prop_id)
-    {
+  switch (prop_id) {
     case PROP_BOOKMARK:
       self->bookmark = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  }
 }
 
 static void
-ephy_bookmark_row_get_property (GObject      *object,
-                                guint         prop_id,
-                                GValue       *value,
-                                GParamSpec   *pspec)
+ephy_bookmark_row_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
 
-  switch (prop_id)
-    {
+  switch (prop_id) {
     case PROP_BOOKMARK:
       g_value_set_object (value, ephy_bookmark_row_get_bookmark (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  }
 }
 
 static void

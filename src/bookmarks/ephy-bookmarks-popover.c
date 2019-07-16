@@ -32,17 +32,17 @@
 #include <glib/gi18n.h>
 
 struct _EphyBookmarksPopover {
-  GtkPopover             parent_instance;
+  GtkPopover parent_instance;
 
-  GtkWidget             *toplevel_stack;
-  GtkWidget             *bookmarks_list_box;
-  GtkWidget             *tags_list_box;
-  GtkWidget             *tag_detail_list_box;
-  GtkWidget             *tag_detail_back_button;
-  GtkWidget             *tag_detail_label;
-  char                  *tag_detail_tag;
+  GtkWidget *toplevel_stack;
+  GtkWidget *bookmarks_list_box;
+  GtkWidget *tags_list_box;
+  GtkWidget *tag_detail_list_box;
+  GtkWidget *tag_detail_back_button;
+  GtkWidget *tag_detail_label;
+  char *tag_detail_tag;
 
-  EphyBookmarksManager  *manager;
+  EphyBookmarksManager *manager;
 };
 
 G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
@@ -50,7 +50,7 @@ G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
 
-static GtkWidget *create_bookmark_row (gpointer item, gpointer user_data);
+static GtkWidget * create_bookmark_row (gpointer item, gpointer user_data);
 static GtkWidget *create_tag_row (const char *tag);
 
 static void
@@ -190,13 +190,13 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
 
   /* If the tag no longer contains bookmarks, remove it from the tags list */
   if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
-      children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
-      for (l = children; l != NULL; l = l->next) {
-        title = g_object_get_data (G_OBJECT (l->data), "title");
-        if (g_strcmp0 (title, tag) == 0)
-          gtk_container_remove (GTK_CONTAINER (self->tags_list_box), GTK_WIDGET (l->data));
-      }
-      g_list_free (children);
+    children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
+    for (l = children; l != NULL; l = l->next) {
+      title = g_object_get_data (G_OBJECT (l->data), "title");
+      if (g_strcmp0 (title, tag) == 0)
+        gtk_container_remove (GTK_CONTAINER (self->tags_list_box), GTK_WIDGET (l->data));
+    }
+    g_list_free (children);
   }
 }
 
@@ -345,7 +345,8 @@ ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
 }
 
 static int
-tags_list_box_sort_func (GtkListBoxRow *row1, GtkListBoxRow *row2)
+tags_list_box_sort_func (GtkListBoxRow *row1,
+                         GtkListBoxRow *row2)
 {
   const char *type1;
   const char *type2;
@@ -363,7 +364,7 @@ tags_list_box_sort_func (GtkListBoxRow *row1, GtkListBoxRow *row2)
 
   if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0
       && g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
-      return ephy_bookmark_tags_compare (title1, title2);
+    return ephy_bookmark_tags_compare (title1, title2);
 
   if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
     return -1;
@@ -425,9 +426,9 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover   *self,
-                                                  GtkListBoxRow          *row,
-                                                  GtkListBox             *box)
+ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover *self,
+                                                  GtkListBoxRow        *row,
+                                                  GtkListBox           *box)
 {
   const char *type;
   const char *tag;

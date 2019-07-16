@@ -27,9 +27,9 @@
 struct _EphyHistoryRecord {
   GObject parent_instance;
 
-  char      *id;
-  char      *title;
-  char      *uri;
+  char *id;
+  char *title;
+  char *uri;
   GSequence *visits;
 };
 

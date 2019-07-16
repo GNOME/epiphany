@@ -35,15 +35,15 @@
 
 typedef struct {
   guint8 *data;     /* The bit stream as an array of bytes */
-  gsize   data_len; /* The number of bytes in the array */
+  gsize data_len;   /* The number of bytes in the array */
   guint8 *curr;     /* The current byte in the bit stream */
-  guint8  mask;     /* Bit mask to read a bit within a byte */
-  gsize   num_read; /* The number of bits read so far */
+  guint8 mask;      /* Bit mask to read a bit within a byte */
+  gsize num_read;   /* The number of bits read so far */
 } EphyGSBBitReader;
 
 typedef struct {
   EphyGSBBitReader *reader;
-  guint             parameter; /* Golomb-Rice parameter, between 2 and 28 */
+  guint parameter;             /* Golomb-Rice parameter, between 2 and 28 */
 } EphyGSBRiceDecoder;
 
 static inline EphyGSBBitReader *

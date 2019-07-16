@@ -40,7 +40,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   const char *adblock_data_dir;
   gboolean private_profile;
   gboolean browser_mode;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   g_variant_get (user_data, "(&sm&sm&s&sbb)", &guid, &server_address, &profile_dir, &adblock_data_dir, &private_profile, &browser_mode);
 

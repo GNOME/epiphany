@@ -139,7 +139,8 @@ test_web_app_lifetime (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

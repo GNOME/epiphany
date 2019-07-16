@@ -65,9 +65,10 @@
  **/
 
 char *
-eel_strdup_strftime (const char *format, struct tm *time_pieces)
+eel_strdup_strftime (const char *format,
+                     struct tm  *time_pieces)
 {
-  g_autoptr(GString) string = NULL;
+  g_autoptr (GString) string = NULL;
   const char *remainder, *percent;
   char code[4], buffer[512];
   char *piece, *result;
@@ -230,7 +231,6 @@ ephy_time_helpers_utf_friendly_time (time_t date)
   if (then.tm_mday == now.tm_mday &&
       then.tm_mon == now.tm_mon &&
       then.tm_year == now.tm_year) {
-
     if (!use_24) {
       /* Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am" */
       format = _("Today %I∶%M %p");

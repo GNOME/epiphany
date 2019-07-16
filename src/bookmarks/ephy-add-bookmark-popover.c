@@ -30,11 +30,11 @@
 #include "ephy-sync-utils.h"
 
 struct _EphyAddBookmarkPopover {
-  GtkPopover     parent_instance;
+  GtkPopover parent_instance;
 
-  char          *address;
+  char *address;
 
-  GtkWidget     *grid;
+  GtkWidget *grid;
   EphyHeaderBar *header_bar;
 };
 
@@ -213,7 +213,7 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
     g_autofree char *id = NULL;
-    g_autoptr(EphyBookmark) new_bookmark = NULL;
+    g_autoptr (EphyBookmark) new_bookmark = NULL;
 
     id = ephy_sync_utils_get_random_sync_id ();
     new_bookmark = ephy_bookmark_new (address,

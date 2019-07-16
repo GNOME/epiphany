@@ -113,14 +113,16 @@ GQuark ephy_sqlite_error_quark (void)
 }
 
 static void
-set_error_from_string (const char *string, GError **error)
+set_error_from_string (const char  *string,
+                       GError     **error)
 {
   if (error)
     *error = g_error_new_literal (ephy_sqlite_error_quark (), 0, string);
 }
 
 EphySQLiteConnection *
-ephy_sqlite_connection_new (EphySQLiteConnectionMode mode, const char *database_path)
+ephy_sqlite_connection_new (EphySQLiteConnectionMode  mode,
+                            const char               *database_path)
 {
   return EPHY_SQLITE_CONNECTION (g_object_new (EPHY_TYPE_SQLITE_CONNECTION,
                                                "mode", mode,
@@ -129,7 +131,8 @@ ephy_sqlite_connection_new (EphySQLiteConnectionMode mode, const char *database_
 }
 
 gboolean
-ephy_sqlite_connection_open (EphySQLiteConnection *self, GError **error)
+ephy_sqlite_connection_open (EphySQLiteConnection  *self,
+                             GError               **error)
 {
   if (self->database) {
     set_error_from_string ("Connection already open.", error);
@@ -176,14 +179,17 @@ ephy_sqlite_connection_delete_database (EphySQLiteConnection *self)
 }
 
 void
-ephy_sqlite_connection_get_error (EphySQLiteConnection *self, GError **error)
+ephy_sqlite_connection_get_error (EphySQLiteConnection  *self,
+                                  GError               **error)
 {
   if (error)
     *error = g_error_new_literal (ephy_sqlite_error_quark (), sqlite3_errcode (self->database), sqlite3_errmsg (self->database));
 }
 
 gboolean
-ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GError **error)
+ephy_sqlite_connection_execute (EphySQLiteConnection  *self,
+                                const char            *sql,
+                                GError               **error)
 {
   if (self->database == NULL) {
     set_error_from_string ("Connection not open.", error);
@@ -198,7 +204,9 @@ ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GEr
 }
 
 EphySQLiteStatement *
-ephy_sqlite_connection_create_statement (EphySQLiteConnection *self, const char *sql, GError **error)
+ephy_sqlite_connection_create_statement (EphySQLiteConnection  *self,
+                                         const char            *sql,
+                                         GError               **error)
 {
   sqlite3_stmt *prepared_statement;
 
@@ -239,7 +247,8 @@ ephy_sqlite_connection_enable_foreign_keys (EphySQLiteConnection *self)
 }
 
 gboolean
-ephy_sqlite_connection_begin_transaction (EphySQLiteConnection *self, GError **error)
+ephy_sqlite_connection_begin_transaction (EphySQLiteConnection  *self,
+                                          GError               **error)
 {
   if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
     return TRUE;
@@ -247,7 +256,8 @@ ephy_sqlite_connection_begin_transaction (EphySQLiteConnection *self, GError **e
 }
 
 gboolean
-ephy_sqlite_connection_commit_transaction (EphySQLiteConnection *self, GError **error)
+ephy_sqlite_connection_commit_transaction (EphySQLiteConnection  *self,
+                                           GError               **error)
 {
   if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
     return TRUE;
@@ -255,7 +265,8 @@ ephy_sqlite_connection_commit_transaction (EphySQLiteConnection *self, GError **
 }
 
 gboolean
-ephy_sqlite_connection_table_exists (EphySQLiteConnection *self, const char *table_name)
+ephy_sqlite_connection_table_exists (EphySQLiteConnection *self,
+                                     const char           *table_name)
 {
   GError *error = NULL;
   gboolean table_exists = FALSE;

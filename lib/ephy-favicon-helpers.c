@@ -25,7 +25,9 @@
 #include <glib.h>
 
 GdkPixbuf *
-ephy_pixbuf_get_from_surface_scaled (cairo_surface_t *surface, int width, int height)
+ephy_pixbuf_get_from_surface_scaled (cairo_surface_t *surface,
+                                     int              width,
+                                     int              height)
 {
   GdkPixbuf *pixbuf;
   int favicon_width;

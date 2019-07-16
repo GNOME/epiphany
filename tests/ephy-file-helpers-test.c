@@ -32,8 +32,7 @@ typedef struct {
   EphyFileHelpersFlags flags;
 } FileInitTest;
 
-static const FileInitTest private_tests[] =
-{
+static const FileInitTest private_tests[] = {
   { "private", EPHY_FILE_HELPERS_PRIVATE_PROFILE },
   { "private, keep-dir", EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_KEEP_DIR }
 };
@@ -106,8 +105,7 @@ typedef struct {
   gboolean in_flatpak;
 } DownloadsDirTest;
 
-static const DownloadsDirTest downloads_tests[] =
-{
+static const DownloadsDirTest downloads_tests[] = {
   { "Desktop", NULL, G_USER_DIRECTORY_DESKTOP, FALSE },
 
   { "Downloads", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
@@ -163,8 +161,7 @@ typedef struct {
   gboolean can_delete;
 } DirTest;
 
-static const DirTest dir_tests[] =
-{
+static const DirTest dir_tests[] = {
   { "/tmp/ephy-test-dir", FALSE, TRUE, TRUE },
   /* Unreadable */
   { "/root/ephy-test-dir", FALSE, FALSE, FALSE },
@@ -222,7 +219,7 @@ test_ephy_file_desktop_dir (void)
 static void
 delete_uri (const char *uri)
 {
-  g_autoptr(GFile) file = NULL;
+  g_autoptr (GFile) file = NULL;
 
   g_assert_nonnull (uri);
 
@@ -300,8 +297,7 @@ typedef struct {
   const char *expected;
 } SanitizeFilenameTest;
 
-static const SanitizeFilenameTest sanitize_filename_tests[] =
-{
+static const SanitizeFilenameTest sanitize_filename_tests[] = {
   { "Normal Filename", "Normal Filename" },
   { "filename/with/slashes", "filename_with_slashes" }
 };
@@ -329,7 +325,8 @@ test_ephy_sanitize_filename (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

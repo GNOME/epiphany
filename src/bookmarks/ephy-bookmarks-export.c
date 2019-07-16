@@ -83,7 +83,7 @@ write_contents_cb (GObject      *source_object,
                    GAsyncResult *result,
                    gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr (GTask) task = user_data;
   GHashTable *root_table;
   GError *error = NULL;
 

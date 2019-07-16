@@ -132,7 +132,8 @@ static GParamSpec *obj_properties[LAST_PROP];
  */
 
 static guint
-ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_description)
+ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
+                                     const char *context_description)
 {
   char *string;
   guint id;
@@ -155,7 +156,8 @@ ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_desc
 }
 
 static void
-ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
+ephy_embed_set_statusbar_label (EphyEmbed  *embed,
+                                const char *label)
 {
   nautilus_floating_bar_set_primary_label (NAUTILUS_FLOATING_BAR (embed->floating_bar), label);
 
@@ -167,7 +169,8 @@ ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 }
 
 static void
-ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
+ephy_embed_statusbar_update (EphyEmbed  *embed,
+                             const char *text)
 {
   g_assert (EPHY_IS_EMBED (embed));
 
@@ -175,7 +178,9 @@ ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
 }
 
 static guint
-ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
+ephy_embed_statusbar_push (EphyEmbed  *embed,
+                           guint       context_id,
+                           const char *text)
 {
   EphyEmbedStatusbarMsg *msg;
 
@@ -198,7 +203,8 @@ ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
 /* End of code based on GTK+ GtkStatusbar. */
 
 static void
-ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
+ephy_embed_statusbar_pop (EphyEmbed *embed,
+                          guint      context_id)
 {
   EphyEmbedStatusbarMsg *msg;
   GSList *list;
@@ -223,7 +229,8 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 }
 
 static void
-remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
+remove_from_destroy_list_cb (GtkWidget *widget,
+                             EphyEmbed *embed)
 {
   GSList *list;
 
@@ -283,9 +290,9 @@ web_view_title_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-load_changed_cb (WebKitWebView  *web_view,
-                 WebKitLoadEvent load_event,
-                 EphyEmbed      *embed)
+load_changed_cb (WebKitWebView   *web_view,
+                 WebKitLoadEvent  load_event,
+                 EphyEmbed       *embed)
 {
   switch (load_event) {
     case WEBKIT_LOAD_COMMITTED:
@@ -536,7 +543,7 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
 static gboolean
 ephy_embed_close_inspector_cb (WebKitWebInspector *inspector,
-                                EphyEmbed          *embed)
+                               EphyEmbed          *embed)
 {
   embed->inspector_loaded = FALSE;
 
@@ -583,7 +590,9 @@ pop_statusbar_later_cb (gpointer data)
 }
 
 static void
-status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
+status_message_notify_cb (EphyWebView *view,
+                          GParamSpec  *pspec,
+                          EphyEmbed   *embed)
 {
   const char *message;
 
@@ -599,7 +608,7 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
     ephy_embed_statusbar_push (embed, embed->tab_message_id, message);
   } else {
     /* A short timeout before hiding the statusbar ensures that while moving
-       over a series of links, the overlay widget doesn't flicker on and off. */
+     *  over a series of links, the overlay widget doesn't flicker on and off. */
     if (embed->pop_statusbar_later_source_id == 0) {
       embed->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
       g_source_set_name_by_id (embed->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
@@ -617,7 +626,9 @@ clear_progress_cb (EphyEmbed *embed)
 }
 
 static void
-progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
+progress_update (EphyWebView *view,
+                 GParamSpec  *pspec,
+                 EphyEmbed   *embed)
 {
   gdouble progress;
   gboolean loading;
@@ -698,7 +709,8 @@ ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
 }
 
 static void
-ephy_embed_restored_window_cb (EphyEmbedShell *shell, EphyEmbed *embed)
+ephy_embed_restored_window_cb (EphyEmbedShell *shell,
+                               EphyEmbed      *embed)
 {
   if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
     return;
@@ -707,7 +719,8 @@ ephy_embed_restored_window_cb (EphyEmbedShell *shell, EphyEmbed *embed)
 }
 
 static void
-ephy_embed_mapped_cb (GtkWidget *widget, gpointer data)
+ephy_embed_mapped_cb (GtkWidget *widget,
+                      gpointer   data)
 {
   ephy_embed_maybe_load_delayed_request ((EphyEmbed *)widget);
 }
@@ -911,7 +924,8 @@ ephy_embed_add_top_widget (EphyEmbed                *embed,
  * details.
  */
 void
-ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
+ephy_embed_remove_top_widget (EphyEmbed *embed,
+                              GtkWidget *widget)
 {
   if (g_slist_find (embed->destroy_on_transition_list, widget)) {
     GSList *list;
@@ -936,7 +950,9 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
  * is on is switched to.
  */
 void
-ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request, WebKitWebViewSessionState *state)
+ephy_embed_set_delayed_load_request (EphyEmbed                 *embed,
+                                     WebKitURIRequest          *request,
+                                     WebKitWebViewSessionState *state)
 {
   g_assert (EPHY_IS_EMBED (embed));
   g_assert (WEBKIT_IS_URI_REQUEST (request));

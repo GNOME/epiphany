@@ -33,11 +33,13 @@ typedef struct {
   const char *schema;
   const char *key;
   const char *webkit_pref;
-  void (*callback)(GSettings *settings, const char *key, gpointer data);
+  void (*callback)(GSettings  *settings,
+                   const char *key,
+                   gpointer    data);
 } PrefData;
 
 #define DEFAULT_ENCODING_SETTING "default-charset"
-// FIXME: Refactor this code to remove the need of those globals
+/* FIXME: Refactor this code to remove the need of those globals */
 static WebKitSettings *webkit_settings = NULL;
 static GFileMonitor *user_style_sheet_monitor = NULL;
 
@@ -219,7 +221,7 @@ webkit_pref_callback_font_family (GSettings  *settings,
 }
 
 /* Based on Christian Persch's code from gecko backend of epiphany
-   (old transform_accept_languages_list() function) */
+ *  (old transform_accept_languages_list() function) */
 static void
 webkit_pref_callback_accept_languages (GSettings  *settings,
                                        const char *key,
@@ -344,7 +346,7 @@ webkit_pref_callback_enable_spell_checking (GSettings  *settings,
   webkit_web_context_set_spell_checking_enabled (web_context, value);
 
   if (value) {
-    g_autoptr(GArray) array = g_array_new (TRUE, FALSE, sizeof (char *));
+    g_autoptr (GArray) array = g_array_new (TRUE, FALSE, sizeof (char *));
     g_autofree gchar *language = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SPELL_CHECKER_LANGUAGE);
     char **normalized;
 
@@ -381,7 +383,7 @@ webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
                                                         WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER);
       break;
     case EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY_ON_DEMAND:
-      /* Fallthrough */
+    /* Fallthrough */
     default:
       webkit_settings_set_hardware_acceleration_policy (webkit_settings,
                                                         WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND);
@@ -389,8 +391,7 @@ webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
   }
 }
 
-static const PrefData webkit_pref_entries[] =
-{
+static const PrefData webkit_pref_entries[] = {
   /* Epiphany font settings */
   { EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_SERIF_FONT,

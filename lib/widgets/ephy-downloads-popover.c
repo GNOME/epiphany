@@ -100,7 +100,7 @@ static void
 download_removed_cb (EphyDownloadsPopover *popover,
                      EphyDownload         *download)
 {
-  g_autoptr(GList) children = NULL;
+  g_autoptr (GList) children = NULL;
   GList *l;
   EphyDownloadsManager *manager;
 
@@ -134,7 +134,7 @@ download_removed_cb (EphyDownloadsPopover *popover,
 static void
 clear_button_clicked_cb (EphyDownloadsPopover *popover)
 {
-  g_autoptr(GList) children = NULL;
+  g_autoptr (GList) children = NULL;
   GList *l;
   EphyDownloadsManager *manager;
 

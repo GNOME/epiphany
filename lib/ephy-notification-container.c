@@ -22,9 +22,9 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotificationContainer {
-  GtkRevealer  parent_instance;
+  GtkRevealer parent_instance;
 
-  GtkWidget   *grid;
+  GtkWidget *grid;
 };
 
 struct _EphyNotificationContainerClass {

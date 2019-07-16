@@ -81,12 +81,13 @@ G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYP
                                                 NULL))
 
 static void
-entry_drag_data_received_cb (GtkWidget *widget,
-                             GdkDragContext *context,
-                             gint x, gint y,
-                             GtkSelectionData *selection_data,
-                             guint info,
-                             guint time,
+entry_drag_data_received_cb (GtkWidget              *widget,
+                             GdkDragContext         *context,
+                             gint                    x,
+                             gint                    y,
+                             GtkSelectionData       *selection_data,
+                             guint                   info,
+                             guint                   time,
                              EphyLocationController *controller)
 {
   GtkEntry *entry;
@@ -191,7 +192,8 @@ entry_activate_cb (GtkEntry               *entry,
 
 
 static void
-user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
+user_changed_cb (GtkWidget              *widget,
+                 EphyLocationController *controller)
 {
   const char *address;
   DzlSuggestionEntry *entry = DZL_SUGGESTION_ENTRY (ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (widget)));

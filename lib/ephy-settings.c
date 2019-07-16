@@ -128,7 +128,7 @@ on_settings_changed (GSettings *settings,
                      char      *key,
                      gpointer   user_data)
 {
-  g_autoptr(GVariant) value = g_settings_get_user_value (settings, key);
+  g_autoptr (GVariant) value = g_settings_get_user_value (settings, key);
   if (value != NULL)
     g_settings_set_value (user_data, key, value);
   else
@@ -144,15 +144,15 @@ static void
 sync_settings (GSettings *original,
                GSettings *new)
 {
-  g_autoptr(GSettingsSchema) schema = NULL;
-  g_auto(GStrv) keys = NULL;
+  g_autoptr (GSettingsSchema) schema = NULL;
+  g_auto (GStrv) keys = NULL;
 
   g_object_get (original, "settings-schema", &schema, NULL);
   keys = g_settings_schema_list_keys (schema);
 
   for (size_t i = 0; keys[i] != NULL; ++i) {
     const char *key = keys[i];
-    g_autoptr(GVariant) value = g_settings_get_user_value (original, key);
+    g_autoptr (GVariant) value = g_settings_get_user_value (original, key);
 
     if (value != NULL)
       g_settings_set_value (new, key, value);
@@ -204,24 +204,27 @@ ephy_settings_get_for_web_process_extension (const char *schema)
   gsettings = g_hash_table_lookup (settings, key_name);
 
   if (gsettings == NULL) {
-    g_autoptr(GSettingsBackend) backend = NULL;
+    g_autoptr (GSettingsBackend) backend = NULL;
+    g_autoptr (GSettings) web_gsettings = NULL;
+    g_autofree char *keyfile_path = NULL;
+    g_autofree char *path = NULL;
+
     gsettings = ephy_settings_get (schema);
     g_assert (gsettings != NULL);
 
-    // GLib inside Flatpak will default to this backend in the future
-    // so we don't need to do anything extra
+    /* GLib inside Flatpak will default to this backend in the future */
+    /* so we don't need to do anything extra */
     g_object_get (gsettings, "backend", &backend, NULL);
-    // G_IS_KEYFILE_SETTINGS_BACKEND () is private API
+    /* G_IS_KEYFILE_SETTINGS_BACKEND () is private API */
     if (!g_strcmp0 (g_type_name (G_TYPE_FROM_INSTANCE (backend)), "GKeyfileSettingsBackend")) {
       g_hash_table_insert (settings, g_steal_pointer (&key_name), g_object_ref (gsettings));
       return gsettings;
     }
 
-    g_autofree char *keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
+    keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
     backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
 
-    GSettings *web_gsettings;
-    g_autofree char *path = get_relocatable_path (schema);
+    path = get_relocatable_path (schema);
     if (path != NULL)
       web_gsettings = g_settings_new_with_backend_and_path (schema, backend, path);
     else
@@ -230,7 +233,7 @@ ephy_settings_get_for_web_process_extension (const char *schema)
     sync_settings (gsettings, web_gsettings);
     g_hash_table_insert (settings, g_steal_pointer (&key_name), web_gsettings);
 
-    return web_gsettings;
+    return g_steal_pointer (&web_gsettings);
   }
 
   return gsettings;

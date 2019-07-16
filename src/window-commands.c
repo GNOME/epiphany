@@ -217,7 +217,8 @@ create_tree_model (void)
 }
 
 static gchar *
-show_profile_selector (GtkWidget *parent, GSList *profiles)
+show_profile_selector (GtkWidget *parent,
+                       GSList    *profiles)
 {
   GtkWidget *selector;
   GtkWidget *list_box;
@@ -443,7 +444,7 @@ bookmarks_export_cb (GObject      *source_object,
   EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (source_object);
   GtkWidget *export_info_dialog;
   gboolean exported;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   exported = ephy_bookmarks_export_finish (manager, result, &error);
 
@@ -453,7 +454,7 @@ bookmarks_export_cb (GObject      *source_object,
                                                GTK_BUTTONS_OK,
                                                "%s",
                                                exported ? _("Bookmarks successfully exported!") :
-                                                          error->message);
+                                               error->message);
   gtk_dialog_run (GTK_DIALOG (export_info_dialog));
   gtk_widget_destroy (export_info_dialog);
 }
@@ -708,41 +709,41 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
   if (strstr (g_action_get_name (G_ACTION (action)), "back")) {
-      const char *back_uri;
-      WebKitBackForwardList *history;
-      WebKitBackForwardListItem *back_item;
+    const char *back_uri;
+    WebKitBackForwardList *history;
+    WebKitBackForwardListItem *back_item;
 
-      history = webkit_web_view_get_back_forward_list (web_view);
-      back_item = webkit_back_forward_list_get_back_item (history);
-      back_uri = webkit_back_forward_list_item_get_original_uri (back_item);
+    history = webkit_web_view_get_back_forward_list (web_view);
+    back_item = webkit_back_forward_list_get_back_item (history);
+    back_uri = webkit_back_forward_list_item_get_original_uri (back_item);
 
-      embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-                                  NULL,
-                                  0);
+    embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                NULL,
+                                0);
 
-      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-      webkit_web_view_load_uri (web_view, back_uri);
-      gtk_widget_grab_focus (GTK_WIDGET (embed));
+    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_load_uri (web_view, back_uri);
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
   } else {
-      const char *forward_uri;
-      WebKitBackForwardList *history;
-      WebKitBackForwardListItem *forward_item;
+    const char *forward_uri;
+    WebKitBackForwardList *history;
+    WebKitBackForwardListItem *forward_item;
 
-      /* Forward history is not copied when opening
-         a new tab, so get the forward URI manually
-         and load it */
-      history = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-      forward_item = webkit_back_forward_list_get_forward_item (history);
-      forward_uri = webkit_back_forward_list_item_get_original_uri (forward_item);
+    /* Forward history is not copied when opening
+     *  a new tab, so get the forward URI manually
+     *  and load it */
+    history = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+    forward_item = webkit_back_forward_list_get_forward_item (history);
+    forward_uri = webkit_back_forward_list_item_get_original_uri (forward_item);
 
-      embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
-                                  embed,
-                                  0);
+    embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                embed,
+                                0);
 
-      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-      webkit_web_view_load_uri (web_view, forward_uri);
+    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_load_uri (web_view, forward_uri);
   }
 }
 
@@ -855,7 +856,9 @@ window_cmd_new_tab (GSimpleAction *action,
 }
 
 static void
-open_response_cb (GtkNativeDialog *dialog, int response, EphyWindow *window)
+open_response_cb (GtkNativeDialog *dialog,
+                  int              response,
+                  EphyWindow      *window)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
@@ -1243,7 +1246,8 @@ notify_launch_cb (NotifyNotification *notification,
 }
 
 static gboolean
-confirm_web_application_overwrite (GtkWindow *parent, const char *title)
+confirm_web_application_overwrite (GtkWindow  *parent,
+                                   const char *title)
 {
   GtkResponseType response;
   GtkWidget *dialog;
@@ -1276,7 +1280,7 @@ session_bus_ready_cb (GObject      *source,
                       GAsyncResult *res,
                       gpointer      user_data)
 {
-  g_autoptr(GDBusConnection) connection = g_bus_get_finish (res, NULL);
+  g_autoptr (GDBusConnection) connection = g_bus_get_finish (res, NULL);
   g_autofree gchar *desktop_file = user_data;
   g_autofree gchar *app_id = NULL;
   GVariant *app;
@@ -1502,9 +1506,9 @@ static void
 save_snapshot (cairo_surface_t *surface,
                const char      *file)
 {
-  g_autoptr(GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
   g_autofree char *snapshot_path = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
   int width;
   int height;
   gboolean ret;
@@ -1568,7 +1572,9 @@ take_snapshot (EphyEmbed *embed,
 
 
 static void
-save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
+save_response_cb (GtkNativeDialog *dialog,
+                  int              response,
+                  EphyEmbed       *embed)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
@@ -1901,7 +1907,8 @@ window_cmd_encoding (GSimpleAction *action,
 }
 
 static void
-view_source_embedded (const char *uri, EphyEmbed *embed)
+view_source_embedded (const char *uri,
+                      EphyEmbed  *embed)
 {
   EphyEmbed *new_embed;
   SoupURI *soup_uri;
@@ -1936,7 +1943,9 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 }
 
 static void
-tmp_source_delete_cb (GObject *source, GAsyncResult *result, gpointer data)
+tmp_source_delete_cb (GObject      *source,
+                      GAsyncResult *result,
+                      gpointer      data)
 {
   GFile *file = G_FILE (source);
   GError *error = NULL;
@@ -1963,7 +1972,9 @@ delete_tmp_source_file (GOutputStream *ostream)
 }
 
 static void
-portal_opened_cb (GObject *source, GAsyncResult *result, gpointer data)
+portal_opened_cb (GObject      *source,
+                  GAsyncResult *result,
+                  gpointer      data)
 {
   char *path = data;
   GFile *file;
@@ -1985,7 +1996,9 @@ portal_opened_cb (GObject *source, GAsyncResult *result, gpointer data)
 }
 
 static void
-save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointer data)
+save_temp_source_close_cb (GOutputStream *ostream,
+                           GAsyncResult  *result,
+                           gpointer       data)
 {
   const char *uri;
   GFile *file;
@@ -2028,7 +2041,9 @@ out:
 }
 
 static void
-save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString *data)
+save_temp_source_write_cb (GOutputStream *ostream,
+                           GAsyncResult  *result,
+                           GString       *data)
 {
   GError *error = NULL;
   gssize written;
@@ -2067,7 +2082,9 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 }
 
 static void
-get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GOutputStream *ostream)
+get_main_resource_data_cb (WebKitWebResource *resource,
+                           GAsyncResult      *result,
+                           GOutputStream     *ostream)
 {
   guchar *data;
   gsize data_length;
@@ -2095,7 +2112,9 @@ get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GO
 }
 
 static void
-save_temp_source_replace_cb (GFile *file, GAsyncResult *result, EphyEmbed *embed)
+save_temp_source_replace_cb (GFile        *file,
+                             GAsyncResult *result,
+                             EphyEmbed    *embed)
 {
   EphyWebView *view;
   WebKitWebResource *resource;
@@ -2849,11 +2868,11 @@ window_cmd_set_spell_checker (GSimpleAction *action,
                               gpointer       user_data)
 {
   WebKitWebContext *context = webkit_web_context_get_default ();
-  g_autoptr(GPtrArray) languages = g_ptr_array_new ();
+  g_autoptr (GPtrArray) languages = g_ptr_array_new ();
   const gchar *lang = g_variant_get_string (parameter, NULL);
 
   g_ptr_array_add (languages, (gchar *)lang);
 
-  webkit_web_context_set_spell_checking_languages (context, (const char * const *) languages->pdata);
+  webkit_web_context_set_spell_checking_languages (context, (const char * const *)languages->pdata);
   g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SPELL_CHECKER_LANGUAGE, lang);
 }

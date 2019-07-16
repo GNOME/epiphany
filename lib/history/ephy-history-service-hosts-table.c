@@ -50,7 +50,8 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
 }
 
 void
-ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *host)
+ephy_history_service_add_host_row (EphyHistoryService *self,
+                                   EphyHistoryHost    *host)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -90,7 +91,8 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
 }
 
 void
-ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost *host)
+ephy_history_service_update_host_row (EphyHistoryService *self,
+                                      EphyHistoryHost    *host)
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
@@ -130,7 +132,9 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
 }
 
 EphyHistoryHost *
-ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_string, EphyHistoryHost *host)
+ephy_history_service_get_host_row (EphyHistoryService *self,
+                                   const gchar        *host_string,
+                                   EphyHistoryHost    *host)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -244,7 +248,8 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
 }
 
 GList *
-ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery *query)
+ephy_history_service_find_host_rows (EphyHistoryService *self,
+                                     EphyHistoryQuery   *query)
 {
   EphySQLiteStatement *statement = NULL;
   GList *substring;
@@ -345,7 +350,8 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
 
 /* Inspired from ephy-history.c */
 static GList *
-get_hostname_and_locations (const gchar *url, gchar **hostname)
+get_hostname_and_locations (const gchar  *url,
+                            gchar       **hostname)
 {
   GList *host_locations = NULL;
   char *scheme = NULL;
@@ -478,10 +484,10 @@ ephy_history_service_delete_orphan_hosts (EphyHistoryService *self)
   g_assert (self->history_database != NULL);
 
   /* Where a JOIN would give us all hosts with urls associated, a LEFT
-     JOIN also gives us those hosts for which there are no urls.  By
-     means of urls.host == NULL we filter out anything else and
-     retrieve only the ids of the hosts without associated urls. Then,
-     we delete all these rows from the hosts table. */
+   *  JOIN also gives us those hosts for which there are no urls.  By
+   *  means of urls.host == NULL we filter out anything else and
+   *  retrieve only the ids of the hosts without associated urls. Then,
+   *  we delete all these rows from the hosts table. */
   ephy_sqlite_connection_execute (self->history_database,
                                   "DELETE FROM hosts WHERE hosts.id IN "
                                   "  (SELECT hosts.id FROM hosts LEFT JOIN urls "

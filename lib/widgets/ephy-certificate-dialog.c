@@ -328,11 +328,11 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 }
 
 GtkWidget *
-ephy_certificate_dialog_new (GtkWindow           *parent,
-                             const char          *address,
-                             GTlsCertificate     *certificate,
-                             GTlsCertificateFlags tls_errors,
-                             EphySecurityLevel    security_level)
+ephy_certificate_dialog_new (GtkWindow            *parent,
+                             const char           *address,
+                             GTlsCertificate      *certificate,
+                             GTlsCertificateFlags  tls_errors,
+                             EphySecurityLevel     security_level)
 {
   GtkWidget *dialog;
 

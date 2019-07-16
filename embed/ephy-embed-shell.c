@@ -113,16 +113,17 @@ ephy_embed_shell_get_view_for_page_id (EphyEmbedShell *self,
   GList *windows = gtk_application_get_windows (GTK_APPLICATION (self));
 
   for (GList *l = windows; l && l->data; l = l->next) {
-    g_autoptr(GList) tabs = ephy_embed_container_get_children (l->data);
+    g_autoptr (GList) tabs = ephy_embed_container_get_children (l->data);
 
     for (GList *t = tabs; t && t->data; t = t->next) {
       EphyWebView *ephy_view = ephy_embed_get_web_view (t->data);
       WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_view);
+      g_autofree char *real_origin = NULL;
 
       if (webkit_web_view_get_page_id (web_view) != page_id)
         continue;
 
-      g_autofree char *real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+      real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
 
       if (g_strcmp0 (real_origin, origin)) {
         g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
@@ -151,7 +152,7 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (catalog);
   WebKitFaviconDatabase *database;
   GList *windows;
-  g_autoptr(GList) tabs = NULL;
+  g_autoptr (GList) tabs = NULL;
   GList *tabs_info = NULL;
   const char *title;
   const char *url;
@@ -228,7 +229,7 @@ web_process_extension_password_form_focused_message_received_cb (WebKitUserConte
 {
   guint64 page_id;
   gboolean insecure_action;
-  g_autoptr(GVariant) variant = NULL;
+  g_autoptr (GVariant) variant = NULL;
   g_autofree char *message_str = NULL;
 
   message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
@@ -265,7 +266,7 @@ static void
 ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(EphyHistoryQuery) query = NULL;
+  g_autoptr (EphyHistoryQuery) query = NULL;
 
   query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (priv->global_history_service, query, NULL,
@@ -361,6 +362,7 @@ static void
 password_manager_query_finished_cb (GList               *records,
                                     PasswordManagerData *data)
 {
+  EphyWebProcessExtensionProxy *proxy;
   EphyPasswordRecord *record;
   const char *username = NULL;
   const char *password = NULL;
@@ -371,9 +373,9 @@ password_manager_query_finished_cb (GList               *records,
     password = ephy_password_record_get_password (record);
   }
 
-  EphyWebProcessExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (data->shell,
-                                                                                   data->page_id,
-                                                                                   data->origin);
+  proxy = ephy_embed_shell_get_extension_proxy_for_page_id (data->shell,
+                                                            data->page_id,
+                                                            data->origin);
   if (proxy)
     ephy_web_process_extension_proxy_password_query_response (proxy, username, password, data->promise_id, data->frame_id);
 
@@ -384,7 +386,7 @@ static char *
 property_to_string_or_null (JSCValue   *value,
                             const char *name)
 {
-  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  g_autoptr (JSCValue) prop = jsc_value_object_get_property (value, name);
   if (jsc_value_is_null (prop) || jsc_value_is_undefined (prop))
     return NULL;
   return jsc_value_to_string (prop);
@@ -394,7 +396,7 @@ static int
 property_to_int32 (JSCValue   *value,
                    const char *name)
 {
-  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  g_autoptr (JSCValue) prop = jsc_value_object_get_property (value, name);
   return jsc_value_to_int32 (prop);
 }
 
@@ -402,7 +404,7 @@ static int
 property_to_uint64 (JSCValue   *value,
                     const char *name)
 {
-  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  g_autoptr (JSCValue) prop = jsc_value_object_get_property (value, name);
   return (guint64)jsc_value_to_double (prop);
 }
 
@@ -421,6 +423,7 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
   guint64 frame_id = property_to_uint64 (value, "frameID");
+  PasswordManagerData *data;
 
   if (!origin || !target_origin || !password_field)
     return;
@@ -432,7 +435,7 @@ web_process_extension_password_manager_query_received_cb (WebKitUserContentManag
   if (!username && username_field)
     g_clear_pointer (&username_field, g_free);
 
-  PasswordManagerData *data = g_new (PasswordManagerData, 1);
+  data = g_new (PasswordManagerData, 1);
   data->shell = g_object_ref (shell);
   data->promise_id = promise_id;
   data->page_id = page_id;
@@ -477,8 +480,8 @@ save_auth_request_free (SaveAuthRequest *request)
 }
 
 static void
-save_auth_request_response_cb (gint                 response_id,
-                               SaveAuthRequest      *data)
+save_auth_request_response_cb (gint             response_id,
+                               SaveAuthRequest *data)
 {
   if (response_id == GTK_RESPONSE_REJECT) {
     ephy_permissions_manager_set_permission (data->permissions_manager,
@@ -504,10 +507,11 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
   g_autofree char *password = property_to_string_or_null (value, "password");
   g_autofree char *username_field = property_to_string_or_null (value, "usernameField");
   g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
-  g_autoptr(JSCValue) is_new_prop = jsc_value_object_get_property (value, "isNew");
+  g_autoptr (JSCValue) is_new_prop = jsc_value_object_get_property (value, "isNew");
   gboolean is_new = jsc_value_to_boolean (is_new_prop);
   guint64 page_id = property_to_uint64 (value, "pageID");
   EphyWebView *view;
+  SaveAuthRequest *request;
 
   /* Both origin and target origin are required. */
   if (!origin || !target_origin)
@@ -542,7 +546,7 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
     return;
   }
 
-  SaveAuthRequest *request = g_new (SaveAuthRequest, 1);
+  request = g_new (SaveAuthRequest, 1);
   request->password_manager = g_object_ref (priv->password_manager);
   request->permissions_manager = g_object_ref (priv->permissions_manager);
   request->origin = g_steal_pointer (&origin);
@@ -581,21 +585,20 @@ web_process_extension_password_manager_query_usernames_received_cb (WebKitUserCo
                                                                     EphyEmbedShell           *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
   JSCValue *value = webkit_javascript_result_get_js_value (message);
   g_autofree char *origin = property_to_string_or_null (value, "origin");
   gint32 promise_id = property_to_int32 (value, "promiseID");
   guint64 page_id = property_to_uint64 (value, "pageID");
   guint64 frame_id = property_to_uint64 (value, "frameID");
-
   GList *usernames;
+  EphyWebProcessExtensionProxy *proxy;
 
   if (!origin)
     return;
 
   usernames = ephy_password_manager_get_usernames_for_origin (priv->password_manager, origin);
 
-  EphyWebProcessExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
+  proxy = ephy_embed_shell_get_extension_proxy_for_page_id (shell, page_id, origin);
   if (proxy)
     ephy_web_process_extension_proxy_password_query_usernames_response (proxy, usernames, promise_id, frame_id);
 }
@@ -638,7 +641,7 @@ history_service_host_deleted_cb (EphyHistoryService *service,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
-  g_autoptr(SoupURI) deleted_uri = NULL;
+  g_autoptr (SoupURI) deleted_uri = NULL;
 
   deleted_uri = soup_uri_new (deleted_url);
 
@@ -735,7 +738,7 @@ got_snapshot_path_for_url_cb (EphySnapshotService *service,
                               char                *url)
 {
   g_autofree char *snapshot = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, &error);
   if (snapshot) {
@@ -889,8 +892,8 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
   gsize size;
-  g_autoptr(GInputStream) stream = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GInputStream) stream = NULL;
+  g_autoptr (GError) error = NULL;
 
   path = webkit_uri_scheme_request_get_path (request);
   if (!g_resources_get_info (path, 0, &size, NULL, &error)) {
@@ -908,9 +911,9 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
 static void
 ftp_request_cb (WebKitURISchemeRequest *request)
 {
-  g_autoptr(GDesktopAppInfo) app_info = NULL;
-  g_autoptr(GList) list = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GDesktopAppInfo) app_info = NULL;
+  g_autoptr (GList) list = NULL;
+  g_autoptr (GError) error = NULL;
   const char *uri;
 
   uri = webkit_uri_scheme_request_get_uri (request);
@@ -936,7 +939,7 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
                                    EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(GVariant) user_data = NULL;
+  g_autoptr (GVariant) user_data = NULL;
   gboolean private_profile;
   gboolean browser_mode;
   const char *address;
@@ -1001,7 +1004,7 @@ new_connection_cb (GDBusServer     *server,
                    EphyEmbedShell  *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(EphyWebProcessExtensionProxy) extension = NULL;
+  g_autoptr (EphyWebProcessExtensionProxy) extension = NULL;
 
   extension = ephy_web_process_extension_proxy_new (connection);
 
@@ -1028,9 +1031,9 @@ static void
 ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(GDBusAuthObserver) observer = NULL;
+  g_autoptr (GDBusAuthObserver) observer = NULL;
   g_autofree char *address = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr (GError) error = NULL;
 
   address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
 
@@ -1065,7 +1068,7 @@ static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(WebKitWebsiteDataManager) manager = NULL;
+  g_autoptr (WebKitWebsiteDataManager) manager = NULL;
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     priv->web_context = webkit_web_context_new_ephemeral ();
@@ -1097,7 +1100,7 @@ download_started_cb (WebKitWebContext *web_context,
                      EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr(EphyDownload) ephy_download = NULL;
+  g_autoptr (EphyDownload) ephy_download = NULL;
   gboolean ephy_download_set;
 
   /* Is download locked down? */
@@ -1176,30 +1179,30 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerQuery",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerQuery",
-                    G_CALLBACK (web_process_extension_password_manager_query_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQuery",
+                           G_CALLBACK (web_process_extension_password_manager_query_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerQueryUsernames",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
-                    G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
+                           G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerSave",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerSave",
-                    G_CALLBACK (web_process_extension_password_manager_save_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerSave",
+                           G_CALLBACK (web_process_extension_password_manager_save_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "passwordManagerRequestSave",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::passwordManagerRequestSave",
-                    G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerRequestSave",
+                           G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
+                           shell, 0);
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
@@ -1268,8 +1271,8 @@ ephy_embed_shell_startup (GApplication *application)
   filters_dir = adblock_filters_dir (shell);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
 
-  g_signal_connect (priv->web_context, "download-started",
-                    G_CALLBACK (download_started_cb), shell);
+  g_signal_connect_object (priv->web_context, "download-started",
+                           G_CALLBACK (download_started_cb), shell, 0);
 }
 
 static void
@@ -1359,7 +1362,7 @@ ephy_embed_shell_constructed (GObject *object)
   mode = ephy_embed_shell_get_mode (shell);
 
   /* These do not run the EmbedShell application instance, so make sure that
-     there is a web context and a user content manager for them. */
+   *  there is a web context and a user content manager for them. */
   if (mode == EPHY_EMBED_SHELL_MODE_TEST ||
       mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     ephy_embed_shell_create_web_context (shell);

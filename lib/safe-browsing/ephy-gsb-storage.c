@@ -44,10 +44,10 @@
  * The format is {THREAT_TYPE, PLATFORM_TYPE, THREAT_ENTRY_TYPE}.
  */
 static const char * const gsb_linux_threat_lists[][3] = {
-  {GSB_THREAT_TYPE_MALWARE,            "LINUX",        "URL"},
+  {GSB_THREAT_TYPE_MALWARE, "LINUX", "URL"},
   {GSB_THREAT_TYPE_SOCIAL_ENGINEERING, "ANY_PLATFORM", "URL"},
-  {GSB_THREAT_TYPE_UNWANTED_SOFTWARE,  "LINUX",        "URL"},
-  {GSB_THREAT_TYPE_MALWARE,            "LINUX",        "IP_RANGE"},
+  {GSB_THREAT_TYPE_UNWANTED_SOFTWARE, "LINUX", "URL"},
+  {GSB_THREAT_TYPE_MALWARE, "LINUX", "IP_RANGE"},
 };
 
 struct _EphyGSBStorage {
@@ -746,7 +746,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   GError *error = NULL;
   const char *sql;
   char *retval = NULL;
-  GChecksum *checksum ;
+  GChecksum *checksum;
   guint8 *digest;
   gsize digest_len = GSB_HASH_SIZE;
 

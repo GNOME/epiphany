@@ -110,7 +110,8 @@ static void perm_entry_free (PermEntry *entry)
   g_free (entry);
 }
 
-static void add_to_perm_entry (GHashTable *hash, VMA_t *entry)
+static void add_to_perm_entry (GHashTable *hash,
+                               VMA_t      *entry)
 {
   const char *perms = entry->perms;
   PermEntry *value;
@@ -137,7 +138,8 @@ static void add_to_perm_entry (GHashTable *hash, VMA_t *entry)
     g_hash_table_insert (hash, g_strdup (perms), value);
 }
 
-static void add_to_totals (PermEntry *entry, PermEntry *totals)
+static void add_to_totals (PermEntry *entry,
+                           PermEntry *totals)
 {
   totals->shared_clean += entry->shared_clean;
   totals->shared_dirty += entry->shared_dirty;
@@ -145,7 +147,9 @@ static void add_to_totals (PermEntry *entry, PermEntry *totals)
   totals->private_dirty += entry->private_dirty;
 }
 
-static void print_vma_table (GString *str, GHashTable *hash, const char *caption)
+static void print_vma_table (GString    *str,
+                             GHashTable *hash,
+                             const char *caption)
 {
   PermEntry *pentry, totals;
 
@@ -188,7 +192,10 @@ static void print_vma_table (GString *str, GHashTable *hash, const char *caption
   g_string_append (str, "</table>");
 }
 
-static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, EphyProcess process)
+static void ephy_smaps_pid_to_html (EphySMaps  *smaps,
+                                    GString    *str,
+                                    pid_t       pid,
+                                    EphyProcess process)
 {
   GFileInputStream *stream;
   GDataInputStream *data_stream;
@@ -271,7 +278,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
     }
 
     g_match_info_free (match_info);
- out:
+out:
     g_free (line);
   }
 
@@ -407,7 +414,9 @@ static EphyProcess get_ephy_process (pid_t pid)
   return process;
 }
 
-static void ephy_smaps_pid_children_to_html (EphySMaps *smaps, GString *str, pid_t parent_pid)
+static void ephy_smaps_pid_children_to_html (EphySMaps *smaps,
+                                             GString   *str,
+                                             pid_t      parent_pid)
 {
   GDir *proc;
   const char *name;

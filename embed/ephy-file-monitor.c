@@ -100,11 +100,11 @@ ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
 }
 
 static void
-ephy_file_monitor_changed_cb (GFileMonitor     *monitor,
-                              GFile            *file,
-                              GFile            *other_file,
-                              GFileMonitorEvent event_type,
-                              EphyFileMonitor  *file_monitor)
+ephy_file_monitor_changed_cb (GFileMonitor      *monitor,
+                              GFile             *file,
+                              GFile             *other_file,
+                              GFileMonitorEvent  event_type,
+                              EphyFileMonitor   *file_monitor)
 {
   gboolean should_reload;
 

@@ -46,12 +46,12 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 typedef struct {
-  EphyHistoryManager                     *manager;
-  gboolean                                is_initial;
-  GList                                  *remotes_deleted;
-  GList                                  *remotes_updated;
-  EphySynchronizableManagerMergeCallback  callback;
-  gpointer                                user_data;
+  EphyHistoryManager *manager;
+  gboolean is_initial;
+  GList *remotes_deleted;
+  GList *remotes_updated;
+  EphySynchronizableManagerMergeCallback callback;
+  gpointer user_data;
 } MergeHistoryAsyncData;
 
 static MergeHistoryAsyncData *
@@ -364,7 +364,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
 
       g_hash_table_remove (records_ht_id, remote_id);
     } else {
-    /* Try find by URL. */
+      /* Try find by URL. */
       record = g_hash_table_lookup (records_ht_url, remote_url);
       if (record) {
         /* Different ID, same URL. Keep local ID. */
@@ -391,11 +391,11 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
 }
 
 static GPtrArray *
-ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
-                                           GHashTable          *records_ht_id,
-                                           GHashTable          *records_ht_url,
-                                           GList               *deleted_records,
-                                           GList               *updated_records)
+ephy_history_manager_handle_regular_merge (EphyHistoryManager *self,
+                                           GHashTable         *records_ht_id,
+                                           GHashTable         *records_ht_url,
+                                           GList              *deleted_records,
+                                           GList              *updated_records)
 {
   EphyHistoryRecord *record;
   GPtrArray *to_upload;

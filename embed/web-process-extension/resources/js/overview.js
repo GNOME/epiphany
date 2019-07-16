@@ -7,6 +7,9 @@ Ephy.Overview = class Overview
         this._model = model;
         this._items = [];
 
+        this._pendingThumbnailChanges = [];
+        this._pendingTitleChanges = [];
+
         // Event handlers are weak references in EphyWebOverviewModel, we need to keep
         // a strong reference to them while Ephy.Overview is alive.
         this._onURLsChangedFunction = this._onURLsChanged.bind(this);
@@ -47,9 +50,18 @@ Ephy.Overview = class Overview
 
             this._items.push(item);
         }
+
         let items = this._model.urls;
         if (items.length > this._items.length)
             this._onURLsChanged(items);
+
+        for (let thumbnailChange of this._pendingThumbnailChanges)
+            this._onThumbnailChanged(thumbnailChange.url, thumbnailChange.path);
+        this._pendingThumbnailChanges = [];
+
+        for (let titleChange of this._pendingTitleChanges)
+            this._onTitleChanged(titleChange.url, titleChange.title);
+        this._pendingTitleChanges = [];
     }
 
     _onKeyPress(event)
@@ -132,6 +144,11 @@ Ephy.Overview = class Overview
 
     _onThumbnailChanged(url, path)
     {
+        if (this._items.length == 0) {
+            this._pendingThumbnailChanges.push({ url: url, path: path });
+            return;
+        }
+
         for (let i = 0; i < this._items.length; i++) {
             let item = this._items[i];
             if (item.url() == url) {
@@ -143,6 +160,11 @@ Ephy.Overview = class Overview
 
     _onTitleChanged(url, title)
     {
+        if (this._items.length == 0) {
+            this._pendingTitleChanges.push({ url: url, title: title });
+            return;
+        }
+
         for (let i = 0; i < this._items.length; i++) {
             let item = this._items[i];
             if (item.url() == url) {
@@ -215,10 +237,11 @@ Ephy.Overview.Item = class OverviewItem
     setThumbnailPath(path)
     {
         if (path) {
-            this._thumbnail.style.background = 'url(file://' + path + '); background-size: 100%';
+            this._thumbnail.style.backgroundImage = 'url(file://' + path + ')';
+            this._thumbnail.style.backgroundSize = '100%';
+        } else {
+            this._thumbnail.style.backgroundImage = '';
         }
-        else
-            this._thumbnail.style.background = null;
     }
 
     detachFromParent()

@@ -246,7 +246,8 @@ test_ephy_session_load_many_windows (void)
 }
 
 static void
-open_uris_after_loading_session (const char **uris, int final_num_windows)
+open_uris_after_loading_session (const char **uris,
+                                 int          final_num_windows)
 {
   EphySession *session;
   gboolean ret;
@@ -336,7 +337,8 @@ test_ephy_session_open_empty_uri_forces_new_window (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

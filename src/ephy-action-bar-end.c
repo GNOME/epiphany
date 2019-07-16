@@ -76,7 +76,7 @@ add_attention (EphyActionBarEnd *self)
 
   gtk_style_context_add_class (style_context, "epiphany-downloads-button-needs-attention");
   self->downloads_button_attention_timeout_id = g_timeout_add (NEEDS_ATTENTION_ANIMATION_TIMEOUT,
-                                                               (GSourceFunc) on_remove_downloads_button_attention_style_timeout_cb,
+                                                               (GSourceFunc)on_remove_downloads_button_attention_style_timeout_cb,
                                                                self);
 }
 
@@ -109,7 +109,7 @@ download_added_cb (EphyDownloadsManager *manager,
                              "width", rect.width,
                              "x", rect.x,
                              "y", rect.y,
-                            NULL);
+                             NULL);
 
     dzl_object_animate_full (theatric,
                              DZL_ANIMATION_EASE_IN_CUBIC,
@@ -142,7 +142,7 @@ begin_complete_theatrics_from_main (gpointer user_data)
 static void
 begin_complete_theatrics (EphyActionBarEnd *self)
 {
-  g_autoptr(GIcon) icon = NULL;
+  g_autoptr (GIcon) icon = NULL;
   DzlBoxTheatric *theatric;
   GtkAllocation rect;
 
@@ -267,7 +267,7 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   if (is_desktop_pantheon ()) {
     gtk_button_set_image (GTK_BUTTON (action_bar_end->bookmarks_button),
                           gtk_image_new_from_icon_name ("user-bookmarks",
-                          GTK_ICON_SIZE_LARGE_TOOLBAR));
+                                                        GTK_ICON_SIZE_LARGE_TOOLBAR));
   }
 
   g_signal_connect_object (downloads_manager, "download-added",

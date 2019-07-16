@@ -169,7 +169,8 @@ test_ephy_shell_tab_load (void)
 }
 
 static int
-get_notebook_page_num (GtkWidget *notebook, EphyEmbed *embed)
+get_notebook_page_num (GtkWidget *notebook,
+                       EphyEmbed *embed)
 {
   return gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
 }
@@ -308,7 +309,8 @@ test_ephy_shell_tab_no_history (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   int ret;
 

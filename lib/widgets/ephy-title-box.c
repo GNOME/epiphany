@@ -150,8 +150,8 @@ ephy_title_box_title_widget_get_security_level (EphyTitleWidget *widget)
 }
 
 static void
-ephy_title_box_title_widget_set_security_level (EphyTitleWidget  *widget,
-                                                EphySecurityLevel security_level)
+ephy_title_box_title_widget_set_security_level (EphyTitleWidget   *widget,
+                                                EphySecurityLevel  security_level)
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
   const char *icon_name;
@@ -221,7 +221,7 @@ ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface *iface)
 static void
 ephy_title_box_class_init (EphyTitleBoxClass *klass)
 {
-  GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_title_box_constructed;

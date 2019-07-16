@@ -140,7 +140,8 @@ test_entry_can_redo (void)
 }
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   gtk_test_init (&argc, &argv);
   ephy_debug_init ();
