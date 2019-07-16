@@ -1,5 +1,13 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
+check-code-style:
+  stage: 'build'
+  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  before_script:
+    - dnf install -y uncrustify
+  script:
+    - data/check-code-style
+
 variables:
   BUNDLE: 'epiphany-git.flatpak'
 

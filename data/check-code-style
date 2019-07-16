@@ -30,7 +30,7 @@ do
    # Aligning prototypes is not working yet, so avoid headers
    for FILE in $(find "$DIR" -name "*.c" ! -path "*/contrib/*")
     do
-        "$UNCRUSTIFY" -c "data/uncrustify.cfg" --no-backup "$FILE"
+        "$UNCRUSTIFY" -c "data/uncrustify.cfg" -f "$FILE" -o "$FILE.uncrustify"
         "$LINEUP_PARAMETERS" "$FILE.uncrustify" > "$FILE.temp" && mv "$FILE.temp" "$FILE.uncrustify"
         diff -urN "$FILE" "$FILE.uncrustify" | \
             sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
