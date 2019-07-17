@@ -111,12 +111,15 @@ handle_memory_finished_cb (EphyAboutHandler       *handler,
     g_string_append_printf (data_str, "<head><title>%s</title>"
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                             "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
-                            "</head><body>",
+                            "</head><body>"
+                            "<div id='memory'>",
                             _("Memory usage"));
 
     g_string_append_printf (data_str, "<h1>%s</h1>", _("Memory usage"));
     g_string_append (data_str, memory);
     g_free (memory);
+
+    g_string_append (data_str, "</div>");
   }
 
   g_string_append (data_str, "</html>");
