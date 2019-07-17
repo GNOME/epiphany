@@ -20,15 +20,25 @@ h1 {
 }
 
 /* about: */
+#about-app {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .dialog {
-    padding: 2em;
-    margin: 2em auto;
+    padding: 12px;
     text-align: center;
-    background-color: #fff;
-    border-radius: 1em;
-    border: 2px solid #d3d7cf;
-    width: 40em;
+}
+
+@media (min-width: 550px) {
+    .dialog {
+        padding: 36px 42px;
+        background-color: #fff;
+        border-radius: 1em;
+        border: 2px solid #d3d7cf;
+    }
 }
 
 .properties {
@@ -41,10 +51,11 @@ h1 {
 
 #about-title {
     color: black;
+    font-weight: 800;
 }
 
 #about-subtitle {
-    color: #babdb6;
+    color: #9a9996;
     text-shadow: 0 1px 0 white;
 }
 
