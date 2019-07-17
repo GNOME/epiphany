@@ -173,6 +173,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body>"
+                          "<div id=\"about-app\">"
                           "<div class=\"dialog\">"
                           "<img id=\"about-icon\" src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
@@ -181,7 +182,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<table class=\"properties\">"
                           "<tr><td class=\"prop-label\">%s</td><td class=\"prop-value\">%d.%d.%d</td></tr>"
                           "</table>"
-                          "</div></body></html>",
+                          "</div></div></body></html>",
                           _("About Web"),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
 #if !TECH_PREVIEW
