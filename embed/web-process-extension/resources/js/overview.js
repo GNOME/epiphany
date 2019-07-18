@@ -95,9 +95,10 @@ Ephy.Overview = class Overview
     _onURLsChanged(urls)
     {
         let overview = document.getElementById('overview');
+        let grid = document.getElementById('most-visited-grid');
         if (overview.classList.contains('overview-empty')) {
-            while (overview.lastChild)
-                overview.removeChild(overview.lastChild);
+            while (grid.lastChild)
+                grid.removeChild(grid.lastChild);
             overview.classList.remove('overview-empty');
         }
 
@@ -117,7 +118,7 @@ Ephy.Overview = class Overview
                     this._removeItem(anchor);
                     event.preventDefault();
                 };
-                closeButton.innerHTML = '&#10006;';
+                closeButton.innerHTML = '';
                 closeButton.classList.add('overview-close-button');
                 anchor.appendChild(closeButton);
                 let thumbnailSpan = document.createElement('span');
@@ -126,7 +127,7 @@ Ephy.Overview = class Overview
                 let titleSpan = document.createElement('span');
                 titleSpan.classList.add('overview-title');
                 anchor.appendChild(titleSpan);
-                document.getElementById('overview').appendChild(anchor);
+                document.getElementById('most-visited-grid').appendChild(anchor);
                 item = new Ephy.Overview.Item(anchor);
                 this._items.push(item);
             }
