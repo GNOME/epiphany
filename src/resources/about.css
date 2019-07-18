@@ -131,19 +131,35 @@ html.epiphany-html {
   margin: 20px;
 }
 
+#memory h2 {
+  margin: 2rem 0 0;
+}
+
+.memory-table {
+    width: 100%;
+    margin: 0 0 0.9em 0;
+    font-size: 11px;
+    text-align: left;
+    border-collapse: collapse;
+}
+
 .memory-table caption {
-    font-size: 16pt;
+    margin: 1rem 0;
+    font-size: 1rem;
     font-weight: bold;
-    margin-bottom: 0.9em;
     color: #2e3436;
     text-shadow: 0 1px 0 white;
 }
 
-.memory-table {
-    margin: 0 12.5% 0.9em 12.5%;
-    width: 80%;
-    text-align: left;
-    border-collapse: collapse;
+@media (min-width: 600px) {
+    .memory-table {
+        width: 80%;
+        margin: 0 12.5% 0.9em 12.5%;
+        font-size: 1rem;
+    }
+    .memory-table caption {
+        font-size: 1.2rem;
+    }
 }
 
 .memory-table th {
@@ -155,7 +171,6 @@ html.epiphany-html {
 
 .memory-table td {
     padding: 2px;
-    background: #f6f6f8;
     border-bottom: 1px solid #d3d7cf;
     color: #2e3436;
     border-top: 1px solid transparent;
@@ -163,7 +178,7 @@ html.epiphany-html {
 }
 
 .memory-table tr:hover td {
-    background: #d3d7cf;
+    background: #deddda;
     color: #2e3436;
 }
 
