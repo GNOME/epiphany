@@ -38,7 +38,7 @@ const char *session_data =
   "<?xml version=\"1.0\"?>"
   "<session>"
   "<window x=\"94\" y=\"48\" width=\"1132\" height=\"684\" active-tab=\"0\" role=\"epiphany-window-67c6e8a5\">"
-  "<embed url=\"about:memory\" title=\"Memory usage\"/>"
+  "<embed url=\"about:memory\" title=\"Memory Usage\"/>"
   "</window>"
   "</session>";
 
