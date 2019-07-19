@@ -32,3 +32,8 @@ review:
 
 stop_review:
   extends: '.stop_review'
+
+nightly:
+  extends: '.flatpak'
+  variables:
+    BUNDLES: '$BUNDLE'
