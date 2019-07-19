@@ -27,14 +27,14 @@ variables:
 flatpak:
   extends: '.flatpak-template'
   variables:
-    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled -Db_sanitize=address --werror'
+    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   except:
     - master
 
 flatpak-master:
   extends: '.flatpak-template'
   variables:
-    MESON_ARGS: '-Dtech_preview=true -Dprofile=Devel -Db_sanitize=address'
+    MESON_ARGS: '-Dtech_preview=true -Dprofile=Devel'
   only:
     - master
 
