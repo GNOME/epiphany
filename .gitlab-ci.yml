@@ -16,14 +16,27 @@ check-code-style:
 variables:
   BUNDLE: 'epiphany-git.flatpak'
 
-flatpak:
+.flatpak-template:
   extends: '.flatpak'
   variables:
     MANIFEST_PATH: 'org.gnome.Epiphany.json'
     RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
     FLATPAK_MODULE: 'epiphany'
-    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
     APP_ID: 'org.gnome.Epiphany.Devel'
+
+flatpak:
+  extends: '.flatpak-template'
+  variables:
+    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+  except:
+    - master
+
+flatpak-master:
+  extends: '.flatpak-template'
+  variables:
+    MESON_ARGS: '-Dtech_preview=true -Dprofile=Devel'
+  only:
+    - master
 
 review:
   dependencies:
