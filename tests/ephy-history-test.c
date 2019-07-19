@@ -380,6 +380,7 @@ verify_complex_url_query (EphyHistoryService *service,
   g_assert_cmpstr (url->url, ==, baseline->url);
   g_assert_cmpuint (url->visit_count, ==, baseline->visit_count);
 
+  ephy_history_url_free (baseline);
   g_object_unref (service);
 
   gtk_main_quit ();
