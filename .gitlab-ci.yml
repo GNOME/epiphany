@@ -15,6 +15,7 @@ check-code-style:
 
 variables:
   BUNDLE: 'epiphany-git.flatpak'
+  TEST_BUILD_ARGS: '--env=ASAN_OPTIONS=detect_leaks=0'
 
 .flatpak-template:
   extends: '.flatpak'
