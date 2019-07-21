@@ -22,16 +22,12 @@ cppcheck:
   script:
     - cppcheck --enable=all --suppress=variableScope --suppress=unusedFunction --force -q . --error-exitcode=1 --library=gtk
 
-variables:
-  BUNDLE: 'epiphany-git.flatpak'
 
 .flatpak-template:
   extends: '.flatpak'
   variables:
     MANIFEST_PATH: 'org.gnome.Epiphany.json'
-    RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
     FLATPAK_MODULE: 'epiphany'
-    APP_ID: 'org.gnome.Epiphany.Devel'
 
 flatpak:
   extends: '.flatpak-template'
@@ -48,6 +44,10 @@ flatpak-master:
     - master
 
 review:
+  variables:
+    BUNDLE: 'epiphany-git.flatpak'
+    RUNTIME_REPO: 'https://sdk.gnome.org/gnome-nightly.flatpakrepo'
+    APP_ID: 'org.gnome.Epiphany.Devel'
   dependencies:
     - 'flatpak'
   extends: '.review'
