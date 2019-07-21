@@ -408,7 +408,7 @@ static void
 migrate_adblock_filters (void)
 {
   char *adblock_dir;
-  char *filters_filename;
+  g_autofree char *filters_filename = NULL;
   char *contents;
   gsize content_size;
   GPtrArray *filters_array = NULL;
@@ -434,7 +434,6 @@ migrate_adblock_filters (void)
   if (!g_file_get_contents (filters_filename, &contents, &content_size, &error)) {
     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
       g_warning ("Failed to read filters file: %s: %s", filters_filename, error->message);
-    g_free (filters_filename);
     g_error_free (error);
     return;
   }
