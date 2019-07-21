@@ -396,7 +396,8 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
     const char *snapshot;
-    char *thumbnail_style = NULL;
+    g_autofree char *thumbnail_style = NULL;
+    g_autofree char *markup = NULL;
 
     snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (snapshot_service, url->url);
     if (snapshot)
@@ -404,15 +405,15 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     else
       ephy_embed_shell_schedule_thumbnail_update (shell, url);
 
+    markup = g_markup_escape_text (url->title, -1);
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
                             "  <div class=\"overview-close-button\" title=\"%s\">&#10006;</div>"
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",
-                            g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
+                            markup, url->url, _("Remove from overview"),
                             thumbnail_style ? thumbnail_style : "", url->title);
-    g_free (thumbnail_style);
   }
 
   data_str = g_string_append (data_str,
