@@ -295,23 +295,21 @@ origin_for_keyfile_key (GKeyFile           *file,
                         gboolean            permit)
 {
   WebKitSecurityOrigin *origin = NULL;
-  char *value;
-  GError *error = NULL;
 
   if (strcmp (permission_type_to_string (type), key) == 0) {
+    g_autoptr (GError) error = NULL;
+    g_autofree char *value = NULL;
+
     value = g_key_file_get_string (file, group, key, &error);
     if (error != NULL) {
       g_warning ("Error processing %s group %s key %s: %s",
                  filename, group, key, error->message);
-      g_error_free (error);
       return NULL;
     }
 
     if ((permit && strcmp (value, "'allow'") == 0) ||
         (!permit && strcmp (value, "'deny'") == 0))
       origin = group_name_to_security_origin (group);
-
-    g_free (value);
   }
 
   return origin;
@@ -324,26 +322,24 @@ origins_for_keyfile_group (GKeyFile           *file,
                            EphyPermissionType  type,
                            gboolean            permit)
 {
-  char **keys;
+  g_auto (GStrv) keys = NULL;
   gsize keys_length;
   GList *origins = NULL;
-  WebKitSecurityOrigin *origin;
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
 
   keys = g_key_file_get_keys (file, group, &keys_length, &error);
   if (error != NULL) {
     g_warning ("Error processing %s group %s: %s", filename, group, error->message);
-    g_error_free (error);
     return NULL;
   }
 
   for (guint i = 0; i < keys_length; i++) {
+    WebKitSecurityOrigin *origin;
+
     origin = origin_for_keyfile_key (file, filename, group, keys[i], type, permit);
     if (origin)
       origins = g_list_prepend (origins, origin);
   }
-
-  g_strfreev (keys);
 
   return origins;
 }
