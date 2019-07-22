@@ -253,7 +253,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "    row.parentNode.removeChild(row);"
                             "  }"
                             "</script>"
-                            "</head><body class=\"applications-body\"><h1>%s</h1>"
+                            "</head><div id=\"applications\"><body class=\"applications-body\"><h1>%s</h1>"
                             "<p>%s</p>",
                             _("Applications"),
                             _("Applications"),
@@ -275,7 +275,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               _("Installed on:"), app->install_date);
     }
 
-    g_string_append (data_str, "</table></body></html>");
+    g_string_append (data_str, "</table></div></body></html>");
   } else {
     g_autoptr (GtkIconInfo) icon_info = NULL;
     g_autofree gchar *icon = g_strconcat ("application-x-addon-symbolic", NULL);
