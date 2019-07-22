@@ -333,13 +333,3 @@ ephy_tab_label_is_pinned (GtkWidget *widget)
 
   return self->is_pinned;
 }
-
-void
-ephy_tab_label_set_needs_attention (GtkWidget *widget,
-                                    gboolean   attention)
-{
-  if (attention)
-    gtk_style_context_add_class (gtk_widget_get_style_context (widget), "tab-attention");
-  else
-    gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "tab-attention");
-}
