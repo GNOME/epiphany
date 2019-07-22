@@ -295,7 +295,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "</body></html>\n",
                             icon_info ? gtk_icon_info_get_filename (icon_info) : "",
                             /* Displayed when opening applications without any installed web apps. */
-                            _("Applications"), _("You can add your favorite website by clicking <b>Install Site as Web Application…</b> within page menu."));
+                            _("Applications"), _("You can add your favorite website by clicking <b>Install Site as Web Application…</b> within the page menu."));
   }
 
   ephy_web_application_free_application_list (applications);
