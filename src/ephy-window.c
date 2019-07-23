@@ -1658,16 +1658,16 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
                                 "select-all", window);
-    add_item_to_context_menu (context_menu, insert_emoji_item);
 
     if (can_search_selection)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
 
-    if (input_methods_item || unicode_item)
+    if (input_methods_item || insert_emoji_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     add_item_to_context_menu (context_menu, input_methods_item);
+    add_item_to_context_menu (context_menu, insert_emoji_item);
     add_item_to_context_menu (context_menu, unicode_item);
   } else {
     is_document = TRUE;
