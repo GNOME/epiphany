@@ -2379,11 +2379,7 @@ prefs_dialog_init (PrefsDialog *dialog)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->browsing_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->do_not_track_switch,
-                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->enable_smooth_scrolling_switch,
-                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->enable_mouse_gesture_switch,
+  gtk_widget_set_visible (dialog->do_not_track_row,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
