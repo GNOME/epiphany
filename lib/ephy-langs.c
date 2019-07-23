@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-langs.h"
+
 #include "gnome-languages.h"
 
 #include <string.h>
