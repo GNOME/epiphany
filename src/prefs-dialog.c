@@ -1514,7 +1514,7 @@ normalize_locale (const char *locale)
 static char *
 language_for_locale (const char *locale)
 {
-  g_autoptr(GString) string = g_string_new (locale);
+  g_autoptr (GString) string = g_string_new (locale);
 
   /* Before calling gnome_get_language_from_locale() we have to convert
    * from web locales (e.g. es-ES) to UNIX (e.g. es_ES.UTF-8).
