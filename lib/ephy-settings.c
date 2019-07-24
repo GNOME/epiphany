@@ -204,7 +204,7 @@ ephy_settings_get_for_web_process_extension (const char *schema)
   gsettings = g_hash_table_lookup (settings, key_name);
 
   if (gsettings == NULL) {
-    g_autoptr (GSettingsBackend) backend = NULL;
+    static GSettingsBackend *backend = NULL;
     g_autoptr (GSettings) web_gsettings = NULL;
     g_autofree char *keyfile_path = NULL;
     g_autofree char *path = NULL;
@@ -212,8 +212,13 @@ ephy_settings_get_for_web_process_extension (const char *schema)
     gsettings = ephy_settings_get (schema);
     g_assert (gsettings != NULL);
 
-    keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
-    backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
+    if (!backend) {
+      /* The GKeyfileBackend needs to be shared to avoid overconsumption of
+       * inotify handles. See: epiphany#865.
+       */
+      keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
+      backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
+    }
 
     path = get_relocatable_path (schema);
     if (path != NULL)
