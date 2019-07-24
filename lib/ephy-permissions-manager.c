@@ -39,6 +39,8 @@ struct _EphyPermissionsManager {
 
   GHashTable *permission_type_permitted_origins;
   GHashTable *permission_type_denied_origins;
+
+  GSettingsBackend *backend;
 };
 
 G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
@@ -48,6 +50,8 @@ G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
 static void
 ephy_permissions_manager_init (EphyPermissionsManager *manager)
 {
+  g_autofree char *filename = NULL;
+
   manager->origins_mapping = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   manager->settings_mapping = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 
@@ -55,6 +59,11 @@ ephy_permissions_manager_init (EphyPermissionsManager *manager)
    * the GList keys without destroying the contents of the lists. */
   manager->permission_type_permitted_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
   manager->permission_type_denied_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+
+  /* The GKeyfileBackend needs to be shared to avoid overconsumption of inotify
+   * handles. See: epiphany #865. */
+  filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
+  manager->backend = g_keyfile_settings_backend_new (filename, "/", NULL);
 }
 
 static void
@@ -85,6 +94,8 @@ ephy_permissions_manager_dispose (GObject *object)
     manager->permission_type_denied_origins = NULL;
   }
 
+  g_clear_object (&manager->backend);
+
   G_OBJECT_CLASS (ephy_permissions_manager_parent_class)->dispose (object);
 }
 
@@ -102,8 +113,6 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
 {
   char *origin_path;
   char *trimmed_protocol;
-  char *filename;
-  GSettingsBackend *backend;
   GSettings *settings;
   WebKitSecurityOrigin *security_origin;
   char *pos;
@@ -113,10 +122,6 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   settings = g_hash_table_lookup (manager->origins_mapping, origin);
   if (settings)
     return settings;
-
-  filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
-  backend = g_keyfile_settings_backend_new (filename, "/", NULL);
-  g_free (filename);
 
   /* Cannot contain consecutive slashes in GSettings path... */
   security_origin = webkit_security_origin_new_for_uri (origin);
@@ -130,10 +135,9 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
                                  webkit_security_origin_get_host (security_origin),
                                  webkit_security_origin_get_port (security_origin));
 
-  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.permissions", backend, origin_path);
+  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.permissions", manager->backend, origin_path);
   g_free (trimmed_protocol);
   g_free (origin_path);
-  g_object_unref (backend);
   webkit_security_origin_unref (security_origin);
 
   /* Note that settings is owned only by the first hash table! */
