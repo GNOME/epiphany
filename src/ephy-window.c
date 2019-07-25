@@ -1479,8 +1479,8 @@ populate_context_menu (WebKitWebView       *web_view,
   gboolean is_document = FALSE;
   gboolean is_image = FALSE;
   gboolean is_media = FALSE;
-  gboolean is_video = FALSE;
-  gboolean is_audio = FALSE;
+  gboolean is_downloadable_video = FALSE;
+  gboolean is_downloadable_audio = FALSE;
   gboolean can_search_selection = FALSE;
   char *search_selection_action_name = NULL;
   const char *selected_text = NULL;
@@ -1515,14 +1515,14 @@ populate_context_menu (WebKitWebView       *web_view,
     toggle_loop_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP);
     fullscreen_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN);
 
-    item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD);
+    item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_VIDEO_TO_DISK);
     if (item) {
-      is_video = TRUE;
+      is_downloadable_video = TRUE;
       g_object_unref (item);
     } else {
-      item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD);
+      item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_DOWNLOAD_AUDIO_TO_DISK);
       if (item) {
-        is_audio = TRUE;
+        is_downloadable_audio = TRUE;
         g_object_unref (item);
       }
     }
@@ -1695,7 +1695,7 @@ populate_context_menu (WebKitWebView       *web_view,
     add_item_to_context_menu (context_menu, fullscreen_item);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    if (is_video) {
+    if (is_downloadable_video) {
       if (!app_mode) {
         add_action_to_context_menu (context_menu, popup_action_group,
                                     "open-video-in-new-window", window);
@@ -1706,7 +1706,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                   "save-video-as", window);
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "copy-video-location", window);
-    } else if (is_audio) {
+    } else if (is_downloadable_audio) {
       if (!app_mode) {
         add_action_to_context_menu (context_menu, popup_action_group,
                                     "open-audio-in-new-window", window);
