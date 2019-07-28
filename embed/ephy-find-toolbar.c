@@ -165,8 +165,8 @@ real_find (EphyFindToolbar   *toolbar,
   if (direction == EPHY_FIND_DIRECTION_PREV)
     options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
 
-  webkit_find_controller_search (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
   webkit_find_controller_count_matches (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
+  webkit_find_controller_search (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
 }
 
 static gboolean
