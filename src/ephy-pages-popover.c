@@ -132,6 +132,9 @@ items_changed_cb (EphyPagesPopover *self,
 {
   EphyPageRow **items = g_new (EphyPageRow *, added);
 
+  if ((guint)(position + removed) > g_list_model_get_n_items (G_LIST_MODEL (self->list_store)))
+    return;
+
   for (int i = 0; i < added; i++) {
     items[i] = ephy_page_row_new (self->notebook, position + i);
     ephy_page_row_set_adaptive_mode (EPHY_PAGE_ROW (items[i]),

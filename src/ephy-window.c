@@ -2730,6 +2730,14 @@ notebook_page_removed_cb (EphyNotebook *notebook,
     (ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
 
   tab_accels_update (window);
+
+  if (gtk_notebook_get_n_pages (window->notebook) == 0) {
+    EphyShell *shell = ephy_shell_get_default ();
+    GList *windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+
+    if (g_list_length (windows) > 1)
+      gtk_window_close (GTK_WINDOW (window));
+  }
 }
 
 static void
