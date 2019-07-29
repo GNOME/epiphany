@@ -262,6 +262,17 @@ html.epiphany-html {
     text-decoration: none;
 }
 
+/* Hide 9th item on narrow widths to avoid uneven number*/
+.overview-item:last-child {
+    display: none;
+}
+
+@media (min-width: 672px) {
+    .overview-item:last-child {
+        display: block;
+    }
+}
+
 .overview-title {
     margin: 10px 6px;
     padding-bottom: 2px;
