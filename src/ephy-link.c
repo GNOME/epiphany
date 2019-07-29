@@ -110,10 +110,10 @@ ephy_link_flags_from_current_event (void)
       flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
     }
   } else {
-    if (state == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) {
+    if (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) {
       flags = EPHY_LINK_NEW_WINDOW;
-    } else if (state == GDK_MOD1_MASK) {
-      flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER | EPHY_LINK_JUMP_TO;
+    } else if (state == GDK_CONTROL_MASK) {
+      flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
     }
   }
 
