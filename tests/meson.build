@@ -169,15 +169,15 @@ if get_option('unit_tests').enabled()
   #      env: envs
   # )
 
-  if get_option('network_tests').enabled()
-    gsb_service_test = executable('test-ephy-gsb-service',
-      'ephy-gsb-service-test.c',
-      dependencies: ephymain_dep
-    )
-    test('GSB service test',
-         gsb_service_test,
-         env: envs,
-         timeout: 90 # slow!
-    )
-  endif
+  #if get_option('network_tests').enabled()
+  #  gsb_service_test = executable('test-ephy-gsb-service',
+  #    'ephy-gsb-service-test.c',
+  #    dependencies: ephymain_dep
+  #  )
+  #  test('GSB service test',
+  #       gsb_service_test,
+  #       env: envs,
+  #       timeout: 90 # slow!
+  #  )
+  #endif
 endif
