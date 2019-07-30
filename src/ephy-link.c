@@ -98,10 +98,10 @@ EphyLinkFlags
 ephy_link_flags_from_current_event (void)
 {
   GdkEventType type = GDK_NOTHING;
-  guint state = 0, button = (guint) - 1;
+  guint state = 0, button = (guint) - 1, keyval = (guint) - 1;
   EphyLinkFlags flags = 0;
 
-  ephy_gui_get_current_event (&type, &state, &button);
+  ephy_gui_get_current_event (&type, &state, &button, &keyval);
 
   if (button == 2 && (type == GDK_BUTTON_PRESS || type == GDK_BUTTON_RELEASE)) {
     if (state == GDK_SHIFT_MASK) {
@@ -110,9 +110,12 @@ ephy_link_flags_from_current_event (void)
       flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
     }
   } else {
-    if (state == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) {
+    gboolean navigation_keys = (keyval == GDK_KEY_Left) || (keyval == GDK_KEY_Right);
+
+    if (((state == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) && !navigation_keys) ||
+        (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
       flags = EPHY_LINK_NEW_WINDOW;
-    } else if (state == GDK_MOD1_MASK) {
+    } else if (((state == GDK_MOD1_MASK) && !navigation_keys) || (state == GDK_CONTROL_MASK)) {
       flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER | EPHY_LINK_JUMP_TO;
     }
   }
