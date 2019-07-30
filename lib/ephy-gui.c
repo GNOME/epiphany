@@ -85,7 +85,8 @@ ephy_gui_help (GtkWidget  *parent,
 void
 ephy_gui_get_current_event (GdkEventType *otype,
                             guint        *ostate,
-                            guint        *obutton)
+                            guint        *obutton,
+                            guint        *keyval)
 {
   GdkEvent *event;
   GdkEventType type = GDK_NOTHING;
@@ -98,6 +99,8 @@ ephy_gui_get_current_event (GdkEventType *otype,
     if (type == GDK_KEY_PRESS ||
         type == GDK_KEY_RELEASE) {
       state = event->key.state;
+      if (keyval)
+        *keyval = event->key.keyval;
     } else if (type == GDK_BUTTON_PRESS ||
                type == GDK_BUTTON_RELEASE ||
                type == GDK_2BUTTON_PRESS ||
