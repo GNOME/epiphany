@@ -288,12 +288,36 @@ filter_info_get_data_as_bytes (FilterInfo *self)
   return g_variant_get_data_as_bytes (value);
 }
 
-static gboolean
-filter_info_save_sidecar (FilterInfo  *self,
-                          GError     **error)
+static void
+sidecar_contents_replaced_cb (GFile        *file,
+                              GAsyncResult *result,
+                              GTask        *task)
+{
+  GError *error = NULL;
+  if (g_file_replace_contents_finish (file,
+                                       result,
+                                       NULL,  /* new_etag */
+                                       &error)) {
+    g_task_return_boolean (task, TRUE);
+  } else {
+    g_task_return_error (task, error);
+  }
+}
+
+static void
+filter_info_save_sidecar (FilterInfo          *self,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          void                *user_data)
 {
   g_autoptr (GBytes) data = filter_info_get_data_as_bytes (self);
   g_autoptr (GFile) sidecar_file = filter_info_get_sidecar_file (self);
+  g_autofree char *sidecar_file_path = g_file_get_path (sidecar_file);
+  g_autofree char *task_name = g_strconcat ("save sidecar file: ",
+                                            sidecar_file_path,
+                                            NULL);
+  GTask *task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_name (task, task_name);
 
   LOG ("Saving metadata: uri=<%s>, identifier=%s, checksum=%s, last_update=%" PRIu64,
        self->source_uri,
@@ -301,20 +325,22 @@ filter_info_save_sidecar (FilterInfo  *self,
        self->checksum,
        self->last_update);
 
-  if (g_file_replace_contents (sidecar_file,
-                               g_bytes_get_data (data, NULL),
-                               g_bytes_get_size (data),
-                               NULL,   /* etag */
-                               FALSE,  /* make_backup */
-                               G_FILE_CREATE_PRIVATE |
-                               G_FILE_CREATE_REPLACE_DESTINATION,
-                               NULL,   /* new_etag */
-                               NULL,   /* cancellable */
-                               error)) {
-    return TRUE;
-  }
+  g_file_replace_contents_bytes_async (sidecar_file,
+                                       data,
+                                       NULL,   /* etag */
+                                       FALSE,  /* make_backup */
+                                       G_FILE_CREATE_PRIVATE |
+                                       G_FILE_CREATE_REPLACE_DESTINATION,
+                                       g_task_get_cancellable (task),
+                                       (GAsyncReadyCallback)sidecar_contents_replaced_cb,
+                                       task);
+}
 
-  return FALSE;
+static gboolean
+filter_info_save_sidecar_finish (GAsyncResult  *result,
+                                 GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static GFile *
@@ -386,9 +412,25 @@ file_removed_cb (GFile        *file,
 }
 
 static void
-filter_save_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
-                GAsyncResult                 *result,
-                FilterInfo                   *self)
+sidecar_saved_cb (GObject      *source_object G_GNUC_UNUSED,
+                  GAsyncResult *result,
+                  FilterInfo   *self)
+{
+  g_autoptr (GError) error = NULL;
+  if (filter_info_save_sidecar_finish (result, &error)) {
+    LOG ("Sidecar successfully saved for filter %s.",
+         filter_info_get_identifier (self));
+  } else {
+    g_warning ("Cannot save sidecar for filter %s: %s",
+               filter_info_get_identifier (self),
+               error->message);
+  }
+}
+
+static void
+filter_saved_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
+                 GAsyncResult                 *result,
+                 FilterInfo                   *self)
 {
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitUserContentFilter) wk_filter = NULL;
@@ -404,6 +446,10 @@ filter_save_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
   if (wk_filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
     filter_info_setup_enable_compiled_filter (self, wk_filter);
+    filter_info_save_sidecar (self,
+                              self->manager->cancellable,
+                              (GAsyncReadyCallback)sidecar_saved_cb,
+                              self);
   } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Filter %s <%s> cannot be compiled: %s.",
                filter_info_get_identifier (self), self->source_uri,
@@ -454,25 +500,23 @@ filter_info_setup_load_file (FilterInfo *self,
   self->checksum = g_compute_checksum_for_bytes (G_CHECKSUM_SHA256, json_data);
   self->last_update = self->manager->update_time;
 
-  if (!filter_info_save_sidecar (self, &error)) {
-    g_warning ("Cannot save sidecar for filter %s: %s",
-               filter_info_get_identifier (self),
-               error->message);
-  }
-
   if (!filter_info_needs_updating_from_source (self) && self->found &&
       old_checksum && strcmp (self->checksum, old_checksum) == 0) {
+    /* Even if an update is not needed, the sidecar needs to be updated. */
+    filter_info_save_sidecar (self,
+                              self->manager->cancellable,
+                              (GAsyncReadyCallback)sidecar_saved_cb,
+                              self);
     LOG ("Filter %s not stale, source checksum unchanged (%s), recompilation skipped.",
          filter_info_get_identifier (self), self->checksum);
-    return;
+  } else {
+    webkit_user_content_filter_store_save (self->manager->store,
+                                           filter_info_get_identifier (self),
+                                           json_data,
+                                           self->manager->cancellable,
+                                           (GAsyncReadyCallback)filter_saved_cb,
+                                           self);
   }
-
-  webkit_user_content_filter_store_save (self->manager->store,
-                                         filter_info_get_identifier (self),
-                                         json_data,
-                                         self->manager->cancellable,
-                                         (GAsyncReadyCallback)filter_save_cb,
-                                         self);
 }
 
 static void
@@ -499,9 +543,9 @@ download_completed_cb (EphyDownload *download,
 }
 
 static void
-download_error_cb (EphyDownload *download,
-                   GError       *error,
-                   FilterInfo   *self)
+download_errored_cb (EphyDownload *download,
+                     GError       *error,
+                     FilterInfo   *self)
 {
   g_assert (download);
   g_assert (error);
@@ -593,7 +637,7 @@ filter_load_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
   g_signal_connect (download, "completed",
                     G_CALLBACK (download_completed_cb), self);
   g_signal_connect (download, "error",
-                    G_CALLBACK (download_error_cb), self);
+                    G_CALLBACK (download_errored_cb), self);
 }
 
 static void
@@ -611,9 +655,9 @@ filter_info_setup_start (FilterInfo *self)
 }
 
 static void
-filter_remove_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
-                  GAsyncResult                 *result,
-                  gpointer                      user_data G_GNUC_UNUSED)
+filter_removed_cb (WebKitUserContentFilterStore *store G_GNUC_UNUSED,
+                   GAsyncResult                 *result,
+                   gpointer                      user_data G_GNUC_UNUSED)
 {
   g_autoptr (GError) error = NULL;
 
@@ -647,7 +691,7 @@ remove_unused_filter (const char *identifier G_GNUC_UNUSED,
   webkit_user_content_filter_store_remove (filter->manager->store,
                                            identifier,
                                            filter->manager->cancellable,
-                                           (GAsyncReadyCallback)filter_remove_cb,
+                                           (GAsyncReadyCallback)filter_removed_cb,
                                            NULL);
   LOG ("Filter %s removal scheduled scheduled.", identifier);
 }
