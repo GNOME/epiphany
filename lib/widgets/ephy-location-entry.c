@@ -841,6 +841,39 @@ leave_notify_cb (GtkWidget *widget,
 }
 
 static void
+position_func (DzlSuggestionEntry *self,
+               GdkRectangle       *area,
+               gboolean           *is_absolute,
+               gpointer            user_data)
+{
+  GtkStyleContext *style_context;
+  GtkAllocation alloc;
+  GtkStateFlags state;
+  GtkBorder margin;
+
+  g_assert (DZL_IS_SUGGESTION_ENTRY (self));
+  g_assert (area != NULL);
+  g_assert (is_absolute != NULL);
+
+  *is_absolute = FALSE;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  area->y += alloc.height;
+  area->y += 6;
+  area->height = 300;
+
+  /* Adjust for bottom margin */
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  state = gtk_style_context_get_state (style_context);
+  gtk_style_context_get_margin (style_context, state, &margin);
+
+  area->y -= margin.bottom;
+  area->x += margin.left;
+  area->width -= margin.left + margin.right;
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
@@ -851,6 +884,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
+  dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, _("Show website security status and permissions"));
 
   /* Add special widget css provider */
