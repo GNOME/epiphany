@@ -1488,7 +1488,6 @@ populate_context_menu (WebKitWebView       *web_view,
                        EphyWindow          *window)
 {
   WebKitContextMenuItem *input_methods_item = NULL;
-  WebKitContextMenuItem *unicode_item = NULL;
   WebKitContextMenuItem *insert_emoji_item = NULL;
   WebKitContextMenuItem *copy_image_item = NULL;
   WebKitContextMenuItem *play_pause_item = NULL;
@@ -1525,7 +1524,6 @@ populate_context_menu (WebKitWebView       *web_view,
 
   if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
     input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
-    unicode_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_UNICODE);
     insert_emoji_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI);
     spelling_guess_items = find_spelling_guess_context_menu_items (context_menu);
   }
@@ -1663,12 +1661,11 @@ populate_context_menu (WebKitWebView       *web_view,
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
 
-    if (input_methods_item || insert_emoji_item || unicode_item)
+    if (input_methods_item || insert_emoji_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     add_item_to_context_menu (context_menu, input_methods_item);
     add_item_to_context_menu (context_menu, insert_emoji_item);
-    add_item_to_context_menu (context_menu, unicode_item);
   } else {
     is_document = TRUE;
 
