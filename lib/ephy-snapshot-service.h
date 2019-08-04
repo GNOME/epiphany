@@ -39,9 +39,8 @@ typedef enum {
   EPHY_SNAPSHOT_SERVICE_ERROR_INVALID
 } EphySnapshotServiceError;
 
-/* Values taken from the Web mockups. */
-#define EPHY_THUMBNAIL_WIDTH 360
-#define EPHY_THUMBNAIL_HEIGHT 270
+#define EPHY_THUMBNAIL_WIDTH 650
+#define EPHY_THUMBNAIL_HEIGHT 540
 
 GQuark               ephy_snapshot_service_error_quark                      (void);
 
