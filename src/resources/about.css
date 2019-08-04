@@ -262,7 +262,7 @@ html.epiphany-html {
     text-decoration: none;
 }
 
-/* Hide 9th item on narrow widths to avoid uneven number*/
+/* Hide 9th item on narrow widths to avoid uneven number */
 .overview-item:last-child {
     display: none;
 }
@@ -295,12 +295,14 @@ html.epiphany-html {
     border-radius: 5px;
 }
 
+/* In order to preserve a wide aspect ratio as the layout changes, we need to reduce the height */
 @media (min-width: 341px) {
     .overview-thumbnail {
         height: 120px;
     }
 }
 
+/* After this point we can go back to the regular height */
 @media (min-width: 450px) {
     .overview-thumbnail {
         height: 160px;
