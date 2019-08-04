@@ -111,12 +111,15 @@ handle_memory_finished_cb (EphyAboutHandler       *handler,
     g_string_append_printf (data_str, "<head><title>%s</title>"
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                             "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
-                            "</head><body>",
+                            "</head><body>"
+                            "<div id='memory'>",
                             _("Memory usage"));
 
     g_string_append_printf (data_str, "<h1>%s</h1>", _("Memory usage"));
     g_string_append (data_str, memory);
     g_free (memory);
+
+    g_string_append (data_str, "</div>");
   }
 
   g_string_append (data_str, "</html>");
@@ -173,6 +176,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body>"
+                          "<div id=\"about-app\">"
                           "<div class=\"dialog\">"
                           "<img id=\"about-icon\" src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
@@ -181,7 +185,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<table class=\"properties\">"
                           "<tr><td class=\"prop-label\">%s</td><td class=\"prop-value\">%d.%d.%d</td></tr>"
                           "</table>"
-                          "</div></body></html>",
+                          "</div></div></body></html>",
                           _("About Web"),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
 #if !TECH_PREVIEW
@@ -249,7 +253,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "    row.parentNode.removeChild(row);"
                             "  }"
                             "</script>"
-                            "</head><body class=\"applications-body\"><h1>%s</h1>"
+                            "</head><div id=\"applications\"><body class=\"applications-body\"><h1>%s</h1>"
                             "<p>%s</p>",
                             _("Applications"),
                             _("Applications"),
@@ -271,7 +275,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               _("Installed on:"), app->install_date);
     }
 
-    g_string_append (data_str, "</table></body></html>");
+    g_string_append (data_str, "</table></div></body></html>");
   } else {
     g_autoptr (GtkIconInfo) icon_info = NULL;
     g_autofree gchar *icon = g_strconcat ("application-x-addon-symbolic", NULL);
@@ -393,6 +397,9 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   g_string_append (data_str,
                    "<div id=\"overview\">\n");
 
+  g_string_append (data_str,
+                   "<div id=\"most-visited-grid\">\n");
+
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
     const char *snapshot;
@@ -408,7 +415,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     markup = g_markup_escape_text (url->title, -1);
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                            "  <div class=\"overview-close-button\" title=\"%s\">&#10006;</div>"
+                            "  <div class=\"overview-close-button\" title=\"%s\"></div>"
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",
@@ -417,6 +424,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   }
 
   data_str = g_string_append (data_str,
+                              "  </div>\n"
                               "  </div>\n"
                               "</body></html>\n");
 
