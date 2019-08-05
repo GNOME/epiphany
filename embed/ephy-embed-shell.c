@@ -41,7 +41,6 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-tabs-catalog.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-uri-tester-shared.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-process-extension-proxy.h"
@@ -954,11 +953,10 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
   browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
-  user_data = g_variant_new ("(smsmssbb)",
+  user_data = g_variant_new ("(smsmsbb)",
                              priv->guid,
                              address,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
-                             ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
                              private_profile,
                              browser_mode);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
@@ -1090,12 +1088,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
                                              NULL);
 
   priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
-}
-
-static char *
-adblock_filters_dir (EphyEmbedShell *shell)
-{
-  return g_build_filename (ephy_cache_dir (), "adblock", NULL);
 }
 
 static void
@@ -1282,8 +1274,17 @@ ephy_embed_shell_startup (GApplication *application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
 
-  filters_dir = adblock_filters_dir (shell);
+  filters_dir = g_build_filename (ephy_cache_dir (), "adblock", NULL);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
+
+  g_signal_connect_object (priv->filters_manager, "filters-disabled",
+                           G_CALLBACK (webkit_user_content_manager_remove_all_filters),
+                           priv->user_content,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-ready",
+                           G_CALLBACK (webkit_user_content_manager_add_filter),
+                           priv->user_content,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->web_context, "download-started",
                            G_CALLBACK (download_started_cb), shell, 0);

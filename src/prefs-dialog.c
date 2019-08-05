@@ -30,6 +30,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
+#include "ephy-filters-manager.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-gui.h"
 #include "ephy-langs.h"
@@ -43,7 +44,6 @@
 #include "ephy-sync-service.h"
 #include "ephy-sync-utils.h"
 #include "ephy-time-helpers.h"
-#include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
@@ -119,8 +119,6 @@ struct _PrefsDialog {
   GtkWidget *no_third_party;
   GtkWidget *never;
   GtkWidget *remember_passwords_switch;
-  GtkWidget *do_not_track_row;
-  GtkWidget *do_not_track_switch;
   GtkWidget *clear_personal_data_button;
 
   /* language */
@@ -1003,8 +1001,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
 
   /* language */
@@ -1672,24 +1668,6 @@ prefs_dialog_response_cb (GtkWidget   *widget,
 }
 
 static void
-do_not_track_switch_activated_cb (GtkWidget   *sw,
-                                  PrefsDialog *dialog)
-{
-  char **filters;
-  char **new_filters;
-
-  filters = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
-  if (gtk_switch_get_active (GTK_SWITCH (sw)))
-    new_filters = ephy_strv_append ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
-  else
-    new_filters = ephy_strv_remove ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
-  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)new_filters);
-
-  g_strfreev (filters);
-  g_strfreev (new_filters);
-}
-
-static void
 clear_personal_data_button_clicked_cb (GtkWidget   *button,
                                        PrefsDialog *dialog)
 {
@@ -2003,22 +1981,7 @@ setup_general_page (PrefsDialog *dialog)
                    dialog->adblock_allow_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   dialog->do_not_track_row,
-                   "sensitive",
-                   G_SETTINGS_BIND_DEFAULT);
 
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_DO_NOT_TRACK,
-                   dialog->do_not_track_switch,
-                   "active",
-                   /* Teensy hack: don't override the previous binding. */
-                   G_SETTINGS_BIND_NO_SENSITIVITY);
-  g_signal_connect (dialog->do_not_track_switch,
-                    "notify::active",
-                    G_CALLBACK (do_not_track_switch_activated_cb),
-                    dialog);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
                    dialog->enable_smooth_scrolling_switch,
@@ -2410,8 +2373,6 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->browsing_box,
-                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->do_not_track_row,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
