@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-07-26 00:48+0000\n"
-"PO-Revision-Date: 2019-07-26 17:53+0700\n"
+"POT-Creation-Date: 2019-08-05 23:59+0000\n"
+"PO-Revision-Date: 2019-08-06 17:38+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -55,8 +55,8 @@ msgstr "Situs web GNOME ditampilkan dalam GNOME Web"
 msgid "The GNOME Project"
 msgstr "Projek GNOME"
 
-#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:188
-#: embed/ephy-about-handler.c:222 src/ephy-main.c:102 src/ephy-main.c:255
+#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
 #: src/ephy-main.c:407 src/window-commands.c:616
 msgid "Web"
 msgstr "Web"
@@ -174,10 +174,12 @@ msgid "List of adblock filters"
 msgstr "Daftar penyaring pemblokir iklan"
 
 #: data/org.gnome.epiphany.gschema.xml:61
-msgid "List of URLs with filter rules to be used by the adblock."
+msgid ""
+"List of URLs with content filtering rules in JSON format to be used by the "
+"ad blocker."
 msgstr ""
-"Daftar URL dengan aturan penyaring yang akan digunakan oleh pemblokir iklan "
-"tersebut."
+"Daftar URL dengan aturan penyaringan konten dalam format JSON untuk "
+"digunakan oleh pemblokir iklan."
 
 #: data/org.gnome.epiphany.gschema.xml:65
 msgid "Whether to ask for setting browser as default"
@@ -356,7 +358,7 @@ msgstr ""
 "WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:150
-#: src/resources/gtk/prefs-dialog.ui:767
+#: src/resources/gtk/prefs-dialog.ui:752
 msgid "Languages"
 msgstr "Bahasa"
 
@@ -447,15 +449,8 @@ msgid "Do Not Track"
 msgstr "Jangan Lacak"
 
 #: data/org.gnome.epiphany.gschema.xml:195
-msgid ""
-"Enables tracking query parameter removal. Note that when changing this "
-"setting from the preferences dialog, the adblock-filters setting will "
-"additionally be updated to add/remove EasyPrivacy filters."
-msgstr ""
-"Aktifkan penghapusan pelacakan parameter kueri. Perhatikan bahwa ketika "
-"mengubah pengaturan ini dari dialog preferensi, pengaturan penyaring-"
-"pemblokir iklan tambahan akan diperbarui untuk menambah/menghapus penyaring "
-"EasyPrivacy."
+msgid "Enables tracking query parameter removal."
+msgstr "Aktifkan penghapusan parameter kueri pelacakan."
 
 #: data/org.gnome.epiphany.gschema.xml:199
 msgid "Enable adblock"
@@ -917,47 +912,47 @@ msgstr ""
 "global peramban digunakan, sementara \"membiarkan\" dan \"menolak\" "
 "memberitahukan otomatis untuk membuat keputusan atas permintaan tersebut."
 
-#: embed/ephy-about-handler.c:115 embed/ephy-about-handler.c:117
+#: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
 msgstr "Penggunaan memori"
 
-#: embed/ephy-about-handler.c:165
+#: embed/ephy-about-handler.c:168
 #, c-format
 msgid "Version %s"
 msgstr "Versi %s"
 
-#: embed/ephy-about-handler.c:185
+#: embed/ephy-about-handler.c:189
 msgid "About Web"
 msgstr "Tentang Web"
 
-#: embed/ephy-about-handler.c:190 src/window-commands.c:618
+#: embed/ephy-about-handler.c:194 src/window-commands.c:618
 msgid "Epiphany Technology Preview"
 msgstr "Pratinjau Teknologi Epiphany"
 
-#: embed/ephy-about-handler.c:193
+#: embed/ephy-about-handler.c:197
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Tampilan web yang sederhana, bersih, dan indah"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:254 embed/ephy-about-handler.c:255
-#: embed/ephy-about-handler.c:283 embed/ephy-about-handler.c:298
+#: embed/ephy-about-handler.c:258 embed/ephy-about-handler.c:259
+#: embed/ephy-about-handler.c:287 embed/ephy-about-handler.c:302
 msgid "Applications"
 msgstr "Aplikasi"
 
-#: embed/ephy-about-handler.c:256
+#: embed/ephy-about-handler.c:260
 msgid "List of installed web applications"
 msgstr "Daftar aplikasi web yang terpasang"
 
-#: embed/ephy-about-handler.c:269
+#: embed/ephy-about-handler.c:273
 msgid "Delete"
 msgstr "Hapus"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:271
+#: embed/ephy-about-handler.c:275
 msgid "Installed on:"
 msgstr "Dipasang pada:"
 
-#: embed/ephy-about-handler.c:298
+#: embed/ephy-about-handler.c:302
 msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
@@ -966,26 +961,26 @@ msgstr ""
 "Situs sebagai Aplikasi Web...</b> dalam menu halaman."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:387
+#: embed/ephy-about-handler.c:391
 msgid "Welcome to Web"
 msgstr "Selamat datang ke Web"
 
-#: embed/ephy-about-handler.c:387
+#: embed/ephy-about-handler.c:391
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Mulailah meramban dan situs-situs yang paling sering Anda kunjungi akan "
 "muncul di sini."
 
-#: embed/ephy-about-handler.c:415
-#: embed/web-process-extension/resources/js/overview.js:115
+#: embed/ephy-about-handler.c:422
+#: embed/web-process-extension/resources/js/overview.js:116
 msgid "Remove from overview"
 msgstr "Hapus dari ringkasan"
 
-#: embed/ephy-about-handler.c:486 embed/ephy-about-handler.c:487
+#: embed/ephy-about-handler.c:494 embed/ephy-about-handler.c:495
 msgid "Private Browsing"
 msgstr "Meramban Pribadi"
 
-#: embed/ephy-about-handler.c:488
+#: embed/ephy-about-handler.c:496
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -996,14 +991,14 @@ msgstr ""
 "disimpan akan dibersihkan ketika Anda menutup jendela. Berkas yang diunduh "
 "akan dipertahankan."
 
-#: embed/ephy-about-handler.c:492
+#: embed/ephy-about-handler.c:500
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Mode menyamar hanya menyembunyikan aktivitas Anda dari orang yang memakai "
 "komputer ini."
 
-#: embed/ephy-about-handler.c:494
+#: embed/ephy-about-handler.c:502
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1030,7 +1025,7 @@ msgid "Download requested"
 msgstr "Unduhan yang diminta"
 
 #: embed/ephy-download.c:823 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1125
+#: src/resources/gtk/prefs-dialog.ui:1110
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
 #: src/window-commands.c:477 src/window-commands.c:1429
@@ -1427,15 +1422,15 @@ msgstr "Teks tak ditemukan"
 msgid "Search wrapped back to the top"
 msgstr "Pencarian kembali ke puncak"
 
-#: embed/ephy-find-toolbar.c:396
+#: embed/ephy-find-toolbar.c:400
 msgid "Type to search…"
 msgstr "Ketik untuk mencari…"
 
-#: embed/ephy-find-toolbar.c:402
+#: embed/ephy-find-toolbar.c:406
 msgid "Find previous occurrence of the search string"
 msgstr "Cari kata yang dikehendaki ke arah belakang"
 
-#: embed/ephy-find-toolbar.c:410
+#: embed/ephy-find-toolbar.c:414
 msgid "Find next occurrence of the search string"
 msgstr "Cari lagi kata yang dikehendaki"
 
@@ -1457,7 +1452,7 @@ msgid "_Never Save"
 msgstr "_Tidak Pernah Simpan"
 
 #: embed/ephy-web-view.c:609 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1116 src/window-commands.c:476
+#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:476
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -1822,11 +1817,6 @@ msgstr "Informasi teknis"
 #: embed/ephy-web-view.c:3629
 msgid "_OK"
 msgstr "_OK"
-
-#: embed/web-process-extension/ephy-web-process-extension.c:210
-#, c-format
-msgid "Epiphany adblocker refused to load %s"
-msgstr "Pemblokir iklan Epiphany menolak memuat %s"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -2194,15 +2184,15 @@ msgstr "_Batal"
 msgid "_Redo"
 msgstr "Jadi _Lagi"
 
-#: lib/widgets/ephy-location-entry.c:854
+#: lib/widgets/ephy-location-entry.c:888
 msgid "Show website security status and permissions"
 msgstr "Tampilkan status dan izin keamanan situs web"
 
-#: lib/widgets/ephy-location-entry.c:894
+#: lib/widgets/ephy-location-entry.c:928
 msgid "Bookmark this page"
 msgstr "Penanda taut halaman kini"
 
-#: lib/widgets/ephy-location-entry.c:906
+#: lib/widgets/ephy-location-entry.c:940
 msgid "Toggle reader mode"
 msgstr "Jungkitkan mode pembaca"
 
@@ -2423,7 +2413,7 @@ msgid "Web options"
 msgstr "Opsi web"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:565
+#: src/ephy-notebook.c:570
 msgid "View open tabs"
 msgstr "Lihat tab yang terbuka"
 
@@ -2607,34 +2597,34 @@ msgstr "Kode Sumber _Halaman"
 msgid "Search the Web for “%s”"
 msgstr "Cari %s di Web"
 
-#: src/ephy-window.c:2864
+#: src/ephy-window.c:2869
 msgid "Download operation"
 msgstr "Operasi unduhan"
 
-#: src/ephy-window.c:2866
+#: src/ephy-window.c:2871
 msgid "Show details"
 msgstr "Tampilkan detail"
 
-#: src/ephy-window.c:2868
+#: src/ephy-window.c:2873
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operasi pengunduhan aktif"
 msgstr[1] "%d operasi pengunduhan aktif"
 
-#: src/ephy-window.c:3508
+#: src/ephy-window.c:3513
 msgid "Set Web as your default browser?"
 msgstr "Atur Web sebagai peramban bawaan Anda?"
 
-#: src/ephy-window.c:3510
+#: src/ephy-window.c:3515
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Tetapkan Pratinjau Teknologi Epiphany sebagai peramban bawaan Anda?"
 
-#: src/ephy-window.c:3522
+#: src/ephy-window.c:3527
 msgid "_Yes"
 msgstr "_Ya"
 
-#: src/ephy-window.c:3523
+#: src/ephy-window.c:3528
 msgid "_No"
 msgstr "_Tidak"
 
@@ -2653,72 +2643,72 @@ msgstr "Simpan Media Sebagai"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:239
+#: src/prefs-dialog.c:237
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Terakhir diselaraskan: %s"
 
-#: src/prefs-dialog.c:527
+#: src/prefs-dialog.c:525
 msgid "Something went wrong, please try again later."
 msgstr "Ada yang tidak beres, harap coba lagi nanti."
 
-#: src/prefs-dialog.c:820
+#: src/prefs-dialog.c:818
 msgid "Web Application Icon"
 msgstr "Ikon Aplikasi Web"
 
-#: src/prefs-dialog.c:825
+#: src/prefs-dialog.c:823
 msgid "Supported Image Files"
 msgstr "Berkas Gambar Yang Didukung"
 
-#: src/prefs-dialog.c:1273
+#: src/prefs-dialog.c:1269
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Bahasa sistem (%s)"
 msgstr[1] "Bahasa sistem (%s)"
 
-#: src/prefs-dialog.c:1562 src/resources/gtk/prefs-dialog.ui:760
-#: src/resources/gtk/prefs-dialog.ui:947
+#: src/prefs-dialog.c:1558 src/resources/gtk/prefs-dialog.ui:745
+#: src/resources/gtk/prefs-dialog.ui:932
 msgid "Language"
 msgstr "Bahasa"
 
-#: src/prefs-dialog.c:1643
+#: src/prefs-dialog.c:1639
 msgid "Select a directory"
 msgstr "Pilih direktori"
 
-#: src/prefs-dialog.c:2064
+#: src/prefs-dialog.c:2027
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2066
+#: src/prefs-dialog.c:2029
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2110
+#: src/prefs-dialog.c:2073
 msgid "Light"
 msgstr "Terang"
 
-#: src/prefs-dialog.c:2112
+#: src/prefs-dialog.c:2075
 msgid "Dark"
 msgstr "Gelap"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1468
+#: src/profile-migrator/ephy-profile-migrator.c:1384
 msgid "Executes only the n-th migration step"
 msgstr "Laksanakan hanya langkah migrasi ke-n"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1470
+#: src/profile-migrator/ephy-profile-migrator.c:1386
 msgid "Specifies the required version for the migrator"
 msgstr "Menentukan versi migrator yang diperlukan"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1472
+#: src/profile-migrator/ephy-profile-migrator.c:1388
 msgid "Specifies the profile where the migrator should run"
 msgstr "Menentukan profil yang seharusnya dijalankan oleh migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1493
+#: src/profile-migrator/ephy-profile-migrator.c:1409
 msgid "Web profile migrator"
 msgstr "Pemigrasi profil Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1494
+#: src/profile-migrator/ephy-profile-migrator.c:1410
 msgid "Web profile migrator options"
 msgstr "Opsi pemigrasi profil Web"
 
@@ -2870,7 +2860,7 @@ msgstr ""
 "Anda tak bisa membalikkan aksi ini. Data yang Anda pilih untuk dibersihkan "
 "akan dihapus selamanya."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:595
+#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
 msgid "Cookies"
 msgstr "Cookie"
 
@@ -3061,7 +3051,7 @@ msgid "Close page"
 msgstr "Tutup halaman"
 
 #: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:670
+#: src/resources/gtk/prefs-dialog.ui:655
 msgid "Passwords"
 msgstr "Sandi"
 
@@ -3110,7 +3100,7 @@ msgstr "S_alin Nama Pengguna"
 msgid "Preferences"
 msgstr "Preferensi"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:401
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
 msgid "General"
 msgstr "Umum"
 
@@ -3198,140 +3188,136 @@ msgstr "Isi Web"
 msgid "Try to block _advertisements"
 msgstr "Coba untuk memblokir ikl_an"
 
-#: src/resources/gtk/prefs-dialog.ui:355
-msgid "Try to block web _trackers"
-msgstr "Coba untuk memblokir _pelacak web"
-
-#: src/resources/gtk/prefs-dialog.ui:369
+#: src/resources/gtk/prefs-dialog.ui:354
 msgid "Block popup _windows"
 msgstr "Blokir _jendela popup"
 
-#: src/resources/gtk/prefs-dialog.ui:383
+#: src/resources/gtk/prefs-dialog.ui:368
 msgid "Try to block dangerous web_sites"
 msgstr "Coba untuk memblokir _situs web berbahaya"
 
-#: src/resources/gtk/prefs-dialog.ui:410 src/resources/gtk/prefs-dialog.ui:578
+#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
 msgid "Fonts & Style"
 msgstr "Fonta & Gaya"
 
-#: src/resources/gtk/prefs-dialog.ui:417
+#: src/resources/gtk/prefs-dialog.ui:402
 msgid "Fonts"
 msgstr "Fonta"
 
-#: src/resources/gtk/prefs-dialog.ui:422
+#: src/resources/gtk/prefs-dialog.ui:407
 msgid "Use custom fonts"
 msgstr "Gunakan fonta sistem"
 
-#: src/resources/gtk/prefs-dialog.ui:438
+#: src/resources/gtk/prefs-dialog.ui:423
 msgid "Sans serif font"
 msgstr "Fonta sans serif"
 
-#: src/resources/gtk/prefs-dialog.ui:453
+#: src/resources/gtk/prefs-dialog.ui:438
 msgid "Serif font"
 msgstr "Fonta serif"
 
-#: src/resources/gtk/prefs-dialog.ui:468
+#: src/resources/gtk/prefs-dialog.ui:453
 msgid "Monospace font"
 msgstr "Fonta lebar seragam (monospace)"
 
-#: src/resources/gtk/prefs-dialog.ui:488
+#: src/resources/gtk/prefs-dialog.ui:473
 msgid "Reader Mode"
 msgstr "Mode Pembaca"
 
-#: src/resources/gtk/prefs-dialog.ui:492
+#: src/resources/gtk/prefs-dialog.ui:477
 msgid "Font style"
 msgstr "Gaya fonta"
 
-#: src/resources/gtk/prefs-dialog.ui:498
+#: src/resources/gtk/prefs-dialog.ui:483
 msgid "Color scheme"
 msgstr "Skema warna"
 
-#: src/resources/gtk/prefs-dialog.ui:511
+#: src/resources/gtk/prefs-dialog.ui:496
 msgid "Style"
 msgstr "Gaya"
 
-#: src/resources/gtk/prefs-dialog.ui:516
+#: src/resources/gtk/prefs-dialog.ui:501
 msgid "Use custom stylesheet"
 msgstr "Gunakan stylesheet gubahan"
 
-#: src/resources/gtk/prefs-dialog.ui:551
+#: src/resources/gtk/prefs-dialog.ui:536
 msgid "Default zoom level"
 msgstr "Tingkat perbesaran bawaan"
 
-#: src/resources/gtk/prefs-dialog.ui:588 src/resources/gtk/prefs-dialog.ui:750
+#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
 msgid "Stored Data"
 msgstr "Data Tersimpan"
 
-#: src/resources/gtk/prefs-dialog.ui:600
+#: src/resources/gtk/prefs-dialog.ui:585
 msgid "Manage _Cookies"
 msgstr "Kelola _Cookie"
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:609
 msgid "_Always accept"
 msgstr "Terim_a selalu"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:638
+#: src/resources/gtk/prefs-dialog.ui:623
 msgid "For example, not from advertisers on these sites"
 msgstr "Sebagai contoh, bukan dari pemasang iklan pada situs-situs ini"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:624
 msgid "Only _from sites you visit"
 msgstr "Hanya _dari situs yang Anda kunjungi"
 
-#: src/resources/gtk/prefs-dialog.ui:654
+#: src/resources/gtk/prefs-dialog.ui:639
 msgid "_Never accept"
 msgstr "_Tolak selalu"
 
-#: src/resources/gtk/prefs-dialog.ui:675
+#: src/resources/gtk/prefs-dialog.ui:660
 msgid "Manage _Passwords"
 msgstr "Kelola _Sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:699
+#: src/resources/gtk/prefs-dialog.ui:684
 msgid "_Remember passwords"
 msgstr "_Ingat sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:714
+#: src/resources/gtk/prefs-dialog.ui:699
 msgid "Personal Data"
 msgstr "Data Pribadi"
 
-#: src/resources/gtk/prefs-dialog.ui:719
+#: src/resources/gtk/prefs-dialog.ui:704
 msgid "You can clear stored personal data."
 msgstr "Anda dapat membersihkan data pribadi yang tersimpan."
 
-#: src/resources/gtk/prefs-dialog.ui:720
+#: src/resources/gtk/prefs-dialog.ui:705
 msgid "Manage Personal _Data"
 msgstr "Kelola _Data Pribadi"
 
-#: src/resources/gtk/prefs-dialog.ui:814
+#: src/resources/gtk/prefs-dialog.ui:799
 msgid "Add language"
 msgstr "Tambah bahasa"
 
-#: src/resources/gtk/prefs-dialog.ui:834
+#: src/resources/gtk/prefs-dialog.ui:819
 msgid "Remove language"
 msgstr "Hapus bahasa"
 
-#: src/resources/gtk/prefs-dialog.ui:876
+#: src/resources/gtk/prefs-dialog.ui:861
 msgid "Move language up"
 msgstr "Pindahkan bahasa ke atas"
 
-#: src/resources/gtk/prefs-dialog.ui:896
+#: src/resources/gtk/prefs-dialog.ui:881
 msgid "Move language down"
 msgstr "Pindahkan bahasa ke bawah"
 
-#: src/resources/gtk/prefs-dialog.ui:921
+#: src/resources/gtk/prefs-dialog.ui:906
 msgid "Spell Checking"
 msgstr "Pemeriksaan ejaan"
 
-#: src/resources/gtk/prefs-dialog.ui:926
+#: src/resources/gtk/prefs-dialog.ui:911
 msgid "_Enable spell checking"
 msgstr "Bolehkan pemeriksaan _ejaan"
 
-#: src/resources/gtk/prefs-dialog.ui:957 src/resources/gtk/prefs-dialog.ui:1151
+#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
 msgid "Sync"
 msgstr "Sinkronisasi"
 
-#: src/resources/gtk/prefs-dialog.ui:964
+#: src/resources/gtk/prefs-dialog.ui:949
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3341,59 +3327,59 @@ msgstr ""
 "Firefox pada komputer lain. Web bukan Firefox dan tidak diproduksi atau "
 "didukung oleh Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:965
+#: src/resources/gtk/prefs-dialog.ui:950
 msgid "Firefox Sync"
 msgstr "Sync Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:984
+#: src/resources/gtk/prefs-dialog.ui:969
 msgid "Firefox Account"
 msgstr "Akun Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:988
+#: src/resources/gtk/prefs-dialog.ui:973
 msgid "Logged in"
 msgstr "Sudah masuk"
 
-#: src/resources/gtk/prefs-dialog.ui:993
+#: src/resources/gtk/prefs-dialog.ui:978
 msgid "Sign _out"
 msgstr "Kel_uar"
 
-#: src/resources/gtk/prefs-dialog.ui:1006
+#: src/resources/gtk/prefs-dialog.ui:991
 msgid "Sync Options"
 msgstr "Opsi Sinkronisasi"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:996
 msgid "Sync _Bookmarks"
 msgstr "Sinkronkan _Penanda Taut"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:1011
 msgid "Sync _Passwords"
 msgstr "Sinkronkan _Kata Sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:1026
 msgid "Sync _History"
 msgstr "Sinkronkan _Riwayat"
 
-#: src/resources/gtk/prefs-dialog.ui:1056
+#: src/resources/gtk/prefs-dialog.ui:1041
 msgid "Sync Open _Tabs"
 msgstr "Sinkronkan Buka _Tab"
 
-#: src/resources/gtk/prefs-dialog.ui:1068
+#: src/resources/gtk/prefs-dialog.ui:1053
 msgid "S_ynced tabs"
 msgstr "Tab s_elaras"
 
-#: src/resources/gtk/prefs-dialog.ui:1079
+#: src/resources/gtk/prefs-dialog.ui:1064
 msgid "Frequency"
 msgstr "Frekuensi"
 
-#: src/resources/gtk/prefs-dialog.ui:1090
+#: src/resources/gtk/prefs-dialog.ui:1075
 msgid "Sync _now"
 msgstr "Sy_nc sekarang"
 
-#: src/resources/gtk/prefs-dialog.ui:1102
+#: src/resources/gtk/prefs-dialog.ui:1087
 msgid "Device name"
 msgstr "Nama peranti"
 
-#: src/resources/gtk/prefs-dialog.ui:1107
+#: src/resources/gtk/prefs-dialog.ui:1092
 msgid "_Change"
 msgstr "_Ubah"
 
@@ -3873,6 +3859,22 @@ msgstr ""
 #: src/window-commands.c:2403
 msgid "_Enable"
 msgstr "_Aktifkan"
+
+#~ msgid ""
+#~ "Enables tracking query parameter removal. Note that when changing this "
+#~ "setting from the preferences dialog, the adblock-filters setting will "
+#~ "additionally be updated to add/remove EasyPrivacy filters."
+#~ msgstr ""
+#~ "Aktifkan penghapusan pelacakan parameter kueri. Perhatikan bahwa ketika "
+#~ "mengubah pengaturan ini dari dialog preferensi, pengaturan penyaring-"
+#~ "pemblokir iklan tambahan akan diperbarui untuk menambah/menghapus "
+#~ "penyaring EasyPrivacy."
+
+#~ msgid "Epiphany adblocker refused to load %s"
+#~ msgstr "Pemblokir iklan Epiphany menolak memuat %s"
+
+#~ msgid "Try to block web _trackers"
+#~ msgstr "Coba untuk memblokir _pelacak web"
 
 #~ msgid "Spell checking language"
 #~ msgstr "Bahasa pemeriksaan ejaan"
