@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ephy-snapshot-service.h"
 
-#include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -213,8 +212,7 @@ out:
 }
 
 static GdkPixbuf *
-ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
-                                        cairo_surface_t *favicon)
+ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
 {
   GdkPixbuf *snapshot, *scaled;
   int orig_width, orig_height;
@@ -257,20 +255,6 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
   }
 
   g_object_unref (snapshot);
-
-  x_offset = 6;
-  if (favicon) {
-    GdkPixbuf *fav_pixbuf;
-    int favicon_size = 16;
-    int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
-
-    fav_pixbuf = ephy_pixbuf_get_from_surface_scaled (favicon, favicon_size, favicon_size);
-    gdk_pixbuf_composite (fav_pixbuf, scaled,
-                          x_offset, y_offset, favicon_size, favicon_size,
-                          x_offset, y_offset, 1, 1,
-                          GDK_INTERP_NEAREST, 255);
-    g_object_unref (fav_pixbuf);
-  }
 
   return scaled;
 }
@@ -425,8 +409,7 @@ save_snapshot (cairo_surface_t *surface,
 {
   SnapshotAsyncData *data = g_task_get_task_data (task);
 
-  data->snapshot = ephy_snapshot_service_prepare_snapshot (surface,
-                                                           webkit_web_view_get_favicon (data->web_view));
+  data->snapshot = ephy_snapshot_service_prepare_snapshot (surface);
 
   ephy_snapshot_service_save_snapshot_async (g_task_get_source_object (task),
                                              data->snapshot,
