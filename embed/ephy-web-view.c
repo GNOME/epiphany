@@ -704,12 +704,14 @@ update_navigation_flags (WebKitWebView *view)
 static void
 ephy_web_view_freeze_history (EphyWebView *view)
 {
+g_warning("%s", __FUNCTION__);
   view->history_frozen = TRUE;
 }
 
 static void
 ephy_web_view_thaw_history (EphyWebView *view)
 {
+g_warning("%s", __FUNCTION__);
   view->history_frozen = FALSE;
 }
 
@@ -758,15 +760,21 @@ history_service_query_urls_cb (EphyHistoryService *service,
   const char *url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
 
   if (!success)
+{
+g_warning ("Oh no, history service query failed");
     goto out;
+}
 
   /* Have we already started a new load? */
   if (g_strcmp0 (url, view->pending_snapshot_uri) != 0)
+{
+g_warning ("Oh no, url=%s doesn't match pending snapshot URL %s, we must have started a new load?", url, view->pending_snapshot_uri);
     goto out;
+}
 
   for (GList *l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *history_url = l->data;
-
+g_warning("Top search result: %s", history_url->url);
     /* Take snapshot if this URL is one of the top history results. */
     if (strcmp (history_url->url, view->pending_snapshot_uri) == 0) {
       take_snapshot (view);
@@ -785,6 +793,8 @@ maybe_take_snapshot (EphyWebView *view)
   EphyEmbedShell *shell;
   EphyHistoryService *service;
   EphyHistoryQuery *query;
+
+g_warning ("%s", __FUNCTION__);
 
   view->snapshot_timeout_id = 0;
 
@@ -1985,6 +1995,7 @@ load_changed_cb (WebKitWebView   *web_view,
       break;
     }
     case WEBKIT_LOAD_FINISHED:
+g_warning ("LOAD_FINISHED!");
       ephy_web_view_set_loading_message (view, NULL);
 
       /* Ensure we load the icon for this web view, if available. */
