@@ -686,11 +686,6 @@ load_delayed_request_if_mapped (gpointer user_data)
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
-  /* This is to allow UI elements watching load status to show that the page is
-   * loading as soon as possible.
-   */
-  g_signal_emit_by_name (web_view, "load-changed", WEBKIT_LOAD_STARTED);
-
   return G_SOURCE_REMOVE;
 }
 
