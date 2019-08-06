@@ -1281,6 +1281,10 @@ ephy_embed_shell_startup (GApplication *application)
                            G_CALLBACK (webkit_user_content_manager_add_filter),
                            priv->user_content,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-removed",
+                           G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
+                           priv->user_content,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->web_context, "download-started",
                            G_CALLBACK (download_started_cb), shell, 0);
