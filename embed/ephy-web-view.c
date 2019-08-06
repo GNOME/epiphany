@@ -1776,13 +1776,6 @@ restore_zoom_level (EphyWebView *view,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
-/**
- * ephy_web_view_set_loading_message:
- * @view: an #EphyWebView
- * @address: the loading address
- *
- * Update @view's loading message
- **/
 static void
 ephy_web_view_set_loading_message (EphyWebView *view,
                                    const char  *address)
@@ -1804,8 +1797,17 @@ ephy_web_view_set_loading_message (EphyWebView *view,
 
     g_free (decoded_address);
     g_free (title);
+  } else {
+    view->loading_message = g_strdup (_("Loading…"));
   }
 
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_STATUS_MESSAGE]);
+}
+
+static void
+ephy_web_view_unset_loading_message (EphyWebView *view)
+{
+  g_clear_pointer (&view->loading_message, g_free);
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_STATUS_MESSAGE]);
 }
 
@@ -1907,10 +1909,12 @@ load_changed_cb (WebKitWebView   *web_view,
 
   view->in_auth_dialog = 0;
 
+  /* Warning: the URI property may remain set to the URI of the
+   * previously-loaded page until WEBKIT_LOAD_COMMITTED! During
+   * WEBKIT_LOAD_STARTED, it may or may not match the URI being loaded.
+   */
   switch (load_event) {
     case WEBKIT_LOAD_STARTED: {
-      const char *loading_uri = NULL;
-
       view->load_failed = FALSE;
 
       if (view->snapshot_timeout_id) {
@@ -1918,16 +1922,11 @@ load_changed_cb (WebKitWebView   *web_view,
         view->snapshot_timeout_id = 0;
       }
 
-      loading_uri = webkit_web_view_get_uri (web_view);
-
-      if (ephy_embed_utils_is_no_show_address (loading_uri))
-        ephy_web_view_freeze_history (view);
-
+      /* XXX: what is this for? */
       if (view->address == NULL || view->address[0] == '\0')
-        ephy_web_view_set_address (view, loading_uri);
+        ephy_web_view_set_address (view, webkit_web_view_get_uri (web_view));
 
-      ephy_web_view_set_loading_message (view, loading_uri);
-
+      ephy_web_view_set_loading_message (view, NULL);
 
       if (!view->reader_loading) {
         g_clear_pointer (&view->reader_byline, g_free);
@@ -1951,6 +1950,9 @@ load_changed_cb (WebKitWebView   *web_view,
       update_security_status_for_committed_load (view, uri);
 
       /* History. */
+      if (ephy_embed_utils_is_no_show_address (uri))
+        ephy_web_view_freeze_history (view);
+
       if (!ephy_web_view_is_history_frozen (view)) {
         char *history_uri = NULL;
 
@@ -1985,7 +1987,7 @@ load_changed_cb (WebKitWebView   *web_view,
       break;
     }
     case WEBKIT_LOAD_FINISHED:
-      ephy_web_view_set_loading_message (view, NULL);
+      ephy_web_view_unset_loading_message (view);
 
       /* Ensure we load the icon for this web view, if available. */
       _ephy_web_view_update_icon (view);
