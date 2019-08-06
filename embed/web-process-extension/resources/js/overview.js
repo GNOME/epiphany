@@ -240,8 +240,10 @@ Ephy.Overview.Item = class OverviewItem
         if (path) {
             this._thumbnail.style.backgroundImage = 'url(file://' + path + ')';
             this._thumbnail.style.backgroundSize = '100%';
+            this._thumbnail.style.backgroundPosition = 'top';
         } else {
             this._thumbnail.style.backgroundImage = '';
+            this._thumbnail.style.backgroundPosition = 'center';
         }
     }
 
