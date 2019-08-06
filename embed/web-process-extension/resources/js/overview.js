@@ -221,18 +221,11 @@ Ephy.Overview.Item = class OverviewItem
 
     thumbnailPath()
     {
-        let style = this._thumbnail.style;
-        if (style.isPropertyImplicit('background'))
+        let backgroundImage = this._thumbnail.style.backgroundImage;
+        if (!backgroundImage || !background.startsWith('url("file://'))
             return null;
 
-        let background = style.getPropertyValue('background');
-        if (!background)
-            return null;
-
-        if (background.startsWith('url("file://'))
-            return background.replace('url("file://', '').replace('"); background-size: 100%', '');
-
-        return null;
+        return background.replace('url("file://', '');
     }
 
     setThumbnailPath(path)
