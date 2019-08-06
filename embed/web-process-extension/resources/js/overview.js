@@ -243,6 +243,7 @@ Ephy.Overview.Item = class OverviewItem
             this._thumbnail.style.backgroundPosition = 'top';
         } else {
             this._thumbnail.style.backgroundImage = '';
+            this._thumbnail.style.backgroundSize = 'auto';
             this._thumbnail.style.backgroundPosition = 'center';
         }
     }
