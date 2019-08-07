@@ -41,7 +41,7 @@ Ephy.getWebAppIcon = function(baseURL)
                 break;
             }
 
-            let sizesList = size.split(' ');
+            let sizesList = sizes.split(' ');
             for (let j = 0; j < sizesList.length; j++) {
                 let size = sizesList[j].toLowerCase().split('x');
 
