@@ -687,6 +687,7 @@ title_changed_cb (EphyEmbed    *embed,
     return;
 
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
+  g_assert (tab_label);
 
   ephy_notebook_rebuild_tab_menu (notebook);
 
@@ -867,6 +868,8 @@ ephy_notebook_remove (GtkContainer *container,
   if (position == curr) {
     smart_tab_switching_on_closure (notebook, tab_widget);
   }
+
+  g_signal_handlers_disconnect_by_data (tab_widget, notebook);
 
   GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
