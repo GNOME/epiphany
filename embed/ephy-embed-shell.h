@@ -34,6 +34,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _EphyFiltersManager EphyFiltersManager;
+
 #define EPHY_TYPE_EMBED_SHELL (ephy_embed_shell_get_type ())
 
 G_DECLARE_DERIVABLE_TYPE (EphyEmbedShell, ephy_embed_shell, EPHY, EMBED_SHELL, DzlApplication)
@@ -78,6 +80,7 @@ void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell  
                                                                 const char       *path);
 void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell   *shell,
                                                                 EphyHistoryURL   *url);
+EphyFiltersManager       *ephy_embed_shell_get_filters_manager      (EphyEmbedShell *shell);
 WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
