@@ -1670,6 +1670,14 @@ ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
   webkit_web_context_clear_cache (priv->web_context);
 }
 
+EphyFiltersManager *
+ephy_embed_shell_get_filters_manager (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->filters_manager;
+}
+
 WebKitUserContentManager *
 ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
 {

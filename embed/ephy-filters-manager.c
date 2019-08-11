@@ -35,6 +35,7 @@
 
 struct _EphyFiltersManager {
   GObject parent_instance;
+  gboolean is_initialized;
 
   char *filters_dir;
   GHashTable *filters;  /* (identifier, FilterInfo) */
@@ -57,6 +58,7 @@ static guint s_signals[LAST_SIGNAL];
 enum {
   PROP_0,
   PROP_FILTERS_DIR,
+  PROP_IS_INITIALIZED,
   N_PROPERTIES
 };
 
@@ -69,9 +71,9 @@ typedef struct {
   char *checksum;        /* Saved. */
   gint64 last_update;    /* Saved, seconds since the Epoch. */
 
-  gboolean found   : 1;  /* WebKitUserContentFilter found during lookup. */
-  gboolean enabled : 1;  /* The filter is already enabled. */
-  gboolean local   : 1;  /* The source_uri is a local file URI. */
+  gboolean found : 1;    /* WebKitUserContentFilter found during lookup. */
+  gboolean local : 1;    /* The source_uri is a local file URI. */
+  gboolean done  : 1;    /* Filter setup done (successfully or errored). */
 } FilterInfo;
 
 /* The "saved" fields from the struct above are stored as versioned sidecar
@@ -82,6 +84,8 @@ typedef struct {
  */
 #define FILTER_INFO_VARIANT_VERSION ((uint32_t)2)
 #define FILTER_INFO_VARIANT_FORMAT  "(usmsx)"
+
+static void filter_info_setup_done (FilterInfo *self);
 
 static void
 filter_info_free (FilterInfo *self)
@@ -364,7 +368,6 @@ filter_info_setup_enable_compiled_filter (FilterInfo              *self,
 
   LOG ("Emitting EphyFiltersManager::filter-ready for %s.", filter_info_get_identifier (self));
   g_signal_emit (self->manager, s_signals[FILTER_READY], 0, wk_filter);
-  self->enabled = TRUE;
 }
 
 static gboolean
@@ -465,6 +468,9 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                filter_info_get_identifier (self), self->source_uri,
                error->message);
   }
+
+  /* In either case, setting up this filter is done. */
+  filter_info_setup_done (self);
 }
 
 static void
@@ -505,6 +511,7 @@ filter_info_setup_load_file (FilterInfo *self,
     g_warning ("Cannot map filter %s source file %s: %s",
                filter_info_get_identifier (self),
                json_file_path, error->message);
+    filter_info_setup_done (self);
     return;
   }
 
@@ -522,6 +529,7 @@ filter_info_setup_load_file (FilterInfo *self,
                               self);
     LOG ("Filter %s not stale, source checksum unchanged (%s), recompilation skipped.",
          filter_info_get_identifier (self), self->checksum);
+    filter_info_setup_done (self);
   } else {
     webkit_user_content_filter_store_save (self->manager->store,
                                            filter_info_get_identifier (self),
@@ -550,6 +558,7 @@ download_completed_cb (EphyDownload *download,
     g_warning ("Filter source %s has invalid MIME type: %s",
                ephy_download_get_destination_uri (download),
                ephy_download_get_content_type (download));
+    filter_info_setup_done (self);
   }
 
   g_object_unref (download);
@@ -567,14 +576,15 @@ download_errored_cb (EphyDownload *download,
   g_signal_handlers_disconnect_by_data (download, self);
 
   if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    g_warning ("Cannot fetch source for filter %s from <%s>",
-               filter_info_get_identifier (self), self->source_uri);
+    g_warning ("Cannot fetch source for filter %s from <%s>: %s",
+               filter_info_get_identifier (self), self->source_uri,
+               error ? error->message : "Unknown error");
 
   /* There is not much else we can do if the download failed. Note that it
    * is still possible that if a precompiled version of the filter was found
    * that may get used instead.
    */
-  LOG ("Done fetching filter %s", filter_info_get_identifier (self));
+  filter_info_setup_done (self);
 
   g_object_unref (download);
 }
@@ -613,6 +623,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
          (self->manager->update_time - self->last_update),
          ADBLOCK_FILTER_UPDATE_FREQUENCY);
   } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    filter_info_setup_done (self);
     return;
   } else if (g_error_matches (error,
                               WEBKIT_USER_CONTENT_FILTER_ERROR,
@@ -625,8 +636,10 @@ filter_load_cb (WebKitUserContentFilterStore *store,
                error->message);
   }
 
-  if (!filter_info_needs_updating_from_source (self))
+  if (!filter_info_needs_updating_from_source (self)) {
+    filter_info_setup_done (self);
     return;
+  }
 
   /* Even if a compiled filter was found, we may need to compile an updated
    * version if the local file has changed, or the contents of remote URIs
@@ -667,11 +680,55 @@ filter_info_setup_start (FilterInfo *self)
 
   LOG ("Setup started for <%s> id=%s", self->source_uri, filter_info_get_identifier (self));
 
+  self->done = FALSE;
   webkit_user_content_filter_store_load (self->manager->store,
                                          filter_info_get_identifier (self),
                                          self->manager->cancellable,
                                          (GAsyncReadyCallback)filter_load_cb,
                                          self);
+}
+
+static void
+filters_manager_ensure_initialized (EphyFiltersManager *manager)
+{
+  g_assert (EPHY_IS_FILTERS_MANAGER (manager));
+  if (manager->is_initialized)
+    return;
+
+  LOG ("Setting EphyFiltersManager as initialized.");
+  manager->is_initialized = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (manager),
+                            object_properties[PROP_IS_INITIALIZED]);
+}
+
+static void
+accumulate_filter_done (const char *identifier,
+                        FilterInfo *filter,
+                        gboolean   *done)
+{
+  g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
+  g_assert (g_hash_table_contains (filter->manager->filters, identifier));
+
+  *done = *done && filter->done;
+}
+
+static void
+filter_info_setup_done (FilterInfo *self)
+{
+  gboolean done = self->done = TRUE;
+
+  g_hash_table_foreach (self->manager->filters,
+                        (GHFunc)accumulate_filter_done,
+                        &done);
+
+  LOG ("Setup for filter %s from <%s> completed.",
+       filter_info_get_identifier (self), self->source_uri);
+
+  if (done) {
+    LOG ("Setup completed for %u filters.",
+         g_hash_table_size (self->manager->filters));
+    filters_manager_ensure_initialized (self->manager);
+  }
 }
 
 static void
@@ -753,6 +810,8 @@ update_adblock_filter_files_cb (GSettings          *settings,
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
     LOG ("Filters are disabled, skipping update.");
     g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
+    /* If the ad blocker is disabled, initialization is done. */
+    filters_manager_ensure_initialized (manager);
     return;
   }
 
@@ -889,6 +948,9 @@ ephy_filters_manager_set_property (GObject      *object,
     case PROP_FILTERS_DIR:
       manager->filters_dir = g_value_dup_string (value);
       break;
+    case PROP_IS_INITIALIZED:
+      manager->is_initialized = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -905,6 +967,9 @@ ephy_filters_manager_get_property (GObject    *object,
   switch (prop_id) {
     case PROP_FILTERS_DIR:
       g_value_set_string (value, manager->filters_dir);
+      break;
+    case PROP_IS_INITIALIZED:
+      g_value_set_boolean (value, manager->is_initialized);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -944,6 +1009,13 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
                          "",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  object_properties[PROP_IS_INITIALIZED] =
+    g_param_spec_boolean ("is-initialized",
+                          "Filters manager is initialized",
+                          "Whether initialization was completed",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
                                      object_properties);
@@ -971,4 +1043,11 @@ const char *
 ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager)
 {
   return manager->filters_dir;
+}
+
+gboolean
+ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
+{
+  g_return_val_if_fail (EPHY_IS_FILTERS_MANAGER (manager), FALSE);
+  return manager->is_initialized;
 }
