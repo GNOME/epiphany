@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2008, 2009 Gustavo Noronha Silva
  *  Copyright © 2009, 2010, 2014 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -24,6 +25,7 @@
 
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
+#include "ephy-embed-autofill.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -136,6 +138,9 @@ struct _EphyWebView {
 
   /* Web Process Extension */
   EphyWebProcessExtensionProxy *web_process_extension;
+
+  /* Autofill */
+  bool autofill_popup_enabled;
 };
 
 typedef struct {
@@ -833,6 +838,38 @@ icon_changed_cb (EphyWebView *view,
   _ephy_web_view_update_icon (view);
 }
 
+void
+ephy_web_view_autofill (EphyWebView           *view,
+                        const char            *selector,
+                        EphyAutofillFillChoice fill_choice)
+{
+  guint64 page_id;
+  const char *world_name;
+  char *script;
+
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  if (view->web_process_extension == NULL) {
+    return;
+  }
+
+  page_id = webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view));
+  world_name = ephy_embed_shell_get_guid (ephy_embed_shell_get_default ());
+  script = g_strdup_printf ("EphyAutofill.in.fill(%lu, '%s', %i);",
+                            page_id,
+                            selector,
+                            fill_choice);
+
+  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
+                                           script,
+                                           world_name,
+                                           NULL,
+                                           NULL,
+                                           NULL);
+
+  g_free (script);
+}
+
 static void
 password_form_focused_cb (EphyEmbedShell *shell,
                           guint64         page_id,
@@ -1135,6 +1172,8 @@ uri_changed_cb (WebKitWebView *web_view,
 {
   ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
                              webkit_web_view_get_uri (web_view));
+
+  EPHY_WEB_VIEW (web_view)->autofill_popup_enabled = TRUE;
 }
 
 static void
@@ -2880,6 +2919,17 @@ reader_setting_changed_cb (GSettings   *settings,
                                            NULL);
   g_free (js_snippet);
 }
+bool
+ephy_web_view_autofill_popup_enabled (EphyWebView *web_view)
+{
+  return web_view->autofill_popup_enabled;
+}
+
+void
+ephy_web_view_autofill_disable_popup (EphyWebView *web_view)
+{
+  web_view->autofill_popup_enabled = FALSE;
+}
 
 static gboolean
 authenticate_cb (WebKitWebView               *web_view,
@@ -2907,6 +2957,7 @@ ephy_web_view_init (EphyWebView *web_view)
 {
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
+  web_view->autofill_popup_enabled = TRUE;
   web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   web_view->security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
 
@@ -2984,6 +3035,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
                            G_CALLBACK (page_created_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (ephy_embed_shell_get_default (), "autofill",
+                           G_CALLBACK (ephy_embed_autofill_signal_received_cb),
                            web_view, 0);
 }
 
