@@ -192,19 +192,33 @@ html.epiphany-html {
 .applications-body table { width: 100%; border-collapse: collapse; }
 
 .applications-body table, td { 
-	border: 1px solid #d3d7cf;
-	border-left: none; border-right: none;
+    border: 1px solid #d3d7cf;
+    border-left: none; border-right: none;
 }
 
-.applications-body p { margin-bottom: 30px; }
-.applications-body td { padding: 15px;}
-.applications-body td.icon { width: 64px; }
+.applications-body p { margin-bottom: 24px; }
+.applications-body td { padding: 12px;}
+.applications-body td.icon { width: 64px; padding-left:0; padding-right:0; }
 .applications-body td.datas { width: 200px; }
-.applications-body td.input { width: 64px; }
+.applications-body td.input { width: 64px; padding-left:0; padding-right:0; }
 .applications-body td.date { width: auto; text-align: right; font-size: small; }
 .applications-body .appname { font-weight: bold; }
 .applications-body .appurl, td.date { color: #babdb6; }
-.applications-body input { width: 100%; padding: 8px; }
+.applications-body input { width: auto; padding: 8px; }
+
+@media only screen and (max-width : 600px) { 
+    .applications-body td.date { display:none; }
+    .applications-body .appurl, .applications-body .appurl { white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 256px;}
+}
+
+@media only screen and (max-width : 400px) { 
+    .applications-body td.date { display:none; }
+    .applications-body .appurl, .applications-body .appurl { white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 120px;}
+}
+
+@media only screen and (max-width : 360px) { 
+    .applications-body .appname { white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 120px;}
+}
 
 /* about:incognito */
 
