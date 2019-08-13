@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2008 Gustavo Noronha Silva
  *  Copyright © 2012 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -23,6 +24,7 @@
 
 #include <webkit2/webkit2.h>
 
+#include "ephy-autofill-fill-choice.h"
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"
 #include "ephy-security-levels.h"
@@ -174,5 +176,13 @@ void                       ephy_web_view_show_auth_form_save_request (EphyWebVie
                                                                       EphyPasswordSaveRequestCallback response_callback,
                                                                       gpointer                        response_data,
                                                                       GDestroyNotify                  response_destroy);
+
+void ephy_web_view_autofill                                       (EphyWebView               *view,
+                                                                   const char                *selector,
+                                                                   EphyAutofillFillChoice     fill_choice);
+
+bool ephy_web_view_autofill_popup_enabled                         (EphyWebView               *web_view);
+
+void ephy_web_view_autofill_disable_popup                         (EphyWebView               *web_view);
 
 G_END_DECLS
