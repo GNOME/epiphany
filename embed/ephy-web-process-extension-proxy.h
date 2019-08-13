@@ -51,4 +51,5 @@ void                          ephy_web_process_extension_proxy_password_query_re
                                                                                                   const char                   *password,
                                                                                                   gint32                        promise_id,
                                                                                                   guint64                       frame_id);
+
 G_END_DECLS
