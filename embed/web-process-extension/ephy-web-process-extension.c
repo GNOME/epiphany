@@ -543,10 +543,8 @@ dbus_connection_created_cb (GObject                 *source_object,
     introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
 
   connection = g_dbus_connection_new_for_address_finish (result, &error);
-  if (error) {
-    g_warning ("Failed to connect to UI process: %s", error->message);
-    return;
-  }
+  if (error)
+    g_error ("Failed to connect to UI process: %s", error->message);
 
   registration_id =
     g_dbus_connection_register_object (connection,
@@ -556,10 +554,8 @@ dbus_connection_created_cb (GObject                 *source_object,
                                        extension,
                                        NULL,
                                        &error);
-  if (!registration_id) {
-    g_warning ("Failed to register web process extension object: %s\n", error->message);
-    return;
-  }
+  if (!registration_id)
+    g_error ("Failed to register web process extension object: %s\n", error->message);
 
   extension->dbus_connection = g_steal_pointer (&connection);
   ephy_web_process_extension_emit_page_created_signals_pending (extension);

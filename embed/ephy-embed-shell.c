@@ -1056,10 +1056,8 @@ ephy_embed_shell_setup_web_process_extensions_server (EphyEmbedShell *shell)
                                               NULL,
                                               &error);
 
-  if (error) {
-    g_warning ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
-    return;
-  }
+  if (error)
+    g_error ("Failed to start embed shell D-Bus server on %s: %s", address, error->message);
 
   g_signal_connect_object (priv->dbus_server, "new-connection",
                            G_CALLBACK (new_connection_cb), shell, 0);
