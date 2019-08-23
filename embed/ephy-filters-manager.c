@@ -38,7 +38,7 @@ struct _EphyFiltersManager {
 
   char *filters_dir;
   GHashTable *filters;  /* (identifier, FilterInfo) */
-  guint64 update_time;
+  gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
   WebKitUserContentFilterStore *store;
@@ -67,7 +67,7 @@ typedef struct {
   char *identifier;      /* Lazily derived from source_uri. */
   char *source_uri;      /* Saved. */
   char *checksum;        /* Saved. */
-  guint64 last_update;   /* Saved, seconds. */
+  gint64 last_update;    /* Saved, seconds since the Epoch. */
 
   gboolean found   : 1;  /* WebKitUserContentFilter found during lookup. */
   gboolean enabled : 1;  /* The filter is already enabled. */
@@ -80,8 +80,8 @@ typedef struct {
  * be increased by 1 in the source code whenever the GVariant format below
  * changes.
  */
-#define FILTER_INFO_VARIANT_VERSION ((uint32_t)1)
-#define FILTER_INFO_VARIANT_FORMAT  "(usmst)"
+#define FILTER_INFO_VARIANT_VERSION ((uint32_t)2)
+#define FILTER_INFO_VARIANT_FORMAT  "(usmsx)"
 
 static void
 filter_info_free (FilterInfo *self)
@@ -106,6 +106,7 @@ filter_info_new (const char         *source_uri,
 
   self = g_new0 (FilterInfo, 1);
   self->source_uri = g_strdup (source_uri);
+  self->last_update = G_MININT64;  /* Oldest possible time: never updated. */
   g_set_weak_pointer (&self->manager, manager);
   return g_steal_pointer (&self);
 }
@@ -392,7 +393,7 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
     }
 
     g_file_info_get_modification_time (info, &modification_time);
-    return (modification_time.tv_sec > 0) && ((gulong)modification_time.tv_sec > self->last_update);
+    return (modification_time.tv_sec > 0) && (modification_time.tv_sec > self->last_update);
   }
 
   /* For remote filters, check the time elapsed since the last fetch. */
@@ -747,7 +748,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
   g_autoptr (GHashTable) old_filters = NULL;
   g_auto (GStrv) uris = NULL;
 
-  g_assert (update_time >= 0);
   g_assert (manager);
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
