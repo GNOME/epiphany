@@ -98,7 +98,7 @@ Ephy.getWebAppIcon = function(baseURL)
         return { 'url' : new URL(ogpIcon, baseURL).href, 'color' : null };
 
     // Last ditch effort: just fallback to the default favicon location.
-    return { 'url' : new URL('./favicon.ico', baseURL).href, 'color' : null };
+    return { 'url' : new URL('/favicon.ico', baseURL).href, 'color' : null };
 }
 
 Ephy.PreFillUserMenu = class PreFillUserMenu
