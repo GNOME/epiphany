@@ -104,6 +104,7 @@ struct _PrefsDialog {
 
   /* fonts & style */
   GtkWidget *use_gnome_fonts_row;
+  GtkWidget *use_custom_fonts_list;
   GtkWidget *sans_fontbutton;
   GtkWidget *serif_fontbutton;
   GtkWidget *mono_fontbutton;
@@ -986,6 +987,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_custom_fonts_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sans_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, serif_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
@@ -2392,4 +2394,6 @@ prefs_dialog_init (PrefsDialog *dialog)
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",
                     G_CALLBACK (prefs_dialog_response_cb), dialog);
+
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->use_custom_fonts_list), hdy_list_box_separator_header, NULL, NULL);
 }
