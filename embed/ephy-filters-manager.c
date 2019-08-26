@@ -379,7 +379,7 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
    * than the last update time saved for it.
    */
   if (self->local) {
-    GTimeVal modification_time = { .tv_sec = 0 };
+    g_autoptr (GDateTime) modification_time = NULL;
     g_autoptr (GError) error = NULL;
     g_autoptr (GFile) source_file = g_file_new_for_uri (self->source_uri);
     g_autoptr (GFileInfo) info = g_file_query_info (source_file,
@@ -392,8 +392,8 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
       return TRUE;
     }
 
-    g_file_info_get_modification_time (info, &modification_time);
-    return (modification_time.tv_sec > 0) && (modification_time.tv_sec > self->last_update);
+    modification_time = g_file_info_get_modification_date_time (info);
+    return g_date_time_to_unix (modification_time) > self->last_update;
   }
 
   /* For remote filters, check the time elapsed since the last fetch. */
