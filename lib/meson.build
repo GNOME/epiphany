@@ -87,7 +87,8 @@ libephymisc = shared_library('ephymisc',
   dependencies: libephymisc_deps,
   include_directories: libephymisc_includes,
   install: true,
-  install_dir: pkglibdir
+  install_dir: pkglibdir,
+  install_rpath: pkglibdir
 )
 
 ephymisc_dep = declare_dependency(
