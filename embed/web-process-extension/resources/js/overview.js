@@ -79,7 +79,7 @@ Ephy.Overview = class Overview
     _removeItem(item)
     {
         item.classList.add('overview-removed');
-        // Animation takes 0.75s, remove the item after 1s to ensure the animation finished.
+        // Animation takes 0.25s, remove the item after 0.5s to ensure the animation finished.
         setTimeout(() => {
             item.parentNode.removeChild(item);
             for (let i = 0; i < this._items.length; i++) {
@@ -89,7 +89,7 @@ Ephy.Overview = class Overview
                 }
             }
             window.webkit.messageHandlers.overview.postMessage(item.href);
-        }, 1000);
+        }, 500);  // This value needs to be synced with the one in about.css
     }
 
     _onURLsChanged(urls)
