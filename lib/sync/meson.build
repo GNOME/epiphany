@@ -39,7 +39,8 @@ libephysync = shared_library('ephysync',
   dependencies: libephysync_deps,
   include_directories: libephysync_includes,
   install: true,
-  install_dir: pkglibdir
+  install_dir: pkglibdir,
+  install_rpath: pkglibdir
 )
 
 ephysync_dep = declare_dependency(
