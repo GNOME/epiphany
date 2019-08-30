@@ -352,11 +352,9 @@ html.epiphany-html {
 }
 
 .overview-removed.overview-item {
-    transition: all 0.75s ease-in-out;
-    width: 0;
-    margin: 0;
+    transition: all 0.25s ease-out;  /* This value needs to be synced with the timeout in overview.js */
+    transform: scale(0.5);
     opacity: 0;
-    padding: 0;
 }
 
 .overview-removed .overview-close-button {
