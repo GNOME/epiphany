@@ -34,6 +34,7 @@
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-filters-manager.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gsb-utils.h"
 #include "ephy-gui.h"
@@ -164,6 +165,9 @@ struct _EphyWindow {
   EphyEmbed *last_opened_embed;
   int last_opened_pos;
   gboolean show_fullscreen_header_bar;
+
+  GList *pending_decisions;
+  gulong filters_initialized_id;
 
   gint current_width;
   gint current_height;
@@ -2192,25 +2196,13 @@ verify_url_cb (EphyGSBService     *service,
 }
 
 static gboolean
-decide_policy_cb (WebKitWebView            *web_view,
-                  WebKitPolicyDecision     *decision,
-                  WebKitPolicyDecisionType  decision_type,
-                  EphyWindow               *window)
+decide_navigation (EphyWindow               *window,
+                   WebKitWebView            *web_view,
+                   WebKitPolicyDecision     *decision,
+                   WebKitPolicyDecisionType  decision_type,
+                   const char               *request_uri)
 {
   EphyGSBService *service;
-  WebKitNavigationPolicyDecision *navigation_decision;
-  WebKitNavigationAction *navigation_action;
-  WebKitURIRequest *request;
-  const char *request_uri;
-
-  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
-      decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
-    return FALSE;
-
-  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
-  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
-  request = webkit_navigation_action_get_request (navigation_action);
-  request_uri = webkit_uri_request_get_uri (request);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING)) {
     if (ephy_web_view_get_should_bypass_safe_browsing (EPHY_WEB_VIEW (web_view))) {
@@ -2230,6 +2222,74 @@ decide_policy_cb (WebKitWebView            *web_view,
   }
 
   return decide_navigation_policy (web_view, decision, decision_type, window);
+}
+
+static void
+resolve_pending_decision (VerifyUrlAsyncData *async_data)
+{
+  decide_navigation (async_data->window,
+                     async_data->web_view,
+                     async_data->decision,
+                     async_data->decision_type,
+                     async_data->request_uri);
+}
+
+static void
+filters_initialized_cb (EphyFiltersManager *filters_manager,
+                        GParamSpec         *pspec,
+                        EphyWindow         *window)
+{
+  g_assert (!ephy_filters_manager_get_is_initialized (filters_manager));
+
+  g_signal_handler_disconnect (filters_manager, window->filters_initialized_id);
+
+  g_list_foreach (window->pending_decisions, (GFunc)resolve_pending_decision, NULL);
+  g_list_free_full (window->pending_decisions, (GDestroyNotify)verify_url_async_data_free);
+  window->pending_decisions = NULL;
+}
+
+static gboolean
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  EphyWindow               *window)
+{
+  EphyFiltersManager *filters_manager;
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *navigation_action;
+  WebKitURIRequest *request;
+  const char *request_uri;
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
+      decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
+    return FALSE;
+
+  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+  request = webkit_navigation_action_get_request (navigation_action);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  filters_manager = ephy_embed_shell_get_filters_manager (ephy_embed_shell_get_default ());
+  if (!ephy_filters_manager_get_is_initialized (filters_manager)) {
+    /* Queue request while filters initialization is in progress. */
+    VerifyUrlAsyncData *async_data = verify_url_async_data_new (window,
+                                                                web_view,
+                                                                decision,
+                                                                decision_type,
+                                                                request_uri);
+    window->pending_decisions = g_list_append (window->pending_decisions,
+                                               async_data);
+    if (!window->filters_initialized_id) {
+      window->filters_initialized_id =
+        g_signal_connect_object (filters_manager,
+                                 "notify::is-initialized",
+                                 G_CALLBACK (filters_initialized_cb),
+                                 window, 0);
+    }
+    return TRUE;
+  }
+
+  return decide_navigation (window, web_view, decision, decision_type, request_uri);
 }
 
 static void
