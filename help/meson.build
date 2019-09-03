@@ -19,7 +19,6 @@ help_files = [
   'pref-cookies.page',
   'pref-css.page',
   'pref-downloads.page',
-  'pref-do-not-track.page',
   'pref-font.page',
   'pref-passwords.page',
   'pref-mouse-gestures.page',
