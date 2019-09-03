@@ -914,6 +914,9 @@ page_created_cb (EphyEmbedShell               *shell,
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
+  if (view->web_process_extension)
+    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
+
   view->web_process_extension = web_process_extension;
   g_object_add_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
 
