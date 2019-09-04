@@ -919,18 +919,6 @@ page_created_cb (EphyEmbedShell               *shell,
 
   view->web_process_extension = web_process_extension;
   g_object_add_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-
-  g_signal_connect_object (shell, "password-form-focused",
-                           G_CALLBACK (password_form_focused_cb),
-                           view, 0);
-
-  g_signal_connect_object (shell, "allow-tls-certificate",
-                           G_CALLBACK (allow_tls_certificate_cb),
-                           view, 0);
-
-  g_signal_connect_object (shell, "allow-unsafe-browsing",
-                           G_CALLBACK (allow_unsafe_browsing_cb),
-                           view, 0);
 }
 
 static void
@@ -2908,6 +2896,10 @@ authenticate_cb (WebKitWebView               *web_view,
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
+  EphyEmbedShell *shell;
+
+  shell = ephy_embed_shell_get_default ();
+
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
   web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
@@ -2915,7 +2907,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->file_monitor = ephy_file_monitor_new (web_view);
 
-  web_view->history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
+  web_view->history_service = ephy_embed_shell_get_global_history_service (shell);
   web_view->history_service_cancellable = g_cancellable_new ();
 
   g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
@@ -2985,8 +2977,20 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (authenticate_cb),
                     NULL);
 
-  g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
+  g_signal_connect_object (shell, "page-created",
                            G_CALLBACK (page_created_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "password-form-focused",
+                           G_CALLBACK (password_form_focused_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "allow-tls-certificate",
+                           G_CALLBACK (allow_tls_certificate_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "allow-unsafe-browsing",
+                           G_CALLBACK (allow_unsafe_browsing_cb),
                            web_view, 0);
 }
 
