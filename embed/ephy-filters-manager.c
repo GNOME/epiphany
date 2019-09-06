@@ -399,8 +399,18 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
     return g_date_time_to_unix (modification_time) > self->last_update;
   }
 
-  /* For remote filters, check the time elapsed since the last fetch. */
-  return (self->manager->update_time - self->last_update) >= ADBLOCK_FILTER_UPDATE_FREQUENCY;
+  /*
+   * For remote filters, check the time elapsed since the last fetch.
+   *
+   * Note that timestamps are signed; calculating (update time - last update)
+   * can overflow. Instead find the point in time after which a filter should
+   * have been last updated to be considered "recent enough" (that is, current
+   * time minus the update frequency). Then a filter needs an update if its
+   * last update was before that moment. Also check that the "recent enough"
+   * time point can be calculated without undeflowing beforehand.
+   */
+  return (self->manager->update_time < ADBLOCK_FILTER_UPDATE_FREQUENCY) ||
+         (self->last_update <= (self->manager->update_time - ADBLOCK_FILTER_UPDATE_FREQUENCY));
 }
 
 static void
