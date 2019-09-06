@@ -2239,7 +2239,8 @@ filters_initialized_cb (EphyFiltersManager *filters_manager,
                         GParamSpec         *pspec,
                         EphyWindow         *window)
 {
-  g_assert (!ephy_filters_manager_get_is_initialized (filters_manager));
+  /* This function is only ever invoked after initialization has completed. */
+  g_assert (ephy_filters_manager_get_is_initialized (filters_manager));
 
   g_signal_handler_disconnect (filters_manager, window->filters_initialized_id);
 
