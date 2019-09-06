@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-download.h"
+#include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
@@ -919,6 +920,11 @@ ephy_filters_manager_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
+  if (!manager->filters_dir) {
+    g_autofree char *cache_dir = ephy_default_cache_dir ();
+    manager->filters_dir = g_build_filename (cache_dir, "adblock", NULL);
+  }
+
   saved_filters_dir = g_build_filename (manager->filters_dir, "compiled", NULL);
   g_mkdir_with_parents (saved_filters_dir, 0700);
   manager->store = webkit_user_content_filter_store_new (saved_filters_dir);
@@ -1006,7 +1012,7 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
     g_param_spec_string ("filters-dir",
                          "Filters directory",
                          "The directory in which adblock filters are saved",
-                         "",
+                         NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   object_properties[PROP_IS_INITIALIZED] =
