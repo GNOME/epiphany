@@ -865,13 +865,12 @@ ephy_notebook_remove (GtkContainer *container,
   position = gtk_notebook_page_num (gnotebook, tab_widget);
   curr = gtk_notebook_get_current_page (gnotebook);
 
-  if (position == curr) {
+  if (position == curr)
     smart_tab_switching_on_closure (notebook, tab_widget);
-  }
-
-  g_signal_handlers_disconnect_by_data (tab_widget, notebook);
 
   GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
+
+  g_signal_handlers_disconnect_by_data (tab_widget, notebook);
 
   update_tabs_visibility (notebook, FALSE);
 }
