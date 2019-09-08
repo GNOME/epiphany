@@ -1268,6 +1268,22 @@ migrate_adblock_to_content_filters (void)
 }
 
 static void
+migrate_adblock_to_shared_cache_dir (void)
+{
+  /*
+   * Remove the adblock/ subdirectory from the profile directory. During
+   * startup Epiphany will create the new directory under the shared cache
+   * data directory itself.
+   */
+  g_autofree char *directory = g_build_filename (ephy_cache_dir (), "adblock", NULL);
+
+  g_autoptr (GError) error = NULL;
+  if (!ephy_file_delete_dir_recursively (directory, &error) &&
+      !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+    g_warning ("Cannot delete adblock directory %s: %s", directory, error->message);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1315,6 +1331,7 @@ const EphyProfileMigrator migrators[] = {
   /* 31 */ migrate_web_extension_config_dir,
   /* 32 */ migrate_webapps_harder,
   /* 33 */ migrate_adblock_to_content_filters,
+  /* 34 */ migrate_adblock_to_shared_cache_dir,
 };
 
 static gboolean
