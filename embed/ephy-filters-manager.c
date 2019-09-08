@@ -335,6 +335,14 @@ filter_info_save_sidecar (FilterInfo          *self,
        self->checksum,
        self->last_update);
 
+  /* Using G_FILE_CREATE_REPLACE_DESTINATION is needed to ensure that
+   * different processes trying to write the same file replace its
+   * contents atomically so there is no partially written data. If two
+   * processes write the same file, the one which finishes writing later
+   * "wins", but that is fine because both would have downloaded the
+   * same rule set and their metadata files will only have a slightly
+   * different (but very close) timestamp.
+   */
   g_file_replace_contents_bytes_async (sidecar_file,
                                        data,
                                        NULL,   /* etag */
