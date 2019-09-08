@@ -363,7 +363,14 @@ filter_info_save_sidecar_finish (GAsyncResult  *result,
 static GFile *
 filter_info_get_source_file (FilterInfo *self)
 {
-  g_autofree char *filename = g_strconcat (filter_info_get_identifier (self), ".json", NULL);
+  /* It is possible that different Epiphany processes try to download the
+   * same ruleset file simultanously. Using different file names ensures
+   * that they do not step on each other toes when writing the downloaded
+   * data to disk.
+   */
+  g_autofree char *filename = g_strdup_printf ("%s-%" G_PID_FORMAT ".json",
+                                               filter_info_get_identifier (self),
+                                               getpid ());
   const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
   return g_file_new_build_filename (filters_dir, filename, NULL);
 }
