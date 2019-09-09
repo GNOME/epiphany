@@ -3,6 +3,13 @@
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
+    "add-extensions": {
+      "org.freedesktop.Platform.ffmpeg-full": {
+        "directory": "lib/ffmpeg",
+        "version": "19.08beta",
+        "add-ld-path": "."
+      }
+    },
     "command" : "epiphany",
     "tags" : [
         "nightly"
