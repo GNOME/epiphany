@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-download.h"
+#include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 
@@ -334,6 +335,14 @@ filter_info_save_sidecar (FilterInfo          *self,
        self->checksum,
        self->last_update);
 
+  /* Using G_FILE_CREATE_REPLACE_DESTINATION is needed to ensure that
+   * different processes trying to write the same file replace its
+   * contents atomically so there is no partially written data. If two
+   * processes write the same file, the one which finishes writing later
+   * "wins", but that is fine because both would have downloaded the
+   * same rule set and their metadata files will only have a slightly
+   * different (but very close) timestamp.
+   */
   g_file_replace_contents_bytes_async (sidecar_file,
                                        data,
                                        NULL,   /* etag */
@@ -354,7 +363,14 @@ filter_info_save_sidecar_finish (GAsyncResult  *result,
 static GFile *
 filter_info_get_source_file (FilterInfo *self)
 {
-  g_autofree char *filename = g_strconcat (filter_info_get_identifier (self), ".json", NULL);
+  /* It is possible that different Epiphany processes try to download the
+   * same ruleset file simultanously. Using different file names ensures
+   * that they do not step on each other toes when writing the downloaded
+   * data to disk.
+   */
+  g_autofree char *filename = g_strdup_printf ("%s-%" G_PID_FORMAT ".json",
+                                               filter_info_get_identifier (self),
+                                               getpid ());
   const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
   return g_file_new_build_filename (filters_dir, filename, NULL);
 }
@@ -929,6 +945,11 @@ ephy_filters_manager_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
+  if (!manager->filters_dir) {
+    g_autofree char *cache_dir = ephy_default_cache_dir ();
+    manager->filters_dir = g_build_filename (cache_dir, "adblock", NULL);
+  }
+
   saved_filters_dir = g_build_filename (manager->filters_dir, "compiled", NULL);
   g_mkdir_with_parents (saved_filters_dir, 0700);
   manager->store = webkit_user_content_filter_store_new (saved_filters_dir);
@@ -1016,7 +1037,7 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
     g_param_spec_string ("filters-dir",
                          "Filters directory",
                          "The directory in which adblock filters are saved",
-                         "",
+                         NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   object_properties[PROP_IS_INITIALIZED] =

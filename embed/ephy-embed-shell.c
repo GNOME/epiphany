@@ -1126,7 +1126,6 @@ ephy_embed_shell_startup (GApplication *application)
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
   g_autofree char *cookie_policy = NULL;
-  g_autofree char *filters_dir = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
@@ -1272,8 +1271,7 @@ ephy_embed_shell_startup (GApplication *application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
 
-  filters_dir = g_build_filename (ephy_cache_dir (), "adblock", NULL);
-  priv->filters_manager = ephy_filters_manager_new (filters_dir);
+  priv->filters_manager = ephy_filters_manager_new (NULL);
 
   g_signal_connect_object (priv->filters_manager, "filters-disabled",
                            G_CALLBACK (webkit_user_content_manager_remove_all_filters),
