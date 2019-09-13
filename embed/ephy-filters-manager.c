@@ -50,6 +50,7 @@ G_DEFINE_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
 
 enum {
   FILTER_READY,
+  FILTER_REMOVED,
   FILTERS_DISABLED,
   LAST_SIGNAL,
 };
@@ -778,14 +779,17 @@ filter_removed_cb (WebKitUserContentFilterStore *store,
 }
 
 static void
-remove_unused_filter (const char *identifier,
-                      FilterInfo *filter)
+remove_unused_filter (const char         *identifier,
+                      FilterInfo         *filter,
+                      EphyFiltersManager *manager)
 {
   g_autoptr (GFile) sidecar_file = filter_info_get_sidecar_file (filter);
 
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
   g_assert (!g_hash_table_contains (filter->manager->filters, identifier));
 
+  LOG ("Emitting EphyFiltersManager::filter-removed for %s.", identifier);
+  g_signal_emit (manager, s_signals[FILTER_REMOVED], 0, identifier);
   g_file_delete_async (sidecar_file,
                        G_PRIORITY_LOW,
                        filter->manager->cancellable,
@@ -840,9 +844,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
     filters_manager_ensure_initialized (manager);
     return;
   }
-
-  LOG ("Emitting EphyFiltersManager::filters-disabled.");
-  g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
 
   /* Only once at a time please! Newest set of filters wins. */
   g_cancellable_cancel (manager->cancellable);
@@ -899,7 +900,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
   /* Remove the filters which are no longer in the configured set. */
   g_hash_table_foreach (old_filters,
                         (GHFunc)remove_unused_filter,
-                        NULL);
+                        manager);
 }
 
 static void
@@ -1025,6 +1026,14 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   WEBKIT_TYPE_USER_CONTENT_FILTER);
+
+  s_signals[FILTER_REMOVED] =
+    g_signal_new ("filter-removed",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 
   s_signals[FILTERS_DISABLED] =
     g_signal_new ("filters-disabled",
