@@ -119,7 +119,6 @@ gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
 
 cflags = cc.get_supported_arguments(['-Werror=declaration-after-statement',
-                                     '-Werror=format-security',
                                      '-Werror=implicit-function-declaration',
                                      '-Wno-cast-function-type',
                                      '-Wno-missing-field-initializers',
