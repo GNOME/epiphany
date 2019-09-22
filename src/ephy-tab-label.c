@@ -162,30 +162,35 @@ ephy_tab_label_get_property (GObject    *object,
   }
 }
 
-static void
-ephy_tab_label_init (EphyTabLabel *self)
+static gboolean
+is_layout_reversed (void)
 {
-  gtk_widget_init_template (GTK_WIDGET (self));
-  self->has_icon = FALSE;
+  GtkSettings *settings;
+  g_autofree char *layout = NULL;
+  g_auto (GStrv) parts = NULL;
+
+  settings = gtk_settings_get_default ();
+  g_object_get (settings, "gtk-decoration-layout", &layout, NULL);
+
+  parts = g_strsplit (layout, ":", 2);
+
+  /* Invalid layout, don't even try */
+  if (g_strv_length (parts) < 2)
+    return FALSE;
+
+  return !!g_strrstr (parts[0], "close");
 }
 
 static void
-close_button_clicked_cb (GtkWidget    *widget,
-                         EphyTabLabel *tab_label)
+update_layout (EphyTabLabel *self)
 {
-  g_signal_emit (tab_label, signals[CLOSE_CLICKED], 0, NULL);
-}
-
-static void
-style_updated_cb (GtkWidget *widget,
-                  gpointer   user_data)
-{
+  GtkWidget *widget = GTK_WIDGET (self);
+  GtkContainer *container = GTK_CONTAINER (self);
   PangoFontMetrics *metrics;
   PangoContext *context;
   GtkStyleContext *style;
   PangoFontDescription *font_desc;
-  EphyTabLabel *self = EPHY_TAB_LABEL (widget);
-  gboolean expanded;
+  gboolean expanded, reversed;
   int char_width, h, w;
 
   if (self->is_pinned) {
@@ -211,10 +216,66 @@ style_updated_cb (GtkWidget *widget,
   gtk_widget_set_size_request (self->close_button, w + 2, h + 2);
 
   expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
+  reversed = is_layout_reversed ();
+
   gtk_widget_set_hexpand (self->icon, expanded);
-  gtk_widget_set_halign (self->icon, expanded ? GTK_ALIGN_END : GTK_ALIGN_FILL);
   gtk_widget_set_hexpand (self->spinner, expanded);
-  gtk_widget_set_halign (self->spinner, expanded ? GTK_ALIGN_END : GTK_ALIGN_FILL);
+  if (expanded) {
+    gtk_widget_set_halign (self->icon, reversed ? GTK_ALIGN_START : GTK_ALIGN_END);
+    gtk_widget_set_halign (self->spinner, reversed ? GTK_ALIGN_START : GTK_ALIGN_END);
+  } else {
+    gtk_widget_set_halign (self->icon, GTK_ALIGN_FILL);
+    gtk_widget_set_halign (self->spinner, GTK_ALIGN_FILL);
+  }
+
+  gtk_container_child_set (container, self->spinner,
+                           "pack-type", reversed ? GTK_PACK_END : GTK_PACK_START,
+                           NULL);
+  gtk_container_child_set (container, self->icon,
+                           "pack-type", reversed ? GTK_PACK_END : GTK_PACK_START,
+                           NULL);
+  gtk_container_child_set (container, self->close_button,
+                           "pack-type", reversed ? GTK_PACK_START : GTK_PACK_END,
+                           "position", reversed ? 0 : 3,
+                           NULL);
+}
+
+static void
+notify_decoration_layout_cb (GtkSettings  *settings,
+                             GParamSpec   *spec,
+                             EphyTabLabel *self)
+{
+  update_layout (self);
+}
+
+static void
+ephy_tab_label_init (EphyTabLabel *self)
+{
+  GtkSettings *settings;
+
+  gtk_widget_init_template (GTK_WIDGET (self));
+  self->has_icon = FALSE;
+
+  settings = gtk_settings_get_default ();
+  g_signal_connect_object (settings, "notify::gtk-decoration-layout",
+                           G_CALLBACK (notify_decoration_layout_cb), self, 0);
+  update_layout (self);
+}
+
+static void
+close_button_clicked_cb (GtkWidget    *widget,
+                         EphyTabLabel *tab_label)
+{
+  g_signal_emit (tab_label, signals[CLOSE_CLICKED], 0, NULL);
+}
+
+static void
+style_updated_cb (GtkWidget *widget,
+                  gpointer   user_data)
+{
+  EphyTabLabel *self = EPHY_TAB_LABEL (widget);
+
+  update_layout (self);
 }
 
 static void
