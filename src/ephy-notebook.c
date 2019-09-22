@@ -557,21 +557,16 @@ static void
 ephy_notebook_constructed (GObject *object)
 {
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
-  GtkWidget *hbox;
   GtkWidget *button;
   EphyPagesPopover *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), hbox, GTK_PACK_END);
-  gtk_widget_show (hbox);
-
   button = gtk_menu_button_new ();
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   /* Translators: tooltip for the tab switcher menu button */
   gtk_widget_set_tooltip_text (button, _("View open tabs"));
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), button, GTK_PACK_END);
   gtk_widget_show (button);
 
   notebook->tab_menu = g_menu_new ();
