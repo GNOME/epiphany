@@ -24,6 +24,7 @@
 #include "ephy-notebook.h"
 
 #include "ephy-debug.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-dnd.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
@@ -561,6 +562,16 @@ ephy_notebook_constructed (GObject *object)
   EphyPagesPopover *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
+
+  if (is_desktop_pantheon ()) {
+    button = gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_MENU);
+    /* Translators: tooltip for the new tab button */
+    gtk_widget_set_tooltip_text (button, _("Open a new tab"));
+    gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
+    gtk_style_context_add_class (gtk_widget_get_style_context (button), "flat");
+    gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), button, GTK_PACK_START);
+    gtk_widget_show (button);
+  }
 
   button = gtk_menu_button_new ();
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
