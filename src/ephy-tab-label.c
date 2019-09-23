@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "ephy-desktop-utils.h"
 #include "ephy-embed.h"
 #include "ephy-embed-utils.h"
 #include "ephy-settings.h"
@@ -215,7 +216,9 @@ update_layout (EphyTabLabel *self)
 
   gtk_widget_set_size_request (self->close_button, w + 2, h + 2);
 
-  expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
+  expanded = !is_desktop_pantheon () &&
+             g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                     EPHY_PREFS_UI_EXPAND_TABS_BAR);
   reversed = is_layout_reversed ();
 
   gtk_widget_set_hexpand (self->icon, expanded);
