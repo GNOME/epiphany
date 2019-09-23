@@ -569,21 +569,26 @@ static void
 ephy_notebook_constructed (GObject *object)
 {
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
-  GtkWidget *hbox;
   GtkWidget *button;
   EphyPagesPopover *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), hbox, GTK_PACK_END);
-  gtk_widget_show (hbox);
+  if (is_desktop_pantheon ()) {
+    button = gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_MENU);
+    /* Translators: tooltip for the new tab button */
+    gtk_widget_set_tooltip_text (button, _("Open a new tab"));
+    gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
+    gtk_style_context_add_class (gtk_widget_get_style_context (button), "flat");
+    gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), button, GTK_PACK_START);
+    gtk_widget_show (button);
+  }
 
   button = gtk_menu_button_new ();
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   /* Translators: tooltip for the tab switcher menu button */
   gtk_widget_set_tooltip_text (button, _("View open tabs"));
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), button, GTK_PACK_END);
   gtk_widget_show (button);
 
   notebook->tab_menu = g_menu_new ();
