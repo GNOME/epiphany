@@ -371,8 +371,11 @@ update_tabs_visibility (EphyNotebook *nb,
   if (before_inserting)
     num++;
 
-  policy = g_settings_get_enum (EPHY_SETTINGS_UI,
-                                EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
+  if (is_desktop_pantheon ())
+    policy = EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS;
+  else
+    policy = g_settings_get_enum (EPHY_SETTINGS_UI,
+                                  EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
       nb->adaptive_mode != EPHY_ADAPTIVE_MODE_NARROW &&
