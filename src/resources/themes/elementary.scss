@@ -11,3 +11,53 @@ $variant: 'light';
 .page-menu-zoom-box {
   margin-bottom: 6px;
 }
+
+.entry_icon {
+  color: themecolor(internal_element_color);
+  transition: all 200ms ease-in-out;
+  -gtk-icon-palette: needs-attention themecolor(attention_color),
+                     success themecolor(LIME_500),
+                     warning shade(themecolor(BANANA_700), 1.25),
+                     error themecolor(error_color);
+
+  &:hover, &:active {
+    color: themecolor(text_color);
+  }
+
+  &:backdrop {
+    color: themecolor(insensitive_color);
+  }
+
+  // Reader mode
+  &.selected {
+    color: themecolor(colorAccent);
+  }
+
+  // Bookmarks
+  &.starred {
+    color: themecolor(BANANA_500);
+  }
+}
+
+.main-notebook {
+  tab:not(.reorderable-page) {
+    min-width: 18px;
+  }
+}
+
+// FIXME: this should be in libdazzle
+dzlsuggestionpopover > revealer > box {
+  // Fix background and shadow
+  margin: 12px;
+  border: none;
+  background: themecolor(theme_base_color);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px gtkalpha(#000, 0.2),
+              0 3px 6px gtkalpha(#000, 0.16),
+              0 3px 6px gtkalpha(#000, 0.23);
+
+  // Fix selected row color
+  > elastic > scrolledwindow > viewport > list > row:selected .title {
+    color: themecolor(theme_fg_color);
+  }
+}
