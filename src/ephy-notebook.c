@@ -24,6 +24,7 @@
 #include "ephy-notebook.h"
 
 #include "ephy-debug.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-dnd.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
@@ -383,6 +384,15 @@ update_tabs_visibility (EphyNotebook *nb,
   gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), nb->tabs_allowed && show_tabs);
 }
 
+static gboolean
+expand_tabs_bar (void)
+{
+  if (is_desktop_pantheon ())
+    return FALSE;
+  return g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                 EPHY_PREFS_UI_EXPAND_TABS_BAR);
+}
+
 static void
 expand_tabs_changed_cb (GSettings    *settings,
                         char         *key,
@@ -392,8 +402,7 @@ expand_tabs_changed_cb (GSettings    *settings,
   GList *l;
   gboolean expand;
 
-  expand = g_settings_get_boolean (EPHY_SETTINGS_UI,
-                                   EPHY_PREFS_UI_EXPAND_TABS_BAR),
+  expand = expand_tabs_bar ();
 
   tabs = gtk_container_get_children (GTK_CONTAINER (nb));
 
@@ -788,8 +797,7 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
   gtk_notebook_set_tab_detachable (gnotebook, tab_widget, TRUE);
   gtk_container_child_set (GTK_CONTAINER (gnotebook),
                            GTK_WIDGET (tab_widget),
-                           "tab-expand", g_settings_get_boolean (EPHY_SETTINGS_UI,
-                                                                 EPHY_PREFS_UI_EXPAND_TABS_BAR),
+                           "tab-expand", expand_tabs_bar (),
                            NULL);
 
   return position;
@@ -812,8 +820,7 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 
   gtk_container_child_set (GTK_CONTAINER (notebook),
                            GTK_WIDGET (embed),
-                           "tab-expand", g_settings_get_boolean (EPHY_SETTINGS_UI,
-                                                                 EPHY_PREFS_UI_EXPAND_TABS_BAR),
+                           "tab-expand", expand_tabs_bar (),
                            NULL);
 
   if (jump_to) {
@@ -1007,7 +1014,7 @@ ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
     gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), embed, 0);
     expanded = FALSE;
   } else {
-    expanded = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_EXPAND_TABS_BAR);
+    expanded = expand_tabs_bar ();
     gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), embed, -1);
   }
 
