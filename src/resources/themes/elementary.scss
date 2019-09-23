@@ -44,3 +44,20 @@ $variant: 'light';
     min-width: 18px;
   }
 }
+
+// FIXME: this should be in libdazzle
+dzlsuggestionpopover > revealer > box {
+  // Fix background and shadow
+  margin: 12px;
+  border: none;
+  background: themecolor(theme_base_color);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px gtkalpha(#000, 0.2),
+              0 3px 6px gtkalpha(#000, 0.16),
+              0 3px 6px gtkalpha(#000, 0.23);
+
+  // Fix selected row color
+  > elastic > scrolledwindow > viewport > list > row:selected .title {
+    color: themecolor(theme_fg_color);
+  }
+}
