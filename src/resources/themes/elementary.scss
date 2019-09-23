@@ -11,3 +11,30 @@ $variant: 'light';
 .page-menu-zoom-box {
   margin-bottom: 6px;
 }
+
+.entry_icon {
+  color: themecolor(internal_element_color);
+  transition: all 200ms ease-in-out;
+  -gtk-icon-palette: needs-attention themecolor(attention_color),
+                     success themecolor(LIME_500),
+                     warning shade(themecolor(BANANA_700), 1.25),
+                     error themecolor(error_color);
+
+  &:hover, &:active {
+    color: themecolor(text_color);
+  }
+
+  &:backdrop {
+    color: themecolor(insensitive_color);
+  }
+
+  // Reader mode
+  &.selected {
+    color: themecolor(colorAccent);
+  }
+
+  // Bookmarks
+  &.starred {
+    color: themecolor(BANANA_500);
+  }
+}
