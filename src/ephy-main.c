@@ -424,6 +424,11 @@ main (int   argc,
   g_unix_signal_add (SIGINT, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGINT));
   g_unix_signal_add (SIGTERM, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGTERM));
 
+  g_object_set (gtk_settings_get_default (),
+                "gtk-icon-theme-name", "elementary",
+                "gtk-theme-name", "elementary",
+                NULL);
+
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
   /* Shutdown */

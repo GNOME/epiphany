@@ -24,6 +24,33 @@
     ],
     "modules" : [
         {
+            "name" : "elementary-theme",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/elementary/stylesheet"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "0001-Remove-epiphany-styling.patch"
+                }
+            ]
+        },
+        {
+            "name" : "elementary-icons",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dpalettes=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/elementary/icons"
+                }
+            ]
+        },
+        {
             "name" : "libdazzle",
             "buildsystem" : "meson",
             "sources" : [

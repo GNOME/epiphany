@@ -1,0 +1,84 @@
+From 641d789aa3188470c55338006e5e381bf6bde775 Mon Sep 17 00:00:00 2001
+From: Alexander Mikhaylenko <exalm7659@gmail.com>
+Date: Tue, 24 Sep 2019 02:12:47 +0500
+Subject: [PATCH] Remove epiphany styling
+
+---
+ elementary/gtk-3.0/apps.css | 61 -------------------------------------
+ 1 file changed, 61 deletions(-)
+
+diff --git a/elementary/gtk-3.0/apps.css b/elementary/gtk-3.0/apps.css
+index 9a7962c..b25a12c 100644
+--- a/elementary/gtk-3.0/apps.css
++++ b/elementary/gtk-3.0/apps.css
+@@ -19,67 +19,6 @@
+ * Authored by: Daniel Foré <daniel@elementary.io>
+ */
+ 
+-/***********
+-* Epiphany *
+-***********/
+-
+-.incognito.titlebar {
+-    background-image:
+-        -gtk-icontheme(
+-            "user-not-tracked-symbolic"
+-        ),
+-        linear-gradient(
+-            to bottom,
+-            shade (
+-                @colorPrimary,
+-                1.04
+-            ),
+-            shade (
+-                @colorPrimary,
+-                0.94
+-            )
+-        );
+-    background-size: 64px 64px, 100% 100%;
+-    background-position: 100px, 0, 0 0;
+-    background-repeat: no-repeat, no-repeat;
+-    color: @text_shadow_color;
+-}
+-
+-.incognito.titlebar:backdrop {
+-    background-image:
+-        -gtk-icontheme(
+-            "user-not-tracked-symbolic"
+-        ),
+-        linear-gradient(
+-            shade (
+-                @colorPrimary,
+-                1.08
+-            ),
+-            shade (
+-                @colorPrimary,
+-                0.98
+-            )
+-        );
+-}
+-
+-.floating-bar {
+-    background-color: alpha (#222, 0.9);
+-    border-radius: 3px;
+-    border-width: 0;
+-    box-shadow:
+-        0 1px 3px alpha (#000, 0.12),
+-        0 1px 2px alpha (#000, 0.24);
+-    color: #fff;
+-    padding: 2px 0;
+-    margin: 6px;
+-    text-shadow: 0 1px 2px alpha (#000, 0.6);
+-}
+-
+-.floating-bar label {
+-    color: #fff;
+-    text-shadow: 0 1px 2px alpha (#000, 0.6);
+-}
+-
+ /********
+ * Files *
+ ********/
+-- 
+2.17.1
+
