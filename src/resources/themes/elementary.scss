@@ -61,3 +61,40 @@ dzlsuggestionpopover > revealer > box {
     color: themecolor(theme_fg_color);
   }
 }
+
+// floating status bar
+.floating-bar {
+  border: none;
+  box-shadow: 0 1px 3px gtkalpha(#000, 0.12),
+              0 1px 2px gtkalpha(#000, 0.24);
+  padding: 2px 0;
+  margin: 6px;
+
+  &, &:backdrop {
+    background: gtkalpha(#222, 0.9);
+  }
+
+  &, &.left, &.right {
+    border-radius: 3px;
+  }
+
+  &, & label {
+    color: #fff;
+    text-shadow: 0 1px 2px gtkalpha(#000, 0.6);
+  }
+}
+
+.incognito-mode {
+  // Override padding on the titlebar stack...
+  .titlebar {
+    padding: 0;
+  }
+
+  headerbar {
+    // ...and instead apply it on the headerbar inside
+    padding: 8px 6px 6px;
+
+    background-position: 100px;
+    color: themecolor(text_shadow_color);
+  }
+}
