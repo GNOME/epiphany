@@ -10,7 +10,11 @@
 
 .automation-mode headerbar { background-color: #ff9600; color: rgba(0, 0, 0, 0.35); }
 
-.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); }
+.entry_icon_box { margin-left: 2px; margin-right: 5px; }
+
+.entry_icon_box:dir(rtl) { margin-left: 5px; margin-right: 2px; }
+
+.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); margin: 0 4px; }
 
 .entry_icon:hover { color: @theme_fg_color; }
 
@@ -58,7 +62,11 @@
 
 .page-menu-zoom-box { margin-bottom: 6px; }
 
-.entry_icon { color: @internal_element_color; transition: all 200ms ease-in-out; -gtk-icon-palette: needs-attention @attention_color, success @LIME_500, warning shade(@BANANA_700, 1.25), error @error_color; }
+.entry_icon_box { margin-left: 3px; margin-right: 1px; }
+
+.entry_icon_box:dir(rtl) { margin-left: 1px; margin-right: 3px; }
+
+.entry_icon { margin: 0 3px; color: @internal_element_color; transition: all 200ms ease-in-out; -gtk-icon-palette: needs-attention @attention_color, success @LIME_500, warning shade(@BANANA_700, 1.25), error @error_color; }
 
 .entry_icon:hover, .entry_icon:active { color: @text_color; }
 
