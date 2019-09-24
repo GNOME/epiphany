@@ -12,7 +12,19 @@ $variant: 'light';
   margin-bottom: 6px;
 }
 
+// entry icons
+.entry_icon_box {
+  margin-left: 3px;
+  margin-right: 1px;
+
+  &:dir(rtl) {
+    margin-left: 1px;
+    margin-right: 3px;
+  }
+}
+
 .entry_icon {
+  margin: 0 3px;
   color: themecolor(internal_element_color);
   transition: all 200ms ease-in-out;
   -gtk-icon-palette: needs-attention themecolor(attention_color),
