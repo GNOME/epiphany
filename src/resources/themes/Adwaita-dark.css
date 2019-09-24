@@ -10,7 +10,11 @@
 
 .automation-mode headerbar { background-color: #ff9600; color: rgba(0, 0, 0, 0.35); }
 
-.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); }
+.entry_icon_box { margin-left: 3px; margin-right: 5px; }
+
+.entry_icon_box:dir(rtl) { margin-left: 5px; margin-right: 3px; }
+
+.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); margin: 0 3px; }
 
 .entry_icon:hover { color: @theme_fg_color; }
 
