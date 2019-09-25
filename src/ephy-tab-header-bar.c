@@ -66,6 +66,7 @@ ephy_tab_header_bar_constructed (GObject *object)
   gtk_header_bar_pack_end (GTK_HEADER_BAR (self), new_tab_button);
 
   gtk_header_bar_set_title (GTK_HEADER_BAR (self), _("Tabs"));
+  gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (self), FALSE);
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (self), TRUE);
 
   gtk_widget_show_all (GTK_WIDGET (self));
