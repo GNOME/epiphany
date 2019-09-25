@@ -726,6 +726,45 @@ bookmark_icon_button_press_event_cb (GtkWidget         *entry,
   return TRUE;
 }
 
+static GtkBorder
+get_progress_margin (EphyLocationEntry *entry)
+{
+  g_autoptr (GtkWidgetPath) path = NULL;
+  g_autoptr (GtkStyleContext) context = NULL;
+  GtkBorder margin;
+  gint pos;
+
+  path = gtk_widget_path_copy (gtk_widget_get_path (entry->url_entry));
+
+  pos = gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);
+  gtk_widget_path_iter_set_object_name (path, pos, "progress");
+
+  context = gtk_style_context_new ();
+  gtk_style_context_set_path (context, path);
+
+  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
+
+  return margin;
+}
+
+static GtkBorder
+get_padding (EphyLocationEntry *entry)
+{
+  g_autoptr (GtkWidgetPath) path = NULL;
+  g_autoptr (GtkStyleContext) context = NULL;
+  GtkBorder padding;
+
+  path = gtk_widget_path_copy (gtk_widget_get_path (entry->url_entry));
+
+  /* Create a new context here, since the existing one has extra css loaded */
+  context = gtk_style_context_new ();
+  gtk_style_context_set_path (context, path);
+
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+
+  return padding;
+}
+
 static void
 button_box_size_allocated_cb (GtkWidget    *widget,
                               GdkRectangle *allocation,
@@ -733,41 +772,32 @@ button_box_size_allocated_cb (GtkWidget    *widget,
 {
   EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   g_autofree gchar *css = NULL;
-  GtkStyleContext *style_context;
-  GtkTextDirection text_direction;
-  GtkStateFlags state_flags;
-  GtkBorder padding;
+  GtkBorder margin, padding;
 
   if (lentry->allocation_width == (guint)allocation->width)
     return;
 
   lentry->allocation_width = allocation->width;
-  style_context = gtk_widget_get_style_context (widget);
-  text_direction = gtk_widget_get_direction (widget);
 
-  if (text_direction == GTK_TEXT_DIR_RTL)
-    state_flags = GTK_STATE_FLAG_DIR_RTL;
-  else
-    state_flags = GTK_STATE_FLAG_DIR_LTR;
-
-  gtk_style_context_get_padding (style_context, state_flags, &padding);
+  margin = get_progress_margin (lentry);
+  padding = get_padding (lentry);
 
   /* We are using the CSS provider here to solve UI displaying issues:
    *  - padding-right is used to prevent text below the icons on the right side
-   *    of the entry (removing the icon button box width (allocation width)
-   *    including border spacing 5).
+   *    of the entry (removing the icon button box width (allocation width).
    *  - progress margin-right is used to allow progress bar below icons on the
    *    right side.
    *
    * FIXME: Loading CSS during size_allocate is ILLEGAL and BROKEN.
    */
-  css = g_strdup_printf (".url_entry { padding-right: %dpx; }" \
-                         ".url_entry:dir(rtl) { padding-left: %dpx; padding-right: %dpx; }" \
-                         ".url_entry progress { margin-right: -%dpx; }",
-                         lentry->allocation_width + 5,
-                         lentry->allocation_width + 5,
-                         padding.right + 10,
-                         lentry->allocation_width);
+  css = g_strdup_printf (".url_entry:dir(ltr) { padding-right: %dpx; }" \
+                         ".url_entry:dir(rtl) { padding-left: %dpx; }" \
+                         ".url_entry:dir(ltr) progress { margin-right: %dpx; }" \
+                         ".url_entry:dir(rtl) progress { margin-left: %dpx; }",
+                         lentry->allocation_width,
+                         lentry->allocation_width,
+                         margin.right + padding.right - lentry->allocation_width,
+                         margin.left + padding.left - lentry->allocation_width);
   gtk_css_provider_load_from_data (lentry->css_provider, css, -1, NULL);
 }
 
@@ -877,7 +907,7 @@ static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
-  GtkWidget *button_box;
+  GtkWidget *box;
   GtkStyleContext *context;
 
   LOG ("EphyLocationEntry constructing contents %p", entry);
@@ -913,34 +943,36 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), event);
 
   /* Button Box */
-  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (event), button_box);
-  gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
-  g_signal_connect (G_OBJECT (button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_EXPAND);
-  gtk_widget_set_halign (button_box, GTK_ALIGN_END);
-  gtk_widget_set_margin_end (button_box, 5);
-  gtk_widget_show (button_box);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (event), box);
+  g_signal_connect (G_OBJECT (box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
+  gtk_widget_set_halign (box, GTK_ALIGN_END);
+  gtk_widget_show (box);
+
+  context = gtk_widget_get_style_context (box);
+  gtk_style_context_add_class (context, "entry_icon_box");
 
   /* Bookmark */
   entry->bookmark_event_box = gtk_event_box_new ();
+  gtk_widget_set_tooltip_text (entry->bookmark_event_box, _("Bookmark this page"));
   entry->bookmark = gtk_image_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_widget_set_tooltip_text (entry->bookmark, _("Bookmark this page"));
+  gtk_widget_set_valign (entry->bookmark, GTK_ALIGN_CENTER);
   gtk_widget_show (entry->bookmark);
   g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
   gtk_container_add (GTK_CONTAINER (entry->bookmark_event_box), entry->bookmark);
-  gtk_box_pack_end (GTK_BOX (button_box), entry->bookmark_event_box, FALSE, FALSE, 6);
+  gtk_box_pack_end (GTK_BOX (box), entry->bookmark_event_box, FALSE, FALSE, 0);
 
   context = gtk_widget_get_style_context (entry->bookmark);
   gtk_style_context_add_class (context, "entry_icon");
 
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
+  gtk_widget_set_tooltip_text (entry->reader_mode_event_box, _("Toggle reader mode"));
   entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_widget_set_tooltip_text (entry->reader_mode, _("Toggle reader mode"));
+  gtk_widget_set_valign (entry->reader_mode, GTK_ALIGN_CENTER);
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER (entry->reader_mode_event_box), entry->reader_mode);
-  gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
+  gtk_box_pack_end (GTK_BOX (box), entry->reader_mode_event_box, FALSE, FALSE, 0);
 
   context = gtk_widget_get_style_context (entry->reader_mode);
   gtk_style_context_add_class (context, "entry_icon");
