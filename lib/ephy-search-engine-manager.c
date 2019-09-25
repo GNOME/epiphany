@@ -27,6 +27,8 @@
 #include "ephy-settings.h"
 #include "ephy-prefs.h"
 
+#include <libsoup/soup.h>
+
 #define FALLBACK_ADDRESS "https://duckduckgo.com/?q=%s&t=epiphany"
 
 enum {
@@ -314,20 +316,25 @@ ephy_search_engine_manager_replace_pattern (const char *string,
                                             const char *replace)
 {
   gchar **strings;
+  gchar *query_param;
+  const gchar *escaped_replace;
   GString *buffer;
 
   strings = g_strsplit (string, pattern, -1);
+  query_param = soup_form_encode ("q", replace, NULL);
+  escaped_replace = query_param + 2;
 
   buffer = g_string_new (NULL);
 
   for (guint i = 0; strings[i] != NULL; i++) {
     if (i > 0)
-      g_string_append (buffer, replace);
+      g_string_append (buffer, escaped_replace);
 
     g_string_append (buffer, strings[i]);
   }
 
   g_strfreev (strings);
+  g_free (query_param);
 
   return g_string_free (buffer, FALSE);
 }
