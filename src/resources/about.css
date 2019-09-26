@@ -1,5 +1,34 @@
 /* Global CSS for pages */
 
+html {
+    /* Adwaita colors */
+    --bg-color: #f6f5f4;
+    --fg-color: #2e3436;
+    --base-color: #fff;
+    --text-color: #000;
+    --borders: #d3d7cf;
+
+    /* Misc colors */
+    --header-color: #999;
+    --header-text-color: white;
+    --row-hover-color: rgba(0, 0, 0, .1);
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        /* Adwaita colors */
+        --bg-color: #353535;
+        --fg-color: #eeeeec;
+        --base-color: #2d2d2d;
+        --text-color: #fff;
+        --borders: #1b1b1b;
+
+        /* Misc colors */
+        --header-color: #666;
+        --row-hover-color: rgba(255, 255, 255, .1);
+    }
+}
+
 html,
 body {
     margin: 0;
@@ -9,13 +38,13 @@ body {
 html {
     font-family: -webkit-system-font;
     font-size: 11pt;
-    color: #2e3436;
-    background-color: #f6f6f4;
+    color: var(--fg-color);
+    background-color: var(--bg-color);
 }
 
 h1 {
-    color: #9a9996;
-    text-shadow: 0 1px 0 white;
+    opacity: 0.55; /* Adwaita's dim-label */
+    text-shadow: 0 1px 0 var(--base-color);
     margin-bottom: 0;
 }
 
@@ -36,9 +65,9 @@ h1 {
 @media (min-width: 550px) {
     .dialog {
         padding: 36px 42px;
-        background-color: #fff;
+        background-color: var(--base-color);
         border-radius: 1em;
-        border: 2px solid #d3d7cf;
+        border: 2px solid var(--borders);
     }
 }
 
@@ -51,13 +80,13 @@ h1 {
 }
 
 #about-title {
-    color: black;
+    opacity: 1;
     font-weight: 800;
 }
 
 #about-subtitle {
-    color: #9a9996;
-    text-shadow: 0 1px 0 white;
+    opacity: 0.55; /* Adwaita's dim-label */
+    text-shadow: 0 1px 0 var(--base-color);
 }
 
 #about-icon {
@@ -78,25 +107,25 @@ h1 {
 #plugin-table th
 {
     padding: 6px;
-    background: #565051;
-    border: 2px solid #565051;
-    color: #f6f6f4;
+    background: var(--header-color);
+    border: 2px var(--header-color);
+    color: var(--header-text-color);
     width: 33%;
 }
 
 #plugin-table td
 {
     padding: 4px;
-    background: #f6f6f4;
-    border-bottom: 1px solid #d3d7cf;
-    color: #2e3436;
+    background: var(--bg-color);
+    border-bottom: 1px solid var(--borders);
+    color: var(--fg-color);
     border-top: 1px solid transparent;
 }
 
 #plugin-table tr:hover td
 {
-    background: #d3d7cf;
-    color: #2e3436;
+    background: var(--row-hover-color);
+    color: var(--fg-color);
 }
 
 /* about:epiphany */
@@ -147,8 +176,8 @@ html.epiphany-html {
     margin: 1rem 0;
     font-size: 1rem;
     font-weight: bold;
-    color: #2e3436;
-    text-shadow: 0 1px 0 white;
+    color: var(--fg-color);
+    text-shadow: 0 1px 0 var(--base-color);
 }
 
 @media (min-width: 600px) {
@@ -164,22 +193,22 @@ html.epiphany-html {
 
 .memory-table th {
     padding: 4px;
-    background: #565051;
-    border: 2px solid #565051;
-    color: #f6f6f4;
+    background: var(--header-color);
+    border: 2px solid var(--header-color);
+    color: var(--header-text-color);
 }
 
 .memory-table td {
     padding: 2px;
-    border-bottom: 1px solid #d3d7cf;
-    color: #2e3436;
+    border-bottom: 1px solid var(--borders);
+    color: var(--fg-color);
     border-top: 1px solid transparent;
     width: 16%;
 }
 
 .memory-table tr:hover td {
-    background: #deddda;
-    color: #2e3436;
+    background: var(--row-hover-color);
+    color: var(--fg-color);
 }
 
 
@@ -192,7 +221,7 @@ html.epiphany-html {
 .applications-body table { width: 100%; border-collapse: collapse; }
 
 .applications-body table, td { 
-    border: 1px solid #d3d7cf;
+    border: 1px solid var(--borders);
     border-left: none; border-right: none;
 }
 
@@ -203,7 +232,7 @@ html.epiphany-html {
 .applications-body td.input { width: 64px; padding-left:0; padding-right:0; }
 .applications-body td.date { width: auto; text-align: right; font-size: small; }
 .applications-body .appname { font-weight: bold; }
-.applications-body .appurl, td.date { color: #babdb6; }
+.applications-body .appurl, td.date { opacity: 0.55; /* Adwaita's dim-label */ }
 .applications-body input { width: auto; padding: 8px; }
 
 @media only screen and (max-width : 600px) { 
@@ -234,7 +263,7 @@ html.epiphany-html {
 }
 
 .incognito-body h1 {
-    color: #888a85;
+    opacity: 0.55; /* Adwaita's dim-label */
     text-align:center;
 }
 
@@ -296,7 +325,7 @@ html.epiphany-html {
     overflow: hidden;
     font-family: -webkit-system-font;
     font-size: 11pt;
-    color: #2e3436;
+    color: var(--fg-color);
     text-overflow: ellipsis;
     text-align: center;
 }
@@ -307,8 +336,8 @@ html.epiphany-html {
 .overview-thumbnail {
     height: 160px;
     display: block;
-    border: 1px solid #ccc;
-    background: url(ephy-resource:///org/gnome/epiphany/web-watermark.svg) center no-repeat, #fff;
+    border: 1px solid rgba(0, 0, 0, .2);
+    background: url(ephy-resource:///org/gnome/epiphany/web-watermark.svg) center no-repeat, var(--base-color);
     background-repeat: no-repeat;
     border-radius: 5px;
 }
@@ -329,12 +358,12 @@ html.epiphany-html {
 
 .overview-thumbnail:hover,
 :focus .overview-thumbnail {
-    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .4);
     box-shadow: 0 1px 1px rgba(0,0,0,0.3);
 }
 
 .overview-thumbnail:active {
-    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .4);
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
 }
 
@@ -399,7 +428,7 @@ html[dir="rtl"] .overview-item {
 }
 
 .overview-empty h1 {
-    color: black;
+    color: var(--text-color);
     opacity: 0.55; /* Adwaita's dim-label */
     text-shadow: none;
 }
