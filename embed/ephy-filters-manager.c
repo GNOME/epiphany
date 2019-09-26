@@ -26,6 +26,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-embed-shell.h"
 
 #include <gio/gio.h>
 
@@ -837,7 +838,8 @@ update_adblock_filter_files_cb (GSettings          *settings,
 
   g_assert (manager);
 
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
+  if ((!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) ||
+      (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION)) {
     LOG ("Filters are disabled, skipping update.");
     g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
     /* If the ad blocker is disabled, initialization is done. */
