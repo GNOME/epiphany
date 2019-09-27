@@ -180,6 +180,9 @@ ephy_header_bar_constructed (GObject *object)
                            G_CALLBACK (fullscreen_changed_cb), header_bar,
                            G_CONNECT_SWAPPED);
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (header_bar)),
+                               "titlebar");
+
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
   gtk_widget_show (GTK_WIDGET (header_bar->action_bar_start));
