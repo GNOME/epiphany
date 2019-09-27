@@ -124,6 +124,7 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
 
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar), !fullscreen);
   gtk_widget_set_visible (header_bar->restore_button, fullscreen);
+  ephy_action_bar_set_is_fullscreen (header_bar->action_bar_start, fullscreen);
 }
 
 static void
