@@ -46,6 +46,7 @@ struct _EphyActionBarStart {
   GtkWidget *new_tab_button;
 
   guint navigation_buttons_menu_timeout;
+  gboolean is_fullscreen;
 };
 
 G_DEFINE_TYPE (EphyActionBarStart, ephy_action_bar_start, GTK_TYPE_BOX)
@@ -478,6 +479,19 @@ get_icon_size (void)
 }
 
 static void
+update_new_tab_button_visibility (EphyActionBarStart *action_bar_start)
+{
+  EphyEmbedShell *embed_shell;
+
+  embed_shell = ephy_embed_shell_get_default ();
+
+  gtk_widget_set_visible (action_bar_start->new_tab_button,
+                          (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
+                          !is_desktop_pantheon () &&
+                          !action_bar_start->is_fullscreen);
+}
+
+static void
 ephy_action_bar_start_constructed (GObject *object)
 {
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (object);
@@ -521,8 +535,7 @@ ephy_action_bar_start_constructed (GObject *object)
                     G_CALLBACK (homepage_button_release_event_cb), action_bar_start);
 
   /* New Tab Button */
-  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION || is_desktop_pantheon ())
-    gtk_widget_set_visible (action_bar_start->new_tab_button, FALSE);
+  update_new_tab_button_visibility (action_bar_start);
 
   g_signal_connect (action_bar_start->new_tab_button, "button-release-event",
                     G_CALLBACK (new_tab_button_release_event_cb), action_bar_start);
@@ -578,6 +591,7 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
 static void
 ephy_action_bar_start_init (EphyActionBarStart *action_bar_start)
 {
+  action_bar_start->is_fullscreen = FALSE;
 }
 
 EphyActionBarStart *
@@ -611,4 +625,15 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
+}
+
+void
+ephy_action_bar_set_is_fullscreen (EphyActionBarStart *action_bar_start,
+                                   gboolean            fullscreen)
+{
+  if (action_bar_start->is_fullscreen == fullscreen)
+    return;
+
+  action_bar_start->is_fullscreen = fullscreen;
+  update_new_tab_button_visibility (action_bar_start);
 }
