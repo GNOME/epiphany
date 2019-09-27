@@ -33,5 +33,7 @@ EphyActionBarStart *ephy_action_bar_start_new                               (voi
 GtkWidget          *ephy_action_bar_start_get_navigation_box                (EphyActionBarStart *action_bar_start);
 void                ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *action_bar_start,
                                                                              gboolean            loading);
+void                ephy_action_bar_set_new_tab_visible                     (EphyActionBarStart *action_bar_start,
+                                                                             gboolean            visible);
 
 G_END_DECLS

@@ -612,3 +612,10 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
 }
+
+void
+ephy_action_bar_set_new_tab_visible (EphyActionBarStart *action_bar_start,
+                                     gboolean            visible)
+{
+  gtk_widget_set_visible (action_bar_start->new_tab_button, visible);
+}
