@@ -102,15 +102,12 @@ dzlsuggestionpopover > revealer > box {
 }
 
 .incognito-mode {
-  // Override padding on the titlebar stack...
-  .titlebar {
+  // Override padding on the titlebar stack
+  .titlebar:not(headerbar) {
     padding: 0;
   }
 
   headerbar {
-    // ...and instead apply it on the headerbar inside
-    padding: 8px 6px 6px;
-
     background-position: 100px;
     color: themecolor(text_shadow_color);
   }
