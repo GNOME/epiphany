@@ -80,4 +80,7 @@ void            ephy_location_entry_set_progress               (EphyLocationEntr
                                                                 gdouble            progress,
                                                                 gboolean           loading);
 
+void            ephy_location_entry_set_compact                (EphyLocationEntry *entry,
+                                                                gboolean           compact);
+
 G_END_DECLS

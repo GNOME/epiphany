@@ -1392,3 +1392,10 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
   entry->progress_fraction = fraction;
   ephy_location_entry_set_fraction_internal (entry);
 }
+
+void
+ephy_location_entry_set_compact (EphyLocationEntry *entry,
+                                 gboolean           compact)
+{
+  dzl_suggestion_entry_set_compact (DZL_SUGGESTION_ENTRY (entry->url_entry), compact);
+}

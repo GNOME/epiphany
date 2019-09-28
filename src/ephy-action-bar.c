@@ -20,6 +20,8 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-header-bar.h"
+#include "ephy-location-entry.h"
 #include "ephy-pages-button.h"
 #include "ephy-pages-popover.h"
 #include "ephy-settings.h"
@@ -199,13 +201,22 @@ void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
+  GtkWidget *title_widget;
+  EphyLocationEntry *entry;
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (action_bar)));
+
+  title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (ephy_window_get_header_bar (window))));
+  entry = EPHY_LOCATION_ENTRY (title_widget);
+
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
+      ephy_location_entry_set_compact (entry, FALSE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
+      ephy_location_entry_set_compact (entry, TRUE);
 
       break;
   }
