@@ -35,5 +35,6 @@ void                ephy_action_bar_start_change_combined_stop_reload_state (Eph
                                                                              gboolean            loading);
 void                ephy_action_bar_set_is_fullscreen                       (EphyActionBarStart *action_bar_start,
                                                                              gboolean            fullscreen);
+GtkWidget          *ephy_action_bar_start_get_placeholder                   (EphyActionBarStart *action_bar_start);
 
 G_END_DECLS

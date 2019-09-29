@@ -44,6 +44,7 @@ struct _EphyActionBarStart {
   GtkWidget *combined_stop_reload_image;
   GtkWidget *homepage_button;
   GtkWidget *new_tab_button;
+  GtkWidget *placeholder;
 
   guint navigation_buttons_menu_timeout;
   gboolean is_fullscreen;
@@ -586,6 +587,9 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         new_tab_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarStart,
+                                        placeholder);
 }
 
 static void
@@ -636,4 +640,10 @@ ephy_action_bar_set_is_fullscreen (EphyActionBarStart *action_bar_start,
 
   action_bar_start->is_fullscreen = fullscreen;
   update_new_tab_button_visibility (action_bar_start);
+}
+
+GtkWidget *
+ephy_action_bar_start_get_placeholder (EphyActionBarStart *action_bar_start)
+{
+  return action_bar_start->placeholder;
 }
