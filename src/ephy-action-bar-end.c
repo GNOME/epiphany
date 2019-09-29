@@ -80,6 +80,19 @@ add_attention (EphyActionBarEnd *self)
                                                                self);
 }
 
+static gboolean
+update_downloads_visibility (EphyActionBarEnd *action_bar_end)
+{
+  EphyDownloadsManager *manager;
+  gboolean has_downloads;
+
+  manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
+  has_downloads = !!ephy_downloads_manager_get_downloads (manager);
+
+  gtk_widget_set_visible (action_bar_end->downloads_revealer, has_downloads || is_desktop_pantheon ());
+  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), has_downloads);
+}
+
 static void
 download_added_cb (EphyDownloadsManager *manager,
                    EphyDownload         *download,
@@ -95,8 +108,7 @@ download_added_cb (EphyDownloadsManager *manager,
   }
 
   add_attention (action_bar_end);
-  gtk_widget_set_visible (action_bar_end->downloads_revealer, TRUE);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), TRUE);
+  update_downloads_visibility (action_bar_end);
   gtk_widget_queue_draw (action_bar_end->downloads_image);
 
   if (gtk_widget_is_visible (GTK_WIDGET (action_bar_end))) {
@@ -198,10 +210,7 @@ download_removed_cb (EphyDownloadsManager *manager,
                      EphyDownload         *download,
                      EphyActionBarEnd     *action_bar_end)
 {
-  if (!ephy_downloads_manager_get_downloads (manager)) {
-    gtk_widget_set_visible (action_bar_end->downloads_revealer, FALSE);
-    gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), FALSE);
-  }
+  update_downloads_visibility (action_bar_end);
 }
 
 static void
@@ -255,9 +264,7 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
-  gtk_widget_set_visible (action_bar_end->downloads_revealer, ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer),
-                                 ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
+  update_downloads_visibility (action_bar_end);
 
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
     action_bar_end->downloads_popover = ephy_downloads_popover_new (action_bar_end->downloads_button);
