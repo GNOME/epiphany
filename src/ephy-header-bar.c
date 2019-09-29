@@ -144,7 +144,6 @@ ephy_header_bar_constructed (GObject *object)
   GtkWidget *page_menu_popover;
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
-  HdyColumn *column;
   GtkSizeGroup *downloads_size_group;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
@@ -174,13 +173,27 @@ ephy_header_bar_constructed (GObject *object)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-  column = hdy_column_new ();
-  gtk_widget_set_hexpand (GTK_WIDGET (column), TRUE);
-  gtk_widget_show (GTK_WIDGET (column));
-  hdy_column_set_maximum_width (column, 860);
-  hdy_column_set_linear_growth_width (column, 560);
-  gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (header_bar->title_widget));
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (column));
+
+  if (is_desktop_pantheon ()) {
+    /* Use a full-width entry on Pantheon */
+    gtk_widget_set_hexpand (GTK_WIDGET (header_bar->title_widget), TRUE);
+    gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 6);
+    gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 6);
+
+    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
+  } else {
+    HdyColumn *column;
+
+    column = hdy_column_new ();
+    gtk_widget_set_hexpand (GTK_WIDGET (column), TRUE);
+    gtk_widget_show (GTK_WIDGET (column));
+    hdy_column_set_maximum_width (column, 860);
+    hdy_column_set_linear_growth_width (column, 560);
+    gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (header_bar->title_widget));
+
+    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (column));
+  }
+
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
   if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
