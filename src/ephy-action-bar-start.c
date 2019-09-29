@@ -44,6 +44,7 @@ struct _EphyActionBarStart {
   GtkWidget *combined_stop_reload_image;
   GtkWidget *homepage_button;
   GtkWidget *new_tab_button;
+  GtkWidget *placeholder;
 
   guint navigation_buttons_menu_timeout;
 };
@@ -573,6 +574,9 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         new_tab_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarStart,
+                                        placeholder);
 }
 
 static void
@@ -612,3 +616,10 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
 }
+
+GtkWidget *
+ephy_action_bar_start_get_placeholder (EphyActionBarStart *action_bar_start)
+{
+  return action_bar_start->placeholder;
+}
+
