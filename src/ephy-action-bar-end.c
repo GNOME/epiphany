@@ -302,3 +302,9 @@ ephy_action_bar_end_get_bookmarks_button (EphyActionBarEnd *action_bar_end)
 {
   return action_bar_end->bookmarks_button;
 }
+
+GtkWidget *
+ephy_action_bar_end_get_downloads_revealer (EphyActionBarEnd *action_bar_end)
+{
+  return action_bar_end->downloads_revealer;
+}
