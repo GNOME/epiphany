@@ -28,6 +28,7 @@
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -541,7 +542,7 @@ update_adaptive_mode (EphyWindow *window)
   is_mobile_landscape = geometry.height <= 400 &&
                         (gtk_window_is_maximized (GTK_WINDOW (window)) ||
                          window->is_fullscreen);
-  adaptive_mode = is_narrow || is_mobile_landscape ?
+  adaptive_mode = (is_narrow || is_mobile_landscape) && !is_desktop_pantheon () ?
                   EPHY_ADAPTIVE_MODE_NARROW :
                   EPHY_ADAPTIVE_MODE_NORMAL;
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
