@@ -171,6 +171,7 @@ ephy_header_bar_constructed (GObject *object)
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
   HdyColumn *column;
+  GtkSizeGroup *downloads_size_group;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
@@ -292,6 +293,14 @@ ephy_header_bar_constructed (GObject *object)
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
                            GTK_WIDGET (header_bar->end_revealer));
+
+  /* Sync the size of placeholder in EphyActionBarStart with downloads button */
+  downloads_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  gtk_size_group_add_widget (downloads_size_group,
+                             ephy_action_bar_start_get_placeholder (header_bar->action_bar_start));
+  gtk_size_group_add_widget (downloads_size_group,
+                             ephy_action_bar_end_get_downloads_revealer (header_bar->action_bar_end));
+  g_object_unref (downloads_size_group);
 }
 
 static void
