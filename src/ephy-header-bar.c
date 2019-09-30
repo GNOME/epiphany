@@ -61,6 +61,7 @@ struct _EphyHeaderBar {
   GtkWidget *bookmarks_button;
   GtkWidget *page_menu_button;
   GtkWidget *zoom_level_button;
+  GtkWidget *restore_button;
 };
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
@@ -114,6 +115,18 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
 }
 
+void
+fullscreen_changed_cb (EphyHeaderBar *header_bar)
+{
+  gboolean fullscreen;
+
+  g_object_get (header_bar->window, "fullscreen", &fullscreen, NULL);
+
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar), !fullscreen);
+  gtk_widget_set_visible (header_bar->restore_button, fullscreen);
+  ephy_action_bar_set_is_fullscreen (header_bar->action_bar_start, fullscreen);
+}
+
 static void
 add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                 gpointer          *user_data)
@@ -124,6 +137,19 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark-page");
+
+  g_action_activate (action, NULL);
+}
+
+static void
+restore_button_clicked_cb (GtkButton     *button,
+                           EphyHeaderBar *header_bar)
+{
+  GActionGroup *action_group;
+  GAction *action;
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
 
   g_action_activate (action, NULL);
 }
@@ -150,6 +176,9 @@ ephy_header_bar_constructed (GObject *object)
 
   g_signal_connect_object (header_bar->window, "notify::chrome",
                            G_CALLBACK (sync_chromes_visibility), header_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (header_bar->window, "notify::fullscreen",
+                           G_CALLBACK (fullscreen_changed_cb), header_bar,
                            G_CONNECT_SWAPPED);
 
   /* Start action elements */
@@ -192,6 +221,16 @@ ephy_header_bar_constructed (GObject *object)
                              header_bar,
                              0);
   }
+
+  /* Fullscreen restore button */
+  header_bar->restore_button = gtk_button_new_from_icon_name ("view-restore-symbolic",
+                                                              GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_valign (header_bar->restore_button, GTK_ALIGN_CENTER);
+  g_signal_connect_object (header_bar->restore_button, "clicked",
+                           G_CALLBACK (restore_button_clicked_cb),
+                           header_bar, 0);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
+                           GTK_WIDGET (header_bar->restore_button));
 
   /* Page Menu */
   button = gtk_menu_button_new ();
