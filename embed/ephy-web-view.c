@@ -1163,6 +1163,25 @@ process_terminated_cb (EphyWebView                       *web_view,
 }
 
 static void
+style_updated_cb (EphyWebView *web_view,
+                  gpointer     user_data)
+{
+  GtkStyleContext *context;
+  GdkRGBA color;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
+  if (!gtk_style_context_lookup_color (context, "theme_base_color", &color)) {
+    /* Fall back to white */
+    color.red = 1;
+    color.green = 1;
+    color.blue = 1;
+    color.alpha = 1;
+  }
+
+  webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
+}
+
+static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
@@ -1175,6 +1194,10 @@ ephy_web_view_constructed (GObject *object)
                     G_CALLBACK (process_terminated_cb), NULL);
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
+
+  g_signal_connect (web_view, "style-updated",
+                    G_CALLBACK (style_updated_cb), NULL);
+  style_updated_cb (web_view, NULL);
 }
 
 static void
