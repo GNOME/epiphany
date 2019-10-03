@@ -431,10 +431,13 @@ create_web_view_for_automation_cb (WebKitAutomationSession *session,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   n_embeds = ephy_embed_container_get_n_children (EPHY_EMBED_CONTAINER (window));
   web_view = ephy_embed_get_web_view (embed);
-  if (n_embeds == 1 && ephy_web_view_get_visit_type (web_view) == EPHY_PAGE_VISIT_HOMEPAGE)
+  if (n_embeds == 1 && ephy_web_view_get_visit_type (web_view) == EPHY_PAGE_VISIT_HOMEPAGE) {
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
     return GTK_WIDGET (web_view);
+  }
 
   embed = ephy_shell_new_tab (shell, window, NULL, EPHY_NEW_TAB_JUMP);
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
   return GTK_WIDGET (ephy_embed_get_web_view (embed));
 }
 
