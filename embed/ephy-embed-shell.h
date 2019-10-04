@@ -31,6 +31,7 @@
 #include "ephy-password-manager.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-web-process-extension-proxy.h"
 
 G_BEGIN_DECLS
 
