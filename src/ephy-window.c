@@ -535,13 +535,9 @@ update_adaptive_mode (EphyWindow *window)
   else
     geometry.height = height;
 
-  /* window->is_maximized doesn't work here for some reason, so we use
-   * gtk_window_is_maximized() instead.
-   */
   is_narrow = width <= 600;
   is_mobile_landscape = geometry.height <= 400 &&
-                        (gtk_window_is_maximized (GTK_WINDOW (window)) ||
-                         window->is_fullscreen);
+                        (window->is_maximized || window->is_fullscreen);
   adaptive_mode = (is_narrow || is_mobile_landscape) && !is_desktop_pantheon () ?
                   EPHY_ADAPTIVE_MODE_NARROW :
                   EPHY_ADAPTIVE_MODE_NORMAL;
@@ -3221,7 +3217,7 @@ ephy_window_state_event (GtkWidget           *widget,
     GAction *action;
     gboolean fullscreen;
 
-    fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
+    fullscreen = !!(event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN);
 
     if (fullscreen) {
       ephy_window_fullscreen (window);
@@ -3240,7 +3236,7 @@ ephy_window_state_event (GtkWidget           *widget,
     g_simple_action_set_state (G_SIMPLE_ACTION (action),
                                g_variant_new_boolean (fullscreen));
   } else if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED) {
-    window->is_maximized = event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED;
+    window->is_maximized = !!(event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED);
   }
 
   update_adaptive_mode (window);
