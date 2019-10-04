@@ -43,6 +43,7 @@ G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
                                         "^data:.*$|" \
                                         "^file:.*$|" \
                                         "^inspector://.*$" \
+                                        "^webkit://.*$" \
                                         ")"
 
 #define EPHY_WEB_VIEW_DOMAIN_REGEX "^localhost(\\.[^[:space:]]+)?(:\\d+)?(:[0-9]+)?(/.*)?$|" \

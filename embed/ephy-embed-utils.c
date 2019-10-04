@@ -133,7 +133,8 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
                      g_ascii_strncasecmp (address, "ephy-about", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-source", colonpos) &&
                      g_ascii_strncasecmp (address, "gopher", colonpos) &&
-                     g_ascii_strncasecmp (address, "inspector", colonpos));
+                     g_ascii_strncasecmp (address, "inspector", colonpos) &&
+                     g_ascii_strncasecmp (address, "webkit", colonpos));
 
   return has_web_scheme;
 }
@@ -248,8 +249,13 @@ ephy_embed_utils_normalize_address (const char *address)
   if (ephy_embed_utils_address_is_existing_absolute_filename (address))
     return g_strconcat ("file://", address, NULL);
 
-  if (g_str_has_prefix (address, "about:") && strcmp (address, "about:blank"))
-    return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
+  if (g_str_has_prefix (address, "about:")) {
+    if (strcmp (address, "about:gpu") == 0)
+      return g_strdup ("webkit://gpu");
+
+    if (strcmp (address, "about:blank") != 0)
+      return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
+  }
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
     SoupURI *uri;
