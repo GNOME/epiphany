@@ -133,9 +133,6 @@ struct _EphyWebView {
   char *tls_error_failing_uri;
 
   EphyWebViewErrorPage error_page;
-
-  /* Web Process Extension */
-  EphyWebProcessExtensionProxy *web_process_extension;
 };
 
 typedef struct {
@@ -906,30 +903,9 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
 }
 
 static void
-page_created_cb (EphyEmbedShell               *shell,
-                 guint64                       page_id,
-                 EphyWebProcessExtensionProxy *web_process_extension,
-                 EphyWebView                  *view)
-{
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
-    return;
-
-  if (view->web_process_extension)
-    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-
-  view->web_process_extension = web_process_extension;
-  g_object_add_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-}
-
-static void
 ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
-
-  if (view->web_process_extension) {
-    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-    view->web_process_extension = NULL;
-  }
 
   untrack_info_bar (&view->geolocation_info_bar);
   untrack_info_bar (&view->notification_info_bar);
@@ -3000,10 +2976,6 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (authenticate_cb),
                     NULL);
 
-  g_signal_connect_object (shell, "page-created",
-                           G_CALLBACK (page_created_cb),
-                           web_view, 0);
-
   g_signal_connect_object (shell, "password-form-focused",
                            G_CALLBACK (password_form_focused_cb),
                            web_view, 0);
@@ -3976,12 +3948,6 @@ gboolean
 ephy_web_view_get_reader_mode_state (EphyWebView *view)
 {
   return view->reader_active;
-}
-
-EphyWebProcessExtensionProxy *
-ephy_web_view_get_web_process_extension_proxy (EphyWebView *view)
-{
-  return view->web_process_extension;
 }
 
 gboolean

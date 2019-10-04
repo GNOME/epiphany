@@ -43,7 +43,6 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-web-process-extension-proxy.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -69,6 +68,7 @@ typedef struct {
   char *guid;
   GDBusServer *dbus_server;
   GList *web_process_extensions;
+  GHashTable *web_process_extension_page_map;
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
   GCancellable *cancellable;
@@ -77,7 +77,6 @@ typedef struct {
 enum {
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
-  PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
   ALLOW_UNSAFE_BROWSING,
   PASSWORD_FORM_FOCUSED,
@@ -141,8 +140,15 @@ ephy_embed_shell_get_extension_proxy_for_page_id (EphyEmbedShell *self,
                                                   guint64         page_id,
                                                   const char     *origin)
 {
-  EphyWebView *view = ephy_embed_shell_get_view_for_page_id (self, page_id, origin);
-  return view ? ephy_web_view_get_web_process_extension_proxy (view) : NULL;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (self);
+
+  if (!priv->web_process_extension_page_map)
+    return NULL;
+
+  if (!ephy_embed_shell_get_view_for_page_id (self, page_id, origin))
+    return NULL;
+
+  return g_hash_table_lookup (priv->web_process_extension_page_map, GSIZE_TO_POINTER (page_id));
 }
 
 static GList *
@@ -217,6 +223,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->dbus_server);
   g_clear_object (&priv->filters_manager);
   g_clear_object (&priv->search_engine_manager);
+  g_clear_pointer (&priv->web_process_extension_page_map, g_hash_table_destroy);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -982,8 +989,18 @@ web_process_extension_page_created (EphyWebProcessExtensionProxy *extension,
                                     guint64                       page_id,
                                     EphyEmbedShell               *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
   g_object_set_data (G_OBJECT (extension), "initialized", GINT_TO_POINTER (TRUE));
-  g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, extension);
+  g_hash_table_insert (priv->web_process_extension_page_map, GSIZE_TO_POINTER (page_id), extension);
+}
+
+static gboolean
+find_extension (gpointer key,
+                gpointer value,
+                gpointer user_data)
+{
+  return value == user_data;
 }
 
 static void
@@ -993,6 +1010,7 @@ web_process_extension_connection_closed (EphyWebProcessExtensionProxy *extension
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   priv->web_process_extensions = g_list_remove (priv->web_process_extensions, extension);
+  g_hash_table_foreach_remove (priv->web_process_extension_page_map, find_extension, extension);
   g_object_unref (extension);
 }
 
@@ -1070,22 +1088,21 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (WebKitWebsiteDataManager) manager = NULL;
 
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-    priv->web_context = webkit_web_context_new_ephemeral ();
-    return;
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    manager = webkit_website_data_manager_new_ephemeral ();
+  } else {
+    manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
+                                               "base-cache-directory", ephy_cache_dir (),
+                                               NULL);
   }
 
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    priv->web_context = webkit_web_context_new_ephemeral ();
+  priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
+                                    "website-data-manager", manager,
+                                    "process-swap-on-cross-site-navigation-enabled", TRUE,
+                                    NULL);
+
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     webkit_web_context_set_automation_allowed (priv->web_context, TRUE);
-    return;
-  }
-
-  manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
-                                             "base-cache-directory", ephy_cache_dir (),
-                                             NULL);
-
-  priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
 }
 
 static void
@@ -1209,6 +1226,7 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
 #endif
 
+  priv->web_process_extension_page_map = g_hash_table_new (g_direct_hash, g_direct_equal);
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
                            shell, 0);
@@ -1451,23 +1469,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_WEB_VIEW);
-
-  /**
-   * EphyEmbedShell::page-created:
-   * @shell: the #EphyEmbedShell
-   * @page_id: the identifier of the web page created
-   * @web_process_extension: the #EphyWebProcessExtensionProxy
-   *
-   * Emitted when a web page is created in the web process.
-   */
-  signals[PAGE_CREATED] =
-    g_signal_new ("page-created",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_UINT64,
-                  EPHY_TYPE_WEB_PROCESS_EXTENSION_PROXY);
 
   /**
    * EphyEmbedShell::allow-tls-certificate:
