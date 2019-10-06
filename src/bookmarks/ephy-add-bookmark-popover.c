@@ -112,13 +112,17 @@ ephy_add_bookmark_popover_class_init (EphyAddBookmarkPopoverClass *klass)
 }
 
 static void
-ephy_add_bookmark_popover_closed_cb (GtkPopover *popover,
-                                     gpointer    user_data)
+ephy_add_bookmark_popover_notify_visible_cb (GtkPopover *popover,
+                                             GParamSpec *param,
+                                             gpointer    user_data)
 {
   EphyAddBookmarkPopover *self;
   EphyBookmarksManager *manager;
 
   g_assert (EPHY_IS_ADD_BOOKMARK_POPOVER (popover));
+
+  if (gtk_widget_get_visible (GTK_WIDGET (popover)))
+    return;
 
   self = EPHY_ADD_BOOKMARK_POPOVER (popover);
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
@@ -135,8 +139,8 @@ ephy_add_bookmark_popover_closed_cb (GtkPopover *popover,
 static void
 ephy_add_bookmark_popover_init (EphyAddBookmarkPopover *self)
 {
-  g_signal_connect (self, "closed",
-                    G_CALLBACK (ephy_add_bookmark_popover_closed_cb),
+  g_signal_connect (self, "notify::visible",
+                    G_CALLBACK (ephy_add_bookmark_popover_notify_visible_cb),
                     NULL);
 }
 
@@ -190,7 +194,7 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
                                ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 
-  gtk_widget_hide (GTK_WIDGET (self));
+  gtk_popover_popdown (GTK_POPOVER (self));
 }
 
 void
