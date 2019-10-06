@@ -30,17 +30,15 @@
 
 .bookmarks-row:hover button { opacity: 1; }
 
-.bookmark-tag-widget { padding-left: 8px; background-color: darker(@theme_bg_color); }
+.bookmark-tag-widget { padding-left: 8px; background-color: rgba(0, 0, 0, 0.1); border-radius: 3px; }
 
 .bookmark-tag-widget label { padding-left: 8px; padding-right: 8px; }
 
-.bookmark-tag-widget image, .bookmark-tag-widget label { color: @theme_fg_color; }
-
-.bookmark-tag-widget button:hover image { color: @theme_fg_color; }
+.bookmark-tag-widget image, .bookmark-tag-widget label, .bookmark-tag-widget button:hover image { color: @theme_fg_color; }
 
 .bookmark-tag-widget-selected { background-color: @theme_selected_bg_color; }
 
-.bookmark-tag-widget-selected image, .bookmark-tag-widget-selected label { color: @theme_selected_fg_color; }
+.bookmark-tag-widget-selected image, .bookmark-tag-widget-selected label, .bookmark-tag-widget-selected button:hover image { color: @theme_selected_fg_color; }
 
 #fullscreen-popup { padding: 12px; border-radius: 18px; background: rgba(0, 0, 0, 0.65); color: white; }
 
@@ -95,3 +93,7 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 .incognito-mode .titlebar { padding: 0; }
 
 .incognito-mode headerbar { padding: 8px 6px 6px; background-position: 100px; color: @text_shadow_color; }
+
+.bookmark-tag-widget image { -gtk-icon-shadow: none; }
+
+.bookmark-tag-widget-selected { background-color: @colorAccent; }
