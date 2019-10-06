@@ -948,6 +948,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_container_add (GTK_CONTAINER (event), box);
   g_signal_connect (G_OBJECT (box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
   gtk_widget_set_halign (box, GTK_ALIGN_END);
+  gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
   gtk_widget_show (box);
 
   context = gtk_widget_get_style_context (box);

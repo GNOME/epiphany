@@ -48,6 +48,7 @@ struct _EphyBookmarkPropertiesGrid {
   GtkWidget *address_entry;
   GtkWidget *popover_tags_label;
   GtkWidget *tags_box;
+  GtkWidget *tags_scrolled_window;
   GtkWidget *add_tag_entry;
   GtkWidget *add_tag_button;
   GtkWidget *remove_bookmark_button;
@@ -89,6 +90,21 @@ flow_box_sort_func (GtkFlowBoxChild *child1,
   tag2 = gtk_label_get_text (GTK_LABEL (label2));
 
   return ephy_bookmark_tags_compare (tag1, tag2);
+}
+
+static void
+update_tags_scrollbar (EphyBookmarkPropertiesGrid *self)
+{
+  g_autoptr (GList) children = NULL;
+  gint n_tags;
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->tags_box));
+  n_tags = g_list_length (children);
+
+  g_object_set (self->tags_scrolled_window,
+                "vscrollbar-policy",
+                (n_tags > 3) ? GTK_POLICY_AUTOMATIC : GTK_POLICY_NEVER,
+                NULL);
 }
 
 static void
@@ -138,6 +154,7 @@ ephy_bookmark_properties_grid_tag_widget_button_clicked_cb (EphyBookmarkProperti
 
   flow_box_child = gtk_widget_get_parent (box);
   gtk_widget_destroy (flow_box_child);
+  update_tags_scrollbar (self);
 }
 
 static GtkWidget *
@@ -227,6 +244,7 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
   /* Create a new widget for the new tag */
   widget = ephy_bookmark_properties_grid_create_tag_widget (self, text, TRUE);
   gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
+  update_tags_scrollbar (self);
 
   /* Empty entry and disable button's action until new text is inserted */
   gtk_entry_set_text (GTK_ENTRY (self->add_tag_entry), "");
@@ -406,6 +424,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
     widget = ephy_bookmark_properties_grid_create_tag_widget (self, tag, selected);
     gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
   }
+  update_tags_scrollbar (self);
 
   g_signal_connect_object (self->tags_box, "child-activated",
                            G_CALLBACK (ephy_bookmark_properties_grid_tags_box_child_activated_cb),
@@ -470,6 +489,7 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, address_entry);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, popover_tags_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, tags_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, tags_scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, add_tag_entry);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, add_tag_button);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, remove_bookmark_button);
