@@ -219,6 +219,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
   GSequence *bookmarks = NULL;
   gboolean ret = TRUE;
   gchar *filename;
+  GError *my_error = NULL;
   const char *statement_str = "SELECT b.id, p.url, b.title, b.dateAdded, b.guid, g.title "
                               "FROM moz_bookmarks b "
                               "JOIN moz_places p ON b.fk=p.id "
@@ -235,10 +236,10 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
                                NULL);
 
   connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READ_ONLY, filename);
-  ephy_sqlite_connection_open (connection, error);
-  if (*error) {
-    g_warning ("Could not open database at %s: %s", filename, (*error)->message);
-    g_error_free (*error);
+  ephy_sqlite_connection_open (connection, &my_error);
+  if (my_error) {
+    g_warning ("Could not open database at %s: %s", filename, my_error->message);
+    g_error_free (my_error);
     g_set_error (error,
                  BOOKMARKS_IMPORT_ERROR,
                  BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
@@ -248,10 +249,10 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
 
   statement = ephy_sqlite_connection_create_statement (connection,
                                                        statement_str,
-                                                       error);
+                                                       &my_error);
   if (statement == NULL) {
-    g_warning ("Could not build bookmarks query statement: %s", (*error)->message);
-    g_error_free (*error);
+    g_warning ("Could not build bookmarks query statement: %s", my_error->message);
+    g_error_free (my_error);
     g_set_error (error,
                  BOOKMARKS_IMPORT_ERROR,
                  BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
@@ -261,7 +262,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
   }
 
   bookmarks = g_sequence_new (g_object_unref);
-  while (ephy_sqlite_statement_step (statement, error)) {
+  while (ephy_sqlite_statement_step (statement, &my_error)) {
     int bookmark_id = ephy_sqlite_statement_get_column_as_int (statement, 0);
     const char *url = ephy_sqlite_statement_get_column_as_string (statement, 1);
     const char *title = ephy_sqlite_statement_get_column_as_string (statement, 2);
@@ -281,9 +282,9 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
     g_sequence_prepend (bookmarks, bookmark);
   }
 
-  if (*error) {
-    g_warning ("Could not execute bookmarks query statement: %s", (*error)->message);
-    g_error_free (*error);
+  if (my_error) {
+    g_warning ("Could not execute bookmarks query statement: %s", my_error->message);
+    g_error_free (my_error);
     g_set_error (error,
                  BOOKMARKS_IMPORT_ERROR,
                  BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
