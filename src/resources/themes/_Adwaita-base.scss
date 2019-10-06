@@ -229,29 +229,15 @@ $close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken(
 }
 
 .bookmark-tag-widget {
-  background-color: darken($bg_color, 10%);
-
-  image,
-  label {
-    color: $fg_color;
-  }
+  border-radius: 5px;
 
   button {
     @include close_button();
   }
 }
 
-.bookmark-tag-widget-selected {
-  background-color: themecolor(theme_selected_bg_color);
-
-  image,
-  label {
-    color: themecolor(theme_selected_fg_color);
-  }
-
-  button {
-    @include close_button($selected_bg_color, $selected_fg_color);
-  }
+.bookmark-tag-widget-selected button {
+  @include close_button($selected_bg_color, $selected_fg_color);
 }
 
 .page-row-close-button {
