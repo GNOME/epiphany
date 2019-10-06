@@ -3396,6 +3396,15 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
+security_popover_notify_visible_cb (GtkWidget  *widget,
+                                    GParamSpec *param,
+                                    gpointer    user_data)
+{
+  if (!gtk_widget_get_visible (widget))
+    gtk_widget_destroy (widget);
+}
+
+static void
 title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                               GdkRectangle    *lock_position,
                               gpointer         user_data)
@@ -3417,8 +3426,8 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                                                 tls_errors,
                                                 security_level);
 
-  g_signal_connect (security_popover, "closed",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (security_popover, "notify::visible",
+                    G_CALLBACK (security_popover_notify_visible_cb), NULL);
   gtk_popover_set_pointing_to (GTK_POPOVER (security_popover), lock_position);
   gtk_popover_set_position (GTK_POPOVER (security_popover), GTK_POS_BOTTOM);
   gtk_popover_popup (GTK_POPOVER (security_popover));

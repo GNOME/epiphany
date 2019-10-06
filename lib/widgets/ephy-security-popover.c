@@ -231,7 +231,7 @@ certificate_button_clicked_cb (GtkButton *button,
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
 
-  gtk_widget_hide (GTK_WIDGET (popover));
+  gtk_popover_popdown (GTK_POPOVER (popover));
   gtk_widget_show (dialog);
 }
 
