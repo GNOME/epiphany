@@ -389,24 +389,33 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkWidget *combo_box;
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
+  GtkWidget *button;
 
-  dialog = hdy_dialog_new (GTK_WINDOW (window));
+  dialog = g_object_new (GTK_TYPE_DIALOG,
+                         "parent", window,
+                         "deletable", FALSE,
+                         "resizable", FALSE,
+                         "border-width", 6,
+                         "transient-for", window,
+                         "modal", TRUE,
+                         NULL);
+
   gtk_window_set_title (GTK_WINDOW (dialog), _("Import Bookmarks"));
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("_Cancel"),
-                          GTK_RESPONSE_CANCEL,
-                          _("Ch_oose File"),
-                          GTK_RESPONSE_OK,
-                          NULL);
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         _("_Cancel"),
+                         GTK_RESPONSE_CANCEL);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                  _("Ch_oose File"),
+                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button),
+                               "suggested-action");
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (content_area, 25);
-  gtk_widget_set_margin_end (content_area, 25);
-  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  g_object_set (hbox, "margin", 6, "margin-top", 0, NULL);
 
   label = gtk_label_new (_("From:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
