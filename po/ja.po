@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-09-27 14:59+0000\n"
+"POT-Creation-Date: 2019-10-07 09:49+0000\n"
 "PO-Revision-Date: 2019-10-02 18:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -210,9 +210,13 @@ msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "タブのサイズをタブバーの空き領域に合わせて拡大する"
 
 #: data/org.gnome.epiphany.gschema.xml:78
+#, fuzzy
+#| msgid ""
+#| "If enabled the tabs will expand to use the entire available space in the "
+#| "tabs bar."
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
-"tabs bar."
+"tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 "有効にすると、タブバーの利用可能な領域全体を使用するようにタブを拡大します。"
 
@@ -234,10 +238,16 @@ msgid "The visibility policy for the tabs bar."
 msgstr "タブバーの表示/非表示のポリシー"
 
 #: data/org.gnome.epiphany.gschema.xml:88
+#, fuzzy
+#| msgid ""
+#| "Controls when the tabs bar is shown. Possible values are “always” (the "
+#| "tabs bar is always shown), “more-than-one” (the tabs bar is only shown if "
+#| "there’s two or more tabs) and “never” (the tabs bar is never shown)."
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
-"two or more tabs) and “never” (the tabs bar is never shown)."
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "タブバーが表示される条件を制御します。指定できる値は、“always” (タブバーを常"
 "に表示します)、“more-than-one” (タブが2個以上存在する場合にタブバーを表示しま"
@@ -875,8 +885,8 @@ msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
 msgstr ""
-"ページメニューにある <b>ウェブアプリケーションとしてサイトをインストール…"
-"</b> をクリックすると、お気に入りのウェブサイトを追加できます。"
+"ページメニューにある <b>ウェブアプリケーションとしてサイトをインストール…</"
+"b> をクリックすると、お気に入りのウェブサイトを追加できます。"
 
 #. Displayed when opening the browser for the first time.
 #: embed/ephy-about-handler.c:391
@@ -1385,8 +1395,8 @@ msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
 msgstr ""
-"警告: このフォームは安全ではありません。入力したパスワードは漏えいする可能性があり"
-"ます。"
+"警告: このフォームは安全ではありません。入力したパスワードは漏えいする可能性"
+"があります。"
 
 #: embed/ephy-web-view.c:1152
 msgid "Web process crashed"
@@ -1396,56 +1406,56 @@ msgstr "Web のプロセスがクラッシュしました"
 msgid "Web process terminated due to exceeding memory limit"
 msgstr ""
 
-#: embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1601
 msgid "Deny"
 msgstr "拒否"
 
-#: embed/ephy-web-view.c:1579
+#: embed/ephy-web-view.c:1602
 msgid "Allow"
 msgstr "許可"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1592
+#: embed/ephy-web-view.c:1615
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "%s のページがデスクトップ通知を行う権限を要求しています。"
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1597
+#: embed/ephy-web-view.c:1620
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "%s のページがあなたの位置情報を要求しています。"
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1602
+#: embed/ephy-web-view.c:1625
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "%s のページがマイクの使用を要求しています。"
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1607
+#: embed/ephy-web-view.c:1630
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "%s のページがウェブカメラの使用を要求しています。"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1807
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s”の読み込み中…"
 
-#: embed/ephy-web-view.c:1786 embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1809 embed/ephy-web-view.c:1815
 msgid "Loading…"
 msgstr "読み込み中…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2080
+#: embed/ephy-web-view.c:2103
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "このウェブサイトの提供する識別情報は、異なるウェブサイトのものです。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2085
+#: embed/ephy-web-view.c:2108
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1454,14 +1464,14 @@ msgstr ""
 "てください。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2090
+#: embed/ephy-web-view.c:2113
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "このウェブサイトの識別情報は、信頼された認証局で発行されたものではありませ"
 "ん。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2095
+#: embed/ephy-web-view.c:2118
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1469,7 +1479,7 @@ msgstr ""
 "ます。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2100
+#: embed/ephy-web-view.c:2123
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1478,7 +1488,7 @@ msgstr ""
 "す。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2105
+#: embed/ephy-web-view.c:2128
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1487,7 +1497,7 @@ msgstr ""
 "す。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2133
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1497,24 +1507,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2173 embed/ephy-web-view.c:2229
+#: embed/ephy-web-view.c:2196 embed/ephy-web-view.c:2252
 #, c-format
 msgid "Problem Loading Page"
 msgstr "ページの読み込み時の問題"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2176
+#: embed/ephy-web-view.c:2199
 msgid "Unable to display this website"
 msgstr "このウェブサイトを表示できません"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2180
+#: embed/ephy-web-view.c:2203
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "%s のサイトは利用できないようです。"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2184
+#: embed/ephy-web-view.c:2207
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1523,7 +1533,7 @@ msgstr ""
 "能性があります。インターネット接続が正常にできていることも確認してください。"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2194
+#: embed/ephy-web-view.c:2217
 #, c-format
 msgid "The precise error was: %s"
 msgstr "エラーの詳細: %s"
@@ -1531,70 +1541,70 @@ msgstr "エラーの詳細: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2199 embed/ephy-web-view.c:2252
-#: embed/ephy-web-view.c:2295
+#: embed/ephy-web-view.c:2222 embed/ephy-web-view.c:2275
+#: embed/ephy-web-view.c:2318
 msgid "Reload"
 msgstr "再読み込み"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2202 embed/ephy-web-view.c:2255
-#: embed/ephy-web-view.c:2298
+#: embed/ephy-web-view.c:2225 embed/ephy-web-view.c:2278
+#: embed/ephy-web-view.c:2321
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2232
+#: embed/ephy-web-view.c:2255
 msgid "Oops! There may be a problem"
 msgstr "問題が発生した可能性があります"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2236
+#: embed/ephy-web-view.c:2259
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "ページ %s が原因で Web が予期せず終了した可能性があります。"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2243
+#: embed/ephy-web-view.c:2266
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "もし同じ現象が再発するようであれば、%s の開発者に問題を報告してください。"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2281
+#: embed/ephy-web-view.c:2304
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "ページの表示時の問題"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2284
+#: embed/ephy-web-view.c:2307
 msgid "Oops!"
 msgstr "おっと!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2287
+#: embed/ephy-web-view.c:2310
 msgid "Something went wrong while displaying this page."
 msgstr "このページの表示中に何か問題が発生しました。"
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2289
+#: embed/ephy-web-view.c:2312
 msgid "Please reload or visit a different page to continue."
 msgstr "使用を続けるには再読み込みするか他のページにアクセスしてください。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2324
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid "Security Violation"
 msgstr "セキュリティ違反"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2350
 msgid "This Connection is Not Secure"
 msgstr "この接続は安全ではありません"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2331
+#: embed/ephy-web-view.c:2354
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1606,45 +1616,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2341 embed/ephy-web-view.c:2430
-#: embed/ephy-web-view.c:2481
+#: embed/ephy-web-view.c:2364 embed/ephy-web-view.c:2453
+#: embed/ephy-web-view.c:2504
 msgid "Go Back"
 msgstr "戻る"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2344 embed/ephy-web-view.c:2433
-#: embed/ephy-web-view.c:2484
+#: embed/ephy-web-view.c:2367 embed/ephy-web-view.c:2456
+#: embed/ephy-web-view.c:2507
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2347 embed/ephy-web-view.c:2436
+#: embed/ephy-web-view.c:2370 embed/ephy-web-view.c:2459
 msgid "Accept Risk and Proceed"
 msgstr "リスクを許容して続行"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2351 embed/ephy-web-view.c:2440
+#: embed/ephy-web-view.c:2374 embed/ephy-web-view.c:2463
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2381
+#: embed/ephy-web-view.c:2404
 #, c-format
 msgid "Security Warning"
 msgstr "セキュリティ警告"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2384
+#: embed/ephy-web-view.c:2407
 msgid "Unsafe website detected!"
 msgstr "安全でないウェブサイトを検出しました!"
 
-#: embed/ephy-web-view.c:2391
+#: embed/ephy-web-view.c:2414
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1653,7 +1663,7 @@ msgstr ""
 "%s にアクセスすると、コンピューターに害を及ぼす可能性があります。あなたの同意"
 "なしに悪意あるコードがコンピューターにダウンロードされる可能性があります。"
 
-#: embed/ephy-web-view.c:2395
+#: embed/ephy-web-view.c:2418
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1662,7 +1672,7 @@ msgstr ""
 "ウイルスやその他の悪意あるコードを含む有害なウェブコンテンツについて、および"
 "コンピューターを保護する方法については、%s で詳細を確認できます。"
 
-#: embed/ephy-web-view.c:2402
+#: embed/ephy-web-view.c:2425
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1670,10 +1680,10 @@ msgid ""
 "phone numbers, or credit cards)."
 msgstr ""
 "%s の攻撃者は、あなたを騙して個人情報 (パスワード、電話番号、クレジットカード"
-"情報など) を入力させようとしたり、ソフトウェアをインストールさせようとしたりす"
-"る可能性があります。"
+"情報など) を入力させようとしたり、ソフトウェアをインストールさせようとしたり"
+"する可能性があります。"
 
-#: embed/ephy-web-view.c:2407
+#: embed/ephy-web-view.c:2430
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1681,7 +1691,7 @@ msgstr ""
 "ソーシャルエンジニアリング (フィッシング) については、%s または %s で詳細を確"
 "認できます。"
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:2439
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1693,41 +1703,42 @@ msgstr ""
 "ような、あなたのブラウジング体験を損なうプログラムをインストールさせようとす"
 "る可能性があります。"
 
-#: embed/ephy-web-view.c:2421
+#: embed/ephy-web-view.c:2444
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "望ましくないソフトウェアについては、%s で詳細を確認できます。"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2465 embed/ephy-web-view.c:2468
+#: embed/ephy-web-view.c:2488 embed/ephy-web-view.c:2491
 #, c-format
 msgid "File not found"
 msgstr "ファイルが見つかりません"
 
-#: embed/ephy-web-view.c:2472
+#: embed/ephy-web-view.c:2495
 #, c-format
 msgid "%s could not be found."
 msgstr "%s が見つかりませんでした。"
 
-#: embed/ephy-web-view.c:2474
+#: embed/ephy-web-view.c:2497
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr ""
-"ファイル名の大文字小文字や、その他の入力ミスを確認してください。また、そのファイル"
-"を移動していないか、削除していないか、名前を変更していないか確認してください。"
+"ファイル名の大文字小文字や、その他の入力ミスを確認してください。また、その"
+"ファイルを移動していないか、削除していないか、名前を変更していないか確認して"
+"ください。"
 
-#: embed/ephy-web-view.c:2537
+#: embed/ephy-web-view.c:2560
 msgid "None specified"
 msgstr "指定なし"
 
-#: embed/ephy-web-view.c:2653
+#: embed/ephy-web-view.c:2676
 msgid "Technical information"
 msgstr "技術情報"
 
-#: embed/ephy-web-view.c:3639
+#: embed/ephy-web-view.c:3662
 msgid "_OK"
 msgstr "OK(_O)"
 
@@ -2080,7 +2091,7 @@ msgid "Paste and _Go"
 msgstr "貼り付けて移動(_G)"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:674 src/ephy-window.c:938
+#: lib/widgets/ephy-location-entry.c:674 src/ephy-window.c:935
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
@@ -2088,15 +2099,15 @@ msgstr "元に戻す(_U)"
 msgid "_Redo"
 msgstr "やり直す(_R)"
 
-#: lib/widgets/ephy-location-entry.c:888
+#: lib/widgets/ephy-location-entry.c:918
 msgid "Show website security status and permissions"
 msgstr "ウェブサイトのセキュリティステータスや権限を表示します"
 
-#: lib/widgets/ephy-location-entry.c:928
+#: lib/widgets/ephy-location-entry.c:959
 msgid "Bookmark this page"
 msgstr "このページをブックマークします"
 
-#: lib/widgets/ephy-location-entry.c:940
+#: lib/widgets/ephy-location-entry.c:972
 msgid "Toggle reader mode"
 msgstr "リーダーモードを切り替えます"
 
@@ -2213,29 +2224,35 @@ msgstr "お気に入り"
 msgid "Mobile"
 msgstr "モバイル"
 
-#: src/clear-data-dialog.c:80
+#: src/clear-data-dialog.c:81
 msgid "HTTP disk cache"
 msgstr "HTTP ディスクキャッシュ"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:82
 msgid "Local storage data"
 msgstr "ローカルストレージデータ"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:83
 msgid "Offline web application cache"
 msgstr "オフラインウェブアプリケーションキャッシュ"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:84
 msgid "IndexedDB databases"
 msgstr "IndexedDB データベース"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:85
 msgid "WebSQL databases"
 msgstr "WebSQL データベース"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:86
 msgid "Plugins data"
 msgstr "プラグインデータ"
+
+#: src/clear-data-dialog.c:87
+#, fuzzy
+#| msgid "HTTP disk cache"
+msgid "HSTS policies cache"
+msgstr "HTTP ディスクキャッシュ"
 
 #: src/cookies-dialog.c:175
 msgid "Remove cookie"
@@ -2246,7 +2263,7 @@ msgstr "cookie を削除します"
 msgid "Reload the current page"
 msgstr "現在のページを再読み込みします"
 
-#: src/ephy-action-bar-start.c:606
+#: src/ephy-action-bar-start.c:624
 msgid "Stop loading the current page"
 msgstr "現在のページの読み込みを中止します"
 
@@ -2312,8 +2329,13 @@ msgstr "URL…"
 msgid "Web options"
 msgstr "Web のオプション"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:580 src/resources/gtk/action-bar-start.ui:96
+msgid "Open a new tab"
+msgstr "新しいタブを開きます"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:573
+#: src/ephy-notebook.c:590
 msgid "View open tabs"
 msgstr "開いているタブを表示します"
 
@@ -2338,192 +2360,192 @@ msgstr "タブに切り替え"
 msgid "Tabs"
 msgstr "タブ"
 
-#: src/ephy-tab-label.c:232
+#: src/ephy-tab-label.c:296
 msgid "New Tab"
 msgstr "新しいタブ"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:271
 msgid "Do you want to leave this website?"
 msgstr "このウェブサイトから移動しますか?"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:272
 msgid "A form you modified has not been submitted."
 msgstr "変更したフォームは送信されていません。"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "_Discard form"
 msgstr "フォームを破棄(_D)"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:288
 msgid "There are multiple tabs open."
 msgstr "複数のタブを開いています。"
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:289
 msgid "If you close this window, all open tabs will be lost"
 msgstr "このウィンドウを閉じると開いているタブは失われます"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:290
 msgid "C_lose tabs"
 msgstr "タブを閉じる(_L)"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:936
 msgid "Re_do"
 msgstr "やり直す(_D)"
 
 #. Edit.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:939
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:940
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:941
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:942
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:944
 msgid "S_end Link by Email…"
 msgstr "リンクをメールで送信(_E)…"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:946
 msgid "_Reload"
 msgstr "再読み込み(_R)"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:947
 msgid "_Back"
 msgstr "戻る(_B)"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:948
 msgid "_Forward"
 msgstr "進む(_F)"
 
 #. Bookmarks
-#: src/ephy-window.c:954
+#: src/ephy-window.c:951
 msgid "Add Boo_kmark…"
 msgstr "ブックマークの追加(_K)…"
 
 #. Links.
-#: src/ephy-window.c:958
+#: src/ephy-window.c:955
 msgid "Open Link in New _Window"
 msgstr "リンク先を新しいウィンドウで開く(_W)"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:956
 msgid "Open Link in New _Tab"
 msgstr "リンク先を新しいタブで開く(_T)"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:957
 msgid "Open Link in I_ncognito Window"
 msgstr "リンク先を匿名ウィンドウで開く(_N)"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:958
 msgid "_Save Link As…"
 msgstr "名前を付けてリンク先を保存(_S)…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:959
 msgid "_Copy Link Address"
 msgstr "リンク先のコピー(_C)"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:960
 msgid "_Copy E-mail Address"
 msgstr "メールアドレスのコピー(_C)"
 
 #. Images.
-#: src/ephy-window.c:967
+#: src/ephy-window.c:964
 msgid "View _Image in New Tab"
 msgstr "新しいタブで画像を表示する(_I)"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:965
 msgid "Copy I_mage Address"
 msgstr "画像のアドレスをコピー(_M)"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:966
 msgid "_Save Image As…"
 msgstr "名前を付けて画像を保存(_S)…"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:967
 msgid "Set as _Wallpaper"
 msgstr "壁紙に設定する(_W)"
 
 #. Video.
-#: src/ephy-window.c:974
+#: src/ephy-window.c:971
 msgid "Open Video in New _Window"
 msgstr "新しいウィンドウでビデオを開く(_W)"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:972
 msgid "Open Video in New _Tab"
 msgstr "新しいタブでビデオを開く(_T)"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:973
 msgid "_Save Video As…"
 msgstr "名前を付けてビデオを保存(_S)…"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:974
 msgid "_Copy Video Address"
 msgstr "ビデオのアドレスのコピー(_C)"
 
 #. Audio.
-#: src/ephy-window.c:981
+#: src/ephy-window.c:978
 msgid "Open Audio in New _Window"
 msgstr "新しいウィンドウで音声を開く(_W)"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:979
 msgid "Open Audio in New _Tab"
 msgstr "新しいタブで音声を開く(_T)"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:980
 msgid "_Save Audio As…"
 msgstr "名前を付けて音声を保存(_S)"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:981
 msgid "_Copy Audio Address"
 msgstr "音声のアドレスのコピー(_C)"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:986
 msgid "Save Pa_ge As…"
 msgstr "名前を付けてページを保存(_S)…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:987
 msgid "_Page Source"
 msgstr "ページのソース(_P)"
 
-#: src/ephy-window.c:1378
+#: src/ephy-window.c:1375
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "ウェブで検索: “%s”"
 
-#: src/ephy-window.c:2930
+#: src/ephy-window.c:2927
 msgid "Download operation"
 msgstr "ダウンロード操作"
 
-#: src/ephy-window.c:2932
+#: src/ephy-window.c:2929
 msgid "Show details"
 msgstr "詳細を表示"
 
-#: src/ephy-window.c:2934
+#: src/ephy-window.c:2931
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d 個のダウンロードを実行中です"
 
-#: src/ephy-window.c:3574
+#: src/ephy-window.c:3580
 msgid "Set Web as your default browser?"
 msgstr "Web をデフォルトのブラウザーに設定しますか?"
 
-#: src/ephy-window.c:3576
+#: src/ephy-window.c:3582
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Epiphany テクノロジープレビューをデフォルトのブラウザーに設定しますか?"
 
-#: src/ephy-window.c:3588
+#: src/ephy-window.c:3594
 msgid "_Yes"
 msgstr "はい(_Y)"
 
-#: src/ephy-window.c:3589
+#: src/ephy-window.c:3595
 msgid "_No"
 msgstr "いいえ(_N)"
 
@@ -2635,11 +2657,6 @@ msgstr "次のページに進みます"
 msgid "Go to your homepage"
 msgstr "ホームページに移動します"
 
-#. Translators: tooltip for the new tab button
-#: src/resources/gtk/action-bar-start.ui:96
-msgid "Open a new tab"
-msgstr "新しいタブを開きます"
-
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:21
 msgid "View open pages"
@@ -2665,16 +2682,16 @@ msgstr "アドレス"
 msgid "Tags"
 msgstr "タグ"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:140
+#: src/resources/gtk/bookmark-properties-grid.ui:142
 msgid "Add Tag…"
 msgstr "タグを追加…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:148
+#: src/resources/gtk/bookmark-properties-grid.ui:150
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "追加(_A)"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:163
+#: src/resources/gtk/bookmark-properties-grid.ui:165
 msgid "_Remove Bookmark"
 msgstr "ブックマークを削除(_B)"
 
@@ -2718,8 +2735,8 @@ msgid ""
 "that period. If you choose from the beginning of time, then you can also "
 "clear data only for particular websites."
 msgstr ""
-"指定した期間内に変更された、すべてのウェブサイトのデータを消去できます。“すべて”"
-"を指定した場合、サイトを個別に選択してデータを消去できます。"
+"指定した期間内に変更された、すべてのウェブサイトのデータを消去できます。“すべ"
+"て”を指定した場合、サイトを個別に選択してデータを消去できます。"
 
 #: src/resources/gtk/clear-data-dialog.ui:120
 msgid "Clear selected personal data _from:"
@@ -2864,81 +2881,81 @@ msgstr "他のタブを閉じる(_O)"
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: src/resources/gtk/page-menu-popover.ui:21
+#: src/resources/gtk/page-menu-popover.ui:24
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "縮小します"
 
-#: src/resources/gtk/page-menu-popover.ui:40
+#: src/resources/gtk/page-menu-popover.ui:43
 msgid "Restore Zoom"
 msgstr "ズームを元に戻します"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "拡大します"
 
-#: src/resources/gtk/page-menu-popover.ui:80
+#: src/resources/gtk/page-menu-popover.ui:84
 msgid "Print…"
 msgstr "印刷…"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:99
 msgid "Find…"
 msgstr "検索…"
 
-#: src/resources/gtk/page-menu-popover.ui:110
+#: src/resources/gtk/page-menu-popover.ui:114
 msgid "Fullscreen"
 msgstr "フルスクリーン"
 
-#: src/resources/gtk/page-menu-popover.ui:137
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "_New Window"
 msgstr "新しいウィンドウ(_N)"
 
-#: src/resources/gtk/page-menu-popover.ui:145
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "New _Incognito Window"
 msgstr "新しい匿名ウィンドウ(_I)"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:175
 msgid "Reopen Closed _Tab"
 msgstr "閉じたタブを再度開く(_T)"
 
-#: src/resources/gtk/page-menu-popover.ui:170
+#: src/resources/gtk/page-menu-popover.ui:183
 msgid "_History"
 msgstr "履歴(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:187
+#: src/resources/gtk/page-menu-popover.ui:200
 msgid "I_mport Bookmarks…"
 msgstr "ブックマークをインポート(_M)…"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:208
 msgid "E_xport Bookmarks…"
 msgstr "ブックマークをエクスポート(_X)…"
 
-#: src/resources/gtk/page-menu-popover.ui:212
+#: src/resources/gtk/page-menu-popover.ui:225
 msgid "Install Site as Web _Application…"
 msgstr "ウェブアプリケーションとしてサイトをインストール(_A)…"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:233
 msgid "Open Appli_cation Manager"
 msgstr "アプリケーションマネージャーを開く(_C)"
 
-#: src/resources/gtk/page-menu-popover.ui:237
+#: src/resources/gtk/page-menu-popover.ui:250
 msgid "_Override Text Encoding…"
 msgstr "テキストエンコーディングを上書き(_O)…"
 
-#: src/resources/gtk/page-menu-popover.ui:253
+#: src/resources/gtk/page-menu-popover.ui:266
 msgid "Pr_eferences"
 msgstr "設定(_E)"
 
-#: src/resources/gtk/page-menu-popover.ui:262
+#: src/resources/gtk/page-menu-popover.ui:275
 msgid "_Keyboard Shortcuts"
 msgstr "キーボードショートカット(_K)"
 
-#: src/resources/gtk/page-menu-popover.ui:271
+#: src/resources/gtk/page-menu-popover.ui:284
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:280
+#: src/resources/gtk/page-menu-popover.ui:293
 msgid "_About Web"
 msgstr "Web について(_A)"
 
