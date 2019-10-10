@@ -227,16 +227,16 @@ web_process_extension_password_form_focused_message_received_cb (WebKitUserConte
                                                                  EphyEmbedShell           *shell)
 {
   guint64 page_id;
-  gboolean insecure_action;
+  gboolean insecure_form_action;
   g_autoptr (GVariant) variant = NULL;
   g_autofree char *message_str = NULL;
 
   message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
 
-  g_variant_get (variant, "(tb)", &page_id, &insecure_action);
+  g_variant_get (variant, "(tb)", &page_id, &insecure_form_action);
   g_signal_emit (shell, signals[PASSWORD_FORM_FOCUSED], 0,
-                 page_id, insecure_action);
+                 page_id, insecure_form_action);
 }
 
 static void
