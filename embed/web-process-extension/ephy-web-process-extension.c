@@ -21,8 +21,6 @@
 #include "config.h"
 #include "ephy-web-process-extension.h"
 
-#include "ephy-dbus-names.h"
-#include "ephy-dbus-util.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-permissions-manager.h"
@@ -47,9 +45,6 @@ struct _EphyWebProcessExtension {
   WebKitWebExtension *extension;
   gboolean initialized;
 
-  GDBusConnection *dbus_connection;
-  GArray *page_created_signals_pending;
-
   EphyWebOverviewModel *overview_model;
   EphyPermissionsManager *permissions_manager;
 
@@ -59,44 +54,6 @@ struct _EphyWebProcessExtension {
 
   GHashTable *frames_map;
 };
-
-static const char introspection_xml[] =
-  "<node>"
-  " <interface name='org.gnome.Epiphany.WebProcessExtension'>"
-  "  <signal name='PageCreated'>"
-  "   <arg type='t' name='page_id' direction='out'/>"
-  "  </signal>"
-  "  <method name='HistorySetURLs'>"
-  "   <arg type='a(ss)' name='urls' direction='in'/>"
-  "  </method>"
-  "  <method name='HistorySetURLThumbnail'>"
-  "   <arg type='s' name='url' direction='in'/>"
-  "   <arg type='s' name='path' direction='in'/>"
-  "  </method>"
-  "  <method name='HistorySetURLTitle'>"
-  "   <arg type='s' name='url' direction='in'/>"
-  "   <arg type='s' name='title' direction='in'/>"
-  "  </method>"
-  "  <method name='HistoryDeleteURL'>"
-  "   <arg type='s' name='url' direction='in'/>"
-  "  </method>"
-  "  <method name='HistoryDeleteHost'>"
-  "   <arg type='s' name='host' direction='in'/>"
-  "  </method>"
-  "  <method name='HistoryClear'/>"
-  "  <method name='PasswordQueryResponse'>"
-  "    <arg type='s' name='username' direction='in'/>"
-  "    <arg type='s' name='password' direction='in'/>"
-  "    <arg type='i' name='promise_id' direction='in'/>"
-  "    <arg type='t' name='frame_id' direction='in'/>"
-  "  </method>"
-  "  <method name='PasswordQueryUsernamesResponse'>"
-  "    <arg type='as' name='users' direction='in'/>"
-  "    <arg type='i' name='promise_id' direction='in'/>"
-  "    <arg type='t' name='frame_id' direction='in'/>"
-  "  </method>"
-  " </interface>"
-  "</node>";
 
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
@@ -268,65 +225,13 @@ web_page_context_menu (WebKitWebPage          *web_page,
 }
 
 static void
-ephy_web_process_extension_emit_page_created (EphyWebProcessExtension *extension,
-                                              guint64                  page_id)
-{
-  g_autoptr (GError) error = NULL;
-
-  g_dbus_connection_emit_signal (extension->dbus_connection,
-                                 NULL,
-                                 EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH,
-                                 EPHY_WEB_PROCESS_EXTENSION_INTERFACE,
-                                 "PageCreated",
-                                 g_variant_new ("(t)", page_id),
-                                 &error);
-  if (error)
-    g_warning ("Error emitting signal PageCreated: %s\n", error->message);
-}
-
-static void
-ephy_web_process_extension_emit_page_created_signals_pending (EphyWebProcessExtension *extension)
-{
-  guint i;
-
-  if (!extension->page_created_signals_pending)
-    return;
-
-  for (i = 0; i < extension->page_created_signals_pending->len; i++) {
-    guint64 page_id;
-
-    page_id = g_array_index (extension->page_created_signals_pending, guint64, i);
-    ephy_web_process_extension_emit_page_created (extension, page_id);
-  }
-
-  g_array_free (extension->page_created_signals_pending, TRUE);
-  extension->page_created_signals_pending = NULL;
-}
-
-static void
-ephy_web_process_extension_queue_page_created_signal_emission (EphyWebProcessExtension *extension,
-                                                               guint64                  page_id)
-{
-  if (!extension->page_created_signals_pending)
-    extension->page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
-  extension->page_created_signals_pending = g_array_append_val (extension->page_created_signals_pending, page_id);
-}
-
-static void
 ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                                             WebKitWebPage           *web_page)
 {
-  guint64 page_id;
   g_autoptr (JSCContext) js_context = NULL;
 
   /* Enforce the creation of the script world global context in the main frame */
   js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
-
-  page_id = webkit_web_page_get_id (web_page);
-  if (extension->dbus_connection)
-    ephy_web_process_extension_emit_page_created (extension, page_id);
-  else
-    ephy_web_process_extension_queue_page_created_signal_emission (extension, page_id);
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
@@ -340,6 +245,89 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
   g_signal_connect (web_page, "form-controls-associated-for-frame",
                     G_CALLBACK (web_page_form_controls_associated),
                     extension);
+}
+
+static void
+ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *extension,
+                                                     WebKitUserMessage       *message)
+{
+  const char *name = webkit_user_message_get_name (message);
+
+  if (g_strcmp0 (name, "History.SetURLs") == 0) {
+    if (extension->overview_model) {
+      GVariant *parameters;
+      GVariantIter iter;
+      const char *url;
+      const char *title;
+      GList *items = NULL;
+      g_autoptr (GVariant) array = NULL;
+
+      parameters = webkit_user_message_get_parameters (message);
+      if (!parameters)
+        return;
+
+      g_variant_get (parameters, "@a(ss)", &array);
+      g_variant_iter_init (&iter, array);
+
+      while (g_variant_iter_loop (&iter, "(&s&s)", &url, &title))
+        items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
+
+      ephy_web_overview_model_set_urls (extension->overview_model, g_list_reverse (items));
+    }
+  } else if (g_strcmp0 (name, "History.SetURLThumbnail") == 0) {
+    if (extension->overview_model) {
+      GVariant *parameters;
+      const char *url;
+      const char *path;
+
+      parameters = webkit_user_message_get_parameters (message);
+      if (!parameters)
+        return;
+
+      g_variant_get (parameters, "(&s&s)", &url, &path);
+      ephy_web_overview_model_set_url_thumbnail (extension->overview_model, url, path, TRUE);
+    }
+  } else if (g_strcmp0 (name, "History.SetURLTitle") == 0) {
+    if (extension->overview_model) {
+      GVariant *parameters;
+      const char *url;
+      const char *title;
+
+      parameters = webkit_user_message_get_parameters (message);
+      if (!parameters)
+        return;
+
+      g_variant_get (parameters, "(&s&s)", &url, &title);
+      ephy_web_overview_model_set_url_title (extension->overview_model, url, title);
+    }
+  } else if (g_strcmp0 (name, "History.DeleteURL") == 0) {
+    if (extension->overview_model) {
+      GVariant *parameters;
+      const char *url;
+
+      parameters = webkit_user_message_get_parameters (message);
+      if (!parameters)
+        return;
+
+      g_variant_get (parameters, "&s", &url);
+      ephy_web_overview_model_delete_url (extension->overview_model, url);
+    }
+  } else if (g_strcmp0 (name, "History.DeleteHost") == 0) {
+    if (extension->overview_model) {
+      GVariant *parameters;
+      const char *host;
+
+      parameters = webkit_user_message_get_parameters (message);
+      if (!parameters)
+        return;
+
+      g_variant_get (parameters, "&s", &host);
+      ephy_web_overview_model_delete_host (extension->overview_model, host);
+    }
+  } else if (g_strcmp0 (name, "History.Clear") == 0) {
+    if (extension->overview_model)
+      ephy_web_overview_model_clear (extension->overview_model);
+  }
 }
 
 static JSCValue *
@@ -361,115 +349,6 @@ get_password_manager (EphyWebProcessExtension *self,
 }
 
 static void
-handle_method_call (GDBusConnection       *connection,
-                    const char            *sender,
-                    const char            *object_path,
-                    const char            *interface_name,
-                    const char            *method_name,
-                    GVariant              *parameters,
-                    GDBusMethodInvocation *invocation,
-                    gpointer               user_data)
-{
-  EphyWebProcessExtension *extension = EPHY_WEB_PROCESS_EXTENSION (user_data);
-
-  if (g_strcmp0 (interface_name, EPHY_WEB_PROCESS_EXTENSION_INTERFACE) != 0)
-    return;
-
-  if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
-    if (extension->overview_model) {
-      GVariantIter iter;
-      g_autoptr (GVariant) array = NULL;
-      const char *url;
-      const char *title;
-      GList *items = NULL;
-
-      g_variant_get (parameters, "(@a(ss))", &array);
-      g_variant_iter_init (&iter, array);
-
-      while (g_variant_iter_loop (&iter, "(&s&s)", &url, &title))
-        items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
-
-      ephy_web_overview_model_set_urls (extension->overview_model, g_list_reverse (items));
-    }
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "HistorySetURLThumbnail") == 0) {
-    if (extension->overview_model) {
-      const char *url;
-      const char *path;
-
-      g_variant_get (parameters, "(&s&s)", &url, &path);
-      ephy_web_overview_model_set_url_thumbnail (extension->overview_model, url, path, TRUE);
-    }
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "HistorySetURLTitle") == 0) {
-    if (extension->overview_model) {
-      const char *url;
-      const char *title;
-
-      g_variant_get (parameters, "(&s&s)", &url, &title);
-      ephy_web_overview_model_set_url_title (extension->overview_model, url, title);
-    }
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "HistoryDeleteURL") == 0) {
-    if (extension->overview_model) {
-      const char *url;
-
-      g_variant_get (parameters, "(&s)", &url);
-      ephy_web_overview_model_delete_url (extension->overview_model, url);
-    }
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "HistoryDeleteHost") == 0) {
-    if (extension->overview_model) {
-      const char *host;
-
-      g_variant_get (parameters, "(&s)", &host);
-      ephy_web_overview_model_delete_host (extension->overview_model, host);
-    }
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "HistoryClear") == 0) {
-    if (extension->overview_model)
-      ephy_web_overview_model_clear (extension->overview_model);
-    g_dbus_method_invocation_return_value (invocation, NULL);
-  } else if (g_strcmp0 (method_name, "PasswordQueryUsernamesResponse") == 0) {
-    g_autofree const char **users;
-    g_autoptr (JSCValue) ret = NULL;
-    g_autoptr (JSCValue) password_manager = NULL;
-    gint32 promise_id;
-    guint64 frame_id;
-
-    users = g_variant_get_strv (g_variant_get_child_value (parameters, 0), NULL);
-    g_variant_get_child (parameters, 1, "i", &promise_id);
-    g_variant_get_child (parameters, 2, "t", &frame_id);
-
-    password_manager = get_password_manager (extension, frame_id);
-    if (password_manager != NULL)
-      ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
-                                            G_TYPE_STRV, users, G_TYPE_INT, promise_id, G_TYPE_NONE);
-  } else if (g_strcmp0 (method_name, "PasswordQueryResponse") == 0) {
-    const char *username;
-    const char *password;
-    gint32 promise_id;
-    guint64 frame_id;
-    g_autoptr (JSCValue) ret = NULL;
-    g_autoptr (JSCValue) password_manager = NULL;
-
-    g_variant_get (parameters, "(&s&sit)", &username, &password, &promise_id, &frame_id);
-    password_manager = get_password_manager (extension, frame_id);
-    if (password_manager != NULL)
-      ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
-                                            G_TYPE_STRING, username,
-                                            G_TYPE_STRING, password,
-                                            G_TYPE_INT, promise_id, G_TYPE_NONE);
-  }
-}
-
-static const GDBusInterfaceVTable interface_vtable = {
-  handle_method_call,
-  NULL,
-  NULL
-};
-
-static void
 drop_frame_weak_ref (gpointer key,
                      gpointer value,
                      gpointer extension)
@@ -485,13 +364,7 @@ ephy_web_process_extension_dispose (GObject *object)
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
 
-  if (extension->page_created_signals_pending) {
-    g_array_free (extension->page_created_signals_pending, TRUE);
-    extension->page_created_signals_pending = NULL;
-  }
-
   g_clear_object (&extension->script_world);
-  g_clear_object (&extension->dbus_connection);
   g_clear_object (&extension->extension);
 
   if (extension->frames_map) {
@@ -530,47 +403,6 @@ ephy_web_process_extension_get (void)
 }
 
 static void
-dbus_connection_created_cb (GObject                 *source_object,
-                            GAsyncResult            *result,
-                            EphyWebProcessExtension *extension)
-{
-  static GDBusNodeInfo *introspection_data = NULL;
-  g_autoptr (GDBusConnection) connection = NULL;
-  guint registration_id;
-  g_autoptr (GError) error = NULL;
-
-  if (!introspection_data)
-    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-
-  connection = g_dbus_connection_new_for_address_finish (result, &error);
-  if (error)
-    g_error ("Failed to connect to UI process: %s", error->message);
-
-  registration_id =
-    g_dbus_connection_register_object (connection,
-                                       EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH,
-                                       introspection_data->interfaces[0],
-                                       &interface_vtable,
-                                       extension,
-                                       NULL,
-                                       &error);
-  if (!registration_id)
-    g_error ("Failed to register web process extension object: %s\n", error->message);
-
-  extension->dbus_connection = g_steal_pointer (&connection);
-  ephy_web_process_extension_emit_page_created_signals_pending (extension);
-}
-
-static gboolean
-authorize_authenticated_peer_cb (GDBusAuthObserver       *observer,
-                                 GIOStream               *stream,
-                                 GCredentials            *credentials,
-                                 EphyWebProcessExtension *extension)
-{
-  return ephy_dbus_peer_is_authorized (credentials);
-}
-
-static void
 js_log (const char *message)
 {
   LOG ("%s", message);
@@ -594,6 +426,149 @@ js_auto_fill (JSCValue   *js_element,
 
   webkit_dom_element_html_input_element_set_auto_filled (element, TRUE);
   webkit_dom_element_html_input_element_set_editing_value (element, value);
+}
+
+typedef struct {
+  EphyWebProcessExtension *extension;
+  guint64 promise_id;
+  guint64 frame_id;
+} PasswordManagerQueryData;
+
+static void
+web_view_query_usernames_ready_cb (WebKitWebPage *web_page, GAsyncResult *result, PasswordManagerQueryData *data)
+{
+  WebKitUserMessage *reply;
+  GVariant *parameters;
+  const char **usernames;
+  g_autoptr (JSCValue) password_manager = NULL;
+  g_autoptr (GError) error = NULL;
+
+  reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
+  if (error) {
+    g_warning ("Error getting usernames from WebView: %s\n", error->message);
+    g_free (data);
+    return;
+  }
+
+  parameters = webkit_user_message_get_parameters (reply);
+  if (!parameters) {
+    g_free (data);
+    return;
+  }
+
+  usernames = g_variant_get_strv (parameters, NULL);
+  password_manager = get_password_manager (data->extension, data->frame_id);
+  if (password_manager) {
+    g_autoptr (JSCValue) ret = NULL;
+
+    ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
+                                          G_TYPE_STRV, usernames,
+                                          G_TYPE_UINT64, data->promise_id,
+                                          G_TYPE_NONE);
+  }
+
+  g_free (usernames);
+  g_free (data);
+}
+
+static void
+js_query_usernames (const char              *origin,
+                    guint64                  promise_id,
+                    guint64                  page_id,
+                    guint64                  frame_id,
+                    EphyWebProcessExtension *extension)
+{
+  WebKitWebPage *web_page;
+  WebKitUserMessage *message;
+  PasswordManagerQueryData *data;
+
+  if (!origin)
+    return;
+
+  web_page = webkit_web_extension_get_page (extension->extension, page_id);
+  if (!web_page)
+    return;
+
+  data = g_new0 (PasswordManagerQueryData, 1);
+  data->extension = extension;
+  data->promise_id = promise_id;
+  data->frame_id = frame_id;
+  message = webkit_user_message_new ("PasswordManager.QueryUsernames",
+                                     g_variant_new ("s", origin));
+  webkit_web_page_send_message_to_view (web_page, message, NULL,
+                                        (GAsyncReadyCallback)web_view_query_usernames_ready_cb,
+                                        data);
+}
+
+static void
+web_view_query_password_ready_cb (WebKitWebPage *web_page, GAsyncResult *result, PasswordManagerQueryData *data)
+{
+  WebKitUserMessage *reply;
+  GVariant *parameters;
+  const char *username;
+  const char *password;
+  g_autoptr (JSCValue) password_manager = NULL;
+  g_autoptr (GError) error = NULL;
+
+  reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
+  if (error) {
+    g_warning ("Error getting password from WebView: %s\n", error->message);
+    g_free (data);
+    return;
+  }
+
+  parameters = webkit_user_message_get_parameters (reply);
+  if (!parameters) {
+    g_free (data);
+    return;
+  }
+
+  g_variant_get (parameters, "(m&sm&s)", &username, &password);
+  password_manager = get_password_manager (data->extension, data->frame_id);
+  if (password_manager) {
+    g_autoptr (JSCValue) ret = NULL;
+
+    ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
+                                          G_TYPE_STRING, username,
+                                          G_TYPE_STRING, password,
+                                          G_TYPE_UINT64, data->promise_id,
+                                          G_TYPE_NONE);
+  }
+
+  g_free (data);
+}
+
+static void
+js_query_password (const char              *origin,
+                   const char              *target_origin,
+                   const char              *username,
+                   const char              *username_field,
+                   const char              *password_field,
+                   guint64                  promise_id,
+                   guint64                  page_id,
+                   guint64                  frame_id,
+                   EphyWebProcessExtension *extension)
+{
+  WebKitWebPage *web_page;
+  WebKitUserMessage *message;
+  PasswordManagerQueryData *data;
+
+  if (!origin || !target_origin || !password_field)
+    return;
+
+  web_page = webkit_web_extension_get_page (extension->extension, page_id);
+  if (!web_page)
+    return;
+
+  data = g_new0 (PasswordManagerQueryData, 1);
+  data->extension = extension;
+  data->promise_id = promise_id;
+  data->frame_id = frame_id;
+  message = webkit_user_message_new ("PasswordManager.QueryPassword",
+                                     g_variant_new ("(ssmsmss)", origin, target_origin, username, username_field, password_field));
+  webkit_web_page_send_message_to_view (web_page, message, NULL,
+                                        (GAsyncReadyCallback)web_view_query_password_ready_cb,
+                                        data);
 }
 
 static gboolean
@@ -715,6 +690,28 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
                                           JSC_TYPE_VALUE, G_TYPE_STRING);
     jsc_value_object_set_property (js_ephy, "autoFill", js_function);
     g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "queryUsernames",
+                                          G_CALLBACK (js_query_usernames),
+                                          extension, NULL,
+                                          G_TYPE_NONE, 4,
+                                          G_TYPE_STRING, G_TYPE_UINT64,
+                                          G_TYPE_UINT64, G_TYPE_UINT64);
+    jsc_value_object_set_property (js_ephy, "queryUsernames", js_function);
+    g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "queryPassword",
+                                          G_CALLBACK (js_query_password),
+                                          extension, NULL,
+                                          G_TYPE_NONE, 8,
+                                          G_TYPE_STRING, G_TYPE_STRING,
+                                          G_TYPE_STRING, G_TYPE_STRING,
+                                          G_TYPE_STRING, G_TYPE_UINT64,
+                                          G_TYPE_UINT64, G_TYPE_UINT64);
+    jsc_value_object_set_property (js_ephy, "queryPassword", js_function);
+    g_clear_object (&js_function);
   }
 
   js_function = jsc_value_new_function (js_context,
@@ -745,12 +742,9 @@ void
 ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                        WebKitWebExtension      *wk_extension,
                                        const char              *guid,
-                                       const char              *server_address,
                                        gboolean                 is_private_profile,
                                        gboolean                 is_browser_mode)
 {
-  g_autoptr (GDBusAuthObserver) observer = NULL;
-
   g_assert (EPHY_IS_WEB_PROCESS_EXTENSION (extension));
 
   if (extension->initialized)
@@ -770,20 +764,12 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->permissions_manager = ephy_permissions_manager_new ();
 
+  g_signal_connect_swapped (extension->extension, "user-message-received",
+                            G_CALLBACK (ephy_web_process_extension_user_message_received_cb),
+                            extension);
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_process_extension_page_created_cb),
                             extension);
-
-  observer = g_dbus_auth_observer_new ();
-  g_signal_connect (observer, "authorize-authenticated-peer",
-                    G_CALLBACK (authorize_authenticated_peer_cb), extension);
-
-  g_dbus_connection_new_for_address (server_address,
-                                     G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
-                                     observer,
-                                     NULL,
-                                     (GAsyncReadyCallback)dbus_connection_created_cb,
-                                     extension);
 
   extension->frames_map = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                  NULL, NULL);

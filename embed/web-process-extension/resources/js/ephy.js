@@ -345,10 +345,7 @@ Ephy.PasswordManager = class PasswordManager
     {
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
-            window.webkit.messageHandlers.passwordManagerQuery.postMessage({
-                origin, targetOrigin, username, usernameField, passwordField, promiseID,
-                pageID: this._pageID, frameID: this._frameID
-            });
+            Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this._pageID, this._frameID);
             this._pendingPromises.push({promiseID, resolver});
         });
     }
@@ -381,9 +378,7 @@ Ephy.PasswordManager = class PasswordManager
     {
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
-            window.webkit.messageHandlers.passwordManagerQueryUsernames.postMessage({
-                origin, promiseID, pageID: this._pageID, frameID: this._frameID
-            });
+            Ephy.queryUsernames(origin, promiseID, this._pageID, this._frameID);
             this._pendingPromises.push({promiseID, resolver});
         });
     }
