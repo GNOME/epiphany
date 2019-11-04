@@ -93,7 +93,7 @@ update_search_tag (EphyFindToolbar *toolbar)
 {
   g_autofree gchar *label = NULL;
 
-  label = g_strdup_printf ("%d/%d", toolbar->current_match, toolbar->num_matches);
+  label = g_strdup_printf ("%u/%u", toolbar->current_match, toolbar->num_matches);
   gd_tagged_entry_tag_set_label (toolbar->entry_tag, label);
   gd_tagged_entry_add_tag (toolbar->entry, toolbar->entry_tag);
 }
@@ -598,18 +598,24 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
 void
 ephy_find_toolbar_find_next (EphyFindToolbar *toolbar)
 {
-  toolbar->current_match++;
-  if (toolbar->current_match > toolbar->num_matches)
-    toolbar->current_match = 1;
+  if (toolbar->num_matches) {
+    toolbar->current_match++;
+    if (toolbar->current_match > toolbar->num_matches)
+      toolbar->current_match = 1;
+  }
+
   webkit_find_controller_search_next (toolbar->controller);
 }
 
 void
 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
 {
-  toolbar->current_match--;
-  if (toolbar->current_match < 1)
-    toolbar->current_match = toolbar->num_matches;
+  if (toolbar->num_matches) {
+    g_assert (toolbar->current_match > 0);
+    toolbar->current_match--;
+    if (toolbar->current_match < 1)
+      toolbar->current_match = toolbar->num_matches;
+  }
 
   webkit_find_controller_search_previous (toolbar->controller);
 }
