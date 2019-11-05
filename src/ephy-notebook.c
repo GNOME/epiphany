@@ -493,10 +493,9 @@ get_last_pinned_tab_pos (EphyNotebook *notebook)
 }
 
 static void
-page_reordered_cb (GtkNotebook *notebook,
-                   GtkWidget   *child,
-                   guint        page_num,
-                   gpointer     user_data)
+ephy_notebook_ensure_pinned_tab_position (GtkNotebook *notebook,
+                                          GtkWidget   *child,
+                                          guint        page_num)
 {
   int last_pinned_tab_pos = get_last_pinned_tab_pos (EPHY_NOTEBOOK (notebook));
   gboolean is_current_tab_pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (child));
@@ -507,6 +506,15 @@ page_reordered_cb (GtkNotebook *notebook,
 
     gtk_notebook_reorder_child (notebook, child, new_pos);
   }
+}
+
+static void
+page_reordered_cb (GtkNotebook *notebook,
+                   GtkWidget   *child,
+                   guint        page_num,
+                   gpointer     user_data)
+{
+  ephy_notebook_ensure_pinned_tab_position (notebook, child, page_num);
 }
 
 static void
@@ -885,6 +893,8 @@ ephy_notebook_page_added (GtkNotebook *notebook,
 {
   if (GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_added != NULL)
     GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_added (notebook, child, page_num);
+
+  ephy_notebook_ensure_pinned_tab_position (notebook, child, page_num);
 
   ephy_notebook_rebuild_tab_menu (EPHY_NOTEBOOK (notebook));
 }
