@@ -333,7 +333,7 @@ navigation_button_press_event_cb (GtkButton *button,
     g_source_set_name_by_id (action_bar_start->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
   }
 
-  return FALSE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
