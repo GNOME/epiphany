@@ -2605,7 +2605,9 @@ window_cmd_tabs_close_left (GSimpleAction *action,
 
   for (int i = 0; i < current_page_no; i++) {
     embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-    pages_to_close = g_slist_prepend (pages_to_close, embed);
+
+    if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
+      pages_to_close = g_slist_prepend (pages_to_close, embed);
   }
 
   for (GSList *l = pages_to_close; l != NULL; l = l->next) {
@@ -2633,7 +2635,9 @@ window_cmd_tabs_close_right (GSimpleAction *action,
 
   for (int i = current_page_no + 1; i < n_pages; i++) {
     embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-    pages_to_close = g_slist_prepend (pages_to_close, embed);
+
+    if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
+      pages_to_close = g_slist_prepend (pages_to_close, embed);
   }
 
   for (GSList *l = pages_to_close; l != NULL; l = l->next) {
@@ -2662,7 +2666,9 @@ window_cmd_tabs_close_others (GSimpleAction *action,
   for (int i = 0; i < n_pages; i++) {
     if (i != current_page) {
       embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-      pages_to_close = g_slist_prepend (pages_to_close, embed);
+
+      if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
+        pages_to_close = g_slist_prepend (pages_to_close, embed);
     }
   }
 
