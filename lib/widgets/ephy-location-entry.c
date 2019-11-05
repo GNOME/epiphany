@@ -914,6 +914,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
+  dzl_suggestion_entry_set_compact (DZL_SUGGESTION_ENTRY (entry->url_entry), TRUE);
   dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, _("Show website security status and permissions"));
   gtk_entry_set_width_chars (GTK_ENTRY (entry->url_entry), 0);
