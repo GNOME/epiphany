@@ -29,20 +29,11 @@
         <property name="visible">True</property>
         <property name="transition-type">crossfade</property>
         <child>
-          <object class="GtkMenuButton" id="downloads_button">
+          <object class="DzlProgressMenuButton" id="downloads_button">
             <property name="visible">True</property>
             <property name="valign">center</property>
             <!-- Translators: tooltip for the downloads button -->
             <property name="tooltip_text" translatable="yes">View downloads</property>
-            <property name="image">downloads_image</property>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="EphyDownloadsProgressIcon" id="downloads_image">
-                <property name="visible">True</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
