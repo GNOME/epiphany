@@ -389,7 +389,7 @@ add_tabs (EphySuggestionModel *self,
     g_autofree gchar *markup = NULL;
     const gchar *display_address;
     g_autofree gchar *address = NULL;
-    const gchar *title;
+    const gchar *title = "";
     g_autofree gchar *title_casefold = NULL;
     g_autofree gchar *display_address_casefold = NULL;
     g_autofree gchar *query_casefold = NULL;
