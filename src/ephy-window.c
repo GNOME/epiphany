@@ -240,6 +240,7 @@ construct_confirm_close_dialog (EphyWindow *window,
                                 const char *action)
 {
   GtkWidget *dialog;
+  GtkWidget *button;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL,
@@ -249,8 +250,8 @@ construct_confirm_close_dialog (EphyWindow *window,
 
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", info);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
-                         action, GTK_RESPONSE_ACCEPT);
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog), action, GTK_RESPONSE_ACCEPT);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "destructive-action");
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
