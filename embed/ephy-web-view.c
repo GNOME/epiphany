@@ -836,7 +836,7 @@ icon_changed_cb (EphyWebView *view,
 static void
 password_form_focused_cb (EphyEmbedShell *shell,
                           guint64         page_id,
-                          gboolean        insecure_action,
+                          gboolean        insecure_form_action,
                           EphyWebView    *web_view)
 {
   GtkWidget *info_bar;
@@ -847,7 +847,7 @@ password_form_focused_cb (EphyEmbedShell *shell,
     return;
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
-  if (!insecure_action && ephy_security_level_is_secure (web_view->security_level))
+  if (!insecure_form_action && ephy_security_level_is_secure (web_view->security_level))
     return;
 
   /* Translators: Message appears when insecure password form is focused. */
@@ -1865,6 +1865,18 @@ ephy_web_view_set_committed_location (EphyWebView *view,
   g_object_thaw_notify (object);
 }
 
+static char *
+hostname_to_tld (const char *hostname)
+{
+  g_auto (GStrv) parts = NULL;
+  guint length;
+
+  parts = g_strsplit (hostname, ".", 0);
+  length = g_strv_length (parts);
+
+  return g_strdup (parts[length - 1]);
+}
+
 static void
 update_security_status_for_committed_load (EphyWebView *view,
                                            const char  *uri)
@@ -1875,6 +1887,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   WebKitWebContext *web_context;
   WebKitSecurityManager *security_manager;
   SoupURI *soup_uri;
+  g_autofree char *tld = NULL;
 
   if (view->loading_error_page)
     return;
@@ -1889,11 +1902,14 @@ update_security_status_for_committed_load (EphyWebView *view,
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
+  if (soup_uri && soup_uri->host)
+    tld = hostname_to_tld (soup_uri->host);
+
   if (!soup_uri ||
-      strcmp (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
-      /* Warning: we do not whitelist localhost because it could be redirected by DNS. */
-      g_strcmp0 (soup_uri_get_host (soup_uri), "127.0.0.1") == 0 ||
-      g_strcmp0 (soup_uri_get_host (soup_uri), "::1") == 0 ||
+      strcmp (soup_uri->scheme, EPHY_VIEW_SOURCE_SCHEME) == 0 ||
+      g_strcmp0 (tld, "127.0.0.1") == 0 ||
+      g_strcmp0 (tld, "::1") == 0 ||
+      g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
       webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme) ||
       webkit_security_manager_uri_scheme_is_empty_document (security_manager, soup_uri->scheme)) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;

@@ -562,13 +562,19 @@ Ephy.FormManager = class FormManager
 
     _passwordFormFocused(event)
     {
-        let isInsecureAction = false;
+        let isFormActionInsecure = false;
         if (this._form.action) {
             let url = new URL(this._form.action);
-            // Warning: we do not whitelist localhost because it could be redirected by DNS.
-            isInsecureAction = url.protocol == 'http:' && url.hostname != "127.0.0.1" && url.hostname != "::1";
+            if (url.protocol == 'http:') {
+                // We trust localhost to be local since glib!616.
+                let parts = url.hostname.split('.');
+                if (parts.length > 0) {
+                    let tld = parts[parts.length - 1];
+                    isFormActionInsecure = tld != "127.0.0.1" && tld != "::1" && tld != "localhost";
+                }
+            }
         }
-        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._frameID, isInsecureAction));
+        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._frameID, isFormActionInsecure));
     }
 
     _findPasswordFields()
