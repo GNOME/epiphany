@@ -44,6 +44,7 @@ struct _EphyFiltersManager {
   gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
+  WebKitUserContentFilter *wk_filter;
   WebKitUserContentFilterStore *store;
 };
 
@@ -471,7 +472,6 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                  FilterInfo                   *self)
 {
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitUserContentFilter) wk_filter = NULL;
 
   if (!self->manager)
     return;
@@ -481,12 +481,13 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (self->manager->store == store);
 
-  wk_filter = webkit_user_content_filter_store_save_finish (self->manager->store,
-                                                            result,
-                                                            &error);
-  if (wk_filter) {
+  g_clear_object (&self->manager->wk_filter);
+  self->manager->wk_filter = webkit_user_content_filter_store_save_finish (self->manager->store,
+                                                                           result,
+                                                                           &error);
+  if (self->manager->wk_filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
-    filter_info_setup_enable_compiled_filter (self, wk_filter);
+    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     filter_info_save_sidecar (self,
                               self->manager->cancellable,
                               (GAsyncReadyCallback)sidecar_saved_cb,
@@ -623,7 +624,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
                 FilterInfo                   *self)
 {
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitUserContentFilter) wk_filter = NULL;
   g_autoptr (GFile) source_file = NULL;
   g_autoptr (GFile) json_file = NULL;
   g_autofree char *json_file_uri = NULL;
@@ -637,14 +637,15 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (store == self->manager->store);
 
-  wk_filter = webkit_user_content_filter_store_load_finish (self->manager->store,
-                                                            result,
-                                                            &error);
-  self->found = (wk_filter != NULL);
+  g_clear_object (&self->manager->wk_filter);
+  self->manager->wk_filter = webkit_user_content_filter_store_load_finish (self->manager->store,
+                                                                           result,
+                                                                           &error);
+  self->found = (self->manager->wk_filter != NULL);
 
-  if (wk_filter) {
+  if (self->manager->wk_filter) {
     LOG ("Found compiled filter %s.", filter_info_get_identifier (self));
-    filter_info_setup_enable_compiled_filter (self, wk_filter);
+    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     LOG ("Update %sneeded for filter %s (last %" PRIu64 "s ago, interval %us)",
          filter_info_needs_updating_from_source (self) ? "" : "not ",
          filter_info_get_identifier (self),
@@ -916,6 +917,7 @@ ephy_filters_manager_dispose (GObject *object)
     g_cancellable_cancel (manager->cancellable);
     g_clear_object (&manager->cancellable);
   }
+  g_clear_object (&manager->wk_filter);
   g_clear_object (&manager->store);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->dispose (object);
@@ -1092,4 +1094,12 @@ ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
 {
   g_return_val_if_fail (EPHY_IS_FILTERS_MANAGER (manager), FALSE);
   return manager->is_initialized;
+}
+
+void
+ephy_filters_manager_add_content_filters (EphyFiltersManager       *manager,
+                                          WebKitUserContentManager *ucm)
+{
+  if (manager->wk_filter)
+    webkit_user_content_manager_add_filter (ucm, manager->wk_filter);
 }
