@@ -1025,6 +1025,7 @@ ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
   gboolean expanded;
 
   gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), embed, !is_pinned);
+  gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), embed, !is_pinned);
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), embed);
   ephy_tab_label_set_pinned (tab_label, is_pinned);
 
