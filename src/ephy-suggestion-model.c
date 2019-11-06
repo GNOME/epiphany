@@ -339,7 +339,7 @@ add_search_engines (EphySuggestionModel *self,
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     escaped_title = g_markup_escape_text (engines[i], -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new_without_subtitle (markup, engines[i], address);
+    suggestion = ephy_suggestion_new (markup, engines[i], address);
 
     uri = soup_uri_new (address);
     if (uri) {
