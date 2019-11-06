@@ -379,6 +379,8 @@ ephy_location_entry_dispose (GObject *object)
     entry->progress_timeout = 0;
   }
 
+  g_signal_handlers_disconnect_by_data (gtk_settings_get_default (), entry);
+
   g_clear_object (&entry->css_provider);
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
@@ -901,6 +903,23 @@ position_func (DzlSuggestionEntry *self,
 }
 
 static void
+update_reader_icon (EphyLocationEntry *entry)
+{
+  GtkIconTheme *theme;
+
+  theme = gtk_icon_theme_get_default ();
+
+  if (gtk_icon_theme_has_icon (theme, "view-reader-symbolic"))
+    gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode),
+                                  "view-reader-symbolic",
+                                  GTK_ICON_SIZE_MENU);
+  else
+    gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode),
+                                  "ephy-reader-mode-symbolic",
+                                  GTK_ICON_SIZE_MENU);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
@@ -968,7 +987,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
   gtk_widget_set_tooltip_text (entry->reader_mode_event_box, _("Toggle reader mode"));
-  entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
+  entry->reader_mode = gtk_image_new ();
   gtk_widget_set_valign (entry->reader_mode, GTK_ALIGN_CENTER);
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER (entry->reader_mode_event_box), entry->reader_mode);
@@ -976,6 +995,10 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   context = gtk_widget_get_style_context (entry->reader_mode);
   gtk_style_context_add_class (context, "entry_icon");
+
+  update_reader_icon (entry);
+  g_signal_connect_swapped (gtk_settings_get_default (), "notify::gtk-icon-theme-name",
+                            G_CALLBACK (update_reader_icon), entry);
 
   g_object_connect (entry->url_entry,
                     "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), entry,
