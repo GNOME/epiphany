@@ -333,7 +333,7 @@ navigation_button_press_event_cb (GtkButton *button,
     g_source_set_name_by_id (action_bar_start->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
   }
 
-  return FALSE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -378,7 +378,7 @@ navigation_button_release_event_cb (GtkButton *button,
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -389,6 +389,7 @@ homepage_button_release_event_cb (GtkButton *button,
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
   GActionGroup *action_group;
   GAction *action;
+  gboolean ret = GDK_EVENT_PROPAGATE;
 
   action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
 
@@ -396,12 +397,13 @@ homepage_button_release_event_cb (GtkButton *button,
     case GDK_BUTTON_MIDDLE:
       action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "homepage-new-tab");
       g_action_activate (action, NULL);
+      ret = GDK_EVENT_STOP;
       break;
     default:
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return ret;
 }
 
 static gboolean
@@ -412,6 +414,7 @@ new_tab_button_release_event_cb (GtkButton *button,
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
   GActionGroup *action_group;
   GAction *action;
+  gboolean ret = GDK_EVENT_PROPAGATE;
 
   action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
 
@@ -419,12 +422,13 @@ new_tab_button_release_event_cb (GtkButton *button,
     case GDK_BUTTON_MIDDLE:
       action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab-from-clipboard");
       g_action_activate (action, NULL);
+      ret = GDK_EVENT_STOP;
       break;
     default:
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return ret;
 }
 
 static gboolean
