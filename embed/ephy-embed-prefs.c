@@ -57,8 +57,9 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
     style_sheet = webkit_user_style_sheet_new (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
                                                WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES, WEBKIT_USER_STYLE_LEVEL_USER,
                                                NULL, NULL);
-    webkit_user_content_manager_add_style_sheet (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())),
-                                                 style_sheet);
+#warning FIXME: How to handled user style sheets?
+    //webkit_user_content_manager_add_style_sheet (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())),
+    //                                             style_sheet);
     webkit_user_style_sheet_unref (style_sheet);
   }
 }
@@ -95,7 +96,8 @@ user_style_sheet_file_changed (GFileMonitor      *monitor,
                                gpointer           user_data)
 {
   if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) {
-    webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
+#warning FIXME: How to handled user style sheets?
+    //webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
 
     g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
                        (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
@@ -113,7 +115,8 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
 
   if (!value) {
     g_clear_object (&user_style_sheet_monitor);
-    webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
+#warning FIXME: How to handled user style sheets?
+    //webkit_user_content_manager_remove_all_style_sheets (WEBKIT_USER_CONTENT_MANAGER (ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ())));
   } else {
     GFile *file;
     GError *error = NULL;

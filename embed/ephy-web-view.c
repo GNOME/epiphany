@@ -926,6 +926,8 @@ ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
 
+  //ephy_embed_shell_unregister_global_ucm_handler (shell, ucm);
+
   if (view->web_process_extension) {
     g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
     view->web_process_extension = NULL;
@@ -3045,10 +3047,13 @@ GtkWidget *
 ephy_web_view_new (void)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_global_ucm_handler (shell, ucm);
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "web-context", ephy_embed_shell_get_web_context (shell),
-                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
+                       "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
                        NULL);
@@ -3058,10 +3063,13 @@ GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_global_ucm_handler (shell, ucm);
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
-                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
+                       "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
 }

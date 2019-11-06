@@ -60,7 +60,6 @@ typedef struct {
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
-  WebKitUserContentManager *user_content;
   EphyDownloadsManager *downloads_manager;
   EphyPermissionsManager *permissions_manager;
   EphyPasswordManager *password_manager;
@@ -208,7 +207,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_gsb_service);
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->source_handler);
-  g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->password_manager);
   g_clear_object (&priv->permissions_manager);
@@ -1133,70 +1131,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   ephy_embed_shell_setup_web_process_extensions_server (shell);
 
-  /* User content manager */
-  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
-    priv->user_content = webkit_user_content_manager_new ();
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "overview",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::overview",
-                           G_CALLBACK (web_process_extension_overview_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "tlsErrorPage");
-  g_signal_connect_object (priv->user_content, "script-message-received::tlsErrorPage",
-                           G_CALLBACK (web_process_extension_tls_error_page_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "unsafeBrowsingErrorPage");
-  g_signal_connect_object (priv->user_content, "script-message-received::unsafeBrowsingErrorPage",
-                           G_CALLBACK (web_process_extension_unsafe_browsing_error_page_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "passwordFormFocused",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::passwordFormFocused",
-                           G_CALLBACK (web_process_extension_password_form_focused_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "aboutApps");
-  g_signal_connect_object (priv->user_content, "script-message-received::aboutApps",
-                           G_CALLBACK (web_process_extension_about_apps_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "passwordManagerQuery",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQuery",
-                           G_CALLBACK (web_process_extension_password_manager_query_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "passwordManagerQueryUsernames",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerQueryUsernames",
-                           G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "passwordManagerSave",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerSave",
-                           G_CALLBACK (web_process_extension_password_manager_save_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "passwordManagerRequestSave",
-                                                                        priv->guid);
-  g_signal_connect_object (priv->user_content, "script-message-received::passwordManagerRequestSave",
-                           G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
-                           shell, 0);
-
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
@@ -1273,19 +1207,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   priv->filters_manager = ephy_filters_manager_new (NULL);
 
-  g_signal_connect_object (priv->filters_manager, "filters-disabled",
-                           G_CALLBACK (webkit_user_content_manager_remove_all_filters),
-                           priv->user_content,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->filters_manager, "filter-ready",
-                           G_CALLBACK (webkit_user_content_manager_add_filter),
-                           priv->user_content,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->filters_manager, "filter-removed",
-                           G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
-                           priv->user_content,
-                           G_CONNECT_SWAPPED);
-
   g_signal_connect_object (priv->web_context, "download-started",
                            G_CALLBACK (download_started_cb), shell, 0);
 }
@@ -1300,29 +1221,6 @@ ephy_embed_shell_shutdown (GApplication *application)
   if (priv->dbus_server)
     g_dbus_server_stop (priv->dbus_server);
 
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "overview",
-                                                                          priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content,
-                                                                 "tlsErrorPage");
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content,
-                                                                 "unsafeBrowsingErrorPage");
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "passwordManagerRequestSave",
-                                                                          priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "passwordFormFocused",
-                                                                          priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "passwordManagerQuery",
-                                                                          priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "passwordManagerSave",
-                                                                          priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "passwordManagerQueryUsernames",
-                                                                          priv->guid);
 
   g_object_unref (ephy_embed_prefs_get_settings ());
   ephy_embed_utils_shutdown ();
@@ -1381,7 +1279,6 @@ ephy_embed_shell_constructed (GObject *object)
   if (mode == EPHY_EMBED_SHELL_MODE_TEST ||
       mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     ephy_embed_shell_create_web_context (shell);
-    priv->user_content = webkit_user_content_manager_new ();
   }
 }
 
@@ -1680,14 +1577,6 @@ ephy_embed_shell_get_filters_manager (EphyEmbedShell *shell)
   return priv->filters_manager;
 }
 
-WebKitUserContentManager *
-ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  return priv->user_content;
-}
-
 const char *
 ephy_embed_shell_get_guid (EphyEmbedShell *shell)
 {
@@ -1738,4 +1627,119 @@ ephy_embed_shell_get_password_manager (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   return priv->password_manager;
+}
+
+void
+ephy_embed_shell_register_global_ucm_handler (EphyEmbedShell           *shell,
+                                              WebKitUserContentManager *ucm)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  /* User content manager */
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "overview",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::overview",
+                           G_CALLBACK (web_process_extension_overview_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "tlsErrorPage");
+  g_signal_connect_object (ucm, "script-message-received::tlsErrorPage",
+                           G_CALLBACK (web_process_extension_tls_error_page_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "unsafeBrowsingErrorPage");
+  g_signal_connect_object (ucm, "script-message-received::unsafeBrowsingErrorPage",
+                           G_CALLBACK (web_process_extension_unsafe_browsing_error_page_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "passwordFormFocused",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::passwordFormFocused",
+                           G_CALLBACK (web_process_extension_password_form_focused_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "aboutApps");
+  g_signal_connect_object (ucm, "script-message-received::aboutApps",
+                           G_CALLBACK (web_process_extension_about_apps_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "passwordManagerQuery",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::passwordManagerQuery",
+                           G_CALLBACK (web_process_extension_password_manager_query_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "passwordManagerQueryUsernames",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::passwordManagerQueryUsernames",
+                           G_CALLBACK (web_process_extension_password_manager_query_usernames_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "passwordManagerSave",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::passwordManagerSave",
+                           G_CALLBACK (web_process_extension_password_manager_save_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
+                                                                        "passwordManagerRequestSave",
+                                                                        priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::passwordManagerRequestSave",
+                           G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
+                           shell, 0);
+
+  /* Filter Manager */
+  g_signal_connect_object (priv->filters_manager, "filters-disabled",
+                           G_CALLBACK (webkit_user_content_manager_remove_all_filters),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-ready",
+                           G_CALLBACK (webkit_user_content_manager_add_filter),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-removed",
+                           G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+
+  ephy_filters_manager_add_content_filters (priv->filters_manager, ucm);
+}
+
+void
+ephy_embed_shell_unregister_global_ucm_handler (EphyEmbedShell           *shell,
+                                                WebKitUserContentManager *ucm)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "overview",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (ucm,
+                                                                 "tlsErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler (ucm,
+                                                                 "unsafeBrowsingErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "passwordManagerRequestSave",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "passwordFormFocused",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (ucm, "aboutApps");
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "passwordManagerQuery",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "passwordManagerSave",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
+                                                                          "passwordManagerQueryUsernames",
+                                                                          priv->guid);
 }
