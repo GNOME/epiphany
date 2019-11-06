@@ -21,6 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
@@ -31,5 +32,9 @@ G_DECLARE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, EPHY, FILTERS_MA
 EphyFiltersManager *ephy_filters_manager_new                     (const char         *adblock_filters_dir);
 const char         *ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager);
 gboolean            ephy_filters_manager_get_is_initialized      (EphyFiltersManager *manager);
+void                ephy_filters_manager_set_ucm_forbids_ads     (EphyFiltersManager       *manager,
+                                                                  WebKitUserContentManager *ucm,
+                                                                  gboolean                  forbids_ads);
+
 
 G_END_DECLS
