@@ -81,10 +81,15 @@ void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell  
 void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell   *shell,
                                                                 EphyHistoryURL   *url);
 EphyFiltersManager       *ephy_embed_shell_get_filters_manager      (EphyEmbedShell *shell);
-WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
 EphySearchEngineManager  *ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell);
 EphyPasswordManager      *ephy_embed_shell_get_password_manager      (EphyEmbedShell *shell);
+
+void                     ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
+                                                                WebKitUserContentManager *ucm);
+void                     ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
+                                                                  WebKitUserContentManager *ucm);
+
 
 G_END_DECLS
