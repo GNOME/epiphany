@@ -34,6 +34,7 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
+#include "ephy-filters-manager.h"
 #include "ephy-gsb-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
@@ -925,6 +926,10 @@ static void
 ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
+
+  ephy_embed_prefs_unregister_ucm (ucm);
+  ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
 
   if (view->web_process_extension) {
     g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
@@ -1889,6 +1894,30 @@ update_security_status_for_committed_load (EphyWebView *view,
 }
 
 static void
+update_ucm_ads_state (WebKitWebView *web_view,
+                      const char    *uri)
+{
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (web_view);
+  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+  gboolean enable = FALSE;
+  g_autofree gchar *origin = NULL;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  origin = ephy_uri_to_security_origin (uri);
+
+  /* Check page setting first in case it overwrites global setting */
+  if (origin)
+    permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
+                                                          EPHY_PERMISSION_TYPE_SHOW_ADS,
+                                                          origin);
+  enable = permission == EPHY_PERMISSION_DENY;
+  if (permission == EPHY_PERMISSION_UNDECIDED && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+    enable = TRUE;
+
+  ephy_filters_manager_set_ucm_forbids_ads (ephy_embed_shell_get_filters_manager (shell), ucm, enable);
+}
+
+static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
                  gpointer         user_data)
@@ -1940,6 +1969,7 @@ load_changed_cb (WebKitWebView   *web_view,
       uri = webkit_web_view_get_uri (web_view);
       ephy_web_view_set_committed_location (view, uri);
       update_security_status_for_committed_load (view, uri);
+      update_ucm_ads_state (web_view, uri);
 
       /* History. */
       if (ephy_embed_utils_is_no_show_address (uri))
@@ -3006,10 +3036,14 @@ GtkWidget *
 ephy_web_view_new (void)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_prefs_register_ucm (ucm);
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "web-context", ephy_embed_shell_get_web_context (shell),
-                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
+                       "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
                        NULL);
@@ -3019,10 +3053,14 @@ GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_prefs_register_ucm (ucm);
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
-                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
+                       "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
 }
