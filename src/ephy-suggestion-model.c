@@ -33,6 +33,7 @@ struct _EphySuggestionModel {
   GObject parent;
   EphyHistoryService *history_service;
   EphyBookmarksManager *bookmarks_manager;
+  GSequence *urls;
   GSequence *items;
   GCancellable *icon_cancellable;
 };
@@ -58,6 +59,7 @@ ephy_suggestion_model_finalize (GObject *object)
 
   g_clear_object (&self->bookmarks_manager);
   g_clear_object (&self->history_service);
+  g_clear_pointer (&self->urls, g_sequence_free);
   g_clear_pointer (&self->items, g_sequence_free);
 
   g_cancellable_cancel (self->icon_cancellable);
@@ -249,6 +251,7 @@ static guint
 add_bookmarks (EphySuggestionModel *self,
                const char          *query)
 {
+  GList *new_urls = NULL;
   GSequence *bookmarks;
   guint added = 0;
 
@@ -265,6 +268,10 @@ add_bookmarks (EphySuggestionModel *self,
     url = ephy_bookmark_get_url (bookmark);
     title = ephy_bookmark_get_title (bookmark);
 
+    if (g_sequence_lookup (self->urls, (gpointer)url, (GCompareDataFunc)g_strcmp0,
+                           NULL))
+      continue;
+
     if (strlen (title) == 0)
       title = url;
 
@@ -278,10 +285,16 @@ add_bookmarks (EphySuggestionModel *self,
       suggestion = ephy_suggestion_new (markup, title, url);
       load_favicon (self, suggestion, url);
 
+      new_urls = g_list_prepend (new_urls, g_strdup (url));
       g_sequence_append (self->items, suggestion);
       added++;
     }
   }
+
+  for (GList *p = new_urls; p != NULL; p = p->next)
+    g_sequence_append (self->urls, p->data);
+  g_sequence_sort (self->urls, (GCompareDataFunc)g_strcmp0, NULL);
+  g_list_free (new_urls);
 
   return added;
 }
@@ -299,6 +312,10 @@ add_history (EphySuggestionModel *self,
     g_autofree gchar *escaped_title = NULL;
     g_autofree gchar *markup = NULL;
     const gchar *title = url->title;
+
+    if (g_sequence_lookup (self->urls, url->url, (GCompareDataFunc)g_strcmp0,
+                           NULL))
+      continue;
 
     if (strlen (url->title) == 0)
       title = url->url;
@@ -388,6 +405,7 @@ add_tabs (EphySuggestionModel *self,
     g_autofree gchar *escaped_title = NULL;
     g_autofree gchar *markup = NULL;
     const gchar *display_address;
+    const gchar *url;
     g_autofree gchar *address = NULL;
     const gchar *title;
     g_autofree gchar *title_casefold = NULL;
@@ -400,6 +418,7 @@ add_tabs (EphySuggestionModel *self,
     embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
     webview = ephy_embed_get_web_view (embed);
     display_address = ephy_web_view_get_display_address (webview);
+    url = ephy_web_view_get_address (webview);
     address = g_strdup_printf ("ephy-tab://%d", i);
     title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
 
@@ -414,10 +433,13 @@ add_tabs (EphySuggestionModel *self,
       suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, _("Switch to Tab"), address);
       load_favicon (self, suggestion, display_address);
 
+      g_sequence_append (self->urls, g_strdup (url));
       g_sequence_append (self->items, suggestion);
       added++;
     }
   }
+
+  g_sequence_sort (self->urls, (GCompareDataFunc)g_strcmp0, NULL);
 
   return added;
 }
@@ -446,6 +468,8 @@ query_completed_cb (EphyHistoryService *service,
 
   removed = g_sequence_get_length (self->items);
 
+  g_clear_pointer (&self->urls, g_sequence_free);
+  self->urls = g_sequence_new (g_free);
   g_clear_pointer (&self->items, g_sequence_free);
   self->items = g_sequence_new (g_object_unref);
 
