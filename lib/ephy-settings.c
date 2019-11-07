@@ -212,15 +212,6 @@ ephy_settings_get_for_web_process_extension (const char *schema)
     gsettings = ephy_settings_get (schema);
     g_assert (gsettings != NULL);
 
-    /* GLib inside Flatpak will default to this backend in the future */
-    /* so we don't need to do anything extra */
-    g_object_get (gsettings, "backend", &backend, NULL);
-    /* G_IS_KEYFILE_SETTINGS_BACKEND () is private API */
-    if (!g_strcmp0 (g_type_name (G_TYPE_FROM_INSTANCE (backend)), "GKeyfileSettingsBackend")) {
-      g_hash_table_insert (settings, g_steal_pointer (&key_name), g_object_ref (gsettings));
-      return gsettings;
-    }
-
     keyfile_path = g_build_filename (ephy_config_dir (), "web-extension-settings.ini", NULL);
     backend = g_keyfile_settings_backend_new (keyfile_path, "/", "/");
 
