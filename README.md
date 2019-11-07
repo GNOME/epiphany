@@ -62,11 +62,13 @@ automatically. For example, in Fedora:
 ```
 $ sudo dnf install 'pkgconfig(hogweed)'
 ```
-In DEB-based distributions:
+
+In deb-based distributions:
 
 ```
 $ sudo apt install $(apt-file search --package-only hogweed)
 ```
+
 In other distributions, you must research each dependency to determine which
 package provides the required pkg-config file.
 
