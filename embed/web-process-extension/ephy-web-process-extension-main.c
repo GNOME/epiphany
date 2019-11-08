@@ -38,10 +38,10 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   const char *server_address;
   const char *profile_dir;
   gboolean private_profile;
-  gboolean browser_mode;
+  gboolean should_remember_passwords;
   g_autoptr (GError) error = NULL;
 
-  g_variant_get (user_data, "(&sm&sm&sbb)", &guid, &server_address, &profile_dir, &private_profile, &browser_mode);
+  g_variant_get (user_data, "(&sm&sm&sbb)", &guid, &server_address, &profile_dir, &should_remember_passwords, &private_profile);
 
   if (!server_address) {
     g_warning ("UI process did not start D-Bus server, giving up.");
@@ -53,14 +53,16 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 
   ephy_debug_init ();
 
+  ephy_settings_set_is_web_process_extension ();
+
   extension = ephy_web_process_extension_get ();
 
   ephy_web_process_extension_initialize (extension,
                                          webkit_extension,
                                          guid,
                                          server_address,
-                                         private_profile,
-                                         browser_mode);
+                                         should_remember_passwords,
+                                         private_profile);
 }
 
 static void __attribute__((destructor))

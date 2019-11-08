@@ -35,11 +35,10 @@ G_BEGIN_DECLS
 #define EPHY_SETTINGS_SYNC                       ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA)
 #define EPHY_SETTINGS_WEB_APP                    ephy_settings_get (EPHY_PREFS_WEB_APP_SCHEMA)
 #define EPHY_SETTINGS_READER                     ephy_settings_get (EPHY_PREFS_READER_SCHEMA)
-#define EPHY_SETTINGS_WEB_PROCESS_EXTENSION_MAIN ephy_settings_get_for_web_process_extension (EPHY_PREFS_SCHEMA)
-#define EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB  ephy_settings_get_for_web_process_extension (EPHY_PREFS_WEB_SCHEMA)
 
 GSettings *ephy_settings_get (const char *schema);
-GSettings *ephy_settings_get_for_web_process_extension (const char *schema);
+
+void ephy_settings_set_is_web_process_extension (void);
 
 void ephy_settings_shutdown (void);
 

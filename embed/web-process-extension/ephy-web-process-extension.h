@@ -34,7 +34,7 @@ void                     ephy_web_process_extension_initialize (EphyWebProcessEx
                                                                 WebKitWebExtension      *wk_extension,
                                                                 const char              *guid,
                                                                 const char              *server_address,
-                                                                gboolean                 is_private_profile,
-                                                                gboolean                 is_browser_mode);
+                                                                gboolean                 should_remember_passwords,
+                                                                gboolean                 is_private_profile);
 
 G_END_DECLS
