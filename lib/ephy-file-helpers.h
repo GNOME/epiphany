@@ -33,13 +33,6 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  EPHY_MIME_PERMISSION_SAFE    = 1,
-  EPHY_MIME_PERMISSION_UNSAFE  = 2,
-  EPHY_MIME_PERMISSION_UNKNOWN = 3
-} EphyMimePermission;
-
-typedef enum
-{
   EPHY_FILE_HELPERS_NONE             = 0,
   EPHY_FILE_HELPERS_KEEP_DIR         = 1 << 1,
   EPHY_FILE_HELPERS_PRIVATE_PROFILE  = 1 << 2,
