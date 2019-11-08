@@ -1097,9 +1097,15 @@ ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
 }
 
 void
-ephy_filters_manager_add_content_filters (EphyFiltersManager       *manager,
-                                          WebKitUserContentManager *ucm)
+ephy_filters_manager_set_content_filters (EphyFiltersManager       *manager,
+                                          WebKitUserContentManager *ucm,
+                                          gboolean                  set)
 {
-  if (manager->wk_filter)
+  if (!manager->wk_filter)
+    return;
+
+  if (set)
     webkit_user_content_manager_add_filter (ucm, manager->wk_filter);
+  else
+    webkit_user_content_manager_remove_filter (ucm, manager->wk_filter);
 }

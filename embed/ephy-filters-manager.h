@@ -32,8 +32,9 @@ G_DECLARE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, EPHY, FILTERS_MA
 EphyFiltersManager *ephy_filters_manager_new                     (const char         *adblock_filters_dir);
 const char         *ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager);
 gboolean            ephy_filters_manager_get_is_initialized      (EphyFiltersManager *manager);
-void                ephy_filters_manager_add_content_filters     (EphyFiltersManager       *manager,
-                                                                  WebKitUserContentManager *ucm);
+void                ephy_filters_manager_set_content_filters     (EphyFiltersManager       *manager,
+                                                                  WebKitUserContentManager *ucm,
+                                                                  gboolean                  set);
 
 
 G_END_DECLS

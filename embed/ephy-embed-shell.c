@@ -1710,7 +1710,7 @@ ephy_embed_shell_register_global_ucm_handler (EphyEmbedShell           *shell,
                            ucm,
                            G_CONNECT_SWAPPED);
 
-  ephy_filters_manager_add_content_filters (priv->filters_manager, ucm);
+  ephy_filters_manager_set_content_filters (priv->filters_manager, ucm, TRUE);
 
   /* User Scripts */
   ephy_embed_prefs_apply_user_style (ucm);
