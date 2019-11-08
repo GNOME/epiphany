@@ -55,6 +55,7 @@ struct _EphyWebProcessExtension {
 
   WebKitScriptWorld *script_world;
 
+  gboolean should_remember_passwords;
   gboolean is_private_profile;
 
   GHashTable *frames_map;
@@ -95,6 +96,9 @@ static const char introspection_xml[] =
   "    <arg type='i' name='promise_id' direction='in'/>"
   "    <arg type='t' name='frame_id' direction='in'/>"
   "  </method>"
+  "  <method name='SetShouldRememberPasswords'>"
+  "    <arg type='b' name='should_remember_passwords' direction='in'/>"
+  "  </method>"
   " </interface>"
   "</node>";
 
@@ -106,13 +110,15 @@ web_page_send_request (WebKitWebPage           *web_page,
                        WebKitURIResponse       *redirected_response,
                        EphyWebProcessExtension *extension)
 {
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
-    const char *request_uri = webkit_uri_request_get_uri (request);
-    g_autofree char *modified_uri = ephy_remove_tracking_from_uri (request_uri);
-    if (modified_uri && g_strcmp0 (request_uri, modified_uri) != 0) {
-      LOG ("Rewrote %s to %s", request_uri, modified_uri);
-      webkit_uri_request_set_uri (request, modified_uri);
-    }
+  /* FIXME: We should probably remove ephy_remove_tracking_from_uri and instead
+   * trust Intelligent Tracking Prevention to mitigate potential privacy impact
+   * of tracking query parameters. But first we need to enable ITP.
+   */
+  const char *request_uri = webkit_uri_request_get_uri (request);
+  g_autofree char *modified_uri = ephy_remove_tracking_from_uri (request_uri);
+  if (modified_uri && g_strcmp0 (request_uri, modified_uri) != 0) {
+    LOG ("Rewrote %s to %s", request_uri, modified_uri);
+    webkit_uri_request_set_uri (request, modified_uri);
   }
   return FALSE;
 }
@@ -460,6 +466,8 @@ handle_method_call (GDBusConnection       *connection,
                                             G_TYPE_STRING, username,
                                             G_TYPE_STRING, password,
                                             G_TYPE_INT, promise_id, G_TYPE_NONE);
+  } else if (g_strcmp0 (method_name, "SetShouldRememberPasswords") == 0) {
+    g_variant_get (parameters, "(b)", &extension->should_remember_passwords);
   }
 }
 
@@ -615,7 +623,10 @@ js_should_remember_passwords (EphyWebProcessExtension *extension)
 {
   g_assert (EPHY_IS_WEB_PROCESS_EXTENSION (extension));
 
-  return !extension->is_private_profile && g_settings_get_boolean (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+  /* We currently don't remember passwords in private profiles. But there is
+   * no good reason for this and we should probably change this.
+   */
+  return extension->should_remember_passwords && !extension->is_private_profile;
 }
 
 static void
@@ -746,8 +757,8 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                        WebKitWebExtension      *wk_extension,
                                        const char              *guid,
                                        const char              *server_address,
-                                       gboolean                 is_private_profile,
-                                       gboolean                 is_browser_mode)
+                                       gboolean                 should_remember_passwords,
+                                       gboolean                 is_private_profile)
 {
   g_autoptr (GDBusAuthObserver) observer = NULL;
 
@@ -766,6 +777,11 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->extension = g_object_ref (wk_extension);
 
+  /* For now we don't allow remembering passwords in private profile or
+   * incognito mode, but there's no good reason for this and we should probably
+   * change it.
+   */
+  extension->should_remember_passwords = should_remember_passwords;
   extension->is_private_profile = is_private_profile;
 
   extension->permissions_manager = ephy_permissions_manager_new ();
