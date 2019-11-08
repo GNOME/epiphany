@@ -34,6 +34,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+static gboolean is_web_process = FALSE;
+
+void
+ephy_flatpak_utils_set_is_web_process_extension (void)
+{
+  g_assert (!is_web_process);
+
+  is_web_process = TRUE;
+}
+
 gboolean
 ephy_is_running_inside_flatpak (void)
 {
@@ -42,6 +52,12 @@ ephy_is_running_inside_flatpak (void)
 
   if (decided)
     return under_flatpak;
+
+  /* This function cannot be used in the web process extension, because WebKit
+   * creates a .flatpak-info in its web process sandbox even when we are not
+   * running under flatpak. It would always return TRUE.
+   */
+  g_assert (!is_web_process);
 
   under_flatpak = g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
   decided = TRUE;
