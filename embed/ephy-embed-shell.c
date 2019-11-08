@@ -940,7 +940,6 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (GVariant) user_data = NULL;
   gboolean private_profile;
-  gboolean browser_mode;
   const char *address;
 
 #if DEVELOPER_MODE
@@ -952,13 +951,12 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
-  browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
   user_data = g_variant_new ("(smsmsbb)",
                              priv->guid,
                              address,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
-                             private_profile,
-                             browser_mode);
+                             g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS),
+                             private_profile);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
@@ -1115,6 +1113,25 @@ download_started_cb (WebKitWebContext *web_context,
 
   ephy_download = ephy_download_new (download);
   ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
+}
+
+static void
+remember_passwords_setting_changed_cb (GSettings      *settings,
+                                       char           *key,
+                                       EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  gboolean should_remember_passwords;
+  GList *l;
+
+  should_remember_passwords = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+
+  for (l = priv->web_process_extensions; l; l = g_list_next (l)) {
+    EphyWebProcessExtensionProxy *web_process_extension = (EphyWebProcessExtensionProxy *)l->data;
+
+    ephy_web_process_extension_proxy_set_should_remember_passwords (web_process_extension,
+                                                                    should_remember_passwords);
+  }
 }
 
 static void
@@ -1288,6 +1305,9 @@ ephy_embed_shell_startup (GApplication *application)
 
   g_signal_connect_object (priv->web_context, "download-started",
                            G_CALLBACK (download_started_cb), shell, 0);
+
+  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
+                           G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
 }
 
 static void
