@@ -336,3 +336,19 @@ ephy_web_process_extension_proxy_password_query_response (EphyWebProcessExtensio
                      web_process_extension->cancellable,
                      NULL, NULL);
 }
+
+void
+ephy_web_process_extension_proxy_set_should_remember_passwords (EphyWebProcessExtensionProxy *web_process_extension,
+                                                                gboolean                      should_remember_passwords)
+{
+  if (!web_process_extension->proxy)
+    return;
+
+  g_dbus_proxy_call (web_process_extension->proxy,
+                     "SetShouldRememberPasswords",
+                     g_variant_new ("(b)", should_remember_passwords),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     web_process_extension->cancellable,
+                     NULL, NULL);
+}
