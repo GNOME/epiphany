@@ -53,8 +53,8 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
     g_warning ("Failed to initialize file helpers: %s", error->message);
 
   ephy_debug_init ();
-  ephy_flatpak_utils_set_is_web_process_extension ();
 
+  ephy_flatpak_utils_set_is_web_process_extension ();
   ephy_settings_set_is_web_process_extension ();
 
   extension = ephy_web_process_extension_get ();
