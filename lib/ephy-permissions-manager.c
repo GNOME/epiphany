@@ -60,8 +60,6 @@ ephy_permissions_manager_init (EphyPermissionsManager *manager)
   manager->permission_type_permitted_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
   manager->permission_type_denied_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-  /* The GKeyfileBackend needs to be shared to avoid overconsumption of inotify
-   * handles. See: epiphany#865. */
   filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
   manager->backend = g_keyfile_settings_backend_new (filename, "/", NULL);
 }
