@@ -684,6 +684,11 @@ open_in_default_handler (const char                   *uri,
   gdk_app_launch_context_set_timestamp (context, timestamp);
 
   appinfo = g_app_info_get_default_for_type (mime_type, TRUE);
+  if (!appinfo) {
+    g_warning ("Failed to get default for mime type: %s", mime_type);
+    return FALSE;
+  }
+
   uris.data = (gpointer)uri;
   uris.next = uris.prev = NULL;
 
