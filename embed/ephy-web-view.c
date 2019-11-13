@@ -2420,7 +2420,7 @@ format_tls_error_page (EphyWebView  *view,
   /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
   *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
-  *icon_name = "channel-insecure-symbolic.png";
+  *icon_name = "channel-insecure-symbolic.svg";
   *style = "danger";
 
   g_free (formatted_origin);
