@@ -1,55 +1,73 @@
 /* Global CSS for error pages */
 
 html {
+    /* Adwaita colors */
+    --bg-color: #f6f5f4;
+    --fg-color: #2e3436;
+    --base-color: #fff;
+    --text-color: #000;
+    --borders: #d3d7cf;
+
+    /* Misc colors */
+    --header-color: #999;
+    --header-text-color: white;
+    --row-hover-color: rgba(0, 0, 0, .1);
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        /* Adwaita colors */
+        --bg-color: #353535;
+        --fg-color: #eeeeec;
+        --base-color: #2d2d2d;
+        --text-color: #fff;
+        --borders: #1b1b1b;
+
+        /* Misc colors */
+        --header-color: #666;
+        --row-hover-color: rgba(255, 255, 255, .1);
+    }
+}
+
+html {
     font-family: -webkit-system-font, Cantarell, sans-serif;
-    font-size: 12pt;
-    padding: 40px 20px 0 20px;
+    color: var(--fg-color);
+    background-color: var(--bg-color);
+    height: 100%;
 }
 
-#container {
-    padding: 2em;
-    margin: 2em auto;
-    background-color: #fff;
-    max-width: 500px;
+.error-body {
+    box-sizing:border-box;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width:40em;
+    margin: auto;
+    line-height: 1.5;
+    height: 100%;
 }
 
-#leftpanel {
-    vertical-align: top;
-    display: inline-block;
-    margin-right: 5px;
-    width: 10%;
-}
-
-#rightpanel {
-    vertical-align: top;
-    display: inline-block;
-    margin-left: 5px;
-    width: 80%;
-}
-
-#rightpanel .hidden {
+.error-body .hidden {
     display: none;
 }
 
-#rightpanel .visible {
+.error-body .visible {
     display: block;
 }
 
-#rightpanel .clickable {
+.error-body .clickable {
     cursor: pointer;
     color: #888a85;
 }
 
-#rightpanel .clickable:hover,
-#rightpanel .clickable:focus {
+.error-body .clickable:hover,
+.error-body .clickable:focus {
     color: #a6ad9c;
 }
 
 #msg-title {
-    font-size: 16pt;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 10px;
+    opacity: 0.55; /* Adwaita's dim-label */
+    text-align:center;
 }
 
 #msg-title.default {
@@ -60,12 +78,9 @@ html {
     color: #cc0000;
 }
 
-#msg-body {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 #msg-details {
+    margin-left: 10px;
+    margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -84,7 +99,7 @@ html {
 .btn {
     min-width: 200px;
     height: 32px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 0;
     line-height: 1.42857143;
     text-align: center;
@@ -110,31 +125,31 @@ html {
 }
 
 .suggested-action {
-    color: #fff;
-    border-color: #1c5187;
-    background-image: linear-gradient(to bottom, #86add6, #538ac5 60%, #2a76c6);
+    color: white;
+    border-color: #1b6acb;
+    background-image: linear-gradient(to top, #2379e2 2px, #3584e4);
 }
 
 .suggested-action:hover,
 .suggested-action:focus,
 .suggested-action:active,
 .suggested-action.active {
-    color: #fff;
-    background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
+    color: white;
+    background-image: linear-gradient(to top, #3584e4, #3987e5 1px);
 }
 
 .destructive-action {
-    color: #fff;
-    border-color: #8e0b0b;
-    background-image: linear-gradient(to bottom, #ef2929, #ee1616 60%, #d51010);
+    color: white;
+    border-color: #b2161d;
+    background-image: linear-gradient(to top, #ce1921 2px, #e01b24);
 }
 
 .destructive-action:hover,
 .destructive-action:focus,
 .destructive-action:active,
 .destructive-action.active {
-    color: #fff;
-    background-image: linear-gradient(to bottom, #f14545, #ef2929 60%, #ee1616);
+    color: white;
+    background-image: linear-gradient(to top, #e01b24, #e41c26 1px);
 }
 
 details > summary::-webkit-details-marker {
