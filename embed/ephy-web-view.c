@@ -1879,8 +1879,10 @@ hostname_to_tld (const char *hostname)
   parts = g_strsplit (hostname, ".", 0);
   length = g_strv_length (parts);
 
-  g_assert (length >= 1);
-  return g_strdup (parts[length - 1]);
+  if (length >= 1)
+    return g_strdup (parts[length - 1]);
+
+  return g_strdup ("");
 }
 
 static void
