@@ -3888,6 +3888,17 @@ static void
 ephy_window_init (EphyWindow *window)
 {
   LOG ("EphyWindow initialising %p", window);
+  if (is_desktop_pantheon ()) {
+    GtkSettings *settings = gtk_settings_get_default();
+    g_object_set(settings,
+                 "gtk-icon-theme-name",
+                 "elementary",
+                 NULL);
+    g_object_set(settings,
+             "gtk-theme-name",
+             "elementary",
+             NULL);
+  }
 }
 
 /**
