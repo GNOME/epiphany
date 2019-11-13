@@ -201,6 +201,20 @@ is_bang_search (const char *address)
   return FALSE;
 }
 
+static gboolean
+is_host_with_port (const char *address)
+{
+  gchar **split = g_strsplit (address, ":", -1);
+  gint64 port = 0;
+
+  if (g_strv_length (split) == 2)
+    port = g_ascii_strtoll (split[1], NULL, 10);
+
+  g_strfreev (split);
+
+  return port != 0;
+}
+
 gboolean
 ephy_embed_utils_address_is_valid (const char *address)
 {
@@ -222,7 +236,8 @@ ephy_embed_utils_address_is_valid (const char *address)
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
            is_public_domain (address) ||
-           is_bang_search (address);
+           is_bang_search (address) ||
+           is_host_with_port (address);
 
   g_clear_object (&info);
 
@@ -257,24 +272,38 @@ ephy_embed_utils_normalize_address (const char *address)
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
     SoupURI *uri;
+    gchar **split = g_strsplit (address, ":", -1);
+    gint64 port = 0;
 
-    uri = soup_uri_new (address);
+    if (g_strv_length (split) == 2)
+      port = g_ascii_strtoll (split[1], NULL, 10);
 
-    /* Auto-prepend http:// to anything that is not
-     * one according to soup, because it probably will be
-     * something like "google.com". Special case localhost(:port)
-     * and IP(:port), because SoupURI, correctly, thinks it is a
-     * URI with scheme being localhost/IP and, optionally, path
-     * being the port. Ideally we should check if we have a
-     * handler for the scheme, and since we'll fail for localhost
-     * and IP, we'd fallback to loading it as a domain. */
-    if (!uri ||
-        (uri && !g_strcmp0 (uri->scheme, "localhost")) ||
-        (uri && g_hostname_is_ip_address (uri->scheme)))
+    g_strfreev (split);
+
+    if (port == 443) {
+      effective_address = g_strconcat ("https://", address, NULL);
+    } else if (port != 0) {
       effective_address = g_strconcat ("http://", address, NULL);
+    } else {
+      uri = soup_uri_new (address);
 
-    if (uri)
-      soup_uri_free (uri);
+      /* Auto-prepend http:// to anything that is not
+       * one according to soup, because it probably will be
+       * something like "google.com". Special case localhost(:port)
+       * and IP(:port), because SoupURI, correctly, thinks it is a
+       * URI with scheme being localhost/IP and, optionally, path
+       * being the port. Ideally we should check if we have a
+       * handler for the scheme, and since we'll fail for localhost
+       * and IP, we'd fallback to loading it as a domain. */
+      if (!uri ||
+          (uri && !g_strcmp0 (uri->scheme, "localhost")) ||
+          (uri && g_hostname_is_ip_address (uri->scheme)))
+        effective_address = g_strconcat ("http://", address, NULL);
+
+      if (uri)
+        soup_uri_free (uri);
+    }
+  } else {
   }
 
   return effective_address ? effective_address : g_strdup (address);
