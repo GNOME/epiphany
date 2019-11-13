@@ -49,7 +49,6 @@ static const SchemeTest tests_has_scheme[] = {
   { "http_with_port", "http://www.gnome.org:8080" },
   { "https", "https://www.gnome.org/" },
   { "http_caps", "HTTP://www.gnome.org/" },
-  { "ftp_with_user", "ftp://rupert:bananas@ftp.gnome.org/epiphany/" },
   { "file", "file:///home/epiphany/code" },
   { "javascript", "javascript:var a=b;" },
   { "data", "data:\%20\%40" },
