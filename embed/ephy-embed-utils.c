@@ -211,6 +211,18 @@ is_bang_search (const char *address)
   return FALSE;
 }
 
+static gboolean
+is_host_with_port (const char *address)
+{
+  g_auto (GStrv) split = g_strsplit (address, ":", -1);
+  gint64 port = 0;
+
+  if (g_strv_length (split) == 2)
+    port = g_ascii_strtoll (split[1], NULL, 10);
+
+  return port != 0;
+}
+
 gboolean
 ephy_embed_utils_address_is_valid (const char *address)
 {
@@ -232,7 +244,8 @@ ephy_embed_utils_address_is_valid (const char *address)
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
            is_public_domain (address) ||
-           is_bang_search (address);
+           is_bang_search (address) ||
+           is_host_with_port (address);
 
   g_clear_object (&info);
 
@@ -266,7 +279,7 @@ ephy_embed_utils_normalize_address (const char *address)
     return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
-    SoupURI *uri;
+    g_autoptr (SoupURI) uri = NULL;
 
     uri = soup_uri_new (address);
 
@@ -280,11 +293,9 @@ ephy_embed_utils_normalize_address (const char *address)
      * and IP, we'd fallback to loading it as a domain. */
     if (!uri ||
         (uri && !g_strcmp0 (uri->scheme, "localhost")) ||
-        (uri && g_hostname_is_ip_address (uri->scheme)))
+        (uri && g_hostname_is_ip_address (uri->scheme)) ||
+        (uri && is_host_with_port (address)))
       effective_address = g_strconcat ("http://", address, NULL);
-
-    if (uri)
-      soup_uri_free (uri);
   }
 
   return effective_address ? effective_address : g_strdup (address);
