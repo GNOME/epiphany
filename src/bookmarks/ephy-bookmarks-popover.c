@@ -426,6 +426,26 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 }
 
 static void
+ephy_bookmarks_popover_open_bookmark (EphyBookmarksPopover *self,
+                                      GtkListBoxRow        *row)
+{
+  GtkWidget *window;
+  GActionGroup *action_group;
+  GAction *action;
+  const char *url;
+
+  window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
+  g_assert (EPHY_IS_WINDOW (window));
+  action_group = gtk_widget_get_action_group (window, "win");
+  g_assert (action_group != NULL);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-bookmark");
+  g_assert (action != NULL);
+  url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
+
+  g_action_activate (action, g_variant_new_string (url));
+}
+
+static void
 ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover *self,
                                                   GtkListBoxRow        *row,
                                                   GtkListBox           *box)
@@ -439,24 +459,27 @@ ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover *self,
 
   type = g_object_get_data (G_OBJECT (row), "type");
   if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
-    GtkWidget *window;
-    GActionGroup *action_group;
-    GAction *action;
-    const char *url;
-
-    window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
-    g_assert (EPHY_IS_WINDOW (window));
-    action_group = gtk_widget_get_action_group (window, "win");
-    g_assert (action_group != NULL);
-    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-bookmark");
-    g_assert (action != NULL);
-    url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
-
-    g_action_activate (action, g_variant_new_string (url));
+    ephy_bookmarks_popover_open_bookmark (self, row);
   } else {
     tag = g_object_get_data (G_OBJECT (row), "title");
     ephy_bookmarks_popover_show_tag_detail (self, tag);
   }
+}
+
+static gboolean
+ephy_bookmarks_popover_list_box_button_release_event_cb (EphyBookmarksPopover *self,
+                                                         GdkEvent             *event,
+                                                         GtkListBox           *box)
+{
+  GdkEventButton *event_button = (GdkEventButton *)event;
+  GtkListBoxRow *row = gtk_list_box_get_row_at_y (box, event_button->y);
+
+  if (event_button->button != GDK_BUTTON_MIDDLE)
+    return GDK_EVENT_PROPAGATE;
+
+  ephy_bookmarks_popover_open_bookmark (self, row);
+
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -576,6 +599,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->tag_detail_list_box, "row-activated",
                            G_CALLBACK (ephy_bookmarks_popover_list_box_row_activated_cb),
+                           self, G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->bookmarks_list_box, "button-release-event",
+                           G_CALLBACK (ephy_bookmarks_popover_list_box_button_release_event_cb),
                            self, G_CONNECT_SWAPPED);
 }
 
