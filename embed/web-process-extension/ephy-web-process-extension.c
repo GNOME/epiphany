@@ -777,10 +777,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->extension = g_object_ref (wk_extension);
 
-  /* For now we don't allow remembering passwords in private profile or
-   * incognito mode, but there's no good reason for this and we should probably
-   * change it.
-   */
   extension->should_remember_passwords = should_remember_passwords;
   extension->is_private_profile = is_private_profile;
 
