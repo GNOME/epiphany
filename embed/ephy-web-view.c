@@ -2266,7 +2266,7 @@ format_network_error_page (const char  *uri,
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
-  *icon_name = "network-error-symbolic.png";
+  *icon_name = "network-error-symbolic.svg";
   *style = "default";
 
   g_free (formatted_origin);
@@ -2319,7 +2319,7 @@ format_crash_error_page (const char  *uri,
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
-  *icon_name = "computer-fail-symbolic.png";
+  *icon_name = "computer-fail-symbolic.svg";
   *style = "default";
 
   g_free (formatted_uri);
@@ -2362,7 +2362,7 @@ format_process_crash_error_page (const char  *uri,
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
-  *icon_name = "computer-fail-symbolic.png";
+  *icon_name = "computer-fail-symbolic.svg";
   *style = "default";
 }
 
@@ -2415,7 +2415,7 @@ format_tls_error_page (EphyWebView  *view,
   /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
   *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
-  *icon_name = "channel-insecure-symbolic.png";
+  *icon_name = "channel-insecure-symbolic.svg";
   *style = "danger";
 
   g_free (formatted_origin);
@@ -2504,7 +2504,7 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
   /* Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page. */
   *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
-  *icon_name = "security-high-symbolic.png";
+  *icon_name = "security-high-symbolic.svg";
   *style = "danger";
 
   g_free (formatted_origin);
@@ -2548,7 +2548,7 @@ format_no_such_file_error_page (EphyWebView  *view,
   /* Mnemonic for the Go Back button on the no such file error page. */
   *button_accesskey = C_("back-access-key", "B");
 
-  *icon_name = "computer-fail-symbolic.png";
+  *icon_name = "computer-fail-symbolic.svg";
   *style = "default";
 }
 
