@@ -142,8 +142,19 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 gboolean
 ephy_embed_utils_address_is_existing_absolute_filename (const char *address)
 {
-  return g_path_is_absolute (address) &&
-         g_file_test (address, G_FILE_TEST_EXISTS);
+  g_autofree char *real_address = NULL;
+  gint pos;
+
+  if (!strchr (address, '#')) {
+    return g_path_is_absolute (address) &&
+           g_file_test (address, G_FILE_TEST_EXISTS);
+  }
+
+  pos = g_strstr_len (address, -1, "#") - address;
+  real_address = g_strndup (address, pos);
+
+  return g_path_is_absolute (real_address) &&
+         g_file_test (real_address, G_FILE_TEST_EXISTS);
 }
 
 static gboolean
