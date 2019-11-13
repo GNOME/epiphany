@@ -124,7 +124,6 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
 
   has_web_scheme = !(g_ascii_strncasecmp (address, "http", colonpos) &&
                      g_ascii_strncasecmp (address, "https", colonpos) &&
-                     g_ascii_strncasecmp (address, "ftp", colonpos) &&
                      g_ascii_strncasecmp (address, "file", colonpos) &&
                      g_ascii_strncasecmp (address, "javascript", colonpos) &&
                      g_ascii_strncasecmp (address, "data", colonpos) &&
