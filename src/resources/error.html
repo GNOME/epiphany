@@ -37,33 +37,22 @@
     }
   </script>
 </head>
-<body>
-  <div id="container">
-    <div id="leftpanel">
-      <img src="ephy-resource:///org/gnome/epiphany/%s"/>
-    </div>
-    <div id="rightpanel">
-      <div id="msg-title" class="%s">
-        %s
-      </div>
-      <div id="msg-body">
-        %s
-      </div>
-      <div id="msg-details" class="%s">
-        <details>
-          <summary class="clickable">%s</summary>
-          %s
-          <button class="btn destructive-action %s" accesskey="%s" onclick="javascript:hiddenButtonAction()">
-            <strong>%s</strong>
-          </button>
-        </details>
-      </div>
-      <div id="footer">
-        <button class="btn suggested-action visible" accesskey="%s" onclick="javascript:buttonAction()">
-          <strong>%s</strong>
-        </button>
-      </div>
-    </div>
-  </div>
+<body class="error-body">
+  <img class="error-body-image" src="ephy-resource:///org/gnome/epiphany/%s"/>
+  <br>
+  <h1  id="msg-title" class="%s">%s</h1>
+  <p>%s</p>
+  <!--<div id="msg-details" class="%s">-->
+    <details>
+      <summary class="clickable">%s</summary>
+      %s
+      <button class="btn destructive-action %s" accesskey="%s" onclick="javascript:hiddenButtonAction()">
+        <strong>%s</strong>
+      </button>
+    </details>
+<!--  </div>-->
+  <button class="btn suggested-action visible" accesskey="%s" onclick="javascript:buttonAction()">
+    <strong>%s</strong>
+  </button>
 </body>
 </html>
