@@ -423,8 +423,10 @@ add_tabs (EphySuggestionModel *self,
 
     display_address_casefold = g_utf8_casefold (display_address, -1);
     query_casefold = g_utf8_casefold (query, -1);
-    if (title)
-      title_casefold = g_utf8_casefold (title, -1);
+    if (!title)
+      title = "";
+
+    title_casefold = g_utf8_casefold (title, -1);
 
     if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
       escaped_title = g_markup_escape_text (title, -1);
