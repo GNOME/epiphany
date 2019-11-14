@@ -58,6 +58,9 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
 
+  if (self->in_memory)
+    return;
+
   statement = ephy_sqlite_connection_create_statement (
     self->history_database,
     "INSERT INTO visits (url, visit_time, visit_type) "
