@@ -141,8 +141,8 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
 
   if (sqlite3_open_v2 (self->database_path,
                        &self->database,
-                       self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY ? SQLITE_OPEN_READONLY
-                                                                           : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+                       self->mode == EPHY_SQLITE_CONNECTION_MODE_MEMORY ? SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MEMORY
+                                                                        : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
                        NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     self->database = NULL;
@@ -250,8 +250,6 @@ gboolean
 ephy_sqlite_connection_begin_transaction (EphySQLiteConnection  *self,
                                           GError               **error)
 {
-  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
-    return TRUE;
   return ephy_sqlite_connection_execute (self, "BEGIN TRANSACTION", error);
 }
 
@@ -259,8 +257,6 @@ gboolean
 ephy_sqlite_connection_commit_transaction (EphySQLiteConnection  *self,
                                            GError               **error)
 {
-  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
-    return TRUE;
   return ephy_sqlite_connection_execute (self, "COMMIT", error);
 }
 

@@ -235,7 +235,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
                                FIREFOX_BOOKMARKS_FILE,
                                NULL);
 
-  connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READ_ONLY, filename);
+  connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_MEMORY, filename);
   ephy_sqlite_connection_open (connection, &my_error);
   if (my_error) {
     g_warning ("Could not open database at %s: %s", filename, my_error->message);

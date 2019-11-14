@@ -95,7 +95,7 @@ static void ephy_history_service_quit (EphyHistoryService    *self,
 enum {
   PROP_0,
   PROP_HISTORY_FILENAME,
-  PROP_READ_ONLY,
+  PROP_MEMORY,
   LAST_PROP
 };
 
@@ -116,8 +116,8 @@ ephy_history_service_set_property (GObject      *object,
       g_free (self->history_filename);
       self->history_filename = g_value_dup_string (value);
       break;
-    case PROP_READ_ONLY:
-      self->read_only = g_value_get_boolean (value);
+    case PROP_MEMORY:
+      self->in_memory = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
@@ -300,10 +300,10 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_READ_ONLY] =
-    g_param_spec_boolean ("read-only",
-                          "Read only mode",
-                          "Whether the history service works in read only mode",
+  obj_properties[PROP_MEMORY] =
+    g_param_spec_boolean ("memory",
+                          "In memory mode",
+                          "Whether the history service works in memory mode",
                           FALSE,
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
@@ -321,7 +321,7 @@ ephy_history_service_new (const char               *history_filename,
 {
   return EPHY_HISTORY_SERVICE (g_object_new (EPHY_TYPE_HISTORY_SERVICE,
                                              "history-filename", history_filename,
-                                             "read-only", mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY,
+                                             "memory", mode == EPHY_SQLITE_CONNECTION_MODE_MEMORY,
                                              NULL));
 }
 
@@ -380,8 +380,7 @@ ephy_history_service_open_transaction (EphyHistoryService *self)
   GError *error = NULL;
   g_assert (self->history_thread == g_thread_self ());
 
-  if (self->history_database == NULL ||
-      self->read_only)
+  if (self->history_database == NULL)
     return;
 
   ephy_sqlite_connection_begin_transaction (self->history_database, &error);
@@ -397,8 +396,7 @@ ephy_history_service_commit_transaction (EphyHistoryService *self)
   GError *error = NULL;
   g_assert (self->history_thread == g_thread_self ());
 
-  if (self->history_database == NULL ||
-      self->read_only)
+  if (self->history_database == NULL)
     return;
 
   ephy_sqlite_connection_commit_transaction (self->history_database, &error);
@@ -418,7 +416,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
   if (self->history_database != NULL)
     g_object_unref (self->history_database);
 
-  self->history_database = ephy_sqlite_connection_new (self->read_only ? EPHY_SQLITE_CONNECTION_MODE_READ_ONLY
+  self->history_database = ephy_sqlite_connection_new (self->in_memory ? EPHY_SQLITE_CONNECTION_MODE_MEMORY
                                                                        : EPHY_SQLITE_CONNECTION_MODE_READWRITE,
                                                        self->history_filename);
   ephy_sqlite_connection_open (self->history_database, &error);
@@ -426,10 +424,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
     g_object_unref (self->history_database);
     self->history_database = NULL;
 
-    /* Opening the database is expected to fail if it's being opened in read-
-     * only mode and does not already exist. Otherwise, this is bad. */
-    if (!self->read_only ||
-        !g_error_matches (error, EPHY_SQLITE_ERROR, SQLITE_CANTOPEN) ||
+    if (!g_error_matches (error, EPHY_SQLITE_ERROR, SQLITE_CANTOPEN) ||
         g_file_test (self->history_filename, G_FILE_TEST_EXISTS)) {
       g_warning ("Could not open history database at %s: %s", self->history_filename, error->message);
     }
@@ -439,8 +434,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
     ephy_sqlite_connection_enable_foreign_keys (self->history_database);
   }
 
-  return self->read_only ||
-         (ephy_history_service_initialize_hosts_table (self) &&
+  return (ephy_history_service_initialize_hosts_table (self) &&
           ephy_history_service_initialize_urls_table (self) &&
           ephy_history_service_initialize_visits_table (self));
 }
@@ -622,9 +616,6 @@ ephy_history_service_execute_add_visit (EphyHistoryService   *self,
   gboolean success;
   g_assert (self->history_thread == g_thread_self ());
 
-  if (self->read_only)
-    return FALSE;
-
   success = ephy_history_service_execute_add_visit_helper (self, visit);
   return success;
 }
@@ -636,9 +627,6 @@ ephy_history_service_execute_add_visits (EphyHistoryService *self,
 {
   gboolean success = TRUE;
   g_assert (self->history_thread == g_thread_self ());
-
-  if (self->read_only)
-    return FALSE;
 
   while (visits) {
     success = success && ephy_history_service_execute_add_visit_helper (self, (EphyHistoryPageVisit *)visits->data);
@@ -854,9 +842,6 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
 {
   char *title = g_strdup (url->title);
 
-  if (self->read_only)
-    return FALSE;
-
   if (ephy_history_service_get_url_row (self, NULL, url) == NULL) {
     /* The URL is not yet in the database, so we can't update it.. */
     g_free (title);
@@ -910,9 +895,6 @@ ephy_history_service_execute_set_url_zoom_level (EphyHistoryService *self,
   double zoom_level;
   EphyHistoryHost *host;
 
-  if (self->read_only)
-    return FALSE;
-
   g_variant_get (variant, "(sd)", &url_string, &zoom_level);
 
   host = ephy_history_service_get_host_row_from_url (self, url_string);
@@ -958,9 +940,6 @@ ephy_history_service_execute_set_url_hidden (EphyHistoryService *self,
                                              gpointer           *result)
 {
   gboolean hidden;
-
-  if (self->read_only)
-    return FALSE;
 
   hidden = url->hidden;
 
@@ -1081,9 +1060,6 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
   EphyHistoryURL *url;
   SignalEmissionContext *ctx;
 
-  if (self->read_only)
-    return FALSE;
-
   for (l = urls; l != NULL; l = l->next) {
     url = l->data;
     ephy_history_service_delete_url (self, url);
@@ -1121,9 +1097,6 @@ ephy_history_service_execute_delete_host (EphyHistoryService     *self,
 {
   SignalEmissionContext *ctx;
 
-  if (self->read_only)
-    return FALSE;
-
   ephy_history_service_delete_host_row (self, host);
 
   ctx = signal_emission_context_new (self, g_strdup (host->url),
@@ -1141,8 +1114,7 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
                                     gpointer            pointer,
                                     gpointer           *result)
 {
-  if (self->history_database == NULL ||
-      self->read_only)
+  if (self->history_database == NULL)
     return FALSE;
 
   ephy_history_service_commit_transaction (self);
