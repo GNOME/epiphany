@@ -134,6 +134,9 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
 
+  if (self->in_memory)
+    return;
+
   statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, host, sync_id) "
                                                        " VALUES (?, ?, ?, ?, ?, ?, ?)", &error);
@@ -176,6 +179,9 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
 
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
+
+  if (self->in_memory)
+    return;
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, sync_id=? "
