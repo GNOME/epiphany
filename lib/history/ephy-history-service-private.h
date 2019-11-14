@@ -34,7 +34,7 @@ struct _EphyHistoryService {
   GThread *history_thread;
   GAsyncQueue *queue;
   gboolean scheduled_to_quit;
-  gboolean read_only;
+  gboolean in_memory;
   int queue_urls_visited_id;
 };
 

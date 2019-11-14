@@ -99,7 +99,7 @@ def matchParameter(line):
     stars = match.group('stars')
     numStars = len(stars) if stars is not None else 0
     end = match.group('end')
-    isLastParameter = True if end is not None and end is ')' else False
+    isLastParameter = True if end != None and end == ')' else False
     return ParameterInfo(paramType, name, numStars, isLastParameter)
 
 
