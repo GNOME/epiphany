@@ -217,7 +217,7 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
   GdkPixbuf *snapshot, *scaled;
   int orig_width, orig_height;
   float orig_aspect_ratio, dest_aspect_ratio;
-  int x_offset, new_width = 0, new_height;
+  int x_offset, new_width, new_height;
 
   orig_width = cairo_image_surface_get_width (surface);
   orig_height = cairo_image_surface_get_height (surface);
