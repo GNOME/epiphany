@@ -21,7 +21,7 @@ cppcheck:
     - apk update && apk add cppcheck
   script: >-
     cppcheck .
-    --enable=all
+    --enable=warning,style
     --error-exitcode=1
     --library=gtk
     --quiet
@@ -29,10 +29,8 @@ cppcheck:
     --suppress=leakNoVarFunctionCall
     --suppress=literalWithCharPtrCompare
     --suppress=memleak
-    --suppress=missingInclude
     --suppress=redundantAssignment
     --suppress=variableScope
-    --suppress=unusedFunction
     --suppress=varFuncNullUB
     --suppress=*:lib/contrib/gvdb/*
     --template=gcc
