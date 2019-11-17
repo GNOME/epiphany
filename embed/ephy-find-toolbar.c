@@ -48,11 +48,8 @@ struct _EphyFindToolbar {
   guint find_again_source_id;
   guint find_source_id;
   char *find_string;
-  guint preedit_changed : 1;
-  guint prevent_activate : 1;
-  guint activated : 1;
-  guint links_only : 1;
-  guint typing_ahead : 1;
+  gboolean links_only;
+  gboolean typing_ahead;
 };
 
 G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, HDY_TYPE_SEARCH_BAR)
@@ -191,7 +188,7 @@ found_text_cb (WebKitFindController *controller,
 
   options = webkit_find_controller_get_options (controller);
   /* FIXME: it's not possible to remove the wrap flag, so the status is now always wrapped. */
-  result = options & WEBKIT_FIND_OPTIONS_WRAP_AROUND ? EPHY_FIND_RESULT_FOUNDWRAPPED : EPHY_FIND_RESULT_FOUND;
+  result = (options & WEBKIT_FIND_OPTIONS_WRAP_AROUND) ? EPHY_FIND_RESULT_FOUNDWRAPPED : EPHY_FIND_RESULT_FOUND;
   set_status (toolbar, result);
 }
 
