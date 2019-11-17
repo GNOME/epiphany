@@ -147,7 +147,6 @@ ephy_embed_shell_get_extension_proxy_for_page_id (EphyEmbedShell *self,
 static GList *
 tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
 {
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (catalog);
   WebKitFaviconDatabase *database;
   GList *windows;
   g_autoptr (GList) tabs = NULL;
@@ -155,6 +154,8 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
   const char *title;
   const char *url;
   g_autofree char *favicon = NULL;
+
+  g_assert ((gpointer)catalog == (gpointer)embed_shell);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (embed_shell));
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (embed_shell));
