@@ -52,7 +52,6 @@ struct _EphyShell {
 
   EphySession *session;
   EphySyncService *sync_service;
-  GList *windows;
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
   EphyHistoryManager *history_manager;

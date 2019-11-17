@@ -51,7 +51,6 @@ struct _EphyBookmarkPropertiesGrid {
   GtkWidget *tags_scrolled_window;
   GtkWidget *add_tag_entry;
   GtkWidget *add_tag_button;
-  GtkWidget *remove_bookmark_button;
 };
 
 G_DEFINE_TYPE (EphyBookmarkPropertiesGrid, ephy_bookmark_properties_grid, GTK_TYPE_GRID)
@@ -492,7 +491,6 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, tags_scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, add_tag_entry);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, add_tag_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, remove_bookmark_button);
 }
 
 static const GActionEntry entries[] = {

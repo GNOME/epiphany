@@ -42,7 +42,6 @@ struct _EphyEncodingDialog {
   EphyEncodings *encodings;
   EphyWindow *window;
   EphyEmbed *embed;
-  GtkWidget *enc_view;
   gboolean update_embed_tag;
   gboolean update_view_tag;
   const char *selected_encoding;

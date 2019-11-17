@@ -54,7 +54,6 @@ struct _EphyNotebook {
   EphyAdaptiveMode adaptive_mode;
 
   GList *focused_pages;
-  guint tabs_vis_notifier_id;
 
   GMenu *tab_menu;
 
