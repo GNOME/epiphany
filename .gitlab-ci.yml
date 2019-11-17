@@ -25,12 +25,15 @@ cppcheck:
     --library=gtk
     --quiet
     --suppress=constArgument
+    --suppress=ctnullpointe
     --suppress=leakNoVarFunctionCall
     --suppress=memleak
+    --suppress=nullPointer
     --suppress=variableScope
     --suppress=unusedFunction
     --suppress=varFuncNullUB
     --suppress=*:lib/contrib/gvdb/*
+    --suppress=*:subprojects/*
     --suppress=deallocret:lib/ephy-gui.c
     --template=gcc
 
