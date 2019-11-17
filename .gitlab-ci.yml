@@ -27,10 +27,10 @@ cppcheck:
     --quiet
     --suppress=leakNoVarFunctionCall
     --suppress=memleak
-    --suppress=shadowVar
     --suppress=variableScope
     --suppress=unusedFunction
     --suppress=varFuncNullUB
+    --suppress=*:lib/contrib/gvdb/*
     --template=gcc
 
 variables:
