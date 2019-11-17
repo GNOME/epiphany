@@ -21,10 +21,10 @@ cppcheck:
     - apk update && apk add cppcheck
   script: >-
     cppcheck .
-    --enable=all
     --error-exitcode=1
     --library=gtk
     --quiet
+    --suppress=constArgument
     --suppress=leakNoVarFunctionCall
     --suppress=memleak
     --suppress=variableScope
