@@ -101,10 +101,6 @@ struct _EphyWebView {
   /* Local file watch. */
   EphyFileMonitor *file_monitor;
 
-  /* Regex to figure out if we're dealing with a wanna-be URI */
-  GRegex *non_search_regex;
-  GRegex *domain_regex;
-
   GSList *hidden_popups;
   GSList *shown_popups;
 
@@ -122,8 +118,6 @@ struct _EphyWebView {
   char *pending_snapshot_uri;
 
   EphyHistoryPageVisitType visit_type;
-
-  gulong do_not_track_handler;
 
   /* TLS information. */
   GTlsCertificate *certificate;
@@ -506,7 +500,6 @@ ephy_web_view_set_property (GObject      *object,
       break;
     case PROP_TYPED_ADDRESS:
       ephy_web_view_set_typed_address (EPHY_WEB_VIEW (object), g_value_get_string (value));
-      break;
       break;
     case PROP_ADDRESS:
     case PROP_DOCUMENT_TYPE:
@@ -2145,7 +2138,7 @@ static char *
 detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
 {
   GPtrArray *errors = g_ptr_array_new ();
-  char *retval;
+  char *retval = NULL;
 
   if (tls_errors & G_TLS_CERTIFICATE_BAD_IDENTITY) {
     /* Possible error message when a site presents a bad certificate. */
