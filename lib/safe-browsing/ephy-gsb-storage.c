@@ -499,7 +499,7 @@ ephy_gsb_storage_constructed (GObject *object)
 
   if (!g_file_test (self->db_path, G_FILE_TEST_EXISTS)) {
     LOG ("GSB database does not exist, initializing...");
-    success = ephy_gsb_storage_init_db (self);
+    ephy_gsb_storage_init_db (self);
   } else {
     LOG ("GSB database exists, opening...");
     success = ephy_gsb_storage_open_db (self);
