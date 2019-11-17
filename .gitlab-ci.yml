@@ -26,6 +26,8 @@ cppcheck:
     --library=gtk
     --quiet
     --suppress=leakNoVarFunctionCall
+    --suppress=memleak
+    --suppress=shadowVar
     --suppress=variableScope
     --suppress=unusedFunction
     --template=gcc
