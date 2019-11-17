@@ -159,35 +159,35 @@ static void print_vma_table (GString    *str,
   g_string_append (str, "<tbody><tr><td></td><td>Clean</td><td>Dirty</td><td>Clean</td><td>Dirty</td><td></td></tr>");
   pentry = g_hash_table_lookup (hash, "r-xp");
   if (pentry) {
-    g_string_append_printf (str, "<tbody><tr><td>r-xp</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>Code</td></tr>",
+    g_string_append_printf (str, "<tbody><tr><td>r-xp</td><td>%u</td><td>%u</td><td>%u</td><td>%u</td><td>Code</td></tr>",
                             pentry->shared_clean, pentry->shared_dirty, pentry->private_clean, pentry->private_dirty);
     add_to_totals (pentry, &totals);
   }
   pentry = g_hash_table_lookup (hash, "rw-p");
   if (pentry) {
-    g_string_append_printf (str, "<tbody><tr><td>rw-p</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>Data</td></tr>",
+    g_string_append_printf (str, "<tbody><tr><td>rw-p</td><td>%u</td><td>%u</td><td>%u</td><td>%u</td><td>Data</td></tr>",
                             pentry->shared_clean, pentry->shared_dirty, pentry->private_clean, pentry->private_dirty);
     add_to_totals (pentry, &totals);
   }
   pentry = g_hash_table_lookup (hash, "r--p");
   if (pentry) {
-    g_string_append_printf (str, "<tbody><tr><td>r--p</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>Read-only Data</td></tr>",
+    g_string_append_printf (str, "<tbody><tr><td>r--p</td><td>%u</td><td>%u</td><td>%u</td><td>%u</td><td>Read-only Data</td></tr>",
                             pentry->shared_clean, pentry->shared_dirty, pentry->private_clean, pentry->private_dirty);
     add_to_totals (pentry, &totals);
   }
   pentry = g_hash_table_lookup (hash, "---p");
   if (pentry) {
-    g_string_append_printf (str, "<tbody><tr><td>---p</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td></td></tr>",
+    g_string_append_printf (str, "<tbody><tr><td>---p</td><td>%u</td><td>%u</td><td>%u</td><td>%u</td><td></td></tr>",
                             pentry->shared_clean, pentry->shared_dirty, pentry->private_clean, pentry->private_dirty);
     add_to_totals (pentry, &totals);
   }
   pentry = g_hash_table_lookup (hash, "r--s");
   if (pentry) {
-    g_string_append_printf (str, "<tbody><tr><td>r--s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td></td></tr>",
+    g_string_append_printf (str, "<tbody><tr><td>r--s</td><td>%u</td><td>%u</td><td>%u</td><td>%u</td><td></td></tr>",
                             pentry->shared_clean, pentry->shared_dirty, pentry->private_clean, pentry->private_dirty);
     add_to_totals (pentry, &totals);
   }
-  g_string_append_printf (str, "<tbody><tr><td>Total:</td><td>%d kB</td><td>%d kB</td><td>%d kB</td><td>%d kB</td><td></td></tr>",
+  g_string_append_printf (str, "<tbody><tr><td>Total:</td><td>%u kB</td><td>%u kB</td><td>%u kB</td><td>%u kB</td><td></td></tr>",
                           totals.shared_clean, totals.shared_dirty, totals.private_clean, totals.private_dirty);
   g_string_append (str, "</table>");
 }
