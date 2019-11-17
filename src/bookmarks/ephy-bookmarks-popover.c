@@ -38,7 +38,6 @@ struct _EphyBookmarksPopover {
   GtkWidget *bookmarks_list_box;
   GtkWidget *tags_list_box;
   GtkWidget *tag_detail_list_box;
-  GtkWidget *tag_detail_back_button;
   GtkWidget *tag_detail_label;
   char *tag_detail_tag;
 
@@ -505,7 +504,6 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, bookmarks_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tags_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_list_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_back_button);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_label);
 }
 

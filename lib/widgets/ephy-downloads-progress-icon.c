@@ -26,8 +26,6 @@
 
 struct _EphyDownloadsProgressIcon {
   GtkDrawingArea parent_instance;
-
-  GtkWidget *downloads_box;
 };
 
 G_DEFINE_TYPE (EphyDownloadsProgressIcon, ephy_downloads_progress_icon, GTK_TYPE_DRAWING_AREA)

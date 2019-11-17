@@ -95,7 +95,6 @@ struct _PrefsDialog {
   GtkWidget *restore_session_switch;
   GtkWidget *popups_allow_switch;
   GtkWidget *adblock_allow_switch;
-  GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_switch;
   GtkWidget *enable_smooth_scrolling_switch;
   GtkWidget *enable_mouse_gesture_switch;
@@ -140,7 +139,6 @@ struct _PrefsDialog {
   GtkWidget *sync_firefox_iframe_label;
   GtkWidget *sync_firefox_account_box;
   GtkWidget *sync_firefox_account_row;
-  GtkWidget *sync_sign_out_button;
   GtkWidget *sync_options_box;
   GtkWidget *sync_bookmarks_checkbutton;
   GtkWidget *sync_passwords_checkbutton;
@@ -1019,7 +1017,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_iframe_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_options_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);

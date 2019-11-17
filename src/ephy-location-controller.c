@@ -56,7 +56,6 @@ struct _EphyLocationController {
   gboolean editable;
   gboolean sync_address_is_blocked;
   EphySearchEngineManager *search_engine_manager;
-  guint num_search_engines_actions;
 };
 
 static void ephy_location_controller_finalize (GObject *object);

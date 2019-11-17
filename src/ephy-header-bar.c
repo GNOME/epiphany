@@ -54,11 +54,6 @@ struct _EphyHeaderBar {
   GtkRevealer *end_revealer;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
-  GtkWidget *navigation_box;
-  GtkWidget *reader_mode_revealer;
-  GtkWidget *reader_mode_button;
-  GtkWidget *new_tab_button;
-  GtkWidget *bookmarks_button;
   GtkWidget *page_menu_button;
   GtkWidget *zoom_level_button;
   GtkWidget *restore_button;
