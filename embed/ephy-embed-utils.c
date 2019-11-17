@@ -292,9 +292,9 @@ ephy_embed_utils_normalize_address (const char *address)
      * handler for the scheme, and since we'll fail for localhost
      * and IP, we'd fallback to loading it as a domain. */
     if (!uri ||
-        (uri && !g_strcmp0 (uri->scheme, "localhost")) ||
-        (uri && g_hostname_is_ip_address (uri->scheme)) ||
-        (uri && is_host_with_port (address)))
+        !g_strcmp0 (uri->scheme, "localhost") ||
+        g_hostname_is_ip_address (uri->scheme) ||
+        is_host_with_port (address))
       effective_address = g_strconcat ("http://", address, NULL);
   }
 
