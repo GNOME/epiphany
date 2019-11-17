@@ -19,8 +19,21 @@ cppcheck:
   allow_failure: true
   before_script:
     - apk update && apk add cppcheck
-  script:
-    - cppcheck --enable=all --suppress=variableScope --suppress=unusedFunction --force -q . --error-exitcode=1 --library=gtk
+  script: >-
+    cppcheck .
+    --enable=warning,style
+    --error-exitcode=1
+    --library=gtk
+    --quiet
+    --suppress=ctunullpointer
+    --suppress=leakNoVarFunctionCall
+    --suppress=literalWithCharPtrCompare
+    --suppress=memleak
+    --suppress=redundantAssignment
+    --suppress=variableScope
+    --suppress=varFuncNullUB
+    --suppress=*:lib/contrib/gvdb/*
+    --template=gcc
 
 variables:
   BUNDLE: 'epiphany-git.flatpak'

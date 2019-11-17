@@ -693,15 +693,15 @@ ephy_sync_crypto_derive_master_keys (const char    *bundle_hex,
                                      guint8       **ka,
                                      guint8       **kb)
 {
+  gsize len = 32; /* The master sync keys are always 32 bytes. */
   guint8 *bundle;
-  guint8 *ciphertext;
-  guint8 *resp_hmac;
+  guint8 ciphertext[2 * len];
+  guint8 resp_hmac[len];
   guint8 *resp_hmac_2;
   guint8 *xored;
   guint8 *wrap_kb;
   char *resp_hmac_2_hex;
   gboolean retval = TRUE;
-  gsize len = 32; /* The master sync keys are always 32 bytes. */
 
   g_assert (bundle_hex);
   g_assert (resp_hmac_key);
@@ -711,8 +711,6 @@ ephy_sync_crypto_derive_master_keys (const char    *bundle_hex,
   g_assert (kb);
 
   bundle = ephy_sync_utils_decode_hex (bundle_hex);
-  ciphertext = g_malloc (2 * len);
-  resp_hmac = g_malloc (len);
 
   /* Compute the MAC and compare it to the expected value. */
   memcpy (ciphertext, bundle, 2 * len);
@@ -743,8 +741,6 @@ ephy_sync_crypto_derive_master_keys (const char    *bundle_hex,
 out:
   g_free (resp_hmac_2);
   g_free (resp_hmac_2_hex);
-  g_free (resp_hmac);
-  g_free (ciphertext);
   g_free (bundle);
 
   return retval;

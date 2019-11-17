@@ -529,9 +529,6 @@ entry_key_press_cb (GtkEntry          *entry,
       }
 
       if (state == GDK_CONTROL_MASK) {
-        g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
-        gchar *url = g_strstrip (text);
-
         /* Remove control mask to prevent opening address in a new window */
         event->state &= ~GDK_CONTROL_MASK;
 

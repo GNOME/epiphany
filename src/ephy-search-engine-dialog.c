@@ -35,13 +35,11 @@ struct _EphySearchEngineDialog {
   GtkDialog parent_instance;
 
   EphySearchEngineManager *search_engine_manager;
-  GtkWidget *search_engine_add_button;
   GtkWidget *search_engine_address_entry;
   GtkWidget *search_engine_default_switch;
   GtkWidget *search_engine_list_box;
   GtkWidget *search_engine_name_entry;
   GtkWidget *search_engine_bang_entry;
-  GtkWidget *search_engine_remove_button;
 };
 
 G_DEFINE_TYPE (EphySearchEngineDialog, ephy_search_engine_dialog, GTK_TYPE_DIALOG)
@@ -426,12 +424,6 @@ ephy_search_engine_dialog_class_init (EphySearchEngineDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/search-engine-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphySearchEngineDialog,
-                                        search_engine_add_button);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphySearchEngineDialog,
-                                        search_engine_remove_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphySearchEngineDialog,
                                         search_engine_list_box);
