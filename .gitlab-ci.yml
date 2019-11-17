@@ -26,6 +26,7 @@ cppcheck:
     --quiet
     --suppress=constArgument
     --suppress=ctnullpointe
+    --suppress=deallocret
     --suppress=leakNoVarFunctionCall
     --suppress=memleak
     --suppress=nullPointer
@@ -34,7 +35,6 @@ cppcheck:
     --suppress=varFuncNullUB
     --suppress=*:lib/contrib/gvdb/*
     --suppress=*:subprojects/*
-    --suppress=deallocret:lib/ephy-gui.c
     --template=gcc
 
 variables:
