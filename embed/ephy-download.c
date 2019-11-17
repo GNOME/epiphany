@@ -41,7 +41,6 @@ struct _EphyDownload {
 
   WebKitDownload *download;
 
-  char *destination;
   char *content_type;
 
   gboolean show_notification;
@@ -697,7 +696,7 @@ download_created_destination_cb (WebKitDownload *wk_download,
   }
 
   if (!download->content_type ||
-      (download->content_type && !g_content_type_equals (download->content_type, content_type))) {
+      !g_content_type_equals (download->content_type, content_type)) {
     g_free (download->content_type);
     download->content_type = content_type;
     g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
