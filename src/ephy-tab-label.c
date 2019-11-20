@@ -342,11 +342,19 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
   /* Bind class to template */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/tab-label.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, spinner);
-  gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, icon);
-  gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, label);
-  gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, audio_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, close_button);
+  if (is_desktop_pantheon ()) {
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, close_button);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, label);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, audio_button);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, spinner);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, icon);
+  } else {
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, spinner);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, icon);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, label);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, audio_button);
+    gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, close_button);
+  }
 
   gtk_widget_class_bind_template_callback (widget_class, close_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, style_updated_cb);
