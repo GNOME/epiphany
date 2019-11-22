@@ -92,7 +92,7 @@ hogweed_dep = dependency('hogweed', version: nettle_requirement)
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.31.90')
-libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.10', required: false)
+libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.10')
 libnotify_dep = dependency('libnotify', version: '>= 0.5.1')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
@@ -101,18 +101,6 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
-
-# Ubuntu 18.04 doesn't have libhandy at all, and we need 0.0.5, so bundle it if
-# the system copy is missing or too old.
-if not libhandy_dep.found()
-  libhandy_dep = subproject('libhandy', default_options: ['examples=false',
-                                                          'glade_catalog=disabled',
-                                                          'introspection=disabled',
-                                                          'package_subdir=epiphany',
-                                                          'static=true',
-                                                          'tests=false',
-                                                          'vapi=false']).get_variable('libhandy_dep')
-endif
 
 cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
