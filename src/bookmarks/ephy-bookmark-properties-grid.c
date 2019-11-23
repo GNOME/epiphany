@@ -45,6 +45,7 @@ struct _EphyBookmarkPropertiesGrid {
 
   GtkWidget *popover_bookmark_label;
   GtkWidget *name_entry;
+  GtkWidget *address_label;
   GtkWidget *address_entry;
   GtkWidget *popover_tags_label;
   GtkWidget *tags_box;
@@ -187,6 +188,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
 
   label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
   label = gtk_label_new (label_text);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
   if (!default_tag) {
@@ -377,9 +379,8 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   /* Set appearance based on type */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
     gtk_container_remove (GTK_CONTAINER (self), self->popover_bookmark_label);
-    gtk_container_remove (GTK_CONTAINER (self), self->popover_tags_label);
   } else if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER) {
-    gtk_grid_remove_column (GTK_GRID (self), 0);
+    gtk_container_remove (GTK_CONTAINER (self), self->address_label);
     gtk_container_remove (GTK_CONTAINER (self), self->address_entry);
   }
 
@@ -485,6 +486,7 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties-grid.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, popover_bookmark_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, name_entry);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, address_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, address_entry);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, popover_tags_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, tags_box);
