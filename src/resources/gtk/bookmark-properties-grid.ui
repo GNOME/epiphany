@@ -1,180 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.18 -->
+  <requires lib="gtk+" version="3.18"/>
   <template class="EphyBookmarkPropertiesGrid" parent="GtkGrid">
-    <property name="border-width">18</property>
-    <property name="column-spacing">12</property>
-    <property name="row-spacing">12</property>
-    <property name="visible">true</property>
+    <property name="width_request">300</property>
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="border_width">12</property>
+    <property name="orientation">vertical</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
     <child>
       <object class="GtkLabel" id="popover_bookmark_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Bookmark</property>
-        <property name="visible">true</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>
-        <property name="left-attach">0</property>
-        <property name="width">2</property>
-        <property name="top-attach">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="halign">end</property>
-        <property name="valign">center</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="margin_top">6</property>
         <property name="label" translatable="yes">Name</property>
-        <property name="visible">true</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="name_entry">
-        <property name="max-width-chars">40</property>
-        <property name="visible">true</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="max_width_chars">40</property>
       </object>
       <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkLabel">
-        <property name="halign">end</property>
+      <object class="GtkLabel" id="address_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">center</property>
+        <property name="margin_top">6</property>
         <property name="label" translatable="yes">Address</property>
-        <property name="visible">true</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">2</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="address_entry">
-        <property name="visible">true</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
       </object>
       <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="popover_tags_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="valign">center</property>
+        <property name="margin_top">12</property>
         <property name="label" translatable="yes">Tags</property>
-        <property name="visible">true</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Tags</property>
-        <property name="visible">true</property>
-        <style>
-          <class name="dim-label"/>
-        </style>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkScrolledWindow" id="tags_scrolled_window">
-        <property name="expand">True</property>
-        <property name="max-content-height">132</property>
-        <property name="min-content-height">38</property>
-        <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">never</property>
-        <property name="propagate-natural-width">True</property>
-        <property name="propagate-natural-height">True</property>
-        <property name="visible">true</property>
-        <child>
-          <object class="GtkFlowBox" id="tags_box">
-            <property name="column-spacing">6</property>
-            <property name="row-spacing">6</property>
-            <property name="selection-mode">none</property>
-            <property name="homogeneous">true</property>
-            <property name="valign">start</property>
-            <property name="min-children-per-line">3</property>
-            <property name="max-children-per-line">3</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">4</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="orientation">horizontal</property>
-        <property name="visible">true</property>
-        <style>
-          <class name="linked"/>
-        </style>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
           <object class="GtkEntry" id="add_tag_entry">
-            <property name="placeholder-text" translatable="yes">Add Tag…</property>
-            <property name="activates-default">true</property>
-            <property name="hexpand">true</property>
-            <property name="visible">true</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
+            <property name="placeholder_text" translatable="yes">Add Tag…</property>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <object class="GtkButton" id="add_tag_button">
             <property name="label" translatable="yes">_Add</property>
-            <property name="action-name">grid.add-tag</property>
-            <property name="can-default">true</property>
-            <property name="use-underline">true</property>
-            <property name="visible">true</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="action_name">grid.add-tag</property>
+            <property name="use_underline">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <style>
+          <class name="linked"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="tags_scrolled_window">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="vexpand">True</property>
+        <property name="min_content_height">38</property>
+        <property name="max_content_width">270</property>
+        <property name="max_content_height">138</property>
+        <property name="propagate_natural_width">True</property>
+        <child>
+          <object class="GtkViewport">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkFlowBox" id="tags_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="min_children_per_line">2</property>
+                <property name="max_children_per_line">2</property>
+                <property name="selection_mode">none</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
       <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">5</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkButton" id="remove_bookmark_button">
-        <property name="label" translatable="yes">_Remove Bookmark</property>
-        <property name="action-name">grid.remove-bookmark</property>
-        <property name="use-underline">true</property>
+        <property name="label" translatable="yes">_Remove</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
         <property name="halign">end</property>
-        <property name="valign">end</property>
-        <property name="visible">true</property>
+        <property name="action_name">grid.remove-bookmark</property>
+        <property name="use_underline">True</property>
         <style>
           <class name="destructive-action"/>
         </style>
       </object>
       <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">6</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">8</property>
       </packing>
     </child>
   </template>
