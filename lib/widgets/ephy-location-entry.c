@@ -67,6 +67,7 @@ struct _EphyLocationEntry {
   GtkCssProvider *css_provider;
 
   gboolean reader_mode_active;
+  gboolean button_release_is_blocked;
 
   char *saved_text;
   char *jump_tab;
@@ -113,6 +114,41 @@ static void schedule_dns_prefetch (EphyLocationEntry *entry,
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
+
+static gboolean
+button_release_cb (GtkWidget *widget,
+                   GdkEvent  *event,
+                   gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+
+  gtk_editable_select_region (GTK_EDITABLE (entry->url_entry), 0, -1);
+
+  g_signal_handlers_block_by_func (widget,
+                                   G_CALLBACK (button_release_cb), entry);
+  entry->button_release_is_blocked = TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+focus_out_event_cb (GtkWidget *widget,
+                    GdkEvent  *event,
+                    gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+
+  /* Unselect. */
+  gtk_editable_select_region (GTK_EDITABLE (entry->url_entry), 0, 0);
+
+  if (entry->button_release_is_blocked) {
+    g_signal_handlers_unblock_by_func (widget,
+                                       G_CALLBACK (button_release_cb), entry);
+    entry->button_release_is_blocked = FALSE;
+  }
+
+  return FALSE;
+}
 
 static void
 editable_changed_cb (GtkEditable       *editable,
@@ -292,6 +328,10 @@ ephy_location_entry_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
 
   gtk_entry_set_input_hints (GTK_ENTRY (entry->url_entry), GTK_INPUT_HINT_NO_EMOJI);
+  g_signal_connect (entry->url_entry, "button-release-event",
+                    G_CALLBACK (button_release_cb), entry);
+  g_signal_connect (entry->url_entry, "focus-out-event",
+                    G_CALLBACK (focus_out_event_cb), entry);
 }
 
 static void
@@ -994,6 +1034,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 
   le->user_changed = FALSE;
   le->block_update = FALSE;
+  le->button_release_is_blocked = FALSE;
   le->saved_text = NULL;
   le->dns_prefetch_handler = 0;
 
