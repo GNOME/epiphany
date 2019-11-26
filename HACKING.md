@@ -208,3 +208,12 @@ filename. E.g. `export EPHY_PROFILE_MODULES=ephy-window.c:ephy-autocompletion.c`
 The special profiling module `all` enables all profiling modules.
 
 Use `START_PROFILER STOP_PROFILER` macros to profile pieces of code.
+
+## valgrind
+
+To use valgrind, you must use environment variables to disable WebKit's sandbox
+and JavaScriptCore's Gigacage:
+
+```
+WEBKIT_FORCE_SANDBOX=0 GIGACAGE_ENABLED=0 epiphany
+```
