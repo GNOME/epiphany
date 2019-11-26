@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -21,6 +22,8 @@
 #include "config.h"
 #include "ephy-web-process-extension.h"
 
+#include "ephy-autofill-field.h"
+#include "ephy-autofill-js.h"
 #include "ephy-dbus-names.h"
 #include "ephy-dbus-util.h"
 #include "ephy-debug.h"
@@ -66,6 +69,17 @@ static const char introspection_xml[] =
   " <interface name='org.gnome.Epiphany.WebProcessExtension'>"
   "  <signal name='PageCreated'>"
   "   <arg type='t' name='page_id' direction='out'/>"
+  "  </signal>"
+  "  <signal name='Autofill'>"
+  "   <arg type='t' name='page_id' direction='out'/>"
+  "   <arg type='s' name='css_selector' direction='out'/>"
+  "   <arg type='b' name='is_fillable_element' direction='out'/>"
+  "   <arg type='b' name='has_personal_fields' direction='out'/>"
+  "   <arg type='b' name='has_card_fields' direction='out'/>"
+  "   <arg type='t' name='element_x' direction='out'/>"
+  "   <arg type='t' name='element_y' direction='out'/>"
+  "   <arg type='t' name='element_width' direction='out'/>"
+  "   <arg type='t' name='element_height' direction='out'/>"
   "  </signal>"
   "  <method name='HistorySetURLs'>"
   "   <arg type='a(ss)' name='urls' direction='in'/>"
@@ -579,6 +593,36 @@ authorize_authenticated_peer_cb (GDBusAuthObserver       *observer,
 }
 
 static void
+js_autofill_emit_signal (unsigned long     page_id,
+                         EphyAutofillField field,
+                         char             *selector,
+                         bool              is_fillable_element,
+                         bool              has_personal_fields,
+                         bool              has_card_fields,
+                         double            x,
+                         double            y,
+                         double            element_width,
+                         double            element_height,
+                         gpointer          user_data)
+{
+  GDBusConnection *dbus_connection = user_data;
+
+  ephy_autofill_js_emit_signal (EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH,
+                                EPHY_WEB_PROCESS_EXTENSION_INTERFACE,
+                                dbus_connection,
+                                page_id,
+                                field,
+                                selector,
+                                is_fillable_element,
+                                has_personal_fields,
+                                has_card_fields,
+                                x,
+                                y,
+                                element_width,
+                                element_height);
+}
+
+static void
 js_log (const char *message)
 {
   LOG ("%s", message);
@@ -656,7 +700,9 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   const char *data;
   gsize data_size;
   g_autoptr (JSCValue) js_ephy = NULL;
+  g_autoptr (JSCValue) js_ephy_autofill = NULL;
   g_autoptr (JSCValue) js_function = NULL;
+  g_autoptr (JSCValue) js_value = NULL;
   g_autoptr (JSCValue) result = NULL;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
@@ -669,6 +715,15 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   g_clear_object (&result);
 
   js_ephy = jsc_context_get_value (js_context, "Ephy");
+
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  data = g_bytes_get_data (bytes, &data_size);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", 1);
+  g_clear_pointer (&bytes, g_bytes_unref);
+  g_clear_object (&result);
+
+  js_ephy_autofill = jsc_context_get_value (js_context, "EphyAutofill");
+  js_ephy_autofill = jsc_value_object_get_property (js_ephy_autofill, "out");
 
   js_function = jsc_value_new_function (js_context,
                                         "log",
@@ -750,6 +805,61 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
                                         G_TYPE_BOOLEAN, 0);
   jsc_value_object_set_property (js_ephy, "shouldRememberPasswords", js_function);
   g_clear_object (&js_function);
+
+  if (!extension->is_private_profile) {
+    js_function = jsc_value_new_function (js_context,
+                                          "getFieldValue",
+                                          G_CALLBACK (ephy_autofill_js_get_field_value),
+                                          NULL,
+                                          NULL,
+                                          G_TYPE_NONE,
+                                          2,
+                                          G_TYPE_INT,
+                                          JSC_TYPE_VALUE);
+    jsc_value_object_set_property (js_ephy_autofill,
+                                   "getFieldValue",
+                                   js_function);
+    g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "askUser",
+                                          G_CALLBACK (js_autofill_emit_signal),
+                                          extension->dbus_connection,
+                                          NULL,
+                                          G_TYPE_NONE,
+                                          10,
+                                          G_TYPE_UINT64,
+                                          G_TYPE_INT,
+                                          G_TYPE_STRING,
+                                          G_TYPE_BOOLEAN,
+                                          G_TYPE_BOOLEAN,
+                                          G_TYPE_BOOLEAN,
+                                          G_TYPE_DOUBLE,
+                                          G_TYPE_DOUBLE,
+                                          G_TYPE_DOUBLE,
+                                          G_TYPE_DOUBLE);
+    jsc_value_object_set_property (js_ephy_autofill, "askUser", js_function);
+    g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "changeValue",
+                                          G_CALLBACK (ephy_autofill_js_change_value),
+                                          NULL,
+                                          NULL,
+                                          G_TYPE_NONE,
+                                          2,
+                                          JSC_TYPE_VALUE,
+                                          G_TYPE_STRING);
+    jsc_value_object_set_property (js_ephy_autofill, "changeValue", js_function);
+    g_clear_object (&js_function);
+
+    js_value = jsc_value_new_number (js_context,
+                                     (double)webkit_web_page_get_id (page));
+    jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
+    g_clear_object (&js_value);
+
+    g_clear_object (&js_ephy_autofill);
+  }
 }
 
 void
