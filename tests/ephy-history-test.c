@@ -102,7 +102,7 @@ static void
 test_readonly_mode (void)
 {
   EphyHistoryService *service = ensure_empty_history (test_db_filename ());
-  EphyHistoryService *readonly_service = ephy_history_service_new (test_db_filename (), EPHY_SQLITE_CONNECTION_MODE_READ_ONLY);
+  EphyHistoryService *readonly_service = ephy_history_service_new (test_db_filename (), EPHY_SQLITE_CONNECTION_MODE_MEMORY);
 
   /* Having the database open read-only should not break normal connections.
    * https://bugzilla.gnome.org/show_bug.cgi?id=778649 */

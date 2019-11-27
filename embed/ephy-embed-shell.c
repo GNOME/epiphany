@@ -790,7 +790,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
         priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION ||
         priv->mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
-      mode = EPHY_SQLITE_CONNECTION_MODE_READ_ONLY;
+      mode = EPHY_SQLITE_CONNECTION_MODE_MEMORY;
     else
       mode = EPHY_SQLITE_CONNECTION_MODE_READWRITE;
 

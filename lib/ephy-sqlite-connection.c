@@ -141,12 +141,33 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
 
   if (sqlite3_open_v2 (self->database_path,
                        &self->database,
-                       self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY ? SQLITE_OPEN_READONLY
-                                                                           : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+                       self->mode == EPHY_SQLITE_CONNECTION_MODE_MEMORY ? SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MEMORY
+                                                                        : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
                        NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     self->database = NULL;
     return FALSE;
+  }
+
+  /* Create a local copy of current database for in memory usage */
+  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_MEMORY) {
+    sqlite3 *init_db;
+    int rc;
+
+    rc = sqlite3_open_v2 (self->database_path, &init_db, SQLITE_OPEN_READONLY, 0);
+    if (rc == SQLITE_OK) {
+      sqlite3_backup *backup;
+
+      backup = sqlite3_backup_init (self->database, "main", init_db, "main");
+      rc = sqlite3_backup_step (backup, -1);
+
+      if (rc != SQLITE_DONE)
+        g_warning ("Failed to copy history to in-memory database: %s", sqlite3_errstr (rc));
+
+      sqlite3_backup_finish (backup);
+    }
+
+    sqlite3_close (init_db);
   }
 
   return TRUE;
@@ -250,8 +271,6 @@ gboolean
 ephy_sqlite_connection_begin_transaction (EphySQLiteConnection  *self,
                                           GError               **error)
 {
-  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
-    return TRUE;
   return ephy_sqlite_connection_execute (self, "BEGIN TRANSACTION", error);
 }
 
@@ -259,8 +278,6 @@ gboolean
 ephy_sqlite_connection_commit_transaction (EphySQLiteConnection  *self,
                                            GError               **error)
 {
-  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
-    return TRUE;
   return ephy_sqlite_connection_execute (self, "COMMIT", error);
 }
 
