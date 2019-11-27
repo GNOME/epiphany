@@ -917,7 +917,7 @@ ephy_filters_manager_dispose (GObject *object)
     g_cancellable_cancel (manager->cancellable);
     g_clear_object (&manager->cancellable);
   }
-  g_clear_object (&manager->wk_filter);
+  g_clear_pointer (&manager->wk_filter, webkit_user_content_filter_unref);
   g_clear_object (&manager->store);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->dispose (object);
