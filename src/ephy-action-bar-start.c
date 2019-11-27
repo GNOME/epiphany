@@ -370,10 +370,6 @@ navigation_button_release_event_cb (GtkButton *button,
         g_action_activate (action, NULL);
       }
       return GDK_EVENT_STOP;
-    case GDK_BUTTON_SECONDARY:
-      popup_history_menu (GTK_WIDGET (button), EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW)),
-                          direction, (GdkEventButton *)event);
-      return GDK_EVENT_STOP;
     default:
       break;
   }
