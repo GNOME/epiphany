@@ -128,9 +128,6 @@ struct _EphyWebView {
   char *tls_error_failing_uri;
 
   EphyWebViewErrorPage error_page;
-
-  /* Web Process Extension */
-  EphyWebProcessExtensionProxy *web_process_extension;
 };
 
 typedef struct {
@@ -900,22 +897,6 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
 }
 
 static void
-page_created_cb (EphyEmbedShell               *shell,
-                 guint64                       page_id,
-                 EphyWebProcessExtensionProxy *web_process_extension,
-                 EphyWebView                  *view)
-{
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
-    return;
-
-  if (view->web_process_extension)
-    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-
-  view->web_process_extension = web_process_extension;
-  g_object_add_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-}
-
-static void
 ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
@@ -923,11 +904,6 @@ ephy_web_view_dispose (GObject *object)
 
   ephy_embed_prefs_unregister_ucm (ucm);
   ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
-
-  if (view->web_process_extension) {
-    g_object_remove_weak_pointer (G_OBJECT (view->web_process_extension), (gpointer *)&view->web_process_extension);
-    view->web_process_extension = NULL;
-  }
 
   untrack_info_bar (&view->geolocation_info_bar);
   untrack_info_bar (&view->notification_info_bar);
@@ -2958,6 +2934,142 @@ authenticate_cb (WebKitWebView               *web_view,
   return FALSE;
 }
 
+typedef struct {
+  WebKitWebView *web_view;
+  char *origin;
+  WebKitUserMessage *message;
+} PasswordManagerData;
+
+static void
+password_manager_data_free (PasswordManagerData *data)
+{
+  g_object_unref (data->web_view);
+  g_object_unref (data->message);
+  g_free (data);
+}
+
+static void
+password_manager_query_finished_cb (GList               *records,
+                                    PasswordManagerData *data)
+{
+  EphyPasswordRecord *record;
+  const char *origin;
+  const char *username = NULL;
+  const char *password = NULL;
+  g_autofree char *real_origin = NULL;
+
+  record = records && records->data ? EPHY_PASSWORD_RECORD (records->data) : NULL;
+  if (record) {
+    username = ephy_password_record_get_username (record);
+    password = ephy_password_record_get_password (record);
+  }
+
+  g_variant_get (webkit_user_message_get_parameters (data->message), "(&s@sm@sm@s@s)", &origin, NULL, NULL, NULL, NULL);
+  real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (data->web_view));
+  if (g_strcmp0 (real_origin, origin) != 0) {
+      g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
+      password_manager_data_free (data);
+      return;
+  }
+
+  webkit_user_message_send_reply (data->message,
+                                  webkit_user_message_new ("PasswordManager.QueryPasswordResponse",
+                                                           g_variant_new ("(msms)", username, password)));
+
+  password_manager_data_free (data);
+}
+
+static gboolean
+password_manager_handle_query_usernames_message (WebKitWebView     *web_view,
+                                                 WebKitUserMessage *message)
+{
+  GVariant *parameters;
+  const char *origin;
+  EphyPasswordManager *password_manager;
+  GList *usernames, *l;
+  GVariantBuilder builder;
+  g_autofree char *real_origin = NULL;
+
+  parameters = webkit_user_message_get_parameters (message);
+  if (!parameters)
+    return FALSE;
+
+  g_variant_get (parameters, "&s", &origin);
+  real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+  if (g_strcmp0 (real_origin, origin) != 0) {
+    g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
+    return FALSE;
+  }
+
+  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  usernames = ephy_password_manager_get_usernames_for_origin (password_manager, origin);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
+  for (l = usernames; l != NULL; l = g_list_next (l))
+    g_variant_builder_add (&builder, "s", l->data);
+
+  webkit_user_message_send_reply (message, webkit_user_message_new ("PasswordManager.QueryUsernamesResponse",
+                                                                    g_variant_builder_end (&builder)));
+}
+
+static gboolean
+password_manager_handle_query_password_message (WebKitWebView     *web_view,
+                                                WebKitUserMessage *message)
+{
+  GVariant *parameters;
+  const char *origin;
+  const char *target_origin;
+  const char *username;
+  const char *username_field;
+  const char *password_field;
+  EphyPasswordManager *password_manager;
+  PasswordManagerData *data;
+
+  parameters = webkit_user_message_get_parameters (message);
+  if (!parameters)
+    return FALSE;
+
+  g_variant_get (parameters, "(&s&sm&sm&s&s)", &origin, &target_origin, &username, &username_field, &password_field);
+
+  /* Don't include username_field in queries unless we actually have a username
+   * to go along with it, or the query will fail because we don't save
+   * username_field without a corresponding username.
+   */
+  if (!username && username_field)
+    username_field = NULL;
+
+  data = g_new (PasswordManagerData, 1);
+  data->web_view = g_object_ref (web_view);
+  data->message = g_object_ref (message);
+
+  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  ephy_password_manager_query (password_manager,
+                               NULL,
+                               origin,
+                               target_origin,
+                               username,
+                               username_field,
+                               password_field,
+                               (EphyPasswordManagerQueryCallback)password_manager_query_finished_cb,
+                               data);
+}
+
+static gboolean
+user_message_received_cb (WebKitWebView     *web_view,
+                          WebKitUserMessage *message)
+{
+  const char *name;
+
+  name = webkit_user_message_get_name (message);
+  if (g_strcmp0 (name, "PasswordManager.QueryUsernames") == 0)
+    return password_manager_handle_query_usernames_message (web_view, message);
+
+  if (g_strcmp0 (name, "PasswordManager.QueryPassword") == 0)
+    return password_manager_handle_query_password_message (web_view, message);
+
+  return FALSE;
+}
+
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -3042,9 +3154,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (authenticate_cb),
                     NULL);
 
-  g_signal_connect_object (shell, "page-created",
-                           G_CALLBACK (page_created_cb),
-                           web_view, 0);
+  g_signal_connect (web_view, "user-message-received",
+                    G_CALLBACK (user_message_received_cb),
+                    NULL);
 
   g_signal_connect_object (shell, "password-form-focused",
                            G_CALLBACK (password_form_focused_cb),
@@ -4026,12 +4138,6 @@ gboolean
 ephy_web_view_get_reader_mode_state (EphyWebView *view)
 {
   return view->reader_active;
-}
-
-EphyWebProcessExtensionProxy *
-ephy_web_view_get_web_process_extension_proxy (EphyWebView *view)
-{
-  return view->web_process_extension;
 }
 
 gboolean
