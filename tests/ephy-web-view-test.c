@@ -129,7 +129,6 @@ static const URLTest test_load_url[] = {
   /* { "about:epiphany", "ephy-about:epiphany" }, */
   /* { "about:applications", "ephy-about:applications" }, */
   /* { "about:memory", "ephy-about:memory" }, */
-  /* { "about:plugins", "ephy-about:plugins" }, */
 };
 
 /* Tests that EphyWebView is successfully loading the given URL. */
