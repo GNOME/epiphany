@@ -161,6 +161,8 @@ web_page_form_controls_associated (WebKitWebPage           *web_page,
   g_autoptr (JSCValue) js_ephy = NULL;
   g_autoptr (JSCValue) js_serializer = NULL;
   g_autoptr (JSCValue) js_result = NULL;
+  guint64 frame_id;
+  guint64 *frame_id_copy;
   guint i;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
@@ -186,8 +188,11 @@ web_page_form_controls_associated (WebKitWebPage           *web_page,
                                               JSC_TYPE_VALUE, js_serializer,
                                               G_TYPE_NONE);
 
-  if (!g_hash_table_contains (extension->frames_map, GINT_TO_POINTER (webkit_frame_get_id (frame)))) {
-    g_hash_table_insert (extension->frames_map, GINT_TO_POINTER (webkit_frame_get_id (frame)), frame);
+  frame_id = webkit_frame_get_id (frame);
+  if (!g_hash_table_contains (extension->frames_map, &frame_id)) {
+    frame_id_copy = g_malloc (sizeof (guint64));
+    *frame_id_copy = frame_id;
+    g_hash_table_insert (extension->frames_map, g_steal_pointer (&frame_id_copy), frame);
     g_object_weak_ref (G_OBJECT (frame), (GWeakNotify)frame_destroyed_notify, extension);
   }
 }
@@ -349,7 +354,7 @@ get_password_manager (EphyWebProcessExtension *self,
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_ephy = NULL;
 
-  frame = g_hash_table_lookup (self->frames_map, GINT_TO_POINTER (frame_id));
+  frame = g_hash_table_lookup (self->frames_map, &frame_id);
   if (!frame)
     return NULL;
 
@@ -790,6 +795,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                             G_CALLBACK (ephy_web_process_extension_page_created_cb),
                             extension);
 
-  extension->frames_map = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                                 NULL, NULL);
+  extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
+                                                 g_free, NULL);
 }
