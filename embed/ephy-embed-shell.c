@@ -750,22 +750,21 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (WebKitWebsiteDataManager) manager = NULL;
 
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-    priv->web_context = webkit_web_context_new_ephemeral ();
-    return;
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    manager = webkit_website_data_manager_new_ephemeral ();
+  } else {
+    manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
+                                               "base-cache-directory", ephy_cache_dir (),
+                                               NULL);
   }
 
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    priv->web_context = webkit_web_context_new_ephemeral ();
+  priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
+                                    "website-data-manager", manager,
+                                    "process-swap-on-cross-site-navigation-enabled", TRUE,
+                                    NULL);
+
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     webkit_web_context_set_automation_allowed (priv->web_context, TRUE);
-    return;
-  }
-
-  manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
-                                             "base-cache-directory", ephy_cache_dir (),
-                                             NULL);
-
-  priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
 }
 
 static void
