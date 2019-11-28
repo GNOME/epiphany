@@ -14,7 +14,6 @@ libephymisc_sources = [
   'contrib/gnome-languages.c',
   'contrib/gvdb/gvdb-builder.c',
   'contrib/gvdb/gvdb-reader.c',
-  'ephy-dbus-util.c',
   'ephy-debug.c',
   'ephy-dnd.c',
   'ephy-favicon-helpers.c',

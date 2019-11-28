@@ -36,18 +36,12 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
                                                 GVariant           *user_data)
 {
   const char *guid;
-  const char *server_address;
   const char *profile_dir;
   gboolean private_profile;
   gboolean should_remember_passwords;
   g_autoptr (GError) error = NULL;
 
-  g_variant_get (user_data, "(&sm&sm&sbb)", &guid, &server_address, &profile_dir, &should_remember_passwords, &private_profile);
-
-  if (!server_address) {
-    g_warning ("UI process did not start D-Bus server, giving up.");
-    return;
-  }
+  g_variant_get (user_data, "(&sm&sbb)", &guid, &profile_dir, &should_remember_passwords, &private_profile);
 
   if (!ephy_file_helpers_init (profile_dir, 0, &error))
     g_warning ("Failed to initialize file helpers: %s", error->message);
@@ -62,7 +56,6 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   ephy_web_process_extension_initialize (extension,
                                          webkit_extension,
                                          guid,
-                                         server_address,
                                          should_remember_passwords,
                                          private_profile);
 }
