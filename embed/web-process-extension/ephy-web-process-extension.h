@@ -33,7 +33,6 @@ EphyWebProcessExtension *ephy_web_process_extension_get        (void);
 void                     ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                                                 WebKitWebExtension      *wk_extension,
                                                                 const char              *guid,
-                                                                const char              *server_address,
                                                                 gboolean                 should_remember_passwords,
                                                                 gboolean                 is_private_profile);
 

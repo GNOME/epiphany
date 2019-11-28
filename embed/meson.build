@@ -28,7 +28,6 @@ libephyembed_sources = [
   'ephy-find-toolbar.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
-  'ephy-web-process-extension-proxy.c',
   enums
 ]
 
