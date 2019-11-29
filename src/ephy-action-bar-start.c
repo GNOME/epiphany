@@ -82,7 +82,7 @@ item_enter_notify_event_cb (GtkWidget   *widget,
   text = g_object_get_data (G_OBJECT (widget), "link-message");
   ephy_web_view_set_link_message (view, text);
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -91,7 +91,7 @@ item_leave_notify_event_cb (GtkWidget   *widget,
                             EphyWebView *view)
 {
   ephy_web_view_set_link_message (view, NULL);
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -204,7 +204,7 @@ navigation_menu_item_pressed_cb (GtkWidget *menuitem,
     webkit_web_view_go_to_back_forward_list_item (web_view, item);
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_STOP;
 }
 
 static GList *
@@ -308,6 +308,7 @@ navigation_button_press_event_cb (GtkButton *button,
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
+  PopupData *data;
 
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
 
@@ -317,23 +318,22 @@ navigation_button_press_event_cb (GtkButton *button,
   if (((GdkEventButton *)event)->button == GDK_BUTTON_SECONDARY) {
     popup_history_menu (GTK_WIDGET (button), EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW)),
                         direction, (GdkEventButton *)event);
-  } else {
-    PopupData *data;
-
-    data = g_new (PopupData, 1);
-    data->button = GTK_WIDGET (button);
-    data->window = EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW));
-    data->direction = direction;
-    data->event = (GdkEventButton *)event;
-
-    action_bar_start->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
-                                                                            (GSourceFunc)menu_timeout_cb,
-                                                                            data,
-                                                                            (GDestroyNotify)g_free);
-    g_source_set_name_by_id (action_bar_start->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
+    return GDK_EVENT_STOP;
   }
 
-  return FALSE;
+  data = g_new (PopupData, 1);
+  data->button = GTK_WIDGET (button);
+  data->window = EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW));
+  data->direction = direction;
+  data->event = (GdkEventButton *)event;
+
+  action_bar_start->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
+                                                                          (GSourceFunc)menu_timeout_cb,
+                                                                          data,
+                                                                          (GDestroyNotify)g_free);
+  g_source_set_name_by_id (action_bar_start->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -369,16 +369,12 @@ navigation_button_release_event_cb (GtkButton *button,
                                              "navigation-forward-new-tab");
         g_action_activate (action, NULL);
       }
-      break;
-    case GDK_BUTTON_SECONDARY:
-      popup_history_menu (GTK_WIDGET (button), EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW)),
-                          direction, (GdkEventButton *)event);
-      break;
+      return GDK_EVENT_STOP;
     default:
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -396,12 +392,12 @@ homepage_button_release_event_cb (GtkButton *button,
     case GDK_BUTTON_MIDDLE:
       action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "homepage-new-tab");
       g_action_activate (action, NULL);
-      break;
+      return GDK_EVENT_STOP;
     default:
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -419,12 +415,12 @@ new_tab_button_release_event_cb (GtkButton *button,
     case GDK_BUTTON_MIDDLE:
       action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab-from-clipboard");
       g_action_activate (action, NULL);
-      break;
+      return GDK_EVENT_STOP;
     default:
       break;
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -439,7 +435,7 @@ navigation_leave_notify_event_cb (GtkButton *button,
     action_bar_start->navigation_buttons_menu_timeout = 0;
   }
 
-  return G_SOURCE_REMOVE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
