@@ -760,7 +760,7 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 
   priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
                                     "website-data-manager", manager,
-                                    "process-swap-on-cross-site-navigation-enabled", TRUE,
+                                    "process-swap-on-cross-site-navigation-enabled", FALSE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=204703 */
                                     NULL);
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
