@@ -31,16 +31,34 @@
         <child>
           <object class="GtkMenuButton" id="downloads_button">
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
             <property name="valign">center</property>
-            <!-- Translators: tooltip for the downloads button -->
-            <property name="tooltip_text" translatable="yes">View downloads</property>
-            <property name="image">downloads_image</property>
-            <style>
-              <class name="image-button"/>
-            </style>
             <child>
-              <object class="EphyDownloadsProgressIcon" id="downloads_image">
+              <object class="GtkOverlay">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">ephy-download-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="index">-1</property>
+                  </packing>
+                </child>
+                <child type="overlay">
+                  <object class="GtkProgressBar" id="downloads_progress">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <style>
+                      <class name="download_progress"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
