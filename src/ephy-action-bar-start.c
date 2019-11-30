@@ -315,10 +315,19 @@ navigation_button_press_event_cb (GtkButton *button,
   direction = strstr (action_name, "back") ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
                                            : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
-  if (((GdkEventButton *)event)->button == GDK_BUTTON_SECONDARY) {
-    popup_history_menu (GTK_WIDGET (button), EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW)),
-                        direction, (GdkEventButton *)event);
-    return GDK_EVENT_STOP;
+  switch (((GdkEventButton *)event)->button) {
+    case GDK_BUTTON_SECONDARY:
+      popup_history_menu (GTK_WIDGET (button), EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW)),
+                          direction, (GdkEventButton *)event);
+      return GDK_EVENT_STOP;
+    case GDK_BUTTON_MIDDLE:
+      /* If a desktop-wide middle-click titlebar action is enabled, we want to
+       * prevent that action from occurring because we handle middle click in
+       * navigation_button_release_event_cb().
+       */
+      return GDK_EVENT_STOP;
+    default:
+      break;
   }
 
   data = g_new (PopupData, 1);
