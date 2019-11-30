@@ -31,16 +31,43 @@
         <child>
           <object class="GtkMenuButton" id="downloads_button">
             <property name="visible">True</property>
-            <property name="valign">center</property>
-            <!-- Translators: tooltip for the downloads button -->
-            <property name="tooltip_text" translatable="yes">View downloads</property>
-            <property name="image">downloads_image</property>
-            <style>
-              <class name="image-button"/>
-            </style>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
             <child>
-              <object class="EphyDownloadsProgressIcon" id="downloads_image">
+              <object class="GtkBox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">0</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="icon_name">folder-download-symbolic</property>
+                    <property name="resource">/org/gnome/epiphany/ephy-download-symbolic.svg</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkProgressBar" id="downloads_progress">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <style>
+                      <class name="download_progress"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
