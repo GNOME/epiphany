@@ -37,7 +37,7 @@ struct _EphyActionBarEnd {
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
-  GtkWidget *downloads_image;
+  GtkWidget *downloads_progress;
 
   guint downloads_button_attention_timeout_id;
 };
@@ -96,7 +96,6 @@ download_added_cb (EphyDownloadsManager *manager,
 
   add_attention (action_bar_end);
   gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer), TRUE);
-  gtk_widget_queue_draw (action_bar_end->downloads_image);
 
   if (gtk_widget_is_visible (GTK_WIDGET (action_bar_end))) {
     gtk_widget_get_allocation (GTK_WIDGET (action_bar_end->downloads_button), &rect);
@@ -205,7 +204,9 @@ static void
 downloads_estimated_progress_cb (EphyDownloadsManager *manager,
                                  EphyActionBarEnd     *action_bar_end)
 {
-  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (action_bar_end->downloads_button)));
+  gdouble fraction = ephy_downloads_manager_get_estimated_progress (manager);
+
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (action_bar_end->downloads_progress), fraction);
 }
 
 static void
@@ -235,7 +236,7 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
                                         downloads_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
-                                        downloads_image);
+                                        downloads_progress);
 }
 
 static void
