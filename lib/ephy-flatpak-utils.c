@@ -263,6 +263,11 @@ ephy_open_file_via_flatpak_portal_finish (GAsyncResult  *result,
 
 #else /* __linux__ */
 
+void
+ephy_flatpak_utils_set_is_web_process_extension (void)
+{
+}
+
 gboolean
 ephy_is_running_inside_flatpak (void)
 {
