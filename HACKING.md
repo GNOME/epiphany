@@ -215,5 +215,5 @@ To use valgrind, you must use environment variables to disable WebKit's sandbox
 and JavaScriptCore's Gigacage:
 
 ```
-WEBKIT_FORCE_SANDBOX=0 GIGACAGE_ENABLED=0 epiphany
+WEBKIT_FORCE_SANDBOX=0 GIGACAGE_ENABLED=0 G_SLICE=always-malloc epiphany
 ```
