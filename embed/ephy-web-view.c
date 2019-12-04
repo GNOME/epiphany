@@ -2316,7 +2316,6 @@ format_process_crash_error_page (const char  *uri,
                                  const char **style)
 {
   const char *first_paragraph;
-  const char *second_paragraph;
 
   /* Page title when a site cannot be loaded due to a process crash error. */
   *page_title = g_strdup_printf (_("Problem Displaying Page"));
@@ -2325,12 +2324,9 @@ format_process_crash_error_page (const char  *uri,
   *message_title = g_strdup (_("Oops!"));
 
   /* Error details when a site cannot be loaded due to a process crash error. */
-  first_paragraph = _("Something went wrong while displaying this page.");
-  /* Further error details when a site cannot be loaded due to a process crash error. */
-  second_paragraph = _("Please reload or visit a different page to continue.");
-  *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>",
-                                   first_paragraph,
-                                   second_paragraph);
+  first_paragraph = _("Something went wrong while displaying this page. Please reload or visit a different page to continue.");
+  *message_body = g_strdup_printf ("<p>%s</p>",
+                                   first_paragraph);
 
   /* The button on the process crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
