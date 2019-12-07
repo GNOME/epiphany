@@ -1031,7 +1031,7 @@ move_directory_contents (const char *source_path,
     if (!g_file_move (source_file, dest_file, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
       g_autofree char *source_path = g_file_get_path (source_file);
       g_autofree char *dest_path = g_file_get_path (dest_file);
-      g_warning ("Failed to move %s to %s: %s", source_path, dest_path, error->message);
+      g_debug ("Failed to move %s to %s: %s", source_path, dest_path, error->message);
       return FALSE;
     }
   }
