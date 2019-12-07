@@ -119,6 +119,7 @@ subdir('help')
 subdir('po')
 subdir('lib')
 subdir('embed')
+subdir('third_party')
 subdir('src')
 subdir('tests')
 
