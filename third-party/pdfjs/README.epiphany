@@ -1,0 +1,59 @@
+# Embedded PDF Viewer based on pdf.js
+
+This directory contains an official pdf.js release version, distributed at: https://github.com/mozilla/pdf.js
+
+## Update process
+Grab a new official release (*-dist.zip) distributed at github and extract everything except viewer.[html/js/css] into this directory.
+Then recreate the resource xml file with `python pdfjs-generate-resource.py`
+
+The additional files within this directory are modified for Epiphany and shouldn't be changed automatically.
+
+## Modifications to viewer.html
+1. In order to circumvent CORS the pdf is downloaded and then embedded into the viewer.html file. Therefore the head has an
+extra attribute 'pdf_data="%s' which will be replace by Epiphany. Extracting this data is done in viewer.js.
+
+2. Futhermore 'pdf_name="%s"' is supplied to set the download file name.
+
+3. '<base href="ephy-resource:///org/gnome/epiphany/pdfjs/web/">' has been added to the head section.
+
+## Modifications to viewer.js
+
+function webViewerInitialized() has been changed:
+
+1. Set file to ''
+
+2. Replace the end of the function with:
+
+  var file_name = document.head.getAttribute('pdf_name')
+  var raw = atob(document.head.getAttribute('pdf_data'));
+  var raw_length = raw.length;
+  var array = new Uint8Array(new ArrayBuffer(raw_length));
+
+  for(var i = 0; i < raw_length; i++) {
+    array[i] = raw.charCodeAt(i);
+  }
+    
+  try {
+      PDFViewerApplication.open(array);
+      PDFViewerApplication.setTitleUsingUrl(file_name);
+  } catch (reason) {
+    PDFViewerApplication.l10n.get('loading_error', null, 'An error occurred while loading the PDF.').then(function (msg) {
+      PDFViewerApplication.error(msg, reason);
+    });
+  }
+
+
+## Modifications to viewer.css
+
+Here are two small changes for webkit specific layout:
+
+1. Ading:
+-webkit-appearance: none; to .dropdownToolbarButton > select {
+
+2. Adding:
+.toolbarField.pageNumber { blocks in the css
+
+
+# Documentation created by Jan-Michael Brummer <jan.brummer@tabos.org>
+
+

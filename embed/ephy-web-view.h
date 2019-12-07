@@ -42,7 +42,8 @@ G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
                                         "^data:.*$|" \
                                         "^file:.*$|" \
                                         "^inspector://.*$|" \
-                                        "^webkit://.*$" \
+                                        "^webkit://.*$|" \
+                                        "^ephy-resource://.*$" \
                                         ")"
 
 #define EPHY_WEB_VIEW_DOMAIN_REGEX "^localhost(\\.[^[:space:]]+)?(:\\d+)?(:[0-9]+)?(/.*)?$|" \
@@ -171,5 +172,7 @@ void                       ephy_web_view_show_auth_form_save_request (EphyWebVie
                                                                       EphyPasswordSaveRequestCallback response_callback,
                                                                       gpointer                        response_data,
                                                                       GDestroyNotify                  response_destroy);
+
+gboolean                   ephy_web_view_in_pdf_viewer             (EphyWebView              *view);
 
 G_END_DECLS
