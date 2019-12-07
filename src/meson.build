@@ -126,9 +126,17 @@ resources = gnome.compile_resources('epiphany-resources',
     source_dir: 'resources'
 )
 
+pdfjs_resource_files = files('resources/pdfjs/pdfjs.gresource.xml')
+pdfjs_resources = gnome.compile_resources('pdfjs-resources',
+    pdfjs_resource_files,
+    c_name: 'pdfjs',
+    source_dir: 'resources/pdfjs'
+)
+
 epiphany_sources = [
   'ephy-main.c',
-  resources
+  resources,
+  pdfjs_resources
 ]
 
 executable('epiphany',
