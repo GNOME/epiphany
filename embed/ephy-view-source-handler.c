@@ -108,35 +108,34 @@ web_resource_data_cb (WebKitWebResource     *resource,
                       GAsyncResult          *result,
                       EphyViewSourceRequest *request)
 {
-  guchar *data;
-  char *data_str;
-  char *escaped_str;
-  char *html;
+  g_autofree guchar *data = NULL;
+  g_autofree char *data_str = NULL;
+  g_autofree char *escaped_str = NULL;
+  g_autoptr (GError) error = NULL;
+  char *html = NULL;
   gsize length;
-  GError *error = NULL;
 
   data = webkit_web_resource_get_data_finish (resource, result, &length, &error);
   if (error) {
     finish_uri_scheme_request (request, NULL, error);
-    g_error_free (error);
     return;
   }
 
   data_str = g_malloc (length + 1);
   strncpy (data_str, (const char *)data, length);
   data_str[length] = '\0';
-  g_free (data);
 
   escaped_str = g_markup_escape_text (data_str, -1);
-  g_free (data_str);
 
-  html = g_strdup_printf ("<body>"
-                          "  <pre>"
-                          "    <code class=\"language-html\">%s</code>"
-                          "  </pre>"
+  html = g_strdup_printf ("<head>"
+                          "  <link rel=\"stylesheet\" href=\"ephy-resource:///org/gnome/epiphany/highlight.css\">"
+                          "</head>"
+                          "<body>"
+                          "  <script src=\"ephy-resource:///org/gnome/epiphany/highlight.js\"></script>"
+                          "  <script>hljs.initHighlightingOnLoad();</script>"
+                          "  <pre><code class=\"html\">%s</code></pre>"
                           "</body>",
                           escaped_str);
-  g_free (escaped_str);
 
   finish_uri_scheme_request (request, html, NULL);
 }
