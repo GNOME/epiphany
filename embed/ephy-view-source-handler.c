@@ -130,12 +130,27 @@ web_resource_data_cb (WebKitWebResource     *resource,
   escaped_str = g_markup_escape_text (data_str, -1);
   g_free (data_str);
 
-  html = g_strdup_printf ("<body>"
-                          "  <pre>"
-                          "    <code class=\"language-html\">%s</code>"
-                          "  </pre>"
+
+#if 1
+  html = g_strdup_printf ("<head>"
+                          "  <link rel=\"stylesheet\" href=\"ephy-resource:///org/gnome/epiphany/highlight.css\">"
+                          "</head>"
+                          "<body>"
+                          "  <script src=\"ephy-resource:///org/gnome/epiphany/highlight.js\"></script>"
+                          "  <script>hljs.initHighlightingOnLoad();</script>"
+                          "  <pre><code class=\"html\">%s</code></pre>"
                           "</body>",
                           escaped_str);
+#else
+  html = g_strdup_printf ("<head>"
+                          "  <link href=\"ephy-resource:///org/gnome/epiphany/prettify.css\" rel=\"stylesheet\"/>"
+                          "</head>"
+                          "  <body onload=\"PR.prettyPrint()\">"
+                          "  <script src=\"ephy-resource:///org/gnome/epiphany/prettify.js\"></script>"
+                          "  <pre class=\"prettyprint\">%s</pre>"
+                          "</body>",
+                          escaped_str);
+#endif
   g_free (escaped_str);
 
   finish_uri_scheme_request (request, html, NULL);
