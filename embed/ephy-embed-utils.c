@@ -117,7 +117,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
   if (address == NULL)
     return FALSE;
 
-  colonpos = (int)((g_strstr_len (address, 12, ":")) - address);
+  colonpos = (int)((strstr (address, ":")) - address);
 
   if (colonpos < 0)
     return FALSE;
@@ -130,6 +130,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
                      g_ascii_strncasecmp (address, "blob", colonpos) &&
                      g_ascii_strncasecmp (address, "about", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-about", colonpos) &&
+                     g_ascii_strncasecmp (address, "ephy-resource", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-source", colonpos) &&
                      g_ascii_strncasecmp (address, "gopher", colonpos) &&
                      g_ascii_strncasecmp (address, "inspector", colonpos) &&
