@@ -725,9 +725,10 @@ static gboolean
 run_readability_js_if_needed (gpointer data)
 {
   EphyWebView *web_view = data;
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
-  /* Internal pages should never receive reader mode. */
-  if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
+  /* Internal pages and pdf viewer should never receive reader mode. */
+  if (!ephy_embed_utils_is_no_show_address (web_view->address) && ephy_embed_get_mode (embed) != EPHY_EMBED_MODE_EVINCE_DOCUMENT) {
     webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
                                                    "/org/gnome/epiphany/Readability.js",
                                                    web_view->cancellable,
@@ -873,6 +874,14 @@ ephy_web_view_decide_policy (WebKitWebView            *web_view,
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
+  request = webkit_response_policy_decision_get_request (response_decision);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  if (strcmp (mime_type, "application/pdf") == 0) {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+
+    ephy_embed_set_mode (embed, EPHY_EMBED_MODE_EVINCE_DOCUMENT);
+  }
 
   /* If WebKit can't handle the mime type start the download
    *  process */
@@ -880,8 +889,6 @@ ephy_web_view_decide_policy (WebKitWebView            *web_view,
     return FALSE;
 
   /* If it's not the main resource we don't need to set the document type. */
-  request = webkit_response_policy_decision_get_request (response_decision);
-  request_uri = webkit_uri_request_get_uri (request);
   main_resource = webkit_web_view_get_main_resource (web_view);
   if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
     return FALSE;
@@ -1369,6 +1376,7 @@ ephy_web_view_load_changed (WebKitWebView   *web_view,
                             WebKitLoadEvent  load_event)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
   GObject *object = G_OBJECT (web_view);
 
   g_object_freeze_notify (object);
@@ -1382,6 +1390,7 @@ ephy_web_view_load_changed (WebKitWebView   *web_view,
   switch (load_event) {
     case WEBKIT_LOAD_STARTED: {
       view->load_failed = FALSE;
+      ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
 
       if (view->snapshot_timeout_id) {
         g_source_remove (view->snapshot_timeout_id);

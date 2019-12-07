@@ -74,6 +74,9 @@ struct _EphyEmbed {
   GSList *messages;
   GSList *keys;
 
+  EphyEmbedMode mode;
+  char *saved_title;
+
   guint seq_context_id;
   guint seq_message_id;
 
@@ -394,6 +397,7 @@ ephy_embed_dispose (GObject *object)
     embed->fullscreen_message_id = 0;
   }
 
+  g_clear_pointer (&embed->saved_title, g_free);
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
@@ -1028,4 +1032,122 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
      * from the container. */
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
+}
+
+void
+ephy_embed_set_mode (EphyEmbed     *embed,
+                     EphyEmbedMode  mode)
+{
+  g_assert (EPHY_IS_EMBED (embed));
+
+  if (embed->mode == mode)
+    return;
+
+  switch (mode) {
+    case EPHY_EMBED_MODE_WEB_VIEW:
+      if (embed->saved_title) {
+        ephy_embed_set_title (embed, embed->saved_title);
+        g_clear_pointer (&embed->saved_title, g_free);
+      }
+      break;
+    case EPHY_EMBED_MODE_EVINCE_DOCUMENT:
+      break;
+  }
+
+  embed->mode = mode;
+}
+
+EphyEmbedMode
+ephy_embed_get_mode (EphyEmbed *embed)
+{
+  return embed->mode;
+}
+
+static void
+document_download_failed_cb (WebKitDownload *download,
+                             GError         *error,
+                             EphyEmbed      *embed)
+{
+  /* Error occured: Switch back to web view */
+  ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
+}
+
+static char *
+load_file (const char *name,
+           gsize      *size)
+{
+  GFile *file;
+  GFileInfo *file_info;
+  goffset file_size;
+  gchar *data = NULL;
+  GFileInputStream *input_stream = NULL;
+
+  file = g_file_new_for_path (name);
+  if (!g_file_query_exists (file, NULL)) {
+    g_object_unref (file);
+    g_print ("%s(): MOEP\n", __FUNCTION__);
+    return NULL;
+  }
+
+  file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+  file_size = g_file_info_get_size (file_info);
+  if (file_size) {
+    data = g_malloc0 (file_size + 1);
+    input_stream = g_file_read (file, NULL, NULL);
+
+    g_input_stream_read_all (G_INPUT_STREAM (input_stream), data, file_size, size, NULL, NULL);
+
+    g_object_unref (input_stream);
+  }
+  g_object_unref (file_info);
+  g_object_unref (file);
+
+  return data;
+}
+
+static void
+document_download_finished_cb (WebKitDownload *download,
+                               EphyEmbed      *embed)
+{
+  const char *document_uri = webkit_download_get_destination (download);
+  GBytes *html_file;
+  g_autoptr (GString) html = NULL;
+  g_autofree gchar *b64 = NULL;
+  g_autofree gchar *requested_uri = NULL;
+  EphyWebView *web_view = ephy_embed_get_web_view (embed);
+  char *data;
+  gsize len = 0;
+  WebKitURIRequest *request = webkit_download_get_request (download);
+
+  g_print ("LOAD AND SHOW PDF NOW!!!!\n");
+
+  embed->saved_title = g_strdup (embed->title);
+  /*ephy_embed_set_title (embed, g_path_get_basename (document_uri)); */
+  g_print ("file %s\n", g_filename_from_uri (document_uri, NULL, NULL));
+  data = load_file (g_filename_from_uri (document_uri, NULL, NULL), &len);
+  g_print ("%s(): data %p len %ld\n", __FUNCTION__, data, len);
+
+  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
+  b64 = g_base64_encode ((const guchar *)data, len);
+
+  html = g_string_new ("");
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64);
+
+  webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (web_view), html->str, webkit_uri_request_get_uri (request), NULL);
+}
+
+gboolean
+ephy_embed_download_started (EphyEmbed    *embed,
+                             EphyDownload *ephy_download)
+{
+  WebKitDownload *download = ephy_download_get_webkit_download (ephy_download);
+  gboolean ret = FALSE;
+
+  if (embed->mode == EPHY_EMBED_MODE_EVINCE_DOCUMENT) {
+    g_signal_connect (download, "failed", G_CALLBACK (document_download_failed_cb), embed);
+    g_signal_connect (download, "finished", G_CALLBACK (document_download_finished_cb), embed);
+    ret = TRUE;
+  }
+
+  return ret;
 }
