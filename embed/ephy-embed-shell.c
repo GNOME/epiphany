@@ -881,6 +881,8 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",
                                           (WebKitURISchemeRequestCallback)ephy_resource_request_cb,
                                           NULL, NULL);
+  webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (priv->web_context),
+                                                         "ephy-resource");
 
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
