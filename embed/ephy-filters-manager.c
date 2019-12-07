@@ -481,7 +481,7 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (self->manager->store == store);
 
-  g_clear_object (&self->manager->wk_filter);
+  g_clear_pointer (&self->manager->wk_filter, webkit_user_content_filter_unref);
   self->manager->wk_filter = webkit_user_content_filter_store_save_finish (self->manager->store,
                                                                            result,
                                                                            &error);
