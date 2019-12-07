@@ -1,0 +1,9 @@
+# Embedded PDF Viewer based on pdf.js
+
+This directory contains an official pdf.js release version, distributed at: https://github.com/mozilla/pdf.js
+
+## Update process
+Grab a new official release (*-dist.zip) distributed at github and extract everything except viewer.html into this directory.
+Then recreate the resource xml file with `python pdfjs-generate-resource.py`
+
+The additional files within this directory are modified for Epiphany and shouldn't be changed.
