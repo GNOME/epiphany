@@ -1417,6 +1417,49 @@ new_window_cb (EphyWebView *view,
   popups_manager_add_window (view, container);
 }
 
+static void
+pdf_loaded (SoupSession *session,
+            SoupMessage *msg,
+            gpointer     user_data)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (user_data);
+  GBytes *html_file;
+  g_autoptr (GString) html = NULL;
+  g_autofree gchar *b64 = NULL;
+  SoupURI *uri = NULL;
+  g_autofree gchar *requested_uri = NULL;
+
+  if (msg->status_code != 200) {
+    g_warning ("PDF file could not be loaded, got status code %d\n", msg->status_code);
+    return;
+  }
+
+  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/viewer.html", 0, NULL);
+  b64 = g_base64_encode ((const guchar *)msg->response_body->data, msg->response_body->length);
+
+  html = g_string_new ("");
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64);
+
+  uri = soup_message_get_uri (msg);
+  requested_uri = g_strdup_printf ("%s://%s/%s", soup_uri_get_scheme (uri), soup_uri_get_host (uri), soup_uri_get_path (uri));
+  webkit_web_view_load_alternate_html (web_view, html->str, requested_uri, NULL);
+
+  g_object_unref (session);
+}
+
+static void
+load_pdf (WebKitWebView *web_view,
+          const gchar   *request_uri)
+{
+  SoupSession *session = soup_session_new ();
+  SoupMessage *msg = soup_message_new ("GET", request_uri);
+
+  /* Stop current page load so that the history will not be changed for this initial load */
+  webkit_web_view_stop_loading (web_view);
+
+  soup_session_queue_message (session, msg, pdf_loaded, web_view);
+}
+
 static gboolean
 decide_policy_cb (WebKitWebView            *web_view,
                   WebKitPolicyDecision     *decision,
@@ -1437,6 +1480,14 @@ decide_policy_cb (WebKitWebView            *web_view,
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
+  request = webkit_response_policy_decision_get_request (response_decision);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  if (!strcmp (mime_type, "application/pdf")) {
+    load_pdf (web_view, request_uri);
+
+    return FALSE;
+  }
 
   /* If WebKit can't handle the mime type start the download
    *  process */
@@ -1444,8 +1495,6 @@ decide_policy_cb (WebKitWebView            *web_view,
     return FALSE;
 
   /* If it's not the main resource we don't need to set the document type. */
-  request = webkit_response_policy_decision_get_request (response_decision);
-  request_uri = webkit_uri_request_get_uri (request);
   main_resource = webkit_web_view_get_main_resource (web_view);
   if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
     return FALSE;
