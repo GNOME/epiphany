@@ -1754,14 +1754,14 @@ populate_context_menu (WebKitWebView       *web_view,
 
   g_free (search_selection_action_name);
 
-  if (is_document && !is_image && !is_media) {
-    webkit_context_menu_append (context_menu,
-                                webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu, window_action_group,
-                                "send-to", window);
-  }
-
   if (!app_mode) {
+    if (is_document && !is_image && !is_media) {
+      webkit_context_menu_append (context_menu,
+                                  webkit_context_menu_item_new_separator ());
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "send-to", window);
+    }
+
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
