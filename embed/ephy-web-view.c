@@ -79,6 +79,7 @@ struct _EphyWebView {
   guint history_frozen : 1;
   guint ever_committed : 1;
   guint in_auth_dialog : 1;
+  guint in_pdf_viewer : 1;
 
   char *address;
   char *display_address;
@@ -798,8 +799,11 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec    *spec,
                 gpointer       data)
 {
-  ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
-                             webkit_web_view_get_uri (web_view));
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+
+  if (!view->in_pdf_viewer)
+    ephy_web_view_set_address (view,
+                               webkit_web_view_get_uri (web_view));
 }
 
 static void
@@ -854,6 +858,68 @@ ephy_web_view_style_updated (GtkWidget *web_view)
   webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 }
 
+/**
+ * TODO: Please note that we are currently making use of soup function to download
+ * the requested pdf file. This is due to an issue with EphyDownload emitting download
+ * finished signal before the file really exists in 50% of the cases. That
+ * would lead to a very bad pdf experience therefore we are using soup.
+ * Please switch to EphyDownload as soon as the issue is fixed.
+ */
+static void
+pdf_loaded (SoupSession *session,
+            SoupMessage *msg,
+            gpointer     user_data)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (user_data);
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  GBytes *html_file;
+  g_autoptr (GString) html = NULL;
+  g_autofree gchar *b64 = NULL;
+  SoupURI *uri = NULL;
+  g_autofree gchar *requested_uri = NULL;
+
+  if (msg->status_code != 200) {
+    g_warning ("PDF file could not be loaded, got status code %d\n", msg->status_code);
+    return;
+  }
+
+  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
+  b64 = g_base64_encode ((const guchar *)msg->response_body->data, msg->response_body->length);
+
+  uri = soup_message_get_uri (msg);
+
+  html = g_string_new ("");
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, g_path_get_basename (uri->path));
+  requested_uri = soup_uri_to_string (uri, FALSE);
+
+  /* FIXME: Remove this, and remove the hack from update_security_status_for_committed_load(),
+   * when we switch from SoupSession to EphyDownload.
+   *
+   * We are using SoupSession directly, bypassing WebKit's functionality for ignoring
+   * TLS certificate errors, so we should be guaranteed there are no security issues
+   */
+  if (!strcmp (SOUP_URI_SCHEME_HTTPS, soup_uri_get_scheme (uri)))
+    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_STRONG_SECURITY);
+  else
+    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+
+  webkit_web_view_load_alternate_html (web_view, html->str, requested_uri, "ephy-resource:///org/gnome/epiphany/pdfjs/web/");
+
+  g_object_unref (session);
+}
+
+static void
+load_pdf (WebKitWebView *web_view,
+          const gchar   *request_uri)
+{
+  SoupSession *session = soup_session_new ();
+  SoupMessage *msg;
+
+  msg = soup_message_new ("GET", request_uri);
+
+  soup_session_queue_message (session, g_steal_pointer (&msg), pdf_loaded, web_view);
+}
+
 static gboolean
 ephy_web_view_decide_policy (WebKitWebView            *web_view,
                              WebKitPolicyDecision     *decision,
@@ -873,6 +939,19 @@ ephy_web_view_decide_policy (WebKitWebView            *web_view,
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
+  request = webkit_response_policy_decision_get_request (response_decision);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  if (strcmp (mime_type, "application/pdf") == 0) {
+    EphyWebView *view = EPHY_WEB_VIEW (web_view);
+
+    view->in_pdf_viewer = TRUE;
+    webkit_policy_decision_ignore (decision);
+
+    load_pdf (web_view, request_uri);
+
+    return FALSE;
+  }
 
   /* If WebKit can't handle the mime type start the download
    *  process */
@@ -880,8 +959,6 @@ ephy_web_view_decide_policy (WebKitWebView            *web_view,
     return FALSE;
 
   /* If it's not the main resource we don't need to set the document type. */
-  request = webkit_response_policy_decision_get_request (response_decision);
-  request_uri = webkit_uri_request_get_uri (request);
   main_resource = webkit_web_view_get_main_resource (web_view);
   if (g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) != 0)
     return FALSE;
@@ -1302,7 +1379,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   SoupURI *soup_uri;
   g_autofree char *tld = NULL;
 
-  if (view->loading_error_page)
+  if (view->loading_error_page || view->in_pdf_viewer)
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
@@ -1417,6 +1494,8 @@ ephy_web_view_load_changed (WebKitWebView   *web_view,
       /* History. */
       if (ephy_embed_utils_is_no_show_address (uri))
         ephy_web_view_freeze_history (view);
+
+      view->in_pdf_viewer = FALSE;
 
       if (!ephy_web_view_is_history_frozen (view)) {
         char *history_uri = NULL;
@@ -3805,4 +3884,10 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
                        "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
+}
+
+gboolean
+ephy_web_view_in_pdf_viewer (EphyWebView *web_view)
+{
+  return web_view->in_pdf_viewer;
 }

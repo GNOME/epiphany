@@ -2697,6 +2697,9 @@ static void
 download_only_load_cb (EphyWebView *view,
                        EphyWindow  *window)
 {
+  if (ephy_web_view_in_pdf_viewer (view))
+    return;
+
   if (gtk_notebook_get_n_pages (window->notebook) == 1) {
     ephy_web_view_load_homepage (view);
     return;
