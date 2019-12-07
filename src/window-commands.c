@@ -2107,114 +2107,6 @@ save_temp_source_write_cb (GOutputStream *ostream,
                                data);
 }
 
-static void
-get_main_resource_data_cb (WebKitWebResource *resource,
-                           GAsyncResult      *result,
-                           GOutputStream     *ostream)
-{
-  guchar *data;
-  gsize data_length;
-  GString *data_str;
-  GError *error = NULL;
-
-  data = webkit_web_resource_get_data_finish (resource, result, &data_length, &error);
-  if (error) {
-    g_warning ("Unable to get main resource data: %s", error->message);
-    g_error_free (error);
-    delete_tmp_source_file (ostream);
-    return;
-  }
-
-  /* We create a new GString here because we need to make sure
-   * we keep writing in case of partial writes */
-  data_str = g_string_new_len ((gchar *)data, data_length);
-  g_free (data);
-
-  g_output_stream_write_async (ostream,
-                               data_str->str, data_str->len,
-                               G_PRIORITY_DEFAULT, NULL,
-                               (GAsyncReadyCallback)save_temp_source_write_cb,
-                               data_str);
-}
-
-static void
-save_temp_source_replace_cb (GFile        *file,
-                             GAsyncResult *result,
-                             EphyEmbed    *embed)
-{
-  EphyWebView *view;
-  WebKitWebResource *resource;
-  GFileOutputStream *ostream;
-  GError *error = NULL;
-
-  ostream = g_file_replace_finish (file, result, &error);
-  if (error) {
-    g_warning ("Unable to replace file: %s", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  g_object_set_data_full (G_OBJECT (ostream),
-                          "ephy-save-temp-source-uri",
-                          g_file_get_uri (file),
-                          g_free);
-
-  view = ephy_embed_get_web_view (embed);
-
-  g_object_set_data_full (G_OBJECT (ostream),
-                          "ephy-original-source-uri",
-                          g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view))),
-                          g_free),
-
-  g_object_set_data_full (G_OBJECT (ostream),
-                          "ephy-save-temp-source-embed",
-                          g_object_ref (embed),
-                          g_object_unref);
-
-  resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
-  webkit_web_resource_get_data (resource, NULL,
-                                (GAsyncReadyCallback)get_main_resource_data_cb,
-                                ostream);
-}
-
-static void
-save_temp_source (EphyEmbed *embed,
-                  guint32    user_time)
-{
-  GFile *file;
-  char *tmp, *base;
-
-  if (ephy_is_running_inside_flatpak ()) {
-    /* It has to go here because the portal has no access to our tmpfs.
-     * This means we have to delete it manually! */
-    base = g_build_filename (g_get_user_cache_dir (), "tmp", "viewsourceXXXXXX", NULL);
-  } else {
-    const char *static_temp_dir;
-
-    static_temp_dir = ephy_file_tmp_dir ();
-    if (static_temp_dir == NULL)
-      return;
-
-    base = g_build_filename (static_temp_dir, "viewsourceXXXXXX", NULL);
-  }
-
-  tmp = ephy_file_tmp_filename (base, "html");
-  g_free (base);
-
-  if (tmp == NULL)
-    return;
-
-  file = g_file_new_for_path (tmp);
-  g_file_replace_async (file, NULL, FALSE,
-                        G_FILE_CREATE_REPLACE_DESTINATION | G_FILE_CREATE_PRIVATE,
-                        G_PRIORITY_DEFAULT, NULL,
-                        (GAsyncReadyCallback)save_temp_source_replace_cb,
-                        embed);
-
-  g_object_unref (file);
-  g_free (tmp);
-}
-
 void
 window_cmd_page_source (GSimpleAction *action,
                         GVariant      *parameter,
@@ -2223,7 +2115,6 @@ window_cmd_page_source (GSimpleAction *action,
   EphyWindow *window = user_data;
   EphyEmbed *embed;
   const char *address;
-  guint32 user_time;
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -2231,24 +2122,7 @@ window_cmd_page_source (GSimpleAction *action,
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-                              EPHY_PREFS_INTERNAL_VIEW_SOURCE)) {
-    view_source_embedded (address, embed);
-    return;
-  }
-
-  user_time = gtk_get_current_event_time ();
-
-  if (g_str_has_prefix (address, "file://")) {
-    GFile *file;
-
-    file = g_file_new_for_uri (address);
-    ephy_file_launch_handler (file, user_time);
-
-    g_object_unref (file);
-  } else {
-    save_temp_source (embed, user_time);
-  }
+  view_source_embedded (address, embed);
 }
 
 void
