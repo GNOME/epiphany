@@ -1018,18 +1018,15 @@ ephy_session_save (EphySession *session)
 
   g_assert (EPHY_IS_SESSION (session));
 
-  if (session->save_source_id) {
+  if (session->save_source_id)
     return;
-  }
 
-  if (session->dont_save) {
+  if (session->dont_save)
     return;
-  }
 
   policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
-  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER) {
+  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
     return;
-  }
 
   session->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
                                                         (GSourceFunc)ephy_session_save_idle_cb,
