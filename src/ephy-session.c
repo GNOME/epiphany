@@ -64,6 +64,7 @@ struct _EphySession {
   GCancellable *save_cancellable;
   guint closing : 1;
   guint dont_save : 1;
+  guint loaded_page : 1;
 };
 
 #define SESSION_STATE           "type:session_state"
@@ -122,8 +123,13 @@ load_changed_cb (WebKitWebView   *view,
                  WebKitLoadEvent  load_event,
                  EphySession     *session)
 {
-  if (!ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
-    ephy_session_save (session);
+  if (ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
+    return;
+
+  if (load_event == WEBKIT_LOAD_FINISHED)
+    session->loaded_page = TRUE;
+
+  ephy_session_save (session);
 }
 
 static void
@@ -887,14 +893,6 @@ save_session_sync (GTask        *task,
   GList *w;
   int ret = -1;
 
-  /* If any web view has an insane URL, then something has probably gone wrong
-   * inside WebKit. For instance, if the web process is nonfunctional, the UI
-   * process could have an invalid URI property. Yes, this would be a WebKit
-   * bug, but Epiphany should be robust to such issues. Do not clobber an
-   * existing good session file with our new bogus state. Bug #768250. */
-  if (!session_seems_sane (data->windows))
-    return;
-
   buffer = xmlBufferCreate ();
   writer = xmlNewTextWriterMemory (buffer, 0);
   if (writer == NULL)
@@ -986,6 +984,19 @@ ephy_session_save_idle_cb (EphySession *session)
 
   session->save_source_id = 0;
 
+  /* If we have never successfully loaded any page, or any web view has an
+   * insane URL, then something has probably gone wrong inside WebKit. For
+   * instance, if the web process is nonfunctional, the UI process could have
+   * an invalid URI property. Yes, this would be a WebKit bug, but Epiphany
+   * should be robust to such issues. Do not clobber an existing good session
+   * file with our new bogus state. Bug #768250.
+   */
+  data = save_data_new (session);
+  if (!session->loaded_page || !session_seems_sane (data->windows)) {
+    save_data_free (data);
+    return G_SOURCE_REMOVE;
+  }
+
   if (session->save_cancellable) {
     g_cancellable_cancel (session->save_cancellable);
     g_object_unref (session->save_cancellable);
@@ -1001,7 +1012,6 @@ ephy_session_save_idle_cb (EphySession *session)
 
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
   session->save_cancellable = g_cancellable_new ();
-  data = save_data_new (session);
   task = g_task_new (session, session->save_cancellable,
                      save_session_in_thread_finished_cb, NULL);
   g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
