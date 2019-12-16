@@ -622,7 +622,7 @@ bookmarks_export_cb (GObject      *source_object,
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (source_object);
   g_autoptr (GTask) task = user_data;
-  GError *error;
+  GError *error = NULL;
 
   if (!ephy_bookmarks_export_finish (self, result, &error)) {
     g_task_return_error (task, error);
