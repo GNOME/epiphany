@@ -456,7 +456,8 @@ retrieve_snapshot_from_web_view (GTask *task)
   webkit_web_view_get_snapshot (data->web_view,
                                 WEBKIT_SNAPSHOT_REGION_VISIBLE,
                                 WEBKIT_SNAPSHOT_OPTIONS_NONE,
-                                NULL, (GAsyncReadyCallback)on_snapshot_ready,
+                                g_task_get_cancellable (task),
+                                (GAsyncReadyCallback)on_snapshot_ready,
                                 task);
   return FALSE;
 }
@@ -746,13 +747,15 @@ got_snapshot_path_to_delete_cb (EphySnapshotService *service,
   if (path)
     unlink (path);
   g_free (path);
+
+  g_object_unref (service);
 }
 
 void
 ephy_snapshot_service_delete_snapshot_for_url (EphySnapshotService *service,
                                                const char          *url)
 {
-  ephy_snapshot_service_get_snapshot_path_for_url_async (service,
+  ephy_snapshot_service_get_snapshot_path_for_url_async (g_object_ref (service),
                                                          url,
                                                          NULL,
                                                          (GAsyncReadyCallback)got_snapshot_path_to_delete_cb,
