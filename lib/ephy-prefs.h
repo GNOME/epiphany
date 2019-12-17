@@ -105,16 +105,12 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_MONOSPACE_FONT               "monospace-font"
 #define EPHY_PREFS_WEB_ENABLE_USER_CSS              "enable-user-css"
 #define EPHY_PREFS_WEB_ENABLE_POPUPS                "enable-popups"
-#define EPHY_PREFS_WEB_ENABLE_PLUGINS               "enable-plugins"
 #define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING        "enable-spell-checking"
-#define EPHY_PREFS_WEB_ENABLE_WEBGL                 "enable-webgl"
-#define EPHY_PREFS_WEB_ENABLE_WEBAUDIO              "enable-webaudio"
 #define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING      "enable-smooth-scrolling"
 #define EPHY_PREFS_WEB_USER_AGENT                   "user-agent"
 #define EPHY_PREFS_WEB_MOBILE_USER_AGENT            "mobile-user-agent"
 #define EPHY_PREFS_WEB_COOKIES_POLICY               "cookies-policy"
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING             "default-encoding"
-#define EPHY_PREFS_WEB_DO_NOT_TRACK                 "do-not-track"
 #define EPHY_PREFS_WEB_ENABLE_ADBLOCK               "enable-adblock"
 #define EPHY_PREFS_WEB_REMEMBER_PASSWORDS           "remember-passwords"
 #define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS  "enable-site-specific-quirks"
@@ -137,16 +133,12 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_MONOSPACE_FONT,
   EPHY_PREFS_WEB_ENABLE_USER_CSS,
   EPHY_PREFS_WEB_ENABLE_POPUPS,
-  EPHY_PREFS_WEB_ENABLE_PLUGINS,
   EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-  EPHY_PREFS_WEB_ENABLE_WEBGL,
-  EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
   EPHY_PREFS_WEB_USER_AGENT,
   EPHY_PREFS_WEB_MOBILE_USER_AGENT,
   EPHY_PREFS_WEB_COOKIES_POLICY,
   EPHY_PREFS_WEB_DEFAULT_ENCODING,
-  EPHY_PREFS_WEB_DO_NOT_TRACK,
   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
   EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
