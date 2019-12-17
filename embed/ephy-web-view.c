@@ -62,8 +62,6 @@
  * it.
  */
 
-#define MAX_HIDDEN_POPUPS       5
-
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
 #define EPHY_PAGE_TEMPLATE_ERROR_CSS     "/org/gnome/epiphany/page-templates/error.css"
 
@@ -101,9 +99,6 @@ struct _EphyWebView {
   /* Local file watch. */
   EphyFileMonitor *file_monitor;
 
-  GSList *hidden_popups;
-  GSList *shown_popups;
-
   GtkWidget *geolocation_info_bar;
   GtkWidget *notification_info_bar;
   GtkWidget *microphone_info_bar;
@@ -130,21 +125,13 @@ struct _EphyWebView {
   EphyWebViewErrorPage error_page;
 };
 
-typedef struct {
-  char *url;
-  char *name;
-  char *features;
-} PopupInfo;
-
 enum {
   PROP_0,
   PROP_ADDRESS,
   PROP_DOCUMENT_TYPE,
-  PROP_HIDDEN_POPUP_COUNT,
   PROP_ICON,
   PROP_LINK_MESSAGE,
   PROP_NAVIGATION,
-  PROP_POPUPS_ALLOWED,
   PROP_SECURITY,
   PROP_STATUS_MESSAGE,
   PROP_TYPED_ADDRESS,
@@ -157,143 +144,6 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
-
-static guint
-popup_blocker_n_hidden (EphyWebView *view)
-{
-  return g_slist_length (view->hidden_popups);
-}
-
-static void
-popups_manager_free_info (PopupInfo *popup)
-{
-  g_free (popup->url);
-  g_free (popup->name);
-  g_free (popup->features);
-  g_free (popup);
-}
-
-static void
-popups_manager_show (PopupInfo   *popup,
-                     EphyWebView *view)
-{
-  /* Only show popup with non NULL url */
-  if (popup->url != NULL) {
-    /* FIXME: we need a way of opening windows in here. This used to
-     * be implemented in EphyEmbedSingle open_window method, but it's
-     * been a no-op for a while. */
-  }
-  popups_manager_free_info (popup);
-}
-
-static void
-popups_manager_show_all (EphyWebView *view)
-{
-  LOG ("popup_blocker_show_all: view %p", view);
-
-  g_slist_foreach (view->hidden_popups,
-                   (GFunc)popups_manager_show, view);
-  g_slist_free (view->hidden_popups);
-  view->hidden_popups = NULL;
-
-  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
-}
-
-static char *
-popups_manager_new_window_info (EphyEmbedContainer *container)
-{
-  EphyEmbed *embed;
-  GtkAllocation allocation;
-  gboolean is_popup;
-  char *features;
-
-  g_object_get (container, "is-popup", &is_popup, NULL);
-  g_assert (is_popup);
-
-  embed = ephy_embed_container_get_active_child (container);
-  g_assert (embed != NULL);
-
-  gtk_widget_get_allocation (GTK_WIDGET (embed), &allocation);
-
-  features = g_strdup_printf
-               ("width=%d,height=%d,toolbar=%d",
-               allocation.width,
-               allocation.height,
-               1);
-
-  return features;
-}
-
-static void
-popups_manager_add (EphyWebView *view,
-                    const char  *url,
-                    const char  *name,
-                    const char  *features)
-{
-  PopupInfo *popup;
-
-  LOG ("popups_manager_add: view %p, url %s, features %s",
-       view, url, features);
-
-  popup = g_new (PopupInfo, 1);
-
-  popup->url = g_strdup (url);
-  popup->name = g_strdup (name);
-  popup->features = g_strdup (features);
-
-  view->hidden_popups = g_slist_prepend (view->hidden_popups, popup);
-
-  if (popup_blocker_n_hidden (view) > MAX_HIDDEN_POPUPS) {/* bug #160863 */
-    /* Remove the oldest popup */
-    GSList *l = view->hidden_popups;
-
-    while (l->next->next != NULL) {
-      l = l->next;
-    }
-
-    popup = (PopupInfo *)l->next->data;
-    popups_manager_free_info (popup);
-
-    l->next = NULL;
-  } else {
-    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
-  }
-}
-
-static void
-popups_manager_hide (EphyEmbedContainer *container,
-                     EphyWebView        *parent_view)
-{
-  EphyEmbed *embed;
-  const char *location;
-  char *features;
-
-  embed = ephy_embed_container_get_active_child (container);
-  g_assert (EPHY_IS_EMBED (embed));
-
-  location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-  if (location == NULL)
-    return;
-
-  features = popups_manager_new_window_info (container);
-
-  popups_manager_add (parent_view, location, "" /* FIXME? maybe _blank? */, features);
-
-  gtk_widget_destroy (GTK_WIDGET (container));
-
-  g_free (features);
-}
-
-static void
-popups_manager_hide_all (EphyWebView *view)
-{
-  LOG ("popup_blocker_hide_all: view %p", view);
-
-  g_slist_foreach (view->shown_popups,
-                   (GFunc)popups_manager_hide, view);
-  g_slist_free (view->shown_popups);
-  view->shown_popups = NULL;
-}
 
 static void
 open_response_cb (GtkFileChooser           *dialog,
@@ -352,85 +202,6 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
 }
 
 static void
-ephy_web_view_set_popups_allowed (EphyWebView *view,
-                                  gboolean     allowed)
-{
-  if (allowed) {
-    popups_manager_show_all (view);
-  } else {
-    popups_manager_hide_all (view);
-  }
-}
-
-static gboolean
-ephy_web_view_get_popups_allowed (EphyWebView *view)
-{
-  const char *location;
-  gboolean allow;
-
-  location = ephy_web_view_get_address (view);
-  if (location == NULL)
-    return FALSE; /* FALSE, TRUE… same thing */
-
-  allow = g_settings_get_boolean (EPHY_SETTINGS_WEB,
-                                  EPHY_PREFS_WEB_ENABLE_POPUPS);
-  return allow;
-}
-
-static gboolean
-popups_manager_remove_window (EphyWebView        *view,
-                              EphyEmbedContainer *container)
-{
-  view->shown_popups = g_slist_remove (view->shown_popups, container);
-
-  return FALSE;
-}
-
-static void
-popups_manager_add_window (EphyWebView        *view,
-                           EphyEmbedContainer *container)
-{
-  LOG ("popups_manager_add_window: view %p, container %p", view, container);
-
-  view->shown_popups = g_slist_prepend (view->shown_popups, container);
-
-  g_signal_connect_swapped (container, "destroy",
-                            G_CALLBACK (popups_manager_remove_window),
-                            view);
-}
-
-static void
-disconnect_popup (EphyEmbedContainer *container,
-                  EphyWebView        *view)
-{
-  g_signal_handlers_disconnect_by_func
-    (container, G_CALLBACK (popups_manager_remove_window), view);
-}
-
-/**
- * ephy_web_view_popups_manager_reset:
- * @view: an #EphyWebView
- *
- * Resets the state of the popups manager in @view.
- **/
-void
-ephy_web_view_popups_manager_reset (EphyWebView *view)
-{
-  g_slist_foreach (view->hidden_popups,
-                   (GFunc)popups_manager_free_info, NULL);
-  g_slist_free (view->hidden_popups);
-  view->hidden_popups = NULL;
-
-  g_slist_foreach (view->shown_popups,
-                   (GFunc)disconnect_popup, view);
-  g_slist_free (view->shown_popups);
-  view->shown_popups = NULL;
-
-  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
-  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_POPUPS_ALLOWED]);
-}
-
-static void
 ephy_web_view_get_property (GObject    *object,
                             guint       prop_id,
                             GValue     *value,
@@ -448,10 +219,6 @@ ephy_web_view_get_property (GObject    *object,
     case PROP_DOCUMENT_TYPE:
       g_value_set_enum (value, view->document_type);
       break;
-    case PROP_HIDDEN_POPUP_COUNT:
-      g_value_set_int (value, popup_blocker_n_hidden
-                         (EPHY_WEB_VIEW (object)));
-      break;
     case PROP_ICON:
       g_value_set_object (value, view->icon);
       break;
@@ -460,10 +227,6 @@ ephy_web_view_get_property (GObject    *object,
       break;
     case PROP_NAVIGATION:
       g_value_set_flags (value, view->nav_flags);
-      break;
-    case PROP_POPUPS_ALLOWED:
-      g_value_set_boolean (value, ephy_web_view_get_popups_allowed
-                             (EPHY_WEB_VIEW (object)));
       break;
     case PROP_SECURITY:
       g_value_set_enum (value, view->security_level);
@@ -492,15 +255,11 @@ ephy_web_view_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   switch (prop_id) {
-    case PROP_POPUPS_ALLOWED:
-      ephy_web_view_set_popups_allowed (EPHY_WEB_VIEW (object), g_value_get_boolean (value));
-      break;
     case PROP_TYPED_ADDRESS:
       ephy_web_view_set_typed_address (EPHY_WEB_VIEW (object), g_value_get_string (value));
       break;
     case PROP_ADDRESS:
     case PROP_DOCUMENT_TYPE:
-    case PROP_HIDDEN_POPUP_COUNT:
     case PROP_ICON:
     case PROP_LINK_MESSAGE:
     case PROP_NAVIGATION:
@@ -941,8 +700,6 @@ ephy_web_view_finalize (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
 
-  ephy_web_view_popups_manager_reset (view);
-
   g_free (view->address);
   g_free (view->display_address);
   g_free (view->typed_address);
@@ -1292,32 +1049,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
- * EphyWebView:hidden-popup-count:
- *
- * Number of hidden (blocked) popup windows.
- **/
-  obj_properties[PROP_HIDDEN_POPUP_COUNT] =
-    g_param_spec_int ("hidden-popup-count",
-                      "Number of Blocked Popups",
-                      "The view's number of blocked popup windows",
-                      0,
-                      G_MAXINT,
-                      0,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:popups-allowed:
- *
- * If popup windows from this view are to be displayed.
- **/
-  obj_properties[PROP_POPUPS_ALLOWED] =
-    g_param_spec_boolean ("popups-allowed",
-                          "Popups Allowed",
-                          "Whether popup windows are to be displayed",
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-/**
  * EphyWebView:is-blank:
  *
  * Whether the view is showing the blank address.
@@ -1400,21 +1131,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE,
                 0);
-}
-
-static void
-new_window_cb (EphyWebView *view,
-               EphyWebView *new_view,
-               gpointer     user_data)
-{
-  EphyEmbedContainer *container;
-
-  g_assert (new_view != NULL);
-
-  container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (GTK_WIDGET (new_view)));
-  g_assert (container != NULL || !gtk_widget_is_toplevel (GTK_WIDGET (container)));
-
-  popups_manager_add_window (view, container);
 }
 
 static gboolean
@@ -3141,10 +2857,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "script-dialog",
                     G_CALLBACK (script_dialog_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "new-window",
-                    G_CALLBACK (new_window_cb),
                     NULL);
 
   g_signal_connect (web_view, "authenticate",
