@@ -659,67 +659,6 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
 }
 
 static void
-ephy_web_view_dispose (GObject *object)
-{
-  EphyWebView *view = EPHY_WEB_VIEW (object);
-  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
-
-  ephy_embed_prefs_unregister_ucm (ucm);
-  ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
-
-  untrack_info_bar (&view->geolocation_info_bar);
-  untrack_info_bar (&view->notification_info_bar);
-  untrack_info_bar (&view->microphone_info_bar);
-  untrack_info_bar (&view->webcam_info_bar);
-  untrack_info_bar (&view->password_info_bar);
-  untrack_info_bar (&view->password_form_info_bar);
-
-  g_clear_object (&view->file_monitor);
-
-  g_clear_object (&view->icon);
-
-  if (view->cancellable) {
-    g_cancellable_cancel (view->cancellable);
-    g_clear_object (&view->cancellable);
-  }
-
-  if (view->snapshot_timeout_id) {
-    g_source_remove (view->snapshot_timeout_id);
-    view->snapshot_timeout_id = 0;
-  }
-
-  if (view->reader_js_timeout) {
-    g_source_remove (view->reader_js_timeout);
-    view->reader_js_timeout = 0;
-  }
-
-  g_clear_object (&view->certificate);
-
-  G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
-}
-
-static void
-ephy_web_view_finalize (GObject *object)
-{
-  EphyWebView *view = EPHY_WEB_VIEW (object);
-
-  g_free (view->address);
-  g_free (view->display_address);
-  g_free (view->typed_address);
-  g_free (view->last_committed_address);
-  g_free (view->link_message);
-  g_free (view->loading_message);
-  g_free (view->tls_error_failing_uri);
-  g_free (view->pending_snapshot_uri);
-
-  g_free (view->reader_content);
-  g_free (view->reader_byline);
-  g_free (view->reader_url);
-
-  G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
-}
-
-static void
 _ephy_web_view_set_is_blank (EphyWebView *view,
                              gboolean     is_blank)
 {
@@ -864,24 +803,24 @@ uri_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-mouse_target_changed_cb (EphyWebView         *web_view,
-                         WebKitHitTestResult *hit_test_result,
-                         guint                modifiers,
-                         gpointer             data)
+ephy_web_view_mouse_target_changed (WebKitWebView       *web_view,
+                                    WebKitHitTestResult *hit_test_result,
+                                    guint                modifiers)
 {
   const char *message = NULL;
 
   if (webkit_hit_test_result_context_is_link (hit_test_result))
     message = webkit_hit_test_result_get_link_uri (hit_test_result);
 
-  ephy_web_view_set_link_message (web_view, message);
+  ephy_web_view_set_link_message (EPHY_WEB_VIEW (web_view), message);
 }
 
 static void
-process_terminated_cb (EphyWebView                       *web_view,
-                       WebKitWebProcessTerminationReason  reason,
-                       gpointer                           user_data)
+ephy_web_view_web_process_terminated (WebKitWebView                     *view,
+                                      WebKitWebProcessTerminationReason  reason)
 {
+  EphyWebView *web_view = EPHY_WEB_VIEW (view);
+
   switch (reason) {
     case WEBKIT_WEB_PROCESS_CRASHED:
       g_warning (_("Web process crashed"));
@@ -898,13 +837,12 @@ process_terminated_cb (EphyWebView                       *web_view,
 }
 
 static void
-style_updated_cb (EphyWebView *web_view,
-                  gpointer     user_data)
+ephy_web_view_style_updated (GtkWidget *web_view)
 {
   GtkStyleContext *context;
   GdkRGBA color;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
+  context = gtk_widget_get_style_context (web_view);
   if (!gtk_style_context_lookup_color (context, "theme_base_color", &color)) {
     /* Fall back to white */
     color.red = 1;
@@ -916,232 +854,10 @@ style_updated_cb (EphyWebView *web_view,
   webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 }
 
-static void
-ephy_web_view_constructed (GObject *object)
-{
-  EphyWebView *web_view = EPHY_WEB_VIEW (object);
-
-  G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
-
-  g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", web_view);
-
-  g_signal_connect (web_view, "web-process-terminated",
-                    G_CALLBACK (process_terminated_cb), NULL);
-  g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
-                            "changed", G_CALLBACK (update_navigation_flags), web_view);
-
-  g_signal_connect (web_view, "style-updated",
-                    G_CALLBACK (style_updated_cb), NULL);
-  style_updated_cb (web_view, NULL);
-}
-
-static void
-ephy_web_view_class_init (EphyWebViewClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  WebKitWebViewClass *webkit_webview_class = WEBKIT_WEB_VIEW_CLASS (klass);
-
-  gobject_class->dispose = ephy_web_view_dispose;
-  gobject_class->finalize = ephy_web_view_finalize;
-  gobject_class->get_property = ephy_web_view_get_property;
-  gobject_class->set_property = ephy_web_view_set_property;
-  gobject_class->constructed = ephy_web_view_constructed;
-
-  widget_class->button_press_event = ephy_web_view_button_press_event;
-  widget_class->key_press_event = ephy_web_view_key_press_event;
-
-  webkit_webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
-
-/**
- * EphyWebView:address:
- *
- * View's current address. This is a percent-encoded URI.
- **/
-  obj_properties[PROP_ADDRESS] =
-    g_param_spec_string ("address",
-                         "Address",
-                         "The view's address",
-                         "",
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:typed-address:
- *
- * User typed address for the current view.
- **/
-  obj_properties[PROP_TYPED_ADDRESS] =
-    g_param_spec_string ("typed-address",
-                         "Typed Address",
-                         "The typed address",
-                         "",
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:security-level:
- *
- * One of #EphySecurityLevel, determining view's current security level.
- **/
-  obj_properties[PROP_SECURITY] =
-    g_param_spec_enum ("security-level",
-                       "Security Level",
-                       "The view's security level",
-                       EPHY_TYPE_SECURITY_LEVEL,
-                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:document-type:
- *
- * Document type determined for the view.
- **/
-  obj_properties[PROP_DOCUMENT_TYPE] =
-    g_param_spec_enum ("document-type",
-                       "Document Type",
-                       "The view's document type",
-                       EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
-                       EPHY_WEB_VIEW_DOCUMENT_HTML,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:navigation:
- *
- * View's navigation flags as #EphyWebViewNavigationFlags.
- **/
-  obj_properties[PROP_NAVIGATION] =
-    g_param_spec_flags ("navigation",
-                        "Navigation flags",
-                        "The view's navigation flags",
-                        EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
-                        0,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:status-message:
- *
- * Statusbar message corresponding to this view.
- **/
-  obj_properties[PROP_STATUS_MESSAGE] =
-    g_param_spec_string ("status-message",
-                         "Status Message",
-                         "The view's statusbar message",
-                         NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:link-message:
- *
- * ???
- **/
-  obj_properties[PROP_LINK_MESSAGE] =
-    g_param_spec_string ("link-message",
-                         "Link Message",
-                         "The view's link message",
-                         NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:icon:
- *
- * View's favicon set by the loaded site.
- **/
-  obj_properties[PROP_ICON] =
-    g_param_spec_object ("icon",
-                         "Icon",
-                         "The view icon's",
-                         GDK_TYPE_PIXBUF,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:is-blank:
- *
- * Whether the view is showing the blank address.
- **/
-  obj_properties[PROP_IS_BLANK] =
-    g_param_spec_boolean ("is-blank",
-                          "Is blank",
-                          "If the EphyWebView is blank",
-                          FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:reader-mode:
- *
- * Whether the view is in reader mode.
- **/
-  obj_properties[PROP_READER_MODE] =
-    g_param_spec_boolean ("reader-mode",
-                          "Reader mode",
-                          "If the EphyWebView is in reader mode",
-                          FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-/**
- * EphyWebView:display-address:
- *
- * View's current display address.
- **/
-  obj_properties[PROP_DISPLAY_ADDRESS] =
-    g_param_spec_string ("display-address",
-                         "Display address",
-                         "The view's display address",
-                         "",
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
-
-/**
- * EphyWebView::new-window:
- * @view: the #EphyWebView that received the signal
- * @new_view: the newly opened #EphyWebView
- *
- * The ::new-window signal is emitted after a new window has been opened by
- * the view. For example, when a JavaScript popup window is opened.
- **/
-  g_signal_new ("new-window",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                1,
-                GTK_TYPE_WIDGET);
-
-/**
- * EphyWebView::search-key-press:
- * @view: the #EphyWebView that received the signal
- * @event: the #GdkEventKey which triggered this signal
- *
- * The ::search-key-press signal is emitted for keypresses which
- * should be used for find implementations.
- **/
-  g_signal_new ("search-key-press",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_LAST,
-                0, g_signal_accumulator_true_handled, NULL, NULL,
-                G_TYPE_BOOLEAN,
-                1,
-                GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-/**
- * EphyWebView::download-only-load:
- * @view: the #EphyWebView that received the signal
- *
- * The ::download-only-load signal is emitted when the @view has its main load
- * replaced by a download, and that is the only reason why the @view has been created.
- **/
-  g_signal_new ("download-only-load",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_FIRST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                0);
-}
-
 static gboolean
-decide_policy_cb (WebKitWebView            *web_view,
-                  WebKitPolicyDecision     *decision,
-                  WebKitPolicyDecisionType  decision_type,
-                  gpointer                  user_data)
+ephy_web_view_decide_policy (WebKitWebView            *web_view,
+                             WebKitPolicyDecision     *decision,
+                             WebKitPolicyDecisionType  decision_type)
 {
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
@@ -1374,8 +1090,8 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 }
 
 static gboolean
-permission_request_cb (WebKitWebView           *web_view,
-                       WebKitPermissionRequest *decision)
+ephy_web_view_permission_request (WebKitWebView           *web_view,
+                                  WebKitPermissionRequest *decision)
 {
   const char *address;
   char *origin;
@@ -1649,9 +1365,8 @@ update_ucm_ads_state (WebKitWebView *web_view,
 }
 
 static void
-load_changed_cb (WebKitWebView   *web_view,
-                 WebKitLoadEvent  load_event,
-                 gpointer         user_data)
+ephy_web_view_load_changed (WebKitWebView   *web_view,
+                            WebKitLoadEvent  load_event)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
   GObject *object = G_OBJECT (web_view);
@@ -2434,11 +2149,10 @@ ephy_web_view_load_error_page (EphyWebView          *view,
 }
 
 static gboolean
-load_failed_cb (WebKitWebView   *web_view,
-                WebKitLoadEvent  load_event,
-                const char      *uri,
-                GError          *error,
-                gpointer         user_data)
+ephy_web_view_load_failed (WebKitWebView   *web_view,
+                           WebKitLoadEvent  load_event,
+                           const char      *uri,
+                           GError          *error)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2497,11 +2211,10 @@ load_failed_cb (WebKitWebView   *web_view,
 }
 
 static gboolean
-load_failed_with_tls_error_cb (WebKitWebView        *web_view,
-                               const char           *uri,
-                               GTlsCertificate      *certificate,
-                               GTlsCertificateFlags  errors,
-                               gpointer              user_data)
+ephy_web_view_load_failed_with_tls_errors (WebKitWebView        *web_view,
+                                           const char           *uri,
+                                           GTlsCertificate      *certificate,
+                                           GTlsCertificateFlags  errors)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2518,9 +2231,8 @@ load_failed_with_tls_error_cb (WebKitWebView        *web_view,
 }
 
 static void
-mixed_content_detected_cb (WebKitWebView              *web_view,
-                           WebKitInsecureContentEvent  event,
-                           gpointer                    user_data)
+ephy_web_view_insecure_content_detected (WebKitWebView              *web_view,
+                                         WebKitInsecureContentEvent  event)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2529,8 +2241,7 @@ mixed_content_detected_cb (WebKitWebView              *web_view,
 }
 
 static void
-close_web_view_cb (WebKitWebView *web_view,
-                   gpointer       user_data)
+ephy_web_view_close (WebKitWebView *web_view)
 
 {
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
@@ -2567,8 +2278,8 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static gboolean
-script_dialog_cb (WebKitWebView      *web_view,
-                  WebKitScriptDialog *dialog)
+ephy_web_view_script_dialog (WebKitWebView      *web_view,
+                             WebKitScriptDialog *dialog)
 {
   if (webkit_script_dialog_get_dialog_type (dialog) != WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM)
     return FALSE;
@@ -2630,9 +2341,8 @@ reader_setting_changed_cb (GSettings   *settings,
 }
 
 static gboolean
-authenticate_cb (WebKitWebView               *web_view,
-                 WebKitAuthenticationRequest *request,
-                 gpointer                     user_data)
+ephy_web_view_authenticate (WebKitWebView               *web_view,
+                            WebKitAuthenticationRequest *request)
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   g_autoptr (WebKitCredential) credential = NULL;
@@ -2772,8 +2482,8 @@ password_manager_handle_query_password_message (WebKitWebView     *web_view,
 }
 
 static gboolean
-user_message_received_cb (WebKitWebView     *web_view,
-                          WebKitUserMessage *message)
+ephy_web_view_user_message_received (WebKitWebView     *web_view,
+                                     WebKitUserMessage *message)
 {
   const char *name;
 
@@ -2785,145 +2495,6 @@ user_message_received_cb (WebKitWebView     *web_view,
     return password_manager_handle_query_password_message (web_view, message);
 
   return FALSE;
-}
-
-static void
-ephy_web_view_init (EphyWebView *web_view)
-{
-  EphyEmbedShell *shell;
-
-  shell = ephy_embed_shell_get_default ();
-
-  web_view->is_blank = TRUE;
-  web_view->ever_committed = FALSE;
-  web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  web_view->security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
-
-  web_view->file_monitor = ephy_file_monitor_new (web_view);
-
-  web_view->history_service = ephy_embed_shell_get_global_history_service (shell);
-
-  web_view->cancellable = g_cancellable_new ();
-
-  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
-                           G_CALLBACK (reader_setting_changed_cb),
-                           web_view, 0);
-
-  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
-                           G_CALLBACK (reader_setting_changed_cb),
-                           web_view, 0);
-
-  g_signal_connect (web_view, "decide-policy",
-                    G_CALLBACK (decide_policy_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "permission-request",
-                    G_CALLBACK (permission_request_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "load-changed",
-                    G_CALLBACK (load_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "close",
-                    G_CALLBACK (close_web_view_cb),
-                    NULL);
-  g_signal_connect (web_view, "load-failed",
-                    G_CALLBACK (load_failed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "load-failed-with-tls-errors",
-                    G_CALLBACK (load_failed_with_tls_error_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "insecure-content-detected",
-                    G_CALLBACK (mixed_content_detected_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::zoom-level",
-                    G_CALLBACK (zoom_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::title",
-                    G_CALLBACK (title_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::uri",
-                    G_CALLBACK (uri_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "mouse-target-changed",
-                    G_CALLBACK (mouse_target_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "notify::favicon",
-                    G_CALLBACK (icon_changed_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "script-dialog",
-                    G_CALLBACK (script_dialog_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "authenticate",
-                    G_CALLBACK (authenticate_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "user-message-received",
-                    G_CALLBACK (user_message_received_cb),
-                    NULL);
-
-  g_signal_connect_object (shell, "password-form-focused",
-                           G_CALLBACK (password_form_focused_cb),
-                           web_view, 0);
-
-  g_signal_connect_object (shell, "allow-tls-certificate",
-                           G_CALLBACK (allow_tls_certificate_cb),
-                           web_view, 0);
-
-  g_signal_connect_object (shell, "allow-unsafe-browsing",
-                           G_CALLBACK (allow_unsafe_browsing_cb),
-                           web_view, 0);
-}
-
-/**
- * ephy_web_view_new:
- *
- * Equivalent to g_object_new() but returns an #GtkWidget so you don't have
- * to cast it when dealing with most code.
- *
- * Return value: the newly created #EphyWebView widget
- **/
-GtkWidget *
-ephy_web_view_new (void)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
-
-  ephy_embed_shell_register_ucm_handler (shell, ucm);
-  ephy_embed_prefs_register_ucm (ucm);
-
-  return g_object_new (EPHY_TYPE_WEB_VIEW,
-                       "web-context", ephy_embed_shell_get_web_context (shell),
-                       "user-content-manager", ucm,
-                       "settings", ephy_embed_prefs_get_settings (),
-                       "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
-                       NULL);
-}
-
-GtkWidget *
-ephy_web_view_new_with_related_view (WebKitWebView *related_view)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
-
-  ephy_embed_shell_register_ucm_handler (shell, ucm);
-  ephy_embed_prefs_register_ucm (ucm);
-
-  return g_object_new (EPHY_TYPE_WEB_VIEW,
-                       "related-view", related_view,
-                       "user-content-manager", ucm,
-                       "settings", ephy_embed_prefs_get_settings (),
-                       NULL);
 }
 
 /**
@@ -2969,7 +2540,6 @@ ephy_web_view_load_url (EphyWebView *view,
   g_assert (url);
 
   view->reader_active = FALSE;
-
   effective_url = ephy_embed_utils_normalize_address (url);
   if (g_str_has_prefix (effective_url, "javascript:")) {
     char *decoded_url;
@@ -3058,7 +2628,7 @@ ephy_web_view_is_loading (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_load_failed:
+ * ephy_web_view_get_load_failed:
  * @view: an #EphyWebView
  *
  * Returns whether the web page in @view has failed to load.
@@ -3067,7 +2637,7 @@ ephy_web_view_is_loading (EphyWebView *view)
  * or load finished successfully
  **/
 gboolean
-ephy_web_view_load_failed (EphyWebView *view)
+ephy_web_view_get_load_failed (EphyWebView *view)
 {
   return view->load_failed;
 }
@@ -3863,4 +3433,391 @@ gboolean
 ephy_web_view_is_in_auth_dialog (EphyWebView *view)
 {
   return view->in_auth_dialog;
+}
+
+static void
+ephy_web_view_dispose (GObject *object)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (object);
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
+
+  ephy_embed_prefs_unregister_ucm (ucm);
+  ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
+
+  untrack_info_bar (&view->geolocation_info_bar);
+  untrack_info_bar (&view->notification_info_bar);
+  untrack_info_bar (&view->microphone_info_bar);
+  untrack_info_bar (&view->webcam_info_bar);
+  untrack_info_bar (&view->password_info_bar);
+  untrack_info_bar (&view->password_form_info_bar);
+
+  g_clear_object (&view->file_monitor);
+
+  g_clear_object (&view->icon);
+
+  if (view->cancellable) {
+    g_cancellable_cancel (view->cancellable);
+    g_clear_object (&view->cancellable);
+  }
+
+  if (view->snapshot_timeout_id) {
+    g_source_remove (view->snapshot_timeout_id);
+    view->snapshot_timeout_id = 0;
+  }
+
+  if (view->reader_js_timeout) {
+    g_source_remove (view->reader_js_timeout);
+    view->reader_js_timeout = 0;
+  }
+
+  g_clear_object (&view->certificate);
+
+  G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
+}
+
+static void
+ephy_web_view_finalize (GObject *object)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (object);
+
+  g_free (view->address);
+  g_free (view->display_address);
+  g_free (view->typed_address);
+  g_free (view->last_committed_address);
+  g_free (view->link_message);
+  g_free (view->loading_message);
+  g_free (view->tls_error_failing_uri);
+  g_free (view->pending_snapshot_uri);
+
+  g_free (view->reader_content);
+  g_free (view->reader_byline);
+  g_free (view->reader_url);
+
+  G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
+}
+
+static void
+ephy_web_view_constructed (GObject *object)
+{
+  EphyWebView *web_view = EPHY_WEB_VIEW (object);
+
+  G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
+
+  g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", web_view);
+
+  g_signal_connect_object (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
+                           "changed", G_CALLBACK (update_navigation_flags), web_view, G_CONNECT_SWAPPED);
+
+  ephy_web_view_style_updated (GTK_WIDGET (web_view));
+}
+
+static void
+ephy_web_view_init (EphyWebView *web_view)
+{
+  EphyEmbedShell *shell;
+
+  shell = ephy_embed_shell_get_default ();
+
+  web_view->is_blank = TRUE;
+  web_view->ever_committed = FALSE;
+  web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+  web_view->security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
+
+  web_view->file_monitor = ephy_file_monitor_new (web_view);
+
+  web_view->history_service = ephy_embed_shell_get_global_history_service (shell);
+
+  web_view->cancellable = g_cancellable_new ();
+
+  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, 0);
+
+  g_signal_connect (web_view, "notify::zoom-level",
+                    G_CALLBACK (zoom_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::title",
+                    G_CALLBACK (title_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::uri",
+                    G_CALLBACK (uri_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::favicon",
+                    G_CALLBACK (icon_changed_cb),
+                    NULL);
+
+  g_signal_connect_object (shell, "password-form-focused",
+                           G_CALLBACK (password_form_focused_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "allow-tls-certificate",
+                           G_CALLBACK (allow_tls_certificate_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "allow-unsafe-browsing",
+                           G_CALLBACK (allow_unsafe_browsing_cb),
+                           web_view, 0);
+}
+
+static void
+ephy_web_view_class_init (EphyWebViewClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  WebKitWebViewClass *webview_class = WEBKIT_WEB_VIEW_CLASS (klass);
+
+  gobject_class->dispose = ephy_web_view_dispose;
+  gobject_class->finalize = ephy_web_view_finalize;
+  gobject_class->get_property = ephy_web_view_get_property;
+  gobject_class->set_property = ephy_web_view_set_property;
+  gobject_class->constructed = ephy_web_view_constructed;
+
+  widget_class->button_press_event = ephy_web_view_button_press_event;
+  widget_class->key_press_event = ephy_web_view_key_press_event;
+  widget_class->style_updated = ephy_web_view_style_updated;
+
+  webview_class->authenticate = ephy_web_view_authenticate;
+  webview_class->close = ephy_web_view_close;
+  webview_class->decide_policy = ephy_web_view_decide_policy;
+  webview_class->insecure_content_detected = ephy_web_view_insecure_content_detected;
+  webview_class->load_changed = ephy_web_view_load_changed;
+  webview_class->load_failed = ephy_web_view_load_failed;
+  webview_class->load_failed_with_tls_errors = ephy_web_view_load_failed_with_tls_errors;
+  webview_class->mouse_target_changed = ephy_web_view_mouse_target_changed;
+  webview_class->permission_request = ephy_web_view_permission_request;
+  webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
+  webview_class->script_dialog = ephy_web_view_script_dialog;
+  webview_class->user_message_received = ephy_web_view_user_message_received;
+  webview_class->web_process_terminated = ephy_web_view_web_process_terminated;
+
+/**
+ * EphyWebView:address:
+ *
+ * View's current address. This is a percent-encoded URI.
+ **/
+  obj_properties[PROP_ADDRESS] =
+    g_param_spec_string ("address",
+                         "Address",
+                         "The view's address",
+                         "",
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:typed-address:
+ *
+ * User typed address for the current view.
+ **/
+  obj_properties[PROP_TYPED_ADDRESS] =
+    g_param_spec_string ("typed-address",
+                         "Typed Address",
+                         "The typed address",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:security-level:
+ *
+ * One of #EphySecurityLevel, determining view's current security level.
+ **/
+  obj_properties[PROP_SECURITY] =
+    g_param_spec_enum ("security-level",
+                       "Security Level",
+                       "The view's security level",
+                       EPHY_TYPE_SECURITY_LEVEL,
+                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:document-type:
+ *
+ * Document type determined for the view.
+ **/
+  obj_properties[PROP_DOCUMENT_TYPE] =
+    g_param_spec_enum ("document-type",
+                       "Document Type",
+                       "The view's document type",
+                       EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
+                       EPHY_WEB_VIEW_DOCUMENT_HTML,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:navigation:
+ *
+ * View's navigation flags as #EphyWebViewNavigationFlags.
+ **/
+  obj_properties[PROP_NAVIGATION] =
+    g_param_spec_flags ("navigation",
+                        "Navigation flags",
+                        "The view's navigation flags",
+                        EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
+                        0,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:status-message:
+ *
+ * Statusbar message corresponding to this view.
+ **/
+  obj_properties[PROP_STATUS_MESSAGE] =
+    g_param_spec_string ("status-message",
+                         "Status Message",
+                         "The view's statusbar message",
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:link-message:
+ *
+ * ???
+ **/
+  obj_properties[PROP_LINK_MESSAGE] =
+    g_param_spec_string ("link-message",
+                         "Link Message",
+                         "The view's link message",
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:icon:
+ *
+ * View's favicon set by the loaded site.
+ **/
+  obj_properties[PROP_ICON] =
+    g_param_spec_object ("icon",
+                         "Icon",
+                         "The view icon's",
+                         GDK_TYPE_PIXBUF,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:is-blank:
+ *
+ * Whether the view is showing the blank address.
+ **/
+  obj_properties[PROP_IS_BLANK] =
+    g_param_spec_boolean ("is-blank",
+                          "Is blank",
+                          "If the EphyWebView is blank",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:reader-mode:
+ *
+ * Whether the view is in reader mode.
+ **/
+  obj_properties[PROP_READER_MODE] =
+    g_param_spec_boolean ("reader-mode",
+                          "Reader mode",
+                          "If the EphyWebView is in reader mode",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:display-address:
+ *
+ * View's current display address.
+ **/
+  obj_properties[PROP_DISPLAY_ADDRESS] =
+    g_param_spec_string ("display-address",
+                         "Display address",
+                         "The view's display address",
+                         "",
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+
+/**
+ * EphyWebView::new-window:
+ * @view: the #EphyWebView that received the signal
+ * @new_view: the newly opened #EphyWebView
+ *
+ * The ::new-window signal is emitted after a new window has been opened by
+ * the view. For example, when a JavaScript popup window is opened.
+ **/
+  g_signal_new ("new-window",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                1,
+                GTK_TYPE_WIDGET);
+
+/**
+ * EphyWebView::search-key-press:
+ * @view: the #EphyWebView that received the signal
+ * @event: the #GdkEventKey which triggered this signal
+ *
+ * The ::search-key-press signal is emitted for keypresses which
+ * should be used for find implementations.
+ **/
+  g_signal_new ("search-key-press",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_LAST,
+                0, g_signal_accumulator_true_handled, NULL, NULL,
+                G_TYPE_BOOLEAN,
+                1,
+                GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+/**
+ * EphyWebView::download-only-load:
+ * @view: the #EphyWebView that received the signal
+ *
+ * The ::download-only-load signal is emitted when the @view has its main load
+ * replaced by a download, and that is the only reason why the @view has been created.
+ **/
+  g_signal_new ("download-only-load",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_FIRST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                0);
+}
+
+/**
+ * ephy_web_view_new:
+ *
+ * Equivalent to g_object_new() but returns an #GtkWidget so you don't have
+ * to cast it when dealing with most code.
+ *
+ * Return value: the newly created #EphyWebView widget
+ **/
+GtkWidget *
+ephy_web_view_new (void)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_prefs_register_ucm (ucm);
+
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+                       "web-context", ephy_embed_shell_get_web_context (shell),
+                       "user-content-manager", ucm,
+                       "settings", ephy_embed_prefs_get_settings (),
+                       "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
+                       NULL);
+}
+
+GtkWidget *
+ephy_web_view_new_with_related_view (WebKitWebView *related_view)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+
+  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_prefs_register_ucm (ucm);
+
+  return g_object_new (EPHY_TYPE_WEB_VIEW,
+                       "related-view", related_view,
+                       "user-content-manager", ucm,
+                       "settings", ephy_embed_prefs_get_settings (),
+                       NULL);
 }
