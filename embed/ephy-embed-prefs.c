@@ -499,13 +499,12 @@ ephy_embed_prefs_init (gpointer user_data)
 {
   guint i;
 
-  webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
-                                                       "enable-fullscreen", TRUE,
-                                                       "enable-javascript", TRUE,
+  webkit_settings = webkit_settings_new_with_settings ("enable-back-forward-navigation-gestures", TRUE,
+                                                       "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
-                                                       "enable-mediasource", TRUE,
+                                                       "enable-webaudio", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205334 */
+                                                       "enable-webgl", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205335 */
                                                        "javascript-can-open-windows-automatically", TRUE,
-                                                       "enable-back-forward-navigation-gestures", TRUE,
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
@@ -540,14 +539,6 @@ ephy_embed_prefs_init (gpointer user_data)
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_DEFAULT_ENCODING,
                    webkit_settings, DEFAULT_ENCODING_SETTING,
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_WEBGL,
-                   webkit_settings, "enable-webgl",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
-                   webkit_settings, "enable-webaudio",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
