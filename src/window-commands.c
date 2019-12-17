@@ -1200,7 +1200,6 @@ static SiteInfo sites[] = {
   { "www.facebook.com", "Facebook" },
   { "twitter.com", "Twitter" },
   { "gmail.com", "GMail" },
-  { "plus.google.com", "Google+" },
   { "youtube.com", "YouTube" },
 };
 
