@@ -442,13 +442,14 @@ bookmarks_export_cb (GObject      *source_object,
                      gpointer      user_data)
 {
   EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (source_object);
+  GtkWidget *window = GTK_WIDGET (user_data);
   GtkWidget *export_info_dialog;
   gboolean exported;
   g_autoptr (GError) error = NULL;
 
   exported = ephy_bookmarks_export_finish (manager, result, &error);
 
-  export_info_dialog = gtk_message_dialog_new (GTK_WINDOW (user_data),
+  export_info_dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                                GTK_DIALOG_MODAL,
                                                exported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
                                                GTK_BUTTONS_OK,
@@ -457,6 +458,9 @@ bookmarks_export_cb (GObject      *source_object,
                                                error->message);
   gtk_dialog_run (GTK_DIALOG (export_info_dialog));
   gtk_widget_destroy (export_info_dialog);
+
+  g_object_unref (manager);
+  g_object_unref (window);
 }
 
 void
@@ -491,7 +495,11 @@ window_cmd_export_bookmarks (GSimpleAction *action,
     gtk_native_dialog_hide (GTK_NATIVE_DIALOG (dialog));
 
     filename = gtk_file_chooser_get_filename (dialog);
-    ephy_bookmarks_export (manager, filename, NULL, bookmarks_export_cb, window);
+    ephy_bookmarks_export (g_object_ref (manager),
+                           filename,
+                           NULL,
+                           bookmarks_export_cb,
+                           g_object_ref (window));
     g_free (filename);
   }
 
@@ -932,11 +940,14 @@ typedef struct {
   GtkWidget *box;
   char *icon_href;
   GdkRGBA icon_rgba;
+  GCancellable *cancellable;
 } EphyApplicationDialogData;
 
 static void
 ephy_application_dialog_data_free (EphyApplicationDialogData *data)
 {
+  g_cancellable_cancel (data->cancellable);
+  g_object_unref (data->cancellable);
   g_free (data->icon_href);
   g_free (data);
 }
@@ -1157,8 +1168,12 @@ fill_default_application_image_cb (GObject      *source,
   EphyApplicationDialogData *data = user_data;
   char *uri = NULL;
   GdkRGBA color = { 0.5, 0.5, 0.5, 0.3 };
+  GError *error = NULL;
 
-  ephy_web_view_get_best_web_app_icon_finish (EPHY_WEB_VIEW (source), async_result, &uri, &color, NULL);
+  ephy_web_view_get_best_web_app_icon_finish (EPHY_WEB_VIEW (source), async_result, &uri, &color, &error);
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
 
   data->icon_href = uri;
   data->icon_rgba = color;
@@ -1173,7 +1188,7 @@ fill_default_application_image_cb (GObject      *source,
 static void
 fill_default_application_image (EphyApplicationDialogData *data)
 {
-  ephy_web_view_get_best_web_app_icon (data->view, NULL, fill_default_application_image_cb, data);
+  ephy_web_view_get_best_web_app_icon (data->view, data->cancellable, fill_default_application_image_cb, data);
 }
 
 typedef struct {
@@ -1185,7 +1200,6 @@ static SiteInfo sites[] = {
   { "www.facebook.com", "Facebook" },
   { "twitter.com", "Twitter" },
   { "gmail.com", "GMail" },
-  { "plus.google.com", "Google+" },
   { "youtube.com", "YouTube" },
 };
 
@@ -1245,15 +1259,18 @@ fill_default_application_title_cb (GObject      *source,
 {
   EphyApplicationDialogData *data = user_data;
   char *title;
+  GError *error = NULL;
 
-  title = ephy_web_view_get_web_app_title_finish (EPHY_WEB_VIEW (source), async_result, NULL);
-  set_default_application_title (data, title);
+  /* Confusing: this can return NULL for no title, even when there is no error. */
+  title = ephy_web_view_get_web_app_title_finish (EPHY_WEB_VIEW (source), async_result, &error);
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    set_default_application_title (data, title);
 }
 
 static void
 fill_default_application_title (EphyApplicationDialogData *data)
 {
-  ephy_web_view_get_web_app_title (data->view, NULL, fill_default_application_title_cb, data);
+  ephy_web_view_get_web_app_title (data->view, data->cancellable, fill_default_application_title_cb, data);
 }
 
 static void
@@ -1476,6 +1493,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   data->image = image;
   data->entry = entry;
   data->spinner = spinner;
+  data->cancellable = g_cancellable_new ();
 
   g_object_bind_property (image, "visible", spinner, "visible", G_BINDING_INVERT_BOOLEAN);
 
@@ -1587,8 +1605,7 @@ take_snapshot (EphyEmbed *embed,
   WebKitWebView *view;
 
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  g_object_ref (view);
-  webkit_web_view_get_snapshot (view,
+  webkit_web_view_get_snapshot (g_object_ref (view),
                                 WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
                                 WEBKIT_SNAPSHOT_OPTIONS_NONE,
                                 NULL,
