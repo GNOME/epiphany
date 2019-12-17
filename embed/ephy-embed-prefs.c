@@ -502,6 +502,7 @@ ephy_embed_prefs_init (gpointer user_data)
   webkit_settings = webkit_settings_new_with_settings ("enable-back-forward-navigation-gestures", TRUE,
                                                        "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
+                                                       "enable-plugins", FALSE,
                                                        "enable-webaudio", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205334 */
                                                        "enable-webgl", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205335 */
                                                        "javascript-can-open-windows-automatically", TRUE,
@@ -527,10 +528,6 @@ ephy_embed_prefs_init (gpointer user_data)
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_ENABLE_CARET_BROWSING,
                    webkit_settings, "enable-caret-browsing",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_PLUGINS,
-                   webkit_settings, "enable-plugins",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_FONT_MIN_SIZE,

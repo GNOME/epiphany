@@ -105,7 +105,6 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_MONOSPACE_FONT               "monospace-font"
 #define EPHY_PREFS_WEB_ENABLE_USER_CSS              "enable-user-css"
 #define EPHY_PREFS_WEB_ENABLE_POPUPS                "enable-popups"
-#define EPHY_PREFS_WEB_ENABLE_PLUGINS               "enable-plugins"
 #define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING        "enable-spell-checking"
 #define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING      "enable-smooth-scrolling"
 #define EPHY_PREFS_WEB_USER_AGENT                   "user-agent"
@@ -134,7 +133,6 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_MONOSPACE_FONT,
   EPHY_PREFS_WEB_ENABLE_USER_CSS,
   EPHY_PREFS_WEB_ENABLE_POPUPS,
-  EPHY_PREFS_WEB_ENABLE_PLUGINS,
   EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
   EPHY_PREFS_WEB_USER_AGENT,
