@@ -541,7 +541,7 @@ got_snapshot_path_for_url_cb (EphySnapshotService *service,
   snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, &error);
   if (snapshot) {
     ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), url, snapshot);
-  } else {
+  } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     /* Bad luck, not something to warn about. */
     g_info ("Failed to get snapshot for URL %s: %s", url, error->message);
   }
@@ -553,6 +553,7 @@ void
 ephy_embed_shell_schedule_thumbnail_update (EphyEmbedShell *shell,
                                             EphyHistoryURL *url)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphySnapshotService *service;
   const char *snapshot;
 
@@ -564,7 +565,7 @@ ephy_embed_shell_schedule_thumbnail_update (EphyEmbedShell *shell,
   } else {
     ephy_snapshot_service_get_snapshot_path_for_url_async (service,
                                                            url->url,
-                                                           NULL,
+                                                           priv->cancellable,
                                                            (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
                                                            g_strdup (url->url));
   }
