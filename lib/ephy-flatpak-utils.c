@@ -105,7 +105,8 @@ open_file_complete_cb (GObject      *source,
 
   return_value = g_dbus_proxy_call_with_unix_fd_list_finish (proxy, NULL, result, &error);
   if (!return_value) {
-    g_warning ("Failed to open file via portal: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to open file via portal: %s", error->message);
     g_task_return_error (task, error);
     goto out;
   }
@@ -164,7 +165,8 @@ portal_proxy_created_cb (GObject      *source,
 
   proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
   if (!proxy) {
-    g_warning ("Failed to create D-Bus proxy for OpenURI portal: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to create D-Bus proxy for OpenURI portal: %s", error->message);
     g_task_return_error (task, error);
     close (fd);
     return;
@@ -209,7 +211,7 @@ portal_proxy_created_cb (GObject      *source,
                                        G_DBUS_CALL_FLAGS_NONE,
                                        -1,
                                        fd_list,
-                                       NULL,
+                                       g_task_get_cancellable (task),
                                        open_file_complete_cb,
                                        task);
   g_object_unref (fd_list);
@@ -245,7 +247,7 @@ ephy_open_file_via_flatpak_portal (const char          *path,
                             "org.freedesktop.portal.Desktop",
                             "/org/freedesktop/portal/desktop",
                             "org.freedesktop.portal.OpenURI",
-                            NULL,
+                            cancellable,
                             portal_proxy_created_cb,
                             task);
 }

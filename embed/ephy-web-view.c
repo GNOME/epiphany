@@ -112,7 +112,8 @@ struct _EphyWebView {
   GtkWidget *password_form_info_bar;
 
   EphyHistoryService *history_service;
-  GCancellable *history_service_cancellable;
+
+  GCancellable *cancellable;
 
   guint snapshot_timeout_id;
   char *pending_snapshot_uri;
@@ -724,7 +725,8 @@ got_snapshot_path_cb (EphySnapshotService *service,
     g_free (snapshot);
   } else {
     /* Bad luck, not something to warn about. */
-    g_info ("Failed to get snapshot for URL %s: %s", url, error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_info ("Failed to get snapshot for URL %s: %s", url, error->message);
     g_error_free (error);
   }
   g_free (url);
@@ -735,7 +737,8 @@ take_snapshot (EphyWebView *view)
 {
   EphySnapshotService *service = ephy_snapshot_service_get_default ();
 
-  ephy_snapshot_service_get_snapshot_path_async (service, WEBKIT_WEB_VIEW (view), NULL,
+  ephy_snapshot_service_get_snapshot_path_async (service, WEBKIT_WEB_VIEW (view),
+                                                 view->cancellable,
                                                  (GAsyncReadyCallback)got_snapshot_path_cb,
                                                  g_strdup (view->pending_snapshot_uri));
 }
@@ -916,9 +919,9 @@ ephy_web_view_dispose (GObject *object)
 
   g_clear_object (&view->icon);
 
-  if (view->history_service_cancellable) {
-    g_cancellable_cancel (view->history_service_cancellable);
-    g_clear_object (&view->history_service_cancellable);
+  if (view->cancellable) {
+    g_cancellable_cancel (view->cancellable);
+    g_clear_object (&view->cancellable);
   }
 
   if (view->snapshot_timeout_id) {
@@ -1006,7 +1009,8 @@ readability_js_finish_cb (GObject      *object,
 
   js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
   if (!js_result) {
-    g_warning ("Error running javascript: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error running javascript: %s", error->message);
     g_error_free (error);
     return;
   }
@@ -1030,7 +1034,7 @@ run_readability_js_if_needed (gpointer data)
   if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
     webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
                                                    "/org/gnome/epiphany/Readability.js",
-                                                   NULL,
+                                                   web_view->cancellable,
                                                    readability_js_finish_cb,
                                                    web_view);
   }
@@ -1760,7 +1764,7 @@ restore_zoom_level (EphyWebView *view,
 {
   if (ephy_embed_utils_address_has_web_scheme (address))
     ephy_history_service_get_host_for_url (view->history_service,
-                                           address, view->history_service_cancellable,
+                                           address, view->cancellable,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
@@ -3082,7 +3086,8 @@ ephy_web_view_init (EphyWebView *web_view)
   web_view->file_monitor = ephy_file_monitor_new (web_view);
 
   web_view->history_service = ephy_embed_shell_get_global_history_service (shell);
-  web_view->history_service_cancellable = g_cancellable_new ();
+
+  web_view->cancellable = g_cancellable_new ();
 
   g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
                            G_CALLBACK (reader_setting_changed_cb),
@@ -3568,14 +3573,17 @@ has_modified_forms_cb (WebKitWebView *view,
 {
   WebKitJavascriptResult *js_result;
   gboolean retval = FALSE;
+  GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, NULL);
-  if (js_result) {
+  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  if (!js_result) {
+    g_task_return_error (task, error);
+  } else {
     retval = jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result));
+    g_task_return_boolean (task, retval);
     webkit_javascript_result_unref (js_result);
   }
 
-  g_task_return_boolean (task, retval);
   g_object_unref (task);
 }
 
@@ -3898,10 +3906,10 @@ web_resource_get_data_cb (WebKitWebResource *resource,
 
   data = webkit_web_resource_get_data_finish (resource, result, &data_length, &error);
   if (!data) {
-    g_printerr ("Failed to save page: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to save page: %s", error->message);
     g_error_free (error);
     g_object_unref (output_stream);
-
     return;
   }
 
@@ -3925,14 +3933,15 @@ ephy_web_view_save_main_resource_cb (GFile         *file,
 
   output_stream = g_file_replace_finish (file, result, &error);
   if (!output_stream) {
-    g_printerr ("Failed to save page: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to save page: %s", error->message);
     g_error_free (error);
-
     return;
   }
 
   resource = webkit_web_view_get_main_resource (view);
-  webkit_web_resource_get_data (resource, NULL,
+  webkit_web_resource_get_data (resource,
+                                EPHY_WEB_VIEW (view)->cancellable,
                                 (GAsyncReadyCallback)web_resource_get_data_cb,
                                 output_stream);
 }
@@ -3960,7 +3969,8 @@ ephy_web_view_save (EphyWebView *view,
   else
     g_file_replace_async (file, NULL, FALSE,
                           G_FILE_CREATE_REPLACE_DESTINATION | G_FILE_CREATE_PRIVATE,
-                          G_PRIORITY_DEFAULT, NULL,
+                          G_PRIORITY_DEFAULT,
+                          view->cancellable,
                           (GAsyncReadyCallback)ephy_web_view_save_main_resource_cb,
                           view);
   g_object_unref (file);
