@@ -114,7 +114,6 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_MOBILE_USER_AGENT            "mobile-user-agent"
 #define EPHY_PREFS_WEB_COOKIES_POLICY               "cookies-policy"
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING             "default-encoding"
-#define EPHY_PREFS_WEB_DO_NOT_TRACK                 "do-not-track"
 #define EPHY_PREFS_WEB_ENABLE_ADBLOCK               "enable-adblock"
 #define EPHY_PREFS_WEB_REMEMBER_PASSWORDS           "remember-passwords"
 #define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS  "enable-site-specific-quirks"
@@ -146,7 +145,6 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_MOBILE_USER_AGENT,
   EPHY_PREFS_WEB_COOKIES_POLICY,
   EPHY_PREFS_WEB_DEFAULT_ENCODING,
-  EPHY_PREFS_WEB_DO_NOT_TRACK,
   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
   EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
