@@ -76,10 +76,6 @@
  * #EphyWindow is Epiphany's main widget.
  */
 
-static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
-                                                          GVariant      *state,
-                                                          gpointer       user_data);
-
 const struct {
   const char *action_and_target;
   const char *accelerators[9];
@@ -119,7 +115,6 @@ const struct {
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
   { "win.fullscreen", { "F11", NULL } },
-  { "win.allow-popup-windows", { NULL } },
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
@@ -855,7 +850,6 @@ static const GActionEntry window_entries [] = {
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
   { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },
-  { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state }
 };
 
 static const GActionEntry tab_entries [] = {
@@ -1236,27 +1230,6 @@ sync_tab_popup_windows (EphyWebView *view,
                         EphyWindow  *window)
 {
   /* FIXME: show popup count somehow */
-}
-
-static void
-sync_tab_popups_allowed (EphyWebView *view,
-                         GParamSpec  *pspec,
-                         EphyWindow  *window)
-{
-  GActionGroup *action_group;
-  GAction *action;
-  gboolean allow;
-
-  g_assert (EPHY_IS_WEB_VIEW (view));
-  g_assert (EPHY_IS_WINDOW (window));
-
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       "allow-popup-windows");
-
-  g_object_get (view, "popups-allowed", &allow, NULL);
-
-  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (allow));
 }
 
 static void
@@ -2338,7 +2311,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_bookmarked_status (view, NULL, window);
   sync_tab_address (view, NULL, window);
   sync_tab_popup_windows (view, NULL, window);
-  sync_tab_popups_allowed (view, NULL, window);
 
   sync_tab_zoom (web_view, NULL, window);
 
@@ -2365,12 +2337,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            G_CALLBACK (decide_policy_cb),
                            window, 0);
 
-  g_signal_connect_object (view, "notify::hidden-popup-count",
-                           G_CALLBACK (sync_tab_popup_windows),
-                           window, 0);
-  g_signal_connect_object (view, "notify::popups-allowed",
-                           G_CALLBACK (sync_tab_popups_allowed),
-                           window, 0);
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (sync_tab_title),
                            window, 0);
@@ -2438,12 +2404,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (decide_policy_cb),
-                                        window);
-  g_signal_handlers_disconnect_by_func (view,
-                                        G_CALLBACK (sync_tab_popup_windows),
-                                        window);
-  g_signal_handlers_disconnect_by_func (view,
-                                        G_CALLBACK (sync_tab_popups_allowed),
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (sync_tab_security),
@@ -3353,27 +3313,6 @@ ephy_window_finalize (GObject *object)
 }
 
 static void
-allow_popups_notifier (GSettings  *settings,
-                       char       *key,
-                       EphyWindow *window)
-{
-  GList *tabs;
-  EphyEmbed *embed;
-
-  g_assert (EPHY_IS_WINDOW (window));
-
-  tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
-
-  for (; tabs; tabs = g_list_next (tabs)) {
-    embed = EPHY_EMBED (tabs->data);
-    g_assert (EPHY_IS_EMBED (embed));
-
-    g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
-  }
-  g_list_free (tabs);
-}
-
-static void
 sync_user_input_cb (EphyLocationController *action,
                     GParamSpec             *pspec,
                     EphyWindow             *window)
@@ -3774,10 +3713,6 @@ ephy_window_constructed (GObject *object)
                                 NULL,
                                 action, NULL);
 
-  g_signal_connect (EPHY_SETTINGS_WEB,
-                    "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
-                    G_CALLBACK (allow_popups_notifier), window);
-
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "win");
 
@@ -4031,26 +3966,6 @@ ephy_window_set_zoom (EphyWindow *window,
 
   if (zoom != current_zoom)
     webkit_web_view_set_zoom_level (web_view, zoom);
-}
-
-static void
-ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
-                                              GVariant      *state,
-                                              gpointer       user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyEmbed *embed;
-  gboolean allow;
-
-  g_assert (EPHY_IS_WINDOW (window));
-
-  embed = window->active_embed;
-  g_assert (EPHY_IS_EMBED (embed));
-
-  allow = g_variant_get_boolean (state);
-
-  g_object_set (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed", allow, NULL);
-  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (allow));
 }
 
 /**
