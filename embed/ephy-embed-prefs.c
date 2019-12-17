@@ -53,10 +53,9 @@ update_user_style_on_all_ucm (void)
   for (list = ucm_list; list != NULL; list = list->next) {
     WebKitUserContentManager *ucm = list->data;
 
+    webkit_user_content_manager_remove_all_style_sheets (ucm);
     if (style_sheet)
       webkit_user_content_manager_add_style_sheet (ucm, style_sheet);
-    else
-      webkit_user_content_manager_remove_all_style_sheets (ucm);
   }
 }
 
@@ -67,16 +66,18 @@ user_style_sheet_output_stream_splice_cb (GOutputStream *output_stream,
 {
   gssize bytes;
 
+  g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
+
   bytes = g_output_stream_splice_finish (output_stream, result, NULL);
   if (bytes > 0) {
-    g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
-
     style_sheet = webkit_user_style_sheet_new (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
                                                WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES, WEBKIT_USER_STYLE_LEVEL_USER,
                                                NULL, NULL);
-
-    update_user_style_on_all_ucm ();
   }
+
+  update_user_style_on_all_ucm ();
+
+  g_object_unref (output_stream);
 }
 
 static void
@@ -84,23 +85,21 @@ user_style_sheet_read_cb (GFile        *file,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
-  GFileInputStream *input_stream;
-  GOutputStream *output_stream;
+  g_autoptr (GFileInputStream) input_stream = NULL;
+  g_autoptr (GOutputStream) output_stream = NULL;
 
   input_stream = g_file_read_finish (file, result, NULL);
   if (!input_stream)
     return;
 
   output_stream = g_memory_output_stream_new_resizable ();
-  g_output_stream_splice_async (output_stream, G_INPUT_STREAM (input_stream),
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE |
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+  g_output_stream_splice_async (g_steal_pointer (&output_stream),
+                                G_INPUT_STREAM (input_stream),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
                                 G_PRIORITY_DEFAULT,
                                 NULL,
                                 (GAsyncReadyCallback)user_style_sheet_output_stream_splice_cb,
                                 NULL);
-  g_object_unref (input_stream);
-  g_object_unref (output_stream);
 }
 
 static void
@@ -121,37 +120,33 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
                                       const char *key,
                                       gpointer    data)
 {
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *filename = NULL;
   gboolean value;
+  GError *error = NULL;
 
   value = g_settings_get_boolean (settings, key);
 
+  g_clear_object (&user_style_sheet_monitor);
+  g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
+
   if (!value) {
-    g_clear_object (&user_style_sheet_monitor);
-    g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
-
     update_user_style_on_all_ucm ();
+    return;
+  }
+
+  filename = g_build_filename (ephy_profile_dir (), USER_STYLESHEET_FILENAME, NULL);
+  file = g_file_new_for_path (filename);
+
+  g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
+                     (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
+
+  user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+  if (user_style_sheet_monitor == NULL) {
+    g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+    g_error_free (error);
   } else {
-    GFile *file;
-    GError *error = NULL;
-    char *filename;
-
-    filename = g_build_filename (ephy_profile_dir (), USER_STYLESHEET_FILENAME, NULL);
-    file = g_file_new_for_path (filename);
-    g_free (filename);
-
-    g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
-                       (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
-
-    g_assert (user_style_sheet_monitor == NULL);
-    user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
-    if (user_style_sheet_monitor == NULL) {
-      g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
-      g_error_free (error);
-    } else {
-      g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
-    }
-
-    g_object_unref (file);
+    g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
   }
 }
 
