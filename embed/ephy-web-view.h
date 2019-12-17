@@ -146,7 +146,7 @@ char                      *ephy_web_view_get_web_app_title_finish (EphyWebView  
 void                       ephy_web_view_set_visit_type           (EphyWebView *view, 
                                                                    EphyHistoryPageVisitType visit_type);
 EphyHistoryPageVisitType   ephy_web_view_get_visit_type           (EphyWebView *view);
-void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
+
 void                       ephy_web_view_save                     (EphyWebView               *view,
                                                                    const char                *uri);
 void                       ephy_web_view_load_homepage            (EphyWebView               *view);
