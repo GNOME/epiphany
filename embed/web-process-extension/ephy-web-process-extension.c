@@ -45,6 +45,8 @@ struct _EphyWebProcessExtension {
   WebKitWebExtension *extension;
   gboolean initialized;
 
+  GCancellable *cancellable;
+
   EphyWebOverviewModel *overview_model;
   EphyPermissionsManager *permissions_manager;
 
@@ -377,6 +379,11 @@ ephy_web_process_extension_dispose (GObject *object)
 {
   EphyWebProcessExtension *extension = EPHY_WEB_PROCESS_EXTENSION (object);
 
+  if (extension->cancellable) {
+    g_cancellable_cancel (extension->cancellable);
+    g_clear_object (&extension->cancellable);
+  }
+
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
 
@@ -402,6 +409,7 @@ ephy_web_process_extension_class_init (EphyWebProcessExtensionClass *klass)
 static void
 ephy_web_process_extension_init (EphyWebProcessExtension *extension)
 {
+  extension->cancellable = g_cancellable_new ();
   extension->overview_model = ephy_web_overview_model_new ();
 }
 
@@ -463,7 +471,8 @@ web_view_query_usernames_ready_cb (WebKitWebPage            *web_page,
 
   reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
   if (error) {
-    g_warning ("Error getting usernames from WebView: %s\n", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error getting usernames from WebView: %s\n", error->message);
     g_free (data);
     return;
   }
@@ -513,7 +522,8 @@ js_query_usernames (const char              *origin,
   data->frame_id = frame_id;
   message = webkit_user_message_new ("PasswordManager.QueryUsernames",
                                      g_variant_new ("s", origin));
-  webkit_web_page_send_message_to_view (web_page, message, NULL,
+  webkit_web_page_send_message_to_view (web_page, message,
+                                        extension->cancellable,
                                         (GAsyncReadyCallback)web_view_query_usernames_ready_cb,
                                         data);
 }
@@ -532,7 +542,8 @@ web_view_query_password_ready_cb (WebKitWebPage            *web_page,
 
   reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
   if (error) {
-    g_warning ("Error getting password from WebView: %s\n", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error getting password from WebView: %s\n", error->message);
     g_free (data);
     return;
   }
@@ -586,7 +597,8 @@ js_query_password (const char              *origin,
   data->frame_id = frame_id;
   message = webkit_user_message_new ("PasswordManager.QueryPassword",
                                      g_variant_new ("(ssmsmss)", origin, target_origin, username, username_field, password_field));
-  webkit_web_page_send_message_to_view (web_page, message, NULL,
+  webkit_web_page_send_message_to_view (web_page, message,
+                                        extension->cancellable,
                                         (GAsyncReadyCallback)web_view_query_password_ready_cb,
                                         data);
 }
