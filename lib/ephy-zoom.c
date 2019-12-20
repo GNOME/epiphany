@@ -29,7 +29,7 @@
 #define NUM_ZOOM_STEPS 14
 
 static float
-  zoom_steps [NUM_ZOOM_STEPS] = {
+  zoom_steps[NUM_ZOOM_STEPS] = {
   0.30f,
   0.50f,
   0.67f,
