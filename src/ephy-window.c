@@ -2518,9 +2518,9 @@ setup_tab_accels (EphyWindow *window)
     char *action_name_with_tab;
     char *accel;
 
-    action_name = g_strdup_printf ("accel-%d", i);
+    action_name = g_strdup_printf ("accel-%u", i);
     action_name_with_tab = g_strconcat ("tab.", action_name, NULL);
-    accel = g_strdup_printf ("<alt>%d", (i + 1) % TAB_ACCELS_N);
+    accel = g_strdup_printf ("<alt>%u", (i + 1) % TAB_ACCELS_N);
 
     simple_action = g_simple_action_new (action_name, NULL);
 
