@@ -149,10 +149,7 @@ static void
 remove_pending_sorter_source (EphyHistoryDialog *self,
                               gboolean           free_urls)
 {
-  if (self->sorter_source != 0) {
-    g_source_remove (self->sorter_source);
-    self->sorter_source = 0;
-  }
+  g_clear_handle_id (&self->sorter_source, g_source_remove);
 
   if (free_urls && self->urls) {
     g_list_free_full (self->urls, (GDestroyNotify)ephy_history_url_free);

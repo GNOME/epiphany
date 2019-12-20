@@ -722,8 +722,6 @@ save_web_application (PrefsDialog *dialog)
   gboolean changed = FALSE;
   const char *text;
 
-  dialog->webapp_save_id = 0;
-
   if (!dialog->webapp)
     return G_SOURCE_REMOVE;
 
@@ -760,9 +758,7 @@ prefs_dialog_save_web_application (PrefsDialog *dialog)
   if (!dialog->webapp)
     return;
 
-  if (dialog->webapp_save_id)
-    g_source_remove (dialog->webapp_save_id);
-
+  g_clear_handle_id (&dialog->webapp_save_id, g_source_remove);
   dialog->webapp_save_id = g_timeout_add_seconds (1, (GSourceFunc)save_web_application, dialog);
 }
 
@@ -1660,6 +1656,7 @@ prefs_dialog_response_cb (GtkWidget   *widget,
 {
   if (dialog->webapp_save_id) {
     g_source_remove (dialog->webapp_save_id);
+    dialog->webapp_save_id = 0;
     save_web_application (dialog);
   }
 

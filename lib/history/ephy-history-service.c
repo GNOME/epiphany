@@ -162,10 +162,7 @@ ephy_history_service_dispose (GObject *object)
 {
   EphyHistoryService *self = EPHY_HISTORY_SERVICE (object);
 
-  if (self->queue_urls_visited_id) {
-    g_source_remove (self->queue_urls_visited_id);
-    self->queue_urls_visited_id = 0;
-  }
+  g_clear_handle_id (&self->queue_urls_visited_id, g_source_remove);
 
   G_OBJECT_CLASS (ephy_history_service_parent_class)->dispose (object);
 }
