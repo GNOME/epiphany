@@ -77,7 +77,7 @@ struct _EphyLocationEntry {
   guint progress_timeout;
   gdouble progress_fraction;
 
-  gulong dns_prefetch_handler;
+  guint dns_prefetch_handle_id;
 
   guint user_changed : 1;
   guint can_redo : 1;
@@ -374,10 +374,7 @@ ephy_location_entry_dispose (GObject *object)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
-  if (entry->progress_timeout) {
-    g_source_remove (entry->progress_timeout);
-    entry->progress_timeout = 0;
-  }
+  g_clear_handle_id (&entry->progress_timeout, g_source_remove);
 
   g_clear_object (&entry->css_provider);
 
@@ -1016,7 +1013,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
   le->user_changed = FALSE;
   le->block_update = FALSE;
   le->saved_text = NULL;
-  le->dns_prefetch_handler = 0;
 
   ephy_location_entry_construct_contents (le);
 }
@@ -1051,9 +1047,9 @@ do_dns_prefetch (PrefetchHelper *helper)
     webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), helper->uri->host);
 #endif
 
-  helper->entry->dns_prefetch_handler = 0;
+  helper->entry->dns_prefetch_handle_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /*
@@ -1081,16 +1077,14 @@ proxy_resolver_ready_cb (GObject      *object,
     return;
   }
 
-  if (helper->entry->dns_prefetch_handler)
-    g_source_remove (helper->entry->dns_prefetch_handler);
-
-  helper->entry->dns_prefetch_handler =
+  g_clear_handle_id (&helper->entry->dns_prefetch_handle_id, g_source_remove);
+  helper->entry->dns_prefetch_handle_id =
     g_timeout_add_full (G_PRIORITY_DEFAULT,
                         250,
                         (GSourceFunc)do_dns_prefetch,
                         helper,
                         (GDestroyNotify)free_prefetch_helper);
-  g_source_set_name_by_id (helper->entry->dns_prefetch_handler, "[epiphany] do_dns_prefetch");
+  g_source_set_name_by_id (helper->entry->dns_prefetch_handle_id, "[epiphany] do_dns_prefetch");
 }
 
 static void
@@ -1354,10 +1348,7 @@ progress_hide (gpointer user_data)
 
   gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), 0);
 
-  if (entry->progress_timeout) {
-    g_source_remove (entry->progress_timeout);
-    entry->progress_timeout = 0;
-  }
+  g_clear_handle_id (&entry->progress_timeout, g_source_remove);
 
   return G_SOURCE_REMOVE;
 }
@@ -1398,10 +1389,7 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
 {
   gdouble current_progress;
 
-  if (entry->progress_timeout) {
-    g_source_remove (entry->progress_timeout);
-    entry->progress_timeout = 0;
-  }
+  g_clear_handle_id (&entry->progress_timeout, g_source_remove);
 
   if (!loading) {
     /* Setting progress to 0 when it is already 0 can actually cause the

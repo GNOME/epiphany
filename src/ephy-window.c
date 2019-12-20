@@ -1262,15 +1262,9 @@ static void
 _ephy_window_set_context_event (EphyWindow     *window,
                                 EphyEmbedEvent *event)
 {
-  if (window->idle_worker != 0) {
-    g_source_remove (window->idle_worker);
-    window->idle_worker = 0;
-  }
+  g_clear_handle_id (&window->idle_worker, g_source_remove);
 
-  if (window->context_event != NULL) {
-    g_object_unref (window->context_event);
-  }
-
+  g_clear_object (&window->context_event);
   window->context_event = event != NULL ? g_object_ref (event) : NULL;
 }
 

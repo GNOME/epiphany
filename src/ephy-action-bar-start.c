@@ -356,10 +356,7 @@ navigation_button_release_event_cb (GtkButton *button,
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
 
-  if (action_bar_start->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (action_bar_start->navigation_buttons_menu_timeout);
-    action_bar_start->navigation_buttons_menu_timeout = 0;
-  }
+  g_clear_handle_id (&action_bar_start->navigation_buttons_menu_timeout, g_source_remove);
 
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
@@ -439,10 +436,7 @@ navigation_leave_notify_event_cb (GtkButton *button,
 {
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
 
-  if (action_bar_start->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (action_bar_start->navigation_buttons_menu_timeout);
-    action_bar_start->navigation_buttons_menu_timeout = 0;
-  }
+  g_clear_handle_id (&action_bar_start->navigation_buttons_menu_timeout, g_source_remove);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -467,10 +461,7 @@ ephy_action_bar_start_dispose (GObject *object)
 {
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (object);
 
-  if (action_bar_start->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (action_bar_start->navigation_buttons_menu_timeout);
-    action_bar_start->navigation_buttons_menu_timeout = 0;
-  }
+  g_clear_handle_id (&action_bar_start->navigation_buttons_menu_timeout, g_source_remove);
 
   G_OBJECT_CLASS (ephy_action_bar_start_parent_class)->dispose (object);
 }

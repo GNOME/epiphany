@@ -385,10 +385,7 @@ ephy_gsb_service_dispose (GObject *object)
   g_clear_object (&self->storage);
   g_clear_object (&self->session);
 
-  if (self->source_id != 0) {
-    g_source_remove (self->source_id);
-    self->source_id = 0;
-  }
+  g_clear_handle_id (&self->source_id, g_source_remove);
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->dispose (object);
 }
