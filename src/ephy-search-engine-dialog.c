@@ -296,7 +296,7 @@ static char *
 generate_new_unique_default_engine_name (EphySearchEngineDialog *dialog)
 {
   guint i = 1;
-  char *default_name = g_strdup_printf ("%s %d", NEW_SEARCH_ENGINE_NAME, i);
+  char *default_name = g_strdup_printf ("%s %u", NEW_SEARCH_ENGINE_NAME, i);
 
   while (dialog_list_box_child_n_occurence (default_name, dialog) != 0) {
     if (i == UINT_MAX)
@@ -304,7 +304,7 @@ generate_new_unique_default_engine_name (EphySearchEngineDialog *dialog)
 
     i++;
     g_free (default_name);
-    default_name = g_strdup_printf ("%s %d", NEW_SEARCH_ENGINE_NAME, i);
+    default_name = g_strdup_printf ("%s %u", NEW_SEARCH_ENGINE_NAME, i);
   }
 
   return default_name;
