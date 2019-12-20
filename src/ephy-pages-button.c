@@ -42,7 +42,7 @@ enum {
   N_PROPS
 };
 
-static GParamSpec *properties [N_PROPS];
+static GParamSpec *properties[N_PROPS];
 
 /* FIXME: I hope there is a better way to prevent the label from changing scale */
 static void
