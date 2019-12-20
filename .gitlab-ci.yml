@@ -25,11 +25,15 @@ cppcheck:
     --error-exitcode=1
     --library=gtk
     --quiet
+    --suppress=constArgument
     --suppress=ctunullpointer
     --suppress=leakNoVarFunctionCall
     --suppress=literalWithCharPtrCompare
     --suppress=memleak
+    --suppress=nullPointer
+    --suppress=nullPointerRedundantCheck
     --suppress=redundantAssignment
+    --suppress=syntaxError
     --suppress=unreadVariable
     --suppress=variableScope
     --suppress=varFuncNullUB
