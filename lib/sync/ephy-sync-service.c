@@ -1670,10 +1670,7 @@ ephy_sync_service_stop_periodical_sync (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  if (self->source_id != 0) {
-    g_source_remove (self->source_id);
-    self->source_id = 0;
-  }
+  g_clear_handle_id (&self->source_id, g_source_remove);
 }
 
 static void

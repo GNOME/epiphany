@@ -516,13 +516,10 @@ ephy_session_close (EphySession *session)
 
   LOG ("ephy_session_close");
 
-  if (session->save_source_id) {
-    /* There's a save pending, cancel it and save the session now since
-     * after closing the session the saving is no longer allowed.
-     */
-    g_source_remove (session->save_source_id);
-    session->save_source_id = 0;
-  }
+  /* If there's a save pending, cancel it and save the session now since
+   * after closing the session the saving is no longer allowed.
+   */
+  g_clear_handle_id (&session->save_source_id, g_source_remove);
 
   if (session->closing)
     return;

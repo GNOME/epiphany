@@ -1383,10 +1383,7 @@ ephy_web_view_load_changed (WebKitWebView   *web_view,
     case WEBKIT_LOAD_STARTED: {
       view->load_failed = FALSE;
 
-      if (view->snapshot_timeout_id) {
-        g_source_remove (view->snapshot_timeout_id);
-        view->snapshot_timeout_id = 0;
-      }
+      g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
 
       if (view->address == NULL || view->address[0] == '\0') {
         /* We've probably never loaded any page before. */
@@ -1480,10 +1477,7 @@ ephy_web_view_load_changed (WebKitWebView   *web_view,
 
       ephy_web_view_thaw_history (view);
 
-      if (view->reader_js_timeout) {
-        g_source_remove (view->reader_js_timeout);
-        view->reader_js_timeout = 0;
-      }
+      g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
 
       view->reader_loading = FALSE;
       if (!view->reader_active)
@@ -3451,8 +3445,8 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->password_info_bar);
   untrack_info_bar (&view->password_form_info_bar);
 
+  g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
-
   g_clear_object (&view->icon);
 
   if (view->cancellable) {
@@ -3460,17 +3454,8 @@ ephy_web_view_dispose (GObject *object)
     g_clear_object (&view->cancellable);
   }
 
-  if (view->snapshot_timeout_id) {
-    g_source_remove (view->snapshot_timeout_id);
-    view->snapshot_timeout_id = 0;
-  }
-
-  if (view->reader_js_timeout) {
-    g_source_remove (view->reader_js_timeout);
-    view->reader_js_timeout = 0;
-  }
-
-  g_clear_object (&view->certificate);
+  g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
+  g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }

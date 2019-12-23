@@ -214,10 +214,7 @@ update_find_string (EphyFindToolbar *toolbar)
   g_free (toolbar->find_string);
   toolbar->find_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (toolbar->entry)));
 
-  if (toolbar->find_source_id != 0) {
-    g_source_remove (toolbar->find_source_id);
-    toolbar->find_source_id = 0;
-  }
+  g_clear_handle_id (&toolbar->find_source_id, g_source_remove);
 
   if (strlen (toolbar->find_string) == 0) {
     clear_status (toolbar);

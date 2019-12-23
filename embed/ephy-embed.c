@@ -341,9 +341,7 @@ ephy_embed_entering_fullscreen (EphyEmbed *embed)
   if (!g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN)) {
     gtk_widget_show (embed->fullscreen_message_label);
 
-    if (embed->fullscreen_message_id)
-      g_source_remove (embed->fullscreen_message_id);
-
+    g_clear_handle_id (&embed->fullscreen_message_id, g_source_remove);
     embed->fullscreen_message_id = g_timeout_add_seconds (5,
                                                           (GSourceFunc)fullscreen_message_label_hide,
                                                           embed);
@@ -362,37 +360,13 @@ ephy_embed_dispose (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
 
-  if (embed->pop_statusbar_later_source_id) {
-    g_source_remove (embed->pop_statusbar_later_source_id);
-    embed->pop_statusbar_later_source_id = 0;
-  }
+  g_clear_handle_id (&embed->pop_statusbar_later_source_id, g_source_remove);
+  g_clear_handle_id (&embed->clear_progress_source_id, g_source_remove);
+  g_clear_handle_id (&embed->delayed_request_source_id, g_source_remove);
+  g_clear_handle_id (&embed->fullscreen_message_id, g_source_remove);
 
-  if (embed->clear_progress_source_id) {
-    g_source_remove (embed->clear_progress_source_id);
-    embed->clear_progress_source_id = 0;
-  }
-
-  if (embed->delayed_request_source_id) {
-    g_source_remove (embed->delayed_request_source_id);
-    embed->delayed_request_source_id = 0;
-  }
-
-  /* Do not listen to status message notifications anymore, if we try
-   * to update the statusbar after dispose we might crash. */
-  if (embed->status_handler_id) {
-    g_signal_handler_disconnect (embed->web_view, embed->status_handler_id);
-    embed->status_handler_id = 0;
-  }
-
-  if (embed->progress_update_handler_id) {
-    g_signal_handler_disconnect (embed->web_view, embed->progress_update_handler_id);
-    embed->progress_update_handler_id = 0;
-  }
-
-  if (embed->fullscreen_message_id) {
-    g_source_remove (embed->fullscreen_message_id);
-    embed->fullscreen_message_id = 0;
-  }
+  g_clear_signal_handler (&embed->status_handler_id, embed->web_view);
+  g_clear_signal_handler (&embed->progress_update_handler_id, embed->web_view);
 
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
@@ -599,11 +573,7 @@ status_message_notify_cb (EphyWebView *view,
   message = ephy_web_view_get_status_message (view);
 
   if (message) {
-    if (embed->pop_statusbar_later_source_id) {
-      g_source_remove (embed->pop_statusbar_later_source_id);
-      embed->pop_statusbar_later_source_id = 0;
-    }
-
+    g_clear_handle_id (&embed->pop_statusbar_later_source_id, g_source_remove);
     ephy_embed_statusbar_pop (embed, embed->tab_message_id);
     ephy_embed_statusbar_push (embed, embed->tab_message_id, message);
   } else {
@@ -634,10 +604,7 @@ progress_update (EphyWebView *view,
   gboolean loading;
   const char *uri;
 
-  if (embed->clear_progress_source_id) {
-    g_source_remove (embed->clear_progress_source_id);
-    embed->clear_progress_source_id = 0;
-  }
+  g_clear_handle_id (&embed->clear_progress_source_id, g_source_remove);
 
   uri = webkit_web_view_get_uri (embed->web_view);
   if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
