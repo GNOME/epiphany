@@ -174,6 +174,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK      "disable-save-to-disk"
 #define EPHY_PREFS_LOCKDOWN_PRINTING          "disable-printing"
 #define EPHY_PREFS_LOCKDOWN_QUIT              "disable-quit"
+#define EPHY_PREFS_LOCKDOWN_CONTEXT_MENU      "disable-context-menu"
 
 #define EPHY_PREFS_SYNC_SCHEMA            "org.gnome.Epiphany.sync"
 #define EPHY_PREFS_SYNC_USER              "sync-user"

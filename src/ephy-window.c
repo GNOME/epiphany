@@ -1479,6 +1479,10 @@ populate_context_menu (WebKitWebView       *web_view,
   char *search_selection_action_name = NULL;
   const char *selected_text = NULL;
 
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_CONTEXT_MENU))
+    return GDK_EVENT_STOP;
+
   window_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                      "win");
   toolbar_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
@@ -1742,7 +1746,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
   }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
