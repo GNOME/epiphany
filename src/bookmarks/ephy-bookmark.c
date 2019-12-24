@@ -306,9 +306,8 @@ ephy_bookmark_set_time_added (EphyBookmark *self,
                               gint64        time_added)
 {
   g_assert (EPHY_IS_BOOKMARK (self));
-  g_assert (time_added >= 0);
 
-  self->time_added = time_added;
+  self->time_added = (time_added >= 0 ? time_added : g_get_real_time ());
 }
 
 gint64
