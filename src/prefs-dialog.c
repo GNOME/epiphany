@@ -2023,9 +2023,9 @@ reader_font_style_get_name (HdyEnumValueObject *value,
 
   switch (hdy_enum_value_object_get_value (value)) {
     case EPHY_PREFS_READER_FONT_STYLE_SANS:
-      return g_strdup (N_("Sans"));
+      return g_strdup (_("Sans"));
     case EPHY_PREFS_READER_FONT_STYLE_SERIF:
-      return g_strdup (N_("Serif"));
+      return g_strdup (_("Serif"));
     default:
       return NULL;
   }
@@ -2069,9 +2069,9 @@ reader_color_scheme_get_name (HdyEnumValueObject *value,
 
   switch (hdy_enum_value_object_get_value (value)) {
     case EPHY_PREFS_READER_COLORS_LIGHT:
-      return g_strdup (N_("Light"));
+      return g_strdup (_("Light"));
     case EPHY_PREFS_READER_COLORS_DARK:
-      return g_strdup (N_("Dark"));
+      return g_strdup (_("Dark"));
     default:
       return NULL;
   }
