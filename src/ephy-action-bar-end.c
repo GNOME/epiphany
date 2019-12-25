@@ -37,6 +37,7 @@ struct _EphyActionBarEnd {
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
+  GtkWidget *downloads_icon;
   GtkWidget *downloads_progress;
 
   guint downloads_button_attention_timeout_id;
@@ -237,6 +238,9 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
                                         downloads_progress);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarEnd,
+                                        downloads_icon);
 }
 
 static void
@@ -265,6 +269,11 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
     gtk_button_set_image (GTK_BUTTON (action_bar_end->bookmarks_button),
                           gtk_image_new_from_icon_name ("user-bookmarks",
                                                         GTK_ICON_SIZE_LARGE_TOOLBAR));
+    gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_end->downloads_icon),
+                                  "browser-download",
+                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
+    gtk_style_context_add_class (gtk_widget_get_style_context (action_bar_end->downloads_button),
+                                 "flat");
   }
 
   g_signal_connect_object (downloads_manager, "download-added",

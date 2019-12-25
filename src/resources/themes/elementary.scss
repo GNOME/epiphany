@@ -128,3 +128,43 @@ dzlsuggestionpopover > revealer > box {
 .navigation-box button:not(:last-child) {
   margin-right: 6px;
 }
+
+// Style the progress bar similarly to plank ones
+.download_progress {
+  margin: 1px;
+
+  progress, trough {
+    border-radius: 999px;
+    min-height: 3px;
+  }
+
+  progress {
+    background: gtkalpha(#fff, 0.8);
+    border: none;
+    box-shadow: inset 1px 1px gtkalpha(#000, 0.1),
+                inset -1px -1px gtkalpha(#000, 0.1);
+    margin: 0px;
+
+    &:backdrop {
+      background: gtkalpha(#fff, 0.75);
+    }
+  }
+
+  trough {
+    background: linear-gradient(to bottom,
+                                gtkalpha(#222, 0.85),
+                                gtkalpha(#222, 0.75));
+    border: 1px solid gtkalpha(#222, 0.95);
+    box-shadow: none;
+
+    &:backdrop {
+      background: gtkalpha(#333, 0.4);
+      border: 1px solid gtkalpha(#333, 0.45);
+    }
+  }
+}
+
+.download_icon {
+  // Shift the icon up a bit
+  -gtk-icon-transform: translateY(-2px);
+}
