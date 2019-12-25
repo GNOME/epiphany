@@ -107,3 +107,17 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 .bookmark-tag-widget-selected { background-color: @colorAccent; }
 
 .navigation-box button:not(:last-child) { margin-right: 6px; }
+
+.download_progress { margin: 1px; }
+
+.download_progress progress, .download_progress trough { border-radius: 999px; min-height: 3px; }
+
+.download_progress progress { background: alpha(#fff,0.8); border: none; box-shadow: inset 1px 1px alpha(#000,0.1), inset -1px -1px alpha(#000,0.1); margin: 0px; }
+
+.download_progress progress:backdrop { background: alpha(#fff,0.75); }
+
+.download_progress trough { background: linear-gradient(to bottom, alpha(#222,0.85), alpha(#222,0.75)); border: 1px solid alpha(#222,0.95); box-shadow: none; }
+
+.download_progress trough:backdrop { background: alpha(#333,0.4); border: 1px solid alpha(#333,0.45); }
+
+.download_icon { -gtk-icon-transform: translateY(-2px); }

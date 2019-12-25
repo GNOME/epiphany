@@ -42,10 +42,13 @@
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkImage">
+                  <object class="GtkImage" id="downloads_icon">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="icon_name">ephy-download-symbolic</property>
+                    <style>
+                      <class name="download_icon"/>
+                    </style>
                   </object>
                 </child>
                 <child type="overlay">
