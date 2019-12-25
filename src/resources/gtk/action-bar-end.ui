@@ -48,9 +48,6 @@
                     <property name="icon_name">ephy-download-symbolic</property>
                     <property name="margin_bottom">1</property>
                   </object>
-                  <packing>
-                    <property name="index">-1</property>
-                  </packing>
                 </child>
                 <child type="overlay">
                   <object class="GtkProgressBar" id="downloads_progress">
@@ -61,6 +58,9 @@
                       <class name="download_progress"/>
                     </style>
                   </object>
+                  <packing>
+                    <property name="pass-through">True</property>
+                  </packing>
                 </child>
               </object>
             </child>
