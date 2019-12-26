@@ -30,6 +30,7 @@ struct _EphySuggestion {
 
   char *unescaped_title;
   cairo_surface_t *favicon;
+  char *secondary_icon_name;
 };
 
 G_DEFINE_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
@@ -98,6 +99,17 @@ ephy_suggestion_get_icon_surface (DzlSuggestion *self,
   return suggestion->favicon;
 }
 
+GIcon *
+ephy_suggestion_get_secondary_icon (DzlSuggestion *self)
+{
+  EphySuggestion *suggestion = EPHY_SUGGESTION (self);
+  GIcon *icon = NULL;
+
+  if (suggestion->secondary_icon_name)
+    icon = g_themed_icon_new (suggestion->secondary_icon_name);
+
+  return icon;
+}
 
 static void
 ephy_suggestion_class_init (EphySuggestionClass *klass)
@@ -110,6 +122,7 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
 
   dzl_suggestion_class->replace_typed_text = ephy_suggestion_replace_typed_text;
   dzl_suggestion_class->get_icon_surface = ephy_suggestion_get_icon_surface;
+  dzl_suggestion_class->get_secondary_icon = ephy_suggestion_get_secondary_icon;
 
   obj_properties[PROP_UNESCAPED_TITLE] =
     g_param_spec_string ("unescaped-title",
@@ -212,4 +225,16 @@ ephy_suggestion_set_favicon (EphySuggestion  *self,
 {
   self->favicon = favicon;
   g_object_notify (G_OBJECT (self), "icon");
+}
+
+void
+ephy_suggestion_set_secondary_icon (EphySuggestion *self,
+                                    const char     *icon_name)
+{
+  if (g_strcmp0 (self->secondary_icon_name, icon_name) == 0)
+    return;
+
+  g_clear_pointer (&self->secondary_icon_name, g_free);
+  self->secondary_icon_name = g_strdup (icon_name);
+  g_object_notify (G_OBJECT (self), "secondary-icon");
 }
