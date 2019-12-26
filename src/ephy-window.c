@@ -919,7 +919,11 @@ static const GActionEntry popup_entries [] = {
   { "copy-audio-location", popup_cmd_copy_media_location },
 
   /* Selection */
-  { "search-selection", popup_cmd_search_selection, "s" }
+  { "search-selection", popup_cmd_search_selection, "s" },
+  { "open-selection", popup_cmd_open_selection, "s" },
+  { "open-selection-in-new-tab", popup_cmd_open_selection_in_new_tab, "s" },
+  { "open-selection-in-new-window", popup_cmd_open_selection_in_new_window, "s" },
+  { "open-selection-in-incognito-window", popup_cmd_open_selection_in_incognito_window, "s" },
 };
 
 const struct {
@@ -977,6 +981,7 @@ const struct {
 
   /* Selection */
   { "search-selection", "search-selection-placeholder" },
+  { "open-selection", "open-selection-placeholder" },
 
   { "save-as", N_("Save Pa_ge As…") },
   { "page-source", N_("_Page Source") }
@@ -1336,16 +1341,10 @@ mnemonic_escape_string (const char *string)
 static char *
 format_search_label (const char *search_term)
 {
-  char *ellipsized = ellipsize_string (search_term, 32);
-  char *escaped = mnemonic_escape_string (ellipsized);
-  char *label;
+  g_autofree char *ellipsized = ellipsize_string (search_term, 32);
+  g_autofree char *escaped = mnemonic_escape_string (ellipsized);
 
-  label = g_strdup_printf (_("Search the Web for “%s”"), escaped);
-
-  g_free (ellipsized);
-  g_free (escaped);
-
-  return label;
+  return g_strdup_printf (_("Search the Web for “%s”"), escaped);
 }
 
 static void
@@ -1355,23 +1354,35 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
                             EphyWindow        *window)
 {
   GAction *action;
-  const char *label;
   char *name;
-  char *search_label;
-  const char *search_term;
+  const char *label;
   GVariant *target;
 
   g_action_parse_detailed_name (action_name, &name, &target, NULL);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
   label = g_hash_table_lookup (window->action_labels, name);
-  if (strcmp (label, "search-selection-placeholder") != 0) {
-    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label), NULL));
-  } else {
+  if (strcmp (label, "search-selection-placeholder") == 0) {
+    const char *search_term;
+    g_autofree char *search_label = NULL;
+
     search_term = g_variant_get_string (target, NULL);
     search_label = format_search_label (search_term);
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
     webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, search_label, target));
-    g_free (search_label);
+  } else if (strcmp (label, "open-selection-placeholder") == 0) {
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_separator ());
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection");
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _("Open Link"), target));
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection-in-new-tab");
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _("Open Link In New Tab"), target));
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection-in-new-window");
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _("Open Link In New Window"), target));
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection-in-incognito-window");
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _("Open Link In Incognito Window"), target));
+  } else {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label), NULL));
   }
 }
 
@@ -1476,7 +1487,9 @@ populate_context_menu (WebKitWebView       *web_view,
   gboolean is_downloadable_video = FALSE;
   gboolean is_downloadable_audio = FALSE;
   gboolean can_search_selection = FALSE;
+  gboolean can_open_selection = FALSE;
   char *search_selection_action_name = NULL;
+  char *open_selection_action_name = NULL;
   const char *selected_text = NULL;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -1528,13 +1541,26 @@ populate_context_menu (WebKitWebView       *web_view,
 
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text) {
-    GVariant *value;
+    SoupURI *uri = soup_uri_new (selected_text);
+    if (uri) {
+      GVariant *value;
 
-    value = g_variant_new_string (selected_text);
-    search_selection_action_name = g_action_print_detailed_name ("search-selection",
+      value = g_variant_new_string (selected_text);
+      open_selection_action_name = g_action_print_detailed_name ("open-selection",
                                                                  value);
-    g_variant_unref (value);
-    can_search_selection = TRUE;
+      g_variant_unref (value);
+      can_open_selection = TRUE;
+
+      soup_uri_free (uri);
+    } else {
+      GVariant *value;
+
+      value = g_variant_new_string (selected_text);
+      search_selection_action_name = g_action_print_detailed_name ("search-selection",
+                                                                   value);
+      g_variant_unref (value);
+      can_search_selection = TRUE;
+    }
   }
 
   webkit_context_menu_remove_all (context_menu);
@@ -1634,6 +1660,10 @@ populate_context_menu (WebKitWebView       *web_view,
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
 
+    if (can_open_selection)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  open_selection_action_name, window);
+
     if (input_methods_item || insert_emoji_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -1650,6 +1680,9 @@ populate_context_menu (WebKitWebView       *web_view,
     if (can_search_selection)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
+    if (can_open_selection)
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  open_selection_action_name, window);
     if (should_show_copy_outside_editable (web_view) || can_search_selection)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
