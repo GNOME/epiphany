@@ -389,3 +389,63 @@ popup_cmd_search_selection (GSimpleAction *action,
   ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), search_url);
   g_free (search_url);
 }
+
+void
+popup_cmd_open_selection (GSimpleAction *action,
+                          GVariant      *parameter,
+                          gpointer       user_data)
+{
+  EphyEmbed *embed;
+  const char *open_term;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
+  g_assert (EPHY_IS_EMBED (embed));
+
+  open_term = g_variant_get_string (parameter, NULL);
+  ephy_web_view_load_url (ephy_embed_get_web_view (embed), open_term);
+}
+
+void
+popup_cmd_open_selection_in_new_tab (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  EphyEmbed *embed, *new_embed;
+  const char *open_term;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
+  g_assert (EPHY_IS_EMBED (embed));
+
+  open_term = g_variant_get_string (parameter, NULL);
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (user_data), embed, EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP);
+  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), open_term);
+}
+
+void
+popup_cmd_open_selection_in_new_window (GSimpleAction *action,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
+{
+  EphyEmbed *embed, *new_embed;
+  const char *open_term;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
+  g_assert (EPHY_IS_EMBED (embed));
+
+  open_term = g_variant_get_string (parameter, NULL);
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  ephy_window_new (), embed, 0);
+  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), open_term);
+}
+
+void
+popup_cmd_open_selection_in_incognito_window (GSimpleAction *action,
+                                              GVariant      *parameter,
+                                              gpointer       user_data)
+{
+  const char *open_term;
+
+  open_term = g_variant_get_string (parameter, NULL);
+  ephy_open_incognito_window (open_term);
+}

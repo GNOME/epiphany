@@ -77,5 +77,17 @@ void popup_cmd_save_media_as            (GSimpleAction *action,
 void popup_cmd_search_selection         (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
+void popup_cmd_open_selection           (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_open_selection_in_new_tab (GSimpleAction *action,
+                                          GVariant      *parameter,
+                                          gpointer       user_data);
+void popup_cmd_open_selection_in_new_window (GSimpleAction *action,
+                                             GVariant      *parameter,
+                                             gpointer       user_data);
+void popup_cmd_open_selection_in_incognito_window (GSimpleAction *action,
+                                                   GVariant      *parameter,
+                                                   gpointer       user_data);
 
 G_END_DECLS
