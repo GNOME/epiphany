@@ -109,12 +109,12 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
   js_context = webkit_frame_get_js_context_for_script_world (source_frame, extension->script_world);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
   js_form = webkit_frame_get_js_value_for_dom_object_in_script_world (source_frame, WEBKIT_DOM_OBJECT (dom_form), extension->script_world);
-  js_result = jsc_value_object_invoke_method (js_ephy,
-                                              "handleFormSubmission",
-                                              G_TYPE_UINT64, webkit_web_page_get_id (web_page),
-                                              G_TYPE_UINT64, webkit_frame_get_id (source_frame),
-                                              JSC_TYPE_VALUE, js_form,
-                                              G_TYPE_NONE);
+  (void)js_result = jsc_value_object_invoke_method (js_ephy,
+                                                    "handleFormSubmission",
+                                                    G_TYPE_UINT64, webkit_web_page_get_id (web_page),
+                                                    G_TYPE_UINT64, webkit_frame_get_id (source_frame),
+                                                    JSC_TYPE_VALUE, js_form,
+                                                    G_TYPE_NONE);
 }
 
 static char *
@@ -182,13 +182,13 @@ web_page_form_controls_associated (WebKitWebPage           *web_page,
                                           G_CALLBACK (password_form_message_serializer), NULL, NULL,
                                           G_TYPE_STRING, 2,
                                           G_TYPE_UINT64, G_TYPE_BOOLEAN);
-  js_result = jsc_value_object_invoke_method (js_ephy,
-                                              "formControlsAssociated",
-                                              G_TYPE_UINT64, webkit_web_page_get_id (web_page),
-                                              G_TYPE_UINT64, webkit_frame_get_id (frame),
-                                              G_TYPE_PTR_ARRAY, form_controls,
-                                              JSC_TYPE_VALUE, js_serializer,
-                                              G_TYPE_NONE);
+  (void)js_result = jsc_value_object_invoke_method (js_ephy,
+                                                    "formControlsAssociated",
+                                                    G_TYPE_UINT64, webkit_web_page_get_id (web_page),
+                                                    G_TYPE_UINT64, webkit_frame_get_id (frame),
+                                                    G_TYPE_PTR_ARRAY, form_controls,
+                                                    JSC_TYPE_VALUE, js_serializer,
+                                                    G_TYPE_NONE);
 
   frame_id = webkit_frame_get_id (frame);
   if (!g_hash_table_contains (extension->frames_map, &frame_id)) {
@@ -241,7 +241,7 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
   g_autoptr (JSCContext) js_context = NULL;
 
   /* Enforce the creation of the script world global context in the main frame */
-  js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
+  (void)js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
@@ -488,10 +488,10 @@ web_view_query_usernames_ready_cb (WebKitWebPage            *web_page,
   if (password_manager) {
     g_autoptr (JSCValue) ret = NULL;
 
-    ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
-                                          G_TYPE_STRV, usernames,
-                                          G_TYPE_UINT64, data->promise_id,
-                                          G_TYPE_NONE);
+    (void)ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
+                                                G_TYPE_STRV, usernames,
+                                                G_TYPE_UINT64, data->promise_id,
+                                                G_TYPE_NONE);
   }
 
   g_free (usernames);
@@ -559,11 +559,11 @@ web_view_query_password_ready_cb (WebKitWebPage            *web_page,
   if (password_manager) {
     g_autoptr (JSCValue) ret = NULL;
 
-    ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
-                                          G_TYPE_STRING, username,
-                                          G_TYPE_STRING, password,
-                                          G_TYPE_UINT64, data->promise_id,
-                                          G_TYPE_NONE);
+    (void)ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
+                                                G_TYPE_STRING, username,
+                                                G_TYPE_STRING, password,
+                                                G_TYPE_UINT64, data->promise_id,
+                                                G_TYPE_NONE);
   }
 
   g_free (data);
@@ -637,7 +637,7 @@ js_exception_handler (JSCContext   *context,
   g_autofree char *report = NULL;
 
   js_console = jsc_context_get_value (context, "console");
-  js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
+  (void)js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
   report = jsc_exception_report (exception);
   g_warning ("%s", report);
 

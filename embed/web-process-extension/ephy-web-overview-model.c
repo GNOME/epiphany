@@ -130,7 +130,7 @@ ephy_web_overview_model_notify_urls_changed (EphyWebOverviewModel *model)
     if (value && jsc_value_is_function (value)) {
       if (!urls)
         urls = ephy_web_overview_model_urls_to_js_value (model, jsc_value_get_context (value));
-      ret = jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
+      (void)ret = jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
     }
   }
 }
@@ -151,7 +151,7 @@ ephy_web_overview_model_notify_thumbnail_changed (EphyWebOverviewModel *model,
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
       if (jsc_value_is_function (value))
-        ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
+        (void)ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
     }
   }
 }
@@ -172,7 +172,7 @@ ephy_web_overview_model_notify_title_changed (EphyWebOverviewModel *model,
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
       if (jsc_value_is_function (value))
-        ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
+        (void)ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
     }
   }
 }
