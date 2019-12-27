@@ -409,6 +409,7 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
   EphyHistoryHost *host = NULL;
 
   host_locations = get_hostname_and_locations (url, &hostname);
+  g_assert (host_locations != NULL && hostname != NULL);
 
   for (l = host_locations; l != NULL; l = l->next) {
     host = ephy_history_service_get_host_row (self, l->data, NULL);
