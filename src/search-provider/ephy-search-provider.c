@@ -315,14 +315,12 @@ handle_launch_search (EphyShellSearchProvider2  *skeleton,
 static void
 ephy_search_provider_init (EphySearchProvider *self)
 {
-  g_autofree char *filename = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
 
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
-  filename = g_build_filename (ephy_profile_dir (), EPHY_HISTORY_FILE, NULL);
   self->bookmarks_manager = ephy_bookmarks_manager_new ();
   self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
                                            self->bookmarks_manager);
