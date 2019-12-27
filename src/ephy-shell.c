@@ -619,6 +619,7 @@ ephy_shell_before_emit (GApplication *application,
             break;
         }
       }
+      break;
     }
   }
 
