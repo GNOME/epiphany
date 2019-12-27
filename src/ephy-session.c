@@ -1004,6 +1004,7 @@ ephy_session_save_idle_cb (EphySession *session)
 
   if (ephy_shell_get_n_windows (shell) == 0) {
     session_delete (session);
+    save_data_free (data);
     return G_SOURCE_REMOVE;
   }
 
