@@ -115,6 +115,7 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
                                               G_TYPE_UINT64, webkit_frame_get_id (source_frame),
                                               JSC_TYPE_VALUE, js_form,
                                               G_TYPE_NONE);
+  (void)js_result;
 }
 
 static char *
@@ -189,6 +190,7 @@ web_page_form_controls_associated (WebKitWebPage           *web_page,
                                               G_TYPE_PTR_ARRAY, form_controls,
                                               JSC_TYPE_VALUE, js_serializer,
                                               G_TYPE_NONE);
+  (void)js_result;
 
   frame_id = webkit_frame_get_id (frame);
   if (!g_hash_table_contains (extension->frames_map, &frame_id)) {
@@ -242,6 +244,7 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
 
   /* Enforce the creation of the script world global context in the main frame */
   js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
+  (void)js_context;
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
@@ -492,6 +495,7 @@ web_view_query_usernames_ready_cb (WebKitWebPage            *web_page,
                                           G_TYPE_STRV, usernames,
                                           G_TYPE_UINT64, data->promise_id,
                                           G_TYPE_NONE);
+    (void)ret;
   }
 
   g_free (usernames);
@@ -564,6 +568,7 @@ web_view_query_password_ready_cb (WebKitWebPage            *web_page,
                                           G_TYPE_STRING, password,
                                           G_TYPE_UINT64, data->promise_id,
                                           G_TYPE_NONE);
+    (void)ret;
   }
 
   g_free (data);
@@ -638,6 +643,7 @@ js_exception_handler (JSCContext   *context,
 
   js_console = jsc_context_get_value (context, "console");
   js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
+  (void)js_result;
   report = jsc_exception_report (exception);
   g_warning ("%s", report);
 
