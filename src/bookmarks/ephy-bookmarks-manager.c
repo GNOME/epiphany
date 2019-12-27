@@ -228,8 +228,10 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 
   /* Create DB file if it doesn't already exists */
   if (!g_file_test (self->gvdb_filename, G_FILE_TEST_EXISTS)) {
-    if (!ephy_bookmarks_manager_save_sync (self, &error))
+    if (!ephy_bookmarks_manager_save_sync (self, &error)) {
+      g_assert (error);
       g_warning ("Failed to save bookmarks: %s", error->message);
+    }
   }
 
   ephy_bookmarks_import (self, self->gvdb_filename, NULL);
