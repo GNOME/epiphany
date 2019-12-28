@@ -122,16 +122,12 @@ struct _PrefsDialog {
   GtkWidget *clear_personal_data_button;
 
   /* language */
-  GtkTreeView *lang_treeview;
-  GtkWidget *lang_add_button;
-  GtkWidget *lang_remove_button;
-  GtkWidget *lang_up_button;
-  GtkWidget *lang_down_button;
+  HdyPreferencesGroup *lang_group;
+  GtkWidget *lang_listbox;
   GtkWidget *enable_spell_checking_switch;
 
   GtkDialog *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
-  GtkTreeModel *lang_model;
 
   /* sync */
   GtkWidget *sync_page_box;
@@ -1000,11 +996,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
 
   /* language */
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_treeview);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_add_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_remove_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_up_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_group);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_switch);
 
   /* sync */
@@ -1097,98 +1089,391 @@ css_edit_button_clicked_cb (GtkWidget   *button,
   g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
 }
 
+static GtkTargetEntry entries[] = {
+  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
+};
+
 static void
-language_editor_add (PrefsDialog *pd,
+drag_begin (GtkWidget      *widget,
+            GdkDragContext *context,
+            gpointer        data)
+{
+  GtkWidget *row;
+  GtkAllocation alloc;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  int x, y;
+  double sx, sy;
+
+  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  gtk_widget_get_allocation (row, &alloc);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
+  cr = cairo_create (surface);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-icon");
+  gtk_widget_draw (row, cr);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-icon");
+
+  gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
+  cairo_surface_get_device_scale (surface, &sx, &sy);
+  cairo_surface_set_device_offset (surface, -x * sy, -y * sy);
+  gtk_drag_set_icon_surface (context, surface);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", row);
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-row");
+}
+
+static void
+drag_end (GtkWidget      *widget,
+          GdkDragContext *context,
+          gpointer        data)
+{
+  GtkWidget *row;
+
+  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", NULL);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-row");
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-hover");
+}
+
+void
+drag_data_get (GtkWidget        *widget,
+               GdkDragContext   *context,
+               GtkSelectionData *selection_data,
+               guint             info,
+               guint             time,
+               gpointer          data)
+{
+  gtk_selection_data_set (selection_data,
+                          gdk_atom_intern_static_string ("GTK_LIST_BOX_ROW"),
+                          32,
+                          (const guchar *)&widget,
+                          sizeof (gpointer));
+}
+
+
+void
+find_listbox (GtkWidget *widget,
+              gpointer   user_data)
+{
+  PrefsDialog *dialog = user_data;
+  if (strcmp ("GtkBox", gtk_widget_get_name (widget)) == 0) {
+    GList *list;
+
+    for (list = gtk_container_get_children (GTK_CONTAINER (widget)); list; list = list->next) {
+      GtkWidget *child = list->data;
+
+      if (strcmp ("GtkListBox", gtk_widget_get_name (child)) == 0) {
+        dialog->lang_listbox = child;
+        return;
+      }
+    }
+  }
+}
+
+static void
+hdy_preferences_group_get_listbox (PrefsDialog         *dialog,
+                                   HdyPreferencesGroup *group)
+{
+  gtk_container_forall (GTK_CONTAINER (group), find_listbox, dialog);
+}
+
+static int
+get_list_box_length (GtkWidget *listbox)
+{
+  GList *childs = gtk_container_get_children (GTK_CONTAINER (listbox));
+
+  return g_list_length (childs);
+}
+
+static GtkListBoxRow *
+get_last_row (GtkListBox *list)
+{
+  int i;
+
+  for (i = 0; ; i++) {
+    GtkListBoxRow *tmp;
+    tmp = gtk_list_box_get_row_at_index (list, i);
+    if (tmp == NULL)
+      break;
+  }
+
+  return i > 0 ? gtk_list_box_get_row_at_index (list, i - 1) : NULL;
+}
+
+static GtkListBoxRow *
+get_row_before (GtkListBox    *list,
+                GtkListBoxRow *row)
+{
+  int pos = gtk_list_box_row_get_index (row);
+  return gtk_list_box_get_row_at_index (list, pos - 1);
+}
+
+static GtkListBoxRow *
+get_row_after (GtkListBox    *list,
+               GtkListBoxRow *row)
+{
+  int pos = gtk_list_box_row_get_index (row);
+  return gtk_list_box_get_row_at_index (list, pos + 1);
+}
+
+static void
+language_editor_update_pref (PrefsDialog *pd);
+
+static void
+drag_data_received (GtkWidget        *widget,
+                    GdkDragContext   *context,
+                    gint              x,
+                    gint              y,
+                    GtkSelectionData *selection_data,
+                    guint             info,
+                    guint32           time,
+                    gpointer          data)
+{
+  GtkWidget *row_before;
+  GtkWidget *row_after;
+  GtkWidget *row;
+  GtkWidget *source;
+  PrefsDialog *dialog = data;
+  int len;
+  int pos;
+
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+
+  g_object_set_data (G_OBJECT (widget), "row-before", NULL);
+  g_object_set_data (G_OBJECT (widget), "row-after", NULL);
+
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
+  row = (gpointer) * (gpointer *)gtk_selection_data_get_data (selection_data);
+  source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
+
+  if (source == row_after)
+    return;
+
+  len = get_list_box_length (dialog->lang_listbox);
+  g_object_ref (source);
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
+
+  if (row_after)
+    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_after));
+  else
+    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_before)) + 1;
+
+  if (pos + 1 == len)
+    pos--;
+
+  gtk_list_box_insert (GTK_LIST_BOX (widget), source, pos);
+  g_object_unref (source);
+
+  language_editor_update_pref (dialog);
+}
+
+static gboolean
+drag_motion (GtkWidget      *widget,
+             GdkDragContext *context,
+             int             x,
+             int             y,
+             guint           time)
+{
+  GtkAllocation alloc;
+  GtkWidget *row;
+  int hover_row_y;
+  int hover_row_height;
+  GtkWidget *drag_row;
+  GtkWidget *row_before;
+  GtkWidget *row_after;
+
+  row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (widget), y));
+
+  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
+  if (row) {
+    gtk_widget_get_allocation (row, &alloc);
+    hover_row_y = alloc.y;
+    hover_row_height = alloc.height;
+
+    if (y < hover_row_y + hover_row_height / 2) {
+      row_after = row;
+      row_before = GTK_WIDGET (get_row_before (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
+    } else {
+      row_before = row;
+      row_after = GTK_WIDGET (get_row_after (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
+    }
+  } else {
+    row_before = GTK_WIDGET (get_last_row (GTK_LIST_BOX (widget)));
+    row_after = NULL;
+  }
+
+  g_object_set_data (G_OBJECT (widget), "row-before", row_before);
+  g_object_set_data (G_OBJECT (widget), "row-after", row_after);
+
+  if (drag_row == row_before || drag_row == row_after) {
+    gtk_style_context_add_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+    return FALSE;
+  }
+
+  if (row_before)
+    gtk_style_context_add_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_add_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
+  return TRUE;
+}
+
+static void
+drag_leave (GtkWidget      *widget,
+            GdkDragContext *context,
+            guint           time)
+{
+  GtkWidget *drag_row;
+  GtkWidget *row_before;
+  GtkWidget *row_after;
+
+  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+}
+
+
+static void
+language_editor_add_button_clicked_cb (GtkWidget   *button,
+                                       PrefsDialog *pd);
+static void
+language_editor_remove_button_clicked_cb (GtkWidget   *button,
+                                          PrefsDialog *pd);
+
+static void
+language_editor_add (PrefsDialog *dialog,
                      const char  *code,
                      const char  *desc)
 {
-  GtkTreeIter iter;
+  GtkWidget *event_box;
+  HdyActionRow *row;
+  GtkWidget *prefix;
+  GtkWidget *action;
+  int len;
 
   g_assert (code != NULL && desc != NULL);
 
-  if (gtk_tree_model_get_iter_first (pd->lang_model, &iter)) {
-    do {
-      char *c;
+/*#warning TODO: Remove duplicates */
 
-      gtk_tree_model_get (pd->lang_model, &iter,
-                          COL_LANG_CODE, &c,
-                          -1);
+  row = hdy_action_row_new ();
+  hdy_action_row_set_title (row, desc);
+  g_object_set_data (G_OBJECT (row), "code", g_strdup (code));
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "row");
 
-      if (strcmp (code, c) == 0) {
-        g_free (c);
+  event_box = gtk_event_box_new ();
+  gtk_drag_source_set (GTK_WIDGET (event_box), GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (event_box, "drag-begin", G_CALLBACK (drag_begin), dialog);
+  g_signal_connect (event_box, "drag-end", G_CALLBACK (drag_end), dialog);
+  g_signal_connect (event_box, "drag-data-get", G_CALLBACK (drag_data_get), dialog);
+  prefix = gtk_image_new_from_icon_name ("list-drag-handle-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_container_add (GTK_CONTAINER (event_box), prefix);
+  hdy_action_row_add_prefix (row, event_box);
 
-        /* already in list, don't allow a duplicate */
-        return;
-      }
-      g_free (c);
-    } while (gtk_tree_model_iter_next (pd->lang_model, &iter));
-  }
+  action = gtk_button_new_from_icon_name ("edit-delete-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_object_set_data (G_OBJECT (row), "action", action);
+  g_object_set_data (G_OBJECT (action), "row", row);
+  g_signal_connect (action, "clicked", G_CALLBACK (language_editor_remove_button_clicked_cb), dialog);
+  gtk_widget_set_valign (action, GTK_ALIGN_CENTER);
+  hdy_action_row_add_action (row, action);
 
-  gtk_list_store_append (GTK_LIST_STORE (pd->lang_model), &iter);
+  gtk_widget_show_all (GTK_WIDGET (row));
 
-  gtk_list_store_set (GTK_LIST_STORE (pd->lang_model), &iter,
-                      COL_LANG_NAME, desc,
-                      COL_LANG_CODE, code,
-                      -1);
+  len = get_list_box_length (dialog->lang_listbox);
+  gtk_list_box_insert (GTK_LIST_BOX (dialog->lang_listbox), GTK_WIDGET (row), len - 1);
+}
+
+static void
+language_editor_add_function_buttons (PrefsDialog *dialog)
+{
+  HdyActionRow *row;
+  GtkWidget *action;
+
+  row = hdy_action_row_new ();
+  hdy_action_row_set_title (row, _("Add language"));
+
+  action = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_signal_connect (action, "clicked", G_CALLBACK (language_editor_add_button_clicked_cb), dialog);
+  gtk_widget_set_valign (action, GTK_ALIGN_CENTER);
+  hdy_action_row_add_action (row, action);
+
+  gtk_widget_show_all (GTK_WIDGET (row));
+
+  gtk_container_add (GTK_CONTAINER (dialog->lang_group), GTK_WIDGET (row));
 }
 
 static void
 language_editor_update_pref (PrefsDialog *pd)
 {
-  GtkTreeIter iter;
   GVariantBuilder builder;
+  GtkListBoxRow *row;
+  int index = 0;
 
-  if (gtk_tree_model_get_iter_first (pd->lang_model, &iter)) {
-    g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
-
-    do {
-      char *code;
-
-      gtk_tree_model_get (pd->lang_model, &iter,
-                          COL_LANG_CODE, &code,
-                          -1);
-      g_variant_builder_add (&builder, "s", code);
-      g_free (code);
-    } while (gtk_tree_model_iter_next (pd->lang_model, &iter));
-
-    g_settings_set (EPHY_SETTINGS_WEB,
-                    EPHY_PREFS_WEB_LANGUAGE,
-                    "as", &builder);
-  } else {
+  if (get_list_box_length (pd->lang_listbox) <= 1) {
     g_settings_set (EPHY_SETTINGS_WEB,
                     EPHY_PREFS_WEB_LANGUAGE,
                     "as", NULL);
+    return;
   }
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
+
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (pd->lang_listbox), index++))) {
+    char *code;
+
+    code = g_object_get_data (G_OBJECT (row), "code");
+    if (code)
+      g_variant_builder_add (&builder, "s", code);
+  }
+
+  g_settings_set (EPHY_SETTINGS_WEB,
+                  EPHY_PREFS_WEB_LANGUAGE,
+                  "as", &builder);
 }
 
 static void
-language_editor_update_buttons (PrefsDialog *dialog)
+language_editor_update_state (PrefsDialog *pd)
 {
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  gboolean can_remove = FALSE, can_move_up = FALSE, can_move_down = FALSE;
-  int selected;
+  int length = get_list_box_length (pd->lang_listbox);
+  int index;
 
-  selection = gtk_tree_view_get_selection (dialog->lang_treeview);
+  if (length == 2) {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (pd->lang_listbox), 0);
+    GtkWidget *action = g_object_get_data (G_OBJECT (row), "action");
 
-  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-    path = gtk_tree_model_get_path (model, &iter);
-
-    selected = gtk_tree_path_get_indices (path)[0];
-
-    can_remove = TRUE;
-    can_move_up = selected > 0;
-    can_move_down =
-      selected < gtk_tree_model_iter_n_children (model, NULL) - 1;
-
-    gtk_tree_path_free (path);
+    gtk_widget_set_sensitive (action, FALSE);
+    return;
   }
 
-  gtk_widget_set_sensitive (dialog->lang_remove_button, can_remove);
-  gtk_widget_set_sensitive (dialog->lang_up_button, can_move_up);
-  gtk_widget_set_sensitive (dialog->lang_down_button, can_move_down);
+  for (index = 0; index < length - 1; index++) {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (pd->lang_listbox), index);
+    GtkWidget *action = g_object_get_data (G_OBJECT (row), "action");
+
+    gtk_widget_set_sensitive (action, TRUE);
+  }
 }
 
 static void
@@ -1241,18 +1526,18 @@ add_lang_dialog_response_cb (GtkWidget   *widget,
     g_list_free (rows);
 
     language_editor_update_pref (pd);
-    language_editor_update_buttons (pd);
+    language_editor_update_state (pd);
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
-add_system_language_entry (GtkListStore *store)
+add_system_language_entry (PrefsDialog *dialog)
 {
-  GtkTreeIter iter;
-  char **sys_langs;
-  char *system, *text;
+  g_auto (GStrv) sys_langs = NULL;
+  g_autofree char *system = NULL;
+  g_autofree char *text = NULL;
   int n_sys_langs;
 
   sys_langs = ephy_langs_get_languages ();
@@ -1264,15 +1549,7 @@ add_system_language_entry (GtkListStore *store)
            (ngettext ("System language (%s)",
                       "System languages (%s)", n_sys_langs), system);
 
-  gtk_list_store_append (store, &iter);
-  gtk_list_store_set (store, &iter,
-                      COL_LANG_NAME, text,
-                      COL_LANG_CODE, "system",
-                      -1);
-
-  g_strfreev (sys_langs);
-  g_free (system);
-  g_free (text);
+  language_editor_add (dialog, "system", text);
 }
 
 static GtkDialog *
@@ -1329,7 +1606,7 @@ setup_add_language_dialog (PrefsDialog *dialog)
                         -1);
   }
 
-  add_system_language_entry (store);
+  /*add_system_language_entry (store); */
 
   sortmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
   gtk_tree_sortable_set_sort_column_id
@@ -1396,92 +1673,13 @@ static void
 language_editor_remove_button_clicked_cb (GtkWidget   *button,
                                           PrefsDialog *pd)
 {
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
+  GtkWidget *row = g_object_get_data (G_OBJECT (button), "row");
 
-  selection = gtk_tree_view_get_selection (pd->lang_treeview);
-
-  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-    gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+  if (row) {
+    gtk_container_remove (GTK_CONTAINER (pd->lang_listbox), row);
+    language_editor_update_pref (pd);
+    language_editor_update_state (pd);
   }
-
-  language_editor_update_pref (pd);
-  language_editor_update_buttons (pd);
-}
-
-static void
-language_editor_up_button_clicked_cb (GtkWidget   *button,
-                                      PrefsDialog *pd)
-{
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter, iter_prev;
-  GtkTreePath *path;
-
-  selection = gtk_tree_view_get_selection (pd->lang_treeview);
-
-  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-    path = gtk_tree_model_get_path (model, &iter);
-
-    if (!gtk_tree_path_prev (path)) {
-      gtk_tree_path_free (path);
-      return;
-    }
-
-    gtk_tree_model_get_iter (model, &iter_prev, path);
-
-    gtk_list_store_swap (GTK_LIST_STORE (model), &iter_prev, &iter);
-
-    gtk_tree_path_free (path);
-  }
-
-  language_editor_update_pref (pd);
-  language_editor_update_buttons (pd);
-}
-
-static void
-language_editor_down_button_clicked_cb (GtkWidget   *button,
-                                        PrefsDialog *pd)
-{
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter, iter_next;
-  GtkTreePath *path;
-
-
-  selection = gtk_tree_view_get_selection (pd->lang_treeview);
-
-  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-    path = gtk_tree_model_get_path (model, &iter);
-
-    gtk_tree_path_next (path);
-
-    gtk_tree_model_get_iter (model, &iter_next, path);
-
-    gtk_list_store_swap (GTK_LIST_STORE (model), &iter, &iter_next);
-
-    gtk_tree_path_free (path);
-  }
-
-  language_editor_update_pref (pd);
-  language_editor_update_buttons (pd);
-}
-
-static void
-language_editor_treeview_drag_end_cb (GtkWidget      *widget,
-                                      GdkDragContext *context,
-                                      PrefsDialog    *dialog)
-{
-  language_editor_update_pref (dialog);
-  language_editor_update_buttons (dialog);
-}
-
-static void
-language_editor_selection_changed_cb (GtkTreeSelection *selection,
-                                      PrefsDialog      *dialog)
-{
-  language_editor_update_buttons (dialog);
 }
 
 static char *
@@ -1516,56 +1714,51 @@ language_for_locale (const char *locale)
   return gnome_get_language_from_locale (string->str, string->str);
 }
 
+
+static const char *css =
+  ".row.drag-icon { "
+  "  background: white; "
+  "  border: 1px solid black; "
+  "}"
+  ".row.drag-row { "
+  "  color: gray; "
+  "  background: alpha(gray,0.2); "
+  "}"
+  ".row.drag-row.drag-hover { "
+  "  border-top: 1px solid #4e9a06; "
+  "  border-bottom: 1px solid #4e9a06; "
+  "}"
+  ".row.drag-hover image, "
+  ".row.drag-hover label { "
+  "  color: #4e9a06; "
+  "}"
+  ".row.drag-hover-top {"
+  "  border-top: 1px solid #4e9a06; "
+  "}"
+  ".row.drag-hover-bottom {"
+  "  border-bottom: 1px solid #4e9a06; "
+  "}"
+;
+
+
 static void
 create_language_section (PrefsDialog *dialog)
 {
-  GtkListStore *store;
-  GtkTreeView *treeview;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
   char **list = NULL;
   int i;
+  GtkCssProvider *provider;
 
-  g_signal_connect (dialog->lang_add_button, "clicked",
-                    G_CALLBACK (language_editor_add_button_clicked_cb), dialog);
-  g_signal_connect (dialog->lang_remove_button, "clicked",
-                    G_CALLBACK (language_editor_remove_button_clicked_cb), dialog);
-  g_signal_connect (dialog->lang_up_button, "clicked",
-                    G_CALLBACK (language_editor_up_button_clicked_cb), dialog);
-  g_signal_connect (dialog->lang_down_button, "clicked",
-                    G_CALLBACK (language_editor_down_button_clicked_cb), dialog);
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800);
 
-  /* setup the languages treeview */
-  treeview = dialog->lang_treeview;
+  hdy_preferences_group_get_listbox (dialog, dialog->lang_group);
+  gtk_drag_dest_set (dialog->lang_listbox, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (dialog->lang_listbox, "drag-data-received", G_CALLBACK (drag_data_received), dialog);
+  g_signal_connect (dialog->lang_listbox, "drag-motion", G_CALLBACK (drag_motion), NULL);
+  g_signal_connect (dialog->lang_listbox, "drag-leave", G_CALLBACK (drag_leave), NULL);
 
-  gtk_tree_view_set_reorderable (treeview, TRUE);
-  gtk_tree_view_set_headers_visible (treeview, FALSE);
-
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-
-  dialog->lang_model = GTK_TREE_MODEL (store);
-  gtk_tree_view_set_model (treeview, dialog->lang_model);
-
-  renderer = gtk_cell_renderer_text_new ();
-
-  gtk_tree_view_insert_column_with_attributes (treeview,
-                                               0, _("Language"),
-                                               renderer,
-                                               "text", 0,
-                                               NULL);
-  column = gtk_tree_view_get_column (treeview, 0);
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_sort_column_id (column, COL_LANG_NAME);
-
-  selection = gtk_tree_view_get_selection (treeview);
-  gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-
-  /* Connect treeview signals */
-  g_signal_connect (G_OBJECT (treeview), "drag_end",
-                    G_CALLBACK (language_editor_treeview_drag_end_cb), dialog);
-  g_signal_connect (G_OBJECT (selection), "changed",
-                    G_CALLBACK (language_editor_selection_changed_cb), dialog);
+  language_editor_add_function_buttons (dialog);
 
   list = g_settings_get_strv (EPHY_SETTINGS_WEB,
                               EPHY_PREFS_WEB_LANGUAGE);
@@ -1574,7 +1767,7 @@ create_language_section (PrefsDialog *dialog)
   for (i = 0; list[i]; i++) {
     const char *code = list[i];
     if (strcmp (code, "system") == 0) {
-      add_system_language_entry (store);
+      add_system_language_entry (dialog);
     } else if (code[0] != '\0') {
       g_autofree char *normalized_locale = normalize_locale (code);
       if (normalized_locale != NULL) {
@@ -1585,28 +1778,6 @@ create_language_section (PrefsDialog *dialog)
       }
     }
   }
-  g_object_unref (store);
-
-  g_strfreev (list);
-
-  /* Lockdown if key is not writable */
-  g_settings_bind_writable (EPHY_SETTINGS_WEB,
-                            EPHY_PREFS_WEB_LANGUAGE,
-                            dialog->lang_add_button, "sensitive", FALSE);
-  g_settings_bind_writable (EPHY_SETTINGS_WEB,
-                            EPHY_PREFS_WEB_LANGUAGE,
-                            dialog->lang_remove_button, "sensitive", FALSE);
-  g_settings_bind_writable (EPHY_SETTINGS_WEB,
-                            EPHY_PREFS_WEB_LANGUAGE,
-                            dialog->lang_up_button, "sensitive", FALSE);
-  g_settings_bind_writable (EPHY_SETTINGS_WEB,
-                            EPHY_PREFS_WEB_LANGUAGE,
-                            dialog->lang_down_button, "sensitive", FALSE);
-  g_settings_bind_writable (EPHY_SETTINGS_WEB,
-                            EPHY_PREFS_WEB_LANGUAGE,
-                            dialog->lang_treeview, "sensitive", FALSE);
-
-  language_editor_update_buttons (dialog);
 }
 
 static void
