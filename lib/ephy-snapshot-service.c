@@ -682,7 +682,7 @@ got_snapshot_path_for_url (EphySnapshotService *service,
   path = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
   if (path) {
     take_fresh_snapshot_in_background_if_stale (service, snapshot_async_data_copy (data));
-    g_task_return_pointer (task, path, g_free);
+    g_task_return_pointer (task, g_steal_pointer (&path), g_free);
     g_object_unref (task);
   } else {
     ephy_snapshot_service_take_from_webview (task);
