@@ -1,52 +1,22 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
 stages:
-  - check
-  - test
-  - deploy
+  - build
 
 check-code-style:
-  stage: 'check'
+  stage: .pre
   image: alpine:latest
   before_script:
     - apk update && apk add uncrustify bash python3
   script:
     - bash data/check-code-style
 
-cppcheck:
-  stage: 'check'
-  image: alpine:latest
-  allow_failure: true
-  before_script:
-    - apk update && apk add cppcheck
-  script: >-
-    cppcheck .
-    --enable=warning,style
-    --error-exitcode=1
-    --library=gtk
-    --quiet
-    --suppress=constArgument
-    --suppress=ctunullpointer
-    --suppress=deallocret
-    --suppress=knownConditionTrueFalse
-    --suppress=leakNoVarFunctionCall
-    --suppress=literalWithCharPtrCompare
-    --suppress=memleak
-    --suppress=nullPointer
-    --suppress=nullPointerRedundantCheck
-    --suppress=redundantAssignment
-    --suppress=syntaxError
-    --suppress=unreadVariable
-    --suppress=variableScope
-    --suppress=varFuncNullUB
-    --suppress=*:lib/contrib/gvdb/*
-    --template=gcc
-
 variables:
   BUNDLE: 'epiphany-git.flatpak'
 
 .flatpak-template:
   extends: '.flatpak'
+  stage: build
   variables:
     MANIFEST_PATH: 'org.gnome.Epiphany.json'
     RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
@@ -55,6 +25,7 @@ variables:
 
 flatpak:
   extends: '.flatpak-template'
+  stage: build
   variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   except:
@@ -62,18 +33,28 @@ flatpak:
 
 flatpak-master:
   extends: '.flatpak-template'
+  stage: build
   variables:
     MESON_ARGS: '-Dtech_preview=true -Dprofile=Devel'
   only:
     - master
 
-review:
-  dependencies:
-    - 'flatpak'
-  extends: '.review'
-
-stop_review:
-  extends: '.stop_review'
+flatpak-scanbuild:
+  extends: '.flatpak-template'
+  stage: .pre
+  allow_failure: true
+  variables:
+    MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  script:
+    - flatpak-builder --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
+    - flatpak build flatpak_app meson --prefix=/app ${MESON_ARGS} _build
+    - flatpak build flatpak_app ninja -C _build scan-build
+    - bash -c 'if [[ -n "$(ls -A _build/meson-logs/scanbuild/)" ]]; then echo "Scan build log found, assuming defects exist"; exit 1; fi'
+  artifacts:
+    when: on_failure
+    paths:
+      - _build/meson-logs/scanbuild
 
 nightly:
   extends: '.publish_nightly'
