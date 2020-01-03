@@ -676,6 +676,7 @@ got_snapshot_path_for_url (EphySnapshotService *service,
                            GAsyncResult        *result,
                            GTask               *task)
 {
+#ifndef __clang_analyzer__
   SnapshotAsyncData *data = g_task_get_task_data (task);
   char *path;
 
@@ -687,6 +688,7 @@ got_snapshot_path_for_url (EphySnapshotService *service,
   } else {
     ephy_snapshot_service_take_from_webview (task);
   }
+#endif
 }
 
 void
