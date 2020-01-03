@@ -694,9 +694,10 @@ ephy_search_engine_dialog_init (EphySearchEngineDialog *dialog)
 }
 
 EphySearchEngineDialog *
-ephy_search_engine_dialog_new (void)
+ephy_search_engine_dialog_new (const gchar *search_engine_name)
 {
   return g_object_new (EPHY_TYPE_SEARCH_ENGINE_DIALOG,
                        "use-header-bar", TRUE,
+                       "name", search_engine_name,
                        NULL);
 }

@@ -28,6 +28,6 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_SEARCH_ENGINE_DIALOG (ephy_search_engine_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (EphySearchEngineDialog, ephy_search_engine_dialog, EPHY, SEARCH_ENGINE_DIALOG, GtkDialog);
 
-EphySearchEngineDialog  *ephy_search_engine_dialog_new (void);
+EphySearchEngineDialog  *ephy_search_engine_dialog_new (const gchar *search_engine_name);
 
 G_END_DECLS

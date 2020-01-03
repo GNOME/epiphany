@@ -88,7 +88,8 @@ struct _PrefsDialog {
   GtkWidget *webapp_title;
   GtkWidget *download_folder_row;
   GtkWidget *download_box;
-  GtkWidget *search_box;
+  HdyPreferencesGroup *search_group;
+  GtkWidget *search_listbox;
   GtkWidget *session_box;
   GtkWidget *browsing_box;
   GtkWidget *restore_session_row;
@@ -151,6 +152,8 @@ struct _PrefsDialog {
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
+
+  EphySearchEngineManager *search_engine_manager;
 };
 
 enum {
@@ -895,19 +898,6 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
   gtk_window_present_with_time (GTK_WINDOW (passwords_dialog), gtk_get_current_event_time ());
 }
 
-static void
-on_search_engine_dialog_button_clicked (GtkWidget   *button,
-                                        PrefsDialog *dialog)
-{
-  GtkWindow *search_engine_dialog;
-
-  search_engine_dialog = GTK_WINDOW (ephy_search_engine_dialog_new ());
-
-  gtk_window_set_transient_for (search_engine_dialog, GTK_WINDOW (dialog));
-  gtk_window_set_modal (search_engine_dialog, TRUE);
-  gtk_window_present_with_time (search_engine_dialog, gtk_get_current_event_time ());
-}
-
 static gboolean
 on_default_zoom_spin_button_output (GtkSpinButton *spin,
                                     gpointer       user_data)
@@ -960,7 +950,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_icon);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_url);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_title);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_group);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, browsing_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_row);
@@ -1023,7 +1013,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
@@ -2099,6 +2088,93 @@ restore_session_set_mapping (const GValue       *value,
 }
 
 static void
+search_engine_toggled_cb (GtkToggleButton *button,
+                          gpointer         user_data)
+{
+  HdyActionRow *row = NULL;
+  PrefsDialog *dialog = user_data;
+  const char *name;
+
+  if (!gtk_toggle_button_get_active (button))
+    return;
+
+  row = g_object_get_data (G_OBJECT (button), "row");
+  g_assert (row);
+
+  name = hdy_action_row_get_title (row);
+
+  ephy_search_engine_manager_set_default_engine (dialog->search_engine_manager, name);
+}
+
+static void
+search_engine_action_clicked_cb (GtkButton *button,
+                                 gpointer   user_data)
+{
+  HdyActionRow *row = NULL;
+  PrefsDialog *dialog = user_data;
+  GtkWindow *search_engine_dialog;
+  const char *name;
+
+  row = g_object_get_data (G_OBJECT (button), "row");
+  g_assert (row);
+
+  name = hdy_action_row_get_title (row);
+  search_engine_dialog = GTK_WINDOW (ephy_search_engine_dialog_new (name));
+
+  gtk_window_set_transient_for (search_engine_dialog, GTK_WINDOW (dialog));
+  gtk_window_set_modal (search_engine_dialog, TRUE);
+  gtk_window_present_with_time (search_engine_dialog, gtk_get_current_event_time ());
+}
+
+static void
+setup_search_engine_section (PrefsDialog *dialog)
+{
+  EphyEmbedShell *shell;
+  GSList *radio_group = NULL;
+  const char *search_engine_default;
+  char **engines_names;
+
+  shell = ephy_embed_shell_get_default ();
+  dialog->search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
+
+  search_engine_default = ephy_search_engine_manager_get_default_engine (dialog->search_engine_manager);
+  engines_names = ephy_search_engine_manager_get_names (dialog->search_engine_manager);
+
+  for (guint i = 0; engines_names[i] != NULL; i++) {
+    const char *name = engines_names[i];
+    HdyActionRow *row;
+    GtkWidget *action;
+    GtkWidget *radio;
+
+    row = hdy_action_row_new ();
+    hdy_action_row_set_title (row, name);
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "row");
+
+    radio = gtk_radio_button_new (radio_group);
+    radio_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
+    gtk_widget_set_can_focus (radio, FALSE);
+    hdy_action_row_add_prefix (row, radio);
+
+    if (strcmp (search_engine_default, name) == 0) {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+    }
+    g_signal_connect (radio, "toggled", G_CALLBACK (search_engine_toggled_cb), dialog);
+    g_object_set_data (G_OBJECT (radio), "row", row);
+
+    action = gtk_button_new_from_icon_name ("emblem-system-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    g_object_set_data (G_OBJECT (action), "row", row);
+    g_signal_connect (action, "clicked", G_CALLBACK (search_engine_action_clicked_cb), dialog);
+    gtk_widget_set_valign (action, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (row, action);
+
+    gtk_widget_show_all (GTK_WIDGET (row));
+    gtk_container_add (GTK_CONTAINER (dialog->search_group), GTK_WIDGET (row));
+  }
+
+  g_strfreev (engines_names);
+}
+
+static void
 setup_general_page (PrefsDialog *dialog)
 {
   GSettings *settings;
@@ -2110,6 +2186,8 @@ setup_general_page (PrefsDialog *dialog)
     gtk_entry_set_text (GTK_ENTRY (dialog->webapp_url), dialog->webapp->url);
     gtk_entry_set_text (GTK_ENTRY (dialog->webapp_title), dialog->webapp->name);
   }
+
+  setup_search_engine_section (dialog);
 
   settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
@@ -2568,7 +2646,7 @@ prefs_dialog_init (PrefsDialog *dialog)
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->search_box,
+  gtk_widget_set_visible (GTK_WIDGET (dialog->search_group),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
