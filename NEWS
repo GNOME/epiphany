@@ -1,3 +1,43 @@
+3.35.3 - January 3, 2020
+========================
+
+Big stuff:
+
+- View source mode now uses highlight.js syntax highlighting (!506)
+- Now displays PDFs with PDF.js (!508)
+
+The usual:
+
+- Add Open Link context menu option for selected text (#349)
+- Fix crash when bookmark time is invalid (#454)
+- Remove support for external view source (#819)
+- Try harder to avoid session data loss (#887)
+- Remember page zoom levels during incognito session (#891)
+- Always show overview close button (#906)
+- Fix middle click on back button when titlebar action is configured (#919)
+- Add lockdown setting to disable context menu (#921)
+- Disable Send Link context menu option in application mode (#926)
+- Reenable on-demand hardware acceleration (#932)
+- Fix profile migrator error message (#944)
+- Fix localization of reader mode preferences (#994)
+- Fix crash on shutdown regression (#1004)
+- Redesigned the downloads button (#947, #1005)
+- Improve design of web process crash error page (#1013)
+- Fix regressions with user style sheet monitor (#1026)
+- Major refactor of IPC to web extension (!448)
+- Enable process swap on navigation (site isolation) (!448)
+- Security popover's per-website adblocker preference now actually works (!471)
+- Improve reader mode icon on elementary (!490)
+- Fix search provider crash when there are no bookmarks (!510)
+- Fix crashes on web app creation dialog and theoretical crashes elsewhere (!511)
+- Remove do-not-track setting, obsolete (!514)
+- Remove enable-plugins setting (NPAPI plugins), now always off (!514)
+- Remove enable-webaudio and enable-webgl settings, now always on (!514)
+- Fix issues detected by cppcheck and scan-build
+- Disable Search the Web in application mode
+- Temporarily disable address bar DNS prefetch due to WebKit crash
+- Require libhandy as system dependency
+
 3.35.2 - November 22, 2019
 ==========================
 
