@@ -312,6 +312,7 @@ file_builder_allocate_for_hash (FileBuilder            *fb,
                                 struct gvdb_hash_item **hash_items,
                                 struct gvdb_pointer    *pointer)
 {
+#ifndef __clang_analyzer__
   guint32_le bloom_hdr, table_hdr;
   guchar *data;
   gsize size;
@@ -346,6 +347,7 @@ file_builder_allocate_for_hash (FileBuilder            *fb,
    * http://en.wikipedia.org/wiki/Bloom_filter
    * http://0pointer.de/blog/projects/bloom.html
    */
+#endif
 }
 
 static void
@@ -353,6 +355,7 @@ file_builder_add_hash (FileBuilder         *fb,
                        GHashTable          *table,
                        struct gvdb_pointer *pointer)
 {
+#ifndef __clang_analyzer__
   guint32_le *buckets, *bloom_filter;
   struct gvdb_hash_item *items;
   HashTable *mytable;
@@ -435,6 +438,7 @@ file_builder_add_hash (FileBuilder         *fb,
     }
 
   hash_table_free (mytable);
+#endif
 }
 
 static FileBuilder *
