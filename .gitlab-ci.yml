@@ -42,7 +42,6 @@ flatpak-master:
 flatpak-scanbuild:
   extends: '.flatpak-template'
   stage: .pre
-  allow_failure: true
   variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
