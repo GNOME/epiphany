@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-08-05 23:59+0000\n"
-"PO-Revision-Date: 2019-08-06 17:38+0700\n"
-"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"POT-Creation-Date: 2020-01-04 04:56+0000\n"
+"PO-Revision-Date: 2020-01-04 16:14+0700\n"
+"Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -57,7 +57,7 @@ msgstr "Projek GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:616
+#: src/ephy-main.c:407 src/window-commands.c:624
 msgid "Web"
 msgstr "Web"
 
@@ -135,14 +135,10 @@ msgstr ""
 "Memaksa permintaan jendela baru dibuka dalam tab, bukan memakai jendela baru."
 
 #: data/org.gnome.epiphany.gschema.xml:46
-msgid "Don’t use an external application to view page source."
-msgstr "Jangan memakai aplikasi eksternal untuk menilik sumber halaman."
-
-#: data/org.gnome.epiphany.gschema.xml:50
 msgid "Whether to automatically restore the last session"
 msgstr "Apakah secara otomatis memulihkan sesi terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:51
+#: data/org.gnome.epiphany.gschema.xml:47
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -150,18 +146,18 @@ msgid ""
 "“never” (the homepage is always shown)."
 msgstr ""
 "Menentukan bagaimana sesi akan dipulihkan saat awal mula. Nilai yang "
-"diizinkan adalah 'selalu' (keadaan aplikasi sebelumnya selalu dipulihkan), "
-"'crashed' (hanya memulihkan sesi bila aplikasi crash), dan 'tidak "
-"pernah' (selalu menampilkan halaman pembuka)."
+"diizinkan adalah \"always\" (keadaan aplikasi sebelumnya selalu dipulihkan), "
+"\"crashed\" (hanya memulihkan sesi bila aplikasi crash), dan \"never"
+"\" (selalu menampilkan halaman pembuka)."
 
-#: data/org.gnome.epiphany.gschema.xml:55
+#: data/org.gnome.epiphany.gschema.xml:51
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
 "Apakah menunda pemuatan tab yang tak seketika nampak saat mengembalikan sesi"
 
-#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -169,11 +165,11 @@ msgstr ""
 "Ketika opsi ini diisi true, tab tak akan mulai memuat sampai pengguna "
 "berpindah ke mereka, saat sesi dikembalikan."
 
-#: data/org.gnome.epiphany.gschema.xml:60
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "List of adblock filters"
 msgstr "Daftar penyaring pemblokir iklan"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -181,11 +177,11 @@ msgstr ""
 "Daftar URL dengan aturan penyaringan konten dalam format JSON untuk "
 "digunakan oleh pemblokir iklan."
 
-#: data/org.gnome.epiphany.gschema.xml:65
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Whether to ask for setting browser as default"
 msgstr "Apakah akan meminta pengaturan peramban sebagai bawaan"
 
-#: data/org.gnome.epiphany.gschema.xml:66
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -193,73 +189,75 @@ msgstr ""
 "Ketika opsi ini diisi true, peramban akan meminta menjadi bawaan jika belum "
 "diatur."
 
-#: data/org.gnome.epiphany.gschema.xml:70
+#: data/org.gnome.epiphany.gschema.xml:66
 msgid "Start in incognito mode"
 msgstr "Mulai dalam mode penyamaran"
 
-#: data/org.gnome.epiphany.gschema.xml:71
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "Ketika opsi ini diisi true, peramban akan selalu mulai dalam mode penyamaran"
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Memperluas ukuran tab untuk mengisi ruang yang tersedia pada bilah tab."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
-"tabs bar."
+"tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
-"Jika diaktifkan tab akan memperluas untuk menggunakan seluruh ruang yang "
-"tersedia pada bilah tab."
+"Jika difungsikan tab akan mengembang untuk menggunakan seluruh ruang yang "
+"tersedia pada bilah tab. Pengaturan ini diabaikan dalam desktop Pantheon."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "The position of the tabs bar."
 msgstr "Posisi bilah tab."
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
 "“right” (vertical tabs with bar on the right)."
 msgstr ""
-"Mengendalikan kapan bilah tab ditampilkan. Nilai yang mungkin adalah \"atas"
-"\" (bawaan), \"kiri\" (tab vertikal dengan bilah disebelah kiri) dan \"kanan"
-"\" (tab vertikal dengan bilah disebelah kanan)."
+"Mengendalikan kapan bilah tab ditampilkan. Nilai yang mungkin adalah \"top"
+"\" (bawaan), \"bottom\", \"left\" (tab vertikal dengan bilah disebelah "
+"kiri), dan \"right\" (tab vertikal dengan bilah disebelah kanan)."
 
-#: data/org.gnome.epiphany.gschema.xml:87
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The visibility policy for the tabs bar."
 msgstr "Kebijakan kenampakan bagi bilah tab."
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
-"two or more tabs) and “never” (the tabs bar is never shown)."
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
-"Mengendalikan kapan bilah tab ditampilkan. Nilai yang mungkin adalah "
-"'selalu' (bilah tab selalu ditampilkan), 'lebih-dari-satu' (tab hanya "
-"ditampilkan bila ada dua tab atau lebih), dan 'tidak pernah' (bilah tab tak "
-"pernah ditampilkan)."
+"Mengendalikan kapan bilah tab ditampilkan. Nilai yang mungkin adalah \"always"
+"\" (bilah tab selalu ditampilkan), \"more-than-one\" (tab hanya ditampilkan "
+"bila ada dua tab atau lebih), dan \"never\" (bilah tab tak pernah "
+"ditampilkan). Pengaturan ini diabaikan dalam desktop Pantheon, dan nilai "
+"\"always\" dipakai."
 
-#: data/org.gnome.epiphany.gschema.xml:92
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "Keep window open when closing last tab"
 msgstr "Biarkan jendela terbuka saat menutup tab terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:93
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Jika diaktifkan maka jendela aplikasi tetap terbuka saat menutup tab "
 "terakhir."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid "Reader mode article font style."
 msgstr "Gaya fonta artikel mode pembaca."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -267,11 +265,11 @@ msgstr ""
 "Memilih gaya teks isi utama untuk artikel dalam mode pembaca. Nilai yang "
 "mungkin adalah \"sans\" dan \"serif\"."
 
-#: data/org.gnome.epiphany.gschema.xml:104
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode color scheme."
 msgstr "Skema warna mode pembaca."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -281,23 +279,23 @@ msgstr ""
 "yang mungkin adalah \"light\" (teks gelap pada latar belakang terang) dan "
 "\"dark\" (teks terang pada latar belakang gelap)."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Minimum font size"
 msgstr "Ukuran fonta minimum"
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Use GNOME fonts"
 msgstr "Pakai fonta GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Use GNOME font settings."
 msgstr "Pakai pengaturan fonta GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Custom sans-serif font"
 msgstr "Fonta sans-serif ubahan"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -305,11 +303,11 @@ msgstr ""
 "Nilai yang dipakai untuk menimpa fonta destop sans-serif ketika use-gome-"
 "fonts ditata."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom serif font"
 msgstr "Fonta serif ubahan"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -317,11 +315,11 @@ msgstr ""
 "Nilai yang dipakai untuk menimpa fonta destop serif ketika use-gome-fonts "
 "ditata."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom monospace font"
 msgstr "Fonta lebar seragam (monospace) ubahan"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -329,102 +327,82 @@ msgstr ""
 "Nilai yang dipakai untuk menimpa fonta destop monospace ketika use-gome-"
 "fonts ditata."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Use a custom CSS"
 msgstr "Pakai CSS ubahan"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Pakai berkas CSS ubahan untuk mengubah CSS milik situs web."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Enable spell checking"
 msgstr "Bolehkan pemeriksaan ejaan"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 "Periksa ejaan dari teks yang diketikkan pada area yang dapat disunting."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Default encoding"
 msgstr "Pengkodean bawaan"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Pengkodean bawaan. Nilai yang diterima adalah yang dapat dipahami oleh "
 "WebKitGTK."
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:146
 #: src/resources/gtk/prefs-dialog.ui:752
 msgid "Languages"
 msgstr "Bahasa"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Bahasa yang diinginkan. Array kode lokal atau \"sistem\" untuk menggunakan "
 "lokalisasi saat ini."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Cookie accept"
 msgstr "Terima cookie"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
 msgstr ""
-"Menerima cookie dari mana. Nilai yang mungkin adalah \"selalu\", \"bukan-"
-"dari-pihak ketiga\" dan \"tidak pernah\"."
+"Menerima cookie dari mana. Nilai yang mungkin adalah \"always\", \"no-third-"
+"party\", dan \"never\"."
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Allow popups"
 msgstr "Perbolehkan jendela popup"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Izinkan situs membuka jendela baru memakai JavaScript (bila JavaScript "
 "diaktifkan)."
 
-#: data/org.gnome.epiphany.gschema.xml:165
-msgid "Enable Plugins"
-msgstr "Aktifkan Pengaya"
-
-#: data/org.gnome.epiphany.gschema.xml:169
-msgid "Enable WebGL"
-msgstr "Aktifkan WebGL"
-
-#: data/org.gnome.epiphany.gschema.xml:170
-msgid "Whether to enable support for WebGL contexts."
-msgstr "Apakah mengaktifkan dukungan bagi konteks WebGL."
-
-#: data/org.gnome.epiphany.gschema.xml:174
-msgid "Enable WebAudio"
-msgstr "Aktifkan WebAudio"
-
-#: data/org.gnome.epiphany.gschema.xml:175
-msgid "Whether to enable support for WebAudio."
-msgstr "Apakah mengaktifkan dukungan bagi WebAudio."
-
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
 msgstr "Aktifkan penggulungan mulus"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid "Whether to enable smooth scrolling."
 msgstr "Apakah mengaktifkan penggulungan mulus."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
 msgstr "User agent"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -432,11 +410,11 @@ msgstr ""
 "String yang akan dipakai sebagai user agent, untuk mengidentifikasikan "
 "peramban ke server web."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Mobile user agent"
 msgstr "Mobile user agent"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to present a mobile user agent. If the user agent is overridden, "
 "this will have no effect."
@@ -444,19 +422,11 @@ msgstr ""
 "Apakah akan menyajikan mobile user agent atau tidak. Jika user agent "
 "diganti, ini tidak akan berpengaruh."
 
-#: data/org.gnome.epiphany.gschema.xml:194
-msgid "Do Not Track"
-msgstr "Jangan Lacak"
-
-#: data/org.gnome.epiphany.gschema.xml:195
-msgid "Enables tracking query parameter removal."
-msgstr "Aktifkan penghapusan parameter kueri pelacakan."
-
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Aktifkan pemblokir iklan"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -464,19 +434,19 @@ msgstr ""
 "Apakah memblokir iklan tertanam yang mungkin ingin ditunjukkan oleh halaman "
 "web ini."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Remember passwords"
 msgstr "Ingat sandi"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Apakah menyimpan dan mempraisi sandi-sandi dalam situs web."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable site-specific quirks"
 msgstr "Aktifkan keluarbiasaan khusus-situs"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -485,11 +455,11 @@ msgstr ""
 "Anda mungkin ingin menonaktifkan setelan ini jika melakukan awakutu pada "
 "masalah tertentu."
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Enable safe browsing"
 msgstr "Aktifkan penjelajahan yang aman"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -497,24 +467,24 @@ msgstr ""
 "Apakah untuk mengaktifkan penjelajahan yang aman. Penjelajahan aman "
 "beroperasi melalui API Penjelajahan Aman Google v4."
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Google Safe Browsing API key"
 msgstr "Kunci API Penjelajahan Aman Google"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
 "Kunci API yang digunakan untuk mengakses API Penjelajahan Aman Google v4."
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr "Tingkat perbesaran bawaan untuk halaman baru"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr "Aktifkan pencarian otomatis"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -526,11 +496,11 @@ msgstr ""
 "semuanya akan dimuat sebagai URL kecuali mesin pencari secara eksplisit "
 "dipilih dari menu dropdown."
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "Fungsikan gestur tetikus"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -538,27 +508,27 @@ msgstr ""
 "Apakah akan mengaktifkan gerakan tetikus. Gerakan tetikus didasarkan pada "
 "perilaku Opera dan diaktifkan menggunakan tombol tengah tetikus + gerakan."
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "Direktori unggahan terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "Pantau direktori unggahan terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "Direktori unduhan terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr "Pantau direktori unduhan terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr "Kebijakan akselerasi perangkat keras"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -575,27 +545,27 @@ msgstr ""
 "kebijakan \"on-demand\", akselerasi perangkat keras hanya akan digunakan "
 "bila diminta untuk menampilkan transformasi 3D."
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr "Selalu tanyakan untuk direktori unduhan"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Apakah akan menyajikan dialog pemilih direktori untuk setiap unduhan."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Web application additional URLs"
 msgstr "URL tambahan aplikasi web"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Daftar URL yang harus dibuka oleh aplikasi web"
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "The downloads folder"
 msgstr "Folder unduhan"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -603,11 +573,11 @@ msgstr ""
 "Path folder tempat mengunduh berkas; atau \"Unduhan\" untuk memakai folder "
 "pengunduhan bawaan, atau \"Destop\" untuk memakai folder destop."
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Window position"
 msgstr "Posisi jendela"
 
-#: data/org.gnome.epiphany.gschema.xml:276
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -615,11 +585,11 @@ msgstr ""
 "Posisi untuk digunakan jendela baru yang tidak dikembalikan dari sesi "
 "sebelumnya."
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Window size"
 msgstr "Ukuran jendela"
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -627,11 +597,11 @@ msgstr ""
 "Ukuran untuk digunakan jendela baru yang tidak dikembalikan dari sesi "
 "sebelumnya."
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Is maximized"
 msgstr "Dimaksimalkan"
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -639,11 +609,11 @@ msgstr ""
 "Apakah jendela baru yang tidak dikembalikan dari sesi sebelumnya harus "
 "awalnya dimaksimalkan."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid "Disable forward and back buttons"
 msgstr "Nonaktifkan tombol maju dan mundur"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -651,11 +621,11 @@ msgstr ""
 "Jika diatur ke \"true\", tombol maju dan mundur dinonaktifkan, mencegah "
 "pengguna mengakses riwayat peramban secara langsung"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Currently signed in sync user"
 msgstr "Pengguna sync sekarang yang sedang masuk"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -663,43 +633,43 @@ msgstr ""
 "Surel yang terkait dengan Akun Firefox digunakan untuk sinkronisasi data "
 "dengan peladen Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "Last sync timestamp"
 msgstr "Timestamp sinkronisasi terakhir"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Waktu UNIX saat terakhir sinkronisasi dilakukan dalam detik."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "Sync device ID"
 msgstr "ID peranti sync"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The sync device ID of the current device."
 msgstr "ID peranti sync dari peranti saat ini."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:312
 msgid "Sync device name"
 msgstr "Nama peranti sync"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The sync device name of the current device."
 msgstr "Nama peranti sync dari peranti saat ini."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid "The sync frequency in minutes"
 msgstr "Frekuensi sinkroni dalam menit"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Berapa menit antara dua sync berturutan."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid "Sync data with Firefox"
 msgstr "Sync data dengan Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -707,29 +677,29 @@ msgstr ""
 "TRUE bila koleksi Ephy mesti diselaraskan dengan koleksi Firefox, FALSE bila "
 "tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Enable bookmarks sync"
 msgstr "Fungsikan sync markah"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "TRUE bila koleksi markah mesti diselaraskan, FALSE bila tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Bookmarks sync timestamp"
 msgstr "Timestamp sync markah"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Timestamp saat terakhir sinkronisasi markah dilakukan."
 
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "Initial sync or normal sync"
 msgstr "Sync awal atau sync normal"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -737,23 +707,23 @@ msgstr ""
 "TRUE bila koleksi markah perlu diselaraskan untuk pertama kali, FALSE bila "
 "tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Enable passwords sync"
 msgstr "Fungsikan sync kata sandi"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "TRUE bila koleksi kata sandi mesti diselaraskan, FALSE bila tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Passwords sync timestamp"
 msgstr "Timestamp sync kata sandi"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Timestamp saat terakhir sinkronisasi kata sandi dilakukan."
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -761,23 +731,23 @@ msgstr ""
 "TRUE bila koleksi kata sandi perlu diselaraskan untuk pertama kali, FALSE "
 "bila tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable history sync"
 msgstr "Fungsikan sync riwayat"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "TRUE bila koleksi riwayat mesti diselaraskan, FALSE bila tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "History sync timestamp"
 msgstr "Timestamp sync riwayat"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last history sync was made."
 msgstr "Timestamp saat terakhir sinkronisasi riwayat dilakukan."
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -785,28 +755,29 @@ msgstr ""
 "TRUE bila koleksi riwayat perlu diselaraskan untuk pertama kali, FALSE bila "
 "tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable open tabs sync"
 msgstr "Fungsikan sync tab yang terbuka"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE bila koleksi tab yang terbuka mesti diselaraskan, FALSE bila tidak."
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Open tabs sync timestamp"
 msgstr "Timestamp sync tab terbuka"
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Timestamp saat terakhir sinkronisasi tab terbuka dilakukan."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Keputusan untuk menerapkan ketika izin mikrofon diminta untuk host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:390
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -819,13 +790,14 @@ msgstr ""
 "\"menolak\" memberitahukan otomatis untuk membuat keputusan atas permintaan "
 "tersebut."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Keputusan untuk menerapkan ketika izin geolokasi diminta untuk host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:395
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -838,13 +810,14 @@ msgstr ""
 "\"menolak\" memberitahukan otomatis untuk membuat keputusan atas permintaan "
 "tersebut."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Keputusan untuk menerapkan bila ketika notifikasi diminta untuk host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:400
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -857,14 +830,15 @@ msgstr ""
 "\"menolak\" memberitahukan otomatis untuk membuat keputusan atas permintaan "
 "tersebut."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Keputusan untuk menerapkan ketika izin menyimpan kata sandi diminta untuk "
 "host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:405
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -877,12 +851,13 @@ msgstr ""
 "\"menolak\" memberitahukan otomatis untuk membuat keputusan atas permintaan "
 "tersebut."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Keputusan untuk menerapkan ketika izin kamera web diminta untuk host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:410
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -895,12 +870,13 @@ msgstr ""
 "dan \"menolak\" memberitahukan otomatis untuk membuat keputusan atas "
 "permintaan tersebut."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Keputusan untuk menerapkan ketika izin iklan diminta untuk host ini"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:415
+#, fuzzy
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -925,7 +901,7 @@ msgstr "Versi %s"
 msgid "About Web"
 msgstr "Tentang Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:618
+#: embed/ephy-about-handler.c:194 src/window-commands.c:626
 msgid "Epiphany Technology Preview"
 msgstr "Pratinjau Teknologi Epiphany"
 
@@ -958,7 +934,7 @@ msgid ""
 "Application…</b> within the page menu."
 msgstr ""
 "Anda dapat menambahkan situs web favorit Anda dengan mengklik <b>Pasang "
-"Situs sebagai Aplikasi Web...</b> dalam menu halaman."
+"Situs sebagai Aplikasi Web…</b> dalam menu halaman."
 
 #. Displayed when opening the browser for the first time.
 #: embed/ephy-about-handler.c:391
@@ -1010,69 +986,69 @@ msgstr ""
 "pada situs-situs web ini mungkin masih melacak Anda."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:727
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Selesai mengunduh: %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:730
+#: embed/ephy-download.c:729
 msgid "Download finished"
 msgstr "Unduhan selesai"
 
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:821
 msgid "Download requested"
 msgstr "Unduhan yang diminta"
 
-#: embed/ephy-download.c:823 lib/widgets/ephy-file-chooser.c:163
+#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
 #: src/resources/gtk/prefs-dialog.ui:1110
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:477 src/window-commands.c:1429
+#: src/window-commands.c:481 src/window-commands.c:1446
 msgid "_Cancel"
 msgstr "_Batal"
 
-#: embed/ephy-download.c:823
+#: embed/ephy-download.c:822
 msgid "_Download"
 msgstr "Un_duh"
 
-#: embed/ephy-download.c:836
+#: embed/ephy-download.c:835
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tipe: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:842
+#: embed/ephy-download.c:841
 #, c-format
 msgid "From: %s"
 msgstr "Dari: %s"
 
 #. Question
-#: embed/ephy-download.c:847
+#: embed/ephy-download.c:846
 msgid "Where do you want to save the file?"
 msgstr "Di mana Anda ingin menyimpan berkas?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:852
+#: embed/ephy-download.c:851
 msgid "Save file"
 msgstr "Simpan berkas"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Tekan %s untuk keluar dari layar penuh"
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:832
+#: embed/ephy-embed.c:794
 msgid "Web is being controlled by automation."
 msgstr "Web dikendalikan oleh otomatisasi."
 
@@ -1414,58 +1390,58 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Tak dikenal (%s)"
 
-#: embed/ephy-find-toolbar.c:115
+#: embed/ephy-find-toolbar.c:112
 msgid "Text not found"
 msgstr "Teks tak ditemukan"
 
-#: embed/ephy-find-toolbar.c:121
+#: embed/ephy-find-toolbar.c:118
 msgid "Search wrapped back to the top"
 msgstr "Pencarian kembali ke puncak"
 
-#: embed/ephy-find-toolbar.c:400
+#: embed/ephy-find-toolbar.c:398
 msgid "Type to search…"
 msgstr "Ketik untuk mencari…"
 
-#: embed/ephy-find-toolbar.c:406
+#: embed/ephy-find-toolbar.c:404
 msgid "Find previous occurrence of the search string"
 msgstr "Cari kata yang dikehendaki ke arah belakang"
 
-#: embed/ephy-find-toolbar.c:414
+#: embed/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Cari lagi kata yang dikehendaki"
 
-#: embed/ephy-view-source-handler.c:255
+#: embed/ephy-view-source-handler.c:254
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s bukan merupakan URI valid"
 
-#: embed/ephy-web-view.c:340 src/window-commands.c:916
+#: embed/ephy-web-view.c:184 src/window-commands.c:924
 msgid "Open"
 msgstr "Buka"
 
-#: embed/ephy-web-view.c:607
+#: embed/ephy-web-view.c:359
 msgid "Not No_w"
 msgstr "Tidak Sekaran_g"
 
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:360
 msgid "_Never Save"
 msgstr "_Tidak Pernah Simpan"
 
-#: embed/ephy-web-view.c:609 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:476
+#: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
+#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Simpan"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:616
+#: embed/ephy-web-view.c:368
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Apakah Anda ingin menyimpan kata sandi Anda untuk \"%s\"?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:854
+#: embed/ephy-web-view.c:608
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1473,64 +1449,64 @@ msgstr ""
 "Perhatian: formulir ini tidak aman. Jika Anda mengetik kata sandi Anda, itu "
 "tidak akan dirahasiakan."
 
-#: embed/ephy-web-view.c:1161
+#: embed/ephy-web-view.c:830
 msgid "Web process crashed"
 msgstr "Proses web macet"
 
-#: embed/ephy-web-view.c:1164
+#: embed/ephy-web-view.c:833
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Proses web dihentikan karena melebihi batas memori"
 
-#: embed/ephy-web-view.c:1587
+#: embed/ephy-web-view.c:1088
 msgid "Deny"
 msgstr "Tolak"
 
-#: embed/ephy-web-view.c:1588
+#: embed/ephy-web-view.c:1089
 msgid "Allow"
 msgstr "Izinkan"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1601
+#: embed/ephy-web-view.c:1102
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Halaman pada %s ingin menampilkan notifikasi destop."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1606
+#: embed/ephy-web-view.c:1107
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Halaman pada %s ingin tahu lokasi Anda."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1611
+#: embed/ephy-web-view.c:1112
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Halaman pada %s ingin menggunakan mikrofon Anda."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1616
+#: embed/ephy-web-view.c:1117
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Halaman pada %s ingin menggunaka kamera web Anda."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1800
+#: embed/ephy-web-view.c:1294
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Memuat \"%s\"…"
 
-#: embed/ephy-web-view.c:1802
+#: embed/ephy-web-view.c:1296 embed/ephy-web-view.c:1302
 msgid "Loading…"
 msgstr "Memuat…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2086
+#: embed/ephy-web-view.c:1629
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Situs web ini menyajikan identifikasi milik situs web lain."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2091
+#: embed/ephy-web-view.c:1634
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1539,19 +1515,19 @@ msgstr ""
 "pada kalender komputer Anda."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2096
+#: embed/ephy-web-view.c:1639
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identifikasi situs web ini tidak diterbitkan oleh organisasi yang terpercaya."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2101
+#: embed/ephy-web-view.c:1644
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Identifikasi situs web ini tak dapat diproses. Mungkin itu rusak."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2106
+#: embed/ephy-web-view.c:1649
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1560,7 +1536,7 @@ msgstr ""
 "menerbitkannya."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2111
+#: embed/ephy-web-view.c:1654
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1569,7 +1545,7 @@ msgstr ""
 "sangat lemah."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2116
+#: embed/ephy-web-view.c:1659
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1579,24 +1555,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2179 embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:1722 embed/ephy-web-view.c:1778
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Masalah Saat Memuat Halaman"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:1725
 msgid "Unable to display this website"
 msgstr "Tak dapat menampilkan situs web ini"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2186
+#: embed/ephy-web-view.c:1729
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Situs di %s tampaknya tidak tersedia."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2190
+#: embed/ephy-web-view.c:1733
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1606,7 +1582,7 @@ msgstr ""
 "benar."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2200
+#: embed/ephy-web-view.c:1743
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Kesalahan tepatnya adalah: %s"
@@ -1614,70 +1590,69 @@ msgstr "Kesalahan tepatnya adalah: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2205 embed/ephy-web-view.c:2258
-#: embed/ephy-web-view.c:2301
+#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1840
 msgid "Reload"
 msgstr "Muat ulang"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2208 embed/ephy-web-view.c:2261
-#: embed/ephy-web-view.c:2304
+#: embed/ephy-web-view.c:1751 embed/ephy-web-view.c:1804
+#: embed/ephy-web-view.c:1843
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2238
+#: embed/ephy-web-view.c:1781
 msgid "Oops! There may be a problem"
 msgstr "Ups! Mungkin ada masalah"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2242
+#: embed/ephy-web-view.c:1785
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Laman %s mungkin telah menyebabkan Web menutup tiba-tiba."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2249
+#: embed/ephy-web-view.c:1792
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Jika hal ini terjadi lagi, harap laporkan masalah ini ke pengembang %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2287
+#: embed/ephy-web-view.c:1829
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Masalah Saat Menampilkan Halaman"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2290
+#: embed/ephy-web-view.c:1832
 msgid "Oops!"
 msgstr "Ups!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2293
-msgid "Something went wrong while displaying this page."
-msgstr "Ada yang tidak beres saat menampilkan halaman ini."
-
-#. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2295
-msgid "Please reload or visit a different page to continue."
-msgstr "Harap muat ulang atau kunjungi halaman lain untuk melanjutkan."
+#: embed/ephy-web-view.c:1835
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Ada yang salah ketika menampilkan halaman ini. Harap muat ulang atau "
+"kunjungi halaman lain untuk melanjutkan."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:1869
 #, c-format
 msgid "Security Violation"
 msgstr "Pelanggaran Keamanan"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2333
+#: embed/ephy-web-view.c:1872
 msgid "This Connection is Not Secure"
 msgstr "Koneksi Ini Tidak Aman"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:1876
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1689,45 +1664,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2347 embed/ephy-web-view.c:2436
-#: embed/ephy-web-view.c:2487
+#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1975
+#: embed/ephy-web-view.c:2026
 msgid "Go Back"
 msgstr "Kembali"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2350 embed/ephy-web-view.c:2439
-#: embed/ephy-web-view.c:2490
+#: embed/ephy-web-view.c:1889 embed/ephy-web-view.c:1978
+#: embed/ephy-web-view.c:2029
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2353 embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:1892 embed/ephy-web-view.c:1981
 msgid "Accept Risk and Proceed"
 msgstr "Terima Risiko dan Lanjutkan"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2357 embed/ephy-web-view.c:2446
+#: embed/ephy-web-view.c:1896 embed/ephy-web-view.c:1985
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2387
+#: embed/ephy-web-view.c:1926
 #, c-format
 msgid "Security Warning"
 msgstr "Peringatan Keamanan"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2390
+#: embed/ephy-web-view.c:1929
 msgid "Unsafe website detected!"
 msgstr "Situs yang tidak aman terdeteksi!"
 
-#: embed/ephy-web-view.c:2397
+#: embed/ephy-web-view.c:1936
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1737,7 +1712,7 @@ msgstr ""
 "berisi kode berbahaya yang bisa diunduh ke komputer Anda tanpa persetujuan "
 "Anda."
 
-#: embed/ephy-web-view.c:2401
+#: embed/ephy-web-view.c:1940
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1747,7 +1722,7 @@ msgstr ""
 "termasuk virus dan kode berbahaya lainnya dan cara melindungi komputer Anda "
 "di %s."
 
-#: embed/ephy-web-view.c:2408
+#: embed/ephy-web-view.c:1947
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1758,7 +1733,7 @@ msgstr ""
 "seperti memasang perangkat lunak atau mengungkapkan informasi pribadi Anda "
 "(misalnya, kata sandi, nomor telepon, atau kartu kredit)."
 
-#: embed/ephy-web-view.c:2413
+#: embed/ephy-web-view.c:1952
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1766,7 +1741,7 @@ msgstr ""
 "Anda dapat mengetahui lebih lanjut tentang rekayasa sosial (phishing) di %s "
 "atau dari %s."
 
-#: embed/ephy-web-view.c:2422
+#: embed/ephy-web-view.c:1961
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1778,7 +1753,7 @@ msgstr ""
 "(misalnya, dengan mengubah beranda Anda atau menampilkan iklan tambahan di "
 "situs yang Anda kunjungi)."
 
-#: embed/ephy-web-view.c:2427
+#: embed/ephy-web-view.c:1966
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr ""
@@ -1787,17 +1762,17 @@ msgstr ""
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2471 embed/ephy-web-view.c:2474
+#: embed/ephy-web-view.c:2010 embed/ephy-web-view.c:2013
 #, c-format
 msgid "File not found"
 msgstr "Berkas tak ditemukan"
 
-#: embed/ephy-web-view.c:2478
+#: embed/ephy-web-view.c:2017
 #, c-format
 msgid "%s could not be found."
 msgstr "%s tidak dapat ditemukan."
 
-#: embed/ephy-web-view.c:2480
+#: embed/ephy-web-view.c:2019
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1806,15 +1781,15 @@ msgstr ""
 "Periksa nama berkas untuk huruf besar atau kesalahan pengetikan lainnya. "
 "Periksa juga apakah sudah dipindahkan, diganti namanya, atau dihapus."
 
-#: embed/ephy-web-view.c:2543
+#: embed/ephy-web-view.c:2082
 msgid "None specified"
 msgstr "Tak dinyatakan apapun"
 
-#: embed/ephy-web-view.c:2659
+#: embed/ephy-web-view.c:2198
 msgid "Technical information"
 msgstr "Informasi teknis"
 
-#: embed/ephy-web-view.c:3629
+#: embed/ephy-web-view.c:3184
 msgid "_OK"
 msgstr "_OK"
 
@@ -1936,14 +1911,14 @@ msgstr "Tak dikenal"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:415
+#: lib/sync/ephy-password-manager.c:416
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Kata sandi bagi %s dalam suatu formulir dalam %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:419
+#: lib/sync/ephy-password-manager.c:420
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Kata sandi dalam suatu formulir di %s"
@@ -1953,7 +1928,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Gagal memperoleh kredensial penyimpanan."
 
 #: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
-#: lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1738
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Silahkan kunjungi Preferensi dan masuk lagi untuk melanjutkan sinkronisasi."
@@ -1974,54 +1949,54 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Gagal memperoleh sertifikat yang ditandatangani."
 
-#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
+#: lib/sync/ephy-sync-service.c:1704 lib/sync/ephy-sync-service.c:1709
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Tidak dapat menemukan rahasia sinkronisasi untuk pengguna yang sync saat ini."
 
-#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
+#: lib/sync/ephy-sync-service.c:1716 lib/sync/ephy-sync-service.c:1724
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Rahasia sync untuk pengguna sync saat ini tidak valid."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1835
+#: lib/sync/ephy-sync-service.c:1832
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Rahasia sync dari %s"
 
-#: lib/sync/ephy-sync-service.c:1861
+#: lib/sync/ephy-sync-service.c:1858
 msgid "Failed to upload client record."
 msgstr "Gagal mengunggah rekaman klien."
 
-#: lib/sync/ephy-sync-service.c:2054
+#: lib/sync/ephy-sync-service.c:2051
 msgid "Failed to upload crypto/keys record."
 msgstr "Gagal mengunggah rekaman kripto/kunci."
 
-#: lib/sync/ephy-sync-service.c:2161
+#: lib/sync/ephy-sync-service.c:2158
 msgid "Failed to retrieve crypto keys."
 msgstr "Gagal mengambil kunci kripto."
 
-#: lib/sync/ephy-sync-service.c:2212
+#: lib/sync/ephy-sync-service.c:2209
 msgid "Failed to upload meta/global record."
 msgstr "Gagal mengunggah rekaman meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2329
+#: lib/sync/ephy-sync-service.c:2326
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Akun Firefox Anda memakai penyimpanan versi %d. Web hanya mendukung versi %d."
 
-#: lib/sync/ephy-sync-service.c:2340
+#: lib/sync/ephy-sync-service.c:2337
 msgid "Failed to verify storage version."
 msgstr "Gagal verifikasi versi penyimpanan."
 
-#: lib/sync/ephy-sync-service.c:2396
+#: lib/sync/ephy-sync-service.c:2393
 msgid "Failed to upload device info"
 msgstr "Gagal mengunggah info perangkat"
 
-#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
+#: lib/sync/ephy-sync-service.c:2466 lib/sync/ephy-sync-service.c:2544
 msgid "Failed to retrieve the Sync Key"
 msgstr "Gagal mengambil Kunci Sync"
 
@@ -2167,32 +2142,32 @@ msgstr "Semua berkas"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:633 src/ephy-history-dialog.c:371
+#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:368
 msgid "Cl_ear"
 msgstr "B_ersihkan"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:647
 msgid "Paste and _Go"
 msgstr "Tempel dan _Jalan"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:674 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:668 src/ephy-window.c:934
 msgid "_Undo"
 msgstr "_Batal"
 
-#: lib/widgets/ephy-location-entry.c:681
+#: lib/widgets/ephy-location-entry.c:675
 msgid "_Redo"
 msgstr "Jadi _Lagi"
 
-#: lib/widgets/ephy-location-entry.c:888
+#: lib/widgets/ephy-location-entry.c:930
 msgid "Show website security status and permissions"
 msgstr "Tampilkan status dan izin keamanan situs web"
 
-#: lib/widgets/ephy-location-entry.c:928
+#: lib/widgets/ephy-location-entry.c:971
 msgid "Bookmark this page"
 msgstr "Penanda taut halaman kini"
 
-#: lib/widgets/ephy-location-entry.c:940
+#: lib/widgets/ephy-location-entry.c:984
 msgid "Toggle reader mode"
 msgstr "Jungkitkan mode pembaca"
 
@@ -2288,7 +2263,7 @@ msgstr ""
 "Berkas merupakan berkas penanda taut Epiphany yang tidak valid: tabel "
 "penanda taut hilang"
 
-#: src/bookmarks/ephy-bookmarks-import.c:245
+#: src/bookmarks/ephy-bookmarks-import.c:246
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2296,8 +2271,8 @@ msgstr ""
 "Basis data penanda taut Firefox tidak bisa dibuka. Tutup Firefox dan coba "
 "lagi."
 
-#: src/bookmarks/ephy-bookmarks-import.c:258
-#: src/bookmarks/ephy-bookmarks-import.c:290
+#: src/bookmarks/ephy-bookmarks-import.c:259
+#: src/bookmarks/ephy-bookmarks-import.c:291
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Penanda taut Firefox tidak dapat diambil!"
@@ -2310,29 +2285,33 @@ msgstr "Favorit"
 msgid "Mobile"
 msgstr "Seluler"
 
-#: src/clear-data-dialog.c:80
+#: src/clear-data-dialog.c:81
 msgid "HTTP disk cache"
 msgstr "Singgahan cakram HTTP"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:82
 msgid "Local storage data"
 msgstr "Penyimpanan data lokal"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:83
 msgid "Offline web application cache"
 msgstr "Singgahan aplikasi web luring"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:84
 msgid "IndexedDB databases"
 msgstr "Basisdata indexedDB"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:85
 msgid "WebSQL databases"
 msgstr "Basisdata webSQL"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:86
 msgid "Plugins data"
 msgstr "Data pengaya"
+
+#: src/clear-data-dialog.c:87
+msgid "HSTS policies cache"
+msgstr "Singgahan kebijakan HSTS"
 
 #: src/cookies-dialog.c:175
 msgid "Remove cookie"
@@ -2343,19 +2322,19 @@ msgstr "Hapus cookie"
 msgid "Reload the current page"
 msgstr "Muat ulang halaman ini"
 
-#: src/ephy-action-bar-start.c:606
+#: src/ephy-action-bar-start.c:620
 msgid "Stop loading the current page"
 msgstr "Berhenti memuat halaman ini"
 
-#: src/ephy-history-dialog.c:275
+#: src/ephy-history-dialog.c:272
 msgid "Remove the selected pages from history"
 msgstr "Buang halaman yang dipilih dari riwayat"
 
-#: src/ephy-history-dialog.c:361
+#: src/ephy-history-dialog.c:358
 msgid "Clear browsing history?"
 msgstr "Kosongkan riwayat perambanan?"
 
-#: src/ephy-history-dialog.c:365
+#: src/ephy-history-dialog.c:362
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2363,7 +2342,7 @@ msgstr ""
 "Penghapusan riwayat peramban akan menyebabkan semua riwayat taut dihapus "
 "secara permanen."
 
-#: src/ephy-history-dialog.c:812
+#: src/ephy-history-dialog.c:809
 msgid "It is not possible to modify history when in incognito mode."
 msgstr ""
 "Hal ini tidak mungkin untuk mengubah riwayat ketika dalam mode penyamaran."
@@ -2412,8 +2391,13 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "Opsi web"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:587 src/resources/gtk/action-bar-start.ui:96
+msgid "Open a new tab"
+msgstr "Buka Tab Baru"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:570
+#: src/ephy-notebook.c:597
 msgid "View open tabs"
 msgstr "Lihat tab yang terbuka"
 
@@ -2430,7 +2414,7 @@ msgstr "Alamat Baru"
 msgid "Bang"
 msgstr "Bang"
 
-#: src/ephy-suggestion-model.c:414
+#: src/ephy-suggestion-model.c:434
 msgid "Switch to Tab"
 msgstr "Beralih ke Tab"
 
@@ -2438,31 +2422,31 @@ msgstr "Beralih ke Tab"
 msgid "Tabs"
 msgstr "Tab"
 
-#: src/ephy-tab-label.c:232
+#: src/ephy-tab-label.c:296
 msgid "New Tab"
 msgstr "Tab Baru"
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:267
 msgid "Do you want to leave this website?"
 msgstr "Apakah Anda ingin meninggalkan situs ini?"
 
-#: src/ephy-window.c:267
+#: src/ephy-window.c:268
 msgid "A form you modified has not been submitted."
 msgstr "Formulir yang Anda ubah belum diserahkan."
 
-#: src/ephy-window.c:268
+#: src/ephy-window.c:269
 msgid "_Discard form"
 msgstr "_Buang formulir"
 
-#: src/ephy-window.c:283
+#: src/ephy-window.c:284
 msgid "There are multiple tabs open."
 msgstr "Ada beberapa tab terbuka."
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:285
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Jika Anda menutup jendela ini, semua tab yang terbuka akan hilang"
 
-#: src/ephy-window.c:285
+#: src/ephy-window.c:286
 msgid "C_lose tabs"
 msgstr "T_utup tab"
 
@@ -2584,47 +2568,63 @@ msgstr "_Simpan Audio Sebagai…"
 msgid "_Copy Audio Address"
 msgstr "_Salin Alamat Audio"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:986
 msgid "Save Pa_ge As…"
 msgstr "Simpan Ha_laman Sebagai…"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "_Page Source"
 msgstr "Kode Sumber _Halaman"
 
-#: src/ephy-window.c:1374
+#: src/ephy-window.c:1347
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cari %s di Web"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:1376
+msgid "Open Link"
+msgstr "Buka Taut"
+
+#: src/ephy-window.c:1378
+msgid "Open Link In New Tab"
+msgstr "Buka Taut Dalam Tab baru"
+
+#: src/ephy-window.c:1380
+msgid "Open Link In New Window"
+msgstr "Buka Taut Dalam Jendela Baru"
+
+#: src/ephy-window.c:1382
+msgid "Open Link In Incognito Window"
+msgstr "Buka Taut Dalam Jendela Penyamaran"
+
+#: src/ephy-window.c:2922
 msgid "Download operation"
 msgstr "Operasi unduhan"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2924
 msgid "Show details"
 msgstr "Tampilkan detail"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2926
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operasi pengunduhan aktif"
 msgstr[1] "%d operasi pengunduhan aktif"
 
-#: src/ephy-window.c:3513
+#: src/ephy-window.c:3554
 msgid "Set Web as your default browser?"
 msgstr "Atur Web sebagai peramban bawaan Anda?"
 
-#: src/ephy-window.c:3515
+#: src/ephy-window.c:3556
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Tetapkan Pratinjau Teknologi Epiphany sebagai peramban bawaan Anda?"
 
-#: src/ephy-window.c:3527
+#: src/ephy-window.c:3568
 msgid "_Yes"
 msgstr "_Ya"
 
-#: src/ephy-window.c:3528
+#: src/ephy-window.c:3569
 msgid "_No"
 msgstr "_Tidak"
 
@@ -2643,72 +2643,72 @@ msgstr "Simpan Media Sebagai"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:237
+#: src/prefs-dialog.c:236
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Terakhir diselaraskan: %s"
 
-#: src/prefs-dialog.c:525
+#: src/prefs-dialog.c:524
 msgid "Something went wrong, please try again later."
 msgstr "Ada yang tidak beres, harap coba lagi nanti."
 
-#: src/prefs-dialog.c:818
+#: src/prefs-dialog.c:813
 msgid "Web Application Icon"
 msgstr "Ikon Aplikasi Web"
 
-#: src/prefs-dialog.c:823
+#: src/prefs-dialog.c:818
 msgid "Supported Image Files"
 msgstr "Berkas Gambar Yang Didukung"
 
-#: src/prefs-dialog.c:1269
+#: src/prefs-dialog.c:1264
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Bahasa sistem (%s)"
 msgstr[1] "Bahasa sistem (%s)"
 
-#: src/prefs-dialog.c:1558 src/resources/gtk/prefs-dialog.ui:745
+#: src/prefs-dialog.c:1553 src/resources/gtk/prefs-dialog.ui:745
 #: src/resources/gtk/prefs-dialog.ui:932
 msgid "Language"
 msgstr "Bahasa"
 
-#: src/prefs-dialog.c:1639
+#: src/prefs-dialog.c:1634
 msgid "Select a directory"
 msgstr "Pilih direktori"
 
-#: src/prefs-dialog.c:2027
+#: src/prefs-dialog.c:2023
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2029
+#: src/prefs-dialog.c:2025
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2073
+#: src/prefs-dialog.c:2069
 msgid "Light"
 msgstr "Terang"
 
-#: src/prefs-dialog.c:2075
+#: src/prefs-dialog.c:2071
 msgid "Dark"
 msgstr "Gelap"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1384
+#: src/profile-migrator/ephy-profile-migrator.c:1400
 msgid "Executes only the n-th migration step"
 msgstr "Laksanakan hanya langkah migrasi ke-n"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1386
+#: src/profile-migrator/ephy-profile-migrator.c:1402
 msgid "Specifies the required version for the migrator"
 msgstr "Menentukan versi migrator yang diperlukan"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1388
+#: src/profile-migrator/ephy-profile-migrator.c:1404
 msgid "Specifies the profile where the migrator should run"
 msgstr "Menentukan profil yang seharusnya dijalankan oleh migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1409
+#: src/profile-migrator/ephy-profile-migrator.c:1425
 msgid "Web profile migrator"
 msgstr "Pemigrasi profil Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1410
+#: src/profile-migrator/ephy-profile-migrator.c:1426
 msgid "Web profile migrator options"
 msgstr "Opsi pemigrasi profil Web"
 
@@ -2718,7 +2718,7 @@ msgid "View and manage your bookmarks"
 msgstr "Lihat dan kelola penanda taut Anda"
 
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:36
+#: src/resources/gtk/action-bar-end.ui:34
 msgid "View downloads"
 msgstr "Lihat unduhan"
 
@@ -2736,11 +2736,6 @@ msgstr "Maju ke halaman selanjutnya"
 #: src/resources/gtk/action-bar-start.ui:77
 msgid "Go to your homepage"
 msgstr "Pergi ke halaman pembuka"
-
-#. Translators: tooltip for the new tab button
-#: src/resources/gtk/action-bar-start.ui:96
-msgid "Open a new tab"
-msgstr "Buka Tab Baru"
 
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:21
@@ -2767,16 +2762,16 @@ msgstr "Alamat"
 msgid "Tags"
 msgstr "Tag"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:140
+#: src/resources/gtk/bookmark-properties-grid.ui:142
 msgid "Add Tag…"
 msgstr "Tambahkan Tag…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:148
+#: src/resources/gtk/bookmark-properties-grid.ui:150
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "T_ambah"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:163
+#: src/resources/gtk/bookmark-properties-grid.ui:165
 msgid "_Remove Bookmark"
 msgstr "_Hapus Penanda Taut"
 
@@ -2968,81 +2963,81 @@ msgstr "T_utup Tab Lainnya"
 msgid "_Close"
 msgstr "_Tutup"
 
-#: src/resources/gtk/page-menu-popover.ui:21
+#: src/resources/gtk/page-menu-popover.ui:24
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Perkecil"
 
-#: src/resources/gtk/page-menu-popover.ui:40
+#: src/resources/gtk/page-menu-popover.ui:43
 msgid "Restore Zoom"
 msgstr "Kembalikan Zum"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Perbesar"
 
-#: src/resources/gtk/page-menu-popover.ui:80
+#: src/resources/gtk/page-menu-popover.ui:84
 msgid "Print…"
 msgstr "Cetak…"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:99
 msgid "Find…"
 msgstr "Cari…"
 
-#: src/resources/gtk/page-menu-popover.ui:110
+#: src/resources/gtk/page-menu-popover.ui:114
 msgid "Fullscreen"
 msgstr "Layar penuh"
 
-#: src/resources/gtk/page-menu-popover.ui:137
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "_New Window"
 msgstr "_Jendela Baru"
 
-#: src/resources/gtk/page-menu-popover.ui:145
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "New _Incognito Window"
 msgstr "_Jendela Penyamaran Baru"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:175
 msgid "Reopen Closed _Tab"
 msgstr "Buka Ulang _Tab Yang Ditutup"
 
-#: src/resources/gtk/page-menu-popover.ui:170
+#: src/resources/gtk/page-menu-popover.ui:183
 msgid "_History"
 msgstr "_Riwayat"
 
-#: src/resources/gtk/page-menu-popover.ui:187
+#: src/resources/gtk/page-menu-popover.ui:200
 msgid "I_mport Bookmarks…"
 msgstr "I_mpor Penanda Taut…"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:208
 msgid "E_xport Bookmarks…"
 msgstr "E_kspor Penanda Taut…"
 
-#: src/resources/gtk/page-menu-popover.ui:212
+#: src/resources/gtk/page-menu-popover.ui:225
 msgid "Install Site as Web _Application…"
 msgstr "Pasang Situs Sebagai Aplikasi _Web…"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:233
 msgid "Open Appli_cation Manager"
 msgstr "Buka Pen_gelola Aplikasi"
 
-#: src/resources/gtk/page-menu-popover.ui:237
+#: src/resources/gtk/page-menu-popover.ui:250
 msgid "_Override Text Encoding…"
 msgstr "Timpa Pengk_odean Teks…"
 
-#: src/resources/gtk/page-menu-popover.ui:253
+#: src/resources/gtk/page-menu-popover.ui:266
 msgid "Pr_eferences"
 msgstr "Pr_eferensi"
 
-#: src/resources/gtk/page-menu-popover.ui:262
+#: src/resources/gtk/page-menu-popover.ui:275
 msgid "_Keyboard Shortcuts"
 msgstr "Pintasan Papan _Ketik"
 
-#: src/resources/gtk/page-menu-popover.ui:271
+#: src/resources/gtk/page-menu-popover.ui:284
 msgid "_Help"
 msgstr "Ba_ntuan"
 
-#: src/resources/gtk/page-menu-popover.ui:280
+#: src/resources/gtk/page-menu-popover.ui:293
 msgid "_About Web"
 msgstr "Tent_ang Web"
 
@@ -3731,7 +3726,7 @@ msgstr "Pilih Profil"
 msgid "_Select"
 msgstr "_Pilih"
 
-#: src/window-commands.c:295 src/window-commands.c:473
+#: src/window-commands.c:295 src/window-commands.c:477
 msgid "Choose File"
 msgstr "Pilih Berkas"
 
@@ -3751,16 +3746,16 @@ msgstr "P_ilih Berkas"
 msgid "From:"
 msgstr "Dari:"
 
-#: src/window-commands.c:456
+#: src/window-commands.c:457
 msgid "Bookmarks successfully exported!"
 msgstr "Penanda taut sukses diekspor!"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:481
+#: src/window-commands.c:485
 msgid "bookmarks.gvdb"
 msgstr "penanda taut.gvdb"
 
-#: src/window-commands.c:604
+#: src/window-commands.c:612
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3769,83 +3764,83 @@ msgstr ""
 "Menampilkan web dengan sederhana, bersih, dan indah.\n"
 "Diberdayakan oleh WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:628
+#: src/window-commands.c:636
 msgid "Website"
 msgstr "Situs Web"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:669
 msgid "translator-credits"
 msgstr ""
 "Tunggul Arif Siswoyo <tunggul@matralintas.net>, 2003\n"
 "Mohammad DAMT <mdamt@bisnisweb.com>, 2004, 2005, 2006\n"
 "Ahmad Riza H Nst  <rizahnst@eriagempita.co.id>, 2005, 2006\n"
 "Dirgita <dirgitadevina@yahoo.co.id>, 2011, 2012\n"
-"Andika Triwidada <andika@gmail.com>, 2011-2015.\n"
+"Andika Triwidada <andika@gmail.com>, 2011-2015, 2019.\n"
 "Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019."
 
-#: src/window-commands.c:1285
+#: src/window-commands.c:1302
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Aplikasi web bernama '%s' telah ada. Apakah Anda ingin menimpanya?"
 
-#: src/window-commands.c:1288
+#: src/window-commands.c:1305
 msgid "Cancel"
 msgstr "Batal"
 
-#: src/window-commands.c:1290
+#: src/window-commands.c:1307
 msgid "Replace"
 msgstr "Timpa"
 
-#: src/window-commands.c:1294
+#: src/window-commands.c:1311
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Aplikasi dengan nama sama telah ada. Menggantinya akan menimpanya."
 
-#: src/window-commands.c:1369
+#: src/window-commands.c:1386
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplikasi '%s' siap untuk digunakan"
 
-#: src/window-commands.c:1372
+#: src/window-commands.c:1389
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Aplikasi '%s' tidak dapat dibuat"
 
-#: src/window-commands.c:1380
+#: src/window-commands.c:1397
 msgid "Launch"
 msgstr "Luncurkan"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1426
+#: src/window-commands.c:1443
 msgid "Create Web Application"
 msgstr "Buat Aplikasi Web"
 
-#: src/window-commands.c:1431
+#: src/window-commands.c:1448
 msgid "C_reate"
 msgstr "_Buat"
 
-#: src/window-commands.c:1645
+#: src/window-commands.c:1662
 msgid "Save"
 msgstr "Simpan"
 
-#: src/window-commands.c:1654
+#: src/window-commands.c:1671
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1659
+#: src/window-commands.c:1676
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1664
+#: src/window-commands.c:1681
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2397
+#: src/window-commands.c:2141
 msgid "Enable caret browsing mode?"
 msgstr "Aktifkan mode tanda sisip?"
 
-#: src/window-commands.c:2400
+#: src/window-commands.c:2144
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3856,47 +3851,6 @@ msgstr ""
 "memungkinkan Anda berpindah-pindah dengan papan tik Anda. Apakah Anda ingin "
 "mengaktifkan meramban dengan tanda sisip?"
 
-#: src/window-commands.c:2403
+#: src/window-commands.c:2147
 msgid "_Enable"
 msgstr "_Aktifkan"
-
-#~ msgid ""
-#~ "Enables tracking query parameter removal. Note that when changing this "
-#~ "setting from the preferences dialog, the adblock-filters setting will "
-#~ "additionally be updated to add/remove EasyPrivacy filters."
-#~ msgstr ""
-#~ "Aktifkan penghapusan pelacakan parameter kueri. Perhatikan bahwa ketika "
-#~ "mengubah pengaturan ini dari dialog preferensi, pengaturan penyaring-"
-#~ "pemblokir iklan tambahan akan diperbarui untuk menambah/menghapus "
-#~ "penyaring EasyPrivacy."
-
-#~ msgid "Epiphany adblocker refused to load %s"
-#~ msgstr "Pemblokir iklan Epiphany menolak memuat %s"
-
-#~ msgid "Try to block web _trackers"
-#~ msgstr "Coba untuk memblokir _pelacak web"
-
-#~ msgid "Spell checking language"
-#~ msgstr "Bahasa pemeriksaan ejaan"
-
-#~ msgid ""
-#~ "Language which is used by Spell checker in locale format (e.g. en_US, "
-#~ "de_DE)."
-#~ msgstr ""
-#~ "Bahasa yang digunakan oleh Pemeriksa ejaan dalam format lokal (mis. "
-#~ "en_US, de_DE)."
-
-#~ msgid "Current maintainers"
-#~ msgstr "Pengelola saat ini"
-
-#~ msgid "Past maintainers"
-#~ msgstr "Pengelola terdahulu"
-
-#~ msgid "Documented by"
-#~ msgstr "Dokumentasi oleh"
-
-#~ msgid "Artwork by"
-#~ msgstr "Karya seni oleh"
-
-#~ msgid "Contributors"
-#~ msgstr "Kontributor"
