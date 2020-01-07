@@ -109,23 +109,19 @@ web_resource_data_cb (WebKitWebResource     *resource,
                       EphyViewSourceRequest *request)
 {
   g_autofree guchar *data = NULL;
-  g_autofree char *data_str = NULL;
   g_autofree char *escaped_str = NULL;
   g_autoptr (GError) error = NULL;
   g_autofree char *html = NULL;
   gsize length;
 
   data = webkit_web_resource_get_data_finish (resource, result, &length, &error);
-  if (error) {
+  if (!data) {
     finish_uri_scheme_request (request, NULL, error);
     return;
   }
 
-  data_str = g_malloc (length + 1);
-  strncpy (data_str, (const char *)data, length);
-  data_str[length] = '\0';
-
-  escaped_str = g_markup_escape_text (data_str, -1);
+  /* Warning: data is not a string, so we pass length here because it's not NUL-terminated. */
+  escaped_str = g_markup_escape_text ((const char *)data, length);
 
   html = g_strdup_printf ("<head>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlight.css'>"
