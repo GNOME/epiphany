@@ -120,7 +120,7 @@ web_resource_data_cb (WebKitWebResource     *resource,
     return;
   }
 
-  /* Warning: We expect 'data' to be a nul terminated string, but it is not mandatory */
+  /* Warning: data is not a string, so we pass length here because it's not NUL-terminated. */
   escaped_str = g_markup_escape_text ((const char *)data, length);
 
   html = g_strdup_printf ("<head>"
