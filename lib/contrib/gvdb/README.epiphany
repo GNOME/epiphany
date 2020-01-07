@@ -3,3 +3,6 @@ GVariant Database
  * Copied from https://git.gnome.org/browse/gvdb commit a6f0eadb51aae5351a0cfd6b9da3dcba6b134e1a
  * Removed G_GNUC_INTERNAL and GVDB_GNUC_WEAK
  * Fix -Wsign-compare
+ * Add clang ifdef guards (#ifndef __clang_analyzer__) around:
+   - file_builder_allocate_for_hash
+   - file_builder_add_hash
