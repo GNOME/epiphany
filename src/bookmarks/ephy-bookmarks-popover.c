@@ -239,11 +239,10 @@ create_tag_row (const char *tag)
 
   if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0) {
     image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic", GTK_ICON_SIZE_MENU);
-    label = gtk_label_new (_(EPHY_BOOKMARKS_FAVORITES_TAG));
   } else {
     image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic", GTK_ICON_SIZE_MENU);
-    label = gtk_label_new (tag);
   }
+  label = gtk_label_new (tag);
 
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
@@ -410,10 +409,7 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
     gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
   }
 
-  if (strcmp (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    gtk_label_set_label (GTK_LABEL (self->tag_detail_label), _(EPHY_BOOKMARKS_FAVORITES_TAG));
-  else
-    gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
+  gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
 
