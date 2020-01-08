@@ -850,8 +850,15 @@ ephy_web_application_save (EphyWebApplication *app)
 
     icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
     if (g_strcmp0 (icon, app->icon_url) != 0) {
+      GFile *new_icon;
+      GFile *old_icon;
       changed = TRUE;
-      g_key_file_set_string (key, "Desktop Entry", "Icon", app->icon_url);
+      new_icon = g_file_new_for_path (app->icon_url);
+      old_icon = g_file_new_for_path (icon);
+      if (!g_file_copy (new_icon, old_icon, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error)) {
+        g_warning ("Failed to change icon: %s", error->message);
+        g_error_free (error);
+      }
     }
     g_free (icon);
 
