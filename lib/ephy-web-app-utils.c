@@ -818,6 +818,17 @@ ephy_web_application_is_uri_allowed (const char *uri)
   return matched;
 }
 
+static void
+ephy_web_icon_copy_cb (GFile *file,
+                       GAsyncResult *result,
+                       gpointer user_data)
+{
+  GError *error = NULL;
+  if (!g_file_copy_finish(file, result, &error))
+    g_warning ("Failed to change icon: %s", error->message);
+    g_error_free (error);
+}
+
 gboolean
 ephy_web_application_save (EphyWebApplication *app)
 {
@@ -850,8 +861,14 @@ ephy_web_application_save (EphyWebApplication *app)
 
     icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
     if (g_strcmp0 (icon, app->icon_url) != 0) {
+      GFile *new_icon;
+      GFile *old_icon;
       changed = TRUE;
-      g_key_file_set_string (key, "Desktop Entry", "Icon", app->icon_url);
+      new_icon = g_file_new_for_path (app->icon_url);
+      old_icon = g_file_new_for_path (icon);
+      g_file_copy_async (new_icon, old_icon, G_FILE_COPY_OVERWRITE,
+                         G_PRIORITY_DEFAULT, NULL, NULL, NULL,
+                         (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
     }
     g_free (icon);
 
