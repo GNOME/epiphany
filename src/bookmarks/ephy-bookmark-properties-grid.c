@@ -185,7 +185,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
     gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   }
 
-  label_text = default_tag ? _(EPHY_BOOKMARKS_FAVORITES_TAG) : tag;
+  label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
   label = gtk_label_new (label_text);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
