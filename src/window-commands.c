@@ -880,13 +880,18 @@ window_cmd_new_tab (GSimpleAction *action,
 {
   GtkWidget *stack;
   EphyWindow *window = user_data;
+  char *home;
 
   stack = ephy_window_get_stack (window);
+  home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+  if (home[0] == '\0')
+    home = NULL;
 
   ephy_link_open (EPHY_LINK (window),
-                  NULL, NULL,
+                  home, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  g_free (home);
 }
 
 static void
