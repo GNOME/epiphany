@@ -418,8 +418,8 @@ new_tab_button_release_event_cb (GtkButton *button,
   action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
 
   switch (((GdkEventButton *)event)->button) {
-    case GDK_BUTTON_PRIMARY:
-      action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "homepage-new-tab");
+    case GDK_BUTTON_MIDDLE:
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab-from-clipboard");
       g_action_activate (action, NULL);
       return GDK_EVENT_STOP;
     default:
