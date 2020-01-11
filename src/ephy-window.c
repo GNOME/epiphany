@@ -3016,6 +3016,26 @@ real_get_active_tab (EphyWindow *window,
   return EPHY_EMBED (embed);
 }
 
+void
+ephy_window_update_entry_focus (EphyWindow  *window,
+                                EphyWebView *view)
+{
+  GtkWidget *title_widget;
+  EphyLocationEntry *lentry;
+  GtkWidget *entry;
+  const char *address = NULL;
+
+  address = ephy_web_view_get_address (view);
+  if (!ephy_embed_utils_is_no_show_address (address) && !ephy_web_view_is_overview (view))
+    return;
+
+  title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+  entry = ephy_location_entry_get_entry (lentry);
+
+  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (entry));
+}
+
 static void
 notebook_switch_page_cb (GtkNotebook *notebook,
                          GtkWidget   *page,
@@ -3045,6 +3065,8 @@ notebook_switch_page_cb (GtkNotebook *notebook,
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_uint32 (page_num));
 
   update_reader_mode (window, view);
+
+  ephy_window_update_entry_focus (window, view);
 }
 
 static void
