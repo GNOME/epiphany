@@ -84,4 +84,7 @@ void              ephy_window_show_fullscreen_header_bar (EphyWindow *window);
 int               ephy_window_get_position_for_new_embed (EphyWindow *window,
                                                           EphyEmbed  *embed);
 
+void              ephy_window_update_entry_focus         (EphyWindow  *window,
+                                                          EphyWebView *view);
+
 G_END_DECLS

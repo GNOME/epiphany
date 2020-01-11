@@ -1295,6 +1295,7 @@ session_end_element (GMarkupParseContext  *ctx,
 
       active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (context->window));
       gtk_widget_grab_focus (GTK_WIDGET (active_child));
+      ephy_window_update_entry_focus (context->window, ephy_embed_get_web_view (active_child));
       gtk_widget_show (GTK_WIDGET (context->window));
     }
 
