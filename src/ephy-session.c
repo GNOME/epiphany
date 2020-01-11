@@ -1695,14 +1695,15 @@ ephy_session_resume (EphySession         *session,
 
   shell = ephy_shell_get_default ();
 
+  /* If we are auto-resuming, and we never want to
+   * restore the session, clobber the session state
+   * file.
+   */
+  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
+    session_delete (session);
+
   if (has_session_state == FALSE ||
       policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER) {
-    /* If we are auto-resuming, and we never want to
-     * restore the session, clobber the session state
-     * file. */
-    if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-      session_delete (session);
-
     session_maybe_open_window (session, user_time);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     ephy_session_load (session, SESSION_STATE, user_time, cancellable,
