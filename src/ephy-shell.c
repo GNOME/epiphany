@@ -30,6 +30,7 @@
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
+#include "ephy-link.h"
 #include "ephy-lockdown.h"
 #include "ephy-notification.h"
 #include "ephy-prefs.h"
@@ -126,6 +127,9 @@ ephy_shell_startup_continue (EphyShell               *shell,
     /* since session autoresume will open one for us. */
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
                           ctx->startup_mode, ctx->user_time);
+  } else if (ephy_shell_get_n_windows (shell) == 0) {
+    EphyWindow *window = ephy_window_new ();
+    ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
   }
 }
 
