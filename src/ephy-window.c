@@ -54,6 +54,7 @@
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
+#include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
@@ -1491,6 +1492,7 @@ populate_context_menu (WebKitWebView       *web_view,
   char *search_selection_action_name = NULL;
   char *open_selection_action_name = NULL;
   const char *selected_text = NULL;
+  const char *uri = NULL;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_CONTEXT_MENU))
@@ -1773,8 +1775,12 @@ populate_context_menu (WebKitWebView       *web_view,
 
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu, window_action_group,
-                                "page-source", window);
+    uri = webkit_web_view_get_uri (web_view);
+    if (uri && !strstr (uri, EPHY_VIEW_SOURCE_SCHEME)) {
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "page-source", window);
+    }
+
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
   }
