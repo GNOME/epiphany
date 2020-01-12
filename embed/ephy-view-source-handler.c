@@ -125,12 +125,14 @@ web_resource_data_cb (WebKitWebResource     *resource,
 
   html = g_strdup_printf ("<head>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlight.css'>"
+                          "  <title>%s</title>"
                           "</head>"
                           "<body class='hljs'>"
                           "  <script src='ephy-resource:///org/gnome/epiphany/highlight.js'></script>"
                           "  <script>hljs.initHighlightingOnLoad();</script>"
                           "  <pre><code class='html'>%s</code></pre>"
                           "</body>",
+                          webkit_web_resource_get_uri (resource),
                           escaped_str);
 
   finish_uri_scheme_request (request, g_steal_pointer (&html), NULL);
