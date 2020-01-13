@@ -23,23 +23,23 @@
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Enrico Nicoletto <liverig@gmail.com>, 2013-2016.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018.
-# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018.
+# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-04 04:56+0000\n"
-"PO-Revision-Date: 2020-01-04 22:49-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2020-01-12 19:02+0000\n"
+"PO-Revision-Date: 2020-01-12 21:19-0300\n"
+"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.32.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -929,7 +929,7 @@ msgstr "Versão %s"
 
 #: embed/ephy-about-handler.c:189
 msgid "About Web"
-msgstr "Sobre o web"
+msgstr "Sobre o Web"
 
 #: embed/ephy-about-handler.c:194 src/window-commands.c:626
 msgid "Epiphany Technology Preview"
@@ -1030,7 +1030,7 @@ msgstr "Download requisitado"
 #: src/resources/gtk/prefs-dialog.ui:1110
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:481 src/window-commands.c:1446
+#: src/window-commands.c:481 src/window-commands.c:1453
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1436,12 +1436,12 @@ msgstr "Localiza a ocorrência anterior da palavra ou frase"
 msgid "Find next occurrence of the search string"
 msgstr "Localiza a próxima ocorrência da palavra ou frase"
 
-#: embed/ephy-view-source-handler.c:254
+#: embed/ephy-view-source-handler.c:252
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s não é uma URI válida"
 
-#: embed/ephy-web-view.c:184 src/window-commands.c:924
+#: embed/ephy-web-view.c:184 src/window-commands.c:931
 msgid "Open"
 msgstr "Abrir"
 
@@ -2183,7 +2183,7 @@ msgid "Paste and _Go"
 msgstr "C_olar e ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:668 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:668 src/ephy-window.c:935
 msgid "_Undo"
 msgstr "Desfa_zer"
 
@@ -2195,11 +2195,15 @@ msgstr "_Refazer"
 msgid "Show website security status and permissions"
 msgstr "Mostra o status e permissões de segurança do site"
 
-#: lib/widgets/ephy-location-entry.c:971
+#: lib/widgets/ephy-location-entry.c:932
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "Pesquisa por sites, favoritos e abas abertas"
+
+#: lib/widgets/ephy-location-entry.c:972
 msgid "Bookmark this page"
 msgstr "Adiciona esta página aos favoritos"
 
-#: lib/widgets/ephy-location-entry.c:984
+#: lib/widgets/ephy-location-entry.c:985
 msgid "Toggle reader mode"
 msgstr "Ativa/desativa o modo de leitura"
 
@@ -2457,210 +2461,205 @@ msgstr "Abas"
 msgid "New Tab"
 msgstr "Nova aba"
 
-#: src/ephy-window.c:267
+#: src/ephy-window.c:268
 msgid "Do you want to leave this website?"
 msgstr "Você deseja sair deste site?"
 
-#: src/ephy-window.c:268
+#: src/ephy-window.c:269
 msgid "A form you modified has not been submitted."
 msgstr "Uma formulário que você modificou não foi enviado."
 
-#: src/ephy-window.c:269
+#: src/ephy-window.c:270
 msgid "_Discard form"
 msgstr "_Descartar formulário"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:285
 msgid "There are multiple tabs open."
 msgstr "Há várias abas abertas."
 
-#: src/ephy-window.c:285
+#: src/ephy-window.c:286
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se você fechar essa janela, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:287
 msgid "C_lose tabs"
 msgstr "_Fechar abas"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Re_do"
 msgstr "_Refazer"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:940
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:941
 msgid "_Paste"
 msgstr "C_olar"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:942
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "S_end Link by Email…"
 msgstr "E_nviar link por e-mail…"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "_Reload"
 msgstr "_Recarregar"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:947
 msgid "_Back"
 msgstr "_Voltar"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:948
 msgid "_Forward"
 msgstr "Ava_nçar"
 
 #. Bookmarks
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Add Boo_kmark…"
 msgstr "Adicionar aos _favoritos…"
 
 #. Links.
-#: src/ephy-window.c:954
+#: src/ephy-window.c:955
 msgid "Open Link in New _Window"
 msgstr "Abrir link em nova _janela"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:956
 msgid "Open Link in New _Tab"
 msgstr "Abrir link em nova a_ba"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir link em janela anôn_ima"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "_Save Link As…"
 msgstr "Salvar link _como…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Copy Link Address"
 msgstr "Copiar endereço do _link"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy E-mail Address"
 msgstr "_Copiar endereço de e-mail"
 
 #. Images.
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "View _Image in New Tab"
 msgstr "Ver _imagem em nova aba"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Copy I_mage Address"
 msgstr "Copiar endereço da i_magem"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Save Image As…"
 msgstr "_Salvar imagem como…"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:967
 msgid "Set as _Wallpaper"
 msgstr "Definir como _papel de parede"
 
 #. Video.
-#: src/ephy-window.c:970
+#: src/ephy-window.c:971
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo em nova _janela"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:972
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo em nova a_ba"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "_Save Video As…"
 msgstr "Sal_var vídeo como…"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:974
 msgid "_Copy Video Address"
 msgstr "_Copiar endereço de vídeo"
 
 #. Audio.
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Audio in New _Window"
 msgstr "Abrir áudio em nova _janela"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Audio in New _Tab"
 msgstr "Abrir áudio em nova a_ba"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Audio As…"
 msgstr "Sal_var áudio como…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Audio Address"
 msgstr "_Copiar endereço de áudio"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "Save Pa_ge As…"
 msgstr "Salvar pá_gina como…"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "_Page Source"
 msgstr "Có_digo-fonte da página"
 
-#: src/ephy-window.c:1347
+#: src/ephy-window.c:1348
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Pesquisar na web por “%s”"
 
-#: src/ephy-window.c:1376
-#| msgctxt "shortcut window"
-#| msgid "Open file"
+#: src/ephy-window.c:1377
 msgid "Open Link"
 msgstr "Abrir link"
 
-#: src/ephy-window.c:1378
-#| msgid "Open Link in New _Tab"
+#: src/ephy-window.c:1379
 msgid "Open Link In New Tab"
 msgstr "Abrir link em nova aba"
 
-#: src/ephy-window.c:1380
-#| msgid "Open Link in New _Window"
+#: src/ephy-window.c:1381
 msgid "Open Link In New Window"
 msgstr "Abrir link em nova janela"
 
-#: src/ephy-window.c:1382
-#| msgid "Open Link in I_ncognito Window"
+#: src/ephy-window.c:1383
 msgid "Open Link In Incognito Window"
 msgstr "Abrir link em janela anônima"
 
-#: src/ephy-window.c:2922
+#: src/ephy-window.c:2928
 msgid "Download operation"
 msgstr "Operação de download"
 
-#: src/ephy-window.c:2924
+#: src/ephy-window.c:2930
 msgid "Show details"
 msgstr "Mostrar detalhes"
 
-#: src/ephy-window.c:2926
+#: src/ephy-window.c:2932
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operação de download ativa"
 msgstr[1] "%d operações de download ativas"
 
-#: src/ephy-window.c:3554
+#: src/ephy-window.c:3582
 msgid "Set Web as your default browser?"
 msgstr "Definir o Web como seu navegador padrão?"
 
-#: src/ephy-window.c:3556
+#: src/ephy-window.c:3584
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Definir Teste de Tecnologia do Epiphany como seu navegador padrão?"
 
-#: src/ephy-window.c:3568
+#: src/ephy-window.c:3596
 msgid "_Yes"
 msgstr "_Sim"
 
-#: src/ephy-window.c:3569
+#: src/ephy-window.c:3597
 msgid "_No"
 msgstr "_Não"
 
@@ -2778,38 +2777,37 @@ msgstr "Vai para a página inicial"
 msgid "View open pages"
 msgstr "Visualiza as páginas abertas"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:11
+#: src/resources/gtk/bookmark-properties-grid.ui:16
 msgid "Bookmark"
 msgstr "Favorito"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:27
+#: src/resources/gtk/bookmark-properties-grid.ui:31
 #: src/resources/gtk/search-engine-dialog.ui:139
 msgid "Name"
 msgstr "Nome"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:52
+#: src/resources/gtk/bookmark-properties-grid.ui:59
 #: src/resources/gtk/search-engine-dialog.ui:152
 msgid "Address"
 msgstr "Endereço"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:76
-#: src/resources/gtk/bookmark-properties-grid.ui:94
+#: src/resources/gtk/bookmark-properties-grid.ui:86
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Marcadores"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:142
+#: src/resources/gtk/bookmark-properties-grid.ui:106
 msgid "Add Tag…"
 msgstr "Adicionar marcador…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:150
+#: src/resources/gtk/bookmark-properties-grid.ui:116
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Adicionar"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:165
-msgid "_Remove Bookmark"
-msgstr "_Remover favoritos"
+#: src/resources/gtk/bookmark-properties-grid.ui:175
+msgid "_Remove"
+msgstr "_Remover"
 
 #: src/resources/gtk/bookmarks-popover.ui:54
 msgid "All"
@@ -3060,15 +3058,15 @@ msgstr "Abrir geren_ciador de aplicativo"
 
 #: src/resources/gtk/page-menu-popover.ui:250
 msgid "_Override Text Encoding…"
-msgstr "S_obrescrever codificação de texto"
+msgstr "S_obrescrever codificação de texto…"
 
 #: src/resources/gtk/page-menu-popover.ui:266
 msgid "Pr_eferences"
-msgstr "Pr_eferências"
+msgstr "_Preferências"
 
 #: src/resources/gtk/page-menu-popover.ui:275
 msgid "_Keyboard Shortcuts"
-msgstr "A_talhos de teclado"
+msgstr "Atalhos de _teclado"
 
 #: src/resources/gtk/page-menu-popover.ui:284
 msgid "_Help"
@@ -3076,7 +3074,7 @@ msgstr "Aj_uda"
 
 #: src/resources/gtk/page-menu-popover.ui:293
 msgid "_About Web"
-msgstr "_Sobre o web"
+msgstr "_Sobre o Web"
 
 #: src/resources/gtk/page-row.ui:85
 msgid "Close page"
@@ -3838,70 +3836,70 @@ msgstr ""
 "Bruno Lopes da Silva <brunolopesbldsb@gmail.com>\n"
 "Ricardo Silva Veloso <ricvelozo@gmail.com>"
 
-#: src/window-commands.c:1302
+#: src/window-commands.c:1309
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Um aplicativo web com o nome “%s” já existe. Você deseja substituí-lo?"
 
-#: src/window-commands.c:1305
+#: src/window-commands.c:1312
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1307
+#: src/window-commands.c:1314
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/window-commands.c:1311
+#: src/window-commands.c:1318
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Um aplicativo com mesmo nome já existe. Substituí-lo irá sobrescrevê-lo."
 
-#: src/window-commands.c:1386
+#: src/window-commands.c:1393
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "O aplicativo “%s” está pronto para ser usado"
 
-#: src/window-commands.c:1389
+#: src/window-commands.c:1396
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "O aplicativo “%s” não pôde ser criado"
 
-#: src/window-commands.c:1397
+#: src/window-commands.c:1404
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1443
+#: src/window-commands.c:1450
 msgid "Create Web Application"
 msgstr "Cria um aplicativo web"
 
-#: src/window-commands.c:1448
+#: src/window-commands.c:1455
 msgid "C_reate"
 msgstr "C_riar"
 
-#: src/window-commands.c:1662
+#: src/window-commands.c:1669
 msgid "Save"
 msgstr "Salvar"
 
-#: src/window-commands.c:1671
+#: src/window-commands.c:1678
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1676
+#: src/window-commands.c:1683
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1681
+#: src/window-commands.c:1688
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2141
+#: src/window-commands.c:2148
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: src/window-commands.c:2144
+#: src/window-commands.c:2151
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3912,9 +3910,12 @@ msgstr ""
 "lhe navegar nelas com o seu teclado. Você deseja habilitar o modo de "
 "navegação com cursor?"
 
-#: src/window-commands.c:2147
+#: src/window-commands.c:2154
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid "_Remove Bookmark"
+#~ msgstr "_Remover favoritos"
 
 #~ msgid "Don’t use an external application to view page source."
 #~ msgstr "Não usa um aplicativo externo para visualizar a fonte de páginas."
@@ -4044,9 +4045,6 @@ msgstr "_Ativar"
 
 #~ msgid "_Add…"
 #~ msgstr "_Adicionar…"
-
-#~ msgid "_Remove"
-#~ msgstr "_Remover"
 
 #~ msgid "_Up"
 #~ msgstr "_Cima"
