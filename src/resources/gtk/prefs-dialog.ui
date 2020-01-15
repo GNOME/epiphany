@@ -144,69 +144,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="HdyPreferencesGroup" id="browsing_box">
-                    <property name="title" translatable="yes">Browsing</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">enable_smooth_scrolling_switch</property>
-                        <property name="title" translatable="yes">Enable sm_ooth scrolling</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkSwitch" id="enable_smooth_scrolling_switch">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">enable_mouse_gesture_switch</property>
-                        <property name="title" translatable="yes">Enable mouse _gesture</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkSwitch" id="enable_mouse_gesture_switch">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="HdyPreferencesGroup" id="download_box">
-                    <property name="title" translatable="yes">Downloads</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">ask_on_download_switch</property>
-                        <property name="title" translatable="yes">Always ask o_n download</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkSwitch" id="ask_on_download_switch">
-                            <property name="margin-start">12</property>
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow" id="download_folder_row">
-                        <property name="sensitive" bind-source="ask_on_download_switch" bind-property="active" bind-flags="sync-create|invert-boolean"/>
-                        <property name="title" translatable="yes">_Download folder</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="HdyPreferencesGroup" id="homepage_box">
                     <property name="title" translatable="yes">Homepage</property>
                     <property name="visible">True</property>
@@ -260,6 +197,35 @@
                             <property name="visible">True</property>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyPreferencesGroup" id="download_box">
+                    <property name="title" translatable="yes">Downloads</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">ask_on_download_switch</property>
+                        <property name="title" translatable="yes">Always ask o_n download</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSwitch" id="ask_on_download_switch">
+                            <property name="margin-start">12</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow" id="download_folder_row">
+                        <property name="sensitive" bind-source="ask_on_download_switch" bind-property="active" bind-flags="sync-create|invert-boolean"/>
+                        <property name="title" translatable="yes">_Download folder</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
                       </object>
                     </child>
                   </object>
@@ -331,6 +297,91 @@
                   </object>
                 </child>
                 <child>
+                  <object class="HdyPreferencesGroup" id="browsing_box">
+                    <property name="title" translatable="yes">Browsing</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">enable_smooth_scrolling_switch</property>
+                        <property name="title" translatable="yes">Sm_ooth scrolling</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSwitch" id="enable_smooth_scrolling_switch">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">enable_mouse_gesture_switch</property>
+                        <property name="title" translatable="yes">Mouse _gestures</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSwitch" id="enable_mouse_gesture_switch">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyPreferencesGroup" id="lang_group">
+                    <property name="title" translatable="yes">Languages</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkListBox" id="lang_listbox">
+                        <property name="selection_mode">none</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyPreferencesGroup">
+                    <property name="title" translatable="yes"></property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">enable_spell_checking_switch</property>
+                        <property name="title" translatable="yes">_Spell checking</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSwitch" id="enable_spell_checking_switch">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">General</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="HdyPreferencesPage">
+                <property name="icon_name">preferences-system-privacy-symbolic</property>
+                <property name="title" translatable="yes">Privacy</property>
+                <property name="visible">True</property>
+                <style>
+                  <class name="background"/>
+                </style>
+                <child>
                   <object class="HdyPreferencesGroup">
                     <property name="title" translatable="yes">Web Content</property>
                     <property name="visible">True</property>
@@ -378,21 +429,174 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="HdyPreferencesGroup">
+                    <property name="title" translatable="yes">Cookies</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable">False</property>
+                        <property name="title" translatable="yes">Manage _Cookies</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkButton">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon_name">emblem-system-symbolic</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">always</property>
+                        <property name="title" translatable="yes">_Always accept</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="prefix">
+                          <object class="GtkRadioButton" id="always">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">no_third_party</property>
+                        <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
+                        <property name="title" translatable="yes">Only _from sites you visit</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="prefix">
+                          <object class="GtkRadioButton" id="no_third_party">
+                            <property name="valign">center</property>
+                            <property name="group">always</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">never</property>
+                        <property name="title" translatable="yes">_Never accept</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="prefix">
+                          <object class="GtkRadioButton" id="never">
+                            <property name="valign">center</property>
+                            <property name="group">always</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyPreferencesGroup">
+                    <property name="title" translatable="yes">Passwords</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable">False</property>
+                        <property name="title" translatable="yes">Manage _Passwords</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkButton">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon_name">emblem-system-symbolic</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">remember_passwords_switch</property>
+                        <property name="title" translatable="yes">_Remember passwords</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSwitch" id="remember_passwords_switch">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyPreferencesGroup">
+                    <property name="title" translatable="yes">Personal Data</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable">False</property>
+                        <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
+                        <property name="title" translatable="yes">Manage Personal _Data</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkButton" id="clear_personal_data_button">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon_name">emblem-system-symbolic</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">General</property>
+                <property name="label" translatable="yes">Privacy</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
               <object class="HdyPreferencesPage">
                 <property name="icon_name">document-edit-symbolic</property>
-                <property name="title" translatable="yes">Fonts &amp; Style</property>
+                <property name="title" translatable="yes">Appearance</property>
                 <property name="visible">True</property>
                 <style>
                   <class name="background"/>
@@ -554,385 +758,16 @@
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Fonts &amp; Style</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="HdyPreferencesPage">
-                <property name="icon_name">drive-harddisk-symbolic</property>
-                <property name="title" translatable="yes">Stored Data</property>
-                <property name="visible">True</property>
-                <style>
-                  <class name="background"/>
-                </style>
-                <child>
-                  <object class="HdyPreferencesGroup">
-                    <property name="title" translatable="yes">Cookies</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable">False</property>
-                        <property name="title" translatable="yes">Manage _Cookies</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkButton">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                            <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
-                            <style>
-                              <class name="image-button"/>
-                            </style>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon_name">emblem-system-symbolic</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">always</property>
-                        <property name="title" translatable="yes">_Always accept</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="prefix">
-                          <object class="GtkRadioButton" id="always">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">no_third_party</property>
-                        <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
-                        <property name="title" translatable="yes">Only _from sites you visit</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="prefix">
-                          <object class="GtkRadioButton" id="no_third_party">
-                            <property name="valign">center</property>
-                            <property name="group">always</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">never</property>
-                        <property name="title" translatable="yes">_Never accept</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="prefix">
-                          <object class="GtkRadioButton" id="never">
-                            <property name="valign">center</property>
-                            <property name="group">always</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="HdyPreferencesGroup">
-                    <property name="title" translatable="yes">Passwords</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable">False</property>
-                        <property name="title" translatable="yes">Manage _Passwords</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkButton">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                            <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
-                            <style>
-                              <class name="image-button"/>
-                            </style>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon_name">emblem-system-symbolic</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">remember_passwords_switch</property>
-                        <property name="title" translatable="yes">_Remember passwords</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkSwitch" id="remember_passwords_switch">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="HdyPreferencesGroup">
-                    <property name="title" translatable="yes">Personal Data</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable">False</property>
-                        <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
-                        <property name="title" translatable="yes">Manage Personal _Data</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkButton" id="clear_personal_data_button">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                            <style>
-                              <class name="image-button"/>
-                            </style>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon_name">emblem-system-symbolic</property>
-                                <property name="visible">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
                 <property name="position">2</property>
               </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Stored Data</property>
+                <property name="label" translatable="yes">Appearance</property>
               </object>
               <packing>
                 <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="HdyPreferencesPage">
-                <property name="icon_name">emoji-flags-symbolic</property>
-                <property name="title" translatable="yes">Language</property>
-                <property name="visible">True</property>
-                <style>
-                  <class name="background"/>
-                </style>
-                <child>
-                  <object class="HdyPreferencesGroup">
-                    <property name="title" translatable="yes">Languages</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkFrame">
-                            <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <child>
-                              <object class="GtkTreeView" id="lang_treeview">
-                                <property name="visible">True</property>
-                                <property name="headers-visible">False</property>
-                                <property name="fixed-height-mode">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection"/>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkToolbar">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">1</property>
-                            <style>
-                              <class name="inline-toolbar"/>
-                            </style>
-                            <child>
-                              <object class="GtkToolItem">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <child>
-                                      <object class="GtkButton" id="lang_add_button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Add language</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">list-add-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="lang_remove_button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Remove language</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">list-remove-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparatorToolItem">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="draw">False</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolItem">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <child>
-                                      <object class="GtkButton" id="lang_up_button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Move language up</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">go-up-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="lang_down_button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject">
-                                            <property name="accessible-name" translatable="yes">Move language down</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="icon_name">go-down-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="HdyPreferencesGroup">
-                    <property name="title" translatable="yes">Spell Checking</property>
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="HdyActionRow">
-                        <property name="activatable_widget">enable_spell_checking_switch</property>
-                        <property name="title" translatable="yes">_Enable spell checking</property>
-                        <property name="use_underline">True</property>
-                        <property name="visible">True</property>
-                        <child type="action">
-                          <object class="GtkSwitch" id="enable_spell_checking_switch">
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Language</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
