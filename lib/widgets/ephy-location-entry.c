@@ -865,6 +865,36 @@ leave_notify_cb (GtkWidget *widget,
 }
 
 static void
+handle_forward_tab_key (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  GtkWidget *popover;
+
+  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
+  if (gtk_widget_is_visible (popover)) {
+    g_signal_emit_by_name (entry->url_entry, "move-suggestion", 1, G_TYPE_INT, 1, G_TYPE_NONE);
+  } else {
+    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_FORWARD);
+  }
+}
+
+static void
+handle_backward_tab_key (GtkWidget *widget,
+                         gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  GtkWidget *popover;
+
+  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
+  if (gtk_widget_is_visible (popover)) {
+    g_signal_emit_by_name (entry->url_entry, "move-suggestion", -1, G_TYPE_INT, 1, G_TYPE_NONE);
+  } else {
+    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_BACKWARD);
+  }
+}
+
+static void
 position_func (DzlSuggestionEntry *self,
                GdkRectangle       *area,
                gboolean           *is_absolute,
@@ -920,6 +950,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   GtkWidget *event;
   GtkWidget *box;
   GtkStyleContext *context;
+  DzlShortcutController *controller;
 
   LOG ("EphyLocationEntry constructing contents %p", entry);
 
@@ -1004,6 +1035,24 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   g_signal_connect (entry->url_entry, "suggestion-activated",
                     G_CALLBACK (ephy_location_entry_suggestion_activated), entry);
+
+
+  controller = dzl_shortcut_controller_find (entry->url_entry);
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                "org.gnome.Epiphany.complete-url-forward",
+                                                "Tab",
+                                                DZL_SHORTCUT_PHASE_DISPATCH,
+                                                handle_forward_tab_key,
+                                                entry,
+                                                NULL);
+
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                "org.gnome.Epiphany.complete-url-backward",
+                                                "ISO_Left_Tab",
+                                                DZL_SHORTCUT_PHASE_DISPATCH,
+                                                handle_backward_tab_key,
+                                                entry,
+                                                NULL);
 }
 
 static void
