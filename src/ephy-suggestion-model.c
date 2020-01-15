@@ -284,6 +284,7 @@ add_bookmarks (EphySuggestionModel *self,
       markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
       suggestion = ephy_suggestion_new (markup, title, url);
       load_favicon (self, suggestion, url);
+      ephy_suggestion_set_secondary_icon (suggestion, "starred-symbolic");
 
       new_urls = g_list_prepend (new_urls, g_strdup (url));
       g_sequence_append (self->items, suggestion);
@@ -429,10 +430,13 @@ add_tabs (EphySuggestionModel *self,
     title_casefold = g_utf8_casefold (title, -1);
 
     if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
+      char *escaped_address = g_markup_escape_text (display_address, -1);
+
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-      suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, _("Switch to Tab"), address);
+      suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
       load_favicon (self, suggestion, display_address);
+      ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
 
       g_sequence_append (self->urls, g_strdup (url));
       g_sequence_append (self->items, suggestion);

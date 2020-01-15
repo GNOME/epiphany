@@ -98,7 +98,6 @@ ephy_suggestion_get_icon_surface (DzlSuggestion *self,
   return suggestion->favicon;
 }
 
-
 static void
 ephy_suggestion_class_init (EphySuggestionClass *klass)
 {
@@ -212,4 +211,11 @@ ephy_suggestion_set_favicon (EphySuggestion  *self,
 {
   self->favicon = favicon;
   g_object_notify (G_OBJECT (self), "icon");
+}
+
+void
+ephy_suggestion_set_secondary_icon (EphySuggestion *self,
+                                    const char     *icon_name)
+{
+  dzl_suggestion_set_secondary_icon_name (DZL_SUGGESTION (self), icon_name);
 }
