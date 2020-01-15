@@ -1,5 +1,5 @@
 # epiphany ja.po.
-# Copyright (C) 2000-2019 epiphany's COPYRIGHT HOLDER
+# Copyright (C) 2000-2020 epiphany's COPYRIGHT HOLDER
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000.
 # Takuro Ashie <ashie@homa.ne.jp>, 2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2001-2003, 2010-2012.
@@ -13,14 +13,14 @@
 # Hajime Taira <htaira@redhat.com>, 2013-2014.
 # Aefgh39622 <aefgh39622@gmail.com>, 2018.
 # Ryo Nakano <ryonakaknock3@gmail.com>, 2019.
-# sicklylife <translation@sicklylife.jp>, 2019.
+# sicklylife <translation@sicklylife.jp>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
 "POT-Creation-Date: 2020-01-13 03:27+0000\n"
-"PO-Revision-Date: 2019-10-07 23:00+0900\n"
+"PO-Revision-Date: 2020-01-15 00:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -206,15 +206,12 @@ msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "タブのサイズをタブバーの空き領域に合わせて拡大する"
 
 #: data/org.gnome.epiphany.gschema.xml:74
-#, fuzzy
-#| msgid ""
-#| "If enabled the tabs will expand to use the entire available space in the "
-#| "tabs bar."
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 "有効にすると、タブバーの利用可能な領域全体を使用するようにタブを拡大します。"
+"この設定は Pantheon デスクトップでは無視します。"
 
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid "The position of the tabs bar."
@@ -234,11 +231,6 @@ msgid "The visibility policy for the tabs bar."
 msgstr "タブバーの表示/非表示のポリシー"
 
 #: data/org.gnome.epiphany.gschema.xml:84
-#, fuzzy
-#| msgid ""
-#| "Controls when the tabs bar is shown. Possible values are “always” (the "
-#| "tabs bar is always shown), “more-than-one” (the tabs bar is only shown if "
-#| "there’s two or more tabs) and “never” (the tabs bar is never shown)."
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -247,7 +239,8 @@ msgid ""
 msgstr ""
 "タブバーが表示される条件を制御します。指定できる値は、“always” (タブバーを常"
 "に表示します)、“more-than-one” (タブが2個以上存在する場合にタブバーを表示しま"
-"す)、“never” (タブバーを表示しません) です。"
+"す)、“never” (タブバーを表示しません) です。この設定は Pantheon デスクトップ"
+"または“always”を使用している場合は無視します。"
 
 #: data/org.gnome.epiphany.gschema.xml:88
 msgid "Keep window open when closing last tab"
@@ -382,8 +375,8 @@ msgstr "ポップアップを許可する"
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"JavaScript を使って新しいウィンドウで開くことを許可します (JavaScript が有効"
-"な場合)。"
+"JavaScript を使用して新しいウィンドウで開くことを許可します (JavaScript が有"
+"効な場合)。"
 
 #: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
@@ -402,8 +395,8 @@ msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr ""
-"ユーザーエージェントの文字列は、ウェブサーバーがブラウザーを識別するのに使い"
-"ます。"
+"ユーザーエージェント文字列は、ウェブサーバーがブラウザーを識別するのに使用"
+"します。"
 
 #: data/org.gnome.epiphany.gschema.xml:171
 msgid "Mobile user agent"
@@ -466,7 +459,7 @@ msgstr "Google Safe Browsing API キー"
 #: data/org.gnome.epiphany.gschema.xml:197
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
-"Google Safe Browsing API v4 にアクセスするために使用される API キーです。"
+"Google Safe Browsing API v4 へのアクセスに使用する API キーです。"
 
 #: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
@@ -823,7 +816,7 @@ msgstr "Web について"
 
 #: embed/ephy-about-handler.c:194 src/window-commands.c:626
 msgid "Epiphany Technology Preview"
-msgstr ""
+msgstr "Epiphany テクノロジープレビュー"
 
 #: embed/ephy-about-handler.c:197
 msgid "A simple, clean, beautiful view of the web"
@@ -881,8 +874,8 @@ msgid ""
 "when you close the window. Files you download will be kept."
 msgstr ""
 "現在、匿名でブラウジングしています。このモードで表示したページは閲覧履歴に残"
-"らず、ウィンドウを閉じた時点ですべての格納情報は消去されます。なお、ダウン"
-"ロードしたファイルは保持されます。"
+"らず、ウィンドウを閉じた時点ですべての格納情報を消去します。なお、ダウンロー"
+"ドしたファイルは保持します。"
 
 #: embed/ephy-about-handler.c:500
 msgid ""
@@ -898,9 +891,9 @@ msgid ""
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
 "たとえば職場でブラウザーを使用する場合、匿名モードであなたのアクセス履歴を雇"
-"用主に対して隠すことはできません。お使いのインターネットサービスプロバイダー"
-"や、政府機関、訪れたウェブサイト、およびそのサイトの広告主などは、依然として"
-"あなたの行動を追跡できます。"
+"用主に対して隠すことはできません。インターネットサービスプロバイダー、政府機"
+"関、訪れたウェブサイト、およびそのサイトの広告主などは、依然としてあなたの行"
+"動を追跡できます。"
 
 #. Translators: a desktop notification when a download finishes.
 #: embed/ephy-download.c:727
@@ -1229,7 +1222,7 @@ msgstr "トルコ語 (Windows-1254)(_W)"
 
 #: embed/ephy-encodings.c:119
 msgid "Unicode (UTF-_8)"
-msgstr "Unicode (UTF-_8)"
+msgstr "Unicode (UTF-8)(_8)"
 
 #: embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
@@ -1285,19 +1278,19 @@ msgstr "英語 (US-ASCII)(_U)"
 
 #: embed/ephy-encodings.c:137
 msgid "Unicode (UTF-_16 BE)"
-msgstr "Unicode (UTF-_16 BE)"
+msgstr "Unicode (UTF-16 BE)(_1)"
 
 #: embed/ephy-encodings.c:138
 msgid "Unicode (UTF-1_6 LE)"
-msgstr "Unicode (UTF-1_6 LE)"
+msgstr "Unicode (UTF-16 LE)(_6)"
 
 #: embed/ephy-encodings.c:139
 msgid "Unicode (UTF-_32 BE)"
-msgstr "Unicode (UTF-_32 BE)"
+msgstr "Unicode (UTF-32 BE)(_3)"
 
 #: embed/ephy-encodings.c:140
 msgid "Unicode (UTF-3_2 LE)"
-msgstr "Unicode (UTF-3_2 LE)"
+msgstr "Unicode (UTF-32 LE)(_2)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
@@ -1552,12 +1545,11 @@ msgstr "おっと!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1835
-#, fuzzy
-#| msgid "Please reload or visit a different page to continue."
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
-msgstr "使用を続けるには再読み込みするか他のページにアクセスしてください。"
+msgstr "このページの表示中に何か問題が発生しました。使用を続けるには再読み込"
+"みするか他のページにアクセスしてください。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:1869
@@ -2072,7 +2064,7 @@ msgstr "ウェブサイトのセキュリティステータスや権限を表示
 
 #: lib/widgets/ephy-location-entry.c:932
 msgid "Search for websites, bookmarks, and open tabs"
-msgstr ""
+msgstr "ウェブサイトやブックマークを詮索してタブで開きます"
 
 #: lib/widgets/ephy-location-entry.c:972
 msgid "Bookmark this page"
@@ -2220,10 +2212,8 @@ msgid "Plugins data"
 msgstr "プラグインデータ"
 
 #: src/clear-data-dialog.c:87
-#, fuzzy
-#| msgid "HTTP disk cache"
 msgid "HSTS policies cache"
-msgstr "HTTP ディスクキャッシュ"
+msgstr "HSTS ポリシーキャッシュ"
 
 #: src/cookies-dialog.c:175
 msgid "Remove cookie"
@@ -2286,7 +2276,7 @@ msgstr "WebDriver 制御用のプライベートなインスタンスを起動�
 
 #: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
-msgstr ""
+msgstr "プライベートインスタンス用のプロファイルディレクトリを指定する"
 
 #: src/ephy-main.c:124
 msgid "DIR"
@@ -2404,15 +2394,15 @@ msgstr "ブックマークの追加(_K)…"
 #. Links.
 #: src/ephy-window.c:955
 msgid "Open Link in New _Window"
-msgstr "リンク先を新しいウィンドウで開く(_W)"
+msgstr "リンクを新しいウィンドウで開く(_W)"
 
 #: src/ephy-window.c:956
 msgid "Open Link in New _Tab"
-msgstr "リンク先を新しいタブで開く(_T)"
+msgstr "リンクを新しいタブで開く(_T)"
 
 #: src/ephy-window.c:957
 msgid "Open Link in I_ncognito Window"
-msgstr "リンク先を匿名ウィンドウで開く(_N)"
+msgstr "リンクを匿名ウィンドウで開く(_N)"
 
 #: src/ephy-window.c:958
 msgid "_Save Link As…"
@@ -2420,11 +2410,11 @@ msgstr "名前を付けてリンク先を保存(_S)…"
 
 #: src/ephy-window.c:959
 msgid "_Copy Link Address"
-msgstr "リンク先のコピー(_C)"
+msgstr "リンクをコピー(_C)"
 
 #: src/ephy-window.c:960
 msgid "_Copy E-mail Address"
-msgstr "メールアドレスのコピー(_C)"
+msgstr "メールアドレスをコピー(_C)"
 
 #. Images.
 #: src/ephy-window.c:964
@@ -2458,7 +2448,7 @@ msgstr "名前を付けてビデオを保存(_S)…"
 
 #: src/ephy-window.c:974
 msgid "_Copy Video Address"
-msgstr "ビデオのアドレスのコピー(_C)"
+msgstr "ビデオのアドレスをコピー(_C)"
 
 #. Audio.
 #: src/ephy-window.c:978
@@ -2475,7 +2465,7 @@ msgstr "名前を付けて音声を保存(_S)"
 
 #: src/ephy-window.c:981
 msgid "_Copy Audio Address"
-msgstr "音声のアドレスのコピー(_C)"
+msgstr "音声のアドレスをコピー(_C)"
 
 #: src/ephy-window.c:987
 msgid "Save Pa_ge As…"
@@ -2491,29 +2481,20 @@ msgid "Search the Web for “%s”"
 msgstr "ウェブで検索: “%s”"
 
 #: src/ephy-window.c:1377
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Open file"
 msgid "Open Link"
-msgstr "ファイルを開く"
+msgstr "リンクを開く"
 
 #: src/ephy-window.c:1379
-#, fuzzy
-#| msgid "Open Link in New _Tab"
 msgid "Open Link In New Tab"
-msgstr "リンク先を新しいタブで開く(_T)"
+msgstr "リンクを新しいタブで開く"
 
 #: src/ephy-window.c:1381
-#, fuzzy
-#| msgid "Open Link in New _Window"
 msgid "Open Link In New Window"
-msgstr "リンク先を新しいウィンドウで開く(_W)"
+msgstr "リンクを新しいウィンドウで開く"
 
 #: src/ephy-window.c:1383
-#, fuzzy
-#| msgid "Open Link in I_ncognito Window"
 msgid "Open Link In Incognito Window"
-msgstr "リンク先を匿名ウィンドウで開く(_N)"
+msgstr "リンクを匿名ウィンドウで開く"
 
 #: src/ephy-window.c:2928
 msgid "Download operation"
