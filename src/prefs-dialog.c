@@ -1460,6 +1460,7 @@ language_editor_add (PrefsDialog *dialog,
   hdy_action_row_add_prefix (row, event_box);
 
   action = gtk_button_new_from_icon_name ("edit-delete-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_set_tooltip_text (action, _("Delete language"));
   g_object_set_data (G_OBJECT (row), "action", action);
   g_object_set_data (G_OBJECT (action), "row", row);
   g_signal_connect (action, "clicked", G_CALLBACK (language_editor_remove_button_clicked_cb), dialog);
