@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-12 18:47+0000\n"
-"PO-Revision-Date: 2020-01-13 09:31+0100\n"
+"POT-Creation-Date: 2020-01-15 21:02+0000\n"
+"PO-Revision-Date: 2020-01-16 11:47+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -361,7 +361,7 @@ msgstr ""
 "puede entender."
 
 #: data/org.gnome.epiphany.gschema.xml:146
-#: src/resources/gtk/prefs-dialog.ui:752
+#: src/resources/gtk/prefs-dialog.ui:335
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -1016,7 +1016,7 @@ msgid "Download requested"
 msgstr "Descarga requerida"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:945
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
 #: src/window-commands.c:481 src/window-commands.c:1453
@@ -1425,7 +1425,7 @@ msgstr "Busca la aparición anterior de la cadena de búsqueda"
 msgid "Find next occurrence of the search string"
 msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 
-#: embed/ephy-view-source-handler.c:250
+#: embed/ephy-view-source-handler.c:252
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s no es un URI válido"
@@ -1443,7 +1443,7 @@ msgid "_Never Save"
 msgstr "_Nunca guardar"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:480
+#: src/resources/gtk/prefs-dialog.ui:936 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Guardar"
 
@@ -1816,7 +1816,7 @@ msgid "Unspecified"
 msgstr "Sin especificar"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:182
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
 msgid "Downloads"
 msgstr "Descargas"
 
@@ -2179,19 +2179,19 @@ msgstr "_Deshacer"
 msgid "_Redo"
 msgstr "_Rehacer"
 
-#: lib/widgets/ephy-location-entry.c:930
+#: lib/widgets/ephy-location-entry.c:961
 msgid "Show website security status and permissions"
 msgstr "Mostrar el estado de la seguridad y los permisos del sitio web"
 
-#: lib/widgets/ephy-location-entry.c:932
+#: lib/widgets/ephy-location-entry.c:963
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Buscar páginas web, marcadores y pestañas abiertas"
 
-#: lib/widgets/ephy-location-entry.c:972
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Bookmark this page"
 msgstr "Añadir esta página a marcadores"
 
-#: lib/widgets/ephy-location-entry.c:985
+#: lib/widgets/ephy-location-entry.c:1016
 msgid "Toggle reader mode"
 msgstr "Conmutar el modo de lectura"
 
@@ -2437,10 +2437,6 @@ msgstr "Nueva dirección"
 msgid "Bang"
 msgstr "Bang"
 
-#: src/ephy-suggestion-model.c:434
-msgid "Switch to Tab"
-msgstr "Cambiar a la pestaña"
-
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
 msgstr "Pestañas"
@@ -2669,53 +2665,57 @@ msgstr "Abrir medio como"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:236
+#: src/prefs-dialog.c:232
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Última sincronización: %s"
 
-#: src/prefs-dialog.c:524
+#: src/prefs-dialog.c:520
 msgid "Something went wrong, please try again later."
 msgstr "Algo salió mal, inténtelo de nuevo más tarde."
 
-#: src/prefs-dialog.c:813
+#: src/prefs-dialog.c:809
 msgid "Web Application Icon"
 msgstr "Icono de aplicación web"
 
-#: src/prefs-dialog.c:818
+#: src/prefs-dialog.c:814
 msgid "Supported Image Files"
 msgstr "Archivos de imagen soportados"
 
-#: src/prefs-dialog.c:1264
+#: src/prefs-dialog.c:1463
+#| msgid "Remove language"
+msgid "Delete language"
+msgstr "Eliminar idioma"
+
+#: src/prefs-dialog.c:1482
+msgid "Add language"
+msgstr "Añadir idioma"
+
+#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: src/prefs-dialog.c:1553 src/resources/gtk/prefs-dialog.ui:745
-#: src/resources/gtk/prefs-dialog.ui:932
-msgid "Language"
-msgstr "Idioma"
-
-#: src/prefs-dialog.c:1634
+#: src/prefs-dialog.c:1816
 msgid "Select a directory"
 msgstr "Seleccione una carpeta"
 
-#: src/prefs-dialog.c:2023
+#: src/prefs-dialog.c:2205
 msgid "Sans"
 msgstr "Sans"
 
 # Esto es de gestión de cookies (serrador)
-#: src/prefs-dialog.c:2025
+#: src/prefs-dialog.c:2207
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2069
+#: src/prefs-dialog.c:2251
 msgid "Light"
 msgstr "Claro"
 
-#: src/prefs-dialog.c:2071
+#: src/prefs-dialog.c:2253
 msgid "Dark"
 msgstr "Oscuro"
 
@@ -2882,7 +2882,7 @@ msgstr ""
 "No puede deshacer esta acción. Los datos que está seleccionando para limpiar "
 "se perderán para siempre."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
+#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:434
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -3073,7 +3073,7 @@ msgid "Close page"
 msgstr "Cerrar la página"
 
 #: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/prefs-dialog.ui:509
 msgid "Passwords"
 msgstr "Contraseñas"
 
@@ -3122,7 +3122,7 @@ msgstr "C_opiar nombre de usuario"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:370
 msgid "General"
 msgstr "General"
 
@@ -3143,204 +3143,187 @@ msgid "_Manage Additional URLs"
 msgstr "_Gestionar URL adicionales"
 
 #: src/resources/gtk/prefs-dialog.ui:148
-msgid "Browsing"
-msgstr "Examinar"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Enable sm_ooth scrolling"
-msgstr "Activar desplazamiento suave"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "Enable mouse _gesture"
-msgstr "Activar _gestos del ratón"
-
-#: src/resources/gtk/prefs-dialog.ui:187
-msgid "Always ask o_n download"
-msgstr "Preguntar siempre _al descargar"
-
-#: src/resources/gtk/prefs-dialog.ui:202
-msgid "_Download folder"
-msgstr "Carpeta de _descarga"
-
-#: src/resources/gtk/prefs-dialog.ui:211
 msgid "Homepage"
 msgstr "Página de inicio"
 
-#: src/resources/gtk/prefs-dialog.ui:216
+#: src/resources/gtk/prefs-dialog.ui:153
 msgid "Most _visited pages"
 msgstr "Páginas más _visitadas"
 
-#: src/resources/gtk/prefs-dialog.ui:230
+#: src/resources/gtk/prefs-dialog.ui:167
 msgid "_Blank page"
 msgstr "Página en _blanco"
 
-#: src/resources/gtk/prefs-dialog.ui:245
+#: src/resources/gtk/prefs-dialog.ui:182
 msgid "_Custom"
 msgstr "_Personalizado"
 
-#: src/resources/gtk/prefs-dialog.ui:269
+#: src/resources/gtk/prefs-dialog.ui:211
+msgid "Always ask o_n download"
+msgstr "Preguntar siempre _al descargar"
+
+#: src/resources/gtk/prefs-dialog.ui:226
+msgid "_Download folder"
+msgstr "Carpeta de _descarga"
+
+#: src/resources/gtk/prefs-dialog.ui:235
 msgid "Search Engines"
 msgstr "Motores de búsqueda"
 
-#: src/resources/gtk/prefs-dialog.ui:274
+#: src/resources/gtk/prefs-dialog.ui:240
 msgid "You can select different search engines to use"
 msgstr "Puede seleccionar diferentes motores de búsqueda que usar"
 
-#: src/resources/gtk/prefs-dialog.ui:275
+#: src/resources/gtk/prefs-dialog.ui:241
 msgid "_Manage Search Engines"
 msgstr "_Gestionar motores de búsqueda"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:266
 msgid "Session"
 msgstr "Sesión"
 
-#: src/resources/gtk/prefs-dialog.ui:305
+#: src/resources/gtk/prefs-dialog.ui:271
 msgid "Always start browser in _incognito mode"
 msgstr "Iniciar siempre el navegador en modo _incógnito"
 
-#: src/resources/gtk/prefs-dialog.ui:320
+#: src/resources/gtk/prefs-dialog.ui:286
 msgid "_Remember previous tabs on startup"
 msgstr "_Recordar las pestañas anteriores al iniciar"
 
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:301
+msgid "Browsing"
+msgstr "Examinar"
+
+#: src/resources/gtk/prefs-dialog.ui:306
+#| msgid "Use s_mooth scrolling"
+msgid "Sm_ooth scrolling"
+msgstr "Desplazamiento _suave"
+
+#: src/resources/gtk/prefs-dialog.ui:320
+#| msgid "Enable mouse _gesture"
+msgid "Mouse _gestures"
+msgstr "_Gestos del ratón"
+
+#: src/resources/gtk/prefs-dialog.ui:352
+#| msgid "Spell Checking"
+msgid "_Spell checking"
+msgstr "Re_visión ortográfica"
+
+#: src/resources/gtk/prefs-dialog.ui:379 src/resources/gtk/prefs-dialog.ui:589
+msgid "Privacy"
+msgstr "Privacidad"
+
+#: src/resources/gtk/prefs-dialog.ui:386
 msgid "Web Content"
 msgstr "Contenido web"
 
-#: src/resources/gtk/prefs-dialog.ui:340
+#: src/resources/gtk/prefs-dialog.ui:391
 msgid "Try to block _advertisements"
 msgstr "Intentar bloquear _anuncios"
 
-#: src/resources/gtk/prefs-dialog.ui:354
+#: src/resources/gtk/prefs-dialog.ui:405
 msgid "Block popup _windows"
 msgstr "Bloquear ventanas e_mergentes"
 
-#: src/resources/gtk/prefs-dialog.ui:368
+#: src/resources/gtk/prefs-dialog.ui:419
 msgid "Try to block dangerous web_sites"
 msgstr "Intentar bloquear _sitios web peligrosos"
 
-#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
-msgid "Fonts & Style"
-msgstr "Tipografías y estilo"
-
-#: src/resources/gtk/prefs-dialog.ui:402
-msgid "Fonts"
-msgstr "Tipografías"
-
-#: src/resources/gtk/prefs-dialog.ui:407
-msgid "Use custom fonts"
-msgstr "Usar tipografía personalizada"
-
-#: src/resources/gtk/prefs-dialog.ui:423
-msgid "Sans serif font"
-msgstr "Tipografía Sans Serif"
-
-# Esto es de gestión de cookies (serrador)
-#: src/resources/gtk/prefs-dialog.ui:438
-msgid "Serif font"
-msgstr "Tipografía Serif"
-
-#: src/resources/gtk/prefs-dialog.ui:453
-msgid "Monospace font"
-msgstr "Tipografía monoespaciada"
-
-#: src/resources/gtk/prefs-dialog.ui:473
-msgid "Reader Mode"
-msgstr "Modo de lectura"
-
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "Font style"
-msgstr "Estilo de la tipografía"
-
-#: src/resources/gtk/prefs-dialog.ui:483
-msgid "Color scheme"
-msgstr "Esquema de color"
-
-#: src/resources/gtk/prefs-dialog.ui:496
-msgid "Style"
-msgstr "Estilo"
-
-#: src/resources/gtk/prefs-dialog.ui:501
-msgid "Use custom stylesheet"
-msgstr "Usar hoja de estilos personalizada"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "Default zoom level"
-msgstr "Nivel de ampliación predeterminado"
-
-#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
-msgid "Stored Data"
-msgstr "Datos almacenados"
-
-#: src/resources/gtk/prefs-dialog.ui:585
+#: src/resources/gtk/prefs-dialog.ui:439
 msgid "Manage _Cookies"
 msgstr "Gestionar _cookies"
 
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-dialog.ui:463
 msgid "_Always accept"
 msgstr "_Aceptar siempre"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:623
+#: src/resources/gtk/prefs-dialog.ui:477
 msgid "For example, not from advertisers on these sites"
 msgstr "Por ejemplo, no de publicidad de estos sitios"
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:478
 msgid "Only _from sites you visit"
 msgstr "Sólo desde los sitios que _visita"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:493
 msgid "_Never accept"
 msgstr "_Nunca aceptar"
 
-#: src/resources/gtk/prefs-dialog.ui:660
+#: src/resources/gtk/prefs-dialog.ui:514
 msgid "Manage _Passwords"
 msgstr "Gestionar _contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:684
+#: src/resources/gtk/prefs-dialog.ui:538
 msgid "_Remember passwords"
 msgstr "_Recordar la contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:699
+#: src/resources/gtk/prefs-dialog.ui:553
 msgid "Personal Data"
 msgstr "Datos personales"
 
-#: src/resources/gtk/prefs-dialog.ui:704
+#: src/resources/gtk/prefs-dialog.ui:558
 msgid "You can clear stored personal data."
 msgstr "Puede limpiar los datos personales almacenados."
 
-#: src/resources/gtk/prefs-dialog.ui:705
+#: src/resources/gtk/prefs-dialog.ui:559
 msgid "Manage Personal _Data"
 msgstr "Gestionar _datos personales"
 
-#: src/resources/gtk/prefs-dialog.ui:799
-msgid "Add language"
-msgstr "Añadir idioma"
+#: src/resources/gtk/prefs-dialog.ui:599 src/resources/gtk/prefs-dialog.ui:767
+msgid "Appearance"
+msgstr "Apariencia"
 
-#: src/resources/gtk/prefs-dialog.ui:819
-msgid "Remove language"
-msgstr "Quitar idioma"
+#: src/resources/gtk/prefs-dialog.ui:606
+msgid "Fonts"
+msgstr "Tipografías"
 
-#: src/resources/gtk/prefs-dialog.ui:861
-msgid "Move language up"
-msgstr "Subir idioma"
+#: src/resources/gtk/prefs-dialog.ui:611
+msgid "Use custom fonts"
+msgstr "Usar tipografía personalizada"
 
-#: src/resources/gtk/prefs-dialog.ui:881
-msgid "Move language down"
-msgstr "Bajar idioma"
+#: src/resources/gtk/prefs-dialog.ui:627
+msgid "Sans serif font"
+msgstr "Tipografía Sans Serif"
 
-#: src/resources/gtk/prefs-dialog.ui:906
-msgid "Spell Checking"
-msgstr "Revisión ortográfica"
+# Esto es de gestión de cookies (serrador)
+#: src/resources/gtk/prefs-dialog.ui:642
+msgid "Serif font"
+msgstr "Tipografía Serif"
 
-#: src/resources/gtk/prefs-dialog.ui:911
-msgid "_Enable spell checking"
-msgstr "_Activar corrección ortográfica"
+#: src/resources/gtk/prefs-dialog.ui:657
+msgid "Monospace font"
+msgstr "Tipografía monoespaciada"
 
-#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
+#: src/resources/gtk/prefs-dialog.ui:677
+msgid "Reader Mode"
+msgstr "Modo de lectura"
+
+#: src/resources/gtk/prefs-dialog.ui:681
+msgid "Font style"
+msgstr "Estilo de la tipografía"
+
+#: src/resources/gtk/prefs-dialog.ui:687
+msgid "Color scheme"
+msgstr "Esquema de color"
+
+#: src/resources/gtk/prefs-dialog.ui:700
+msgid "Style"
+msgstr "Estilo"
+
+#: src/resources/gtk/prefs-dialog.ui:705
+msgid "Use custom stylesheet"
+msgstr "Usar hoja de estilos personalizada"
+
+#: src/resources/gtk/prefs-dialog.ui:740
+msgid "Default zoom level"
+msgstr "Nivel de ampliación predeterminado"
+
+#: src/resources/gtk/prefs-dialog.ui:777 src/resources/gtk/prefs-dialog.ui:971
 msgid "Sync"
 msgstr "Sincronizar"
 
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:784
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3350,59 +3333,59 @@ msgstr ""
 "Firefox en otros equipos. Web no es Firefox y no está desarrollado ni "
 "promocionado por Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:950
+#: src/resources/gtk/prefs-dialog.ui:785
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:804
 msgid "Firefox Account"
 msgstr "Cuenta de Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:973
+#: src/resources/gtk/prefs-dialog.ui:808
 msgid "Logged in"
 msgstr "Sesión iniciada"
 
-#: src/resources/gtk/prefs-dialog.ui:978
+#: src/resources/gtk/prefs-dialog.ui:813
 msgid "Sign _out"
 msgstr "Cerrar _sesión"
 
-#: src/resources/gtk/prefs-dialog.ui:991
+#: src/resources/gtk/prefs-dialog.ui:826
 msgid "Sync Options"
 msgstr "Opciones de sincronización"
 
-#: src/resources/gtk/prefs-dialog.ui:996
+#: src/resources/gtk/prefs-dialog.ui:831
 msgid "Sync _Bookmarks"
 msgstr "Sincronizar _marcadores"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:846
 msgid "Sync _Passwords"
 msgstr "Sincronizar _contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:861
 msgid "Sync _History"
 msgstr "Sincronizar _histórico"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:876
 msgid "Sync Open _Tabs"
 msgstr "Sincronizar pes_tañas abiertas"
 
-#: src/resources/gtk/prefs-dialog.ui:1053
+#: src/resources/gtk/prefs-dialog.ui:888
 msgid "S_ynced tabs"
 msgstr "Pestañas s_incronizadas"
 
-#: src/resources/gtk/prefs-dialog.ui:1064
+#: src/resources/gtk/prefs-dialog.ui:899
 msgid "Frequency"
 msgstr "Frecuencia"
 
-#: src/resources/gtk/prefs-dialog.ui:1075
+#: src/resources/gtk/prefs-dialog.ui:910
 msgid "Sync _now"
 msgstr "Sincronizar a_hora"
 
-#: src/resources/gtk/prefs-dialog.ui:1087
+#: src/resources/gtk/prefs-dialog.ui:922
 msgid "Device name"
 msgstr "Nombre del dispositivo"
 
-#: src/resources/gtk/prefs-dialog.ui:1092
+#: src/resources/gtk/prefs-dialog.ui:927
 msgid "_Change"
 msgstr "_Cambiar"
 
@@ -3879,6 +3862,30 @@ msgstr ""
 #: src/window-commands.c:2154
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Switch to Tab"
+#~ msgstr "Cambiar a la pestaña"
+
+#~ msgid "Language"
+#~ msgstr "Idioma"
+
+#~ msgid "Enable sm_ooth scrolling"
+#~ msgstr "Activar desplazamiento suave"
+
+#~ msgid "Fonts & Style"
+#~ msgstr "Tipografías y estilo"
+
+#~ msgid "Stored Data"
+#~ msgstr "Datos almacenados"
+
+#~ msgid "Move language up"
+#~ msgstr "Subir idioma"
+
+#~ msgid "Move language down"
+#~ msgstr "Bajar idioma"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "_Activar corrección ortográfica"
 
 #~ msgid "_Remove Bookmark"
 #~ msgstr "_Quitar marcador"
@@ -4360,9 +4367,6 @@ msgstr "_Activar"
 
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Indicar a los sitios web que no quiere que le rastreen"
-
-#~ msgid "Privacy"
-#~ msgstr "Privacidad"
 
 #~| msgid "Open the selected pages in new tabs"
 #~ msgid "Whether homepage loads in new tabs"
@@ -6100,9 +6104,6 @@ msgstr "_Activar"
 
 #~ msgid "Show or hide statusbar"
 #~ msgstr "Muestra u oculta la barra de estado"
-
-#~ msgid "Use s_mooth scrolling"
-#~ msgstr "Activar desplazamiento _suave"
 
 #~ msgid "In keyboard selection mode, press F7 to exit"
 #~ msgstr "En el modo de selección del teclado, pulse F7 para salir"
