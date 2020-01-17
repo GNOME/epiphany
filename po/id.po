@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-12 02:12+0000\n"
-"PO-Revision-Date: 2020-01-12 22:24+0700\n"
+"POT-Creation-Date: 2020-01-15 21:02+0000\n"
+"PO-Revision-Date: 2020-01-16 18:56+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -356,7 +356,7 @@ msgstr ""
 "WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:146
-#: src/resources/gtk/prefs-dialog.ui:752
+#: src/resources/gtk/prefs-dialog.ui:335
 msgid "Languages"
 msgstr "Bahasa"
 
@@ -991,7 +991,7 @@ msgid "Download requested"
 msgstr "Unduhan yang diminta"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:945
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
 #: src/window-commands.c:481 src/window-commands.c:1453
@@ -1400,7 +1400,7 @@ msgstr "Cari kata yang dikehendaki ke arah belakang"
 msgid "Find next occurrence of the search string"
 msgstr "Cari lagi kata yang dikehendaki"
 
-#: embed/ephy-view-source-handler.c:250
+#: embed/ephy-view-source-handler.c:252
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s bukan merupakan URI valid"
@@ -1418,7 +1418,7 @@ msgid "_Never Save"
 msgstr "_Tidak Pernah Simpan"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:480
+#: src/resources/gtk/prefs-dialog.ui:936 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -1788,7 +1788,7 @@ msgid "Unspecified"
 msgstr "Tak dinyatakan"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:182
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
 msgid "Downloads"
 msgstr "Unduh"
 
@@ -2149,19 +2149,19 @@ msgstr "_Batal"
 msgid "_Redo"
 msgstr "Jadi _Lagi"
 
-#: lib/widgets/ephy-location-entry.c:930
+#: lib/widgets/ephy-location-entry.c:961
 msgid "Show website security status and permissions"
 msgstr "Tampilkan status dan izin keamanan situs web"
 
-#: lib/widgets/ephy-location-entry.c:932
+#: lib/widgets/ephy-location-entry.c:963
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Cari situs web, penanda taut, dan tab terbuka"
 
-#: lib/widgets/ephy-location-entry.c:972
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Bookmark this page"
 msgstr "Penanda taut halaman kini"
 
-#: lib/widgets/ephy-location-entry.c:985
+#: lib/widgets/ephy-location-entry.c:1016
 msgid "Toggle reader mode"
 msgstr "Jungkitkan mode pembaca"
 
@@ -2408,10 +2408,6 @@ msgstr "Alamat Baru"
 msgid "Bang"
 msgstr "Bang"
 
-#: src/ephy-suggestion-model.c:434
-msgid "Switch to Tab"
-msgstr "Beralih ke Tab"
-
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
 msgstr "Tab"
@@ -2637,52 +2633,55 @@ msgstr "Simpan Media Sebagai"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:236
+#: src/prefs-dialog.c:232
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Terakhir diselaraskan: %s"
 
-#: src/prefs-dialog.c:524
+#: src/prefs-dialog.c:520
 msgid "Something went wrong, please try again later."
 msgstr "Ada yang tidak beres, harap coba lagi nanti."
 
-#: src/prefs-dialog.c:813
+#: src/prefs-dialog.c:809
 msgid "Web Application Icon"
 msgstr "Ikon Aplikasi Web"
 
-#: src/prefs-dialog.c:818
+#: src/prefs-dialog.c:814
 msgid "Supported Image Files"
 msgstr "Berkas Gambar Yang Didukung"
 
-#: src/prefs-dialog.c:1264
+#: src/prefs-dialog.c:1463
+msgid "Delete language"
+msgstr "Hapus bahasa"
+
+#: src/prefs-dialog.c:1482
+msgid "Add language"
+msgstr "Tambah bahasa"
+
+#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Bahasa sistem (%s)"
 msgstr[1] "Bahasa sistem (%s)"
 
-#: src/prefs-dialog.c:1553 src/resources/gtk/prefs-dialog.ui:745
-#: src/resources/gtk/prefs-dialog.ui:932
-msgid "Language"
-msgstr "Bahasa"
-
-#: src/prefs-dialog.c:1634
+#: src/prefs-dialog.c:1816
 msgid "Select a directory"
 msgstr "Pilih direktori"
 
-#: src/prefs-dialog.c:2023
+#: src/prefs-dialog.c:2205
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2025
+#: src/prefs-dialog.c:2207
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2069
+#: src/prefs-dialog.c:2251
 msgid "Light"
 msgstr "Terang"
 
-#: src/prefs-dialog.c:2071
+#: src/prefs-dialog.c:2253
 msgid "Dark"
 msgstr "Gelap"
 
@@ -2848,7 +2847,7 @@ msgstr ""
 "Anda tak bisa membalikkan aksi ini. Data yang Anda pilih untuk dibersihkan "
 "akan dihapus selamanya."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
+#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:434
 msgid "Cookies"
 msgstr "Cookie"
 
@@ -3039,7 +3038,7 @@ msgid "Close page"
 msgstr "Tutup halaman"
 
 #: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/prefs-dialog.ui:509
 msgid "Passwords"
 msgstr "Sandi"
 
@@ -3088,7 +3087,7 @@ msgstr "S_alin Nama Pengguna"
 msgid "Preferences"
 msgstr "Preferensi"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:370
 msgid "General"
 msgstr "Umum"
 
@@ -3109,203 +3108,183 @@ msgid "_Manage Additional URLs"
 msgstr "Kelola URL Ta_mbahan"
 
 #: src/resources/gtk/prefs-dialog.ui:148
-msgid "Browsing"
-msgstr "Meramban"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Enable sm_ooth scrolling"
-msgstr "Aktifkan penggulungan _mulus"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "Enable mouse _gesture"
-msgstr "Fungsikan _gestur tetikus"
-
-#: src/resources/gtk/prefs-dialog.ui:187
-msgid "Always ask o_n download"
-msgstr "Selalu tanyaka_n saat mengunduh"
-
-#: src/resources/gtk/prefs-dialog.ui:202
-msgid "_Download folder"
-msgstr "Folder Un_duhan"
-
-#: src/resources/gtk/prefs-dialog.ui:211
 msgid "Homepage"
 msgstr "Halaman pembuka"
 
-#: src/resources/gtk/prefs-dialog.ui:216
+#: src/resources/gtk/prefs-dialog.ui:153
 msgid "Most _visited pages"
 msgstr "Halaman _yang sering dikunjungi"
 
-#: src/resources/gtk/prefs-dialog.ui:230
+#: src/resources/gtk/prefs-dialog.ui:167
 msgid "_Blank page"
 msgstr "_Halaman kosong"
 
-#: src/resources/gtk/prefs-dialog.ui:245
+#: src/resources/gtk/prefs-dialog.ui:182
 msgid "_Custom"
 msgstr "_Ubahan"
 
-#: src/resources/gtk/prefs-dialog.ui:269
+#: src/resources/gtk/prefs-dialog.ui:211
+msgid "Always ask o_n download"
+msgstr "Selalu tanyaka_n saat mengunduh"
+
+#: src/resources/gtk/prefs-dialog.ui:226
+msgid "_Download folder"
+msgstr "Folder Un_duhan"
+
+#: src/resources/gtk/prefs-dialog.ui:235
 msgid "Search Engines"
 msgstr "Mesin Pencari"
 
-#: src/resources/gtk/prefs-dialog.ui:274
+#: src/resources/gtk/prefs-dialog.ui:240
 msgid "You can select different search engines to use"
 msgstr "Anda dapat memilih mesin pencari yang berbeda untuk digunakan"
 
-#: src/resources/gtk/prefs-dialog.ui:275
+#: src/resources/gtk/prefs-dialog.ui:241
 msgid "_Manage Search Engines"
 msgstr "Kelola _Mesin Pencari"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:266
 msgid "Session"
 msgstr "Sesi"
 
-#: src/resources/gtk/prefs-dialog.ui:305
+#: src/resources/gtk/prefs-dialog.ui:271
 msgid "Always start browser in _incognito mode"
 msgstr "Mula_i selalu peramban dalam mode penyamaran"
 
-#: src/resources/gtk/prefs-dialog.ui:320
+#: src/resources/gtk/prefs-dialog.ui:286
 msgid "_Remember previous tabs on startup"
 msgstr "Ingat tab _sebelumnya saat awal mula"
 
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:301
+msgid "Browsing"
+msgstr "Meramban"
+
+#: src/resources/gtk/prefs-dialog.ui:306
+msgid "Sm_ooth scrolling"
+msgstr "Penggulungan _mulus"
+
+#: src/resources/gtk/prefs-dialog.ui:320
+msgid "Mouse _gestures"
+msgstr "_Gestur tetikus"
+
+#: src/resources/gtk/prefs-dialog.ui:352
+msgid "_Spell checking"
+msgstr "Pemerik_saan ejaan"
+
+#: src/resources/gtk/prefs-dialog.ui:379 src/resources/gtk/prefs-dialog.ui:589
+msgid "Privacy"
+msgstr "Privasi"
+
+#: src/resources/gtk/prefs-dialog.ui:386
 msgid "Web Content"
 msgstr "Isi Web"
 
-#: src/resources/gtk/prefs-dialog.ui:340
+#: src/resources/gtk/prefs-dialog.ui:391
 msgid "Try to block _advertisements"
 msgstr "Coba untuk memblokir ikl_an"
 
-#: src/resources/gtk/prefs-dialog.ui:354
+#: src/resources/gtk/prefs-dialog.ui:405
 msgid "Block popup _windows"
 msgstr "Blokir _jendela popup"
 
-#: src/resources/gtk/prefs-dialog.ui:368
+#: src/resources/gtk/prefs-dialog.ui:419
 msgid "Try to block dangerous web_sites"
 msgstr "Coba untuk memblokir _situs web berbahaya"
 
-#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
-msgid "Fonts & Style"
-msgstr "Fonta & Gaya"
-
-#: src/resources/gtk/prefs-dialog.ui:402
-msgid "Fonts"
-msgstr "Fonta"
-
-#: src/resources/gtk/prefs-dialog.ui:407
-msgid "Use custom fonts"
-msgstr "Gunakan fonta sistem"
-
-#: src/resources/gtk/prefs-dialog.ui:423
-msgid "Sans serif font"
-msgstr "Fonta sans serif"
-
-#: src/resources/gtk/prefs-dialog.ui:438
-msgid "Serif font"
-msgstr "Fonta serif"
-
-#: src/resources/gtk/prefs-dialog.ui:453
-msgid "Monospace font"
-msgstr "Fonta lebar seragam (monospace)"
-
-#: src/resources/gtk/prefs-dialog.ui:473
-msgid "Reader Mode"
-msgstr "Mode Pembaca"
-
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "Font style"
-msgstr "Gaya fonta"
-
-#: src/resources/gtk/prefs-dialog.ui:483
-msgid "Color scheme"
-msgstr "Skema warna"
-
-#: src/resources/gtk/prefs-dialog.ui:496
-msgid "Style"
-msgstr "Gaya"
-
-#: src/resources/gtk/prefs-dialog.ui:501
-msgid "Use custom stylesheet"
-msgstr "Gunakan stylesheet gubahan"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "Default zoom level"
-msgstr "Tingkat perbesaran bawaan"
-
-#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
-msgid "Stored Data"
-msgstr "Data Tersimpan"
-
-#: src/resources/gtk/prefs-dialog.ui:585
+#: src/resources/gtk/prefs-dialog.ui:439
 msgid "Manage _Cookies"
 msgstr "Kelola _Cookie"
 
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-dialog.ui:463
 msgid "_Always accept"
 msgstr "Terim_a selalu"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:623
+#: src/resources/gtk/prefs-dialog.ui:477
 msgid "For example, not from advertisers on these sites"
 msgstr "Sebagai contoh, bukan dari pemasang iklan pada situs-situs ini"
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:478
 msgid "Only _from sites you visit"
 msgstr "Hanya _dari situs yang Anda kunjungi"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:493
 msgid "_Never accept"
 msgstr "_Tolak selalu"
 
-#: src/resources/gtk/prefs-dialog.ui:660
+#: src/resources/gtk/prefs-dialog.ui:514
 msgid "Manage _Passwords"
 msgstr "Kelola _Sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:684
+#: src/resources/gtk/prefs-dialog.ui:538
 msgid "_Remember passwords"
 msgstr "_Ingat sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:699
+#: src/resources/gtk/prefs-dialog.ui:553
 msgid "Personal Data"
 msgstr "Data Pribadi"
 
-#: src/resources/gtk/prefs-dialog.ui:704
+#: src/resources/gtk/prefs-dialog.ui:558
 msgid "You can clear stored personal data."
 msgstr "Anda dapat membersihkan data pribadi yang tersimpan."
 
-#: src/resources/gtk/prefs-dialog.ui:705
+#: src/resources/gtk/prefs-dialog.ui:559
 msgid "Manage Personal _Data"
 msgstr "Kelola _Data Pribadi"
 
-#: src/resources/gtk/prefs-dialog.ui:799
-msgid "Add language"
-msgstr "Tambah bahasa"
+#: src/resources/gtk/prefs-dialog.ui:599 src/resources/gtk/prefs-dialog.ui:767
+msgid "Appearance"
+msgstr "Penampilan"
 
-#: src/resources/gtk/prefs-dialog.ui:819
-msgid "Remove language"
-msgstr "Hapus bahasa"
+#: src/resources/gtk/prefs-dialog.ui:606
+msgid "Fonts"
+msgstr "Fonta"
 
-#: src/resources/gtk/prefs-dialog.ui:861
-msgid "Move language up"
-msgstr "Pindahkan bahasa ke atas"
+#: src/resources/gtk/prefs-dialog.ui:611
+msgid "Use custom fonts"
+msgstr "Gunakan fonta sistem"
 
-#: src/resources/gtk/prefs-dialog.ui:881
-msgid "Move language down"
-msgstr "Pindahkan bahasa ke bawah"
+#: src/resources/gtk/prefs-dialog.ui:627
+msgid "Sans serif font"
+msgstr "Fonta sans serif"
 
-#: src/resources/gtk/prefs-dialog.ui:906
-msgid "Spell Checking"
-msgstr "Pemeriksaan ejaan"
+#: src/resources/gtk/prefs-dialog.ui:642
+msgid "Serif font"
+msgstr "Fonta serif"
 
-#: src/resources/gtk/prefs-dialog.ui:911
-msgid "_Enable spell checking"
-msgstr "Bolehkan pemeriksaan _ejaan"
+#: src/resources/gtk/prefs-dialog.ui:657
+msgid "Monospace font"
+msgstr "Fonta lebar seragam (monospace)"
 
-#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
+#: src/resources/gtk/prefs-dialog.ui:677
+msgid "Reader Mode"
+msgstr "Mode Pembaca"
+
+#: src/resources/gtk/prefs-dialog.ui:681
+msgid "Font style"
+msgstr "Gaya fonta"
+
+#: src/resources/gtk/prefs-dialog.ui:687
+msgid "Color scheme"
+msgstr "Skema warna"
+
+#: src/resources/gtk/prefs-dialog.ui:700
+msgid "Style"
+msgstr "Gaya"
+
+#: src/resources/gtk/prefs-dialog.ui:705
+msgid "Use custom stylesheet"
+msgstr "Gunakan stylesheet gubahan"
+
+#: src/resources/gtk/prefs-dialog.ui:740
+msgid "Default zoom level"
+msgstr "Tingkat perbesaran bawaan"
+
+#: src/resources/gtk/prefs-dialog.ui:777 src/resources/gtk/prefs-dialog.ui:971
 msgid "Sync"
 msgstr "Sinkronisasi"
 
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:784
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3315,59 +3294,59 @@ msgstr ""
 "Firefox pada komputer lain. Web bukan Firefox dan tidak diproduksi atau "
 "didukung oleh Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:950
+#: src/resources/gtk/prefs-dialog.ui:785
 msgid "Firefox Sync"
 msgstr "Sync Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:804
 msgid "Firefox Account"
 msgstr "Akun Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:973
+#: src/resources/gtk/prefs-dialog.ui:808
 msgid "Logged in"
 msgstr "Sudah masuk"
 
-#: src/resources/gtk/prefs-dialog.ui:978
+#: src/resources/gtk/prefs-dialog.ui:813
 msgid "Sign _out"
 msgstr "Kel_uar"
 
-#: src/resources/gtk/prefs-dialog.ui:991
+#: src/resources/gtk/prefs-dialog.ui:826
 msgid "Sync Options"
 msgstr "Opsi Sinkronisasi"
 
-#: src/resources/gtk/prefs-dialog.ui:996
+#: src/resources/gtk/prefs-dialog.ui:831
 msgid "Sync _Bookmarks"
 msgstr "Sinkronkan _Penanda Taut"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:846
 msgid "Sync _Passwords"
 msgstr "Sinkronkan _Kata Sandi"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:861
 msgid "Sync _History"
 msgstr "Sinkronkan _Riwayat"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:876
 msgid "Sync Open _Tabs"
 msgstr "Sinkronkan Buka _Tab"
 
-#: src/resources/gtk/prefs-dialog.ui:1053
+#: src/resources/gtk/prefs-dialog.ui:888
 msgid "S_ynced tabs"
 msgstr "Tab s_elaras"
 
-#: src/resources/gtk/prefs-dialog.ui:1064
+#: src/resources/gtk/prefs-dialog.ui:899
 msgid "Frequency"
 msgstr "Frekuensi"
 
-#: src/resources/gtk/prefs-dialog.ui:1075
+#: src/resources/gtk/prefs-dialog.ui:910
 msgid "Sync _now"
 msgstr "Sy_nc sekarang"
 
-#: src/resources/gtk/prefs-dialog.ui:1087
+#: src/resources/gtk/prefs-dialog.ui:922
 msgid "Device name"
 msgstr "Nama peranti"
 
-#: src/resources/gtk/prefs-dialog.ui:1092
+#: src/resources/gtk/prefs-dialog.ui:927
 msgid "_Change"
 msgstr "_Ubah"
 
@@ -3847,3 +3826,24 @@ msgstr ""
 #: src/window-commands.c:2154
 msgid "_Enable"
 msgstr "_Aktifkan"
+
+#~ msgid "Switch to Tab"
+#~ msgstr "Beralih ke Tab"
+
+#~ msgid "Language"
+#~ msgstr "Bahasa"
+
+#~ msgid "Fonts & Style"
+#~ msgstr "Fonta & Gaya"
+
+#~ msgid "Stored Data"
+#~ msgstr "Data Tersimpan"
+
+#~ msgid "Move language up"
+#~ msgstr "Pindahkan bahasa ke atas"
+
+#~ msgid "Move language down"
+#~ msgstr "Pindahkan bahasa ke bawah"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "Bolehkan pemeriksaan _ejaan"
