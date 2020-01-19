@@ -996,3 +996,135 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }
+
+typedef struct {
+  char *document_uri;
+  char *remote_uri;
+  WebKitDownload *download;
+  EphyWebView *web_view;
+} PdfAsyncData;
+
+static PdfAsyncData *
+pdf_async_data_new (const char  *document_uri,
+                    const char  *remote_uri,
+                    EphyWebView *web_view)
+{
+  PdfAsyncData *data;
+
+  data = g_new0 (PdfAsyncData, 1);
+  data->document_uri = g_strdup (document_uri);
+  data->remote_uri = g_strdup (remote_uri);
+  data->web_view = web_view;
+
+  if (web_view)
+    g_object_add_weak_pointer (G_OBJECT (web_view), (gpointer *)&data->web_view);
+
+  return data;
+}
+
+static void
+pdf_async_data_free (PdfAsyncData *data)
+{
+  if (data->web_view)
+    g_object_remove_weak_pointer (G_OBJECT (data->web_view), (gpointer *)&data->web_view);
+
+  g_free (data->document_uri);
+  g_free (data->remote_uri);
+  g_free (data);
+}
+
+static void
+pdf_file_deleted (GObject      *source,
+                  GAsyncResult *res,
+                  gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  if (!g_file_delete_finish (G_FILE (source), res, &error))
+    g_warning ("Could not delete temporary pdf file: %s\n", error->message);
+}
+
+static void
+pdf_file_loaded (GObject      *source,
+                 GAsyncResult *res,
+                 gpointer      user_data)
+{
+  PdfAsyncData *data = user_data;
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (data->web_view);
+  GBytes *html_file;
+  g_autoptr (GString) html = NULL;
+  g_autofree gchar *b64 = NULL;
+  g_autofree gchar *requested_uri = NULL;
+  g_autofree char *file_data = NULL;
+  gsize len = 0;
+
+  if (!g_file_load_contents_finish (G_FILE (source), res, &file_data, &len, NULL, NULL)) {
+    pdf_async_data_free (data);
+    return;
+  }
+
+  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
+
+  b64 = g_base64_encode ((const guchar *)file_data, len);
+  g_file_delete_async (G_FILE (source), G_PRIORITY_DEFAULT, NULL, pdf_file_deleted, NULL);
+
+  html = g_string_new ("");
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, g_path_get_basename (data->remote_uri));
+
+  webkit_web_view_load_alternate_html (web_view, html->str, data->remote_uri, "ephy-resource:///org/gnome/epiphany/pdfjs/web/");
+
+  /* FIXME: Necessary WebKit API to access security level (TLS certificate) of a download is not
+   * available. Please fix this line once available.
+   */
+  ephy_web_view_set_security_level (data->web_view, EPHY_SECURITY_LEVEL_LOCAL_PAGE);
+
+  pdf_async_data_free (data);
+}
+
+static void
+pdf_download_finished_cb (WebKitDownload *download,
+                          EphyEmbed      *embed)
+{
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  WebKitURIRequest *request = webkit_download_get_request (download);
+  g_autoptr (GFile) file = NULL;
+  PdfAsyncData *pdf_data;
+  const char *document_uri = webkit_download_get_destination (download);
+  const char *remote_uri = webkit_uri_request_get_uri (request);
+
+  file = g_file_new_for_uri (document_uri);
+
+  pdf_data = pdf_async_data_new (document_uri, remote_uri, view);
+  g_file_load_contents_async (file, NULL, pdf_file_loaded, pdf_data);
+}
+
+static gboolean
+pdf_download_decide_destination_cb (WebKitDownload *wk_download,
+                                    gchar          *suggested_filename,
+                                    gpointer        user_data)
+{
+  EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (user_data));
+
+  if (ephy_web_view_in_pdf_viewer (web_view)) {
+    g_autofree gchar *tmp_file = g_strdup_printf ("%s/%s", g_get_tmp_dir (), suggested_filename);
+    g_autofree gchar *file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
+
+    webkit_download_set_allow_overwrite (wk_download, TRUE);
+    webkit_download_set_destination (wk_download, file_uri);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+void
+ephy_embed_download_started (EphyEmbed    *embed,
+                             EphyDownload *ephy_download)
+{
+  EphyWebView *web_view = ephy_embed_get_web_view (embed);
+  WebKitDownload *download = ephy_download_get_webkit_download (ephy_download);
+
+  if (ephy_web_view_in_pdf_viewer (web_view)) {
+    g_signal_connect_object (download, "finished", G_CALLBACK (pdf_download_finished_cb), embed, 0);
+    g_signal_connect_object (download, "decide-destination", G_CALLBACK (pdf_download_decide_destination_cb), embed, 0);
+  }
+}
