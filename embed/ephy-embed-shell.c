@@ -774,8 +774,11 @@ download_started_cb (WebKitWebContext *web_context,
                      EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  EphyEmbed *embed;
+  EphyWebView *view;
   g_autoptr (EphyDownload) ephy_download = NULL;
   gboolean ephy_download_set;
+  WebKitWebView *web_view;
 
   /* Is download locked down? */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -794,7 +797,14 @@ download_started_cb (WebKitWebContext *web_context,
     return;
 
   ephy_download = ephy_download_new (download);
-  ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
+
+  web_view = webkit_download_get_web_view (download);
+  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+  ephy_embed_download_started (embed, ephy_download);
+  view = EPHY_WEB_VIEW (web_view);
+
+  if (!ephy_web_view_in_pdf_viewer (view))
+    ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
 }
 
 static void
