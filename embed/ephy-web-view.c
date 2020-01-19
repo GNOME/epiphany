@@ -858,68 +858,6 @@ ephy_web_view_style_updated (GtkWidget *web_view)
   webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 }
 
-/**
- * TODO: Please note that we are currently making use of soup function to download
- * the requested pdf file. This is due to an issue with EphyDownload emitting download
- * finished signal before the file really exists in 50% of the cases. That
- * would lead to a very bad pdf experience therefore we are using soup.
- * Please switch to EphyDownload as soon as the issue is fixed.
- */
-static void
-pdf_loaded (SoupSession *session,
-            SoupMessage *msg,
-            gpointer     user_data)
-{
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (user_data);
-  EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  GBytes *html_file;
-  g_autoptr (GString) html = NULL;
-  g_autofree gchar *b64 = NULL;
-  SoupURI *uri = NULL;
-  g_autofree gchar *requested_uri = NULL;
-
-  if (msg->status_code != 200) {
-    g_warning ("PDF file could not be loaded, got status code %d\n", msg->status_code);
-    return;
-  }
-
-  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
-  b64 = g_base64_encode ((const guchar *)msg->response_body->data, msg->response_body->length);
-
-  uri = soup_message_get_uri (msg);
-
-  html = g_string_new ("");
-  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, g_path_get_basename (uri->path));
-  requested_uri = soup_uri_to_string (uri, FALSE);
-
-  /* FIXME: Remove this, and remove the hack from update_security_status_for_committed_load(),
-   * when we switch from SoupSession to EphyDownload.
-   *
-   * We are using SoupSession directly, bypassing WebKit's functionality for ignoring
-   * TLS certificate errors, so we should be guaranteed there are no security issues
-   */
-  if (!strcmp (SOUP_URI_SCHEME_HTTPS, soup_uri_get_scheme (uri)))
-    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_STRONG_SECURITY);
-  else
-    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
-
-  webkit_web_view_load_alternate_html (web_view, html->str, requested_uri, "ephy-resource:///org/gnome/epiphany/pdfjs/web/");
-
-  g_object_unref (session);
-}
-
-static void
-load_pdf (WebKitWebView *web_view,
-          const gchar   *request_uri)
-{
-  SoupSession *session = soup_session_new ();
-  SoupMessage *msg;
-
-  msg = soup_message_new ("GET", request_uri);
-
-  soup_session_queue_message (session, g_steal_pointer (&msg), pdf_loaded, web_view);
-}
-
 static gboolean
 ephy_web_view_decide_policy (WebKitWebView            *web_view,
                              WebKitPolicyDecision     *decision,
@@ -946,11 +884,6 @@ ephy_web_view_decide_policy (WebKitWebView            *web_view,
     EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
     view->in_pdf_viewer = TRUE;
-    webkit_policy_decision_ignore (decision);
-
-    load_pdf (web_view, request_uri);
-
-    return FALSE;
   }
 
   /* If WebKit can't handle the mime type start the download
