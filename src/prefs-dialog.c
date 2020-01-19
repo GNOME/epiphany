@@ -1479,7 +1479,7 @@ language_editor_add_function_buttons (PrefsDialog *dialog)
   GtkWidget *label;
 
   box = gtk_event_box_new ();
-  label = gtk_label_new (_("Add language"));
+  label = gtk_label_new (_("Add Language"));
   g_signal_connect (box, "button-release-event", G_CALLBACK (language_editor_add_button_release_event), dialog);
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_widget_set_size_request (box, -1, 50);
