@@ -1150,7 +1150,13 @@ ephy_embed_shell_startup (GApplication *application)
 
   webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
 
-  webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
+  /* Disable sandbox for the moment until:
+   *   - printing: https://bugs.webkit.org/show_bug.cgi?id=202363
+   *   - local browsing: https://bugs.webkit.org/show_bug.cgi?id=202071
+   *   - leaking sockets: https://bugs.webkit.org/show_bug.cgi?id=201771
+   * are fixed.
+   */
+  webkit_web_context_set_sandbox_enabled (priv->web_context, FALSE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_file_tmp_dir (), TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_profile_dir (), TRUE);
   webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_cache_dir (), TRUE);
