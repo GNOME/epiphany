@@ -23,6 +23,7 @@
 
 #include "ephy-shell.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-utils.h"
 #include "gvdb-builder.h"
 #include "gvdb-reader.h"
 
@@ -307,4 +308,213 @@ out:
     g_sequence_free (bookmarks);
 
   return ret;
+}
+
+char *replace_str (const char *src,
+                   const char *find,
+                   const char *replace)
+{
+  g_auto (GStrv) split = g_strsplit (src, find, -1);
+
+  return g_strjoinv (replace, split);
+}
+
+typedef struct {
+  GQueue *tags_stack;
+  GHashTable *urls_table;
+  GPtrArray *tags;
+  GPtrArray *urls;
+  GPtrArray *add_dates;
+  GPtrArray *titles;
+  gboolean read_title;
+  gboolean read_tag;
+} ParserData;
+
+static ParserData *
+parser_data_new ()
+{
+  ParserData *data;
+
+  data = g_new (ParserData, 1);
+  data->tags_stack = g_queue_new ();
+  data->urls_table = g_hash_table_new (g_str_hash, g_str_equal);
+  data->tags = g_ptr_array_new_with_free_func (g_free);
+  data->urls = g_ptr_array_new_with_free_func (g_free);
+  data->add_dates = g_ptr_array_new_with_free_func (g_free);
+  data->titles = g_ptr_array_new_with_free_func (g_free);
+  data->read_title = FALSE;
+  data->read_tag = FALSE;
+
+  return data;
+}
+
+static void
+parser_data_free (ParserData *data)
+{
+  g_queue_free_full (data->tags_stack, g_free);
+  g_hash_table_destroy (data->urls_table);
+  g_ptr_array_free (data->tags, TRUE);
+  g_ptr_array_free (data->urls, TRUE);
+  g_ptr_array_free (data->titles, TRUE);
+  g_ptr_array_free (data->add_dates, TRUE);
+  g_free (data);
+}
+
+static void
+xml_start_element (GMarkupParseContext  *context,
+                   const gchar          *element_name,
+                   const gchar         **attribute_names,
+                   const gchar         **attribute_values,
+                   gpointer              user_data,
+                   GError              **error)
+{
+  ParserData *data = user_data;
+  const gchar **names = attribute_names;
+  const gchar **values = attribute_values;
+
+  if (strcmp (element_name, "H3") == 0) {
+    data->read_tag = TRUE;
+  } else if (strcmp (element_name, "A") == 0) {
+    data->read_title = TRUE;
+
+    while (*names) {
+      if (strcmp (*names, "HREF") == 0) {
+        GPtrArray *tags;
+        const char *tag = g_queue_peek_head (data->tags_stack);
+
+        if (!g_hash_table_lookup_extended (data->urls_table, *values, NULL, (gpointer *)&tags))
+          tags = g_ptr_array_new ();
+
+        g_ptr_array_add (tags, g_strdup (tag));
+        g_hash_table_insert (data->urls_table, g_strdup (*values), tags);
+        g_ptr_array_add (data->urls, g_strdup (*values));
+      } else if (strcmp (*names, "ADD_DATE") == 0)
+        g_ptr_array_add (data->add_dates, g_strdup (*values));
+      names++;
+      values++;
+    }
+  }
+}
+
+static void
+xml_end_element (GMarkupParseContext  *context,
+                 const gchar          *element_name,
+                 gpointer              user_data,
+                 GError              **error)
+{
+  ParserData *data = user_data;
+
+  if (strcmp (element_name, "H3") == 0)
+    data->read_tag = FALSE;
+  else if (strcmp (element_name, "A") == 0)
+    data->read_title = FALSE;
+  else if (strcmp (element_name, "DL") == 0)
+    g_free (g_queue_pop_head (data->tags_stack));
+}
+
+static void
+xml_text (GMarkupParseContext  *context,
+          const gchar          *text,
+          gsize                 text_len,
+          gpointer              user_data,
+          GError              **error)
+{
+  ParserData *data = user_data;
+
+  if (data->read_tag) {
+    g_queue_push_head (data->tags_stack, g_strdup (text));
+    g_ptr_array_add (data->tags, g_strdup (text));
+  }
+
+  if (data->read_title)
+    g_ptr_array_add (data->titles, g_strdup (text));
+}
+
+gboolean
+ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
+                                 const char            *filename,
+                                 GError               **error)
+{
+  GMarkupParser parser;
+  g_autofree gchar *buf = NULL;
+  g_autoptr (GMarkupParseContext) context = NULL;
+  g_autoptr (GError) my_error = NULL;
+  g_autoptr (GMappedFile) mapped = NULL;
+  g_autoptr (GSequence) bookmarks = NULL;
+  ParserData *data;
+
+  mapped = g_mapped_file_new (filename, FALSE, &my_error);
+
+  if (!mapped) {
+    g_set_error (error,
+                 BOOKMARKS_IMPORT_ERROR,
+                 BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                 _("HTML bookmarks database could not be opened: %s"),
+                 my_error->message);
+    return FALSE;
+  }
+
+  buf = g_mapped_file_get_contents (mapped);
+
+  if (!buf) {
+    g_set_error_literal (error,
+                         BOOKMARKS_IMPORT_ERROR,
+                         BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                         _("HTML bookmarks database could not be read."));
+    return FALSE;
+  }
+
+  buf = replace_str (buf, "<DT>", "");
+  buf = replace_str (buf, "<p>", "");
+  buf = replace_str (buf, "&", "&amp;");
+
+  parser.start_element = xml_start_element;
+  parser.end_element = xml_end_element;
+  parser.text = xml_text;
+  parser.passthrough = NULL;
+  parser.error = NULL;
+
+  data = parser_data_new ();
+
+  context = g_markup_parse_context_new (&parser, 0, (gpointer)data, NULL);
+  if (!g_markup_parse_context_parse (context, buf, strlen (buf), &my_error)) {
+    g_set_error (error,
+                 BOOKMARKS_IMPORT_ERROR,
+                 BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                 _("HTML bookmarks database could not be parsed: %s"),
+                 my_error->message);
+    parser_data_free (data);
+    return FALSE;
+  }
+
+  for (guint i = 0; i < data->tags->len; i++)
+    ephy_bookmarks_manager_create_tag (manager, g_ptr_array_index (data->tags, i));
+
+  bookmarks = g_sequence_new (g_object_unref);
+  for (guint i = 0; i < data->urls->len; i++) {
+    const char *guid = ephy_sync_utils_get_random_sync_id ();
+    const char *url = g_ptr_array_index (data->urls, i);
+    const char *title = g_ptr_array_index (data->titles, i);
+    gint64 time_added = (gint64)g_ptr_array_index (data->add_dates, i);
+    EphyBookmark *bookmark;
+    GSequence *tags;
+    GPtrArray *val;
+
+    tags = g_sequence_new (g_free);
+    g_hash_table_lookup_extended (data->urls_table, url, NULL, (gpointer *)&val);
+    for (guint j = 0; j < val->len; j++) {
+      char *tag = g_ptr_array_index (val, j);
+      if (tag)
+        g_sequence_append (tags, tag);
+    }
+    bookmark = ephy_bookmark_new (url, title, tags, guid);
+    ephy_bookmark_set_time_added (bookmark, time_added);
+    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
+
+    g_sequence_prepend (bookmarks, bookmark);
+  }
+  ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
+
+  parser_data_free (data);
+  return TRUE;
 }
