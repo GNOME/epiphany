@@ -36,4 +36,8 @@ gboolean    ephy_bookmarks_import_from_firefox  (EphyBookmarksManager  *manager,
                                                  const gchar           *profile,
                                                  GError               **error);
 
+gboolean    ephy_bookmarks_import_from_html     (EphyBookmarksManager  *manager,
+                                                 const char            *filename,
+                                                 GError               **error);
+
 G_END_DECLS
