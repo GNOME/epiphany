@@ -93,8 +93,9 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
-const gchar *import_option_names[2] = {
+const gchar *import_option_names[3] = {
   N_("GVDB File"),
+  N_("HTML File"),
   N_("Firefox")
 };
 
@@ -275,98 +276,171 @@ show_profile_selector (GtkWidget *parent,
   return selected_profile;
 }
 
+gboolean
+dialog_bookmarks_import (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkFileChooser *file_chooser_dialog;
+  GtkWidget *import_info_dialog;
+  GtkFileFilter *filter;
+  int chooser_response;
+  gboolean imported = FALSE;
+
+  file_chooser_dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
+                                                                       GTK_WINDOW (dialog),
+                                                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                                                       _("I_mport"),
+                                                                       _("_Cancel")));
+  gtk_file_chooser_set_show_hidden (file_chooser_dialog, TRUE);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.gvdb");
+  gtk_file_chooser_set_filter (file_chooser_dialog, filter);
+
+  chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (file_chooser_dialog));
+  if (chooser_response == GTK_RESPONSE_ACCEPT) {
+    GError *error = NULL;
+    char *filename;
+
+    gtk_native_dialog_hide (GTK_NATIVE_DIALOG (file_chooser_dialog));
+
+    filename = gtk_file_chooser_get_filename (file_chooser_dialog);
+    imported = ephy_bookmarks_import (manager, filename, &error);
+    g_free (filename);
+
+    import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                 GTK_DIALOG_MODAL,
+                                                 imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s",
+                                                 imported ? _("Bookmarks successfully imported!")
+                                                          : error->message);
+    gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+
+    gtk_widget_destroy (import_info_dialog);
+  }
+  g_object_unref (file_chooser_dialog);
+  return imported;
+}
+
+gboolean
+dialog_bookmarks_import_from_html (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkFileChooser *file_chooser_dialog;
+  GtkWidget *import_info_dialog;
+  GtkFileFilter *filter;
+  int chooser_response;
+  gboolean imported = FALSE;
+
+  file_chooser_dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
+                                                                       GTK_WINDOW (dialog),
+                                                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                                                       _("I_mport"),
+                                                                       _("_Cancel")));
+  gtk_file_chooser_set_show_hidden (file_chooser_dialog, TRUE);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.html");
+  gtk_file_chooser_set_filter (file_chooser_dialog, filter);
+
+  chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (file_chooser_dialog));
+  if (chooser_response == GTK_RESPONSE_ACCEPT) {
+    GError *error = NULL;
+    char *filename;
+
+    gtk_native_dialog_hide (GTK_NATIVE_DIALOG (file_chooser_dialog));
+
+    filename = gtk_file_chooser_get_filename (file_chooser_dialog);
+    imported = ephy_bookmarks_import_from_html (manager, filename, &error);
+    g_free (filename);
+
+    import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                 GTK_DIALOG_MODAL,
+                                                 imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s",
+                                                 imported ? _("Bookmarks successfully imported!")
+                                                          : error->message);
+    gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+
+    gtk_widget_destroy (import_info_dialog);
+  }
+  g_object_unref (file_chooser_dialog);
+  return imported;
+}
+
+gboolean
+dialog_bookmarks_import_from_firefox (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *import_info_dialog;
+  GError *error = NULL;
+  GSList *profiles;
+  gchar *profile = NULL;
+  int num_profiles;
+  gboolean imported = FALSE;
+
+  profiles = get_firefox_profiles ();
+
+  /* Import default profile */
+  num_profiles = g_slist_length (profiles);
+  if (num_profiles == 1) {
+    imported = ephy_bookmarks_import_from_firefox (manager, profiles->data, &error);
+  } else if (num_profiles > 1) {
+    profile = show_profile_selector (GTK_WIDGET (dialog), profiles);
+    if (profile) {
+      imported = ephy_bookmarks_import_from_firefox (manager, profile, &error);
+      g_free (profile);
+    }
+  } else {
+    g_assert_not_reached ();
+  }
+
+  g_slist_free (profiles);
+
+  /* If there are multiple profiles, but the user didn't select one in
+   * the profile (he pressed Cancel), don't display the import info dialog
+   * as no import took place
+   */
+  if (num_profiles == 1 || profile) {
+    import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                 GTK_DIALOG_MODAL,
+                                                 imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s",
+                                                 imported ? _("Bookmarks successfully imported!")
+                                                          : error->message);
+    gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+    gtk_widget_destroy (import_info_dialog);
+  }
+  if (error)
+    g_error_free (error);
+  return imported;
+}
+
 static void
 dialog_bookmarks_import_cb (GtkDialog   *dialog,
                             int          response,
                             GtkComboBox *combo_box)
 {
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GtkFileChooser *file_chooser_dialog;
-  GtkWidget *import_info_dialog;
   int active;
-  int chooser_response;
   gboolean imported = FALSE;
 
   if (response == GTK_RESPONSE_OK) {
     active = gtk_combo_box_get_active (combo_box);
-    if (active == 0) {
-      GtkFileFilter *filter;
-
-      file_chooser_dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
-                                                                           GTK_WINDOW (dialog),
-                                                                           GTK_FILE_CHOOSER_ACTION_OPEN,
-                                                                           _("I_mport"),
-                                                                           _("_Cancel")));
-      gtk_file_chooser_set_show_hidden (file_chooser_dialog, TRUE);
-
-      filter = gtk_file_filter_new ();
-      gtk_file_filter_add_pattern (filter, "*.gvdb");
-      gtk_file_chooser_set_filter (file_chooser_dialog, filter);
-
-      chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (file_chooser_dialog));
-      if (chooser_response == GTK_RESPONSE_ACCEPT) {
-        GError *error = NULL;
-        char *filename;
-
-        gtk_native_dialog_hide (GTK_NATIVE_DIALOG (file_chooser_dialog));
-
-        filename = gtk_file_chooser_get_filename (file_chooser_dialog);
-        imported = ephy_bookmarks_import (manager, filename, &error);
-        g_free (filename);
-
-        import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
-                                                     GTK_DIALOG_MODAL,
-                                                     imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
-                                                     GTK_BUTTONS_OK,
-                                                     "%s",
-                                                     imported ? _("Bookmarks successfully imported!")
-                                                              : error->message);
-        gtk_dialog_run (GTK_DIALOG (import_info_dialog));
-
-        gtk_widget_destroy (import_info_dialog);
-      }
-      g_object_unref (file_chooser_dialog);
-    } else if (active == 1) {
-      GError *error = NULL;
-      GSList *profiles;
-      gchar *profile = NULL;
-      int num_profiles;
-
-      profiles = get_firefox_profiles ();
-
-      /* Import default profile */
-      num_profiles = g_slist_length (profiles);
-      if (num_profiles == 1) {
-        imported = ephy_bookmarks_import_from_firefox (manager, profiles->data, &error);
-      } else if (num_profiles > 1) {
-        profile = show_profile_selector (GTK_WIDGET (dialog), profiles);
-        if (profile) {
-          imported = ephy_bookmarks_import_from_firefox (manager, profile, &error);
-          g_free (profile);
-        }
-      } else {
+    switch (active) {
+      case 0:
+        imported = dialog_bookmarks_import (dialog);
+        break;
+      case 1:
+        imported = dialog_bookmarks_import_from_html (dialog);
+        break;
+      case 2:
+        imported = dialog_bookmarks_import_from_firefox (dialog);
+        break;
+      default:
         g_assert_not_reached ();
-      }
-
-      g_slist_free (profiles);
-
-      /* If there are multiple profiles, but the user didn't select one in
-       * the profile (he pressed Cancel), don't display the import info dialog
-       * as no import took place
-       */
-      if (num_profiles == 1 || profile) {
-        import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
-                                                     GTK_DIALOG_MODAL,
-                                                     imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
-                                                     GTK_BUTTONS_OK,
-                                                     "%s",
-                                                     imported ? _("Bookmarks successfully imported!")
-                                                              : error->message);
-        gtk_dialog_run (GTK_DIALOG (import_info_dialog));
-        gtk_widget_destroy (import_info_dialog);
-      }
-      if (error)
-        g_error_free (error);
     }
 
     if (imported)
