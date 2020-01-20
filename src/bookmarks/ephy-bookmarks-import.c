@@ -23,6 +23,7 @@
 
 #include "ephy-shell.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-utils.h"
 #include "gvdb-builder.h"
 #include "gvdb-reader.h"
 
@@ -307,4 +308,164 @@ out:
     g_sequence_free (bookmarks);
 
   return ret;
+}
+
+char *replace_str (const char *src,
+                   const char *find,
+                   const char *replace)
+{
+  char *retval = g_strdup (src);
+  const char *ptr = NULL;
+
+  ptr = strstr (retval, find);
+  if (ptr) {
+    g_autofree char *after_find = replace_str (ptr + strlen (find), find, replace);
+    g_autofree char *before_find = g_strndup (retval, ptr - retval);
+    g_autofree char *temp = g_strconcat (before_find, replace, after_find, NULL);
+
+    g_free (retval);
+    retval = g_strdup (temp);
+  }
+  return retval;
+}
+
+struct parser_data {
+  GPtrArray *urls;
+  GPtrArray *add_dates;
+  GPtrArray *titles;
+  gboolean read_title;
+};
+
+static void
+xml_start_element (GMarkupParseContext  *context,
+                   const gchar          *element_name,
+                   const gchar         **attribute_names,
+                   const gchar         **attribute_values,
+                   gpointer              user_data,
+                   GError              **error)
+{
+  struct parser_data *data = user_data;
+  const gchar **names = attribute_names;
+  const gchar **values = attribute_values;
+
+  if (strcmp (element_name, "A") == 0) {
+    data->read_title = TRUE;
+    while (*names) {
+      if (strcmp (*names, "HREF") == 0)
+        g_ptr_array_add (data->urls, (gpointer)g_strdup (*values));
+      if (strcmp (*names, "ADD_DATE") == 0)
+        g_ptr_array_add (data->add_dates, (gpointer)g_strdup (*values));
+      names++;
+      values++;
+    }
+  }
+}
+
+static void
+xml_end_element (GMarkupParseContext  *context,
+                 const gchar          *element_name,
+                 gpointer              user_data,
+                 GError              **error)
+{
+  struct parser_data *data = user_data;
+
+  if (strcmp (element_name, "A") == 0)
+    data->read_title = FALSE;
+}
+
+static void
+xml_text (GMarkupParseContext  *context,
+          const gchar          *text,
+          gsize                 text_len,
+          gpointer              user_data,
+          GError              **error)
+{
+  struct parser_data *data = user_data;
+
+  if (data->read_title)
+    g_ptr_array_add (data->titles, (gpointer)g_strdup (text));
+}
+
+gboolean
+ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
+                                 const char            *filename,
+                                 GError               **error)
+{
+  GMarkupParser parser;
+  g_autofree gchar *buf = NULL;
+  g_autoptr (GMarkupParseContext) context = NULL;
+  g_autoptr (GError) my_error = NULL;
+  g_autoptr (GMappedFile) mapped = NULL;
+  g_autoptr (GSequence) bookmarks = NULL;
+  struct parser_data data;
+
+  mapped = g_mapped_file_new (filename, FALSE, &my_error);
+
+  if (!mapped) {
+    g_warning ("Could not open bookmarks file: %s", my_error->message);
+    g_set_error (error,
+                 BOOKMARKS_IMPORT_ERROR,
+                 BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                 _("HTML bookmarks database could not be opened."));
+    return FALSE;
+  }
+
+  buf = g_mapped_file_get_contents (mapped);
+
+  if (!buf) {
+    g_warning ("Could not read bookmarks file.");
+    g_set_error (error,
+                 BOOKMARKS_IMPORT_ERROR,
+                 BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                 _("HTML bookmarks database could not be read."));
+    return FALSE;
+  }
+
+  buf = replace_str (buf, "<DT>", "");
+  buf = replace_str (buf, "<p>", "");
+  buf = replace_str (buf, "&", "&amp;");
+
+  parser.start_element = xml_start_element;
+  parser.end_element = xml_end_element;
+  parser.text = xml_text;
+  parser.passthrough = NULL;
+  parser.error = NULL;
+
+  data.read_title = FALSE;
+  data.urls = g_ptr_array_new ();
+  data.add_dates = g_ptr_array_new ();
+  data.titles = g_ptr_array_new ();
+
+  context = g_markup_parse_context_new (&parser, 0, &data, NULL);
+  if (!g_markup_parse_context_parse (context, buf, strlen (buf), &my_error)) {
+    g_warning ("Could not parse bookmarks file: %s", my_error->message);
+    g_set_error (error,
+                 BOOKMARKS_IMPORT_ERROR,
+                 BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+                 _("HTML bookmarks database could not be parsed."));
+    g_ptr_array_free (data.urls, TRUE);
+    g_ptr_array_free (data.titles, TRUE);
+    g_ptr_array_free (data.add_dates, TRUE);
+    return FALSE;
+  }
+
+  bookmarks = g_sequence_new (g_object_unref);
+  for (guint i = 0; i < data.urls->len; i++) {
+    const char *guid = ephy_sync_utils_get_random_sync_id ();
+    const char *url = g_ptr_array_index (data.urls, i);
+    const char *title = g_ptr_array_index (data.titles, i);
+    gint64 time_added = (gint64)g_ptr_array_index (data.add_dates, i);
+    EphyBookmark *bookmark;
+    GSequence *tags;
+
+    tags = g_sequence_new (g_free);
+    bookmark = ephy_bookmark_new (url, title, tags, guid);
+    ephy_bookmark_set_time_added (bookmark, time_added);
+    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
+
+    g_sequence_prepend (bookmarks, bookmark);
+  }
+  ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
+
+  return TRUE;
 }
