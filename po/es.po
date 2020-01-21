@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-15 21:02+0000\n"
-"PO-Revision-Date: 2020-01-16 11:47+0100\n"
+"POT-Creation-Date: 2020-01-19 15:50+0000\n"
+"PO-Revision-Date: 2020-01-21 11:20+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -361,7 +361,7 @@ msgstr ""
 "puede entender."
 
 #: data/org.gnome.epiphany.gschema.xml:146
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:333
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -1016,7 +1016,7 @@ msgid "Download requested"
 msgstr "Descarga requerida"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:945
+#: src/resources/gtk/prefs-dialog.ui:943
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
 #: src/window-commands.c:481 src/window-commands.c:1453
@@ -1443,7 +1443,7 @@ msgid "_Never Save"
 msgstr "_Nunca guardar"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:936 src/window-commands.c:480
+#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Guardar"
 
@@ -2138,7 +2138,7 @@ msgstr "Cancelando…"
 msgid "Starting…"
 msgstr "Iniciando…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:294
+#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2162,7 +2162,7 @@ msgstr "Todos los archivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:368
+#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:364
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
@@ -2309,35 +2309,35 @@ msgstr "Favoritos"
 msgid "Mobile"
 msgstr "Móvil"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:77
 msgid "HTTP disk cache"
 msgstr "Caché HTTP en disco"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:78
 msgid "Local storage data"
 msgstr "Datos de almacenamiento local"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:79
 msgid "Offline web application cache"
 msgstr "Caché de aplicaciones web sin conexión"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:80
 msgid "IndexedDB databases"
 msgstr "Bases de datos IndexedDB"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:81
 msgid "WebSQL databases"
 msgstr "Bases de datos WebSQL"
 
-#: src/clear-data-dialog.c:86
+#: src/clear-data-dialog.c:82
 msgid "Plugins data"
 msgstr "Datos de complementos"
 
-#: src/clear-data-dialog.c:87
+#: src/clear-data-dialog.c:83
 msgid "HSTS policies cache"
 msgstr "Caché de políticas HSTS"
 
-#: src/cookies-dialog.c:175
+#: src/cookies-dialog.c:143
 msgid "Remove cookie"
 msgstr "Eliminar cookie"
 
@@ -2350,15 +2350,118 @@ msgstr "Recargar la página actual"
 msgid "Stop loading the current page"
 msgstr "Detener la carga de la página actual"
 
-#: src/ephy-history-dialog.c:272
+#: src/ephy-data-dialog.c:290
+msgid "'Clear all' action name"
+msgstr "Nombre de la acción «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:291
+msgid "The name of the action associated to the 'Clear all' button"
+msgstr "El nombre de la acción asociada al botón «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:297
+msgid "'Clear all' action target value"
+msgstr "Valor objetivo de la acción «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:298
+msgid "The parameter for 'Clear all' action invocations"
+msgstr "El parámetro para la invocación de acciones «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:304
+msgid "'Clear all' description"
+msgstr "Descripción de «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:305
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Clear all' action"
+msgstr "La descripción de la acción «Limpiar todo»"
+
+#: src/ephy-data-dialog.c:311
+#| msgid "Description"
+msgid "'Search' description"
+msgstr "Descripción de «Buscar»"
+
+#: src/ephy-data-dialog.c:312
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Search' action"
+msgstr "La descripción de la acción «Buscar»"
+
+#: src/ephy-data-dialog.c:318
+msgid "'Empty' title"
+msgstr "Título de «Vaciar»"
+
+#: src/ephy-data-dialog.c:319
+msgid "The title of the 'Empty' state page"
+msgstr "El título de la página del estado de «Vaciar»"
+
+#: src/ephy-data-dialog.c:325
+#| msgid "Description"
+msgid "'Empty' description"
+msgstr "Descripción de «Vaciar»"
+
+#: src/ephy-data-dialog.c:326
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Empty' state page"
+msgstr "La descripción de la página del estado de «Vaciar»"
+
+#: src/ephy-data-dialog.c:332
+#| msgid "Search the Web"
+msgid "Search text"
+msgstr "Buscar texto"
+
+#: src/ephy-data-dialog.c:333
+#| msgid "Find next occurrence of the search string"
+msgid "The text of the search entry"
+msgstr "El testo de la entrada de búsqueda"
+
+#: src/ephy-data-dialog.c:339
+#| msgid "Loading…"
+msgid "Is loading"
+msgstr "Está cargando"
+
+#: src/ephy-data-dialog.c:340
+#| msgid "Whether homepage loads in new tabs"
+msgid "Whether the dialog is loading its data"
+msgstr "Indica si el diálogo está cargando sus datos"
+
+#: src/ephy-data-dialog.c:346
+#| msgid "Plugins data"
+msgid "Has data"
+msgstr "Tiene datos"
+
+#: src/ephy-data-dialog.c:347
+msgid "Whether the dialog has data"
+msgstr "Indica si el diálogo tiene datos"
+
+#: src/ephy-data-dialog.c:353
+#| msgctxt "shortcut window"
+#| msgid "Next search result"
+msgid "Has search results"
+msgstr "Tiene resultados de búsqueda"
+
+#: src/ephy-data-dialog.c:354
+#| msgctxt "shortcut window"
+#| msgid "Previous search result"
+msgid "Whether the dialog has search results"
+msgstr "Indica si el diálogo tiene resultados de búsqueda"
+
+#: src/ephy-data-dialog.c:360
+#| msgid "Clear"
+msgid "Can clear"
+msgstr "Puede limpiar"
+
+#: src/ephy-data-dialog.c:361
+msgid "Whether the data can be cleared"
+msgstr "Indica si se pueden limpiar los datos"
+
+#: src/ephy-history-dialog.c:269
 msgid "Remove the selected pages from history"
 msgstr "Quita las páginas seleccionadas del histórico"
 
-#: src/ephy-history-dialog.c:358
+#: src/ephy-history-dialog.c:354
 msgid "Clear browsing history?"
 msgstr "¿Quiere limpiar el histórico de navegación?"
 
-#: src/ephy-history-dialog.c:362
+#: src/ephy-history-dialog.c:358
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2366,7 +2469,7 @@ msgstr ""
 "Limpiar del histórico de navegación hará que todos enlaces del histórico se "
 "eliminen permanentemente."
 
-#: src/ephy-history-dialog.c:809
+#: src/ephy-history-dialog.c:782
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "No se puede modificar el histórico cuando está en modo incógnito."
 
@@ -2683,12 +2786,11 @@ msgid "Supported Image Files"
 msgstr "Archivos de imagen soportados"
 
 #: src/prefs-dialog.c:1463
-#| msgid "Remove language"
 msgid "Delete language"
 msgstr "Eliminar idioma"
 
-#: src/prefs-dialog.c:1482
-msgid "Add language"
+#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+msgid "Add Language"
 msgstr "Añadir idioma"
 
 #: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
@@ -2702,20 +2804,20 @@ msgstr[1] "Idiomas del sistema (%s)"
 msgid "Select a directory"
 msgstr "Seleccione una carpeta"
 
-#: src/prefs-dialog.c:2205
+#: src/prefs-dialog.c:2203
 msgid "Sans"
 msgstr "Sans"
 
 # Esto es de gestión de cookies (serrador)
-#: src/prefs-dialog.c:2207
+#: src/prefs-dialog.c:2205
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2251
+#: src/prefs-dialog.c:2249
 msgid "Light"
 msgstr "Claro"
 
-#: src/prefs-dialog.c:2253
+#: src/prefs-dialog.c:2251
 msgid "Dark"
 msgstr "Oscuro"
 
@@ -2813,29 +2915,32 @@ msgstr "¿Todavía no hay marcadores?"
 msgid "Bookmark some webpages to view them here."
 msgstr "Guarde en marcadores algunas páginas para verlas aquí."
 
-#: src/resources/gtk/clear-data-dialog.ui:31
-msgid "Clear Personal Data"
-msgstr "Limpiar datos personales"
+#: src/resources/gtk/clear-data-dialog.ui:22
+#: src/resources/gtk/prefs-dialog.ui:551
+msgid "Personal Data"
+msgstr "Datos personales"
 
-#: src/resources/gtk/clear-data-dialog.ui:35
-msgid "C_lear"
-msgstr "_Limpiar"
+#: src/resources/gtk/clear-data-dialog.ui:23
+#| msgid "Clear Personal Data"
+msgid "Remove all personal data"
+msgstr "Quitar todos los datos personales"
 
-#: src/resources/gtk/clear-data-dialog.ui:55
-#: src/resources/gtk/cookies-dialog.ui:57
-#: src/resources/gtk/passwords-dialog.ui:60
-msgid "Search"
-msgstr "Buscar"
+#: src/resources/gtk/clear-data-dialog.ui:24
+#| msgid "Clear Personal Data"
+msgid "Search personal data"
+msgstr "Buscar datos personales"
 
-#: src/resources/gtk/clear-data-dialog.ui:56
-msgid "Filter domains"
-msgstr "Filtrar dominios"
+#: src/resources/gtk/clear-data-dialog.ui:25
+#| msgid "Clear Personal Data"
+msgid "There is no Personal Data"
+msgstr "No hay datos personales"
 
-#: src/resources/gtk/clear-data-dialog.ui:87
-msgid "Search domains"
-msgstr "Buscar dominios"
+#: src/resources/gtk/clear-data-dialog.ui:26
+#| msgid "Visited pages will be listed here"
+msgid "Personal data will be listed here"
+msgstr "Los datos personales se listarán aquí"
 
-#: src/resources/gtk/clear-data-dialog.ui:103
+#: src/resources/gtk/clear-data-dialog.ui:53
 msgid ""
 "You can select a period of time to clear data for all websites modified in "
 "that period. If you choose from the beginning of time, then you can also "
@@ -2846,35 +2951,31 @@ msgstr ""
 "principio de los tiempos, también puede hacerlo sólo para algunos sitios en "
 "concreto."
 
-#: src/resources/gtk/clear-data-dialog.ui:120
+#: src/resources/gtk/clear-data-dialog.ui:74
 msgid "Clear selected personal data _from:"
 msgstr "Limpiar los datos personales seleccionados _desde:"
 
-#: src/resources/gtk/clear-data-dialog.ui:130
+#: src/resources/gtk/clear-data-dialog.ui:89
 msgid "the past hour"
 msgstr "la última hora"
 
-#: src/resources/gtk/clear-data-dialog.ui:131
+#: src/resources/gtk/clear-data-dialog.ui:90
 msgid "the past day"
 msgstr "el último día"
 
-#: src/resources/gtk/clear-data-dialog.ui:132
+#: src/resources/gtk/clear-data-dialog.ui:91
 msgid "the past week"
 msgstr "la última semana"
 
-#: src/resources/gtk/clear-data-dialog.ui:133
+#: src/resources/gtk/clear-data-dialog.ui:92
 msgid "the past four weeks"
 msgstr "las últimas cuatro semanas"
 
-#: src/resources/gtk/clear-data-dialog.ui:134
+#: src/resources/gtk/clear-data-dialog.ui:93
 msgid "the beginning of time"
 msgstr "el principio de los tiempos"
 
-#: src/resources/gtk/clear-data-dialog.ui:213
-msgid "No data found"
-msgstr "No se han encontrado datos"
-
-#: src/resources/gtk/clear-data-dialog.ui:230
+#: src/resources/gtk/clear-data-dialog.ui:153
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -2882,17 +2983,40 @@ msgstr ""
 "No puede deshacer esta acción. Los datos que está seleccionando para limpiar "
 "se perderán para siempre."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:434
+#: src/resources/gtk/cookies-dialog.ui:7 src/resources/gtk/prefs-dialog.ui:432
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/resources/gtk/cookies-dialog.ui:39
+#: src/resources/gtk/cookies-dialog.ui:9
 msgid "Remove all cookies"
 msgstr "Eliminas todas las cookies"
 
-#: src/resources/gtk/cookies-dialog.ui:58
-msgid "Filter cookies"
-msgstr "Filtrar cookies"
+#: src/resources/gtk/cookies-dialog.ui:10
+#| msgid "Filter cookies"
+msgid "Search cookies"
+msgstr "Buscar cookies"
+
+#: src/resources/gtk/cookies-dialog.ui:11
+#| msgid "There are ongoing downloads."
+msgid "There are no Cookies"
+msgstr "No hay cookies"
+
+#: src/resources/gtk/cookies-dialog.ui:12
+#| msgid "Visited pages will be listed here"
+msgid "Cookies left by visited pages will be listed here"
+msgstr "Las cookies dejadas por páginas que ha visitado se listarán aquí"
+
+#: src/resources/gtk/data-dialog.ui:59
+msgid "Search"
+msgstr "Buscar"
+
+#: src/resources/gtk/data-dialog.ui:229
+msgid "No Results Found"
+msgstr "No se encontraron resultados"
+
+#: src/resources/gtk/data-dialog.ui:244
+msgid "Try a different search"
+msgstr "Pruebe a hacer una búsqueda diferente"
 
 #: src/resources/gtk/encoding-dialog.ui:8
 msgid "Text Encoding"
@@ -2914,39 +3038,31 @@ msgstr "Codificaciones relacionadas"
 msgid "Show all…"
 msgstr "Mostrar todas…"
 
-#: src/resources/gtk/history-dialog.ui:29
+#: src/resources/gtk/history-dialog.ui:7
 msgid "History"
 msgstr "Histórico"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:9
 msgid "Remove all history"
 msgstr "Eliminar todo el histórico"
 
-#: src/resources/gtk/history-dialog.ui:79
+#: src/resources/gtk/history-dialog.ui:10
 msgid "Search history"
 msgstr "Histórico de búsqueda"
 
-#: src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/history-dialog.ui:11
 msgid "The History is Empty"
 msgstr "El histórico está vacío"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "Las páginas visitadas se listarán aquí"
 
-#: src/resources/gtk/history-dialog.ui:244
-msgid "No Results Found"
-msgstr "No se encontraron resultados"
-
-#: src/resources/gtk/history-dialog.ui:259
-msgid "Try a different search"
-msgstr "Pruebe a hacer una búsqueda diferente"
-
-#: src/resources/gtk/history-dialog.ui:303
+#: src/resources/gtk/history-dialog.ui:67
 msgid "_Copy Location"
 msgstr "Copiar _ubicación"
 
-#: src/resources/gtk/history-dialog.ui:312
+#: src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -3072,49 +3188,55 @@ msgstr "_Acerca de Web"
 msgid "Close page"
 msgstr "Cerrar la página"
 
-#: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:509
+#: src/resources/gtk/passwords-dialog.ui:25
+#: src/resources/gtk/prefs-dialog.ui:507
 msgid "Passwords"
 msgstr "Contraseñas"
 
-#: src/resources/gtk/passwords-dialog.ui:38
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "_Limpiar todo"
+#: src/resources/gtk/passwords-dialog.ui:27
+#| msgid "Reveal all the passwords"
+msgid "Remove all passwords"
+msgstr "Quitar todas las contraseñas"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Filter passwords"
-msgstr "Filtrar contraseñas"
-
-#: src/resources/gtk/passwords-dialog.ui:91
+#: src/resources/gtk/passwords-dialog.ui:28
 msgid "Search passwords"
 msgstr "Buscar contraseñas"
 
-#: src/resources/gtk/passwords-dialog.ui:121
+#: src/resources/gtk/passwords-dialog.ui:29
+#| msgid "There are ongoing downloads."
+msgid "There are no Passwords"
+msgstr "No hay contraseñas"
+
+#: src/resources/gtk/passwords-dialog.ui:30
+#| msgid "Visited pages will be listed here"
+msgid "Saved passwords will be listed here"
+msgstr "Las contraseñas guardadas se listarán aquí"
+
+#: src/resources/gtk/passwords-dialog.ui:61
 msgid "Site"
 msgstr "Sitio"
 
-#: src/resources/gtk/passwords-dialog.ui:136
+#: src/resources/gtk/passwords-dialog.ui:76
 msgid "User Name"
 msgstr "Nombre de usuario"
 
-#: src/resources/gtk/passwords-dialog.ui:150
+#: src/resources/gtk/passwords-dialog.ui:90
 msgid "Password"
 msgstr "Contraseña"
 
-#: src/resources/gtk/passwords-dialog.ui:169
+#: src/resources/gtk/passwords-dialog.ui:109
 msgid "Forget the selected passwords"
 msgstr "Olvidar las contraseñas seleccionadas"
 
-#: src/resources/gtk/passwords-dialog.ui:184
+#: src/resources/gtk/passwords-dialog.ui:124
 msgid "Reveal all the passwords"
 msgstr "Mostrar todas las contraseñas"
 
-#: src/resources/gtk/passwords-dialog.ui:204
+#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "_Copiar contraseña"
 
-#: src/resources/gtk/passwords-dialog.ui:208
+#: src/resources/gtk/passwords-dialog.ui:148
 msgid "C_opy Username"
 msgstr "C_opiar nombre de usuario"
 
@@ -3122,7 +3244,7 @@ msgstr "C_opiar nombre de usuario"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:370
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:368
 msgid "General"
 msgstr "General"
 
@@ -3159,8 +3281,9 @@ msgid "_Custom"
 msgstr "_Personalizado"
 
 #: src/resources/gtk/prefs-dialog.ui:211
-msgid "Always ask o_n download"
-msgstr "Preguntar siempre _al descargar"
+#| msgid "Always ask o_n download"
+msgid "Ask o_n download"
+msgstr "Preguntar _al descargar"
 
 #: src/resources/gtk/prefs-dialog.ui:226
 msgid "_Download folder"
@@ -3171,159 +3294,165 @@ msgid "Search Engines"
 msgstr "Motores de búsqueda"
 
 #: src/resources/gtk/prefs-dialog.ui:240
-msgid "You can select different search engines to use"
-msgstr "Puede seleccionar diferentes motores de búsqueda que usar"
-
-#: src/resources/gtk/prefs-dialog.ui:241
 msgid "_Manage Search Engines"
 msgstr "_Gestionar motores de búsqueda"
 
-#: src/resources/gtk/prefs-dialog.ui:266
+#: src/resources/gtk/prefs-dialog.ui:265
 msgid "Session"
 msgstr "Sesión"
 
-#: src/resources/gtk/prefs-dialog.ui:271
-msgid "Always start browser in _incognito mode"
-msgstr "Iniciar siempre el navegador en modo _incógnito"
+#: src/resources/gtk/prefs-dialog.ui:270
+#| msgid "Start in incognito mode"
+msgid "Start in _Incognito Mode"
+msgstr "Iniciar en modo _incógnito"
 
-#: src/resources/gtk/prefs-dialog.ui:286
-msgid "_Remember previous tabs on startup"
-msgstr "_Recordar las pestañas anteriores al iniciar"
+#: src/resources/gtk/prefs-dialog.ui:284
+#| msgid "_Remember previous tabs on startup"
+msgid "_Restore Tabs on Startup"
+msgstr "_Restaurar las pestañas al iniciar"
 
-#: src/resources/gtk/prefs-dialog.ui:301
+#: src/resources/gtk/prefs-dialog.ui:299
 msgid "Browsing"
 msgstr "Examinar"
 
-#: src/resources/gtk/prefs-dialog.ui:306
-#| msgid "Use s_mooth scrolling"
-msgid "Sm_ooth scrolling"
+#: src/resources/gtk/prefs-dialog.ui:304
+#| msgid "Sm_ooth scrolling"
+msgid "Sm_ooth Scrolling"
 msgstr "Desplazamiento _suave"
 
-#: src/resources/gtk/prefs-dialog.ui:320
-#| msgid "Enable mouse _gesture"
-msgid "Mouse _gestures"
+#: src/resources/gtk/prefs-dialog.ui:318
+#| msgid "Mouse _gestures"
+msgid "Mouse _Gestures"
 msgstr "_Gestos del ratón"
 
-#: src/resources/gtk/prefs-dialog.ui:352
-#| msgid "Spell Checking"
-msgid "_Spell checking"
+#: src/resources/gtk/prefs-dialog.ui:350
+#| msgid "_Spell checking"
+msgid "_Spell Checking"
 msgstr "Re_visión ortográfica"
 
-#: src/resources/gtk/prefs-dialog.ui:379 src/resources/gtk/prefs-dialog.ui:589
+#: src/resources/gtk/prefs-dialog.ui:377 src/resources/gtk/prefs-dialog.ui:587
 msgid "Privacy"
 msgstr "Privacidad"
 
-#: src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:384
 msgid "Web Content"
 msgstr "Contenido web"
 
-#: src/resources/gtk/prefs-dialog.ui:391
-msgid "Try to block _advertisements"
+#: src/resources/gtk/prefs-dialog.ui:389
+#| msgid "Try to block _advertisements"
+msgid "Try to Block _Advertisements"
 msgstr "Intentar bloquear _anuncios"
 
-#: src/resources/gtk/prefs-dialog.ui:405
-msgid "Block popup _windows"
+#: src/resources/gtk/prefs-dialog.ui:403
+#| msgid "Block popup _windows"
+msgid "Block Popup _Windows"
 msgstr "Bloquear ventanas e_mergentes"
 
-#: src/resources/gtk/prefs-dialog.ui:419
-msgid "Try to block dangerous web_sites"
+#: src/resources/gtk/prefs-dialog.ui:417
+#| msgid "Try to block dangerous web_sites"
+msgid "Try to Block Dangerous Web_sites"
 msgstr "Intentar bloquear _sitios web peligrosos"
 
-#: src/resources/gtk/prefs-dialog.ui:439
-msgid "Manage _Cookies"
-msgstr "Gestionar _cookies"
+#: src/resources/gtk/prefs-dialog.ui:437
+#| msgid "C_ookies"
+msgid "Clear _Cookies"
+msgstr "Limpiar _cookies"
 
-#: src/resources/gtk/prefs-dialog.ui:463
+#: src/resources/gtk/prefs-dialog.ui:461
 msgid "_Always accept"
 msgstr "_Aceptar siempre"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "For example, not from advertisers on these sites"
-msgstr "Por ejemplo, no de publicidad de estos sitios"
+#: src/resources/gtk/prefs-dialog.ui:475
+#| msgid "For example, not from advertisers on these sites"
+msgid "For example, not from advertisers on these sites."
+msgstr "Por ejemplo, no de publicidad de estos sitios."
 
-#: src/resources/gtk/prefs-dialog.ui:478
+#: src/resources/gtk/prefs-dialog.ui:476
 msgid "Only _from sites you visit"
 msgstr "Sólo desde los sitios que _visita"
 
-#: src/resources/gtk/prefs-dialog.ui:493
+#: src/resources/gtk/prefs-dialog.ui:491
 msgid "_Never accept"
 msgstr "_Nunca aceptar"
 
-#: src/resources/gtk/prefs-dialog.ui:514
-msgid "Manage _Passwords"
-msgstr "Gestionar _contraseñas"
+#: src/resources/gtk/prefs-dialog.ui:512
+#| msgid "Passwords"
+msgid "_Passwords"
+msgstr "_Contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:538
-msgid "_Remember passwords"
-msgstr "_Recordar la contraseñas"
+#: src/resources/gtk/prefs-dialog.ui:536
+#| msgid "_Remember passwords"
+msgid "_Remember Passwords"
+msgstr "_Recordar contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:553
-msgid "Personal Data"
-msgstr "Datos personales"
-
-#: src/resources/gtk/prefs-dialog.ui:558
+#: src/resources/gtk/prefs-dialog.ui:556
 msgid "You can clear stored personal data."
 msgstr "Puede limpiar los datos personales almacenados."
 
-#: src/resources/gtk/prefs-dialog.ui:559
-msgid "Manage Personal _Data"
-msgstr "Gestionar _datos personales"
+#: src/resources/gtk/prefs-dialog.ui:557
+#| msgid "Clear Personal Data"
+msgid "Clear Personal _Data"
+msgstr "Limpiar _datos personales"
 
-#: src/resources/gtk/prefs-dialog.ui:599 src/resources/gtk/prefs-dialog.ui:767
+#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: src/resources/gtk/prefs-dialog.ui:606
+#: src/resources/gtk/prefs-dialog.ui:604
 msgid "Fonts"
 msgstr "Tipografías"
 
-#: src/resources/gtk/prefs-dialog.ui:611
-msgid "Use custom fonts"
-msgstr "Usar tipografía personalizada"
+#: src/resources/gtk/prefs-dialog.ui:609
+#| msgid "Use custom fonts"
+msgid "Use Custom Fonts"
+msgstr "Usar tipografías personalizada"
 
-#: src/resources/gtk/prefs-dialog.ui:627
+#: src/resources/gtk/prefs-dialog.ui:625
 msgid "Sans serif font"
 msgstr "Tipografía Sans Serif"
 
 # Esto es de gestión de cookies (serrador)
-#: src/resources/gtk/prefs-dialog.ui:642
+#: src/resources/gtk/prefs-dialog.ui:640
 msgid "Serif font"
 msgstr "Tipografía Serif"
 
-#: src/resources/gtk/prefs-dialog.ui:657
+#: src/resources/gtk/prefs-dialog.ui:655
 msgid "Monospace font"
 msgstr "Tipografía monoespaciada"
 
-#: src/resources/gtk/prefs-dialog.ui:677
+#: src/resources/gtk/prefs-dialog.ui:675
 msgid "Reader Mode"
 msgstr "Modo de lectura"
 
-#: src/resources/gtk/prefs-dialog.ui:681
-msgid "Font style"
+#: src/resources/gtk/prefs-dialog.ui:679
+#| msgid "Font style"
+msgid "Font Style"
 msgstr "Estilo de la tipografía"
 
-#: src/resources/gtk/prefs-dialog.ui:687
-msgid "Color scheme"
+#: src/resources/gtk/prefs-dialog.ui:685
+#| msgid "Color scheme"
+msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: src/resources/gtk/prefs-dialog.ui:700
+#: src/resources/gtk/prefs-dialog.ui:698
 msgid "Style"
 msgstr "Estilo"
 
-#: src/resources/gtk/prefs-dialog.ui:705
-msgid "Use custom stylesheet"
+#: src/resources/gtk/prefs-dialog.ui:703
+#| msgid "Use custom stylesheet"
+msgid "Use Custom Stylesheet"
 msgstr "Usar hoja de estilos personalizada"
 
-#: src/resources/gtk/prefs-dialog.ui:740
+#: src/resources/gtk/prefs-dialog.ui:738
 msgid "Default zoom level"
 msgstr "Nivel de ampliación predeterminado"
 
-#: src/resources/gtk/prefs-dialog.ui:777 src/resources/gtk/prefs-dialog.ui:971
+#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
 msgid "Sync"
 msgstr "Sincronizar"
 
-#: src/resources/gtk/prefs-dialog.ui:784
+#: src/resources/gtk/prefs-dialog.ui:782
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3333,65 +3462,61 @@ msgstr ""
 "Firefox en otros equipos. Web no es Firefox y no está desarrollado ni "
 "promocionado por Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:785
+#: src/resources/gtk/prefs-dialog.ui:783
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:804
+#: src/resources/gtk/prefs-dialog.ui:802
 msgid "Firefox Account"
 msgstr "Cuenta de Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:808
+#: src/resources/gtk/prefs-dialog.ui:806
 msgid "Logged in"
 msgstr "Sesión iniciada"
 
-#: src/resources/gtk/prefs-dialog.ui:813
+#: src/resources/gtk/prefs-dialog.ui:811
 msgid "Sign _out"
 msgstr "Cerrar _sesión"
 
-#: src/resources/gtk/prefs-dialog.ui:826
+#: src/resources/gtk/prefs-dialog.ui:824
 msgid "Sync Options"
 msgstr "Opciones de sincronización"
 
-#: src/resources/gtk/prefs-dialog.ui:831
+#: src/resources/gtk/prefs-dialog.ui:829
 msgid "Sync _Bookmarks"
 msgstr "Sincronizar _marcadores"
 
-#: src/resources/gtk/prefs-dialog.ui:846
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "Sync _Passwords"
 msgstr "Sincronizar _contraseñas"
 
-#: src/resources/gtk/prefs-dialog.ui:861
+#: src/resources/gtk/prefs-dialog.ui:859
 msgid "Sync _History"
 msgstr "Sincronizar _histórico"
 
-#: src/resources/gtk/prefs-dialog.ui:876
+#: src/resources/gtk/prefs-dialog.ui:874
 msgid "Sync Open _Tabs"
 msgstr "Sincronizar pes_tañas abiertas"
 
-#: src/resources/gtk/prefs-dialog.ui:888
+#: src/resources/gtk/prefs-dialog.ui:886
 msgid "S_ynced tabs"
 msgstr "Pestañas s_incronizadas"
 
-#: src/resources/gtk/prefs-dialog.ui:899
+#: src/resources/gtk/prefs-dialog.ui:897
 msgid "Frequency"
 msgstr "Frecuencia"
 
-#: src/resources/gtk/prefs-dialog.ui:910
+#: src/resources/gtk/prefs-dialog.ui:908
 msgid "Sync _now"
 msgstr "Sincronizar a_hora"
 
-#: src/resources/gtk/prefs-dialog.ui:922
+#: src/resources/gtk/prefs-dialog.ui:920
 msgid "Device name"
 msgstr "Nombre del dispositivo"
 
-#: src/resources/gtk/prefs-dialog.ui:927
+#: src/resources/gtk/prefs-dialog.ui:925
 msgid "_Change"
 msgstr "_Cambiar"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add Language"
-msgstr "Añadir idioma"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a l_anguage:"
@@ -3680,6 +3805,10 @@ msgstr "Cerrar documento"
 msgid "Additional URLs"
 msgstr "URL adicionales"
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
+msgid "C_lear All"
+msgstr "_Limpiar todo"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:64
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
@@ -3863,6 +3992,39 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Activar"
 
+#~ msgid "Add language"
+#~ msgstr "Añadir idioma"
+
+#~ msgid "C_lear"
+#~ msgstr "_Limpiar"
+
+#~ msgid "Filter domains"
+#~ msgstr "Filtrar dominios"
+
+#~ msgid "Search domains"
+#~ msgstr "Buscar dominios"
+
+#~ msgid "No data found"
+#~ msgstr "No se han encontrado datos"
+
+#~ msgid "Filter passwords"
+#~ msgstr "Filtrar contraseñas"
+
+#~ msgid "You can select different search engines to use"
+#~ msgstr "Puede seleccionar diferentes motores de búsqueda que usar"
+
+#~ msgid "Always start browser in _incognito mode"
+#~ msgstr "Iniciar siempre el navegador en modo _incógnito"
+
+#~ msgid "Manage _Cookies"
+#~ msgstr "Gestionar _cookies"
+
+#~ msgid "Manage _Passwords"
+#~ msgstr "Gestionar _contraseñas"
+
+#~ msgid "Manage Personal _Data"
+#~ msgstr "Gestionar _datos personales"
+
 #~ msgid "Switch to Tab"
 #~ msgstr "Cambiar a la pestaña"
 
@@ -3993,9 +4155,6 @@ msgstr "_Activar"
 #~ msgid "_60 min"
 #~ msgstr "_60 min"
 
-#~ msgid "There are ongoing downloads."
-#~ msgstr "Hay descargas en curso."
-
 #~ msgid "If you quit, the downloads will be cancelled"
 #~ msgstr "Si sale, se cancelarán las descargas"
 
@@ -4107,9 +4266,6 @@ msgstr "_Activar"
 #~ msgid "You are connected to %s"
 #~ msgstr "Está conectado a %s"
 
-#~ msgid "Search the Web"
-#~ msgstr "Buscar en la web"
-
 #~ msgid "Search the Web for %s"
 #~ msgstr "Buscar %s en la web"
 
@@ -4179,9 +4335,6 @@ msgstr "_Activar"
 
 #~ msgid "MIME type"
 #~ msgstr "Tipo MIME"
-
-#~ msgid "Description"
-#~ msgstr "Descripción"
 
 #~ msgid "Suffixes"
 #~ msgstr "Sufijos"
@@ -4367,10 +4520,6 @@ msgstr "_Activar"
 
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Indicar a los sitios web que no quiere que le rastreen"
-
-#~| msgid "Open the selected pages in new tabs"
-#~ msgid "Whether homepage loads in new tabs"
-#~ msgstr "Indica si se debe abrir la página principal en una pestaña nueva"
 
 #~ msgid ""
 #~ "This key does nothing unless the homepage-url key is set. If homepage-url "
@@ -4890,9 +5039,6 @@ msgstr "_Activar"
 #~ msgid "Load Anyway"
 #~ msgstr "Cargar de todas formas"
 
-#~ msgid "Clear"
-#~ msgstr "Limpiar"
-
 #~ msgid "Remove"
 #~ msgstr "Quitar"
 
@@ -5138,9 +5284,6 @@ msgstr "_Activar"
 
 #~ msgid "Inspect _Element"
 #~ msgstr "Inspeccionar _elemento"
-
-#~ msgid "C_ookies"
-#~ msgstr "C_ookies"
 
 #~ msgid "Hi_story"
 #~ msgstr "_Histórico"
