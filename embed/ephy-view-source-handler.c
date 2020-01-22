@@ -158,8 +158,12 @@ load_changed_cb (WebKitWebView         *web_view,
                  WebKitLoadEvent        load_event,
                  EphyViewSourceRequest *request)
 {
-  if (load_event == WEBKIT_LOAD_FINISHED)
+  if (load_event == WEBKIT_LOAD_FINISHED) {
+    g_signal_handler_disconnect (request->web_view, request->load_changed_id);
+    request->load_changed_id = 0;
+
     ephy_view_source_request_begin_get_source_from_web_view (request, web_view);
+  }
 }
 
 static void
