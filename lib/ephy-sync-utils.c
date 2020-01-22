@@ -23,12 +23,14 @@
 
 #include "ephy-settings.h"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <inttypes.h>
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/random.h>
 
 static const char hex_digits[] = "0123456789abcdef";
 
@@ -165,21 +167,24 @@ ephy_sync_utils_base64_urlsafe_decode (const char *text,
  * This is mainly required by Nettle's RSA support.
  * From Nettle's documentation: random_ctx and random is a randomness generator.
  * random(random_ctx, length, dst) should generate length random octets and store them at dst.
- * We don't really use random_ctx, since we have /dev/urandom available.
+ * We don't use random_ctx.
  */
 void
 ephy_sync_utils_generate_random_bytes (void   *random_ctx,
                                        gsize   num_bytes,
                                        guint8 *out)
 {
-  FILE *fp;
+  gssize ret;
 
   g_assert (num_bytes > 0);
   g_assert (out);
 
-  fp = fopen ("/dev/urandom", "r");
-  fread (out, sizeof (guint8), num_bytes, fp);
-  fclose (fp);
+  do {
+    ret = getrandom (out, num_bytes, 0);
+  } while (ret < (gssize)num_bytes && errno == EINTR);
+
+  if (ret != (gssize)num_bytes)
+    g_error ("Failed to generate randomness: %s", g_strerror (errno));
 }
 
 char *
