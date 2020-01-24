@@ -355,6 +355,7 @@ ephy_download_widget_constructed (GObject *object)
   WebKitDownload *download;
   const char *action_icon_name = NULL;
   GError *error = NULL;
+  PangoAttrList *status_attrs;
 
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->constructed (object);
 
@@ -395,6 +396,11 @@ ephy_download_widget_constructed (GObject *object)
   g_object_set (widget->status, "width-request", 260, NULL);
   gtk_label_set_max_width_chars (GTK_LABEL (widget->status), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->status), PANGO_ELLIPSIZE_END);
+  status_attrs = pango_attr_list_new ();
+  pango_attr_list_insert (status_attrs, pango_attr_font_features_new ("tnum=1"));
+  gtk_label_set_attributes (GTK_LABEL (widget->status), status_attrs);
+  pango_attr_list_unref (status_attrs);
+
   if (ephy_download_failed (widget->download, &error)) {
     g_autofree char *error_msg = NULL;
 
