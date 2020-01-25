@@ -605,8 +605,8 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
                                                           "user-content-manager", dialog->fxa_manager,
                                                           "settings", ephy_embed_prefs_get_settings (),
                                                           "web-context", sync_context,
-                                                          "height-request", 450,
                                                           NULL));
+    gtk_widget_set_vexpand (GTK_WIDGET (dialog->fxa_web_view), TRUE);
     gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
     frame = gtk_frame_new (NULL);
     gtk_widget_set_visible (frame, TRUE);
@@ -614,7 +614,7 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
                        GTK_WIDGET (dialog->fxa_web_view));
     gtk_box_pack_start (GTK_BOX (dialog->sync_firefox_iframe_box),
                         frame,
-                        FALSE, FALSE, 0);
+                        TRUE, TRUE, 0);
 
     g_object_unref (sync_context);
   }
