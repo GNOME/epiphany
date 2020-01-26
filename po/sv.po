@@ -1,9 +1,9 @@
 # Swedish messages for Epiphany.
-# Copyright © 2000-2012, 2014-2019 Free Software Foundation, Inc.
+# Copyright © 2000-2012, 2014-2020 Free Software Foundation, Inc.
 # Dennis Persson <dennis@linux.nu>, 2000.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2014, 2015, 2016, 2017, 2018, 2019.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
 # Mattias Eriksson <snaggen@gmail.com>, 2014.
 # Sebastian Rasmussen <sebras@gmail.com>, 2015.
 #
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-08-08 17:21+0000\n"
-"PO-Revision-Date: 2019-08-12 21:20+0200\n"
+"POT-Creation-Date: 2020-01-19 15:50+0000\n"
+"PO-Revision-Date: 2020-01-26 17:47+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -56,7 +56,7 @@ msgstr "GNOME-projektet"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:616
+#: src/ephy-main.c:407 src/window-commands.c:624
 msgid "Web"
 msgstr "Webb"
 
@@ -135,14 +135,10 @@ msgstr ""
 "fönster."
 
 #: data/org.gnome.epiphany.gschema.xml:46
-msgid "Don’t use an external application to view page source."
-msgstr "Använd inte ett externt program för att visa källkod för sidor."
-
-#: data/org.gnome.epiphany.gschema.xml:50
 msgid "Whether to automatically restore the last session"
 msgstr "Huruvida den senaste sessionen ska återställas automatiskt"
 
-#: data/org.gnome.epiphany.gschema.xml:51
+#: data/org.gnome.epiphany.gschema.xml:47
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -154,7 +150,7 @@ msgstr ""
 "”crashed” (sessionen återställs endast om programmet kraschar) och "
 "”never” (startsidan visas alltid)."
 
-#: data/org.gnome.epiphany.gschema.xml:55
+#: data/org.gnome.epiphany.gschema.xml:51
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -162,7 +158,7 @@ msgstr ""
 "Huruvida inläsning av flikar som inte är omedelbart synliga ska fördröjas "
 "vid sessionsåterställning"
 
-#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -170,11 +166,11 @@ msgstr ""
 "När detta är sant kommer flikar inte börja läsas in förrän användaren byter "
 "till dem då en session återställts."
 
-#: data/org.gnome.epiphany.gschema.xml:60
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "List of adblock filters"
 msgstr "Lista över annonsblockeringsfilter"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -182,11 +178,11 @@ msgstr ""
 "Lista över URL:er med innehållsfilterregler i JSON-format att användas av "
 "annonsblockeraren."
 
-#: data/org.gnome.epiphany.gschema.xml:65
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Whether to ask for setting browser as default"
 msgstr "Huruvida det ska efterfrågas att ställa in webbläsaren som standard"
 
-#: data/org.gnome.epiphany.gschema.xml:66
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -194,32 +190,33 @@ msgstr ""
 "När detta är sant kommer webbläsaren att efterfråga att vara "
 "standardwebbläsare om den inte redan ställts in som detta."
 
-#: data/org.gnome.epiphany.gschema.xml:70
+#: data/org.gnome.epiphany.gschema.xml:66
 msgid "Start in incognito mode"
 msgstr "Starta i inkognitoläge"
 
-#: data/org.gnome.epiphany.gschema.xml:71
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr "När detta är sant kommer webbläsaren alltid startas i inkognitoläge"
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Expandera flikstorlekar så att tillgängligt utrymme i flikraden fylls."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
-"tabs bar."
+"tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 "Om aktiverad kommer flikarna expanderas så att hela det tillgängliga "
-"utrymmet i flikraden används."
+"utrymmet i flikraden används. Denna inställning ignoreras i skrivbordsmiljön "
+"Pantheon."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "The position of the tabs bar."
 msgstr "Positionen för flikraden."
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -229,33 +226,35 @@ msgstr ""
 "”bottom”, ”left” (vertikala flikar med rad till vänster) och "
 "”right” (vertikala flikar med rad till höger)."
 
-#: data/org.gnome.epiphany.gschema.xml:87
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The visibility policy for the tabs bar."
 msgstr "Synlighetspolicy för flikraden."
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
-"two or more tabs) and “never” (the tabs bar is never shown)."
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "Kontrollerar när flikraden visas. Möjliga värden är ”always” (flikraden "
-"visas alltid), ”more-than-one” (Flikraden visas bara om det finns två eller "
-"fler flikar) och ”never” (flikraden visas aldrig)."
+"visas alltid), ”more-than-one” (flikraden visas bara om det finns två eller "
+"fler flikar) och ”never” (flikraden visas aldrig). Denna inställning "
+"ignoreras i skrivbordsmiljön Pantheon, och värdet ”always” används."
 
-#: data/org.gnome.epiphany.gschema.xml:92
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "Keep window open when closing last tab"
 msgstr "Behåll fönstret öppet då sista fliken stängs"
 
-#: data/org.gnome.epiphany.gschema.xml:93
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr "Om aktiverad behålls programfönstret öppet då den sista fliken stängs."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid "Reader mode article font style."
 msgstr "Artiklars typsnittsstil i läsarläge."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -263,11 +262,11 @@ msgstr ""
 "Väljer stilen för artiklars brödtext i läsarläge. Möjliga värden är ”sans” "
 "och ”serif”."
 
-#: data/org.gnome.epiphany.gschema.xml:104
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode color scheme."
 msgstr "Färgschema för läsarläge."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -276,23 +275,23 @@ msgstr ""
 "Väljer färgstilen för artiklar som visas i läsarläge. Möjliga värden är "
 "”light” (mörk text på ljus bakgrund) och ”dark” (ljus text på mörk bakgrund)."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Minimum font size"
 msgstr "Minsta typsnittsstorlek"
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Use GNOME fonts"
 msgstr "Använd GNOME-typsnitt"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Use GNOME font settings."
 msgstr "Använd typsnittsinställningar för GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Custom sans-serif font"
 msgstr "Anpassat sans serif-typsnitt"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -300,11 +299,11 @@ msgstr ""
 "Ett värde som används för att åsidosätta skrivbordets sans serif-typsnitt "
 "när use-gnome-fonts är inställt."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom serif font"
 msgstr "Anpassat serif-typsnitt"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -312,11 +311,11 @@ msgstr ""
 "Ett värde som används för att åsidosätta skrivbordets serif-typsnitt när use-"
 "gnome-fonts är inställt."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom monospace font"
 msgstr "Anpassat typsnitt med fast breddslag"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -324,48 +323,48 @@ msgstr ""
 "Ett värde som används för att åsidosätta skrivbordets typsnitt med fast "
 "breddslag när use-gnome-fonts är inställt."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Use a custom CSS"
 msgstr "Använd anpassad CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Använd en anpassad CSS-fil för att ändra webbplatsers egna CSS."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Enable spell checking"
 msgstr "Aktivera stavningskontroll"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Spell check any text typed in editable areas."
 msgstr "Stavningskontrollera all text som skrivs in i redigerbara ytor."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Default encoding"
 msgstr "Standardkodning"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "Standardkodning. Accepterade värden är de som WebKitGTK förstår."
 
-#: data/org.gnome.epiphany.gschema.xml:150
-#: src/resources/gtk/prefs-dialog.ui:752
+#: data/org.gnome.epiphany.gschema.xml:146
+#: src/resources/gtk/prefs-dialog.ui:333
 msgid "Languages"
 msgstr "Språk"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Föredragna språk. En vektor av språkkoder eller ”system” för att använda "
 "aktuell lokal."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Cookie accept"
 msgstr "Accepterande av kakor"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -373,50 +372,30 @@ msgstr ""
 "Var kakor ska accepteras ifrån. Möjliga värden är ”always” (alltid), ”no-"
 "third-party” (ej tredjepart) och ”never” (aldrig)."
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Allow popups"
-msgstr "Tillåt popupfönster"
+msgstr "Tillåt poppuppfönster"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Tillåt webbplatser att öppna nya fönster med hjälp av JavaScript (om "
 "JavaScript är aktiverat)."
 
-#: data/org.gnome.epiphany.gschema.xml:165
-msgid "Enable Plugins"
-msgstr "Aktivera tillägg"
-
-#: data/org.gnome.epiphany.gschema.xml:169
-msgid "Enable WebGL"
-msgstr "Aktivera WebGL"
-
-#: data/org.gnome.epiphany.gschema.xml:170
-msgid "Whether to enable support for WebGL contexts."
-msgstr "Huruvida stöd för WebGL-innehåll ska aktiveras."
-
-#: data/org.gnome.epiphany.gschema.xml:174
-msgid "Enable WebAudio"
-msgstr "Aktivera WebAudio"
-
-#: data/org.gnome.epiphany.gschema.xml:175
-msgid "Whether to enable support for WebAudio."
-msgstr "Huruvida stöd för WebAudio ska aktiveras."
-
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
 msgstr "Aktivera mjuk rullning"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid "Whether to enable smooth scrolling."
 msgstr "Huruvida mjuk rullning ska aktiveras."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
 msgstr "Användaragent"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -424,11 +403,11 @@ msgstr ""
 "Sträng som ska användas som användaragent för att identifiera webbläsaren "
 "till webbservrarna."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Mobile user agent"
 msgstr "Mobil användaragent"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to present a mobile user agent. If the user agent is overridden, "
 "this will have no effect."
@@ -436,37 +415,29 @@ msgstr ""
 "Huruvida en mobil användaragent ska presenteras. Om användaragenten "
 "åsidosätts kommer detta inte ha någon effekt."
 
-#: data/org.gnome.epiphany.gschema.xml:194
-msgid "Do Not Track"
-msgstr "Spåra mig inte"
-
-#: data/org.gnome.epiphany.gschema.xml:195
-msgid "Enables tracking query parameter removal."
-msgstr "Aktiverar borttagning av frågeparameter för spårning."
-
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Aktivera annonsblockering"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Huruvida inbäddade annonser som webbplatser vill visa ska blockeras."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Remember passwords"
 msgstr "Kom ihåg lösenord"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Huruvida lösenord ska lagras och på förhand matas in på webbplatser."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable site-specific quirks"
 msgstr "Aktivera platsspecifika justeringar"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -474,11 +445,11 @@ msgstr ""
 "Aktivera justeringar för att få specifika webbplatser att fungera bättre. Du "
 "kan vilja inaktivera denna inställning om du felsöker ett specifikt problem."
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Enable safe browsing"
 msgstr "Aktivera säker surf"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -486,23 +457,23 @@ msgstr ""
 "Huruvida säker surf ska aktiveras. Säker surf drivs av Google Safe Browsing "
 "API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Google Safe Browsing API key"
 msgstr "API-nyckel för Google Safe Browsing"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "API-nyckel som används för att komma åt Google Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr "Standardzoomnivå för nya sidor"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr "Aktivera automatisk sökning"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -514,11 +485,11 @@ msgstr ""
 "kommer allt att läsas in som en URL om inte en sökmotor väljs explicit från "
 "rullgardinsmenyn."
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "Aktivera musgester"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -526,27 +497,27 @@ msgstr ""
 "Huruvida musgester ska aktiveras. Musgester baseras på Operas beteende och "
 "aktiveras med mittenmusknappen + gest."
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "Senaste sändningskatalog"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "Kom ihåg senaste sändningskatalog"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "Senaste hämtningskatalog"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr "Kom ihåg senaste hämtningskatalog"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr "Hårdvaruaccelerationspolicy"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -562,27 +533,27 @@ msgstr ""
 "grafikdrivrutiner. Då policyn är ”on-demand” så kommer hårdvaruacceleration "
 "endast att användas då det krävs för att visa 3D-transformer."
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr "Fråga alltid om hämtningskatalog"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Huruvida en katalogväljare ska visas för varje hämtning."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Web application additional URLs"
 msgstr "Ytterligare URL:er för webbapplikation"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Listan över URL:er som ska öppnas av webbapplikationen"
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "The downloads folder"
 msgstr "Hämtningsmappen"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -591,11 +562,11 @@ msgstr ""
 "använda standardhämtningsmappen, eller ”Desktop” för att använda "
 "skrivbordsmappen."
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Window position"
 msgstr "Fönsterposition"
 
-#: data/org.gnome.epiphany.gschema.xml:276
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -603,11 +574,11 @@ msgstr ""
 "Position att använda för ett nytt fönster som inte återställs från en "
 "tidigare session."
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Window size"
 msgstr "Fönsterstorlek"
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -615,11 +586,11 @@ msgstr ""
 "Storlek att använda för ett nytt fönster som inte återställs från en "
 "tidigare session."
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Is maximized"
 msgstr "Är maximerat"
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -627,11 +598,11 @@ msgstr ""
 "Huruvida ett nytt fönster som inte återställs från en tidigare session ska "
 "vara maximerat från början."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid "Disable forward and back buttons"
 msgstr "Inaktivera framåt- och bakåtknappar"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -640,11 +611,11 @@ msgstr ""
 "inaktiveras, vilket förhindrar användare från att komma åt den närmaste "
 "webbläsarhistoriken"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Currently signed in sync user"
 msgstr "För tillfället inloggad synkroniseringsanvändare"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -652,43 +623,43 @@ msgstr ""
 "E-postadressen som är länkad till Firefox-kontot som används för att "
 "synkronisera data med Mozillas servrar."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "Last sync timestamp"
 msgstr "Tidsstämpel för senaste synkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX-tiden för när senaste synkroniseringen gjordes i sekunder."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "Sync device ID"
 msgstr "Synkroniseringsenhets-ID"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The sync device ID of the current device."
 msgstr "Synkroniseringsenhets-ID för aktuell enhet."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:312
 msgid "Sync device name"
 msgstr "Synkroniseringsenhetsnamn"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The sync device name of the current device."
 msgstr "Synkroniseringsenhetsnamn för aktuell enhet."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid "The sync frequency in minutes"
 msgstr "Synkroniseringsfrekvens i minuter"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Antalet minuter mellan två på varandra följande synkroniseringar."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid "Sync data with Firefox"
 msgstr "Synkronisera data med Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -696,30 +667,30 @@ msgstr ""
 "TRUE (sant) om Ephy-samlingar ska synkroniseras med Firefox-samlingar, "
 "annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Enable bookmarks sync"
 msgstr "Aktivera synkronisering av bokmärken"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sant) om bokmärkessamling ska synkroniseras, annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Bookmarks sync timestamp"
 msgstr "Tidsstämpel för bokmärkessynkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Tidsstämpeln för när senaste bokmärkessynkroniseringen gjordes."
 
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "Initial sync or normal sync"
 msgstr "Ursprunglig synkronisering eller normal synkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -727,24 +698,24 @@ msgstr ""
 "TRUE (sant) om bokmärkessamling behöver synkroniseras för första gången, "
 "annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Enable passwords sync"
 msgstr "Aktivera synkronisering av lösenord"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sant) om lösenordssamling ska synkroniseras, annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Passwords sync timestamp"
 msgstr "Tidsstämpel för lösenordssynkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Tidsstämpeln för när senaste synkroniseringen av lösenord gjordes."
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -752,24 +723,24 @@ msgstr ""
 "TRUE (sant) om lösenordssamling behöver synkroniseras för första gången, "
 "annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable history sync"
 msgstr "Aktivera synkronisering av historik"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sant) om historiksamling ska synkroniseras, annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "History sync timestamp"
 msgstr "Tidsstämpel för historiksynkronisering"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last history sync was made."
 msgstr "Tidsstämpeln för när senaste synkroniseringen av historik gjordes."
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -777,29 +748,29 @@ msgstr ""
 "TRUE (sant) om historiksamling behöver synkroniseras för första gången, "
 "annars FALSE (falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable open tabs sync"
 msgstr "Aktivera synkronisering av öppna flikar"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (sant) om samling av öppna flikar ska synkroniseras, annars FALSE "
 "(falskt)."
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Open tabs sync timestamp"
 msgstr "Synkroniseringstidsstämpel för öppna flikar"
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Tidsstämpeln för när senaste synkroniseringen av öppna flikar gjordes."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Beslut att tillämpa när mikrofonrättigheter efterfrågas för denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -812,12 +783,12 @@ msgstr ""
 "säger till den att automatiskt tillåta respektive neka detta vid en "
 "förfrågan."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Beslut att tillämpa när platsrättigheter efterfrågas för denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -830,13 +801,13 @@ msgstr ""
 "säger till den att automatiskt tillåta respektive neka detta vid en "
 "förfrågan."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Beslut att tillämpa när aviseringsrättigheter efterfrågas för denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -848,14 +819,14 @@ msgstr ""
 "måste fråga användaren om tillåtelse, medan ”allow” och ”deny” säger till "
 "den att automatiskt tillåta respektive neka detta vid en förfrågan."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Beslut att tillämpa när rättigheter för att spara lösenord efterfrågas för "
 "denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -867,12 +838,12 @@ msgstr ""
 "fråga användaren om tillåtelse, medan ”allow” och ”deny” säger till den att "
 "automatiskt tillåta respektive neka detta vid en förfrågan."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Beslut att tillämpa när webbkamerarättigheter efterfrågas för denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -885,12 +856,12 @@ msgstr ""
 "säger till den att automatiskt tillåta respektive neka detta vid en "
 "förfrågan."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Beslut att tillämpa när annonsrättigheter efterfrågas för denna värd"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -915,7 +886,7 @@ msgstr "Version %s"
 msgid "About Web"
 msgstr "Om Webb"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:618
+#: embed/ephy-about-handler.c:194 src/window-commands.c:626
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany - teknologisk förhandsversion"
 
@@ -997,69 +968,69 @@ msgstr ""
 "fortfarande spåra dig."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:727
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Klar med hämtning av %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:730
+#: embed/ephy-download.c:729
 msgid "Download finished"
 msgstr "Hämtning slutförd"
 
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:821
 msgid "Download requested"
 msgstr "Hämtning begärd"
 
-#: embed/ephy-download.c:823 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
+#: src/resources/gtk/prefs-dialog.ui:943
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:477 src/window-commands.c:1429
+#: src/window-commands.c:481 src/window-commands.c:1453
 msgid "_Cancel"
 msgstr "A_vbryt"
 
-#: embed/ephy-download.c:823
+#: embed/ephy-download.c:822
 msgid "_Download"
 msgstr "_Hämta"
 
-#: embed/ephy-download.c:836
+#: embed/ephy-download.c:835
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Typ: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:842
+#: embed/ephy-download.c:841
 #, c-format
 msgid "From: %s"
 msgstr "Från: %s"
 
 #. Question
-#: embed/ephy-download.c:847
+#: embed/ephy-download.c:846
 msgid "Where do you want to save the file?"
 msgstr "Var vill du spara filen?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:852
+#: embed/ephy-download.c:851
 msgid "Save file"
 msgstr "Spara fil"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Tryck %s för att avsluta helskärmsläge"
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "ESC"
 msgstr "Esc"
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:827
+#: embed/ephy-embed.c:794
 msgid "Web is being controlled by automation."
 msgstr "Webb kontrolleras genom automatisering."
 
@@ -1401,58 +1372,58 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Okänd (%s)"
 
-#: embed/ephy-find-toolbar.c:115
+#: embed/ephy-find-toolbar.c:112
 msgid "Text not found"
 msgstr "Texten hittades inte"
 
-#: embed/ephy-find-toolbar.c:121
+#: embed/ephy-find-toolbar.c:118
 msgid "Search wrapped back to the top"
 msgstr "Sökning började om från början"
 
-#: embed/ephy-find-toolbar.c:400
+#: embed/ephy-find-toolbar.c:398
 msgid "Type to search…"
 msgstr "Skriv för att söka…"
 
-#: embed/ephy-find-toolbar.c:406
+#: embed/ephy-find-toolbar.c:404
 msgid "Find previous occurrence of the search string"
 msgstr "Sök föregående förekomst av söksträngen"
 
-#: embed/ephy-find-toolbar.c:414
+#: embed/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Sök nästa förekomst av söksträngen"
 
-#: embed/ephy-view-source-handler.c:255
+#: embed/ephy-view-source-handler.c:252
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s är inte en giltig URI"
 
-#: embed/ephy-web-view.c:340 src/window-commands.c:916
+#: embed/ephy-web-view.c:184 src/window-commands.c:931
 msgid "Open"
 msgstr "Öppna"
 
-#: embed/ephy-web-view.c:607
+#: embed/ephy-web-view.c:359
 msgid "Not No_w"
 msgstr "Inte _nu"
 
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:360
 msgid "_Never Save"
 msgstr "Spara _aldrig"
 
-#: embed/ephy-web-view.c:609 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:476
+#: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
+#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Spara"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:616
+#: embed/ephy-web-view.c:368
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Vill du spara ditt lösenord för ”%s”?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:854
+#: embed/ephy-web-view.c:608
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1460,58 +1431,58 @@ msgstr ""
 "Varning: detta formulär är inte säkert. Om du skriver in ditt lösenord "
 "kommer det inte att kunna hållas privat."
 
-#: embed/ephy-web-view.c:1161
+#: embed/ephy-web-view.c:830
 msgid "Web process crashed"
 msgstr "Webbprocessen kraschade"
 
-#: embed/ephy-web-view.c:1164
+#: embed/ephy-web-view.c:833
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Webbprocessen avslutades på grund av överskriden minnesgräns"
 
-#: embed/ephy-web-view.c:1587
+#: embed/ephy-web-view.c:1088
 msgid "Deny"
 msgstr "Neka"
 
-#: embed/ephy-web-view.c:1588
+#: embed/ephy-web-view.c:1089
 msgid "Allow"
 msgstr "Tillåt"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1601
+#: embed/ephy-web-view.c:1102
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Sidan på %s vill visa aviseringar på skrivbordet."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1606
+#: embed/ephy-web-view.c:1107
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Sidan på %s vill veta din geografiska plats."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1611
+#: embed/ephy-web-view.c:1112
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Sidan på %s vill använda din mikrofon."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1616
+#: embed/ephy-web-view.c:1117
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Sidan på %s vill använda din webbkamera."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1793
+#: embed/ephy-web-view.c:1294
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Läser in ”%s”…"
 
-#: embed/ephy-web-view.c:1795 embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1296 embed/ephy-web-view.c:1302
 msgid "Loading…"
 msgstr "Läser in…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2089
+#: embed/ephy-web-view.c:1629
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1519,7 +1490,7 @@ msgstr ""
 "webbplats."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2094
+#: embed/ephy-web-view.c:1634
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1528,14 +1499,14 @@ msgstr ""
 "Kontrollera datumet för din dators kalender."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:1639
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Denna webbplats identitetshandlingar var inte utfärdade av någon betrodd "
 "organisation."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:1644
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1543,7 +1514,7 @@ msgstr ""
 "trasiga."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2109
+#: embed/ephy-web-view.c:1649
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1552,7 +1523,7 @@ msgstr ""
 "organisation som utfärdade dem."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2114
+#: embed/ephy-web-view.c:1654
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1561,7 +1532,7 @@ msgstr ""
 "använder väldigt svag kryptering."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2119
+#: embed/ephy-web-view.c:1659
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1571,24 +1542,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182 embed/ephy-web-view.c:2238
+#: embed/ephy-web-view.c:1722 embed/ephy-web-view.c:1778
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problem vid inläsning av sida"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2185
+#: embed/ephy-web-view.c:1725
 msgid "Unable to display this website"
 msgstr "Kunde inte visa denna webbplats"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:1729
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Webbplatsen på %s verkar inte vara tillgänglig."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2193
+#: embed/ephy-web-view.c:1733
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1597,7 +1568,7 @@ msgstr ""
 "Glöm inte att kontrollera att din internetanslutning fungerar som den ska."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2203
+#: embed/ephy-web-view.c:1743
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Det exakta felet var: %s"
@@ -1605,70 +1576,69 @@ msgstr "Det exakta felet var: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2208 embed/ephy-web-view.c:2261
-#: embed/ephy-web-view.c:2304
+#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1840
 msgid "Reload"
 msgstr "Uppdatera"
 
 # Möjliggör Alt+U för att klicka på knappen 'uppdatera'.
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2211 embed/ephy-web-view.c:2264
-#: embed/ephy-web-view.c:2307
+#: embed/ephy-web-view.c:1751 embed/ephy-web-view.c:1804
+#: embed/ephy-web-view.c:1843
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "U"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:1781
 msgid "Oops! There may be a problem"
 msgstr "Hoppsan! Det kan ha uppstått ett problem"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2245
+#: embed/ephy-web-view.c:1785
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Sidan %s kan ha fått Webb att oväntat stängas."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2252
+#: embed/ephy-web-view.c:1792
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Rapportera problemet till %s-utvecklarna om detta händer igen."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2290
+#: embed/ephy-web-view.c:1829
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problem vid visning av sida"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2293
+#: embed/ephy-web-view.c:1832
 msgid "Oops!"
 msgstr "Hoppsan!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2296
-msgid "Something went wrong while displaying this page."
-msgstr "Något gick fel då denna sida skulle visas."
-
-#. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2298
-msgid "Please reload or visit a different page to continue."
-msgstr "Uppdatera sidan eller besök en annan sida för att fortsätta."
+#: embed/ephy-web-view.c:1835
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Något gick fel då denna sida skulle visas. Uppdatera sidan eller besök en "
+"annan sida för att fortsätta."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2333
+#: embed/ephy-web-view.c:1869
 #, c-format
 msgid "Security Violation"
 msgstr "Säkerhetsöverträdelse"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2336
+#: embed/ephy-web-view.c:1872
 msgid "This Connection is Not Secure"
 msgstr "Denna anslutning är inte säker"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2340
+#: embed/ephy-web-view.c:1876
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1680,45 +1650,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2350 embed/ephy-web-view.c:2439
-#: embed/ephy-web-view.c:2490
+#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1975
+#: embed/ephy-web-view.c:2026
 msgid "Go Back"
 msgstr "Gå bakåt"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2353 embed/ephy-web-view.c:2442
-#: embed/ephy-web-view.c:2493
+#: embed/ephy-web-view.c:1889 embed/ephy-web-view.c:1978
+#: embed/ephy-web-view.c:2029
 msgctxt "back-access-key"
 msgid "B"
 msgstr "G"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2356 embed/ephy-web-view.c:2445
+#: embed/ephy-web-view.c:1892 embed/ephy-web-view.c:1981
 msgid "Accept Risk and Proceed"
 msgstr "Acceptera risk och fortsätt"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2360 embed/ephy-web-view.c:2449
+#: embed/ephy-web-view.c:1896 embed/ephy-web-view.c:1985
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "A"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2390
+#: embed/ephy-web-view.c:1926
 #, c-format
 msgid "Security Warning"
 msgstr "Säkerhetsvarning"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2393
+#: embed/ephy-web-view.c:1929
 msgid "Unsafe website detected!"
 msgstr "Osäker webbplats upptäcktes!"
 
-#: embed/ephy-web-view.c:2400
+#: embed/ephy-web-view.c:1936
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1727,7 +1697,7 @@ msgstr ""
 "Att besöka %s kan skada din dator. Denna sida verkar innehålla skadlig kod "
 "som skulle kunna hämtas till din dator utan ditt medgivande."
 
-#: embed/ephy-web-view.c:2404
+#: embed/ephy-web-view.c:1940
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1736,7 +1706,7 @@ msgstr ""
 "Du kan lära dig mer om skadligt webbinnehåll inklusive virus och annan "
 "ondsint kod samt hur du kan skydda din dator på %s."
 
-#: embed/ephy-web-view.c:2411
+#: embed/ephy-web-view.c:1947
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1747,14 +1717,14 @@ msgstr ""
 "installera programvara eller avslöja din personliga information (exempelvis "
 "lösenord, telefonnummer eller kreditkort)."
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:1952
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Du kan få reda på mer om social manipulation (phishing) på %s eller från %s."
 
-#: embed/ephy-web-view.c:2425
+#: embed/ephy-web-view.c:1961
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1766,24 +1736,24 @@ msgstr ""
 "ändra din startsida eller genom att visa extra annonser på webbplatser som "
 "du besöker)."
 
-#: embed/ephy-web-view.c:2430
+#: embed/ephy-web-view.c:1966
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Du kan lära dig mer om oönskad programvara på %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2474 embed/ephy-web-view.c:2477
+#: embed/ephy-web-view.c:2010 embed/ephy-web-view.c:2013
 #, c-format
 msgid "File not found"
 msgstr "Filen kunde inte hitta filen"
 
-#: embed/ephy-web-view.c:2481
+#: embed/ephy-web-view.c:2017
 #, c-format
 msgid "%s could not be found."
 msgstr "%s kunde inte hittas."
 
-#: embed/ephy-web-view.c:2483
+#: embed/ephy-web-view.c:2019
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1792,15 +1762,15 @@ msgstr ""
 "Kontrollera filnamnet efter versalisering eller andra skrivfel. Kontrollera "
 "också om filen har flyttats, bytt namn eller tagits bort."
 
-#: embed/ephy-web-view.c:2546
+#: embed/ephy-web-view.c:2082
 msgid "None specified"
 msgstr "Inget angivet"
 
-#: embed/ephy-web-view.c:2662
+#: embed/ephy-web-view.c:2198
 msgid "Technical information"
 msgstr "Teknisk information"
 
-#: embed/ephy-web-view.c:3632
+#: embed/ephy-web-view.c:3184
 msgid "_OK"
 msgstr "_OK"
 
@@ -1809,7 +1779,7 @@ msgid "Unspecified"
 msgstr "Ej angivet"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:182
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
 msgid "Downloads"
 msgstr "Hämtningar"
 
@@ -1922,14 +1892,14 @@ msgstr "Okänd"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:415
+#: lib/sync/ephy-password-manager.c:416
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Lösenord för %s i ett formulär på %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:419
+#: lib/sync/ephy-password-manager.c:420
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Lösenord i ett formulär på %s"
@@ -1939,7 +1909,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Misslyckades med att erhålla lagringsuppgifter."
 
 #: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
-#: lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1738
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr "Besök Inställningar och logga in igen för att fortsätta synkronisera."
 
@@ -1959,57 +1929,57 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Misslyckades med att erhålla signerat certifikat."
 
-#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
+#: lib/sync/ephy-sync-service.c:1704 lib/sync/ephy-sync-service.c:1709
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Kunde inte hitta synkroniseringshemligheterna för den aktuella "
 "synkroniseringsanvändaren."
 
-#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
+#: lib/sync/ephy-sync-service.c:1716 lib/sync/ephy-sync-service.c:1724
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Synkroniseringshemligheterna för aktuell synkroniseringsanvändare är "
 "ogiltiga."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1835
+#: lib/sync/ephy-sync-service.c:1832
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Synkroniseringshemligheterna för %s"
 
-#: lib/sync/ephy-sync-service.c:1861
+#: lib/sync/ephy-sync-service.c:1858
 msgid "Failed to upload client record."
 msgstr "Misslyckades med att sända klientpost."
 
-#: lib/sync/ephy-sync-service.c:2054
+#: lib/sync/ephy-sync-service.c:2051
 msgid "Failed to upload crypto/keys record."
 msgstr "Misslyckades med att sända crypto/keys-post."
 
-#: lib/sync/ephy-sync-service.c:2161
+#: lib/sync/ephy-sync-service.c:2158
 msgid "Failed to retrieve crypto keys."
 msgstr "Misslyckades med att erhålla kryptonycklar."
 
-#: lib/sync/ephy-sync-service.c:2212
+#: lib/sync/ephy-sync-service.c:2209
 msgid "Failed to upload meta/global record."
 msgstr "Misslyckades med att sända meta/global-post."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2329
+#: lib/sync/ephy-sync-service.c:2326
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Ditt Firefox-konto använder lagringsversion %d. Webb stöder bara version %d."
 
-#: lib/sync/ephy-sync-service.c:2340
+#: lib/sync/ephy-sync-service.c:2337
 msgid "Failed to verify storage version."
 msgstr "Misslyckades med att erhålla lagringsversion."
 
-#: lib/sync/ephy-sync-service.c:2396
+#: lib/sync/ephy-sync-service.c:2393
 msgid "Failed to upload device info"
 msgstr "Misslyckades med att sända enhetsinformation"
 
-#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
+#: lib/sync/ephy-sync-service.c:2466 lib/sync/ephy-sync-service.c:2544
 msgid "Failed to retrieve the Sync Key"
 msgstr "Misslyckades med att erhålla synkroniseringsnyckeln"
 
@@ -2131,7 +2101,7 @@ msgstr "Avbryter…"
 msgid "Starting…"
 msgstr "Startar…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:294
+#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
 msgid "_Open"
 msgstr "Ö_ppna"
 
@@ -2155,32 +2125,36 @@ msgstr "Alla filer"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:633 src/ephy-history-dialog.c:371
+#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:364
 msgid "Cl_ear"
 msgstr "T_öm"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:647
 msgid "Paste and _Go"
 msgstr "Klistra in och _gå till"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:674 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:668 src/ephy-window.c:935
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: lib/widgets/ephy-location-entry.c:681
+#: lib/widgets/ephy-location-entry.c:675
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: lib/widgets/ephy-location-entry.c:888
+#: lib/widgets/ephy-location-entry.c:961
 msgid "Show website security status and permissions"
 msgstr "Visa säkerhetsstatus och rättigheter för webbplats"
 
-#: lib/widgets/ephy-location-entry.c:928
+#: lib/widgets/ephy-location-entry.c:963
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "Sök efter webbplatser, bokmärken och öppna flikar"
+
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Bookmark this page"
 msgstr "Bokmärk denna sida"
 
-#: lib/widgets/ephy-location-entry.c:940
+#: lib/widgets/ephy-location-entry.c:1016
 msgid "Toggle reader mode"
 msgstr "Växla läsarläge"
 
@@ -2272,15 +2246,15 @@ msgstr "Filen är inte en giltig Epiphany-bokmärkesfil: taggtabell saknas"
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr "Filen är inte en giltig Epiphany-bokmärkesfil: bokmärkestabell saknas"
 
-#: src/bookmarks/ephy-bookmarks-import.c:245
+#: src/bookmarks/ephy-bookmarks-import.c:246
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "Firefox bokmärkesdatabas kunde inte öppnas. Stäng Firefox och försök igen."
 
-#: src/bookmarks/ephy-bookmarks-import.c:258
-#: src/bookmarks/ephy-bookmarks-import.c:290
+#: src/bookmarks/ephy-bookmarks-import.c:259
+#: src/bookmarks/ephy-bookmarks-import.c:291
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefoxbokmärken kunde inte hämtas!"
@@ -2293,31 +2267,35 @@ msgstr "Favoriter"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: src/clear-data-dialog.c:80
+#: src/clear-data-dialog.c:77
 msgid "HTTP disk cache"
 msgstr "HTTP-diskcache"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:78
 msgid "Local storage data"
 msgstr "Lokalt lagrade data"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:79
 msgid "Offline web application cache"
 msgstr "Cache för frånkopplade webbapplikationer"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:80
 msgid "IndexedDB databases"
 msgstr "IndexedDB-databaser"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:81
 msgid "WebSQL databases"
 msgstr "WebSQL-databaser"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:82
 msgid "Plugins data"
 msgstr "Data för tillägg"
 
-#: src/cookies-dialog.c:175
+#: src/clear-data-dialog.c:83
+msgid "HSTS policies cache"
+msgstr "HSTS-policycache"
+
+#: src/cookies-dialog.c:143
 msgid "Remove cookie"
 msgstr "Ta bort kaka"
 
@@ -2326,19 +2304,107 @@ msgstr "Ta bort kaka"
 msgid "Reload the current page"
 msgstr "Läs om aktuell sida"
 
-#: src/ephy-action-bar-start.c:606
+#: src/ephy-action-bar-start.c:620
 msgid "Stop loading the current page"
 msgstr "Stoppa inläsning av aktuell sida"
 
-#: src/ephy-history-dialog.c:275
+#: src/ephy-data-dialog.c:290
+msgid "'Clear all' action name"
+msgstr "Åtgärdsnamn för ”Töm allt”"
+
+#: src/ephy-data-dialog.c:291
+msgid "The name of the action associated to the 'Clear all' button"
+msgstr "Namnet på åtgärden som är associerad med knappen ”Töm allt”"
+
+#: src/ephy-data-dialog.c:297
+msgid "'Clear all' action target value"
+msgstr "Målvärde för åtgärden ”Töm allt”"
+
+#: src/ephy-data-dialog.c:298
+msgid "The parameter for 'Clear all' action invocations"
+msgstr "Parametern för ”Töm allt”-åtgärdsanrop"
+
+#: src/ephy-data-dialog.c:304
+msgid "'Clear all' description"
+msgstr "Beskrivning för ”Töm allt”"
+
+#: src/ephy-data-dialog.c:305
+msgid "The description of the 'Clear all' action"
+msgstr "Beskrivningen för åtgärden ”Töm allt”"
+
+#: src/ephy-data-dialog.c:311
+msgid "'Search' description"
+msgstr "Beskrivning för ”Sök”"
+
+#: src/ephy-data-dialog.c:312
+msgid "The description of the 'Search' action"
+msgstr "Beskrivningen för åtgärden ”Sök”"
+
+#: src/ephy-data-dialog.c:318
+msgid "'Empty' title"
+msgstr "Titel för ”Tom”"
+
+#: src/ephy-data-dialog.c:319
+msgid "The title of the 'Empty' state page"
+msgstr "Titeln för tillståndssidan ”Tom”"
+
+#: src/ephy-data-dialog.c:325
+msgid "'Empty' description"
+msgstr "Beskrivning för ”Tom”"
+
+#: src/ephy-data-dialog.c:326
+msgid "The description of the 'Empty' state page"
+msgstr "Beskrivningen för tillståndssidan ”Tom”"
+
+#: src/ephy-data-dialog.c:332
+msgid "Search text"
+msgstr "Söktext"
+
+#: src/ephy-data-dialog.c:333
+msgid "The text of the search entry"
+msgstr "Sökfältets text"
+
+#: src/ephy-data-dialog.c:339
+msgid "Is loading"
+msgstr "Läses in"
+
+#: src/ephy-data-dialog.c:340
+msgid "Whether the dialog is loading its data"
+msgstr "Huruvida dialogrutan läser in sina data"
+
+#: src/ephy-data-dialog.c:346
+msgid "Has data"
+msgstr "Har data"
+
+#: src/ephy-data-dialog.c:347
+msgid "Whether the dialog has data"
+msgstr "Huruvida dialogrutan har data"
+
+#: src/ephy-data-dialog.c:353
+msgid "Has search results"
+msgstr "Har sökresultat"
+
+#: src/ephy-data-dialog.c:354
+msgid "Whether the dialog has search results"
+msgstr "Huruvida dialogrutan har sökresultat"
+
+#: src/ephy-data-dialog.c:360
+msgid "Can clear"
+msgstr "Kan tömmas"
+
+#: src/ephy-data-dialog.c:361
+msgid "Whether the data can be cleared"
+msgstr "Huruvida data kan tömmas"
+
+#: src/ephy-history-dialog.c:269
 msgid "Remove the selected pages from history"
 msgstr "Ta bort markerade sidor från historiken"
 
-#: src/ephy-history-dialog.c:361
+#: src/ephy-history-dialog.c:354
 msgid "Clear browsing history?"
 msgstr "Töm surfhistorik?"
 
-#: src/ephy-history-dialog.c:365
+#: src/ephy-history-dialog.c:358
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2346,7 +2412,7 @@ msgstr ""
 "Att tömma surfhistoriken kommer att orsaka att alla historiklänkar tas bort "
 "permanent."
 
-#: src/ephy-history-dialog.c:812
+#: src/ephy-history-dialog.c:782
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Det är inte möjligt att ändra historik då du är i inkognitoläge."
 
@@ -2394,8 +2460,13 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "Webbalternativ"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:587 src/resources/gtk/action-bar-start.ui:96
+msgid "Open a new tab"
+msgstr "Öppna en ny flik"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:570
+#: src/ephy-notebook.c:597
 msgid "View open tabs"
 msgstr "Visa öppna flikar"
 
@@ -2412,203 +2483,215 @@ msgstr "Ny adress"
 msgid "Bang"
 msgstr "Bang"
 
-#: src/ephy-suggestion-model.c:414
-msgid "Switch to Tab"
-msgstr "Växla till flik"
-
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
 msgstr "Flikar"
 
-#: src/ephy-tab-label.c:232
+#: src/ephy-tab-label.c:296
 msgid "New Tab"
 msgstr "Ny flik"
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:268
 msgid "Do you want to leave this website?"
 msgstr "Vill du lämna denna webbplats?"
 
-#: src/ephy-window.c:267
+#: src/ephy-window.c:269
 msgid "A form you modified has not been submitted."
 msgstr "Ett formulär som du har ändrat har inte skickats."
 
-#: src/ephy-window.c:268
+#: src/ephy-window.c:270
 msgid "_Discard form"
 msgstr "_Förkasta formulär"
 
-#: src/ephy-window.c:283
+#: src/ephy-window.c:285
 msgid "There are multiple tabs open."
 msgstr "Flera flikar är öppna."
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:286
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Om du stänger detta fönster kommer alla öppna flikar att förloras"
 
-#: src/ephy-window.c:285
+#: src/ephy-window.c:287
 msgid "C_lose tabs"
 msgstr "Stäng f_likar"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:936
 msgid "Re_do"
 msgstr "_Gör om"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:939
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:940
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:941
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:942
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:944
 msgid "S_end Link by Email…"
 msgstr "Sk_icka länk via e-post…"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:946
 msgid "_Reload"
 msgstr "_Uppdatera"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:947
 msgid "_Back"
 msgstr "_Bakåt"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:948
 msgid "_Forward"
 msgstr "_Framåt"
 
 #. Bookmarks
-#: src/ephy-window.c:950
+#: src/ephy-window.c:951
 msgid "Add Boo_kmark…"
 msgstr "Lägg till bo_kmärke…"
 
 #. Links.
-#: src/ephy-window.c:954
+#: src/ephy-window.c:955
 msgid "Open Link in New _Window"
 msgstr "Öppna länk i n_ytt fönster"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:956
 msgid "Open Link in New _Tab"
 msgstr "Öppna länk i ny _flik"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Open Link in I_ncognito Window"
 msgstr "Öppna länk i i_nkognitofönster"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:958
 msgid "_Save Link As…"
 msgstr "_Spara länk som…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:959
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "_Copy E-mail Address"
 msgstr "_Kopiera e-postadress"
 
 #. Images.
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "View _Image in New Tab"
 msgstr "Visa _bild i ny flik"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:965
 msgid "Copy I_mage Address"
 msgstr "Kopiera b_ildadress"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "_Save Image As…"
 msgstr "Spara bil_d som…"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:967
 msgid "Set as _Wallpaper"
 msgstr "Använd som sk_rivbordsbakgrund"
 
 #. Video.
-#: src/ephy-window.c:970
+#: src/ephy-window.c:971
 msgid "Open Video in New _Window"
 msgstr "Öppna video i nyt_t fönster"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:972
 msgid "Open Video in New _Tab"
 msgstr "Öppna video i ny _flik"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "_Save Video As…"
 msgstr "_Spara video som…"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:974
 msgid "_Copy Video Address"
 msgstr "_Kopiera video-adress"
 
 #. Audio.
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Audio in New _Window"
 msgstr "Öppna ljud i nyt_t fönster"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Audio in New _Tab"
 msgstr "Öppna ljud i ny _flik"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Audio As…"
 msgstr "_Spara ljud som…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Audio Address"
 msgstr "_Kopiera ljud-adress"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:987
 msgid "Save Pa_ge As…"
 msgstr "Spara si_da som…"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:988
 msgid "_Page Source"
 msgstr "Sidk_älla"
 
-#: src/ephy-window.c:1374
+#: src/ephy-window.c:1348
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Sök på nätet efter ”%s”"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:1377
+msgid "Open Link"
+msgstr "Öppna länk"
+
+#: src/ephy-window.c:1379
+msgid "Open Link In New Tab"
+msgstr "Öppna länk i ny flik"
+
+#: src/ephy-window.c:1381
+msgid "Open Link In New Window"
+msgstr "Öppna länk i nytt fönster"
+
+#: src/ephy-window.c:1383
+msgid "Open Link In Incognito Window"
+msgstr "Öppna länk i inkognitofönster"
+
+#: src/ephy-window.c:2928
 msgid "Download operation"
 msgstr "Hämtningsåtgärd"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2930
 msgid "Show details"
 msgstr "Visa detaljer"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2932
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d hämtningsåtgärd aktiv"
 msgstr[1] "%d hämtningsåtgärder aktiva"
 
-#: src/ephy-window.c:3513
+#: src/ephy-window.c:3582
 msgid "Set Web as your default browser?"
 msgstr "Ställ in Webb som din standardwebbläsare?"
 
-#: src/ephy-window.c:3515
+#: src/ephy-window.c:3584
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Ställ in den teknologiska förhandsversionen av Epiphany som din "
 "standardwebbläsare?"
 
-#: src/ephy-window.c:3527
+#: src/ephy-window.c:3596
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:3528
+#: src/ephy-window.c:3597
 msgid "_No"
 msgstr "_Nej"
 
@@ -2627,72 +2710,75 @@ msgstr "Spara media som"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:237
+#: src/prefs-dialog.c:232
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Senaste synkronisering: %s"
 
-#: src/prefs-dialog.c:525
+#: src/prefs-dialog.c:520
 msgid "Something went wrong, please try again later."
 msgstr "Något gick fel, försök igen senare."
 
-#: src/prefs-dialog.c:818
+#: src/prefs-dialog.c:809
 msgid "Web Application Icon"
 msgstr "Webbapplikationsikon"
 
-#: src/prefs-dialog.c:823
+#: src/prefs-dialog.c:814
 msgid "Supported Image Files"
 msgstr "Bildfiler som stöds"
 
-#: src/prefs-dialog.c:1269
+#: src/prefs-dialog.c:1463
+msgid "Delete language"
+msgstr "Ta bort språk"
+
+#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+msgid "Add Language"
+msgstr "Lägg till språk"
+
+#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk (%s)"
 msgstr[1] "Systemspråk (%s)"
 
-#: src/prefs-dialog.c:1558 src/resources/gtk/prefs-dialog.ui:745
-#: src/resources/gtk/prefs-dialog.ui:932
-msgid "Language"
-msgstr "Språk"
-
-#: src/prefs-dialog.c:1639
+#: src/prefs-dialog.c:1816
 msgid "Select a directory"
 msgstr "Välj en katalog"
 
-#: src/prefs-dialog.c:2027
+#: src/prefs-dialog.c:2203
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2029
+#: src/prefs-dialog.c:2205
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2073
+#: src/prefs-dialog.c:2249
 msgid "Light"
 msgstr "Ljus"
 
-#: src/prefs-dialog.c:2075
+#: src/prefs-dialog.c:2251
 msgid "Dark"
 msgstr "Mörk"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1384
+#: src/profile-migrator/ephy-profile-migrator.c:1400
 msgid "Executes only the n-th migration step"
 msgstr "Utför bara det n:te migrationssteget"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1386
+#: src/profile-migrator/ephy-profile-migrator.c:1402
 msgid "Specifies the required version for the migrator"
 msgstr "Anger versionen som krävs för migrationsverktyget"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1388
+#: src/profile-migrator/ephy-profile-migrator.c:1404
 msgid "Specifies the profile where the migrator should run"
 msgstr "Anger profilen där migrationsverktyget ska köra"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1409
+#: src/profile-migrator/ephy-profile-migrator.c:1425
 msgid "Web profile migrator"
 msgstr "Migrationsverktyg för webbprofiler"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1410
+#: src/profile-migrator/ephy-profile-migrator.c:1426
 msgid "Web profile migrator options"
 msgstr "Alternativ för migrationsverktyget för webbprofiler"
 
@@ -2702,7 +2788,7 @@ msgid "View and manage your bookmarks"
 msgstr "Visa och hantera dina bokmärken"
 
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:36
+#: src/resources/gtk/action-bar-end.ui:34
 msgid "View downloads"
 msgstr "Visa hämtningar"
 
@@ -2721,48 +2807,42 @@ msgstr "Gå framåt till nästa sida"
 msgid "Go to your homepage"
 msgstr "Gå till din startsida"
 
-#. Translators: tooltip for the new tab button
-#: src/resources/gtk/action-bar-start.ui:96
-msgid "Open a new tab"
-msgstr "Öppna en ny flik"
-
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:21
 msgid "View open pages"
 msgstr "Visa öppna sidor"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:11
+#: src/resources/gtk/bookmark-properties-grid.ui:16
 msgid "Bookmark"
 msgstr "Bokmärke"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:27
+#: src/resources/gtk/bookmark-properties-grid.ui:31
 #: src/resources/gtk/search-engine-dialog.ui:139
 msgid "Name"
 msgstr "Namn"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:52
+#: src/resources/gtk/bookmark-properties-grid.ui:59
 #: src/resources/gtk/search-engine-dialog.ui:152
 msgid "Address"
 msgstr "Adress"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:76
-#: src/resources/gtk/bookmark-properties-grid.ui:94
+#: src/resources/gtk/bookmark-properties-grid.ui:86
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Taggar"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:140
+#: src/resources/gtk/bookmark-properties-grid.ui:106
 msgid "Add Tag…"
 msgstr "Lägg till tagg…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:148
+#: src/resources/gtk/bookmark-properties-grid.ui:116
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Lägg till"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:163
-msgid "_Remove Bookmark"
-msgstr "_Ta bort bokmärke"
+#: src/resources/gtk/bookmark-properties-grid.ui:175
+msgid "_Remove"
+msgstr "_Ta bort"
 
 # Detta används i historiken och bland bokmärkena i betydelserna
 # "alla webbplatser", "alla bokmärken".
@@ -2778,29 +2858,28 @@ msgstr "Inga bokmärken än?"
 msgid "Bookmark some webpages to view them here."
 msgstr "Bokmärk några webbsidor för att se dem här."
 
-#: src/resources/gtk/clear-data-dialog.ui:31
-msgid "Clear Personal Data"
-msgstr "Töm personliga data"
+#: src/resources/gtk/clear-data-dialog.ui:22
+#: src/resources/gtk/prefs-dialog.ui:551
+msgid "Personal Data"
+msgstr "Personliga data"
 
-#: src/resources/gtk/clear-data-dialog.ui:35
-msgid "C_lear"
-msgstr "_Töm"
+#: src/resources/gtk/clear-data-dialog.ui:23
+msgid "Remove all personal data"
+msgstr "Ta bort alla personliga data"
 
-#: src/resources/gtk/clear-data-dialog.ui:55
-#: src/resources/gtk/cookies-dialog.ui:57
-#: src/resources/gtk/passwords-dialog.ui:60
-msgid "Search"
-msgstr "Sökning"
+#: src/resources/gtk/clear-data-dialog.ui:24
+msgid "Search personal data"
+msgstr "Sök personliga data"
 
-#: src/resources/gtk/clear-data-dialog.ui:56
-msgid "Filter domains"
-msgstr "Filtrera domäner"
+#: src/resources/gtk/clear-data-dialog.ui:25
+msgid "There is no Personal Data"
+msgstr "Det finns inga personliga data"
 
-#: src/resources/gtk/clear-data-dialog.ui:87
-msgid "Search domains"
-msgstr "Sök domäner"
+#: src/resources/gtk/clear-data-dialog.ui:26
+msgid "Personal data will be listed here"
+msgstr "Personliga data kommer att listas här"
 
-#: src/resources/gtk/clear-data-dialog.ui:103
+#: src/resources/gtk/clear-data-dialog.ui:53
 msgid ""
 "You can select a period of time to clear data for all websites modified in "
 "that period. If you choose from the beginning of time, then you can also "
@@ -2810,35 +2889,31 @@ msgstr ""
 "ändrats under den tidsperioden. Om du väljer från tidens begynnelse kan du "
 "också välja att bara tömma data för specifika webbplatser."
 
-#: src/resources/gtk/clear-data-dialog.ui:120
+#: src/resources/gtk/clear-data-dialog.ui:74
 msgid "Clear selected personal data _from:"
 msgstr "Töm valda personliga data _från:"
 
-#: src/resources/gtk/clear-data-dialog.ui:130
+#: src/resources/gtk/clear-data-dialog.ui:89
 msgid "the past hour"
 msgstr "den senaste timmen"
 
-#: src/resources/gtk/clear-data-dialog.ui:131
+#: src/resources/gtk/clear-data-dialog.ui:90
 msgid "the past day"
 msgstr "det senaste dygnet"
 
-#: src/resources/gtk/clear-data-dialog.ui:132
+#: src/resources/gtk/clear-data-dialog.ui:91
 msgid "the past week"
 msgstr "den senaste veckan"
 
-#: src/resources/gtk/clear-data-dialog.ui:133
+#: src/resources/gtk/clear-data-dialog.ui:92
 msgid "the past four weeks"
 msgstr "de senaste fyra veckorna"
 
-#: src/resources/gtk/clear-data-dialog.ui:134
+#: src/resources/gtk/clear-data-dialog.ui:93
 msgid "the beginning of time"
 msgstr "tidens begynnelse"
 
-#: src/resources/gtk/clear-data-dialog.ui:213
-msgid "No data found"
-msgstr "Inga data hittades"
-
-#: src/resources/gtk/clear-data-dialog.ui:230
+#: src/resources/gtk/clear-data-dialog.ui:153
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -2846,17 +2921,37 @@ msgstr ""
 "Du kan inte ångra denna åtgärd. De data som du väljer att tömma går inte att "
 "återställa."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
+#: src/resources/gtk/cookies-dialog.ui:7 src/resources/gtk/prefs-dialog.ui:432
 msgid "Cookies"
 msgstr "Kakor"
 
-#: src/resources/gtk/cookies-dialog.ui:39
+#: src/resources/gtk/cookies-dialog.ui:9
 msgid "Remove all cookies"
 msgstr "Ta bort alla kakor"
 
-#: src/resources/gtk/cookies-dialog.ui:58
-msgid "Filter cookies"
-msgstr "Filtrera kakor"
+#: src/resources/gtk/cookies-dialog.ui:10
+msgid "Search cookies"
+msgstr "Sök kakor"
+
+#: src/resources/gtk/cookies-dialog.ui:11
+msgid "There are no Cookies"
+msgstr "Det finns inga kakor"
+
+#: src/resources/gtk/cookies-dialog.ui:12
+msgid "Cookies left by visited pages will be listed here"
+msgstr "Kakor som lämnats av besökta sidor kommer att listas här"
+
+#: src/resources/gtk/data-dialog.ui:59
+msgid "Search"
+msgstr "Sökning"
+
+#: src/resources/gtk/data-dialog.ui:229
+msgid "No Results Found"
+msgstr "Inga resultat hittades"
+
+#: src/resources/gtk/data-dialog.ui:244
+msgid "Try a different search"
+msgstr "Försök med en annan sökning"
 
 #: src/resources/gtk/encoding-dialog.ui:8
 msgid "Text Encoding"
@@ -2878,39 +2973,31 @@ msgstr "Relaterade kodningar"
 msgid "Show all…"
 msgstr "Visa alla…"
 
-#: src/resources/gtk/history-dialog.ui:29
+#: src/resources/gtk/history-dialog.ui:7
 msgid "History"
 msgstr "Historik"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:9
 msgid "Remove all history"
 msgstr "Ta bort all historik"
 
-#: src/resources/gtk/history-dialog.ui:79
+#: src/resources/gtk/history-dialog.ui:10
 msgid "Search history"
 msgstr "Sökhistorik"
 
-#: src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/history-dialog.ui:11
 msgid "The History is Empty"
 msgstr "Historiken är tom"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "Besökta sidor kommer att listas här"
 
-#: src/resources/gtk/history-dialog.ui:244
-msgid "No Results Found"
-msgstr "Inga resultat hittades"
-
-#: src/resources/gtk/history-dialog.ui:259
-msgid "Try a different search"
-msgstr "Försök med en annan sökning"
-
-#: src/resources/gtk/history-dialog.ui:303
+#: src/resources/gtk/history-dialog.ui:67
 msgid "_Copy Location"
 msgstr "_Kopiera plats"
 
-#: src/resources/gtk/history-dialog.ui:312
+#: src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2954,81 +3041,81 @@ msgstr "Stäng a_ndra flikar"
 msgid "_Close"
 msgstr "S_täng"
 
-#: src/resources/gtk/page-menu-popover.ui:21
+#: src/resources/gtk/page-menu-popover.ui:24
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Zooma ut"
 
-#: src/resources/gtk/page-menu-popover.ui:40
+#: src/resources/gtk/page-menu-popover.ui:43
 msgid "Restore Zoom"
 msgstr "Återställ zoomnivå"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Zooma in"
 
-#: src/resources/gtk/page-menu-popover.ui:80
+#: src/resources/gtk/page-menu-popover.ui:84
 msgid "Print…"
 msgstr "Skriv ut…"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:99
 msgid "Find…"
 msgstr "Sök…"
 
-#: src/resources/gtk/page-menu-popover.ui:110
+#: src/resources/gtk/page-menu-popover.ui:114
 msgid "Fullscreen"
 msgstr "Helskärm"
 
-#: src/resources/gtk/page-menu-popover.ui:137
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "_New Window"
 msgstr "_Nytt fönster"
 
-#: src/resources/gtk/page-menu-popover.ui:145
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "New _Incognito Window"
 msgstr "Nytt _inkognito-fönster"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:175
 msgid "Reopen Closed _Tab"
 msgstr "Öppna stängd _flik igen"
 
-#: src/resources/gtk/page-menu-popover.ui:170
+#: src/resources/gtk/page-menu-popover.ui:183
 msgid "_History"
 msgstr "_Historik"
 
-#: src/resources/gtk/page-menu-popover.ui:187
+#: src/resources/gtk/page-menu-popover.ui:200
 msgid "I_mport Bookmarks…"
 msgstr "I_mportera bokmärken…"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:208
 msgid "E_xport Bookmarks…"
 msgstr "E_xportera bokmärken…"
 
-#: src/resources/gtk/page-menu-popover.ui:212
+#: src/resources/gtk/page-menu-popover.ui:225
 msgid "Install Site as Web _Application…"
 msgstr "Installera plats som _webbapplikation…"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:233
 msgid "Open Appli_cation Manager"
 msgstr "Öppna appli_kationshanterare"
 
-#: src/resources/gtk/page-menu-popover.ui:237
+#: src/resources/gtk/page-menu-popover.ui:250
 msgid "_Override Text Encoding…"
 msgstr "Åsid_osätt textkodning…"
 
-#: src/resources/gtk/page-menu-popover.ui:253
+#: src/resources/gtk/page-menu-popover.ui:266
 msgid "Pr_eferences"
 msgstr "Instä_llningar"
 
-#: src/resources/gtk/page-menu-popover.ui:262
+#: src/resources/gtk/page-menu-popover.ui:275
 msgid "_Keyboard Shortcuts"
 msgstr "_Tangentbordsgenvägar"
 
-#: src/resources/gtk/page-menu-popover.ui:271
+#: src/resources/gtk/page-menu-popover.ui:284
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: src/resources/gtk/page-menu-popover.ui:280
+#: src/resources/gtk/page-menu-popover.ui:293
 msgid "_About Web"
 msgstr "_Om Webb"
 
@@ -3036,49 +3123,52 @@ msgstr "_Om Webb"
 msgid "Close page"
 msgstr "Stäng sida"
 
-#: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/passwords-dialog.ui:25
+#: src/resources/gtk/prefs-dialog.ui:507
 msgid "Passwords"
 msgstr "Lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:38
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "_Töm allt"
+#: src/resources/gtk/passwords-dialog.ui:27
+msgid "Remove all passwords"
+msgstr "Ta bort alla lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Filter passwords"
-msgstr "Filtrera lösenord"
-
-#: src/resources/gtk/passwords-dialog.ui:91
+#: src/resources/gtk/passwords-dialog.ui:28
 msgid "Search passwords"
 msgstr "Sök lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:121
+#: src/resources/gtk/passwords-dialog.ui:29
+msgid "There are no Passwords"
+msgstr "Det finns inga lösenord"
+
+#: src/resources/gtk/passwords-dialog.ui:30
+msgid "Saved passwords will be listed here"
+msgstr "Sparade lösenord kommer att listas här"
+
+#: src/resources/gtk/passwords-dialog.ui:61
 msgid "Site"
 msgstr "Webbplats"
 
-#: src/resources/gtk/passwords-dialog.ui:136
+#: src/resources/gtk/passwords-dialog.ui:76
 msgid "User Name"
 msgstr "Användarnamn"
 
-#: src/resources/gtk/passwords-dialog.ui:150
+#: src/resources/gtk/passwords-dialog.ui:90
 msgid "Password"
 msgstr "Lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:169
+#: src/resources/gtk/passwords-dialog.ui:109
 msgid "Forget the selected passwords"
 msgstr "Glöm valda lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:184
+#: src/resources/gtk/passwords-dialog.ui:124
 msgid "Reveal all the passwords"
 msgstr "Visa alla lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:204
+#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "_Kopiera lösenord"
 
-#: src/resources/gtk/passwords-dialog.ui:208
+#: src/resources/gtk/passwords-dialog.ui:148
 msgid "C_opy Username"
 msgstr "K_opiera användarnamn"
 
@@ -3086,7 +3176,7 @@ msgstr "K_opiera användarnamn"
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:368
 msgid "General"
 msgstr "Allmänt"
 
@@ -3107,203 +3197,175 @@ msgid "_Manage Additional URLs"
 msgstr "Han_tera ytterligare URL:er"
 
 #: src/resources/gtk/prefs-dialog.ui:148
-msgid "Browsing"
-msgstr "Surfning"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Enable sm_ooth scrolling"
-msgstr "Aktivera mj_uk rullning"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "Enable mouse _gesture"
-msgstr "Aktivera mus_gest"
-
-#: src/resources/gtk/prefs-dialog.ui:187
-msgid "Always ask o_n download"
-msgstr "Fråga alltid vid hämt_ning"
-
-#: src/resources/gtk/prefs-dialog.ui:202
-msgid "_Download folder"
-msgstr "_Hämtningsmapp"
-
-#: src/resources/gtk/prefs-dialog.ui:211
 msgid "Homepage"
 msgstr "Startsida"
 
-#: src/resources/gtk/prefs-dialog.ui:216
+#: src/resources/gtk/prefs-dialog.ui:153
 msgid "Most _visited pages"
 msgstr "Mest _besökta sidor"
 
-#: src/resources/gtk/prefs-dialog.ui:230
+#: src/resources/gtk/prefs-dialog.ui:167
 msgid "_Blank page"
 msgstr "_Tom sida"
 
-#: src/resources/gtk/prefs-dialog.ui:245
+#: src/resources/gtk/prefs-dialog.ui:182
 msgid "_Custom"
 msgstr "An_passad"
 
-#: src/resources/gtk/prefs-dialog.ui:269
+#: src/resources/gtk/prefs-dialog.ui:211
+msgid "Ask o_n download"
+msgstr "Fråga vid hämt_ning"
+
+#: src/resources/gtk/prefs-dialog.ui:226
+msgid "_Download folder"
+msgstr "_Hämtningsmapp"
+
+#: src/resources/gtk/prefs-dialog.ui:235
 msgid "Search Engines"
 msgstr "Sökmotorer"
 
-#: src/resources/gtk/prefs-dialog.ui:274
-msgid "You can select different search engines to use"
-msgstr "Du kan välja olika sökmotorer att använda"
-
-#: src/resources/gtk/prefs-dialog.ui:275
+#: src/resources/gtk/prefs-dialog.ui:240
 msgid "_Manage Search Engines"
 msgstr "Han_tera sökmotorer"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:265
 msgid "Session"
 msgstr "Session"
 
-#: src/resources/gtk/prefs-dialog.ui:305
-msgid "Always start browser in _incognito mode"
-msgstr "Starta alltid webbläsaren i _inkognitoläge"
+#: src/resources/gtk/prefs-dialog.ui:270
+msgid "Start in _Incognito Mode"
+msgstr "Starta i _inkognitoläge"
 
-#: src/resources/gtk/prefs-dialog.ui:320
-msgid "_Remember previous tabs on startup"
-msgstr "Kom _ihåg tidigare flikar vid uppstart"
+#: src/resources/gtk/prefs-dialog.ui:284
+msgid "_Restore Tabs on Startup"
+msgstr "Åt_erställ flikar vid uppstart"
 
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:299
+msgid "Browsing"
+msgstr "Surfning"
+
+#: src/resources/gtk/prefs-dialog.ui:304
+msgid "Sm_ooth Scrolling"
+msgstr "Mj_uk rullning"
+
+#: src/resources/gtk/prefs-dialog.ui:318
+msgid "Mouse _Gestures"
+msgstr "Mus_gester"
+
+#: src/resources/gtk/prefs-dialog.ui:350
+msgid "_Spell Checking"
+msgstr "_Stavningskontroll"
+
+#: src/resources/gtk/prefs-dialog.ui:377 src/resources/gtk/prefs-dialog.ui:587
+msgid "Privacy"
+msgstr "Sekretess"
+
+#: src/resources/gtk/prefs-dialog.ui:384
 msgid "Web Content"
 msgstr "Webbinnehåll"
 
-#: src/resources/gtk/prefs-dialog.ui:340
-msgid "Try to block _advertisements"
+#: src/resources/gtk/prefs-dialog.ui:389
+msgid "Try to Block _Advertisements"
 msgstr "Försök att blockera _annonser"
 
-#: src/resources/gtk/prefs-dialog.ui:354
-msgid "Block popup _windows"
-msgstr "Blockera popup_fönster"
+#: src/resources/gtk/prefs-dialog.ui:403
+msgid "Block Popup _Windows"
+msgstr "Blockera poppupp_fönster"
 
-#: src/resources/gtk/prefs-dialog.ui:368
-msgid "Try to block dangerous web_sites"
+#: src/resources/gtk/prefs-dialog.ui:417
+msgid "Try to Block Dangerous Web_sites"
 msgstr "Försök att blockera farliga webb_platser"
 
-#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
-msgid "Fonts & Style"
-msgstr "Typsnitt & stil"
+#: src/resources/gtk/prefs-dialog.ui:437
+msgid "Clear _Cookies"
+msgstr "Töm _kakor"
 
-#: src/resources/gtk/prefs-dialog.ui:402
-msgid "Fonts"
-msgstr "Typsnitt"
-
-#: src/resources/gtk/prefs-dialog.ui:407
-msgid "Use custom fonts"
-msgstr "Använd anpassade typsnitt"
-
-#: src/resources/gtk/prefs-dialog.ui:423
-msgid "Sans serif font"
-msgstr "Sans serif-typsnitt"
-
-#: src/resources/gtk/prefs-dialog.ui:438
-msgid "Serif font"
-msgstr "Serif-typsnitt"
-
-#: src/resources/gtk/prefs-dialog.ui:453
-msgid "Monospace font"
-msgstr "Typsnitt med fast breddslag"
-
-#: src/resources/gtk/prefs-dialog.ui:473
-msgid "Reader Mode"
-msgstr "Läsarläge"
-
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "Font style"
-msgstr "Typsnittsstil"
-
-#: src/resources/gtk/prefs-dialog.ui:483
-msgid "Color scheme"
-msgstr "Färgschema"
-
-#: src/resources/gtk/prefs-dialog.ui:496
-msgid "Style"
-msgstr "Stil"
-
-#: src/resources/gtk/prefs-dialog.ui:501
-msgid "Use custom stylesheet"
-msgstr "Använd anpassad stilmall"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "Default zoom level"
-msgstr "Standardzoomnivå"
-
-#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
-msgid "Stored Data"
-msgstr "Lagrade data"
-
-#: src/resources/gtk/prefs-dialog.ui:585
-msgid "Manage _Cookies"
-msgstr "Hantera kak_or"
-
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-dialog.ui:461
 msgid "_Always accept"
 msgstr "_Acceptera alltid"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:623
-msgid "For example, not from advertisers on these sites"
-msgstr "Exempelvis inte från annonsörer på dessa webbplatser"
+#: src/resources/gtk/prefs-dialog.ui:475
+msgid "For example, not from advertisers on these sites."
+msgstr "Exempelvis inte från annonsörer på dessa webbplatser."
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:476
 msgid "Only _from sites you visit"
 msgstr "Endast _från webbplatser du besöker"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:491
 msgid "_Never accept"
 msgstr "A_cceptera aldrig"
 
-#: src/resources/gtk/prefs-dialog.ui:660
-msgid "Manage _Passwords"
-msgstr "Hantera _lösenord"
+#: src/resources/gtk/prefs-dialog.ui:512
+msgid "_Passwords"
+msgstr "_Lösenord"
 
-#: src/resources/gtk/prefs-dialog.ui:684
-msgid "_Remember passwords"
+#: src/resources/gtk/prefs-dialog.ui:536
+msgid "_Remember Passwords"
 msgstr "_Kom ihåg lösenord"
 
-#: src/resources/gtk/prefs-dialog.ui:699
-msgid "Personal Data"
-msgstr "Personliga data"
-
-#: src/resources/gtk/prefs-dialog.ui:704
+#: src/resources/gtk/prefs-dialog.ui:556
 msgid "You can clear stored personal data."
 msgstr "Du kan tömma lagrade personliga data."
 
-#: src/resources/gtk/prefs-dialog.ui:705
-msgid "Manage Personal _Data"
-msgstr "Hantera personliga _data"
+#: src/resources/gtk/prefs-dialog.ui:557
+msgid "Clear Personal _Data"
+msgstr "Töm personliga _data"
 
-#: src/resources/gtk/prefs-dialog.ui:799
-msgid "Add language"
-msgstr "Lägg till språk"
+#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
+msgid "Appearance"
+msgstr "Utseende"
 
-#: src/resources/gtk/prefs-dialog.ui:819
-msgid "Remove language"
-msgstr "Ta bort språk"
+#: src/resources/gtk/prefs-dialog.ui:604
+msgid "Fonts"
+msgstr "Typsnitt"
 
-#: src/resources/gtk/prefs-dialog.ui:861
-msgid "Move language up"
-msgstr "Flytta språk uppåt"
+#: src/resources/gtk/prefs-dialog.ui:609
+msgid "Use Custom Fonts"
+msgstr "Använd anpassade typsnitt"
 
-#: src/resources/gtk/prefs-dialog.ui:881
-msgid "Move language down"
-msgstr "Flytta språk nedåt"
+#: src/resources/gtk/prefs-dialog.ui:625
+msgid "Sans serif font"
+msgstr "Sans serif-typsnitt"
 
-#: src/resources/gtk/prefs-dialog.ui:906
-msgid "Spell Checking"
-msgstr "Stavningskontroll"
+#: src/resources/gtk/prefs-dialog.ui:640
+msgid "Serif font"
+msgstr "Serif-typsnitt"
 
-#: src/resources/gtk/prefs-dialog.ui:911
-msgid "_Enable spell checking"
-msgstr "A_ktivera stavningskontroll"
+#: src/resources/gtk/prefs-dialog.ui:655
+msgid "Monospace font"
+msgstr "Typsnitt med fast breddslag"
 
-#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
+#: src/resources/gtk/prefs-dialog.ui:675
+msgid "Reader Mode"
+msgstr "Läsarläge"
+
+#: src/resources/gtk/prefs-dialog.ui:679
+msgid "Font Style"
+msgstr "Typsnittsstil"
+
+#: src/resources/gtk/prefs-dialog.ui:685
+msgid "Color Scheme"
+msgstr "Färgschema"
+
+#: src/resources/gtk/prefs-dialog.ui:698
+msgid "Style"
+msgstr "Stil"
+
+#: src/resources/gtk/prefs-dialog.ui:703
+msgid "Use Custom Stylesheet"
+msgstr "Använd anpassad stilmall"
+
+#: src/resources/gtk/prefs-dialog.ui:738
+msgid "Default zoom level"
+msgstr "Standardzoomnivå"
+
+#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
 msgid "Sync"
 msgstr "Synkronisera"
 
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:782
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3313,65 +3375,61 @@ msgstr ""
 "Firefox på andra datorer. Webb är inte Firefox och varken produceras eller "
 "rekommenderas av Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:950
+#: src/resources/gtk/prefs-dialog.ui:783
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:802
 msgid "Firefox Account"
 msgstr "Firefox-konto"
 
-#: src/resources/gtk/prefs-dialog.ui:973
+#: src/resources/gtk/prefs-dialog.ui:806
 msgid "Logged in"
 msgstr "Inloggad"
 
-#: src/resources/gtk/prefs-dialog.ui:978
+#: src/resources/gtk/prefs-dialog.ui:811
 msgid "Sign _out"
 msgstr "Logga _ut"
 
-#: src/resources/gtk/prefs-dialog.ui:991
+#: src/resources/gtk/prefs-dialog.ui:824
 msgid "Sync Options"
 msgstr "Synkroniseringsalternativ"
 
-#: src/resources/gtk/prefs-dialog.ui:996
+#: src/resources/gtk/prefs-dialog.ui:829
 msgid "Sync _Bookmarks"
 msgstr "Synkronisera _bokmärken"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "Sync _Passwords"
 msgstr "Synkronisera _lösenord"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:859
 msgid "Sync _History"
 msgstr "Synkronisera _historik"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:874
 msgid "Sync Open _Tabs"
 msgstr "Synkronisera öppna _flikar"
 
-#: src/resources/gtk/prefs-dialog.ui:1053
+#: src/resources/gtk/prefs-dialog.ui:886
 msgid "S_ynced tabs"
 msgstr "S_ynkroniserade flikar"
 
-#: src/resources/gtk/prefs-dialog.ui:1064
+#: src/resources/gtk/prefs-dialog.ui:897
 msgid "Frequency"
 msgstr "Frekvens"
 
-#: src/resources/gtk/prefs-dialog.ui:1075
+#: src/resources/gtk/prefs-dialog.ui:908
 msgid "Sync _now"
 msgstr "Synkronisera _nu"
 
-#: src/resources/gtk/prefs-dialog.ui:1087
+#: src/resources/gtk/prefs-dialog.ui:920
 msgid "Device name"
 msgstr "Enhetsnamn"
 
-#: src/resources/gtk/prefs-dialog.ui:1092
+#: src/resources/gtk/prefs-dialog.ui:925
 msgid "_Change"
 msgstr "Än_dra"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add Language"
-msgstr "Lägg till språk"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a l_anguage:"
@@ -3660,6 +3718,10 @@ msgstr "Stäng dokument"
 msgid "Additional URLs"
 msgstr "Ytterligare URL:er"
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
+msgid "C_lear All"
+msgstr "_Töm allt"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:64
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
@@ -3717,7 +3779,7 @@ msgstr "Välj profil"
 msgid "_Select"
 msgstr "_Välj"
 
-#: src/window-commands.c:295 src/window-commands.c:473
+#: src/window-commands.c:295 src/window-commands.c:477
 msgid "Choose File"
 msgstr "Välj fil"
 
@@ -3737,16 +3799,16 @@ msgstr "Vä_lj fil"
 msgid "From:"
 msgstr "Från:"
 
-#: src/window-commands.c:456
+#: src/window-commands.c:457
 msgid "Bookmarks successfully exported!"
 msgstr "Lyckades exportera bokmärken!"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:481
+#: src/window-commands.c:485
 msgid "bookmarks.gvdb"
 msgstr "bokmärken.gvdb"
 
-#: src/window-commands.c:604
+#: src/window-commands.c:612
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3755,11 +3817,11 @@ msgstr ""
 "Ett enkelt, stilrent och vackert sätt att se webben.\n"
 "Drivs av WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:628
+#: src/window-commands.c:636
 msgid "Website"
 msgstr "Webbplats"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:669
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander <po@danielnylander.se>\n"
@@ -3770,20 +3832,20 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: src/window-commands.c:1285
+#: src/window-commands.c:1309
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "En webbapplikation med namnet ”%s” finns redan. Vill du ersätta den?"
 
-#: src/window-commands.c:1288
+#: src/window-commands.c:1312
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/window-commands.c:1290
+#: src/window-commands.c:1314
 msgid "Replace"
 msgstr "Ersätt"
 
-#: src/window-commands.c:1294
+#: src/window-commands.c:1318
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3791,50 +3853,50 @@ msgstr ""
 "Det finns redan en applikation med detta namn. Om du ersätter den så skrivs "
 "den gamla över."
 
-#: src/window-commands.c:1369
+#: src/window-commands.c:1393
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Applikationen ”%s” är redo att användas"
 
-#: src/window-commands.c:1372
+#: src/window-commands.c:1396
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Applikationen ”%s” kunde inte skapas"
 
-#: src/window-commands.c:1380
+#: src/window-commands.c:1404
 msgid "Launch"
 msgstr "Starta"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1426
+#: src/window-commands.c:1450
 msgid "Create Web Application"
 msgstr "Skapa webbapplikation"
 
-#: src/window-commands.c:1431
+#: src/window-commands.c:1455
 msgid "C_reate"
 msgstr "S_kapa"
 
-#: src/window-commands.c:1645
+#: src/window-commands.c:1669
 msgid "Save"
 msgstr "Spara"
 
-#: src/window-commands.c:1654
+#: src/window-commands.c:1678
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1659
+#: src/window-commands.c:1683
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1664
+#: src/window-commands.c:1688
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2397
+#: src/window-commands.c:2148
 msgid "Enable caret browsing mode?"
 msgstr "Aktivera markörläge?"
 
-#: src/window-commands.c:2400
+#: src/window-commands.c:2151
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3844,9 +3906,96 @@ msgstr ""
 "markör i webbsidor, vilket gör att du kan flytta runt med ditt tangentbord. "
 "Vill du aktivera markörläge?"
 
-#: src/window-commands.c:2403
+#: src/window-commands.c:2154
 msgid "_Enable"
 msgstr "_Aktivera"
+
+#~ msgid "Don’t use an external application to view page source."
+#~ msgstr "Använd inte ett externt program för att visa källkod för sidor."
+
+#~ msgid "Enable Plugins"
+#~ msgstr "Aktivera tillägg"
+
+#~ msgid "Enable WebGL"
+#~ msgstr "Aktivera WebGL"
+
+#~ msgid "Whether to enable support for WebGL contexts."
+#~ msgstr "Huruvida stöd för WebGL-innehåll ska aktiveras."
+
+#~ msgid "Enable WebAudio"
+#~ msgstr "Aktivera WebAudio"
+
+#~ msgid "Whether to enable support for WebAudio."
+#~ msgstr "Huruvida stöd för WebAudio ska aktiveras."
+
+#~ msgid "Do Not Track"
+#~ msgstr "Spåra mig inte"
+
+#~ msgid "Enables tracking query parameter removal."
+#~ msgstr "Aktiverar borttagning av frågeparameter för spårning."
+
+#~ msgid "Something went wrong while displaying this page."
+#~ msgstr "Något gick fel då denna sida skulle visas."
+
+#~ msgid "Switch to Tab"
+#~ msgstr "Växla till flik"
+
+#~ msgid "Language"
+#~ msgstr "Språk"
+
+#~ msgid "_Remove Bookmark"
+#~ msgstr "_Ta bort bokmärke"
+
+#~ msgid "C_lear"
+#~ msgstr "_Töm"
+
+#~ msgid "Filter domains"
+#~ msgstr "Filtrera domäner"
+
+#~ msgid "Search domains"
+#~ msgstr "Sök domäner"
+
+#~ msgid "No data found"
+#~ msgstr "Inga data hittades"
+
+#~ msgid "Filter passwords"
+#~ msgstr "Filtrera lösenord"
+
+#~ msgid "Enable mouse _gesture"
+#~ msgstr "Aktivera mus_gest"
+
+#~ msgid "You can select different search engines to use"
+#~ msgstr "Du kan välja olika sökmotorer att använda"
+
+#~ msgid "Always start browser in _incognito mode"
+#~ msgstr "Starta alltid webbläsaren i _inkognitoläge"
+
+#~ msgid "Fonts & Style"
+#~ msgstr "Typsnitt & stil"
+
+#~ msgid "Stored Data"
+#~ msgstr "Lagrade data"
+
+#~ msgid "Manage _Cookies"
+#~ msgstr "Hantera kak_or"
+
+#~ msgid "Manage _Passwords"
+#~ msgstr "Hantera _lösenord"
+
+#~ msgid "Manage Personal _Data"
+#~ msgstr "Hantera personliga _data"
+
+#~ msgid "Add language"
+#~ msgstr "Lägg till språk"
+
+#~ msgid "Move language up"
+#~ msgstr "Flytta språk uppåt"
+
+#~ msgid "Move language down"
+#~ msgstr "Flytta språk nedåt"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "A_ktivera stavningskontroll"
 
 #~ msgid ""
 #~ "Enables tracking query parameter removal. Note that when changing this "
@@ -3904,9 +4053,6 @@ msgstr "_Aktivera"
 #~ msgid "Local files"
 #~ msgstr "Lokala filer"
 
-#~ msgid "There are ongoing downloads"
-#~ msgstr "Det pågår fortfarande hämtningar"
-
 #~ msgid "If you quit, the downloads will be cancelled"
 #~ msgstr "Om du avslutar så kommer hämtningarna att avbrytas"
 
@@ -3924,9 +4070,6 @@ msgstr "_Aktivera"
 
 #~ msgid "_Add…"
 #~ msgstr "_Lägg till…"
-
-#~ msgid "_Remove"
-#~ msgstr "_Ta bort"
 
 #~ msgid "_Up"
 #~ msgstr "_Upp"
@@ -4021,9 +4164,6 @@ msgstr "_Aktivera"
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Search the Web"
-#~ msgstr "Sök på nätet"
-
 #~ msgid "Zoom Out"
 #~ msgstr "Zooma ut"
 
@@ -4078,9 +4218,6 @@ msgstr "_Aktivera"
 
 #~ msgid "MIME type"
 #~ msgstr "MIME-typ"
-
-#~ msgid "Description"
-#~ msgstr "Beskrivning"
 
 #~ msgid "Suffixes"
 #~ msgstr "Filändelser"
@@ -4569,9 +4706,6 @@ msgstr "_Aktivera"
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Säg till webbplatser att jag inte vill bli spårad"
 
-#~ msgid "Privacy"
-#~ msgstr "Sekretess"
-
 #~ msgid "Stop"
 #~ msgstr "Stoppa"
 
@@ -4733,9 +4867,6 @@ msgstr "_Aktivera"
 
 #~ msgid "Load Anyway"
 #~ msgstr "Läs in ändå"
-
-#~ msgid "Clear"
-#~ msgstr "Töm"
 
 #~ msgid "Remove"
 #~ msgstr "Ta bort"
