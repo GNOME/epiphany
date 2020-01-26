@@ -191,6 +191,7 @@ ephy_create_file_chooser (const char            *title,
         "message/rfc822",                                     /* MHTML */
         "multipart/related",                                  /* MHTML */
         "application/x-mimearchive",                          /* MHTML */
+        "application/pdf",
         "image/png",
         "image/jpeg",
         "image/gif",
