@@ -390,7 +390,7 @@ dialog_bookmarks_import_from_firefox (GtkDialog *dialog)
     g_assert_not_reached ();
   }
 
-  g_slist_free (profiles);
+  g_slist_free_full (profiles, g_free);
 
   /* If there are multiple profiles, but the user didn't select one in
    * the profile (he pressed Cancel), don't display the import info dialog
