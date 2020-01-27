@@ -30,16 +30,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-12 19:02+0000\n"
-"PO-Revision-Date: 2020-01-12 21:19-0300\n"
-"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
+"POT-Creation-Date: 2020-01-26 13:05+0000\n"
+"PO-Revision-Date: 2020-01-27 14:28-0300\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 3.32.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -379,7 +379,7 @@ msgstr ""
 "Codificação padrão. Valores aceitados são aqueles que o WebKitGTK entende."
 
 #: data/org.gnome.epiphany.gschema.xml:146
-#: src/resources/gtk/prefs-dialog.ui:752
+#: src/resources/gtk/prefs-dialog.ui:333
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -1027,7 +1027,7 @@ msgid "Download requested"
 msgstr "Download requisitado"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:943
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
 #: src/window-commands.c:481 src/window-commands.c:1453
@@ -1436,7 +1436,7 @@ msgstr "Localiza a ocorrência anterior da palavra ou frase"
 msgid "Find next occurrence of the search string"
 msgstr "Localiza a próxima ocorrência da palavra ou frase"
 
-#: embed/ephy-view-source-handler.c:252
+#: embed/ephy-view-source-handler.c:256
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s não é uma URI válida"
@@ -1454,7 +1454,7 @@ msgid "_Never Save"
 msgstr "_Nunca salvar"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:480
+#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1483,57 +1483,57 @@ msgstr "O processo web falhou e teve que ser encerrado"
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "O processo web foi encerrado por exceder o limite de memória"
 
-#: embed/ephy-web-view.c:1088
+#: embed/ephy-web-view.c:1023
 msgid "Deny"
 msgstr "Negar"
 
-#: embed/ephy-web-view.c:1089
+#: embed/ephy-web-view.c:1024
 msgid "Allow"
 msgstr "Permitir"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1102
+#: embed/ephy-web-view.c:1037
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "A página em %s deseja mostrar notificações na área de trabalho."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1107
+#: embed/ephy-web-view.c:1042
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "A página em %s deseja saber sua localização."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1112
+#: embed/ephy-web-view.c:1047
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "A página em %s deseja usar seu microfone."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1117
+#: embed/ephy-web-view.c:1052
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "A página em %s deseja usar sua webcam."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1294
+#: embed/ephy-web-view.c:1229
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Carregando “%s”…"
 
-#: embed/ephy-web-view.c:1296 embed/ephy-web-view.c:1302
+#: embed/ephy-web-view.c:1231 embed/ephy-web-view.c:1237
 msgid "Loading…"
 msgstr "Carregando…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1629
+#: embed/ephy-web-view.c:1564
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Este site apresentou uma identificação que pertence a um site diferente."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1634
+#: embed/ephy-web-view.c:1569
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1542,13 +1542,13 @@ msgstr ""
 "data no calendário do seu computador."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1639
+#: embed/ephy-web-view.c:1574
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "A identificação deste site não foi emitida por uma organização confiável."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1644
+#: embed/ephy-web-view.c:1579
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1556,7 +1556,7 @@ msgstr ""
 "corrompida."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1649
+#: embed/ephy-web-view.c:1584
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1565,7 +1565,7 @@ msgstr ""
 "emitiu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1654
+#: embed/ephy-web-view.c:1589
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1574,7 +1574,7 @@ msgstr ""
 "codificação muito fraca."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1659
+#: embed/ephy-web-view.c:1594
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1584,24 +1584,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1722 embed/ephy-web-view.c:1778
+#: embed/ephy-web-view.c:1657 embed/ephy-web-view.c:1713
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema ao carregar página"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1725
+#: embed/ephy-web-view.c:1660
 msgid "Unable to display this website"
 msgstr "Não foi possível exibir este site"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1729
+#: embed/ephy-web-view.c:1664
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "A página em %s parece estar indisponível."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1733
+#: embed/ephy-web-view.c:1668
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1611,7 +1611,7 @@ msgstr ""
 "está funcionando corretamente."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1743
+#: embed/ephy-web-view.c:1678
 #, c-format
 msgid "The precise error was: %s"
 msgstr "O erro específico foi: %s"
@@ -1619,31 +1619,31 @@ msgstr "O erro específico foi: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1683 embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1775
 msgid "Reload"
 msgstr "Recarregar"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1751 embed/ephy-web-view.c:1804
-#: embed/ephy-web-view.c:1843
+#: embed/ephy-web-view.c:1686 embed/ephy-web-view.c:1739
+#: embed/ephy-web-view.c:1778
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1716
 msgid "Oops! There may be a problem"
 msgstr "Opa! Pode ter alguma coisa de errada"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1785
+#: embed/ephy-web-view.c:1720
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "A página %s pode ter causado o Web a fechar inesperadamente."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1727
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1651,18 +1651,18 @@ msgstr ""
 "desenvolvedores do %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1764
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Ocorreu problema ao exibir página"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1832
+#: embed/ephy-web-view.c:1767
 msgid "Oops!"
 msgstr "Opa!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1835
+#: embed/ephy-web-view.c:1770
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1671,18 +1671,18 @@ msgstr ""
 "visite uma página diferente para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1804
 #, c-format
 msgid "Security Violation"
 msgstr "Violação de segurança"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1807
 msgid "This Connection is Not Secure"
 msgstr "Esta conexão não é segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1876
+#: embed/ephy-web-view.c:1811
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1694,45 +1694,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1975
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:1821 embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:1961
 msgid "Go Back"
 msgstr "Voltar"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1889 embed/ephy-web-view.c:1978
-#: embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1824 embed/ephy-web-view.c:1913
+#: embed/ephy-web-view.c:1964
 msgctxt "back-access-key"
 msgid "B"
 msgstr "V"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1892 embed/ephy-web-view.c:1981
+#: embed/ephy-web-view.c:1827 embed/ephy-web-view.c:1916
 msgid "Accept Risk and Proceed"
 msgstr "Aceitar o risco e prosseguir"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1896 embed/ephy-web-view.c:1985
+#: embed/ephy-web-view.c:1831 embed/ephy-web-view.c:1920
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1926
+#: embed/ephy-web-view.c:1861
 #, c-format
 msgid "Security Warning"
 msgstr "Aviso de segurança"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1929
+#: embed/ephy-web-view.c:1864
 msgid "Unsafe website detected!"
 msgstr "Site inseguro detectado!"
 
-#: embed/ephy-web-view.c:1936
+#: embed/ephy-web-view.c:1871
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1742,7 +1742,7 @@ msgstr ""
 "maliciosos que podem ser baixados para o seu computador sem o seu "
 "consentimento."
 
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1875
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1751,7 +1751,7 @@ msgstr ""
 "Você pode aprender mais sobre conteúdo da web prejudicial, incluindo vírus e "
 "outros códigos maliciosos e como proteger seu computador em %s."
 
-#: embed/ephy-web-view.c:1947
+#: embed/ephy-web-view.c:1882
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1762,14 +1762,14 @@ msgstr ""
 "ou revelar suas informações pessoais (por exemplo, senhas, números de "
 "telefone ou cartões de crédito)."
 
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1887
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Você pode descobrir mais sobre engenharia social (phishing) em %s ou de %s."
 
-#: embed/ephy-web-view.c:1961
+#: embed/ephy-web-view.c:1896
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1781,24 +1781,24 @@ msgstr ""
 "exemplo, alterando sua página inicial ou exibindo anúncios extras em sites "
 "que você visita)."
 
-#: embed/ephy-web-view.c:1966
+#: embed/ephy-web-view.c:1901
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Você pode aprender mais sobre software indesejado em %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2010 embed/ephy-web-view.c:2013
+#: embed/ephy-web-view.c:1945 embed/ephy-web-view.c:1948
 #, c-format
 msgid "File not found"
 msgstr "Arquivo não localizado"
 
-#: embed/ephy-web-view.c:2017
+#: embed/ephy-web-view.c:1952
 #, c-format
 msgid "%s could not be found."
 msgstr "%s não pôde ser localizado."
 
-#: embed/ephy-web-view.c:2019
+#: embed/ephy-web-view.c:1954
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1807,15 +1807,15 @@ msgstr ""
 "Por favor, verifique o nome do arquivo por letras maiúsculo ou outros erros "
 "de escrita. Também verifique se ele já foi movido, renomeado ou excluído."
 
-#: embed/ephy-web-view.c:2082
+#: embed/ephy-web-view.c:2017
 msgid "None specified"
 msgstr "Nada especificado"
 
-#: embed/ephy-web-view.c:2198
+#: embed/ephy-web-view.c:2133
 msgid "Technical information"
 msgstr "Informações técnicas"
 
-#: embed/ephy-web-view.c:3184
+#: embed/ephy-web-view.c:3119
 msgid "_OK"
 msgstr "_OK"
 
@@ -1824,7 +1824,7 @@ msgid "Unspecified"
 msgstr "Não especificado"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:182
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -1866,7 +1866,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=br-pt"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:327
+#: lib/ephy-sync-utils.c:332
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "GNOME Web de %s em %s"
@@ -2128,7 +2128,7 @@ msgstr[0] "%d mês restante"
 msgstr[1] "%d meses restantes"
 
 #: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:404
+#: lib/widgets/ephy-download-widget.c:410
 msgid "Finished"
 msgstr "Terminado"
 
@@ -2137,7 +2137,7 @@ msgid "Moved or deleted"
 msgstr "Movido ou excluído"
 
 #: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:401
+#: lib/widgets/ephy-download-widget.c:407
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Erro ao baixar: %s"
@@ -2146,11 +2146,11 @@ msgstr "Erro ao baixar: %s"
 msgid "Cancelling…"
 msgstr "Cancelando…"
 
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:412
 msgid "Starting…"
 msgstr "Iniciando…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:294
+#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
 msgid "_Open"
 msgstr "A_brir"
 
@@ -2174,7 +2174,7 @@ msgstr "Todos os arquivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:368
+#: lib/widgets/ephy-location-entry.c:627 src/ephy-history-dialog.c:364
 msgid "Cl_ear"
 msgstr "_Limpar"
 
@@ -2191,19 +2191,19 @@ msgstr "Desfa_zer"
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: lib/widgets/ephy-location-entry.c:930
+#: lib/widgets/ephy-location-entry.c:961
 msgid "Show website security status and permissions"
 msgstr "Mostra o status e permissões de segurança do site"
 
-#: lib/widgets/ephy-location-entry.c:932
+#: lib/widgets/ephy-location-entry.c:963
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Pesquisa por sites, favoritos e abas abertas"
 
-#: lib/widgets/ephy-location-entry.c:972
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Bookmark this page"
 msgstr "Adiciona esta página aos favoritos"
 
-#: lib/widgets/ephy-location-entry.c:985
+#: lib/widgets/ephy-location-entry.c:1016
 msgid "Toggle reader mode"
 msgstr "Ativa/desativa o modo de leitura"
 
@@ -2321,35 +2321,35 @@ msgstr "Favoritos"
 msgid "Mobile"
 msgstr "Móvel"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:77
 msgid "HTTP disk cache"
 msgstr "Cache de disco HTTP"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:78
 msgid "Local storage data"
 msgstr "Dados de armazenamento local"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:79
 msgid "Offline web application cache"
 msgstr "Cache offline de aplicativo web"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:80
 msgid "IndexedDB databases"
 msgstr "Bancos de dados IndexedDB"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:81
 msgid "WebSQL databases"
 msgstr "Bancos de dados WebSQL"
 
-#: src/clear-data-dialog.c:86
+#: src/clear-data-dialog.c:82
 msgid "Plugins data"
 msgstr "Dados de plug-ins"
 
-#: src/clear-data-dialog.c:87
+#: src/clear-data-dialog.c:83
 msgid "HSTS policies cache"
 msgstr "Cache de políticas HSTS"
 
-#: src/cookies-dialog.c:175
+#: src/cookies-dialog.c:143
 msgid "Remove cookie"
 msgstr "Remover cookie"
 
@@ -2362,15 +2362,117 @@ msgstr "Recarrega a página atual"
 msgid "Stop loading the current page"
 msgstr "Para de carregar a página atual"
 
-#: src/ephy-history-dialog.c:272
+#: src/ephy-data-dialog.c:290
+msgid "'Clear all' action name"
+msgstr "Nome da ação “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:291
+msgid "The name of the action associated to the 'Clear all' button"
+msgstr "O nome da ação associada ao botão “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:297
+msgid "'Clear all' action target value"
+msgstr "Valor alvo da ação “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:298
+msgid "The parameter for 'Clear all' action invocations"
+msgstr "O parâmetro para invocações da ação “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:304
+msgid "'Clear all' description"
+msgstr "Descrição de “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:305
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Clear all' action"
+msgstr "A descrição da ação “Limpar tudo”"
+
+#: src/ephy-data-dialog.c:311
+#| msgid "Description"
+msgid "'Search' description"
+msgstr "Descrição de “Pesquisar”"
+
+#: src/ephy-data-dialog.c:312
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Search' action"
+msgstr "A descrição da ação “Pesquisar”"
+
+#: src/ephy-data-dialog.c:318
+msgid "'Empty' title"
+msgstr "Título “Vazio”"
+
+#: src/ephy-data-dialog.c:319
+msgid "The title of the 'Empty' state page"
+msgstr "O título da página de estado “Vazio”"
+
+#: src/ephy-data-dialog.c:325
+#| msgid "Description"
+msgid "'Empty' description"
+msgstr "Descrição de “Vazio”"
+
+#: src/ephy-data-dialog.c:326
+#| msgid "The position of the tabs bar."
+msgid "The description of the 'Empty' state page"
+msgstr "A descrição da página de estado “Vazio”"
+
+#: src/ephy-data-dialog.c:332
+#| msgid "Search the Web"
+msgid "Search text"
+msgstr "Texto de pesquisa"
+
+#: src/ephy-data-dialog.c:333
+#| msgid "Find next occurrence of the search string"
+msgid "The text of the search entry"
+msgstr "O texto da entrada de pesquisa"
+
+#: src/ephy-data-dialog.c:339
+#| msgid "Loading…"
+msgid "Is loading"
+msgstr "Está carregando"
+
+#: src/ephy-data-dialog.c:340
+msgid "Whether the dialog is loading its data"
+msgstr "Se o diálogo está carregando seus dados"
+
+#: src/ephy-data-dialog.c:346
+#| msgid "Plugins data"
+msgid "Has data"
+msgstr "Possui dados"
+
+#: src/ephy-data-dialog.c:347
+msgid "Whether the dialog has data"
+msgstr "Se o diálogo possui dados"
+
+#: src/ephy-data-dialog.c:353
+#| msgctxt "shortcut window"
+#| msgid "Next search result"
+msgid "Has search results"
+msgstr "Possui resultados de pesquisa"
+
+#: src/ephy-data-dialog.c:354
+#| msgctxt "shortcut window"
+#| msgid "Previous search result"
+msgid "Whether the dialog has search results"
+msgstr "Se o diálogo possui resultados de pesquisa"
+
+#: src/ephy-data-dialog.c:360
+#| msgid "Clear"
+msgid "Can clear"
+msgstr "Pode limpar"
+
+#: src/ephy-data-dialog.c:361
+msgid "Whether the data can be cleared"
+msgstr "Se os dados podem ser apagados"
+
+#: src/ephy-history-dialog.c:269
 msgid "Remove the selected pages from history"
 msgstr "Remove as páginas selecionadas do histórico"
 
-#: src/ephy-history-dialog.c:358
+#: src/ephy-history-dialog.c:354
 msgid "Clear browsing history?"
 msgstr "Limpar o histórico de navegação?"
 
-#: src/ephy-history-dialog.c:362
+#: src/ephy-history-dialog.c:358
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2378,7 +2480,7 @@ msgstr ""
 "Limpar o histórico de navegação fará com que todos os links do histórico "
 "sejam apagados."
 
-#: src/ephy-history-dialog.c:809
+#: src/ephy-history-dialog.c:782
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Não é possível modificar o histórico no modo anônimo."
 
@@ -2448,10 +2550,6 @@ msgstr "Novo endereço"
 #: src/resources/gtk/search-engine-dialog.ui:177
 msgid "Bang"
 msgstr "Atalho"
-
-#: src/ephy-suggestion-model.c:434
-msgid "Switch to Tab"
-msgstr "Alternar para aba"
 
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
@@ -2678,52 +2776,57 @@ msgstr "Salvar mídia como"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:236
+#: src/prefs-dialog.c:232
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Última sincronização: %s"
 
-#: src/prefs-dialog.c:524
+#: src/prefs-dialog.c:520
 msgid "Something went wrong, please try again later."
 msgstr "Alguma coisa deu errado, por favor tente novamente depois."
 
-#: src/prefs-dialog.c:813
+#: src/prefs-dialog.c:809
 msgid "Web Application Icon"
 msgstr "Ícone do aplicativo"
 
-#: src/prefs-dialog.c:818
+#: src/prefs-dialog.c:814
 msgid "Supported Image Files"
 msgstr "Arquivos de imagem suportados"
 
-#: src/prefs-dialog.c:1264
+# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
+#: src/prefs-dialog.c:1463
+#| msgid "Remove language"
+msgid "Delete language"
+msgstr "Excluir idioma"
+
+#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+msgid "Add Language"
+msgstr "Adicionar idioma"
+
+#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: src/prefs-dialog.c:1553 src/resources/gtk/prefs-dialog.ui:745
-#: src/resources/gtk/prefs-dialog.ui:932
-msgid "Language"
-msgstr "Idioma"
-
-#: src/prefs-dialog.c:1634
+#: src/prefs-dialog.c:1816
 msgid "Select a directory"
 msgstr "Selecione um diretório"
 
-#: src/prefs-dialog.c:2023
+#: src/prefs-dialog.c:2203
 msgid "Sans"
 msgstr "Sans"
 
-#: src/prefs-dialog.c:2025
+#: src/prefs-dialog.c:2205
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2069
+#: src/prefs-dialog.c:2249
 msgid "Light"
 msgstr "Claro"
 
-#: src/prefs-dialog.c:2071
+#: src/prefs-dialog.c:2251
 msgid "Dark"
 msgstr "Escuro"
 
@@ -2821,29 +2924,32 @@ msgstr "Nenhum favorito ainda?"
 msgid "Bookmark some webpages to view them here."
 msgstr "Favorite algumas páginas para vê-las aqui."
 
-#: src/resources/gtk/clear-data-dialog.ui:31
-msgid "Clear Personal Data"
-msgstr "Limpar dados pessoais"
+#: src/resources/gtk/clear-data-dialog.ui:22
+#: src/resources/gtk/prefs-dialog.ui:551
+msgid "Personal Data"
+msgstr "Dados pessoais"
 
-#: src/resources/gtk/clear-data-dialog.ui:35
-msgid "C_lear"
-msgstr "_Limpar"
+#: src/resources/gtk/clear-data-dialog.ui:23
+#| msgid "Clear Personal Data"
+msgid "Remove all personal data"
+msgstr "Remover todos dados pessoais"
 
-#: src/resources/gtk/clear-data-dialog.ui:55
-#: src/resources/gtk/cookies-dialog.ui:57
-#: src/resources/gtk/passwords-dialog.ui:60
-msgid "Search"
-msgstr "Pesquisar"
+#: src/resources/gtk/clear-data-dialog.ui:24
+#| msgid "Clear Personal Data"
+msgid "Search personal data"
+msgstr "Pesquisar dados pessoais"
 
-#: src/resources/gtk/clear-data-dialog.ui:56
-msgid "Filter domains"
-msgstr "Filtrar domínios"
+#: src/resources/gtk/clear-data-dialog.ui:25
+#| msgid "Clear Personal Data"
+msgid "There is no Personal Data"
+msgstr "Não há dados pessoais"
 
-#: src/resources/gtk/clear-data-dialog.ui:87
-msgid "Search domains"
-msgstr "Pesquisar domínios"
+#: src/resources/gtk/clear-data-dialog.ui:26
+#| msgid "Visited pages will be listed here"
+msgid "Personal data will be listed here"
+msgstr "Os dados pessoais serão listados aqui"
 
-#: src/resources/gtk/clear-data-dialog.ui:103
+#: src/resources/gtk/clear-data-dialog.ui:53
 msgid ""
 "You can select a period of time to clear data for all websites modified in "
 "that period. If you choose from the beginning of time, then you can also "
@@ -2853,35 +2959,31 @@ msgstr ""
 "modificados naquele período. Se você escolher a partir do início dos tempos, "
 "então você também pode limpar os dados apenas de sites específicos."
 
-#: src/resources/gtk/clear-data-dialog.ui:120
+#: src/resources/gtk/clear-data-dialog.ui:74
 msgid "Clear selected personal data _from:"
 msgstr "_Limpar dados pessoais armazenados de:"
 
-#: src/resources/gtk/clear-data-dialog.ui:130
+#: src/resources/gtk/clear-data-dialog.ui:89
 msgid "the past hour"
 msgstr "a última hora"
 
-#: src/resources/gtk/clear-data-dialog.ui:131
+#: src/resources/gtk/clear-data-dialog.ui:90
 msgid "the past day"
 msgstr "o último dia"
 
-#: src/resources/gtk/clear-data-dialog.ui:132
+#: src/resources/gtk/clear-data-dialog.ui:91
 msgid "the past week"
 msgstr "a última semana"
 
-#: src/resources/gtk/clear-data-dialog.ui:133
+#: src/resources/gtk/clear-data-dialog.ui:92
 msgid "the past four weeks"
 msgstr "as últimas quatro semanas"
 
-#: src/resources/gtk/clear-data-dialog.ui:134
+#: src/resources/gtk/clear-data-dialog.ui:93
 msgid "the beginning of time"
 msgstr "o início dos tempos"
 
-#: src/resources/gtk/clear-data-dialog.ui:213
-msgid "No data found"
-msgstr "Nenhum dado localizado"
-
-#: src/resources/gtk/clear-data-dialog.ui:230
+#: src/resources/gtk/clear-data-dialog.ui:153
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -2889,17 +2991,40 @@ msgstr ""
 "Você não pode desfazer esta ação. Os dados escolhidos para serem limpos "
 "serão excluídos permanentemente."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
+#: src/resources/gtk/cookies-dialog.ui:7 src/resources/gtk/prefs-dialog.ui:432
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/resources/gtk/cookies-dialog.ui:39
+#: src/resources/gtk/cookies-dialog.ui:9
 msgid "Remove all cookies"
 msgstr "Remover todos cookies"
 
-#: src/resources/gtk/cookies-dialog.ui:58
-msgid "Filter cookies"
-msgstr "Filtrar cookies"
+#: src/resources/gtk/cookies-dialog.ui:10
+#| msgid "Filter cookies"
+msgid "Search cookies"
+msgstr "Pesquisar cookies"
+
+#: src/resources/gtk/cookies-dialog.ui:11
+#| msgid "There are ongoing downloads"
+msgid "There are no Cookies"
+msgstr "Não há cookies"
+
+#: src/resources/gtk/cookies-dialog.ui:12
+#| msgid "Visited pages will be listed here"
+msgid "Cookies left by visited pages will be listed here"
+msgstr "Os cookies deixados por páginas visitadas serão listados aqui"
+
+#: src/resources/gtk/data-dialog.ui:59
+msgid "Search"
+msgstr "Pesquisar"
+
+#: src/resources/gtk/data-dialog.ui:229
+msgid "No Results Found"
+msgstr "Nenhum resultado localizado"
+
+#: src/resources/gtk/data-dialog.ui:244
+msgid "Try a different search"
+msgstr "Tente uma pesquisa diferente"
 
 #: src/resources/gtk/encoding-dialog.ui:8
 msgid "Text Encoding"
@@ -2921,39 +3046,31 @@ msgstr "Codificações relacionadas"
 msgid "Show all…"
 msgstr "Mostrar todas…"
 
-#: src/resources/gtk/history-dialog.ui:29
+#: src/resources/gtk/history-dialog.ui:7
 msgid "History"
 msgstr "Histórico"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:9
 msgid "Remove all history"
 msgstr "Remover todo histórico"
 
-#: src/resources/gtk/history-dialog.ui:79
+#: src/resources/gtk/history-dialog.ui:10
 msgid "Search history"
 msgstr "Pesquisar histórico"
 
-#: src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/history-dialog.ui:11
 msgid "The History is Empty"
 msgstr "O histórico está vazio"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "As páginas visitadas serão listadas aqui"
 
-#: src/resources/gtk/history-dialog.ui:244
-msgid "No Results Found"
-msgstr "Nenhum resultado localizado"
-
-#: src/resources/gtk/history-dialog.ui:259
-msgid "Try a different search"
-msgstr "Tente uma pesquisa diferente"
-
-#: src/resources/gtk/history-dialog.ui:303
+#: src/resources/gtk/history-dialog.ui:67
 msgid "_Copy Location"
 msgstr "Co_piar localização"
 
-#: src/resources/gtk/history-dialog.ui:312
+#: src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -3080,49 +3197,55 @@ msgstr "_Sobre o Web"
 msgid "Close page"
 msgstr "Fechar página"
 
-#: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/passwords-dialog.ui:25
+#: src/resources/gtk/prefs-dialog.ui:507
 msgid "Passwords"
 msgstr "Senhas"
 
-#: src/resources/gtk/passwords-dialog.ui:38
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "_Limpar tudo"
+#: src/resources/gtk/passwords-dialog.ui:27
+#| msgid "Reveal all the passwords"
+msgid "Remove all passwords"
+msgstr "Remover todas senhas"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Filter passwords"
-msgstr "Filtrar senhas"
-
-#: src/resources/gtk/passwords-dialog.ui:91
+#: src/resources/gtk/passwords-dialog.ui:28
 msgid "Search passwords"
 msgstr "Pesquisar senhas"
 
-#: src/resources/gtk/passwords-dialog.ui:121
+#: src/resources/gtk/passwords-dialog.ui:29
+#| msgid "There are ongoing downloads"
+msgid "There are no Passwords"
+msgstr "Não há senha"
+
+#: src/resources/gtk/passwords-dialog.ui:30
+#| msgid "Visited pages will be listed here"
+msgid "Saved passwords will be listed here"
+msgstr "As senhas salvas serão listadas aqui"
+
+#: src/resources/gtk/passwords-dialog.ui:61
 msgid "Site"
 msgstr "Site"
 
-#: src/resources/gtk/passwords-dialog.ui:136
+#: src/resources/gtk/passwords-dialog.ui:76
 msgid "User Name"
 msgstr "Nome de usuário"
 
-#: src/resources/gtk/passwords-dialog.ui:150
+#: src/resources/gtk/passwords-dialog.ui:90
 msgid "Password"
 msgstr "Senha"
 
-#: src/resources/gtk/passwords-dialog.ui:169
+#: src/resources/gtk/passwords-dialog.ui:109
 msgid "Forget the selected passwords"
 msgstr "Esquece as senhas selecionadas"
 
-#: src/resources/gtk/passwords-dialog.ui:184
+#: src/resources/gtk/passwords-dialog.ui:124
 msgid "Reveal all the passwords"
 msgstr "Revela todas as senhas"
 
-#: src/resources/gtk/passwords-dialog.ui:204
+#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "_Copiar senha"
 
-#: src/resources/gtk/passwords-dialog.ui:208
+#: src/resources/gtk/passwords-dialog.ui:148
 msgid "C_opy Username"
 msgstr "C_opiar nome de usuário"
 
@@ -3130,7 +3253,7 @@ msgstr "C_opiar nome de usuário"
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:368
 msgid "General"
 msgstr "Geral"
 
@@ -3151,205 +3274,193 @@ msgid "_Manage Additional URLs"
 msgstr "_Gerenciar URLs adicionais"
 
 #: src/resources/gtk/prefs-dialog.ui:148
-msgid "Browsing"
-msgstr "Navegação"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Enable sm_ooth scrolling"
-msgstr "Habilitar r_olagem suave"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "Enable mouse _gesture"
-msgstr "Habilitar _gesto do mouse"
-
-#: src/resources/gtk/prefs-dialog.ui:187
-msgid "Always ask o_n download"
-msgstr "Sempre perguntar ao baixar"
-
-#: src/resources/gtk/prefs-dialog.ui:202
-msgid "_Download folder"
-msgstr "Pasta de _downloads"
-
-#: src/resources/gtk/prefs-dialog.ui:211
 msgid "Homepage"
 msgstr "Página inicial"
 
-#: src/resources/gtk/prefs-dialog.ui:216
+#: src/resources/gtk/prefs-dialog.ui:153
 msgid "Most _visited pages"
 msgstr "Páginas mais _visitadas"
 
-#: src/resources/gtk/prefs-dialog.ui:230
+#: src/resources/gtk/prefs-dialog.ui:167
 msgid "_Blank page"
 msgstr "Página em _branco"
 
-#: src/resources/gtk/prefs-dialog.ui:245
+#: src/resources/gtk/prefs-dialog.ui:182
 msgid "_Custom"
 msgstr "_Personalizada"
 
-#: src/resources/gtk/prefs-dialog.ui:269
+#: src/resources/gtk/prefs-dialog.ui:211
+#| msgid "Always ask o_n download"
+msgid "Ask o_n download"
+msgstr "Perguntar a_o baixar"
+
+#: src/resources/gtk/prefs-dialog.ui:226
+msgid "_Download folder"
+msgstr "Pasta de _downloads"
+
+#: src/resources/gtk/prefs-dialog.ui:235
 msgid "Search Engines"
 msgstr "Mecanismos de pesquisa"
 
-#: src/resources/gtk/prefs-dialog.ui:274
-msgid "You can select different search engines to use"
-msgstr "Você pode selecionar mecanismos de pesquisa diferentes para usar"
-
-#: src/resources/gtk/prefs-dialog.ui:275
+#: src/resources/gtk/prefs-dialog.ui:240
 msgid "_Manage Search Engines"
 msgstr "_Gerenciar mecanismos de pesquisa"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:265
 msgid "Session"
 msgstr "Sessão"
 
-#: src/resources/gtk/prefs-dialog.ui:305
-msgid "Always start browser in _incognito mode"
-msgstr "Sempre iniciar o navegador no modo anôn_imo"
+#: src/resources/gtk/prefs-dialog.ui:270
+#| msgid "Start in incognito mode"
+msgid "Start in _Incognito Mode"
+msgstr "Iniciar em modo anôn_imo"
 
-#: src/resources/gtk/prefs-dialog.ui:320
-msgid "_Remember previous tabs on startup"
-msgstr "_Lembrar das abas anteriores na inicialização"
+#: src/resources/gtk/prefs-dialog.ui:284
+#| msgid "_Remember previous tabs on startup"
+msgid "_Restore Tabs on Startup"
+msgstr "_Restaurar abas na inicialização"
 
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:299
+msgid "Browsing"
+msgstr "Navegação"
+
+#: src/resources/gtk/prefs-dialog.ui:304
+#| msgid "Enable sm_ooth scrolling"
+msgid "Sm_ooth Scrolling"
+msgstr "R_olagem suave"
+
+#: src/resources/gtk/prefs-dialog.ui:318
+#| msgid "Enable mouse gestures"
+msgid "Mouse _Gestures"
+msgstr "_Gestos do mouse"
+
+#: src/resources/gtk/prefs-dialog.ui:350
+#| msgid "Spell Checking"
+msgid "_Spell Checking"
+msgstr "_Verificação ortográfica"
+
+#: src/resources/gtk/prefs-dialog.ui:377 src/resources/gtk/prefs-dialog.ui:587
+msgid "Privacy"
+msgstr "Privacidade"
+
+#: src/resources/gtk/prefs-dialog.ui:384
 msgid "Web Content"
 msgstr "Conteúdo da web"
 
-#: src/resources/gtk/prefs-dialog.ui:340
-msgid "Try to block _advertisements"
+#: src/resources/gtk/prefs-dialog.ui:389
+#| msgid "Try to block _advertisements"
+msgid "Try to Block _Advertisements"
 msgstr "Tentar bloquear prop_agandas"
 
-#: src/resources/gtk/prefs-dialog.ui:354
-msgid "Block popup _windows"
-msgstr "Bloquear janelas _instantâneas"
+#: src/resources/gtk/prefs-dialog.ui:403
+#| msgid "Block popup _windows"
+msgid "Block Popup _Windows"
+msgstr "Bloquear _janelas instantâneas"
 
-#: src/resources/gtk/prefs-dialog.ui:368
-msgid "Try to block dangerous web_sites"
+#: src/resources/gtk/prefs-dialog.ui:417
+#| msgid "Try to block dangerous web_sites"
+msgid "Try to Block Dangerous Web_sites"
 msgstr "Tentar bloquear _sites perigosos"
 
-#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
-msgid "Fonts & Style"
-msgstr "Fontes e estilos"
+#: src/resources/gtk/prefs-dialog.ui:437
+#| msgid "Filter cookies"
+msgid "Clear _Cookies"
+msgstr "Limpar _cookies"
 
-#: src/resources/gtk/prefs-dialog.ui:402
-msgid "Fonts"
-msgstr "Fontes"
-
-#: src/resources/gtk/prefs-dialog.ui:407
-msgid "Use custom fonts"
-msgstr "Usar fontes personalizadas"
-
-#: src/resources/gtk/prefs-dialog.ui:423
-msgid "Sans serif font"
-msgstr "Fonte sem serifa"
-
-#: src/resources/gtk/prefs-dialog.ui:438
-msgid "Serif font"
-msgstr "Fonte com serifa"
-
-#: src/resources/gtk/prefs-dialog.ui:453
-msgid "Monospace font"
-msgstr "Fonte monoespaçada"
-
-#: src/resources/gtk/prefs-dialog.ui:473
-msgid "Reader Mode"
-msgstr "Modo de leitura"
-
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "Font style"
-msgstr "Estilo da fonte"
-
-#: src/resources/gtk/prefs-dialog.ui:483
-msgid "Color scheme"
-msgstr "Esquema de cores"
-
-#: src/resources/gtk/prefs-dialog.ui:496
-msgid "Style"
-msgstr "Estilo"
-
-#: src/resources/gtk/prefs-dialog.ui:501
-msgid "Use custom stylesheet"
-msgstr "Usar folha de estilos personalizada"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "Default zoom level"
-msgstr "Nível de ampliação padrão"
-
-#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
-msgid "Stored Data"
-msgstr "Dados armazenados"
-
-#: src/resources/gtk/prefs-dialog.ui:585
-msgid "Manage _Cookies"
-msgstr "Gerenciar _cookies"
-
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-dialog.ui:461
 msgid "_Always accept"
 msgstr "Sempre _aceitar"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:623
-msgid "For example, not from advertisers on these sites"
-msgstr "Por exemplo, não de anunciantes nesses sites"
+#: src/resources/gtk/prefs-dialog.ui:475
+#| msgid "For example, not from advertisers on these sites"
+msgid "For example, not from advertisers on these sites."
+msgstr "Por exemplo, não de anunciantes nesses sites."
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:476
 msgid "Only _from sites you visit"
 msgstr "Apenas de sites que você _visita"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:491
 msgid "_Never accept"
 msgstr "_Nunca aceitar"
 
-#: src/resources/gtk/prefs-dialog.ui:660
-msgid "Manage _Passwords"
-msgstr "Gerenciar _senhas"
+#: src/resources/gtk/prefs-dialog.ui:512
+#| msgid "Passwords"
+msgid "_Passwords"
+msgstr "_Senhas"
 
-#: src/resources/gtk/prefs-dialog.ui:684
-msgid "_Remember passwords"
+#: src/resources/gtk/prefs-dialog.ui:536
+#| msgid "_Remember passwords"
+msgid "_Remember Passwords"
 msgstr "_Lembrar senhas"
 
-#: src/resources/gtk/prefs-dialog.ui:699
-msgid "Personal Data"
-msgstr "Dados pessoais"
-
-#: src/resources/gtk/prefs-dialog.ui:704
+#: src/resources/gtk/prefs-dialog.ui:556
 msgid "You can clear stored personal data."
 msgstr "Você pode limpar os dados pessoais armazenados."
 
-#: src/resources/gtk/prefs-dialog.ui:705
-msgid "Manage Personal _Data"
-msgstr "Gerenciar _dados pessoais"
+#: src/resources/gtk/prefs-dialog.ui:557
+#| msgid "Clear Personal Data"
+msgid "Clear Personal _Data"
+msgstr "Limpar _dados pessoais"
 
-#: src/resources/gtk/prefs-dialog.ui:799
-msgid "Add language"
-msgstr "Adicionar idioma"
+#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
+msgid "Appearance"
+msgstr "Aparência"
 
-# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
-#: src/resources/gtk/prefs-dialog.ui:819
-msgid "Remove language"
-msgstr "Remover idioma"
+#: src/resources/gtk/prefs-dialog.ui:604
+msgid "Fonts"
+msgstr "Fontes"
 
-# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
-#: src/resources/gtk/prefs-dialog.ui:861
-msgid "Move language up"
-msgstr "Mover idioma para cima"
+#: src/resources/gtk/prefs-dialog.ui:609
+#| msgid "Use custom fonts"
+msgid "Use Custom Fonts"
+msgstr "Usar fontes personalizadas"
 
-#: src/resources/gtk/prefs-dialog.ui:881
-msgid "Move language down"
-msgstr "Mover idioma para baixo"
+#: src/resources/gtk/prefs-dialog.ui:625
+msgid "Sans serif font"
+msgstr "Fonte sem serifa"
 
-#: src/resources/gtk/prefs-dialog.ui:906
-msgid "Spell Checking"
-msgstr "Verificação ortográfica"
+#: src/resources/gtk/prefs-dialog.ui:640
+msgid "Serif font"
+msgstr "Fonte com serifa"
 
-#: src/resources/gtk/prefs-dialog.ui:911
-msgid "_Enable spell checking"
-msgstr "_Habilitar verificação ortográfica"
+#: src/resources/gtk/prefs-dialog.ui:655
+msgid "Monospace font"
+msgstr "Fonte monoespaçada"
 
-#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
+#: src/resources/gtk/prefs-dialog.ui:675
+msgid "Reader Mode"
+msgstr "Modo de leitura"
+
+#: src/resources/gtk/prefs-dialog.ui:679
+#| msgid "Font style"
+msgid "Font Style"
+msgstr "Estilo da fonte"
+
+#: src/resources/gtk/prefs-dialog.ui:685
+#| msgid "Color scheme"
+msgid "Color Scheme"
+msgstr "Esquema de cores"
+
+#: src/resources/gtk/prefs-dialog.ui:698
+msgid "Style"
+msgstr "Estilo"
+
+#: src/resources/gtk/prefs-dialog.ui:703
+#| msgid "Use custom stylesheet"
+msgid "Use Custom Stylesheet"
+msgstr "Usar folha de estilos personalizada"
+
+#: src/resources/gtk/prefs-dialog.ui:738
+msgid "Default zoom level"
+msgstr "Nível de ampliação padrão"
+
+#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
 msgid "Sync"
 msgstr "Sincronização"
 
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:782
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3359,65 +3470,61 @@ msgstr ""
 "Firefox em outros computadores. Web não é o Firefox e não é produzido ou "
 "endossado pela Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:950
+#: src/resources/gtk/prefs-dialog.ui:783
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:802
 msgid "Firefox Account"
 msgstr "Conta Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:973
+#: src/resources/gtk/prefs-dialog.ui:806
 msgid "Logged in"
 msgstr "Autenticado"
 
-#: src/resources/gtk/prefs-dialog.ui:978
+#: src/resources/gtk/prefs-dialog.ui:811
 msgid "Sign _out"
 msgstr "Desc_onectar"
 
-#: src/resources/gtk/prefs-dialog.ui:991
+#: src/resources/gtk/prefs-dialog.ui:824
 msgid "Sync Options"
 msgstr "Opções do Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:996
+#: src/resources/gtk/prefs-dialog.ui:829
 msgid "Sync _Bookmarks"
 msgstr "Sincronizar _favoritos"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "Sync _Passwords"
 msgstr "Sincronizar _senhas"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:859
 msgid "Sync _History"
 msgstr "Sincronizar _histórico"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:874
 msgid "Sync Open _Tabs"
 msgstr "Sincronizar a_bas abertas"
 
-#: src/resources/gtk/prefs-dialog.ui:1053
+#: src/resources/gtk/prefs-dialog.ui:886
 msgid "S_ynced tabs"
 msgstr "_Abas sincronizada"
 
-#: src/resources/gtk/prefs-dialog.ui:1064
+#: src/resources/gtk/prefs-dialog.ui:897
 msgid "Frequency"
 msgstr "Frequência"
 
-#: src/resources/gtk/prefs-dialog.ui:1075
+#: src/resources/gtk/prefs-dialog.ui:908
 msgid "Sync _now"
 msgstr "Sincronizar ago_ra"
 
-#: src/resources/gtk/prefs-dialog.ui:1087
+#: src/resources/gtk/prefs-dialog.ui:920
 msgid "Device name"
 msgstr "Nome do dispositivo"
 
-#: src/resources/gtk/prefs-dialog.ui:1092
+#: src/resources/gtk/prefs-dialog.ui:925
 msgid "_Change"
 msgstr "_Mudar"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add Language"
-msgstr "Adicionar idioma"
 
 # Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
 #: src/resources/gtk/prefs-lang-dialog.ui:67
@@ -3709,6 +3816,10 @@ msgstr "Fecha o documento"
 msgid "Additional URLs"
 msgstr "URLs adicionais"
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
+msgid "C_lear All"
+msgstr "_Limpar tudo"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:64
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
@@ -3914,6 +4025,64 @@ msgstr ""
 msgid "_Enable"
 msgstr "_Ativar"
 
+#~ msgid "Switch to Tab"
+#~ msgstr "Alternar para aba"
+
+#~ msgid "Language"
+#~ msgstr "Idioma"
+
+#~ msgid "C_lear"
+#~ msgstr "_Limpar"
+
+#~ msgid "Filter domains"
+#~ msgstr "Filtrar domínios"
+
+#~ msgid "Search domains"
+#~ msgstr "Pesquisar domínios"
+
+#~ msgid "No data found"
+#~ msgstr "Nenhum dado localizado"
+
+#~ msgid "Filter passwords"
+#~ msgstr "Filtrar senhas"
+
+#~ msgid "Enable mouse _gesture"
+#~ msgstr "Habilitar _gesto do mouse"
+
+#~ msgid "You can select different search engines to use"
+#~ msgstr "Você pode selecionar mecanismos de pesquisa diferentes para usar"
+
+#~ msgid "Always start browser in _incognito mode"
+#~ msgstr "Sempre iniciar o navegador no modo anôn_imo"
+
+#~ msgid "Fonts & Style"
+#~ msgstr "Fontes e estilos"
+
+#~ msgid "Stored Data"
+#~ msgstr "Dados armazenados"
+
+#~ msgid "Manage _Cookies"
+#~ msgstr "Gerenciar _cookies"
+
+#~ msgid "Manage _Passwords"
+#~ msgstr "Gerenciar _senhas"
+
+#~ msgid "Manage Personal _Data"
+#~ msgstr "Gerenciar _dados pessoais"
+
+#~ msgid "Add language"
+#~ msgstr "Adicionar idioma"
+
+# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
+#~ msgid "Move language up"
+#~ msgstr "Mover idioma para cima"
+
+#~ msgid "Move language down"
+#~ msgstr "Mover idioma para baixo"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "_Habilitar verificação ortográfica"
+
 #~ msgid "_Remove Bookmark"
 #~ msgstr "_Remover favoritos"
 
@@ -4025,9 +4194,6 @@ msgstr "_Ativar"
 #~ msgid "Local files"
 #~ msgstr "Arquivos locais"
 
-#~ msgid "There are ongoing downloads"
-#~ msgstr "Há downloads em andamento"
-
 #~ msgid "If you quit, the downloads will be cancelled"
 #~ msgstr "Se você sair, os downloads serão cancelados"
 
@@ -4128,9 +4294,6 @@ msgstr "_Ativar"
 #~ msgid "User defined (%s)"
 #~ msgstr "Definido pelo usuário (%s)"
 
-#~ msgid "Search the Web"
-#~ msgstr "Pesquisar na web"
-
 #~ msgid "I_mport Bookmarks"
 #~ msgstr "I_mportar favoritos"
 
@@ -4192,9 +4355,6 @@ msgstr "_Ativar"
 
 #~ msgid "MIME type"
 #~ msgstr "Tipo MIME"
-
-#~ msgid "Description"
-#~ msgstr "Descrição"
 
 #~ msgid "Suffixes"
 #~ msgstr "Sufixos"
@@ -4362,9 +4522,6 @@ msgstr "_Ativar"
 
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Avisar aos sites que eu não quero ser rastreado"
-
-#~ msgid "Privacy"
-#~ msgstr "Privacidade"
 
 #~ msgid "web-browser"
 #~ msgstr "web-browser"
@@ -4835,9 +4992,6 @@ msgstr "_Ativar"
 
 #~ msgid "Load Anyway"
 #~ msgstr "Carregar mesmo assim"
-
-#~ msgid "Clear"
-#~ msgstr "Limpar"
 
 #~ msgid "Remove"
 #~ msgstr "Remover"
