@@ -22,7 +22,9 @@
 #include "ephy-bookmark.h"
 
 #include "ephy-bookmarks-manager.h"
+#include "ephy-shell.h"
 #include "ephy-synchronizable.h"
+#include "ephy-sync-utils.h"
 
 #include <string.h>
 
@@ -515,6 +517,25 @@ ephy_bookmark_tags_compare (const char *tag1,
     return 1;
 
   return result;
+}
+
+char *
+ephy_bookmark_generate_random_id ()
+{
+  char *id = NULL;
+  EphyBookmarksManager *manager;
+
+  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+
+  while (!id) {
+    id = ephy_sync_utils_get_random_sync_id ();
+
+    /* Check if the generated id isn't used already. */
+    if (ephy_bookmarks_manager_get_bookmark_by_id (manager, id))
+      id = NULL;
+  }
+
+  return id;
 }
 
 static JsonNode *

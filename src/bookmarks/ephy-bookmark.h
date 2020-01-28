@@ -59,5 +59,6 @@ int                  ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmar
                                                            EphyBookmark *bookmark2);
 int                  ephy_bookmark_tags_compare           (const char *tag1,
                                                            const char *tag2);
+char                *ephy_bookmark_generate_random_id     ();
 
 G_END_DECLS
