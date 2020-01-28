@@ -219,7 +219,7 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
     g_autofree char *id = NULL;
     g_autoptr (EphyBookmark) new_bookmark = NULL;
 
-    id = ephy_sync_utils_get_random_sync_id ();
+    id = ephy_bookmark_generate_random_id ();
     new_bookmark = ephy_bookmark_new (address,
                                       ephy_embed_get_title (embed),
                                       g_sequence_new (g_free),
