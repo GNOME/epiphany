@@ -237,6 +237,7 @@ out:
 static void
 ephy_view_source_request_start (EphyViewSourceRequest *request)
 {
+  guint port;
   SoupURI *soup_uri;
   char *modified_uri;
   char *decoded_fragment;
@@ -260,9 +261,13 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
     return;
   }
 
-  /* Convert e.g. ephy-source://gnome.org#https to https://gnome.org */
+  /* Convert e.g. ephy-source://gnome.org#https to https://gnome.org, taking
+   * care to prevent soup_uri_set_scheme() from forcing the default port.
+   */
   decoded_fragment = soup_uri_decode (soup_uri->fragment);
+  port = soup_uri_get_port (soup_uri);
   soup_uri_set_scheme (soup_uri, decoded_fragment);
+  soup_uri_set_port (soup_uri, port);
   soup_uri_set_fragment (soup_uri, NULL);
   modified_uri = soup_uri_to_string (soup_uri, FALSE);
   g_assert (modified_uri);
