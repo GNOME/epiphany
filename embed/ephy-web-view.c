@@ -807,24 +807,24 @@ uri_changed_cb (WebKitWebView *web_view,
 }
 
 static void
-ephy_web_view_mouse_target_changed (WebKitWebView       *web_view,
-                                    WebKitHitTestResult *hit_test_result,
-                                    guint                modifiers)
+mouse_target_changed_cb (EphyWebView         *web_view,
+                         WebKitHitTestResult *hit_test_result,
+                         guint                modifiers,
+                         gpointer             data)
 {
   const char *message = NULL;
 
   if (webkit_hit_test_result_context_is_link (hit_test_result))
     message = webkit_hit_test_result_get_link_uri (hit_test_result);
 
-  ephy_web_view_set_link_message (EPHY_WEB_VIEW (web_view), message);
+  ephy_web_view_set_link_message (web_view, message);
 }
 
 static void
-ephy_web_view_web_process_terminated (WebKitWebView                     *view,
-                                      WebKitWebProcessTerminationReason  reason)
+process_terminated_cb (EphyWebView                       *web_view,
+                       WebKitWebProcessTerminationReason  reason,
+                       gpointer                           user_data)
 {
-  EphyWebView *web_view = EPHY_WEB_VIEW (view);
-
   switch (reason) {
     case WEBKIT_WEB_PROCESS_CRASHED:
       g_warning (_("Web process crashed"));
@@ -841,12 +841,13 @@ ephy_web_view_web_process_terminated (WebKitWebView                     *view,
 }
 
 static void
-ephy_web_view_style_updated (GtkWidget *web_view)
+style_updated_cb (EphyWebView *web_view,
+                  gpointer     user_data)
 {
   GtkStyleContext *context;
   GdkRGBA color;
 
-  context = gtk_widget_get_style_context (web_view);
+  context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
   if (!gtk_style_context_lookup_color (context, "theme_base_color", &color)) {
     /* Fall back to white */
     color.red = 1;
@@ -859,9 +860,10 @@ ephy_web_view_style_updated (GtkWidget *web_view)
 }
 
 static gboolean
-ephy_web_view_decide_policy (WebKitWebView            *web_view,
-                             WebKitPolicyDecision     *decision,
-                             WebKitPolicyDecisionType  decision_type)
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  gpointer                  user_data)
 {
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
@@ -1102,8 +1104,8 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 }
 
 static gboolean
-ephy_web_view_permission_request (WebKitWebView           *web_view,
-                                  WebKitPermissionRequest *decision)
+permission_request_cb (WebKitWebView           *web_view,
+                       WebKitPermissionRequest *decision)
 {
   const char *address;
   char *origin;
@@ -1377,8 +1379,9 @@ update_ucm_ads_state (WebKitWebView *web_view,
 }
 
 static void
-ephy_web_view_load_changed (WebKitWebView   *web_view,
-                            WebKitLoadEvent  load_event)
+load_changed_cb (WebKitWebView   *web_view,
+                 WebKitLoadEvent  load_event,
+                 gpointer         user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
   GObject *object = G_OBJECT (web_view);
@@ -2157,10 +2160,11 @@ ephy_web_view_load_error_page (EphyWebView          *view,
 }
 
 static gboolean
-ephy_web_view_load_failed (WebKitWebView   *web_view,
-                           WebKitLoadEvent  load_event,
-                           const char      *uri,
-                           GError          *error)
+load_failed_cb (WebKitWebView   *web_view,
+                WebKitLoadEvent  load_event,
+                const char      *uri,
+                GError          *error,
+                gpointer         user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2219,10 +2223,11 @@ ephy_web_view_load_failed (WebKitWebView   *web_view,
 }
 
 static gboolean
-ephy_web_view_load_failed_with_tls_errors (WebKitWebView        *web_view,
-                                           const char           *uri,
-                                           GTlsCertificate      *certificate,
-                                           GTlsCertificateFlags  errors)
+load_failed_with_tls_error_cb (WebKitWebView        *web_view,
+                               const char           *uri,
+                               GTlsCertificate      *certificate,
+                               GTlsCertificateFlags  errors,
+                               gpointer              user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2239,8 +2244,9 @@ ephy_web_view_load_failed_with_tls_errors (WebKitWebView        *web_view,
 }
 
 static void
-ephy_web_view_insecure_content_detected (WebKitWebView              *web_view,
-                                         WebKitInsecureContentEvent  event)
+mixed_content_detected_cb (WebKitWebView              *web_view,
+                           WebKitInsecureContentEvent  event,
+                           gpointer                    user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
@@ -2249,7 +2255,8 @@ ephy_web_view_insecure_content_detected (WebKitWebView              *web_view,
 }
 
 static void
-ephy_web_view_close (WebKitWebView *web_view)
+close_web_view_cb (WebKitWebView *web_view,
+                   gpointer       user_data)
 
 {
   GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
@@ -2286,8 +2293,8 @@ zoom_changed_cb (WebKitWebView *web_view,
 }
 
 static gboolean
-ephy_web_view_script_dialog (WebKitWebView      *web_view,
-                             WebKitScriptDialog *dialog)
+script_dialog_cb (WebKitWebView      *web_view,
+                  WebKitScriptDialog *dialog)
 {
   if (webkit_script_dialog_get_dialog_type (dialog) != WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM)
     return FALSE;
@@ -2349,8 +2356,9 @@ reader_setting_changed_cb (GSettings   *settings,
 }
 
 static gboolean
-ephy_web_view_authenticate (WebKitWebView               *web_view,
-                            WebKitAuthenticationRequest *request)
+authenticate_cb (WebKitWebView               *web_view,
+                 WebKitAuthenticationRequest *request,
+                 gpointer                     user_data)
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   g_autoptr (WebKitCredential) credential = NULL;
@@ -2490,8 +2498,8 @@ password_manager_handle_query_password_message (WebKitWebView     *web_view,
 }
 
 static gboolean
-ephy_web_view_user_message_received (WebKitWebView     *web_view,
-                                     WebKitUserMessage *message)
+user_message_received_cb (WebKitWebView     *web_view,
+                          WebKitUserMessage *message)
 {
   const char *name;
 
@@ -2636,7 +2644,7 @@ ephy_web_view_is_loading (EphyWebView *view)
 }
 
 /**
- * ephy_web_view_get_load_failed:
+ * ephy_web_view_load_failed:
  * @view: an #EphyWebView
  *
  * Returns whether the web page in @view has failed to load.
@@ -2645,7 +2653,7 @@ ephy_web_view_is_loading (EphyWebView *view)
  * or load finished successfully
  **/
 gboolean
-ephy_web_view_get_load_failed (EphyWebView *view)
+ephy_web_view_load_failed (EphyWebView *view)
 {
   return view->load_failed;
 }
@@ -3504,10 +3512,14 @@ ephy_web_view_constructed (GObject *object)
 
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", web_view);
 
-  g_signal_connect_object (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
-                           "changed", G_CALLBACK (update_navigation_flags), web_view, G_CONNECT_SWAPPED);
+  g_signal_connect (web_view, "web-process-terminated",
+                    G_CALLBACK (process_terminated_cb), NULL);
+  g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
+                            "changed", G_CALLBACK (update_navigation_flags), web_view);
 
-  ephy_web_view_style_updated (GTK_WIDGET (web_view));
+  g_signal_connect (web_view, "style-updated",
+                    G_CALLBACK (style_updated_cb), NULL);
+  style_updated_cb (web_view, NULL);
 }
 
 static void
@@ -3536,6 +3548,33 @@ ephy_web_view_init (EphyWebView *web_view)
                            G_CALLBACK (reader_setting_changed_cb),
                            web_view, 0);
 
+  g_signal_connect (web_view, "decide-policy",
+                    G_CALLBACK (decide_policy_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "permission-request",
+                    G_CALLBACK (permission_request_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "load-changed",
+                    G_CALLBACK (load_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "close",
+                    G_CALLBACK (close_web_view_cb),
+                    NULL);
+  g_signal_connect (web_view, "load-failed",
+                    G_CALLBACK (load_failed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "load-failed-with-tls-errors",
+                    G_CALLBACK (load_failed_with_tls_error_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "insecure-content-detected",
+                    G_CALLBACK (mixed_content_detected_cb),
+                    NULL);
+
   g_signal_connect (web_view, "notify::zoom-level",
                     G_CALLBACK (zoom_changed_cb),
                     NULL);
@@ -3548,8 +3587,24 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (uri_changed_cb),
                     NULL);
 
+  g_signal_connect (web_view, "mouse-target-changed",
+                    G_CALLBACK (mouse_target_changed_cb),
+                    NULL);
+
   g_signal_connect (web_view, "notify::favicon",
                     G_CALLBACK (icon_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "script-dialog",
+                    G_CALLBACK (script_dialog_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "authenticate",
+                    G_CALLBACK (authenticate_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "user-message-received",
+                    G_CALLBACK (user_message_received_cb),
                     NULL);
 
   g_signal_connect_object (shell, "password-form-focused",
@@ -3570,7 +3625,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  WebKitWebViewClass *webview_class = WEBKIT_WEB_VIEW_CLASS (klass);
+  WebKitWebViewClass *webkit_webview_class = WEBKIT_WEB_VIEW_CLASS (klass);
 
   gobject_class->dispose = ephy_web_view_dispose;
   gobject_class->finalize = ephy_web_view_finalize;
@@ -3580,21 +3635,8 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
-  widget_class->style_updated = ephy_web_view_style_updated;
 
-  webview_class->authenticate = ephy_web_view_authenticate;
-  webview_class->close = ephy_web_view_close;
-  webview_class->decide_policy = ephy_web_view_decide_policy;
-  webview_class->insecure_content_detected = ephy_web_view_insecure_content_detected;
-  webview_class->load_changed = ephy_web_view_load_changed;
-  webview_class->load_failed = ephy_web_view_load_failed;
-  webview_class->load_failed_with_tls_errors = ephy_web_view_load_failed_with_tls_errors;
-  webview_class->mouse_target_changed = ephy_web_view_mouse_target_changed;
-  webview_class->permission_request = ephy_web_view_permission_request;
-  webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
-  webview_class->script_dialog = ephy_web_view_script_dialog;
-  webview_class->user_message_received = ephy_web_view_user_message_received;
-  webview_class->web_process_terminated = ephy_web_view_web_process_terminated;
+  webkit_webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
 
 /**
  * EphyWebView:address:

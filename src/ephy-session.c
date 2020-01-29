@@ -123,7 +123,7 @@ load_changed_cb (WebKitWebView   *view,
                  WebKitLoadEvent  load_event,
                  EphySession     *session)
 {
-  if (ephy_web_view_get_load_failed (EPHY_WEB_VIEW (view)))
+  if (ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
     return;
 
   if (load_event == WEBKIT_LOAD_FINISHED)
