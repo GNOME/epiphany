@@ -126,8 +126,8 @@ const struct {
   /* Tabs */
   { "tab.previous", { "<Primary>Page_Up", "<Primary>KP_9", "<shift><Primary>Tab", NULL } },
   { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", "<Primary>Tab", NULL } },
-  { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
-  { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
+  { "tab.move-left", { "<shift><Primary>Page_Up", NULL } },
+  { "tab.move-right", { "<shift><Primary>Page_Down", NULL } },
   { "tab.duplicate", { NULL } },
   { "tab.close", { "<Primary>W", NULL } },
   { "tab.pin", { NULL } }
