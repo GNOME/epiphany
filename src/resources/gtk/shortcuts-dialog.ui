@@ -250,6 +250,28 @@
           </object>
         </child>
 
+       <!-- Web apps shortcuts -->
+        <child>
+          <object class="GtkShortcutsGroup" id="shortcut-web-apps-separator">
+            <property name="visible">True</property>
+            <property name="title" translatable="yes" context="shortcut window">Web application</property>
+            <child>
+              <object class="GtkShortcutsShortcut" id="shortcut-install-site-as-web-application">
+                <property name="visible">True</property>
+                <property name="title" translatable="yes" context="shortcut window">Install site as web application</property>
+                <property name="accelerator">&lt;Shift&gt;&lt;Primary&gt;A</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="shortcut-open-web-application-manager">
+                <property name="visible">True</property>
+                <property name="title" translatable="yes" context="shortcut window">Open web application manager</property>
+                <property name="accelerator">&lt;Shift&gt;&lt;Primary&gt;C</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
         <!-- View shortcuts -->
         <child>
           <object class="GtkShortcutsGroup">

@@ -550,6 +550,12 @@ window_cmd_show_shortcuts (GSimpleAction *action,
     builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/shortcuts-dialog.ui");
     shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
 
+    if (ephy_is_running_inside_flatpak ()) {
+      gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "shortcut-web-apps-separator")));
+      gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "shortcut-install-site-as-web-application")));
+      gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "shortcut-open-web-application-manager")));
+    }
+
     g_signal_connect (shortcuts_window,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
