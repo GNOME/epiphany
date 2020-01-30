@@ -1360,6 +1360,15 @@ update_ucm_ads_state (WebKitWebView *web_view,
 }
 
 static void
+reset_background_color (WebKitWebView *web_view)
+{
+  GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
+
+  /* https://bugs.webkit.org/show_bug.cgi?id=206953#c2 */
+  webkit_web_view_set_background_color (web_view, &white);
+}
+
+static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
                  gpointer         user_data)
@@ -1446,6 +1455,12 @@ load_changed_cb (WebKitWebView   *web_view,
       /* Reset reader content */
       if (!view->reader_active)
         g_clear_pointer (&view->reader_content, g_free);
+
+      /* We have to reset the background color here because we set a
+       * nonwhite background in constructed.
+       */
+      if (!g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
+        reset_background_color (web_view);
 
       break;
     }
@@ -3488,6 +3503,8 @@ static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
+  GtkStyleContext *context;
+  GdkRGBA color;
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
@@ -3497,6 +3514,14 @@ ephy_web_view_constructed (GObject *object)
                     G_CALLBACK (process_terminated_cb), NULL);
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
+
+  /* Avoid flashing a white background when loading the overview in
+   * dark mode. Note that we have to later reset this to white before
+   * loading any non-Epiphany page.
+   */
+  context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
+  if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
+    webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 }
 
 static void
