@@ -55,6 +55,10 @@ struct _EphyPasswordManager {
   GHashTable *cache;
 };
 
+static void ephy_password_manager_forget_record (EphyPasswordManager *self,
+                                                 EphyPasswordRecord  *record,
+                                                 EphyPasswordRecord  *replacement);
+
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyPasswordManager, ephy_password_manager, G_TYPE_OBJECT,
@@ -434,6 +438,30 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   g_hash_table_unref (attributes);
 }
 
+static GList *
+deduplicate_records (EphyPasswordManager *manager,
+                     GList               *records)
+{
+  GList *newest = records;
+  guint64 newest_modified = ephy_password_record_get_time_password_changed (newest->data);
+
+  for (GList *l = records->next; l; l = l->next) {
+    guint64 modified = ephy_password_record_get_time_password_changed (l->data);
+    if (modified > newest_modified) {
+      newest = l;
+      newest_modified = modified;
+    }
+  }
+
+  records = g_list_remove_link (records, newest);
+
+  for (GList *l = records; l; l = l->next)
+    ephy_password_manager_forget_record (manager, l->data, NULL);
+  g_list_free_full (records, g_object_unref);
+
+  return newest;
+}
+
 static void
 update_password_cb (GList    *records,
                     gpointer  user_data)
@@ -441,17 +469,20 @@ update_password_cb (GList    *records,
   UpdatePasswordAsyncData *data = (UpdatePasswordAsyncData *)user_data;
   EphyPasswordRecord *record;
 
-  /* We expect only one matching record here. */
-  if (g_list_length (records) == 1) {
+  /* Since we didn't include ID in our query, there could be multiple records
+   * returned. We only want to have one saved at a time, so delete the rest.
+   */
+  if (g_list_length (records) > 1)
+    records = deduplicate_records (data->manager, records);
+
+  if (records) {
     record = EPHY_PASSWORD_RECORD (records->data);
     ephy_password_record_set_password (record, data->password);
     ephy_password_manager_store_record (data->manager, record);
     g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
-  } else {
-    g_warn_if_reached ();
+    g_list_free_full (records, g_object_unref);
   }
 
-  g_list_free_full (records, g_object_unref);
   update_password_async_data_free (data);
 }
 
