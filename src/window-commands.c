@@ -1967,6 +1967,7 @@ window_cmd_page_source (GSimpleAction *action,
   SoupURI *soup_uri;
   char *source_uri;
   const char *address;
+  guint port;
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -1984,9 +1985,13 @@ window_cmd_page_source (GSimpleAction *action,
     return;
   }
 
-  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https */
+  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https,
+   * taking care to prevent soup_uri_set_scheme() from forcing the default port.
+   */
+  port = soup_uri_get_port (soup_uri);
   soup_uri_set_fragment (soup_uri, soup_uri->scheme);
   soup_uri_set_scheme (soup_uri, EPHY_VIEW_SOURCE_SCHEME);
+  soup_uri_set_port (soup_uri, port);
   source_uri = soup_uri_to_string (soup_uri, FALSE);
 
   new_embed = ephy_shell_new_tab
