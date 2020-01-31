@@ -366,6 +366,15 @@ ephy_tab_label_get_text (GtkWidget *widget)
   return gtk_label_get_text (GTK_LABEL (self->label));
 }
 
+void
+ephy_tab_label_set_text (GtkWidget  *widget,
+                         const char *text)
+{
+  EphyTabLabel *self = EPHY_TAB_LABEL (widget);
+
+  gtk_label_set_text (GTK_LABEL (self->label), text);
+}
+
 static void
 update_label (EphyTabLabel *self)
 {
