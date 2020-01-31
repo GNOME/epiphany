@@ -709,12 +709,15 @@ title_changed_cb (EphyEmbed    *embed,
                   EphyNotebook *notebook)
 {
   GtkWidget *tab_label = NULL;
+  const char *new_title = NULL;
 
   if (ephy_embed_has_load_pending (embed))
     return;
 
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
   g_assert (tab_label);
+  new_title = ephy_embed_get_title (embed);
+  ephy_tab_label_set_text (tab_label, new_title);
 
   ephy_notebook_rebuild_tab_menu (notebook);
 
