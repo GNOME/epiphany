@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-01-19 15:50+0000\n"
-"PO-Revision-Date: 2020-01-26 17:47+0100\n"
+"POT-Creation-Date: 2020-01-30 17:14+0000\n"
+"PO-Revision-Date: 2020-01-31 13:18+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -1392,7 +1392,7 @@ msgstr "Sök föregående förekomst av söksträngen"
 msgid "Find next occurrence of the search string"
 msgstr "Sök nästa förekomst av söksträngen"
 
-#: embed/ephy-view-source-handler.c:252
+#: embed/ephy-view-source-handler.c:256
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s är inte en giltig URI"
@@ -1439,50 +1439,50 @@ msgstr "Webbprocessen kraschade"
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Webbprocessen avslutades på grund av överskriden minnesgräns"
 
-#: embed/ephy-web-view.c:1088
+#: embed/ephy-web-view.c:1006
 msgid "Deny"
 msgstr "Neka"
 
-#: embed/ephy-web-view.c:1089
+#: embed/ephy-web-view.c:1007
 msgid "Allow"
 msgstr "Tillåt"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1102
+#: embed/ephy-web-view.c:1020
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Sidan på %s vill visa aviseringar på skrivbordet."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1107
+#: embed/ephy-web-view.c:1025
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Sidan på %s vill veta din geografiska plats."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1112
+#: embed/ephy-web-view.c:1030
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Sidan på %s vill använda din mikrofon."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1117
+#: embed/ephy-web-view.c:1035
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Sidan på %s vill använda din webbkamera."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1294
+#: embed/ephy-web-view.c:1212
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Läser in ”%s”…"
 
-#: embed/ephy-web-view.c:1296 embed/ephy-web-view.c:1302
+#: embed/ephy-web-view.c:1214 embed/ephy-web-view.c:1220
 msgid "Loading…"
 msgstr "Läser in…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1629
+#: embed/ephy-web-view.c:1548
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1490,7 +1490,7 @@ msgstr ""
 "webbplats."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1634
+#: embed/ephy-web-view.c:1553
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1499,14 +1499,14 @@ msgstr ""
 "Kontrollera datumet för din dators kalender."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1639
+#: embed/ephy-web-view.c:1558
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Denna webbplats identitetshandlingar var inte utfärdade av någon betrodd "
 "organisation."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1644
+#: embed/ephy-web-view.c:1563
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1514,7 +1514,7 @@ msgstr ""
 "trasiga."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1649
+#: embed/ephy-web-view.c:1568
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1523,7 +1523,7 @@ msgstr ""
 "organisation som utfärdade dem."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1654
+#: embed/ephy-web-view.c:1573
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1532,7 +1532,7 @@ msgstr ""
 "använder väldigt svag kryptering."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1659
+#: embed/ephy-web-view.c:1578
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1542,24 +1542,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1722 embed/ephy-web-view.c:1778
+#: embed/ephy-web-view.c:1641 embed/ephy-web-view.c:1697
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problem vid inläsning av sida"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1725
+#: embed/ephy-web-view.c:1644
 msgid "Unable to display this website"
 msgstr "Kunde inte visa denna webbplats"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1729
+#: embed/ephy-web-view.c:1648
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Webbplatsen på %s verkar inte vara tillgänglig."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1733
+#: embed/ephy-web-view.c:1652
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1568,7 +1568,7 @@ msgstr ""
 "Glöm inte att kontrollera att din internetanslutning fungerar som den ska."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1743
+#: embed/ephy-web-view.c:1662
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Det exakta felet var: %s"
@@ -1576,49 +1576,49 @@ msgstr "Det exakta felet var: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1667 embed/ephy-web-view.c:1720
+#: embed/ephy-web-view.c:1759
 msgid "Reload"
 msgstr "Uppdatera"
 
 # Möjliggör Alt+U för att klicka på knappen 'uppdatera'.
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1751 embed/ephy-web-view.c:1804
-#: embed/ephy-web-view.c:1843
+#: embed/ephy-web-view.c:1670 embed/ephy-web-view.c:1723
+#: embed/ephy-web-view.c:1762
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "U"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1700
 msgid "Oops! There may be a problem"
 msgstr "Hoppsan! Det kan ha uppstått ett problem"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1785
+#: embed/ephy-web-view.c:1704
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Sidan %s kan ha fått Webb att oväntat stängas."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1711
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Rapportera problemet till %s-utvecklarna om detta händer igen."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1748
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problem vid visning av sida"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1832
+#: embed/ephy-web-view.c:1751
 msgid "Oops!"
 msgstr "Hoppsan!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1835
+#: embed/ephy-web-view.c:1754
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1627,18 +1627,18 @@ msgstr ""
 "annan sida för att fortsätta."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1788
 #, c-format
 msgid "Security Violation"
 msgstr "Säkerhetsöverträdelse"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1791
 msgid "This Connection is Not Secure"
 msgstr "Denna anslutning är inte säker"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1876
+#: embed/ephy-web-view.c:1795
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1650,45 +1650,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1975
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:1805 embed/ephy-web-view.c:1894
+#: embed/ephy-web-view.c:1945
 msgid "Go Back"
 msgstr "Gå bakåt"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1889 embed/ephy-web-view.c:1978
-#: embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1808 embed/ephy-web-view.c:1897
+#: embed/ephy-web-view.c:1948
 msgctxt "back-access-key"
 msgid "B"
 msgstr "G"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1892 embed/ephy-web-view.c:1981
+#: embed/ephy-web-view.c:1811 embed/ephy-web-view.c:1900
 msgid "Accept Risk and Proceed"
 msgstr "Acceptera risk och fortsätt"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1896 embed/ephy-web-view.c:1985
+#: embed/ephy-web-view.c:1815 embed/ephy-web-view.c:1904
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "A"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1926
+#: embed/ephy-web-view.c:1845
 #, c-format
 msgid "Security Warning"
 msgstr "Säkerhetsvarning"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1929
+#: embed/ephy-web-view.c:1848
 msgid "Unsafe website detected!"
 msgstr "Osäker webbplats upptäcktes!"
 
-#: embed/ephy-web-view.c:1936
+#: embed/ephy-web-view.c:1855
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1697,7 +1697,7 @@ msgstr ""
 "Att besöka %s kan skada din dator. Denna sida verkar innehålla skadlig kod "
 "som skulle kunna hämtas till din dator utan ditt medgivande."
 
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1859
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1706,7 +1706,7 @@ msgstr ""
 "Du kan lära dig mer om skadligt webbinnehåll inklusive virus och annan "
 "ondsint kod samt hur du kan skydda din dator på %s."
 
-#: embed/ephy-web-view.c:1947
+#: embed/ephy-web-view.c:1866
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1717,14 +1717,14 @@ msgstr ""
 "installera programvara eller avslöja din personliga information (exempelvis "
 "lösenord, telefonnummer eller kreditkort)."
 
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1871
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Du kan få reda på mer om social manipulation (phishing) på %s eller från %s."
 
-#: embed/ephy-web-view.c:1961
+#: embed/ephy-web-view.c:1880
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1736,24 +1736,24 @@ msgstr ""
 "ändra din startsida eller genom att visa extra annonser på webbplatser som "
 "du besöker)."
 
-#: embed/ephy-web-view.c:1966
+#: embed/ephy-web-view.c:1885
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Du kan lära dig mer om oönskad programvara på %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2010 embed/ephy-web-view.c:2013
+#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1932
 #, c-format
 msgid "File not found"
 msgstr "Filen kunde inte hitta filen"
 
-#: embed/ephy-web-view.c:2017
+#: embed/ephy-web-view.c:1936
 #, c-format
 msgid "%s could not be found."
 msgstr "%s kunde inte hittas."
 
-#: embed/ephy-web-view.c:2019
+#: embed/ephy-web-view.c:1938
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1762,15 +1762,15 @@ msgstr ""
 "Kontrollera filnamnet efter versalisering eller andra skrivfel. Kontrollera "
 "också om filen har flyttats, bytt namn eller tagits bort."
 
-#: embed/ephy-web-view.c:2082
+#: embed/ephy-web-view.c:2001
 msgid "None specified"
 msgstr "Inget angivet"
 
-#: embed/ephy-web-view.c:2198
+#: embed/ephy-web-view.c:2117
 msgid "Technical information"
 msgstr "Teknisk information"
 
-#: embed/ephy-web-view.c:3184
+#: embed/ephy-web-view.c:3108
 msgid "_OK"
 msgstr "_OK"
 
@@ -1820,7 +1820,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=se-sv&amp;kad=sv_SE"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:327
+#: lib/ephy-sync-utils.c:332
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "GNOME Webb för %s på %s"
@@ -2079,7 +2079,7 @@ msgstr[0] "%d månad kvar"
 msgstr[1] "%d månader kvar"
 
 #: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:404
+#: lib/widgets/ephy-download-widget.c:410
 msgid "Finished"
 msgstr "Färdig"
 
@@ -2088,7 +2088,7 @@ msgid "Moved or deleted"
 msgstr "Flyttad eller borttagen"
 
 #: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:401
+#: lib/widgets/ephy-download-widget.c:407
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Fel vid hämtning: %s"
@@ -2097,7 +2097,7 @@ msgstr "Fel vid hämtning: %s"
 msgid "Cancelling…"
 msgstr "Avbryter…"
 
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:412
 msgid "Starting…"
 msgstr "Startar…"
 
@@ -2109,15 +2109,15 @@ msgstr "Ö_ppna"
 msgid "All supported types"
 msgstr "Alla typer som stöds"
 
-#: lib/widgets/ephy-file-chooser.c:202
+#: lib/widgets/ephy-file-chooser.c:203
 msgid "Web pages"
 msgstr "Webbsidor"
 
-#: lib/widgets/ephy-file-chooser.c:213
+#: lib/widgets/ephy-file-chooser.c:214
 msgid "Images"
 msgstr "Bilder"
 
-#: lib/widgets/ephy-file-chooser.c:222
+#: lib/widgets/ephy-file-chooser.c:223
 msgid "All files"
 msgstr "Alla filer"
 
@@ -3496,202 +3496,217 @@ msgstr "Hjälp"
 
 #: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
+msgid "Open menu"
+msgstr "Öppna meny"
+
+#: src/resources/gtk/shortcuts-dialog.ui:75
+msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Genvägar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:79
+#: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigering"
 
-#: src/resources/gtk/shortcuts-dialog.ui:83
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Gå till din startsida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Läs om aktuell sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "Läs om utan att använda cache"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Stoppa inläsning av aktuell sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
-#: src/resources/gtk/shortcuts-dialog.ui:126
+#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Gå bakåt till föregående sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:125
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Gå framåt till nästa sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:143
+#: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Flikar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Ny flik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Stäng aktuell flik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Öppna stängd flik igen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Gå till nästa flik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:182
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Gå till föregående flik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
+#: src/resources/gtk/shortcuts-dialog.ui:189
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Flytta aktuell flik åt vänster"
 
-#: src/resources/gtk/shortcuts-dialog.ui:189
+#: src/resources/gtk/shortcuts-dialog.ui:196
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Flytta aktuell flik åt höger"
 
-#: src/resources/gtk/shortcuts-dialog.ui:200
+#: src/resources/gtk/shortcuts-dialog.ui:207
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Historik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:218
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:218
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Bokmärk aktuell sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:232
+msgctxt "shortcut window"
+msgid "Import bookmarks"
+msgstr "Importera bokmärken"
+
+#: src/resources/gtk/shortcuts-dialog.ui:239
+msgctxt "shortcut window"
+msgid "Export bookmarks"
+msgstr "Exportera bokmärken"
+
+#: src/resources/gtk/shortcuts-dialog.ui:246
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Växla markörläge"
 
-#: src/resources/gtk/shortcuts-dialog.ui:236
+#: src/resources/gtk/shortcuts-dialog.ui:257
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Visning"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Zooma in"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:268
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Zooma ut"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:275
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Återställ zoomnivå"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:282
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Helskärm"
 
-#: src/resources/gtk/shortcuts-dialog.ui:268
+#: src/resources/gtk/shortcuts-dialog.ui:289
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Visa sidkälla"
 
-#: src/resources/gtk/shortcuts-dialog.ui:275
+#: src/resources/gtk/shortcuts-dialog.ui:296
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Aktivera/inaktivera inspektör"
 
-#: src/resources/gtk/shortcuts-dialog.ui:282
+#: src/resources/gtk/shortcuts-dialog.ui:303
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Aktivera/inaktivera läsarläge"
 
-#: src/resources/gtk/shortcuts-dialog.ui:293
+#: src/resources/gtk/shortcuts-dialog.ui:314
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Redigering"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopiera"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Klistra in"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Ångra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Gör om"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:353
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Markera allt"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:360
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Markera URL för sida"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
+#: src/resources/gtk/shortcuts-dialog.ui:367
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Sökning"
 
-#: src/resources/gtk/shortcuts-dialog.ui:353
+#: src/resources/gtk/shortcuts-dialog.ui:374
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Nästa sökresultat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:360
+#: src/resources/gtk/shortcuts-dialog.ui:381
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Föregående sökresultat"
@@ -4182,9 +4197,6 @@ msgstr "_Aktivera"
 
 #~ msgid "I_mport Bookmarks"
 #~ msgstr "I_mportera bokmärken"
-
-#~ msgid "E_xport Bookmarks"
-#~ msgstr "E_xportera bokmärken"
 
 #~ msgid "_About"
 #~ msgstr "_Om"
