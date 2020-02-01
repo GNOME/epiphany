@@ -481,6 +481,8 @@ update_password_cb (GList    *records,
     ephy_password_manager_store_record (data->manager, record);
     g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
     g_list_free_full (records, g_object_unref);
+  } else {
+    LOG ("Attempted to update password record that doesn't exist (likely Epiphany bug)");
   }
 
   update_password_async_data_free (data);
