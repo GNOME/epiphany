@@ -1,3 +1,38 @@
+3.35.90 - February 1, 2020
+==========================
+
+- Update design of bookmark dialogs (#371)
+- Disable new tab page when homepage is about:blank (#393, ignapk)
+- Tab now autocompletes URL in address bar (#705)
+- Reorganize the preferences dialog (#803, #1055)
+- Changing web app icon in preferences dialog should copy icon (#810, ignapk)
+- Update design of data management dialogs (#832, Adrien Plazas)
+- Add placeholder text to address bar (#852)
+- Add address bar dropdown icons for jump-to-tab and for bookmarks (#861, #895)
+- Fix history dialog claiming history is empty until history has loaded (#992, Adrien Plazas)
+- Fix Favorites and Mobile bookmarks not tagged correctly when localized (#1015, Jonathan Kang)
+- Fix crash when loading empty sessions (#1043)
+- Hide view source context menu item when on view source page (#1046)
+- Use page URI as tab title in view source mode (#1048)
+- Allow Ctrl+Tab in address bar (#1051)
+- Fix inconsistent capitalization in preferences dialog (#1054, Devesh Vijaywargiya)
+- Fix padding on incognito mode welcome page (#1056)
+- Fix problems with the new PDF support (#1059, !548)
+- Temporarily disable web process sandbox due to WebKit #206533 problems (#1060)
+- Fix password saving, likely broken in 3.35.3  (#1064)
+- Fix memory corruption in view source mode (#1065)
+- Allow opening PDFs with file chooser (#1073)
+- Fix view source mode for URIs with non-default port numbers (#1076)
+- Fix occasional failure to start up (!537, Alexander Mikhaylenko)
+- Fix download time remaining "jumping around" (!553)
+- Avoid theoretical bookmark ID collisions (!555, Andrei Lisita)
+- Standardize keyboard shortcuts and improve keyboard shortcuts dialog (!556, Sabri Ünal)
+- Fix web background color to allow dark mode to work (!558, !559)
+- Fix sides cropped off of new tab page snapshots (!563)
+- Fix memory corruption when loading adblock filters
+- Fix display of script dialogs, broken in 3.35.3
+- Fix various scan-build warnings
+
 3.35.3 - January 3, 2020
 ========================
 
