@@ -216,8 +216,6 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
 {
   GdkPixbuf *snapshot, *scaled;
   int orig_width, orig_height;
-  float orig_aspect_ratio, dest_aspect_ratio;
-  int x_offset, new_width, new_height;
 
   orig_width = cairo_image_surface_get_width (surface);
   orig_height = cairo_image_surface_get_height (surface);
@@ -232,22 +230,7 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
                                       EPHY_THUMBNAIL_HEIGHT,
                                       GDK_INTERP_TILES);
   } else {
-    orig_aspect_ratio = orig_width / (float)orig_height;
-    dest_aspect_ratio = EPHY_THUMBNAIL_WIDTH / (float)EPHY_THUMBNAIL_HEIGHT;
-
-    if (orig_aspect_ratio > dest_aspect_ratio) {
-      /* Wider than taller, crop the sides. */
-      new_width = orig_height * dest_aspect_ratio;
-      new_height = orig_height;
-      x_offset = (orig_width - new_width) / 2;
-    } else {
-      /* Crop the bottom otherwise. */
-      new_width = orig_width;
-      new_height = orig_width / (float)dest_aspect_ratio;
-      x_offset = 0;
-    }
-
-    snapshot = gdk_pixbuf_get_from_surface (surface, x_offset, 0, new_width, new_height);
+    snapshot = gdk_pixbuf_get_from_surface (surface, 0, 0, orig_width, orig_height);
     scaled = gdk_pixbuf_scale_simple (snapshot,
                                       EPHY_THUMBNAIL_WIDTH,
                                       EPHY_THUMBNAIL_HEIGHT,
