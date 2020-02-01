@@ -460,7 +460,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (!authInfo) {
+                if (!authInfo.username) {
                     Ephy.log('No result');
                     return;
                 }
@@ -506,7 +506,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (authInfo) {
+                if (authInfo.username) {
                     if (authInfo.username == formAuth.username && authInfo.password == formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
@@ -535,7 +535,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo == null,
+                                                 authInfo.username == null,
                                                  this._pageID);
             }
         );
