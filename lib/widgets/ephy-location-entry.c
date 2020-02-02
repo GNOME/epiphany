@@ -477,6 +477,8 @@ editable_changed_cb (GtkEditable       *editable,
     entry->can_redo = FALSE;
   }
 
+  g_clear_pointer (&entry->jump_tab, g_free);
+
   g_signal_emit (entry, signals[USER_CHANGED], 0);
 }
 
