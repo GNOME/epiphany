@@ -151,11 +151,30 @@ entry_activate_cb (GtkEntry               *entry,
     GtkWidget *tab;
     EphyWebView *webview;
     gint current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-    guint64 page = g_ascii_strtoull (content + strlen ("ephy-tab://"), NULL, 0);
+    g_auto(GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
+
+    g_assert (g_strv_length (split) == 2);
 
     tab = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), current);
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
     webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
+
+    if (atoi(split[1]) != 0) {
+      GApplication *application;
+      EphyEmbedShell *shell;
+      EphyWindow *window;
+      GList *windows;
+
+      shell = ephy_embed_shell_get_default ();
+      application = G_APPLICATION (shell);
+      windows = gtk_application_get_windows(GTK_APPLICATION (application));
+
+      window = g_list_nth_data (windows, atoi(split[1]));
+      notebook = ephy_window_get_notebook (window);
+
+      gtk_window_present (GTK_WINDOW (window));
+    }
+
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), atoi(split[0]));
 
     if (ephy_web_view_is_overview (webview))
       g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", tab);
