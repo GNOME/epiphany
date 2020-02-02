@@ -347,6 +347,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   gsize data_length;
   char *lang;
   GList *l;
+  guint list_length;
 
   snapshot_service = ephy_snapshot_service_get_default ();
   shell = ephy_embed_shell_get_default ();
@@ -371,7 +372,9 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           _(OVERVIEW_PAGE_TITLE));
   g_free (lang);
 
-  if (g_list_length (urls) == 0 || !success) {
+  list_length = g_list_length (urls);
+
+  if (list_length == 0 || !success) {
     GtkIconInfo *icon_info;
     g_autofree gchar *icon = g_strconcat (APPLICATION_ID, "-symbolic", NULL);
 
@@ -421,6 +424,14 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                             "</a>",
                             markup, url->url, _("Remove from overview"),
                             thumbnail_style ? thumbnail_style : "", url->title);
+  }
+
+  for (guint idx = list_length; idx < 9; idx++) {
+    g_string_append_printf (data_str,
+                            "<i class=\"overview-item\">"
+                            "  <span class=\"overview-thumbnail\"></span>"
+                            "  <span class=\"overview-title\"></span>"
+                            "</i>");
   }
 
   data_str = g_string_append (data_str,
