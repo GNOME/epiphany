@@ -383,64 +383,66 @@ add_tabs (EphySuggestionModel *self,
   EphyEmbedShell *shell;
   EphyWindow *window;
   GtkWidget *notebook;
+  GList *windows;
   gint n_pages;
   gint current;
   guint added = 0;
 
   shell = ephy_embed_shell_get_default ();
   application = G_APPLICATION (shell);
-  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
+  windows = gtk_application_get_windows (GTK_APPLICATION (application));
 
-  if (!window)
-    return 0;
+  for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
+    window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
 
-  notebook = ephy_window_get_notebook (window);
-  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-  current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+    notebook = ephy_window_get_notebook (window);
+    n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+    current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
-  for (int i = 0; i < n_pages; i++) {
-    EphyEmbed *embed;
-    EphyWebView *webview;
-    EphySuggestion *suggestion;
-    g_autofree gchar *escaped_title = NULL;
-    g_autofree gchar *markup = NULL;
-    const gchar *display_address;
-    const gchar *url;
-    g_autofree gchar *address = NULL;
-    const gchar *title;
-    g_autofree gchar *title_casefold = NULL;
-    g_autofree gchar *display_address_casefold = NULL;
-    g_autofree gchar *query_casefold = NULL;
+    for (int i = 0; i < n_pages; i++) {
+      EphyEmbed *embed;
+      EphyWebView *webview;
+      EphySuggestion *suggestion;
+      g_autofree gchar *escaped_title = NULL;
+      g_autofree gchar *markup = NULL;
+      const gchar *display_address;
+      const gchar *url;
+      g_autofree gchar *address = NULL;
+      const gchar *title;
+      g_autofree gchar *title_casefold = NULL;
+      g_autofree gchar *display_address_casefold = NULL;
+      g_autofree gchar *query_casefold = NULL;
 
-    if (i == current)
-      continue;
+      if (win_idx == 0 && i == current)
+        continue;
 
-    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-    webview = ephy_embed_get_web_view (embed);
-    display_address = ephy_web_view_get_display_address (webview);
-    url = ephy_web_view_get_address (webview);
-    address = g_strdup_printf ("ephy-tab://%d", i);
-    title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
+      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+      webview = ephy_embed_get_web_view (embed);
+      display_address = ephy_web_view_get_display_address (webview);
+      url = ephy_web_view_get_address (webview);
+      address = g_strdup_printf ("ephy-tab://%d@%d", i, win_idx);
+      title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
 
-    display_address_casefold = g_utf8_casefold (display_address, -1);
-    query_casefold = g_utf8_casefold (query, -1);
-    if (!title)
-      title = "";
+      display_address_casefold = g_utf8_casefold (display_address, -1);
+      query_casefold = g_utf8_casefold (query, -1);
+      if (!title)
+        title = "";
 
-    title_casefold = g_utf8_casefold (title, -1);
+      title_casefold = g_utf8_casefold (title, -1);
 
-    if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
-      char *escaped_address = g_markup_escape_text (display_address, -1);
+      if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
+        char *escaped_address = g_markup_escape_text (display_address, -1);
 
-      escaped_title = g_markup_escape_text (title, -1);
-      markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-      suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
-      load_favicon (self, suggestion, display_address);
-      ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
+        escaped_title = g_markup_escape_text (title, -1);
+        markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+        suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
+        load_favicon (self, suggestion, display_address);
+        ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
 
-      g_sequence_append (self->urls, g_strdup (url));
-      g_sequence_append (self->items, suggestion);
-      added++;
+        g_sequence_append (self->urls, g_strdup (url));
+        g_sequence_append (self->items, suggestion);
+        added++;
+      }
     }
   }
 
