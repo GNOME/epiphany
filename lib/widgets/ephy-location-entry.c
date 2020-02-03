@@ -1091,13 +1091,10 @@ free_prefetch_helper (PrefetchHelper *helper)
 static gboolean
 do_dns_prefetch (PrefetchHelper *helper)
 {
-/* FIXME: https://bugs.webkit.org/show_bug.cgi?id=204703 */
-#if WEBKIT_CHECK_VERSION (2, 27, 4)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   if (helper->uri)
     webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), helper->uri->host);
-#endif
 
   helper->entry->dns_prefetch_handle_id = 0;
 
