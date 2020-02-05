@@ -103,12 +103,13 @@ Ephy.getWebAppIcon = function(baseURL)
 
 Ephy.PreFillUserMenu = class PreFillUserMenu
 {
-    constructor(manager, userElement, users, passwordElement)
+    constructor(manager, formAuth, users)
     {
         this._manager = manager;
-        this._userElement = userElement;
+        this._formAuth = formAuth;
+        this._userElement = formAuth.usernameNode;
         this._users = users;
-        this._passwordElement = passwordElement;
+        this._passwordElement = formAuth.passwordNode;
         this._selected = null;
         this._wasEdited = false;
 
@@ -165,7 +166,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         if (newSelect) {
             this._selected = newSelect;
             this._userElement.value = this._selected.firstElementChild.textContent;
-            this._manager.preFill();
+            this._usernameSelected();
         } else {
             this._passwordElement.value = '';
         }
@@ -233,7 +234,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
                 this._userElement.value = user;
                 this._selected = li;
                 this._removeMenu();
-                this._manager.preFill();
+                this._usernameSelected();
             }, true);
         }
 
@@ -248,6 +249,13 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         let menu = document.getElementById('ephy-user-choices-container');
         if (menu)
             menu.parentNode.removeChild(menu);
+    }
+
+    _usernameSelected()
+    {
+        this._formAuth.username = this._userElement.value;
+        this._passwordElement.value = '';
+        this._manager.preFill(this._formAuth);
     }
 }
 
@@ -443,7 +451,7 @@ Ephy.FormManager = class FormManager
             Ephy.passwordManager.queryUsernames(formAuth.origin).then(users => {
                 if (users.length > 1) {
                     Ephy.log('More than one saved username, hooking menu for choosing which one to select');
-                    this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth.usernameNode, users, formAuth.passwordNode);
+                    this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
                 }
                 this.preFill(formAuth);
             });
