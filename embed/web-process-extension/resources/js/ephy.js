@@ -186,13 +186,14 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             'z-index: 2147483647;' +
             'cursor: default;' +
             'background-color: white;' +
-            'box-shadow: 5px 5px 5px black;' +
+            'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
             'border-top: 0px;' +
             'border-radius: 8px;' +
+            'padding: 12px 0px;' +
             '-webkit-user-modify: read-only ! important;';
-        mainDiv.style.width = this._userElement.offsetWidth;
-        mainDiv.style.left = elementRect.left + document.body.scrollLeft;
-        mainDiv.style.top = elementRect.top + document.body.scrollTop;
+        mainDiv.style.width = this._userElement.offsetWidth + 'px';
+        mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
+        mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
 
         let ul = document.createElement('ul');
         ul.style.cssText = 'margin: 0; padding: 0;';
@@ -209,6 +210,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             li.style.cssText = 'list-style-type: none ! important;' +
                 'background-image: none ! important;' +
                 'padding: 3px 6px ! important;' +
+                'color: black;' +
                 'margin: 0px;';
             // FIXME: selection colors.
             li.tabindex = -1;
@@ -221,6 +223,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             anchor.style.cssText = 'font-weight: normal ! important;' +
                 'font-family: sans ! important;' +
                 'text-decoration: none ! important;' +
+                'color: black;' +
                 '-webkit-user-modify: read-only ! important;';
             // FIXME: selection colors.
             anchor.textContent = user;
