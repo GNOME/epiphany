@@ -1099,8 +1099,6 @@ static void
 session_parser_context_free (SessionParserContext *context)
 {
   g_object_unref (context->session);
-  if (context->window)
-    g_object_unref (context->window);
 
   g_free (context);
 }
@@ -1113,9 +1111,7 @@ session_parse_window (SessionParserContext  *context,
   GdkRectangle geometry = { -1, -1, 0, 0 };
   guint i;
 
-  g_assert (!context->window);
   context->window = ephy_window_new ();
-  g_object_ref (context->window);
 
   for (i = 0; names[i]; i++) {
     gulong int_value;
