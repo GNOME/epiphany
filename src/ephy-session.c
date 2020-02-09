@@ -1080,6 +1080,7 @@ typedef struct {
   guint32 user_time;
 
   EphyWindow *window;
+  gulong destroy_id;
   gboolean is_first_window;
   gint active_tab;
 
@@ -1105,6 +1106,11 @@ session_parser_context_free (SessionParserContext *context)
 {
   g_object_unref (context->session);
 
+  if (context->window) {
+    /* This can only happen if the session state is malformed. */
+    g_signal_handler_disconnect (context->window, context->destroy_id);
+  }
+
   g_free (context);
 }
 
@@ -1116,7 +1122,13 @@ session_parse_window (SessionParserContext  *context,
   GdkRectangle geometry = { -1, -1, 0, 0 };
   guint i;
 
+  if (context->window) {
+    /* This should only happen if the session state is malformed. */
+    return;
+  }
+
   context->window = ephy_window_new ();
+  context->destroy_id = g_signal_connect (context->window, "destroy", G_CALLBACK (gtk_widget_destroyed), &context->window);
 
   for (i = 0; names[i]; i++) {
     gulong int_value;
@@ -1158,6 +1170,13 @@ session_parse_embed (SessionParserContext  *context,
   gboolean is_blank_page = FALSE;
   gboolean is_pin = FALSE;
   guint i;
+
+  if (!context->window) {
+    /* This can happen if the session is malformed, or if the window is
+     * destroyed before the session finishes loading.
+     */
+    return;
+  }
 
   notebook = ephy_window_get_notebook (context->window);
 
@@ -1288,6 +1307,13 @@ session_end_element (GMarkupParseContext  *ctx,
     GtkWidget *notebook;
     EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
+    if (!context->window) {
+      /* This can happen if the session is malformed, or if the window is
+       * destroyed before the session finishes loading.
+       */
+      return;
+    }
+
     notebook = ephy_window_get_notebook (context->window);
     gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), context->active_tab);
 
@@ -1301,6 +1327,7 @@ session_end_element (GMarkupParseContext  *ctx,
 
     ephy_embed_shell_restored_window (shell);
 
+    g_clear_signal_handler (&context->destroy_id, context->window);
     context->window = NULL;
     context->active_tab = 0;
     context->is_first_window = FALSE;
