@@ -1100,6 +1100,11 @@ session_parser_context_free (SessionParserContext *context)
 {
   g_object_unref (context->session);
 
+  if (context->window) {
+    g_warning ("Malformed session state: window tag not closed");
+    g_object_unref (context->window);
+  }
+
   g_free (context);
 }
 
@@ -1111,7 +1116,12 @@ session_parse_window (SessionParserContext  *context,
   GdkRectangle geometry = { -1, -1, 0, 0 };
   guint i;
 
-  context->window = ephy_window_new ();
+  if (context->window) {
+    g_warning ("Malformed session state: window tag inside window tag");
+    return;
+  }
+
+  context->window = EPHY_WINDOW (g_object_ref (ephy_window_new ()));
 
   for (i = 0; names[i]; i++) {
     gulong int_value;
@@ -1153,6 +1163,11 @@ session_parse_embed (SessionParserContext  *context,
   gboolean is_blank_page = FALSE;
   gboolean is_pin = FALSE;
   guint i;
+
+  if (!context->window) {
+    g_warning ("Malformed session state: embed tag outside window tag");
+    return;
+  }
 
   notebook = ephy_window_get_notebook (context->window);
 
@@ -1297,7 +1312,7 @@ session_end_element (GMarkupParseContext  *ctx,
 
     ephy_embed_shell_restored_window (shell);
 
-    context->window = NULL;
+    g_clear_object (&context->window);
     context->active_tab = 0;
     context->is_first_window = FALSE;
   } else if (strcmp (element_name, "embed") == 0) {
