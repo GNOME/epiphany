@@ -345,9 +345,7 @@ Ephy.PasswordManager = class PasswordManager
 
         let element = this._takePendingPromise(id);
         if (element) {
-            if (username === '')
-                username = null;
-            if (password !== '')
+            if (password)
                 element.resolver({username, password});
             else
                 element.resolver(null);
@@ -483,7 +481,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (!authInfo.username) {
+                if (!authInfo) {
                     Ephy.log('No result');
                     return;
                 }
@@ -529,7 +527,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (authInfo.username) {
+                if (authInfo) {
                     if (authInfo.username == formAuth.username && authInfo.password == formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
@@ -558,7 +556,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo.username == null,
+                                                 authInfo == null,
                                                  this._pageID);
             }
         );
