@@ -341,6 +341,8 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryResponse(username, password, id)
     {
+        Ephy.log(`Received password query response for username=${username}`);
+
         let element = this._takePendingPromise(id);
         if (element) {
             if (username === '')
@@ -354,6 +356,8 @@ Ephy.PasswordManager = class PasswordManager
 
     query(origin, targetOrigin, username, usernameField, passwordField)
     {
+        Ephy.log(`Querying passwords for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}`);
+
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
             Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this._pageID, this._frameID);
@@ -363,6 +367,8 @@ Ephy.PasswordManager = class PasswordManager
 
     save(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
     {
+        Ephy.log(`Saving password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
+
         window.webkit.messageHandlers.passwordManagerSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
             pageID: this._pageID
@@ -372,6 +378,8 @@ Ephy.PasswordManager = class PasswordManager
     // FIXME: Why is pageID a parameter here?
     requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
     {
+        Ephy.log(`Requesting to save password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
+
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
             pageID
@@ -380,6 +388,8 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryUsernamesResponse(users, id)
     {
+        Ephy.log(`Received query usernames response with users=${users}`);
+
         let element = this._takePendingPromise(id);
         if (element)
             element.resolver(users);
@@ -387,6 +397,8 @@ Ephy.PasswordManager = class PasswordManager
 
     queryUsernames(origin)
     {
+        Ephy.log(`Requesting usernames for origin=${origin}`);
+
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
             Ephy.queryUsernames(origin, promiseID, this._pageID, this._frameID);
