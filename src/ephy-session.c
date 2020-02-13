@@ -1768,3 +1768,9 @@ ephy_session_clear (EphySession *session)
 
   ephy_session_save (session);
 }
+
+gboolean
+ephy_session_is_closing (EphySession *session)
+{
+  return session->closing;
+}
