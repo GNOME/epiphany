@@ -117,19 +117,11 @@ ephy_shell_startup_continue (EphyShell               *shell,
                              EphyShellStartupContext *ctx)
 {
   EphySession *session = ephy_shell_get_session (shell);
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (shell);
-  EphyDownloadsManager *downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
-  gboolean downloads_in_progress = ephy_downloads_manager_has_active_downloads (downloads_manager);
 
   if (ctx->session_filename != NULL) {
     g_assert (session != NULL);
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
-  } else if (downloads_in_progress && !ctx->arguments) {
-    /* If there are downloads in progress and there are no URLs passed in arguments */
-    /* then just present the active window without opening any new tabs */
-    GtkWindow *active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-    gtk_window_present (active_window);
   } else if (ctx->arguments || !session) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
