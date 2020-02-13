@@ -69,5 +69,6 @@ gboolean         ephy_session_get_can_undo_tab_closed (EphySession *session);
 
 void             ephy_session_clear                   (EphySession *session);
 
+gboolean         ephy_session_is_closing              (EphySession *session);
 
 G_END_DECLS
