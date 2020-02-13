@@ -341,11 +341,11 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryResponse(username, password, id)
     {
+        Ephy.log(`Received password query response for username=${username}`);
+
         let element = this._takePendingPromise(id);
         if (element) {
-            if (username === '')
-                username = null;
-            if (password !== '')
+            if (password)
                 element.resolver({username, password});
             else
                 element.resolver(null);
@@ -354,6 +354,8 @@ Ephy.PasswordManager = class PasswordManager
 
     query(origin, targetOrigin, username, usernameField, passwordField)
     {
+        Ephy.log(`Querying passwords for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}`);
+
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
             Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this._pageID, this._frameID);
@@ -363,6 +365,8 @@ Ephy.PasswordManager = class PasswordManager
 
     save(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
     {
+        Ephy.log(`Saving password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
+
         window.webkit.messageHandlers.passwordManagerSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
             pageID: this._pageID
@@ -372,6 +376,8 @@ Ephy.PasswordManager = class PasswordManager
     // FIXME: Why is pageID a parameter here?
     requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
     {
+        Ephy.log(`Requesting to save password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
+
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
             pageID
@@ -380,6 +386,8 @@ Ephy.PasswordManager = class PasswordManager
 
     _onQueryUsernamesResponse(users, id)
     {
+        Ephy.log(`Received query usernames response with users=${users}`);
+
         let element = this._takePendingPromise(id);
         if (element)
             element.resolver(users);
@@ -387,6 +395,8 @@ Ephy.PasswordManager = class PasswordManager
 
     queryUsernames(origin)
     {
+        Ephy.log(`Requesting usernames for origin=${origin}`);
+
         return new Promise((resolver, reject) => {
             let promiseID = this._promiseCounter++;
             Ephy.queryUsernames(origin, promiseID, this._pageID, this._frameID);
@@ -471,7 +481,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (!authInfo.username) {
+                if (!authInfo) {
                     Ephy.log('No result');
                     return;
                 }
@@ -517,7 +527,7 @@ Ephy.FormManager = class FormManager
             formAuth.username,
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
-                if (authInfo.username) {
+                if (authInfo) {
                     if (authInfo.username == formAuth.username && authInfo.password == formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
@@ -546,7 +556,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo.username == null,
+                                                 authInfo == null,
                                                  this._pageID);
             }
         );
