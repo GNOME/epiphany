@@ -4249,6 +4249,8 @@ ephy_window_check_modified_forms (EphyWindow *window)
 gboolean
 ephy_window_close (EphyWindow *window)
 {
+  EphySession *session;
+
   /* We ignore the delete_event if the disable_quit lockdown has been set
    */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -4269,8 +4271,10 @@ ephy_window_close (EphyWindow *window)
     return FALSE;
   }
 
+  session = ephy_shell_get_session (ephy_shell_get_default ());
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) > 1 &&
       gtk_notebook_get_n_pages (window->notebook) > 1 &&
+      !ephy_session_is_closing (session) &&
       !confirm_close_with_multiple_tabs (window)) {
     /* stop window close */
     return FALSE;
