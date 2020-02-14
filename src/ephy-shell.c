@@ -117,11 +117,33 @@ ephy_shell_startup_continue (EphyShell               *shell,
                              EphyShellStartupContext *ctx)
 {
   EphySession *session = ephy_shell_get_session (shell);
+  gboolean new_window_option = (ctx->startup_mode == EPHY_STARTUP_NEW_WINDOW);
+  GtkWindow *active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
   if (ctx->session_filename != NULL) {
     g_assert (session != NULL);
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
+  } else if (new_window_option) {
+    static const char *default_uris[] = { "", NULL };
+    const char **uris = NULL;
+
+    if (ctx->arguments)
+      uris = (const char **)ctx->arguments;
+    else
+      /* If there are no URLs passed in arguments but the --new-window option */
+      /* has been used, then use the default_uris list to open the homepage */
+      uris = default_uris;
+
+    ephy_shell_open_uris (shell, uris, ctx->startup_mode, ctx->user_time);
+  } else if (active_window && !ctx->arguments) {
+    /* If the application already has an active window and the --new-window */
+    /* option was not passed, then we should just present it */
+    /* This can happen for example if the user starts a long download and then */
+    /* closes the browser.*/
+    /* The window will still remain active and presenting it will have a */
+    /* session-resumed feel for the user. */
+    gtk_window_present (active_window);
   } else if (ctx->arguments || !session) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
@@ -531,8 +553,6 @@ ephy_shell_add_platform_data (GApplication    *application,
   EphyShell *app;
   EphyShellStartupContext *ctx;
   GVariantBuilder *ctx_builder;
-  static const char *empty_arguments[] = { "", NULL };
-  const char * const *arguments;
 
   app = EPHY_SHELL (application);
 
@@ -562,13 +582,9 @@ ephy_shell_add_platform_data (GApplication    *application,
      * the primary instance opens a new window.
      */
     if (ctx->arguments)
-      arguments = (const gchar * const *)ctx->arguments;
-    else
-      arguments = empty_arguments;
-
-    g_variant_builder_add (ctx_builder, "{iv}",
-                           CTX_ARGUMENTS,
-                           g_variant_new_strv (arguments, -1));
+      g_variant_builder_add (ctx_builder, "{iv}",
+                             CTX_ARGUMENTS,
+                             g_variant_new_strv ((const char **)ctx->arguments, -1));
 
     g_variant_builder_add (ctx_builder, "{iv}",
                            CTX_USER_TIME,
