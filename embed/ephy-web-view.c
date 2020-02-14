@@ -2843,15 +2843,13 @@ static gboolean
 script_dialog_cb (WebKitWebView      *web_view,
                   WebKitScriptDialog *dialog)
 {
-  if (webkit_script_dialog_get_dialog_type (dialog) != WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM)
-    return FALSE;
-
-  /* Ignore beforeunload events for now until we properly support webkit_web_view_try_close()
-   * See https://bugzilla.gnome.org/show_bug.cgi?id=722032.
+  /* FIXME: Ignore beforeunload events for now until we properly support webkit_web_view_try_close()
+   * See https://gitlab.gnome.org/GNOME/epiphany/issues/220.
    */
-  webkit_script_dialog_confirm_set_confirmed (dialog, TRUE);
+  if (webkit_script_dialog_get_dialog_type (dialog) == WEBKIT_SCRIPT_DIALOG_BEFORE_UNLOAD_CONFIRM)
+    webkit_script_dialog_confirm_set_confirmed (dialog, TRUE);
 
-  return TRUE;
+  return WEBKIT_WEB_VIEW_CLASS (ephy_web_view_parent_class)->script_dialog (web_view, dialog);
 }
 
 static const char *
