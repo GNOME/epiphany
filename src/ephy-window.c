@@ -3198,33 +3198,6 @@ ephy_window_get_property (GObject    *object,
 }
 
 static gboolean
-ephy_window_configure_event (GtkWidget         *widget,
-                             GdkEventConfigure *event)
-{
-  EphyWindow *window = EPHY_WINDOW (widget);
-  gboolean result;
-  gint width, height;
-
-  result = GTK_WIDGET_CLASS (ephy_window_parent_class)->configure_event (widget, event);
-
-  gtk_window_get_size (GTK_WINDOW (widget),
-                       &width,
-                       &height);
-
-  if (!window->is_maximized && !window->is_fullscreen) {
-    gtk_window_get_position (GTK_WINDOW (widget),
-                             &window->current_x,
-                             &window->current_y);
-    window->current_width = width;
-    window->current_height = height;
-  }
-
-  update_adaptive_mode (window);
-
-  return result;
-}
-
-static gboolean
 ephy_window_state_event (GtkWidget           *widget,
                          GdkEventWindowState *event)
 {
@@ -3637,6 +3610,19 @@ download_completed_cb (EphyDownload *download,
 }
 
 static void
+on_window_size_allocate (GtkWidget     *widget,
+                         GtkAllocation *allocation)
+{
+  EphyWindow *window = EPHY_WINDOW (widget);
+
+  GTK_WIDGET_CLASS (ephy_window_parent_class)->size_allocate (widget, allocation);
+
+  if (!(window->is_maximized || window->is_fullscreen)) {
+    gtk_window_get_size (GTK_WINDOW (widget), &window->current_width, &window->current_height);
+  }
+}
+
+static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
@@ -3836,6 +3822,7 @@ ephy_window_constructed (GObject *object)
 
   window->mouse_gesture_controller = ephy_mouse_gesture_controller_new (window);
 
+  g_signal_connect (window, "size-allocate", G_CALLBACK (on_window_size_allocate), NULL);
   ephy_window_set_chrome (window, chrome);
 }
 
@@ -3853,7 +3840,6 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->set_property = ephy_window_set_property;
 
   widget_class->key_press_event = ephy_window_key_press_event;
-  widget_class->configure_event = ephy_window_configure_event;
   widget_class->window_state_event = ephy_window_state_event;
   widget_class->show = ephy_window_show;
   widget_class->destroy = ephy_window_destroy;
@@ -4332,4 +4318,26 @@ ephy_window_get_position_for_new_embed (EphyWindow *window,
   window->last_opened_pos = position + 1;
 
   return position;
+}
+
+gboolean
+ephy_window_is_maximized (EphyWindow *window)
+{
+  return window->is_maximized;
+}
+
+gboolean
+ephy_window_is_fullscreen (EphyWindow *window)
+{
+  return window->is_fullscreen;
+}
+
+void
+ephy_window_get_geometry (EphyWindow   *window,
+                          GdkRectangle *rectangle)
+{
+  rectangle->x = window->current_x;
+  rectangle->y = window->current_y;
+  rectangle->width = window->current_width;
+  rectangle->height = window->current_height;
 }

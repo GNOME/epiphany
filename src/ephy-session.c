@@ -536,12 +536,24 @@ ephy_session_close (EphySession *session)
   session->dont_save = TRUE;
 }
 
+typedef struct {
+  GdkRectangle geometry;
+  gboolean is_maximized;
+  gboolean is_fullscreen;
+  char *role;
+
+  GList *tabs;
+  gint active_tab;
+} SessionWindow;
+
 static void
-get_window_geometry (GtkWindow    *window,
-                     GdkRectangle *rectangle)
+get_window_geometry (EphyWindow    *window,
+                     SessionWindow *session_window)
 {
-  gtk_window_get_size (window, &rectangle->width, &rectangle->height);
-  gtk_window_get_position (window, &rectangle->x, &rectangle->y);
+  session_window->is_maximized = ephy_window_is_maximized (window);
+  session_window->is_fullscreen = ephy_window_is_fullscreen (window);
+
+  ephy_window_get_geometry (window, &session_window->geometry);
 }
 
 typedef struct {
@@ -600,14 +612,6 @@ session_tab_free (SessionTab *tab)
   g_free (tab);
 }
 
-typedef struct {
-  GdkRectangle geometry;
-  char *role;
-
-  GList *tabs;
-  gint active_tab;
-} SessionWindow;
-
 static SessionWindow *
 session_window_new (EphyWindow  *window,
                     EphySession *session)
@@ -625,7 +629,7 @@ session_window_new (EphyWindow  *window,
   }
 
   session_window = g_new0 (SessionWindow, 1);
-  get_window_geometry (GTK_WINDOW (window), &session_window->geometry);
+  get_window_geometry (window, session_window);
   session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
   notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
 
@@ -760,7 +764,9 @@ write_tab (xmlTextWriterPtr  writer,
 
 static int
 write_window_geometry (xmlTextWriterPtr  writer,
-                       GdkRectangle     *geometry)
+                       GdkRectangle     *geometry,
+                       gboolean          is_maximized,
+                       gboolean          is_fullscreen)
 {
   int ret;
 
@@ -782,6 +788,17 @@ write_window_geometry (xmlTextWriterPtr  writer,
 
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"height", "%d",
                                            geometry->height);
+  if (ret < 0)
+    return ret;
+
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-maximized", "%d",
+                                           is_maximized);
+  if (ret < 0)
+    return ret;
+
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-fullscreen", "%d",
+                                           is_fullscreen);
+
   return ret;
 }
 
@@ -796,7 +813,7 @@ write_ephy_window (xmlTextWriterPtr  writer,
   if (ret < 0)
     return ret;
 
-  ret = write_window_geometry (writer, &window->geometry);
+  ret = write_window_geometry (writer, &window->geometry, window->is_maximized, window->is_fullscreen);
   if (ret < 0)
     return ret;
 
@@ -1115,6 +1132,8 @@ session_parse_window (SessionParserContext  *context,
                       const gchar          **values)
 {
   GdkRectangle geometry = { -1, -1, 0, 0 };
+  gboolean is_maximized;
+  gboolean is_fullscreen;
   guint i;
 
   if (context->window) {
@@ -1140,6 +1159,12 @@ session_parse_window (SessionParserContext  *context,
     } else if (strcmp (names[i], "height") == 0) {
       ephy_string_to_int (values[i], &int_value);
       geometry.height = int_value;
+    } else if (strcmp (names[i], "is-maximized") == 0) {
+      ephy_string_to_int (values[i], &int_value);
+      is_maximized = int_value;
+    } else if (strcmp (names[i], "is-fullscreen") == 0) {
+      ephy_string_to_int (values[i], &int_value);
+      is_fullscreen = int_value;
     } else if (strcmp (names[i], "role") == 0) {
       gtk_window_set_role (GTK_WINDOW (context->window), values[i]);
     } else if (strcmp (names[i], "active-tab") == 0) {
@@ -1149,6 +1174,12 @@ session_parse_window (SessionParserContext  *context,
   }
 
   restore_geometry (GTK_WINDOW (context->window), &geometry);
+
+  if (is_maximized)
+    gtk_window_maximize (GTK_WINDOW (context->window));
+
+  if (is_fullscreen)
+    gtk_window_fullscreen (GTK_WINDOW (context->window));
 }
 
 static void
