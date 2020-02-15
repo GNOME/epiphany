@@ -87,4 +87,11 @@ int               ephy_window_get_position_for_new_embed (EphyWindow *window,
 void              ephy_window_update_entry_focus         (EphyWindow  *window,
                                                           EphyWebView *view);
 
+gboolean          ephy_window_is_maximized               (EphyWindow *window);
+
+gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
+
+void              ephy_window_get_geometry               (EphyWindow   *window,
+                                                          GdkRectangle *rectangle);
+
 G_END_DECLS
