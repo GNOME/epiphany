@@ -118,7 +118,7 @@ items_changed_cb (EphyPagesView *self,
                   gint           added,
                   GMenuModel    *menu_model)
 {
-  EphyPageRow **items = g_new (EphyPageRow *, added);
+  g_autofree EphyPageRow **items = g_new (EphyPageRow *, added);
 
   for (int i = 0; i < added; i++) {
     items[i] = ephy_page_row_new (self->notebook, position + i);
