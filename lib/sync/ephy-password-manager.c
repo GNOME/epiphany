@@ -632,6 +632,7 @@ secret_password_search_cb (GObject        *source_object,
     }
     if (data->callback)
       data->callback (NULL, data->user_data);
+    query_async_data_free (data);
     return;
   }
 
