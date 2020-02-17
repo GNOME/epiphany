@@ -84,7 +84,7 @@ ephy_search_engine_manager_init (EphySearchEngineManager *manager)
   const char *address;
   const char *bang;
   char *name;
-  GVariantIter *iter = NULL;
+  g_autoptr (GVariantIter) iter = NULL;
 
   manager->search_engines = g_hash_table_new_full (g_str_hash,
                                                    g_str_equal,
