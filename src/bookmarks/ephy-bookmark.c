@@ -177,9 +177,13 @@ ephy_bookmark_finalize (GObject *object)
 
   g_free (self->url);
   g_free (self->title);
-  g_free (self->id);
 
   g_sequence_free (self->tags);
+
+  g_free (self->id);
+  g_free (self->type);
+  g_free (self->parent_id);
+  g_free (self->parent_name);
 
   G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
