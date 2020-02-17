@@ -287,78 +287,78 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
 
   obj_properties[PROP_CLEAR_ALL_ACTION_NAME] =
     g_param_spec_string ("clear-all-action-name",
-                         _("'Clear all' action name"),
-                         _("The name of the action associated to the 'Clear all' button"),
+                         "'Clear all' action name",
+                         "The name of the action associated to the 'Clear all' button",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_CLEAR_ALL_ACTION_TARGET] =
     g_param_spec_variant ("clear-all-action-target",
-                          _("'Clear all' action target value"),
-                          _("The parameter for 'Clear all' action invocations"),
+                          "'Clear all' action target value",
+                          "The parameter for 'Clear all' action invocations",
                           G_VARIANT_TYPE_ANY, NULL,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_CLEAR_ALL_DESCRIPTION] =
     g_param_spec_string ("clear-all-description",
-                         _("'Clear all' description"),
-                         _("The description of the 'Clear all' action"),
+                         "'Clear all' description",
+                         "The description of the 'Clear all' action",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_SEARCH_DESCRIPTION] =
     g_param_spec_string ("search-description",
-                         _("'Search' description"),
-                         _("The description of the 'Search' action"),
+                         "'Search' description",
+                         "The description of the 'Search' action",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_EMPTY_TITLE] =
     g_param_spec_string ("empty-title",
-                         _("'Empty' title"),
-                         _("The title of the 'Empty' state page"),
+                         "'Empty' title",
+                         "The title of the 'Empty' state page",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_EMPTY_DESCRIPTION] =
     g_param_spec_string ("empty-description",
-                         _("'Empty' description"),
-                         _("The description of the 'Empty' state page"),
+                         "'Empty' description",
+                         "The description of the 'Empty' state page",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_SEARCH_TEXT] =
     g_param_spec_string ("search-text",
-                         _("Search text"),
-                         _("The text of the search entry"),
+                         "Search text",
+                         "The text of the search entry",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_IS_LOADING] =
     g_param_spec_boolean ("is-loading",
-                          _("Is loading"),
-                          _("Whether the dialog is loading its data"),
+                          "Is loading",
+                          "Whether the dialog is loading its data",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_HAS_DATA] =
     g_param_spec_boolean ("has-data",
-                          _("Has data"),
-                          _("Whether the dialog has data"),
+                          "Has data",
+                          "Whether the dialog has data",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_HAS_SEARCH_RESULTS] =
     g_param_spec_boolean ("has-search-results",
-                          _("Has search results"),
-                          _("Whether the dialog has search results"),
+                          "Has search results",
+                          "Whether the dialog has search results",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_CAN_CLEAR] =
     g_param_spec_boolean ("can-clear",
-                          _("Can clear"),
-                          _("Whether the data can be cleared"),
+                          "Can clear",
+                          "Whether the data can be cleared",
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
