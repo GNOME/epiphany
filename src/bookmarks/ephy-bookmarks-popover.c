@@ -177,7 +177,7 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
                                         ephy_bookmark_get_url (bookmark));
 
     /* If we removed the tag's last bookmark, switch back to the tags list. */
-    if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+    if (ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
       GActionGroup *group;
       GAction *action;
 
@@ -188,7 +188,7 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
   }
 
   /* If the tag no longer contains bookmarks, remove it from the tags list */
-  if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+  if (ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
     children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
     for (l = children; l != NULL; l = l->next) {
       title = g_object_get_data (G_OBJECT (l->data), "title");
@@ -290,7 +290,7 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
   if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
   } else if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
-             g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, self->tag_detail_tag))) {
+             ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, self->tag_detail_tag)) {
     /* If we removed the tag's last bookmark, switch back to the tags list. */
     GActionGroup *group;
     GAction *action;
@@ -510,10 +510,10 @@ static const GActionEntry entries[] = {
 static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
-  GSequence *tags;
-  GSequence *bookmarks;
+  g_autoptr (GSequence) tags = NULL;
+  g_autoptr (GSequence) bookmarks = NULL;
+  g_autoptr (GSimpleActionGroup) group = NULL;
   GSequenceIter *iter;
-  GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -524,7 +524,6 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                                    G_N_ELEMENTS (entries), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "popover",
                                   G_ACTION_GROUP (group));
-  g_object_unref (group);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
                            G_LIST_MODEL (self->manager),
@@ -548,7 +547,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
     const char *tag = g_sequence_get (iter);
     GtkWidget *tag_row;
 
-    if (!g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+    if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
       tag_row = create_tag_row (tag);
       gtk_container_add (GTK_CONTAINER (self->tags_list_box), tag_row);
     }
