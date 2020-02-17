@@ -24,7 +24,7 @@
 gboolean
 is_desktop_pantheon (void)
 {
-  const gchar *xdg_current_desktop = g_environ_getenv (g_get_environ (), "XDG_CURRENT_DESKTOP");
+  const gchar *xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
 
   if (!xdg_current_desktop)
     return FALSE;
