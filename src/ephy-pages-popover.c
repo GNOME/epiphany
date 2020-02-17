@@ -130,7 +130,7 @@ items_changed_cb (EphyPagesPopover *self,
                   gint              added,
                   GMenuModel       *menu_model)
 {
-  EphyPageRow **items = g_new (EphyPageRow *, added);
+  g_autofree EphyPageRow **items = g_new (EphyPageRow *, added);
 
   if ((guint)(position + removed) > g_list_model_get_n_items (G_LIST_MODEL (self->list_store)))
     return;
