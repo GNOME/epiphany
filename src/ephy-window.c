@@ -110,6 +110,7 @@ const struct {
 
   { "win.send-to", { "Send", NULL } },
   { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
+  { "win.location-search", {"<Primary>K", NULL} },
   { "win.home", { "<alt>Home", NULL } },
   { "win.content", { "Escape", NULL } },
 
@@ -842,6 +843,7 @@ static const GActionEntry window_entries [] = {
 
   { "send-to", window_cmd_send_to },
   { "location", window_cmd_go_location },
+  { "location-search", window_cmd_location_search },
   { "home", window_cmd_go_home },
   { "content", window_cmd_go_content },
   { "tabs-view", window_cmd_go_tabs_view },
@@ -3977,6 +3979,21 @@ ephy_window_activate_location (EphyWindow *window)
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget))
     ephy_location_entry_focus (EPHY_LOCATION_ENTRY (title_widget));
+}
+
+void
+ephy_window_location_search (EphyWindow *window)
+{
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  EphyLocationEntry *location_entry = EPHY_LOCATION_ENTRY (title_widget);
+  GtkEntry *location_gtk_entry = GTK_ENTRY (ephy_location_entry_get_entry (location_entry));
+  GtkApplication *gtk_application = gtk_window_get_application (GTK_WINDOW (window));
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (gtk_application);
+  EphySearchEngineManager *search_engine_manager = ephy_embed_shell_get_search_engine_manager (embed_shell);
+  char *search_engine_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
+  const char *search_engine_bang = ephy_search_engine_manager_get_bang (search_engine_manager, search_engine_name);
+
+  gtk_entry_set_text (location_gtk_entry, search_engine_bang);
 }
 
 /**
