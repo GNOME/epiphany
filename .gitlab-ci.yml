@@ -42,6 +42,8 @@ flatpak-master:
 flatpak-scanbuild:
   extends: '.flatpak-template'
   stage: .pre
+  tags:
+    - flatpak
   variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
@@ -57,3 +59,4 @@ flatpak-scanbuild:
 
 nightly:
   extends: '.publish_nightly'
+  dependencies: ['flatpak-master']
