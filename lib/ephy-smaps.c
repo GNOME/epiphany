@@ -252,7 +252,7 @@ static void ephy_smaps_pid_to_html (EphySMaps  *smaps,
       goto out;
 
     g_regex_match (smaps->detail, line, 0, &match_info);
-    if (g_match_info_matches (match_info)) {
+    if (vma && g_match_info_matches (match_info)) {
       char *name = g_match_info_fetch (match_info, 1);
       char **size = NULL;
 
