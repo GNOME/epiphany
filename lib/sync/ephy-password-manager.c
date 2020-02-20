@@ -109,6 +109,7 @@ query_async_data_free (QueryAsyncData *data)
 {
   g_assert (data);
 
+  g_list_free_full (data->records, g_object_unref);
   g_free (data);
 }
 
@@ -162,6 +163,8 @@ merge_passwords_async_data_free (MergePasswordsAsyncData *data)
   g_assert (data);
 
   g_object_unref (data->manager);
+  g_list_free_full (data->remotes_deleted, g_object_unref);
+  g_list_free_full (data->remotes_updated, g_object_unref);
   g_free (data);
 }
 
@@ -306,8 +309,6 @@ populate_cache_cb (GList    *records,
 
     ephy_password_manager_cache_add (self, origin, username);
   }
-
-  g_list_free_full (records, g_object_unref);
 }
 
 static void
@@ -480,7 +481,6 @@ update_password_cb (GList    *records,
     ephy_password_record_set_password (record, data->password);
     ephy_password_manager_store_record (data->manager, record);
     g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
-    g_list_free_full (records, g_object_unref);
   } else {
     LOG ("Attempted to update password record that doesn't exist (likely Epiphany bug)");
   }
@@ -632,6 +632,7 @@ secret_password_search_cb (GObject        *source_object,
     }
     if (data->callback)
       data->callback (NULL, data->user_data);
+    query_async_data_free (data);
     return;
   }
 
@@ -753,8 +754,6 @@ forget_cb (GList    *records,
   } else {
     g_warn_if_reached ();
   }
-
-  g_list_free_full (records, g_object_unref);
 }
 
 void
@@ -789,7 +788,6 @@ forget_all_cb (GList    *records,
   ephy_password_manager_cache_clear (self);
 
   g_hash_table_unref (attributes);
-  g_list_free_full (records, g_object_unref);
 }
 
 void
@@ -874,7 +872,6 @@ replace_existing_cb (GList    *records,
   else
     g_warn_if_reached ();
 
-  g_list_free_full (records, g_object_unref);
   manage_record_async_data_free (data);
 }
 
@@ -1156,7 +1153,6 @@ merge_cb (GList    *records,
 
   data->callback (to_upload, data->user_data);
 
-  g_list_free_full (records, g_object_unref);
   merge_passwords_async_data_free (data);
 }
 
