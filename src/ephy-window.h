@@ -56,6 +56,7 @@ void              ephy_window_set_zoom            (EphyWindow *window,
                                                    double zoom);
 
 void              ephy_window_activate_location   (EphyWindow *window);
+void              ephy_window_location_search     (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);
 
 GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);
