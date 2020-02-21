@@ -2100,6 +2100,14 @@ window_cmd_go_location (GSimpleAction *action,
 }
 
 void
+window_cmd_location_search (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  ephy_window_location_search (user_data);
+}
+
+void
 window_cmd_go_home (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
