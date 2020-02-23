@@ -119,7 +119,7 @@ update_password_async_data_new (EphyPasswordManager *manager,
 {
   UpdatePasswordAsyncData *data;
 
-  data = g_new (UpdatePasswordAsyncData, 1);
+  data = g_new0 (UpdatePasswordAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->password = g_strdup (password);
 
@@ -146,7 +146,7 @@ merge_passwords_async_data_new (EphyPasswordManager                    *manager,
 {
   MergePasswordsAsyncData *data;
 
-  data = g_new (MergePasswordsAsyncData, 1);
+  data = g_new0 (MergePasswordsAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->is_initial = is_initial;
   data->remotes_deleted = remotes_deleted;
@@ -174,7 +174,7 @@ manage_record_async_data_new (EphyPasswordManager *manager,
 {
   ManageRecordAsyncData *data;
 
-  data = g_new (ManageRecordAsyncData, 1);
+  data = g_new0 (ManageRecordAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->record = g_object_ref (record);
 
