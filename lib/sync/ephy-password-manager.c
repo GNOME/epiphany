@@ -97,7 +97,7 @@ query_async_data_new (EphyPasswordManagerQueryCallback callback,
 {
   QueryAsyncData *data;
 
-  data = g_new (QueryAsyncData, 1);
+  data = g_new0 (QueryAsyncData, 1);
   data->callback = callback;
   data->user_data = user_data;
 
