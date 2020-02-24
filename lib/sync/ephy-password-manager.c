@@ -1170,8 +1170,8 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
                                merge_cb,
                                merge_passwords_async_data_new (self,
                                                                is_initial,
-                                                               remotes_deleted,
-                                                               remotes_updated,
+                                                               g_list_copy_deep (remotes_deleted, (GCopyFunc)g_object_ref, NULL),
+                                                               g_list_copy_deep (remotes_updated, (GCopyFunc)g_object_ref, NULL),
                                                                callback,
                                                                user_data));
 }
