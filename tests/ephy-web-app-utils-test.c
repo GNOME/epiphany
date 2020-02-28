@@ -68,7 +68,7 @@ test_web_app_lifetime (void)
 
     /* Test creation */
     id = ephy_web_application_get_app_id_from_name (test.name);
-    desktop_file = ephy_web_application_create (id, test.url, test.name, NULL);
+    desktop_file = ephy_web_application_create (id, test.url, test.name, NULL, FALSE);
     g_assert_true (g_str_has_prefix (desktop_file, ephy_profile_dir ()));
     g_assert_true (g_file_test (desktop_file, G_FILE_TEST_EXISTS));
 

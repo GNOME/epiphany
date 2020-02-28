@@ -3077,6 +3077,60 @@ ephy_web_view_get_web_app_title_finish (EphyWebView   *view,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
+static void
+get_web_app_mobile_capable_cb (WebKitWebView *view,
+                               GAsyncResult  *result,
+                               GTask         *task)
+{
+  WebKitJavascriptResult *js_result;
+  GError *error = NULL;
+
+  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  if (js_result) {
+    JSCValue *js_value;
+    gboolean retval = FALSE;
+
+    js_value = webkit_javascript_result_get_js_value (js_result);
+    if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
+      retval = jsc_value_to_boolean (js_value);
+
+    g_task_return_boolean (task, retval);
+    webkit_javascript_result_unref (js_result);
+  } else
+    g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
+
+void
+ephy_web_view_get_web_app_mobile_capable (EphyWebView         *view,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  GTask *task;
+
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  task = g_task_new (view, cancellable, callback, user_data);
+  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
+                                           "Ephy.getAppleMobileWebAppCapable();",
+                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                           cancellable,
+                                           (GAsyncReadyCallback)get_web_app_mobile_capable_cb,
+                                           task);
+}
+
+gboolean
+ephy_web_view_get_web_app_mobile_capable_finish (EphyWebView   *view,
+                                                 GAsyncResult  *result,
+                                                 GError       **error)
+{
+  g_assert (g_task_is_valid (result, view));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
 /**
  * ephy_web_view_get_security_level:
  * @view: an #EphyWebView

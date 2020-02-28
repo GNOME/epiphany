@@ -454,3 +454,11 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
       break;
   }
 }
+
+void
+ephy_header_bar_hide_navigation_buttons (EphyHeaderBar *header_bar)
+{
+  GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (header_bar->action_bar_start);
+
+  gtk_widget_set_visible (navigation_box, FALSE);
+}

@@ -41,7 +41,7 @@ char               *ephy_web_application_get_app_id_from_name (const char *name)
 
 const char         *ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir);
 
-char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
+char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon, gboolean hide_navigation);
 
 char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 

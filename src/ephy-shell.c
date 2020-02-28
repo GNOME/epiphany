@@ -65,6 +65,7 @@ struct _EphyShell {
   GSList *open_uris_idle_ids;
 
   gchar *open_notification_id;
+  gboolean hide_navigation;
 };
 
 static EphyShell *ephy_shell = NULL;
@@ -839,6 +840,8 @@ ephy_shell_new_tab_full (EphyShell       *shell,
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
+    if (shell->hide_navigation)
+      ephy_window_hide_navigation_buttons (window);
     gtk_widget_show (GTK_WIDGET (window));
   }
 
@@ -1281,4 +1284,10 @@ ephy_shell_send_notification (EphyShell     *shell,
 
   shell->open_notification_id = g_strdup (id);
   g_application_send_notification (G_APPLICATION (shell), id, notification);
+}
+
+void
+ephy_shell_hide_navigation (EphyShell *shell)
+{
+  shell->hide_navigation = TRUE;
 }

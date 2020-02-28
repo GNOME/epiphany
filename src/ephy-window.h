@@ -94,4 +94,6 @@ gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
 void              ephy_window_get_geometry               (EphyWindow   *window,
                                                           GdkRectangle *rectangle);
 
+void              ephy_window_hide_navigation_buttons    (EphyWindow *window);
+
 G_END_DECLS

@@ -277,7 +277,8 @@ create_desktop_file (const char *id,
                      const char *name,
                      const char *address,
                      const char *profile_dir,
-                     GdkPixbuf  *icon)
+                     GdkPixbuf  *icon,
+                     gboolean    hide_navigation)
 {
   GKeyFile *file = NULL;
   char *exec_string;
@@ -296,8 +297,9 @@ create_desktop_file (const char *id,
 
   file = g_key_file_new ();
   g_key_file_set_value (file, "Desktop Entry", "Name", name);
-  exec_string = g_strdup_printf ("epiphany --application-mode --profile=\"%s\" %s",
+  exec_string = g_strdup_printf ("epiphany --application-mode --profile=\"%s\" %s %s",
                                  profile_dir,
+                                 hide_navigation ? "--hide-navigation" : "",
                                  address);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_free (exec_string);
@@ -372,7 +374,8 @@ char *
 ephy_web_application_create (const char *id,
                              const char *address,
                              const char *name,
-                             GdkPixbuf  *icon)
+                             GdkPixbuf  *icon,
+                             gboolean    disable_history)
 {
   g_autofree char *app_file = NULL;
   g_autofree char *profile_dir = NULL;
@@ -406,7 +409,7 @@ ephy_web_application_create (const char *id,
   close (fd);
 
   /* Create the deskop file. */
-  desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon);
+  desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon, disable_history);
   if (desktop_file_path)
     ephy_web_application_initialize_settings (profile_dir);
 
