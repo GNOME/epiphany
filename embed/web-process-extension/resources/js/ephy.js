@@ -2,6 +2,20 @@
 
 var Ephy = {};
 
+Ephy.getAppleMobileWebAppCapable = function()
+{
+    let metas = document.getElementsByTagName('meta');
+
+    for (let i = 0; i < metas.length; i++) {
+        let meta = metas[i];
+
+        if (meta.name == 'apple-mobile-web-app-capable' && meta.getAttribute('content') == 'yes')
+            return true;
+    }
+
+    return false;
+}
+
 Ephy.getWebAppTitle = function()
 {
     let metas = document.getElementsByTagName('meta');

@@ -35,13 +35,18 @@ typedef struct {
   char install_date[128];
 } EphyWebApplication;
 
+typedef enum {
+  EPHY_WEB_APPLICATION_NONE,
+  EPHY_WEB_APPLICATION_MOBILE_CAPABLE,
+} EphyWebApplicationOptions;
+
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
 char               *ephy_web_application_get_app_id_from_name (const char *name);
 
 const char         *ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir);
 
-char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
+char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon, EphyWebApplicationOptions options);
 
 char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 
@@ -65,7 +70,7 @@ GList              *ephy_web_application_get_legacy_application_list (void);
 
 void                ephy_web_application_free_application_list (GList *list);
 
-void                ephy_web_application_initialize_settings (const char *profile_directory);
+void                ephy_web_application_initialize_settings (const char *profile_directory, EphyWebApplicationOptions options);
 
 gboolean            ephy_web_application_is_uri_allowed (const char *uri);
 
