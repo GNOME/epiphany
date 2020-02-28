@@ -197,6 +197,7 @@ static const char * const ephy_prefs_web_schema[] = {
 
 #define EPHY_PREFS_WEB_APP_SCHEMA          "org.gnome.Epiphany.webapp"
 #define EPHY_PREFS_WEB_APP_ADDITIONAL_URLS "additional-urls"
+#define EPHY_PREFS_WEB_APP_MOBILE_CAPABLE  "mobile-capable"
 
 static struct {
   const char *schema;
