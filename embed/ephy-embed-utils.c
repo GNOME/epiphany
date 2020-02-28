@@ -139,6 +139,22 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
   return has_web_scheme;
 }
 
+gchar *
+ephy_embed_utils_address_get_web_scheme (const char *address)
+{
+  int colonpos;
+
+  if (address == NULL)
+    return NULL;
+
+  colonpos = (int)((strstr (address, ":")) - address);
+
+  if (colonpos < 0)
+    return NULL;
+
+  return g_strndup (address, colonpos);
+}
+
 gboolean
 ephy_embed_utils_address_is_existing_absolute_filename (const char *address)
 {

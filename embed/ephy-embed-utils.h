@@ -47,5 +47,6 @@ gboolean ephy_embed_utils_url_is_empty                          (const char *loc
 gboolean ephy_embed_utils_is_no_show_address                    (const char *address);
 char    *ephy_embed_utils_get_title_from_address                (const char *address);
 void     ephy_embed_utils_shutdown                              (void);
+gchar   *ephy_embed_utils_address_get_web_scheme                (const char *address);
 
 G_END_DECLS
