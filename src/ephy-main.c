@@ -54,6 +54,7 @@ static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
 static gboolean automation_mode = FALSE;
+static gboolean hide_navigation = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
 
@@ -128,6 +129,8 @@ static const GOptionEntry option_entries[] = {
     G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
   { "delete-application", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,
     &application_to_delete, NULL, NULL },
+  { "hide-navigation", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+    &hide_navigation, NULL, NULL },
   { NULL }
 };
 
@@ -420,6 +423,9 @@ main (int   argc,
   g_strfreev (arguments);
   ephy_shell = ephy_shell_get_default ();
   ephy_shell_set_startup_context (ephy_shell, ctx);
+
+  if (hide_navigation)
+    ephy_shell_hide_navigation (ephy_shell);
 
   g_unix_signal_add (SIGINT, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGINT));
   g_unix_signal_add (SIGTERM, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGTERM));

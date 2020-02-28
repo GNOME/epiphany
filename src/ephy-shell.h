@@ -127,4 +127,6 @@ void                     ephy_shell_send_notification     (EphyShell        *she
                                                            gchar            *id,
                                                            GNotification    *notification);
 
+void                     ephy_shell_hide_navigation       (EphyShell *shell);
+
 G_END_DECLS

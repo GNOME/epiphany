@@ -4342,3 +4342,9 @@ ephy_window_get_geometry (EphyWindow   *window,
   rectangle->width = window->current_width;
   rectangle->height = window->current_height;
 }
+
+void
+ephy_window_hide_navigation_buttons (EphyWindow *window)
+{
+  ephy_header_bar_hide_navigation_buttons (EPHY_HEADER_BAR (window->header_bar));
+}
