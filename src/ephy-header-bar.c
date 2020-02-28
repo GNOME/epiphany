@@ -26,9 +26,11 @@
 #include "ephy-add-bookmark-popover.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-utils.h"
+#include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
@@ -362,6 +364,12 @@ ephy_header_bar_constructed (GObject *object)
   gtk_size_group_add_widget (downloads_size_group,
                              ephy_action_bar_end_get_downloads_revealer (header_bar->action_bar_end));
   g_object_unref (downloads_size_group);
+
+  if (ephy_profile_dir_is_web_application ()) {
+    GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (header_bar->action_bar_start);
+
+    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, navigation_box, "visible", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_INVERT_BOOLEAN);
+  }
 }
 
 static void

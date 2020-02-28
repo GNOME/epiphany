@@ -1013,6 +1013,7 @@ typedef struct {
   char *icon_href;
   GdkRGBA icon_rgba;
   GCancellable *cancellable;
+  gboolean mobile_capable;
 } EphyApplicationDialogData;
 
 static void
@@ -1346,6 +1347,26 @@ fill_default_application_title (EphyApplicationDialogData *data)
 }
 
 static void
+fill_mobile_capable_cb (GObject      *source,
+                        GAsyncResult *async_result,
+                        gpointer      user_data)
+{
+  EphyApplicationDialogData *data = user_data;
+  gboolean capable;
+  GError *error = NULL;
+
+  capable = ephy_web_view_get_web_app_mobile_capable_finish (EPHY_WEB_VIEW (source), async_result, &error);
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    data->mobile_capable = capable;
+}
+
+static void
+fill_mobile_capable (EphyApplicationDialogData *data)
+{
+  ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
+}
+
+static void
 notify_launch_cb (NotifyNotification *notification,
                   char               *action,
                   gpointer            user_data)
@@ -1452,7 +1473,8 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
     desktop_file = ephy_web_application_create (app_id,
                                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
                                                 app_name,
-                                                gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+                                                gtk_image_get_pixbuf (GTK_IMAGE (data->image)),
+                                                data->mobile_capable);
 
     if (desktop_file)
       message = g_strdup_printf (_("The application “%s” is ready to be used"),
@@ -1571,6 +1593,7 @@ window_cmd_save_as_application (GSimpleAction *action,
 
   fill_default_application_image (data);
   fill_default_application_title (data);
+  fill_mobile_capable (data);
 
   gtk_widget_show_all (dialog);
 
