@@ -143,6 +143,13 @@ void                       ephy_web_view_get_web_app_title        (EphyWebView  
 char                      *ephy_web_view_get_web_app_title_finish (EphyWebView               *view,
                                                                    GAsyncResult              *result,
                                                                    GError                   **error);
+void                       ephy_web_view_get_web_app_mobile_capable        (EphyWebView         *view,
+                                                                            GCancellable        *cancellable,
+                                                                            GAsyncReadyCallback  callback,
+                                                                            gpointer             user_data);
+gboolean                   ephy_web_view_get_web_app_mobile_capable_finish (EphyWebView   *view,
+                                                                            GAsyncResult  *result,
+                                                                            GError       **error);
 
 void                       ephy_web_view_set_visit_type           (EphyWebView *view, 
                                                                    EphyHistoryPageVisitType visit_type);

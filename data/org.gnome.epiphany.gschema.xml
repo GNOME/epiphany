@@ -231,13 +231,18 @@
 			<description>Whether to present a directory chooser dialog for every download.</description>
 		</key>
 	</schema>
-        <schema id="org.gnome.Epiphany.webapp">
-                <key type="as" name="additional-urls">
-                      <default>[]</default>
-                      <summary>Web application additional URLs</summary>
-                      <description>The list of URLs that should be opened by the web application</description>
-                </key>
-        </schema>
+  <schema id="org.gnome.Epiphany.webapp">
+    <key type="as" name="additional-urls">
+      <default>[]</default>
+      <summary>Web application additional URLs</summary>
+      <description>The list of URLs that should be opened by the web application</description>
+    </key>
+    <key type="b" name="mobile-capable">
+      <default>false</default>
+      <summary>WebApp is mobile capable</summary>
+      <description>Whether to show buttons for navigation.</description>
+    </key>
+  </schema>
 	<schema id="org.gnome.Epiphany.state">
 		<key type="s" name="download-dir">
 			<default>'Downloads'</default>

@@ -363,16 +363,18 @@ create_desktop_file (const char *id,
  * @address: the address of the new web application
  * @name: the name for the new web application
  * @icon: the icon for the new web application
+ * @options: the options for the new web application
  *
  * Creates a new Web Application for @address.
  *
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
 char *
-ephy_web_application_create (const char *id,
-                             const char *address,
-                             const char *name,
-                             GdkPixbuf  *icon)
+ephy_web_application_create (const char                *id,
+                             const char                *address,
+                             const char                *name,
+                             GdkPixbuf                 *icon,
+                             EphyWebApplicationOptions  options)
 {
   g_autofree char *app_file = NULL;
   g_autofree char *profile_dir = NULL;
@@ -408,7 +410,7 @@ ephy_web_application_create (const char *id,
   /* Create the deskop file. */
   desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon);
   if (desktop_file_path)
-    ephy_web_application_initialize_settings (profile_dir);
+    ephy_web_application_initialize_settings (profile_dir, options);
 
   return g_steal_pointer (&desktop_file_path);
 }
@@ -712,7 +714,8 @@ ephy_web_application_exists (const char *id)
 }
 
 void
-ephy_web_application_initialize_settings (const char *profile_directory)
+ephy_web_application_initialize_settings (const char                *profile_directory,
+                                          EphyWebApplicationOptions  options)
 {
   GSettings *settings;
   GSettings *web_app_settings;
@@ -753,6 +756,18 @@ ephy_web_application_initialize_settings (const char *profile_directory)
 
   g_object_unref (settings);
   g_object_unref (web_app_settings);
+
+
+  if (options & EPHY_WEB_APPLICATION_MOBILE_CAPABLE) {
+    path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "webapp/", NULL);
+    web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_APP_SCHEMA, path);
+    g_free (path);
+
+    g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, TRUE);
+    g_object_unref (web_app_settings);
+  }
+
+
   g_free (name);
 }
 
