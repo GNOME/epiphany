@@ -40,6 +40,7 @@
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
+#include "ephy-user-agent.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
 #include "prefs-dialog.h"
@@ -400,6 +401,7 @@ ephy_shell_startup (GApplication *application)
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
+  ephy_user_agent_init_sync ();
 
   mode = ephy_embed_shell_get_mode (embed_shell);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
