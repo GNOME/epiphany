@@ -159,6 +159,7 @@ transform_bookmark_title (GBinding     *binding,
                           GValue       *to_value,
                           gpointer      user_data)
 {
+  EphyBookmarkRow *row = EPHY_BOOKMARK_ROW (user_data);
   const char *title;
 
   title = g_value_get_string (from_value);
@@ -167,12 +168,14 @@ transform_bookmark_title (GBinding     *binding,
     EphyBookmark *bookmark;
     const char *url;
 
-    bookmark = EPHY_BOOKMARK (user_data);
+    bookmark = EPHY_BOOKMARK (row->bookmark);
     url = ephy_bookmark_get_url (bookmark);
 
     g_value_set_string (to_value, url);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (row), url);
   } else {
     g_value_set_string (to_value, title);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (row), title);
   }
 
   return TRUE;
@@ -192,7 +195,7 @@ ephy_bookmark_row_constructed (GObject *object)
                                G_BINDING_SYNC_CREATE,
                                transform_bookmark_title,
                                NULL,
-                               self->bookmark, NULL);
+                               self, NULL);
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
   webkit_favicon_database_get_favicon (database,
