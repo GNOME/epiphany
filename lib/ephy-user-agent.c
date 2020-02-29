@@ -26,12 +26,73 @@
 
 #include <webkit2/webkit2.h>
 
+static gboolean mobile_user_agent = FALSE;
+
+static void
+get_chassis_cb (GObject      *source_object,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  GDBusConnection *connection = G_DBUS_CONNECTION (source_object);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GVariant) var = g_dbus_connection_call_finish (connection, res, &error);
+  g_autoptr (GVariant) v = NULL;
+  const char *chassis;
+
+  if (error) {
+    g_warning ("Could not access chassis property: %s", error->message);
+
+    return;
+  }
+
+  g_variant_get (var, "(v)", &v);
+
+  chassis = g_variant_get_string (v, NULL);
+
+  mobile_user_agent = g_strcmp0 (chassis, "handset") == 0;
+}
+
+static void
+system_bus_cb (GObject      *source_object,
+               GAsyncResult *res,
+               gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GDBusConnection) connection = g_bus_get_finish (res, &error);
+
+  if (!connection) {
+    g_warning ("Could not access system bus: %s", error->message);
+
+    return;
+  }
+
+  g_dbus_connection_call (connection,
+                          "org.freedesktop.hostname1",
+                          "/org/freedesktop/hostname1",
+                          "org.freedesktop.DBus.Properties",
+                          "Get",
+                          g_variant_new ("(ss)",
+                                         "org.freedesktop.hostname1",
+                                         "Chassis"),
+                          NULL,
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1,
+                          NULL,
+                          get_chassis_cb,
+                          NULL);
+}
+
+void
+ephy_user_agent_init (void)
+{
+  g_bus_get (G_BUS_TYPE_SYSTEM, NULL, system_bus_cb, NULL);
+}
+
 const char *
 ephy_user_agent_get (void)
 {
   static char *user_agent = NULL;
   WebKitSettings *settings;
-  gboolean mobile;
   gboolean web_app;
 
   if (user_agent)
@@ -44,13 +105,12 @@ ephy_user_agent_get (void)
     g_free (user_agent);
   }
 
-  mobile = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_MOBILE_USER_AGENT);
   web_app = ephy_profile_dir_is_web_application ();
 
   settings = webkit_settings_new ();
   user_agent = g_strdup_printf ("%s%s%s",
                                 webkit_settings_get_user_agent (settings),
-                                mobile ? " Mobile" : "",
+                                mobile_user_agent ? " Mobile" : "",
                                 web_app ? " (Web App)" : "");
   g_object_unref (settings);
 
