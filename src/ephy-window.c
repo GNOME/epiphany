@@ -664,10 +664,13 @@ ephy_window_key_press_event (GtkWidget   *widget,
    * that is reserved for Epiphany not allowed to be seen by webpages.
    */
   if (!ephy_window_should_view_receive_key_press_event (EPHY_WINDOW (widget), event) ||
-      !gtk_window_propagate_key_event (GTK_WINDOW (widget), event))
+      !gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
     gtk_window_activate_key (GTK_WINDOW (widget), event);
 
-  return GDK_EVENT_STOP;
+    return GDK_EVENT_STOP;
+  }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
