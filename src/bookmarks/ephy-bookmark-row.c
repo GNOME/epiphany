@@ -25,6 +25,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-settings.h"
 
 struct _EphyBookmarkRow {
   GtkListBoxRow parent_instance;
@@ -193,6 +194,12 @@ ephy_bookmark_row_constructed (GObject *object)
                                transform_bookmark_title,
                                NULL,
                                self->bookmark, NULL);
+
+  g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
+                   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
+                   self->properties_button,
+                   "visible",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
   webkit_favicon_database_get_favicon (database,

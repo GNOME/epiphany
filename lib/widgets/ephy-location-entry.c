@@ -31,6 +31,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-settings.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-suggestion.h"
 #include "ephy-title-widget.h"
@@ -1012,6 +1013,12 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   context = gtk_widget_get_style_context (entry->bookmark);
   gtk_style_context_add_class (context, "entry_icon");
+
+  g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
+                   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
+                   entry->bookmark_event_box,
+                   "visible",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
