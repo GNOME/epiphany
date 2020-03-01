@@ -27,6 +27,7 @@
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
+#include "ephy-gui.h"
 #include "ephy-uri-helpers.h"
 #include "passwords-dialog.h"
 
@@ -51,6 +52,7 @@ struct _EphyPasswordsDialog {
   GtkWidget *show_passwords_button;
   GtkWidget *password_column;
   GtkWidget *password_renderer;
+  GtkWidget *confirmation_dialog;
   GMenuModel *treeview_popup_menu_model;
 
   GActionGroup *action_group;
@@ -375,19 +377,74 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
 }
 
 static void
+confirmation_dialog_response_cb (GtkWidget           *dialog,
+                                 int                  response,
+                                 EphyPasswordsDialog *self)
+{
+  gtk_widget_destroy (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    g_print ("CLEAR ALL\n");
+    return;
+    ephy_password_manager_forget_all (self->manager);
+
+    gtk_list_store_clear (GTK_LIST_STORE (self->liststore));
+    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), FALSE);
+
+    g_list_free_full (self->records, g_object_unref);
+    self->records = NULL;
+  }
+}
+
+static GtkWidget *
+confirmation_dialog_construct (EphyPasswordsDialog *self)
+{
+  GtkWidget *dialog, *button;
+
+  dialog = gtk_message_dialog_new
+             (GTK_WINDOW (self),
+             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+             GTK_MESSAGE_WARNING,
+             GTK_BUTTONS_CANCEL,
+             _("Delete All Passwords?"));
+
+  gtk_message_dialog_format_secondary_text
+    (GTK_MESSAGE_DIALOG (dialog),
+    _("This will clear all locally stored passwords, and can not be undone."));
+
+  gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (self)),
+                               GTK_WINDOW (dialog));
+
+  button = gtk_button_new_with_mnemonic (_("_Delete"));
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (confirmation_dialog_response_cb),
+                    self);
+
+  return dialog;
+}
+
+static void
 forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
+  EphyPasswordsDialog *self = EPHY_PASSWORDS_DIALOG (user_data);
 
-  ephy_password_manager_forget_all (dialog->manager);
+  if (!self->confirmation_dialog) {
+    GtkWidget **confirmation_dialog;
 
-  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
-  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), FALSE);
+    self->confirmation_dialog = confirmation_dialog_construct (self);
+    confirmation_dialog = &self->confirmation_dialog;
+    g_object_add_weak_pointer (G_OBJECT (self->confirmation_dialog),
+                               (gpointer *)confirmation_dialog);
+  }
 
-  g_list_free_full (dialog->records, g_object_unref);
-  dialog->records = NULL;
+  gtk_widget_show (self->confirmation_dialog);
 }
 
 static void
