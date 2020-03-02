@@ -76,7 +76,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-static gboolean add_urls_source (EphyHistoryDialog *self);
+static gboolean add_visits_source (EphyHistoryDialog *self);
 
 static EphyHistoryURL *
 get_url_from_row (GtkListBoxRow *row)
@@ -103,10 +103,10 @@ clear_listbox (GtkWidget *listbox)
 }
 
 static void
-on_find_urls_cb (gpointer service,
-                 gboolean success,
-                 gpointer result_data,
-                 gpointer user_data)
+on_find_visits_cb (gpointer service,
+                   gboolean success,
+                   gpointer result_data,
+                   gpointer user_data)
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
@@ -118,7 +118,7 @@ on_find_urls_cb (gpointer service,
   clear_listbox (self->listbox);
 
   self->num_fetch = NUM_FETCH_LIMIT;
-  self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+  self->sorter_source = g_idle_add ((GSourceFunc)add_visits_source, self);
 }
 
 static GList *
@@ -168,13 +168,13 @@ filter_now (EphyHistoryDialog *self)
 
   remove_pending_sorter_source (self, TRUE);
 
-  ephy_history_service_find_urls (self->history_service,
-                                  from, to,
-                                  -1, 0,
-                                  substrings,
-                                  type,
-                                  self->cancellable,
-                                  (EphyHistoryJobCallback)on_find_urls_cb, self);
+  ephy_history_service_find_visits (self->history_service,
+                                    from, to,
+                                    -1, 0,
+                                    substrings,
+                                    type,
+                                    self->cancellable,
+                                    (EphyHistoryJobCallback)on_find_visits_cb, self);
 }
 
 static GList *
@@ -237,14 +237,15 @@ forget_clicked (GtkButton *button,
 }
 
 static GtkWidget *
-create_row (EphyHistoryDialog *self,
-            EphyHistoryURL    *url)
+create_row (EphyHistoryDialog    *self,
+            EphyHistoryPageVisit *visit)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *date;
   GtkWidget *row;
   GtkWidget *separator;
   GtkWidget *button;
+  EphyHistoryURL *url = visit->url;
 
   /* Row */
   row = GTK_WIDGET (hdy_action_row_new ());
@@ -283,9 +284,9 @@ create_row (EphyHistoryDialog *self,
 }
 
 static gboolean
-add_urls_source (EphyHistoryDialog *self)
+add_visits_source (EphyHistoryDialog *self)
 {
-  EphyHistoryURL *url;
+  EphyHistoryPageVisit *visit;
   GList *element;
   GtkWidget *row;
   GList *children;
@@ -305,14 +306,14 @@ add_urls_source (EphyHistoryDialog *self)
   }
 
   element = self->urls;
-  url = element->data;
+  visit = element->data;
 
-  row = create_row (self, url);
+  row = create_row (self, visit);
   gtk_list_box_insert (GTK_LIST_BOX (self->listbox), row, -1);
   ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), TRUE);
 
   self->urls = g_list_remove_link (self->urls, element);
-  ephy_history_url_free (url);
+  ephy_history_page_visit_free (visit);
   g_list_free_1 (element);
 
   self->num_fetch--;
@@ -490,7 +491,7 @@ load_further_data (EphyHistoryDialog *self)
   remove_pending_sorter_source (self, FALSE);
 
   self->num_fetch += NUM_FETCH_LIMIT;
-  self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+  self->sorter_source = g_idle_add ((GSourceFunc)add_visits_source, self);
 }
 
 static gboolean
