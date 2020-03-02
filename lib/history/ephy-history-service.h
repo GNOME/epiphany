@@ -54,5 +54,6 @@ void                     ephy_history_service_find_urls               (EphyHisto
 void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *url, const char *sync_id, gint64 visit_time, EphyHistoryPageVisitType visit_type, gboolean should_notify);
 void                     ephy_history_service_clear                   (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
+void                     ephy_history_service_find_visits             (EphyHistoryService *self, gint64 from, gint64 to, guint limit, gint host, GList *substring_list, EphyHistorySortType sort_type, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 
 G_END_DECLS
