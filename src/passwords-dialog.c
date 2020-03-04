@@ -413,7 +413,8 @@ populate_model_cb (GList    *records,
     ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
   }
 
-  dialog->records = records;
+  g_assert (!dialog->records);
+  dialog->records = g_list_copy_deep (records, (GCopyFunc)g_object_ref, NULL);
 }
 
 static void
