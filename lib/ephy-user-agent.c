@@ -48,7 +48,7 @@ ephy_user_agent_get (void)
   web_app = ephy_profile_dir_is_web_application ();
 
   settings = webkit_settings_new ();
-  user_agent = g_strdup_printf ("%s%s Epiphany/605.1.15%s",
+  user_agent = g_strdup_printf ("%s%s%s",
                                 webkit_settings_get_user_agent (settings),
                                 mobile ? " Mobile" : "",
                                 web_app ? " (Web App)" : "");
