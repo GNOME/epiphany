@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-debug.h"
+#include "ephy-file-helpers.h"
 #include "ephy-location-entry.h"
 #include "ephy-title-widget.h"
 #include <glib.h>
@@ -145,6 +146,13 @@ main (int   argc,
 {
   gtk_test_init (&argc, &argv);
   ephy_debug_init ();
+
+  if (!ephy_file_helpers_init (NULL,
+                               EPHY_FILE_HELPERS_TESTING_MODE | EPHY_FILE_HELPERS_ENSURE_EXISTS,
+                               NULL)) {
+    g_debug ("Something wrong happened with ephy_file_helpers_init()");
+    return -1;
+  }
 
   g_test_add_func ("/lib/widgets/ephy-location-entry/new",
                    test_entry_new);
