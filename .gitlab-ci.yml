@@ -59,4 +59,5 @@ flatpak-scanbuild:
 
 nightly:
   extends: '.publish_nightly'
+  stage: .post
   dependencies: ['flatpak-master']
