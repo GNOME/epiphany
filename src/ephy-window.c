@@ -648,12 +648,6 @@ static gboolean
 ephy_window_key_press_event (GtkWidget   *widget,
                              GdkEventKey *event)
 {
-  EphyWebView *view;
-
-  view = ephy_embed_get_web_view (EPHY_WINDOW (widget)->active_embed);
-  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view))
-    return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
-
   /* GtkWindow's key press handler first calls gtk_window_activate_key,
    * then gtk_window_propagate_key_event. We want to do the opposite,
    * because we want to give webpages the chance to override most
