@@ -878,24 +878,23 @@ decide_policy_cb (WebKitWebView            *web_view,
     return FALSE;
 
   /* If it's not the main resource we don't need to set the document type. */
-  if (!is_main_resource)
-    return FALSE;
+  if (is_main_resource) {
+    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
+    if (!strcmp (mime_type, "text/html") || !strcmp (mime_type, "text/plain"))
+      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+    else if (!strcmp (mime_type, "application/xhtml+xml"))
+      type = EPHY_WEB_VIEW_DOCUMENT_XML;
+    else if (!strncmp (mime_type, "image/", 6))
+      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
 
-  type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
-  if (!strcmp (mime_type, "text/html") || !strcmp (mime_type, "text/plain"))
-    type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  else if (!strcmp (mime_type, "application/xhtml+xml"))
-    type = EPHY_WEB_VIEW_DOCUMENT_XML;
-  else if (!strncmp (mime_type, "image/", 6))
-    type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+    /* FIXME: maybe it makes more sense to have an API to query the mime
+     * type when the load of a page starts than doing this here.
+     */
+    if (EPHY_WEB_VIEW (web_view)->document_type != type) {
+      EPHY_WEB_VIEW (web_view)->document_type = type;
 
-  /* FIXME: maybe it makes more sense to have an API to query the mime
-   * type when the load of a page starts than doing this here.
-   */
-  if (EPHY_WEB_VIEW (web_view)->document_type != type) {
-    EPHY_WEB_VIEW (web_view)->document_type = type;
-
-    g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_DOCUMENT_TYPE]);
+      g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_DOCUMENT_TYPE]);
+    }
   }
 
   webkit_policy_decision_download (decision);
