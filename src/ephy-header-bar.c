@@ -453,4 +453,7 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
 
       break;
   }
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
+    ephy_location_entry_set_mobile_popdown (EPHY_LOCATION_ENTRY (header_bar->title_widget), adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
 }
