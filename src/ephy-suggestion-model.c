@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 
 #define MAX_COMPLETION_HISTORY_URLS 8
+#define MAX_URL_ENTRIES             25
 
 struct _EphySuggestionModel {
   GObject parent;
@@ -252,7 +253,7 @@ static gboolean
 append_suggestion (EphySuggestionModel *self,
                    EphySuggestion      *suggestion)
 {
-  if (self->num_custom_entries < 25) {
+  if (self->num_custom_entries < MAX_URL_ENTRIES) {
     g_sequence_append (self->items, suggestion);
     self->num_custom_entries++;
 
@@ -304,6 +305,8 @@ add_bookmarks (EphySuggestionModel *self,
       if (append_suggestion (self, suggestion)) {
         new_urls = g_list_prepend (new_urls, g_strdup (url));
         added++;
+      } else {
+        break;
       }
     }
   }
@@ -344,6 +347,8 @@ add_history (EphySuggestionModel *self,
 
     if (append_suggestion (self, suggestion))
       added++;
+    else
+      break;
   }
 
   return added;
@@ -407,7 +412,6 @@ add_tabs (EphySuggestionModel *self,
   shell = ephy_embed_shell_get_default ();
   application = G_APPLICATION (shell);
   windows = gtk_application_get_windows (GTK_APPLICATION (application));
-  self->num_custom_entries = 0;
 
   for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
     window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
@@ -496,6 +500,7 @@ query_completed_cb (EphyHistoryService *service,
   self->urls = g_sequence_new (g_free);
   g_clear_pointer (&self->items, g_sequence_free);
   self->items = g_sequence_new (g_object_unref);
+  self->num_custom_entries = 0;
 
   if (strlen (query) > 0) {
     added = add_tabs (self, query);
