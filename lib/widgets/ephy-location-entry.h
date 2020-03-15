@@ -80,4 +80,7 @@ void            ephy_location_entry_set_progress               (EphyLocationEntr
                                                                 gdouble            progress,
                                                                 gboolean           loading);
 
+void            ephy_location_entry_set_mobile_popdown         (EphyLocationEntry *entry,
+                                                                gboolean           mobile_popdown);
+
 G_END_DECLS

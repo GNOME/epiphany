@@ -1460,3 +1460,14 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
   entry->progress_fraction = fraction;
   ephy_location_entry_set_fraction_internal (entry);
 }
+
+void
+ephy_location_entry_set_mobile_popdown (EphyLocationEntry *entry,
+                                        gboolean           mobile_popdown)
+{
+  if (mobile_popdown)
+    dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
+  else
+    dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
+}
+
