@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-adaptive-mode.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_ACTION_BAR_START (ephy_action_bar_start_get_type ())
@@ -36,5 +38,8 @@ void                ephy_action_bar_start_change_combined_stop_reload_state (Eph
 void                ephy_action_bar_set_is_fullscreen                       (EphyActionBarStart *action_bar_start,
                                                                              gboolean            fullscreen);
 GtkWidget          *ephy_action_bar_start_get_placeholder                   (EphyActionBarStart *action_bar_start);
+
+void                ephy_action_bar_start_set_adaptive_mode                 (EphyActionBarStart *action_bar,
+                                                                             EphyAdaptiveMode    adaptive_mode);
 
 G_END_DECLS
