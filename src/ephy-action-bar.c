@@ -209,4 +209,6 @@ ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
 
       break;
   }
+
+  ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start, adaptive_mode);
 }
