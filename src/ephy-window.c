@@ -649,20 +649,64 @@ ephy_window_key_press_event (GtkWidget   *widget,
                              GdkEventKey *event)
 {
   EphyWebView *view;
+  GdkDisplay *display;
+  GdkKeymap *keymap;
+  guint keyval;
 
   view = ephy_embed_get_web_view (EPHY_WINDOW (widget)->active_embed);
-  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view))
-    return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+  display = gtk_widget_get_display (widget);
+  keymap = gdk_keymap_get_for_display (display);
 
-  /* GtkWindow's key press handler first calls gtk_window_activate_key,
-   * then gtk_window_propagate_key_event. We want to do the opposite,
-   * because we want to give webpages the chance to override most
-   * Epiphany shortcuts. For example, Ctrl+I in Google Docs should
-   * italicize your text and not open a new incognito window. So:
-   * first, propagate the event to the web view. Next, try
-   * accelerators only if the web view did not handle the event. But
-   * short-circuit the event propagation if it's a special keybinding
-   * that is reserved for Epiphany not allowed to be seen by webpages.
+  gdk_keymap_translate_keyboard_state (keymap,
+                                       event->hardware_keycode,
+                                       event->state,
+                                       event->group,
+                                       &keyval,
+                                       NULL,
+                                       NULL,
+                                       NULL);
+
+  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view)) {
+    /* Handle the key event in GTK's usual way, which for keyboard events is:
+     * 1) Send the key event to the GtkWindow to activate any shortcuts or
+     *    accelerators the window has
+     *    If there were no accelerators found to handle the event,
+     *    then proceed with (2)
+     * 2) Send the key event to the focused widget from which it will chain up
+     *    until it is handled
+     *
+     * Note this is the case only for keyboard events. Other events such as
+     * mouse clicks are handled using only step (2)
+     */
+
+    if (keyval == GDK_KEY_Tab) {
+      /* We have noticed that shortcuts involving Tab do not work properly.
+       * Normally, key_press_event() should implement the process described above
+       * and call gtk_window_activate_key() but this does not happen with Tab shortcuts,
+       * therefore we have to intercept here any Tab key presses and manually
+       * call gtk_window_activate_key().
+       *
+       * TODO: Remove this workaround if Tab shortcuts work properly without it.
+       */
+      if (gtk_window_activate_key (GTK_WINDOW (widget), event))
+        return GDK_EVENT_STOP;
+      else
+        return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+    } else {
+      return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+    }
+  }
+
+  /* Handle the key event differently from GTK's usual way:
+   * We want to give webpages the chance to override most Epiphany shortcuts.
+   * For example, Ctrl+I in Google Docs should italicize your text and
+   * not open a new incognito window, therefore:
+   * 1) Propagate the event to the web view.
+   * 2) Try accelerators only if the web view did not handle the event.
+   *
+   * Note that there are some shortcuts reserved for Epiphany which
+   * are not allowed to be seen by webpages (see ephy_window_should_view_receive_key_press_event())
+   * For these shortcuts, we send them directly to the window.
    */
   if (!ephy_window_should_view_receive_key_press_event (EPHY_WINDOW (widget), event) ||
       !gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
