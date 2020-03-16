@@ -651,8 +651,23 @@ ephy_window_key_press_event (GtkWidget   *widget,
   EphyWebView *view;
 
   view = ephy_embed_get_web_view (EPHY_WINDOW (widget)->active_embed);
-  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view))
-    return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view)) {
+    /* Handle the key event in Gtk's usual way, which for keyboard events is:
+     * 1) Send the key event to the GtkWindow to activate any shortcuts or
+     *    accelerators the window has
+     *    If there were no accelerators found to handle the event,
+     *    then proceed with (2)
+     * 2) Send the key event to the focused widget from which it will chain up
+     *    until it is handled
+     *
+     * Note this is the case only for keyboard events. Other events such as
+     * mouse clicks are handled using only step (2)
+     */
+    if (gtk_window_activate_key (GTK_WINDOW (widget), event))
+      return TRUE;
+    else
+      return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+  }
 
   /* GtkWindow's key press handler first calls gtk_window_activate_key,
    * then gtk_window_propagate_key_event. We want to do the opposite,
