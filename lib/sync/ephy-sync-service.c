@@ -919,6 +919,11 @@ get_signed_certificate_cb (SoupSession *session,
   const char *message = NULL;
   const char *certificate = NULL;
 
+  if (!msg->response_body || !msg->response_body->data) {
+    g_warning ("No response body");
+    goto out_error;
+  }
+
   node = json_from_string (msg->response_body->data, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
