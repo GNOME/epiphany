@@ -858,7 +858,13 @@ decide_policy_cb (WebKitWebView            *web_view,
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
 
+  /* If WebKit can handle the MIME type, let it.
+   * Otherwise, we'll start a download.
+   */
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
+  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
+    return FALSE;
+
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
   request = webkit_response_policy_decision_get_request (response_decision);
@@ -867,25 +873,20 @@ decide_policy_cb (WebKitWebView            *web_view,
   main_resource = webkit_web_view_get_main_resource (web_view);
   is_main_resource = g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) == 0;
 
-  if (is_main_resource && strcmp (mime_type, "application/pdf") == 0) {
-    /* TODO: figure out how to make PDFs work in iframes */
-    EPHY_WEB_VIEW (web_view)->in_pdf_viewer = TRUE;
-  }
-
-  /* If WebKit can't handle the mime type start the download
-   *  process */
-  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
-    return FALSE;
-
-  /* If it's not the main resource we don't need to set the document type. */
+  /* If it's not the main resource, we don't need to set the document type. */
   if (is_main_resource) {
     type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
-    if (!strcmp (mime_type, "text/html") || !strcmp (mime_type, "text/plain"))
+    if (strcmp (mime_type, "text/html") == 0 || strcmp (mime_type, "text/plain") == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-    else if (!strcmp (mime_type, "application/xhtml+xml"))
+    } else if (strcmp (mime_type, "application/xhtml+xml") == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_XML;
-    else if (!strncmp (mime_type, "image/", 6))
+    } else if (strncmp (mime_type, "image/", 6) == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+    } else if (strcmp (mime_type, "application/pdf") == 0) {
+      /* FIXME: figure out how to make PDFs work in iframes. */
+      /* FIXME: Can we replace in_pdf_viewer with a new EphyWebViewDocumentType? */
+      EPHY_WEB_VIEW (web_view)->in_pdf_viewer = TRUE;
+    }
 
     /* FIXME: maybe it makes more sense to have an API to query the mime
      * type when the load of a page starts than doing this here.
@@ -898,7 +899,6 @@ decide_policy_cb (WebKitWebView            *web_view,
   }
 
   webkit_policy_decision_download (decision);
-
   return TRUE;
 }
 
