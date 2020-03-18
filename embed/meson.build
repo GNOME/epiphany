@@ -50,7 +50,6 @@ libephyembed_includes = include_directories(
   '..',
   '../lib',
   '../lib/contrib',
-  '../lib/contrib/gvdb',
   '../lib/history',
   '../lib/sync',
   '../lib/widgets',

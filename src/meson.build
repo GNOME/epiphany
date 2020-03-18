@@ -64,6 +64,7 @@ libephymain_deps = [
   ephysync_dep,
   ephywidgets_dep,
   gdk_dep,
+  gvdb_dep,
   libhandy_dep,
   libnotify_dep
 ]

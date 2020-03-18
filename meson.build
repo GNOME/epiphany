@@ -117,9 +117,9 @@ add_project_arguments(cflags,
 subdir('data')
 subdir('help')
 subdir('po')
+subdir('third-party')
 subdir('lib')
 subdir('embed')
-subdir('third-party')
 subdir('src')
 subdir('tests')
 
