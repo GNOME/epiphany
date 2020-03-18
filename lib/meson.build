@@ -12,8 +12,6 @@ enums = gnome.mkenums_simple('ephy-lib-type-builtins',
 libephymisc_sources = [
   'contrib/eggtreemultidnd.c',
   'contrib/gnome-languages.c',
-  'contrib/gvdb/gvdb-builder.c',
-  'contrib/gvdb/gvdb-reader.c',
   'ephy-debug.c',
   'ephy-dnd.c',
   'ephy-favicon-helpers.c',
@@ -75,7 +73,6 @@ libephymisc_includes = include_directories(
   '.',
   '..',
   'contrib',
-  'contrib/gvdb',
   'history',
   'safe-browsing'
 )
