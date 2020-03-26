@@ -508,7 +508,6 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
     if (names)
       gtk_window_set_default_icon_name (names[0]);
   }
-  g_clear_object (&icon);
 
   /* We need to re-set this because we have already parsed the
    * options, which inits GTK+ and sets this as a side effect.
