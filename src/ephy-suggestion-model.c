@@ -36,7 +36,6 @@ struct _EphySuggestionModel {
   GSequence *urls;
   GSequence *items;
   GCancellable *icon_cancellable;
-  guint num_custom_entries;
 };
 
 enum {
@@ -248,20 +247,6 @@ load_favicon (EphySuggestionModel *model,
                                        suggestion);
 }
 
-static gboolean
-append_suggestion (EphySuggestionModel *self,
-                   EphySuggestion      *suggestion)
-{
-  if (self->num_custom_entries < 25) {
-    g_sequence_append (self->items, suggestion);
-    self->num_custom_entries++;
-
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
 static guint
 add_bookmarks (EphySuggestionModel *self,
                const char          *query)
@@ -301,10 +286,9 @@ add_bookmarks (EphySuggestionModel *self,
       load_favicon (self, suggestion, url);
       ephy_suggestion_set_secondary_icon (suggestion, "starred-symbolic");
 
-      if (append_suggestion (self, suggestion)) {
-        new_urls = g_list_prepend (new_urls, g_strdup (url));
-        added++;
-      }
+      new_urls = g_list_prepend (new_urls, g_strdup (url));
+      g_sequence_append (self->items, suggestion);
+      added++;
     }
   }
 
@@ -342,8 +326,8 @@ add_history (EphySuggestionModel *self,
     suggestion = ephy_suggestion_new (markup, title, url->url);
     load_favicon (self, suggestion, url->url);
 
-    if (append_suggestion (self, suggestion))
-      added++;
+    g_sequence_append (self->items, suggestion);
+    added++;
   }
 
   return added;
@@ -406,7 +390,6 @@ add_tabs (EphySuggestionModel *self,
   shell = ephy_embed_shell_get_default ();
   application = G_APPLICATION (shell);
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
-  self->num_custom_entries = 0;
 
   if (!window)
     return 0;
