@@ -799,6 +799,9 @@ ephy_web_application_is_uri_allowed (const char *uri)
   guint i;
   gboolean matched = FALSE;
 
+  if (!webapp)
+    g_error ("Cannot create an EphyWebApplication for the current web app. Please debug ephy_web_application_for_profile_directory().");
+
   if (g_str_has_prefix (uri, "blob:") || g_str_has_prefix (uri, "data:"))
     return TRUE;
 
