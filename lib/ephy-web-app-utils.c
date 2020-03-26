@@ -548,7 +548,7 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
 
   id = get_app_id_from_profile_directory (profile_dir);
   if (!id)
-    return NULL;
+    g_error ("Cannot create EphyWebApplication: failed to get app ID from profile directory %s", profile_dir);
 
   app = g_new0 (EphyWebApplication, 1);
   app->id = g_strdup (id);
@@ -559,7 +559,7 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
   if (!desktop_info) {
     ephy_web_application_free (app);
     g_free (desktop_file_path);
-    return NULL;
+    g_error ("Cannot create EphyWebApplication: failed to create GDesktopAppInfo from desktop file %s", desktop_file_path);
   }
 
   app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
