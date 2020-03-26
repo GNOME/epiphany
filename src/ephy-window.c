@@ -3040,7 +3040,6 @@ ephy_window_update_entry_focus (EphyWindow  *window,
                                 EphyWebView *view)
 {
   GtkWidget *title_widget;
-  EphyLocationEntry *lentry;
   GtkWidget *entry;
   const char *address = NULL;
 
@@ -3049,10 +3048,10 @@ ephy_window_update_entry_focus (EphyWindow  *window,
     return;
 
   title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
-  entry = ephy_location_entry_get_entry (lentry);
-
-  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (entry));
+  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (title_widget));
+    gtk_entry_grab_focus_without_selecting (GTK_ENTRY (entry));
+  }
 }
 
 static void
