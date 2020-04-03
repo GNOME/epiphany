@@ -618,6 +618,17 @@ window_cmd_show_shortcuts (GSimpleAction *action,
     if (ephy_is_running_inside_flatpak ())
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-web-apps-group")));
 
+    if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
+      {
+        GtkShortcutsShortcut *shortcut;
+
+        shortcut = GTK_SHORTCUTS_SHORTCUT (gtk_builder_get_object (builder, "go-back-shortcut"));
+        g_object_set (shortcut, "accelerator", "<Alt>Right", NULL);
+
+        shortcut = GTK_SHORTCUTS_SHORTCUT (gtk_builder_get_object (builder, "go-forward-shortcut"));
+        g_object_set (shortcut, "accelerator", "<Alt>Left", NULL);
+      }
+
     g_signal_connect (shortcuts_window,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
