@@ -166,36 +166,6 @@ update_revealer_visibility (GtkRevealer *revealer)
 }
 
 static void
-handle_primary_tab_key (GtkWidget *widget,
-                        gpointer   user_data)
-{
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
-  GtkWidget *entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (header_bar->title_widget));
-  GtkWidget *nb;
-
-  nb = ephy_window_get_notebook (header_bar->window);
-  g_assert (nb != NULL);
-
-  ephy_notebook_next_page (EPHY_NOTEBOOK (nb));
-  gtk_widget_grab_focus (entry);
-}
-
-static void
-handle_primary_iso_tab_key (GtkWidget *widget,
-                            gpointer   user_data)
-{
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
-  GtkWidget *entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (header_bar->title_widget));
-  GtkWidget *nb;
-
-  nb = ephy_window_get_notebook (header_bar->window);
-  g_assert (nb != NULL);
-
-  ephy_notebook_prev_page (EPHY_NOTEBOOK (nb));
-  gtk_widget_grab_focus (entry);
-}
-
-static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
@@ -234,28 +204,7 @@ ephy_header_bar_constructed (GObject *object)
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else {
-    DzlShortcutController *controller;
-    GtkWidget *entry;
-
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-    entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (header_bar->title_widget));
-    controller = dzl_shortcut_controller_find (entry);
-
-    dzl_shortcut_controller_add_command_callback (controller,
-                                                  "org.gnome.Epiphany.next-tab-pages",
-                                                  "<Primary>Tab",
-                                                  DZL_SHORTCUT_PHASE_DISPATCH,
-                                                  handle_primary_tab_key,
-                                                  header_bar,
-                                                  NULL);
-
-    dzl_shortcut_controller_add_command_callback (controller,
-                                                  "org.gnome.Epiphany.prev-tab-pages",
-                                                  "<Primary>ISO_Left_Tab",
-                                                  DZL_SHORTCUT_PHASE_DISPATCH,
-                                                  handle_primary_iso_tab_key,
-                                                  header_bar,
-                                                  NULL);
   }
 
   if (is_desktop_pantheon ()) {
