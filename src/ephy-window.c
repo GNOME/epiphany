@@ -2553,6 +2553,13 @@ tab_accels_update (EphyWindow *window)
   g_strfreev (actions);
 }
 
+static void
+accel_cb_tabs_next (GtkWidget *widget,
+                    gpointer   user_data)
+{
+  window_cmd_tabs_next (NULL, NULL, user_data);
+}
+
 #define TAB_ACCELS_N 10
 
 static void
@@ -2561,6 +2568,7 @@ setup_tab_accels (EphyWindow *window)
   GActionGroup *action_group;
   GApplication *app;
   guint i;
+  DzlShortcutController *controller = dzl_shortcut_controller_find (GTK_WIDGET (window));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
   app = g_application_get_default ();
@@ -2590,6 +2598,26 @@ setup_tab_accels (EphyWindow *window)
     g_free (action_name);
     g_free (action_name_with_tab);
   }
+
+  /* We have to setup the Ctrl + Tab shortcut in the window's ShortcutController
+   * because otherwise libdazzle would handle this shortcut by changing
+   * the focused widget instead of switching between the browser tabs
+   */
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                "org.gnome.Epiphany.next-tab-pages",
+                                                "<Primary>Tab",
+                                                DZL_SHORTCUT_PHASE_DISPATCH,
+                                                accel_cb_tabs_next,
+                                                window,
+                                                NULL);
+
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                "org.gnome.Epiphany.prev-tab-pages",
+                                                "<Primary>ISO_Left_Tab",
+                                                DZL_SHORTCUT_PHASE_DISPATCH,
+                                                accel_cb_tabs_next,
+                                                window,
+                                                NULL);
 }
 
 static gboolean
