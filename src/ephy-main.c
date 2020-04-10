@@ -406,8 +406,6 @@ main (int   argc,
     gtk_window_set_default_icon_name (APPLICATION_ID);
   }
 
-  hdy_init (&argc, &argv);
-
   _ephy_shell_create_instance (mode);
 
   ctx = ephy_shell_startup_context_new (open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : EPHY_STARTUP_NEW_TAB,
