@@ -36,7 +36,6 @@ struct _PrefsAppearancePage {
 
   /* Fonts */
   GtkWidget *use_gnome_fonts_row;
-  GtkWidget *use_custom_fonts_list;
   GtkWidget *sans_fontbutton;
   GtkWidget *serif_fontbutton;
   GtkWidget *mono_fontbutton;
@@ -293,9 +292,6 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                    "enable-expansion",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 
-  gtk_list_box_set_header_func (GTK_LIST_BOX (appearance_page->use_custom_fonts_list),
-                                hdy_list_box_separator_header, NULL, NULL);
-
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_SANS_SERIF_FONT,
                    appearance_page->sans_fontbutton,
@@ -394,7 +390,6 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
 
   /* Fonts */
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, use_gnome_fonts_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, use_custom_fonts_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, sans_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, serif_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, mono_fontbutton);
