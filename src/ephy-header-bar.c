@@ -60,6 +60,7 @@ struct _EphyHeaderBar {
   GtkWidget *page_menu_button;
   GtkWidget *zoom_level_button;
   GtkWidget *restore_button;
+  GtkWidget *reload_button;
 };
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
@@ -330,6 +331,8 @@ ephy_header_bar_constructed (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
   }
 
+  header_bar->reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "reload_button"));
+
   if (is_desktop_pantheon ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "about-button")));
 
@@ -453,11 +456,13 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
+      gtk_widget_set_visible (header_bar->reload_button, FALSE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
+      gtk_widget_set_visible (header_bar->reload_button, TRUE);
 
       break;
   }
