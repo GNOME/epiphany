@@ -500,8 +500,8 @@ add_permission_combobox (EphySecurityPopover *popover,
   gtk_box_pack_start (GTK_BOX (hbox), tmp, TRUE, TRUE, 6);
 
   widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Yes"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("No"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Allow"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Deny"));
 
   if (!no_ask)
     gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Ask"));
