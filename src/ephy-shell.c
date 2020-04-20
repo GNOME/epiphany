@@ -124,7 +124,7 @@ ephy_shell_startup_continue (EphyShell               *shell,
     g_assert (session != NULL);
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
-  } else if (new_window_option) {
+  } else if (new_window_option && shell->remote_startup_context) {
     char *homepage_url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
     const char *default_uris[] = { homepage_url, NULL };
     const char **uris = NULL;
