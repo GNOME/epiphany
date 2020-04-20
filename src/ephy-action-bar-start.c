@@ -643,3 +643,11 @@ ephy_action_bar_start_get_placeholder (EphyActionBarStart *action_bar_start)
 {
   return action_bar_start->placeholder;
 }
+
+void
+ephy_action_bar_start_set_adaptive_mode (EphyActionBarStart *action_bar,
+                                         EphyAdaptiveMode    adaptive_mode)
+{
+  gtk_widget_set_visible (action_bar->new_tab_button, adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+  gtk_widget_set_visible (action_bar->combined_stop_reload_button, adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+}

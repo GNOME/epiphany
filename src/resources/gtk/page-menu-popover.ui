@@ -124,6 +124,21 @@
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkModelButton" id="reload_button">
+                <property name="tooltip_text" translatable="yes">Reload</property>
+                <property name="action-name">toolbar.reload</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">reload</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child>
@@ -315,5 +330,8 @@
   </object>
   <object class="GThemedIcon" id="fullscreen">
     <property name="name">view-fullscreen-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="reload">
+    <property name="name">view-refresh-symbolic</property>
   </object>
 </interface>
