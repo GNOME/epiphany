@@ -27,7 +27,6 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#define MAX_COMPLETION_HISTORY_URLS 8
 #define MAX_URL_ENTRIES             25
 
 struct _EphySuggestionModel {
@@ -539,7 +538,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
 
   ephy_history_service_find_urls (self->history_service,
                                   0, 0,
-                                  MAX_COMPLETION_HISTORY_URLS, 0,
+                                  MAX_URL_ENTRIES, 0,
                                   qlist,
                                   EPHY_HISTORY_SORT_MOST_VISITED,
                                   cancellable,
