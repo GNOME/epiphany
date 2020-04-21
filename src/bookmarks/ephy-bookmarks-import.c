@@ -520,3 +520,122 @@ ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
   parser_data_free (data);
   return TRUE;
 }
+
+static void chrome_import_folder (JsonObject *object, GSequence *bookmarks);
+
+static void
+chrome_add_child (JsonArray *array,
+                  guint      index_,
+                  JsonNode  *element_node,
+                  gpointer   user_data)
+{
+  GSequence *bookmarks = user_data;
+  JsonObject *object = json_node_get_object (element_node);
+  const char *title;
+  const char *time;
+  const char *type;
+
+  if (!object)
+    return;
+
+  title = json_object_get_string_member (object, "name");
+  type = json_object_get_string_member (object, "type");
+  time = json_object_get_string_member (object, "date_added");
+
+  if (g_strcmp0 (type, "url") == 0) {
+    const char *url;
+
+    url = json_object_get_string_member (object, "url");
+
+    if (title && url && !g_str_has_prefix (url, "chrome://") && time) {
+      g_autofree const char *guid = ephy_bookmark_generate_random_id ();
+      EphyBookmark *bookmark;
+      GSequence *tags;
+      gint64 time_added;
+
+      tags = g_sequence_new (g_free);
+      time_added = g_ascii_strtoll (time, NULL, 0);
+
+      bookmark = ephy_bookmark_new (url, title, tags, guid);
+      ephy_bookmark_set_time_added (bookmark, time_added);
+      ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
+
+      g_sequence_prepend (bookmarks, bookmark);
+    }
+  } else if (g_strcmp0 (type, "folder") == 0) {
+    chrome_import_folder (object, bookmarks);
+  }
+}
+
+static void
+chrome_import_folder (JsonObject *object,
+                      GSequence  *bookmarks)
+{
+  JsonArray *children;
+  const char *type;
+
+  type = json_object_get_string_member (object, "type");
+  if (g_strcmp0 (type, "folder") != 0)
+    return;
+
+  children = json_object_get_array_member (object, "children");
+  if (children)
+    json_array_foreach_element (children, chrome_add_child, bookmarks);
+}
+
+static void
+chrome_parse_root (JsonObject  *object,
+                   const gchar *member_name,
+                   JsonNode    *member_node,
+                   gpointer     user_data)
+{
+  JsonObject *member_object;
+
+  member_object = json_node_get_object (member_node);
+  chrome_import_folder (member_object, user_data);
+}
+
+gboolean
+ephy_bookmarks_import_from_chrome (EphyBookmarksManager  *manager,
+                                   const char            *filename,
+                                   GError               **error)
+{
+  g_autoptr (GSequence) bookmarks = NULL;
+  g_autoptr (JsonParser) parser = NULL;
+  JsonNode *root;
+  JsonObject *object;
+  JsonObject *roots_object;
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_file (parser, filename, error))
+    return FALSE;
+
+  root = json_parser_get_root (parser);
+  if (!root)
+    goto parser_error;
+
+  object = json_node_get_object (root);
+  if (!object)
+    goto parser_error;
+
+  roots_object = json_object_get_object_member (object, "roots");
+  if (!roots_object)
+    goto parser_error;
+
+  bookmarks = g_sequence_new (g_object_unref);
+
+  json_object_foreach_member (roots_object, chrome_parse_root, bookmarks);
+
+  ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
+
+  return TRUE;
+
+parser_error:
+  g_set_error (error,
+               BOOKMARKS_IMPORT_ERROR,
+               BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+               _("Bookmarks file could not be parsed:"));
+
+  return FALSE;
+}
