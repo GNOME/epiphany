@@ -806,10 +806,13 @@ change_combined_stop_reload_state (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyActionBarStart *header_bar_start = ephy_header_bar_get_action_bar_start (EPHY_HEADER_BAR (window->header_bar));
   EphyActionBarStart *action_bar_start = ephy_action_bar_get_action_bar_start (EPHY_ACTION_BAR (window->action_bar));
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (window->header_bar);
 
   ephy_action_bar_start_change_combined_stop_reload_state (header_bar_start,
                                                            g_variant_get_boolean (loading));
   ephy_action_bar_start_change_combined_stop_reload_state (action_bar_start,
+                                                           g_variant_get_boolean (loading));
+  ephy_header_bar_start_change_combined_stop_reload_state (header_bar,
                                                            g_variant_get_boolean (loading));
 
   g_simple_action_set_state (action, loading);
