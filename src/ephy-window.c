@@ -2616,25 +2616,25 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     tab = GTK_WIDGET (window->active_embed);
     n_pages = gtk_notebook_get_n_pages (notebook);
     page_num = gtk_notebook_page_num (notebook, tab);
+    pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (tab));
 
     /* enable/disable close others/left/right */
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close-left");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num > 0);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (page_num > 0) && !pinned);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close-right");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (page_num < n_pages - 1) && !pinned);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close-others");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (n_pages > 1) && !pinned);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "reload-all");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
 
-    pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (tab));
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "pin");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pinned);
