@@ -93,10 +93,28 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
-const gchar *import_option_names[3] = {
-  N_("GVDB File"),
-  N_("HTML File"),
-  N_("Firefox")
+typedef enum {
+  IMPORT_TYPE_CHOOSE,
+  IMPORT_TYPE_IMPORT
+} ImportTypes;
+
+
+struct import_option {
+  const char *name;
+  ImportTypes type;
+  gboolean (*exists)(void);
+};
+
+static gboolean firefox_exists (void);
+static gboolean chrome_exists (void);
+static gboolean chromium_exists (void);
+
+static struct import_option import_options[] = {
+  { N_("GVDB File"), IMPORT_TYPE_CHOOSE, NULL },
+  { N_("HTML File"), IMPORT_TYPE_CHOOSE, NULL },
+  { N_("Firefox"), IMPORT_TYPE_IMPORT, firefox_exists },
+  { N_("Chrome"), IMPORT_TYPE_IMPORT, chrome_exists },
+  { N_("Chromium"), IMPORT_TYPE_IMPORT, chromium_exists }
 };
 
 static void
@@ -109,9 +127,9 @@ combo_box_changed_cb (GtkComboBox *combo_box,
   g_assert (GTK_IS_BUTTON (button));
 
   active = gtk_combo_box_get_active (combo_box);
-  if (active == 0 || active == 1)
+  if (import_options[active].type == IMPORT_TYPE_CHOOSE)
     gtk_button_set_label (button, _("Ch_oose File"));
-  else if (active == 2)
+  else if (import_options[active].type == IMPORT_TYPE_IMPORT)
     gtk_button_set_label (button, _("I_mport"));
 }
 
@@ -182,6 +200,39 @@ get_firefox_profiles (void)
   return profiles;
 }
 
+static gboolean
+firefox_exists (void)
+{
+  GSList *firefox_profiles;
+  gboolean has_firefox_profile;
+
+  firefox_profiles = get_firefox_profiles ();
+  has_firefox_profile = g_slist_length (firefox_profiles) > 0;
+  g_slist_free (firefox_profiles);
+
+  return has_firefox_profile;
+}
+
+static gboolean
+chrome_exists (void)
+{
+  g_autofree char *filename = NULL;
+
+  filename = g_build_filename (g_get_user_config_dir (), "google-chrome", "Default", "Bookmarks", NULL);
+
+  return g_file_test (filename, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR);
+}
+
+static gboolean
+chromium_exists (void)
+{
+  g_autofree char *filename = NULL;
+
+  filename = g_build_filename (g_get_user_config_dir (), "chromium", "Default", "Bookmarks", NULL);
+
+  return g_file_test (filename, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR);
+}
+
 static GtkTreeModel *
 create_tree_model (void)
 {
@@ -190,27 +241,16 @@ create_tree_model (void)
   };
   GtkListStore *list_store;
   GtkTreeIter iter;
-  GSList *firefox_profiles;
-  gboolean has_firefox_profile;
   int i;
 
-
-  /* Check if user has a firefox profile*/
-  firefox_profiles = get_firefox_profiles ();
-  has_firefox_profile = g_slist_length (firefox_profiles) > 0;
-  g_slist_free (firefox_profiles);
-
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
-  for (i = G_N_ELEMENTS (import_option_names) - 1; i >= 0; i--) {
-    /* Skip Firefox option if user doesn't have a Firefox profile */
-    if (g_strcmp0 (import_option_names[i], _("Firefox")) == 0) {
-      if (!has_firefox_profile)
-        continue;
-    }
+  for (i = G_N_ELEMENTS (import_options) - 1; i >= 0; i--) {
+    if (import_options[i].exists && !import_options[i].exists ())
+      continue;
 
     gtk_list_store_prepend (list_store, &iter);
     gtk_list_store_set (list_store, &iter,
-                        TEXT_COL, _(import_option_names[i]),
+                        TEXT_COL, _(import_options[i].name),
                         -1);
   }
 
@@ -410,6 +450,56 @@ dialog_bookmarks_import_from_firefox (GtkDialog *dialog)
   return imported;
 }
 
+static gboolean
+dialog_bookmarks_import_from_chrome (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *import_info_dialog;
+  g_autoptr (GError) error = NULL;
+  g_autofree gchar *filename;
+  gboolean imported;
+
+  filename = g_build_filename (g_get_home_dir (), ".config/google-chrome/Default/Bookmarks", NULL);
+
+  imported = ephy_bookmarks_import_from_chrome (manager, filename, &error);
+  import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                               GTK_DIALOG_MODAL,
+                                               imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                               GTK_BUTTONS_OK,
+                                               "%s",
+                                               imported ? _("Bookmarks successfully imported!")
+                                                        : error->message);
+  gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+  gtk_widget_destroy (import_info_dialog);
+
+  return imported;
+}
+
+static gboolean
+dialog_bookmarks_import_from_chromium (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *import_info_dialog;
+  g_autoptr (GError) error = NULL;
+  g_autofree gchar *filename;
+  gboolean imported;
+
+  filename = g_build_filename (g_get_home_dir (), ".config/chromium/Default/Bookmarks", NULL);
+
+  imported = ephy_bookmarks_import_from_chrome (manager, filename, &error);
+  import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                               GTK_DIALOG_MODAL,
+                                               imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                               GTK_BUTTONS_OK,
+                                               "%s",
+                                               imported ? _("Bookmarks successfully imported!")
+                                                        : error->message);
+  gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+  gtk_widget_destroy (import_info_dialog);
+
+  return imported;
+}
+
 static void
 dialog_bookmarks_import_cb (GtkDialog   *dialog,
                             int          response,
@@ -429,6 +519,12 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
         break;
       case 2:
         imported = dialog_bookmarks_import_from_firefox (dialog);
+        break;
+      case 3:
+        imported = dialog_bookmarks_import_from_chrome (dialog);
+        break;
+      case 4:
+        imported = dialog_bookmarks_import_from_chromium (dialog);
         break;
       default:
         g_assert_not_reached ();
