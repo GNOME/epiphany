@@ -124,11 +124,11 @@ web_resource_data_cb (WebKitWebResource     *resource,
   escaped_str = g_markup_escape_text ((const char *)data, length);
 
   html = g_strdup_printf ("<head>"
-                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlight.css'>"
+                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/default.css'>"
                           "  <title>%s</title>"
                           "</head>"
                           "<body class='hljs'>"
-                          "  <script src='ephy-resource:///org/gnome/epiphany/highlight.js'></script>"
+                          "  <script src='ephy-resource:///org/gnome/epiphany/highlightjs/highlight.pack.js'></script>"
                           "  <script>hljs.initHighlightingOnLoad();</script>"
                           "  <pre><code class='html'>%s</code></pre>"
                           "</body>",
