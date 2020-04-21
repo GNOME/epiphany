@@ -131,7 +131,8 @@ resources = gnome.compile_resources('epiphany-resources',
 epiphany_sources = [
   'ephy-main.c',
   resources,
-  pdfjs_resources
+  pdfjs_resources,
+  highlightjs_resources
 ]
 
 executable('epiphany',

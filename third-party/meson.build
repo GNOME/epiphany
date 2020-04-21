@@ -5,6 +5,13 @@ pdfjs_resources = gnome.compile_resources('pdfjs-resources',
     source_dir: 'pdfjs'
 )
 
+highlightjs_resource_files = files('highlightjs/highlightjs.gresource.xml')
+highlightjs_resources = gnome.compile_resources('highlightjs-resources',
+    highlightjs_resource_files,
+    c_name: 'highlightjs',
+    source_dir: 'highlightjs'
+)
+
 libgvdb_sources = [
   'gvdb/gvdb-builder.c',
   'gvdb/gvdb-reader.c'
