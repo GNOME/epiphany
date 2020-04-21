@@ -466,15 +466,6 @@ ephy_action_bar_start_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_action_bar_start_parent_class)->dispose (object);
 }
 
-static GtkIconSize
-get_icon_size (void)
-{
-  if (is_desktop_pantheon ())
-    return GTK_ICON_SIZE_LARGE_TOOLBAR;
-
-  return GTK_ICON_SIZE_BUTTON;
-}
-
 static void
 update_new_tab_button_visibility (EphyActionBarStart *action_bar_start)
 {
