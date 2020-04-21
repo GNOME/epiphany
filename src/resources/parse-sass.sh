@@ -17,3 +17,9 @@ sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
 	themes/elementary.scss themes/elementary.css
 sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
 	themes/shared.scss themes/shared.css
+sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
+	-I${GTK_SOURCE_PATH}/gtk/theme/HighContrast \
+	themes/HighContrast.scss themes/HighContrast.css
+sassc $SASSC_OPT -I${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
+	-I${GTK_SOURCE_PATH}/gtk/theme/HighContrast \
+	themes/HighContrastInverse.scss themes/HighContrastInverse.css
