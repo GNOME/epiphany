@@ -520,3 +520,94 @@ ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
   parser_data_free (data);
   return TRUE;
 }
+
+static void
+chrome_add_child (JsonArray *array,
+                  guint      index_,
+                  JsonNode  *element_node,
+                  gpointer   user_data)
+{
+  GSequence *bookmarks = user_data;
+  JsonObject *object = json_node_get_object (element_node);
+  const char *url;
+  const char *title;
+  const char *time;
+
+  if (!object)
+    return;
+
+  title = json_object_get_string_member (object, "name");
+  url = json_object_get_string_member (object, "url");
+  time = json_object_get_string_member (object, "date_added");
+
+  if (title && url && time) {
+    g_autofree const char *guid = ephy_bookmark_generate_random_id ();
+    EphyBookmark *bookmark;
+    GSequence *tags;
+    gint64 time_added;
+
+    tags = g_sequence_new (g_free);
+    time_added = g_ascii_strtoll (time, NULL, 0);
+
+    bookmark = ephy_bookmark_new (url, title, tags, guid);
+    ephy_bookmark_set_time_added (bookmark, time_added);
+    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
+
+    g_sequence_prepend (bookmarks, bookmark);
+  }
+}
+
+gboolean
+ephy_bookmarks_import_from_chrome (EphyBookmarksManager  *manager,
+                                   const char            *filename,
+                                   GError               **error)
+{
+  g_autoptr (GSequence) bookmarks = NULL;
+  g_autoptr (JsonParser) parser = NULL;
+  JsonNode *root;
+  JsonObject *object;
+  JsonObject *roots_object;
+  JsonObject *bookmark_bar_object;
+  JsonArray *children_array;
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_file (parser, filename, error))
+    return FALSE;
+
+  root = json_parser_get_root (parser);
+  if (!root)
+    goto parser_error;
+
+  object = json_node_get_object (root);
+  if (!object)
+    goto parser_error;
+
+  roots_object = json_object_get_object_member (object, "roots");
+  if (!roots_object)
+    goto parser_error;
+
+  bookmark_bar_object = json_object_get_object_member (roots_object, "bookmark_bar");
+  if (!bookmark_bar_object)
+    goto parser_error;
+
+  children_array = json_object_get_array_member (bookmark_bar_object, "children");
+  if (!children_array)
+    return FALSE;
+
+  bookmarks = g_sequence_new (g_object_unref);
+
+  json_array_foreach_element (children_array, chrome_add_child, bookmarks);
+
+  ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
+
+  return TRUE;
+
+parser_error:
+  g_set_error (error,
+               BOOKMARKS_IMPORT_ERROR,
+               BOOKMARKS_IMPORT_ERROR_BOOKMARKS,
+               _("Bookmarks file could not be parsed:"));
+
+  return FALSE;
+}
