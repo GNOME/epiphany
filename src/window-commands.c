@@ -93,10 +93,11 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
-const gchar *import_option_names[3] = {
+const gchar *import_option_names[4] = {
   N_("GVDB File"),
   N_("HTML File"),
-  N_("Firefox")
+  N_("Firefox"),
+  N_("Chrome")
 };
 
 static void
@@ -111,7 +112,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
   active = gtk_combo_box_get_active (combo_box);
   if (active == 0 || active == 1)
     gtk_button_set_label (button, _("Ch_oose File"));
-  else if (active == 2)
+  else if (active == 2 || active == 3)
     gtk_button_set_label (button, _("I_mport"));
 }
 
@@ -410,6 +411,31 @@ dialog_bookmarks_import_from_firefox (GtkDialog *dialog)
   return imported;
 }
 
+static gboolean
+dialog_bookmarks_import_from_chrome (GtkDialog *dialog)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *import_info_dialog;
+  g_autoptr (GError) error = NULL;
+  g_autofree gchar *filename;
+  gboolean imported;
+
+  filename = g_build_filename (g_get_home_dir (), ".config/google-chrome/Default/Bookmarks", NULL);
+
+  imported = ephy_bookmarks_import_from_chrome (manager, filename, &error);
+  import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                               GTK_DIALOG_MODAL,
+                                               imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                               GTK_BUTTONS_OK,
+                                               "%s",
+                                               imported ? _("Bookmarks successfully imported!")
+                                                        : error->message);
+  gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+  gtk_widget_destroy (import_info_dialog);
+
+  return imported;
+}
+
 static void
 dialog_bookmarks_import_cb (GtkDialog   *dialog,
                             int          response,
@@ -429,6 +455,9 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
         break;
       case 2:
         imported = dialog_bookmarks_import_from_firefox (dialog);
+        break;
+      case 3:
+        imported = dialog_bookmarks_import_from_chrome (dialog);
         break;
       default:
         g_assert_not_reached ();
