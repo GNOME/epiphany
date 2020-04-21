@@ -48,6 +48,9 @@ enum {
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
+/* Translators: tooltip for the refresh button */
+static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
+
 struct _EphyHeaderBar {
   GtkHeaderBar parent_instance;
 
@@ -60,7 +63,8 @@ struct _EphyHeaderBar {
   GtkWidget *page_menu_button;
   GtkWidget *zoom_level_button;
   GtkWidget *restore_button;
-  GtkWidget *reload_button;
+  GtkWidget *combined_stop_reload_button;
+  GtkWidget *combined_stop_reload_image;
 };
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
@@ -331,7 +335,9 @@ ephy_header_bar_constructed (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
   }
 
-  header_bar->reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "reload_button"));
+  header_bar->combined_stop_reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "combined_stop_reload_button"));
+  header_bar->combined_stop_reload_image = GTK_WIDGET (gtk_builder_get_object (builder, "combined_stop_reload_image"));
+  gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
 
   if (is_desktop_pantheon ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "about-button")));
@@ -456,17 +462,37 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
-      gtk_widget_set_visible (header_bar->reload_button, FALSE);
+      gtk_widget_set_visible (header_bar->combined_stop_reload_button, FALSE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
-      gtk_widget_set_visible (header_bar->reload_button, TRUE);
+      gtk_widget_set_visible (header_bar->combined_stop_reload_button, TRUE);
 
       break;
   }
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
     ephy_location_entry_set_mobile_popdown (EPHY_LOCATION_ENTRY (header_bar->title_widget), adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
+}
+
+void
+ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_bar,
+                                                         gboolean       loading)
+{
+  if (loading) {
+    gtk_image_set_from_icon_name (GTK_IMAGE (header_bar->combined_stop_reload_image),
+                                  "process-stop-symbolic",
+                                  get_icon_size ());
+    /* Translators: tooltip for the stop button */
+    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button,
+                                 _("Stop loading the current page"));
+  } else {
+    gtk_image_set_from_icon_name (GTK_IMAGE (header_bar->combined_stop_reload_image),
+                                  "view-refresh-symbolic",
+                                  get_icon_size ());
+    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button,
+                                 _(REFRESH_BUTTON_TOOLTIP));
+  }
 }

@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-desktop-utils.h"
 
+#include <gtk/gtk.h>
+
 gboolean
 is_desktop_pantheon (void)
 {
@@ -30,4 +32,13 @@ is_desktop_pantheon (void)
     return FALSE;
 
   return strstr (xdg_current_desktop, "Pantheon") != NULL;
+}
+
+GtkIconSize
+get_icon_size (void)
+{
+  if (is_desktop_pantheon ())
+    return GTK_ICON_SIZE_LARGE_TOOLBAR;
+
+  return GTK_ICON_SIZE_BUTTON;
 }

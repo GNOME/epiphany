@@ -125,13 +125,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkModelButton" id="reload_button">
+              <object class="GtkButton" id="combined_stop_reload_button">
                 <property name="tooltip_text" translatable="yes">Reload</property>
-                <property name="action-name">toolbar.reload</property>
-                <property name="iconic">True</property>
-                <property name="centered">True</property>
-                <property name="icon">reload</property>
+                <property name="action-name">toolbar.combined-stop-reload</property>
                 <property name="visible">True</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage" id="combined_stop_reload_image">
+                    <property name="visible">True</property>
+                    <property name="icon-name">view-refresh-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -330,8 +337,5 @@
   </object>
   <object class="GThemedIcon" id="fullscreen">
     <property name="name">view-fullscreen-symbolic</property>
-  </object>
-  <object class="GThemedIcon" id="reload">
-    <property name="name">view-refresh-symbolic</property>
   </object>
 </interface>

@@ -21,9 +21,12 @@
 #pragma once
 
 #include <glib.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
 gboolean is_desktop_pantheon (void);
+
+GtkIconSize get_icon_size (void);
 
 G_END_DECLS
