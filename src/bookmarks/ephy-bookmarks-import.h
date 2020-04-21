@@ -40,4 +40,8 @@ gboolean    ephy_bookmarks_import_from_html     (EphyBookmarksManager  *manager,
                                                  const char            *filename,
                                                  GError               **error);
 
+gboolean    ephy_bookmarks_import_from_chrome   (EphyBookmarksManager  *manager,
+                                                 const char            *filename,
+                                                 GError               **error);
+
 G_END_DECLS
