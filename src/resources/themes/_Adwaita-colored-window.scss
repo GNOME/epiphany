@@ -20,6 +20,18 @@ $backdrop_borders_color: mix($borders_color, $bg_color, 80%);
 $backdrop_dark_fill: mix($backdrop_borders_color, $backdrop_bg_color, 35%);
 $backdrop_insensitive_color: if($variant == 'light', darken($backdrop_bg_color, 15%), lighten($backdrop_bg_color, 15%));
 
+@if $high_contrast {
+  $fg_color: if($variant == 'light', darken($fg_color, 3%), lighten($fg_color, 2%));
+  $bg_color: if($variant == 'light', lighten($bg_color, 3%), darken($bg_color, 2%));
+  $borders_color: if($variant == 'light', darken($borders_color, 30%), lighten($borders_color, 30%));
+  $alt_borders_color: if($variant == 'light', darken($alt_borders_color, 33%), lighten($alt_borders_color, 28%));
+
+  //insensitive state derived colors
+  $insensitive_fg_color: mix($fg_color, $bg_color, 50%);
+  $insensitive_bg_color: mix($bg_color, $base_color, 60%);
+  $insensitive_borders_color: mix($borders_color, $bg_color, 80%);
+}
+
 @import 'drawing';
 
 headerbar {

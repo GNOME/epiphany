@@ -40,8 +40,10 @@ $close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken(
   }
 }
 
-.url_entry:not(:hover):not(:focus) {
-  background-color: transparentize($base_color, 0.25);
+@if not $high_contrast {
+  .url_entry:not(:hover):not(:focus) {
+    background-color: transparentize($base_color, 0.25);
+  }
 }
 
 .bookmark-tag-widget {
