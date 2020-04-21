@@ -964,16 +964,8 @@ typedef struct {
   char *icon_href;
   GdkRGBA icon_rgba;
   GCancellable *cancellable;
+  WebKitDownload *download;
 } EphyApplicationDialogData;
-
-static void
-ephy_application_dialog_data_free (EphyApplicationDialogData *data)
-{
-  g_cancellable_cancel (data->cancellable);
-  g_object_unref (data->cancellable);
-  g_free (data->icon_href);
-  g_free (data);
-}
 
 static void
 rounded_rectangle (cairo_t *cr,
@@ -1156,30 +1148,29 @@ download_failed_cb (WebKitDownload            *download,
 static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
-  WebKitDownload *download;
   char *destination, *destination_uri, *tmp_filename;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell),
-                                              data->icon_href);
+  data->download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell),
+                                                    data->icon_href);
   /* We do not want this download to show up in the UI, so let's
    * set 'ephy-download-set' to make Epiphany think this is
    * already there. */
   /* FIXME: it's probably better to just do this in a clean way
    * instead of using this workaround. */
-  g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
+  g_object_set_data (G_OBJECT (data->download), "ephy-download-set", GINT_TO_POINTER (TRUE));
 
   tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
   destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
   destination_uri = g_filename_to_uri (destination, NULL, NULL);
-  webkit_download_set_destination (download, destination_uri);
+  webkit_download_set_destination (data->download, destination_uri);
   g_free (destination);
   g_free (destination_uri);
   g_free (tmp_filename);
 
-  g_signal_connect (download, "finished",
+  g_signal_connect (data->download, "finished",
                     G_CALLBACK (download_finished_cb), data);
-  g_signal_connect (download, "failed",
+  g_signal_connect (data->download, "failed",
                     G_CALLBACK (download_failed_cb), data);
 }
 
@@ -1375,6 +1366,22 @@ static void
 ephy_focus_desktop_app (const char *desktop_file)
 {
   g_bus_get (G_BUS_TYPE_SESSION, NULL, session_bus_ready_cb, g_strdup (desktop_file));
+}
+
+static void
+ephy_application_dialog_data_free (EphyApplicationDialogData *data)
+{
+  if (data->download) {
+    g_signal_handlers_disconnect_by_func (data->download, download_finished_cb, data);
+    g_signal_handlers_disconnect_by_func (data->download, download_failed_cb, data);
+
+    data->download = NULL;
+  }
+
+  g_cancellable_cancel (data->cancellable);
+  g_object_unref (data->cancellable);
+  g_free (data->icon_href);
+  g_free (data);
 }
 
 static void
