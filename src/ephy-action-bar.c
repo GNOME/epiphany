@@ -173,6 +173,9 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   gtk_widget_set_visible (GTK_WIDGET (action_bar->pages_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
+                                           EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 EphyActionBar *
@@ -209,6 +212,4 @@ ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
 
       break;
   }
-
-  ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start, adaptive_mode);
 }
