@@ -60,7 +60,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libnotify/notify.h>
 #include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
@@ -1472,21 +1471,6 @@ fill_mobile_capable (EphyApplicationDialogData *data)
   ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
 }
 
-static void
-notify_launch_cb (NotifyNotification *notification,
-                  char               *action,
-                  gpointer            user_data)
-{
-  g_autofree char *desktop_file = user_data;
-
-  /* We can't get here under flatpak because all web app functionality
-   * is disabled when running under flatpak.
-   */
-  ephy_file_launch_desktop_file (desktop_file,
-                                 gtk_get_current_event_time (),
-                                 EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
-}
-
 static gboolean
 confirm_web_application_overwrite (GtkWindow  *parent,
                                    const char *title)
@@ -1578,8 +1562,8 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
     const char *app_name;
     g_autofree gchar *app_id = NULL;
     g_autofree gchar *desktop_file = NULL;
-    char *message;
-    NotifyNotification *notification;
+    g_autofree char *message = NULL;
+    GNotification *notification;
 
     app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
     app_id = ephy_web_application_get_app_id_from_name (app_name);
@@ -1605,25 +1589,27 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
       message = g_strdup_printf (_("The application “%s” could not be created"),
                                  app_name);
 
-    notification = notify_notification_new (message,
-                                            NULL, NULL);
-    g_free (message);
+    notification = g_notification_new (message);
+
+    if (data->image) {
+      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (data->image));
+
+      g_notification_set_icon (notification, G_ICON (pixbuf));
+    }
 
     if (desktop_file) {
-      notify_notification_add_action (notification, "launch", _("Launch"),
-                                      (NotifyActionCallback)notify_launch_cb,
-                                      g_path_get_basename (desktop_file),
-                                      NULL);
-      notify_notification_set_icon_from_pixbuf (notification, gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+      g_autofree char *basename = g_path_get_basename (desktop_file);
+
+      /* Translators: Desktop notification when a new web app is created. */
+      g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", basename);
+      g_notification_set_default_action_and_target (notification, "app.launch-app", "s", basename);
 
       ephy_focus_desktop_app (desktop_file);
     }
 
-    notify_notification_set_timeout (notification, NOTIFY_EXPIRES_DEFAULT);
-    notify_notification_set_urgency (notification, NOTIFY_URGENCY_LOW);
-    notify_notification_set_hint (notification, "desktop-entry", g_variant_new_string ("epiphany"));
-    notify_notification_set_hint (notification, "transient", g_variant_new_boolean (TRUE));
-    notify_notification_show (notification, NULL);
+    g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_LOW);
+
+    g_application_send_notification (G_APPLICATION (g_application_get_default ()), app_name, notification);
   }
 
   ephy_application_dialog_data_free (data);

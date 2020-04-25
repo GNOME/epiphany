@@ -65,8 +65,7 @@ libephymain_deps = [
   ephywidgets_dep,
   gdk_dep,
   gvdb_dep,
-  libhandy_dep,
-  libnotify_dep
+  libhandy_dep
 ]
 
 libephymain_includes = include_directories(

@@ -37,7 +37,6 @@
 #include <gtk/gtk.h>
 #define HANDY_USE_UNSTABLE_API
 #include <handy.h>
-#include <libnotify/notify.h>
 #include <libxml/xmlreader.h>
 #include <libxml/xmlversion.h>
 #include <signal.h>
@@ -190,8 +189,6 @@ main (int   argc,
    * version we're running with.
    */
   LIBXML_TEST_VERSION;
-
-  notify_init ("epiphany");
 
   /* If we're given -remote arguments, translate them */
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {
@@ -431,9 +428,6 @@ main (int   argc,
   g_object_unref (ephy_shell);
   g_free (desktop_file_basename);
   g_free (profile_directory);
-
-  if (notify_is_initted ())
-    notify_uninit ();
 
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
