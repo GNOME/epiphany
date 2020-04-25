@@ -290,6 +290,21 @@ show_downloads (GSimpleAction *action,
   g_signal_emit_by_name (manager, "show-downloads", NULL);
 }
 
+static void
+launch_app (GSimpleAction *action,
+            GVariant      *parameter,
+            gpointer       user_data)
+{
+  const gchar *desktop_file = g_variant_get_string (parameter, NULL);
+
+  /* We can't get here under flatpak because all web app functionality
+   * is disabled when running under flatpak.
+   */
+  ephy_file_launch_desktop_file (desktop_file,
+                                 gtk_get_current_event_time (),
+                                 EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -302,6 +317,7 @@ static GActionEntry app_entries[] = {
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
   { "show-downloads", show_downloads, NULL, NULL, NULL },
+  { "launch-app", launch_app, "s", NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {
