@@ -24,6 +24,11 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
+
+#include <dazzle.h>
+
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
@@ -31,29 +36,13 @@
 #include "ephy-uri-helpers.h"
 #include "passwords-dialog.h"
 
-typedef enum {
-  COL_PASSWORDS_ORIGIN,
-  COL_PASSWORDS_USER,
-  COL_PASSWORDS_PASSWORD,
-  COL_PASSWORDS_INVISIBLE,
-  COL_PASSWORDS_DATA,
-} PasswordsDialogColumn;
-
 struct _EphyPasswordsDialog {
   EphyDataDialog parent_instance;
 
   EphyPasswordManager *manager;
   GList *records;
-  GtkWidget *passwords_treeview;
-  GtkTreeSelection *tree_selection;
-  GtkWidget *liststore;
-  GtkWidget *treemodelfilter;
-  GtkWidget *treemodelsort;
-  GtkWidget *show_passwords_button;
-  GtkWidget *password_column;
-  GtkWidget *password_renderer;
+  GtkWidget *listbox;
   GtkWidget *confirmation_dialog;
-  GMenuModel *treeview_popup_menu_model;
 
   GActionGroup *action_group;
 };
@@ -67,6 +56,8 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
+
+static void populate_model (EphyPasswordsDialog *dialog);
 
 static void
 ephy_passwords_dialog_set_property (GObject      *object,
@@ -119,224 +110,63 @@ ephy_passwords_dialog_dispose (GObject *object)
 }
 
 static void
-forget (GSimpleAction *action,
-        GVariant      *parameter,
-        gpointer       user_data)
+clear_listbox (GtkWidget *listbox)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  GList *llist, *rlist = NULL, *l, *r;
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter, iter2;
-  GtkTreeRowReference *row_ref = NULL;
+  GList *children, *iter;
 
-  llist = gtk_tree_selection_get_selected_rows (dialog->tree_selection, &model);
+  children = gtk_container_get_children (GTK_CONTAINER (listbox));
 
-  if (llist == NULL) {
-    /* nothing to delete, return early */
-    return;
+  for (iter = children; iter; iter = g_list_next (iter)) {
+    gtk_widget_destroy (GTK_WIDGET (iter->data));
   }
 
-  for (l = llist; l != NULL; l = l->next) {
-    rlist = g_list_prepend (rlist, gtk_tree_row_reference_new (model, (GtkTreePath *)l->data));
-  }
-
-  /* Intelligent selection logic, no actual selection yet */
-
-  path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)g_list_first (rlist)->data);
-
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_path_free (path);
-  iter2 = iter;
-
-  if (gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter)) {
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
-    row_ref = gtk_tree_row_reference_new (model, path);
-  } else {
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter2);
-    if (gtk_tree_path_prev (path)) {
-      row_ref = gtk_tree_row_reference_new (model, path);
-    }
-  }
-  gtk_tree_path_free (path);
-
-  /* Removal */
-  for (r = rlist; r != NULL; r = r->next) {
-    GValue val = { 0, };
-    EphyPasswordRecord *record;
-    GtkTreeIter filter_iter;
-    GtkTreeIter child_iter;
-
-    path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
-    gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
-    record = g_value_get_object (&val);
-    ephy_password_manager_forget (dialog->manager, ephy_password_record_get_id (record));
-    dialog->records = g_list_remove (dialog->records, record);
-    g_object_unref (record);
-    g_value_unset (&val);
-
-    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (dialog->treemodelsort),
-                                                    &filter_iter,
-                                                    &iter);
-
-    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter),
-                                                      &child_iter,
-                                                      &filter_iter);
-
-    gtk_list_store_remove (GTK_LIST_STORE (dialog->liststore), &child_iter);
-
-    gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
-    gtk_tree_path_free (path);
-  }
-
-  g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
-  g_list_free (llist);
-  g_list_free (rlist);
-
-  /* Selection */
-  if (row_ref != NULL) {
-    path = gtk_tree_row_reference_get_path (row_ref);
-
-    if (path != NULL) {
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (dialog->passwords_treeview), path, NULL, FALSE);
-      gtk_tree_path_free (path);
-    }
-
-    gtk_tree_row_reference_free (row_ref);
-  }
-}
-
-static void
-show_passwords (GSimpleAction *action,
-                GVariant      *parameter,
-                gpointer       user_data)
-{
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  gboolean active;
-
-  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->show_passwords_button));
-
-  gtk_tree_view_column_set_attributes (GTK_TREE_VIEW_COLUMN (dialog->password_column),
-                                       GTK_CELL_RENDERER (dialog->password_renderer),
-                                       "text", (active ? COL_PASSWORDS_PASSWORD : COL_PASSWORDS_INVISIBLE),
-                                       NULL);
-  gtk_widget_queue_draw (dialog->passwords_treeview);
-}
-
-static void
-update_selection_actions (GActionMap *action_map,
-                          gboolean    has_selection)
-{
-  GAction *forget_action;
-
-  forget_action = g_action_map_lookup_action (action_map, "forget");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
-}
-
-static void
-on_treeview_selection_changed (GtkTreeSelection    *selection,
-                               EphyPasswordsDialog *dialog)
-{
-  update_selection_actions (G_ACTION_MAP (dialog->action_group),
-                            gtk_tree_selection_count_selected_rows (selection) > 0);
+  g_list_free (children);
 }
 
 static void
 on_search_text_changed (EphyPasswordsDialog *dialog)
 {
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter));
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (dialog->listbox));
 }
 
-static char *
-get_selected_item (EphyPasswordsDialog   *dialog,
-                   PasswordsDialogColumn  column)
+
+static void
+forget_clicked (GtkWidget *button,
+                gpointer   user_data)
 {
-  GtkTreeModel *model;
-  GList *selected;
-  GtkTreeIter iter;
-  char *value;
+  EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (user_data);
+  EphyPasswordsDialog *dialog = g_object_get_data (G_OBJECT (record), "dialog");
 
-  selected = gtk_tree_selection_get_selected_rows (dialog->tree_selection, &model);
-  gtk_tree_model_get_iter (model, &iter, selected->data);
-  gtk_tree_model_get (model, &iter,
-                      column, &value,
-                      -1);
-  g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
+  ephy_password_manager_forget (dialog->manager, ephy_password_record_get_id (record));
+  clear_listbox (dialog->listbox);
 
-  return value;
+  g_list_free_full (dialog->records, g_object_unref);
+  dialog->records = NULL;
+
+  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), FALSE);
+
+  populate_model (dialog);
+}
+
+
+static void
+copy_password_clicked (GtkWidget *button,
+                       gpointer   user_data)
+{
+  const char *password = user_data;
+
+  if (password)
+    gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button), GDK_SELECTION_CLIPBOARD), password, -1);
 }
 
 static void
-copy_password (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
+copy_username_clicked (GtkWidget *button,
+                       gpointer   user_data)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  char *password;
+  const char *username = user_data;
 
-  password = get_selected_item (dialog, COL_PASSWORDS_PASSWORD);
-  if (password != NULL) {
-    gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog),
-                                                      GDK_SELECTION_CLIPBOARD),
-                            password, -1);
-  }
-  g_free (password);
-}
-
-static void
-copy_username (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
-{
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  char *username;
-
-  username = get_selected_item (dialog, COL_PASSWORDS_USER);
-  if (username != NULL) {
-    gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog),
-                                                      GDK_SELECTION_CLIPBOARD),
-                            username, -1);
-  }
-  g_free (username);
-}
-
-static void
-update_popup_menu_actions (GActionGroup *action_group,
-                           gboolean      only_one_selected_item)
-{
-  GAction *copy_password_action;
-  GAction *copy_username_action;
-
-  copy_password_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-password");
-  copy_username_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-username");
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_password_action), only_one_selected_item);
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_username_action), only_one_selected_item);
-}
-
-static gboolean
-on_passwords_treeview_button_press_event (GtkWidget           *widget,
-                                          GdkEventButton      *event,
-                                          EphyPasswordsDialog *dialog)
-{
-  if (event->button == 3) {
-    int n;
-    GtkWidget *menu;
-
-    n = gtk_tree_selection_count_selected_rows (dialog->tree_selection);
-    if (n == 0)
-      return FALSE;
-
-    update_popup_menu_actions (dialog->action_group, (n == 1));
-
-    menu = gtk_menu_new_from_model (dialog->treeview_popup_menu_model);
-    gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (dialog), NULL);
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
-    return TRUE;
-  }
-
-  return FALSE;
+  if (username)
+    gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button), GDK_SELECTION_CLIPBOARD), username, -1);
 }
 
 static void
@@ -361,18 +191,7 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/passwords-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, liststore);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, treemodelfilter);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, treemodelsort);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, passwords_treeview);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, tree_selection);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, show_passwords_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, password_column);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, password_renderer);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, treeview_popup_menu_model);
-
-  gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
-  gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
+  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, listbox);
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
 
@@ -386,7 +205,7 @@ confirmation_dialog_response_cb (GtkWidget           *dialog,
   if (response == GTK_RESPONSE_ACCEPT) {
     ephy_password_manager_forget_all (self->manager);
 
-    gtk_list_store_clear (GTK_LIST_STORE (self->liststore));
+    clear_listbox (self->listbox);
     ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), FALSE);
 
     g_list_free_full (self->records, g_object_unref);
@@ -450,20 +269,114 @@ populate_model_cb (GList    *records,
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 
   ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (dialog), FALSE);
+
   for (GList *l = records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
-    GtkTreeIter iter;
+    GtkWidget *row;
+    GtkWidget *sub_row;
+    GtkWidget *separator;
+    GtkWidget *button;
+    GtkWidget *image;
+    GtkWidget *entry;
+    const char *text;
 
-    gtk_list_store_insert_with_values (GTK_LIST_STORE (dialog->liststore),
-                                       &iter,
-                                       -1,
-                                       COL_PASSWORDS_ORIGIN, ephy_password_record_get_origin (record),
-                                       COL_PASSWORDS_USER, ephy_password_record_get_username (record),
-                                       COL_PASSWORDS_PASSWORD, ephy_password_record_get_password (record),
-                                       COL_PASSWORDS_INVISIBLE, "●●●●●●●●",
-                                       COL_PASSWORDS_DATA, record,
-                                       -1);
+    row = GTK_WIDGET (hdy_expander_row_new ());
+    g_object_set_data (G_OBJECT (row), "record", record);
+    hdy_action_row_set_title (HDY_ACTION_ROW (row), ephy_password_record_get_origin (record));
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), ephy_password_record_get_username (record));
+    hdy_expander_row_set_show_enable_switch (HDY_EXPANDER_ROW (row), FALSE);
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    hdy_action_row_add_action (HDY_ACTION_ROW (row), separator);
+
+    button = gtk_button_new_from_icon_name ("edit-copy-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (HDY_ACTION_ROW (row), button);
+    g_signal_connect (button, "clicked", G_CALLBACK (copy_password_clicked), (void *)(ephy_password_record_get_password (record)));
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    gtk_container_add (GTK_CONTAINER (row), separator);
+
+    /* Username */
+    sub_row = GTK_WIDGET (hdy_action_row_new ());
+    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Username"));
+    gtk_container_add (GTK_CONTAINER (row), sub_row);
+
+    button = gtk_button_new_from_icon_name ("edit-copy-symbolic", GTK_ICON_SIZE_BUTTON);
+    g_signal_connect (button, "clicked", G_CALLBACK (copy_username_clicked), (void *)(ephy_password_record_get_username (record)));
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), button);
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), separator);
+
+    entry = gtk_entry_new ();
+    gtk_widget_set_hexpand (entry, TRUE);
+    gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
+    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+    gtk_entry_set_alignment (GTK_ENTRY (entry), 1.0f);
+    gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
+
+    text = ephy_password_record_get_username (record);
+    if (text)
+      gtk_entry_set_text (GTK_ENTRY (entry), text);
+
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), entry);
+
+    /* Password */
+    sub_row = GTK_WIDGET (hdy_action_row_new ());
+    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Password"));
+    gtk_container_add (GTK_CONTAINER (row), sub_row);
+
+    button = gtk_toggle_button_new ();
+    image = gtk_image_new_from_icon_name ("dialog-password-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image (GTK_BUTTON (button), image);
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), button);
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), separator);
+
+    entry = gtk_entry_new ();
+    gtk_widget_set_hexpand (entry, TRUE);
+    gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
+    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+    gtk_entry_set_alignment (GTK_ENTRY (entry), 1.0f);
+    gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
+    gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+
+    text = ephy_password_record_get_password (record);
+    if (text)
+      gtk_entry_set_text (GTK_ENTRY (entry), text);
+
+    g_object_bind_property (G_OBJECT (button), "active", G_OBJECT (entry), "visibility", G_BINDING_DEFAULT);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), entry);
+
+    /* Remove button */
+    button = gtk_button_new_with_label (_("Remove Password"));
+    gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+    gtk_widget_set_margin_top (button, 18);
+    gtk_widget_set_margin_bottom (button, 18);
+    dzl_gtk_widget_add_style_class (button, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
+    g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), record);
+    gtk_container_add (GTK_CONTAINER (row), button);
+
+    g_object_set_data (G_OBJECT (record), "dialog", dialog);
+
+    gtk_list_box_insert (GTK_LIST_BOX (dialog->listbox), row, -1);
+  }
+
+  if (g_list_length (records)) {
     ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
+    gtk_widget_show_all (dialog->listbox);
   }
 
   g_assert (!dialog->records);
@@ -483,44 +396,11 @@ populate_model (EphyPasswordsDialog *dialog)
                                populate_model_cb, dialog);
 }
 
-static gboolean
-row_visible_func (GtkTreeModel        *model,
-                  GtkTreeIter         *iter,
-                  EphyPasswordsDialog *dialog)
-{
-  char *username;
-  char *origin;
-  gboolean visible = FALSE;
-  const char *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
-
-  if (search_text == NULL)
-    return TRUE;
-
-  gtk_tree_model_get (model, iter,
-                      COL_PASSWORDS_ORIGIN, &origin,
-                      COL_PASSWORDS_USER, &username,
-                      -1);
-
-  if (origin != NULL && g_strrstr (origin, search_text) != NULL)
-    visible = TRUE;
-  else if (username != NULL && g_strrstr (username, search_text) != NULL)
-    visible = TRUE;
-
-  g_free (origin);
-  g_free (username);
-
-  return visible;
-}
-
 static GActionGroup *
 create_action_group (EphyPasswordsDialog *dialog)
 {
   const GActionEntry entries[] = {
-    { "copy-password", copy_password },
-    { "copy-username", copy_username },
-    { "forget", forget },
     { "forget-all", forget_all },
-    { "show-passwords", show_passwords }
   };
 
   GSimpleActionGroup *group;
@@ -540,22 +420,45 @@ show_dialog_cb (GtkWidget *widget,
   populate_model (dialog);
 }
 
+static gboolean
+password_filter (GtkListBoxRow *row,
+                 gpointer       user_data)
+{
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
+  HdyActionRow *action_row = HDY_ACTION_ROW (row);
+  EphyPasswordRecord *record = g_object_get_data (G_OBJECT (action_row), "record");
+  const char *username;
+  const char *origin;
+  gboolean visible = FALSE;
+  const char *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
+
+  if (search_text == NULL)
+    return TRUE;
+
+  origin = ephy_password_record_get_origin (record);
+  username = ephy_password_record_get_username (record);
+
+  if (origin != NULL && g_strrstr (origin, search_text) != NULL)
+    visible = TRUE;
+  else if (username != NULL && g_strrstr (username, search_text) != NULL)
+    visible = TRUE;
+
+  return visible;
+}
+
 static void
 ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
 {
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (dialog->treemodelfilter),
-                                          (GtkTreeModelFilterVisibleFunc)row_visible_func,
-                                          dialog,
-                                          NULL);
-
   dialog->action_group = create_action_group (dialog);
   gtk_widget_insert_action_group (GTK_WIDGET (dialog), "passwords", dialog->action_group);
 
-  update_selection_actions (G_ACTION_MAP (dialog->action_group), FALSE);
-
   g_signal_connect (GTK_WIDGET (dialog), "show", G_CALLBACK (show_dialog_cb), NULL);
+
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->listbox), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (dialog->listbox), password_filter, dialog, NULL);
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (dialog->listbox), GTK_SELECTION_NONE);
 }
 
 EphyPasswordsDialog *
