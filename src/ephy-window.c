@@ -129,7 +129,7 @@ const struct {
   { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", "<Primary>Tab", NULL } },
   { "tab.move-left", { "<shift><Primary>Page_Up", NULL } },
   { "tab.move-right", { "<shift><Primary>Page_Down", NULL } },
-  { "tab.duplicate", { NULL } },
+  { "tab.duplicate", { "<shift><Primary>K", NULL } },
   { "tab.close", { "<Primary>W", NULL } },
   { "tab.pin", { NULL } }
 }, accels_navigation_ltr [] = {
