@@ -68,7 +68,6 @@ struct _EphySession {
 };
 
 #define SESSION_STATE           "type:session_state"
-#define MAX_CLOSED_TABS         10
 
 enum {
   PROP_0,
@@ -304,10 +303,6 @@ ephy_session_tab_closed (EphySession  *session,
   if (!webkit_web_view_can_go_back (wk_view) && !webkit_web_view_can_go_forward (wk_view) &&
       (ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view))) {
     return;
-  }
-
-  if (g_queue_get_length (session->closed_tabs) == MAX_CLOSED_TABS) {
-    closed_tab_free (g_queue_pop_tail (session->closed_tabs));
   }
 
   tab = closed_tab_new (view, position,
