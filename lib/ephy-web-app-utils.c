@@ -799,6 +799,8 @@ ephy_web_application_is_uri_allowed (const char *uri)
   guint i;
   gboolean matched = FALSE;
 
+  g_assert (webapp);
+
   if (g_str_has_prefix (uri, "blob:") || g_str_has_prefix (uri, "data:"))
     return TRUE;
 
