@@ -66,6 +66,12 @@ void                 ephy_password_manager_query                    (EphyPasswor
                                                                      const char                       *password_field,
                                                                      EphyPasswordManagerQueryCallback  callback,
                                                                      gpointer                          user_data);
+gboolean             ephy_password_manager_find                     (EphyPasswordManager              *self,
+                                                                     const char                       *origin,
+                                                                     const char                       *target_origin,
+                                                                     const char                       *username,
+                                                                     const char                       *username_field,
+                                                                     const char                       *password_field);
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
                                                                       const char          *id);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
