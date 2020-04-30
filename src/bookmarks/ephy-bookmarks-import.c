@@ -328,6 +328,7 @@ typedef struct {
   GPtrArray *titles;
   gboolean read_title;
   gboolean read_tag;
+  gboolean skip_bookmark;
 } ParserData;
 
 static ParserData *
@@ -344,6 +345,7 @@ parser_data_new ()
   data->titles = g_ptr_array_new_with_free_func (g_free);
   data->read_title = FALSE;
   data->read_tag = FALSE;
+  data->skip_bookmark = FALSE;
 
   return data;
 }
@@ -384,13 +386,15 @@ xml_start_element (GMarkupParseContext  *context,
 
         if (g_hash_table_lookup_extended (data->urls_table, *values, NULL, (gpointer *)&tags)) {
           g_ptr_array_add (tags, g_strdup (tag));
+          data->skip_bookmark = TRUE;
         } else {
           tags = g_ptr_array_new_with_free_func (g_free);
           g_ptr_array_add (tags, g_strdup (tag));
           g_hash_table_insert (data->urls_table, g_strdup (*values), tags);
           g_ptr_array_add (data->urls, g_strdup (*values));
+          data->skip_bookmark = FALSE;
         }
-      } else if (strcmp (*names, "ADD_DATE") == 0)
+      } else if (strcmp (*names, "ADD_DATE") == 0 && !data->skip_bookmark)
         g_ptr_array_add (data->add_dates, g_strdup (*values));
       names++;
       values++;
@@ -428,7 +432,7 @@ xml_text (GMarkupParseContext  *context,
     g_ptr_array_add (data->tags, g_strdup (text));
   }
 
-  if (data->read_title)
+  if (data->read_title && !data->skip_bookmark)
     g_ptr_array_add (data->titles, g_strdup (text));
 }
 
