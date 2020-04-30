@@ -683,6 +683,36 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   g_hash_table_unref (attributes);
 }
 
+gboolean
+ephy_password_manager_find (EphyPasswordManager *self,
+                            const char          *origin,
+                            const char          *target_origin,
+                            const char          *username,
+                            const char          *username_field,
+                            const char          *password_field)
+{
+  GHashTable *attributes;
+  g_autoptr (GList) list = NULL;
+
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+
+  LOG ("Querying password records for (%s, %s, %s, %s)",
+       origin, username, username_field, password_field);
+
+  attributes = get_attributes_table (NULL, origin, target_origin, username,
+                                     username_field, password_field, -1);
+
+  list = secret_password_searchv_sync (EPHY_FORM_PASSWORD_SCHEMA,
+                                       attributes,
+                                       SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                       NULL,
+                                       NULL);
+
+  g_hash_table_unref (attributes);
+
+  return list != NULL;
+}
+
 static void
 secret_password_clear_cb (GObject      *source_object,
                           GAsyncResult *result,

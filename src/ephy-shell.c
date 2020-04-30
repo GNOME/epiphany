@@ -207,6 +207,18 @@ export_bookmarks (GSimpleAction *action,
 }
 
 static void
+import_passwords (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_import_passwords (NULL, NULL, EPHY_WINDOW (window));
+}
+
+static void
 show_history (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
@@ -310,6 +322,7 @@ static GActionEntry app_entries[] = {
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
   { "import-bookmarks", import_bookmarks, NULL, NULL, NULL },
   { "export-bookmarks", export_bookmarks, NULL, NULL, NULL },
+  { "import-passwords", import_passwords, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
