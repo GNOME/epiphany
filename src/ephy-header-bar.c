@@ -275,6 +275,8 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "keyboard-shortcuts-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "passwords-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-passwords-button")));
   } else if (ephy_is_running_inside_flatpak ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
