@@ -234,6 +234,23 @@
             </child>
             <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
             <child>
+              <object class="GtkSeparator" id="passwords-separator">
+                <property name="orientation">horizontal</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton" id="import-passwords-button">
+                <property name="can_focus">True</property>
+                <property name="text" translatable="yes">I_mport Passwords…</property>
+                <property name="action-name">app.import-passwords</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
+            <child>
               <object class="GtkSeparator" id="save-as-application-separator">
                 <property name="orientation">horizontal</property>
                 <property name="margin-top">6</property>
