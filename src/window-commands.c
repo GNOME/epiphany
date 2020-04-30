@@ -47,6 +47,7 @@
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
+#include "ephy-password-import.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -665,6 +666,180 @@ window_cmd_export_bookmarks (GSimpleAction *action,
 
   g_object_unref (dialog);
 }
+
+static gboolean
+chrome_passwords_exists (void)
+{
+  g_autofree char *filename = NULL;
+
+  filename = g_build_filename (g_get_user_config_dir (), "google-chrome", "Default", "Login Data", NULL);
+
+  return g_file_test (filename, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR);
+}
+
+static gboolean
+chromium_passwords_exists (void)
+{
+  g_autofree char *filename = NULL;
+
+  filename = g_build_filename (g_get_user_config_dir (), "chromium", "Default", "Login Data", NULL);
+
+  return g_file_test (filename, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR);
+}
+
+static struct import_option import_passwords_options[] = {
+  { N_("Chrome"), IMPORT_TYPE_IMPORT, chrome_passwords_exists },
+  { N_("Chromium"), IMPORT_TYPE_IMPORT, chromium_passwords_exists }
+};
+
+static GtkTreeModel *
+create_import_passwords_tree_model (void)
+{
+  enum {
+    TEXT_COL
+  };
+  GtkListStore *list_store;
+  GtkTreeIter iter;
+  int i;
+
+  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  for (i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--) {
+    if (import_passwords_options[i].exists && !import_passwords_options[i].exists ())
+      continue;
+
+    gtk_list_store_prepend (list_store, &iter);
+    gtk_list_store_set (list_store, &iter,
+                        TEXT_COL, _(import_passwords_options[i].name),
+                        -1);
+  }
+
+  return GTK_TREE_MODEL (list_store);
+}
+
+static void
+dialog_password_import_cb (GObject      *source_object,
+                           GAsyncResult *res,
+                           gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  gboolean imported = ephy_password_import_from_chrome_finish (source_object, res, &error);
+  GtkWidget *import_info_dialog;
+
+  import_info_dialog = gtk_message_dialog_new (NULL,
+                                               GTK_DIALOG_MODAL,
+                                               imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                               GTK_BUTTONS_OK,
+                                               "%s",
+                                               imported ? _("Passwords successfully imported!")
+                                                        : error->message);
+  gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+  gtk_widget_destroy (import_info_dialog);
+}
+
+static void
+dialog_passwords_import_cb (GtkDialog   *dialog,
+                            int          response,
+                            GtkComboBox *combo_box)
+{
+  if (response == GTK_RESPONSE_OK) {
+    EphyPasswordManager *manager;
+    int active;
+
+    manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+    active = gtk_combo_box_get_active (combo_box);
+
+    switch (active) {
+      case 0:
+        ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, NULL);
+        break;
+      case 1:
+        ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, NULL);
+        break;
+      default:
+        g_assert_not_reached ();
+    }
+  }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+passwords_combo_box_changed_cb (GtkComboBox *combo_box,
+                                GtkButton   *button)
+{
+  int active;
+
+  g_assert (GTK_IS_COMBO_BOX (combo_box));
+  g_assert (GTK_IS_BUTTON (button));
+
+  active = gtk_combo_box_get_active (combo_box);
+  if (import_passwords_options[active].type == IMPORT_TYPE_CHOOSE)
+    gtk_button_set_label (button, _("Ch_oose File"));
+  else if (import_passwords_options[active].type == IMPORT_TYPE_IMPORT)
+    gtk_button_set_label (button, _("I_mport"));
+}
+
+void
+window_cmd_import_passwords (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkWidget *dialog;
+  GtkWidget *content_area;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *combo_box;
+  GtkTreeModel *tree_model;
+  GtkCellRenderer *cell_renderer;
+
+  dialog = hdy_dialog_new (GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Passwords"));
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"),
+                          GTK_RESPONSE_CANCEL,
+                          _("Ch_oose File"),
+                          GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_start (content_area, 25);
+  gtk_widget_set_margin_end (content_area, 25);
+  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+
+  label = gtk_label_new (_("From:"));
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  tree_model = create_import_passwords_tree_model ();
+  combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
+  g_object_unref (tree_model);
+
+  g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
+                    G_CALLBACK (passwords_combo_box_changed_cb),
+                    gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK));
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
+
+  cell_renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
+                                  "text", 0, NULL);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_box, TRUE, TRUE, 0);
+
+  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (dialog_passwords_import_cb),
+                    GTK_COMBO_BOX (combo_box));
+
+  gtk_widget_show_all (dialog);
+}
+
 
 void
 window_cmd_show_history (GSimpleAction *action,

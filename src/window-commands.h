@@ -236,5 +236,8 @@ void window_cmd_tabs_pin                        (GSimpleAction *action,
 void window_cmd_tabs_unpin                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_import_passwords                (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS
