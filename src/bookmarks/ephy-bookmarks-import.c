@@ -380,10 +380,15 @@ xml_start_element (GMarkupParseContext  *context,
     while (*names) {
       if (strcmp (*names, "HREF") == 0) {
         GPtrArray *tags;
+        GPtrArray *old_tags;
         const char *tag = g_queue_peek_head (data->tags_stack);
 
-        if (g_hash_table_lookup_extended (data->urls_table, *values, NULL, (gpointer *)&tags)) {
+        if (g_hash_table_lookup_extended (data->urls_table, *values, NULL, (gpointer *)&old_tags)) {
+          tags = g_ptr_array_new_with_free_func (g_free);
+          g_ptr_array_extend (tags, old_tags, (GCopyFunc)g_strdup, NULL);
           g_ptr_array_add (tags, g_strdup (tag));
+          g_hash_table_insert (data->urls_table, g_strdup (*values), tags);
+          g_ptr_array_add (data->urls, g_strdup (*values));
         } else {
           tags = g_ptr_array_new_with_free_func (g_free);
           g_ptr_array_add (tags, g_strdup (tag));
