@@ -1,8 +1,16 @@
 # Embedded source code highlighter based on hightlight.js
 
-This directory contains an official highlight.js release version, distributed at: https://highlightjs.org/download/
+This directory contains an official highlight.js release version, distributed at: https://github.com/highlightjs/highlight.js
 
 ## Update process
-Download a new official release (select HTML,XML / CSS / JavaScript) and move highlight.pack.js and styles/default.css into this directory.
+
+git clone https://github.com/highlightjs/highlight.js.git
+cd highlight.js
+git checkout <version number>
+npm install
+node tools/build.js -n css javascript xml
+
+Copy build/highlight.js to <epiphany-source>/third-party/highlightjs/
+Copy src/styles/default.css to <epiphany-source>third-party/highlightjs/
 
 # Documentation created by Jan-Michael Brummer <jan.brummer@tabos.org>
