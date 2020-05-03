@@ -13,6 +13,7 @@ enums = gnome.mkenums_simple('ephy-embed-type-builtins',
 libephyembed_sources = [
   'contrib/gd-tagged-entry.c',
   'ephy-about-handler.c',
+  'ephy-auth-dialog.c',
   'ephy-downloads-manager.c',
   'ephy-download.c',
   'ephy-embed.c',
