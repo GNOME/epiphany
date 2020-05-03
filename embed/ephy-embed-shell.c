@@ -629,7 +629,7 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_assert (EPHY_IS_EMBED_SHELL (shell), NULL);
 
   if (!priv->global_gsb_service) {
     g_autofree char *api_key = NULL;
