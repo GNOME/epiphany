@@ -23,6 +23,7 @@
 #include "ephy-web-view.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-auth-dialog.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -2355,12 +2356,14 @@ authenticate_cb (WebKitWebView               *web_view,
                  WebKitAuthenticationRequest *request,
                  gpointer                     user_data)
 {
+  GtkWidget *dialog;
+  GtkWindow *window;
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   g_autoptr (WebKitCredential) credential = NULL;
 
   credential = webkit_authentication_request_get_proposed_credential (request);
 
-  /* In case we have known credentials and it is the firs try, authenticate automatically */
+  /* In case we have known credentials and it is the first try, authenticate automatically */
   if (credential && !webkit_authentication_request_is_retry (request)) {
     webkit_authentication_request_authenticate (request, credential);
     return TRUE;
@@ -2368,7 +2371,15 @@ authenticate_cb (WebKitWebView               *web_view,
 
   ephy_web_view->in_auth_dialog = 1;
 
-  return FALSE;
+  g_object_ref (request);
+
+  dialog = ephy_auth_dialog_new (request);
+  window = gtk_application_get_active_window (GTK_APPLICATION (g_application_get_default ()));
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), window);
+
+  gtk_widget_show_all (dialog);
+
+  return TRUE;
 }
 
 typedef struct {
