@@ -104,8 +104,6 @@ ephy_pages_button_new (void)
 int
 ephy_pages_button_get_n_pages (EphyPagesButton *self)
 {
-  g_return_val_if_fail (EPHY_IS_PAGES_BUTTON (self), 0);
-
   return self->n_pages;
 }
 
@@ -113,8 +111,6 @@ void
 ephy_pages_button_set_n_pages (EphyPagesButton *self,
                                int              n_pages)
 {
-  g_return_if_fail (EPHY_IS_PAGES_BUTTON (self));
-
   self->n_pages = n_pages;
 
   update_icon (self);
