@@ -1092,7 +1092,6 @@ ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager)
 gboolean
 ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
 {
-  g_return_val_if_fail (EPHY_IS_FILTERS_MANAGER (manager), FALSE);
   return manager->is_initialized;
 }
 
