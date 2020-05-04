@@ -105,7 +105,8 @@ ephy_profile_utils_do_migration (const char *profile_directory,
                            "EPHY_LOG_MODULES", "ephy-profile",
                            TRUE);
 
-  argv[i++] = version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
+  version = g_strdup_printf ("%d", EPHY_PROFILE_MIGRATION_VERSION);
+  argv[i++] = version;
 
   /* If we're not trying to run a migration step in a test and there
    *  is nothing to migrate, don't spawn the migrator at all. */
