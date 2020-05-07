@@ -10,17 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-04-28 18:59+0000\n"
-"PO-Revision-Date: 2020-04-29 08:55+0300\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"POT-Creation-Date: 2020-05-06 21:37+0000\n"
+"PO-Revision-Date: 2020-05-07 07:48+0300\n"
+"Last-Translator: Кирило Тур <lytvyn349@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
-"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 20.07.70\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 2.3\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -215,7 +215,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid "The position of the tabs bar."
-msgstr "Розміщення панелі вкладок"
+msgstr "Розміщення панелі вкладок."
 
 #: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
@@ -268,7 +268,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode color scheme."
-msgstr "Кольорова схема режиму читача"
+msgstr "Кольорова схема режиму читача."
 
 #: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
@@ -2239,21 +2239,21 @@ msgstr ""
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Закладки Firefox неможливо одержати!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:454
+#: src/bookmarks/ephy-bookmarks-import.c:458
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "Не вдалося відкрити базу даних закладок HTML: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:465
+#: src/bookmarks/ephy-bookmarks-import.c:469
 msgid "HTML bookmarks database could not be read."
 msgstr "Не вдалося прочитати базу даних закладок HTML."
 
-#: src/bookmarks/ephy-bookmarks-import.c:486
+#: src/bookmarks/ephy-bookmarks-import.c:490
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "Не вдалося обробити базу даних закладок HTML: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:639
+#: src/bookmarks/ephy-bookmarks-import.c:643
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Не вдалося обробити файл закладок:"
@@ -2607,19 +2607,44 @@ msgstr "_Так"
 msgid "_No"
 msgstr "_Ні"
 
-#: src/passwords-dialog.c:406
+#: src/passwords-dialog.c:225
 msgid "Delete All Passwords?"
 msgstr "Вилучити усі паролі?"
 
-#: src/passwords-dialog.c:409
+#: src/passwords-dialog.c:228
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені паролі. Наслідки "
 "дії неможливо скасувати."
 
-#: src/passwords-dialog.c:414 src/resources/gtk/history-dialog.ui:76
+#: src/passwords-dialog.c:233 src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "В_илучити"
+
+#: src/passwords-dialog.c:304
+msgid "Copy password"
+msgstr "С_копіювати пароль"
+
+#: src/passwords-dialog.c:315
+msgid "Username"
+msgstr "Імʼя користувача"
+
+#: src/passwords-dialog.c:320
+msgid "Copy username"
+msgstr "Ск_опіювати ім’я користувача"
+
+#: src/passwords-dialog.c:344
+msgid "Password"
+msgstr "Пароль"
+
+#: src/passwords-dialog.c:350
+msgid "Reveal password"
+msgstr "Показати усі паролі"
+
+#. Remove button
+#: src/passwords-dialog.c:375
+msgid "Remove Password"
+msgstr "Вилучити пароль"
 
 #: src/popup-commands.c:232
 msgid "Save Link As"
@@ -2673,19 +2698,19 @@ msgstr[2] "Системних мов (%s)"
 msgid "Select a directory"
 msgstr "Виберіть теку"
 
-#: src/prefs-dialog.c:2203
+#: src/prefs-dialog.c:2204
 msgid "Sans"
 msgstr "Без зарубок"
 
-#: src/prefs-dialog.c:2205
+#: src/prefs-dialog.c:2206
 msgid "Serif"
 msgstr "З зарубками"
 
-#: src/prefs-dialog.c:2249
+#: src/prefs-dialog.c:2250
 msgid "Light"
 msgstr "Світла"
 
-#: src/prefs-dialog.c:2251
+#: src/prefs-dialog.c:2252
 msgid "Dark"
 msgstr "Темна"
 
@@ -3064,31 +3089,11 @@ msgstr "Немає паролів"
 msgid "Saved passwords will be listed here"
 msgstr "Тут буде показано список збережених паролів"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Site"
-msgstr "Сайт"
-
 #: src/resources/gtk/passwords-dialog.ui:76
-msgid "User Name"
-msgstr "Користувач"
-
-#: src/resources/gtk/passwords-dialog.ui:90
-msgid "Password"
-msgstr "Пароль"
-
-#: src/resources/gtk/passwords-dialog.ui:109
-msgid "Forget the selected passwords"
-msgstr "Забути вибрані паролі"
-
-#: src/resources/gtk/passwords-dialog.ui:124
-msgid "Reveal all the passwords"
-msgstr "Викрити всі паролі"
-
-#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "_Копіювати пароль"
 
-#: src/resources/gtk/passwords-dialog.ui:148
+#: src/resources/gtk/passwords-dialog.ui:80
 msgid "C_opy Username"
 msgstr "К_опіювати користувача"
 
@@ -3227,7 +3232,7 @@ msgstr "_Зберігати паролі"
 
 #: src/resources/gtk/prefs-dialog.ui:556
 msgid "You can clear stored personal data."
-msgstr "Можете очистити збережені особисті дані"
+msgstr "Можете очистити збережені особисті дані."
 
 #: src/resources/gtk/prefs-dialog.ui:557
 msgid "Clear Personal _Data"
@@ -3502,8 +3507,6 @@ msgid "Move current tab to the right"
 msgstr "Перемістити поточну вкладку праворуч"
 
 #: src/resources/gtk/shortcuts-dialog.ui:203
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "Здублювати поточну вкладку"
@@ -3723,7 +3726,7 @@ msgstr "Файл GVDB"
 
 #: src/window-commands.c:113
 msgid "HTML File"
-msgstr "файл HTML"
+msgstr "Файл HTML"
 
 #: src/window-commands.c:114
 msgid "Firefox"
@@ -3800,7 +3803,8 @@ msgid "translator-credits"
 msgstr ""
 "Максим Дзюманенко <dziumanenko@gmail.com>\n"
 "Daniel Korostil <ted.korostiled@gmail.com>\n"
-"Eugene Strezhnev <strezhnev.ua@gmail.com>"
+"Eugene Strezhnev <strezhnev.ua@gmail.com>\n"
+"Юрій Яновський <lytvyn349@ukr.net>"
 
 #: src/window-commands.c:1485
 #, c-format
@@ -3878,6 +3882,15 @@ msgstr ""
 #: src/window-commands.c:2363
 msgid "_Enable"
 msgstr "_Увімкнути"
+
+#~ msgid "Site"
+#~ msgstr "Сайт"
+
+#~ msgid "Forget the selected passwords"
+#~ msgstr "Забути вибрані паролі"
+
+#~ msgid "Reveal all the passwords"
+#~ msgstr "Викрити всі паролі"
 
 #~ msgid "Yes"
 #~ msgstr "Дозволити"
