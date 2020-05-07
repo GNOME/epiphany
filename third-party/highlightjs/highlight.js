@@ -1,13 +1,10 @@
 /*
-  Highlight.js 10.0.1 (33af2ea5)
+  Highlight.js 10.0.2 (e29f8f7d)
   License: BSD-3-Clause
   Copyright (c) 2006-2020, Ivan Sagalaev
 */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.hljs = factory());
-}(this, (function () { 'use strict';
+var hljs = (function () {
+  'use strict';
 
   // https://github.com/substack/deep-freeze/blob/master/index.js
   function deepFreeze (o) {
@@ -870,7 +867,7 @@
   return COMMON_KEYWORDS.includes(word.toLowerCase());
   }
 
-  var version = "10.0.1";
+  var version = "10.0.2";
 
   /*
   Syntax highlighting with language autodetection.
@@ -1214,6 +1211,23 @@
             return processed;
         }
 
+        // edge case for when illegal matches $ (end of line) which is technically
+        // a 0 width match but not a begin/end match so it's not caught by the
+        // first handler (when ignoreIllegals is true)
+        if (match.type === "illegal" && lexeme === "") {
+          // advance so we aren't stuck in an infinite loop
+          return 1;
+        }
+
+        // infinite loops are BAD, this is a last ditch catch all. if we have a
+        // decent number of iterations yet our index (cursor position in our
+        // parsing) still 3x behind our index then something is very wrong
+        // so we bail
+        if (iterations > 100000 && iterations > match.index * 3) {
+          const err = new Error('potential infinite loop, way more iterations than matches');
+          throw err;
+        }
+
         /*
         Why might be find ourselves here?  Only one occasion now.  An end match that was
         triggered but could not be completed.  When might this happen?  When an `endSameasBegin`
@@ -1244,13 +1258,17 @@
       processContinuations();
       var mode_buffer = '';
       var relevance = 0;
-      var match, processedCount, index = 0;
+      var match;
+      var processedCount;
+      var index = 0;
+      var iterations = 0;
+      var continueScanAtSamePosition = false;
 
       try {
-        var continueScanAtSamePosition = false;
         top.matcher.considerAll();
 
-        while (true) {
+        for (;;) {
+          iterations++;
           if (continueScanAtSamePosition) {
             continueScanAtSamePosition = false;
             // only regexes not matched previously will now be
@@ -1573,7 +1591,8 @@
 
   return highlight;
 
-})));
+}());
+if (typeof exports === 'object' && typeof module !== 'undefined') { module.exports = hljs; }
 
 hljs.registerLanguage('css', function () {
   'use strict';
