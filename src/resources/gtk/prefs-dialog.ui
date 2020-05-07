@@ -734,6 +734,41 @@
                     </child>
                     <child>
                       <object class="HdyActionRow">
+                        <property name="activatable_widget">js_switch</property>
+                        <property name="title" translatable="yes">Use Custom JavaScript</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkButton" id="js_edit_button">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon_name">document-edit-symbolic</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkSeparator">
+                            <property name="margin_bottom">8</property>
+                            <property name="margin_top">8</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkSwitch" id="js_switch">
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
                         <property name="activatable">False</property>
                         <property name="title" translatable="yes">Default zoom level</property>
                         <property name="visible">True</property>

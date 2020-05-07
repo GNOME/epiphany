@@ -43,6 +43,8 @@ typedef struct {
 static WebKitSettings *webkit_settings = NULL;
 static GFileMonitor *user_style_sheet_monitor = NULL;
 static WebKitUserStyleSheet *style_sheet = NULL;
+static GFileMonitor *user_javascript_monitor = NULL;
+static WebKitUserScript *javascript = NULL;
 static GList *ucm_list = NULL;
 
 static void
@@ -147,6 +149,111 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
     g_error_free (error);
   } else {
     g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
+  }
+}
+
+static void
+update_user_javascript_on_all_ucm (void)
+{
+  GList *list = NULL;
+
+  for (list = ucm_list; list != NULL; list = list->next) {
+    WebKitUserContentManager *ucm = list->data;
+
+    webkit_user_content_manager_remove_all_scripts (ucm);
+    if (javascript)
+      webkit_user_content_manager_add_script (ucm, javascript);
+  }
+}
+
+static void
+user_javascript_output_stream_splice_cb (GOutputStream *output_stream,
+                                         GAsyncResult  *result,
+                                         gpointer       user_data)
+{
+  gssize bytes;
+
+  g_clear_pointer (&javascript, webkit_user_script_unref);
+
+  bytes = g_output_stream_splice_finish (output_stream, result, NULL);
+  if (bytes > 0) {
+    javascript = webkit_user_script_new (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output_stream)),
+                                         WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES, WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                         NULL, NULL);
+  }
+
+  update_user_javascript_on_all_ucm ();
+
+  g_object_unref (output_stream);
+}
+
+static void
+user_javascript_read_cb (GFile        *file,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  g_autoptr (GFileInputStream) input_stream = NULL;
+  g_autoptr (GOutputStream) output_stream = NULL;
+
+  input_stream = g_file_read_finish (file, result, NULL);
+  if (!input_stream)
+    return;
+
+  output_stream = g_memory_output_stream_new_resizable ();
+  g_output_stream_splice_async (g_steal_pointer (&output_stream),
+                                G_INPUT_STREAM (input_stream),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                (GAsyncReadyCallback)user_javascript_output_stream_splice_cb,
+                                NULL);
+}
+
+static void
+user_javascript_file_changed (GFileMonitor      *monitor,
+                              GFile             *file,
+                              GFile             *other_file,
+                              GFileMonitorEvent  event_type,
+                              gpointer           user_data)
+{
+  if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) {
+    g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
+                       (GAsyncReadyCallback)user_javascript_read_cb, NULL);
+  }
+}
+
+static void
+webkit_pref_callback_user_javascript (GSettings  *settings,
+                                      const char *key,
+                                      gpointer    data)
+{
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *filename = NULL;
+  gboolean value;
+  GError *error = NULL;
+
+  value = g_settings_get_boolean (settings, key);
+
+  g_clear_object (&user_javascript_monitor);
+  g_clear_pointer (&javascript, webkit_user_script_unref);
+
+  if (!value) {
+    update_user_javascript_on_all_ucm ();
+    return;
+  }
+
+  filename = g_build_filename (ephy_profile_dir (), USER_JAVASCRIPT_FILENAME, NULL);
+  file = g_file_new_for_path (filename);
+
+  g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
+                     (GAsyncReadyCallback)user_javascript_read_cb, NULL);
+
+  user_javascript_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+  if (!user_javascript_monitor) {
+    g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+    g_error_free (error);
+  } else {
+    g_signal_connect (user_javascript_monitor, "changed", G_CALLBACK (user_javascript_file_changed), NULL);
   }
 }
 
@@ -467,6 +574,10 @@ static const PrefData webkit_pref_entries[] = {
     "user-stylesheet-uri",
     webkit_pref_callback_user_stylesheet },
   { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_ENABLE_USER_JS,
+    "user-javascript-uri",
+    webkit_pref_callback_user_javascript },
+  { EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_LANGUAGE,
     "accept-language",
     webkit_pref_callback_accept_languages },
@@ -554,6 +665,13 @@ ephy_embed_prefs_apply_user_style (WebKitUserContentManager *ucm)
 {
   if (style_sheet)
     webkit_user_content_manager_add_style_sheet (ucm, style_sheet);
+}
+
+void
+ephy_embed_prefs_apply_user_javascript (WebKitUserContentManager *ucm)
+{
+  if (javascript)
+    webkit_user_content_manager_add_script (ucm, javascript);
 }
 
 void

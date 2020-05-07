@@ -26,6 +26,7 @@
 #include <webkit2/webkit2.h>
 
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
+#define USER_JAVASCRIPT_FILENAME	"user-javascript.js"
 #define FAVICON_SIZE 16
 
 G_BEGIN_DECLS
@@ -34,6 +35,7 @@ WebKitSettings *ephy_embed_prefs_get_settings  (void);
 void ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager      *cookie_manager,
                                                 const char               *settings_policy);
 void ephy_embed_prefs_apply_user_style         (WebKitUserContentManager *ucm);
+void ephy_embed_prefs_apply_user_javascript    (WebKitUserContentManager *ucm);
 
 void ephy_embed_prefs_register_ucm             (WebKitUserContentManager *ucm);
 void ephy_embed_prefs_unregister_ucm           (WebKitUserContentManager *ucm);
