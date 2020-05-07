@@ -1055,7 +1055,7 @@ migrate_webapps_harder (void)
    * later to correct a different bug in earlier versions.
    */
   g_autoptr (GFileEnumerator) children = NULL;
-  g_autoptr (GFileInfo) info;
+  g_autoptr (GFileInfo) info = NULL;
   g_autofree char *parent_directory_path = NULL;
   g_autoptr (GFile) parent_directory = NULL;
 
