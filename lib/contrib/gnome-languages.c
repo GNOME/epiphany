@@ -764,7 +764,7 @@ get_translated_territory (const char *code,
         if (territory != NULL) {
                 const char *translated_territory;
                 locale_t loc;
-                locale_t old_locale;
+                locale_t old_locale = NULL;
                 g_autofree char *tmp = NULL;
 
                 if (locale != NULL) {
@@ -779,8 +779,10 @@ get_translated_territory (const char *code,
                 name = capitalize_utf8_string (tmp);
 
                 if (locale != NULL) {
-                        uselocale (old_locale);
-                        freelocale (loc);
+                        if (old_locale)
+                                uselocale (old_locale);
+                        if (loc)
+                                freelocale (loc);
                 }
         }
 
