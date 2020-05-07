@@ -29,6 +29,8 @@ variables:
 flatpak:
   extends: '.flatpak-template'
   stage: build
+  before_script:
+    - /usr/libexec/xdg-desktop-portal
   variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   except:
