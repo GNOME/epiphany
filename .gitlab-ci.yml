@@ -1,55 +1,52 @@
 include:
   - project: 'gnome/citemplates'
-    ref: 3ecafcc4f06d98a13eb958e86ae0d8c6f388c1aa
     file: '/flatpak/flatpak_ci_initiative.yml'
 
+variables:
+  BUNDLE: 'epiphany-git.flatpak'
+
 stages:
-  - build
+  - test
 
 check-code-style:
   stage: .pre
   image: alpine:latest
+  interruptible: true
   before_script:
     - apk update && apk add uncrustify bash python3
   script:
     - bash data/check-code-style
 
-variables:
-  BUNDLE: 'epiphany-git.flatpak'
-
-.flatpak-template:
+flatpak:
   extends: '.flatpak'
-  stage: build
   variables:
     MANIFEST_PATH: 'org.gnome.Epiphany.json'
     RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
     FLATPAK_MODULE: 'epiphany'
     APP_ID: 'org.gnome.Epiphany.Devel'
-
-flatpak:
-  extends: '.flatpak-template'
-  stage: build
-  variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
   except:
     - master
 
-flatpak-master:
-  extends: '.flatpak-template'
-  stage: build
+flatpak master:
+  extends: '.flatpak'
   variables:
+    MANIFEST_PATH: 'org.gnome.Epiphany.json'
+    RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
+    FLATPAK_MODULE: 'epiphany'
+    APP_ID: 'org.gnome.Epiphany.Devel'
     MESON_ARGS: '-Dtech_preview=true -Dprofile=Devel'
   only:
     - master
 
-flatpak-scanbuild:
-  extends: '.flatpak-template'
-  stage: .pre
-  tags:
-    - flatpak
+flatpak scanbuild:
+  extends: '.flatpak'
   variables:
+    MANIFEST_PATH: 'org.gnome.Epiphany.json'
+    RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
+    FLATPAK_MODULE: 'epiphany'
+    APP_ID: 'org.gnome.Epiphany.Devel'
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
-  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
   script:
     - flatpak-builder --user --disable-rofiles-fuse --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
     - flatpak build flatpak_app meson --prefix=/app ${MESON_ARGS} _build
@@ -63,4 +60,4 @@ flatpak-scanbuild:
 nightly:
   extends: '.publish_nightly'
   stage: .post
-  dependencies: ['flatpak-master']
+  dependencies: ['flatpak master']
