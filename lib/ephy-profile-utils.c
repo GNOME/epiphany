@@ -64,8 +64,8 @@ gboolean
 ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
                                                           const char *profile_directory)
 {
-  g_autofree char *migrated_file;
-  g_autofree char *contents;
+  g_autofree char *migrated_file = NULL;
+  g_autofree char *contents = NULL;
   gboolean result = FALSE;
 
   migrated_file = g_build_filename (profile_directory,

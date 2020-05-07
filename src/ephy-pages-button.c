@@ -75,7 +75,7 @@ update_icon (EphyPagesButton *self)
   gboolean is_overflow;
   double font_size;
   const char *icon_name;
-  g_autofree char *label_text;
+  g_autofree char *label_text = NULL;
   PangoAttrList *attrs;
   PangoAttribute *size_attribute;
 

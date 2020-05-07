@@ -455,7 +455,7 @@ dialog_bookmarks_import_from_chrome (GtkDialog *dialog)
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkWidget *import_info_dialog;
   g_autoptr (GError) error = NULL;
-  g_autofree gchar *filename;
+  g_autofree gchar *filename = NULL;
   gboolean imported;
 
   filename = g_build_filename (g_get_user_config_dir (), "google-chrome", "Default", "Bookmarks", NULL);
@@ -480,7 +480,7 @@ dialog_bookmarks_import_from_chromium (GtkDialog *dialog)
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkWidget *import_info_dialog;
   g_autoptr (GError) error = NULL;
-  g_autofree gchar *filename;
+  g_autofree gchar *filename = NULL;
   gboolean imported;
 
   filename = g_build_filename (g_get_user_config_dir (), "chromium", "Default", "Bookmarks", NULL);
