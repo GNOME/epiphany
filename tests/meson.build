@@ -10,14 +10,15 @@ test_cargs = ['-UG_DISABLE_ASSERT']
 if get_option('unit_tests').enabled()
   # FIXME: The tests that need ephy-test-utils are all disabled....
   #
-  # libephytestutils = static_library('ephytestutils',
-  #   'ephy-test-utils.c',
-  #   dependencies: ephymain_dep
-  # )
-  #
-  # ephytestutils_dep = declare_dependency(
-  #   link_with: libephytestutils
-  # )
+  libephytestutils = static_library('ephytestutils',
+    'ephy-test-utils.c',
+    dependencies: ephymain_dep,
+    c_args: test_cargs
+  )
+
+  ephytestutils_dep = declare_dependency(
+    link_with: libephytestutils
+  )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
   # download_test = executable('test-ephy-download',
@@ -114,15 +115,16 @@ if get_option('unit_tests').enabled()
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=693369
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=695703
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707217
-  # shell_test = executable('test-ephy-shell',
-  #   'ephy-shell-test.c',
-  #   dependencies: ephytestutils_dep,
-  #    c_args: test_cargs,
-  # )
-  # test('Shell test',
-  #      shell_test,
-  #      env: envs
-  # )
+  shell_test = executable('test-ephy-shell',
+    'ephy-shell-test.c',
+    resources,
+    dependencies: [ephytestutils_dep, ephymain_dep],
+    c_args: test_cargs,
+  )
+  test('Shell test',
+       shell_test,
+       env: envs
+  )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=762753
   # snapshot_service_test = executable('test-snapshot-service',
