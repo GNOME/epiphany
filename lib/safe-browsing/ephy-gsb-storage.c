@@ -919,10 +919,10 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (indices);
 
+  *num_prefixes = 0;
+
   if (!self->is_operable)
     return NULL;
-
-  *num_prefixes = 0;
 
   sql = "SELECT value FROM hash_prefix WHERE "
         "threat_type=? AND platform_type=? AND threat_entry_type=? "
@@ -1060,7 +1060,7 @@ ephy_gsb_storage_delete_hash_prefixes_internal (EphyGSBStorage    *self,
   GList *prefixes = NULL;
   GList *head = NULL;
   GHashTable *set;
-  gsize num_prefixes;
+  gsize num_prefixes = 0;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (list);
