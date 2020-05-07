@@ -127,7 +127,11 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
 
   value = g_settings_get_boolean (settings, key);
 
-  g_clear_object (&user_style_sheet_monitor);
+  if (user_style_sheet_monitor) {
+    g_signal_handlers_disconnect_by_func (user_style_sheet_monitor, user_style_sheet_file_changed, NULL);
+    g_clear_object (&user_style_sheet_monitor);
+  }
+
   g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
 
   if (!value) {
@@ -141,12 +145,14 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
   g_file_read_async (file, G_PRIORITY_DEFAULT, NULL,
                      (GAsyncReadyCallback)user_style_sheet_read_cb, NULL);
 
-  user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
   if (!user_style_sheet_monitor) {
-    g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
-    g_error_free (error);
-  } else {
-    g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
+    user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+    if (!user_style_sheet_monitor) {
+      g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+      g_error_free (error);
+    } else {
+      g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
+    }
   }
 }
 
