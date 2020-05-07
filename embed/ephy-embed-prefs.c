@@ -127,7 +127,11 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
 
   value = g_settings_get_boolean (settings, key);
 
-  g_clear_object (&user_style_sheet_monitor);
+  if (user_style_sheet_monitor) {
+    g_signal_handlers_disconnect_by_func (user_style_sheet_monitor, user_style_sheet_file_changed, NULL);
+    g_clear_object (&user_style_sheet_monitor);
+  }
+
   g_clear_pointer (&style_sheet, webkit_user_style_sheet_unref);
 
   if (!value) {
