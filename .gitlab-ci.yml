@@ -31,6 +31,31 @@ flatpak:
   stage: build
   variables:
     MESON_ARGS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+  script:
+    - rewrite-flatpak-manifest ${MANIFEST_PATH} ${FLATPAK_MODULE}
+    - flatpak-builder --user --disable-rofiles-fuse flatpak_app --repo=repo ${BRANCH:+--default-branch=$BRANCH} ${MANIFEST_PATH}
+
+    # Generate a Flatpak bundle
+    - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${APP_ID} ${BRANCH}
+    - tar cf repo.tar repo/
+
+    # Run automatic tests inside the Flatpak env
+    # we need to recreate the build directory because cleanup would have deleted build dependencies
+    - rm -rf flatpak_app
+    - flatpak-builder --user --disable-rofiles-fuse --build-only flatpak_app ${MANIFEST_PATH}
+    - flatpak build-finish --socket=x11 --share=network flatpak_app
+    - >
+      xvfb-run -a -s "-screen 0 1024x768x24"
+      flatpak-builder --user --disable-rofiles-fuse --build-shell=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH} <<END
+
+      LANG=C.UTF-8
+      NO_AT_BRIDGE=1
+      dbus-run-session
+      /usr/libexec/xdg-desktop-portal
+      meson test --no-stdsplit --print-errorlogs ${TEST_RUN_ARGS}
+
+      END
+
   except:
     - master
 
