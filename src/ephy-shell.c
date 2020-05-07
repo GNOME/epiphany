@@ -65,6 +65,7 @@ struct _EphyShell {
   EphyShellStartupContext *remote_startup_context;
   GSList *open_uris_idle_ids;
 
+  GHashTable *notifications;
   gchar *open_notification_id;
 };
 
@@ -305,6 +306,20 @@ launch_app (GSimpleAction *action,
                                  EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
 }
 
+static void
+notification_clicked (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  guint64 id = g_variant_get_uint64 (parameter);
+  WebKitNotification *notification;
+
+  notification = g_hash_table_lookup (shell->notifications, GINT_TO_POINTER (id));
+  if (notification)
+    webkit_notification_clicked (notification);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -318,6 +333,7 @@ static GActionEntry app_entries[] = {
   { "quit", quit_application, NULL, NULL, NULL },
   { "show-downloads", show_downloads, NULL, NULL, NULL },
   { "launch-app", launch_app, "s", NULL, NULL },
+  { "notification-clicked", notification_clicked, "t", NULL, NULL},
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {
@@ -731,6 +747,8 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+  ephy_shell->notifications = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -755,6 +773,8 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
+
+  g_hash_table_destroy (shell->notifications);
 
   if (shell->open_notification_id) {
     g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
@@ -791,6 +811,85 @@ EphyShell *
 ephy_shell_get_default (void)
 {
   return ephy_shell;
+}
+
+static void
+webkit_notification_clicked_cb (WebKitNotification *notification,
+                                gpointer            user_data)
+{
+  WebKitWebView *notification_webview = WEBKIT_WEB_VIEW (user_data);
+  EphyShell *shell;
+  GApplication *application;
+  GList *windows;
+
+  shell = ephy_shell_get_default ();
+  application = G_APPLICATION (shell);
+  windows = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
+    EphyWindow *window;
+    GtkWidget *notebook;
+    int n_pages;
+
+    window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
+
+    notebook = ephy_window_get_notebook (window);
+    n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+    for (int i = 0; i < n_pages; i++) {
+      EphyEmbed *embed;
+      WebKitWebView *webview;
+
+      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+      webview = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
+
+      if (webview == notification_webview) {
+        gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), i);
+        gtk_window_present (GTK_WINDOW (window));
+        return;
+      }
+    }
+  }
+}
+
+static void
+webkit_notification_closed_cb (WebKitNotification *notification,
+                               gpointer            user_data)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autofree char *id;
+
+  id = g_strdup_printf ("%" G_GUINT64_FORMAT, webkit_notification_get_id (notification));
+
+  g_application_withdraw_notification (G_APPLICATION (g_application_get_default ()), id);
+  g_hash_table_remove (shell->notifications, GINT_TO_POINTER (webkit_notification_get_id (notification)));
+}
+
+static gboolean
+show_notification_cb (WebKitWebView      *web_view,
+                      WebKitNotification *notification,
+                      gpointer            user_data)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  GNotification *notify;
+  g_autofree char *id = NULL;
+
+  id = g_strdup_printf ("%" G_GUINT64_FORMAT, webkit_notification_get_id (notification));
+
+  g_signal_connect_object (notification, "clicked", G_CALLBACK (webkit_notification_clicked_cb), web_view, 0);
+  g_signal_connect_object (notification, "closed", G_CALLBACK (webkit_notification_closed_cb), web_view, 0);
+
+  notify = g_notification_new (webkit_notification_get_title (notification));
+  g_notification_set_body (notify, webkit_notification_get_body (notification));
+
+  g_notification_set_priority (notify, G_NOTIFICATION_PRIORITY_LOW);
+  g_notification_set_default_action_and_target (notify, "app.notification-clicked", "t", webkit_notification_get_id (notification));
+
+  g_hash_table_insert (shell->notifications, GINT_TO_POINTER (webkit_notification_get_id (notification)), notification);
+
+  g_application_send_notification (G_APPLICATION (g_application_get_default ()), id, notify);
+
+  return TRUE;
 }
 
 /**
@@ -846,6 +945,8 @@ ephy_shell_new_tab_full (EphyShell       *shell,
     web_view = ephy_web_view_new_with_related_view (related_view);
   else
     web_view = ephy_web_view_new ();
+
+  g_signal_connect (web_view, "show-notification", G_CALLBACK (show_notification_cb), NULL);
 
   embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED,
                                     "web-view", web_view,
