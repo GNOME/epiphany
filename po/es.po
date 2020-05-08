@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-04-24 16:39+0000\n"
-"PO-Revision-Date: 2020-04-28 12:16+0200\n"
+"POT-Creation-Date: 2020-05-06 21:37+0000\n"
+"PO-Revision-Date: 2020-05-08 13:07+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -57,8 +57,8 @@ msgid "The GNOME Project"
 msgstr "El proyecto GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:804
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:101 src/ephy-main.c:252
+#: src/ephy-main.c:404 src/window-commands.c:803
 msgid "Web"
 msgstr "Web"
 
@@ -915,7 +915,7 @@ msgstr "Versión %s"
 msgid "About Web"
 msgstr "Acerca de Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:806
+#: embed/ephy-about-handler.c:194 src/window-commands.c:805
 msgid "Epiphany Technology Preview"
 msgstr "Tecnología de vista previa de Epiphany"
 
@@ -1013,10 +1013,10 @@ msgstr "Descarga requerida"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
 #: src/resources/gtk/prefs-dialog.ui:943
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:275
-#: src/window-commands.c:333 src/window-commands.c:377
-#: src/window-commands.c:557 src/window-commands.c:642
-#: src/window-commands.c:1662
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:274
+#: src/window-commands.c:332 src/window-commands.c:376
+#: src/window-commands.c:556 src/window-commands.c:641
+#: src/window-commands.c:1648
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1427,7 +1427,7 @@ msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 msgid "%s is not a valid URI"
 msgstr "%s no es un URI válido"
 
-#: embed/ephy-web-view.c:184 src/window-commands.c:1111
+#: embed/ephy-web-view.c:184 src/window-commands.c:1110
 msgid "Open"
 msgstr "Abrir"
 
@@ -1440,7 +1440,7 @@ msgid "_Never Save"
 msgstr "_Nunca guardar"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:641
+#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:640
 msgid "_Save"
 msgstr "_Guardar"
 
@@ -2290,30 +2290,22 @@ msgstr ""
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "No se pudieron obtener los marcadores de Firefox."
 
-#: src/bookmarks/ephy-bookmarks-import.c:454
+#: src/bookmarks/ephy-bookmarks-import.c:458
 #, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "No se pudo abrir la base de datos de marcadores HTML. %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:465
-#| msgid "Firefox bookmarks could not be retrieved!"
+#: src/bookmarks/ephy-bookmarks-import.c:469
 msgid "HTML bookmarks database could not be read."
 msgstr "No se pudieron leer los marcadores HTML."
 
-#: src/bookmarks/ephy-bookmarks-import.c:486
+#: src/bookmarks/ephy-bookmarks-import.c:490
 #, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "No se pudo analizar la base de datos de marcadores HTML: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:639
+#: src/bookmarks/ephy-bookmarks-import.c:643
 #, c-format
-#| msgid "Firefox bookmarks could not be retrieved!"
 msgid "Bookmarks file could not be parsed:"
 msgstr "No se pudo analizar el archivo de marcadores de HTML:"
 
@@ -2386,47 +2378,47 @@ msgstr ""
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "No se puede modificar el histórico cuando está en modo incógnito."
 
-#: src/ephy-main.c:111
+#: src/ephy-main.c:110
 msgid "Open a new browser window instead of a new tab"
 msgstr "Abre una ventana nueva del navegador en lugar de una pestaña nueva"
 
-#: src/ephy-main.c:113
+#: src/ephy-main.c:112
 msgid "Load the given session state file"
 msgstr "Cargar el archivo de sesión dado"
 
-#: src/ephy-main.c:113
+#: src/ephy-main.c:112
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: src/ephy-main.c:115
+#: src/ephy-main.c:114
 msgid "Start an instance with user data read-only"
 msgstr "Iniciar una instancia con datos de usuario en sólo lectura"
 
-#: src/ephy-main.c:117
+#: src/ephy-main.c:116
 msgid "Start a private instance with separate user data"
 msgstr "Iniciar una instancia privada con datos de usuario separados"
 
-#: src/ephy-main.c:120
+#: src/ephy-main.c:119
 msgid "Start a private instance in web application mode"
 msgstr "Iniciar una instancia privada en modo aplicación web"
 
-#: src/ephy-main.c:122
+#: src/ephy-main.c:121
 msgid "Start a private instance for WebDriver control"
 msgstr "Iniciar una instancia privada para"
 
-#: src/ephy-main.c:124
+#: src/ephy-main.c:123
 msgid "Custom profile directory for private instance"
 msgstr "Carpeta personalizada de perfiles que usar en la instancia privada"
 
-#: src/ephy-main.c:124
+#: src/ephy-main.c:123
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:126
+#: src/ephy-main.c:125
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:256
+#: src/ephy-main.c:253
 msgid "Web options"
 msgstr "Opciones de Web"
 
@@ -2666,19 +2658,48 @@ msgstr "_Sí"
 msgid "_No"
 msgstr "_No"
 
-#: src/passwords-dialog.c:406
-#| msgid "Remove all passwords"
+#: src/passwords-dialog.c:225
 msgid "Delete All Passwords?"
 msgstr "¿Eliminar todas las contraseñas?"
 
-#: src/passwords-dialog.c:409
+#: src/passwords-dialog.c:228
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Esto eliminará la contraseñas guardadas en local y no se puede deshacer."
 
-#: src/passwords-dialog.c:414 src/resources/gtk/history-dialog.ui:76
+#: src/passwords-dialog.c:233 src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "_Eliminar"
+
+#: src/passwords-dialog.c:304
+#| msgid "_Copy Password"
+msgid "Copy password"
+msgstr "Copiar contraseña"
+
+#: src/passwords-dialog.c:315
+#| msgid "User Name"
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: src/passwords-dialog.c:320
+#| msgid "C_opy Username"
+msgid "Copy username"
+msgstr "Copiar nombre de usuario"
+
+#: src/passwords-dialog.c:344
+msgid "Password"
+msgstr "Contraseña"
+
+#: src/passwords-dialog.c:350
+#| msgid "Remove all passwords"
+msgid "Reveal password"
+msgstr "Mostrar contraseña"
+
+#. Remove button
+#: src/passwords-dialog.c:375
+#| msgid "Remove all passwords"
+msgid "Remove Password"
+msgstr "Quitar contraseña"
 
 #: src/popup-commands.c:232
 msgid "Save Link As"
@@ -2731,20 +2752,20 @@ msgstr[1] "Idiomas del sistema (%s)"
 msgid "Select a directory"
 msgstr "Seleccione una carpeta"
 
-#: src/prefs-dialog.c:2203
+#: src/prefs-dialog.c:2204
 msgid "Sans"
 msgstr "Sans"
 
 # Esto es de gestión de cookies (serrador)
-#: src/prefs-dialog.c:2205
+#: src/prefs-dialog.c:2206
 msgid "Serif"
 msgstr "Serif"
 
-#: src/prefs-dialog.c:2249
+#: src/prefs-dialog.c:2250
 msgid "Light"
 msgstr "Claro"
 
-#: src/prefs-dialog.c:2251
+#: src/prefs-dialog.c:2252
 msgid "Dark"
 msgstr "Oscuro"
 
@@ -3125,31 +3146,11 @@ msgstr "No hay contraseñas"
 msgid "Saved passwords will be listed here"
 msgstr "Las contraseñas guardadas se listarán aquí"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Site"
-msgstr "Sitio"
-
 #: src/resources/gtk/passwords-dialog.ui:76
-msgid "User Name"
-msgstr "Nombre de usuario"
-
-#: src/resources/gtk/passwords-dialog.ui:90
-msgid "Password"
-msgstr "Contraseña"
-
-#: src/resources/gtk/passwords-dialog.ui:109
-msgid "Forget the selected passwords"
-msgstr "Olvidar las contraseñas seleccionadas"
-
-#: src/resources/gtk/passwords-dialog.ui:124
-msgid "Reveal all the passwords"
-msgstr "Mostrar todas las contraseñas"
-
-#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "_Copiar contraseña"
 
-#: src/resources/gtk/passwords-dialog.ui:148
+#: src/resources/gtk/passwords-dialog.ui:80
 msgid "C_opy Username"
 msgstr "C_opiar nombre de usuario"
 
@@ -3563,161 +3564,157 @@ msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Mover la pestaña actual a la derecha"
 
-#: src/resources/gtk/shortcuts-dialog.ui:207
+#: src/resources/gtk/shortcuts-dialog.ui:203
+msgctxt "shortcut window"
+msgid "Duplicate current tab"
+msgstr "Duplicar la pestaña actual"
+
+#: src/resources/gtk/shortcuts-dialog.ui:214
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Miscelánea"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:218
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Histórico"
 
-#: src/resources/gtk/shortcuts-dialog.ui:218
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:232
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Añadir la página actual a marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:239
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "Importar marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:246
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "Exportar marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:253
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Conmutar el modo de navegación con cursor"
 
-#: src/resources/gtk/shortcuts-dialog.ui:257
-#| msgid "Web Application"
+#: src/resources/gtk/shortcuts-dialog.ui:264
 msgctxt "shortcut window"
 msgid "Web application"
 msgstr "Aplicación web"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
-#| msgid "Install Site as Web _Application…"
+#: src/resources/gtk/shortcuts-dialog.ui:268
 msgctxt "shortcut window"
 msgid "Install site as web application"
 msgstr "Instalar página como aplicación web"
 
-#: src/resources/gtk/shortcuts-dialog.ui:268
-#| msgid "Open Appli_cation Manager"
+#: src/resources/gtk/shortcuts-dialog.ui:275
 msgctxt "shortcut window"
 msgid "Open web application manager"
 msgstr "Abrir gestor de aplicaciones web"
 
-#: src/resources/gtk/shortcuts-dialog.ui:279
+#: src/resources/gtk/shortcuts-dialog.ui:286
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Ver"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Ampliar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Reducir"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Restablecer ampliación"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Ver código fuente"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Conmutar inspector"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Conmutar el modo de lectura"
 
-#: src/resources/gtk/shortcuts-dialog.ui:336
+#: src/resources/gtk/shortcuts-dialog.ui:343
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edición"
 
-#: src/resources/gtk/shortcuts-dialog.ui:340
+#: src/resources/gtk/shortcuts-dialog.ui:347
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Cortar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:347
+#: src/resources/gtk/shortcuts-dialog.ui:354
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Copiar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:354
+#: src/resources/gtk/shortcuts-dialog.ui:361
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Pegar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:361
+#: src/resources/gtk/shortcuts-dialog.ui:368
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Deshacer"
 
-#: src/resources/gtk/shortcuts-dialog.ui:368
+#: src/resources/gtk/shortcuts-dialog.ui:375
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Rehacer"
 
-#: src/resources/gtk/shortcuts-dialog.ui:375
+#: src/resources/gtk/shortcuts-dialog.ui:382
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: src/resources/gtk/shortcuts-dialog.ui:382
+#: src/resources/gtk/shortcuts-dialog.ui:389
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Seleccionar el URL de la página"
 
-#: src/resources/gtk/shortcuts-dialog.ui:389
-#| msgid "Default search engine."
+#: src/resources/gtk/shortcuts-dialog.ui:396
 msgctxt "shortcut window"
 msgid "Search with default search engine"
 msgstr "Buscar con el motor de búsqueda predeterminado"
 
-#: src/resources/gtk/shortcuts-dialog.ui:396
-#| msgid "Find"
+#: src/resources/gtk/shortcuts-dialog.ui:403
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Buscar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:403
-#| msgctxt "shortcut window"
-#| msgid "Next search result"
+#: src/resources/gtk/shortcuts-dialog.ui:410
 msgctxt "shortcut window"
 msgid "Next find result"
 msgstr "Siguiente resultado de búsqueda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:410
-#| msgctxt "shortcut window"
-#| msgid "Previous search result"
+#: src/resources/gtk/shortcuts-dialog.ui:417
 msgctxt "shortcut window"
 msgid "Previous find result"
 msgstr "Resultado de búsqueda anterior"
@@ -3780,73 +3777,72 @@ msgstr "Buscar «%s» en la web"
 msgid "Local Tabs"
 msgstr "Pestañas locales"
 
-#: src/window-commands.c:113
+#: src/window-commands.c:112
 msgid "GVDB File"
 msgstr "Archivo GVDB"
 
-#: src/window-commands.c:114
-#| msgid "HTML"
+#: src/window-commands.c:113
 msgid "HTML File"
 msgstr "Archivo HTML"
 
-#: src/window-commands.c:115
+#: src/window-commands.c:114
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116
+#: src/window-commands.c:115
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117
+#: src/window-commands.c:116
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:559
+#: src/window-commands.c:130 src/window-commands.c:558
 msgid "Ch_oose File"
 msgstr "Selecci_onar archivo"
 
-#: src/window-commands.c:133 src/window-commands.c:332
-#: src/window-commands.c:376
+#: src/window-commands.c:132 src/window-commands.c:331
+#: src/window-commands.c:375
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: src/window-commands.c:272
+#: src/window-commands.c:271
 msgid "Select Profile"
 msgstr "Seleccionar perfil"
 
-#: src/window-commands.c:277
+#: src/window-commands.c:276
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: src/window-commands.c:329 src/window-commands.c:373
-#: src/window-commands.c:638
+#: src/window-commands.c:328 src/window-commands.c:372
+#: src/window-commands.c:637
 msgid "Choose File"
 msgstr "Seleccionar archivo"
 
-#: src/window-commands.c:354 src/window-commands.c:398
-#: src/window-commands.c:445 src/window-commands.c:470
-#: src/window-commands.c:495
+#: src/window-commands.c:353 src/window-commands.c:397
+#: src/window-commands.c:444 src/window-commands.c:469
+#: src/window-commands.c:494
 msgid "Bookmarks successfully imported!"
 msgstr "Marcadores importados satisfactoriamente."
 
-#: src/window-commands.c:555
+#: src/window-commands.c:554
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: src/window-commands.c:572
+#: src/window-commands.c:571
 msgid "From:"
 msgstr "De:"
 
-#: src/window-commands.c:618
+#: src/window-commands.c:617
 msgid "Bookmarks successfully exported!"
 msgstr "Marcadores exportados satisfactoriamente."
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:646
+#: src/window-commands.c:645
 msgid "bookmarks.gvdb"
 msgstr "bookmarks.gvdb"
 
-#: src/window-commands.c:792
+#: src/window-commands.c:791
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3855,81 +3851,82 @@ msgstr ""
 "Una vista simple, limpia y bonita de la web.\n"
 "Basado en WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:816
+#: src/window-commands.c:815
 msgid "Website"
 msgstr "Página web"
 
-#: src/window-commands.c:849
+#: src/window-commands.c:848
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: src/window-commands.c:1501
+#: src/window-commands.c:1485
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: src/window-commands.c:1504
+#: src/window-commands.c:1488
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1506
+#: src/window-commands.c:1490
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: src/window-commands.c:1510
+#: src/window-commands.c:1494
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: src/window-commands.c:1602
+#: src/window-commands.c:1586
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1605
+#: src/window-commands.c:1589
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
-#: src/window-commands.c:1613
+#. Translators: Desktop notification when a new web app is created.
+#: src/window-commands.c:1604
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1659
+#: src/window-commands.c:1645
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: src/window-commands.c:1664
+#: src/window-commands.c:1650
 msgid "C_reate"
 msgstr "C_rear"
 
-#: src/window-commands.c:1879
+#: src/window-commands.c:1865
 msgid "Save"
 msgstr "Guardar"
 
-#: src/window-commands.c:1888
+#: src/window-commands.c:1874
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1893
+#: src/window-commands.c:1879
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1898
+#: src/window-commands.c:1884
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2371
+#: src/window-commands.c:2357
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2374
+#: src/window-commands.c:2360
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3939,9 +3936,18 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2377
+#: src/window-commands.c:2363
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Site"
+#~ msgstr "Sitio"
+
+#~ msgid "Forget the selected passwords"
+#~ msgstr "Olvidar las contraseñas seleccionadas"
+
+#~ msgid "Reveal all the passwords"
+#~ msgstr "Mostrar todas las contraseñas"
 
 #~ msgid "Mobile user agent"
 #~ msgstr "Agente de usuario móvil"
@@ -4918,10 +4924,6 @@ msgstr "_Activar"
 
 #~ msgid "Add _Bookmark"
 #~ msgstr "Añadir _marcador"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Duplicate current tab"
-#~ msgstr "Duplicar la pestaña actual"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Bookmarks"
