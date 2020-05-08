@@ -10,17 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-05-06 21:37+0000\n"
-"PO-Revision-Date: 2020-05-07 07:48+0300\n"
-"Last-Translator: Кирило Тур <lytvyn349@ukr.net>\n"
+"POT-Creation-Date: 2020-05-08 16:57+0000\n"
+"PO-Revision-Date: 2020-05-08 21:02+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 20.07.70\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -337,39 +337,49 @@ msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Використовувати власний файл CSS, щоб змінювати CSS сайтів."
 
 #: data/org.gnome.epiphany.gschema.xml:136
+#| msgid "Use a custom CSS"
+msgid "Use a custom JS"
+msgstr "Використовувати власний JS"
+
+#: data/org.gnome.epiphany.gschema.xml:137
+#| msgid "Use a custom CSS file to modify websites own CSS."
+msgid "Use a custom JS file to modify websites."
+msgstr "Використовувати власний файл JS, щоб змінювати сайти."
+
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Увімкнути перевірку правопису"
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 "Перевірка правопису будь-якого тексту, набраного в місцях для редагування."
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Типова кодова сторінка"
 
-#: data/org.gnome.epiphany.gschema.xml:142
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Типове кодування. Допустимі значення — ті, які може розібрати WebKitGTK."
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:151
 #: src/resources/gtk/prefs-dialog.ui:333
 msgid "Languages"
 msgstr "Мови"
 
-#: data/org.gnome.epiphany.gschema.xml:147
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr "Бажані мови. Масив кодів локалей або «system» для поточної локалі."
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Cookie accept"
 msgstr "Приймати куки"
 
-#: data/org.gnome.epiphany.gschema.xml:152
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -377,30 +387,30 @@ msgstr ""
 "Звідки приймати куки. Допустимі значення: «always» (завжди), «no-third-"
 "party» (без сторонніх сайтів) та «never» (ніколи)."
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Дозволити контекстні вікна"
 
-#: data/org.gnome.epiphany.gschema.xml:157
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Дозволити веб-сайтам відкривання нових вікон використовуючи JavaScript (якщо "
 "JavaScript увімкнено)."
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable smooth scrolling"
 msgstr "Увімкнути плавне гортання"
 
-#: data/org.gnome.epiphany.gschema.xml:162
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid "Whether to enable smooth scrolling."
 msgstr "Вмикає плавне гортання."
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "User agent"
 msgstr "User agent"
 
-#: data/org.gnome.epiphany.gschema.xml:167
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -408,29 +418,29 @@ msgstr ""
 "Рядок, що використовується як user agent, і ідентифікує переглядач для веб-"
 "сервера."
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Увімкнути блокування реклами"
 
-#: data/org.gnome.epiphany.gschema.xml:172
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Блокувати вбудовану рекламу, яку сайти вам бажають показати."
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Remember passwords"
 msgstr "Зберігати паролі"
 
-#: data/org.gnome.epiphany.gschema.xml:177
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Зберігати паролі та заповнювати поля з паролями на сайтах."
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable site-specific quirks"
 msgstr "Увімкнути сайт-специфічні примхи"
 
-#: data/org.gnome.epiphany.gschema.xml:182
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -438,11 +448,11 @@ msgstr ""
 "Увімкнути примхи, щоб покращити роботу конкретних веб-сайтів. Можливо, ви "
 "захочете відключити цей параметр, якщо налагоджуєте певну проблему."
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Enable safe browsing"
 msgstr "Увімкнути безпечний перегляд"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -450,23 +460,23 @@ msgstr ""
 "Увімкнути безпечний перегляд. Безпечний перегляд працює через Google Safe "
 "Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Google Safe Browsing API key"
 msgstr "Ключ Google Safe Browsing API"
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "Ключ API для доступу до Google Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr "Типовий масштаб для нових сторінок"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr "Увімкнути автопошук"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -478,11 +488,11 @@ msgstr ""
 "як URL-адреса, хіба тільки пошукова система явно не буде вибрана з "
 "розкривного меню."
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "Увімкнути рухи мишею"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -490,27 +500,27 @@ msgstr ""
 "Увімкнути рухи мишею. Рухи мишею базуються на поведінці переглядача Opera та "
 "активуються за допомогою середньої кнопки миші + руху."
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "Остання тека передавання"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "Запам'ятовує останню теку передавання"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "Остання тека завантаження"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr "Запам'ятовує останню теку завантаження"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr "Політика апаратного прискорення"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -526,35 +536,35 @@ msgstr ""
 "Коли встановлено режим «on-demand», апаратне прискорення буде використано "
 "тільки за потреби показу тривимірних трансформацій."
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr "Завжди запитувати теку завантаження"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Відкривати діалог вибору теки призначення для кожного завантаження."
 
-#: data/org.gnome.epiphany.gschema.xml:232
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Web application additional URLs"
 msgstr "Додаткові URL-адреси веб-програми"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Перелік встановлених веб-програм"
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:242
 msgid "WebApp is mobile capable"
 msgstr "WebApp є придатним для запуску на мобільних пристроях"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "Whether to show buttons for navigation."
 msgstr "Визначає, чи слід показувати кнопки для навігації."
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "The downloads folder"
 msgstr "Тека завантажень"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -563,42 +573,42 @@ msgstr ""
 "використовувати типову теку завантажень, або «Desktop», щоб завантажувати "
 "файли на стільницю."
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Window position"
 msgstr "Положення вікна"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "Положення для нових вікон, які не відновлені з попередніх сеансів."
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Window size"
 msgstr "Розмір вікна"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "Розмір для нових вікон, які не відновлені з попередніх сеансів."
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid "Is maximized"
 msgstr "Розгорнуте вікно"
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 "Нове вікно, що не відновлено з попереднього сеансу, має бути розгорнутим."
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid "Disable forward and back buttons"
 msgstr "Вимкнути кнопки вперед і назад"
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:284
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -607,11 +617,11 @@ msgstr ""
 "сторінок вимкнено, не дозволяючи користувачам отримувати доступ до "
 "найближчої історії переглядача"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "Currently signed in sync user"
 msgstr "Авторизований на даний час користувач синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -619,43 +629,43 @@ msgstr ""
 "Пошта, зв'язана з обліковим записом Firefox для синхронізації даних з "
 "серверами Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "Last sync timestamp"
 msgstr "Часова мітка останньої синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Час UNIX, в який відбулась остання синхронізація в секундах."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:312
 msgid "Sync device ID"
 msgstr "Ідентифікатор пристрою для синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The sync device ID of the current device."
 msgstr "Ідентифікатор цього пристрою для синхронізації."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid "Sync device name"
 msgstr "Ім'я пристрою для синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "The sync device name of the current device."
 msgstr "Ім'я цього пристрою для синхронізації."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid "The sync frequency in minutes"
 msgstr "Частота синхронізації у хвилинах"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Кількість хвилин між двома послідовними синхронізаціями."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Sync data with Firefox"
 msgstr "Синхронізувати дані з Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -663,103 +673,103 @@ msgstr ""
 "TRUE, якщо колекції закладок Ephy мають бути синхронізовані з колекціями "
 "Firefox, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Enable bookmarks sync"
 msgstr "Увімкнути синхронізацію закладок"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція закладок має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Bookmarks sync timestamp"
 msgstr "Часова мітка синхронізації закладок"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію закладок."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Initial sync or normal sync"
 msgstr "Початкова або звичайна синхронізація"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція закладок має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Enable passwords sync"
 msgstr "Увімкнути синхронізацію паролів"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція паролів має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Passwords sync timestamp"
 msgstr "Часова мітка синхронізації паролів"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію паролів."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція паролів має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Enable history sync"
 msgstr "Увімкнути синхронізацію історії"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція історії має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "History sync timestamp"
 msgstr "Часова мітка синхронізації історії"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "The timestamp at which last history sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію історії."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція історії має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Enable open tabs sync"
 msgstr "Увімкнути синхронізацію відкритих вкладок"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE, якщо колекція відкритих вкладок має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "Open tabs sync timestamp"
 msgstr "Часова мітка синхронізації відкритих вкладок"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію відкритих вкладок."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на мікрофон для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -771,12 +781,12 @@ msgstr ""
 "про дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір "
 "за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на розташування для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -788,12 +798,12 @@ msgstr ""
 "користувача про дозвіл, в той час, коли «allow» і «deny» будуть автоматично "
 "робити вибір за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на сповіщення для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -805,12 +815,12 @@ msgstr ""
 "про дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір "
 "за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на збереження паролю для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -822,11 +832,11 @@ msgstr ""
 "користувача про дозвіл, в той час, коли «allow» і «deny» будуть автоматично "
 "робити вибір за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на камеру для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -838,12 +848,12 @@ msgstr ""
 "дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір за "
 "користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на показ реклами для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -964,7 +974,7 @@ msgid "Download requested"
 msgstr "Запит на завантаження"
 
 #: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:943
+#: src/resources/gtk/prefs-dialog.ui:978
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:274
 #: src/window-commands.c:332 src/window-commands.c:376
 #: src/window-commands.c:556 src/window-commands.c:641
@@ -1392,7 +1402,7 @@ msgid "_Never Save"
 msgstr "_Ніколи не зберігати"
 
 #: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:640
+#: src/resources/gtk/prefs-dialog.ui:969 src/window-commands.c:640
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -2661,32 +2671,32 @@ msgstr "Зберегти медіа як"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:232
+#: src/prefs-dialog.c:234
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Остання синхронізація: %s"
 
-#: src/prefs-dialog.c:520
+#: src/prefs-dialog.c:522
 msgid "Something went wrong, please try again later."
 msgstr "Щось пішло не так. Повторіть спробу пізніше."
 
-#: src/prefs-dialog.c:809
+#: src/prefs-dialog.c:811
 msgid "Web Application Icon"
 msgstr "Піктограма веб-програми"
 
-#: src/prefs-dialog.c:814
+#: src/prefs-dialog.c:816
 msgid "Supported Image Files"
 msgstr "Підтримувані файли зображень"
 
-#: src/prefs-dialog.c:1463
+#: src/prefs-dialog.c:1513
 msgid "Delete language"
 msgstr "Вилучити мову"
 
-#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+#: src/prefs-dialog.c:1532 src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "Додати мову"
 
-#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
+#: src/prefs-dialog.c:1611 src/prefs-dialog.c:1631
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2694,23 +2704,23 @@ msgstr[0] "Системна мова (%s)"
 msgstr[1] "Системні мови (%s)"
 msgstr[2] "Системних мов (%s)"
 
-#: src/prefs-dialog.c:1816
+#: src/prefs-dialog.c:1866
 msgid "Select a directory"
 msgstr "Виберіть теку"
 
-#: src/prefs-dialog.c:2204
+#: src/prefs-dialog.c:2254
 msgid "Sans"
 msgstr "Без зарубок"
 
-#: src/prefs-dialog.c:2206
+#: src/prefs-dialog.c:2256
 msgid "Serif"
 msgstr "З зарубками"
 
-#: src/prefs-dialog.c:2250
+#: src/prefs-dialog.c:2300
 msgid "Light"
 msgstr "Світла"
 
-#: src/prefs-dialog.c:2252
+#: src/prefs-dialog.c:2302
 msgid "Dark"
 msgstr "Темна"
 
@@ -3238,7 +3248,7 @@ msgstr "Можете очистити збережені особисті дан
 msgid "Clear Personal _Data"
 msgstr "Вилучити _особисті дані"
 
-#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
+#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:800
 msgid "Appearance"
 msgstr "Вигляд"
 
@@ -3283,14 +3293,19 @@ msgid "Use Custom Stylesheet"
 msgstr "Використовувати нетипову таблицю стилів"
 
 #: src/resources/gtk/prefs-dialog.ui:738
+#| msgid "Use Custom Fonts"
+msgid "Use Custom JavaScript"
+msgstr "Використовувати нетиповий JavaScript"
+
+#: src/resources/gtk/prefs-dialog.ui:773
 msgid "Default zoom level"
 msgstr "Типовий масштаб"
 
-#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:810 src/resources/gtk/prefs-dialog.ui:1004
 msgid "Sync"
 msgstr "Синхронізація"
 
-#: src/resources/gtk/prefs-dialog.ui:782
+#: src/resources/gtk/prefs-dialog.ui:817
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3300,59 +3315,59 @@ msgstr ""
 "та Firefox на інших пристроях. Тенет не є Firefox і не розробляється чи "
 "підтримується Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:783
+#: src/resources/gtk/prefs-dialog.ui:818
 msgid "Firefox Sync"
 msgstr "Синхронізація Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:802
+#: src/resources/gtk/prefs-dialog.ui:837
 msgid "Firefox Account"
 msgstr "Обліковий запис Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:806
+#: src/resources/gtk/prefs-dialog.ui:841
 msgid "Logged in"
 msgstr "Вхід виконано"
 
-#: src/resources/gtk/prefs-dialog.ui:811
+#: src/resources/gtk/prefs-dialog.ui:846
 msgid "Sign _out"
 msgstr "Ви_йти"
 
-#: src/resources/gtk/prefs-dialog.ui:824
+#: src/resources/gtk/prefs-dialog.ui:859
 msgid "Sync Options"
 msgstr "Налаштування синхронізації"
 
-#: src/resources/gtk/prefs-dialog.ui:829
+#: src/resources/gtk/prefs-dialog.ui:864
 msgid "Sync _Bookmarks"
 msgstr "Синхронізувати _Закладки"
 
-#: src/resources/gtk/prefs-dialog.ui:844
+#: src/resources/gtk/prefs-dialog.ui:879
 msgid "Sync _Passwords"
 msgstr "Синхронізувати _Паролі"
 
-#: src/resources/gtk/prefs-dialog.ui:859
+#: src/resources/gtk/prefs-dialog.ui:894
 msgid "Sync _History"
 msgstr "Синхронізувати _Історію"
 
-#: src/resources/gtk/prefs-dialog.ui:874
+#: src/resources/gtk/prefs-dialog.ui:909
 msgid "Sync Open _Tabs"
 msgstr "Синхронізувати Відкриті _вкладки"
 
-#: src/resources/gtk/prefs-dialog.ui:886
+#: src/resources/gtk/prefs-dialog.ui:921
 msgid "S_ynced tabs"
 msgstr "Син_хронізовані вкладки"
 
-#: src/resources/gtk/prefs-dialog.ui:897
+#: src/resources/gtk/prefs-dialog.ui:932
 msgid "Frequency"
 msgstr "Періодичність"
 
-#: src/resources/gtk/prefs-dialog.ui:908
+#: src/resources/gtk/prefs-dialog.ui:943
 msgid "Sync _now"
 msgstr "Синхронізувати _зараз"
 
-#: src/resources/gtk/prefs-dialog.ui:920
+#: src/resources/gtk/prefs-dialog.ui:955
 msgid "Device name"
 msgstr "Назва пристрою"
 
-#: src/resources/gtk/prefs-dialog.ui:925
+#: src/resources/gtk/prefs-dialog.ui:960
 msgid "_Change"
 msgstr "_Змінити"
 
