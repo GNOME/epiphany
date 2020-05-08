@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="PrefsAppearancePage" parent="HdyPreferencesPage">
+    <property name="icon_name">document-edit-symbolic</property>
+    <property name="title" translatable="yes">Appearance</property>
+    <property name="visible">True</property>
+    <style>
+      <class name="background"/>
+    </style>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Fonts</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyExpanderRow" id="use_gnome_fonts_row">
+            <property name="show_enable_switch">True</property>
+            <property name="title" translatable="yes">Use Custom Fonts</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-start">24</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBox" id="use_custom_fonts_list">
+                <property name="margin-start">24</property>
+                <property name="selection_mode">none</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Sans serif font</property>
+                    <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="sans_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Serif font</property>
+                    <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="serif_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Monospace font</property>
+                    <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="mono_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup" id="reader_mode_box">
+        <property name="title" translatable="yes">Reader Mode</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyComboRow" id="reader_mode_font_style">
+            <property name="title" translatable="yes">Font Style</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="HdyComboRow" id="reader_mode_color_scheme">
+            <property name="title" translatable="yes">Color Scheme</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Style</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">css_switch</property>
+            <property name="title" translatable="yes">Use Custom Stylesheet</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkButton" id="css_edit_button">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">document-edit-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSeparator">
+                <property name="margin_bottom">8</property>
+                <property name="margin_top">8</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSwitch" id="css_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">js_switch</property>
+            <property name="title" translatable="yes">Use Custom JavaScript</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkButton" id="js_edit_button">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">document-edit-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSeparator">
+                <property name="margin_bottom">8</property>
+                <property name="margin_top">8</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSwitch" id="js_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="title" translatable="yes">Default zoom level</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkSpinButton" id="default_zoom_spin_button">
+                <property name="adjustment">zoom_adjustment</property>
+                <property name="can_focus">True</property>
+                <property name="input_purpose">number</property>
+                <property name="max_width_chars">5</property>
+                <property name="valign">center</property>
+                <property name="value">100</property>
+                <property name="visible">True</property>
+                <signal name="output" handler="on_default_zoom_spin_button_output"/>
+                <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="sans_fontbutton"/>
+      <widget name="serif_fontbutton"/>
+      <widget name="mono_fontbutton"/>
+    </widgets>
+  </object>
+  <object class="GtkAdjustment" id="zoom_adjustment">
+    <property name="lower">33</property>
+    <property name="upper">300</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+</interface>

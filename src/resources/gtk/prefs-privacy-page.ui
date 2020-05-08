@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="PrefsPrivacyPage" parent="HdyPreferencesPage">
+    <property name="icon_name">preferences-system-privacy-symbolic</property>
+    <property name="title" translatable="yes">Privacy</property>
+    <property name="visible">True</property>
+    <style>
+      <class name="background"/>
+    </style>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Web Content</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow" id="adblock_allow_row">
+            <property name="activatable_widget">adblock_allow_switch</property>
+            <property name="title" translatable="yes">Try to Block _Advertisements</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkSwitch" id="adblock_allow_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">popups_allow_switch</property>
+            <property name="title" translatable="yes">Block Popup _Windows</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkSwitch" id="popups_allow_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">enable_safe_browsing_switch</property>
+            <property name="title" translatable="yes">Try to Block Dangerous Web_sites</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkSwitch" id="enable_safe_browsing_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Cookies</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="title" translatable="yes">Clear _Cookies</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkButton">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+                <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">emblem-system-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">always</property>
+            <property name="title" translatable="yes">_Always accept</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="prefix">
+              <object class="GtkRadioButton" id="always">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">no_third_party</property>
+            <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites.</property>
+            <property name="title" translatable="yes">Only _from sites you visit</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="prefix">
+              <object class="GtkRadioButton" id="no_third_party">
+                <property name="valign">center</property>
+                <property name="group">always</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">never</property>
+            <property name="title" translatable="yes">_Never accept</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="prefix">
+              <object class="GtkRadioButton" id="never">
+                <property name="valign">center</property>
+                <property name="group">always</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Passwords</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="title" translatable="yes">_Passwords</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkButton">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+                <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">emblem-system-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">remember_passwords_switch</property>
+            <property name="title" translatable="yes">_Remember Passwords</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkSwitch" id="remember_passwords_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Personal Data</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
+            <property name="title" translatable="yes">Clear Personal _Data</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child type="action">
+              <object class="GtkButton" id="clear_personal_data_button">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">emblem-system-symbolic</property>
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
