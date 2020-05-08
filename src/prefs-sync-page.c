@@ -1,0 +1,772 @@
+#include "prefs-sync-page.h"
+
+#include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-sync-service.h"
+#include "ephy-sync-utils.h"
+#include "ephy-time-helpers.h"
+#include "synced-tabs-dialog.h"
+
+#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v3"
+
+struct _PrefsSyncPage {
+  HdyPreferencesPage parent_instance;
+
+  GtkWidget *sync_page_box;
+  GtkWidget *sync_firefox_iframe_box;
+  GtkWidget *sync_firefox_iframe_label;
+  GtkWidget *sync_firefox_account_box;
+  GtkWidget *sync_firefox_account_row;
+  GtkWidget *sync_options_box;
+  GtkWidget *sync_bookmarks_checkbutton;
+  GtkWidget *sync_passwords_checkbutton;
+  GtkWidget *sync_history_checkbutton;
+  GtkWidget *sync_open_tabs_checkbutton;
+  GtkWidget *sync_frequency_row;
+  GtkWidget *sync_now_button;
+  GtkWidget *synced_tabs_button;
+  GtkWidget *sync_device_name_entry;
+  GtkWidget *sync_device_name_change_button;
+  GtkWidget *sync_device_name_save_button;
+  GtkWidget *sync_device_name_cancel_button;
+
+  WebKitWebView *fxa_web_view;
+  WebKitUserContentManager *fxa_manager;
+  WebKitUserScript *fxa_script;
+};
+
+G_DEFINE_TYPE (PrefsSyncPage, prefs_sync_page, HDY_TYPE_PREFERENCES_PAGE)
+
+static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
+
+static void
+sync_collection_toggled_cb (GtkToggleButton *button,
+                            PrefsSyncPage   *sync_page)
+{
+  EphySynchronizableManager *manager = NULL;
+  EphyShell *shell = ephy_shell_get_default ();
+  EphySyncService *service = ephy_shell_get_sync_service (shell);
+
+  if (GTK_WIDGET (button) == sync_page->sync_bookmarks_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+  } else if (GTK_WIDGET (button) == sync_page->sync_passwords_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
+  } else if (GTK_WIDGET (button) == sync_page->sync_history_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+  } else if (GTK_WIDGET (button) == sync_page->sync_open_tabs_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_open_tabs_manager_clear_cache (EPHY_OPEN_TABS_MANAGER (manager));
+  } else {
+    g_assert_not_reached ();
+  }
+
+  if (gtk_toggle_button_get_active (button)) {
+    ephy_sync_service_register_manager (service, manager);
+  } else {
+    ephy_sync_service_unregister_manager (service, manager);
+    ephy_synchronizable_manager_set_is_initial_sync (manager, TRUE);
+  }
+}
+
+static void
+sync_set_last_sync_time (PrefsSyncPage *sync_page)
+{
+  gint64 sync_time = ephy_sync_utils_get_sync_time ();
+
+  if (sync_time) {
+    char *time = ephy_time_helpers_utf_friendly_time (sync_time);
+    /* Translators: the %s refers to the time at which the last sync was made.
+     * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+     */
+    char *text = g_strdup_printf (_("Last synchronized: %s"), time);
+
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (sync_page->sync_firefox_account_row), text);
+
+    g_free (text);
+    g_free (time);
+  }
+}
+
+static void
+sync_finished_cb (EphySyncService *service,
+                  PrefsSyncPage   *sync_page)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
+
+  gtk_widget_set_sensitive (sync_page->sync_now_button, TRUE);
+  sync_set_last_sync_time (sync_page);
+}
+
+static void
+sync_sign_in_details_show (PrefsSyncPage *sync_page,
+                           const char    *text)
+{
+  char *message;
+
+  g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
+
+  message = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>", text);
+  gtk_label_set_markup (GTK_LABEL (sync_page->sync_firefox_iframe_label), message);
+  gtk_widget_set_visible (sync_page->sync_firefox_iframe_label, TRUE);
+
+  g_free (message);
+}
+
+static void
+sync_sign_in_error_cb (EphySyncService *service,
+                       const char      *error,
+                       PrefsSyncPage   *sync_page)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
+
+  /* Display the error message and reload the iframe. */
+  sync_sign_in_details_show (sync_page, error);
+  webkit_web_view_load_uri (sync_page->fxa_web_view, FXA_IFRAME_URL);
+}
+
+static void
+sync_secrets_store_finished_cb (EphySyncService *service,
+                                GError          *error,
+                                PrefsSyncPage   *sync_page)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
+
+  if (!error) {
+    hdy_action_row_set_title (HDY_ACTION_ROW (sync_page->sync_firefox_account_row),
+                              ephy_sync_utils_get_sync_user ());
+    gtk_widget_hide (sync_page->sync_page_box);
+    gtk_widget_show (sync_page->sync_firefox_account_box);
+    gtk_widget_show (sync_page->sync_options_box);
+  } else {
+    /* Display the error message and reload the iframe. */
+    sync_sign_in_details_show (sync_page, error->message);
+    webkit_web_view_load_uri (sync_page->fxa_web_view, FXA_IFRAME_URL);
+  }
+}
+
+static void
+sync_message_to_fxa_content (PrefsSyncPage *sync_page,
+                             const char    *web_channel_id,
+                             const char    *command,
+                             const char    *message_id,
+                             JsonObject    *data)
+{
+  JsonNode *node;
+  JsonObject *detail;
+  JsonObject *message;
+  char *detail_str;
+  char *script;
+  const char *type;
+
+  g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
+  g_assert (web_channel_id);
+  g_assert (command);
+  g_assert (message_id);
+  g_assert (data);
+
+  message = json_object_new ();
+  json_object_set_string_member (message, "command", command);
+  json_object_set_string_member (message, "messageId", message_id);
+  json_object_set_object_member (message, "data", json_object_ref (data));
+  detail = json_object_new ();
+  json_object_set_string_member (detail, "id", web_channel_id);
+  json_object_set_object_member (detail, "message", message);
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, detail);
+
+  type = "WebChannelMessageToContent";
+  detail_str = json_to_string (node, FALSE);
+  script = g_strdup_printf ("let e = new window.CustomEvent(\"%s\", {detail: %s});"
+                            "window.dispatchEvent(e);",
+                            type, detail_str);
+
+  /* We don't expect any response from the server. */
+  webkit_web_view_run_javascript (sync_page->fxa_web_view, script, NULL, NULL, NULL);
+
+  g_free (script);
+  g_free (detail_str);
+  json_object_unref (detail);
+  json_node_unref (node);
+}
+
+static gboolean
+sync_parse_message_from_fxa_content (const char  *message,
+                                     char       **web_channel_id,
+                                     char       **message_id,
+                                     char       **command,
+                                     JsonObject **data,
+                                     char       **error_msg)
+{
+  JsonNode *node;
+  JsonObject *object;
+  JsonObject *detail;
+  JsonObject *msg;
+  JsonObject *msg_data = NULL;
+  const char *type;
+  const char *channel_id;
+  const char *cmd;
+  const char *error = NULL;
+  gboolean success = FALSE;
+
+  g_assert (message);
+  g_assert (web_channel_id);
+  g_assert (message_id);
+  g_assert (command);
+  g_assert (data);
+  g_assert (error_msg);
+
+  /* Expected message format is:
+   * {
+   *   type: "WebChannelMessageToChrome",
+   *   detail: {
+   *     id: <id> (string, the id of the WebChannel),
+   *     message: {
+   *       messageId: <messageId> (optional string, the message id),
+   *       command: <command> (string, the message command),
+   *       data: <data> (optional JSON object, the message data)
+   *     }
+   *   }
+   * }
+   */
+
+  node = json_from_string (message, NULL);
+  if (!node) {
+    error = "Message is not a valid JSON";
+    goto out_error;
+  }
+  object = json_node_get_object (node);
+  if (!object) {
+    error = "Message is not a JSON object";
+    goto out_error;
+  }
+  type = json_object_get_string_member (object, "type");
+  if (!type) {
+    error = "Message has missing or invalid 'type' member";
+    goto out_error;
+  } else if (strcmp (type, "WebChannelMessageToChrome")) {
+    error = "Message type is not WebChannelMessageToChrome";
+    goto out_error;
+  }
+  detail = json_object_get_object_member (object, "detail");
+  if (!detail) {
+    error = "Message has missing or invalid 'detail' member";
+    goto out_error;
+  }
+  channel_id = json_object_get_string_member (detail, "id");
+  if (!channel_id) {
+    error = "'Detail' object has missing or invalid 'id' member";
+    goto out_error;
+  }
+  msg = json_object_get_object_member (detail, "message");
+  if (!msg) {
+    error = "'Detail' object has missing or invalid 'message' member";
+    goto out_error;
+  }
+  cmd = json_object_get_string_member (msg, "command");
+  if (!cmd) {
+    error = "'Message' object has missing or invalid 'command' member";
+    goto out_error;
+  }
+
+  *web_channel_id = g_strdup (channel_id);
+  *command = g_strdup (cmd);
+  *message_id = json_object_has_member (msg, "messageId") ?
+                g_strdup (json_object_get_string_member (msg, "messageId")) :
+                NULL;
+  if (json_object_has_member (msg, "data"))
+    msg_data = json_object_get_object_member (msg, "data");
+  *data = msg_data ? json_object_ref (msg_data) : NULL;
+
+  success = TRUE;
+  *error_msg = NULL;
+  goto out_no_error;
+
+out_error:
+  *web_channel_id = NULL;
+  *command = NULL;
+  *message_id = NULL;
+  *error_msg = g_strdup (error);
+
+out_no_error:
+  json_node_unref (node);
+
+  return success;
+}
+
+static void
+sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
+                                  WebKitJavascriptResult   *result,
+                                  PrefsSyncPage            *sync_page)
+{
+  JsonObject *data = NULL;
+  char *message = NULL;
+  char *web_channel_id = NULL;
+  char *message_id = NULL;
+  char *command = NULL;
+  char *error_msg = NULL;
+  gboolean is_error = FALSE;
+
+  message = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
+  if (!message) {
+    g_warning ("Failed to get JavaScript result as string");
+    is_error = TRUE;
+    goto out;
+  }
+
+  if (!sync_parse_message_from_fxa_content (message, &web_channel_id,
+                                            &message_id, &command,
+                                            &data, &error_msg)) {
+    g_warning ("Failed to parse message from FxA Content Server: %s", error_msg);
+    is_error = TRUE;
+    goto out;
+  }
+
+  LOG ("WebChannelMessageToChrome: received %s command", command);
+
+  if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
+    /* Confirm a relink. Respond with {ok: true}. */
+    JsonObject *response = json_object_new ();
+    json_object_set_boolean_member (response, "ok", TRUE);
+    sync_message_to_fxa_content (sync_page, web_channel_id, command, message_id, response);
+    json_object_unref (response);
+  } else if (!g_strcmp0 (command, "fxaccounts:login")) {
+    /* Extract sync tokens and pass them to the sync service. */
+    const char *email = json_object_get_string_member (data, "email");
+    const char *uid = json_object_get_string_member (data, "uid");
+    const char *session_token = json_object_get_string_member (data, "sessionToken");
+    const char *key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
+    const char *unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
+
+    if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
+      g_warning ("Message data has missing or invalid members");
+      is_error = TRUE;
+      goto out;
+    }
+    if (!json_object_has_member (data, "verified") ||
+        !JSON_NODE_HOLDS_VALUE (json_object_get_member (data, "verified"))) {
+      g_warning ("Message data has missing or invalid 'verified' member");
+      is_error = TRUE;
+      goto out;
+    }
+
+    ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
+                               email, uid, session_token, key_fetch_token, unwrap_kb);
+  }
+
+out:
+  if (data)
+    json_object_unref (data);
+  g_free (message);
+  g_free (web_channel_id);
+  g_free (message_id);
+  g_free (command);
+  g_free (error_msg);
+
+  if (is_error) {
+    sync_sign_in_details_show (sync_page, _("Something went wrong, please try again later."));
+    webkit_web_view_load_uri (sync_page->fxa_web_view, FXA_IFRAME_URL);
+  }
+}
+
+static void
+sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
+                              WebKitJavascriptResult   *result,
+                              PrefsSyncPage            *sync_page)
+{
+  EphyShell *shell;
+  EphyEmbed *embed;
+  GtkWindow *window;
+  GtkWidget *prefs_dialog;
+  char *url;
+
+  url = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
+  if (url) {
+    /* Open a new tab to the webmail URL. */
+    shell = ephy_shell_get_default ();
+    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+    embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
+                                NULL, EPHY_NEW_TAB_JUMP);
+    ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
+
+    /* Close the preferences dialog. */
+    prefs_dialog = gtk_widget_get_toplevel (GTK_WIDGET (sync_page));
+    gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
+
+    g_free (url);
+  }
+}
+
+static void
+sync_setup_firefox_iframe (PrefsSyncPage *sync_page)
+{
+  EphyEmbedShell *shell;
+  WebKitWebsiteDataManager *manager;
+  WebKitWebContext *embed_context;
+  WebKitWebContext *sync_context;
+  GtkWidget *frame;
+  const char *script;
+
+  if (!sync_page->fxa_web_view) {
+    script =
+      /* Handle sign-in messages from the FxA content server. */
+      "function handleToChromeMessage(event) {"
+      "  let e = JSON.stringify({type: event.type, detail: event.detail});"
+      "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
+      "};"
+      "window.addEventListener('WebChannelMessageToChrome', handleToChromeMessage);"
+      /* Handle open-webmail click event. */
+      "function handleOpenWebmailClick(event) {"
+      "  if (event.target.id == 'open-webmail' && event.target.hasAttribute('href'))"
+      "    window.webkit.messageHandlers.openWebmailClickHandler.postMessage(event.target.getAttribute('href'));"
+      "};"
+      "var stage = document.getElementById('stage');"
+      "if (stage)"
+      "  stage.addEventListener('click', handleOpenWebmailClick);";
+
+    sync_page->fxa_script = webkit_user_script_new (script,
+                                                 WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
+                                                 WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                                 NULL, NULL);
+    sync_page->fxa_manager = webkit_user_content_manager_new ();
+    webkit_user_content_manager_add_script (sync_page->fxa_manager, sync_page->fxa_script);
+    g_signal_connect (sync_page->fxa_manager,
+                      "script-message-received::toChromeMessageHandler",
+                      G_CALLBACK (sync_message_from_fxa_content_cb),
+                      sync_page);
+    g_signal_connect (sync_page->fxa_manager,
+                      "script-message-received::openWebmailClickHandler",
+                      G_CALLBACK (sync_open_webmail_clicked_cb),
+                      sync_page);
+    webkit_user_content_manager_register_script_message_handler (sync_page->fxa_manager,
+                                                                 "toChromeMessageHandler");
+    webkit_user_content_manager_register_script_message_handler (sync_page->fxa_manager,
+                                                                 "openWebmailClickHandler");
+
+    shell = ephy_embed_shell_get_default ();
+    embed_context = ephy_embed_shell_get_web_context (shell);
+    manager = webkit_web_context_get_website_data_manager (embed_context);
+    sync_context = webkit_web_context_new_with_website_data_manager (manager);
+    webkit_web_context_set_preferred_languages (sync_context,
+                                                g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
+
+    sync_page->fxa_web_view = WEBKIT_WEB_VIEW (g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                                             "user-content-manager", sync_page->fxa_manager,
+                                                             "settings", ephy_embed_prefs_get_settings (),
+                                                             "web-context", sync_context,
+                                                             NULL));
+    gtk_widget_set_vexpand (GTK_WIDGET (sync_page->fxa_web_view), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET (sync_page->fxa_web_view), TRUE);
+    frame = gtk_frame_new (NULL);
+    gtk_widget_set_visible (frame, TRUE);
+    gtk_container_add (GTK_CONTAINER (frame),
+                       GTK_WIDGET (sync_page->fxa_web_view));
+    gtk_box_pack_start (GTK_BOX (sync_page->sync_firefox_iframe_box),
+                        frame,
+                        TRUE, TRUE, 0);
+
+    g_object_unref (sync_context);
+  }
+
+  webkit_web_view_load_uri (sync_page->fxa_web_view, FXA_IFRAME_URL);
+  gtk_widget_set_visible (sync_page->sync_firefox_iframe_label, FALSE);
+}
+
+static void
+on_sync_sign_out_button_clicked (GtkWidget     *button,
+                                 PrefsSyncPage *sync_page)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+
+  ephy_sync_service_sign_out (service);
+
+  /* Show Firefox Accounts iframe. */
+  sync_setup_firefox_iframe (sync_page);
+  gtk_widget_hide (sync_page->sync_firefox_account_box);
+  gtk_widget_hide (sync_page->sync_options_box);
+  gtk_widget_show (sync_page->sync_page_box);
+  hdy_action_row_set_subtitle (HDY_ACTION_ROW (sync_page->sync_firefox_account_row), NULL);
+}
+
+static void
+on_sync_sync_now_button_clicked (GtkWidget     *button,
+                                 PrefsSyncPage *sync_page)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+
+  gtk_widget_set_sensitive (button, FALSE);
+  ephy_sync_service_sync (service);
+}
+
+static void
+on_sync_synced_tabs_button_clicked (GtkWidget     *button,
+                                    PrefsSyncPage *sync_page)
+{
+  EphyOpenTabsManager *manager;
+  SyncedTabsDialog *synced_tabs_dialog;
+
+  manager = ephy_shell_get_open_tabs_manager (ephy_shell_get_default ());
+  synced_tabs_dialog = synced_tabs_dialog_new (manager);
+  gtk_window_set_transient_for (GTK_WINDOW (synced_tabs_dialog), GTK_WINDOW (sync_page));
+  gtk_window_set_modal (GTK_WINDOW (synced_tabs_dialog), TRUE);
+  gtk_window_present_with_time (GTK_WINDOW (synced_tabs_dialog), gtk_get_current_event_time ());
+}
+
+static void
+on_sync_device_name_change_button_clicked (GtkWidget     *button,
+                                           PrefsSyncPage *sync_page)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (sync_page->sync_device_name_entry), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_change_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_save_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_cancel_button), TRUE);
+}
+
+static void
+on_sync_device_name_save_button_clicked (GtkWidget     *button,
+                                         PrefsSyncPage *sync_page)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  const char *text;
+
+  text = gtk_entry_get_text (GTK_ENTRY (sync_page->sync_device_name_entry));
+  if (!g_strcmp0 (text, "")) {
+    char *name = ephy_sync_utils_get_device_name ();
+    gtk_entry_set_text (GTK_ENTRY (sync_page->sync_device_name_entry), name);
+    g_free (name);
+  } else {
+    ephy_sync_service_update_device_name (service, text);
+  }
+
+  gtk_widget_set_sensitive (GTK_WIDGET (sync_page->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_cancel_button), FALSE);
+}
+
+static void
+on_sync_device_name_cancel_button_clicked (GtkWidget     *button,
+                                           PrefsSyncPage *sync_page)
+{
+  char *name;
+
+  name = ephy_sync_utils_get_device_name ();
+  gtk_entry_set_text (GTK_ENTRY (sync_page->sync_device_name_entry), name);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (sync_page->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (sync_page->sync_device_name_cancel_button), FALSE);
+
+  g_free (name);
+}
+
+static void
+prefs_sync_page_finalize (GObject *object)
+{
+  PrefsSyncPage *sync_page = EPHY_PREFS_SYNC_PAGE (object);
+
+  if (sync_page->fxa_web_view != NULL) {
+    webkit_user_content_manager_unregister_script_message_handler (sync_page->fxa_manager,
+                                                                   "toChromeMessageHandler");
+    webkit_user_content_manager_unregister_script_message_handler (sync_page->fxa_manager,
+                                                                   "openWebmailClickHandler");
+    webkit_user_script_unref (sync_page->fxa_script);
+    g_object_unref (sync_page->fxa_manager);
+  }
+
+  G_OBJECT_CLASS (prefs_sync_page_parent_class)->finalize (object);
+}
+
+static void
+prefs_sync_page_class_init (PrefsSyncPageClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/epiphany/gtk/prefs-sync-page.ui");
+
+  object_class->finalize = prefs_sync_page_finalize;
+
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_page_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_iframe_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_iframe_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_account_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_account_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_options_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_bookmarks_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_passwords_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_history_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_open_tabs_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_frequency_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_now_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, synced_tabs_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_device_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_device_name_change_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_device_name_save_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_device_name_cancel_button);
+
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_change_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
+}
+
+static gboolean
+sync_frequency_get_mapping (GValue   *value,
+                            GVariant *variant,
+                            gpointer  user_data)
+{
+  uint minutes = g_variant_get_uint32 (variant);
+
+  for (gint i = 0; i < (gint)G_N_ELEMENTS (sync_frequency_minutes); i++) {
+    if (sync_frequency_minutes[i] != minutes)
+      continue;
+
+    g_value_set_int (value, i);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+sync_frequency_set_mapping (const GValue       *value,
+                            const GVariantType *expected_type,
+                            gpointer            user_data)
+{
+  gint i = g_value_get_int (value);
+
+  if (i >= (gint)G_N_ELEMENTS (sync_frequency_minutes))
+    return NULL;
+
+  return g_variant_new_uint32 (sync_frequency_minutes[i]);
+}
+
+static GListModel *
+create_sync_frequency_minutes_model ()
+{
+  GListStore *list_store = g_list_store_new (HDY_TYPE_VALUE_OBJECT);
+  HdyValueObject *obj;
+  g_auto (GValue) value = G_VALUE_INIT;
+  guint i;
+
+  g_value_init (&value, G_TYPE_UINT);
+
+  for (i = 0; i < G_N_ELEMENTS (sync_frequency_minutes); i++) {
+    g_value_set_uint (&value, sync_frequency_minutes[i]);
+    obj = hdy_value_object_new (&value);
+    g_list_store_insert (list_store, i, obj);
+    g_clear_object (&obj);
+  }
+
+  return G_LIST_MODEL (list_store);
+}
+
+static gchar *
+get_sync_frequency_minutes_name (HdyValueObject *value)
+{
+  return g_strdup_printf ("%u min", g_value_get_uint (hdy_value_object_get_value (value)));
+}
+
+void
+prefs_sync_page_setup (PrefsSyncPage *sync_page)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  GSettings *sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
+  char *user = ephy_sync_utils_get_sync_user ();
+  char *name = ephy_sync_utils_get_device_name ();
+  g_autoptr (GListModel) sync_frequency_minutes_model = create_sync_frequency_minutes_model ();
+
+  gtk_entry_set_text (GTK_ENTRY (sync_page->sync_device_name_entry), name);
+
+  if (!user) {
+    sync_setup_firefox_iframe (sync_page);
+    gtk_widget_hide (sync_page->sync_firefox_account_box);
+    gtk_widget_hide (sync_page->sync_options_box);
+  } else {
+    sync_set_last_sync_time (sync_page);
+    hdy_action_row_set_title (HDY_ACTION_ROW (sync_page->sync_firefox_account_row), user);
+    gtk_widget_hide (sync_page->sync_page_box);
+  }
+
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
+                   sync_page->sync_bookmarks_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
+                   sync_page->sync_passwords_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_HISTORY_ENABLED,
+                   sync_page->sync_history_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
+                   sync_page->sync_open_tabs_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  hdy_combo_row_bind_name_model (HDY_COMBO_ROW (sync_page->sync_frequency_row),
+                                 sync_frequency_minutes_model,
+                                 (HdyComboRowGetNameFunc)get_sync_frequency_minutes_name,
+                                 NULL,
+                                 NULL);
+  g_settings_bind_with_mapping (sync_settings,
+                                EPHY_PREFS_SYNC_FREQUENCY,
+                                sync_page->sync_frequency_row,
+                                "selected-index",
+                                G_SETTINGS_BIND_DEFAULT,
+                                sync_frequency_get_mapping,
+                                sync_frequency_set_mapping,
+                                NULL, NULL);
+
+  g_object_bind_property (sync_page->sync_open_tabs_checkbutton, "active",
+                          sync_page->synced_tabs_button, "sensitive",
+                          G_BINDING_SYNC_CREATE);
+
+  g_signal_connect_object (service, "sync-secrets-store-finished",
+                           G_CALLBACK (sync_secrets_store_finished_cb),
+                           sync_page, 0);
+  g_signal_connect_object (service, "sync-sign-in-error",
+                           G_CALLBACK (sync_sign_in_error_cb),
+                           sync_page, 0);
+  g_signal_connect_object (service, "sync-finished",
+                           G_CALLBACK (sync_finished_cb),
+                           sync_page, 0);
+  g_signal_connect_object (sync_page->sync_bookmarks_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           sync_page, 0);
+  g_signal_connect_object (sync_page->sync_passwords_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           sync_page, 0);
+  g_signal_connect_object (sync_page->sync_history_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           sync_page, 0);
+  g_signal_connect_object (sync_page->sync_open_tabs_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           sync_page, 0);
+
+  g_free (user);
+  g_free (name);
+}
+
+static void
+prefs_sync_page_init (PrefsSyncPage *sync_page)
+{
+  gtk_widget_init_template (GTK_WIDGET (sync_page));
+}
