@@ -50,6 +50,7 @@ libephymain_sources = [
   'passwords-dialog.c',
   'popup-commands.c',
   'prefs-dialog.c',
+  'prefs-general-page.c',
   'synced-tabs-dialog.c',
   'webapp-additional-urls-dialog.c',
   'window-commands.c',
