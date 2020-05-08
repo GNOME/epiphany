@@ -1373,6 +1373,7 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
 
   /* User Scripts */
   ephy_embed_prefs_apply_user_style (ucm);
+  ephy_embed_prefs_apply_user_javascript (ucm);
 }
 
 void

@@ -109,6 +109,8 @@ struct _PrefsDialog {
   GtkWidget *mono_fontbutton;
   GtkWidget *css_switch;
   GtkWidget *css_edit_button;
+  GtkWidget *js_switch;
+  GtkWidget *js_edit_button;
   GtkWidget *default_zoom_spin_button;
   GtkWidget *reader_mode_box;
   GtkWidget *reader_mode_font_style;
@@ -983,6 +985,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, js_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, js_edit_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, default_zoom_spin_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_style);
@@ -1088,6 +1092,52 @@ css_edit_button_clicked_cb (GtkWidget   *button,
                                                     NULL));
 
   g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
+}
+
+static void
+js_file_opened_cb (GObject      *source,
+                   GAsyncResult *result,
+                   gpointer      user_data)
+{
+  gboolean ret;
+  g_autoptr (GError) error = NULL;
+
+  ret = ephy_open_file_via_flatpak_portal_finish (result, &error);
+  if (!ret && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    g_warning ("Failed to open JS file: %s", error->message);
+}
+
+static void
+js_file_created_cb (GObject      *source,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  g_autoptr (GFile) file = G_FILE (source);
+  g_autoptr (GFileOutputStream) stream = NULL;
+  g_autoptr (GError) error = NULL;
+
+  stream = g_file_create_finish (file, result, &error);
+  if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+    g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
+  else {
+    if (ephy_is_running_inside_flatpak ())
+      ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, js_file_opened_cb, NULL);
+    else
+      ephy_file_launch_handler (file, gtk_get_current_event_time ());
+  }
+}
+
+static void
+js_edit_button_clicked_cb (GtkWidget   *button,
+                           PrefsDialog *pd)
+{
+  GFile *js_file;
+
+  js_file = g_file_new_for_path (g_build_filename (ephy_profile_dir (),
+                                                   USER_JAVASCRIPT_FILENAME,
+                                                   NULL));
+
+  g_file_create_async (g_steal_pointer (&js_file), G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, js_file_created_cb, NULL);
 }
 
 static GtkTargetEntry entries[] = {
@@ -2353,6 +2403,22 @@ setup_fonts_page (PrefsDialog *dialog)
   g_signal_connect (dialog->css_edit_button,
                     "clicked",
                     G_CALLBACK (css_edit_button_clicked_cb),
+                    dialog);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_USER_JS,
+                   dialog->js_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_USER_JS,
+                   dialog->js_edit_button,
+                   "sensitive",
+                   G_SETTINGS_BIND_GET);
+
+  g_signal_connect (dialog->js_edit_button,
+                    "clicked",
+                    G_CALLBACK (js_edit_button_clicked_cb),
                     dialog);
 
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->default_zoom_spin_button),
