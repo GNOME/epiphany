@@ -194,13 +194,44 @@ static gboolean
 should_add_bookmark_to_model (EphySuggestionModel *self,
                               const char          *search_string,
                               const char          *title,
-                              const char          *location)
+                              const char          *location,
+                              GSequence           *tags)
 {
   g_autofree gchar *search_casefold = g_utf8_casefold (search_string, -1);
   g_autofree gchar *title_casefold = g_utf8_casefold (title, -1);
   g_autofree gchar *location_casefold = g_utf8_casefold (location, -1);
+  g_autofree char *tag_string = NULL;
+  g_autofree char *tag_string_casefold = NULL;
+  char **tag_array = NULL;
+  g_auto (GStrv) search_terms = NULL;
+  GSequenceIter *tag_iter;
+  guint i;
+  gboolean ret = TRUE;
 
-  return strstr (title_casefold, search_casefold) || strstr (location_casefold, search_casefold);
+  tag_array = g_malloc0 ((g_sequence_get_length (tags) + 1) * sizeof (char *));
+
+  for (i = 0, tag_iter = g_sequence_get_begin_iter (tags);
+       !g_sequence_iter_is_end (tag_iter);
+       i++, tag_iter = g_sequence_iter_next (tag_iter)) {
+    tag_array[i] = g_sequence_get (tag_iter);
+  }
+
+  tag_string = g_strjoinv (" ", tag_array);
+  tag_string_casefold = g_utf8_casefold (tag_string, -1);
+  search_terms = g_strsplit (search_casefold, " ", -1);
+
+  for (i = 0; i < g_strv_length (search_terms); i++) {
+    if (!strstr (title_casefold, search_terms[i]) &&
+        !strstr (location_casefold, search_terms[i]) &&
+        (tag_string_casefold && !strstr (tag_string_casefold, search_terms[i]))) {
+      ret = FALSE;
+      break;
+    }
+  }
+
+  g_free (tag_array);
+
+  return ret;
 }
 
 static void
@@ -276,21 +307,21 @@ add_bookmarks (EphySuggestionModel *self,
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter)) {
     EphyBookmark *bookmark;
+    GSequence *tags;
     const char *url, *title;
 
     bookmark = g_sequence_get (iter);
 
     url = ephy_bookmark_get_url (bookmark);
-    title = ephy_bookmark_get_title (bookmark);
-
-    if (g_sequence_lookup (self->urls, (gpointer)url, (GCompareDataFunc)g_strcmp0,
-                           NULL))
+    if (g_sequence_lookup (self->urls, (gpointer)url, (GCompareDataFunc)g_strcmp0, NULL))
       continue;
 
+    title = ephy_bookmark_get_title (bookmark);
     if (strlen (title) == 0)
       title = url;
 
-    if (should_add_bookmark_to_model (self, query, title, url)) {
+    tags = ephy_bookmark_get_tags (bookmark);
+    if (should_add_bookmark_to_model (self, query, title, url, tags)) {
       EphySuggestion *suggestion;
       g_autofree gchar *escaped_title = NULL;
       g_autofree gchar *markup = NULL;
