@@ -18,10 +18,14 @@ Ephy.getAppleMobileWebAppCapable = function()
 
 Ephy.getWebAppTitle = function()
 {
-    let metas = document.getElementsByTagName('meta');
+    const metas = document.getElementsByTagName('meta');
+
     for (let i = 0; i < metas.length; i++) {
-        let meta = metas[i];
+        const meta = metas[i];
         if (meta.name == 'application-name')
+            return meta.content;
+
+        if (meta.name === 'apple-mobile-web-app-title')
             return meta.content;
 
         // og:site_name is read from the property attribute (standard), but is
@@ -29,7 +33,19 @@ Ephy.getWebAppTitle = function()
         if (meta.getAttribute('property') == 'og:site_name' || meta.name == 'og:site_name')
             return meta.content;
     }
-    return null;
+
+    // Fallback to document title
+    const titles = document.head.getElementsByTagName('title');
+
+    if (titles.length > 0) {
+      const title = titles[titles.length - 1];
+
+      if (title && title.innerText)
+          return title.innerText;
+    }
+
+    // Last resort: hostname
+    return document.location.hostname;
 }
 
 Ephy.getWebAppIcon = function(baseURL)
@@ -38,26 +54,36 @@ Ephy.getWebAppIcon = function(baseURL)
     // http://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url
     //
     // Also check out: https://www.slightfuture.com/webdev/gnome-web-app-icons
-    let iconURL = null;
+    let htmlIconURL = null;
+    let msIconURL = null;
     let appleTouchIconURL = null;
     let largestIconSize = 0;
-    let links = document.getElementsByTagName('link');
+    let iconColor = null;
+    let ogpIcon = null;
+    const links = document.getElementsByTagName('link');
+    const metas = document.getElementsByTagName('meta');
+
     for (let i = 0; i < links.length; i++) {
-        let link = links[i];
-        if (link.rel == 'icon' || link.rel == 'shortcut icon' || link.rel == 'icon shortcut' || link.rel == 'shortcut-icon') {
-            let sizes = link.getAttribute('sizes');
-            if (!sizes)
+        const link = links[i];
+
+        if (link.rel == 'icon' || link.rel == 'shortcut icon' || link.rel == 'icon shortcut' || link.rel == 'shortcut-icon' || link.rel == 'apple-touch-icon' || link.rel == 'apple-touch-icon-precomposed') {
+            const sizes = link.getAttribute('sizes');
+
+            if (!sizes) {
+                if (largestIconSize == 0 && (!htmlIconURL || link.rel == 'apple-touch-icon' || link.rel == 'apple-touch-icon-precomposed'))
+                  htmlIconURL = link.href;
                 continue;
+            }
 
             if (sizes == 'any') {
                 // "any" means a vector, and thus it will always be the largest icon.
-                iconURL = link.href;
+                htmlIconURL = link.href;
                 break;
             }
 
-            let sizesList = sizes.split(' ');
+            const sizesList = sizes.split(' ');
             for (let j = 0; j < sizesList.length; j++) {
-                let size = sizesList[j].toLowerCase().split('x');
+                const size = sizesList[j].toLowerCase().split('x');
 
                 // Only accept square icons.
                 if (size.length != 2 || size[0] != size[1])
@@ -67,32 +93,23 @@ Ephy.getWebAppIcon = function(baseURL)
                 // It's better to defer to other icon discovery methods if smaller
                 // icons are returned here.
                 if (size[0] >= 92 && size[0] > largestIconSize) {
-                    iconURL = link.href;
+                    htmlIconURL = link.href;
                     largestIconSize = size[0];
                 }
             }
-        } else if (link.rel == 'apple-touch-icon' || link.rel == 'apple-touch-icon-precomposed') {
-            // TODO: support more than one possible icon.
-            // apple-touch-icon is best touch-icon candidate.
-            if (link.rel == 'apple-touch-icon' || !appleTouchIconURL)
-                appleTouchIconURL = link.href;
-            // TODO: Try to retrieve /apple-touch-icon.png, and return it if it exist.
         }
     }
 
-    // HTML icon.
-    if (iconURL)
-        return { 'url' : new URL(iconURL, baseURL).href, 'color' : null };
+    if (largestIconSize != 0 && htmlIconURL)
+        return { 'url' : new URL(htmlIconURL, baseURL).href, 'color' : null };
 
-    let iconColor = null;
-    let ogpIcon = null;
-    let metas = document.getElementsByTagName('meta');
     for (let i = 0; i < metas.length; i++) {
-        let meta = metas[i];
+        const meta = metas[i];
+
         // FIXME: Ought to also search browserconfig.xml
         // See: http://stackoverflow.com/questions/24625305/msapplication-tileimage-favicon-backup
         if (meta.name == 'msapplication-TileImage')
-            iconURL = meta.content;
+            msIconURL = meta.content;
         else if (meta.name == 'msapplication-TileColor')
             iconColor = meta.content;
         else if (meta.getAttribute('property') == 'og:image' || meta.getAttribute('itemprop') == 'image')
@@ -100,16 +117,16 @@ Ephy.getWebAppIcon = function(baseURL)
     }
 
     // msapplication icon.
-    if (iconURL)
-        return { 'url' : new URL(iconURL, baseURL).href, 'color' : iconColor };
-
-    // Apple touch icon.
-    if (appleTouchIconURL)
-        return { 'url' : new URL(appleTouchIconURL, baseURL).href, 'color' : null };
+    if (msIconURL)
+        return { 'url' : new URL(msIconURL, baseURL).href, 'color' : iconColor };
 
     // ogp icon.
     if (ogpIcon)
         return { 'url' : new URL(ogpIcon, baseURL).href, 'color' : null };
+
+    // html icon without known size
+    if (htmlIconURL)
+        return { 'url' : new URL(htmlIconURL, baseURL).href, 'color' : null };
 
     // Last ditch effort: just fallback to the default favicon location.
     return { 'url' : new URL('/favicon.ico', baseURL).href, 'color' : null };
