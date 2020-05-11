@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkPopover" id="page-menu-popover">
+  <object class="GtkPopoverMenu" id="page-menu-popover">
     <child>
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -209,7 +209,7 @@
             </child>
             <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
             <child>
-              <object class="GtkSeparator" id="bookmarks-separator">
+              <object class="GtkSeparator" id="import-export-separator">
                 <property name="orientation">horizontal</property>
                 <property name="margin-top">6</property>
                 <property name="margin-bottom">6</property>
@@ -217,36 +217,10 @@
               </object>
             </child>
             <child>
-              <object class="GtkModelButton" id="import-bookmarks-button">
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">I_mport Bookmarks…</property>
-                <property name="action-name">app.import-bookmarks</property>
+              <object class="GtkModelButton" id="import-export-menu">
+                <property name="text" translatable="yes">I_mport &amp; Export</property>
                 <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton" id="export-bookmarks-button">
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">E_xport Bookmarks…</property>
-                <property name="action-name">app.export-bookmarks</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
-            <child>
-              <object class="GtkSeparator" id="passwords-separator">
-                <property name="orientation">horizontal</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton" id="import-passwords-button">
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">I_mport Passwords…</property>
-                <property name="action-name">app.import-passwords</property>
-                <property name="visible">True</property>
+                <property name="menu-name">import_export</property>
               </object>
             </child>
             <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
@@ -338,6 +312,65 @@
           </object>
         </child>
       </object>
+      <packing>
+        <property name="submenu">main</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="margin-top">12</property>
+        <property name="orientation">vertical</property>
+        <property name="visible">True</property>
+        <property name="spacing">6</property>
+        <style>
+          <class name="page-menu-contents"/>
+        </style>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">Import &amp; Export</property>
+            <property name="visible">True</property>
+            <property name="menu-name">main</property>
+            <property name="inverted">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">I_mport Bookmarks…</property>
+            <property name="action-name">app.import-bookmarks</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">E_xport Bookmarks…</property>
+            <property name="action-name">app.export-bookmarks</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">I_mport Passwords…</property>
+            <property name="action-name">app.import-passwords</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="submenu">import_export</property>
+      </packing>
     </child>
   </object>
     <object class="GThemedIcon" id="zoom_out">
