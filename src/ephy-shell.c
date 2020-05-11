@@ -1177,6 +1177,8 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
 
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
     id = g_strconcat (APPLICATION_ID, ".WebApp", NULL);
+  else if (mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
+    id = g_strconcat (APPLICATION_ID, ".Private", NULL);
   else
     id = g_strdup (APPLICATION_ID);
 
