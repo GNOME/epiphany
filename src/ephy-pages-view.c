@@ -111,6 +111,24 @@ row_closed_cb (EphyPagesView *self,
                          embed, window);
 }
 
+
+static void
+current_page_changed_cb (EphyPagesView *self)
+{
+  GtkListBoxRow *current_row, *new_row;
+  gint current_page;
+
+  g_assert (EPHY_IS_PAGES_VIEW (self));
+
+  current_row = gtk_list_box_get_selected_row (self->list_box);
+  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (self->notebook));
+  if (current_row && gtk_list_box_row_get_index (current_row) == current_page)
+    return;
+
+  new_row = gtk_list_box_get_row_at_index (self->list_box, current_page);
+  gtk_list_box_select_row (self->list_box, new_row);
+}
+
 static void
 items_changed_cb (EphyPagesView *self,
                   gint           position,
@@ -128,6 +146,8 @@ items_changed_cb (EphyPagesView *self,
   }
 
   g_list_store_splice (self->list_store, position, removed, (gpointer)items, added);
+
+  current_page_changed_cb (self);
 }
 
 static void
@@ -187,8 +207,6 @@ ephy_pages_view_init (EphyPagesView *self)
   list_init (self);
 
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
-
-  gtk_list_box_set_selection_mode (self->list_box, GTK_SELECTION_NONE);
 
   ephy_pages_view_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NARROW);
   gtk_list_box_bind_model (self->list_box,
