@@ -265,9 +265,6 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-incognito-window-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "reopen-closed-tab-button")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "bookmarks-separator")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-bookmarks-button")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "export-bookmarks-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
@@ -276,7 +273,8 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "keyboard-shortcuts-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "passwords-separator")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-passwords-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-menu")));
   } else if (ephy_is_running_inside_flatpak ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
