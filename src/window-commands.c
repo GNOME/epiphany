@@ -798,7 +798,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"),
                           GTK_RESPONSE_CANCEL,
-                          _("Ch_oose File"),
+                          _("I_mport"),
                           GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -815,6 +815,12 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   tree_model = create_import_passwords_tree_model ();
+
+  if (gtk_tree_model_iter_n_children (tree_model, NULL))
+    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
+  else
+    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
+
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
   g_object_unref (tree_model);
 
