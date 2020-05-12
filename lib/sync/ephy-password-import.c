@@ -237,12 +237,14 @@ ephy_password_import_from_chrome_thread_cb (GTask        *task,
                                             GCancellable *cancellable)
 {
   PasswordImportChromeData *data = task_data;
-  g_autoptr (GError) error = NULL;
+  GError *error = NULL;
   gboolean retval;
 
   retval = ephy_password_import_from_chrome (data->manager, data->type, &error);
-
-  g_task_return_boolean (task, retval);
+  if (error)
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, retval);
 }
 
 void
