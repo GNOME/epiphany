@@ -129,8 +129,7 @@ robustness of the browser. The UI process (the main epiphany process) runs
 several subprocesses:
 
  * Any number of WebKitWebProcesses, which handle rendering web content
- * One WebKitNetworkProcess, which handles most network requests
- * One or zero WebKitDatabaseProcesses, which handles IndexedDB
+ * One WebKitNetworkProcess, which handles network requests, storage, etc.
 
 In WebKitGTK, by default each WebKitWebView shares the same WebKitWebProcess.
 This can reduce overall resource usage, but it results in a less-stable browser
