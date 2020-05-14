@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-05-11 07:04+0000\n"
-"PO-Revision-Date: 2020-05-11 17:48+0200\n"
+"POT-Creation-Date: 2020-05-13 19:31+0000\n"
+"PO-Revision-Date: 2020-05-14 11:56+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -58,7 +58,7 @@ msgstr "El proyecto GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:101 src/ephy-main.c:252
-#: src/ephy-main.c:404 src/window-commands.c:978
+#: src/ephy-main.c:404 src/window-commands.c:984
 msgid "Web"
 msgstr "Web"
 
@@ -349,7 +349,7 @@ msgstr "Usar JS personalizado"
 #: data/org.gnome.epiphany.gschema.xml:137
 #| msgid "Use a custom CSS file to modify websites own CSS."
 msgid "Use a custom JS file to modify websites."
-msgstr "Usar un archivo JS personalizado para modificar páginas web."
+msgstr "Usar un archivo JS personalizado para modificar sitios web."
 
 #: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
@@ -925,7 +925,7 @@ msgstr "Versión %s"
 msgid "About Web"
 msgstr "Acerca de Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:980
+#: embed/ephy-about-handler.c:194 src/window-commands.c:986
 msgid "Epiphany Technology Preview"
 msgstr "Tecnología de vista previa de Epiphany"
 
@@ -1026,7 +1026,7 @@ msgstr "Descarga requerida"
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:557 src/window-commands.c:642
-#: src/window-commands.c:799 src/window-commands.c:1823
+#: src/window-commands.c:799 src/window-commands.c:1829
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1437,7 +1437,7 @@ msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 msgid "%s is not a valid URI"
 msgstr "%s no es un URI válido"
 
-#: embed/ephy-web-view.c:184 src/window-commands.c:1285
+#: embed/ephy-web-view.c:184 src/window-commands.c:1291
 msgid "Open"
 msgstr "Abrir"
 
@@ -2364,7 +2364,7 @@ msgstr "Eliminar cookie"
 msgid "Reload the current page"
 msgstr "Recargar la página actual"
 
-#: src/ephy-action-bar-start.c:611 src/ephy-header-bar.c:441
+#: src/ephy-action-bar-start.c:611 src/ephy-header-bar.c:439
 msgid "Stop loading the current page"
 msgstr "Detener la carga de la página actual"
 
@@ -3090,46 +3090,55 @@ msgstr "_Volver a abrir la pestaña cerrada"
 msgid "_History"
 msgstr "_Histórico"
 
-#: src/resources/gtk/page-menu-popover.ui:222
-msgid "I_mport Bookmarks…"
-msgstr "I_mportar marcadores…"
+#: src/resources/gtk/page-menu-popover.ui:221
+msgid "I_mport and Export"
+msgstr "I_mportar y exportar"
 
-#: src/resources/gtk/page-menu-popover.ui:230
-msgid "E_xport Bookmarks…"
-msgstr "_Exportar marcadores…"
-
-#: src/resources/gtk/page-menu-popover.ui:247
-#| msgid "I_mport Bookmarks…"
-msgid "I_mport Passwords…"
-msgstr "I_mportar contraseñas…"
-
-#: src/resources/gtk/page-menu-popover.ui:264
+#: src/resources/gtk/page-menu-popover.ui:238
 msgid "Install Site as Web _Application…"
 msgstr "Instalar página como aplicación _web…"
 
-#: src/resources/gtk/page-menu-popover.ui:272
+#: src/resources/gtk/page-menu-popover.ui:246
 msgid "Open Appli_cation Manager"
 msgstr "Gestor de apli_caciones abiertas"
 
-#: src/resources/gtk/page-menu-popover.ui:289
+#: src/resources/gtk/page-menu-popover.ui:263
 msgid "_Override Text Encoding…"
 msgstr "_Omitir codificación del texto…"
 
-#: src/resources/gtk/page-menu-popover.ui:305
+#: src/resources/gtk/page-menu-popover.ui:279
 msgid "Pr_eferences"
 msgstr "Prefere_ncias"
 
-#: src/resources/gtk/page-menu-popover.ui:314
+#: src/resources/gtk/page-menu-popover.ui:288
 msgid "_Keyboard Shortcuts"
 msgstr "_Atajos del teclado"
 
-#: src/resources/gtk/page-menu-popover.ui:323
+#: src/resources/gtk/page-menu-popover.ui:297
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: src/resources/gtk/page-menu-popover.ui:332
+#: src/resources/gtk/page-menu-popover.ui:306
 msgid "_About Web"
 msgstr "_Acerca de Web"
+
+#: src/resources/gtk/page-menu-popover.ui:331
+#| msgid "Import failed"
+msgid "Import and Export"
+msgstr "Importar y exportar"
+
+#: src/resources/gtk/page-menu-popover.ui:342
+msgid "I_mport Bookmarks…"
+msgstr "I_mportar marcadores…"
+
+#: src/resources/gtk/page-menu-popover.ui:350
+msgid "E_xport Bookmarks…"
+msgstr "_Exportar marcadores…"
+
+#: src/resources/gtk/page-menu-popover.ui:366
+#| msgid "I_mport Bookmarks…"
+msgid "I_mport Passwords…"
+msgstr "I_mportar contraseñas…"
 
 #: src/resources/gtk/page-row.ui:85
 msgid "Close page"
@@ -3813,12 +3822,13 @@ msgid "Chromium"
 msgstr "Chromium"
 
 #: src/window-commands.c:131 src/window-commands.c:559
-#: src/window-commands.c:777 src/window-commands.c:801
+#: src/window-commands.c:777
 msgid "Ch_oose File"
 msgstr "Selecci_onar archivo"
 
 #: src/window-commands.c:133 src/window-commands.c:332
 #: src/window-commands.c:376 src/window-commands.c:779
+#: src/window-commands.c:801
 msgid "I_mport"
 msgstr "I_mportar"
 
@@ -3861,14 +3871,14 @@ msgstr "bookmarks.gvdb"
 #: src/window-commands.c:733
 #| msgid "Bookmarks successfully imported!"
 msgid "Passwords successfully imported!"
-msgstr "Contraseñas importadas correctamente."
+msgstr "Contraseñas importados correctamente."
 
 #: src/window-commands.c:797
 #| msgid "Show Passwords"
 msgid "Import Passwords"
 msgstr "Importar contraseñas"
 
-#: src/window-commands.c:966
+#: src/window-commands.c:972
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3877,82 +3887,82 @@ msgstr ""
 "Una vista simple, limpia y bonita de la web.\n"
 "Basado en WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:990
+#: src/window-commands.c:996
 msgid "Website"
 msgstr "Página web"
 
-#: src/window-commands.c:1023
+#: src/window-commands.c:1029
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: src/window-commands.c:1660
+#: src/window-commands.c:1666
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: src/window-commands.c:1663
+#: src/window-commands.c:1669
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1665
+#: src/window-commands.c:1671
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: src/window-commands.c:1669
+#: src/window-commands.c:1675
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: src/window-commands.c:1761
+#: src/window-commands.c:1767
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1764
+#: src/window-commands.c:1770
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1779
+#: src/window-commands.c:1785
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1820
+#: src/window-commands.c:1826
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: src/window-commands.c:1825
+#: src/window-commands.c:1831
 msgid "C_reate"
 msgstr "C_rear"
 
-#: src/window-commands.c:2040
+#: src/window-commands.c:2046
 msgid "Save"
 msgstr "Guardar"
 
-#: src/window-commands.c:2049
+#: src/window-commands.c:2055
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2054
+#: src/window-commands.c:2060
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2059
+#: src/window-commands.c:2065
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2532
+#: src/window-commands.c:2538
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2535
+#: src/window-commands.c:2541
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3962,7 +3972,7 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2538
+#: src/window-commands.c:2544
 msgid "_Enable"
 msgstr "_Activar"
 
@@ -4876,9 +4886,6 @@ msgstr "_Activar"
 
 #~ msgid "Konqueror"
 #~ msgstr "Konqueror"
-
-#~ msgid "Import failed"
-#~ msgstr "Ha fallado la importación"
 
 #~ msgid "Import Failed"
 #~ msgstr "Ha fallado la importación"
