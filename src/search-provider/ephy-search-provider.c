@@ -23,6 +23,7 @@
 #include "ephy-search-provider.h"
 
 #include "ephy-bookmarks-manager.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
@@ -167,6 +168,22 @@ handle_get_subsearch_result_set (EphyShellSearchProvider2  *skeleton,
   g_application_hold (G_APPLICATION (self));
   g_cancellable_reset (self->cancellable);
 
+  if (g_strv_length (terms) == 1) {
+    gboolean is_uri = ephy_embed_utils_address_is_valid (terms[0]);
+
+    if (is_uri) {
+      GPtrArray *results = g_ptr_array_new ();
+
+      g_ptr_array_add (results, g_strdup_printf ("special:load:%s", terms[0]));
+      g_ptr_array_add (results, NULL);
+      g_dbus_method_invocation_return_value (invocation,
+                                             g_variant_new ("(^as)", g_ptr_array_free (results, FALSE)));
+
+      g_application_release (G_APPLICATION (self));
+      return TRUE;
+    }
+  }
+
   gather_results_async (self, terms, self->cancellable,
                         complete_request, invocation);
 
@@ -195,6 +212,16 @@ handle_get_result_metas (EphyShellSearchProvider2  *skeleton,
       g_variant_builder_add (&builder, "{sv}",
                              "name", g_variant_new_take_string (g_strdup_printf (_("Search the web for “%s”"),
                                                                                  results[i] + strlen ("special:search:"))));
+      g_variant_builder_add (&builder, "{sv}",
+                             "gicon", g_variant_new_string (APPLICATION_ID));
+      g_variant_builder_close (&builder);
+    } else if (g_str_has_prefix (results[i], "special:load:")) {
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+      g_variant_builder_add (&builder, "{sv}",
+                             "id", g_variant_new_string ("special:load"));
+      g_variant_builder_add (&builder, "{sv}",
+                             "name", g_variant_new_take_string (g_strdup_printf (_("Load “%s”"),
+                                                                                 results[i] + strlen ("special:load:"))));
       g_variant_builder_add (&builder, "{sv}",
                              "gicon", g_variant_new_string (APPLICATION_ID));
       g_variant_builder_close (&builder);
@@ -285,6 +312,8 @@ handle_activate_result (EphyShellSearchProvider2  *skeleton,
 
   if (strcmp (identifier, "special:search") == 0)
     launch_search (self, terms, timestamp);
+  else if (strcmp (identifier, "special:load") == 0)
+    launch_uri (terms[0], timestamp);
   else
     launch_uri (identifier, timestamp);
 
