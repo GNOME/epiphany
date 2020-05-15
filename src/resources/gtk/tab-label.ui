@@ -7,6 +7,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">window-close-symbolic</property>
   </object>
+  <object class="GtkImage" id="audio_button_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">audio-volume-high-symbolic</property>
+  </object>
   <template class="EphyTabLabel" parent="GtkBox">
     <property name="can_focus">False</property>
     <property name="spacing">6</property>
@@ -67,10 +72,19 @@
       </packing>
     </child>
     <child>
-      <object class="GtkImage" id="audio_button">
-        <property name="visible">True</property>
+      <object class="GtkButton" id="audio_button">
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
-        <property name="icon_name">audio-volume-high-symbolic</property>
+        <property name="focus_on_click">False</property>
+        <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">Mute Audio</property>
+        <property name="image">audio_button_image</property>
+        <property name="relief">none</property>
+        <signal name="clicked" handler="audio_button_clicked_cb" object="EphyTabLabel" swapped="no"/>
+        <style>
+          <class name="small-button"/>
+          <class name="flat"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>

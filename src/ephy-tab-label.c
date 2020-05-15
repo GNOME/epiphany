@@ -44,6 +44,7 @@ struct _EphyTabLabel {
 
 enum {
   CLOSE_CLICKED,
+  AUDIO_CLICKED,
   LAST_SIGNAL
 };
 
@@ -54,6 +55,7 @@ enum {
   PROP_ICON_BUF,
   PROP_SPINNING,
   PROP_AUDIO,
+  PROP_AUDIO_MUTED,
   PROP_PINNED,
   LAST_PROP
 };
@@ -85,6 +87,15 @@ ephy_tab_label_update_icon (EphyTabLabel *self)
     else
       gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), NULL);
   }
+}
+
+static void
+ephy_tab_label_update_audio_muted (GtkWidget *button,
+                                   gboolean   muted)
+{
+  GtkWidget *image = gtk_image_new_from_icon_name (muted ? "audio-volume-muted-symbolic" : "audio-volume-high-symbolic", GTK_ICON_SIZE_MENU);
+
+  gtk_button_set_image (GTK_BUTTON (button), image);
 }
 
 static void
@@ -122,6 +133,9 @@ ephy_tab_label_set_property (GObject      *object,
     case PROP_AUDIO:
       gtk_widget_set_visible (self->audio_button, g_value_get_boolean (value));
       break;
+    case PROP_AUDIO_MUTED:
+      ephy_tab_label_update_audio_muted (self->audio_button, g_value_get_boolean (value));
+      break;
     case PROP_PINNED:
       self->is_pinned = g_value_get_boolean (value);
       break;
@@ -153,6 +167,9 @@ ephy_tab_label_get_property (GObject    *object,
       break;
     case PROP_AUDIO:
       g_value_set_boolean (value, gtk_widget_get_visible (self->audio_button));
+      break;
+    case PROP_AUDIO_MUTED:
+      /*g_value_set_boolean (value, ephy_tab_label_get_audio_muted (self->audio_button)); */
       break;
     case PROP_PINNED:
       g_value_set_boolean (value, self->is_pinned);
@@ -273,6 +290,13 @@ close_button_clicked_cb (GtkWidget    *widget,
 }
 
 static void
+audio_button_clicked_cb (GtkWidget    *widget,
+                         EphyTabLabel *tab_label)
+{
+  g_signal_emit (tab_label, signals[AUDIO_CLICKED], 0, NULL);
+}
+
+static void
 style_updated_cb (GtkWidget *widget,
                   gpointer   user_data)
 {
@@ -322,6 +346,12 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
                                                      FALSE,
                                                      G_PARAM_READWRITE |
                                                      G_PARAM_CONSTRUCT);
+  obj_properties[PROP_AUDIO_MUTED] = g_param_spec_boolean ("audio-muted",
+                                                           "Audio Muted",
+                                                           "Is audio muted",
+                                                           FALSE,
+                                                           G_PARAM_READWRITE |
+                                                           G_PARAM_CONSTRUCT);
   obj_properties[PROP_PINNED] = g_param_spec_boolean ("pinned",
                                                       "Pinned",
                                                       "Is tab pinned",
@@ -331,6 +361,15 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   signals[CLOSE_CLICKED] = g_signal_new ("close-clicked",
+                                         EPHY_TYPE_TAB_LABEL,
+                                         G_SIGNAL_RUN_LAST,
+                                         0,
+                                         NULL, NULL,
+                                         NULL,
+                                         G_TYPE_NONE,
+                                         0);
+
+  signals[AUDIO_CLICKED] = g_signal_new ("audio-clicked",
                                          EPHY_TYPE_TAB_LABEL,
                                          G_SIGNAL_RUN_LAST,
                                          0,
@@ -349,6 +388,7 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyTabLabel, close_button);
 
   gtk_widget_class_bind_template_callback (widget_class, close_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, audio_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, style_updated_cb);
 }
 
