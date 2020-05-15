@@ -1,5 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
+ *  Copyright © 2020 Epiphany Developers
+ *
  *  This file is part of Epiphany.
  *
  *  Epiphany is free software: you can redistribute it and/or modify
