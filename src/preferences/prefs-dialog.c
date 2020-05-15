@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 200-2003 Marco Pesenti Gritti
+ *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
  *  Copyright © 2010, 2017 Igalia S.L.
  *
