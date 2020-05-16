@@ -32,3 +32,12 @@ void     ephy_open_file_via_flatpak_portal        (const char          *path,
                                                    gpointer             user_data);
 gboolean ephy_open_file_via_flatpak_portal_finish (GAsyncResult        *result,
                                                    GError             **error);
+
+
+void     ephy_open_directory_via_flatpak_portal   (const char          *path,
+                                                   GCancellable        *cancellable,
+                                                   GAsyncReadyCallback  callback,
+                                                   gpointer             user_data);
+gboolean ephy_open_dir_via_flatpak_portal_finish  (GAsyncResult        *result,
+                                                   GError             **error);
+
