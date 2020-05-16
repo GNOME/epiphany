@@ -149,22 +149,6 @@ reader_color_scheme_set_mapping (const GValue       *value,
 }
 
 static void
-css_file_opened_cb (GObject      *source,
-                    GAsyncResult *result,
-                    gpointer      user_data)
-{
-  gboolean ret;
-  GError *error = NULL;
-
-  ret = ephy_open_file_via_flatpak_portal_finish (result, &error);
-  if (!ret) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Failed to open CSS file: %s", error->message);
-    g_error_free (error);
-  }
-}
-
-static void
 css_file_created_cb (GObject      *source,
                      GAsyncResult *result,
                      gpointer      user_data)
@@ -178,7 +162,7 @@ css_file_created_cb (GObject      *source,
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
     if (ephy_is_running_inside_flatpak ())
-      ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, css_file_opened_cb, NULL);
+      ephy_open_uri_via_flatpak_portal (g_file_get_path (file));
     else
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
   }
@@ -204,19 +188,6 @@ css_edit_button_clicked_cb (GtkWidget           *button,
 }
 
 static void
-js_file_opened_cb (GObject      *source,
-                   GAsyncResult *result,
-                   gpointer      user_data)
-{
-  gboolean ret;
-  g_autoptr (GError) error = NULL;
-
-  ret = ephy_open_file_via_flatpak_portal_finish (result, &error);
-  if (!ret && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    g_warning ("Failed to open JS file: %s", error->message);
-}
-
-static void
 js_file_created_cb (GObject      *source,
                     GAsyncResult *result,
                     gpointer      user_data)
@@ -230,7 +201,7 @@ js_file_created_cb (GObject      *source,
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
     if (ephy_is_running_inside_flatpak ())
-      ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, js_file_opened_cb, NULL);
+      ephy_open_uri_via_flatpak_portal (g_file_get_path (file));
     else
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
   }

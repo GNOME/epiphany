@@ -2090,8 +2090,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
          * executes in web app mode.
          */
         ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
-                                               gtk_window_get_screen (GTK_WINDOW (window)),
-                                               EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+                                               gtk_window_get_screen (GTK_WINDOW (window)));
         webkit_policy_decision_ignore (decision);
 
         gtk_widget_destroy (GTK_WIDGET (window));
@@ -2109,8 +2108,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
        * executes in web app mode.
        */
       ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
-                                             gtk_window_get_screen (GTK_WINDOW (window)),
-                                             EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+                                             gtk_window_get_screen (GTK_WINDOW (window)));
       webkit_policy_decision_ignore (decision);
 
       return TRUE;

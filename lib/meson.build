@@ -66,7 +66,8 @@ libephymisc_deps = [
   libxml_dep,
   m_dep,
   sqlite3_dep,
-  webkit2gtk_dep
+  webkit2gtk_dep,
+  portal_dep
 ]
 
 libephymisc_includes = include_directories(
