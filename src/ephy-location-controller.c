@@ -204,7 +204,7 @@ user_changed_cb (GtkWidget              *widget,
 
   model = dzl_suggestion_entry_get_model (entry);
 
-  ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model), address, NULL, NULL, NULL);
+  ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model), address, TRUE, NULL, NULL, NULL);
 }
 
 static void
