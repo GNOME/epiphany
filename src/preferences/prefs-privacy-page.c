@@ -28,6 +28,12 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 
+enum {
+  CLEAR_COOKIES_BUTTON_CLICKED,
+
+  LAST_SIGNAL
+};
+
 struct _PrefsPrivacyPage {
   HdyPreferencesPage parent_instance;
 
@@ -48,12 +54,15 @@ struct _PrefsPrivacyPage {
   GtkWidget *clear_personal_data_button;
 };
 
+static guint signals[LAST_SIGNAL];
+
 G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, HDY_TYPE_PREFERENCES_PAGE)
 
 static void
 on_manage_cookies_button_clicked (GtkWidget        *button,
                                   PrefsPrivacyPage *privacy_page)
 {
+  /*
   EphyCookiesDialog *cookies_dialog;
 
   cookies_dialog = ephy_cookies_dialog_new ();
@@ -61,6 +70,10 @@ on_manage_cookies_button_clicked (GtkWidget        *button,
   gtk_window_set_transient_for (GTK_WINDOW (cookies_dialog), GTK_WINDOW (privacy_page));
   gtk_window_set_modal (GTK_WINDOW (cookies_dialog), TRUE);
   gtk_window_present_with_time (GTK_WINDOW (cookies_dialog), gtk_get_current_event_time ());
+  */
+
+  /* Emit clear-cookies-button-clicked signal */
+  g_signal_emit (privacy_page, signals[CLEAR_COOKIES_BUTTON_CLICKED], 0);
 }
 
 static void
@@ -217,6 +230,13 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-privacy-page.ui");
 
+  signals[CLEAR_COOKIES_BUTTON_CLICKED] =
+    g_signal_new ("clear-cookies-button-clicked",
+                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
   /* Web Content */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, popups_allow_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, adblock_allow_switch);
@@ -233,7 +253,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   /* Personal Data */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, clear_personal_data_button);
 
-  /* Signals */
+  /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
 }

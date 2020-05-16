@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="search_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-find-symbolic</property>
+  </object>
+  <object class="GtkImage" id="clear_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">user-trash-symbolic</property>
+  </object>
+  <template class="ClearCookiesView" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="title" translatable="yes">Clear Cookies</property>
+        <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkButton" id="clear_all_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">clear_all_image</property>
+            <property name="always_show_image">True</property>
+            <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
+            <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
+            <style>
+              <class name="destructive-action"/>
+              <class name="image-button"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="search_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">search_image</property>
+            <property name="always_show_image">True</property>
+            <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child internal-child="accessible">
+              <object class="AtkObject">
+                <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="vexpand">True</property>
+        <child>
+          <object class="HdyColumn">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <property name="maximum_width">600</property>
+            <property name="linear_growth_width">400</property>
+            <child>
+              <object class="GtkListBox" id="cookies_listbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
+                <property name="valign">start</property>
+                <property name="selection_mode">none</property>
+                <style>
+                  <class name="frame"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
