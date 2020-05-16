@@ -502,6 +502,19 @@ add_tabs (EphySuggestionModel *self,
   return added;
 }
 
+struct QueryData {
+  char *query;
+  gboolean include_search_engines;
+};
+
+static void
+query_data_free (struct QueryData *data)
+{
+  g_assert (data != NULL);
+  g_free (data->query);
+  g_free (data);
+}
+
 static void
 query_completed_cb (EphyHistoryService *service,
                     gboolean            success,
@@ -510,13 +523,13 @@ query_completed_cb (EphyHistoryService *service,
 {
   GTask *task = user_data;
   EphySuggestionModel *self;
-  const gchar *query;
+  struct QueryData *data;
   GList *urls;
   guint removed;
   guint added = 0;
 
   self = g_task_get_source_object (task);
-  query = g_task_get_task_data (task);
+  data = g_task_get_task_data (task);
   urls = (GList *)result_data;
 
   g_cancellable_cancel (self->icon_cancellable);
@@ -532,11 +545,13 @@ query_completed_cb (EphyHistoryService *service,
   self->items = g_sequence_new (g_object_unref);
   self->num_custom_entries = 0;
 
-  if (strlen (query) > 0) {
-    added = add_tabs (self, query);
-    added += add_bookmarks (self, query);
-    added += add_history (self, urls, query);
-    added += add_search_engines (self, query);
+  if (strlen (data->query) > 0) {
+    added = add_tabs (self, data->query);
+    added += add_bookmarks (self, data->query);
+    added += add_history (self, urls, data->query);
+
+    if (data->include_search_engines)
+      added += add_search_engines (self, data->query);
   }
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
@@ -548,6 +563,7 @@ query_completed_cb (EphyHistoryService *service,
 void
 ephy_suggestion_model_query_async (EphySuggestionModel *self,
                                    const gchar         *query,
+                                   gboolean             include_search_engines,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
@@ -555,6 +571,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   GTask *task = NULL;
   char **strings;
   GList *qlist = NULL;
+  struct QueryData *data;
 
   g_assert (EPHY_IS_SUGGESTION_MODEL (self));
   g_assert (query != NULL);
@@ -562,7 +579,11 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ephy_suggestion_model_query_async);
-  g_task_set_task_data (task, g_strdup (query), g_free);
+
+  data = g_malloc0 (sizeof (struct QueryData));
+  data->query = g_strdup (query);
+  data->include_search_engines = include_search_engines;
+  g_task_set_task_data (task, data, query_data_free);
 
   /* Split the search string. */
   strings = g_strsplit (query, " ", -1);
