@@ -713,7 +713,6 @@ ephy_file_open_uri_in_default_browser (const char                   *uri,
  * ephy_file_browse_to:
  * @file: a #GFile
  * @user_time: user_time to prevent focus stealing
- * @tag: used to guard against improper usage
  *
  * Launches the default application for browsing directories to point to
  * @file. E.g. nautilus will jump to @file within its directory and
@@ -722,13 +721,17 @@ ephy_file_open_uri_in_default_browser (const char                   *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile                        *file,
-                     guint32                       user_time,
-                     EphyFileHelpersNotFlatpakTag  tag)
+ephy_file_browse_to (GFile   *file,
+                     guint32  user_time)
 {
   g_autofree char *uri = g_file_get_uri (file);
 
-  return open_in_default_handler (uri, "inode/directory", user_time, NULL, tag);
+  if (ephy_is_running_inside_flatpak ()) {
+    ephy_open_directory_via_flatpak_portal (uri);
+    return TRUE;
+  }
+
+  return open_in_default_handler (uri, "inode/directory", user_time, NULL, EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
 }
 
 /**

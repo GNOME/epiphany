@@ -85,7 +85,6 @@ gboolean           ephy_file_open_uri_in_default_browser    (const char         
                                                              GdkScreen                    *screen,
                                                              EphyFileHelpersNotFlatpakTag  tag);
 gboolean           ephy_file_browse_to                      (GFile                        *file,
-                                                             guint32                       user_time,
-                                                             EphyFileHelpersNotFlatpakTag  tag);
+                                                             guint32                       user_time);
 
 G_END_DECLS

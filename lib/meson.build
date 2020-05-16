@@ -65,6 +65,7 @@ libephymisc_deps = [
   libsoup_dep,
   libxml_dep,
   m_dep,
+  portal_dep,
   sqlite3_dep,
   webkit2gtk_dep
 ]
