@@ -24,11 +24,9 @@
 
 void     ephy_flatpak_utils_set_is_web_process_extension (void);
 
-gboolean ephy_is_running_inside_flatpak           (void);
+gboolean ephy_is_running_inside_flatpak                  (void);
 
-void     ephy_open_file_via_flatpak_portal        (const char          *path,
-                                                   GCancellable        *cancellable,
-                                                   GAsyncReadyCallback  callback,
-                                                   gpointer             user_data);
-gboolean ephy_open_file_via_flatpak_portal_finish (GAsyncResult        *result,
-                                                   GError             **error);
+void     ephy_open_uri_via_flatpak_portal                (const char *uri);
+
+void     ephy_open_directory_via_flatpak_portal          (const char *uri);
+
