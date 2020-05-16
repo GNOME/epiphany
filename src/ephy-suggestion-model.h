@@ -34,6 +34,7 @@ EphySuggestionModel *ephy_suggestion_model_new                     (EphyHistoryS
                                                                     EphyBookmarksManager  *bookmarks_manager);
 void                 ephy_suggestion_model_query_async             (EphySuggestionModel   *self,
                                                                     const gchar           *query,
+                                                                    gboolean               include_search_engines,
                                                                     GCancellable          *cancellable,
                                                                     GAsyncReadyCallback    callback,
                                                                     gpointer               user_data);
