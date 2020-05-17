@@ -567,13 +567,12 @@ on_listbox_button_press_event (GtkWidget         *widget,
   if (event->button == GDK_BUTTON_SECONDARY) {
     GtkListBoxRow *row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), event->y);
     GList *rows = NULL;
-    guint state = event->state & gtk_accelerator_get_default_mod_mask ();
     int n;
 
     if (!row)
       return GDK_EVENT_PROPAGATE;
 
-    if (state != GDK_CONTROL_MASK)
+    if (!gtk_list_box_row_is_selected (row))
       gtk_list_box_unselect_all (GTK_LIST_BOX (self->listbox));
 
     gtk_list_box_select_row (GTK_LIST_BOX (self->listbox), row);
