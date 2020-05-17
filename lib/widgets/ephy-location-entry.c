@@ -1018,7 +1018,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
                    entry->bookmark_event_box,
                    "visible",
-                   G_SETTINGS_BIND_INVERT_BOOLEAN);
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
