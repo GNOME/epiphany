@@ -20,17 +20,18 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_DATA_DIALOG (ephy_data_dialog_get_type ())
 
-G_DECLARE_DERIVABLE_TYPE (EphyDataDialog, ephy_data_dialog, EPHY, DATA_DIALOG, GtkWindow)
+G_DECLARE_DERIVABLE_TYPE (EphyDataDialog, ephy_data_dialog, EPHY, DATA_DIALOG, HdyWindow)
 
 struct _EphyDataDialogClass
 {
-  GtkWindowClass parent_class;
+  HdyWindowClass parent_class;
 };
 
 const gchar *ephy_data_dialog_get_clear_all_description (EphyDataDialog *self);
