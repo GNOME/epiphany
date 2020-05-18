@@ -31,7 +31,7 @@
 #include <webkit2/webkit2.h>
 
 struct _EphyDownloadWidget {
-  GtkGrid parent_instance;
+  GtkEventBox parent_instance;
 
   EphyDownload *download;
 
@@ -42,7 +42,7 @@ struct _EphyDownloadWidget {
   GtkWidget *action_button;
 };
 
-G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_GRID)
+G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_EVENT_BOX)
 
 enum {
   PROP_0,
@@ -287,6 +287,24 @@ download_destination_changed_cb (WebKitDownload     *download,
 }
 
 static void
+download_drag_data_get (GtkWidget        *widget,
+                        GdkDragContext   *context,
+                        GtkSelectionData *selection_data,
+                        guint             info,
+                        guint             time,
+                        gpointer          data)
+{
+  WebKitDownload *download = WEBKIT_DOWNLOAD (data);
+  gchar *uris[2];
+
+  uris[0] = g_strdup (webkit_download_get_destination (download));
+  uris[1] = NULL;
+
+  gtk_selection_data_set_uris (selection_data, uris);
+  g_free (uris[0]);
+}
+
+static void
 ephy_download_widget_get_property (GObject    *object,
                                    guint       property_id,
                                    GValue     *value,
@@ -356,19 +374,23 @@ ephy_download_widget_constructed (GObject *object)
   const char *action_icon_name = NULL;
   GError *error = NULL;
   PangoAttrList *status_attrs;
+  GtkWidget *grid;
 
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->constructed (object);
 
-  gtk_widget_set_margin_start (GTK_WIDGET (widget), 12);
-  gtk_widget_set_margin_end (GTK_WIDGET (widget), 12);
-  gtk_widget_set_margin_top (GTK_WIDGET (widget), 12);
-  gtk_widget_set_margin_bottom (GTK_WIDGET (widget), 12);
+  grid = gtk_grid_new ();
+  gtk_widget_show (grid);
+  gtk_widget_set_margin_start (GTK_WIDGET (grid), 12);
+  gtk_widget_set_margin_end (GTK_WIDGET (grid), 12);
+  gtk_widget_set_margin_top (GTK_WIDGET (grid), 12);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (grid), 12);
+  gtk_container_add (GTK_CONTAINER (widget), grid);
 
   widget->icon = gtk_image_new ();
   gtk_widget_set_margin_end (widget->icon, 4);
   gtk_widget_set_halign (widget->icon, GTK_ALIGN_START);
   update_download_icon (widget);
-  gtk_grid_attach (GTK_GRID (widget), widget->icon, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), widget->icon, 0, 0, 1, 1);
   gtk_widget_show (widget->icon);
 
   widget->filename = gtk_label_new (NULL);
@@ -378,7 +400,7 @@ ephy_download_widget_constructed (GObject *object)
   gtk_label_set_max_width_chars (GTK_LABEL (widget->filename), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->filename), PANGO_ELLIPSIZE_END);
   update_download_destination (widget);
-  gtk_grid_attach (GTK_GRID (widget), widget->filename, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), widget->filename, 1, 0, 1, 1);
   gtk_widget_show (widget->filename);
 
   widget->progress = gtk_progress_bar_new ();
@@ -386,7 +408,7 @@ ephy_download_widget_constructed (GObject *object)
   gtk_widget_set_margin_top (widget->progress, 6);
   gtk_widget_set_margin_bottom (widget->progress, 6);
   gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
-  gtk_grid_attach (GTK_GRID (widget), widget->progress, 0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), widget->progress, 0, 1, 2, 1);
   if (ephy_download_is_active (widget->download))
     gtk_widget_show (widget->progress);
 
@@ -411,7 +433,7 @@ ephy_download_widget_constructed (GObject *object)
   } else {
     update_status_label (widget, _("Starting…"));
   }
-  gtk_grid_attach (GTK_GRID (widget), widget->status, 0, 2, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), widget->status, 0, 2, 2, 1);
   gtk_widget_show (widget->status);
 
   if (ephy_download_succeeded (widget->download))
@@ -428,7 +450,7 @@ ephy_download_widget_constructed (GObject *object)
   gtk_widget_set_margin_start (widget->action_button, 10);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget->action_button),
                                "circular");
-  gtk_grid_attach (GTK_GRID (widget), widget->action_button, 3, 0, 1, 3);
+  gtk_grid_attach (GTK_GRID (grid), widget->action_button, 3, 0, 1, 3);
   gtk_widget_show (widget->action_button);
 
   download = ephy_download_get_webkit_download (widget->download);
@@ -450,6 +472,10 @@ ephy_download_widget_constructed (GObject *object)
   g_signal_connect (widget->download, "notify::content-type",
                     G_CALLBACK (download_content_type_changed_cb),
                     widget);
+
+  gtk_drag_source_set (GTK_WIDGET (widget), GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_add_uri_targets (GTK_WIDGET (widget));
+  g_signal_connect_object (widget, "drag-data-get", G_CALLBACK (download_drag_data_get), download, 0);
 }
 
 static void
