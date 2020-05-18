@@ -59,6 +59,7 @@ struct _EphyShell {
   EphyHistoryManager *history_manager;
   EphyOpenTabsManager *open_tabs_manager;
   GNetworkMonitor *network_monitor;
+  XdpPortal *portal;
   GtkWidget *history_dialog;
   GObject *prefs_dialog;
   EphyShellStartupContext *local_startup_context;
@@ -782,6 +783,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_pointer (&shell->history_dialog, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
+  g_clear_object (&shell->portal);
   g_clear_object (&shell->sync_service);
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->history_manager);
@@ -1120,6 +1122,20 @@ ephy_shell_get_net_monitor (EphyShell *shell)
     shell->network_monitor = g_network_monitor_get_default ();
 
   return shell->network_monitor;
+}
+
+/**
+ * ephy_shell_get_portal
+ *
+ * Return value: (transfer none):
+ **/
+XdpPortal *
+ephy_shell_get_portal (EphyShell *shell)
+{
+  if (shell->portal == NULL)
+    shell->portal = xdp_portal_new ();
+
+  return shell->portal;
 }
 
 /**
