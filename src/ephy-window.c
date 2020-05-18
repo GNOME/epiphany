@@ -93,6 +93,7 @@ const struct {
   { "win.copy", { "<Primary>C", NULL } },
   { "win.cut", { "<Primary>X", NULL } },
   { "win.paste", { "<Primary>V", NULL } },
+  { "win.paste-as-plain-text", { "<shift><Primary>V", NULL } },
   { "win.zoom-in", { "<Primary>plus", "<Primary>KP_Add", "<Primary>equal", "ZoomIn", NULL } },
   { "win.zoom-out", { "<Primary>minus", "<Primary>KP_Subtract", "ZoomOut", NULL } },
   { "win.zoom-normal", { "<Primary>0", "<Primary>KP_0", NULL } },
@@ -778,6 +779,7 @@ update_edit_actions_sensitivity (EphyWindow *window,
   update_edit_action_sensitivity (window, "cut", can_cut, hide);
   update_edit_action_sensitivity (window, "copy", can_copy, hide);
   update_edit_action_sensitivity (window, "paste", can_paste, hide);
+  update_edit_action_sensitivity (window, "paste-as-plain-text", can_paste, hide);
   update_edit_action_sensitivity (window, "undo", can_undo, hide);
   update_edit_action_sensitivity (window, "redo", can_redo, hide);
 }
@@ -796,6 +798,8 @@ enable_edit_actions_sensitivity (EphyWindow *window)
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "paste");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "paste-as-plain-text");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "undo");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
@@ -835,6 +839,7 @@ static const GActionEntry window_entries [] = {
   { "cut", window_cmd_cut },
   { "copy", window_cmd_copy },
   { "paste", window_cmd_paste },
+  { "paste-as-plain-text", window_cmd_paste_as_plain_text },
   { "delete", window_cmd_delete },
   { "zoom-in", window_cmd_zoom_in },
   { "zoom-out", window_cmd_zoom_out },
@@ -952,6 +957,7 @@ const struct {
   { "cut", N_("Cu_t") },
   { "copy", N_("_Copy") },
   { "paste", N_("_Paste") },
+  { "paste-as-plain-text", N_("_Paste Text Only") },
   { "select-all", N_("Select _All") },
 
   { "send-to", N_("S_end Link by Email…") },
@@ -1489,6 +1495,7 @@ populate_context_menu (WebKitWebView       *web_view,
   WebKitContextMenuItem *toggle_controls_item = NULL;
   WebKitContextMenuItem *toggle_loop_item = NULL;
   WebKitContextMenuItem *fullscreen_item = NULL;
+  WebKitContextMenuItem *paste_as_plain_text_item = NULL;
   GActionGroup *window_action_group;
   GActionGroup *toolbar_action_group;
   GActionGroup *popup_action_group;
@@ -1524,6 +1531,7 @@ populate_context_menu (WebKitWebView       *web_view,
   }
 
   if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
+    paste_as_plain_text_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_PASTE_AS_PLAIN_TEXT);
     input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
     insert_emoji_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI);
     spelling_guess_items = find_spelling_guess_context_menu_items (context_menu);
@@ -1666,6 +1674,9 @@ populate_context_menu (WebKitWebView       *web_view,
                                 "copy", window);
     add_action_to_context_menu (context_menu, window_action_group,
                                 "paste", window);
+    if (paste_as_plain_text_item)
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "paste-as-plain-text", window);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
