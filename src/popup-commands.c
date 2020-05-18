@@ -36,6 +36,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
+#include <libportal/portal-gtk3.h>
 
 typedef enum {
   NEW_WINDOW,
@@ -249,15 +250,35 @@ popup_cmd_save_media_as (GSimpleAction *action,
 }
 
 static void
+wallpaper_changed_cb (GObject *source_object,
+                      GAsyncResult *result,
+                      gpointer user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+
+  xdp_portal_set_wallpaper_finish (portal, result, NULL);
+  g_object_unref (portal);
+}
+
+static void
 background_download_completed (EphyDownload *download,
-                               GtkWidget    *window)
+                               GtkWindow    *window)
 {
   const char *uri;
-  GSettings *settings;
+  XdpPortal *portal = xdp_portal_new ();
+  XdpParent *parent_window = xdp_parent_new_gtk (window);
 
   uri = ephy_download_get_destination_uri (download);
-  settings = ephy_settings_get ("org.gnome.desktop.background");
-  g_settings_set_string (settings, "picture-uri", uri);
+
+  xdp_portal_set_wallpaper (portal,
+                            parent_window,
+                            uri,
+                            XDP_WALLPAPER_FLAG_BACKGROUND,
+                            NULL,
+                            wallpaper_changed_cb,
+                            NULL
+                            );
+  xdp_parent_free (parent_window);
 }
 
 void
