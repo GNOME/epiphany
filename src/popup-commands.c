@@ -249,15 +249,38 @@ popup_cmd_save_media_as (GSimpleAction *action,
 }
 
 static void
+wallpaper_changed_cb (GObject      *source_object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+  g_autoptr (GError) error = NULL;
+
+  if (!xdp_portal_set_wallpaper_finish (portal, result, &error))
+    g_warning ("Failed to set wallpaper: %s", error->message);
+  g_warning ("WARRRRRRRRRRRRNNIIIIIIINNNNNNNNNNNGGGGGGG");
+}
+
+static void
 background_download_completed (EphyDownload *download,
-                               GtkWidget    *window)
+                               GtkWindow    *window)
 {
   const char *uri;
-  GSettings *settings;
+  EphyShell *shell = ephy_shell_get_default ();
+  XdpPortal *portal = ephy_shell_get_portal (shell);
+  XdpParent *parent_window = xdp_parent_new_gtk (window);
 
   uri = ephy_download_get_destination_uri (download);
-  settings = ephy_settings_get ("org.gnome.desktop.background");
-  g_settings_set_string (settings, "picture-uri", uri);
+
+  xdp_portal_set_wallpaper (portal,
+                            parent_window,
+                            uri,
+                            XDP_WALLPAPER_FLAG_BACKGROUND,
+                            NULL,
+                            wallpaper_changed_cb,
+                            NULL);
+  xdp_parent_free (parent_window);
+  g_warning ("HHHHHHHHHHHHHHHHHHHHHUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUMMMMMMMMMMMM");
 }
 
 void
