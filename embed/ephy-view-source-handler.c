@@ -126,11 +126,14 @@ web_resource_data_cb (WebKitWebResource     *resource,
   html = g_strdup_printf ("<head>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx.css' media='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)'>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx-dark.css' media='(prefers-color-scheme: dark)'>"
+                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/epiphany.css'>"
                           "  <title>%s</title>"
                           "</head>"
                           "<body class='hljs'>"
                           "  <script src='ephy-resource:///org/gnome/epiphany/highlightjs/highlight.js'></script>"
-                          "  <script>hljs.initHighlightingOnLoad();</script>"
+                          "  <script src='ephy-resource:///org/gnome/epiphany/highlightjs/highlightjs-line-numbers.js'></script>"
+                          "  <script>hljs.initHighlightingOnLoad();"
+                          "          hljs.initLineNumbersOnLoad();</script>"
                           "  <pre><code class='html'>%s</code></pre>"
                           "</body>",
                           webkit_web_resource_get_uri (resource),
