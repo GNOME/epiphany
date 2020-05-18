@@ -36,6 +36,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
+#include <libportal/portal-gtk3.h>
 
 typedef enum {
   NEW_WINDOW,
@@ -249,15 +250,40 @@ popup_cmd_save_media_as (GSimpleAction *action,
 }
 
 static void
+wallpaper_changed_cb(GObject *source_object,
+                     GAsyncResult *async_result,
+                     gpointer user_data)
+{
+  XdpPortal *portal = XDP_PORTAL(source_object);
+  XdpParent *parent_window = user_data;
+
+  xdp_portal_set_wallpaper_finish (portal, async_result, NULL);
+  g_free (portal); //might want to suppress that once the portal is used in all the program
+  xdp_parent_free (parent_window);
+}
+
+static void
 background_download_completed (EphyDownload *download,
-                               GtkWidget    *window)
+                               GtkWindow    *window)
 {
   const char *uri;
-  GSettings *settings;
+  XdpPortal *portal = xdp_portal_new ();
+  XdpParent *parent_window = xdp_parent_new_gtk (window);
+  /* GSettings *settings; */
 
   uri = ephy_download_get_destination_uri (download);
-  settings = ephy_settings_get ("org.gnome.desktop.background");
-  g_settings_set_string (settings, "picture-uri", uri);
+  /* settings = ephy_settings_get ("org.gnome.desktop.background"); */
+  /* g_settings_set_string (settings, "picture-uri", uri); */
+  g_print("HEREEEEE");
+
+  xdp_portal_set_wallpaper (portal,
+                            parent_window,
+                            uri,
+                            XDP_WALLPAPER_FLAG_BACKGROUND,
+                            NULL,
+                            wallpaper_changed_cb,
+                            parent_window
+                            );
 }
 
 void
@@ -290,7 +316,7 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   g_object_unref (download);
 
   g_signal_connect (download, "completed",
-                    G_CALLBACK (background_download_completed), user_data);
+                    G_CALLBACK (background_download_completed), GTK_WINDOW(user_data));
 
   g_value_unset (&value);
   g_free (base);
