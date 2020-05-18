@@ -107,6 +107,9 @@ void window_cmd_copy                            (GSimpleAction *action,
 void window_cmd_paste                           (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_paste_as_plain_text             (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_delete                          (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
