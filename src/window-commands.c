@@ -2183,6 +2183,26 @@ window_cmd_paste (GSimpleAction *action,
 }
 
 void
+window_cmd_paste_as_plain_text (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_assert (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE_AS_PLAIN_TEXT);
+  }
+}
+
+void
 window_cmd_delete (GSimpleAction *action,
                    GVariant      *parameter,
                    gpointer       user_data)
