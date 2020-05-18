@@ -35,6 +35,7 @@
 #include <webkit2/webkit2.h>
 #include <glib-object.h>
 #include <glib.h>
+#include <libportal/portal-gtk3.h>
 
 G_BEGIN_DECLS
 
@@ -96,6 +97,7 @@ EphyEmbed               *ephy_shell_new_tab_full          (EphyShell        *she
 
 EphySession             *ephy_shell_get_session           (EphyShell        *shell);
 GNetworkMonitor         *ephy_shell_get_net_monitor       (EphyShell        *shell);
+XdpPortal               *ephy_shell_get_portal            (EphyShell        *shell);
 EphyBookmarksManager    *ephy_shell_get_bookmarks_manager (EphyShell        *shell);
 EphyHistoryManager      *ephy_shell_get_history_manager   (EphyShell        *shell);
 EphyOpenTabsManager     *ephy_shell_get_open_tabs_manager (EphyShell        *shell);
