@@ -265,6 +265,9 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
                                    GVariant      *parameter,
                                    gpointer       user_data)
 {
+  if (ephy_is_running_inside_flatpak () == TRUE)
+    return;
+
   EphyEmbedEvent *event;
   const char *location;
   char *dest_uri, *dest, *base, *base_converted;
