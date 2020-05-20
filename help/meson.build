@@ -27,9 +27,9 @@ help_files = [
 ]
 
 help_media = [
-  'media/epiphany-3-12.png',
-  'media/private-browsing-3-12.png',
-  'media/web-browser.png'
+  'media/epiphany-icon.png',
+  'media/epiphany-plain-3-36.png',
+  'media/epiphany-private-3-36.png'
 ]
 
 gnome.yelp(meson.project_name(),
