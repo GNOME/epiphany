@@ -315,11 +315,13 @@ language_editor_add_button_release_event (GtkWidget        *button,
                                           GdkEvent         *event,
                                           PrefsGeneralPage *general_page)
 {
+  GtkWidget *prefs_dialog = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
+
   if (general_page->add_lang_dialog == NULL) {
     GtkDialog **add_lang_dialog;
 
     general_page->add_lang_dialog = setup_add_language_dialog (general_page);
-    gtk_window_set_transient_for (GTK_WINDOW (general_page->add_lang_dialog), GTK_WINDOW (general_page));
+    gtk_window_set_transient_for (GTK_WINDOW (general_page->add_lang_dialog), GTK_WINDOW (prefs_dialog));
 
     add_lang_dialog = &general_page->add_lang_dialog;
 
@@ -599,9 +601,11 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   GtkTreeIter iter;
   guint i, n;
   GtkBuilder *builder;
+  GtkWidget *prefs_dialog;
   g_auto (GStrv) locales;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
+  prefs_dialog = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
   add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
   treeview = GTK_TREE_VIEW (gtk_builder_get_object (builder, "languages_treeview"));
@@ -645,7 +649,7 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   gtk_tree_sortable_set_sort_column_id
     (GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-  gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (general_page)),
+  gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (prefs_dialog)),
                                GTK_WINDOW (ad));
   gtk_window_set_modal (GTK_WINDOW (ad), TRUE);
 
