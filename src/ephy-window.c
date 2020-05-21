@@ -1717,8 +1717,8 @@ populate_context_menu (WebKitWebView       *web_view,
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "view-image", window);
 
-    add_action_to_context_menu (context_menu, popup_action_group,
-                                "set-image-as-background", window);
+    /* add_action_to_context_menu (context_menu, popup_action_group, */
+    /*                             "set-image-as-background", window); */
   }
 
   if (is_media) {
