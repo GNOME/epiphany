@@ -27,6 +27,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -272,6 +273,9 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   char *dest_uri, *dest, *base, *base_converted;
   GValue value = { 0, };
   EphyDownload *download;
+
+  if (ephy_is_running_inside_flatpak ())
+    return;
 
   event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
   g_assert (event != NULL);
