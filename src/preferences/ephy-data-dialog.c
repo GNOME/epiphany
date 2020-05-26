@@ -23,6 +23,8 @@
 
 #include <ctype.h>
 #include <glib/gi18n.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 
 typedef struct {
   GtkWidget *box;
@@ -43,7 +45,7 @@ typedef struct {
   char *search_text;
 } EphyDataDialogPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (EphyDataDialog, ephy_data_dialog, HDY_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (EphyDataDialog, ephy_data_dialog, GTK_TYPE_WINDOW)
 
 enum {
   PROP_0,
