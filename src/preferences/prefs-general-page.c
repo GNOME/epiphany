@@ -455,7 +455,7 @@ language_editor_add (PrefsGeneralPage *general_page,
                      const char       *desc)
 {
   GtkWidget *event_box;
-  HdyActionRow *row;
+  GtkWidget *row;
   GtkWidget *prefix;
   GtkWidget *action;
   int len;
@@ -477,7 +477,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   }
 
   row = hdy_action_row_new ();
-  hdy_action_row_set_title (row, desc);
+  hdy_action_row_set_title (HDY_ACTION_ROW (row), desc);
   g_object_set_data (G_OBJECT (row), "code", g_strdup (code));
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "row");
 
@@ -488,7 +488,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   g_signal_connect (event_box, "drag-data-get", G_CALLBACK (drag_data_get), general_page);
   prefix = gtk_image_new_from_icon_name ("list-drag-handle-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_container_add (GTK_CONTAINER (event_box), prefix);
-  hdy_action_row_add_prefix (row, event_box);
+  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), event_box);
 
   action = gtk_button_new_from_icon_name ("edit-delete-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_widget_set_tooltip_text (action, _("Delete language"));
@@ -496,7 +496,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   g_object_set_data (G_OBJECT (action), "row", row);
   g_signal_connect (action, "clicked", G_CALLBACK (language_editor_remove_button_clicked_cb), general_page);
   gtk_widget_set_valign (action, GTK_ALIGN_CENTER);
-  hdy_action_row_add_action (row, action);
+  gtk_container_add (GTK_CONTAINER (row), action);
 
   gtk_widget_show_all (GTK_WIDGET (row));
 
@@ -768,7 +768,7 @@ create_download_path_button (PrefsGeneralPage *general_page)
                                            DOWNLOAD_BUTTON_WIDTH);
   g_signal_connect (button, "selection-changed",
                     G_CALLBACK (download_path_changed_cb), general_page);
-  hdy_action_row_add_action (HDY_ACTION_ROW (general_page->download_folder_row), button);
+  gtk_container_add (GTK_CONTAINER (general_page->download_folder_row), button);
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_widget_show (button);
 
@@ -1194,11 +1194,6 @@ init_lang_listbox (PrefsGeneralPage *general_page)
   char **list = NULL;
   int i;
   GtkCssProvider *provider;
-  GtkStyleContext *style_context;
-
-  style_context = gtk_widget_get_style_context (general_page->lang_listbox);
-  gtk_style_context_add_class (style_context, "frame");
-  gtk_list_box_set_header_func (GTK_LIST_BOX (general_page->lang_listbox), hdy_list_box_separator_header, NULL, NULL);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1, NULL);
