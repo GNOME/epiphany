@@ -1240,11 +1240,9 @@ window_cmd_new_tab (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
-  GtkWidget *stack;
   EphyWindow *window = user_data;
   char *url;
 
-  stack = ephy_window_get_stack (window);
   url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
   if (g_strcmp0 (url, "about:blank") != 0) {
     g_free (url);
@@ -1254,7 +1252,7 @@ window_cmd_new_tab (GSimpleAction *action,
   ephy_link_open (EPHY_LINK (window),
                   url, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  ephy_window_close_pages_view (window);
   g_free (url);
 }
 
@@ -2501,11 +2499,7 @@ window_cmd_go_content (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
 {
-  GtkWidget *stack;
-  EphyWindow *window = EPHY_WINDOW (user_data);
-
-  stack = ephy_window_get_stack (window);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  ephy_window_close_pages_view (EPHY_WINDOW (user_data));
 }
 
 void
@@ -2513,11 +2507,7 @@ window_cmd_go_tabs_view (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  GtkWidget *stack;
-  EphyWindow *window = EPHY_WINDOW (user_data);
-
-  stack = ephy_window_get_stack (window);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "tabs");
+  ephy_window_open_pages_view (EPHY_WINDOW (user_data));
 }
 
 void
