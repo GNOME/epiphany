@@ -247,7 +247,7 @@ create_row (EphyHistoryDialog *self,
   GtkWidget *button;
 
   /* Row */
-  row = GTK_WIDGET (hdy_action_row_new ());
+  row = hdy_action_row_new ();
   hdy_action_row_set_title (HDY_ACTION_ROW (row), url->title);
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), url->url);
   gtk_widget_set_tooltip_text (row, url->url);
@@ -271,9 +271,9 @@ create_row (EphyHistoryDialog *self,
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 
   /* Added in reverse order because actions are packed from the end. */
-  hdy_action_row_add_action (HDY_ACTION_ROW (row), button);
-  hdy_action_row_add_action (HDY_ACTION_ROW (row), separator);
-  hdy_action_row_add_action (HDY_ACTION_ROW (row), date);
+  gtk_container_add (GTK_CONTAINER (row), date);
+  gtk_container_add (GTK_CONTAINER (row), separator);
+  gtk_container_add (GTK_CONTAINER (row), button);
 
   gtk_widget_set_sensitive (button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
@@ -659,26 +659,6 @@ ephy_history_dialog_dispose (GObject *object)
 }
 
 static void
-box_header_func (GtkListBoxRow *row,
-                 GtkListBoxRow *before,
-                 gpointer       user_data)
-{
-  GtkWidget *current;
-
-  if (!before) {
-    gtk_list_box_row_set_header (row, NULL);
-    return;
-  }
-
-  current = gtk_list_box_row_get_header (row);
-  if (!current) {
-    current = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_widget_show (current);
-    gtk_list_box_row_set_header (row, current);
-  }
-}
-
-static void
 on_edge_reached (GtkScrolledWindow *scrolled,
                  GtkPositionType    pos,
                  gpointer           user_data)
@@ -769,7 +749,6 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
   self->urls = NULL;
   self->sorter_source = 0;
 
-  gtk_list_box_set_header_func (GTK_LIST_BOX (self->listbox), box_header_func, NULL, NULL);
   ephy_gui_ensure_window_group (GTK_WINDOW (self));
 
   gtk_menu_attach_to_widget (GTK_MENU (self->popup_menu), GTK_WIDGET (self), NULL);
