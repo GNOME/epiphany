@@ -18,46 +18,59 @@
             <property name="title" translatable="yes">Use Custom Fonts</property>
             <property name="visible">True</property>
             <child>
-              <object class="HdyActionRow">
-                <property name="activatable">False</property>
-                <property name="title" translatable="yes">Sans serif font</property>
+              <object class="GtkSeparator">
+                <property name="margin-start">24</property>
                 <property name="visible">True</property>
-                <child>
-                  <object class="GtkFontButton" id="sans_fontbutton">
-                    <property name="font">Sans 12</property>
-                    <property name="use-font">True</property>
-                    <property name="valign">center</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
-              <object class="HdyActionRow">
-                <property name="activatable">False</property>
-                <property name="title" translatable="yes">Serif font</property>
+              <object class="GtkListBox" id="use_custom_fonts_list">
+                <property name="margin-start">24</property>
+                <property name="selection_mode">none</property>
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkFontButton" id="serif_fontbutton">
-                    <property name="font">Sans 12</property>
-                    <property name="use-font">True</property>
-                    <property name="valign">center</property>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Sans serif font</property>
                     <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="sans_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="HdyActionRow">
-                <property name="activatable">False</property>
-                <property name="title" translatable="yes">Monospace font</property>
-                <property name="visible">True</property>
                 <child>
-                  <object class="GtkFontButton" id="mono_fontbutton">
-                    <property name="font">Sans 12</property>
-                    <property name="use-font">True</property>
-                    <property name="valign">center</property>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Serif font</property>
                     <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="serif_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="HdyActionRow">
+                    <property name="activatable">False</property>
+                    <property name="title" translatable="yes">Monospace font</property>
+                    <property name="visible">True</property>
+                    <child type="action">
+                      <object class="GtkFontButton" id="mono_fontbutton">
+                        <property name="font">Sans 12</property>
+                        <property name="use-font">True</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -98,20 +111,7 @@
             <property name="activatable_widget">css_switch</property>
             <property name="title" translatable="yes">Use Custom Stylesheet</property>
             <property name="visible">True</property>
-            <child>
-              <object class="GtkSwitch" id="css_switch">
-                <property name="valign">center</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="margin_bottom">8</property>
-                <property name="margin_top">8</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
+            <child type="action">
               <object class="GtkButton" id="css_edit_button">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
@@ -126,6 +126,19 @@
                 </child>
               </object>
             </child>
+            <child type="action">
+              <object class="GtkSeparator">
+                <property name="margin_bottom">8</property>
+                <property name="margin_top">8</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSwitch" id="css_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -133,20 +146,7 @@
             <property name="activatable_widget">js_switch</property>
             <property name="title" translatable="yes">Use Custom JavaScript</property>
             <property name="visible">True</property>
-            <child>
-              <object class="GtkSwitch" id="js_switch">
-                <property name="valign">center</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="margin_bottom">8</property>
-                <property name="margin_top">8</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
+            <child type="action">
               <object class="GtkButton" id="js_edit_button">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
@@ -161,6 +161,19 @@
                 </child>
               </object>
             </child>
+            <child type="action">
+              <object class="GtkSeparator">
+                <property name="margin_bottom">8</property>
+                <property name="margin_top">8</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkSwitch" id="js_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -168,7 +181,7 @@
             <property name="activatable">False</property>
             <property name="title" translatable="yes">Default zoom level</property>
             <property name="visible">True</property>
-            <child>
+            <child type="action">
               <object class="GtkSpinButton" id="default_zoom_spin_button">
                 <property name="adjustment">zoom_adjustment</property>
                 <property name="can_focus">True</property>

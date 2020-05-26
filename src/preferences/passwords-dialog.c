@@ -278,24 +278,53 @@ populate_model_cb (GList    *records,
     GtkWidget *button;
     GtkWidget *image;
     GtkWidget *entry;
+    GtkWidget *row_switch;
+    GtkWidget *row_separator;
     const char *text;
 
-    row = hdy_expander_row_new ();
+    row = GTK_WIDGET (hdy_expander_row_new ());
     g_object_set_data (G_OBJECT (row), "record", record);
-    hdy_expander_row_set_title (HDY_EXPANDER_ROW (row), ephy_password_record_get_origin (record));
-    hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), ephy_password_record_get_username (record));
+    hdy_action_row_set_title (HDY_ACTION_ROW (row), ephy_password_record_get_origin (record));
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), ephy_password_record_get_username (record));
+    row_switch = dzl_gtk_widget_find_child_typed (row, GTK_TYPE_SWITCH);
+    if (row_switch)
+      gtk_widget_set_no_show_all (row_switch, TRUE);
+    row_separator = dzl_gtk_widget_find_child_typed (row, GTK_TYPE_SEPARATOR);
+    if (row_separator)
+      gtk_widget_set_no_show_all (row_separator, TRUE);
     hdy_expander_row_set_show_enable_switch (HDY_EXPANDER_ROW (row), FALSE);
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    hdy_action_row_add_action (HDY_ACTION_ROW (row), separator);
 
     button = gtk_button_new_from_icon_name ("edit-copy-symbolic", GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_widget_set_tooltip_text (button, _("Copy password"));
-    hdy_expander_row_add_action (HDY_EXPANDER_ROW (row), button);
+    hdy_action_row_add_action (HDY_ACTION_ROW (row), button);
     g_signal_connect (button, "clicked", G_CALLBACK (copy_password_clicked), (void *)(ephy_password_record_get_password (record)));
 
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    gtk_container_add (GTK_CONTAINER (row), separator);
+
     /* Username */
-    sub_row = hdy_action_row_new ();
+    sub_row = GTK_WIDGET (hdy_action_row_new ());
     hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Username"));
     gtk_container_add (GTK_CONTAINER (row), sub_row);
+
+    button = gtk_button_new_from_icon_name ("edit-copy-symbolic", GTK_ICON_SIZE_BUTTON);
+    g_signal_connect (button, "clicked", G_CALLBACK (copy_username_clicked), (void *)(ephy_password_record_get_username (record)));
+    gtk_widget_set_tooltip_text (button, _("Copy username"));
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), button);
+
+    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_margin_top (separator, 8);
+    gtk_widget_set_margin_bottom (separator, 8);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), separator);
 
     entry = gtk_entry_new ();
     gtk_widget_set_hexpand (entry, TRUE);
@@ -308,23 +337,24 @@ populate_model_cb (GList    *records,
     if (text)
       gtk_entry_set_text (GTK_ENTRY (entry), text);
 
-    gtk_container_add (GTK_CONTAINER (sub_row), entry);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), entry);
+
+    /* Password */
+    sub_row = GTK_WIDGET (hdy_action_row_new ());
+    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Password"));
+    gtk_container_add (GTK_CONTAINER (row), sub_row);
+
+    button = gtk_toggle_button_new ();
+    image = gtk_image_new_from_icon_name ("dialog-password-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image (GTK_BUTTON (button), image);
+    gtk_widget_set_tooltip_text (button, _("Reveal password"));
+    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), button);
 
     separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
     gtk_widget_set_margin_top (separator, 8);
     gtk_widget_set_margin_bottom (separator, 8);
-    gtk_container_add (GTK_CONTAINER (sub_row), separator);
-
-    button = gtk_button_new_from_icon_name ("edit-copy-symbolic", GTK_ICON_SIZE_BUTTON);
-    g_signal_connect (button, "clicked", G_CALLBACK (copy_username_clicked), (void *)(ephy_password_record_get_username (record)));
-    gtk_widget_set_tooltip_text (button, _("Copy username"));
-    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-    gtk_container_add (GTK_CONTAINER (sub_row), button);
-
-    /* Password */
-    sub_row = hdy_action_row_new ();
-    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Password"));
-    gtk_container_add (GTK_CONTAINER (row), sub_row);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), separator);
 
     entry = gtk_entry_new ();
     gtk_widget_set_hexpand (entry, TRUE);
@@ -338,31 +368,17 @@ populate_model_cb (GList    *records,
     if (text)
       gtk_entry_set_text (GTK_ENTRY (entry), text);
 
-    gtk_container_add (GTK_CONTAINER (sub_row), entry);
-
-    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_margin_top (separator, 8);
-    gtk_widget_set_margin_bottom (separator, 8);
-    gtk_container_add (GTK_CONTAINER (sub_row), separator);
-
-    button = gtk_toggle_button_new ();
-    image = gtk_image_new_from_icon_name ("dialog-password-symbolic", GTK_ICON_SIZE_BUTTON);
-    gtk_button_set_image (GTK_BUTTON (button), image);
-    gtk_widget_set_tooltip_text (button, _("Reveal password"));
-    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-
     g_object_bind_property (G_OBJECT (button), "active", G_OBJECT (entry), "visibility", G_BINDING_DEFAULT);
-    gtk_container_add (GTK_CONTAINER (sub_row), button);
+    hdy_action_row_add_action (HDY_ACTION_ROW (sub_row), entry);
 
     /* Remove button */
-    sub_row = hdy_action_row_new ();
-    gtk_container_add (GTK_CONTAINER (row), sub_row);
-
     button = gtk_button_new_with_label (_("Remove Password"));
-    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+    gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+    gtk_widget_set_margin_top (button, 18);
+    gtk_widget_set_margin_bottom (button, 18);
     dzl_gtk_widget_add_style_class (button, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
     g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), record);
-    gtk_container_add (GTK_CONTAINER (sub_row), button);
+    gtk_container_add (GTK_CONTAINER (row), button);
 
     g_object_set_data (G_OBJECT (record), "dialog", dialog);
 
@@ -451,6 +467,7 @@ ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
 
   g_signal_connect (GTK_WIDGET (dialog), "show", G_CALLBACK (show_dialog_cb), NULL);
 
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->listbox), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_filter_func (GTK_LIST_BOX (dialog->listbox), password_filter, dialog, NULL);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (dialog->listbox), GTK_SELECTION_NONE);
 }
