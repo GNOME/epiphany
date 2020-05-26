@@ -47,7 +47,9 @@ typedef enum
 EphyWindow       *ephy_window_new                 (void);
 
 GtkWidget        *ephy_window_get_notebook        (EphyWindow *window);
-GtkWidget        *ephy_window_get_stack           (EphyWindow *window);
+
+void              ephy_window_open_pages_view     (EphyWindow *window);
+void              ephy_window_close_pages_view    (EphyWindow *window);
 
 void              ephy_window_load_url            (EphyWindow *window,
                                                    const char *url);

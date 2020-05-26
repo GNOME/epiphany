@@ -71,7 +71,6 @@ row_activated_cb (EphyPagesView *self,
 {
   gint new_page;
   EphyWindow *window;
-  GtkWidget *stack;
   GApplication *application;
 
   g_assert (EPHY_IS_PAGES_VIEW (self));
@@ -79,7 +78,6 @@ row_activated_cb (EphyPagesView *self,
 
   application = g_application_get_default ();
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
-  stack = ephy_window_get_stack (window);
 
   if (!row)
     return;
@@ -87,7 +85,7 @@ row_activated_cb (EphyPagesView *self,
   new_page = gtk_list_box_row_get_index (row);
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (self->notebook), new_page);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  ephy_window_close_pages_view (window);
 }
 
 static void
