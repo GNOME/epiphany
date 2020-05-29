@@ -27,6 +27,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-gui.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
@@ -307,13 +308,13 @@ navigation_button_press_event_cb (GtkButton *button,
 {
   EphyActionBarStart *action_bar_start = EPHY_ACTION_BAR_START (user_data);
   EphyNavigationHistoryDirection direction;
-  const gchar *action_name;
   PopupData *data;
+  gboolean is_back = FALSE;
 
-  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
+  is_back = (GTK_WIDGET (button) == action_bar_start->navigation_back);
 
-  direction = strstr (action_name, "back") ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
-                                           : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  direction = is_back ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
+                      : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
   switch (((GdkEventButton *)event)->button) {
     case GDK_BUTTON_SECONDARY:
@@ -354,30 +355,49 @@ navigation_button_release_event_cb (GtkButton *button,
   GActionGroup *action_group;
   GAction *action;
   EphyNavigationHistoryDirection direction;
-  const gchar *action_name;
+  gboolean is_back = FALSE;
+  gboolean open_in_new_tab = FALSE;
+  gboolean open_in_current_tab = FALSE;
+  GdkEventType type = GDK_NOTHING;
+  guint state = 0, button_val = (guint) - 1, keyval = (guint) - 1;
+
+  ephy_gui_get_current_event (&type, &state, &button_val, &keyval);
+  is_back = (GTK_WIDGET (button) == action_bar_start->navigation_back);
 
   g_clear_handle_id (&action_bar_start->navigation_buttons_menu_timeout, g_source_remove);
 
-  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (gtk_widget_get_ancestor (GTK_WIDGET (action_bar_start), EPHY_TYPE_WINDOW), "toolbar");
 
-  direction = strcmp (action_name, "toolbar.navigation-back") == 0 ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
-                                                                   : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  direction = is_back ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
+                      : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
-  switch (((GdkEventButton *)event)->button) {
-    case GDK_BUTTON_MIDDLE:
-      if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                             "navigation-back-new-tab");
-        g_action_activate (action, NULL);
-      } else if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                             "navigation-forward-new-tab");
-        g_action_activate (action, NULL);
-      }
-      return GDK_EVENT_STOP;
-    default:
-      break;
+  open_in_new_tab = (((GdkEventButton *)event)->button == GDK_BUTTON_MIDDLE) || (state == GDK_CONTROL_MASK);
+  open_in_current_tab = ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY;
+
+  if (open_in_new_tab) {
+    if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           "navigation-back-new-tab");
+      g_action_activate (action, NULL);
+    } else if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           "navigation-forward-new-tab");
+      g_action_activate (action, NULL);
+    }
+    return GDK_EVENT_STOP;
+  }
+
+  if (open_in_current_tab) {
+    if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           "navigation-back");
+      g_action_activate (action, NULL);
+    } else if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           "navigation-forward");
+      g_action_activate (action, NULL);
+    }
+    return GDK_EVENT_STOP;
   }
 
   return GDK_EVENT_PROPAGATE;
