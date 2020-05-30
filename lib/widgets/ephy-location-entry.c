@@ -68,6 +68,7 @@ struct _EphyLocationEntry {
   GtkCssProvider *css_provider;
 
   gboolean reader_mode_active;
+  gboolean button_release_is_blocked;
 
   char *saved_text;
   char *jump_tab;
@@ -114,6 +115,39 @@ static void schedule_dns_prefetch (EphyLocationEntry *entry,
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
+
+static gboolean
+entry_button_release (GtkWidget *widget,
+                      GdkEvent  *event,
+                      gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+
+  gtk_editable_select_region (GTK_EDITABLE (entry->url_entry), 0, -1);
+
+  g_signal_handlers_block_by_func (widget, G_CALLBACK (entry_button_release), entry);
+  entry->button_release_is_blocked = TRUE;
+
+  return GDK_EVENT_STOP;
+}
+
+static gboolean
+entry_focus_out_event (GtkWidget *widget,
+                       GdkEvent  *event,
+                       gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+
+  /* Unselect. */
+  gtk_editable_select_region (GTK_EDITABLE (entry->url_entry), 0, 0);
+
+  if (entry->button_release_is_blocked) {
+    g_signal_handlers_unblock_by_func (widget, G_CALLBACK (entry_button_release), entry);
+    entry->button_release_is_blocked = FALSE;
+  }
+
+  return GDK_EVENT_PROPAGATE;
+}
 
 static void
 editable_changed_cb (GtkEditable       *editable,
@@ -1045,6 +1079,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   g_signal_connect (entry->url_entry, "suggestion-activated",
                     G_CALLBACK (ephy_location_entry_suggestion_activated), entry);
 
+  g_signal_connect (entry->url_entry, "button-release-event", G_CALLBACK (entry_button_release), entry);
+  g_signal_connect (entry->url_entry, "focus-out-event", G_CALLBACK (entry_focus_out_event), entry);
 
   controller = dzl_shortcut_controller_find (entry->url_entry);
   dzl_shortcut_controller_add_command_callback (controller,
@@ -1071,6 +1107,7 @@ ephy_location_entry_init (EphyLocationEntry *le)
 
   le->user_changed = FALSE;
   le->block_update = FALSE;
+  le->button_release_is_blocked = FALSE;
   le->saved_text = NULL;
 
   ephy_location_entry_construct_contents (le);
@@ -1274,14 +1311,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 void
 ephy_location_entry_focus (EphyLocationEntry *entry)
 {
-  GtkWidget *toplevel, *widget = GTK_WIDGET (entry->url_entry);
-
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  gtk_editable_select_region (GTK_EDITABLE (entry->url_entry),
-                              0, -1);
-  gtk_window_set_focus (GTK_WINDOW (toplevel),
-                        widget);
+  gtk_widget_grab_focus (GTK_WIDGET (entry->url_entry));
 }
 
 void
