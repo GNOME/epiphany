@@ -420,8 +420,7 @@ password_filter (GtkListBoxRow *row,
                  gpointer       user_data)
 {
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  HdyActionRow *action_row = HDY_ACTION_ROW (row);
-  EphyPasswordRecord *record = g_object_get_data (G_OBJECT (action_row), "record");
+  EphyPasswordRecord *record = g_object_get_data (G_OBJECT (row), "record");
   const char *username;
   const char *origin;
   gboolean visible = FALSE;
