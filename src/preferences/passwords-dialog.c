@@ -426,8 +426,11 @@ password_filter (GtkListBoxRow *row,
   gboolean visible = FALSE;
   const char *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
 
-  if (search_text == NULL)
+  if (search_text == NULL) {
+    gtk_widget_show (GTK_WIDGET (row));
+
     return TRUE;
+  }
 
   origin = ephy_password_record_get_origin (record);
   username = ephy_password_record_get_username (record);
@@ -436,6 +439,8 @@ password_filter (GtkListBoxRow *row,
     visible = TRUE;
   else if (username != NULL && g_strrstr (username, search_text) != NULL)
     visible = TRUE;
+
+  gtk_widget_set_visible (GTK_WIDGET (row), visible);
 
   return visible;
 }
