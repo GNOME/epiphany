@@ -23,7 +23,6 @@
 #include "ephy-find-toolbar.h"
 
 #include "ephy-debug.h"
-#include "ephy-web-view.h"
 #include "contrib/gd-tagged-entry.h"
 
 #include <math.h>
@@ -37,6 +36,7 @@
 struct _EphyFindToolbar {
   HdySearchBar parent_instance;
 
+  GCancellable *cancellable;
   WebKitWebView *web_view;
   WebKitFindController *controller;
   GdTaggedEntry *entry;
@@ -436,6 +436,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
   search_entry_changed_cb (GTK_ENTRY (toolbar->entry), toolbar);
 
+  toolbar->cancellable = g_cancellable_new ();
+
   gtk_widget_show_all (GTK_WIDGET (toolbar));
 }
 
@@ -452,6 +454,11 @@ ephy_find_toolbar_dispose (GObject *object)
   if (toolbar->find_source_id != 0) {
     g_source_remove (toolbar->find_source_id);
     toolbar->find_source_id = 0;
+  }
+
+  if (toolbar->cancellable) {
+    g_cancellable_cancel (toolbar->cancellable);
+    g_clear_object (&toolbar->cancellable);
   }
 
   G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
@@ -614,6 +621,37 @@ ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar)
   webkit_find_controller_search_previous (toolbar->controller);
 }
 
+static void
+ephy_find_toolbar_selection_async (GObject      *source_object,
+                                   GAsyncResult *res,
+                                   gpointer      user_data)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (source_object);
+  EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (user_data);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  JSCValue *value = NULL;
+
+  js_result = webkit_web_view_run_javascript_finish (web_view, res, &error);
+  if (!js_result) {
+    g_warning ("Error running javascript: %s", error->message);
+    return;
+  }
+
+  value = webkit_javascript_result_get_js_value (js_result);
+  if (jsc_value_is_string (value)) {
+    JSCException *exception;
+    g_autofree gchar *str_value = NULL;
+
+    str_value = jsc_value_to_string (value);
+    exception = jsc_context_get_exception (jsc_value_get_context (value));
+    if (exception)
+      g_warning ("Error running javascript: %s", jsc_exception_get_message (exception));
+    else if (strlen (str_value))
+      gtk_entry_set_text (GTK_ENTRY (toolbar->entry), str_value);
+  }
+}
+
 void
 ephy_find_toolbar_open (EphyFindToolbar *toolbar,
                         gboolean         links_only,
@@ -623,6 +661,8 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
   toolbar->typing_ahead = typing_ahead;
   toolbar->links_only = links_only;
+
+  webkit_web_view_run_javascript (toolbar->web_view, "window.getSelection().toString();", toolbar->cancellable, ephy_find_toolbar_selection_async, toolbar);
 
   gtk_editable_select_region (GTK_EDITABLE (toolbar->entry), 0, -1);
 
