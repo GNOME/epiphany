@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ephy-debug.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
@@ -55,6 +56,7 @@ static gboolean application_mode = FALSE;
 static gboolean automation_mode = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
+static char *search_term = NULL;
 
 static EphyShell *ephy_shell = NULL;
 static int shutdown_signum = 0;
@@ -127,6 +129,7 @@ static const GOptionEntry option_entries[] = {
     G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
   { "delete-application", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,
     &application_to_delete, NULL, NULL },
+  { "search", 0, 0, G_OPTION_ARG_STRING, &search_term, NULL, NULL},
   { NULL }
 };
 
@@ -409,6 +412,13 @@ main (int   argc,
   hdy_init (&argc, &argv);
 
   _ephy_shell_create_instance (mode);
+
+  if (search_term) {
+    int current_len = arguments ? g_strv_length (arguments) : 0;
+    arguments = g_realloc (arguments, current_len + 1 * sizeof (char *));
+    arguments[current_len] = ephy_embed_utils_autosearch_address (search_term);
+    g_free (search_term);
+  }
 
   ctx = ephy_shell_startup_context_new (open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : EPHY_STARTUP_NEW_TAB,
                                         session_filename,
