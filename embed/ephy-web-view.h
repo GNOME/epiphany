@@ -182,4 +182,6 @@ void                       ephy_web_view_show_auth_form_save_request (EphyWebVie
 
 gboolean                   ephy_web_view_in_pdf_viewer             (EphyWebView              *view);
 
+GCancellable              *ephy_web_view_get_cancellable           (EphyWebView              *view);
+
 G_END_DECLS

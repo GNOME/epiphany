@@ -3922,3 +3922,9 @@ ephy_web_view_in_pdf_viewer (EphyWebView *web_view)
 {
   return web_view->in_pdf_viewer;
 }
+
+GCancellable *
+ephy_web_view_get_cancellable (EphyWebView *web_view)
+{
+  return web_view->cancellable;
+}
