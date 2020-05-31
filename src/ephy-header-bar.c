@@ -276,12 +276,17 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-menu")));
   } else if (ephy_is_running_inside_flatpak ()) {
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
 
     if (is_desktop_pantheon ())
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
+  } else {
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
   }
 
   header_bar->combined_stop_reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "combined_stop_reload_button"));

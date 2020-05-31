@@ -678,6 +678,11 @@ static gboolean
 ephy_window_delete_event (GtkWidget   *widget,
                           GdkEventAny *event)
 {
+  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) && g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
+    gtk_widget_hide (widget);
+    return TRUE;
+  }
+
   if (!ephy_window_close (EPHY_WINDOW (widget)))
     return TRUE;
 

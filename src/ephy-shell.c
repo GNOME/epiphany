@@ -332,6 +332,18 @@ notification_clicked (GSimpleAction *action,
     webkit_notification_clicked (notification);
 }
 
+static void
+run_in_background_change_state (GSimpleAction *action,
+                                GVariant      *value,
+                                gpointer       user_data)
+{
+  gboolean active;
+
+  active = g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND);
+  g_simple_action_set_state (action, g_variant_new_boolean (!active));
+  g_settings_set_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND, !active);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -358,6 +370,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
+  { "run-in-background", NULL, "b", "false", run_in_background_change_state},
 };
 
 static void
@@ -436,12 +449,22 @@ set_accel_for_action (EphyShell   *shell,
   gtk_application_set_accels_for_action (GTK_APPLICATION (shell), detailed_action_name, accels);
 }
 
+static gboolean
+run_in_background_get_mapping (GValue   *value,
+                               GVariant *variant,
+                               gpointer  user_data)
+{
+  g_value_set_variant (value, variant);
+  return TRUE;
+}
+
 static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShellMode mode;
+  GAction *action;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
@@ -484,6 +507,17 @@ ephy_shell_startup (GApplication *application)
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
                                      application);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (application), "run-in-background");
+    g_settings_bind_with_mapping (EPHY_SETTINGS_WEB_APP,
+                                  EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND,
+                                  G_SIMPLE_ACTION (action),
+                                  "state",
+                                  G_SETTINGS_BIND_GET | G_SETTINGS_BIND_GET_NO_CHANGES,
+                                  run_in_background_get_mapping,
+                                  NULL,
+                                  NULL,
+                                  NULL);
   }
 
   /* Actions that are available in both app mode and browser mode */
