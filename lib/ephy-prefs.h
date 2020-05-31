@@ -123,6 +123,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY      "last-download-directory"
 #define EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY "hardware-acceleration-policy"
 #define EPHY_PREFS_WEB_ASK_ON_DOWNLOAD              "ask-on-download"
+#define EPHY_PREFS_WEB_ENABLE_SWITCH_TO_NEW_TAB     "enable-switch-to-new-tab"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -151,6 +152,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
   EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
   EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
+  EPHY_PREFS_WEB_ENABLE_SWITCH_TO_NEW_TAB,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
