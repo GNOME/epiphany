@@ -69,6 +69,8 @@ view_in_destination (EphyWindow      *window,
       break;
     case NEW_TAB:
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
+      if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+        flags |= EPHY_NEW_TAB_JUMP;
       break;
     default:
       g_assert_not_reached ();
