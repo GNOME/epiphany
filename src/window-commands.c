@@ -551,8 +551,12 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = hdy_dialog_new (GTK_WINDOW (window));
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Bookmarks"));
+  dialog = g_object_new (GTK_TYPE_DIALOG,
+                         "use-header-bar", TRUE,
+                         "modal", TRUE,
+                         "transient-for", window,
+                         "title", _("Import Bookmarks"),
+                         NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"),
                           GTK_RESPONSE_CANCEL,
@@ -793,8 +797,12 @@ window_cmd_import_passwords (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = hdy_dialog_new (GTK_WINDOW (window));
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Passwords"));
+  dialog = g_object_new (GTK_TYPE_DIALOG,
+                         "use-header-bar", TRUE,
+                         "modal", TRUE,
+                         "transient-for", window,
+                         "title", _("Import Passwords"),
+                         NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"),
                           GTK_RESPONSE_CANCEL,
@@ -1232,11 +1240,9 @@ window_cmd_new_tab (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
-  GtkWidget *stack;
   EphyWindow *window = user_data;
   char *url;
 
-  stack = ephy_window_get_stack (window);
   url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
   if (g_strcmp0 (url, "about:blank") != 0) {
     g_free (url);
@@ -1246,7 +1252,7 @@ window_cmd_new_tab (GSimpleAction *action,
   ephy_link_open (EPHY_LINK (window),
                   url, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  ephy_window_close_pages_view (window);
   g_free (url);
 }
 
@@ -2493,11 +2499,7 @@ window_cmd_go_content (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
 {
-  GtkWidget *stack;
-  EphyWindow *window = EPHY_WINDOW (user_data);
-
-  stack = ephy_window_get_stack (window);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "content");
+  ephy_window_close_pages_view (EPHY_WINDOW (user_data));
 }
 
 void
@@ -2505,11 +2507,7 @@ window_cmd_go_tabs_view (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  GtkWidget *stack;
-  EphyWindow *window = EPHY_WINDOW (user_data);
-
-  stack = ephy_window_get_stack (window);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "tabs");
+  ephy_window_open_pages_view (EPHY_WINDOW (user_data));
 }
 
 void

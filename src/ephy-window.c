@@ -146,7 +146,7 @@ struct _EphyWindow {
   DzlApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
-  GtkWidget *main_stack;
+  GtkWidget *main_deck;
   EphyPagesView *pages_view;
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
@@ -547,7 +547,7 @@ update_adaptive_mode (EphyWindow *window)
    * to the main view.
    */
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL)
-    gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
+    ephy_window_close_pages_view (window);
 }
 
 static void
@@ -3454,33 +3454,33 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
 static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
+  GtkWidget *title_bar;
   GtkWidget *header_bar;
   GtkWidget *tab_header_bar;
-  GtkWidget *header_stack;
+  GtkWidget *header_deck;
   EphyTitleWidget *title_widget;
+  HdySwipeGroup *swipe_group;
 
+  title_bar = hdy_title_bar_new ();
   header_bar = ephy_header_bar_new (window);
   tab_header_bar = ephy_tab_header_bar_new ();
-  header_stack = gtk_stack_new ();
+  header_deck = hdy_deck_new ();
+  hdy_deck_set_can_swipe_back (HDY_DECK (header_deck), TRUE);
 
-  gtk_stack_add_named (GTK_STACK (header_stack), header_bar, "content");
-  gtk_stack_add_named (GTK_STACK (header_stack), tab_header_bar, "tabs");
+  gtk_container_add (GTK_CONTAINER (title_bar), header_deck);
+  gtk_container_add (GTK_CONTAINER (header_deck), header_bar);
+  gtk_container_add (GTK_CONTAINER (header_deck), tab_header_bar);
 
-  g_object_bind_property (G_OBJECT (window->main_stack),
-                          "visible-child-name", G_OBJECT (header_stack),
-                          "visible-child-name", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (G_OBJECT (window->main_stack),
-                          "transition-type", G_OBJECT (header_stack),
-                          "transition-type", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (G_OBJECT (window->main_stack),
-                          "transition-duration", G_OBJECT (header_stack),
-                          "transition-duration", G_BINDING_SYNC_CREATE);
+  hdy_deck_set_visible_child (HDY_DECK (header_deck), header_bar);
 
-  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_stack);
+  swipe_group = hdy_swipe_group_new ();
+  hdy_swipe_group_add_swipeable (swipe_group, HDY_SWIPEABLE (header_deck));
+  hdy_swipe_group_add_swipeable (swipe_group, HDY_SWIPEABLE (window->main_deck));
+
+  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), title_bar);
+  gtk_widget_show (title_bar);
   gtk_widget_show (header_bar);
-  gtk_widget_show (header_stack);
-
-  gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "content");
+  gtk_widget_show (header_deck);
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_widget, "lock-clicked",
@@ -3754,7 +3754,7 @@ ephy_window_constructed (GObject *object)
   setup_tab_accels (window);
 
   window->notebook = setup_notebook (window);
-  window->main_stack = gtk_stack_new ();
+  window->main_deck = hdy_deck_new ();
   window->pages_view = ephy_pages_view_new ();
 
   ephy_pages_view_set_notebook (window->pages_view, EPHY_NOTEBOOK (window->notebook));
@@ -3781,16 +3781,16 @@ ephy_window_constructed (GObject *object)
 
   gtk_box_pack_start (box, GTK_WIDGET (window->notebook), TRUE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
-  gtk_stack_add_named (GTK_STACK (window->main_stack), GTK_WIDGET (box), "content");
-  gtk_stack_add_named (GTK_STACK (window->main_stack), GTK_WIDGET (window->pages_view), "tabs");
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->main_stack));
+  gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (window->pages_view));
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->main_deck));
   gtk_widget_show_all (GTK_WIDGET (window->pages_view));
-  gtk_widget_show (GTK_WIDGET (window->main_stack));
+  gtk_widget_show (GTK_WIDGET (window->main_deck));
   gtk_widget_show (GTK_WIDGET (box));
   gtk_widget_show (GTK_WIDGET (window->notebook));
 
-  gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
-  gtk_stack_set_transition_type (GTK_STACK (window->main_stack), GTK_STACK_TRANSITION_TYPE_CROSSFADE);
+  hdy_deck_set_visible_child (HDY_DECK (window->main_deck), GTK_WIDGET (box));
+  hdy_deck_set_can_swipe_back (HDY_DECK (window->main_deck), TRUE);
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
@@ -3953,20 +3953,33 @@ ephy_window_get_notebook (EphyWindow *window)
 }
 
 /**
- * ephy_window_get_stack:
+ * ephy_window_open_pages_view
  * @window: an #EphyWindow
  *
- * Returns the #GtkStack housing the content and tab views
- *
- * Return value: (transfer none): the @window's #GtkStack
+ * Opens the mobile pages view
  **/
-GtkWidget *
-ephy_window_get_stack (EphyWindow *window)
+void
+ephy_window_open_pages_view (EphyWindow *window)
 {
   g_assert (EPHY_IS_WINDOW (window));
 
-  return GTK_WIDGET (window->main_stack);
+  hdy_deck_navigate (HDY_DECK (window->main_deck), HDY_NAVIGATION_DIRECTION_FORWARD);
 }
+
+/**
+ * ephy_window_close_pages_view
+ * @window: an #EphyWindow
+ *
+ * Closes the mobile pages view
+ **/
+void
+ephy_window_close_pages_view (EphyWindow *window)
+{
+  g_assert (EPHY_IS_WINDOW (window));
+
+  hdy_deck_navigate (HDY_DECK (window->main_deck), HDY_NAVIGATION_DIRECTION_BACK);
+}
+
 /**
  * ephy_window_get_find_toolbar:
  * @window: an #EphyWindow

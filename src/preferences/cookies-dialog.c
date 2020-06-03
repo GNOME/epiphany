@@ -127,7 +127,7 @@ static void
 cookie_add (EphyCookiesDialog *self,
             WebKitWebsiteData *data)
 {
-  HdyActionRow *row;
+  GtkWidget *row;
   GtkWidget *button;
   const char *domain;
 
@@ -135,14 +135,14 @@ cookie_add (EphyCookiesDialog *self,
 
   /* Row */
   row = hdy_action_row_new ();
-  hdy_action_row_set_title (row, domain);
+  hdy_action_row_set_title (HDY_ACTION_ROW (row), domain);
 
   button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_object_set_data (G_OBJECT (button), "row", row);
   gtk_widget_set_tooltip_text (button, _("Remove cookie"));
   g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), self);
-  hdy_action_row_add_action (row, button);
+  gtk_container_add (GTK_CONTAINER (row), button);
   g_object_set_data (G_OBJECT (row), "data", data);
 
   gtk_widget_show_all (GTK_WIDGET (row));
@@ -212,6 +212,8 @@ filter_func (GtkListBoxRow *row,
   if (result)
     ephy_data_dialog_set_has_search_results (EPHY_DATA_DIALOG (self), TRUE);
 
+  gtk_widget_set_visible (GTK_WIDGET (row), result);
+
   return result;
 }
 
@@ -231,7 +233,6 @@ ephy_cookies_dialog_init (EphyCookiesDialog *self)
   self->action_group = create_action_group (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "cookies", self->action_group);
 
-  gtk_list_box_set_header_func (GTK_LIST_BOX (self->cookies_listbox), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_filter_func (GTK_LIST_BOX (self->cookies_listbox), filter_func, self, NULL);
 }
 
