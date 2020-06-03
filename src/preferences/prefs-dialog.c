@@ -28,10 +28,8 @@
 #include "prefs-general-page.h"
 #include "prefs-sync-page.h"
 
-#include <gtk/gtk.h>
-
 struct _PrefsDialog {
-  GtkDialog parent_instance;
+  HdyWindow parent_instance;
 
   GtkWidget *notebook;
 
@@ -39,7 +37,7 @@ struct _PrefsDialog {
   PrefsSyncPage *sync_page;
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (PrefsDialog, prefs_dialog, HDY_TYPE_WINDOW)
 
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
