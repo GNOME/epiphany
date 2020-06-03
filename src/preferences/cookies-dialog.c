@@ -212,8 +212,6 @@ filter_func (GtkListBoxRow *row,
   if (result)
     ephy_data_dialog_set_has_search_results (EPHY_DATA_DIALOG (self), TRUE);
 
-  gtk_widget_set_visible (GTK_WIDGET (row), result);
-
   return result;
 }
 
