@@ -547,7 +547,7 @@ update_adaptive_mode (EphyWindow *window)
    * to the main view.
    */
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL)
-    ephy_window_close_pages_view (window);
+    gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
 }
 
 static void
@@ -3953,33 +3953,20 @@ ephy_window_get_notebook (EphyWindow *window)
 }
 
 /**
- * ephy_window_open_pages_view
+ * ephy_window_get_stack:
  * @window: an #EphyWindow
  *
- * Opens the mobile pages view
+ * Returns the #GtkStack housing the content and tab views
+ *
+ * Return value: (transfer none): the @window's #GtkStack
  **/
-void
-ephy_window_open_pages_view (EphyWindow *window)
+GtkWidget *
+ephy_window_get_stack (EphyWindow *window)
 {
   g_assert (EPHY_IS_WINDOW (window));
 
-  gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "tabs");
+  return GTK_WIDGET (window->main_stack);
 }
-
-/**
- * ephy_window_close_pages_view
- * @window: an #EphyWindow
- *
- * Closes the mobile pages view
- **/
-void
-ephy_window_close_pages_view (EphyWindow *window)
-{
-  g_assert (EPHY_IS_WINDOW (window));
-
-  gtk_stack_set_visible_child_name (GTK_STACK (window->main_stack), "content");
-}
-
 /**
  * ephy_window_get_find_toolbar:
  * @window: an #EphyWindow
