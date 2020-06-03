@@ -409,6 +409,8 @@ main (int   argc,
     gtk_window_set_default_icon_name (APPLICATION_ID);
   }
 
+  hdy_init (&argc, &argv);
+
   _ephy_shell_create_instance (mode);
 
   if (search_term) {

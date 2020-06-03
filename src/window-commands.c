@@ -551,12 +551,8 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "use-header-bar", TRUE,
-                         "modal", TRUE,
-                         "transient-for", window,
-                         "title", _("Import Bookmarks"),
-                         NULL);
+  dialog = hdy_dialog_new (GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Bookmarks"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"),
                           GTK_RESPONSE_CANCEL,
@@ -797,12 +793,8 @@ window_cmd_import_passwords (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "use-header-bar", TRUE,
-                         "modal", TRUE,
-                         "transient-for", window,
-                         "title", _("Import Passwords"),
-                         NULL);
+  dialog = hdy_dialog_new (GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Passwords"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"),
                           GTK_RESPONSE_CANCEL,
