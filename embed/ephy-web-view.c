@@ -731,7 +731,7 @@ run_readability_js_if_needed (gpointer data)
   /* Internal pages should never receive reader mode. */
   if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
     webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
-                                                   "/org/gnome/epiphany/Readability.js",
+                                                   "/org/gnome/epiphany/readability/Readability.js",
                                                    web_view->cancellable,
                                                    readability_js_finish_cb,
                                                    web_view);
@@ -3454,7 +3454,7 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
 
   view->reader_url = g_strdup (ephy_web_view_get_address (view));
   html = g_string_new ("");
-  style_css = g_resources_lookup_data ("/org/gnome/epiphany/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   title = webkit_web_view_get_title (web_view);
   font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
                           g_settings_get_enum (EPHY_SETTINGS_READER,
