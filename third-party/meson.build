@@ -12,6 +12,13 @@ highlightjs_resources = gnome.compile_resources('highlightjs-resources',
     source_dir: 'highlightjs'
 )
 
+readability_resource_files = files('readability/readability.gresource.xml')
+readability_resources = gnome.compile_resources('readability-resources',
+    readability_resource_files,
+    c_name: 'readability',
+    source_dir: 'readability'
+)
+
 libgvdb_sources = [
   'gvdb/gvdb-builder.c',
   'gvdb/gvdb-reader.c'

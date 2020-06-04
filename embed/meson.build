@@ -29,7 +29,8 @@ libephyembed_sources = [
   'ephy-find-toolbar.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
-  enums
+  enums,
+  readability_resources
 ]
 
 libephyembed_deps = [
@@ -43,7 +44,7 @@ libephyembed_deps = [
   libsecret_dep,
   libsoup_dep,
   m_dep,
-  webkit2gtk_dep,
+  webkit2gtk_dep
 ]
 
 libephyembed_includes = include_directories(
