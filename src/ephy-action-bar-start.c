@@ -532,10 +532,11 @@ ephy_action_bar_start_constructed (GObject *object)
   embed_shell = ephy_embed_shell_get_default ();
   if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     homepage_url_changed (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, action_bar_start->homepage_button);
-    g_signal_connect (EPHY_SETTINGS_MAIN,
-                      "changed::" EPHY_PREFS_HOMEPAGE_URL,
-                      G_CALLBACK (homepage_url_changed),
-                      action_bar_start->homepage_button);
+    g_signal_connect_object (EPHY_SETTINGS_MAIN,
+                             "changed::" EPHY_PREFS_HOMEPAGE_URL,
+                             G_CALLBACK (homepage_url_changed),
+                             action_bar_start->homepage_button,
+                             0);
   } else {
     gtk_widget_set_visible (action_bar_start->homepage_button, FALSE);
   }
