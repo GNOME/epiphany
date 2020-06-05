@@ -590,7 +590,7 @@ Ephy.FormManager = class FormManager
                 }
             }
         }
-        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._frameID, isFormActionInsecure));
+        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._pageID, isFormActionInsecure));
     }
 
     _findPasswordFields()
