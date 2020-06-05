@@ -251,15 +251,42 @@ popup_cmd_save_media_as (GSimpleAction *action,
 }
 
 static void
+wallpaper_changed_cb (GObject      *source_object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+  g_autoptr (GError) error = NULL;
+
+  if (!xdp_portal_set_wallpaper_finish (portal, result, &error))
+    g_warning ("Failed to set wallpaper: %s", error->message);
+}
+
+static void
 background_download_completed (EphyDownload *download,
-                               GtkWidget    *window)
+                               GtkWindow    *window)
 {
   const char *uri;
-  GSettings *settings;
+  g_autofree const char *local_filename;
+  EphyShell *shell = ephy_shell_get_default ();
+  XdpPortal *portal = ephy_shell_get_portal (shell);
+  XdpParent *parent_window = xdp_parent_new_gtk (window);
 
   uri = ephy_download_get_destination_uri (download);
-  settings = ephy_settings_get ("org.gnome.desktop.background");
-  g_settings_set_string (settings, "picture-uri", uri);
+  local_filename = g_filename_from_uri (uri, NULL, NULL);
+
+  g_info (local_filename);
+  if (g_file_test (local_filename, G_FILE_TEST_EXISTS))
+    g_warning ("%s exists", local_filename);
+
+  xdp_portal_set_wallpaper (portal,
+                            parent_window,
+                            local_filename,
+                            XDP_WALLPAPER_FLAG_BACKGROUND | XDP_WALLPAPER_FLAG_PREVIEW,
+                            NULL,
+                            wallpaper_changed_cb,
+                            NULL);
+  xdp_parent_free (parent_window);
 }
 
 void
@@ -269,7 +296,8 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
 {
   EphyEmbedEvent *event;
   const char *location;
-  char *dest_uri, *dest, *base, *base_converted;
+  char *dest_uri, *dest;
+  const char *tmp_dir;
   GValue value = { 0, };
   EphyDownload *download;
 
@@ -281,10 +309,10 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
 
   download = ephy_download_new_for_uri (location);
 
-  base = g_path_get_basename (location);
-  base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
-  dest = g_build_filename (g_get_user_special_dir (G_USER_DIRECTORY_PICTURES), base_converted, NULL);
+  tmp_dir = ephy_file_tmp_dir ();
+  dest = g_build_filename (tmp_dir, "wallpaper-downloaded", NULL);
   dest_uri = g_filename_to_uri (dest, NULL, NULL);
+  g_warning ("the download file URI is %s", dest_uri);
 
   ephy_download_set_destination_uri (download, dest_uri);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
@@ -295,8 +323,6 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
                     G_CALLBACK (background_download_completed), user_data);
 
   g_value_unset (&value);
-  g_free (base);
-  g_free (base_converted);
   g_free (dest);
   g_free (dest_uri);
 }
