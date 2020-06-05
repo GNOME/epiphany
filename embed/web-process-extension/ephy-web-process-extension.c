@@ -119,13 +119,13 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
 }
 
 static char *
-password_form_message_serializer (guint64  frame_id,
+password_form_message_serializer (guint64  page_id,
                                   gboolean is_insecure_action)
 {
   GVariant *variant;
   char *message;
 
-  variant = g_variant_new ("(tb)", frame_id, is_insecure_action);
+  variant = g_variant_new ("(tb)", page_id, is_insecure_action);
   message = g_variant_print (variant, FALSE);
   g_variant_unref (variant);
 
