@@ -1106,7 +1106,7 @@ pdf_download_decide_destination_cb (WebKitDownload *wk_download,
 {
   EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (user_data));
 
-  if (ephy_web_view_in_pdf_viewer (web_view)) {
+  if (ephy_web_view_get_document_type (web_view) == EPHY_WEB_VIEW_DOCUMENT_PDF) {
     g_autofree gchar *tmp_file = g_strdup_printf ("%s/%s", g_get_tmp_dir (), suggested_filename);
     g_autofree gchar *file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
 
@@ -1125,7 +1125,7 @@ ephy_embed_download_started (EphyEmbed    *embed,
   EphyWebView *web_view = ephy_embed_get_web_view (embed);
   WebKitDownload *download = ephy_download_get_webkit_download (ephy_download);
 
-  if (ephy_web_view_in_pdf_viewer (web_view)) {
+  if (ephy_web_view_get_document_type (web_view) == EPHY_WEB_VIEW_DOCUMENT_PDF) {
     g_signal_connect_object (download, "finished", G_CALLBACK (pdf_download_finished_cb), embed, 0);
     g_signal_connect_object (download, "decide-destination", G_CALLBACK (pdf_download_decide_destination_cb), embed, 0);
   }

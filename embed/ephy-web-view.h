@@ -60,6 +60,7 @@ typedef enum
   EPHY_WEB_VIEW_DOCUMENT_HTML,
   EPHY_WEB_VIEW_DOCUMENT_XML,
   EPHY_WEB_VIEW_DOCUMENT_IMAGE,
+  EPHY_WEB_VIEW_DOCUMENT_PDF,
   EPHY_WEB_VIEW_DOCUMENT_OTHER
 } EphyWebViewDocumentType;
 
@@ -179,7 +180,5 @@ void                       ephy_web_view_show_auth_form_save_request (EphyWebVie
                                                                       EphyPasswordSaveRequestCallback response_callback,
                                                                       gpointer                        response_data,
                                                                       GDestroyNotify                  response_destroy);
-
-gboolean                   ephy_web_view_in_pdf_viewer             (EphyWebView              *view);
 
 G_END_DECLS
