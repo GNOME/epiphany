@@ -80,7 +80,6 @@ struct _EphyWebView {
   guint history_frozen : 1;
   guint ever_committed : 1;
   guint in_auth_dialog : 1;
-  guint in_pdf_viewer : 1;
 
   char *address;
   char *display_address;
@@ -802,7 +801,7 @@ uri_changed_cb (WebKitWebView *web_view,
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-  if (!view->in_pdf_viewer)
+  if (view->document_type != EPHY_WEB_VIEW_DOCUMENT_PDF)
     ephy_web_view_set_address (view,
                                webkit_web_view_get_uri (web_view));
 }
@@ -885,8 +884,7 @@ decide_policy_cb (WebKitWebView            *web_view,
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
     } else if (strcmp (mime_type, "application/pdf") == 0) {
       /* FIXME: figure out how to make PDFs work in iframes. */
-      /* FIXME: Can we replace in_pdf_viewer with a new EphyWebViewDocumentType? */
-      EPHY_WEB_VIEW (web_view)->in_pdf_viewer = TRUE;
+      type = EPHY_WEB_VIEW_DOCUMENT_PDF;
     }
 
     /* FIXME: maybe it makes more sense to have an API to query the mime
@@ -1297,7 +1295,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   SoupURI *soup_uri;
   g_autofree char *tld = NULL;
 
-  if (view->loading_error_page || view->in_pdf_viewer)
+  if (view->loading_error_page || (view->document_type == EPHY_WEB_VIEW_DOCUMENT_PDF))
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
@@ -1422,8 +1420,6 @@ load_changed_cb (WebKitWebView   *web_view,
       /* History. */
       if (ephy_embed_utils_is_no_show_address (uri))
         ephy_web_view_freeze_history (view);
-
-      view->in_pdf_viewer = FALSE;
 
       if (!ephy_web_view_is_history_frozen (view)) {
         char *history_uri = NULL;
@@ -3924,10 +3920,4 @@ ephy_web_view_new_with_related_view (WebKitWebView *related_view)
                        "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
-}
-
-gboolean
-ephy_web_view_in_pdf_viewer (EphyWebView *web_view)
-{
-  return web_view->in_pdf_viewer;
 }
