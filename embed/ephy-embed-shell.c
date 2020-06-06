@@ -803,7 +803,7 @@ download_started_cb (WebKitWebContext *web_context,
     embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
     ephy_embed_download_started (embed, ephy_download);
 
-    if (!ephy_web_view_in_pdf_viewer (EPHY_WEB_VIEW (web_view)))
+    if (ephy_web_view_get_document_type (EPHY_WEB_VIEW (web_view)) != EPHY_WEB_VIEW_DOCUMENT_PDF)
       ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
   } else {
     ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
