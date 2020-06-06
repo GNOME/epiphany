@@ -27,8 +27,6 @@
 #include <gdk/gdkx.h>
 #endif
 
-#define HANDY_USE_UNSTABLE_API
-#include <handy.h>
 #include "ephy-notebook.h"
 #include "ephy-page-row.h"
 
@@ -40,7 +38,6 @@ struct _EphyPagesPopover {
 
   GListStore *list_store;
   EphyNotebook *notebook;
-  EphyAdaptiveMode adaptive_mode;
 };
 
 G_DEFINE_TYPE (EphyPagesPopover, ephy_pages_popover, GTK_TYPE_POPOVER)
@@ -137,8 +134,6 @@ items_changed_cb (EphyPagesPopover *self,
 
   for (int i = 0; i < added; i++) {
     items[i] = ephy_page_row_new (self->notebook, position + i);
-    ephy_page_row_set_adaptive_mode (EPHY_PAGE_ROW (items[i]),
-                                     self->adaptive_mode);
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
@@ -214,30 +209,12 @@ ephy_pages_popover_class_init (EphyPagesPopoverClass *klass)
 }
 
 static void
-list_init (EphyPagesPopover *self)
-{
-  GtkCssProvider *provider = gtk_css_provider_new ();
-
-  /* This makes the list's background transparent. */
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   "list { border-style: none; background-color: transparent; }", -1, NULL);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self->list_box)),
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  g_object_unref (provider);
-}
-
-static void
 ephy_pages_popover_init (EphyPagesPopover *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  list_init (self);
-
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 
-  ephy_pages_popover_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NORMAL);
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->list_store),
                            create_row,
@@ -294,39 +271,4 @@ ephy_pages_popover_set_notebook (EphyPagesPopover *self,
                             "notify::page",
                             G_CALLBACK (current_page_changed_cb),
                             self);
-}
-
-void
-ephy_pages_popover_set_adaptive_mode (EphyPagesPopover *self,
-                                      EphyAdaptiveMode  adaptive_mode)
-{
-  GListModel *list_model;
-
-  g_assert (EPHY_IS_PAGES_POPOVER (self));
-
-  self->adaptive_mode = adaptive_mode;
-
-  list_model = G_LIST_MODEL (self->list_store);
-  for (guint i = 0; i < g_list_model_get_n_items (list_model); i++) {
-    EphyPageRow *row = EPHY_PAGE_ROW (g_list_model_get_item (list_model, i));
-
-    ephy_page_row_set_adaptive_mode (row, self->adaptive_mode);
-  }
-
-  switch (adaptive_mode) {
-    case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-      /* This should be enough height in normal mode to fit in 900px hight screen. */
-      gtk_scrolled_window_set_max_content_height (self->scrolled_window, 700);
-      gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
-
-      break;
-    case EPHY_ADAPTIVE_MODE_NARROW:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-      /* Sets the max content to 0 and not -1 to ensure the popover doesn't pop out. */
-      gtk_scrolled_window_set_max_content_height (self->scrolled_window, 0);
-      gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
-
-      break;
-  }
 }

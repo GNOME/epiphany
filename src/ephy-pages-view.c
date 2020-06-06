@@ -24,8 +24,6 @@
 
 #include "ephy-pages-view.h"
 
-#define HANDY_USE_UNSTABLE_API
-#include <handy.h>
 #include "ephy-notebook.h"
 #include "ephy-page-row.h"
 #include "ephy-window.h"
@@ -139,7 +137,7 @@ items_changed_cb (EphyPagesView *self,
   for (int i = 0; i < added; i++) {
     items[i] = ephy_page_row_new (self->notebook, position + i);
     ephy_page_row_set_adaptive_mode (EPHY_PAGE_ROW (items[i]),
-                                     self->adaptive_mode);
+                                     EPHY_ADAPTIVE_MODE_NARROW);
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
@@ -183,18 +181,24 @@ ephy_pages_view_class_init (EphyPagesViewClass *klass)
 }
 
 static void
-list_init (EphyPagesView *self)
+separator_header (GtkListBoxRow *row,
+                  GtkListBoxRow *before,
+                  gpointer       user_data)
 {
-  GtkCssProvider *provider = gtk_css_provider_new ();
+  GtkWidget *header;
 
-  /* This makes the list's background transparent. */
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   "list { border-style: none; background-color: transparent; }", -1, NULL);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self->list_box)),
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  if (before == NULL) {
+    gtk_list_box_row_set_header (row, NULL);
 
-  g_object_unref (provider);
+    return;
+  }
+
+  if (gtk_list_box_row_get_header (row) != NULL)
+    return;
+
+  header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_widget_show (header);
+  gtk_list_box_row_set_header (row, header);
 }
 
 static void
@@ -202,11 +206,10 @@ ephy_pages_view_init (EphyPagesView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  list_init (self);
+  gtk_list_box_set_header_func (self->list_box, separator_header, NULL, NULL);
 
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 
-  ephy_pages_view_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NARROW);
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->list_store),
                            create_row,
@@ -255,38 +258,4 @@ ephy_pages_view_set_notebook (EphyPagesView *self,
                            G_CALLBACK (items_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-}
-
-void
-ephy_pages_view_set_adaptive_mode (EphyPagesView    *self,
-                                   EphyAdaptiveMode  adaptive_mode)
-{
-  GListModel *list_model;
-
-  g_assert (EPHY_IS_PAGES_VIEW (self));
-
-  self->adaptive_mode = adaptive_mode;
-
-  list_model = G_LIST_MODEL (self->list_store);
-  for (guint i = 0; i < g_list_model_get_n_items (list_model); i++) {
-    EphyPageRow *row = EPHY_PAGE_ROW (g_list_model_get_item (list_model, i));
-
-    ephy_page_row_set_adaptive_mode (row, self->adaptive_mode);
-  }
-
-  switch (adaptive_mode) {
-    case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-      /* This should be enough height in normal mode to fit in 900px hight screen. */
-      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 700);
-      gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
-
-      break;
-    case EPHY_ADAPTIVE_MODE_NARROW:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 0);
-      gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
-
-      break;
-  }
 }
