@@ -38,7 +38,4 @@ EphyNotebook *ephy_pages_popover_get_notebook (EphyPagesPopover *popover);
 void          ephy_pages_popover_set_notebook (EphyPagesPopover *popover,
                                                EphyNotebook     *notebook);
 
-void ephy_pages_popover_set_adaptive_mode (EphyPagesPopover *self,
-                                           EphyAdaptiveMode  adaptive_mode);
-
 G_END_DECLS
