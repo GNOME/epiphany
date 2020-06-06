@@ -37,7 +37,4 @@ EphyNotebook  *ephy_pages_view_get_notebook      (EphyPagesView   *view);
 void           ephy_pages_view_set_notebook      (EphyPagesView   *view,
                                                   EphyNotebook    *notebook);
 
-void           ephy_pages_view_set_adaptive_mode (EphyPagesView   *self,
-                                                  EphyAdaptiveMode adaptive_mode);
-
 G_END_DECLS
