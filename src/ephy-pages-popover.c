@@ -27,8 +27,6 @@
 #include <gdk/gdkx.h>
 #endif
 
-#define HANDY_USE_UNSTABLE_API
-#include <handy.h>
 #include "ephy-notebook.h"
 #include "ephy-page-row.h"
 
