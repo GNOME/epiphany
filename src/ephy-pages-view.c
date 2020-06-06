@@ -181,21 +181,6 @@ ephy_pages_view_class_init (EphyPagesViewClass *klass)
 }
 
 static void
-list_init (EphyPagesView *self)
-{
-  GtkCssProvider *provider = gtk_css_provider_new ();
-
-  /* This makes the list's background transparent. */
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   "list { border-style: none; background-color: transparent; }", -1, NULL);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self->list_box)),
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  g_object_unref (provider);
-}
-
-static void
 separator_header (GtkListBoxRow *row,
                   GtkListBoxRow *before,
                   gpointer       user_data)
@@ -220,8 +205,6 @@ static void
 ephy_pages_view_init (EphyPagesView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  list_init (self);
 
   gtk_list_box_set_header_func (self->list_box, separator_header, NULL, NULL);
 

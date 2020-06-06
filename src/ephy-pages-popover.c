@@ -209,26 +209,9 @@ ephy_pages_popover_class_init (EphyPagesPopoverClass *klass)
 }
 
 static void
-list_init (EphyPagesPopover *self)
-{
-  GtkCssProvider *provider = gtk_css_provider_new ();
-
-  /* This makes the list's background transparent. */
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   "list { border-style: none; background-color: transparent; }", -1, NULL);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self->list_box)),
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  g_object_unref (provider);
-}
-
-static void
 ephy_pages_popover_init (EphyPagesPopover *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  list_init (self);
 
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 
