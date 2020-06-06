@@ -139,7 +139,7 @@ items_changed_cb (EphyPagesView *self,
   for (int i = 0; i < added; i++) {
     items[i] = ephy_page_row_new (self->notebook, position + i);
     ephy_page_row_set_adaptive_mode (EPHY_PAGE_ROW (items[i]),
-                                     self->adaptive_mode);
+                                     EPHY_ADAPTIVE_MODE_NARROW);
     g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
@@ -204,9 +204,10 @@ ephy_pages_view_init (EphyPagesView *self)
 
   list_init (self);
 
+  gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
+
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 
-  ephy_pages_view_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NARROW);
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->list_store),
                            create_row,
@@ -255,38 +256,4 @@ ephy_pages_view_set_notebook (EphyPagesView *self,
                            G_CALLBACK (items_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-}
-
-void
-ephy_pages_view_set_adaptive_mode (EphyPagesView    *self,
-                                   EphyAdaptiveMode  adaptive_mode)
-{
-  GListModel *list_model;
-
-  g_assert (EPHY_IS_PAGES_VIEW (self));
-
-  self->adaptive_mode = adaptive_mode;
-
-  list_model = G_LIST_MODEL (self->list_store);
-  for (guint i = 0; i < g_list_model_get_n_items (list_model); i++) {
-    EphyPageRow *row = EPHY_PAGE_ROW (g_list_model_get_item (list_model, i));
-
-    ephy_page_row_set_adaptive_mode (row, self->adaptive_mode);
-  }
-
-  switch (adaptive_mode) {
-    case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), FALSE);
-      /* This should be enough height in normal mode to fit in 900px hight screen. */
-      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 700);
-      gtk_list_box_set_header_func (self->list_box, NULL, NULL, NULL);
-
-      break;
-    case EPHY_ADAPTIVE_MODE_NARROW:
-      gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
-      gtk_scrolled_window_set_max_content_height (GTK_SCROLLED_WINDOW (self), 0);
-      gtk_list_box_set_header_func (self->list_box, hdy_list_box_separator_header, NULL, NULL);
-
-      break;
-  }
 }
