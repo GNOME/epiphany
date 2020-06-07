@@ -38,13 +38,6 @@ typedef struct {
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (EphySourceTransformHandler, ephy_source_transform_handler, G_TYPE_OBJECT)
 
-typedef struct {
-  EphySourceTransformHandler *transform_handler;
-  WebKitURISchemeRequest *scheme_request;
-  WebKitWebView *web_view;
-  GCancellable *cancellable;
-  guint load_changed_id;
-} EphySourceTransformRequest;
 
 static EphySourceTransformRequest *
 ephy_source_transform_request_new (EphySourceTransformHandler *handler,
@@ -103,6 +96,13 @@ finish_uri_scheme_request (EphySourceTransformRequest *request,
   ephy_source_transform_request_free (request);
 }
 
+void
+ephy_source_transform_handler_finish_request (EphySourceTransformRequest *request,
+                                              gchar                      *data)
+{
+  finish_uri_scheme_request (request, data, NULL);
+}
+
 static void
 web_resource_data_cb (WebKitWebResource          *resource,
                       GAsyncResult               *result,
@@ -125,9 +125,10 @@ web_resource_data_cb (WebKitWebResource          *resource,
 
   g_assert (EPHY_SOURCE_TRANSFORM_HANDLER_GET_CLASS (handler)->transform_source != NULL);
   /* FIXME: Encoding schenanigans here */
-  html = (char *)EPHY_SOURCE_TRANSFORM_HANDLER_GET_CLASS (handler)->transform_source (handler, source, length);
+  html = (char *)EPHY_SOURCE_TRANSFORM_HANDLER_GET_CLASS (handler)->transform_source (handler, request, source, length);
 
-  finish_uri_scheme_request (request, html, NULL);
+  if (html)
+    finish_uri_scheme_request (request, html, NULL);
 }
 
 static void
@@ -316,4 +317,10 @@ ephy_source_transform_handler_get_uri (EphySourceTransformHandler *handler)
   EphySourceTransformHandlerPrivate *priv = ephy_source_transform_handler_get_instance_private (handler);
 
   return priv->title;
+}
+
+WebKitWebView *
+ephy_source_transform_request_get_web_view (EphySourceTransformRequest *request)
+{
+  return request->web_view;
 }

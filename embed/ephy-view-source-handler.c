@@ -37,6 +37,7 @@ G_DEFINE_TYPE (EphyViewSourceHandler, ephy_view_source_handler, EPHY_TYPE_SOURCE
 
 static guchar *
 ephy_view_source_handler_transform_source (EphySourceTransformHandler *handler,
+                                           EphySourceTransformRequest *request,
                                            const guchar               *data,
                                            gsize                       length)
 {

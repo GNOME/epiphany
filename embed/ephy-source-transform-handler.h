@@ -28,11 +28,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (EphySourceTransformHandler, ephy_source_transform_handler, EPHY, SOURCE_TRANSFORM_HANDLER, GObject)
 
+typedef struct {
+  EphySourceTransformHandler *transform_handler;
+  WebKitURISchemeRequest *scheme_request;
+  WebKitWebView *web_view;
+  GCancellable *cancellable;
+  guint load_changed_id;
+} EphySourceTransformRequest;
+
 struct _EphySourceTransformHandlerClass
 {
   GObjectClass parent_class;
 
   guchar *(* transform_source) (EphySourceTransformHandler *handler,
+                                EphySourceTransformRequest *request,
                                 const guchar               *source,
                                 gsize                       length);
 };
@@ -41,5 +50,10 @@ void ephy_source_transform_handler_handle_request (EphySourceTransformHandler  *
                                                    WebKitURISchemeRequest      *request);
 
 const char *ephy_source_transform_handler_get_uri (EphySourceTransformHandler *handler);
+
+WebKitWebView *ephy_source_transform_request_get_web_view (EphySourceTransformRequest *request);
+
+void ephy_source_transform_handler_finish_request (EphySourceTransformRequest *request,
+                                                   gchar                      *data);
 
 G_END_DECLS
