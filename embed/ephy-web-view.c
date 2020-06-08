@@ -1421,6 +1421,9 @@ load_changed_cb (WebKitWebView   *web_view,
       if (ephy_embed_utils_is_no_show_address (uri))
         ephy_web_view_freeze_history (view);
 
+      if (view->document_type == EPHY_WEB_VIEW_DOCUMENT_PDF)
+        view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+
       if (!ephy_web_view_is_history_frozen (view)) {
         char *history_uri = NULL;
 
