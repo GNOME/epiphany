@@ -1385,6 +1385,7 @@ load_changed_cb (WebKitWebView   *web_view,
   switch (load_event) {
     case WEBKIT_LOAD_STARTED: {
       view->load_failed = FALSE;
+      view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
 
       g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
 
