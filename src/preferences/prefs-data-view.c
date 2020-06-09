@@ -18,11 +18,9 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-#include "ephy-data-dialog.h"
+#include "prefs-data-view.h"
 
 #include <ctype.h>
-#include <glib/gi18n.h>
 
 typedef struct {
   GtkWidget *box;
@@ -41,9 +39,9 @@ typedef struct {
   gboolean has_search_results : 1;
   gboolean can_clear : 1;
   char *search_text;
-} EphyDataDialogPrivate;
+} PrefsDataViewPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (EphyDataDialog, ephy_data_dialog, HDY_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (PrefsDataView, prefs_data_view, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -71,9 +69,9 @@ enum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void
-update (EphyDataDialog *self)
+update (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
   gboolean has_data = priv->has_data && priv->child && gtk_widget_get_visible (priv->child);
 
   if (priv->is_loading) {
@@ -99,16 +97,16 @@ update (EphyDataDialog *self)
 }
 
 static void
-on_clear_all_button_clicked (EphyDataDialog *self)
+on_clear_all_button_clicked (PrefsDataView *self)
 {
   g_signal_emit (self, signals[CLEAR_ALL_CLICKED], 0);
 }
 
 static void
 on_search_entry_changed (GtkSearchEntry *entry,
-                         EphyDataDialog *self)
+                         PrefsDataView  *self)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
   const char *text;
 
   text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -119,11 +117,11 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static gboolean
-on_key_press_event (EphyDataDialog *self,
+on_key_press_event (PrefsDataView  *self,
                     GdkEvent       *event,
                     gpointer        user_data)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
   GdkEventKey *key = (GdkEventKey *)event;
   gint result;
 
@@ -144,13 +142,13 @@ on_key_press_event (EphyDataDialog *self,
 }
 
 static void
-ephy_data_dialog_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
+prefs_data_view_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
-  EphyDataDialog *self = EPHY_DATA_DIALOG (object);
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataView *self = EPHY_PREFS_DATA_VIEW (object);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
 
   switch (prop_id) {
     case PROP_CLEAR_ALL_ACTION_NAME:
@@ -160,7 +158,7 @@ ephy_data_dialog_set_property (GObject      *object,
       gtk_actionable_set_action_target_value (GTK_ACTIONABLE (priv->clear_all_button), g_value_get_variant (value));
       break;
     case PROP_CLEAR_ALL_DESCRIPTION:
-      ephy_data_dialog_set_clear_all_description (self, g_value_get_string (value));
+      prefs_data_view_set_clear_all_description (self, g_value_get_string (value));
       break;
     case PROP_SEARCH_DESCRIPTION:
       gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), g_value_get_string (value));
@@ -173,16 +171,16 @@ ephy_data_dialog_set_property (GObject      *object,
       gtk_label_set_text (GTK_LABEL (priv->empty_description_label), g_value_get_string (value));
       break;
     case PROP_IS_LOADING:
-      ephy_data_dialog_set_is_loading (self, g_value_get_boolean (value));
+      prefs_data_view_set_is_loading (self, g_value_get_boolean (value));
       break;
     case PROP_HAS_DATA:
-      ephy_data_dialog_set_has_data (self, g_value_get_boolean (value));
+      prefs_data_view_set_has_data (self, g_value_get_boolean (value));
       break;
     case PROP_HAS_SEARCH_RESULTS:
-      ephy_data_dialog_set_has_search_results (self, g_value_get_boolean (value));
+      prefs_data_view_set_has_search_results (self, g_value_get_boolean (value));
       break;
     case PROP_CAN_CLEAR:
-      ephy_data_dialog_set_can_clear (self, g_value_get_boolean (value));
+      prefs_data_view_set_can_clear (self, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -191,13 +189,13 @@ ephy_data_dialog_set_property (GObject      *object,
 }
 
 static void
-ephy_data_dialog_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
+prefs_data_view_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
-  EphyDataDialog *self = EPHY_DATA_DIALOG (object);
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataView *self = EPHY_PREFS_DATA_VIEW (object);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
 
   switch (prop_id) {
     case PROP_CLEAR_ALL_ACTION_NAME:
@@ -207,7 +205,7 @@ ephy_data_dialog_get_property (GObject    *object,
       g_value_set_variant (value, gtk_actionable_get_action_target_value (GTK_ACTIONABLE (priv->clear_all_button)));
       break;
     case PROP_CLEAR_ALL_DESCRIPTION:
-      g_value_set_string (value, ephy_data_dialog_get_clear_all_description (self));
+      g_value_set_string (value, prefs_data_view_get_clear_all_description (self));
       break;
     case PROP_SEARCH_DESCRIPTION:
       g_value_set_string (value, gtk_entry_get_placeholder_text (GTK_ENTRY (priv->search_entry)));
@@ -219,19 +217,19 @@ ephy_data_dialog_get_property (GObject    *object,
       g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->empty_description_label)));
       break;
     case PROP_SEARCH_TEXT:
-      g_value_set_string (value, ephy_data_dialog_get_search_text (self));
+      g_value_set_string (value, prefs_data_view_get_search_text (self));
       break;
     case PROP_IS_LOADING:
-      g_value_set_boolean (value, ephy_data_dialog_get_is_loading (self));
+      g_value_set_boolean (value, prefs_data_view_get_is_loading (self));
       break;
     case PROP_HAS_DATA:
-      g_value_set_boolean (value, ephy_data_dialog_get_has_data (self));
+      g_value_set_boolean (value, prefs_data_view_get_has_data (self));
       break;
     case PROP_HAS_SEARCH_RESULTS:
-      g_value_set_boolean (value, ephy_data_dialog_get_has_search_results (self));
+      g_value_set_boolean (value, prefs_data_view_get_has_search_results (self));
       break;
     case PROP_CAN_CLEAR:
-      g_value_set_boolean (value, ephy_data_dialog_get_can_clear (self));
+      g_value_set_boolean (value, prefs_data_view_get_can_clear (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -240,33 +238,25 @@ ephy_data_dialog_get_property (GObject    *object,
 }
 
 static void
-ephy_data_dialog_finalize (GObject *object)
+prefs_data_view_finalize (GObject *object)
 {
-  EphyDataDialog *self = EPHY_DATA_DIALOG (object);
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataView *self = EPHY_PREFS_DATA_VIEW (object);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
 
   g_free (priv->search_text);
 
-  G_OBJECT_CLASS (ephy_data_dialog_parent_class)->finalize (object);
+  G_OBJECT_CLASS (prefs_data_view_parent_class)->finalize (object);
 }
 
 static void
-ephy_data_dialog_add (GtkContainer *container,
-                      GtkWidget    *child)
+prefs_data_view_add (GtkContainer *container,
+                     GtkWidget    *child)
 {
-  EphyDataDialog *self = EPHY_DATA_DIALOG (container);
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
-
-  printf ("ephy_data_dialog_add() called =============================\n");
-  printf ("child_widget_name = %s --------------------------\n", gtk_widget_get_name (child));
-  if (!priv->box) {
-    printf ("EphyDataDialog doesn't have box -------------------\n");
-  } else  {
-    printf ("EphyDataDialog already has box --------------------\n");
-  }
+  PrefsDataView *self = EPHY_PREFS_DATA_VIEW (container);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
 
   if (!priv->box) {
-    GTK_CONTAINER_CLASS (ephy_data_dialog_parent_class)->add (container, child);
+    GTK_CONTAINER_CLASS (prefs_data_view_parent_class)->add (container, child);
     return;
   }
 
@@ -279,17 +269,17 @@ ephy_data_dialog_add (GtkContainer *container,
 }
 
 static void
-ephy_data_dialog_class_init (EphyDataDialogClass *klass)
+prefs_data_view_class_init (PrefsDataViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  object_class->set_property = ephy_data_dialog_set_property;
-  object_class->get_property = ephy_data_dialog_get_property;
-  object_class->finalize = ephy_data_dialog_finalize;
+  object_class->set_property = prefs_data_view_set_property;
+  object_class->get_property = prefs_data_view_get_property;
+  object_class->finalize = prefs_data_view_finalize;
 
-  container_class->add = ephy_data_dialog_add;
+  container_class->add = prefs_data_view_add;
 
   obj_properties[PROP_CLEAR_ALL_ACTION_NAME] =
     g_param_spec_string ("clear-all-action-name",
@@ -387,16 +377,17 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
                   G_TYPE_NONE);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/data-dialog.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, box);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, clear_all_button);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_title_label);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_description_label);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_button);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, spinner);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, stack);
+                                               "/org/gnome/epiphany/gtk/prefs-data-view.ui");
+
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, box);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, clear_all_button);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, empty_title_label);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, empty_description_label);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, search_button);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, spinner);
+  gtk_widget_class_bind_template_child_private (widget_class, PrefsDataView, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
@@ -404,9 +395,9 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
 }
 
 static void
-ephy_data_dialog_init (EphyDataDialog *self)
+prefs_data_view_init (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  PrefsDataViewPrivate *priv = prefs_data_view_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -416,26 +407,26 @@ ephy_data_dialog_init (EphyDataDialog *self)
 }
 
 const gchar *
-ephy_data_dialog_get_clear_all_description (EphyDataDialog *self)
+prefs_data_view_get_clear_all_description (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_all_button));
 }
 
 void
-ephy_data_dialog_set_clear_all_description (EphyDataDialog *self,
-                                            const gchar    *description)
+prefs_data_view_set_clear_all_description (PrefsDataView *self,
+                                           const gchar   *description)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   if (g_strcmp0 (gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_all_button)), description) == 0)
     return;
@@ -446,26 +437,26 @@ ephy_data_dialog_set_clear_all_description (EphyDataDialog *self,
 }
 
 gboolean
-ephy_data_dialog_get_is_loading (EphyDataDialog *self)
+prefs_data_view_get_is_loading (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return priv->is_loading;
 }
 
 void
-ephy_data_dialog_set_is_loading (EphyDataDialog *self,
-                                 gboolean        is_loading)
+prefs_data_view_set_is_loading (PrefsDataView *self,
+                                gboolean       is_loading)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
   is_loading = !!is_loading;
 
   if (priv->is_loading == is_loading)
@@ -479,26 +470,26 @@ ephy_data_dialog_set_is_loading (EphyDataDialog *self,
 }
 
 gboolean
-ephy_data_dialog_get_has_data (EphyDataDialog *self)
+prefs_data_view_get_has_data (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return priv->has_data;
 }
 
 void
-ephy_data_dialog_set_has_data (EphyDataDialog *self,
-                               gboolean        has_data)
+prefs_data_view_set_has_data (PrefsDataView *self,
+                              gboolean       has_data)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
   has_data = !!has_data;
 
   if (priv->has_data == has_data)
@@ -512,26 +503,26 @@ ephy_data_dialog_set_has_data (EphyDataDialog *self,
 }
 
 gboolean
-ephy_data_dialog_get_has_search_results (EphyDataDialog *self)
+prefs_data_view_get_has_search_results (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return priv->has_search_results;
 }
 
 void
-ephy_data_dialog_set_has_search_results (EphyDataDialog *self,
-                                         gboolean        has_search_results)
+prefs_data_view_set_has_search_results (PrefsDataView *self,
+                                          gboolean       has_search_results)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
   has_search_results = !!has_search_results;
 
   if (priv->has_search_results == has_search_results)
@@ -545,26 +536,26 @@ ephy_data_dialog_set_has_search_results (EphyDataDialog *self,
 }
 
 gboolean
-ephy_data_dialog_get_can_clear (EphyDataDialog *self)
+prefs_data_view_get_can_clear (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return priv->can_clear;
 }
 
 void
-ephy_data_dialog_set_can_clear (EphyDataDialog *self,
-                                gboolean        can_clear)
+prefs_data_view_set_can_clear (PrefsDataView *self,
+                               gboolean       can_clear)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
   can_clear = !!can_clear;
 
   if (priv->can_clear == can_clear)
@@ -578,13 +569,13 @@ ephy_data_dialog_set_can_clear (EphyDataDialog *self,
 }
 
 const gchar *
-ephy_data_dialog_get_search_text (EphyDataDialog *self)
+prefs_data_view_get_search_text (PrefsDataView *self)
 {
-  EphyDataDialogPrivate *priv;
+  PrefsDataViewPrivate *priv;
 
-  g_assert (EPHY_IS_DATA_DIALOG (self));
+  g_assert (EPHY_IS_PREFS_DATA_VIEW (self));
 
-  priv = ephy_data_dialog_get_instance_private (self);
+  priv = prefs_data_view_get_instance_private (self);
 
   return priv->search_text;
 }
