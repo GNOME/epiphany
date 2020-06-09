@@ -31,13 +31,23 @@
 struct _PrefsDialog {
   HdyWindow parent_instance;
 
+  HdyDeck *deck;
   GtkWidget *notebook;
 
   PrefsGeneralPage *general_page;
   PrefsSyncPage *sync_page;
+
+  GtkWidget *clear_cookies_view;
 };
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, HDY_TYPE_WINDOW)
+
+static void
+on_clear_cookies_button_clicked (GtkWidget   *privacy_page,
+                                 PrefsDialog *prefs_dialog)
+{
+  hdy_deck_set_visible_child (prefs_dialog->deck, prefs_dialog->clear_cookies_view);
+}
 
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
@@ -47,9 +57,14 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, deck);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, general_page);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_cookies_view);
+
+  /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_button_clicked);
 }
 
 static void
