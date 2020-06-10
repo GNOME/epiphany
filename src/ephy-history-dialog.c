@@ -250,6 +250,7 @@ create_row (EphyHistoryDialog *self,
   row = hdy_action_row_new ();
   hdy_action_row_set_title (HDY_ACTION_ROW (row), url->title);
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), url->url);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   gtk_widget_set_tooltip_text (row, url->url);
 
   /* Date */
