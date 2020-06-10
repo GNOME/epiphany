@@ -1230,7 +1230,7 @@ init_lang_listbox (PrefsGeneralPage *general_page)
 
 void
 prefs_general_page_connect_pd_response (PrefsGeneralPage *general_page,
-                                        PrefsDialog      *pd)
+                                        EphyPrefsDialog  *pd)
 {
   g_signal_connect (pd, "response", G_CALLBACK (prefs_dialog_response_cb), general_page);
 }
