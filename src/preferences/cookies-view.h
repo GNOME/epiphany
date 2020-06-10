@@ -20,13 +20,11 @@
 
 #pragma once
 
-#include "ephy-data-dialog.h"
+#include "prefs-data-view.h"
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_COOKIES_DIALOG (ephy_cookies_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (EphyCookiesDialog, ephy_cookies_dialog, EPHY, COOKIES_DIALOG, EphyDataDialog);
-
-EphyCookiesDialog *ephy_cookies_dialog_new (void);
+#define EPHY_TYPE_COOKIES_VIEW (ephy_cookies_view_get_type ())
+G_DECLARE_FINAL_TYPE (EphyCookiesView, ephy_cookies_view, EPHY, COOKIES_VIEW, PrefsDataView);
 
 G_END_DECLS
