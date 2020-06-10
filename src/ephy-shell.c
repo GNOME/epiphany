@@ -1196,9 +1196,8 @@ GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
   if (shell->prefs_dialog == NULL) {
-    shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG,
-                                        "use-header-bar", TRUE,
-                                        NULL);
+    shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
+
     g_signal_connect (shell->prefs_dialog,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),

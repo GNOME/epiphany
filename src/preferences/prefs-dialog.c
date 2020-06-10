@@ -28,18 +28,50 @@
 #include "prefs-general-page.h"
 #include "prefs-sync-page.h"
 
-#include <gtk/gtk.h>
-
 struct _PrefsDialog {
-  GtkDialog parent_instance;
+  HdyWindow parent_instance;
 
+  HdyDeck *deck;
+  GtkWidget *prefs_pages_view;
   GtkWidget *notebook;
 
   PrefsGeneralPage *general_page;
   PrefsSyncPage *sync_page;
+
+  GtkWidget *clear_cookies_view;
+  GtkWidget *passwords_view;
+  GtkWidget *clear_data_view;
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (PrefsDialog, prefs_dialog, HDY_TYPE_WINDOW)
+
+static void
+on_clear_cookies_row_activated (GtkWidget   *privacy_page,
+                                PrefsDialog *prefs_dialog)
+{
+  hdy_deck_set_visible_child (prefs_dialog->deck, prefs_dialog->clear_cookies_view);
+}
+
+static void
+on_passwords_row_activated (GtkWidget   *privacy_page,
+                            PrefsDialog *prefs_dialog)
+{
+  hdy_deck_set_visible_child (prefs_dialog->deck, prefs_dialog->passwords_view);
+}
+
+static void
+on_clear_data_row_activated (GtkWidget   *privacy_page,
+                             PrefsDialog *prefs_dialog)
+{
+  hdy_deck_set_visible_child (prefs_dialog->deck, prefs_dialog->clear_data_view);
+}
+
+static void
+on_any_data_view_back_button_clicked (GtkWidget   *data_view,
+                                      PrefsDialog *prefs_dialog)
+{
+  hdy_deck_set_visible_child (prefs_dialog->deck, prefs_dialog->prefs_pages_view);
+}
 
 static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
@@ -49,9 +81,20 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, deck);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, prefs_pages_view);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, general_page);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_cookies_view);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, passwords_view);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_data_view);
+
+  /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_any_data_view_back_button_clicked);
 }
 
 static void
