@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
@@ -13,43 +12,42 @@
     <property name="can_focus">False</property>
     <property name="icon_name">user-trash-symbolic</property>
   </object>
-  <template class="EphyDataDialog" parent="HdyWindow">
+  <object class="GtkImage" id="back_image">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">1000</property>
-    <property name="default_height">600</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
-    <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
+    <property name="icon_name">go-previous-symbolic</property>
+  </object>
+  <template class="EphyDataView" parent="GtkBin">
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="HdyWindowHandle">
+          <object class="HdyHeaderBar" id="header_bar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="show_close_button">True</property>
             <child>
-              <object class="GtkHeaderBar">
+              <object class="GtkButton" id="back_button">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_close_button">True</property>
-                <property name="title" bind-source="EphyDataDialog" bind-property="title"/>
-                <child>
-                  <object class="GtkButton" id="clear_all_button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="image">clear_all_image</property>
-                    <property name="always_show_image">True</property>
-                    <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
-                    <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
-                    <style>
-                      <class name="destructive-action"/>
-                      <class name="image-button"/>
-                    </style>
-                  </object>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="image">back_image</property>
+                <signal name="clicked" handler="on_back_button_clicked"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="clear_all_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">clear_all_image</property>
+                <property name="always_show_image">True</property>
+                <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
+                <style>
+                  <class name="destructive-action"/>
+                  <class name="image-button"/>
+                </style>
               </object>
             </child>
             <child>
@@ -60,7 +58,6 @@
                 <property name="image">search_image</property>
                 <property name="always_show_image">True</property>
                 <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-                <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
                 <style>
                   <class name="image-button"/>
                 </style>
@@ -87,8 +84,6 @@
               <object class="HdyClamp">
                 <property name="visible">True</property>
                 <property name="hexpand">True</property>
-                <property name="maximum_size">400</property>
-                <property name="tightening_threshold">300</property>
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
                     <property name="visible">True</property>
