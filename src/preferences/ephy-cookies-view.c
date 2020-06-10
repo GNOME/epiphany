@@ -32,10 +32,10 @@
 #include "ephy-string.h"
 #include "ephy-shell.h"
 
-#include "cookies-dialog.h"
+#include "ephy-cookies-view.h"
 
-struct _EphyCookiesDialog {
-  EphyDataDialog parent_instance;
+struct _EphyCookiesView {
+  EphyDataView parent_instance;
 
   GtkWidget *cookies_listbox;
 
@@ -44,9 +44,9 @@ struct _EphyCookiesDialog {
   WebKitWebsiteDataManager *data_manager;
 };
 
-G_DEFINE_TYPE (EphyCookiesDialog, ephy_cookies_dialog, EPHY_TYPE_DATA_DIALOG)
+G_DEFINE_TYPE (EphyCookiesView, ephy_cookies_view, EPHY_TYPE_DATA_VIEW)
 
-static void populate_model (EphyCookiesDialog *self);
+static void populate_model (EphyCookiesView *self);
 
 static void
 clear_listbox (GtkWidget *listbox)
@@ -62,10 +62,10 @@ clear_listbox (GtkWidget *listbox)
 }
 
 static void
-reload_model (EphyCookiesDialog *self)
+reload_model (EphyCookiesView *self)
 {
   clear_listbox (self->cookies_listbox);
-  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), FALSE);
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), FALSE);
   populate_model (self);
 }
 
@@ -73,7 +73,7 @@ static void
 forget_clicked (GtkButton *button,
                 gpointer   user_data)
 {
-  EphyCookiesDialog *self = EPHY_COOKIES_DIALOG (user_data);
+  EphyCookiesView *self = EPHY_COOKIES_VIEW (user_data);
   GtkListBoxRow *row = g_object_get_data (G_OBJECT (button), "row");
   GList *data_to_remove = NULL;
   WebKitWebsiteData *data = NULL;
@@ -91,9 +91,9 @@ forget_clicked (GtkButton *button,
 }
 
 static void
-on_search_text_changed (EphyCookiesDialog *self)
+on_search_text_changed (EphyCookiesView *self)
 {
-  ephy_data_dialog_set_has_search_results (EPHY_DATA_DIALOG (self), FALSE);
+  ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (self), FALSE);
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->cookies_listbox));
 }
 
@@ -102,29 +102,29 @@ forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  EphyCookiesDialog *self = EPHY_COOKIES_DIALOG (user_data);
+  EphyCookiesView *self = EPHY_COOKIES_VIEW (user_data);
 
   webkit_website_data_manager_clear (self->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, 0, NULL, NULL, NULL);
   reload_model (self);
 }
 
 static void
-ephy_cookies_dialog_class_init (EphyCookiesDialogClass *klass)
+ephy_cookies_view_class_init (EphyCookiesViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/cookies-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/cookies-view.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, cookies_listbox);
+  gtk_widget_class_bind_template_child (widget_class, EphyCookiesView, cookies_listbox);
 
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
 
 static void
-cookie_add (EphyCookiesDialog *self,
+cookie_add (EphyCookiesView   *self,
             WebKitWebsiteData *data)
 {
   GtkWidget *row;
@@ -152,11 +152,11 @@ cookie_add (EphyCookiesDialog *self,
 static void
 get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
                              GAsyncResult             *result,
-                             EphyCookiesDialog        *self)
+                             EphyCookiesView          *self)
 {
   GList *data_list;
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (self), FALSE);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (self), FALSE);
   data_list = webkit_website_data_manager_fetch_finish (data_manager, result, NULL);
   if (!data_list)
     return;
@@ -167,15 +167,15 @@ get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
   /* The list items have been consumed, so we need only to free the list. */
   g_list_free (data_list);
 
-  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), TRUE);
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), TRUE);
 }
 
 static void
-populate_model (EphyCookiesDialog *self)
+populate_model (EphyCookiesView *self)
 {
-  g_assert (!ephy_data_dialog_get_has_data (EPHY_DATA_DIALOG (self)));
+  g_assert (!ephy_data_view_get_has_data (EPHY_DATA_VIEW (self)));
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (self), TRUE);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (self), TRUE);
   webkit_website_data_manager_fetch (self->data_manager,
                                      WEBKIT_WEBSITE_DATA_COOKIES,
                                      NULL,
@@ -184,7 +184,7 @@ populate_model (EphyCookiesDialog *self)
 }
 
 static GActionGroup *
-create_action_group (EphyCookiesDialog *self)
+create_action_group (EphyCookiesView *self)
 {
   const GActionEntry entries[] = {
     { "forget-all", forget_all }
@@ -202,15 +202,15 @@ static gboolean
 filter_func (GtkListBoxRow *row,
              gpointer       user_data)
 {
-  EphyCookiesDialog *self = EPHY_COOKIES_DIALOG (user_data);
-  const gchar *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (self));
+  EphyCookiesView *self = EPHY_COOKIES_VIEW (user_data);
+  const gchar *search_text = ephy_data_view_get_search_text (EPHY_DATA_VIEW (self));
   gboolean result = TRUE;
 
   if (search_text)
     result = !!strstr (hdy_action_row_get_title (HDY_ACTION_ROW (row)), search_text);
 
   if (result)
-    ephy_data_dialog_set_has_search_results (EPHY_DATA_DIALOG (self), TRUE);
+    ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (self), TRUE);
 
   gtk_widget_set_visible (GTK_WIDGET (row), result);
 
@@ -218,7 +218,7 @@ filter_func (GtkListBoxRow *row,
 }
 
 static void
-ephy_cookies_dialog_init (EphyCookiesDialog *self)
+ephy_cookies_view_init (EphyCookiesView *self)
 {
   WebKitWebContext *web_context;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
@@ -234,10 +234,4 @@ ephy_cookies_dialog_init (EphyCookiesDialog *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "cookies", self->action_group);
 
   gtk_list_box_set_filter_func (GTK_LIST_BOX (self->cookies_listbox), filter_func, self, NULL);
-}
-
-EphyCookiesDialog *
-ephy_cookies_dialog_new (void)
-{
-  return g_object_new (EPHY_TYPE_COOKIES_DIALOG, NULL);
 }

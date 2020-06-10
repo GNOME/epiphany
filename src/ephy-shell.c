@@ -34,6 +34,7 @@
 #include "ephy-lockdown.h"
 #include "ephy-notification.h"
 #include "ephy-prefs.h"
+#include "ephy-prefs-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
@@ -43,7 +44,6 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
-#include "prefs-dialog.h"
 #include "window-commands.h"
 
 #include <glib/gi18n.h>
@@ -1201,9 +1201,8 @@ GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
   if (shell->prefs_dialog == NULL) {
-    shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG,
-                                        "use-header-bar", TRUE,
-                                        NULL);
+    shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
+
     g_signal_connect (shell->prefs_dialog,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),

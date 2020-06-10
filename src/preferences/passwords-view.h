@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include "ephy-data-dialog.h"
+#include "ephy-data-view.h"
 #include "ephy-password-manager.h"
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_PASSWORDS_DIALOG (ephy_passwords_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY, PASSWORDS_DIALOG, EphyDataDialog);
-
-EphyPasswordsDialog *ephy_passwords_dialog_new (EphyPasswordManager *manager);
+#define EPHY_TYPE_PASSWORDS_VIEW (ephy_passwords_view_get_type ())
+G_DECLARE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY, PASSWORDS_VIEW, EphyDataView);
 
 G_END_DECLS
