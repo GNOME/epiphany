@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <requires lib="libhandy" version="0.0"/>
+  <object class="GtkImage" id="search_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-find-symbolic</property>
+  </object>
+  <object class="GtkImage" id="clear_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">user-trash-symbolic</property>
+  </object>
+  <object class="GtkImage" id="back_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">go-previous-symbolic</property>
+  </object>
+  <template class="EphyDataView" parent="GtkBin">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="HdyHeaderBar" id="header_bar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="show_close_button">True</property>
+            <child>
+              <object class="GtkButton" id="back_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="image">back_image</property>
+                <signal name="clicked" handler="on_back_button_clicked"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="clear_all_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">clear_all_image</property>
+                <property name="always_show_image">True</property>
+                <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
+                <style>
+                  <class name="destructive-action"/>
+                  <class name="image-button"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="search_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">search_image</property>
+                <property name="always_show_image">True</property>
+                <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child internal-child="accessible">
+                  <object class="AtkObject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdySearchBar" id="search_bar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="valign">start</property>
+            <property name="hexpand">True</property>
+            <property name="search_mode_enabled">False</property>
+            <child>
+              <object class="HdyClamp">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="primary_icon_name">edit-find-symbolic</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">False</property>
+                    <signal name="search-changed" handler="on_search_entry_changed" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="can_focus">False</property>
+            <property name="expand">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkSpinner" id="spinner">
+                <property name="can_focus">False</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="name">loading</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="can_focus">False</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">web-browser-symbolic</property>
+                        <property name="icon_size">0</property>
+                        <property name="margin_bottom">18</property>
+                        <property name="pixel_size">128</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="can_focus">False</property>
+                        <property name="margin_end">12</property>
+                        <property name="margin_start">12</property>
+                        <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkLabel" id="empty_title_label">
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="justify">center</property>
+                            <property name="margin_bottom">12</property>
+                            <property name="opacity">0.5</property>
+                            <property name="visible">True</property>
+                            <property name="wrap">True</property>
+                            <attributes>
+                              <attribute name="scale" value="2"/>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="empty_description_label">
+                            <property name="can_focus">False</property>
+                            <property name="justify">center</property>
+                            <property name="margin_bottom">6</property>
+                            <property name="opacity">0.5</property>
+                            <property name="use_markup">True</property>
+                            <property name="visible">True</property>
+                            <property name="wrap">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">empty</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="can_focus">False</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">edit-find-symbolic</property>
+                        <property name="icon_size">0</property>
+                        <property name="margin_bottom">18</property>
+                        <property name="pixel_size">128</property>
+                        <property name="valign">center</property>
+                        <property name="visible">True</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="can_focus">False</property>
+                        <property name="margin_end">12</property>
+                        <property name="margin_start">12</property>
+                        <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="justify">center</property>
+                            <property name="label" translatable="yes">No Results Found</property>
+                            <property name="margin_bottom">12</property>
+                            <property name="opacity">0.5</property>
+                            <property name="visible">True</property>
+                            <property name="wrap">True</property>
+                            <attributes>
+                              <attribute name="scale" value="2"/>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="can_focus">False</property>
+                            <property name="justify">center</property>
+                            <property name="label" translatable="yes">Try a different search</property>
+                            <property name="margin_bottom">6</property>
+                            <property name="opacity">0.5</property>
+                            <property name="use_markup">True</property>
+                            <property name="visible">True</property>
+                            <property name="wrap">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">no-results</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
