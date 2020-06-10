@@ -894,18 +894,14 @@ on_webapp_entry_changed (GtkEditable      *editable,
   prefs_general_page_save_web_application (dialog);
 }
 
-static void
-prefs_dialog_response_cb (GtkWidget        *widget,
-                          int               response,
-                          PrefsGeneralPage *general_page)
+void
+prefs_general_page_on_pd_delete_event (PrefsGeneralPage *general_page)
 {
   if (general_page->webapp_save_id) {
     g_source_remove (general_page->webapp_save_id);
     general_page->webapp_save_id = 0;
     save_web_application (general_page);
   }
-
-  gtk_widget_destroy (widget);
 }
 
 static void
@@ -1226,13 +1222,6 @@ init_lang_listbox (PrefsGeneralPage *general_page)
       }
     }
   }
-}
-
-void
-prefs_general_page_connect_pd_response (PrefsGeneralPage *general_page,
-                                        PrefsDialog      *pd)
-{
-  g_signal_connect (pd, "response", G_CALLBACK (prefs_dialog_response_cb), general_page);
 }
 
 static void
