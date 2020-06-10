@@ -62,24 +62,15 @@
         <property name="visible">True</property>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable">False</property>
+            <property name="activatable">True</property>
             <property name="title" translatable="yes">Clear _Cookies</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
+            <signal name="activated" handler="on_clear_cookies_row_activated"/>
             <child>
-              <object class="GtkButton">
-                <property name="valign">center</property>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
                 <property name="visible">True</property>
-                <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">emblem-system-symbolic</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -137,24 +128,15 @@
         <property name="visible">True</property>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable">False</property>
+            <property name="activatable">True</property>
             <property name="title" translatable="yes">_Passwords</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
+            <signal name="activated" handler="on_passwords_row_activated"/>
             <child>
-              <object class="GtkButton">
-                <property name="valign">center</property>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
                 <property name="visible">True</property>
-                <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">emblem-system-symbolic</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -181,24 +163,16 @@
         <property name="visible">True</property>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable">False</property>
+            <property name="activatable">True</property>
             <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
             <property name="title" translatable="yes">Clear Personal _Data</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
+            <signal name="activated" handler="on_clear_data_row_activated"/>
             <child>
-              <object class="GtkButton" id="clear_personal_data_button">
-                <property name="valign">center</property>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
                 <property name="visible">True</property>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">emblem-system-symbolic</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>

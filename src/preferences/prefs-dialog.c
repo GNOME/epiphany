@@ -28,34 +28,82 @@
 #include "prefs-general-page.h"
 #include "prefs-sync-page.h"
 
-#include <gtk/gtk.h>
+struct _EphyPrefsDialog {
+  HdyWindow parent_instance;
 
-struct _PrefsDialog {
-  GtkDialog parent_instance;
-
+  HdyDeck *deck;
+  GtkWidget *prefs_pages_view;
   GtkWidget *notebook;
 
   PrefsGeneralPage *general_page;
   PrefsSyncPage *sync_page;
+
+  GtkStack *data_views_stack;
+  GtkWidget *clear_cookies_view;
+  GtkWidget *passwords_view;
+  GtkWidget *clear_data_view;
 };
 
-G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, HDY_TYPE_WINDOW)
 
 static void
-prefs_dialog_class_init (PrefsDialogClass *klass)
+on_clear_cookies_row_activated (GtkWidget       *privacy_page,
+                                EphyPrefsDialog *prefs_dialog)
+{
+  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_cookies_view);
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+}
+
+static void
+on_passwords_row_activated (GtkWidget       *privacy_page,
+                            EphyPrefsDialog *prefs_dialog)
+{
+  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->passwords_view);
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+}
+
+static void
+on_clear_data_row_activated (GtkWidget       *privacy_page,
+                             EphyPrefsDialog *prefs_dialog)
+{
+  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_data_view);
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+}
+
+static void
+on_any_data_view_back_button_clicked (GtkWidget       *data_view,
+                                      EphyPrefsDialog *prefs_dialog)
+{
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_BACK);
+}
+
+static void
+ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, general_page);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, deck);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, prefs_pages_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, notebook);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, general_page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, sync_page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, data_views_stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, clear_cookies_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, passwords_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, clear_data_view);
+
+  /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_any_data_view_back_button_clicked);
 }
 
 static void
-prefs_dialog_init (PrefsDialog *dialog)
+ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 {
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 

@@ -32,12 +32,13 @@
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
+#include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "ephy-uri-helpers.h"
-#include "passwords-dialog.h"
+#include "passwords-view.h"
 
-struct _EphyPasswordsDialog {
-  EphyDataDialog parent_instance;
+struct _EphyPasswordsView {
+  PrefsDataView parent_instance;
 
   EphyPasswordManager *manager;
   GList *records;
@@ -47,66 +48,19 @@ struct _EphyPasswordsDialog {
   GActionGroup *action_group;
 };
 
-G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY_TYPE_DATA_DIALOG)
+G_DEFINE_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY_TYPE_PREFS_DATA_VIEW)
 
-enum {
-  PROP_0,
-  PROP_PASSWORD_MANAGER,
-  LAST_PROP
-};
-
-static GParamSpec *obj_properties[LAST_PROP];
-
-static void populate_model (EphyPasswordsDialog *dialog);
+static void populate_model (EphyPasswordsView *passwords_view);
 
 static void
-ephy_passwords_dialog_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
+ephy_passwords_view_dispose (GObject *object)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+  EphyPasswordsView *passwords_view = EPHY_PASSWORDS_VIEW (object);
 
-  switch (prop_id) {
-    case PROP_PASSWORD_MANAGER:
-      if (dialog->manager)
-        g_object_unref (dialog->manager);
-      dialog->manager = g_object_ref (g_value_get_object (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-  }
-}
+  g_list_free_full (passwords_view->records, g_object_unref);
+  passwords_view->records = NULL;
 
-static void
-ephy_passwords_dialog_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
-{
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
-
-  switch (prop_id) {
-    case PROP_PASSWORD_MANAGER:
-      g_value_set_object (value, dialog->manager);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
-ephy_passwords_dialog_dispose (GObject *object)
-{
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
-
-  g_clear_object (&dialog->manager);
-
-  g_list_free_full (dialog->records, g_object_unref);
-  dialog->records = NULL;
-
-  G_OBJECT_CLASS (ephy_passwords_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_passwords_view_parent_class)->dispose (object);
 }
 
 static void
@@ -124,9 +78,9 @@ clear_listbox (GtkWidget *listbox)
 }
 
 static void
-on_search_text_changed (EphyPasswordsDialog *dialog)
+on_search_text_changed (EphyPasswordsView *passwords_view)
 {
-  gtk_list_box_invalidate_filter (GTK_LIST_BOX (dialog->listbox));
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (passwords_view->listbox));
 }
 
 
@@ -135,17 +89,17 @@ forget_clicked (GtkWidget *button,
                 gpointer   user_data)
 {
   EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (user_data);
-  EphyPasswordsDialog *dialog = g_object_get_data (G_OBJECT (record), "dialog");
+  EphyPasswordsView *passwords_view = g_object_get_data (G_OBJECT (record), "passwords-view");
 
-  ephy_password_manager_forget (dialog->manager, ephy_password_record_get_id (record));
-  clear_listbox (dialog->listbox);
+  ephy_password_manager_forget (passwords_view->manager, ephy_password_record_get_id (record));
+  clear_listbox (passwords_view->listbox);
 
-  g_list_free_full (dialog->records, g_object_unref);
-  dialog->records = NULL;
+  g_list_free_full (passwords_view->records, g_object_unref);
+  passwords_view->records = NULL;
 
-  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), FALSE);
+  prefs_data_view_set_has_data (EPHY_PREFS_DATA_VIEW (passwords_view), FALSE);
 
-  populate_model (dialog);
+  populate_model (passwords_view);
 }
 
 
@@ -170,35 +124,24 @@ copy_username_clicked (GtkWidget *button,
 }
 
 static void
-ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
+ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->set_property = ephy_passwords_dialog_set_property;
-  object_class->get_property = ephy_passwords_dialog_get_property;
-  object_class->dispose = ephy_passwords_dialog_dispose;
-
-  obj_properties[PROP_PASSWORD_MANAGER] =
-    g_param_spec_object ("password-manager",
-                         "Password manager",
-                         "Password Manager",
-                         EPHY_TYPE_PASSWORD_MANAGER,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  object_class->dispose = ephy_passwords_view_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/passwords-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/passwords-view.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, listbox);
+  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, listbox);
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
 
 static void
-confirmation_dialog_response_cb (GtkWidget           *dialog,
-                                 int                  response,
-                                 EphyPasswordsDialog *self)
+confirmation_dialog_response_cb (GtkWidget         *dialog,
+                                 int                response,
+                                 EphyPasswordsView *self)
 {
   gtk_widget_destroy (dialog);
 
@@ -206,7 +149,7 @@ confirmation_dialog_response_cb (GtkWidget           *dialog,
     ephy_password_manager_forget_all (self->manager);
 
     clear_listbox (self->listbox);
-    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (self), FALSE);
+    prefs_data_view_set_has_data (EPHY_PREFS_DATA_VIEW (self), FALSE);
 
     g_list_free_full (self->records, g_object_unref);
     self->records = NULL;
@@ -214,7 +157,7 @@ confirmation_dialog_response_cb (GtkWidget           *dialog,
 }
 
 static GtkWidget *
-confirmation_dialog_construct (EphyPasswordsDialog *self)
+confirmation_dialog_construct (EphyPasswordsView *self)
 {
   GtkWidget *dialog, *button;
 
@@ -248,7 +191,7 @@ forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  EphyPasswordsDialog *self = EPHY_PASSWORDS_DIALOG (user_data);
+  EphyPasswordsView *self = EPHY_PASSWORDS_VIEW (user_data);
 
   if (!self->confirmation_dialog) {
     GtkWidget **confirmation_dialog;
@@ -266,9 +209,9 @@ static void
 populate_model_cb (GList    *records,
                    gpointer  user_data)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
+  EphyPasswordsView *passwords_view = EPHY_PASSWORDS_VIEW (user_data);
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (dialog), FALSE);
+  prefs_data_view_set_is_loading (EPHY_PREFS_DATA_VIEW (passwords_view), FALSE);
 
   for (GList *l = records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
@@ -364,35 +307,35 @@ populate_model_cb (GList    *records,
     g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), record);
     gtk_container_add (GTK_CONTAINER (sub_row), button);
 
-    g_object_set_data (G_OBJECT (record), "dialog", dialog);
+    g_object_set_data (G_OBJECT (record), "passwords-view", passwords_view);
 
-    gtk_list_box_insert (GTK_LIST_BOX (dialog->listbox), row, -1);
+    gtk_list_box_insert (GTK_LIST_BOX (passwords_view->listbox), row, -1);
   }
 
   if (g_list_length (records)) {
-    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
-    gtk_widget_show_all (dialog->listbox);
+    prefs_data_view_set_has_data (EPHY_PREFS_DATA_VIEW (passwords_view), TRUE);
+    gtk_widget_show_all (passwords_view->listbox);
   }
 
-  g_assert (!dialog->records);
-  dialog->records = g_list_copy_deep (records, (GCopyFunc)g_object_ref, NULL);
+  g_assert (!passwords_view->records);
+  passwords_view->records = g_list_copy_deep (records, (GCopyFunc)g_object_ref, NULL);
 }
 
 static void
-populate_model (EphyPasswordsDialog *dialog)
+populate_model (EphyPasswordsView *passwords_view)
 {
-  g_assert (EPHY_IS_PASSWORDS_DIALOG (dialog));
-  g_assert (!ephy_data_dialog_get_has_data (EPHY_DATA_DIALOG (dialog)));
+  g_assert (EPHY_IS_PASSWORDS_VIEW (passwords_view));
+  g_assert (!prefs_data_view_get_has_data (EPHY_PREFS_DATA_VIEW (passwords_view)));
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (dialog), TRUE);
+  prefs_data_view_set_is_loading (EPHY_PREFS_DATA_VIEW (passwords_view), TRUE);
   /* Ask for all password records. */
-  ephy_password_manager_query (dialog->manager,
+  ephy_password_manager_query (passwords_view->manager,
                                NULL, NULL, NULL, NULL, NULL, NULL,
-                               populate_model_cb, dialog);
+                               populate_model_cb, passwords_view);
 }
 
 static GActionGroup *
-create_action_group (EphyPasswordsDialog *dialog)
+create_action_group (EphyPasswordsView *passwords_view)
 {
   const GActionEntry entries[] = {
     { "forget-all", forget_all },
@@ -401,7 +344,7 @@ create_action_group (EphyPasswordsDialog *dialog)
   GSimpleActionGroup *group;
 
   group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), dialog);
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), passwords_view);
 
   return G_ACTION_GROUP (group);
 }
@@ -410,21 +353,21 @@ static void
 show_dialog_cb (GtkWidget *widget,
                 gpointer   user_data)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (widget);
+  EphyPasswordsView *passwords_view = EPHY_PASSWORDS_VIEW (widget);
 
-  populate_model (dialog);
+  populate_model (passwords_view);
 }
 
 static gboolean
 password_filter (GtkListBoxRow *row,
                  gpointer       user_data)
 {
-  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
+  EphyPasswordsView *passwords_view = EPHY_PASSWORDS_VIEW (user_data);
   EphyPasswordRecord *record = g_object_get_data (G_OBJECT (row), "record");
   const char *username;
   const char *origin;
   gboolean visible = FALSE;
-  const char *search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
+  const char *search_text = prefs_data_view_get_search_text (EPHY_PREFS_DATA_VIEW (passwords_view));
 
   if (search_text == NULL) {
     gtk_widget_show (GTK_WIDGET (row));
@@ -446,23 +389,17 @@ password_filter (GtkListBoxRow *row,
 }
 
 static void
-ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
+ephy_passwords_view_init (EphyPasswordsView *passwords_view)
 {
-  gtk_widget_init_template (GTK_WIDGET (dialog));
+  passwords_view->manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
-  dialog->action_group = create_action_group (dialog);
-  gtk_widget_insert_action_group (GTK_WIDGET (dialog), "passwords", dialog->action_group);
+  gtk_widget_init_template (GTK_WIDGET (passwords_view));
 
-  g_signal_connect (GTK_WIDGET (dialog), "show", G_CALLBACK (show_dialog_cb), NULL);
+  passwords_view->action_group = create_action_group (passwords_view);
+  gtk_widget_insert_action_group (GTK_WIDGET (passwords_view), "passwords", passwords_view->action_group);
 
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (dialog->listbox), password_filter, dialog, NULL);
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (dialog->listbox), GTK_SELECTION_NONE);
-}
+  g_signal_connect (GTK_WIDGET (passwords_view), "show", G_CALLBACK (show_dialog_cb), NULL);
 
-EphyPasswordsDialog *
-ephy_passwords_dialog_new (EphyPasswordManager *manager)
-{
-  return EPHY_PASSWORDS_DIALOG (g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
-                                              "password-manager", manager,
-                                              NULL));
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (passwords_view->listbox), password_filter, passwords_view, NULL);
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (passwords_view->listbox), GTK_SELECTION_NONE);
 }
