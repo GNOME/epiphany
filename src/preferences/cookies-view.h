@@ -20,15 +20,11 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
-#include "ephy-data-dialog.h"
+#include "ephy-data-view.h"
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_CLEAR_DATA_DIALOG (clear_data_dialog_get_type ())
-
-G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, EphyDataDialog)
+#define EPHY_TYPE_COOKIES_VIEW (ephy_cookies_view_get_type ())
+G_DECLARE_FINAL_TYPE (EphyCookiesView, ephy_cookies_view, EPHY, COOKIES_VIEW, EphyDataView);
 
 G_END_DECLS
