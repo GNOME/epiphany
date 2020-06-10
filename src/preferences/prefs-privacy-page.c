@@ -22,7 +22,7 @@
 
 #include "prefs-privacy-page.h"
 
-#include "cookies-dialog.h"
+#include "cookies-view.h"
 #include "clear-data-dialog.h"
 #include "passwords-dialog.h"
 #include "ephy-settings.h"
