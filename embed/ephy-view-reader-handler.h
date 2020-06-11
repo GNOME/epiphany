@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2016 Igalia S.L.
+ *  Copyright © 2020 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -26,12 +26,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_VIEW_SOURCE_HANDLER (ephy_view_source_handler_get_type ())
+#define EPHY_TYPE_VIEW_READER_HANDLER (ephy_view_reader_handler_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyViewSourceHandler, ephy_view_source_handler, EPHY, VIEW_SOURCE_HANDLER, EphySourceTransformHandler)
+G_DECLARE_FINAL_TYPE (EphyViewReaderHandler, ephy_view_reader_handler, EPHY, VIEW_READER_HANDLER, EphySourceTransformHandler)
 
-#define EPHY_VIEW_SOURCE_SCHEME "ephy-source"
+#define EPHY_VIEW_READER_SCHEME "ephy-reader"
 
-EphyViewSourceHandler *ephy_view_source_handler_new            (void);
+EphyViewReaderHandler *ephy_view_reader_handler_new            (void);
 
 G_END_DECLS

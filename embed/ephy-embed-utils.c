@@ -28,6 +28,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-view-reader-handler.h"
 #include "ephy-view-source-handler.h"
 
 #include <glib/gi18n.h>
@@ -132,6 +133,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
                      g_ascii_strncasecmp (address, "ephy-about", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-resource", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-source", colonpos) &&
+                     g_ascii_strncasecmp (address, "ephy-reader", colonpos) &&
                      g_ascii_strncasecmp (address, "gopher", colonpos) &&
                      g_ascii_strncasecmp (address, "inspector", colonpos) &&
                      g_ascii_strncasecmp (address, "webkit", colonpos));
@@ -397,6 +399,9 @@ ephy_embed_utils_is_no_show_address (const char *address)
   if (strstr (address, EPHY_VIEW_SOURCE_SCHEME) == address)
     return TRUE;
 
+  if (strstr (address, EPHY_VIEW_READER_SCHEME) == address)
+    return TRUE;
+
   return FALSE;
 }
 
@@ -418,4 +423,10 @@ ephy_embed_utils_shutdown (void)
 {
   g_clear_pointer (&non_search_regex, g_regex_unref);
   g_clear_pointer (&domain_regex, g_regex_unref);
+}
+
+gboolean
+ephy_embed_utils_address_is_reader_mode (const char *address)
+{
+  return g_str_has_prefix (address, EPHY_VIEW_READER_SCHEME);
 }

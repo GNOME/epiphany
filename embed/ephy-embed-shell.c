@@ -40,6 +40,7 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-tabs-catalog.h"
 #include "ephy-uri-helpers.h"
+#include "ephy-view-reader-handler.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 
@@ -63,6 +64,7 @@ typedef struct {
   EphyPasswordManager *password_manager;
   EphyAboutHandler *about_handler;
   EphyViewSourceHandler *source_handler;
+  EphyViewReaderHandler *reader_handler;
   char *guid;
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
@@ -188,6 +190,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->global_gsb_service);
   g_clear_object (&priv->about_handler);
+  g_clear_object (&priv->reader_handler);
   g_clear_object (&priv->source_handler);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->password_manager);
@@ -683,7 +686,16 @@ source_request_cb (WebKitURISchemeRequest *request,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  ephy_view_source_handler_handle_request (priv->source_handler, request);
+  ephy_source_transform_handler_handle_request (EPHY_SOURCE_TRANSFORM_HANDLER (priv->source_handler), request);
+}
+
+static void
+reader_request_cb (WebKitURISchemeRequest *request,
+                   EphyEmbedShell         *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_source_transform_handler_handle_request (EPHY_SOURCE_TRANSFORM_HANDLER (priv->reader_handler), request);
 }
 
 static void
@@ -885,6 +897,12 @@ ephy_embed_shell_startup (GApplication *application)
   priv->source_handler = ephy_view_source_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_SOURCE_SCHEME,
                                           (WebKitURISchemeRequestCallback)source_request_cb,
+                                          shell, NULL);
+
+  /* reader handler */
+  priv->reader_handler = ephy_view_reader_handler_new ();
+  webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_READER_SCHEME,
+                                          (WebKitURISchemeRequestCallback)reader_request_cb,
                                           shell, NULL);
 
   /* ephy-resource handler */

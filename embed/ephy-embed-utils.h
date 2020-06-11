@@ -46,6 +46,7 @@ char *   ephy_embed_utils_normalize_or_autosearch_address       (const char *add
 gboolean ephy_embed_utils_url_is_empty                          (const char *location);
 gboolean ephy_embed_utils_is_no_show_address                    (const char *address);
 char    *ephy_embed_utils_get_title_from_address                (const char *address);
+gboolean ephy_embed_utils_address_is_reader_mode                (const char *address);
 void     ephy_embed_utils_shutdown                              (void);
 
 G_END_DECLS
