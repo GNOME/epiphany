@@ -1,27 +1,34 @@
-/* GNOME web view-source style */
+/**
+ * nnfx dark - a theme inspired by Netscape Navigator/Firefox
+ *
+ * @version 1.0.0
+ * @author (c) 2020 Jim Mason <jmason@ibinx.com>
+ * @license https://creativecommons.org/licenses/by-sa/4.0  CC BY-SA 4.0
+ */
 
 .hljs {
   display: block;
+  overflow-x: auto;
   padding: 0.5em;
-  background: #fff;
-  color: #000;
+  background: #333;
+  color: #fff;
 }
 
 .xml .hljs-meta {
   font-weight: bold;
   font-style: italic;
-  color: #4682b4;
+  color: #69f;
 }
 
 .hljs-comment,
 .hljs-quote {
   font-style: italic;
-  color: #007400;
+  color: #9c6;
 }
 
 .hljs-name,
 .hljs-keyword {
-  color: #800080;
+  color: #a7a;
 }
 
 .hljs-name,
@@ -35,7 +42,7 @@
 
 .hljs-variable,
 .hljs-template-variable {
-  color: #3F6E74;
+  color: #588;
 }
 
 .hljs-code,
@@ -44,7 +51,7 @@
 .hljs-number,
 .hljs-regexp,
 .hljs-link {
-  color: #00f;
+  color: #bce;
 }
 
 .hljs-title,
@@ -52,23 +59,23 @@
 .hljs-bullet,
 .hljs-built_in,
 .hljs-builtin-name {
-  color: #ff4501;
+  color: #d40;
 }
 
 .hljs-section,
 .hljs-meta {
-  color: #643820;
+  color: #a85;
 }
 
 .hljs-class .hljs-title,
 .hljs-type {
-  color: #5c2699;
+  color: #96c;
 }
 
 .hljs-function .hljs-title,
 .hljs-attr,
 .hljs-subst {
-  color: #000;
+  color: #fff;
 }
 
 .hljs-formula {
@@ -77,16 +84,16 @@
 }
 
 .hljs-addition {
-  background-color: #baeeba;
+  background-color: #797;
 }
 
 .hljs-deletion {
-  background-color: #ffc8bd;
+  background-color: #c99;
 }
 
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #9b703f;
+  color: #964;
 }
 
 .hljs-doctag,
@@ -96,24 +103,4 @@
 
 .hljs-emphasis {
   font-style: italic;
-}
-
-.hljs-ln {
-  white-space: pre;
-}
-
-.hljs-ln-numbers {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-
-  text-align: right;
-  color: #ccc;
-  vertical-align: top;
-  border-right: 1px solid;
-  padding-right: 5px !important;
-}
-
-.hljs-ln-code {
-  padding-left: 10px !important;
 }

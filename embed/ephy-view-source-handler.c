@@ -124,7 +124,9 @@ web_resource_data_cb (WebKitWebResource     *resource,
   escaped_str = g_markup_escape_text ((const char *)data, length);
 
   html = g_strdup_printf ("<head>"
-                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/default.css'>"
+                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx.css' media='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)'>"
+                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx-dark.css' media='(prefers-color-scheme: dark)'>"
+                          "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/epiphany.css'>"
                           "  <title>%s</title>"
                           "</head>"
                           "<body class='hljs'>"

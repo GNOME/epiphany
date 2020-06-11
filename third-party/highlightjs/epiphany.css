@@ -1,0 +1,36 @@
+/**
+  * Customizations for GNOME Web
+  *
+  * This file provides epiphany-specific customizations to the upstream css.
+  */
+
+.hljs {
+  /*
+   * fix overflow handling
+   *
+   * let the browser window display overflow scrollbars, if any,
+   * instead of placing scrollbars inside the content
+   */
+  overflow-x: visible;
+}
+
+/**
+  * styling for the highlightjs-line-numbers plugin
+  */
+.hljs-ln {
+  white-space: pre;
+}
+
+.hljs-ln .hljs-ln-numbers {
+  -webkit-user-select: none;
+
+  text-align: right;
+  color: #ccc;
+  vertical-align: top;
+  border-right: 1px solid;
+  padding-right: 5px;
+}
+
+.hljs-ln .hljs-ln-code {
+  padding-left: 10px;
+}
