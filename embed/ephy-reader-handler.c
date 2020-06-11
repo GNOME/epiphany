@@ -1,0 +1,393 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/*
+ *  Copyright © 2020 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *
+ *  This file is part of Epiphany.
+ *
+ *  Epiphany is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Epiphany is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+#include "ephy-reader-handler.h"
+
+#include "ephy-embed-container.h"
+#include "ephy-embed-shell.h"
+#include "ephy-lib-type-builtins.h"
+#include "ephy-settings.h"
+#include "ephy-web-view.h"
+
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <string.h>
+
+struct _EphyReaderHandler {
+  GObject parent_instance;
+
+  GList *outstanding_requests;
+};
+
+G_DEFINE_TYPE (EphyReaderHandler, ephy_reader_handler, G_TYPE_OBJECT)
+
+typedef struct {
+  EphyReaderHandler *source_handler;
+  WebKitURISchemeRequest *scheme_request;
+  WebKitWebView *web_view;
+  GCancellable *cancellable;
+  guint load_changed_id;
+} EphyReaderRequest;
+
+static EphyReaderRequest *
+ephy_reader_request_new (EphyReaderHandler      *handler,
+                         WebKitURISchemeRequest *request)
+{
+  EphyReaderRequest *reader_request;
+
+  reader_request = g_new (EphyReaderRequest, 1);
+  reader_request->source_handler = g_object_ref (handler);
+  reader_request->scheme_request = g_object_ref (request);
+  reader_request->web_view = NULL; /* created only if required */
+  reader_request->cancellable = g_cancellable_new ();
+  reader_request->load_changed_id = 0;
+
+  return reader_request;
+}
+
+static void
+ephy_reader_request_free (EphyReaderRequest *request)
+{
+  if (request->load_changed_id > 0)
+    g_signal_handler_disconnect (request->web_view, request->load_changed_id);
+
+  g_object_unref (request->source_handler);
+  g_object_unref (request->scheme_request);
+  g_clear_object (&request->web_view);
+
+  g_cancellable_cancel (request->cancellable);
+  g_object_unref (request->cancellable);
+
+  g_free (request);
+}
+
+static void
+finish_uri_scheme_request (EphyReaderRequest *request,
+                           gchar             *data,
+                           GError            *error)
+{
+  GInputStream *stream;
+  gssize data_length;
+
+  g_assert ((data && !error) || (!data && error));
+
+  if (error) {
+    webkit_uri_scheme_request_finish_error (request->scheme_request, error);
+  } else {
+    data_length = MIN (strlen (data), G_MAXSSIZE);
+    stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+    webkit_uri_scheme_request_finish (request->scheme_request, stream, data_length, "text/html");
+    g_object_unref (stream);
+  }
+
+  request->source_handler->outstanding_requests =
+    g_list_remove (request->source_handler->outstanding_requests,
+                   request);
+
+  ephy_reader_request_free (request);
+}
+
+static const char *
+enum_nick (GType enum_type,
+           int   value)
+{
+  GEnumClass *enum_class;
+  const GEnumValue *enum_value;
+  const char *nick = NULL;
+
+  enum_class = g_type_class_ref (enum_type);
+  enum_value = g_enum_get_value (enum_class, value);
+  if (enum_value)
+    nick = enum_value->value_nick;
+
+  g_type_class_unref (enum_class);
+  return nick;
+}
+
+static
+char *readability_get_property_string (WebKitJavascriptResult *js_result,
+                                       char                   *property)
+{
+  JSCValue *jsc_value;
+  char *result = NULL;
+
+  jsc_value = webkit_javascript_result_get_js_value (js_result);
+
+  if (!jsc_value_is_object (jsc_value))
+    return NULL;
+
+  if (jsc_value_object_has_property (jsc_value, property)) {
+    g_autoptr (JSCValue) jsc_content = jsc_value_object_get_property (jsc_value, property);
+
+    result = jsc_value_to_string (jsc_content);
+
+    if (result && strcmp (result, "null") == 0)
+      g_clear_pointer (&result, g_free);
+  }
+
+  return result;
+}
+
+static void
+readability_js_finish_cb (GObject      *object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
+  EphyReaderRequest *request = user_data;
+  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autofree gchar *byline = NULL;
+  g_autofree gchar *content = NULL;
+  g_autoptr (GString) html = NULL;
+  g_autoptr (GBytes) style_css = NULL;
+  const gchar *title;
+  const gchar *font_style;
+  const gchar *color_scheme;
+
+  js_result = webkit_web_view_run_javascript_finish (web_view, result, &error);
+  if (!js_result) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error running javascript: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  byline = readability_get_property_string (js_result, "byline");
+  content = readability_get_property_string (js_result, "content");
+
+  html = g_string_new ("");
+  style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  title = webkit_web_view_get_title (web_view);
+  font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
+                          g_settings_get_enum (EPHY_SETTINGS_READER,
+                                               EPHY_PREFS_READER_FONT_STYLE));
+  color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                            g_settings_get_enum (EPHY_SETTINGS_READER,
+                                                 EPHY_PREFS_READER_COLOR_SCHEME));
+
+  g_string_append_printf (html, "<style>%s</style>"
+                          "<title>%s</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html;\" charset=\"UTF-8\">" \
+                          "<body class='%s %s'>"
+                          "<article>"
+                          "<h2>"
+                          "%s"
+                          "</h2>"
+                          "<i>"
+                          "%s"
+                          "</i>"
+                          "<hr>",
+                          (gchar *)g_bytes_get_data (style_css, NULL),
+                          title,
+                          font_style,
+                          color_scheme,
+                          title,
+                          byline != NULL ? byline : "");
+  g_string_append (html, content);
+  g_string_append (html, "</article>");
+
+  finish_uri_scheme_request (request, g_strdup (html->str), NULL);
+}
+
+static void
+ephy_reader_request_begin_get_source_from_web_view (EphyReaderRequest *request,
+                                                    WebKitWebView     *web_view)
+{
+  webkit_web_view_run_javascript_from_gresource (web_view,
+                                                 "/org/gnome/epiphany/readability/Readability.js",
+                                                 request->cancellable,
+                                                 readability_js_finish_cb,
+                                                 request);
+}
+
+static void
+load_changed_cb (WebKitWebView     *web_view,
+                 WebKitLoadEvent    load_event,
+                 EphyReaderRequest *request)
+{
+  if (load_event == WEBKIT_LOAD_FINISHED) {
+    g_signal_handler_disconnect (request->web_view, request->load_changed_id);
+    request->load_changed_id = 0;
+
+    ephy_reader_request_begin_get_source_from_web_view (request, web_view);
+  }
+}
+
+static void
+ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
+                                               const char        *uri)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
+
+  request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (webkit_web_view_new_with_context (context)));
+
+  g_assert (request->load_changed_id == 0);
+  request->load_changed_id = g_signal_connect (request->web_view, "load-changed",
+                                               G_CALLBACK (load_changed_cb),
+                                               request);
+
+  webkit_web_view_load_uri (request->web_view, uri);
+}
+
+static gint
+embed_is_displaying_matching_uri (EphyEmbed *embed,
+                                  SoupURI   *uri)
+{
+  EphyWebView *web_view;
+  SoupURI *view_uri;
+  gint ret = -1;
+
+  if (ephy_embed_has_load_pending (embed))
+    return -1;
+
+  web_view = ephy_embed_get_web_view (embed);
+  if (ephy_web_view_is_loading (web_view))
+    return -1;
+
+  view_uri = soup_uri_new (ephy_web_view_get_address (web_view));
+  if (!view_uri)
+    return -1;
+
+  soup_uri_set_fragment (view_uri, NULL);
+  ret = soup_uri_equal (view_uri, uri) ? 0 : -1;
+
+  soup_uri_free (view_uri);
+
+  return ret;
+}
+
+static WebKitWebView *
+get_web_view_matching_uri (SoupURI *uri)
+{
+  EphyEmbedShell *shell;
+  GtkWindow *window;
+  GList *embeds = NULL;
+  GList *found;
+  EphyEmbed *embed = NULL;
+
+  shell = ephy_embed_shell_get_default ();
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+
+  if (!EPHY_IS_EMBED_CONTAINER (window))
+    goto out;
+
+  embeds = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
+  found = g_list_find_custom (embeds, uri, (GCompareFunc)embed_is_displaying_matching_uri);
+
+  if (found)
+    embed = found->data;
+
+out:
+  g_list_free (embeds);
+
+  return embed ? WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)) : NULL;
+}
+
+static void
+ephy_reader_request_start (EphyReaderRequest *request)
+{
+  g_autoptr (SoupURI) soup_uri = NULL;
+  const char *modified_uri;
+  const char *original_uri;
+  WebKitWebView *web_view;
+
+  original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
+  soup_uri = soup_uri_new (original_uri);
+
+  if (!soup_uri) {
+    /* Can't assert because user could theoretically input something weird */
+    GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
+                                 WEBKIT_NETWORK_ERROR_FAILED,
+                                 _("%s is not a valid URI"),
+                                 original_uri);
+    finish_uri_scheme_request (request, NULL, error);
+    return;
+  }
+
+  modified_uri = soup_uri_get_path (soup_uri);
+  g_assert (modified_uri);
+
+  web_view = webkit_uri_scheme_request_get_web_view (request->scheme_request);
+  if (web_view && !webkit_web_view_get_title (web_view))
+    web_view = NULL;
+
+  if (!web_view)
+    web_view = get_web_view_matching_uri (soup_uri);
+
+  if (web_view)
+    ephy_reader_request_begin_get_source_from_web_view (request, WEBKIT_WEB_VIEW (web_view));
+  else
+    ephy_reader_request_begin_get_source_from_uri (request, modified_uri);
+
+  request->source_handler->outstanding_requests =
+    g_list_prepend (request->source_handler->outstanding_requests, request);
+}
+
+static void
+cancel_outstanding_request (EphyReaderRequest *request)
+{
+  g_cancellable_cancel (request->cancellable);
+}
+
+static void
+ephy_reader_handler_dispose (GObject *object)
+{
+  EphyReaderHandler *handler = EPHY_READER_HANDLER (object);
+
+  if (handler->outstanding_requests) {
+    g_list_foreach (handler->outstanding_requests, (GFunc)cancel_outstanding_request, NULL);
+    g_list_free (handler->outstanding_requests);
+    handler->outstanding_requests = NULL;
+  }
+
+  G_OBJECT_CLASS (ephy_reader_handler_parent_class)->dispose (object);
+}
+
+static void
+ephy_reader_handler_init (EphyReaderHandler *handler)
+{
+}
+
+static void
+ephy_reader_handler_class_init (EphyReaderHandlerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ephy_reader_handler_dispose;
+}
+
+EphyReaderHandler *
+ephy_reader_handler_new (void)
+{
+  return EPHY_READER_HANDLER (g_object_new (EPHY_TYPE_READER_HANDLER, NULL));
+}
+
+void
+ephy_reader_handler_handle_request (EphyReaderHandler      *handler,
+                                    WebKitURISchemeRequest *scheme_request)
+{
+  EphyReaderRequest *reader_request;
+
+  reader_request = ephy_reader_request_new (handler, scheme_request);
+  ephy_reader_request_start (reader_request);
+}
