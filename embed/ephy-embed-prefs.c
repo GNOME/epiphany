@@ -351,6 +351,7 @@ webkit_pref_callback_gnome_fonts (GSettings  *ephy_settings,
   if (g_settings_get_boolean (ephy_settings, key)) {
     g_object_set (webkit_settings,
                   "default-font-family", "serif",
+                  "serif-font-family", "serif",
                   "sans-serif-font-family", "sans-serif",
                   "monospace-font-family", "monospace",
                   "default-font-size", webkit_settings_font_size_to_pixels (12),
