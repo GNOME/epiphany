@@ -279,19 +279,7 @@ webkit_pref_callback_font_size (GSettings  *settings,
 {
   char *webkit_pref = data;
   char *value = NULL;
-  int size = 9; /* FIXME: What to use here? */
-
-  char *schema = NULL;
-  g_object_get (settings, "schema-id", &schema, NULL);
-
-  /* If we are changing a GNOME font value and we are not using GNOME fonts in
-   * Epiphany, return. */
-  if (g_strcmp0 (schema, EPHY_PREFS_WEB_SCHEMA) != 0 &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_USE_GNOME_FONTS) != TRUE) {
-    g_free (schema);
-    return;
-  }
-  g_free (schema);
+  int size = 12;
 
   value = g_settings_get_string (settings, key);
 
@@ -316,18 +304,6 @@ webkit_pref_callback_font_family (GSettings  *settings,
 {
   char *webkit_pref = data;
   char *value = NULL;
-
-  char *schema = NULL;
-  g_object_get (settings, "schema-id", &schema, NULL);
-
-  /* If we are changing a GNOME font value and we are not using GNOME fonts in
-   * Epiphany, return. */
-  if (g_strcmp0 (schema, EPHY_PREFS_WEB_SCHEMA) != 0 &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_USE_GNOME_FONTS) != TRUE) {
-    g_free (schema);
-    return;
-  }
-  g_free (schema);
 
   value = g_settings_get_string (settings, key);
 
