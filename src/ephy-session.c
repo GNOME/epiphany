@@ -875,7 +875,8 @@ session_seems_sane (GList *windows)
       if (uri) {
         if (uri->host != NULL ||
             uri->scheme == SOUP_URI_SCHEME_DATA ||
-            uri->scheme == SOUP_URI_SCHEME_FILE)
+            uri->scheme == SOUP_URI_SCHEME_FILE ||
+            strcmp (uri->scheme, "ephy-reader") == 0)
           sane = TRUE;
         soup_uri_free (uri);
       }
