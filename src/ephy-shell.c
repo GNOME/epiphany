@@ -910,7 +910,7 @@ webkit_notification_closed_cb (WebKitNotification *notification,
                                gpointer            user_data)
 {
   EphyShell *shell = ephy_shell_get_default ();
-  g_autofree char *id;
+  g_autofree char *id = NULL;
 
   id = g_strdup_printf ("%" G_GUINT64_FORMAT, webkit_notification_get_id (notification));
 
