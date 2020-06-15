@@ -1283,6 +1283,99 @@ migrate_adblock_to_shared_cache_dir (void)
 }
 
 static void
+migrate_webapp_names (void)
+{
+  /* Rename webapp folder and desktop file name from
+   *   epiphany-XXX
+   * to
+   *  org.gnome.Epiphany.WebApp-XXX
+   */
+  g_autoptr (GFile) parent_directory = NULL;
+  g_autoptr (GFileEnumerator) children = NULL;
+  g_autoptr (GFileInfo) info = NULL;
+  g_autofree char *parent_directory_path = g_strdup (g_get_user_data_dir ());
+
+  parent_directory = g_file_new_for_path (parent_directory_path);
+  children = g_file_enumerate_children (parent_directory,
+                                        "standard::name",
+                                        0, NULL, NULL);
+  if (!children)
+    return;
+
+  info = g_file_enumerator_next_file (children, NULL, NULL);
+  while (info) {
+    const char *name;
+
+    name = g_file_info_get_name (info);
+    if (g_str_has_prefix (name, "epiphany-")) {
+      g_auto (GStrv) split = g_strsplit_set (name, "-", 2);
+      guint len = g_strv_length (split);
+
+      if (len == 2) {
+        g_autofree char *old_desktop_file_name = NULL;
+        g_autofree char *new_desktop_file_name = NULL;
+        g_autofree char *old_desktop_path_name = NULL;
+        g_autofree char *new_desktop_path_name = NULL;
+        g_autofree char *app_desktop_file_name = NULL;
+        g_autoptr (GFile) app_link_file = NULL;
+        g_autoptr (GFile) old_desktop_file = NULL;
+        g_autoptr (GFileInfo) file_info = NULL;
+        goffset file_size;
+        g_autofree char *new_name = g_strconcat ("org.gnome.Epiphany.WebApp-", split[1], NULL);
+        g_autoptr (GError) error = NULL;
+
+        /* Rename directory */
+        old_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, name, NULL);
+        new_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, NULL);
+        g_rename (old_desktop_path_name, new_desktop_path_name);
+
+        /* Create new desktop file */
+        old_desktop_file_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+        new_desktop_file_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+
+        /* Fix paths in desktop file */
+        old_desktop_file = g_file_new_for_path (old_desktop_file_name);
+        file_info = g_file_query_info (old_desktop_file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &error);
+        file_size = g_file_info_get_size (file_info);
+
+        if (!error && file_size) {
+          g_autofree char *data = g_malloc0 (file_size);
+          g_autoptr (GFileInputStream) input_stream = NULL;
+          g_autoptr (GFileOutputStream) output_stream = NULL;
+          g_autofree char *new_data = NULL;
+          g_autoptr (GFile) new_desktop_file = NULL;
+
+          input_stream = g_file_read (old_desktop_file, NULL, NULL);
+          g_input_stream_read_all (G_INPUT_STREAM (input_stream), data, file_size, NULL, NULL, NULL);
+
+          new_data = ephy_string_find_and_replace (data, name, new_name);
+
+          new_desktop_file = g_file_new_for_path (new_desktop_file_name);
+
+          output_stream = g_file_create (new_desktop_file, G_FILE_CREATE_PRIVATE, NULL, &error);
+          g_output_stream_write (G_OUTPUT_STREAM (output_stream), new_data, strlen (new_data), NULL, NULL);
+          g_output_stream_flush (G_OUTPUT_STREAM (output_stream), NULL, NULL);
+          g_output_stream_close (G_OUTPUT_STREAM (output_stream), NULL, NULL);
+
+          g_file_delete (old_desktop_file, NULL, NULL);
+        }
+
+        /* Remove old symlink */
+        app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications", G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+        g_remove (app_desktop_file_name);
+
+        /* Create new symlink */
+        app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications", G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+        app_link_file = g_file_new_for_path (app_desktop_file_name);
+        g_file_make_symbolic_link (app_link_file, new_desktop_file_name, NULL, NULL);
+      }
+    }
+
+    info = g_file_enumerator_next_file (children, NULL, NULL);
+  }
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1331,6 +1424,7 @@ const EphyProfileMigrator migrators[] = {
   /* 32 */ migrate_webapps_harder,
   /* 33 */ migrate_adblock_to_content_filters,
   /* 34 */ migrate_adblock_to_shared_cache_dir,
+  /* 35 */ migrate_webapp_names,
 };
 
 static gboolean
