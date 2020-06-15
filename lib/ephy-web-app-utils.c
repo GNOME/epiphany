@@ -40,14 +40,14 @@
  * <normalized-name>-checksum.
  *
  * The id is used to uniquely identify the app.
- *  - Program name: epiphany-<id>
+ *  - Program name: org.gnome.Epiphany.WebApp-<id>
  *  - Profile directory: <program-name>
  *  - Desktop file: <profile-dir>/<program-name>.desktop
  *
  * System web applications have a profile dir without a desktop file.
  */
 
-#define EPHY_WEB_APP_PROGRAM_NAME_PREFIX "epiphany-"
+#define EPHY_WEB_APP_PROGRAM_NAME_PREFIX "org.gnome.Epiphany.WebApp-"
 
 char *
 ephy_web_application_get_app_id_from_name (const char *name)
