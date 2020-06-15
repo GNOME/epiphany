@@ -142,13 +142,24 @@ on_key_press_event (PrefsDataView *self,
 
   if (key->keyval == GDK_KEY_Escape) {
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->search_button)))
-      gtk_widget_destroy (GTK_WIDGET (self));
+      /* If the user presses the Escape key and the search bar is hidden,
+       * we want the event to have the same effect as clicking the back button*/
+      g_signal_emit (self, signals[BACK_BUTTON_CLICKED], 0);
     else
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_button), FALSE);
-  } else if (isprint (key->keyval))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_button), TRUE);
+  }
 
   return result;
+}
+
+static void
+on_search_canceled (GtkWidget *search_entry,
+                    GtkWidget *prefs_data_view)
+{
+  /* This is called when the user cancels a search operation via the Escape key
+   * We implement this in order to maintain focus on prefs_data_view
+   * If prefs_data_view loses focus then on_key_press_event() won't get called */
+  gtk_widget_grab_focus (prefs_data_view);
 }
 
 static void
@@ -424,6 +435,7 @@ prefs_data_view_class_init (PrefsDataViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_canceled);
 }
 
 static void

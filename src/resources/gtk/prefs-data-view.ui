@@ -18,6 +18,7 @@
     <property name="icon_name">go-previous-symbolic</property>
   </object>
   <template class="PrefsDataView" parent="GtkBin">
+    <property name="can_focus">True</property>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="box">
@@ -98,6 +99,7 @@
                     <property name="primary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">False</property>
                     <signal name="search-changed" handler="on_search_entry_changed" swapped="no"/>
+                    <signal name="stop-search" handler="on_search_canceled"/>
                   </object>
                 </child>
               </object>

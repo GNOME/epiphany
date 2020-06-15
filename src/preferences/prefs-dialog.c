@@ -47,27 +47,33 @@ struct _EphyPrefsDialog {
 G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, HDY_TYPE_WINDOW)
 
 static void
+present_data_view (EphyPrefsDialog *prefs_dialog,
+                   GtkWidget       *presented_data_view)
+{
+  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, presented_data_view);
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  gtk_widget_grab_focus (presented_data_view);
+}
+
+static void
 on_clear_cookies_row_activated (GtkWidget       *privacy_page,
                                 EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_cookies_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->clear_cookies_view);
 }
 
 static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->passwords_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->passwords_view);
 }
 
 static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_data_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->clear_data_view);
 }
 
 static void
