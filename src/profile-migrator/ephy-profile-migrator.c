@@ -1283,6 +1283,150 @@ migrate_adblock_to_shared_cache_dir (void)
 }
 
 static void
+migrate_webapp_names (void)
+{
+  /* Rename webapp folder, desktop file name and content from
+   *   epiphany-XXX
+   * to
+   *  org.gnome.Epiphany.WebApp-XXX
+   */
+  g_autoptr (GFile) parent_directory = NULL;
+  g_autoptr (GFileEnumerator) children = NULL;
+  g_autoptr (GFileInfo) info = NULL;
+  g_autofree char *parent_directory_path = g_strdup (g_get_user_data_dir ());
+  g_autoptr (GError) error = NULL;
+
+  parent_directory = g_file_new_for_path (parent_directory_path);
+  children = g_file_enumerate_children (parent_directory,
+                                        "standard::name",
+                                        0, NULL, NULL);
+  if (!children)
+    return;
+
+  info = g_file_enumerator_next_file (children, NULL, &error);
+  if (!info) {
+    g_warning ("Cannot enumerate profile directory: %s", error->message);
+    return;
+  }
+
+  while (info) {
+    const char *name;
+
+    name = g_file_info_get_name (info);
+    if (g_str_has_prefix (name, "epiphany-")) {
+      g_auto (GStrv) split = g_strsplit_set (name, "-", 2);
+      guint len = g_strv_length (split);
+
+      if (len == 2) {
+        g_autofree char *old_desktop_file_name = NULL;
+        g_autofree char *new_desktop_file_name = NULL;
+        g_autofree char *old_desktop_path_name = NULL;
+        g_autofree char *new_desktop_path_name = NULL;
+        g_autofree char *app_desktop_file_name = NULL;
+        g_autoptr (GFile) app_link_file = NULL;
+        g_autoptr (GFile) old_desktop_file = NULL;
+        g_autoptr (GFileInfo) file_info = NULL;
+        goffset file_size;
+        g_autofree char *new_name = g_strconcat ("org.gnome.Epiphany.WebApp-", split[1], NULL);
+
+        /* Rename directory */
+        old_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, name, NULL);
+        new_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, NULL);
+        if (g_rename (old_desktop_path_name, new_desktop_path_name) == -1) {
+          g_warning ("Cannot rename web application directroy from '%s' to '%s'", old_desktop_path_name, new_desktop_path_name);
+          goto out;
+        }
+
+        /* Create new desktop file */
+        old_desktop_file_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+        new_desktop_file_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+
+        /* Fix paths in desktop file */
+        old_desktop_file = g_file_new_for_path (old_desktop_file_name);
+        file_info = g_file_query_info (old_desktop_file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &error);
+        if (!file_info) {
+          g_warning ("Cannot query file info for '%s': %s", old_desktop_file_name, error->message);
+          goto out;
+        }
+
+        file_size = g_file_info_get_size (file_info);
+        if (file_size != 0) {
+          g_autofree char *data = NULL;
+          g_autoptr (GFileInputStream) input_stream = NULL;
+          g_autoptr (GFileOutputStream) output_stream = NULL;
+          g_autofree char *new_data = NULL;
+          g_autoptr (GFile) new_desktop_file = NULL;
+
+          input_stream = g_file_read (old_desktop_file, NULL, &error);
+          if (!input_stream) {
+            g_warning ("Cannot open old desktop file: %s", error->message);
+            goto out;
+          }
+
+          data = g_malloc0 (file_size);
+          if (!g_input_stream_read_all (G_INPUT_STREAM (input_stream), data, file_size, NULL, NULL, &error)) {
+            g_warning ("Cannot read old desktop file: %s", error->message);
+            goto out;
+          }
+
+          new_data = ephy_string_find_and_replace (data, name, new_name);
+          new_desktop_file = g_file_new_for_path (new_desktop_file_name);
+
+          output_stream = g_file_create (new_desktop_file, G_FILE_CREATE_PRIVATE, NULL, &error);
+          if (!output_stream) {
+            g_warning ("Cannot create new desktop file: %s", error->message);
+            goto out;
+          }
+
+          if (g_output_stream_write (G_OUTPUT_STREAM (output_stream), new_data, strlen (new_data), NULL, &error) == -1) {
+            g_warning ("Error writing data to new desktop file: %s", error->message);
+            goto out;
+          }
+
+          if (!g_output_stream_flush (G_OUTPUT_STREAM (output_stream), NULL, &error)) {
+            g_warning ("Cannot flush output stream of new desktop file: %s", error->message);
+            goto out;
+          }
+
+          if (!g_output_stream_close (G_OUTPUT_STREAM (output_stream), NULL, &error)) {
+            g_warning ("Cannot close output stream of new desktop file: %s", error->message);
+            goto out;
+          }
+
+          if (!g_file_delete (old_desktop_file, NULL, &error)) {
+            g_warning ("Cannot delete old desktop file: %s", error->message);
+            goto out;
+          }
+        }
+
+        /* Remove old symlink */
+        app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications", G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+        if (g_remove (app_desktop_file_name) == -1) {
+          g_warning ("Cannot remove old desktop file symlink '%s'", app_desktop_file_name);
+          goto out;
+        }
+
+        /* Create new symlink */
+        app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications", G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+        app_link_file = g_file_new_for_path (app_desktop_file_name);
+
+        if (!g_file_make_symbolic_link (app_link_file, new_desktop_file_name, NULL, &error)) {
+          g_warning ("Cannot create symlink to new desktop file: %s", error->message);
+          goto out;
+        }
+      }
+    }
+
+out:
+    info = g_file_enumerator_next_file (children, NULL, &error);
+    if (!info && error) {
+      g_warning ("Cannot enumerate next file: %s", error->message);
+      return;
+    }
+  }
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1331,6 +1475,7 @@ const EphyProfileMigrator migrators[] = {
   /* 32 */ migrate_webapps_harder,
   /* 33 */ migrate_adblock_to_content_filters,
   /* 34 */ migrate_adblock_to_shared_cache_dir,
+  /* 35 */ migrate_webapp_names,
 };
 
 static gboolean
