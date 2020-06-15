@@ -41,6 +41,7 @@
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
 #include "ephy-user-agent.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
 #include "prefs-dialog.h"
@@ -376,6 +377,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
   { "run-in-background", NULL, "b", "false", run_in_background_change_state},
+  { "notification-clicked", notification_clicked, "t", NULL, NULL},
 };
 
 static void
@@ -1211,22 +1213,17 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 void
 _ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
-  g_autofree gchar *id = NULL;
+  const char *id = NULL;
 
   g_assert (ephy_shell == NULL);
 
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     const char *profile_dir = ephy_profile_dir ();
-    g_autofree char *basename = g_path_get_basename (profile_dir);
-    g_auto (GStrv) split = g_strsplit_set (basename, "-", -1);
-    guint len = g_strv_length (split);
+    const char *web_id = ephy_web_application_get_program_name_from_profile_directory (profile_dir);
 
-    if (len > 0)
-      id = g_strconcat (APPLICATION_ID, ".WebApp-", split[len - 1], NULL);
-    else
-      id = g_strconcat (APPLICATION_ID, ".WebApp", NULL);
+    id = web_id;
   } else {
-    id = g_strdup (APPLICATION_ID);
+    id = APPLICATION_ID;
   }
 
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
