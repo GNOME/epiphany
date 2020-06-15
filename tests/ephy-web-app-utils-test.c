@@ -83,7 +83,7 @@ test_web_app_lifetime (void)
     g_free (exec);
     g_assert_null (g_key_file_get_string (key_file, "Desktop Entry", "Icon", NULL));
     wm_class = g_key_file_get_string (key_file, "Desktop Entry", "StartupWMClass", NULL);
-    program_name = g_strdup_printf ("epiphany-%s", id);
+    program_name = g_strdup_printf ("org.gnome.Epiphany.WebApp-%s", id);
     g_assert_cmpstr (wm_class, ==, program_name);
     g_free (program_name);
     g_free (wm_class);
