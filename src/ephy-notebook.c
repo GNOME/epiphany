@@ -503,19 +503,43 @@ get_last_pinned_tab_pos (EphyNotebook *notebook)
   return found;
 }
 
+static int
+get_first_unpinned_tab_pos (EphyNotebook *notebook)
+{
+  int pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < pages; i++) {
+    GtkWidget *child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+
+    if (!ephy_notebook_tab_is_pinned (notebook, EPHY_EMBED (child)))
+      return i;
+  }
+
+  return pages;
+}
+
 static void
 ephy_notebook_ensure_pinned_tab_position (GtkNotebook *notebook,
                                           GtkWidget   *child,
                                           guint        page_num)
 {
   int last_pinned_tab_pos = get_last_pinned_tab_pos (EPHY_NOTEBOOK (notebook));
+  int first_unpinned_tab_pos = get_first_unpinned_tab_pos (EPHY_NOTEBOOK (notebook));
   gboolean is_current_tab_pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (child));
 
   /* Ensure that pinned tabs will always stay at the beginning of tab bar */
-  if (last_pinned_tab_pos != -1 && page_num <= (guint)last_pinned_tab_pos) {
-    gint new_pos = is_current_tab_pinned ? last_pinned_tab_pos : last_pinned_tab_pos + 1;
-
-    gtk_notebook_reorder_child (notebook, child, new_pos);
+  if (!is_current_tab_pinned) {
+    if (last_pinned_tab_pos != -1 && page_num <= (guint)last_pinned_tab_pos) {
+      gtk_notebook_reorder_child (notebook, child, last_pinned_tab_pos);
+    }
+  } else {
+    if (first_unpinned_tab_pos != -1) {
+      if (page_num > (guint)first_unpinned_tab_pos) {
+        gtk_notebook_reorder_child (notebook, child, first_unpinned_tab_pos);
+      }
+    } else {
+      gtk_notebook_reorder_child (notebook, child, 0);
+    }
   }
 }
 
@@ -1023,7 +1047,6 @@ ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
   GtkWidget *tab_label;
   gboolean expanded;
 
-  gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), embed, !is_pinned);
   gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), embed, !is_pinned);
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), embed);
   ephy_tab_label_set_pinned (tab_label, is_pinned);
