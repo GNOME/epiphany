@@ -18,13 +18,11 @@
         <property name="can_focus">True</property>
         <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
         <child>
-          <object class="HdyColumn">
+          <object class="HdyClamp">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_start">6</property>
             <property name="margin_end">6</property>
-            <property name="maximum_width">600</property>
-            <property name="linear_growth_width">400</property>
             <child>
               <object class="GtkListBox" id="listbox">
                 <property name="visible">True</property>
