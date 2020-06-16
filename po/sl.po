@@ -4,14 +4,14 @@
 #
 # Andraž Tori <andraz.tori1@guest.arnes.si>, 2003.
 # Matic Žgur <mr.zgur@gmail.com>, 2006–2007.
-# Matej Urbančič <mateju@svn.gnome.org>, 2008–2019.
+# Matej Urbančič <mateju@svn.gnome.org>, 2008–2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2019-09-25 19:44+0000\n"
-"PO-Revision-Date: 2019-09-26 21:46+0200\n"
+"POT-Creation-Date: 2020-06-08 14:38+0000\n"
+"PO-Revision-Date: 2020-06-10 21:28+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -55,7 +55,7 @@ msgstr "Projekt GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:616
+#: src/ephy-main.c:407 src/window-commands.c:640
 msgid "Web"
 msgstr "Splet"
 
@@ -109,7 +109,7 @@ msgid ""
 "\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
 msgstr ""
 "[('DuckDuckGo', 'https://duckduckgo.com/?q=%s&t=epiphany', '!ddg'),\n"
-"\t\t\t\t  ('Google', 'https://www.google.com/search?q=%s', '!g'),\n"
+"\t\t\t\t ('Google', 'https://www.google.com/search?q=%s', '!g'),\n"
 "\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
 
 #: data/org.gnome.epiphany.gschema.xml:33
@@ -134,14 +134,10 @@ msgid ""
 msgstr "Vsili odpiranje novih oken v zavihkih trenutnega okna."
 
 #: data/org.gnome.epiphany.gschema.xml:46
-msgid "Don’t use an external application to view page source."
-msgstr "Ne uporabi zunanjega programa za ogled izvorne kode strani."
-
-#: data/org.gnome.epiphany.gschema.xml:50
 msgid "Whether to automatically restore the last session"
 msgstr "Ali naj se zadnja seja samodejno obnovi."
 
-#: data/org.gnome.epiphany.gschema.xml:51
+#: data/org.gnome.epiphany.gschema.xml:47
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -153,7 +149,7 @@ msgstr ""
 "obnovi le, če se program sesuje) in »nikoli« (vedno se odpre privzeto "
 "določena začetna stran)."
 
-#: data/org.gnome.epiphany.gschema.xml:55
+#: data/org.gnome.epiphany.gschema.xml:51
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -161,7 +157,7 @@ msgstr ""
 "Ali naj se nalaganje zavihkov, ki po obnovi seje niso takoj vidni, časovno "
 "zamakne"
 
-#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -169,11 +165,11 @@ msgstr ""
 "Izbrana možnost onemogoči nalaganje vsebine zavihkov po obnovi seje preden "
 "jih uporabnik postavi v žarišče."
 
-#: data/org.gnome.epiphany.gschema.xml:60
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "List of adblock filters"
 msgstr "Seznam filtrov za preprečevanje prikaza oglasov"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -181,11 +177,11 @@ msgstr ""
 "Seznam naslovov URL s filtri vsebine v zapisu JSON, ki jih uporablja program "
 "za preprečevanje prikaza oglasov."
 
-#: data/org.gnome.epiphany.gschema.xml:65
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Whether to ask for setting browser as default"
 msgstr "Ali naj se pokaže zahteva za nastavitev brskalnika po meri"
 
-#: data/org.gnome.epiphany.gschema.xml:66
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -193,33 +189,34 @@ msgstr ""
 "Izbrana možnost omogoči prikaz potrditvenega polja za nastavitev brskalnika "
 "kot privzeteka."
 
-#: data/org.gnome.epiphany.gschema.xml:70
+#: data/org.gnome.epiphany.gschema.xml:66
 msgid "Start in incognito mode"
 msgstr "Zaženi brskalnik v zasebnem načinu"
 
-#: data/org.gnome.epiphany.gschema.xml:71
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr "Izbrana možnost omogoči odpiranje brskalnika v zasebnem načinu."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Razširi velikost zavihkov, da zapolni ves razpoložljivi prostor v vrstici"
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
-"tabs bar."
+"tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 "Izbrana možnost omogoči, da bo uporabljen ves razpoložljiv prostor v vrstici "
-"zavihkov."
+"zavihkov. Ta nastavitev je prezrta na namizju Pantheon, kjer je uporabljena "
+"možnost »vedno«."
 
-#: data/org.gnome.epiphany.gschema.xml:82
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "The position of the tabs bar."
 msgstr "Položaj vrstice zavihkov"
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -229,35 +226,37 @@ msgstr ""
 "»zgoraj« (privzeto), »spodaj«, »levo« (navpični zavihki v vrstici na levi in "
 "»desno« (navpični zavihki v vrstici na desni)."
 
-#: data/org.gnome.epiphany.gschema.xml:87
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The visibility policy for the tabs bar."
 msgstr "Pravila vidnosti za vrstico zavihkov."
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
-"two or more tabs) and “never” (the tabs bar is never shown)."
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so "
 "»vedno« (vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica "
 "zavihkov je prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica "
-"zavihkov ni nikoli prikazana)."
+"zavihkov ni nikoli prikazana). Ta nastavitev je prezrta na namizju Pantheon, "
+"kjer je uporabljena možnost »vedno«."
 
-#: data/org.gnome.epiphany.gschema.xml:92
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "Keep window open when closing last tab"
 msgstr "Ohrani okno odprto po zapiranju zadnjega zavihka"
 
-#: data/org.gnome.epiphany.gschema.xml:93
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Izbrana možnost omogoča, da ostane okno po zaprtju zadnjega zavihka odprto."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid "Reader mode article font style."
 msgstr "Slog pisave v prispevkih za način bralnika."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -265,11 +264,11 @@ msgstr ""
 "Izbor sloga pisave za glavno besedilo prispevka v bralnem načinu. Dovoljeni "
 "vrednosti sta pisava z (serif) ali brez (sans serif) zavihkov črk."
 
-#: data/org.gnome.epiphany.gschema.xml:104
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode color scheme."
 msgstr "Uporabljena barvna shema načina bralnika."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -279,23 +278,23 @@ msgstr ""
 "svetla (temno na svetlem ozadju) oziroma temna (svetlo na temnem ozadju) "
 "barvna shema."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Minimum font size"
 msgstr "Najmanjša velikost pisave"
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Use GNOME fonts"
 msgstr "Uporabi pisave namizja"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Use GNOME font settings."
 msgstr "Uporabi sistemske nastavitve pisave."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Custom sans-serif font"
 msgstr "Pisava Sans Serif po meri"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -303,11 +302,11 @@ msgstr ""
 "Vrednost, s katero naj bo zamenjana namizna pisava, ko je potrjena možnost "
 "use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom serif font"
 msgstr "Pisava serif po meri"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -315,11 +314,11 @@ msgstr ""
 "Vrednost, s katero naj bo preglašena namizna pisava, ko je potrjena možnost "
 "use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom monospace font"
 msgstr "Pisava enotne širine po meri"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -327,50 +326,50 @@ msgstr ""
 "Vrednost, s katero naj bo preglašena namizna pisava, ko je potrjena možnost "
 "use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Use a custom CSS"
 msgstr "Uporabi slog iz CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Uporabite datoteko CSS po meri za spreminjanje videza spletnih strani."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Enable spell checking"
 msgstr "Omogoči črkovanje"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Spell check any text typed in editable areas."
 msgstr "Črkovno preveri vsako besedilo, ki je vneseno v uredljiva polja."
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Default encoding"
 msgstr "Privzet nabor znakov"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Privzeto kodiranje. Ustrezne so vrednosti, ki jih lahko razume sistem "
 "WebKitGTK."
 
-#: data/org.gnome.epiphany.gschema.xml:150
-#: src/resources/gtk/prefs-dialog.ui:752
+#: data/org.gnome.epiphany.gschema.xml:146
+#: src/resources/gtk/prefs-dialog.ui:333
 msgid "Languages"
 msgstr "Jeziki"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Prednostno uporabljeni jeziki. Podatki krajevnih kod oziroma »sistemske "
 "nastavitve« za uporabo trenutnega jezika."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Cookie accept"
 msgstr "Sprejmi piškotke"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -378,51 +377,31 @@ msgstr ""
 "Kako naj program obravnava piškotke. Mogoče vrednosti so »povsod«, »le "
 "trenutno spletišče« in »nikjer«."
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid "Allow popups"
 msgstr "Dovoli pojavna okna"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Dovoli spletnim stranem odpiranje novih oken s kodo JavaScript (če je "
 "uporaba omogočena)."
 
-#: data/org.gnome.epiphany.gschema.xml:165
-msgid "Enable Plugins"
-msgstr "Omogoči vstavke"
-
-#: data/org.gnome.epiphany.gschema.xml:169
-msgid "Enable WebGL"
-msgstr "Omogoči WebGL"
-
-#: data/org.gnome.epiphany.gschema.xml:170
-msgid "Whether to enable support for WebGL contexts."
-msgstr "Ali naj bo podpora vsebini WebGL omogočena."
-
-#: data/org.gnome.epiphany.gschema.xml:174
-msgid "Enable WebAudio"
-msgstr "Omogoči WebAudio"
-
-#: data/org.gnome.epiphany.gschema.xml:175
-msgid "Whether to enable support for WebAudio."
-msgstr "Ali naj se omogoči podpora za WebAudio."
-
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
 msgstr "Omogoči gladko drsenje"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid "Whether to enable smooth scrolling."
 msgstr "Ali naj bo omogočeno gladko drsenje."
 
 # G:3 K:4 O:1
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
 msgstr "Uporabniški agent"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -431,11 +410,11 @@ msgstr ""
 "brskalnika na spletnih strežnikih."
 
 # G:3 K:4 O:1
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Mobile user agent"
 msgstr "Mobilni uporabniški agent"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to present a mobile user agent. If the user agent is overridden, "
 "this will have no effect."
@@ -443,37 +422,29 @@ msgstr ""
 "Ali naj bo prikazan mobilni uporabniški agent. Če je možnost uporabniškega "
 "agenta prepisana, ta nastavitev nima učinka."
 
-#: data/org.gnome.epiphany.gschema.xml:194
-msgid "Do Not Track"
-msgstr "Ne sledi"
-
-#: data/org.gnome.epiphany.gschema.xml:195
-msgid "Enables tracking query parameter removal."
-msgstr "Omogoči odstranitev parametra poizvedbe sledenja."
-
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Omogoči vstavek Adblock"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Ali naj se vgrajeni oglasi na spletnih straneh onemogočajo."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Remember passwords"
 msgstr "Zapomni si gesla"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Ali naj se gesla spletnih strani shranjujejo."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable site-specific quirks"
 msgstr "Omogoči za strani značilne prilagoditve"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -482,11 +453,11 @@ msgstr ""
 "bolje. Možnost onemogočite, če poskušate razhroščevati posamezne težave."
 
 # G:1 K:0 O:0
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Enable safe browsing"
 msgstr "Omogoči varni način brskanja"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -494,25 +465,25 @@ msgstr ""
 "Ali naj bo omogočeno varno brskanje, ki se izvaja prek Googlovega ključa API."
 
 # G:1 K:0 O:0
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Google Safe Browsing API key"
 msgstr "Googlov ključ API za varni način brskanja"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
 "Ključ API, uporabljen za dostop do Googlovega API 4.0 za varni način "
 "brskanja."
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr "Privzeta raven približanja za nove strani"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr "Omogoči samodejno iskanje"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -524,11 +495,11 @@ msgstr ""
 "onemogočena, bo vse zagnano kot naslov, razen če niz ni pisan neposredno v "
 "iskalno vrstico."
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "Omogoči poteze miške"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -536,27 +507,27 @@ msgstr ""
 "Ali naj program omogoči poteze miške. Te so zasnovane na predlogi programa "
 "Opera in jih je mogoče zagnati z uporabo srednjega gumba miške + poteza."
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "Zadnja mapa za pošiljanje"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "Zapomni si nazadnje izbrano mapo za pošiljanje"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "Zadnja mapa za prejemanje"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr "Zapomni si nazadnje izbrano mapo za prejem"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr "Pravila strojnega pospeševanja"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -572,27 +543,27 @@ msgstr ""
 "prikazovanjem grafike. Ko je omogočena možnost »na zahtevo«, je pospeševanje "
 "uporabljeno le pri prikazovanju transformacij 3D."
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr "Vedno vprašaj za mapo prejema"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Ali naj se za vsak prejem pokaže okno izbirnika mape za prejem."
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Web application additional URLs"
 msgstr "Dodatni naslovi URL spletnega programa"
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Seznam naslovov URL, ki naj jih odpre spletni program"
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "The downloads folder"
 msgstr "Mapa prejemanja"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -600,11 +571,11 @@ msgstr ""
 "Pot do mape, kamor naj bodo prejete datoteke; v mapo \"Prejeto\" kot "
 "privzeto mapo za prejemanje ali na \"Namizje\" kot namizna mapa."
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Window position"
 msgstr "Položaj okna"
 
-#: data/org.gnome.epiphany.gschema.xml:276
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -612,11 +583,11 @@ msgstr ""
 "Položaj okna, ki naj bo uporabljen pri odpiranju novega okna, ki ni "
 "obnovljeno iz predhodne seje."
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Window size"
 msgstr "Velikost okna"
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -624,11 +595,11 @@ msgstr ""
 "Velikost okna, ki naj bo uporabljena pri odpiranju novega okna, ki ni "
 "obnovljeno iz predhodne seje."
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Is maximized"
 msgstr "Je razpeto"
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -636,11 +607,11 @@ msgstr ""
 "Ali naj bo okno, ki ni obnovljeno iz predhodne seje, ob odpiranju razpeto "
 "čez celoten zaslon."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid "Disable forward and back buttons"
 msgstr "Onemogoči gumba za naprej in nazaj po straneh"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -648,11 +619,11 @@ msgstr ""
 "Izbrana možnost onemogoči prikaz gumbov za pomikanje po zgodovini brskanja "
 "strani, s čimer se onemogoči neposreden pregled iskanja"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Currently signed in sync user"
 msgstr "Trenutno prijavljen uporabniški račun usklajevanja"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -660,43 +631,43 @@ msgstr ""
 "Elektronski naslov, povezan z računom Firefox, ki se uporablja za "
 "usklajevanje podatkov s strežniki."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "Last sync timestamp"
 msgstr "Časovni žig usklajevanja"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Časovni žig UNIX ob zadnjem usklajevanja (v sekundah)."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "Sync device ID"
 msgstr "Uskladi ID naprave"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The sync device ID of the current device."
 msgstr "Usklajevanje ID trenutno uporabljene naprave."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:312
 msgid "Sync device name"
 msgstr "Uskladi ime naprave"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The sync device name of the current device."
 msgstr "Usklajevanje imena trenutno uporabljene naprave."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid "The sync frequency in minutes"
 msgstr "Pogostost preverjanja (v minutah)"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:318
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Čas v minutah med zaporednimi usklajevanji."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid "Sync data with Firefox"
 msgstr "Uskladi podatke Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -705,103 +676,103 @@ msgstr ""
 "ne."
 
 # G:1 K:0 O:0
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Enable bookmarks sync"
 msgstr "Omogoči usklajevanje zaznamkov"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zbirka zaznamkov usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Bookmarks sync timestamp"
 msgstr "Časovni žig usklajevanja zaznamkov"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Časovni žig zadnjega usklajevanja zaznamkov."
 
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "Initial sync or normal sync"
 msgstr "Začetno ali običajno usklajevanje"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "PRAV, če je treba zbirko zaznamkov prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Enable passwords sync"
 msgstr "Omogoči usklajevanje gesel"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zbirka gesel usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Passwords sync timestamp"
 msgstr "Časovni žig usklajevanja gesel"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Časovni žig zadnjega usklajevanja gesel."
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PRAV, če je treba zbirko gesel prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable history sync"
 msgstr "Omogoči usklajevanje zgodovine"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zgodovina usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "History sync timestamp"
 msgstr "Časovni žig usklajevanja zgodovine"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last history sync was made."
 msgstr "Časovni žig zadnjega usklajevanja zgodovine brskanja."
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PRAV, če je treba zgodovino prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable open tabs sync"
 msgstr "Omogoči usklajevanje odprtih zavihkov"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "PRAV, če naj se zbirka odprtih zavihkov usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Open tabs sync timestamp"
 msgstr "Časovni žig usklajevanja zavihkov"
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Časovni žig zadnjega usklajevanja odprtih zavihkov."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo mikrofona za "
 "tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -813,14 +784,14 @@ msgstr ""
 "uporabnikov odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni "
 "odziv na zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo storitev "
 "geolokacije za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -832,14 +803,14 @@ msgstr ""
 "odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na "
 "zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za javljanje obvestil "
 "za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -850,14 +821,14 @@ msgstr ""
 "gostitelja. Privzeta možnost »neodločeno« zahteva uporabnikov odziv, medtem "
 "ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za shranjevanje gesla "
 "za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -869,13 +840,13 @@ msgstr ""
 "odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na "
 "zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo spletne "
 "kamere za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -886,14 +857,14 @@ msgstr ""
 "do spletne kamere. Privzeta možnost »neodločeno« zahteva uporabnikov odziv, "
 "medtem ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za prikazovanje oglasov "
 "za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -917,7 +888,7 @@ msgstr "Različica %s"
 msgid "About Web"
 msgstr "O programu"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:618
+#: embed/ephy-about-handler.c:194 src/window-commands.c:642
 msgid "Epiphany Technology Preview"
 msgstr "Predogled tehnologije Epiphany"
 
@@ -953,26 +924,26 @@ msgstr ""
 "kot spletni program …</b> znotraj menija strani."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:391
+#: embed/ephy-about-handler.c:394
 msgid "Welcome to Web"
 msgstr "Dobrodošli v programu Web"
 
-#: embed/ephy-about-handler.c:391
+#: embed/ephy-about-handler.c:394
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Ko začnete z brskanjem, bodo najpogosteje obiskane strani prikazane na tem "
 "mestu."
 
-#: embed/ephy-about-handler.c:422
+#: embed/ephy-about-handler.c:425
 #: embed/web-process-extension/resources/js/overview.js:116
 msgid "Remove from overview"
 msgstr "Odstrani iz pregleda"
 
-#: embed/ephy-about-handler.c:494 embed/ephy-about-handler.c:495
+#: embed/ephy-about-handler.c:505 embed/ephy-about-handler.c:506
 msgid "Private Browsing"
 msgstr "Zasebno brskanje"
 
-#: embed/ephy-about-handler.c:496
+#: embed/ephy-about-handler.c:507
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -982,14 +953,14 @@ msgstr ""
 "prikazane v zgodovini brskanja in vsi podatki, pridobljeni med to sejo, bodo "
 "po zaprtju okna izbrisani. Prejete datoteke bodo ohranjene."
 
-#: embed/ephy-about-handler.c:500
+#: embed/ephy-about-handler.c:511
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "V zasebnem načinu, lahko prikrijete dejavnosti, ki jih izvajate na spletu "
 "pred drugimi uporabniki tega računalnika."
 
-#: embed/ephy-about-handler.c:502
+#: embed/ephy-about-handler.c:513
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1001,72 +972,72 @@ msgstr ""
 "oglasov lahko še vedno izvajajo sledenje."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:727
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Prejemanje %s je končano."
 
 # G:6 K:0 O:0
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:730
+#: embed/ephy-download.c:729
 msgid "Download finished"
 msgstr "Prejem je končan"
 
 # G:6 K:0 O:0
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:821
 msgid "Download requested"
 msgstr "Zahtevan je prejem datoteke"
 
-#: embed/ephy-download.c:823 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
+#: src/resources/gtk/prefs-dialog.ui:943
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:477 src/window-commands.c:1429
+#: src/window-commands.c:481 src/window-commands.c:1476
 msgid "_Cancel"
 msgstr "_Prekliči"
 
 # G:6 K:0 O:0
-#: embed/ephy-download.c:823
+#: embed/ephy-download.c:822
 msgid "_Download"
 msgstr "_Prejmi"
 
-#: embed/ephy-download.c:836
+#: embed/ephy-download.c:835
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Vrsta: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:842
+#: embed/ephy-download.c:841
 #, c-format
 msgid "From: %s"
 msgstr "Od: %s"
 
 #. Question
-#: embed/ephy-download.c:847
+#: embed/ephy-download.c:846
 msgid "Where do you want to save the file?"
 msgstr "Kam želite shraniti datoteko?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:852
+#: embed/ephy-download.c:851
 msgid "Save file"
 msgstr "Shrani datoteko"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Pritisnite tipko %s za izhod iz celozaslonskega načina."
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "ESC"
 msgstr "Esc"
 
-#: embed/ephy-embed.c:560
+#: embed/ephy-embed.c:534
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:827
+#: embed/ephy-embed.c:794
 msgid "Web is being controlled by automation."
 msgstr "Program upravlja sistem WebDriver."
 
@@ -1482,61 +1453,61 @@ msgstr "Unikod (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Neznan nabor (%s)"
 
-#: embed/ephy-find-toolbar.c:115
+#: embed/ephy-find-toolbar.c:112
 msgid "Text not found"
 msgstr "Besedila ni mogoče najti."
 
-#: embed/ephy-find-toolbar.c:121
+#: embed/ephy-find-toolbar.c:118
 msgid "Search wrapped back to the top"
 msgstr "Iskanje se ponovi od začetka"
 
-#: embed/ephy-find-toolbar.c:404
+#: embed/ephy-find-toolbar.c:398
 msgid "Type to search…"
 msgstr "Besedilo za iskanje …"
 
 # G:1 K:0 O:0
-#: embed/ephy-find-toolbar.c:410
+#: embed/ephy-find-toolbar.c:404
 msgid "Find previous occurrence of the search string"
 msgstr "Najde predhodno ponovitev iskanega niza"
 
 # G:1 K:0 O:0
-#: embed/ephy-find-toolbar.c:418
+#: embed/ephy-find-toolbar.c:412
 msgid "Find next occurrence of the search string"
 msgstr "Najde naslednjo ponovitev iskanega niza"
 
-#: embed/ephy-view-source-handler.c:255
+#: embed/ephy-view-source-handler.c:257
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "Naslov %s ni veljaven naslov URI"
 
-#: embed/ephy-web-view.c:340 src/window-commands.c:916
+#: embed/ephy-web-view.c:184 src/window-commands.c:947
 msgid "Open"
 msgstr "Odpri"
 
-#: embed/ephy-web-view.c:607
+#: embed/ephy-web-view.c:359
 msgid "Not No_w"
 msgstr "_Ne zdaj"
 
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:360
 msgid "_Never Save"
 msgstr "_Nikoli ne shrani"
 
 # G:1 K:0 O:0
-#: embed/ephy-web-view.c:609 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:1101 src/window-commands.c:476
+#: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
+#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:480
 msgid "_Save"
 msgstr "_Shrani"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:616
+#: embed/ephy-web-view.c:368
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Ali želite shraniti geslo za »%s«?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:854
+#: embed/ephy-web-view.c:608
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1544,64 +1515,64 @@ msgstr ""
 "Opozorilo: pošiljanje podatkov prek tega obrazca ni varno. Vpisano geslo je "
 "lahko vidno tretjim osebam!"
 
-#: embed/ephy-web-view.c:1152
+#: embed/ephy-web-view.c:830
 msgid "Web process crashed"
 msgstr "Spletno opravilo se je sesulo"
 
-#: embed/ephy-web-view.c:1155
+#: embed/ephy-web-view.c:833
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Spletno opravilo se je končalo zaradi presežene omejitve pomnilnika"
 
-#: embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1005
 msgid "Deny"
 msgstr "Zavrni"
 
-#: embed/ephy-web-view.c:1579
+#: embed/ephy-web-view.c:1006
 msgid "Allow"
 msgstr "Dovoli"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1592
+#: embed/ephy-web-view.c:1019
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Stran na %s zahteva dovoljenje za prikazovanje obvestil na namizju."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1597
+#: embed/ephy-web-view.c:1024
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Stran na %s želi pridobiti geolocirane podatke."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1602
+#: embed/ephy-web-view.c:1029
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Stran na %s zahteva dostop do mikrofona."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1607
+#: embed/ephy-web-view.c:1034
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Stran na %s zahteva dostop do spletne kamere."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1211
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Poteka nalaganje »%s« …"
 
-#: embed/ephy-web-view.c:1786 embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1213 embed/ephy-web-view.c:1219
 msgid "Loading…"
 msgstr "Nalaganje …"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2080
+#: embed/ephy-web-view.c:1562
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Spletna stran se javlja s potrdilom, ki pripada drugi spletni strani."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2085
+#: embed/ephy-web-view.c:1567
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1610,18 +1581,18 @@ msgstr ""
 "nastavljen na računalniku."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2090
+#: embed/ephy-web-view.c:1572
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Potrdilo strani ni ni bilo izdano s strani zaupljive ustanove."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2095
+#: embed/ephy-web-view.c:1577
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Potrdila strani ni mogoče prebrati. Najverjetneje je poškodovano."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2100
+#: embed/ephy-web-view.c:1582
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1629,7 +1600,7 @@ msgstr ""
 "Potrdilo strani je bilo preklicano s strani ustanove, ki je potrdilo izdalo."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2105
+#: embed/ephy-web-view.c:1587
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1637,7 +1608,7 @@ msgstr ""
 "Potrdilu strani ni mogoče zaupati, ker ima določeno zelo šibko šifriranje."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:1592
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1647,24 +1618,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2173 embed/ephy-web-view.c:2229
+#: embed/ephy-web-view.c:1655 embed/ephy-web-view.c:1711
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Težave z nalaganjem strani"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2176
+#: embed/ephy-web-view.c:1658
 msgid "Unable to display this website"
 msgstr "Spletne strani ni mogoče pokazati."
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2180
+#: embed/ephy-web-view.c:1662
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Spletišče %s najverjetneje ni na voljo."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2184
+#: embed/ephy-web-view.c:1666
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1673,7 +1644,7 @@ msgstr ""
 "napaka ponavlja, preverite tudi omrežno povezavo."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2194
+#: embed/ephy-web-view.c:1676
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Natančen opis napake je: %s"
@@ -1681,31 +1652,31 @@ msgstr "Natančen opis napake je: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2199 embed/ephy-web-view.c:2252
-#: embed/ephy-web-view.c:2295
+#: embed/ephy-web-view.c:1681 embed/ephy-web-view.c:1734
+#: embed/ephy-web-view.c:1773
 msgid "Reload"
 msgstr "Ponovno naloži"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2202 embed/ephy-web-view.c:2255
-#: embed/ephy-web-view.c:2298
+#: embed/ephy-web-view.c:1684 embed/ephy-web-view.c:1737
+#: embed/ephy-web-view.c:1776
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2232
+#: embed/ephy-web-view.c:1714
 msgid "Oops! There may be a problem"
 msgstr "Ojoj! Prišlo je do napake."
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2236
+#: embed/ephy-web-view.c:1718
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Stran %s je morda vplivala na nepričakovano sesutje brskalnika"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2243
+#: embed/ephy-web-view.c:1725
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1713,39 +1684,38 @@ msgstr ""
 "%s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2281
+#: embed/ephy-web-view.c:1762
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Napaka prikazovanja strani"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2284
+#: embed/ephy-web-view.c:1765
 msgid "Oops!"
 msgstr "Ojoj!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2287
-msgid "Something went wrong while displaying this page."
-msgstr "Nekaj je šlo narobe pri prikazovanju te strani."
-
-#. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2289
-msgid "Please reload or visit a different page to continue."
-msgstr "Stran ponovno naložite ali obiščite drugo stran."
+#: embed/ephy-web-view.c:1768
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr ""
+"Prišlo je do napake med prikazovanjem strani. Stran ponovno naložite ali "
+"obiščite drugo stran."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2324
+#: embed/ephy-web-view.c:1802
 #, c-format
 msgid "Security Violation"
 msgstr "Kršitev varnostnih nastavitev"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:1805
 msgid "This Connection is Not Secure"
 msgstr "Ta povezava ni varna"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2331
+#: embed/ephy-web-view.c:1809
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1757,45 +1727,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2341 embed/ephy-web-view.c:2430
-#: embed/ephy-web-view.c:2481
+#: embed/ephy-web-view.c:1819 embed/ephy-web-view.c:1908
+#: embed/ephy-web-view.c:1959
 msgid "Go Back"
 msgstr "Nazaj"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2344 embed/ephy-web-view.c:2433
-#: embed/ephy-web-view.c:2484
+#: embed/ephy-web-view.c:1822 embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1962
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2347 embed/ephy-web-view.c:2436
+#: embed/ephy-web-view.c:1825 embed/ephy-web-view.c:1914
 msgid "Accept Risk and Proceed"
 msgstr "Sprejmi tveganje in nadaljuj"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2351 embed/ephy-web-view.c:2440
+#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1918
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2381
+#: embed/ephy-web-view.c:1859
 #, c-format
 msgid "Security Warning"
 msgstr "Varnostno opozorilo"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2384
+#: embed/ephy-web-view.c:1862
 msgid "Unsafe website detected!"
 msgstr "Zaznano je spletišče, ki ne zagotavlja varnosti!"
 
-#: embed/ephy-web-view.c:2391
+#: embed/ephy-web-view.c:1869
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1805,7 +1775,7 @@ msgstr ""
 "strani dejavna zlonamerna koda, ki je lahko prejeta na računalnik brez vaše "
 "privolitve."
 
-#: embed/ephy-web-view.c:2395
+#: embed/ephy-web-view.c:1873
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1814,7 +1784,7 @@ msgstr ""
 "Več o zaščiti pred zlonamernimi spletnimi vsebinami, vključno z virusi in "
 "drugo škodljivo kodo, je objavljeno na %s."
 
-#: embed/ephy-web-view.c:2402
+#: embed/ephy-web-view.c:1880
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1825,13 +1795,13 @@ msgstr ""
 "programske opreme ali pa objavljanje osebnih podatkov (na primer gesel, "
 "telefonskih številk, številk kreditnih kartic in drugo)."
 
-#: embed/ephy-web-view.c:2407
+#: embed/ephy-web-view.c:1885
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "Več o kraji podatkov (phishing) je objavljeno na %s ali pa prek %s."
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:1894
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1842,24 +1812,24 @@ msgstr ""
 "prelisičijo v nameščanje programske opreme, ki vpliva na brskanje (na primer "
 "spreminjanje osnovne strani, prikazovanje oglasov in drugo)."
 
-#: embed/ephy-web-view.c:2421
+#: embed/ephy-web-view.c:1899
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Več podrobnosti o neželeni programski opremi je objavljenih na %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2465 embed/ephy-web-view.c:2468
+#: embed/ephy-web-view.c:1943 embed/ephy-web-view.c:1946
 #, c-format
 msgid "File not found"
 msgstr "Datoteke ni mogoče najti"
 
-#: embed/ephy-web-view.c:2472
+#: embed/ephy-web-view.c:1950
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ni mogoče najti."
 
-#: embed/ephy-web-view.c:2474
+#: embed/ephy-web-view.c:1952
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1868,15 +1838,15 @@ msgstr ""
 "Preverite ime datoteke za velike črke oziroma druge napake. Preverite tudi, "
 "ali je bila datoteka premaknjena, preimenovana ali izbrisana."
 
-#: embed/ephy-web-view.c:2537
+#: embed/ephy-web-view.c:2015
 msgid "None specified"
 msgstr "Ni določeno"
 
-#: embed/ephy-web-view.c:2653
+#: embed/ephy-web-view.c:2131
 msgid "Technical information"
 msgstr "Tehnični podatki"
 
-#: embed/ephy-web-view.c:3639
+#: embed/ephy-web-view.c:3122
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1886,7 +1856,7 @@ msgstr "Nedoločeno"
 
 # G:6 K:0 O:0
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:182
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
 msgid "Downloads"
 msgstr "Prejete datoteke"
 
@@ -1927,7 +1897,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:327
+#: lib/ephy-sync-utils.c:332
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "Brskalnik Web uporabnika %s na %s"
@@ -1999,14 +1969,14 @@ msgstr "Neznano"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:415
+#: lib/sync/ephy-password-manager.c:421
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Geslo za %s na spletišču %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:419
+#: lib/sync/ephy-password-manager.c:425
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Geslo v obrazcu %s"
@@ -2016,7 +1986,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Pridobivanje poveril shrambe je spodletelo."
 
 #: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
-#: lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1738
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Med nastavitvami znova omogočite prijavo in nato nadaljujte postopek "
@@ -2038,55 +2008,55 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Pridobivanje podpisanega potrdila je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
+#: lib/sync/ephy-sync-service.c:1704 lib/sync/ephy-sync-service.c:1709
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Ni mogoče najti usklajevalnih žetonov za trenutno prijavljenega uporabnika."
 
-#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
+#: lib/sync/ephy-sync-service.c:1716 lib/sync/ephy-sync-service.c:1724
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Usklajevalni žetoni za trenutno prijavljenega uporabnika niso veljavni."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1835
+#: lib/sync/ephy-sync-service.c:1832
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Usklajevalni žetoni za %s"
 
-#: lib/sync/ephy-sync-service.c:1861
+#: lib/sync/ephy-sync-service.c:1858
 msgid "Failed to upload client record."
 msgstr "Pošiljanje zapisa odjemalca je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2054
+#: lib/sync/ephy-sync-service.c:2051
 msgid "Failed to upload crypto/keys record."
 msgstr "Pošiljanje zapisa šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2161
+#: lib/sync/ephy-sync-service.c:2158
 msgid "Failed to retrieve crypto keys."
 msgstr "Pridobivanje šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2212
+#: lib/sync/ephy-sync-service.c:2209
 msgid "Failed to upload meta/global record."
 msgstr "Pošiljanje zapisa splošnih in meta podatkov je spodletelo."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2329
+#: lib/sync/ephy-sync-service.c:2326
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Račun Firefox uporablja različico shrambe %d, program Web pa podpira le %d."
 
-#: lib/sync/ephy-sync-service.c:2340
+#: lib/sync/ephy-sync-service.c:2337
 msgid "Failed to verify storage version."
 msgstr "Overjanje različice shrambe je spodletela."
 
-#: lib/sync/ephy-sync-service.c:2396
+#: lib/sync/ephy-sync-service.c:2393
 msgid "Failed to upload device info"
 msgstr "Pošiljanje podrobnosti o napravi je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
+#: lib/sync/ephy-sync-service.c:2466 lib/sync/ephy-sync-service.c:2544
 msgid "Failed to retrieve the Sync Key"
 msgstr "Pridobivanje usklajevalnega ključa je spodletelo."
 
@@ -2198,7 +2168,7 @@ msgstr[2] "še %d meseca"
 msgstr[3] "še %d mesece"
 
 #: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:404
+#: lib/widgets/ephy-download-widget.c:410
 msgid "Finished"
 msgstr "Končano"
 
@@ -2207,20 +2177,20 @@ msgid "Moved or deleted"
 msgstr "Premaknjena ali izbrisana"
 
 #: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:401
+#: lib/widgets/ephy-download-widget.c:407
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Napaka med prejemanjem: %s"
 
 #: lib/widgets/ephy-download-widget.c:265
 msgid "Cancelling…"
-msgstr "Poteka preklic ..."
+msgstr "Poteka preklic …"
 
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:412
 msgid "Starting…"
-msgstr "Začenjanje ..."
+msgstr "Začenjanje …"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:294
+#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
 msgid "_Open"
 msgstr "_Odpri"
 
@@ -2228,16 +2198,16 @@ msgstr "_Odpri"
 msgid "All supported types"
 msgstr "Vse podprte vrste"
 
-#: lib/widgets/ephy-file-chooser.c:202
+#: lib/widgets/ephy-file-chooser.c:203
 msgid "Web pages"
 msgstr "Spletne strani"
 
-#: lib/widgets/ephy-file-chooser.c:213
+#: lib/widgets/ephy-file-chooser.c:214
 msgid "Images"
 msgstr "Slike"
 
 # G:1 K:0 O:0
-#: lib/widgets/ephy-file-chooser.c:222
+#: lib/widgets/ephy-file-chooser.c:223
 msgid "All files"
 msgstr "Vse datoteke"
 
@@ -2245,33 +2215,37 @@ msgstr "Vse datoteke"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:633 src/ephy-history-dialog.c:371
+#: lib/widgets/ephy-location-entry.c:630 src/ephy-history-dialog.c:364
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: lib/widgets/ephy-location-entry.c:653
+#: lib/widgets/ephy-location-entry.c:650
 msgid "Paste and _Go"
 msgstr "Prilepi in _pojdi"
 
 # G:5 K:1 O:2
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:674 src/ephy-window.c:938
+#: lib/widgets/ephy-location-entry.c:671 src/ephy-window.c:936
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: lib/widgets/ephy-location-entry.c:681
+#: lib/widgets/ephy-location-entry.c:678
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
-#: lib/widgets/ephy-location-entry.c:888
+#: lib/widgets/ephy-location-entry.c:964
 msgid "Show website security status and permissions"
 msgstr "Pokaži stanje varnosti in dovoljenja spletne strani"
 
-#: lib/widgets/ephy-location-entry.c:928
+#: lib/widgets/ephy-location-entry.c:966
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "Iskanje spletišč, zaznamkov in odprtih zavihkov"
+
+#: lib/widgets/ephy-location-entry.c:1006
 msgid "Bookmark this page"
 msgstr "Ustvari zaznamek trenutne strani"
 
-#: lib/widgets/ephy-location-entry.c:940
+#: lib/widgets/ephy-location-entry.c:1025
 msgid "Toggle reader mode"
 msgstr "Preklopi bralni način"
 
@@ -2350,7 +2324,7 @@ msgstr "Dostop do mikrofona"
 msgid "Webcam access"
 msgstr "Dostop do spletne kamere"
 
-#: src/bookmarks/ephy-bookmark-row.c:61
+#: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "Lastnosti zaznamekov"
 
@@ -2367,7 +2341,7 @@ msgstr ""
 "Datoteka ni veljavna datoteka zaznamkov Epiphany: manjka razpredelnica "
 "zaznamkov"
 
-#: src/bookmarks/ephy-bookmarks-import.c:245
+#: src/bookmarks/ephy-bookmarks-import.c:246
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2375,8 +2349,8 @@ msgstr ""
 "Podatkovne zbirke zaznamkov ni mogoče odpreti. Zaprite brskalnik Firefox in "
 "poskusite znova."
 
-#: src/bookmarks/ephy-bookmarks-import.c:258
-#: src/bookmarks/ephy-bookmarks-import.c:290
+#: src/bookmarks/ephy-bookmarks-import.c:259
+#: src/bookmarks/ephy-bookmarks-import.c:291
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Zaznamkov programa Firefox ni mogoče pridobiti!"
@@ -2389,32 +2363,36 @@ msgstr "Priljubljene"
 msgid "Mobile"
 msgstr "Mobilno"
 
-#: src/clear-data-dialog.c:80
+#: src/clear-data-dialog.c:77
 msgid "HTTP disk cache"
 msgstr "Predpomnilnik HTTP"
 
-#: src/clear-data-dialog.c:81
+#: src/clear-data-dialog.c:78
 msgid "Local storage data"
 msgstr "Krajevno shranjevanje podatkov"
 
-#: src/clear-data-dialog.c:82
+#: src/clear-data-dialog.c:79
 msgid "Offline web application cache"
 msgstr "Programski spletni predpomnilnik za delo brez povezave"
 
-#: src/clear-data-dialog.c:83
+#: src/clear-data-dialog.c:80
 msgid "IndexedDB databases"
 msgstr "Podatkovne zbirke IndexedDB"
 
-#: src/clear-data-dialog.c:84
+#: src/clear-data-dialog.c:81
 msgid "WebSQL databases"
 msgstr "Podatkovne zbirke WebSQL"
 
-#: src/clear-data-dialog.c:85
+#: src/clear-data-dialog.c:82
 msgid "Plugins data"
 msgstr "Podatki vstavkov"
 
+#: src/clear-data-dialog.c:83
+msgid "HSTS policies cache"
+msgstr "Predpomnilnik pravil HSTS"
+
 # G:1 K:0 O:0
-#: src/cookies-dialog.c:175
+#: src/cookies-dialog.c:143
 msgid "Remove cookie"
 msgstr "Odstrani piškotek"
 
@@ -2423,21 +2401,21 @@ msgstr "Odstrani piškotek"
 msgid "Reload the current page"
 msgstr "Ponovno naloži trenutno stran"
 
-#: src/ephy-action-bar-start.c:606
+#: src/ephy-action-bar-start.c:620
 msgid "Stop loading the current page"
 msgstr "Zaustavi nalaganje trenutne strani"
 
 # G:0 K:1 O:3
-#: src/ephy-history-dialog.c:275
+#: src/ephy-history-dialog.c:269
 msgid "Remove the selected pages from history"
 msgstr "Odstrani izbrane strani iz zgodovine"
 
 # G:1 K:0 O:0
-#: src/ephy-history-dialog.c:361
+#: src/ephy-history-dialog.c:354
 msgid "Clear browsing history?"
 msgstr "Ali naj bo zgodovina brskanja počiščena?"
 
-#: src/ephy-history-dialog.c:365
+#: src/ephy-history-dialog.c:358
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2445,7 +2423,7 @@ msgstr ""
 "Čiščenje zgodovine brskanja bo povzročilo, da bodo vsi zaznamki iz zgodovine "
 "trajno izbrisani."
 
-#: src/ephy-history-dialog.c:812
+#: src/ephy-history-dialog.c:782
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Ni mogoče spremeniti zgodovine v načinu brez beleženja podatkov."
 
@@ -2490,14 +2468,19 @@ msgstr "DIR"
 # G:2 K:0 O:0
 #: src/ephy-main.c:126
 msgid "URL …"
-msgstr "Naslov URL ..."
+msgstr "Naslov URL …"
 
 #: src/ephy-main.c:256
 msgid "Web options"
 msgstr "Možnosti programa"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:587 src/resources/gtk/action-bar-start.ui:96
+msgid "Open a new tab"
+msgstr "Odpri nov zavihek"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:573
+#: src/ephy-notebook.c:597
 msgid "View open tabs"
 msgstr "Pogled odprtih zavihkov"
 
@@ -2515,201 +2498,216 @@ msgstr "Nov naslov"
 msgid "Bang"
 msgstr "Tipkovna bližnjica"
 
-#: src/ephy-suggestion-model.c:414
-msgid "Switch to Tab"
-msgstr "Preklopi na zavihek"
-
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
 msgstr "Zavihki"
 
 # G:1 K:0 O:0
-#: src/ephy-tab-label.c:232
+#: src/ephy-tab-label.c:296
 msgid "New Tab"
 msgstr "Nov zavihek"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:269
 msgid "Do you want to leave this website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:270
 msgid "A form you modified has not been submitted."
 msgstr "Podatki obrazca, ki ste ga spremenili, niso poslani."
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:271
 msgid "_Discard form"
 msgstr "_Zavrzi podatke obrazca"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:286
 msgid "There are multiple tabs open."
 msgstr "Odprtih je več zavihkov."
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:287
 msgid "If you close this window, all open tabs will be lost"
 msgstr "V kolikor okno zaprete, bodo izgubljeni vsi odprti zavihki."
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:288
 msgid "C_lose tabs"
 msgstr "Zapri _zavihke"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:937
 msgid "Re_do"
 msgstr "_Uveljavi"
 
 #. Edit.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:940
 msgid "Cu_t"
 msgstr "_Izreži"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:943
+#: src/ephy-window.c:941
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:944
+#: src/ephy-window.c:942
 msgid "_Paste"
 msgstr "_Prilepi"
 
 # G:9 K:0 O:0
-#: src/ephy-window.c:945
+#: src/ephy-window.c:943
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:945
 msgid "S_end Link by Email…"
-msgstr "P_ošlji povezavo po elektronski pošti ..."
+msgstr "P_ošlji povezavo po elektronski pošti …"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:949
+#: src/ephy-window.c:947
 msgid "_Reload"
 msgstr "_Znova naloži"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:948
 msgid "_Back"
 msgstr "_Nazaj"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:949
 msgid "_Forward"
 msgstr "_Naprej"
 
 #. Bookmarks
-#: src/ephy-window.c:954
+#: src/ephy-window.c:952
 msgid "Add Boo_kmark…"
-msgstr "_Dodaj zaznamek ..."
+msgstr "_Dodaj zaznamek …"
 
 # G:1 K:2 O:0
 #. Links.
-#: src/ephy-window.c:958
+#: src/ephy-window.c:956
 msgid "Open Link in New _Window"
 msgstr "Odpri povezavo v _novem oknu"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:959
+#: src/ephy-window.c:957
 msgid "Open Link in New _Tab"
 msgstr "Odpri povezavo v novem _zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:960
+#: src/ephy-window.c:958
 msgid "Open Link in I_ncognito Window"
 msgstr "Odpri povezavo v _zasebnem oknu"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:961
+#: src/ephy-window.c:959
 msgid "_Save Link As…"
 msgstr "Shrani povezavo _kot …"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:960
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:961
 msgid "_Copy E-mail Address"
 msgstr "_Kopiraj elektronski naslov"
 
 # G:1 K:0 O:0
 #. Images.
-#: src/ephy-window.c:967
+#: src/ephy-window.c:965
 msgid "View _Image in New Tab"
 msgstr "Odpri _sliko v novem zavihku"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:968
+#: src/ephy-window.c:966
 msgid "Copy I_mage Address"
 msgstr "Kopiraj n_aslov slike"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:969
+#: src/ephy-window.c:967
 msgid "_Save Image As…"
 msgstr "S_hrani sliko kot …"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:968
 msgid "Set as _Wallpaper"
 msgstr "Nastavi kot sliko _ozadja"
 
 # G:1 K:0 O:0
 #. Video.
-#: src/ephy-window.c:974
+#: src/ephy-window.c:972
 msgid "Open Video in New _Window"
 msgstr "Odpri _video v novem oknu"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:973
 msgid "Open Video in New _Tab"
 msgstr "Odpri video v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:976
+#: src/ephy-window.c:974
 msgid "_Save Video As…"
 msgstr "Shrani video povezavo _kot …"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:975
 msgid "_Copy Video Address"
 msgstr "Kopiraj _naslov video povezave"
 
 # G:1 K:0 O:0
 #. Audio.
-#: src/ephy-window.c:981
+#: src/ephy-window.c:979
 msgid "Open Audio in New _Window"
 msgstr "Odpri _zvok v novem oknu"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:980
 msgid "Open Audio in New _Tab"
 msgstr "Odpri zvok v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:983
+#: src/ephy-window.c:981
 msgid "_Save Audio As…"
 msgstr "Shrani zvočno povezavo _kot …"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:982
 msgid "_Copy Audio Address"
 msgstr "Kopiraj _naslov zvočne povezave"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:989
+#: src/ephy-window.c:988
 msgid "Save Pa_ge As…"
 msgstr "Shrani s_tran kot …"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:990
+#: src/ephy-window.c:989
 msgid "_Page Source"
 msgstr "_Izvorna koda strani"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1378
+#: src/ephy-window.c:1349
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Preišči splet za »%s«"
 
-#: src/ephy-window.c:2930
+#: src/ephy-window.c:1378
+msgid "Open Link"
+msgstr "Odpri povezavo"
+
+# G:1 K:0 O:0
+#: src/ephy-window.c:1380
+msgid "Open Link In New Tab"
+msgstr "Odpri povezavo v novem zavihku"
+
+# G:1 K:2 O:0
+#: src/ephy-window.c:1382
+msgid "Open Link In New Window"
+msgstr "Odpri povezavo v novem oknu"
+
+# G:1 K:2 O:0
+#: src/ephy-window.c:1384
+msgid "Open Link In Incognito Window"
+msgstr "Odpri povezavo v zasebnem oknu"
+
+#: src/ephy-window.c:2938
 msgid "Download operation"
 msgstr "Opravilo prejemanja"
 
-#: src/ephy-window.c:2932
+#: src/ephy-window.c:2940
 msgid "Show details"
 msgstr "Pokaži podrobnosti"
 
-#: src/ephy-window.c:2934
+#: src/ephy-window.c:2942
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2718,59 +2716,67 @@ msgstr[1] "V teku je %d prejemanje"
 msgstr[2] "V teku je %d prejemanji"
 msgstr[3] "V teku je %d prejemanja"
 
-#: src/ephy-window.c:3574
+#: src/ephy-window.c:3564
 msgid "Set Web as your default browser?"
 msgstr "Ali želite nastaviti program Web kot privzet brskalnik?"
 
-#: src/ephy-window.c:3576
+#: src/ephy-window.c:3566
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Ali želite nastaviti preizkusno različico Epiphany kot privzeti brskalnik?"
 
-#: src/ephy-window.c:3588
+#: src/ephy-window.c:3578
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:3589
+#: src/ephy-window.c:3579
 msgid "_No"
 msgstr "_Ne"
 
 # G:10 K:0 O:0
-#: src/popup-commands.c:232
+#: src/popup-commands.c:233
 msgid "Save Link As"
 msgstr "Shrani povezavo kot"
 
 # G:2 K:0 O:0
-#: src/popup-commands.c:240
+#: src/popup-commands.c:241
 msgid "Save Image As"
 msgstr "Shrani sliko kot"
 
 # G:10 K:0 O:0
-#: src/popup-commands.c:248
+#: src/popup-commands.c:249
 msgid "Save Media As"
 msgstr "Shrani predstavno datoteko kot"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:238
+#: src/prefs-dialog.c:232
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Nazadnje usklajeno: %s"
 
-#: src/prefs-dialog.c:526
+#: src/prefs-dialog.c:520
 msgid "Something went wrong, please try again later."
 msgstr "Prišlo je do napake, poskusite znova."
 
-#: src/prefs-dialog.c:819
+#: src/prefs-dialog.c:809
 msgid "Web Application Icon"
 msgstr "Ikona spletnega programa"
 
-#: src/prefs-dialog.c:824
+#: src/prefs-dialog.c:814
 msgid "Supported Image Files"
 msgstr "Podprte slikovne datoteke"
 
-#: src/prefs-dialog.c:1271
+#: src/prefs-dialog.c:1463
+msgid "Delete language"
+msgstr "Odstrani jezik"
+
+#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+msgid "Add Language"
+msgstr "Dodaj jezik"
+
+#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2779,28 +2785,23 @@ msgstr[1] "Sistemski jezik (%s)"
 msgstr[2] "Sistemska jezika (%s)"
 msgstr[3] "Sistemski jeziki (%s)"
 
-#: src/prefs-dialog.c:1560 src/resources/gtk/prefs-dialog.ui:745
-#: src/resources/gtk/prefs-dialog.ui:932
-msgid "Language"
-msgstr "Jezik"
-
-#: src/prefs-dialog.c:1641
+#: src/prefs-dialog.c:1816
 msgid "Select a directory"
 msgstr "Izbor mape"
 
-#: src/prefs-dialog.c:2029
+#: src/prefs-dialog.c:2204
 msgid "Sans"
 msgstr "Pisava brez zavihkov"
 
-#: src/prefs-dialog.c:2031
+#: src/prefs-dialog.c:2206
 msgid "Serif"
 msgstr "Pisava z zavihki"
 
-#: src/prefs-dialog.c:2075
+#: src/prefs-dialog.c:2250
 msgid "Light"
 msgstr "Svetla"
 
-#: src/prefs-dialog.c:2077
+#: src/prefs-dialog.c:2252
 msgid "Dark"
 msgstr "Temna"
 
@@ -2831,7 +2832,7 @@ msgstr "Pregledovanje in urejanje zaznamkov"
 
 # G:6 K:0 O:0
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:36
+#: src/resources/gtk/action-bar-end.ui:34
 msgid "View downloads"
 msgstr "Prejete datoteke"
 
@@ -2850,52 +2851,45 @@ msgstr "Pojdi na naslednjo stran"
 msgid "Go to your homepage"
 msgstr "Pojdi na začetno stran"
 
-#. Translators: tooltip for the new tab button
-#: src/resources/gtk/action-bar-start.ui:96
-msgid "Open a new tab"
-msgstr "Odpri nov zavihek"
-
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:21
 msgid "View open pages"
 msgstr "Pokaži odprte strani"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/bookmark-properties-grid.ui:11
+#: src/resources/gtk/bookmark-properties-grid.ui:16
 msgid "Bookmark"
 msgstr "Zaznamek"
 
 # G:3 K:4 O:1
-#: src/resources/gtk/bookmark-properties-grid.ui:27
+#: src/resources/gtk/bookmark-properties-grid.ui:31
 #: src/resources/gtk/search-engine-dialog.ui:139
 msgid "Name"
 msgstr "Ime"
 
 # G:0 K:1 O:0
-#: src/resources/gtk/bookmark-properties-grid.ui:52
+#: src/resources/gtk/bookmark-properties-grid.ui:59
 #: src/resources/gtk/search-engine-dialog.ui:152
 msgid "Address"
 msgstr "Naslov"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:76
-#: src/resources/gtk/bookmark-properties-grid.ui:94
+#: src/resources/gtk/bookmark-properties-grid.ui:86
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Oznake"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:140
+#: src/resources/gtk/bookmark-properties-grid.ui:106
 msgid "Add Tag…"
 msgstr "Dodaj oznako …"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:148
+#: src/resources/gtk/bookmark-properties-grid.ui:116
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Dodaj"
 
-# G:1 K:0 O:0
-#: src/resources/gtk/bookmark-properties-grid.ui:163
-msgid "_Remove Bookmark"
-msgstr "_Odstrani zaznamek"
+#: src/resources/gtk/bookmark-properties-grid.ui:175
+msgid "_Remove"
+msgstr "_Odstrani"
 
 #: src/resources/gtk/bookmarks-popover.ui:54
 msgid "All"
@@ -2904,35 +2898,34 @@ msgstr "Vse"
 # G:1 K:0 O:0
 #: src/resources/gtk/bookmarks-popover.ui:166
 msgid "No bookmarks yet?"
-msgstr "Kaj ni še nobenega zavihka?"
+msgstr "Kaj ni še nobenega zaznamka?"
 
 #: src/resources/gtk/bookmarks-popover.ui:179
 msgid "Bookmark some webpages to view them here."
 msgstr "Shranite zaznamke strani, ki bodo izpisani na tem mestu."
 
-#: src/resources/gtk/clear-data-dialog.ui:31
-msgid "Clear Personal Data"
+#: src/resources/gtk/clear-data-dialog.ui:22
+#: src/resources/gtk/prefs-dialog.ui:551
+msgid "Personal Data"
+msgstr "Osebni podatki"
+
+#: src/resources/gtk/clear-data-dialog.ui:23
+msgid "Remove all personal data"
+msgstr "Počisti vse osebne podatke"
+
+#: src/resources/gtk/clear-data-dialog.ui:24
+msgid "Search personal data"
 msgstr "Počisti osebne podatke"
 
-#: src/resources/gtk/clear-data-dialog.ui:35
-msgid "C_lear"
-msgstr "Po_čisti"
+#: src/resources/gtk/clear-data-dialog.ui:25
+msgid "There is no Personal Data"
+msgstr "Ni še osebnih podatkov"
 
-#: src/resources/gtk/clear-data-dialog.ui:55
-#: src/resources/gtk/cookies-dialog.ui:57
-#: src/resources/gtk/passwords-dialog.ui:60
-msgid "Search"
-msgstr "Iskanje"
+#: src/resources/gtk/clear-data-dialog.ui:26
+msgid "Personal data will be listed here"
+msgstr "Osebni podatki bodo izpisani na tem mestu"
 
-#: src/resources/gtk/clear-data-dialog.ui:56
-msgid "Filter domains"
-msgstr "Filtriraj domene"
-
-#: src/resources/gtk/clear-data-dialog.ui:87
-msgid "Search domains"
-msgstr "Preišči domene"
-
-#: src/resources/gtk/clear-data-dialog.ui:103
+#: src/resources/gtk/clear-data-dialog.ui:53
 msgid ""
 "You can select a period of time to clear data for all websites modified in "
 "that period. If you choose from the beginning of time, then you can also "
@@ -2942,51 +2935,67 @@ msgstr ""
 "spletišč, spremenjenih v tem obdobju. Če izberete obdobje od začetka "
 "beleženja, lahko izbrišete tudi podatke le za določena spletna mesta."
 
-#: src/resources/gtk/clear-data-dialog.ui:120
+#: src/resources/gtk/clear-data-dialog.ui:74
 msgid "Clear selected personal data _from:"
 msgstr "Počisti izbrane osebne podatke _iz:"
 
-#: src/resources/gtk/clear-data-dialog.ui:130
+#: src/resources/gtk/clear-data-dialog.ui:89
 msgid "the past hour"
 msgstr "zadnja ura"
 
-#: src/resources/gtk/clear-data-dialog.ui:131
+#: src/resources/gtk/clear-data-dialog.ui:90
 msgid "the past day"
 msgstr "zadnji dan"
 
-#: src/resources/gtk/clear-data-dialog.ui:132
+#: src/resources/gtk/clear-data-dialog.ui:91
 msgid "the past week"
 msgstr "zadnji teden"
 
-#: src/resources/gtk/clear-data-dialog.ui:133
+#: src/resources/gtk/clear-data-dialog.ui:92
 msgid "the past four weeks"
 msgstr "zadnjih nekaj tednov"
 
-#: src/resources/gtk/clear-data-dialog.ui:134
+#: src/resources/gtk/clear-data-dialog.ui:93
 msgid "the beginning of time"
 msgstr "od začetka beleženja"
 
-#: src/resources/gtk/clear-data-dialog.ui:213
-msgid "No data found"
-msgstr "Ni najdenih podatkov"
-
-#: src/resources/gtk/clear-data-dialog.ui:230
+#: src/resources/gtk/clear-data-dialog.ui:153
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr "Tega dejanja ni mogoče razveljaviti. Podatki bodo trajno izbrisani."
 
-#: src/resources/gtk/cookies-dialog.ui:29 src/resources/gtk/prefs-dialog.ui:580
+#: src/resources/gtk/cookies-dialog.ui:7 src/resources/gtk/prefs-dialog.ui:432
 msgid "Cookies"
 msgstr "Piškotki"
 
-#: src/resources/gtk/cookies-dialog.ui:39
+#: src/resources/gtk/cookies-dialog.ui:9
 msgid "Remove all cookies"
 msgstr "Odstrani vse piškotke"
 
-#: src/resources/gtk/cookies-dialog.ui:58
-msgid "Filter cookies"
-msgstr "Filtriraj piškotke"
+#: src/resources/gtk/cookies-dialog.ui:10
+msgid "Search cookies"
+msgstr "Preišči piškotke"
+
+#: src/resources/gtk/cookies-dialog.ui:11
+msgid "There are no Cookies"
+msgstr "Ni še prejetih piškotkov"
+
+#: src/resources/gtk/cookies-dialog.ui:12
+msgid "Cookies left by visited pages will be listed here"
+msgstr "Piškotki, zbrani na obiskanih straneh, bodo izpisane na tem mestu"
+
+#: src/resources/gtk/data-dialog.ui:59
+msgid "Search"
+msgstr "Iskanje"
+
+#: src/resources/gtk/data-dialog.ui:229
+msgid "No Results Found"
+msgstr "Ni zadetkov"
+
+#: src/resources/gtk/data-dialog.ui:244
+msgid "Try a different search"
+msgstr "Poskusi drugačno iskanje"
 
 #: src/resources/gtk/encoding-dialog.ui:8
 msgid "Text Encoding"
@@ -3008,39 +3017,31 @@ msgstr "Podobni kodni nabori"
 msgid "Show all…"
 msgstr "Pokaži vse …"
 
-#: src/resources/gtk/history-dialog.ui:29
+#: src/resources/gtk/history-dialog.ui:7
 msgid "History"
 msgstr "Zgodovina"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:9
 msgid "Remove all history"
 msgstr "Odstrani celotno zgodovino"
 
-#: src/resources/gtk/history-dialog.ui:79
+#: src/resources/gtk/history-dialog.ui:10
 msgid "Search history"
 msgstr "Zgodovina iskanja"
 
-#: src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/history-dialog.ui:11
 msgid "The History is Empty"
 msgstr "Ni shranjene zgodovine"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "Obiskane strani bodo izpisane na tem mestu"
 
-#: src/resources/gtk/history-dialog.ui:244
-msgid "No Results Found"
-msgstr "Ni zadetkov"
-
-#: src/resources/gtk/history-dialog.ui:259
-msgid "Try a different search"
-msgstr "Poskusi drugačno iskanje"
-
-#: src/resources/gtk/history-dialog.ui:303
+#: src/resources/gtk/history-dialog.ui:67
 msgid "_Copy Location"
 msgstr "Kopiraj _mesto"
 
-#: src/resources/gtk/history-dialog.ui:312
+#: src/resources/gtk/history-dialog.ui:76
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -3086,85 +3087,85 @@ msgstr "Zapri _preostale zavihke"
 msgid "_Close"
 msgstr "_Zapri"
 
-#: src/resources/gtk/page-menu-popover.ui:21
+#: src/resources/gtk/page-menu-popover.ui:24
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: src/resources/gtk/page-menu-popover.ui:40
+#: src/resources/gtk/page-menu-popover.ui:43
 msgid "Restore Zoom"
 msgstr "Povrni približanje"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: src/resources/gtk/page-menu-popover.ui:80
+#: src/resources/gtk/page-menu-popover.ui:84
 msgid "Print…"
 msgstr "Natisni …"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:99
 msgid "Find…"
 msgstr "Najdi …"
 
-#: src/resources/gtk/page-menu-popover.ui:110
+#: src/resources/gtk/page-menu-popover.ui:114
 msgid "Fullscreen"
 msgstr "Celozaslonski način"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/page-menu-popover.ui:137
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "_New Window"
 msgstr "_Novo okno"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/page-menu-popover.ui:145
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "New _Incognito Window"
 msgstr "Novo _zasebno okno"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:175
 msgid "Reopen Closed _Tab"
 msgstr "Povrni _zaprt zavihek"
 
-#: src/resources/gtk/page-menu-popover.ui:170
+#: src/resources/gtk/page-menu-popover.ui:183
 msgid "_History"
 msgstr "_Zgodovina"
 
-#: src/resources/gtk/page-menu-popover.ui:187
+#: src/resources/gtk/page-menu-popover.ui:200
 msgid "I_mport Bookmarks…"
 msgstr "_Uvozi zaznamke …"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:208
 msgid "E_xport Bookmarks…"
 msgstr "_Izvozi zaznamke …"
 
-#: src/resources/gtk/page-menu-popover.ui:212
+#: src/resources/gtk/page-menu-popover.ui:225
 msgid "Install Site as Web _Application…"
 msgstr "Namesti spletišče kot _spletni program …"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:233
 msgid "Open Appli_cation Manager"
 msgstr "Odpri _upravljalnik programov"
 
-#: src/resources/gtk/page-menu-popover.ui:237
+#: src/resources/gtk/page-menu-popover.ui:250
 msgid "_Override Text Encoding…"
 msgstr "_Prepiši znakovno kodiranje …"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/page-menu-popover.ui:253
+#: src/resources/gtk/page-menu-popover.ui:266
 msgid "Pr_eferences"
 msgstr "_Možnosti"
 
-#: src/resources/gtk/page-menu-popover.ui:262
+#: src/resources/gtk/page-menu-popover.ui:275
 msgid "_Keyboard Shortcuts"
 msgstr "_Tipkovne bližnjice‫"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/page-menu-popover.ui:271
+#: src/resources/gtk/page-menu-popover.ui:284
 msgid "_Help"
 msgstr "Pomo_č"
 
-#: src/resources/gtk/page-menu-popover.ui:280
+#: src/resources/gtk/page-menu-popover.ui:293
 msgid "_About Web"
 msgstr "_O programu"
 
@@ -3172,52 +3173,55 @@ msgstr "_O programu"
 msgid "Close page"
 msgstr "Zapri stran"
 
-#: src/resources/gtk/passwords-dialog.ui:34
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/passwords-dialog.ui:25
+#: src/resources/gtk/prefs-dialog.ui:507
 msgid "Passwords"
 msgstr "Gesla"
 
-#: src/resources/gtk/passwords-dialog.ui:38
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "_Počisti vse"
+#: src/resources/gtk/passwords-dialog.ui:27
+msgid "Remove all passwords"
+msgstr "Odstrani vsa gesla"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Filter passwords"
-msgstr "Filtriraj gesla"
-
-#: src/resources/gtk/passwords-dialog.ui:91
+#: src/resources/gtk/passwords-dialog.ui:28
 msgid "Search passwords"
 msgstr "Iskanje gesel"
 
+#: src/resources/gtk/passwords-dialog.ui:29
+msgid "There are no Passwords"
+msgstr "Ni še shranjenih gesel"
+
+#: src/resources/gtk/passwords-dialog.ui:30
+msgid "Saved passwords will be listed here"
+msgstr "Shranjena gesla bodo izpisana na tem mestu"
+
 # G:7 K:4 O:0
-#: src/resources/gtk/passwords-dialog.ui:121
+#: src/resources/gtk/passwords-dialog.ui:61
 msgid "Site"
 msgstr "Mesto"
 
 # G:3 K:4 O:1
-#: src/resources/gtk/passwords-dialog.ui:136
+#: src/resources/gtk/passwords-dialog.ui:76
 msgid "User Name"
 msgstr "Uporabniško ime"
 
-#: src/resources/gtk/passwords-dialog.ui:150
+#: src/resources/gtk/passwords-dialog.ui:90
 msgid "Password"
 msgstr "Geslo"
 
-#: src/resources/gtk/passwords-dialog.ui:169
+#: src/resources/gtk/passwords-dialog.ui:109
 msgid "Forget the selected passwords"
 msgstr "Pozabi izbrana gesla"
 
-#: src/resources/gtk/passwords-dialog.ui:184
+#: src/resources/gtk/passwords-dialog.ui:124
 msgid "Reveal all the passwords"
 msgstr "Pokaži shranjena gesla"
 
-#: src/resources/gtk/passwords-dialog.ui:204
+#: src/resources/gtk/passwords-dialog.ui:144
 msgid "_Copy Password"
 msgstr "Kopiraj _geslo"
 
 # G:3 K:4 O:1
-#: src/resources/gtk/passwords-dialog.ui:208
+#: src/resources/gtk/passwords-dialog.ui:148
 msgid "C_opy Username"
 msgstr "Kopiraj _uporabniško ime"
 
@@ -3226,7 +3230,7 @@ msgstr "Kopiraj _uporabniško ime"
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:386
+#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:368
 msgid "General"
 msgstr "Splošno"
 
@@ -3248,203 +3252,175 @@ msgid "_Manage Additional URLs"
 msgstr "_Upravljanje z dodatnimi naslovi URL"
 
 #: src/resources/gtk/prefs-dialog.ui:148
-msgid "Browsing"
-msgstr "Poteka brskanje"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Enable sm_ooth scrolling"
-msgstr "Omogoči _gladko drsenje"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "Enable mouse _gesture"
-msgstr "Omogoči _poteze miške"
-
-#: src/resources/gtk/prefs-dialog.ui:187
-msgid "Always ask o_n download"
-msgstr "Vedno vprašaj _ob prejemu"
-
-#: src/resources/gtk/prefs-dialog.ui:202
-msgid "_Download folder"
-msgstr "Mapa _prejemov"
-
-#: src/resources/gtk/prefs-dialog.ui:211
 msgid "Homepage"
 msgstr "Domača stran"
 
-#: src/resources/gtk/prefs-dialog.ui:216
+#: src/resources/gtk/prefs-dialog.ui:153
 msgid "Most _visited pages"
 msgstr "Največkrat _obiskane strani"
 
-#: src/resources/gtk/prefs-dialog.ui:230
+#: src/resources/gtk/prefs-dialog.ui:167
 msgid "_Blank page"
 msgstr "_Prazna stran"
 
-#: src/resources/gtk/prefs-dialog.ui:245
+#: src/resources/gtk/prefs-dialog.ui:182
 msgid "_Custom"
 msgstr "_Po meri"
 
-#: src/resources/gtk/prefs-dialog.ui:269
+#: src/resources/gtk/prefs-dialog.ui:211
+msgid "Ask o_n download"
+msgstr "Vedno vprašaj _ob prejemu"
+
+#: src/resources/gtk/prefs-dialog.ui:226
+msgid "_Download folder"
+msgstr "Mapa _prejemov"
+
+#: src/resources/gtk/prefs-dialog.ui:235
 msgid "Search Engines"
 msgstr "Iskalniki"
 
-#: src/resources/gtk/prefs-dialog.ui:274
-msgid "You can select different search engines to use"
-msgstr "Izbrati je mogoče različne iskalnike"
-
-#: src/resources/gtk/prefs-dialog.ui:275
+#: src/resources/gtk/prefs-dialog.ui:240
 msgid "_Manage Search Engines"
 msgstr "Upravljanje s spletnimi _iskalniki"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:265
 msgid "Session"
 msgstr "Seja"
 
-#: src/resources/gtk/prefs-dialog.ui:305
-msgid "Always start browser in _incognito mode"
-msgstr "Brskalnik vedno zaženi v _zasebnem načinu"
+#: src/resources/gtk/prefs-dialog.ui:270
+msgid "Start in _Incognito Mode"
+msgstr "Zaženi brskalnik v _zasebnem načinu"
 
-#: src/resources/gtk/prefs-dialog.ui:320
-msgid "_Remember previous tabs on startup"
-msgstr "_Zapomni si prej odprte zavihke ob zagonu"
+#: src/resources/gtk/prefs-dialog.ui:284
+msgid "_Restore Tabs on Startup"
+msgstr "_Zapomni si nazadnje odprte zavihke"
 
-#: src/resources/gtk/prefs-dialog.ui:335
+#: src/resources/gtk/prefs-dialog.ui:299
+msgid "Browsing"
+msgstr "Poteka brskanje"
+
+#: src/resources/gtk/prefs-dialog.ui:304
+msgid "Sm_ooth Scrolling"
+msgstr "_Gladko drsenje"
+
+#: src/resources/gtk/prefs-dialog.ui:318
+msgid "Mouse _Gestures"
+msgstr "_Poteze miške"
+
+#: src/resources/gtk/prefs-dialog.ui:350
+msgid "_Spell Checking"
+msgstr "_Preverjanje črkovanja"
+
+#: src/resources/gtk/prefs-dialog.ui:377 src/resources/gtk/prefs-dialog.ui:587
+msgid "Privacy"
+msgstr "Zasebnost"
+
+#: src/resources/gtk/prefs-dialog.ui:384
 msgid "Web Content"
 msgstr "Spletna vsebina"
 
-#: src/resources/gtk/prefs-dialog.ui:340
-msgid "Try to block _advertisements"
+#: src/resources/gtk/prefs-dialog.ui:389
+msgid "Try to Block _Advertisements"
 msgstr "Poskusi onemogočiti _oglasna sporočila"
 
-#: src/resources/gtk/prefs-dialog.ui:354
-msgid "Block popup _windows"
-msgstr "Blokiraj prikaz pojavnih oken"
+#: src/resources/gtk/prefs-dialog.ui:403
+msgid "Block Popup _Windows"
+msgstr "Blokiraj prikaz _pojavnih oken"
 
-#: src/resources/gtk/prefs-dialog.ui:368
-msgid "Try to block dangerous web_sites"
+#: src/resources/gtk/prefs-dialog.ui:417
+msgid "Try to Block Dangerous Web_sites"
 msgstr "Poskusi blokirati nevarna _spletišča"
 
-#: src/resources/gtk/prefs-dialog.ui:395 src/resources/gtk/prefs-dialog.ui:563
-msgid "Fonts & Style"
-msgstr "Pisava in slog"
+#: src/resources/gtk/prefs-dialog.ui:437
+msgid "Clear _Cookies"
+msgstr "Počisti _piškotke"
 
-#: src/resources/gtk/prefs-dialog.ui:402
-msgid "Fonts"
-msgstr "Pisave"
-
-#: src/resources/gtk/prefs-dialog.ui:407
-msgid "Use custom fonts"
-msgstr "Uporabi pisave po meri"
-
-#: src/resources/gtk/prefs-dialog.ui:423
-msgid "Sans serif font"
-msgstr "Pisava brez zavihkov"
-
-#: src/resources/gtk/prefs-dialog.ui:438
-msgid "Serif font"
-msgstr "Pisava z zavihki"
-
-#: src/resources/gtk/prefs-dialog.ui:453
-msgid "Monospace font"
-msgstr "Pisava stalne širine"
-
-#: src/resources/gtk/prefs-dialog.ui:473
-msgid "Reader Mode"
-msgstr "Bralni način"
-
-#: src/resources/gtk/prefs-dialog.ui:477
-msgid "Font style"
-msgstr "Slog pisave"
-
-#: src/resources/gtk/prefs-dialog.ui:483
-msgid "Color scheme"
-msgstr "Barvna shema"
-
-#: src/resources/gtk/prefs-dialog.ui:496
-msgid "Style"
-msgstr "Slog"
-
-#: src/resources/gtk/prefs-dialog.ui:501
-msgid "Use custom stylesheet"
-msgstr "Uporabi slogovno predlogo po meri"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "Default zoom level"
-msgstr "Privzeta raven približanja"
-
-#: src/resources/gtk/prefs-dialog.ui:573 src/resources/gtk/prefs-dialog.ui:735
-msgid "Stored Data"
-msgstr "Shranjeni podatki"
-
-#: src/resources/gtk/prefs-dialog.ui:585
-msgid "Manage _Cookies"
-msgstr "Upravljanje _piškotkov"
-
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-dialog.ui:461
 msgid "_Always accept"
 msgstr "_Vedno sprejmi"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:623
-msgid "For example, not from advertisers on these sites"
-msgstr "Na primer; ne prek oglaševalcev na teh straneh"
+#: src/resources/gtk/prefs-dialog.ui:475
+msgid "For example, not from advertisers on these sites."
+msgstr "Na primer; ne prek oglaševalcev na teh straneh."
 
-#: src/resources/gtk/prefs-dialog.ui:624
+#: src/resources/gtk/prefs-dialog.ui:476
 msgid "Only _from sites you visit"
 msgstr "Le z _obiskanih strani"
 
-#: src/resources/gtk/prefs-dialog.ui:639
+#: src/resources/gtk/prefs-dialog.ui:491
 msgid "_Never accept"
 msgstr "_Nikoli ne sprejmi"
 
-#: src/resources/gtk/prefs-dialog.ui:660
-msgid "Manage _Passwords"
-msgstr "Upravljanje _gesel"
+#: src/resources/gtk/prefs-dialog.ui:512
+msgid "_Passwords"
+msgstr "_Gesla"
 
-#: src/resources/gtk/prefs-dialog.ui:684
-msgid "_Remember passwords"
+#: src/resources/gtk/prefs-dialog.ui:536
+msgid "_Remember Passwords"
 msgstr "_Zapomni si gesla"
 
-#: src/resources/gtk/prefs-dialog.ui:699
-msgid "Personal Data"
-msgstr "Osebni podatki"
-
-#: src/resources/gtk/prefs-dialog.ui:704
+#: src/resources/gtk/prefs-dialog.ui:556
 msgid "You can clear stored personal data."
 msgstr "Izbrisati je mogoče vse shranjene zasebne podatke."
 
-#: src/resources/gtk/prefs-dialog.ui:705
-msgid "Manage Personal _Data"
-msgstr "Upravljanje z _osebnimi podatki"
+#: src/resources/gtk/prefs-dialog.ui:557
+msgid "Clear Personal _Data"
+msgstr "Počisti _osebne podatke"
 
-#: src/resources/gtk/prefs-dialog.ui:799
-msgid "Add language"
-msgstr "Dodaj jezik"
+#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
+msgid "Appearance"
+msgstr "Videz"
 
-#: src/resources/gtk/prefs-dialog.ui:819
-msgid "Remove language"
-msgstr "Odstrani jezik"
+#: src/resources/gtk/prefs-dialog.ui:604
+msgid "Fonts"
+msgstr "Pisave"
 
-#: src/resources/gtk/prefs-dialog.ui:861
-msgid "Move language up"
-msgstr "Pomakni jezik navzgor"
+#: src/resources/gtk/prefs-dialog.ui:609
+msgid "Use Custom Fonts"
+msgstr "Uporabi pisave po meri"
 
-#: src/resources/gtk/prefs-dialog.ui:881
-msgid "Move language down"
-msgstr "Pomakni jezik navzdol"
+#: src/resources/gtk/prefs-dialog.ui:625
+msgid "Sans serif font"
+msgstr "Pisava brez zavihkov"
 
-#: src/resources/gtk/prefs-dialog.ui:906
-msgid "Spell Checking"
-msgstr "Preverjanje črkovanja"
+#: src/resources/gtk/prefs-dialog.ui:640
+msgid "Serif font"
+msgstr "Pisava z zavihki"
 
-#: src/resources/gtk/prefs-dialog.ui:911
-msgid "_Enable spell checking"
-msgstr "_Omogoči črkovanje"
+#: src/resources/gtk/prefs-dialog.ui:655
+msgid "Monospace font"
+msgstr "Pisava stalne širine"
 
-#: src/resources/gtk/prefs-dialog.ui:942 src/resources/gtk/prefs-dialog.ui:1136
+#: src/resources/gtk/prefs-dialog.ui:675
+msgid "Reader Mode"
+msgstr "Bralni način"
+
+#: src/resources/gtk/prefs-dialog.ui:679
+msgid "Font Style"
+msgstr "Slog pisave"
+
+#: src/resources/gtk/prefs-dialog.ui:685
+msgid "Color Scheme"
+msgstr "Barvna shema"
+
+#: src/resources/gtk/prefs-dialog.ui:698
+msgid "Style"
+msgstr "Slog"
+
+#: src/resources/gtk/prefs-dialog.ui:703
+msgid "Use Custom Stylesheet"
+msgstr "Uporabi slogovno predlogo po meri"
+
+#: src/resources/gtk/prefs-dialog.ui:738
+msgid "Default zoom level"
+msgstr "Privzeta raven približanja"
+
+#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
 msgid "Sync"
 msgstr "Uskladi"
 
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:782
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3454,66 +3430,62 @@ msgstr ""
 "drugimi napravami. Program Web, sicer podpira spletni račun Firefox, vendar "
 "ni izdelan in podprt s strani Fundacije Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:950
+#: src/resources/gtk/prefs-dialog.ui:783
 msgid "Firefox Sync"
 msgstr "Usklajevalnik Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-dialog.ui:802
 msgid "Firefox Account"
 msgstr "Račun Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:973
+#: src/resources/gtk/prefs-dialog.ui:806
 msgid "Logged in"
 msgstr "Prijavljeno"
 
-#: src/resources/gtk/prefs-dialog.ui:978
+#: src/resources/gtk/prefs-dialog.ui:811
 msgid "Sign _out"
 msgstr "_Odjavi"
 
-#: src/resources/gtk/prefs-dialog.ui:991
+#: src/resources/gtk/prefs-dialog.ui:824
 msgid "Sync Options"
 msgstr "Možnosti usklajevanja"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/prefs-dialog.ui:996
+#: src/resources/gtk/prefs-dialog.ui:829
 msgid "Sync _Bookmarks"
 msgstr "Uskladi _zaznamki"
 
-#: src/resources/gtk/prefs-dialog.ui:1011
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "Sync _Passwords"
 msgstr "Uskladi _gesla"
 
-#: src/resources/gtk/prefs-dialog.ui:1026
+#: src/resources/gtk/prefs-dialog.ui:859
 msgid "Sync _History"
 msgstr "Uskladi _zgodovino"
 
-#: src/resources/gtk/prefs-dialog.ui:1041
+#: src/resources/gtk/prefs-dialog.ui:874
 msgid "Sync Open _Tabs"
 msgstr "Uskladi odprte _zavihke"
 
-#: src/resources/gtk/prefs-dialog.ui:1053
+#: src/resources/gtk/prefs-dialog.ui:886
 msgid "S_ynced tabs"
 msgstr "_Usklajeni zavihki"
 
-#: src/resources/gtk/prefs-dialog.ui:1064
+#: src/resources/gtk/prefs-dialog.ui:897
 msgid "Frequency"
 msgstr "Frekvenca"
 
-#: src/resources/gtk/prefs-dialog.ui:1075
+#: src/resources/gtk/prefs-dialog.ui:908
 msgid "Sync _now"
 msgstr "Uskladi _takoj"
 
-#: src/resources/gtk/prefs-dialog.ui:1087
+#: src/resources/gtk/prefs-dialog.ui:920
 msgid "Device name"
 msgstr "Ime naprave"
 
-#: src/resources/gtk/prefs-dialog.ui:1092
+#: src/resources/gtk/prefs-dialog.ui:925
 msgid "_Change"
 msgstr "_Spremeni"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add Language"
-msgstr "Dodaj jezik"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a l_anguage:"
@@ -3558,7 +3530,7 @@ msgstr "Novo zasebno okno"
 #: src/resources/gtk/shortcuts-dialog.ui:33
 msgctxt "shortcut window"
 msgid "Open file"
-msgstr "Odpri datoteko"
+msgstr "Odpre datoteko"
 
 # G:2 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:40
@@ -3569,229 +3541,244 @@ msgstr "Shrani stran"
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
 msgid "Print page"
-msgstr "Natisni stran"
+msgstr "Natisne stran"
 
 #: src/resources/gtk/shortcuts-dialog.ui:54
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr "Končaj"
+msgstr "Konča program"
 
 # G:1 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Help"
-msgstr "Pomoč"
+msgstr "Pokaže pomoč"
 
 #: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
-msgid "Shortcuts"
-msgstr "Tipkovne bližnjice"
+msgid "Open menu"
+msgstr "Odpre meni"
 
-#: src/resources/gtk/shortcuts-dialog.ui:79
+#: src/resources/gtk/shortcuts-dialog.ui:75
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "Pokaže tipkovne bližnjice"
+
+#: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Krmarjenje"
 
-#: src/resources/gtk/shortcuts-dialog.ui:83
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Go to homepage"
-msgstr "Pojdi na začetno stran"
+msgstr "Skoči na začetno stran"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Ponovno naloži trenutno stran"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "Ponovno naloži obvodni predpomnilnik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Zaustavi nalaganje trenutne strani"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
-#: src/resources/gtk/shortcuts-dialog.ui:126
-msgctxt "shortcut window"
-msgid "Go back to the previous page"
-msgstr "Pojdi na predhodno stran"
-
 #: src/resources/gtk/shortcuts-dialog.ui:118
 #: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
-msgid "Go forward to the next page"
-msgstr "Pojdi na naslednjo stran"
+msgid "Go back to the previous page"
+msgstr "Skoči na predhodno stran"
 
-#: src/resources/gtk/shortcuts-dialog.ui:143
+#: src/resources/gtk/shortcuts-dialog.ui:125
+#: src/resources/gtk/shortcuts-dialog.ui:140
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "Skoči na naslednjo stran"
+
+#: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Zavihki"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:147
-msgctxt "shortcut window"
-msgid "New tab"
-msgstr "Nov zavihek"
-
 #: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
-msgid "Close current tab"
-msgstr "Zapri trenutni zavihek"
+msgid "New tab"
+msgstr "Odpre nov zavihek"
 
 #: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
-msgid "Reopen closed tab"
-msgstr "Ponovno odpri _zaprt zavihek"
+msgid "Close current tab"
+msgstr "Zapre trenutni zavihek"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "Ponovno odpre zaprt zavihek"
+
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Skoči na naslednji zavihek"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:182
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Skoči na predhodni zavihek"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
-msgctxt "shortcut window"
-msgid "Move current tab to the left"
-msgstr "Premakni trenutni zavihek v levo"
-
 #: src/resources/gtk/shortcuts-dialog.ui:189
 msgctxt "shortcut window"
-msgid "Move current tab to the right"
-msgstr "Premakni trenutni zavihek v desno"
+msgid "Move current tab to the left"
+msgstr "Premakne trenutni zavihek v levo"
 
-#: src/resources/gtk/shortcuts-dialog.ui:200
+#: src/resources/gtk/shortcuts-dialog.ui:196
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "Premakne trenutni zavihek v desno"
+
+#: src/resources/gtk/shortcuts-dialog.ui:207
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
-msgctxt "shortcut window"
-msgid "History"
-msgstr "Zgodovina"
-
-# G:1 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "Možnosti"
+msgid "History"
+msgstr "Pokaže zgodovino"
 
+# G:1 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:218
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Odpre možnosti"
+
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Ustvari zaznamek trenutne strani"
 
+#: src/resources/gtk/shortcuts-dialog.ui:232
+msgctxt "shortcut window"
+msgid "Import bookmarks"
+msgstr "Uvozi zaznamke"
+
+#: src/resources/gtk/shortcuts-dialog.ui:239
+msgctxt "shortcut window"
+msgid "Export bookmarks"
+msgstr "Izvozi zaznamke"
+
 # G:1 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:246
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Preklopi kazalni način brskanja"
 
-#: src/resources/gtk/shortcuts-dialog.ui:236
+#: src/resources/gtk/shortcuts-dialog.ui:257
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Pogled"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Zoom in"
-msgstr "Približaj"
+msgstr "Približa pogled"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:268
 msgctxt "shortcut window"
 msgid "Zoom out"
-msgstr "Oddalji"
+msgstr "Oddalji pogled"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:275
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Ponastavi približanje"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:282
 msgctxt "shortcut window"
 msgid "Fullscreen"
-msgstr "Celozaslonski način"
+msgstr "Omogoči celozaslonski način"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:268
+#: src/resources/gtk/shortcuts-dialog.ui:289
 msgctxt "shortcut window"
 msgid "View page source"
-msgstr "Poglej izvorno kodo strani"
+msgstr "Pokaže izvorno kodo strani"
 
-#: src/resources/gtk/shortcuts-dialog.ui:275
+#: src/resources/gtk/shortcuts-dialog.ui:296
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Preklopi nadzornika"
 
-#: src/resources/gtk/shortcuts-dialog.ui:282
+#: src/resources/gtk/shortcuts-dialog.ui:303
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Preklopi bralni način"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:293
+#: src/resources/gtk/shortcuts-dialog.ui:314
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Urejanje"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
-msgctxt "shortcut window"
-msgid "Cut"
-msgstr "Izreži"
-
-# G:6 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:304
-msgctxt "shortcut window"
-msgid "Copy"
-msgstr "Kopiraj"
-
-# G:6 K:0 O:0
-#: src/resources/gtk/shortcuts-dialog.ui:311
-msgctxt "shortcut window"
-msgid "Paste"
-msgstr "Prilepi"
-
-# G:5 K:1 O:2
 #: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
-msgid "Undo"
-msgstr "Razveljavi"
+msgid "Cut"
+msgstr "Izreže izbor"
 
+# G:6 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
-msgid "Redo"
-msgstr "Ponovi"
+msgid "Copy"
+msgstr "Kopira izbor"
 
-# G:9 K:0 O:0
+# G:6 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
-msgid "Select all"
-msgstr "Izberi vse"
+msgid "Paste"
+msgstr "Prilepi izbor"
 
+# G:5 K:1 O:2
 #: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
-msgid "Select page URL"
-msgstr "Izberi naslov URL strani"
+msgid "Undo"
+msgstr "Razveljavi opravilo"
 
 #: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
-msgid "Search"
-msgstr "Poišči"
+msgid "Redo"
+msgstr "Ponovi opravilo"
 
+# G:9 K:0 O:0
 #: src/resources/gtk/shortcuts-dialog.ui:353
 msgctxt "shortcut window"
-msgid "Next search result"
-msgstr "Naslednji rezultat iskanja"
+msgid "Select all"
+msgstr "Izbere vse predmete"
 
 #: src/resources/gtk/shortcuts-dialog.ui:360
 msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "Izbere naslov URL strani"
+
+#: src/resources/gtk/shortcuts-dialog.ui:367
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Omogoči iskanje"
+
+#: src/resources/gtk/shortcuts-dialog.ui:374
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "Skoči na naslednji rezultat iskanja"
+
+#: src/resources/gtk/shortcuts-dialog.ui:381
+msgctxt "shortcut window"
 msgid "Previous search result"
-msgstr "Predhodni rezultat iskanja"
+msgstr "Skoči na predhodni rezultat iskanja"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:22
 msgid "Synced Tabs"
@@ -3814,6 +3801,10 @@ msgstr "Zapri dokument"
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:20
 msgid "Additional URLs"
 msgstr "Dodatni naslovi URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
+msgid "C_lear All"
+msgstr "_Počisti vse"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:64
 msgid ""
@@ -3841,7 +3832,7 @@ msgid "Remove the selected URLs"
 msgstr "Odstrani izbrane naslove URL"
 
 # G:1 K:2 O:0
-#: src/search-provider/ephy-search-provider.c:196
+#: src/search-provider/ephy-search-provider.c:197
 #, c-format
 msgid "Search the web for “%s”"
 msgstr "Preišči splet za »%s«"
@@ -3880,7 +3871,7 @@ msgstr "Izbor profila"
 msgid "_Select"
 msgstr "_Izberi"
 
-#: src/window-commands.c:295 src/window-commands.c:473
+#: src/window-commands.c:295 src/window-commands.c:477
 msgid "Choose File"
 msgstr "Izbor datoteke"
 
@@ -3900,17 +3891,17 @@ msgstr "Izbor _datoteke"
 msgid "From:"
 msgstr "Od:"
 
-#: src/window-commands.c:456
+#: src/window-commands.c:457
 msgid "Bookmarks successfully exported!"
 msgstr "Zaznamki so uspešno izvoženi!"
 
 # G:1 K:0 O:0
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:481
+#: src/window-commands.c:485
 msgid "bookmarks.gvdb"
 msgstr "zaznamki.gvdb"
 
-#: src/window-commands.c:604
+#: src/window-commands.c:628
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3919,11 +3910,11 @@ msgstr ""
 "Enostaven, izčiščen, prekrasen pogled na splet.\n"
 "Omogoča ga WebKitGTK+ %d.%d.%d"
 
-#: src/window-commands.c:628
+#: src/window-commands.c:652
 msgid "Website"
 msgstr "Spletišče"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:685
 msgid "translator-credits"
 msgstr ""
 "Matej Urbančič <mateju@svn.gnome.org>\n"
@@ -3932,72 +3923,72 @@ msgstr ""
 "Matjaž Horvat\n"
 "Tilen Travnik"
 
-#: src/window-commands.c:1285
+#: src/window-commands.c:1316
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Spletni program »%s« že obstaja. Ali ga želite zamenjati?"
 
-#: src/window-commands.c:1288
+#: src/window-commands.c:1319
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: src/window-commands.c:1290
+#: src/window-commands.c:1321
 msgid "Replace"
 msgstr "Zamenjaj"
 
-#: src/window-commands.c:1294
+#: src/window-commands.c:1325
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Program s tem imenom že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: src/window-commands.c:1369
+#: src/window-commands.c:1416
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program »%s« je pripravljen za uporabo"
 
-#: src/window-commands.c:1372
+#: src/window-commands.c:1419
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Programa »%s« ni mogoče ustvariti"
 
-#: src/window-commands.c:1380
+#: src/window-commands.c:1427
 msgid "Launch"
 msgstr "Zaženi"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1426
+#: src/window-commands.c:1473
 msgid "Create Web Application"
 msgstr "Ustvari spletni program"
 
-#: src/window-commands.c:1431
+#: src/window-commands.c:1478
 msgid "C_reate"
 msgstr "Ustva_ri"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:1645
+#: src/window-commands.c:1692
 msgid "Save"
 msgstr "Shrani"
 
-#: src/window-commands.c:1654
+#: src/window-commands.c:1701
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1659
+#: src/window-commands.c:1706
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1664
+#: src/window-commands.c:1711
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:2397
+#: src/window-commands.c:2176
 msgid "Enable caret browsing mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:2400
+#: src/window-commands.c:2179
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4008,9 +3999,97 @@ msgstr ""
 "katero se je mogoče premikati po strani s pomočjo tipkovnice. Ali želite "
 "omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:2403
+#: src/window-commands.c:2182
 msgid "_Enable"
 msgstr "_Omogoči"
+
+#~ msgid "Don’t use an external application to view page source."
+#~ msgstr "Ne uporabi zunanjega programa za ogled izvorne kode strani."
+
+#~ msgid "Enable Plugins"
+#~ msgstr "Omogoči vstavke"
+
+#~ msgid "Enable WebGL"
+#~ msgstr "Omogoči WebGL"
+
+#~ msgid "Whether to enable support for WebGL contexts."
+#~ msgstr "Ali naj bo podpora vsebini WebGL omogočena."
+
+#~ msgid "Enable WebAudio"
+#~ msgstr "Omogoči WebAudio"
+
+#~ msgid "Whether to enable support for WebAudio."
+#~ msgstr "Ali naj se omogoči podpora za WebAudio."
+
+#~ msgid "Do Not Track"
+#~ msgstr "Ne sledi"
+
+#~ msgid "Enables tracking query parameter removal."
+#~ msgstr "Omogoči odstranitev parametra poizvedbe sledenja."
+
+#~ msgid "Something went wrong while displaying this page."
+#~ msgstr "Nekaj je šlo narobe pri prikazovanju te strani."
+
+#~ msgid "Switch to Tab"
+#~ msgstr "Preklopi na zavihek"
+
+#~ msgid "Language"
+#~ msgstr "Jezik"
+
+# G:1 K:0 O:0
+#~ msgid "_Remove Bookmark"
+#~ msgstr "_Odstrani zaznamek"
+
+#~ msgid "C_lear"
+#~ msgstr "Po_čisti"
+
+#~ msgid "Filter domains"
+#~ msgstr "Filtriraj domene"
+
+#~ msgid "Search domains"
+#~ msgstr "Preišči domene"
+
+#~ msgid "No data found"
+#~ msgstr "Ni najdenih podatkov"
+
+#~ msgid "Filter passwords"
+#~ msgstr "Filtriraj gesla"
+
+#~ msgid "Enable mouse _gesture"
+#~ msgstr "Omogoči _poteze miške"
+
+#~ msgid "You can select different search engines to use"
+#~ msgstr "Izbrati je mogoče različne iskalnike"
+
+#~ msgid "Always start browser in _incognito mode"
+#~ msgstr "Brskalnik vedno zaženi v _zasebnem načinu"
+
+#~ msgid "Fonts & Style"
+#~ msgstr "Pisava in slog"
+
+#~ msgid "Stored Data"
+#~ msgstr "Shranjeni podatki"
+
+#~ msgid "Manage _Cookies"
+#~ msgstr "Upravljanje _piškotkov"
+
+#~ msgid "Manage _Passwords"
+#~ msgstr "Upravljanje _gesel"
+
+#~ msgid "Manage Personal _Data"
+#~ msgstr "Upravljanje z _osebnimi podatki"
+
+#~ msgid "Add language"
+#~ msgstr "Dodaj jezik"
+
+#~ msgid "Move language up"
+#~ msgstr "Pomakni jezik navzgor"
+
+#~ msgid "Move language down"
+#~ msgstr "Pomakni jezik navzdol"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "_Omogoči črkovanje"
 
 #~ msgid ""
 #~ "Enables tracking query parameter removal. Note that when changing this "
@@ -4080,9 +4159,6 @@ msgstr "_Omogoči"
 #~ msgid "Local files"
 #~ msgstr "Krajevne datoteke"
 
-#~ msgid "There are ongoing downloads"
-#~ msgstr "V teku so prejemi"
-
 #~ msgid "If you quit, the downloads will be cancelled"
 #~ msgstr "Če končate program, bodo prejemi preklicani"
 
@@ -4101,9 +4177,6 @@ msgstr "_Omogoči"
 
 #~ msgid "_Add…"
 #~ msgstr "_Dodaj …"
-
-#~ msgid "_Remove"
-#~ msgstr "_Odstrani"
 
 #~ msgid "_Up"
 #~ msgstr "_Gor"
@@ -4219,9 +4292,6 @@ msgstr "_Omogoči"
 
 #~ msgid "I_mport Bookmarks"
 #~ msgstr "_Uvozi zaznamke"
-
-#~ msgid "E_xport Bookmarks"
-#~ msgstr "_Izvozi zaznamke"
 
 #~ msgid "_About"
 #~ msgstr "_O programu"
@@ -4760,9 +4830,6 @@ msgstr "_Omogoči"
 
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Zavrni zahteve spletnih strani po sledenju"
-
-#~ msgid "Privacy"
-#~ msgstr "Zasebnost"
 
 #~ msgid "Stop"
 #~ msgstr "Zaustavi"
