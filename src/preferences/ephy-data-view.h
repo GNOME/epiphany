@@ -56,4 +56,7 @@ void     ephy_data_view_set_can_clear (EphyDataView *self,
 
 const gchar *ephy_data_view_get_search_text (EphyDataView *self);
 
+gboolean ephy_data_view_handle_event (EphyDataView *self,
+                                      GdkEvent     *event);
+
 G_END_DECLS
