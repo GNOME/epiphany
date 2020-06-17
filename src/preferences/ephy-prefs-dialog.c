@@ -25,6 +25,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-gui.h"
 #include "ephy-prefs-dialog.h"
+#include "ephy-data-view.h"
 #include "prefs-general-page.h"
 #include "prefs-sync-page.h"
 
@@ -39,6 +40,7 @@ struct _EphyPrefsDialog {
   PrefsSyncPage *sync_page;
 
   GtkStack *data_views_stack;
+  GtkWidget *active_data_view;
   GtkWidget *clear_cookies_view;
   GtkWidget *passwords_view;
   GtkWidget *clear_data_view;
@@ -46,34 +48,56 @@ struct _EphyPrefsDialog {
 
 G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, HDY_TYPE_WINDOW)
 
+static gboolean
+on_key_press_event (EphyPrefsDialog *prefs_dialog,
+                    GdkEvent        *event,
+                    gpointer         user_data)
+{
+  EphyDataView *active_data_view = EPHY_DATA_VIEW (prefs_dialog->active_data_view);
+
+  /* If the user is currently viewing one the data views,
+   * then we want to redirect any key events there */
+  if (active_data_view)
+    return ephy_data_view_handle_event (active_data_view, event);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+present_data_view (EphyPrefsDialog *prefs_dialog,
+                   GtkWidget       *presented_view)
+{
+  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, presented_view);
+  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  prefs_dialog->active_data_view = presented_view;
+}
+
 static void
 on_clear_cookies_row_activated (GtkWidget       *privacy_page,
                                 EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_cookies_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->clear_cookies_view);
 }
 
 static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->passwords_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->passwords_view);
 }
 
 static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
-  gtk_stack_set_visible_child (prefs_dialog->data_views_stack, prefs_dialog->clear_data_view);
-  hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_FORWARD);
+  present_data_view (prefs_dialog, prefs_dialog->clear_data_view);
 }
 
 static void
 on_any_data_view_back_button_clicked (GtkWidget       *data_view,
                                       EphyPrefsDialog *prefs_dialog)
 {
+  prefs_dialog->active_data_view = NULL;
   hdy_deck_navigate (prefs_dialog->deck, HDY_NAVIGATION_DIRECTION_BACK);
 }
 
@@ -96,6 +120,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, clear_data_view);
 
   /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);

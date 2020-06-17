@@ -26,6 +26,7 @@ typedef struct {
   GtkWidget *box;
   GtkWidget *child;
   GtkWidget *header_bar;
+  GtkWidget *back_button;
   GtkWidget *clear_all_button;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
@@ -126,29 +127,46 @@ on_search_entry_changed (GtkSearchEntry *entry,
   g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_SEARCH_TEXT]);
 }
 
-static gboolean
-on_key_press_event (EphyDataView *self,
-                    GdkEvent     *event,
-                    gpointer      user_data)
+gboolean
+ephy_data_view_handle_event (EphyDataView *self,
+                             GdkEvent     *event)
 {
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
   GdkEventKey *key = (GdkEventKey *)event;
   gint result;
 
+  /* Firstly, we check if the HdySearchBar can handle the event */
   result = hdy_search_bar_handle_event (HDY_SEARCH_BAR (priv->search_bar), event);
 
   if (result == GDK_EVENT_STOP)
     return result;
 
+  /* Secondly, we check for the shortcuts implemented by the data views */
+  /* Ctrl + F */
+  if ((key->state & GDK_CONTROL_MASK) && key->keyval == GDK_KEY_f) {
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_button), TRUE);
+    return GDK_EVENT_STOP;
+  }
+
+  /* Shift + Delete */
+  if ((key->state & GDK_SHIFT_MASK) && key->keyval == GDK_KEY_Delete) {
+    gtk_button_clicked (GTK_BUTTON (priv->clear_all_button));
+    return GDK_EVENT_STOP;
+  }
+
+  /* Finally, we check for the Escape key */
   if (key->keyval == GDK_KEY_Escape) {
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->search_button)))
-      gtk_widget_destroy (GTK_WIDGET (self));
+      /* If the user presses the Escape key and the search bar is hidden,
+       * we want the event to have the same effect as clicking the back button*/
+      gtk_button_clicked (GTK_BUTTON (priv->back_button));
     else
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_button), FALSE);
-  } else if (isprint (key->keyval))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_button), TRUE);
 
-  return result;
+    return GDK_EVENT_STOP;
+  }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -411,6 +429,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, box);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, back_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_all_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_title_label);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_description_label);
@@ -420,7 +439,6 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, spinner);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, stack);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
