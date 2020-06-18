@@ -148,16 +148,17 @@ ephy_create_file_chooser (const char            *title,
                           GtkFileChooserAction   action,
                           EphyFileFilterDefault  default_filter)
 {
+  GtkWidget *toplevel_window = gtk_widget_get_toplevel (parent);
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
   g_autofree char *downloads_dir = NULL;
   GtkWidget *preview = gtk_image_new ();
 
-  g_assert (GTK_IS_WINDOW (parent));
+  g_assert (GTK_IS_WINDOW (toplevel_window));
   g_assert (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST);
 
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (title,
-                                                          GTK_WINDOW (parent),
+                                                          GTK_WINDOW (toplevel_window),
                                                           action,
                                                           NULL,
                                                           _("_Cancel")));
