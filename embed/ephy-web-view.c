@@ -103,6 +103,7 @@ struct _EphyWebView {
   GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
   GtkWidget *password_form_info_bar;
+  GtkWidget *itp_info_bar;
 
   EphyHistoryService *history_service;
 
@@ -1074,6 +1075,79 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   g_free (bold_origin);
 }
 
+static void
+decide_on_itp_permission_request (GtkWidget               *info_bar,
+                                  int                      response,
+                                  WebKitPermissionRequest *request)
+{
+  switch (response) {
+    case GTK_RESPONSE_YES:
+      webkit_permission_request_allow (request);
+      break;
+    default:
+      webkit_permission_request_deny (request);
+      break;
+  }
+
+  g_object_set_data (G_OBJECT (info_bar), "ephy-itp-decision", NULL);
+  gtk_widget_destroy (info_bar);
+}
+
+static void
+ephy_web_view_show_itp_permission_info_bar (EphyWebView                              *web_view,
+                                            WebKitWebsiteDataAccessPermissionRequest *decision)
+{
+  GtkWidget *info_bar;
+  GtkWidget *content_area;
+  GtkWidget *box;
+  GtkWidget *label;
+  g_autofree char *message = NULL;
+  g_autofree char *secondary_message = NULL;
+  g_autofree char *markup = NULL;
+  const char *requesting_domain;
+  const char *current_domain;
+
+  info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
+                                            _("Allow"), GTK_RESPONSE_YES,
+                                            NULL);
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (decision);
+  current_domain = webkit_website_data_access_permission_request_get_current_domain (decision);
+  message = g_strdup_printf (_("Do you want to allow “%s“ to use cookies while browsing “%s“?"), requesting_domain, current_domain);
+  markup = g_strdup_printf ("<span size='xx-large' weight='bold'>%s</span>", message);
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_show (label);
+
+  secondary_message = g_strdup_printf (_("This will allow “%s“ to track your activity"), requesting_domain);
+  label = gtk_label_new (secondary_message);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_show (label);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), box);
+  gtk_widget_show (box);
+
+  track_info_bar (info_bar, &web_view->itp_info_bar);
+
+  g_signal_connect (info_bar, "response",
+                    G_CALLBACK (decide_on_itp_permission_request),
+                    decision);
+  g_object_set_data_full (G_OBJECT (info_bar), "ephy-itp-decision", decision, g_object_unref);
+
+  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+                             info_bar,
+                             EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
+  gtk_widget_show (info_bar);
+}
+
 static gboolean
 permission_request_cb (WebKitWebView           *web_view,
                        WebKitPermissionRequest *decision)
@@ -1096,6 +1170,10 @@ permission_request_cb (WebKitWebView           *web_view,
       permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
     else
       permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+  } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
+    ephy_web_view_show_itp_permission_info_bar (EPHY_WEB_VIEW (web_view),
+                                                WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision));
+    return TRUE;
   } else {
     return FALSE;
   }
@@ -3463,6 +3541,7 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->webcam_info_bar);
   untrack_info_bar (&view->password_info_bar);
   untrack_info_bar (&view->password_form_info_bar);
+  untrack_info_bar (&view->itp_info_bar);
 
   g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
