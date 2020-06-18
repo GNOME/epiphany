@@ -65,7 +65,8 @@ G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, EPHY_TYPE_DATA_DIALOG)
   WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES | \
   WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES | \
   WEBKIT_WEBSITE_DATA_PLUGIN_DATA | \
-  WEBKIT_WEBSITE_DATA_HSTS_CACHE
+  WEBKIT_WEBSITE_DATA_HSTS_CACHE | \
+  WEBKIT_WEBSITE_DATA_ITP
 
 typedef struct {
   WebKitWebsiteDataTypes type;
@@ -80,7 +81,8 @@ static const DataEntry data_entries[] = {
   { WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, FALSE, N_("IndexedDB databases") },
   { WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES, FALSE, N_("WebSQL databases") },
   { WEBKIT_WEBSITE_DATA_PLUGIN_DATA, FALSE, N_("Plugins data") },
-  { WEBKIT_WEBSITE_DATA_HSTS_CACHE, FALSE, N_("HSTS policies cache") }
+  { WEBKIT_WEBSITE_DATA_HSTS_CACHE, FALSE, N_("HSTS policies cache") },
+  { WEBKIT_WEBSITE_DATA_ITP, FALSE, N_("Intelligent Tracking Prevention data") }
 };
 
 static WebKitWebsiteDataManager *

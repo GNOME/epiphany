@@ -771,6 +771,10 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
                                                NULL);
   }
 
+  webkit_website_data_manager_set_itp_enabled (manager,
+                                               g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                                                       EPHY_PREFS_WEB_ENABLE_ITP));
+
   priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
                                     "website-data-manager", manager,
                                     "process-swap-on-cross-site-navigation-enabled", TRUE,
@@ -835,6 +839,20 @@ remember_passwords_setting_changed_cb (GSettings      *settings,
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("PasswordManager.SetShouldRememberPasswords",
                                                                               g_variant_new ("b", should_remember_passwords)));
+}
+
+static void
+enable_itp_setting_changed_cb (GSettings      *settings,
+                               char           *key,
+                               EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  WebKitWebsiteDataManager *manager;
+
+  manager = webkit_web_context_get_website_data_manager (priv->web_context);
+  webkit_website_data_manager_set_itp_enabled (manager,
+                                               g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                                                       EPHY_PREFS_WEB_ENABLE_ITP));
 }
 
 static void
@@ -929,6 +947,9 @@ ephy_embed_shell_startup (GApplication *application)
 
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
                            G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
+
+  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
+                           G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
 }
 
 static void
