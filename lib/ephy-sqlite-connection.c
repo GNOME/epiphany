@@ -168,6 +168,10 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
     }
 
     sqlite3_close (init_db);
+  } else {
+    ephy_sqlite_connection_execute (self, "PRAGMA main.journal_mode=WAL", error);
+    ephy_sqlite_connection_execute (self, "PRAGMA main.synchronous=NORMAL", error);
+    ephy_sqlite_connection_execute (self, "PRAGMA main.cache_size=10000", error);
   }
 
   return TRUE;

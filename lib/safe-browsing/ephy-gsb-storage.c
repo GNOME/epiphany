@@ -28,11 +28,11 @@
 
 #define EXPIRATION_THRESHOLD (8 * 60 * 60)
 
-/* Keep this lower than 200 or else you'll get "too many SQL variables" error
- * in ephy_gsb_storage_insert_batch(). SQLITE_MAX_VARIABLE_NUMBER is hardcoded
- * in sqlite3 as 999.
+/* Keep this lower than 6533 (SQLITE_MAX_VARIABLE_NUMBER / 5 slots) or else
+ * you'll get "too many SQL variables" error in ephy_gsb_storage_insert_batch().
+ * SQLITE_MAX_VARIABLE_NUMBER is hardcoded in sqlite3 (>= 3.22) as 32766.
  */
-#define BATCH_SIZE 199
+#define BATCH_SIZE 6553
 
 /* Increment schema version if you:
  * 1) Modify the database table structure.
