@@ -812,10 +812,35 @@ process_terminated_cb (EphyWebView                       *web_view,
 }
 
 static gboolean
-decide_policy_cb (WebKitWebView            *web_view,
-                  WebKitPolicyDecision     *decision,
-                  WebKitPolicyDecisionType  decision_type,
-                  gpointer                  user_data)
+decide_navigation (WebKitWebView            *web_view,
+                   WebKitPolicyDecision     *decision,
+                   gpointer                  user_data)
+{
+  EphyPrefsWebAutoplayPolicy policy = g_settings_get_enum (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_AUTOPLAY_POLICY);
+  WebKitWebsitePolicies *website_policies = NULL;
+
+  switch (policy) {
+  case EPHY_PREFS_WEB_AUTOPLAY_POLICY_ALLOW:
+    website_policies = webkit_website_policies_new_with_policies("autoplay", WEBKIT_AUTOPLAY_ALLOW, NULL);
+    break;
+  case EPHY_PREFS_WEB_AUTOPLAY_POLICY_ALLOW_WITHOUT_SOUND:
+    website_policies = webkit_website_policies_new_with_policies("autoplay", WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND, NULL);
+    break;
+  case EPHY_PREFS_WEB_AUTOPLAY_POLICY_DENY:
+    website_policies = webkit_website_policies_new_with_policies("autoplay", WEBKIT_AUTOPLAY_DENY, NULL);
+    break;
+  }
+
+  g_assert(website_policies);
+  webkit_policy_decision_use_with_policies(decision, website_policies);
+  g_object_unref(website_policies);
+  return TRUE;
+}
+
+static gboolean
+decide_resource (WebKitWebView            *web_view,
+                 WebKitPolicyDecision     *decision,
+                 gpointer                  user_data)
 {
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
@@ -825,9 +850,6 @@ decide_policy_cb (WebKitWebView            *web_view,
   const char *mime_type;
   const char *request_uri;
   gboolean is_main_resource;
-
-  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
-    return FALSE;
 
   /* If WebKit can handle the MIME type, let it.
    * Otherwise, we'll start a download.
@@ -869,6 +891,25 @@ decide_policy_cb (WebKitWebView            *web_view,
   }
 
   webkit_policy_decision_download (decision);
+  return TRUE;
+}
+
+static gboolean
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  gpointer                  user_data)
+{
+  switch (decision_type) {
+  case WEBKIT_POLICY_DECISION_TYPE_RESPONSE:
+    return decide_resource(web_view, decision, user_data);
+  case WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION:
+    return decide_navigation(web_view, decision, user_data);
+  case WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION:
+    /* not handled */
+    break;
+  }
+
   return TRUE;
 }
 

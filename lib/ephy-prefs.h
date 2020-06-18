@@ -71,6 +71,13 @@ typedef enum
   EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY_NEVER
 } EphyPrefsWebHardwareAccelerationPolicy;
 
+typedef enum
+{
+  EPHY_PREFS_WEB_AUTOPLAY_POLICY_ALLOW,
+  EPHY_PREFS_WEB_AUTOPLAY_POLICY_ALLOW_WITHOUT_SOUND,
+  EPHY_PREFS_WEB_AUTOPLAY_POLICY_DENY
+} EphyPrefsWebAutoplayPolicy;
+
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_EXPAND_TABS_BAR            "expand-tabs-bar"
 #define EPHY_PREFS_UI_TABS_BAR_POSITION          "tabs-bar-position"
@@ -124,6 +131,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY "hardware-acceleration-policy"
 #define EPHY_PREFS_WEB_ASK_ON_DOWNLOAD              "ask-on-download"
 #define EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB            "switch-to-new-tab"
+#define EPHY_PREFS_WEB_AUTOPLAY_POLICY              "autoplay-policy"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -153,6 +161,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
   EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
   EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB,
+  EPHY_PREFS_WEB_AUTOPLAY_POLICY,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"

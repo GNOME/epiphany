@@ -515,6 +515,19 @@ webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
   }
 }
 
+static void
+webkit_pref_callback_autoplay_policy (GSettings  *settings,
+                                      const char *key,
+                                      gpointer    data)
+{
+  // REVIEW: Do I need a callback to register with GSettings?  In the
+  // future, a UI could be provided to allow the user to specify on a
+  // per-URL basis the autoplay policies.  For now, it's like a global
+  // web setting, but due to the allowed flexibility of per-URL
+  // differences, it's actually handled in the decide-policy
+  // callbacks, where GSettings are queried directly.
+}
+
 static const PrefData webkit_pref_entries[] = {
   /* Epiphany font settings */
   { EPHY_PREFS_WEB_SCHEMA,
@@ -576,6 +589,10 @@ static const PrefData webkit_pref_entries[] = {
     EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
     "hardware-acceleration-policy",
     webkit_pref_callback_hardware_acceleration_policy },
+  { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_AUTOPLAY_POLICY,
+    "autoplay-policy",
+    webkit_pref_callback_autoplay_policy },
 };
 
 static gpointer
