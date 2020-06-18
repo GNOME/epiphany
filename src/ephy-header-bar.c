@@ -215,16 +215,16 @@ ephy_header_bar_constructed (GObject *object)
 
     gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
   } else {
-    GtkWidget *column;
+    GtkWidget *clamp;
 
-    column = hdy_column_new ();
-    gtk_widget_set_hexpand (GTK_WIDGET (column), TRUE);
-    gtk_widget_show (column);
-    hdy_column_set_maximum_width (HDY_COLUMN (column), 860);
-    hdy_column_set_linear_growth_width (HDY_COLUMN (column), 560);
-    gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (header_bar->title_widget));
+    clamp = hdy_clamp_new ();
+    gtk_widget_set_hexpand (GTK_WIDGET (clamp), TRUE);
+    gtk_widget_show (clamp);
+    hdy_clamp_set_maximum_size (HDY_CLAMP (clamp), 860);
+    hdy_clamp_set_tightening_threshold (HDY_CLAMP (clamp), 560);
+    gtk_container_add (GTK_CONTAINER (clamp), GTK_WIDGET (header_bar->title_widget));
 
-    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), column);
+    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), clamp);
   }
 
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));

@@ -370,23 +370,23 @@ ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
 static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
-  GtkWidget *column;
+  GtkWidget *clamp;
   GtkWidget *box;
   GtkSizeGroup *size_group;
 
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
-  column = GTK_WIDGET (hdy_column_new ());
-  hdy_column_set_maximum_width (HDY_COLUMN (column), 400);
-  hdy_column_set_linear_growth_width (HDY_COLUMN (column), 300);
-  gtk_container_add (GTK_CONTAINER (toolbar), column);
+  clamp = GTK_WIDGET (hdy_clamp_new ());
+  hdy_clamp_set_maximum_size (HDY_CLAMP (clamp), 400);
+  hdy_clamp_set_tightening_threshold (HDY_CLAMP (clamp), 300);
+  gtk_container_add (GTK_CONTAINER (toolbar), clamp);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                GTK_STYLE_CLASS_RAISED);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                GTK_STYLE_CLASS_LINKED);
-  gtk_container_add (GTK_CONTAINER (column), box);
+  gtk_container_add (GTK_CONTAINER (clamp), box);
 
   toolbar->entry = gd_tagged_entry_new ();
   toolbar->entry_tag = gd_tagged_entry_tag_new ("");
