@@ -221,8 +221,12 @@ static void
 ephy_cookies_view_init (EphyCookiesView *self)
 {
   WebKitWebContext *web_context;
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShell *shell;
+  gint64 start, end;
 
+  start = g_get_monotonic_time ();
+
+  shell = ephy_embed_shell_get_default ();
   gtk_widget_init_template (GTK_WIDGET (self));
 
   web_context = ephy_embed_shell_get_web_context (shell);
@@ -234,4 +238,7 @@ ephy_cookies_view_init (EphyCookiesView *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "cookies", self->action_group);
 
   gtk_list_box_set_filter_func (GTK_LIST_BOX (self->cookies_listbox), filter_func, self, NULL);
+
+  end = g_get_monotonic_time ();
+  printf ("ephy_cookies_view_init (): %ld ms ------------------------------\n", (end - start)/1000);
 }

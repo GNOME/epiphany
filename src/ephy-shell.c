@@ -1197,8 +1197,14 @@ ephy_shell_get_history_dialog (EphyShell *shell)
 GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
+  gint64 before, after;
+
   if (shell->prefs_dialog == NULL) {
+    before = g_get_monotonic_time ();
     shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
+    after = g_get_monotonic_time ();
+
+    printf ("Instancing EphyPrefsDialog: %ld ms ---------------------------\n", (after-before) / 1000 );
 
     g_signal_connect (shell->prefs_dialog,
                       "destroy",

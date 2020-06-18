@@ -391,6 +391,10 @@ password_filter (GtkListBoxRow *row,
 static void
 ephy_passwords_view_init (EphyPasswordsView *passwords_view)
 {
+  gint64 start, end;
+
+  start = g_get_monotonic_time ();
+
   passwords_view->manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
   gtk_widget_init_template (GTK_WIDGET (passwords_view));
@@ -402,4 +406,7 @@ ephy_passwords_view_init (EphyPasswordsView *passwords_view)
 
   gtk_list_box_set_filter_func (GTK_LIST_BOX (passwords_view->listbox), password_filter, passwords_view, NULL);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (passwords_view->listbox), GTK_SELECTION_NONE);
+
+  end = g_get_monotonic_time ();
+  printf ("ephy_passwords_view_init (): %ld ms ----------------------------\n", (end - start)/1000);
 }

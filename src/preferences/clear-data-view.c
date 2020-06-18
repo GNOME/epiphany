@@ -429,6 +429,10 @@ clear_data_view_class_init (ClearDataViewClass *klass)
 static void
 clear_data_view_init (ClearDataView *clear_data_view)
 {
+  gint64 start, end;
+
+  start = g_get_monotonic_time ();
+
   gtk_widget_init_template (GTK_WIDGET (clear_data_view));
 
   gtk_tree_model_filter_set_visible_func (clear_data_view->treemodelfilter,
@@ -448,4 +452,7 @@ clear_data_view_init (ClearDataView *clear_data_view)
                                      clear_data_view->cancellable,
                                      (GAsyncReadyCallback)website_data_fetched_cb,
                                      clear_data_view);
+
+  end = g_get_monotonic_time ();
+  printf ("clear_data_view_init (): %ld ms -------------------------------\n", (end - start)/1000);
 }
