@@ -168,6 +168,10 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
     }
 
     sqlite3_close (init_db);
+  } else {
+    ephy_sqlite_connection_execute (self, "PRAGMA main.journal_mode=WAL", error);
+    ephy_sqlite_connection_execute (self, "PRAGMA main.synchronous=NORMAL", error);
+    ephy_sqlite_connection_execute (self, "PRAGMA main.cache_size=10000", error);
   }
 
   return TRUE;
@@ -185,18 +189,21 @@ ephy_sqlite_connection_close (EphySQLiteConnection *self)
 void
 ephy_sqlite_connection_delete_database (EphySQLiteConnection *self)
 {
-  char *journal;
+  g_autofree char *journal = NULL;
+  g_autofree char *shm = NULL;
 
   g_assert (EPHY_IS_SQLITE_CONNECTION (self));
 
   if (g_file_test (self->database_path, G_FILE_TEST_EXISTS) && g_unlink (self->database_path) == -1)
     g_warning ("Failed to delete database at %s: %s", self->database_path, g_strerror (errno));
 
-  journal = g_strdup_printf ("%s-journal", self->database_path);
+  journal = g_strdup_printf ("%s-wal", self->database_path);
   if (g_file_test (journal, G_FILE_TEST_EXISTS) && g_unlink (journal) == -1)
     g_warning ("Failed to delete database journal at %s: %s", journal, g_strerror (errno));
 
-  g_free (journal);
+  shm = g_strdup_printf ("%s-shm", self->database_path);
+  if (g_file_test (shm, G_FILE_TEST_EXISTS) && g_unlink (shm) == -1)
+    g_warning ("Failed to delete database shm at %s: %s", shm, g_strerror (errno));
 }
 
 void
