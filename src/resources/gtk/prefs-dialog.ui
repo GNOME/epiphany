@@ -11,6 +11,7 @@
     <property name="default-width">600</property>
     <property name="default-height">800</property>
     <signal name="key-press-event" handler="on_key_press_event"/>
+    <signal name="delete-event" handler="on_delete_event"/>
     <child>
       <object class="HdyDeck" id="deck">
         <property name="visible">True</property>

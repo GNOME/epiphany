@@ -64,6 +64,13 @@ on_key_press_event (EphyPrefsDialog *prefs_dialog,
 }
 
 static void
+on_delete_event (EphyPrefsDialog *prefs_dialog)
+{
+  prefs_general_page_on_pd_delete_event (prefs_dialog->general_page);
+  gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
+}
+
+static void
 present_data_view (EphyPrefsDialog *prefs_dialog,
                    GtkWidget       *presented_view)
 {
@@ -121,6 +128,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 
   /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
+  gtk_widget_class_bind_template_callback (widget_class, on_delete_event);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
@@ -134,8 +142,6 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
   gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
-
-  prefs_general_page_connect_pd_response (dialog->general_page, dialog);
 
   if (mode == EPHY_EMBED_SHELL_MODE_BROWSER)
     prefs_sync_page_setup (dialog->sync_page);
