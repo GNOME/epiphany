@@ -65,6 +65,7 @@ struct _EphySecurityPopover {
   GtkWidget *access_location_combobox;
   GtkWidget *access_microphone_combobox;
   GtkWidget *access_webcam_combobox;
+  GtkWidget *autoplay_combobox;
   GtkWidget *grid;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
@@ -155,6 +156,7 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, popover->access_location_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, popover->access_microphone_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, popover->access_webcam_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY, origin, popover->autoplay_combobox);
 }
 
 static void
@@ -482,11 +484,19 @@ on_access_webcam_combobox_changed (GtkComboBox         *box,
   handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
 }
 
+static void
+on_autoplay_policy_combobox_changed (GtkComboBox         *box,
+                                     EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY);
+}
+
 static GtkWidget *
 add_permission_combobox (EphySecurityPopover *popover,
                          const gchar         *name,
                          gpointer             callback,
-                         gboolean             no_ask)
+                         gboolean             no_ask,
+                         const gchar         *third_option_name)
 {
   GtkWidget *widget;
   GtkWidget *hbox;
@@ -503,8 +513,10 @@ add_permission_combobox (EphySecurityPopover *popover,
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Allow"));
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Deny"));
 
-  if (!no_ask)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Ask"));
+  if (!no_ask) {
+    const gchar *name = third_option_name == NULL ? "Ask" : third_option_name;
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _(name));
+  }
 
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
   g_signal_connect (widget, "changed", G_CALLBACK (callback), popover);
@@ -553,12 +565,17 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_grid_attach (GTK_GRID (popover->grid), permissions, 0, 4, 2, 1);
 
   popover->permission_pos = 5;
-  popover->ad_combobox = add_permission_combobox (popover, _("Advertisements"), on_ad_combobox_changed, TRUE);
-  popover->notification_combobox = add_permission_combobox (popover, _("Notifications"), on_notification_combobox_changed, FALSE);
-  popover->save_password_combobox = add_permission_combobox (popover, _("Password saving"), on_save_password_combobox_changed, FALSE);
-  popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, FALSE);
-  popover->access_microphone_combobox = add_permission_combobox (popover, _("Microphone access"), on_access_microphone_combobox_changed, FALSE);
-  popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, FALSE);
+  popover->ad_combobox = add_permission_combobox (popover, _("Advertisements"), on_ad_combobox_changed, TRUE, NULL);
+  popover->notification_combobox = add_permission_combobox (popover, _("Notifications"), on_notification_combobox_changed, FALSE, NULL);
+  popover->save_password_combobox = add_permission_combobox (popover, _("Password saving"), on_save_password_combobox_changed, FALSE, NULL);
+  popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, FALSE, NULL);
+  popover->access_microphone_combobox = add_permission_combobox (popover, _("Microphone access"), on_access_microphone_combobox_changed, FALSE, NULL);
+  popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, FALSE, NULL);
+  /* REVIEW: This makes the combo boxes misaligned, because the of the */
+  /* longer string "Default". Not sure how that is made consistent in */
+  /* GTK+. I didn't want to use the default "Ask", since that's */
+  /* misleading for autoplay. */
+  popover->autoplay_combobox = add_permission_combobox (popover, _("Autoplay"), on_autoplay_policy_combobox_changed, FALSE, "Default");
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
