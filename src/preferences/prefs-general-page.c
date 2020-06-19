@@ -219,7 +219,7 @@ get_last_row (GtkListBox *list)
 {
   int i;
 
-  for (i = 0; ; i++) {
+  for (i = 0;; i++) {
     GtkListBoxRow *tmp;
     tmp = gtk_list_box_get_row_at_index (list, i);
     if (tmp == NULL)
