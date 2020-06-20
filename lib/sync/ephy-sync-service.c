@@ -683,13 +683,13 @@ out:
 }
 
 static void
-forget_secrets_cb (SecretService *service,
-                   GAsyncResult  *result,
-                   gpointer       user_data)
+forget_secrets_cb (GObject      *source_object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
 {
   GError *error = NULL;
 
-  secret_service_clear_finish (service, result, &error);
+  secret_password_clear_finish (result, &error);
   if (error) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Failed to clear sync secrets: %s", error->message);
@@ -714,8 +714,8 @@ ephy_sync_service_forget_secrets (EphySyncService *self)
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
                                         EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
                                         NULL);
-  secret_service_clear (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes, self->cancellable,
-                        (GAsyncReadyCallback)forget_secrets_cb, NULL);
+  secret_password_clearv (EPHY_SYNC_SECRET_SCHEMA, attributes, self->cancellable,
+                          (GAsyncReadyCallback)forget_secrets_cb, NULL);
   g_hash_table_remove_all (self->secrets);
 
   g_hash_table_unref (attributes);
@@ -1688,7 +1688,7 @@ sync_frequency_changed_cb (GSettings       *settings,
 }
 
 static void
-load_secrets_cb (SecretService   *service,
+load_secrets_cb (GObject         *source_object,
                  GAsyncResult    *result,
                  EphySyncService *self)
 {
@@ -1700,7 +1700,7 @@ load_secrets_cb (SecretService   *service,
   const char *message;
   const char *suggestion;
 
-  res = secret_service_search_finish (service, result, &error);
+  res = secret_password_search_finish (result, &error);
   if (error) {
     if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
       g_error_free (error);
@@ -1773,22 +1773,22 @@ ephy_sync_service_load_secrets (EphySyncService *self)
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
                                         EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
                                         NULL);
-  secret_service_search (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes,
-                         SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
-                         self->cancellable, (GAsyncReadyCallback)load_secrets_cb, self);
+  secret_password_searchv (EPHY_SYNC_SECRET_SCHEMA, attributes,
+                           SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                           self->cancellable, (GAsyncReadyCallback)load_secrets_cb, self);
 
   g_hash_table_unref (attributes);
   g_free (user);
 }
 
 static void
-store_secrets_cb (SecretService   *service,
+store_secrets_cb (GObject         *source_object,
                   GAsyncResult    *result,
                   EphySyncService *self)
 {
   GError *error = NULL;
 
-  secret_service_store_finish (service, result, &error);
+  secret_password_store_finish (result, &error);
   if (error) {
     if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       return;
@@ -1813,7 +1813,6 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 {
   JsonNode *node;
   JsonObject *object;
-  SecretValue *secret;
   GHashTable *attributes;
   GHashTableIter iter;
   gpointer key;
@@ -1833,7 +1832,6 @@ ephy_sync_service_store_secrets (EphySyncService *self)
   json_node_set_object (node, object);
   json_string = json_to_string (node, FALSE);
 
-  secret = secret_value_new (json_string, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
                                         EPHY_SYNC_SECRET_ACCOUNT_KEY, self->user,
                                         NULL);
@@ -1841,13 +1839,12 @@ ephy_sync_service_store_secrets (EphySyncService *self)
   label = g_strdup_printf (_("The sync secrets of %s"), self->user);
 
   LOG ("Storing sync secrets...");
-  secret_service_store (NULL, EPHY_SYNC_SECRET_SCHEMA,
-                        attributes, NULL, label, secret, NULL,
-                        (GAsyncReadyCallback)store_secrets_cb, self);
+  secret_password_storev (EPHY_SYNC_SECRET_SCHEMA,
+                          attributes, NULL, label, json_string, NULL,
+                          (GAsyncReadyCallback)store_secrets_cb, self);
 
   g_free (label);
   g_free (json_string);
-  secret_value_unref (secret);
   g_hash_table_unref (attributes);
   json_object_unref (object);
   json_node_unref (node);
