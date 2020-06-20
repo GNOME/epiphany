@@ -46,6 +46,7 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
+#include "ephy-pdf-handler.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
@@ -854,8 +855,17 @@ decide_policy_cb (WebKitWebView            *web_view,
     } else if (strncmp (mime_type, "image/", 6) == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
     } else if (strcmp (mime_type, "application/pdf") == 0) {
+      g_autofree char *pdf_uri = NULL;
+
       /* FIXME: figure out how to make PDFs work in iframes. */
       type = EPHY_WEB_VIEW_DOCUMENT_PDF;
+      EPHY_WEB_VIEW (web_view)->document_type = type;
+
+      pdf_uri = g_strconcat (EPHY_PDF_SCHEME, ":", request_uri, NULL);
+
+      webkit_web_view_load_uri (web_view, pdf_uri);
+
+      return FALSE;
     }
 
     /* FIXME: maybe it makes more sense to have an API to query the mime
@@ -1266,7 +1276,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   SoupURI *soup_uri;
   g_autofree char *tld = NULL;
 
-  if (view->loading_error_page || (view->document_type == EPHY_WEB_VIEW_DOCUMENT_PDF))
+  if (view->loading_error_page)
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
@@ -1285,6 +1295,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   if (!soup_uri ||
       strcmp (soup_uri->scheme, EPHY_VIEW_SOURCE_SCHEME) == 0 ||
       strcmp (soup_uri->scheme, EPHY_READER_SCHEME) == 0 ||
+      strcmp (soup_uri->scheme, EPHY_PDF_SCHEME) == 0 ||
       g_strcmp0 (tld, "127.0.0.1") == 0 ||
       g_strcmp0 (tld, "::1") == 0 ||
       g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
@@ -1426,6 +1437,9 @@ load_changed_cb (WebKitWebView   *web_view,
 
       /* Ensure we load the icon for this web view, if available. */
       _ephy_web_view_update_icon (view);
+
+      if (g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-pdf"))
+        ephy_embed_shell_pdf_handler_stop (ephy_embed_shell_get_default (), web_view);
 
       /* Reset visit type. */
       view->visit_type = EPHY_PAGE_VISIT_NONE;

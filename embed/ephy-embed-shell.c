@@ -35,6 +35,7 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-password-manager.h"
+#include "ephy-pdf-handler.h"
 #include "ephy-profile-utils.h"
 #include "ephy-reader-handler.h"
 #include "ephy-settings.h"
@@ -65,6 +66,7 @@ typedef struct {
   EphyAboutHandler *about_handler;
   EphyViewSourceHandler *source_handler;
   EphyReaderHandler *reader_handler;
+  EphyPdfHandler *pdf_handler;
   char *guid;
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
@@ -192,6 +194,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->reader_handler);
   g_clear_object (&priv->source_handler);
+  g_clear_object (&priv->pdf_handler);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->password_manager);
   g_clear_object (&priv->permissions_manager);
@@ -699,6 +702,15 @@ reader_request_cb (WebKitURISchemeRequest *request,
 }
 
 static void
+pdf_request_cb (WebKitURISchemeRequest *request,
+                EphyEmbedShell         *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_pdf_handler_handle_request (priv->pdf_handler, request);
+}
+
+static void
 ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
@@ -810,11 +822,6 @@ download_started_cb (WebKitWebContext *web_context,
 
   web_view = webkit_download_get_web_view (download);
   if (EPHY_IS_WEB_VIEW (web_view)) {
-    EphyEmbed *embed;
-
-    embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
-    ephy_embed_download_started (embed, ephy_download);
-
     if (ephy_web_view_get_document_type (EPHY_WEB_VIEW (web_view)) != EPHY_WEB_VIEW_DOCUMENT_PDF)
       ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
   } else {
@@ -897,6 +904,11 @@ ephy_embed_shell_startup (GApplication *application)
   priv->source_handler = ephy_view_source_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_SOURCE_SCHEME,
                                           (WebKitURISchemeRequestCallback)source_request_cb,
+                                          shell, NULL);
+  /* pdf handler */
+  priv->pdf_handler = ephy_pdf_handler_new ();
+  webkit_web_context_register_uri_scheme (priv->web_context, EPHY_PDF_SCHEME,
+                                          (WebKitURISchemeRequestCallback)pdf_request_cb,
                                           shell, NULL);
 
   /* reader mode handler */
@@ -1417,4 +1429,13 @@ ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
   webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
                                                                           "passwordManagerSave",
                                                                           priv->guid);
+}
+
+void
+ephy_embed_shell_pdf_handler_stop (EphyEmbedShell *shell,
+                                   WebKitWebView  *web_view)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_pdf_handler_stop (priv->pdf_handler, web_view);
 }
