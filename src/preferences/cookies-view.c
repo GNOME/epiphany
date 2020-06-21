@@ -34,14 +34,20 @@
 
 #include "cookies-view.h"
 
+#define ROWS_BATCH_SIZE 15
+
 struct _EphyCookiesView {
   EphyDataView parent_instance;
 
   GtkWidget *cookies_listbox;
+  gint remaining_batch_size;
+  guint add_rows_source_id;
 
   GActionGroup *action_group;
 
   WebKitWebsiteDataManager *data_manager;
+  GList *sites_data_list;
+  GList *sites_data_list_iter;
 };
 
 G_DEFINE_TYPE (EphyCookiesView, ephy_cookies_view, EPHY_TYPE_DATA_VIEW)
@@ -109,21 +115,6 @@ forget_all (GSimpleAction *action,
 }
 
 static void
-ephy_cookies_view_class_init (EphyCookiesViewClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
-
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/cookies-view.ui");
-
-  gtk_widget_class_bind_template_child (widget_class, EphyCookiesView, cookies_listbox);
-
-  gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
-}
-
-static void
 cookie_add (EphyCookiesView   *self,
             WebKitWebsiteData *data)
 {
@@ -169,6 +160,7 @@ get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
 
   ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), TRUE);
 }
+
 
 static void
 populate_model (EphyCookiesView *self)
@@ -218,20 +210,134 @@ filter_func (GtkListBoxRow *row,
 }
 
 static void
-ephy_cookies_view_init (EphyCookiesView *self)
+on_edge_reached (GtkScrolledWindow *scrolled,
+                 GtkPositionType    pos,
+                 gpointer           user_data)
 {
-  WebKitWebContext *web_context;
+  printf ("on_edge_reached () called --------------------------------------\n");
+
+  /*
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
+
+  if (pos == GTK_POS_BOTTOM) {
+    load_further_data (self);
+  }
+   */
+}
+
+static void
+add_cookie_row (EphyCookiesView   *self,
+                WebKitWebsiteData *data)
+{
+  GtkWidget *row;
+  GtkWidget *button;
+  const char *domain;
+
+  domain = webkit_website_data_get_name (data);
+
+  /* Row */
+  row = hdy_action_row_new ();
+  hdy_action_row_set_title (HDY_ACTION_ROW (row), domain);
+
+  button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  g_object_set_data (G_OBJECT (button), "row", row);
+  gtk_widget_set_tooltip_text (button, _("Remove cookie"));
+  g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), self);
+  gtk_container_add (GTK_CONTAINER (row), button);
+  g_object_set_data (G_OBJECT (row), "data", data);
+
+  gtk_widget_show_all (GTK_WIDGET (row));
+  gtk_list_box_insert (GTK_LIST_BOX (self->cookies_listbox), GTK_WIDGET (row), -1);
+}
+
+static gboolean
+add_cookie_rows_source (EphyCookiesView *self)
+{
+  gint remaining_batch_size = self->remaining_batch_size;
+  GList *data_list_iter = self->sites_data_list_iter;
+  WebKitWebsiteData *site_data;
+
+  if (remaining_batch_size == 0 || data_list_iter == NULL)
+    return G_SOURCE_REMOVE;
+
+  if (data_list_iter->data == NULL) {
+    printf ("Hm, is this allowed to happen ? ------------------------------\n");
+    return G_SOURCE_REMOVE;
+  }
+
+  site_data = data_list_iter->data;
+  add_cookie_row (self, site_data);
+
+  self->remaining_batch_size--;
+  self->sites_data_list_iter = g_list_next (data_list_iter);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+sites_data_fetched_cb (WebKitWebsiteDataManager *data_manager,
+                       GAsyncResult             *result,
+                       EphyCookiesView          *self)
+{
+  GList *data_list = webkit_website_data_manager_fetch_finish (data_manager, result, NULL);
+
+  self->sites_data_list = data_list;
+  if (!data_list) {
+    ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), FALSE);
+    ephy_data_view_set_is_loading (EPHY_DATA_VIEW (self), FALSE);
+
+    return;
+  }
+
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), TRUE);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (self), FALSE);
+
+  /* Begin creating the listbox rows in batches */
+  self->remaining_batch_size += ROWS_BATCH_SIZE;
+  self->sites_data_list_iter = data_list;
+  self->add_rows_source_id = g_idle_add ((GSourceFunc)add_cookie_rows_source, self);
+}
+
+static void
+fetch_sites_data_async (EphyCookiesView *self)
+{
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitWebContext *web_context = ephy_embed_shell_get_web_context (shell);
 
-  gtk_widget_init_template (GTK_WIDGET (self));
-
-  web_context = ephy_embed_shell_get_web_context (shell);
   self->data_manager = webkit_web_context_get_website_data_manager (web_context);
 
-  populate_model (self);
+  webkit_website_data_manager_fetch (self->data_manager,
+                                     WEBKIT_WEBSITE_DATA_COOKIES,
+                                     NULL,
+                                     (GAsyncReadyCallback)sites_data_fetched_cb,
+                                     self);
+}
+
+static void
+ephy_cookies_view_init (EphyCookiesView *self)
+{
+  gtk_widget_init_template (GTK_WIDGET (self));
 
   self->action_group = create_action_group (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "cookies", self->action_group);
 
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->cookies_listbox), filter_func, self, NULL);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (self), TRUE);
+  fetch_sites_data_async (self);
+}
+
+static void
+ephy_cookies_view_class_init (EphyCookiesViewClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/epiphany/gtk/cookies-view.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyCookiesView, cookies_listbox);
+
+  gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_edge_reached);
 }
