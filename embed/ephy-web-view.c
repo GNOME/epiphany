@@ -2588,7 +2588,19 @@ ephy_web_view_get_address (EphyWebView *view)
 const char *
 ephy_web_view_get_display_address (EphyWebView *view)
 {
-  return view->display_address ? view->display_address : "about:blank";
+  if (view->display_address) {
+    int colonpos;
+
+    colonpos = (int)((strstr (view->display_address, "://")) - view->display_address);
+
+    if (colonpos < 0)
+      return "about:blank";
+
+    
+    return view->display_address + colonpos + strlen("://");
+  }
+
+  return "about:blank";
 }
 
 /**
