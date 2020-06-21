@@ -16,6 +16,7 @@
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <signal name="edge-reached" handler="on_edge_reached" object="EphyCookiesView"/>
         <child>
           <object class="HdyClamp">
             <property name="visible">True</property>
