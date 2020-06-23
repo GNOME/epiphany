@@ -50,6 +50,9 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
+
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
@@ -474,6 +477,8 @@ ephy_shell_startup (GApplication *application)
   GAction *action;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
+
+  hdy_init ();
 
   /* We're not remoting; start our services */
   ephy_user_agent_init_sync ();
