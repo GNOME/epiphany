@@ -2407,6 +2407,77 @@ reader_setting_changed_cb (GSettings   *settings,
   g_free (js_snippet);
 }
 
+typedef struct {
+  EphyWebView *web_view;
+  WebKitAuthenticationRequest *request;
+} AuthenticationData;
+
+static AuthenticationData *
+authentication_data_new (EphyWebView                 *web_view,
+                         WebKitAuthenticationRequest *request)
+{
+  AuthenticationData *data;
+
+  data = g_new (AuthenticationData, 1);
+  data->web_view = g_object_ref (web_view);
+  data->request = g_object_ref (request);
+
+  return data;
+}
+
+static void
+authentication_data_free (AuthenticationData *data)
+{
+  g_object_unref (data->web_view);
+  g_object_unref (data->request);
+  g_free (data);
+}
+
+static void
+auth_password_query_finished_cb (GList              *records,
+                                 AuthenticationData *data)
+{
+  EphyPasswordRecord *record;
+  g_autoptr (WebKitCredential) credential = NULL;
+
+  record = records && records->data ? EPHY_PASSWORD_RECORD (records->data) : NULL;
+  if (record) {
+    credential = webkit_credential_new (ephy_password_record_get_username (record),
+                                        ephy_password_record_get_password (record),
+                                        WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+  } else {
+    /* Provide a non-empty wrong credential to force a retry */
+    credential = webkit_credential_new (" ", "", WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+  }
+
+  webkit_authentication_request_authenticate (data->request, credential);
+  authentication_data_free (data);
+}
+
+static void
+authenticate_succeeded_cb (WebKitAuthenticationRequest *request,
+                           WebKitCredential            *credential)
+{
+  EphyPasswordManager *password_manager;
+  g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
+  g_autofree char *origin = NULL;
+
+  if (webkit_credential_get_persistence (credential) != WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT)
+    return;
+
+  security_origin = webkit_authentication_request_get_security_origin (request);
+  origin = webkit_security_origin_to_string (security_origin);
+  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  ephy_password_manager_save (password_manager,
+                              origin,
+                              origin,
+                              webkit_credential_get_username (credential),
+                              webkit_credential_get_password (credential),
+                              "org.gnome.Epiphany.HTTPAuthCredentials.Username",
+                              "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                              TRUE);
+}
+
 static gboolean
 authenticate_cb (WebKitWebView               *web_view,
                  WebKitAuthenticationRequest *request,
@@ -2414,18 +2485,34 @@ authenticate_cb (WebKitWebView               *web_view,
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   g_autoptr (WebKitCredential) credential = NULL;
+  EphyPasswordManager *password_manager;
+  AuthenticationData *data;
+  g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
+  g_autofree char *origin = NULL;
 
-  credential = webkit_authentication_request_get_proposed_credential (request);
-
-  /* In case we have known credentials and it is the firs try, authenticate automatically */
-  if (credential && !webkit_authentication_request_is_retry (request)) {
-    webkit_authentication_request_authenticate (request, credential);
-    return TRUE;
+  if (webkit_authentication_request_is_retry (request)) {
+    webkit_authentication_request_set_can_save_credentials (request, TRUE);
+    g_signal_connect_object (request, "authenticated",
+                             G_CALLBACK (authenticate_succeeded_cb),
+                             ephy_web_view, 0);
+    ephy_web_view->in_auth_dialog = 1;
+    return FALSE;
   }
 
-  ephy_web_view->in_auth_dialog = 1;
-
-  return FALSE;
+  data = authentication_data_new (ephy_web_view, request);
+  security_origin = webkit_authentication_request_get_security_origin (request);
+  origin = webkit_security_origin_to_string (security_origin);
+  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  ephy_password_manager_query (password_manager,
+                               NULL,
+                               origin,
+                               origin,
+                               NULL,
+                               "org.gnome.Epiphany.HTTPAuthCredentials.Username",
+                               "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                               (EphyPasswordManagerQueryCallback)auth_password_query_finished_cb,
+                               data);
+  return TRUE;
 }
 
 typedef struct {

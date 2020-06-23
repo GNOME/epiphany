@@ -781,6 +781,7 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
     manager = webkit_website_data_manager_new ("base-data-directory", ephy_profile_dir (),
                                                "base-cache-directory", ephy_cache_dir (),
                                                NULL);
+    webkit_website_data_manager_set_persistent_credential_storage_enabled (manager, FALSE);
   }
 
   webkit_website_data_manager_set_itp_enabled (manager,
