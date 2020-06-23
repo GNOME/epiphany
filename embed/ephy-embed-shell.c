@@ -47,6 +47,8 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 #include <stdlib.h>
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
@@ -853,6 +855,8 @@ ephy_embed_shell_startup (GApplication *application)
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
   g_autofree char *cookie_policy = NULL;
+
+  hdy_init ();
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
