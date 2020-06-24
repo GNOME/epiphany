@@ -42,6 +42,7 @@ typedef struct {
   WebKitURISchemeRequest *scheme_request;
   GCancellable *cancellable;
   EphyDownload *download;
+  char *file_name;
 } EphyPdfRequest;
 
 static EphyPdfRequest *
@@ -54,6 +55,7 @@ ephy_pdf_request_new (EphyPDFHandler         *handler,
   pdf_request->source_handler = g_object_ref (handler);
   pdf_request->scheme_request = g_object_ref (request);
   pdf_request->cancellable = g_cancellable_new ();
+  pdf_request->file_name = NULL;
 
   return pdf_request;
 }
@@ -70,6 +72,7 @@ ephy_pdf_request_free (EphyPdfRequest *request)
 
   g_object_unref (request->source_handler);
   g_object_unref (request->scheme_request);
+  g_clear_pointer (&request->file_name, g_free);
 
   g_cancellable_cancel (request->cancellable);
   g_object_unref (request->cancellable);
@@ -123,7 +126,6 @@ pdf_file_loaded (GObject      *source,
   g_autoptr (GError) error = NULL;
   g_autoptr (GString) html = NULL;
   g_autofree gchar *b64 = NULL;
-  g_autofree gchar *requested_uri = NULL;
   g_autofree char *file_data = NULL;
   gsize len = 0;
 
@@ -139,7 +141,7 @@ pdf_file_loaded (GObject      *source,
   g_file_delete_async (G_FILE (source), G_PRIORITY_DEFAULT, NULL, pdf_file_deleted, NULL);
 
   html = g_string_new ("");
-  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, g_file_get_basename (G_FILE (source)));
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, self->file_name ? self->file_name : "");
 
   finish_uri_scheme_request (self, g_strdup (html->str), NULL);
 }
@@ -192,6 +194,19 @@ download_errored_cb (EphyDownload   *download,
 }
 
 static void
+created_destination_cb (WebKitDownload *download,
+                        gchar          *destination,
+                        gpointer        user_data)
+{
+  EphyPdfRequest *request = user_data;
+
+  g_signal_handlers_disconnect_by_data (download, request);
+
+  g_clear_pointer (&request->file_name, g_free);
+  request->file_name = g_path_get_basename (destination);
+}
+
+static void
 ephy_pdf_request_start (EphyPdfRequest *request)
 {
   g_autoptr (SoupURI) soup_uri = NULL;
@@ -230,6 +245,7 @@ ephy_pdf_request_start (EphyPdfRequest *request)
 
   g_signal_connect (request->download, "completed", G_CALLBACK (download_completed_cb), request);
   g_signal_connect (request->download, "error", G_CALLBACK (download_errored_cb), request);
+  g_signal_connect (ephy_download_get_webkit_download (request->download), "created-destination", G_CALLBACK (created_destination_cb), request);
 }
 
 static void
