@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2017 Cedric Le Moigne <cedlemo@gmx.com>
+ *  Copyright © 2020 Epiphany Developers
  *
  *  This file is part of Epiphany.
  *
@@ -20,14 +20,15 @@
 
 #pragma once
 
-#include "ephy-window.h"
+#include <glib-object.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SEARCH_ENGINE_DIALOG (ephy_search_engine_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (EphySearchEngineDialog, ephy_search_engine_dialog, EPHY, SEARCH_ENGINE_DIALOG, GtkDialog);
+#define EPHY_TYPE_SEARCH_ENGINE_LIST_BOX (ephy_search_engine_list_box_get_type())
 
-EphySearchEngineDialog  *ephy_search_engine_dialog_new (void);
+G_DECLARE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, EPHY, SEARCH_ENGINE_LIST_BOX, GtkListBox)
+
+GtkWidget *ephy_search_engine_list_box_new (void);
 
 G_END_DECLS

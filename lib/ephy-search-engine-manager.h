@@ -47,6 +47,8 @@ char                        *ephy_search_engine_manager_get_default_engine      
 gboolean                     ephy_search_engine_manager_set_default_engine       (EphySearchEngineManager *manager,
                                                                                   const char              *name);
 char                       **ephy_search_engine_manager_get_names                (EphySearchEngineManager *manager);
+gboolean                     ephy_search_engine_manager_engine_exists            (EphySearchEngineManager *manager,
+                                                                                  const char              *name);
 char                       **ephy_search_engine_manager_get_bangs                (EphySearchEngineManager *manager);
 void                         ephy_search_engine_manager_add_engine               (EphySearchEngineManager *manager,
                                                                                   const char              *name,
@@ -54,6 +56,9 @@ void                         ephy_search_engine_manager_add_engine              
                                                                                   const char              *bang);
 void                         ephy_search_engine_manager_delete_engine            (EphySearchEngineManager *manager,
                                                                                   const char              *name);
+gboolean                     ephy_search_engine_manager_rename                   (EphySearchEngineManager *manager,
+                                                                                  const char              *old_name,
+                                                                                  const char              *new_name);
 void                         ephy_search_engine_manager_modify_engine            (EphySearchEngineManager *manager,
                                                                                   const char              *name,
                                                                                   const char              *address,

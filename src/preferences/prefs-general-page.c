@@ -29,7 +29,7 @@
 #include "ephy-lang-row.h"
 #include "ephy-langs.h"
 #include "ephy-settings.h"
-#include "ephy-search-engine-dialog.h"
+#include "ephy-search-engine-listbox.h"
 #include "ephy-web-app-utils.h"
 #include "webapp-additional-urls-dialog.h"
 
@@ -71,7 +71,8 @@ struct _PrefsGeneralPage {
   GtkWidget *download_folder_row;
 
   /* Search Engines */
-  GtkWidget *search_box;
+  GtkWidget *search_engine_group;
+  GtkWidget *search_engine_listbox;
 
   /* Session */
   GtkWidget *session_box;
@@ -1020,21 +1021,6 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_search_engine_dialog_button_clicked (GtkWidget        *button,
-                                        PrefsGeneralPage *general_page)
-{
-  GtkWindow *search_engine_dialog;
-  GtkWindow *prefs_dialog;
-
-  search_engine_dialog = GTK_WINDOW (ephy_search_engine_dialog_new ());
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (general_page)));
-
-  gtk_window_set_transient_for (search_engine_dialog, prefs_dialog);
-  gtk_window_set_modal (search_engine_dialog, TRUE);
-  gtk_window_present_with_time (search_engine_dialog, gtk_get_current_event_time ());
-}
-
-static void
 on_manage_webapp_additional_urls_button_clicked (GtkWidget        *button,
                                                  PrefsGeneralPage *general_page)
 {
@@ -1083,7 +1069,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
 
   /* Search Engines */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
@@ -1106,7 +1092,6 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
 }
 
 static void
@@ -1294,6 +1279,12 @@ setup_general_page (PrefsGeneralPage *general_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   init_lang_listbox (general_page);
+
+  /* ======================================================================== */
+  /* ========================== Search engines ============================== */
+  /* ======================================================================== */
+  general_page->search_engine_listbox = ephy_search_engine_list_box_new ();
+  gtk_container_add (GTK_CONTAINER (general_page->search_engine_group), general_page->search_engine_listbox);
 }
 
 static void
@@ -1311,7 +1302,7 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                                                    EPHY_PREFS_WEB_APP_SYSTEM));
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (general_page->search_box,
+  gtk_widget_set_visible (general_page->search_engine_group,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
