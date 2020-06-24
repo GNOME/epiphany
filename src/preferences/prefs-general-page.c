@@ -29,6 +29,7 @@
 #include "ephy-langs.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-dialog.h"
+#include "ephy-search-engine-listbox.h"
 #include "ephy-web-app-utils.h"
 #include "webapp-additional-urls-dialog.h"
 
@@ -66,7 +67,8 @@ struct _PrefsGeneralPage {
   GtkWidget *download_folder_row;
 
   /* Search Engines */
-  GtkWidget *search_box;
+  GtkWidget *search_engine_group;
+  GtkWidget *search_engine_listbox;
 
   /* Session */
   GtkWidget *session_box;
@@ -1080,8 +1082,8 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_search_engine_dialog_button_clicked (GtkWidget        *button,
-                                        PrefsGeneralPage *general_page)
+on_search_engine_add_button_clicked_cb (GtkWidget        *button,
+                                       PrefsGeneralPage *general_page)
 {
   GtkWindow *search_engine_dialog;
   GtkWindow *prefs_dialog;
@@ -1139,7 +1141,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
 
   /* Search Engines */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
@@ -1162,28 +1164,27 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_add_button_clicked_cb);
 }
 
-static const char *css =
+static const char *css = ""
   ".row.drag-icon { "
   "  background: white; "
   "  border: 1px solid black; "
   "}"
   ".row.drag-row { "
   "  color: gray; "
-  "  background: alpha(gray,0.2); "
+  "  background: alpha(black,0.2); "
   "}"
   ".row.drag-row.drag-hover { "
-  "  border-top: 1px solid #4e9a06; "
-  "  border-bottom: 1px solid #4e9a06; "
+  "  border: 1px solid #4e9a06; "
   "}"
   ".row.drag-hover image, "
   ".row.drag-hover label { "
   "  color: #4e9a06; "
   "}"
   ".row.drag-hover-top {"
-  "  border-top: 1px solid #4e9a06; "
+  "  border: 1px solid #4e9a06; "
   "}"
   ".row.drag-hover-bottom {"
   "  border-bottom: 1px solid #4e9a06; "
@@ -1370,6 +1371,8 @@ setup_general_page (PrefsGeneralPage *general_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   init_lang_listbox (general_page);
+  general_page->search_engine_listbox = GTK_WIDGET (ephy_search_engine_list_box_new ());
+  gtk_container_add (GTK_CONTAINER (general_page->search_engine_group), general_page->search_engine_listbox);
 }
 
 static void
@@ -1383,7 +1386,7 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (general_page->search_box,
+  gtk_widget_set_visible (general_page->search_engine_group,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);

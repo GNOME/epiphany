@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="EphySearchEngineRow" parent="HdyExpanderRow">
+    <property name="visible">True</property>
+    <!-- <property name="title" bind-source="EphySearchEngineRow" bind-property="name" bind-flags="sync-create|bidirectional"/> --> <!-- FIXME: this doesn't seems to work when the HdyExpanderRow is the template's parent class -->
+    <property name="title">heyyyyyyyyysksksl</property> <!-- FIXME:however, this line works (static title) -->
+    <!-- <child>  --> <!-- FIXME: however, the title of an expander row when as a child works with property binding -->
+    <!--   <object class="HdyExpanderRow"> -->
+    <!--     <property name="visible">True</property> -->
+    <!--     <property name="title" bind-source="name_entry" bind-property="text" bind-flags="sync-create|default"/> -->
+    <!--   </object> -->
+    <!-- </child> -->
+    <child type="prefix"> <!-- will need to be changed to "prefix" once libhandy's MR is merged -->
+      <object class="GtkEventBox" id="event_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="icon-name">list-drag-handle-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBoxRow">
+        <property name="visible">True</property>
+        <property name="activatable">False</property>
+        <property name="can-focus">True</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="margin">12</property>
+            <property name="can-focus">False</property>
+            <!-- Group of label/entry pairs -->
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
+                <property name="row-spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Name</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="name_entry">
+                    <property name="visible">True</property>
+                    <property name="text" bind-source="EphySearchEngineRow" bind-property="name" bind-flags="sync-create|bidirectional"/>
+                    <property name="expand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Address</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                    <property name="text" bind-source="EphySearchEngineRow" bind-property="address" bind-flags="sync-create|bidirectional"/>
+                    <!-- TRANSLATORS: the top-level domain ("com") can be localized (i.e. "fr" in french, etc.). "search" and "example" can also be translated -->
+                    <property name="placeholder-text" translatable="yes">https://www.example.com/search?q=%s</property>
+                    <property name="expand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <!-- FIXME: will need to either change "bang" (maybe "shortcut"? will need to update the code though to reflect this) or add a translator comment to explain what it is. Actually in french it is translated as "Raccourci" which means "shortcut" so it might be a good idea to use the "shortcut" meaning in english too -->
+                    <!-- DONE. -->
+                    <property name="label" translatable="yes">Shortcut</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                    <property name="text" bind-source="EphySearchEngineRow" bind-property="shortcut" bind-flags="sync-create|bidirectional"/>
+                    <!-- FIXME: it would be useful to explain how to use the shortcut in the search bar and why it is useful -->
+                    <property name="placeholder-text">!a</property>
+                    <property name="expand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <!-- Search engine address insight -->
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">dialog-information-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s.</property>
+                    <property name="wrap">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Remove button -->
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <signal name="clicked" handler="remove_search_engine_button_clicked_cb"/>
+                <property name="label" translatable="yes">Remove search engine</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
