@@ -29,6 +29,7 @@
 #include "ephy-langs.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-dialog.h"
+#include "ephy-search-engine-listbox.h"
 #include "ephy-web-app-utils.h"
 #include "webapp-additional-urls-dialog.h"
 
@@ -66,7 +67,8 @@ struct _PrefsGeneralPage {
   GtkWidget *download_folder_row;
 
   /* Search Engines */
-  GtkWidget *search_box;
+  GtkWidget *search_engine_group;
+  GtkWidget *search_engine_listbox;
 
   /* Session */
   GtkWidget *session_box;
@@ -1080,8 +1082,8 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_search_engine_dialog_button_clicked (GtkWidget        *button,
-                                        PrefsGeneralPage *general_page)
+on_search_engine_add_button_clicked_cb (GtkWidget        *button,
+                                       PrefsGeneralPage *general_page)
 {
   GtkWindow *search_engine_dialog;
   GtkWindow *prefs_dialog;
@@ -1139,7 +1141,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
 
   /* Search Engines */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
@@ -1162,10 +1164,10 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_add_button_clicked_cb);
 }
 
-static const char *css =
+static const char *css = /* the code shouldn't hack on the CSS to highlight dragged (over) rows. It should just use gtk_list_box_drag_highlight_row () and the gtk_list_box_drag_unhighlight_row (). */
   ".row.drag-icon { "
   "  background: white; "
   "  border: 1px solid black; "
@@ -1196,10 +1198,13 @@ init_lang_listbox (PrefsGeneralPage *general_page)
   char **list = NULL;
   int i;
   GtkCssProvider *provider;
+  g_autoptr (GError) error = NULL;
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1, NULL);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800);
+  gtk_css_provider_load_from_data (provider, css, -1, &error);
+  if (error)
+    g_error ("%s", error->message);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800); /* problem here. see end of setup_general_page(). */
 
   gtk_drag_dest_set (general_page->lang_listbox, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (general_page->lang_listbox, "drag-data-received", G_CALLBACK (drag_data_received), general_page);
@@ -1369,7 +1374,9 @@ setup_general_page (PrefsGeneralPage *general_page)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
-  init_lang_listbox (general_page);
+  init_lang_listbox (general_page); /* Multiple """(epiphany:4): Gtk-CRITICAL **: 23:43:37.863: gtk_widget_get_scale_factor: assertion 'GTK_IS_WIDGET (widget)' failed""" appears. Will look at it.*/
+  general_page->search_engine_listbox = GTK_WIDGET (ephy_search_engine_list_box_new ());
+  gtk_container_add (GTK_CONTAINER (general_page->search_engine_group), general_page->search_engine_listbox);
 }
 
 static void
@@ -1383,7 +1390,7 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (general_page->search_box,
+  gtk_widget_set_visible (general_page->search_engine_group,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);

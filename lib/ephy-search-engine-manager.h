@@ -65,5 +65,8 @@ char                        *ephy_search_engine_manager_build_search_address    
                                                                                   const char              *search);
 char                        *ephy_search_engine_manager_parse_bang_search        (EphySearchEngineManager *manager,
                                                                                   const char              *search);
+gboolean                     ephy_search_engine_manager_rename                   (EphySearchEngineManager *manager,
+                                                                                  const char              *old_name,
+                                                                                  const char              *new_name);
 
 G_END_DECLS

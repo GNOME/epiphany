@@ -282,6 +282,8 @@ ephy_search_engine_manager_modify_engine (EphySearchEngineManager *manager,
                                           const char              *bang)
 {
   EphySearchEngineInfo *info;
+  /* You can't modify a non-existant search engine. */
+  g_assert (g_hash_table_contains (manager->search_engines, name));
 
   info = ephy_search_engine_info_new (address, bang);
   g_hash_table_replace (manager->search_engines,
@@ -381,4 +383,34 @@ ephy_search_engine_manager_parse_bang_search (EphySearchEngineManager *manager,
   }
 
   return search_address;
+}
+
+/**
+ * ephy_search_engine_manager_rename:
+ *
+ * @manager: a #EphySearchEngineManager
+ * @old_name: the current name of the search engine
+ * @new_name: the new name for search engine @old_name
+ *
+ * Returns: FALSE if there wasn't any renaming to do (if both old and new names
+ * are the same), TRUE if the search engine was renamed.
+ */
+gboolean ephy_search_engine_manager_rename (EphySearchEngineManager *manager,
+                                            const char              *old_name,
+                                            const char              *new_name)
+{
+  EphySearchEngineInfo *info, *info_copy;
+
+  if (g_strcmp0 (old_name, new_name) == 0)
+    return FALSE;
+  g_warning ("old=%s, new=%s", old_name, new_name);
+
+  info = g_hash_table_lookup (manager->search_engines, old_name);
+  g_assert_nonnull (info);
+
+  info_copy = ephy_search_engine_info_new (info->address, info->bang);
+  g_hash_table_remove (manager->search_engines, old_name);
+  g_hash_table_insert (manager->search_engines, g_strdup (new_name), info_copy);
+  ephy_search_engine_manager_apply_settings (manager);
+  return TRUE;
 }
