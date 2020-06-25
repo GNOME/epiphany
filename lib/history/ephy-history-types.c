@@ -126,6 +126,12 @@ ephy_history_host_free (EphyHistoryHost *host)
   g_free (host);
 }
 
+void
+ephy_history_host_list_free (GList *list)
+{
+  g_list_free_full (list, (GDestroyNotify)ephy_history_host_free);
+}
+
 EphyHistoryURL *
 ephy_history_url_new (const char *url,
                       const char *title,

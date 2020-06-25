@@ -105,6 +105,7 @@ void                            ephy_history_page_visit_list_free (GList* list);
 EphyHistoryHost *               ephy_history_host_new (const char *url, const char *title, int visit_count, double zoom_level);
 EphyHistoryHost *               ephy_history_host_copy (EphyHistoryHost *original);
 void                            ephy_history_host_free (EphyHistoryHost *host);
+void                            ephy_history_host_list_free (GList *list);
 
 EphyHistoryURL *                ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, gint64 last_visit_time);
 EphyHistoryURL *                ephy_history_url_copy (EphyHistoryURL *url);

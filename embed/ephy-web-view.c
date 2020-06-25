@@ -1160,8 +1160,6 @@ get_host_for_url_cb (gpointer service,
     webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), set_zoom);
     view->is_setting_zoom = FALSE;
   }
-
-  ephy_history_host_free (host);
 }
 
 static void
