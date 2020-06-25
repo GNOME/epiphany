@@ -513,7 +513,6 @@ merge_history_cb (EphyHistoryService    *service,
 out:
   data->callback (to_upload, data->user_data);
 
-  g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
   if (records_ht_id)
     g_hash_table_unref (records_ht_id);
   if (records_ht_url)

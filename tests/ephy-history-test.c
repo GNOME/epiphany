@@ -159,7 +159,6 @@ verify_create_history_entry_cb (EphyHistoryService *service,
     current_baseline = current_baseline->next;
   }
 
-  ephy_history_page_visit_list_free (visits);
   ephy_history_page_visit_list_free (baseline_visits);
 
   g_object_unref (service);
@@ -204,7 +203,6 @@ get_url (EphyHistoryService *service,
   g_assert_nonnull (url);
   g_assert_cmpstr (url->title, ==, "GNOME");
 
-  ephy_history_url_free (url);
   g_object_unref (service);
   gtk_main_quit ();
 }
@@ -296,7 +294,6 @@ test_get_url_done (EphyHistoryService *service,
     g_assert_nonnull (url);
     g_assert_cmpstr (url->url, ==, "http://www.gnome.org");
     g_assert_cmpint (url->id, !=, -1);
-    ephy_history_url_free (url);
   } else
     g_assert_null (url);
 
