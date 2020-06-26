@@ -249,67 +249,12 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
   webkit_web_view_load_uri (request->web_view, uri);
 }
 
-static gint
-embed_is_displaying_matching_uri (EphyEmbed *embed,
-                                  SoupURI   *uri)
-{
-  EphyWebView *web_view;
-  SoupURI *view_uri;
-  gint ret = -1;
-
-  if (ephy_embed_has_load_pending (embed))
-    return -1;
-
-  web_view = ephy_embed_get_web_view (embed);
-  if (ephy_web_view_is_loading (web_view))
-    return -1;
-
-  view_uri = soup_uri_new (ephy_web_view_get_address (web_view));
-  if (!view_uri)
-    return -1;
-
-  soup_uri_set_fragment (view_uri, NULL);
-  ret = soup_uri_equal (view_uri, uri) ? 0 : -1;
-
-  soup_uri_free (view_uri);
-
-  return ret;
-}
-
-static WebKitWebView *
-get_web_view_matching_uri (SoupURI *uri)
-{
-  EphyEmbedShell *shell;
-  GtkWindow *window;
-  GList *embeds = NULL;
-  GList *found;
-  EphyEmbed *embed = NULL;
-
-  shell = ephy_embed_shell_get_default ();
-  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  if (!EPHY_IS_EMBED_CONTAINER (window))
-    goto out;
-
-  embeds = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
-  found = g_list_find_custom (embeds, uri, (GCompareFunc)embed_is_displaying_matching_uri);
-
-  if (found)
-    embed = found->data;
-
-out:
-  g_list_free (embeds);
-
-  return embed ? WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)) : NULL;
-}
-
 static void
 ephy_reader_request_start (EphyReaderRequest *request)
 {
   g_autoptr (SoupURI) soup_uri = NULL;
   const char *modified_uri;
   const char *original_uri;
-  WebKitWebView *web_view;
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
   soup_uri = soup_uri_new (original_uri);
@@ -324,20 +269,10 @@ ephy_reader_request_start (EphyReaderRequest *request)
     return;
   }
 
-  modified_uri = soup_uri_get_path (soup_uri);
+  modified_uri = soup_uri_to_string (soup_uri, TRUE);
   g_assert (modified_uri);
 
-  web_view = webkit_uri_scheme_request_get_web_view (request->scheme_request);
-  if (web_view && !webkit_web_view_get_title (web_view))
-    web_view = NULL;
-
-  if (!web_view)
-    web_view = get_web_view_matching_uri (soup_uri);
-
-  if (web_view)
-    ephy_reader_request_begin_get_source_from_web_view (request, WEBKIT_WEB_VIEW (web_view));
-  else
-    ephy_reader_request_begin_get_source_from_uri (request, modified_uri);
+  ephy_reader_request_begin_get_source_from_uri (request, modified_uri);
 
   request->source_handler->outstanding_requests =
     g_list_prepend (request->source_handler->outstanding_requests, request);
