@@ -269,6 +269,9 @@ ephy_reader_request_start (EphyReaderRequest *request)
     return;
   }
 
+  /* Extract URI:
+   * ephy-reader:https://example.com/whatever?xyz into https://example.com/whatever?xyz
+   */
   modified_uri = soup_uri_to_string (soup_uri, TRUE);
   g_assert (modified_uri);
 
