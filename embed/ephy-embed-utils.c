@@ -247,7 +247,6 @@ ephy_embed_utils_address_is_valid (const char *address)
   retval = info ||
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
-           g_str_has_prefix (address, EPHY_READER_SCHEME) ||
            is_public_domain (address) ||
            is_bang_search (address) ||
            is_host_with_port (address);
