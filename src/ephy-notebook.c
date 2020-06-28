@@ -761,6 +761,16 @@ close_button_clicked_cb (GtkWidget *widget,
   g_signal_emit (notebook, signals[TAB_CLOSE_REQUEST], 0, tab);
 }
 
+static void
+audio_clicked_cb (GtkWidget *widget,
+                  EphyEmbed *embed)
+{
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  gboolean muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
+
+  webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), !muted);
+}
+
 static GtkWidget *
 build_tab_label (EphyNotebook *nb,
                  EphyEmbed    *embed)
@@ -770,6 +780,7 @@ build_tab_label (EphyNotebook *nb,
 
   tab_label = ephy_tab_label_new ();
   g_signal_connect (tab_label, "close-clicked", G_CALLBACK (close_button_clicked_cb), embed);
+  g_signal_connect (tab_label, "audio-clicked", G_CALLBACK (audio_clicked_cb), embed);
 
   /* Set up drag-and-drop target */
   g_signal_connect (tab_label, "drag-data-received",
@@ -790,6 +801,7 @@ build_tab_label (EphyNotebook *nb,
   g_object_bind_property (view, "icon", tab_label, "icon-buf", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
   g_object_bind_property (view, "is-loading", tab_label, "spinning", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
   g_object_bind_property (view, "is-playing-audio", tab_label, "audio", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+  g_object_bind_property (view, "is-muted", tab_label, "audio-muted", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
   return tab_label;
 }
