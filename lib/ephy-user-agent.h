@@ -25,6 +25,5 @@
 G_BEGIN_DECLS
 
 const char *ephy_user_agent_get (void);
-void ephy_user_agent_init_sync (void);
 
 G_END_DECLS
