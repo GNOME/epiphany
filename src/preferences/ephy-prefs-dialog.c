@@ -41,7 +41,6 @@ struct _EphyPrefsDialog {
 
   GtkStack *data_views_stack;
   GtkWidget *active_data_view;
-  GtkWidget *clear_cookies_view;
   GtkWidget *passwords_view;
   GtkWidget *clear_data_view;
 };
@@ -80,13 +79,6 @@ present_data_view (EphyPrefsDialog *prefs_dialog,
 }
 
 static void
-on_clear_cookies_row_activated (GtkWidget       *privacy_page,
-                                EphyPrefsDialog *prefs_dialog)
-{
-  present_data_view (prefs_dialog, prefs_dialog->clear_cookies_view);
-}
-
-static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
 {
@@ -122,14 +114,12 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, general_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, sync_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, data_views_stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, clear_cookies_view);
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, passwords_view);
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, clear_data_view);
 
   /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_event);
-  gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_any_data_view_back_button_clicked);
