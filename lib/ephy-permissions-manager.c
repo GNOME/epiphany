@@ -167,6 +167,8 @@ permission_type_to_string (EphyPermissionType type)
       return "video-device-permission";
     case EPHY_PERMISSION_TYPE_SHOW_ADS:
       return "advertisement-permission";
+    case EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY:
+      return "autoplay-permission";
     default:
       g_assert_not_reached ();
   }
