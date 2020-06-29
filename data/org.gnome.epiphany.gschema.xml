@@ -429,5 +429,10 @@
 			<summary>Decision to apply when advertisement permission is requested for this host</summary>
 			<description>This option is used to save whether a given host has been given permission to allow advertisements. The “undecided” default means the browser global setting is used, while “allow” and “deny” tell it to automatically make the decision upon request.</description>
 		</key>
+		<key name="autoplay-permission" enum="org.gnome.Epiphany.Permission">
+			<default>'undecided'</default>
+			<summary>Decision to apply when an autoplay policy is requested for this host</summary>
+			<description>This option is used to save whether a given host has been given permission to autoplay. The “undecided” default means to allow autoplay of muted media, while “allow” and “deny” tell it to allow / deny all requests to autoplay media respectively.</description>
+		</key>
 	</schema>
 </schemalist>
