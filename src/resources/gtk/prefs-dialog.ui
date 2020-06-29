@@ -47,7 +47,6 @@
                 </child>
                 <child>
                   <object class="PrefsPrivacyPage">
-                    <signal name="clear-cookies-row-activated" handler="on_clear_cookies_row_activated"/>
                     <signal name="passwords-row-activated" handler="on_passwords_row_activated"/>
                     <signal name="clear-data-row-activated" handler="on_clear_data_row_activated"/>
                   </object>
@@ -106,12 +105,6 @@
           <object class="GtkStack" id="data_views_stack">
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_NONE</property>
             <property name="visible">True</property>
-            <child>
-              <object class="EphyCookiesView" id="clear_cookies_view">
-                <property name="visible">True</property>
-                <signal name="back-button-clicked" handler="on_any_data_view_back_button_clicked"/>
-              </object>
-            </child>
             <child>
               <object class="EphyPasswordsView" id="passwords_view">
                 <property name="visible">True</property>

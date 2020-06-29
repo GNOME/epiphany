@@ -45,7 +45,6 @@ libephymain_sources = [
   'ephy-window.c',
   'popup-commands.c',
   'preferences/clear-data-view.c',
-  'preferences/ephy-cookies-view.c',
   'preferences/ephy-data-dialog.c',
   'preferences/ephy-data-view.c',
   'preferences/ephy-prefs-dialog.c',
