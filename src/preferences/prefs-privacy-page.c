@@ -26,7 +26,6 @@
 #include "ephy-shell.h"
 
 enum {
-  CLEAR_COOKIES_ROW_ACTIVATED,
   PASSWORDS_ROW_ACTIVATED,
   CLEAR_DATA_ROW_ACTIVATED,
 
@@ -53,13 +52,6 @@ struct _PrefsPrivacyPage {
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, HDY_TYPE_PREFERENCES_PAGE)
-
-static void
-on_clear_cookies_row_activated (GtkWidget        *row,
-                                PrefsPrivacyPage *privacy_page)
-{
-  g_signal_emit (privacy_page, signals[CLEAR_COOKIES_ROW_ACTIVATED], 0);
-}
 
 static void
 on_passwords_row_activated (GtkWidget        *row,
@@ -194,13 +186,6 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-privacy-page.ui");
 
-  signals[CLEAR_COOKIES_ROW_ACTIVATED] =
-    g_signal_new ("clear-cookies-row-activated",
-                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
   signals[PASSWORDS_ROW_ACTIVATED] =
     g_signal_new ("passwords-row-activated",
                   EPHY_TYPE_PREFS_PRIVACY_PAGE,
@@ -229,7 +214,6 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);
 
   /* Template file callbacks */
-  gtk_widget_class_bind_template_callback (widget_class, on_clear_cookies_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }
