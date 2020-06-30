@@ -29,23 +29,13 @@
 #include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
 
-typedef enum {
-  TIMESPAN_HOUR,
-  TIMESPAN_DAY,
-  TIMESPAN_WEEK,
-  TIMESPAN_MONTH,
-  TIMESPAN_FOREVER
-} Timespan;
-
 struct _ClearDataView {
   EphyDataView parent_instance;
 
   GtkWidget *treeview;
   GtkTreeModel *treestore;
   GtkTreeModelFilter *treemodelfilter;
-  GtkWidget *timespan_combo;
 
-  Timespan timespan;
   GCancellable *cancellable;
 };
 
@@ -92,28 +82,6 @@ get_website_data_manger (void)
 
   web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
   return webkit_web_context_get_website_data_manager (web_context);
-}
-
-static inline GTimeSpan
-get_timespan_for_combo_value (Timespan timespan)
-{
-  switch (timespan) {
-    case TIMESPAN_HOUR:
-      return G_TIME_SPAN_HOUR;
-    case TIMESPAN_DAY:
-      return G_TIME_SPAN_DAY;
-    case TIMESPAN_WEEK:
-      return G_TIME_SPAN_DAY * 7;
-    case TIMESPAN_MONTH:
-      return G_TIME_SPAN_DAY * 7 * 4;
-    case TIMESPAN_FOREVER:
-      return 0;
-    default:
-      break;
-  }
-
-  g_assert_not_reached ();
-  return 0;
 }
 
 static void
@@ -166,7 +134,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
                                          ACTIVE_COLUMN, data_entries[i].initial_state,
                                          NAME_COLUMN, webkit_website_data_get_name (data),
                                          DATA_COLUMN, webkit_website_data_ref (data),
-                                         SENSITIVE_COLUMN, clear_data_view->timespan == TIMESPAN_FOREVER,
+                                         SENSITIVE_COLUMN, TRUE,
                                          -1);
       empty = FALSE;
     }
@@ -196,12 +164,9 @@ on_clear_all_clicked (ClearDataView *clear_data_view)
   WebKitWebsiteDataTypes types_to_clear = 0;
   GList *data_to_remove = NULL;
   WebKitWebsiteDataTypes types_to_remove = 0;
-  GTimeSpan timespan;
 
   if (!gtk_tree_model_get_iter_first (clear_data_view->treestore, &top_iter))
     return;
-
-  timespan = get_timespan_for_combo_value (clear_data_view->timespan);
 
   do {
     guint type;
@@ -212,9 +177,9 @@ on_clear_all_clicked (ClearDataView *clear_data_view)
                         TYPE_COLUMN, &type,
                         ACTIVE_COLUMN, &active,
                         -1);
-    if (active && (timespan || all_children_visible (clear_data_view->treestore, &top_iter, clear_data_view->treemodelfilter))) {
+    if (active && all_children_visible (clear_data_view->treestore, &top_iter, clear_data_view->treemodelfilter)) {
       types_to_clear |= type;
-    } else if (!timespan && gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &top_iter)) {
+    } else if (gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &top_iter)) {
       gboolean empty = TRUE;
 
       do {
@@ -242,7 +207,7 @@ on_clear_all_clicked (ClearDataView *clear_data_view)
 
   if (types_to_clear) {
     webkit_website_data_manager_clear (get_website_data_manger (),
-                                       types_to_clear, timespan,
+                                       types_to_clear, 0,
                                        NULL, NULL, NULL);
   }
 
@@ -326,38 +291,6 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
   gtk_tree_path_free (path);
 }
 
-static gboolean
-update_item_sensitivity (GtkTreeModel  *model,
-                         GtkTreePath   *path,
-                         GtkTreeIter   *iter,
-                         ClearDataView *clear_data_view)
-{
-  if (!gtk_tree_model_iter_has_child (model, iter)) {
-    gtk_tree_store_set (GTK_TREE_STORE (model), iter,
-                        SENSITIVE_COLUMN, clear_data_view->timespan == TIMESPAN_FOREVER,
-                        -1);
-  }
-
-  return FALSE;
-}
-
-static void
-timespan_combo_changed_cb (GtkComboBox   *combo,
-                           ClearDataView *clear_data_view)
-{
-  gint active;
-  gboolean was_forever;
-
-  active = gtk_combo_box_get_active (combo);
-  was_forever = clear_data_view->timespan == TIMESPAN_FOREVER;
-  clear_data_view->timespan = active;
-  if (active == TIMESPAN_FOREVER || was_forever) {
-    gtk_tree_model_foreach (clear_data_view->treestore,
-                            (GtkTreeModelForeachFunc)update_item_sensitivity,
-                            clear_data_view);
-  }
-}
-
 static void
 search_text_changed_cb (ClearDataView *clear_data_view)
 {
@@ -427,9 +360,7 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treeview);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treestore);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treemodelfilter);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataView, timespan_combo);
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
-  gtk_widget_class_bind_template_callback (widget_class, timespan_combo_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_clicked);
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
 }
@@ -443,9 +374,6 @@ clear_data_view_init (ClearDataView *clear_data_view)
                                           (GtkTreeModelFilterVisibleFunc)row_visible_func,
                                           clear_data_view,
                                           NULL);
-
-  gtk_combo_box_set_active (GTK_COMBO_BOX (clear_data_view->timespan_combo),
-                            clear_data_view->timespan);
 
   ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
 
