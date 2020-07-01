@@ -338,8 +338,10 @@ clear_data_view_dispose (GObject *object)
 {
   ClearDataView *clear_data_view = (ClearDataView *)object;
 
-  g_cancellable_cancel (clear_data_view->cancellable);
-  g_clear_object (&clear_data_view->cancellable);
+  if (clear_data_view->cancellable) {
+    g_cancellable_cancel (clear_data_view->cancellable);
+    g_clear_object (&clear_data_view->cancellable);
+  }
 
   G_OBJECT_CLASS (clear_data_view_parent_class)->dispose (object);
 }
