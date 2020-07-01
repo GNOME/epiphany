@@ -45,6 +45,7 @@
 #include "ephy-mouse-gesture-controller.h"
 #include "ephy-notebook.h"
 #include "ephy-pages-view.h"
+#include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-security-popover.h"
 #include "ephy-session.h"
@@ -54,6 +55,7 @@
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
@@ -2041,6 +2043,43 @@ verify_url_async_data_free (VerifyUrlAsyncData *data)
 }
 
 static gboolean
+accept_navigation_policy_decision (EphyWindow           *window,
+                                   WebKitPolicyDecision *decision,
+                                   const char           *uri)
+{
+  WebKitWebsitePolicies *website_policies;
+  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+  EphyEmbedShell *shell;
+  const char *origin;
+
+  shell = ephy_embed_shell_get_default ();
+
+  origin = ephy_uri_to_security_origin (uri);
+  if (origin) {
+    permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
+                                                          EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY,
+                                                          origin);
+  }
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      website_policies = webkit_website_policies_new_with_policies ("autoplay", WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND, NULL);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      website_policies = webkit_website_policies_new_with_policies ("autoplay", WEBKIT_AUTOPLAY_ALLOW, NULL);
+      break;
+    case EPHY_PERMISSION_DENY:
+      website_policies = webkit_website_policies_new_with_policies ("autoplay", WEBKIT_AUTOPLAY_DENY, NULL);
+      break;
+  }
+
+  webkit_policy_decision_use_with_policies (decision, website_policies);
+  g_object_unref (website_policies);
+
+  return TRUE;
+}
+
+static gboolean
 decide_navigation_policy (WebKitWebView            *web_view,
                           WebKitPolicyDecision     *decision,
                           WebKitPolicyDecisionType  decision_type,
@@ -2077,8 +2116,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
         if (error) {
           LOG ("failed to handle non web scheme: %s", error->message);
           g_error_free (error);
-
-          return FALSE;
+          return accept_navigation_policy_decision (window, decision, uri);
         }
       }
     }
@@ -2119,7 +2157,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED ||
         (navigation_type == WEBKIT_NAVIGATION_TYPE_OTHER && webkit_navigation_action_is_user_gesture (navigation_action))) {
       if (ephy_web_application_is_uri_allowed (uri))
-        return FALSE;
+        return accept_navigation_policy_decision (window, decision, uri);
 
       /* We can't get here under flatpak because this code only
        * executes in web app mode.
@@ -2171,10 +2209,8 @@ decide_navigation_policy (WebKitWebView            *web_view,
         webkit_policy_decision_ignore (decision);
         return TRUE;
       }
-    }
-    /* Those were our special cases, we won't handle this */
-    else {
-      return FALSE;
+    } else {
+      return accept_navigation_policy_decision (window, decision, uri);
     }
 
     embed = ephy_embed_container_get_active_child
@@ -2205,7 +2241,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     return TRUE;
   }
 
-  return FALSE;
+  return accept_navigation_policy_decision (window, decision, uri);
 }
 
 static void
