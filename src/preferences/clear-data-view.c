@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#include "clear-data-dialog.h"
+#include "clear-data-view.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -29,23 +29,13 @@
 #include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
 
-typedef enum {
-  TIMESPAN_HOUR,
-  TIMESPAN_DAY,
-  TIMESPAN_WEEK,
-  TIMESPAN_MONTH,
-  TIMESPAN_FOREVER
-} Timespan;
-
-struct _ClearDataDialog {
-  EphyDataDialog parent_instance;
+struct _ClearDataView {
+  EphyDataView parent_instance;
 
   GtkWidget *treeview;
   GtkTreeModel *treestore;
   GtkTreeModelFilter *treemodelfilter;
-  GtkWidget *timespan_combo;
 
-  Timespan timespan;
   GCancellable *cancellable;
 };
 
@@ -57,9 +47,10 @@ enum {
   SENSITIVE_COLUMN
 };
 
-G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, EPHY_TYPE_DATA_DIALOG)
+G_DEFINE_TYPE (ClearDataView, clear_data_view, EPHY_TYPE_DATA_VIEW)
 
-#define PERSISTENT_DATA_TYPES WEBKIT_WEBSITE_DATA_DISK_CACHE | \
+#define PERSISTENT_DATA_TYPES WEBKIT_WEBSITE_DATA_COOKIES | \
+  WEBKIT_WEBSITE_DATA_DISK_CACHE | \
   WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE | \
   WEBKIT_WEBSITE_DATA_LOCAL_STORAGE | \
   WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES | \
@@ -74,6 +65,7 @@ typedef struct {
 } DataEntry;
 
 static const DataEntry data_entries[] = {
+  { WEBKIT_WEBSITE_DATA_COOKIES, TRUE, N_("Cookies") },
   { WEBKIT_WEBSITE_DATA_DISK_CACHE, TRUE, N_("HTTP disk cache") },
   { WEBKIT_WEBSITE_DATA_LOCAL_STORAGE, FALSE, N_("Local storage data") },
   { WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, TRUE, N_("Offline web application cache") },
@@ -92,32 +84,10 @@ get_website_data_manger (void)
   return webkit_web_context_get_website_data_manager (web_context);
 }
 
-static inline GTimeSpan
-get_timespan_for_combo_value (Timespan timespan)
-{
-  switch (timespan) {
-    case TIMESPAN_HOUR:
-      return G_TIME_SPAN_HOUR;
-    case TIMESPAN_DAY:
-      return G_TIME_SPAN_DAY;
-    case TIMESPAN_WEEK:
-      return G_TIME_SPAN_DAY * 7;
-    case TIMESPAN_MONTH:
-      return G_TIME_SPAN_DAY * 7 * 4;
-    case TIMESPAN_FOREVER:
-      return 0;
-    default:
-      break;
-  }
-
-  g_assert_not_reached ();
-  return 0;
-}
-
 static void
 website_data_fetched_cb (WebKitWebsiteDataManager *manager,
                          GAsyncResult             *result,
-                         ClearDataDialog          *dialog)
+                         ClearDataView            *clear_data_view)
 {
   GList *data_list;
   GtkTreeStore *treestore;
@@ -129,19 +99,19 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
     return;
   }
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (dialog), FALSE);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), FALSE);
 
   if (!data_list) {
-    ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), FALSE);
+    ephy_data_view_set_has_data (EPHY_DATA_VIEW (clear_data_view), FALSE);
 
     if (error)
       g_error_free (error);
     return;
   }
 
-  ephy_data_dialog_set_has_data (EPHY_DATA_DIALOG (dialog), TRUE);
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (clear_data_view), TRUE);
 
-  treestore = GTK_TREE_STORE (dialog->treestore);
+  treestore = GTK_TREE_STORE (clear_data_view->treestore);
   for (guint i = 0; i < G_N_ELEMENTS (data_entries); i++) {
     GtkTreeIter parent_iter;
     gboolean empty = TRUE;
@@ -164,7 +134,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
                                          ACTIVE_COLUMN, data_entries[i].initial_state,
                                          NAME_COLUMN, webkit_website_data_get_name (data),
                                          DATA_COLUMN, webkit_website_data_ref (data),
-                                         SENSITIVE_COLUMN, dialog->timespan == TIMESPAN_FOREVER,
+                                         SENSITIVE_COLUMN, TRUE,
                                          -1);
       empty = FALSE;
     }
@@ -188,41 +158,36 @@ all_children_visible (GtkTreeModel       *model,
 }
 
 static void
-on_clear_all_clicked (ClearDataDialog *dialog)
+on_clear_all_clicked (ClearDataView *clear_data_view)
 {
   GtkTreeIter top_iter;
   WebKitWebsiteDataTypes types_to_clear = 0;
   GList *data_to_remove = NULL;
   WebKitWebsiteDataTypes types_to_remove = 0;
-  GTimeSpan timespan;
 
-  if (!gtk_tree_model_get_iter_first (dialog->treestore, &top_iter)) {
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (!gtk_tree_model_get_iter_first (clear_data_view->treestore, &top_iter))
     return;
-  }
-
-  timespan = get_timespan_for_combo_value (dialog->timespan);
 
   do {
     guint type;
     gboolean active;
     GtkTreeIter child_iter;
 
-    gtk_tree_model_get (dialog->treestore, &top_iter,
+    gtk_tree_model_get (clear_data_view->treestore, &top_iter,
                         TYPE_COLUMN, &type,
                         ACTIVE_COLUMN, &active,
                         -1);
-    if (active && (timespan || all_children_visible (dialog->treestore, &top_iter, dialog->treemodelfilter))) {
+    if (active && all_children_visible (clear_data_view->treestore, &top_iter, clear_data_view->treemodelfilter)) {
       types_to_clear |= type;
-    } else if (!timespan && gtk_tree_model_iter_children (dialog->treestore, &child_iter, &top_iter)) {
+    } else if (gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &top_iter)) {
       gboolean empty = TRUE;
 
       do {
         WebKitWebsiteData *data;
         GtkTreeIter filter_iter;
 
-        if (gtk_tree_model_filter_convert_child_iter_to_iter (dialog->treemodelfilter, &filter_iter, &child_iter)) {
-          gtk_tree_model_get (dialog->treestore, &child_iter,
+        if (gtk_tree_model_filter_convert_child_iter_to_iter (clear_data_view->treemodelfilter, &filter_iter, &child_iter)) {
+          gtk_tree_model_get (clear_data_view->treestore, &child_iter,
                               ACTIVE_COLUMN, &active,
                               DATA_COLUMN, &data,
                               -1);
@@ -233,16 +198,16 @@ on_clear_all_clicked (ClearDataDialog *dialog)
           } else
             webkit_website_data_unref (data);
         }
-      } while (gtk_tree_model_iter_next (dialog->treestore, &child_iter));
+      } while (gtk_tree_model_iter_next (clear_data_view->treestore, &child_iter));
 
       if (!empty)
         types_to_remove |= type;
     }
-  } while (gtk_tree_model_iter_next (dialog->treestore, &top_iter));
+  } while (gtk_tree_model_iter_next (clear_data_view->treestore, &top_iter));
 
   if (types_to_clear) {
     webkit_website_data_manager_clear (get_website_data_manger (),
-                                       types_to_clear, timespan,
+                                       types_to_clear, 0,
                                        NULL, NULL, NULL);
   }
 
@@ -253,46 +218,54 @@ on_clear_all_clicked (ClearDataDialog *dialog)
   }
 
   g_list_free_full (data_to_remove, (GDestroyNotify)webkit_website_data_unref);
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  /* Reload tree */
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
+  gtk_tree_store_clear (GTK_TREE_STORE (clear_data_view->treestore));
+  webkit_website_data_manager_fetch (get_website_data_manger (),
+                                     PERSISTENT_DATA_TYPES,
+                                     clear_data_view->cancellable,
+                                     (GAsyncReadyCallback)website_data_fetched_cb,
+                                     clear_data_view);
 }
 
 static void
 item_toggled_cb (GtkCellRendererToggle *renderer,
                  const char            *path_str,
-                 ClearDataDialog       *dialog)
+                 ClearDataView         *clear_data_view)
 {
   GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
   GtkTreeIter filter_iter, iter;
   gboolean active;
 
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (dialog->treemodelfilter),
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (clear_data_view->treemodelfilter),
                            &filter_iter, path);
-  gtk_tree_model_filter_convert_iter_to_child_iter (dialog->treemodelfilter,
+  gtk_tree_model_filter_convert_iter_to_child_iter (clear_data_view->treemodelfilter,
                                                     &iter, &filter_iter);
-  gtk_tree_model_get (dialog->treestore, &iter,
+  gtk_tree_model_get (clear_data_view->treestore, &iter,
                       ACTIVE_COLUMN, &active,
                       -1);
-  gtk_tree_store_set (GTK_TREE_STORE (dialog->treestore), &iter,
+  gtk_tree_store_set (GTK_TREE_STORE (clear_data_view->treestore), &iter,
                       ACTIVE_COLUMN, !active,
                       -1);
 
-  if (gtk_tree_model_iter_has_child (dialog->treestore, &iter)) {
+  if (gtk_tree_model_iter_has_child (clear_data_view->treestore, &iter)) {
     GtkTreeIter child_iter;
 
-    gtk_tree_model_iter_children (dialog->treestore, &child_iter, &iter);
+    gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &iter);
     do {
-      gtk_tree_store_set (GTK_TREE_STORE (dialog->treestore), &child_iter,
+      gtk_tree_store_set (GTK_TREE_STORE (clear_data_view->treestore), &child_iter,
                           ACTIVE_COLUMN, !active,
                           -1);
-    } while (gtk_tree_model_iter_next (dialog->treestore, &child_iter));
+    } while (gtk_tree_model_iter_next (clear_data_view->treestore, &child_iter));
   } else {
     GtkTreeIter parent_iter;
 
     /* Update the parent */
-    gtk_tree_model_iter_parent (dialog->treestore, &parent_iter, &iter);
+    gtk_tree_model_iter_parent (clear_data_view->treestore, &parent_iter, &iter);
     if (active) {
       /* When unchecking a child we know the parent should be unchecked too */
-      gtk_tree_store_set (GTK_TREE_STORE (dialog->treestore), &parent_iter,
+      gtk_tree_store_set (GTK_TREE_STORE (clear_data_view->treestore), &parent_iter,
                           ACTIVE_COLUMN, FALSE,
                           -1);
     } else {
@@ -300,15 +273,15 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
       gboolean all_active = TRUE;
 
       /* When checking a child, parent should be checked if all its children are */
-      gtk_tree_model_iter_children (dialog->treestore, &child_iter, &parent_iter);
+      gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &parent_iter);
       do {
-        gtk_tree_model_get (dialog->treestore, &child_iter,
+        gtk_tree_model_get (clear_data_view->treestore, &child_iter,
                             ACTIVE_COLUMN, &all_active,
                             -1);
-      } while (all_active && gtk_tree_model_iter_next (dialog->treestore, &child_iter));
+      } while (all_active && gtk_tree_model_iter_next (clear_data_view->treestore, &child_iter));
 
       if (all_active) {
-        gtk_tree_store_set (GTK_TREE_STORE (dialog->treestore), &parent_iter,
+        gtk_tree_store_set (GTK_TREE_STORE (clear_data_view->treestore), &parent_iter,
                             ACTIVE_COLUMN, TRUE,
                             -1);
       }
@@ -318,48 +291,16 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
   gtk_tree_path_free (path);
 }
 
-static gboolean
-update_item_sensitivity (GtkTreeModel    *model,
-                         GtkTreePath     *path,
-                         GtkTreeIter     *iter,
-                         ClearDataDialog *dialog)
-{
-  if (!gtk_tree_model_iter_has_child (model, iter)) {
-    gtk_tree_store_set (GTK_TREE_STORE (model), iter,
-                        SENSITIVE_COLUMN, dialog->timespan == TIMESPAN_FOREVER,
-                        -1);
-  }
-
-  return FALSE;
-}
-
 static void
-timespan_combo_changed_cb (GtkComboBox     *combo,
-                           ClearDataDialog *dialog)
+search_text_changed_cb (ClearDataView *clear_data_view)
 {
-  gint active;
-  gboolean was_forever;
-
-  active = gtk_combo_box_get_active (combo);
-  was_forever = dialog->timespan == TIMESPAN_FOREVER;
-  dialog->timespan = active;
-  if (active == TIMESPAN_FOREVER || was_forever) {
-    gtk_tree_model_foreach (dialog->treestore,
-                            (GtkTreeModelForeachFunc)update_item_sensitivity,
-                            dialog);
-  }
-}
-
-static void
-search_text_changed_cb (ClearDataDialog *dialog)
-{
-  gtk_tree_model_filter_refilter (dialog->treemodelfilter);
+  gtk_tree_model_filter_refilter (clear_data_view->treemodelfilter);
 }
 
 static gboolean
-row_visible_func (GtkTreeModel    *model,
-                  GtkTreeIter     *iter,
-                  ClearDataDialog *dialog)
+row_visible_func (GtkTreeModel  *model,
+                  GtkTreeIter   *iter,
+                  ClearDataView *clear_data_view)
 {
   const char *search_text;
   char *name;
@@ -368,7 +309,7 @@ row_visible_func (GtkTreeModel    *model,
   if (gtk_tree_model_iter_has_child (model, iter))
     return TRUE;
 
-  search_text = ephy_data_dialog_get_search_text (EPHY_DATA_DIALOG (dialog));
+  search_text = ephy_data_view_get_search_text (EPHY_DATA_VIEW (clear_data_view));
   if (!search_text || search_text[0] == '\0')
     return TRUE;
 
@@ -385,7 +326,7 @@ row_visible_func (GtkTreeModel    *model,
 
     gtk_tree_model_iter_parent (model, &parent_iter, iter);
     path = gtk_tree_model_get_path (model, &parent_iter);
-    gtk_tree_view_expand_row (GTK_TREE_VIEW (dialog->treeview), path, FALSE);
+    gtk_tree_view_expand_row (GTK_TREE_VIEW (clear_data_view->treeview), path, FALSE);
     gtk_tree_path_free (path);
   }
 
@@ -393,59 +334,56 @@ row_visible_func (GtkTreeModel    *model,
 }
 
 static void
-clear_data_dialog_dispose (GObject *object)
+clear_data_view_dispose (GObject *object)
 {
-  ClearDataDialog *dialog = (ClearDataDialog *)object;
+  ClearDataView *clear_data_view = (ClearDataView *)object;
 
-  g_cancellable_cancel (dialog->cancellable);
-  g_clear_object (&dialog->cancellable);
+  if (clear_data_view->cancellable) {
+    g_cancellable_cancel (clear_data_view->cancellable);
+    g_clear_object (&clear_data_view->cancellable);
+  }
 
-  G_OBJECT_CLASS (clear_data_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (clear_data_view_parent_class)->dispose (object);
 }
 
 static void
-clear_data_dialog_class_init (ClearDataDialogClass *klass)
+clear_data_view_class_init (ClearDataViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = clear_data_dialog_dispose;
+  object_class->dispose = clear_data_view_dispose;
 
   g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/clear-data-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/clear-data-view.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treeview);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treestore);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, treemodelfilter);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, timespan_combo);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, treeview);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, treestore);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, treemodelfilter);
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
-  gtk_widget_class_bind_template_callback (widget_class, timespan_combo_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_clicked);
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
 }
 
 static void
-clear_data_dialog_init (ClearDataDialog *dialog)
+clear_data_view_init (ClearDataView *clear_data_view)
 {
-  gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_widget_init_template (GTK_WIDGET (clear_data_view));
 
-  gtk_tree_model_filter_set_visible_func (dialog->treemodelfilter,
+  gtk_tree_model_filter_set_visible_func (clear_data_view->treemodelfilter,
                                           (GtkTreeModelFilterVisibleFunc)row_visible_func,
-                                          dialog,
+                                          clear_data_view,
                                           NULL);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->timespan_combo),
-                            dialog->timespan);
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
 
-  ephy_data_dialog_set_is_loading (EPHY_DATA_DIALOG (dialog), TRUE);
-
-  dialog->cancellable = g_cancellable_new ();
+  clear_data_view->cancellable = g_cancellable_new ();
 
   webkit_website_data_manager_fetch (get_website_data_manger (),
                                      PERSISTENT_DATA_TYPES,
-                                     dialog->cancellable,
+                                     clear_data_view->cancellable,
                                      (GAsyncReadyCallback)website_data_fetched_cb,
-                                     dialog);
+                                     clear_data_view);
 }

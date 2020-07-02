@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2013 Red Hat, Inc.
+ *  Copyright © 2000-2004 Marco Pesenti Gritti
+ *  Copyright © 2003-2004 Christian Persch
  *
  *  This file is part of Epiphany.
  *
@@ -20,15 +21,13 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
-#include "ephy-data-dialog.h"
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_CLEAR_DATA_DIALOG (clear_data_dialog_get_type ())
+#define EPHY_TYPE_PREFS_DIALOG (ephy_prefs_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, EphyDataDialog)
+G_DECLARE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, EPHY, PREFS_DIALOG, HdyWindow)
 
 G_END_DECLS

@@ -22,11 +22,15 @@
 
 #include "prefs-privacy-page.h"
 
-#include "cookies-dialog.h"
-#include "clear-data-dialog.h"
-#include "passwords-dialog.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+
+enum {
+  PASSWORDS_ROW_ACTIVATED,
+  CLEAR_DATA_ROW_ACTIVATED,
+
+  LAST_SIGNAL
+};
 
 struct _PrefsPrivacyPage {
   HdyPreferencesPage parent_instance;
@@ -43,43 +47,24 @@ struct _PrefsPrivacyPage {
 
   /* Passwords */
   GtkWidget *remember_passwords_switch;
-
-  /* Personal Data */
-  GtkWidget *clear_personal_data_button;
 };
+
+static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, HDY_TYPE_PREFERENCES_PAGE)
 
 static void
-on_manage_cookies_button_clicked (GtkWidget        *button,
-                                  PrefsPrivacyPage *privacy_page)
+on_passwords_row_activated (GtkWidget        *row,
+                            PrefsPrivacyPage *privacy_page)
 {
-  EphyCookiesDialog *cookies_dialog;
-  GtkWindow *prefs_dialog;
-
-  cookies_dialog = ephy_cookies_dialog_new ();
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (privacy_page)));
-
-  gtk_window_set_transient_for (GTK_WINDOW (cookies_dialog), prefs_dialog);
-  gtk_window_set_modal (GTK_WINDOW (cookies_dialog), TRUE);
-  gtk_window_present_with_time (GTK_WINDOW (cookies_dialog), gtk_get_current_event_time ());
+  g_signal_emit (privacy_page, signals[PASSWORDS_ROW_ACTIVATED], 0);
 }
 
 static void
-on_manage_passwords_button_clicked (GtkWidget        *button,
-                                    PrefsPrivacyPage *privacy_page)
+on_clear_data_row_activated (GtkWidget        *row,
+                             PrefsPrivacyPage *privacy_page)
 {
-  EphyPasswordsDialog *passwords_dialog;
-  EphyPasswordManager *password_manager;
-  GtkWindow *prefs_dialog;
-
-  password_manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-  passwords_dialog = ephy_passwords_dialog_new (password_manager);
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (privacy_page)));
-
-  gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), prefs_dialog);
-  gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);
-  gtk_window_present_with_time (GTK_WINDOW (passwords_dialog), gtk_get_current_event_time ());
+  g_signal_emit (privacy_page, signals[CLEAR_DATA_ROW_ACTIVATED], 0);
 }
 
 static gboolean
@@ -122,21 +107,6 @@ cookies_set_mapping (const GValue       *value,
     variant = g_variant_new_string (name);
 
   return variant;
-}
-
-static void
-clear_personal_data_button_clicked_cb (GtkWidget        *button,
-                                       PrefsPrivacyPage *privacy_page)
-{
-  ClearDataDialog *clear_dialog;
-  GtkWindow *prefs_dialog;
-
-  clear_dialog = g_object_new (EPHY_TYPE_CLEAR_DATA_DIALOG, NULL);
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (privacy_page)));
-
-  gtk_window_set_transient_for (GTK_WINDOW (clear_dialog), prefs_dialog);
-  gtk_window_set_modal (GTK_WINDOW (clear_dialog), TRUE);
-  gtk_window_present_with_time (GTK_WINDOW (clear_dialog), gtk_get_current_event_time ());
 }
 
 static void
@@ -206,14 +176,6 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    privacy_page->remember_passwords_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
-
-  /* ======================================================================== */
-  /* ========================== Personal Data =============================== */
-  /* ======================================================================== */
-  g_signal_connect (privacy_page->clear_personal_data_button,
-                    "clicked",
-                    G_CALLBACK (clear_personal_data_button_clicked_cb),
-                    privacy_page);
 }
 
 static void
@@ -223,6 +185,20 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-privacy-page.ui");
+
+  signals[PASSWORDS_ROW_ACTIVATED] =
+    g_signal_new ("passwords-row-activated",
+                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
+  signals[CLEAR_DATA_ROW_ACTIVATED] =
+    g_signal_new ("clear-data-row-activated",
+                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   /* Web Content */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, popups_allow_switch);
@@ -237,12 +213,9 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   /* Passwords */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);
 
-  /* Personal Data */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, clear_personal_data_button);
-
-  /* Signals */
-  gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
+  /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }
 
 static void
