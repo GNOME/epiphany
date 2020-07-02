@@ -7,11 +7,6 @@
     <property name="can_focus">False</property>
     <property name="icon_name">edit-find-symbolic</property>
   </object>
-  <object class="GtkImage" id="clear_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-trash-symbolic</property>
-  </object>
   <object class="GtkImage" id="back_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -37,20 +32,6 @@
                     <property name="can_focus">True</property>
                     <property name="image">back_image</property>
                     <signal name="clicked" handler="on_back_button_clicked"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="clear_all_button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="image">clear_all_image</property>
-                    <property name="always_show_image">True</property>
-                    <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
-                    <style>
-                      <class name="destructive-action"/>
-                      <class name="image-button"/>
-                    </style>
                   </object>
                 </child>
                 <child>
@@ -267,6 +248,23 @@
           <packing>
             <property name="expand">True</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkActionBar">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton" id="clear_all_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label">Clear all</property>
+                <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
