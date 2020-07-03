@@ -30,7 +30,11 @@
 #include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
+#if defined(__linux__)
 #include <sys/random.h>
+#elif defined(__FreeBSD__) || defined(__OpenBSD__)
+#include <unistd.h>
+#endif
 
 static const char hex_digits[] = "0123456789abcdef";
 
@@ -179,6 +183,11 @@ ephy_sync_utils_generate_random_bytes (void   *random_ctx,
   g_assert (num_bytes > 0);
   g_assert (out);
 
+#ifdef __OpenBSD__
+  if (getentropy (out, num_bytes) == -1) {
+    g_error ("Failed to get entropy: %s", g_strerror (errno));
+  }
+#else
   do {
     ret = getrandom (out, num_bytes, 0);
   } while (ret < (gssize)num_bytes && errno == EINTR);
