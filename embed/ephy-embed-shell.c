@@ -496,7 +496,7 @@ history_service_url_deleted_cb (EphyHistoryService *service,
 
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("History.DeleteURL",
-                                                                              g_variant_new ("s", url)));
+                                                                              g_variant_new ("s", url->url)));
 }
 
 static void
