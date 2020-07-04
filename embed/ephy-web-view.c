@@ -734,6 +734,19 @@ title_changed_cb (WebKitWebView *web_view,
   g_free (title_from_address);
 }
 
+static void
+ephy_web_view_set_display_address (EphyWebView *view)
+{
+  g_clear_pointer (&view->display_address, g_free);
+
+  if (view->address) {
+    if (g_str_has_prefix (view->address, EPHY_PDF_SCHEME))
+      view->display_address = ephy_uri_decode (view->address + strlen (EPHY_PDF_SCHEME) + 1);
+    else
+      view->display_address = ephy_uri_decode (view->address);
+  }
+}
+
 /*
  * Sets the view location to be address. Note that this function might
  * also set the typed-address property to NULL.
@@ -752,8 +765,7 @@ ephy_web_view_set_address (EphyWebView *view,
   g_free (view->address);
   view->address = g_strdup (address);
 
-  g_free (view->display_address);
-  view->display_address = view->address != NULL ? ephy_uri_decode (view->address) : NULL;
+  ephy_web_view_set_display_address (view);
 
   _ephy_web_view_set_is_blank (view, ephy_embed_utils_url_is_empty (address));
 
