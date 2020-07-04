@@ -54,6 +54,16 @@ gboolean ephy_data_dialog_get_can_clear (EphyDataDialog *self);
 void     ephy_data_dialog_set_can_clear (EphyDataDialog *self,
                                          gboolean        can_clear);
 
+gboolean ephy_data_dialog_get_selection_active (EphyDataDialog *self);
+void     ephy_data_dialog_set_selection_active (EphyDataDialog *self,
+                                                gboolean        selection_active);
+
+void ephy_data_dialog_set_selection_actions_sensitive (EphyDataDialog *self,
+                                                       gboolean        actions_sensitive);
+
+void ephy_data_dialog_add_selection_action (EphyDataDialog *self,
+                                            GtkWidget      *action_bar_widget);
+
 const gchar *ephy_data_dialog_get_search_text (EphyDataDialog *self);
 
 G_END_DECLS

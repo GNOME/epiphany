@@ -10,8 +10,13 @@
     <property name="search_description" translatable="yes">Search history</property>
     <property name="empty_title" translatable="yes">The History is Empty</property>
     <property name="empty_description" translatable="yes">Visited pages will be listed here</property>
+    <property name="default-width">640</property>
+    <property name="default-height">800</property>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
+    <signal name="key-release-event" handler="on_key_release_event"/>
+    <signal name="selection-delete-clicked" handler="on_dialog_selection_delete_clicked"/>
     <signal name="notify::search-text" handler="on_search_text_changed" swapped="yes"/>
+    <signal name="notify::selection-active" handler="on_dialog_selection_active_toggled"/>
     <child>
       <object class="GtkScrolledWindow" id="scrolled_window">
         <property name="visible">True</property>
@@ -30,12 +35,10 @@
                 <property name="margin_top">6</property>
                 <property name="margin_bottom">6</property>
                 <property name="valign">start</property>
-                <property name="selection_mode">multiple</property>
-                <property name="activate_on_single_click">False</property>
-                <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
+                <property name="selection_mode">none</property>
+                <property name="activate_on_single_click">True</property>
                 <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
-                <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
-                <signal name="row-selected" handler="on_listbox_row_selected"/>
+                <signal name="row-activated" handler="on_listbox_row_activated"/>
                 <style>
                   <class name="content"/>
                 </style>
@@ -46,35 +49,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkMenu" id="popup_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="action_name">history.open-selection</property>
-        <property name="label" translatable="yes">_Open</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="action_name">history.copy-url</property>
-        <property name="label" translatable="yes">_Copy Location</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="action_name">history.forget</property>
-        <property name="label" translatable="yes">_Delete</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-  </object>
 </interface>
