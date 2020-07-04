@@ -2591,7 +2591,14 @@ ephy_web_view_get_address (EphyWebView *view)
 const char *
 ephy_web_view_get_display_address (EphyWebView *view)
 {
-  return view->display_address ? view->display_address : "about:blank";
+  if (view->display_address) {
+    if (g_str_has_prefix (view->display_address, EPHY_PDF_SCHEME))
+      return view->display_address + strlen (EPHY_PDF_SCHEME) + 1;
+
+    return view->display_address;
+  }
+
+  return "about:blank";
 }
 
 /**
