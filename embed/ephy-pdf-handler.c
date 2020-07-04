@@ -192,25 +192,29 @@ download_errored_cb (EphyDownload   *download,
   g_clear_object (&self->download);
 }
 
-static void
-created_destination_cb (WebKitDownload *download,
-                        gchar          *destination,
-                        gpointer        user_data)
+static gboolean
+decide_destination_cb (WebKitDownload *wk_download,
+                       const gchar    *suggested_filename,
+                       gpointer        user_data)
 {
   EphyPdfRequest *request = user_data;
+  g_autofree gchar *tmp_file = NULL;
+  g_autofree gchar *file_uri = NULL;
 
-  g_signal_handlers_disconnect_by_data (download, request);
+  tmp_file = g_strdup_printf ("%s/%s", g_get_tmp_dir (), g_path_get_basename (suggested_filename));
+  file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
+  ephy_download_set_destination_uri (request->download, file_uri);
 
   g_clear_pointer (&request->file_name, g_free);
-  request->file_name = g_path_get_basename (destination);
+  request->file_name = g_path_get_basename (suggested_filename);
+
+  return TRUE;
 }
 
 static void
 ephy_pdf_request_start (EphyPdfRequest *request)
 {
   g_autoptr (SoupURI) soup_uri = NULL;
-  g_autofree gchar *tmp_file = NULL;
-  g_autofree gchar *file_uri = NULL;
   const char *modified_uri;
   const char *original_uri;
 
@@ -234,17 +238,13 @@ ephy_pdf_request_start (EphyPdfRequest *request)
   modified_uri = soup_uri_get_path (soup_uri);
   g_assert (modified_uri);
 
-  tmp_file = g_strdup_printf ("%s/%s", g_get_tmp_dir (), g_path_get_basename (modified_uri));
-  file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
-
   request->download = ephy_download_new_for_uri_internal (modified_uri);
-  ephy_download_set_destination_uri (request->download, file_uri);
   ephy_download_disable_desktop_notification (request->download);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (request->download), TRUE);
 
   g_signal_connect (request->download, "completed", G_CALLBACK (download_completed_cb), request);
   g_signal_connect (request->download, "error", G_CALLBACK (download_errored_cb), request);
-  g_signal_connect (ephy_download_get_webkit_download (request->download), "created-destination", G_CALLBACK (created_destination_cb), request);
+  g_signal_connect (ephy_download_get_webkit_download (request->download), "decide-destination", G_CALLBACK (decide_destination_cb), request);
 }
 
 static void
