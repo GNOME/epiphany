@@ -26,20 +26,26 @@
 
 typedef struct {
   GtkWidget *box;
+  GtkWidget *header_bars_stack;
+  GtkWidget *window_header_bar;
+  GtkWidget *selection_header_bar;
   GtkWidget *child;
   GtkWidget *clear_all_button;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkWidget *search_button;
-  GtkWidget *stack;
+  GtkWidget *data_presentation_stack;
   GtkWidget *empty_title_label;
   GtkWidget *empty_description_label;
   GtkWidget *spinner;
+  GtkWidget *selection_action_bar_revealer;
+  GtkWidget *selection_delete_button;
 
   gboolean is_loading : 1;
   gboolean has_data : 1;
   gboolean has_search_results : 1;
   gboolean can_clear : 1;
+  gboolean selection_active : 1;
   char *search_text;
 } EphyDataDialogPrivate;
 
@@ -58,6 +64,7 @@ enum {
   PROP_HAS_DATA,
   PROP_HAS_SEARCH_RESULTS,
   PROP_CAN_CLEAR,
+  PROP_SELECTION_ACTIVE,
   LAST_PROP,
 };
 
@@ -65,6 +72,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 enum {
   CLEAR_ALL_CLICKED,
+  SELECTION_DELETE_CLICKED,
   LAST_SIGNAL,
 };
 
@@ -74,22 +82,23 @@ static void
 update (EphyDataDialog *self)
 {
   EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *data_stack = GTK_STACK (priv->data_presentation_stack);
   gboolean has_data = priv->has_data && priv->child && gtk_widget_get_visible (priv->child);
 
   if (priv->is_loading) {
-    gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "loading");
+    gtk_stack_set_visible_child_name (data_stack, "loading");
     gtk_spinner_start (GTK_SPINNER (priv->spinner));
   } else {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->search_button))) {
       if (has_data && priv->has_search_results)
-        gtk_stack_set_visible_child (GTK_STACK (priv->stack), priv->child);
+        gtk_stack_set_visible_child (data_stack, priv->child);
       else
-        gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "no-results");
+        gtk_stack_set_visible_child_name (data_stack, "no-results");
     } else {
       if (has_data)
-        gtk_stack_set_visible_child (GTK_STACK (priv->stack), priv->child);
+        gtk_stack_set_visible_child (data_stack, priv->child);
       else
-        gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "empty");
+        gtk_stack_set_visible_child_name (data_stack, "empty");
     }
     gtk_spinner_stop (GTK_SPINNER (priv->spinner));
   }
@@ -102,6 +111,35 @@ static void
 on_clear_all_button_clicked (EphyDataDialog *self)
 {
   g_signal_emit (self, signals[CLEAR_ALL_CLICKED], 0);
+}
+
+static void
+on_selection_button_clicked (GtkButton      *button,
+                             EphyDataDialog *self)
+{
+  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
+
+  ephy_data_dialog_set_selection_active (self, TRUE);
+  gtk_stack_set_visible_child (header_bars_stack, priv->selection_header_bar);
+}
+
+static void
+on_selection_cancel_button_clicked (GtkButton      *button,
+                                    EphyDataDialog *self)
+{
+  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
+
+  ephy_data_dialog_set_selection_active (self, FALSE);
+  gtk_stack_set_visible_child (header_bars_stack, priv->window_header_bar);
+}
+
+static void
+on_selection_delete_button_clicked (GtkButton      *button,
+                                    EphyDataDialog *self)
+{
+  g_signal_emit (self, signals[SELECTION_DELETE_CLICKED], 0);
 }
 
 static void
@@ -184,6 +222,9 @@ ephy_data_dialog_set_property (GObject      *object,
     case PROP_CAN_CLEAR:
       ephy_data_dialog_set_can_clear (self, g_value_get_boolean (value));
       break;
+    case PROP_SELECTION_ACTIVE:
+      ephy_data_dialog_set_selection_active (self, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -233,6 +274,9 @@ ephy_data_dialog_get_property (GObject    *object,
     case PROP_CAN_CLEAR:
       g_value_set_boolean (value, ephy_data_dialog_get_can_clear (self));
       break;
+    case PROP_SELECTION_ACTIVE:
+      g_value_set_boolean (value, ephy_data_dialog_get_selection_active (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -256,6 +300,7 @@ ephy_data_dialog_add (GtkContainer *container,
 {
   EphyDataDialog *self = EPHY_DATA_DIALOG (container);
   EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *data_stack = GTK_STACK (priv->data_presentation_stack);
 
   if (!priv->box) {
     GTK_CONTAINER_CLASS (ephy_data_dialog_parent_class)->add (container, child);
@@ -265,7 +310,7 @@ ephy_data_dialog_add (GtkContainer *container,
   g_assert (!priv->child);
 
   priv->child = child;
-  gtk_container_add (GTK_CONTAINER (priv->stack), child);
+  gtk_container_add (GTK_CONTAINER (data_stack), child);
 
   update (self);
 }
@@ -360,7 +405,23 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+  obj_properties[PROP_SELECTION_ACTIVE] =
+    g_param_spec_boolean ("selection-active",
+                          "Selection active",
+                          "Is selection active?",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  signals[SELECTION_DELETE_CLICKED] =
+    g_signal_new ("selection-delete-clicked",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0,
+                  G_TYPE_NONE);
 
   /**
    * EphyLocationEntry::user-changed:
@@ -381,6 +442,9 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/data-dialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, box);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, header_bars_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, window_header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, selection_header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, clear_all_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_title_label);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_description_label);
@@ -388,10 +452,15 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, spinner);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, data_presentation_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, selection_action_bar_revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, selection_delete_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_cancel_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_delete_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }
 
@@ -567,6 +636,51 @@ ephy_data_dialog_set_can_clear (EphyDataDialog *self,
   update (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CAN_CLEAR]);
+}
+
+gboolean
+ephy_data_dialog_get_selection_active (EphyDataDialog *self)
+{
+  EphyDataDialogPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_DIALOG (self));
+
+  priv = ephy_data_dialog_get_instance_private (self);
+
+  return priv->selection_active;
+}
+
+void
+ephy_data_dialog_set_selection_active (EphyDataDialog *self,
+                                       gboolean        selection_active)
+{
+  EphyDataDialogPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_DIALOG (self));
+
+  priv = ephy_data_dialog_get_instance_private (self);
+
+  if (priv->selection_active == selection_active)
+    return;
+
+  priv->selection_active = selection_active;
+
+  update (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_SELECTION_ACTIVE]);
+}
+
+void
+ephy_data_dialog_set_selection_delete_sensitive (EphyDataDialog *self,
+                                                 gboolean        is_sensitive)
+{
+  EphyDataDialogPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_DIALOG (self));
+
+  priv = ephy_data_dialog_get_instance_private (self);
+
+  gtk_widget_set_sensitive (priv->selection_delete_button, is_sensitive);
 }
 
 const gchar *
