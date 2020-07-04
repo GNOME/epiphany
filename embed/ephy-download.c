@@ -886,9 +886,6 @@ ephy_download_new_internal (WebKitDownload *download)
   g_signal_connect_object (download, "notify::response",
                            G_CALLBACK (download_response_changed_cb),
                            ephy_download, 0);
-  g_signal_connect_object (download, "decide-destination",
-                           G_CALLBACK (download_decide_destination_cb),
-                           ephy_download, 0);
   g_signal_connect_object (download, "created-destination",
                            G_CALLBACK (download_created_destination_cb),
                            ephy_download, 0);
@@ -919,6 +916,10 @@ ephy_download_new (WebKitDownload *download)
   EphyDownload *ephy_download;
 
   ephy_download = ephy_download_new_internal (download);
+
+  g_signal_connect_object (download, "decide-destination",
+                           G_CALLBACK (download_decide_destination_cb),
+                           ephy_download, 0);
 
   if (!ephy_is_running_inside_flatpak () && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
     g_signal_connect (ephy_download, "filename-suggested",
