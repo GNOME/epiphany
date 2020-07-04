@@ -225,15 +225,21 @@ delete_selected (EphyHistoryDialog *self)
 }
 
 static void
-forget_clicked (GtkButton *button,
-                gpointer   user_data)
+row_check_button_toggled (GtkCheckButton *check_button,
+                          GtkListBoxRow  *row)
 {
-  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
-  GtkListBoxRow *row = g_object_get_data (G_OBJECT (button), "row");
+  GtkListBox *listbox = GTK_LIST_BOX (gtk_widget_get_parent (GTK_WIDGET (row)));
+  gboolean row_selected = gtk_list_box_row_is_selected (row);
+  gboolean button_checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button));
 
-  gtk_list_box_select_row (GTK_LIST_BOX (self->listbox), row);
+  if (button_checked == row_selected)
+    return;
 
-  delete_selected (self);
+  /* If the user ticks a checkbox, then the corresponding row should get selected */
+  if (button_checked)
+    gtk_list_box_select_row (listbox, row);
+  else
+    gtk_list_box_unselect_row (listbox, row);
 }
 
 static GtkWidget *
@@ -244,7 +250,7 @@ create_row (EphyHistoryDialog *self,
   GtkWidget *date;
   GtkWidget *row;
   GtkWidget *separator;
-  GtkWidget *button;
+  GtkWidget *check_button;
 
   /* Row */
   row = hdy_action_row_new ();
@@ -263,22 +269,36 @@ create_row (EphyHistoryDialog *self,
   gtk_widget_set_margin_top (separator, 8);
   gtk_widget_set_margin_bottom (separator, 8);
 
-  /* Button */
-  button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  g_object_set_data (G_OBJECT (button), "row", row);
-  gtk_widget_set_tooltip_text (button, _("Remove the selected pages from history"));
-  g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), self);
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  /* CheckButton */
+  check_button = gtk_check_button_new ();
+  g_object_set_data (G_OBJECT (row), "check-button", check_button);
+  gtk_widget_set_valign (check_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (check_button, _("Remove the selected pages from history"));
+  gtk_button_set_relief (GTK_BUTTON (check_button), GTK_RELIEF_NONE);
+  g_signal_connect (check_button, "toggled", G_CALLBACK (row_check_button_toggled), row);
 
-  /* Added in reverse order because actions are packed from the end. */
+  /* Separator and CheckButton should be visible only during selection mode */
+  g_object_bind_property (self, "selection-active",
+                          separator, "visible",
+                          G_BINDING_DEFAULT);
+
+  g_object_bind_property (self, "selection-active",
+                          check_button, "visible",
+                          G_BINDING_DEFAULT);
+
+  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), check_button);
+  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), separator);
   gtk_container_add (GTK_CONTAINER (row), date);
-  gtk_container_add (GTK_CONTAINER (row), separator);
-  gtk_container_add (GTK_CONTAINER (row), button);
 
-  gtk_widget_set_sensitive (button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
+  gtk_widget_set_sensitive (check_button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
   gtk_widget_show_all (row);
+
+  /* Hide the Separator and CheckButton if selection isn't active */
+  if (!ephy_data_dialog_get_selection_active (EPHY_DATA_DIALOG (self))) {
+    gtk_widget_set_visible (separator, FALSE);
+    gtk_widget_set_visible (check_button, FALSE);
+  }
 
   return row;
 }
@@ -560,18 +580,116 @@ on_listbox_row_activated (GtkListBox        *box,
   ephy_history_url_free (url);
 }
 
+static void
+on_listbox_selected_rows_changed (GtkListBox        *listbox,
+                                  EphyHistoryDialog *self)
+{
+  GList *selected_rows = gtk_list_box_get_selected_rows (listbox);
+  GList *rows = gtk_container_get_children (GTK_CONTAINER (listbox));
+  GList *iter = NULL;
+
+  for (iter = rows; iter != NULL; iter = g_list_next (iter)) {
+    GtkWidget *row = iter->data;
+    GtkCheckButton *check_button = GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
+    gboolean row_selected = gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row));
+    gboolean button_checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button));
+
+    /* Ensure selected rows have their checkboxes ticked */
+    if (button_checked == row_selected)
+      continue;
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), row_selected);
+  }
+
+  if (selected_rows == NULL)
+    ephy_data_dialog_set_selection_delete_sensitive (EPHY_DATA_DIALOG (self), FALSE);
+  else
+    ephy_data_dialog_set_selection_delete_sensitive (EPHY_DATA_DIALOG (self), TRUE);
+
+  g_list_free (selected_rows);
+  g_list_free (rows);
+}
+
+static void
+select_list_index_interval (GtkListBox *listbox,
+                            gint        index_a,
+                            gint        index_b)
+{
+  gint start = 0;
+  gint end = 0;
+  gint index = 0;
+
+  if (index_a < index_b) {
+    start = index_a;
+    end = index_b;
+  } else {
+    start = index_b;
+    end = index_a;
+  }
+
+  for (index = start; index <= end; index++) {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (listbox, index);
+
+    gtk_list_box_select_row (listbox, row);
+  }
+}
+
+static void
+handle_selection_click_event (EphyHistoryDialog *self,
+                              GtkListBoxRow     *clicked_row,
+                              GdkEventButton    *event)
+{
+  GList *selected_rows = NULL;
+  GtkListBox *listbox = GTK_LIST_BOX (self->listbox);
+  gboolean shift_pressed = event->state & GDK_SHIFT_MASK;
+
+  /* If Shift isn't pressed, event simply toggles the row's selection */
+  if (!shift_pressed) {
+    if (gtk_list_box_row_is_selected (clicked_row))
+      gtk_list_box_unselect_row (listbox, clicked_row);
+    else
+      gtk_list_box_select_row (listbox, clicked_row);
+    return;
+  }
+
+  /* If Shift key is pressed, do the interval selection logic */
+  selected_rows = gtk_list_box_get_selected_rows (listbox);
+
+  if (g_list_length (selected_rows) == 1) {
+    /* If there's exactly one other row selected we select the interval between
+     * that one and the currently clicked row */
+    gint index_a = gtk_list_box_row_get_index (clicked_row);
+    gint index_b = gtk_list_box_row_get_index (selected_rows->data);
+
+    select_list_index_interval (listbox, index_a, index_b);
+  } else {
+    /* If there are zero or more than one other rows selected,
+     * then we select the clicked row and unselect all the others */
+    gtk_list_box_unselect_all (listbox);
+    gtk_list_box_select_row (listbox, clicked_row);
+  }
+
+  g_list_free (selected_rows);
+}
+
 static gboolean
 on_listbox_button_press_event (GtkWidget         *widget,
                                GdkEventButton    *event,
                                EphyHistoryDialog *self)
 {
+  GtkListBoxRow *row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), event->y);
+  gboolean selection_active = ephy_data_dialog_get_selection_active (EPHY_DATA_DIALOG (self));
+
+  if (!row)
+    return GDK_EVENT_PROPAGATE;
+
   if (event->button == GDK_BUTTON_SECONDARY) {
-    GtkListBoxRow *row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (self->listbox), event->y);
     GList *rows = NULL;
     int n;
 
-    if (!row)
-      return GDK_EVENT_PROPAGATE;
+    /* If selection mode is active, secondary button has no effect */
+    if (selection_active)
+      return GDK_EVENT_STOP;
 
     if (!gtk_list_box_row_is_selected (row))
       gtk_list_box_unselect_all (GTK_LIST_BOX (self->listbox));
@@ -584,6 +702,14 @@ on_listbox_button_press_event (GtkWidget         *widget,
     update_popup_menu_actions (self->action_group, n == 1);
 
     gtk_menu_popup_at_pointer (GTK_MENU (self->popup_menu), (GdkEvent *)event);
+
+    return GDK_EVENT_STOP;
+  } else if (event->button == GDK_BUTTON_PRIMARY) {
+    /* If selection mode isn't active, primary button has no effect */
+    if (!selection_active)
+      return GDK_EVENT_STOP;
+
+    handle_selection_click_event (self, row, event);
 
     return GDK_EVENT_STOP;
   }
@@ -672,6 +798,18 @@ on_edge_reached (GtkScrolledWindow *scrolled,
 }
 
 static void
+on_dialog_selection_active_toggled (EphyHistoryDialog *self)
+{
+  gtk_list_box_unselect_all (GTK_LIST_BOX (self->listbox));
+}
+
+static void
+on_dialog_selection_delete_clicked (EphyHistoryDialog *self)
+{
+  delete_selected (self);
+}
+
+static void
 ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -697,10 +835,13 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_selected);
+  gtk_widget_class_bind_template_callback (widget_class, on_listbox_selected_rows_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_button_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_dialog_selection_active_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, on_dialog_selection_delete_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_edge_reached);
 }
 
