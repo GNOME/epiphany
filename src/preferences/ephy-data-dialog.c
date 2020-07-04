@@ -26,12 +26,15 @@
 
 typedef struct {
   GtkWidget *box;
+  GtkWidget *header_bars_stack;
+  GtkWidget *window_header_bar;
+  GtkWidget *selection_header_bar;
   GtkWidget *child;
   GtkWidget *clear_all_button;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkWidget *search_button;
-  GtkWidget *stack;
+  GtkWidget *data_presentation_stack;
   GtkWidget *empty_title_label;
   GtkWidget *empty_description_label;
   GtkWidget *spinner;
@@ -74,22 +77,23 @@ static void
 update (EphyDataDialog *self)
 {
   EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *data_stack = GTK_STACK(priv->data_presentation_stack);
   gboolean has_data = priv->has_data && priv->child && gtk_widget_get_visible (priv->child);
 
   if (priv->is_loading) {
-    gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "loading");
+    gtk_stack_set_visible_child_name (data_stack, "loading");
     gtk_spinner_start (GTK_SPINNER (priv->spinner));
   } else {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->search_button))) {
       if (has_data && priv->has_search_results)
-        gtk_stack_set_visible_child (GTK_STACK (priv->stack), priv->child);
+        gtk_stack_set_visible_child (data_stack, priv->child);
       else
-        gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "no-results");
+        gtk_stack_set_visible_child_name (data_stack, "no-results");
     } else {
       if (has_data)
-        gtk_stack_set_visible_child (GTK_STACK (priv->stack), priv->child);
+        gtk_stack_set_visible_child (data_stack, priv->child);
       else
-        gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "empty");
+        gtk_stack_set_visible_child_name (data_stack, "empty");
     }
     gtk_spinner_stop (GTK_SPINNER (priv->spinner));
   }
@@ -102,6 +106,26 @@ static void
 on_clear_all_button_clicked (EphyDataDialog *self)
 {
   g_signal_emit (self, signals[CLEAR_ALL_CLICKED], 0);
+}
+
+static void
+on_selection_button_clicked (GtkButton      *button,
+                             EphyDataDialog *self)
+{
+  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
+
+  gtk_stack_set_visible_child (header_bars_stack, priv->selection_header_bar);
+}
+
+static void
+on_selection_cancel_button_clicked (GtkButton      *button,
+                                    EphyDataDialog *self)
+{
+  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
+
+  gtk_stack_set_visible_child (header_bars_stack, priv->window_header_bar);
 }
 
 static void
@@ -256,6 +280,7 @@ ephy_data_dialog_add (GtkContainer *container,
 {
   EphyDataDialog *self = EPHY_DATA_DIALOG (container);
   EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
+  GtkStack *data_stack = GTK_STACK (priv->data_presentation_stack);
 
   if (!priv->box) {
     GTK_CONTAINER_CLASS (ephy_data_dialog_parent_class)->add (container, child);
@@ -265,7 +290,7 @@ ephy_data_dialog_add (GtkContainer *container,
   g_assert (!priv->child);
 
   priv->child = child;
-  gtk_container_add (GTK_CONTAINER (priv->stack), child);
+  gtk_container_add (GTK_CONTAINER (data_stack), child);
 
   update (self);
 }
@@ -381,6 +406,9 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/data-dialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, box);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, header_bars_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, window_header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, selection_header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, clear_all_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_title_label);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, empty_description_label);
@@ -388,10 +416,12 @@ ephy_data_dialog_class_init (EphyDataDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, spinner);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataDialog, data_presentation_stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_cancel_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }
 
