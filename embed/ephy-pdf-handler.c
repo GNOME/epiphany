@@ -238,7 +238,6 @@ ephy_pdf_request_start (EphyPdfRequest *request)
   file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
 
   request->download = ephy_download_new_for_uri_internal (modified_uri);
-  ephy_download_set_destination_uri (request->download, file_uri);
   ephy_download_disable_desktop_notification (request->download);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (request->download), TRUE);
 
