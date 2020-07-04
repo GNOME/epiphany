@@ -45,6 +45,7 @@ typedef struct {
   WebKitWebView *web_view;
   GCancellable *cancellable;
   guint load_changed_id;
+  char *uri;
 } EphyReaderRequest;
 
 static EphyReaderRequest *
@@ -69,6 +70,7 @@ ephy_reader_request_free (EphyReaderRequest *request)
   if (request->load_changed_id > 0)
     g_signal_handler_disconnect (request->web_view, request->load_changed_id);
 
+  g_clear_pointer (&request->uri, g_free);
   g_object_unref (request->source_handler);
   g_object_unref (request->scheme_request);
   g_clear_object (&request->web_view);
@@ -239,6 +241,7 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
 
+  g_assert (!request->web_view);
   request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (webkit_web_view_new_with_context (context)));
 
   g_assert (request->load_changed_id == 0);
@@ -247,6 +250,37 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
                                                request);
 
   webkit_web_view_load_uri (request->web_view, uri);
+}
+
+static void
+web_resource_data_cb (WebKitWebResource *resource,
+                      GAsyncResult      *result,
+                      EphyReaderRequest *request)
+{
+  g_autofree guchar *data = NULL;
+  g_autoptr (GError) error = NULL;
+  gsize length;
+
+  data = webkit_web_resource_get_data_finish (resource, result, &length, &error);
+  if (!data || length < 2) {
+    g_clear_object (&request->web_view);
+    ephy_reader_request_begin_get_source_from_uri (request, request->uri);
+  } else {
+    ephy_reader_request_begin_get_source_from_web_view (request, request->web_view);
+  }
+}
+
+static void
+ephy_reader_request_begin_get_source_from_initiator (EphyReaderRequest *request,
+                                                     WebKitWebView     *web_view)
+{
+  WebKitWebResource *resource = webkit_web_view_get_main_resource (web_view);
+
+  g_assert (resource);
+  webkit_web_resource_get_data (resource,
+                                request->cancellable,
+                                (GAsyncReadyCallback)web_resource_data_cb,
+                                request);
 }
 
 static void
@@ -275,7 +309,12 @@ ephy_reader_request_start (EphyReaderRequest *request)
   modified_uri = soup_uri_to_string (soup_uri, TRUE);
   g_assert (modified_uri);
 
-  ephy_reader_request_begin_get_source_from_uri (request, modified_uri);
+  request->uri = g_strdup (modified_uri);
+  request->web_view = webkit_uri_scheme_request_get_web_view (request->scheme_request);
+  if (request->web_view && webkit_web_view_get_main_resource (request->web_view))
+    ephy_reader_request_begin_get_source_from_initiator (request, g_object_ref (request->web_view));
+  else
+    ephy_reader_request_begin_get_source_from_uri (request, request->uri);
 
   request->source_handler->outstanding_requests =
     g_list_prepend (request->source_handler->outstanding_requests, request);
