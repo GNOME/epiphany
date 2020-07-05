@@ -43,7 +43,7 @@ G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
                                         "^file:.*$|" \
                                         "^inspector://.*$|" \
                                         "^webkit://.*$|" \
-                                        "^ephy-resource://.*$" \
+                                        "^ephy-resource://.*$|" \
                                         "^ephy-reader:.*$" \
                                         ")"
 
