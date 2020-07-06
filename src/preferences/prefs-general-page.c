@@ -66,7 +66,8 @@ struct _PrefsGeneralPage {
   GtkWidget *download_folder_row;
 
   /* Search Engines */
-  GtkWidget *search_box;
+  GtkWidget *search_engine_group;
+  GtkWidget *search_engine_listbox;
 
   /* Session */
   GtkWidget *session_box;
@@ -1076,8 +1077,8 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_search_engine_dialog_button_clicked (GtkWidget        *button,
-                                        PrefsGeneralPage *general_page)
+on_search_engine_add_button_activated (GtkWidget        *button,
+                                       PrefsGeneralPage *general_page)
 {
   GtkWindow *search_engine_dialog;
   GtkWindow *prefs_dialog;
@@ -1135,7 +1136,8 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
 
   /* Search Engines */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_listbox);
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
@@ -1158,7 +1160,8 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
+  /* gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked); */
+  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_add_button_activated);
 }
 
 static const char *css =
@@ -1372,7 +1375,7 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (general_page->search_box,
+  gtk_widget_set_visible (general_page->search_engine_group,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
