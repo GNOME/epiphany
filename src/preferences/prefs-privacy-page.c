@@ -39,6 +39,7 @@ struct _PrefsPrivacyPage {
   GtkWidget *popups_allow_switch;
   GtkWidget *adblock_allow_switch;
   GtkWidget *enable_safe_browsing_switch;
+  GtkWidget *enable_itp_switch;
 
   /* Cookies */
   GtkWidget *always;
@@ -135,6 +136,12 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_ITP,
+                   privacy_page->enable_itp_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
   /* ======================================================================== */
   /* ========================== Cookies ===================================== */
   /* ======================================================================== */
@@ -204,6 +211,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, popups_allow_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, adblock_allow_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
 
   /* Cookies */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, always);
