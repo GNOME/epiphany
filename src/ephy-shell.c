@@ -587,10 +587,31 @@ session_load_cb (GObject      *object,
 }
 
 static void
+portal_check (EphyShell *shell)
+{
+  if (g_network_monitor_get_connectivity (ephy_shell_get_net_monitor (shell)) == G_NETWORK_CONNECTIVITY_PORTAL) {
+    EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
+    ephy_window_load_url (window, "http://nmcheck.gnome.org/");
+  }
+}
+
+static void
+connectivity_changed (GNetworkMonitor *monitor,
+                      GParamSpec      *pspec,
+                      EphyShell       *shell)
+{
+  portal_check (shell);
+}
+
+static void
 ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (shell);
+
+  g_signal_connect (ephy_shell_get_net_monitor (shell), "notify::connectivity", G_CALLBACK (connectivity_changed), shell);
+  portal_check (shell);
 
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     WebKitWebContext *web_context = ephy_embed_shell_get_web_context (embed_shell);
