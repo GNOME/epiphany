@@ -1290,6 +1290,38 @@ ephy_history_service_find_urls (EphyHistoryService     *self,
 }
 
 void
+ephy_history_service_find_visits (EphyHistoryService     *self,
+                                  gint64                  from,
+                                  gint64                  to,
+                                  guint                   limit,
+                                  gint                    host,
+                                  GList                  *substring_list,
+                                  EphyHistorySortType     sort_type,
+                                  GCancellable           *cancellable,
+                                  EphyHistoryJobCallback  callback,
+                                  gpointer                user_data)
+{
+  EphyHistoryQuery *query;
+
+  g_assert (EPHY_IS_HISTORY_SERVICE (self));
+
+  query = ephy_history_query_new ();
+  query->from = from;
+  query->to = to;
+  query->substring_list = substring_list;
+  query->sort_type = sort_type;
+  query->host = host;
+
+  if (limit != 0)
+    query->limit = limit;
+
+  ephy_history_service_query_visits (self,
+                                     query, cancellable,
+                                     callback, user_data);
+  ephy_history_query_free (query);
+}
+
+void
 ephy_history_service_visit_url (EphyHistoryService       *self,
                                 const char               *url,
                                 const char               *sync_id,
