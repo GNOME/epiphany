@@ -222,20 +222,8 @@ ephy_pdf_request_start (EphyPdfRequest *request)
     g_list_prepend (request->source_handler->outstanding_requests, request);
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
-  soup_uri = soup_uri_new (original_uri);
-
-  if (!soup_uri) {
-    /* Can't assert because user could theoretically input something weird */
-    GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
-                                 WEBKIT_NETWORK_ERROR_FAILED,
-                                 _("%s is not a valid URI"),
-                                 original_uri);
-    finish_uri_scheme_request (request, NULL, error);
-    g_error_free (error);
-    return;
-  }
-
-  modified_uri = soup_uri_get_path (soup_uri);
+  g_assert (g_str_has_prefix (original_uri, "ephy-pdf:"));
+  modified_uri = original_uri + strlen ("ephy-pdf:");
   g_assert (modified_uri);
 
   request->download = ephy_download_new_for_uri_internal (modified_uri);
