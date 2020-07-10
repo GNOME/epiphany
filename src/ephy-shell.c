@@ -756,6 +756,24 @@ ephy_shell_get_lockdown (EphyShell *shell)
 }
 
 static void
+portal_check (EphyShell *shell)
+{
+  if (g_network_monitor_get_connectivity (ephy_shell_get_net_monitor (shell)) == G_NETWORK_CONNECTIVITY_PORTAL) {
+    EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
+    ephy_window_load_url (window, "http://nmcheck.gnome.org/");
+  }
+}
+
+static void
+connectivity_changed (GNetworkMonitor *monitor,
+                      GParamSpec      *pspec,
+                      EphyShell       *shell)
+{
+  portal_check (shell);
+}
+
+static void
 ephy_shell_constructed (GObject *object)
 {
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER &&
@@ -774,6 +792,9 @@ ephy_shell_constructed (GObject *object)
 
   /* FIXME: not sure if this is the best place to put this stuff. */
   ephy_shell_get_lockdown (EPHY_SHELL (object));
+
+  g_signal_connect (ephy_shell_get_net_monitor (EPHY_SHELL (object)), "notify::connectivity", G_CALLBACK (connectivity_changed), EPHY_SHELL (object));
+  portal_check (EPHY_SHELL (object));
 
   if (G_OBJECT_CLASS (ephy_shell_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_shell_parent_class)->constructed (object);
