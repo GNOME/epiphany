@@ -103,6 +103,25 @@ ephy_action_bar_get_property (GObject    *object,
 }
 
 static void
+titlebar_animation_changed (EphyActionBar *action_bar)
+{
+  switch (dzl_application_window_get_titlebar_animation (DZL_APPLICATION_WINDOW (action_bar->window))) {
+    case DZL_TITLEBAR_ANIMATION_SHOWN:
+      gtk_widget_set_visible (GTK_WIDGET (action_bar), TRUE);
+      break;
+    case DZL_TITLEBAR_ANIMATION_SHOWING:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
+      break;
+    case DZL_TITLEBAR_ANIMATION_HIDING:
+      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
+      break;
+    case DZL_TITLEBAR_ANIMATION_HIDDEN:
+      gtk_widget_set_visible (GTK_WIDGET (action_bar), FALSE);
+      break;
+  }
+}
+
+static void
 ephy_action_bar_constructed (GObject *object)
 {
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
@@ -120,6 +139,9 @@ ephy_action_bar_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (action_bar->notebook, "page-removed",
                            G_CALLBACK (update_pages_button), action_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (DZL_APPLICATION_WINDOW (action_bar->window), "notify::titlebar-animation",
+                           G_CALLBACK (titlebar_animation_changed), action_bar,
                            G_CONNECT_SWAPPED);
 }
 
@@ -176,6 +198,7 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
                                            EPHY_ADAPTIVE_MODE_NARROW);
+  titlebar_animation_changed (action_bar);
 }
 
 EphyActionBar *
