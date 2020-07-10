@@ -2934,6 +2934,7 @@ ephy_window_close_tab (EphyWindow *window,
 
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
   gtk_widget_destroy (GTK_WIDGET (tab));
+  window->last_opened_embed = NULL;
 
   /* If that was the last tab, destroy the window.
    *
