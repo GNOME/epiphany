@@ -796,6 +796,24 @@ ephy_shell_class_init (EphyShellClass *klass)
 }
 
 static void
+portal_check (EphyShell *shell)
+{
+  if (g_network_monitor_get_connectivity (shell->network_monitor) == G_NETWORK_CONNECTIVITY_PORTAL) {
+    EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
+    ephy_window_load_url (window, "http://nmcheck.gnome.org/");
+  }
+}
+
+static void
+connectivity_changed (GNetworkMonitor *monitor,
+                      GParamSpec      *pspec,
+                      EphyShell       *shell)
+{
+  portal_check (shell);
+}
+
+static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
@@ -807,6 +825,10 @@ ephy_shell_init (EphyShell *shell)
                              (gpointer *)ptr);
 
   ephy_shell->notifications = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  ephy_shell_get_net_monitor (shell);
+  portal_check (shell);
+  g_signal_connect (shell->network_monitor, "notify::connectivity", G_CALLBACK (connectivity_changed), shell);
 }
 
 static void
