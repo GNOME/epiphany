@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-sync-crypto.h"
 
+#include "ephy-debug.h"
 #include "ephy-string.h"
 #include "ephy-sync-utils.h"
 
@@ -1108,19 +1109,19 @@ ephy_sync_crypto_decrypt_record (const char          *payload,
   /* Extract ciphertext, iv and hmac from payload. */
   node = json_from_string (payload, &error);
   if (error) {
-    g_warning ("Payload is not a valid JSON: %s", error->message);
+    LOG ("Payload is not a valid JSON: %s", error->message);
     goto out;
   }
   json = json_node_get_object (node);
   if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
+    LOG ("JSON node does not hold a JSON object");
     goto out;
   }
   ciphertext_b64 = json_object_get_string_member (json, "ciphertext");
   iv_b64 = json_object_get_string_member (json, "IV");
   hmac = json_object_get_string_member (json, "hmac");
   if (!ciphertext_b64 || !iv_b64 || !hmac) {
-    g_warning ("JSON object has missing or invalid members");
+    LOG ("JSON object has missing or invalid members");
     goto out;
   }
 
@@ -1132,7 +1133,7 @@ ephy_sync_crypto_decrypt_record (const char          *payload,
    * if the HMAC verification fails.
    */
   if (!ephy_sync_crypto_hmac_is_valid (ciphertext_b64, hmac_key, hmac)) {
-    g_warning ("Incorrect HMAC value");
+    LOG ("Incorrect HMAC value");
     goto out;
   }
 
