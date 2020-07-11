@@ -95,6 +95,7 @@ ephy_tab_label_set_property (GObject      *object,
 {
   EphyTabLabel *self = EPHY_TAB_LABEL (object);
   const gchar *str;
+  cairo_surface_t *csurf;
 
   switch (prop_id) {
     case PROP_LABEL_TEXT:
@@ -112,7 +113,10 @@ ephy_tab_label_set_property (GObject      *object,
       }
       break;
     case PROP_ICON_BUF:
-      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), g_value_get_object (value));
+      csurf = gdk_cairo_surface_create_from_pixbuf (g_value_get_object (value),
+                                                    0,
+                                                    gtk_widget_get_window (GTK_WIDGET (self)));
+      gtk_image_set_from_surface (GTK_IMAGE (self->icon), csurf);
       self->has_icon = g_value_get_object (value) != NULL;
       ephy_tab_label_update_icon (self);
       break;
