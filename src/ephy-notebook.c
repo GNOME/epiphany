@@ -854,6 +854,80 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
   return position;
 }
 
+typedef struct {
+  EphyNotebook *notebook;
+  GtkTextDirection direction;
+  int old_pos;
+  int new_pos;
+  guint flash_id;
+} PresentTabData;
+
+static PresentTabData *
+present_tab_data_new (EphyNotebook *notebook,
+                      gint          old_pos,
+                      gint          new_pos)
+{
+  PresentTabData *pt_data = g_new0 (PresentTabData, 1);
+  pt_data->notebook = notebook;
+  pt_data->old_pos = old_pos;
+  pt_data->new_pos = new_pos;
+  pt_data->direction = gtk_widget_get_default_direction ();
+  g_object_add_weak_pointer (G_OBJECT (notebook), (gpointer *)&pt_data->notebook);
+  return pt_data;
+}
+
+static void
+present_tab_data_free (PresentTabData *pt_data)
+{
+  g_clear_weak_pointer (&pt_data->notebook);
+  g_clear_handle_id (&pt_data->flash_id, g_source_remove);
+  g_clear_pointer (&pt_data, g_free);
+}
+
+static gboolean
+remove_arrow_flash (gpointer user_data)
+{
+  PresentTabData *pt_data = user_data;
+
+  if (pt_data->direction == GTK_TEXT_DIR_LTR)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (pt_data->notebook)), "tab-arrow-up-attention");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (pt_data->notebook)), "tab-arrow-down-attention");
+
+  pt_data->flash_id = 0;
+  present_tab_data_free (pt_data);
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+present_new_tab (gpointer user_data)
+{
+  PresentTabData *pt_data = user_data;
+  GtkWidget *page;
+  GtkWidget *label;
+
+  if (!pt_data->notebook)
+    return G_SOURCE_REMOVE;
+
+  page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pt_data->notebook), pt_data->new_pos);
+  label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (pt_data->notebook), page);
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (label))) {
+    if (pt_data->direction == GTK_TEXT_DIR_LTR)
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (pt_data->notebook)), "tab-arrow-up-attention");
+    else
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (pt_data->notebook)), "tab-arrow-down-attention");
+
+    pt_data->flash_id = g_timeout_add (500, remove_arrow_flash, pt_data);
+  } else {
+    pt_data->flash_id = 0;
+    present_tab_data_free (pt_data);
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
 int
 ephy_notebook_add_tab (EphyNotebook *notebook,
                        EphyEmbed    *embed,
@@ -878,6 +952,9 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
     gtk_notebook_set_current_page (gnotebook, position);
     g_object_set_data (G_OBJECT (embed), "jump_to",
                        GINT_TO_POINTER (jump_to));
+  } else {
+    PresentTabData *pt_data = present_tab_data_new (notebook, gtk_notebook_get_current_page (gnotebook), position);
+    pt_data->flash_id = g_idle_add (present_new_tab, pt_data);
   }
 
   return position;
