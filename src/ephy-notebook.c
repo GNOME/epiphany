@@ -58,6 +58,7 @@ struct _EphyNotebook {
   GMenu *tab_menu;
 
   guint tabs_allowed : 1;
+  guint arrow_flash_source;
 };
 
 static void ephy_notebook_constructed (GObject *object);
@@ -854,6 +855,67 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
   return position;
 }
 
+static gboolean
+remove_arrow_flash (gpointer user_data)
+{
+  EphyNotebook *notebook = EPHY_NOTEBOOK (user_data);
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)), "tab-arrow-attention");
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+present_new_tab (EphyNotebook *notebook,
+                 int          old_position,
+                 int          new_position)
+{
+  GtkWidget *page;
+  GtkWidget *label;
+  GtkNotebook *gnotebook = GTK_NOTEBOOK (notebook);
+  int n_pages = gtk_notebook_get_n_pages (gnotebook);
+  int idx;
+  int num_visible = 0;
+  int diff;
+  gboolean new_tab_mapped = FALSE;
+
+  page = gtk_notebook_get_nth_page (gnotebook, new_position);
+  label = gtk_notebook_get_tab_label (gnotebook, page);
+  new_tab_mapped = gtk_widget_get_mapped (GTK_WIDGET (label));
+
+  if (new_tab_mapped) {
+    g_print ("%s(): New tab mapped, exit\n", __FUNCTION__);
+    // does not work, new tab is mapped here...
+    //return;
+  }
+
+  for (idx = 0; idx < n_pages; idx++) {
+    page = gtk_notebook_get_nth_page (gnotebook, idx);
+    label = gtk_notebook_get_tab_label (gnotebook, page);
+
+    if (gtk_widget_get_mapped (GTK_WIDGET (label)))
+      num_visible++;
+    else if (num_visible != 0)
+      break;
+  }
+
+  g_print ("%s(): num_visible %d, checking if set scrolling is possible\n", __FUNCTION__, num_visible);
+  diff = new_position - old_position;
+  if (diff <= 0)
+    return;
+
+  if (diff < num_visible) {
+    g_print ("%s(): scrolling possible\n", __FUNCTION__);
+  } else {
+    g_print ("%s(): need to flash\n", __FUNCTION__);
+    if (notebook->arrow_flash_source)
+      g_source_remove (notebook->arrow_flash_source);
+
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)), "tab-arrow-attention");
+    notebook->arrow_flash_source = g_timeout_add (750, remove_arrow_flash, notebook);
+  }
+}
+
 int
 ephy_notebook_add_tab (EphyNotebook *notebook,
                        EphyEmbed    *embed,
@@ -861,9 +923,11 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
                        gboolean      jump_to)
 {
   GtkNotebook *gnotebook = GTK_NOTEBOOK (notebook);
+  int current_pos;
 
   g_assert (EPHY_IS_NOTEBOOK (notebook));
 
+  current_pos = gtk_notebook_get_current_page (gnotebook);
   position = gtk_notebook_insert_page (GTK_NOTEBOOK (notebook),
                                        GTK_WIDGET (embed),
                                        NULL,
@@ -873,6 +937,8 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
                            GTK_WIDGET (embed),
                            "tab-expand", expand_tabs_bar (),
                            NULL);
+
+  present_new_tab (notebook, current_pos, position);
 
   if (jump_to) {
     gtk_notebook_set_current_page (gnotebook, position);
