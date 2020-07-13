@@ -574,7 +574,6 @@ _ephy_web_view_update_icon (EphyWebView *view)
       gint scale = gdk_window_get_scale_factor (gtk_widget_get_window (GTK_WIDGET (view)));
       view->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, scale * FAVICON_SIZE, scale * FAVICON_SIZE);
     }
-    cairo_surface_destroy (icon_surface);
   }
 
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_ICON]);
