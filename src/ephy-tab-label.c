@@ -127,7 +127,7 @@ ephy_tab_label_set_property (GObject      *object,
                                                     0,
                                                     gtk_widget_get_window (GTK_WIDGET (self)));
       gtk_image_set_from_surface (GTK_IMAGE (self->icon), csurf);
-      cairo_surface_destroy(csurf);
+      cairo_surface_destroy (csurf);
       self->has_icon = g_value_get_object (value) != NULL;
       ephy_tab_label_update_icon (self);
       break;
