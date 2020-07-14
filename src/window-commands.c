@@ -1160,6 +1160,50 @@ window_cmd_stop (GSimpleAction *action,
   webkit_web_view_stop_loading (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
+static void
+check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  GtkWidget *dialog;
+  GtkWidget *button;
+  gboolean has_modified_forms;
+  int response = GTK_RESPONSE_ACCEPT;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+
+  has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
+  if (has_modified_forms) {
+    dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                     GTK_DIALOG_MODAL,
+                                     GTK_MESSAGE_WARNING,
+                                     GTK_BUTTONS_CANCEL,
+                                     "%s", _("Do you want to reload this website?"));
+
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", _("A form you modified has not been submitted."));
+
+    button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Discard form"), GTK_RESPONSE_ACCEPT);
+    gtk_style_context_add_class (gtk_widget_get_style_context (button), "destructive-action");
+
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
+                                 GTK_WINDOW (dialog));
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+    gtk_widget_destroy (dialog);
+  }
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+    webkit_web_view_reload (view);
+  }
+}
+
 void
 window_cmd_reload (GSimpleAction *action,
                    GVariant      *parameter,
@@ -1167,15 +1211,14 @@ window_cmd_reload (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
-  WebKitWebView *view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
-  gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  webkit_web_view_reload (view);
+  ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
+                                    NULL,
+                                    (GAsyncReadyCallback)check_tab_has_modified_forms_and_reload_cb,
+                                    window);
 }
 
 void
