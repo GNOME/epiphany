@@ -662,22 +662,24 @@ ephy_file_launch_handler (GFile   *file,
 }
 
 static gboolean
-open_in_default_handler (const char                   *uri,
-                         const char                   *mime_type,
-                         guint32                       timestamp,
-                         GdkScreen                    *screen,
-                         EphyFileHelpersNotFlatpakTag  tag)
+open_in_default_handler (const char *uri,
+                         const char *mime_type,
+                         guint32     timestamp,
+                         GdkScreen  *screen)
 {
   g_autoptr (GdkAppLaunchContext) context = NULL;
   g_autoptr (GAppInfo) appinfo = NULL;
   g_autoptr (GError) error = NULL;
   GList uris;
 
-  /* This is impossible to implement inside flatpak. Higher layers must
-   * ensure we don't get here.
-   */
-  g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
-  g_assert (!ephy_is_running_inside_flatpak ());
+  if (ephy_is_running_inside_flatpak ()) {
+    if (strcmp (mime_type, "inode/directory") == 0) {
+      ephy_open_directory_via_flatpak_portal (uri);
+      return TRUE;
+    }
+
+    return FALSE;
+  }
 
   context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
   gdk_app_launch_context_set_screen (context, screen);
@@ -701,19 +703,17 @@ open_in_default_handler (const char                   *uri,
 }
 
 gboolean
-ephy_file_open_uri_in_default_browser (const char                   *uri,
-                                       guint32                       user_time,
-                                       GdkScreen                    *screen,
-                                       EphyFileHelpersNotFlatpakTag  tag)
+ephy_file_open_uri_in_default_browser (const char *uri,
+                                       guint32     user_time,
+                                       GdkScreen  *screen)
 {
-  return open_in_default_handler (uri, "x-scheme-handler/http", user_time, screen, tag);
+  return open_in_default_handler (uri, "x-scheme-handler/http", user_time, screen);
 }
 
 /**
  * ephy_file_browse_to:
  * @file: a #GFile
  * @user_time: user_time to prevent focus stealing
- * @tag: used to guard against improper usage
  *
  * Launches the default application for browsing directories to point to
  * @file. E.g. nautilus will jump to @file within its directory and
@@ -722,13 +722,12 @@ ephy_file_open_uri_in_default_browser (const char                   *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile                        *file,
-                     guint32                       user_time,
-                     EphyFileHelpersNotFlatpakTag  tag)
+ephy_file_browse_to (GFile   *file,
+                     guint32  user_time)
 {
   g_autofree char *uri = g_file_get_uri (file);
 
-  return open_in_default_handler (uri, "inode/directory", user_time, NULL, tag);
+  return open_in_default_handler (uri, "inode/directory", user_time, NULL);
 }
 
 /**

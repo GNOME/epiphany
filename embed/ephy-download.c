@@ -444,15 +444,13 @@ ephy_download_do_download_action (EphyDownload           *download,
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
       /* Must not use this action type under flatpak! */
-      ret = ephy_file_browse_to (destination, user_time,
-                                 EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+      ret = ephy_file_browse_to (destination, user_time);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
       ret = ephy_file_launch_handler (destination, user_time);
-      if (!ret && !ephy_is_running_inside_flatpak ())
-        ret = ephy_file_browse_to (destination, user_time,
-                                   EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+      if (!ret)
+        ret = ephy_file_browse_to (destination, user_time);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");

@@ -39,6 +39,11 @@ if profile != ''
   application_id = 'org.gnome.Epiphany.' + profile
 endif
 
+portal = get_option('libportal')
+if portal.enabled()
+  portal_dep = dependency('libportal', version: '>= 0.0.2')
+endif
+
 conf = configuration_data()
 conf.set_quoted('APPLICATION_ID', application_id)
 conf.set_quoted('BUILD_ROOT', meson.build_root())
@@ -62,6 +67,10 @@ conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
 conf.set('EPHY_MICRO_VERSION', version_array[2].to_int())
 
 conf.set_quoted('VERSION', '@VCS_TAG@')
+
+if portal_dep.found()
+  conf.set('HAVE_LIBPORTAL', 1)
+endif
 
 config_h = declare_dependency(
   sources: vcs_tag(

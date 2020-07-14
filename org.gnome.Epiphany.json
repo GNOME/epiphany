@@ -48,6 +48,19 @@
             ]
         },
         {
+            "name" : "libportal",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk_doc=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/flatpak/libportal.git"
+                }
+            ]
+        },
+        {
             "name" : "epiphany",
             "buildsystem" : "meson",
             "config-opts" : [

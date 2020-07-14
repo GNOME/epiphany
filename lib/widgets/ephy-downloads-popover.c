@@ -24,7 +24,6 @@
 #include "ephy-downloads-manager.h"
 #include "ephy-download-widget.h"
 #include "ephy-embed-shell.h"
-#include "ephy-flatpak-utils.h"
 
 #include <glib/gi18n.h>
 
@@ -78,10 +77,6 @@ download_added_cb (EphyDownloadsPopover *popover,
   GtkWidget *widget;
 
   row = gtk_list_box_row_new ();
-  if (ephy_is_running_inside_flatpak ()) {
-    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-    gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
-  }
   gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
   gtk_widget_show (row);
 
@@ -188,12 +183,10 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                                               DOWNLOADS_BOX_MIN_SIZE);
 
   popover->downloads_box = gtk_list_box_new ();
-  if (!ephy_is_running_inside_flatpak ()) {
-    g_signal_connect_swapped (popover->downloads_box, "row-activated",
-                              G_CALLBACK (download_box_row_activated_cb),
-                              popover);
-    gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (popover->downloads_box), TRUE);
-  }
+  g_signal_connect_swapped (popover->downloads_box, "row-activated",
+                            G_CALLBACK (download_box_row_activated_cb),
+                            popover);
+  gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (popover->downloads_box), TRUE);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (popover->downloads_box), GTK_SELECTION_NONE);
   gtk_style_context_add_class (gtk_widget_get_style_context (popover->downloads_box),
                                "background");
@@ -214,10 +207,6 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                              popover, G_CONNECT_SWAPPED);
 
     row = gtk_list_box_row_new ();
-    if (ephy_is_running_inside_flatpak ()) {
-      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-      gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
-    }
     gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
     gtk_widget_show (row);
 
