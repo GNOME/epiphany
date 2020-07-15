@@ -262,7 +262,7 @@ web_resource_data_cb (WebKitWebResource *resource,
   gsize length;
 
   data = webkit_web_resource_get_data_finish (resource, result, &length, &error);
-  if (!data || !*data || length == 0) {
+  if (!data || length == 0) {
     g_clear_object (&request->web_view);
     ephy_reader_request_begin_get_source_from_uri (request, request->uri);
   } else {
