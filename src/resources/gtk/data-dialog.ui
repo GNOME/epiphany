@@ -3,11 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <object class="GtkImage" id="search_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-find-symbolic</property>
-  </object>
   <object class="GtkImage" id="clear_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -28,47 +23,128 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="HdyHeaderBar">
+          <object class="GtkStack" id="header_bars_stack">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="show_close_button">True</property>
-            <property name="title" bind-source="EphyDataDialog" bind-property="title"/>
+            <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
             <child>
-              <object class="GtkButton" id="clear_all_button">
+              <object class="HdyHeaderBar" id="window_header_bar">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">clear_all_image</property>
-                <property name="always_show_image">True</property>
-                <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
-                <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
-                <style>
-                  <class name="destructive-action"/>
-                  <class name="image-button"/>
-                </style>
+                <property name="can_focus">False</property>
+                <property name="show_close_button">True</property>
+                <property name="title" bind-source="EphyDataDialog" bind-property="title"/>
+                <child>
+                  <object class="GtkButton" id="clear_all_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">clear_all_image</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="on_clear_all_button_clicked" swapped="yes"/>
+                    <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
+                    <style>
+                      <class name="destructive-action"/>
+                      <class name="image-button"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="selection_button">
+                    <property name="visible">True</property>
+                    <property name="valign">center</property>
+                    <property name="use-underline">True</property>
+                    <signal name="clicked" handler="on_selection_button_clicked"/>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="a11y-button3">
+                        <property name="accessible-name" translatable="yes">Select Items</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon-name">object-select-symbolic</property>
+                        <property name="icon-size">1</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="search_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="always_show_image">True</property>
+                    <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
+                    <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">edit-find-symbolic</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child>
-              <object class="GtkToggleButton" id="search_button">
+              <object class="HdyHeaderBar" id="selection_header_bar">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">search_image</property>
-                <property name="always_show_image">True</property>
-                <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-                <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                <property name="title" bind-source="EphyDataDialog" bind-property="title"/>
                 <style>
-                  <class name="image-button"/>
+                  <class name="selection-mode"/>
                 </style>
-                <child internal-child="accessible">
-                  <object class="AtkObject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                <child>
+                  <object class="GtkButton" id="selection_cancel_button">
+                    <property name="visible">True</property>
+                    <property name="valign">center</property>
+                    <property name="use-underline">True</property>
+                    <property name="label" translatable="yes">_Cancel</property>
+                    <signal name="clicked" handler="on_selection_cancel_button_clicked"/>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
                   </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="selection_search_button">
+                    <property name="visible">True</property>
+                    <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
+                    <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">edit-find-symbolic</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -104,7 +180,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStack" id="stack">
+          <object class="GtkStack" id="data_presentation_stack">
             <property name="can_focus">False</property>
             <property name="expand">True</property>
             <property name="visible">True</property>
@@ -263,6 +339,32 @@
           <packing>
             <property name="expand">True</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="selection_action_bar_revealer">
+            <property name="visible">True</property>
+            <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
+            <property name="reveal-child" bind-source="EphyDataDialog" bind-property="selection-active"/>
+            <child>
+              <object class="GtkActionBar">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkButton" id="selection_delete_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="label" translatable="yes">_Delete</property>
+                    <signal name="clicked" handler="on_selection_delete_button_clicked"/>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
