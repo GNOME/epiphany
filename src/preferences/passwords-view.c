@@ -80,6 +80,7 @@ clear_listbox (GtkWidget *listbox)
 static void
 on_search_text_changed (EphyPasswordsView *passwords_view)
 {
+  ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (passwords_view), FALSE);
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (passwords_view->listbox));
 }
 
@@ -382,6 +383,9 @@ password_filter (GtkListBoxRow *row,
     visible = TRUE;
   else if (username != NULL && g_strrstr (username, search_text) != NULL)
     visible = TRUE;
+
+  if (visible)
+    ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (passwords_view), TRUE);
 
   gtk_widget_set_visible (GTK_WIDGET (row), visible);
 
