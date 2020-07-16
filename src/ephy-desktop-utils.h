@@ -29,4 +29,6 @@ gboolean is_desktop_pantheon (void);
 
 GtkIconSize get_icon_size (void);
 
+const char *ephy_get_fallback_favicon_name (const char *title);
+
 G_END_DECLS

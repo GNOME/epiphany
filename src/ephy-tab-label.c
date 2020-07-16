@@ -38,6 +38,7 @@ struct _EphyTabLabel {
   GtkWidget *audio_box;
   GtkWidget *audio_image;
 
+  char *uri;
   gboolean is_pinned;
   gboolean is_loading;
   gboolean has_icon;
@@ -81,12 +82,9 @@ static void
 ephy_tab_label_update_icon (EphyTabLabel *self)
 {
   if (!self->has_icon) {
-    if (self->is_pinned)
-      gtk_image_set_from_icon_name (GTK_IMAGE (self->icon),
-                                    "ephy-missing-favicon-symbolic",
-                                    GTK_ICON_SIZE_MENU);
-    else
-      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), NULL);
+    const char *favicon_name = ephy_get_fallback_favicon_name (self->uri);
+
+    gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
   }
 }
 
@@ -115,10 +113,11 @@ ephy_tab_label_set_property (GObject      *object,
       }
       break;
     case PROP_LABEL_URI:
-      str = g_value_get_string (value);
-      if (self->is_loading && !ephy_embed_utils_is_no_show_address (str)) {
-        gtk_label_set_text (GTK_LABEL (self->label), str);
-        gtk_widget_set_tooltip_text (GTK_WIDGET (self), str);
+      g_clear_pointer (&self->uri, g_free);
+      self->uri = g_strdup (g_value_get_string (value));
+      if (self->is_loading && !ephy_embed_utils_is_no_show_address (self->uri)) {
+        gtk_label_set_text (GTK_LABEL (self->label), self->uri);
+        gtk_widget_set_tooltip_text (GTK_WIDGET (self), self->uri);
       }
       break;
     case PROP_ICON_BUF:
@@ -305,6 +304,16 @@ style_updated_cb (GtkWidget *widget,
 }
 
 static void
+ephy_tab_label_dispose (GObject *object)
+{
+  EphyTabLabel *self = EPHY_TAB_LABEL (object);
+
+  g_clear_pointer (&self->uri, g_free);
+
+  G_OBJECT_CLASS (ephy_tab_label_parent_class)->dispose (object);
+}
+
+static void
 ephy_tab_label_class_init (EphyTabLabelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -312,6 +321,7 @@ ephy_tab_label_class_init (EphyTabLabelClass *klass)
 
   object_class->set_property = ephy_tab_label_set_property;
   object_class->get_property = ephy_tab_label_get_property;
+  object_class->dispose = ephy_tab_label_dispose;
 
   obj_properties[PROP_LABEL_TEXT] = g_param_spec_string ("label-text",
                                                          "Label Text",

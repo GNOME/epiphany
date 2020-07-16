@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-utils.h"
 #include "ephy-page-row.h"
 #include "ephy-web-view.h"
@@ -140,11 +141,13 @@ sync_favicon (EphyWebView *view,
   if (ephy_web_view_get_icon (view))
     pixbuf = gdk_pixbuf_copy (ephy_web_view_get_icon (view));
 
-  if (pixbuf)
+  if (pixbuf) {
     gtk_image_set_from_pixbuf (self->icon, pixbuf);
-  else
-    gtk_image_set_from_icon_name (self->icon, "ephy-missing-favicon-symbolic",
-                                  GTK_ICON_SIZE_MENU);
+  } else {
+    const char *favicon_name = ephy_get_fallback_favicon_name (ephy_web_view_get_display_address (view));
+
+    gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
+  }
 }
 
 EphyPageRow *
