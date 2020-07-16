@@ -70,6 +70,7 @@ struct _EphyShell {
 
   GHashTable *notifications;
   gchar *open_notification_id;
+  gboolean startup_finished;
 };
 
 static EphyShell *ephy_shell = NULL;
@@ -165,6 +166,8 @@ ephy_shell_startup_continue (EphyShell               *shell,
     EphyWindow *window = ephy_window_new ();
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
   }
+
+  shell->startup_finished = TRUE;
 }
 
 static void
@@ -824,6 +827,7 @@ ephy_shell_init (EphyShell *shell)
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
   ephy_shell = shell;
+  ephy_shell->startup_finished = FALSE;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
 
@@ -1482,4 +1486,10 @@ ephy_shell_send_notification (EphyShell     *shell,
 
   shell->open_notification_id = g_strdup (id);
   g_application_send_notification (G_APPLICATION (shell), id, notification);
+}
+
+gboolean
+ephy_shell_startup_finished (EphyShell *shell)
+{
+  return shell->startup_finished;
 }
