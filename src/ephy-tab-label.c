@@ -81,12 +81,9 @@ static void
 ephy_tab_label_update_icon (EphyTabLabel *self)
 {
   if (!self->has_icon) {
-    if (self->is_pinned)
-      gtk_image_set_from_icon_name (GTK_IMAGE (self->icon),
-                                    "ephy-missing-favicon-symbolic",
-                                    GTK_ICON_SIZE_MENU);
-    else
-      gtk_image_set_from_pixbuf (GTK_IMAGE (self->icon), NULL);
+    const char *favicon_name = ephy_get_fallback_favicon_name (gtk_label_get_text (GTK_LABEL (self->label)));
+
+    gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
   }
 }
 

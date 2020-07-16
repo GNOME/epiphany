@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-desktop-utils.h"
+#include "ephy-embed-utils.h"
 
 #include <gtk/gtk.h>
 
@@ -41,4 +42,15 @@ get_icon_size (void)
     return GTK_ICON_SIZE_LARGE_TOOLBAR;
 
   return GTK_ICON_SIZE_BUTTON;
+}
+
+const char *
+ephy_get_fallback_favicon_name (const char *title)
+{
+  if (g_strcmp0 (title, _(OVERVIEW_PAGE_TITLE)) == 0)
+    return "view-grid-symbolic";
+  else if (g_strcmp0 (title, _("About Web")) == 0)
+    return "web-browser-symbolic";
+
+  return "ephy-missing-favicon-symbolic";
 }
