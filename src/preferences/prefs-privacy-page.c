@@ -41,11 +41,6 @@ struct _PrefsPrivacyPage {
   GtkWidget *enable_safe_browsing_switch;
   GtkWidget *enable_itp_switch;
 
-  /* Cookies */
-  GtkWidget *always;
-  GtkWidget *no_third_party;
-  GtkWidget *never;
-
   /* Passwords */
   GtkWidget *remember_passwords_switch;
 };
@@ -66,48 +61,6 @@ on_clear_data_row_activated (GtkWidget        *row,
                              PrefsPrivacyPage *privacy_page)
 {
   g_signal_emit (privacy_page, signals[CLEAR_DATA_ROW_ACTIVATED], 0);
-}
-
-static gboolean
-cookies_get_mapping (GValue   *value,
-                     GVariant *variant,
-                     gpointer  user_data)
-{
-  const char *setting;
-  const char *name;
-
-  setting = g_variant_get_string (variant, NULL);
-  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
-
-  if (g_strcmp0 (name, "no_third_party") == 0)
-    name = "no-third-party";
-
-  /* If the button name matches the setting, it should be active. */
-  if (g_strcmp0 (name, setting) == 0)
-    g_value_set_boolean (value, TRUE);
-
-  return TRUE;
-}
-
-static GVariant *
-cookies_set_mapping (const GValue       *value,
-                     const GVariantType *expected_type,
-                     gpointer            user_data)
-{
-  GVariant *variant = NULL;
-  const char *name;
-
-  /* Don't act unless the button has been activated (turned ON). */
-  if (!g_value_get_boolean (value))
-    return NULL;
-
-  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
-  if (g_strcmp0 (name, "no_third_party") == 0)
-    variant = g_variant_new_string ("no-third-party");
-  else
-    variant = g_variant_new_string (name);
-
-  return variant;
 }
 
 static void
@@ -141,39 +94,6 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    privacy_page->enable_itp_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
-
-  /* ======================================================================== */
-  /* ========================== Cookies ===================================== */
-  /* ======================================================================== */
-  g_settings_bind_with_mapping (web_settings,
-                                EPHY_PREFS_WEB_COOKIES_POLICY,
-                                privacy_page->always,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                cookies_get_mapping,
-                                cookies_set_mapping,
-                                privacy_page->always,
-                                NULL);
-
-  g_settings_bind_with_mapping (web_settings,
-                                EPHY_PREFS_WEB_COOKIES_POLICY,
-                                privacy_page->no_third_party,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                cookies_get_mapping,
-                                cookies_set_mapping,
-                                privacy_page->no_third_party,
-                                NULL);
-
-  g_settings_bind_with_mapping (web_settings,
-                                EPHY_PREFS_WEB_COOKIES_POLICY,
-                                privacy_page->never,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                cookies_get_mapping,
-                                cookies_set_mapping,
-                                privacy_page->never,
-                                NULL);
 
   /* ======================================================================== */
   /* ========================== Passwords =================================== */
@@ -212,11 +132,6 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, adblock_allow_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
-
-  /* Cookies */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, always);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, no_third_party);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, never);
 
   /* Passwords */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);

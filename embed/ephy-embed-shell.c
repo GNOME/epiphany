@@ -871,7 +871,6 @@ ephy_embed_shell_startup (GApplication *application)
   g_autofree char *favicon_db_path = NULL;
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
-  g_autofree char *cookie_policy = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
@@ -950,10 +949,6 @@ ephy_embed_shell_startup (GApplication *application)
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
   }
-
-  cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
-                                         EPHY_PREFS_WEB_COOKIES_POLICY);
-  ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
 
   g_signal_connect_object (priv->web_context, "download-started",
                            G_CALLBACK (download_started_cb), shell, 0);

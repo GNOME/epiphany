@@ -392,46 +392,6 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
   g_array_free (array, TRUE);
 }
 
-
-void
-ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
-                                           const char          *settings_policy)
-{
-  WebKitCookieAcceptPolicy policy;
-
-  if (!strcmp (settings_policy, "never"))
-    policy = WEBKIT_COOKIE_POLICY_ACCEPT_NEVER;
-  else if (!strcmp (settings_policy, "always"))
-    policy = WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS;
-  else if (!strcmp (settings_policy, "no-third-party"))
-    policy = WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY;
-  else {
-    g_warn_if_reached ();
-    return;
-  }
-
-  webkit_cookie_manager_set_accept_policy (cookie_manager, policy);
-}
-
-static void
-webkit_pref_callback_cookie_accept_policy (GSettings  *settings,
-                                           const char *key,
-                                           gpointer    data)
-{
-  WebKitCookieManager *cookie_manager;
-  char *value;
-  EphyEmbedShell *shell;
-
-  value = g_settings_get_string (settings, key);
-  if (!value)
-    return;
-
-  shell = ephy_embed_shell_get_default ();
-  cookie_manager = webkit_web_context_get_cookie_manager (ephy_embed_shell_get_web_context (shell));
-  ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, value);
-  g_free (value);
-}
-
 static void
 webkit_pref_callback_gnome_fonts (GSettings  *ephy_settings,
                                   const char *key,
@@ -568,10 +528,6 @@ static const PrefData webkit_pref_entries[] = {
     EPHY_PREFS_WEB_USER_AGENT,
     "user-agent",
     webkit_pref_callback_user_agent },
-  { EPHY_PREFS_WEB_SCHEMA,
-    EPHY_PREFS_WEB_COOKIES_POLICY,
-    "accept-policy",
-    webkit_pref_callback_cookie_accept_policy },
   { EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
     "hardware-acceleration-policy",
