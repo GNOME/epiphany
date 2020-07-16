@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-09 09:21+0000\n"
-"PO-Revision-Date: 2020-07-09 12:29+0300\n"
+"POT-Creation-Date: 2020-07-15 17:41+0000\n"
+"PO-Revision-Date: 2020-07-16 14:16+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -1063,7 +1063,7 @@ msgstr "Descărcare cerută"
 #: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
-#: src/window-commands.c:807 src/window-commands.c:1829
+#: src/window-commands.c:807 src/window-commands.c:1874
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -1469,13 +1469,12 @@ msgstr "Caută precedenta apariție a șirului căutat"
 msgid "Find next occurrence of the search string"
 msgstr "Caută următoarea apariție a șirului căutat"
 
-#: embed/ephy-pdf-handler.c:231 embed/ephy-reader-handler.c:266
-#: embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s nu este un URI valid"
 
-#: embed/ephy-web-view.c:182 src/window-commands.c:1291
+#: embed/ephy-web-view.c:182 src/window-commands.c:1336
 msgid "Open"
 msgstr "Deschide"
 
@@ -1859,7 +1858,7 @@ msgstr "Nespecificat"
 msgid "Technical information"
 msgstr "Informații tehnice"
 
-#: embed/ephy-web-view.c:3238
+#: embed/ephy-web-view.c:3325
 msgid "_OK"
 msgstr "_OK"
 
@@ -2212,7 +2211,7 @@ msgstr "Se anulează…"
 msgid "Starting…"
 msgstr "Se pornește…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:56
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:57
 msgid "_Open"
 msgstr "_Deschide"
 
@@ -2403,7 +2402,7 @@ msgstr "Mobil"
 msgid "Reload the current page"
 msgstr "Reîncarcă pagina curentă"
 
-#: src/ephy-action-bar-start.c:632 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:444
 msgid "Stop loading the current page"
 msgstr "Oprește încărcarea paginii curente"
 
@@ -2492,11 +2491,11 @@ msgstr "Filă nouă"
 msgid "Do you want to leave this website?"
 msgstr "Doriți să părăsiți acest sit web?"
 
-#: src/ephy-window.c:273
+#: src/ephy-window.c:273 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "Un formular pe care l-ați modificat nu a fost trimis."
 
-#: src/ephy-window.c:274
+#: src/ephy-window.c:274 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "I_gnoră formularul"
 
@@ -2664,15 +2663,15 @@ msgstr "Deschide adresa în fereastră nouă"
 msgid "Open Link In Incognito Window"
 msgstr "Deschide legătura în fereastră incognito"
 
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Operație de descărcare"
 
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Arată detaliile"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2680,20 +2679,20 @@ msgstr[0] "%d operație de descărcare activă"
 msgstr[1] "%d operații de descărcare active"
 msgstr[2] "%d de operații de descărcare active"
 
-#: src/ephy-window.c:3649
+#: src/ephy-window.c:3653
 msgid "Set Web as your default browser?"
 msgstr "Stabiliți Web ca navigatorul web implicit?"
 
-#: src/ephy-window.c:3651
+#: src/ephy-window.c:3655
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Stabiliți previzualizarea tehnologiei Epiphany ca navigatorul web implicit?"
 
-#: src/ephy-window.c:3663
+#: src/ephy-window.c:3667
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:3664
+#: src/ephy-window.c:3668
 msgid "_No"
 msgstr "_Nu"
 
@@ -2746,40 +2745,40 @@ msgstr "Cache pentru politicile HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Date Prevenție de Urmărire Inteligentă"
 
-#: src/preferences/passwords-view.c:168
+#: src/preferences/passwords-view.c:169
 msgid "Delete All Passwords?"
 msgstr "Se elimină toate parolele?"
 
-#: src/preferences/passwords-view.c:171
+#: src/preferences/passwords-view.c:172
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Aceasta va curăța toate parolele stocate local, și nu poate fi refăcută."
 
-#: src/preferences/passwords-view.c:176 src/resources/gtk/history-dialog.ui:74
+#: src/preferences/passwords-view.c:177 src/resources/gtk/history-dialog.ui:75
 msgid "_Delete"
 msgstr "Șt_erge"
 
-#: src/preferences/passwords-view.c:234
+#: src/preferences/passwords-view.c:235
 msgid "Copy password"
 msgstr "Copiază parola"
 
-#: src/preferences/passwords-view.c:240
+#: src/preferences/passwords-view.c:241
 msgid "Username"
 msgstr "Nume de utilizator"
 
-#: src/preferences/passwords-view.c:263
+#: src/preferences/passwords-view.c:264
 msgid "Copy username"
 msgstr "Copiază numele de utilizator"
 
-#: src/preferences/passwords-view.c:269
+#: src/preferences/passwords-view.c:270
 msgid "Password"
 msgstr "Parolă"
 
-#: src/preferences/passwords-view.c:294
+#: src/preferences/passwords-view.c:295
 msgid "Reveal password"
 msgstr "Dezvăluie parola"
 
-#: src/preferences/passwords-view.c:304
+#: src/preferences/passwords-view.c:305
 msgid "Remove Password"
 msgstr "Elimină parola"
 
@@ -3024,7 +3023,7 @@ msgstr "Istoricul este gol"
 msgid "Visited pages will be listed here"
 msgstr "Paginile vizitate vor fi listate aici"
 
-#: src/resources/gtk/history-dialog.ui:65
+#: src/resources/gtk/history-dialog.ui:66
 msgid "_Copy Location"
 msgstr "_Copiază locația"
 
@@ -3931,70 +3930,74 @@ msgstr ""
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, "
 "2018-2020"
 
-#: src/window-commands.c:1666
+#: src/window-commands.c:1183
+msgid "Do you want to reload this website?"
+msgstr "Doriți să încărcați această pagină web?"
+
+#: src/window-commands.c:1711
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "O aplicație web numită „%s” există deja. Doriți să o înlocuiți?"
 
-#: src/window-commands.c:1669
+#: src/window-commands.c:1714
 msgid "Cancel"
 msgstr "Anulează"
 
-#: src/window-commands.c:1671
+#: src/window-commands.c:1716
 msgid "Replace"
 msgstr "Înlocuiește"
 
-#: src/window-commands.c:1675
+#: src/window-commands.c:1720
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "O aplicație cu același nume există deja. Înlocuind-o o va suprascrie."
 
-#: src/window-commands.c:1767
+#: src/window-commands.c:1812
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplicația „%s” este gata de utilizare"
 
-#: src/window-commands.c:1770
+#: src/window-commands.c:1815
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Aplicația „%s” nu poate fi creeată"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1785
+#: src/window-commands.c:1830
 msgid "Launch"
 msgstr "Lansează"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1826
+#: src/window-commands.c:1871
 msgid "Create Web Application"
 msgstr "Creează aplicație web"
 
-#: src/window-commands.c:1831
+#: src/window-commands.c:1876
 msgid "C_reate"
 msgstr "C_reează"
 
-#: src/window-commands.c:2046
+#: src/window-commands.c:2091
 msgid "Save"
 msgstr "Salvează"
 
-#: src/window-commands.c:2055
+#: src/window-commands.c:2100
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2060
+#: src/window-commands.c:2105
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2065
+#: src/window-commands.c:2110
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2550
+#: src/window-commands.c:2595
 msgid "Enable caret browsing mode?"
 msgstr "Activați modul de navigare cu cursor?"
 
-#: src/window-commands.c:2553
+#: src/window-commands.c:2598
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4004,7 +4007,7 @@ msgstr ""
 "plasează un cursor care se poate muta în paginile web, permițându-vă să vă "
 "mișcați folosind tastatura. Doriți să activați modul de navigare cu cursor?"
 
-#: src/window-commands.c:2556
+#: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "Activ_ează"
 
