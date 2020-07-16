@@ -33,4 +33,7 @@ EphyNotification *ephy_notification_new  (const char *head,
                                           const char *body);
 void              ephy_notification_show (EphyNotification *self);
 
+gboolean          ephy_notification_is_duplicate (EphyNotification *notification_a,
+                                                  EphyNotification *notification_b);
+
 G_END_DECLS

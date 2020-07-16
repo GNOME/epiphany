@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include "ephy-notification.h"
 #include "ephy-notification-container.h"
 
 struct _EphyNotificationContainer {
@@ -72,8 +73,21 @@ void
 ephy_notification_container_add_notification (EphyNotificationContainer *self,
                                               GtkWidget                 *notification)
 {
+  g_autoptr (GList) children = NULL;
+  GList *list;
+
   g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
   g_assert (GTK_IS_WIDGET (notification));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
+  for (list = children; list && list->data; list = list->next) {
+    EphyNotification *child_notification = EPHY_NOTIFICATION (children->data);
+
+    if (ephy_notification_is_duplicate (child_notification, EPHY_NOTIFICATION (notification))) {
+      gtk_widget_destroy (notification);
+      return;
+    }
+  }
 
   gtk_container_add (GTK_CONTAINER (self->grid), notification);
   gtk_widget_show_all (GTK_WIDGET (self));

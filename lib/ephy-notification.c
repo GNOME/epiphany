@@ -213,3 +213,10 @@ ephy_notification_show (EphyNotification *self)
   ephy_notification_container_add_notification (ephy_notification_container_get_default (),
                                                 GTK_WIDGET (self));
 }
+
+gboolean
+ephy_notification_is_duplicate (EphyNotification *notification_a,
+                                EphyNotification *notification_b)
+{
+  return g_strcmp0 (notification_a->head_msg, notification_b->head_msg) == 0 && g_strcmp0 (notification_a->body_msg, notification_b->body_msg) == 0;
+}
