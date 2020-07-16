@@ -73,7 +73,13 @@ gboolean             ephy_password_manager_find                     (EphyPasswor
                                                                      const char                       *username_field,
                                                                      const char                       *password_field);
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
-                                                                      const char          *id);
+                                                                      const char          *id,
+                                                                      GCancellable        *cancellable,
+                                                                      GAsyncReadyCallback  callback,
+                                                                      gpointer             user_data);
+gboolean             ephy_password_manager_forget_finish             (EphyPasswordManager  *self,
+                                                                      GAsyncResult         *result,
+                                                                      GError              **error);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
 void                 ephy_password_manager_export_to_js_context      (EphyPasswordManager *self,
                                                                       JSCContext          *js_context,

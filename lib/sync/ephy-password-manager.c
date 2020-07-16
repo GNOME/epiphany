@@ -57,7 +57,8 @@ struct _EphyPasswordManager {
 
 static void ephy_password_manager_forget_record (EphyPasswordManager *self,
                                                  EphyPasswordRecord  *record,
-                                                 EphyPasswordRecord  *replacement);
+                                                 EphyPasswordRecord  *replacement,
+                                                 GTask               *task);
 
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
@@ -80,6 +81,7 @@ typedef struct {
 typedef struct {
   EphyPasswordManager *manager;
   EphyPasswordRecord *record;
+  GTask *task;
 } ManageRecordAsyncData;
 
 typedef struct {
@@ -170,13 +172,21 @@ merge_passwords_async_data_free (MergePasswordsAsyncData *data)
 
 static ManageRecordAsyncData *
 manage_record_async_data_new (EphyPasswordManager *manager,
-                              EphyPasswordRecord  *record)
+                              EphyPasswordRecord  *record,
+                              GTask               *task)
 {
   ManageRecordAsyncData *data;
 
   data = g_new0 (ManageRecordAsyncData, 1);
-  data->manager = g_object_ref (manager);
-  data->record = g_object_ref (record);
+
+  if (manager)
+    data->manager = g_object_ref (manager);
+
+  if (record)
+    data->record = g_object_ref (record);
+
+  if (task)
+    data->task = g_object_ref (task);
 
   return data;
 }
@@ -186,8 +196,10 @@ manage_record_async_data_free (ManageRecordAsyncData *data)
 {
   g_assert (data);
 
-  g_object_unref (data->manager);
-  g_object_unref (data->record);
+  g_clear_object (&data->manager);
+  g_clear_object (&data->record);
+  g_clear_object (&data->task);
+
   g_free (data);
 }
 
@@ -433,7 +445,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   secret_password_storev (EPHY_FORM_PASSWORD_SCHEMA,
                           attributes, NULL, label, password, NULL,
                           (GAsyncReadyCallback)secret_password_store_cb,
-                          manage_record_async_data_new (self, record));
+                          manage_record_async_data_new (self, record, NULL));
 
   g_free (label);
   g_hash_table_unref (attributes);
@@ -457,7 +469,7 @@ deduplicate_records (EphyPasswordManager *manager,
   records = g_list_remove_link (records, newest);
 
   for (GList *l = records; l; l = l->next)
-    ephy_password_manager_forget_record (manager, l->data, NULL);
+    ephy_password_manager_forget_record (manager, l->data, NULL, NULL);
   g_list_free_full (records, g_object_unref);
 
   return newest;
@@ -718,28 +730,37 @@ secret_password_clear_cb (GObject      *source_object,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
+  ManageRecordAsyncData *data = user_data;
 
   secret_password_clear_finish (result, &error);
   if (error) {
-    g_warning ("Failed to clear secrets from password schema: %s", error->message);
-    g_error_free (error);
+    if (data->task)
+      g_task_return_error (data->task, error);
+    else
+      g_warning ("Failed to clear secrets from password schema: %s", error->message);
+
+    manage_record_async_data_free (data);
     return;
   }
 
-  if (user_data) {
-    ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
+  if (data->record)
     ephy_password_manager_store_record (data->manager, data->record);
-    manage_record_async_data_free (data);
-  }
+
+  if (data->task)
+    g_task_return_boolean (data->task, TRUE);
+
+  manage_record_async_data_free (data);
 }
 
 static void
 ephy_password_manager_forget_record (EphyPasswordManager *self,
                                      EphyPasswordRecord  *record,
-                                     EphyPasswordRecord  *replacement)
+                                     EphyPasswordRecord  *replacement,
+                                     GTask               *task)
 {
   GHashTable *attributes;
+  ManageRecordAsyncData *clear_cb_data = NULL;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
@@ -752,6 +773,8 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
                                      ephy_password_record_get_password_field (record),
                                      -1);
 
+  clear_cb_data = manage_record_async_data_new (self, replacement, task);
+
   LOG ("Forgetting password record for (%s, %s, %s, %s, %s)",
        ephy_password_record_get_origin (record),
        ephy_password_record_get_target_origin (record),
@@ -761,7 +784,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 
   secret_password_clearv (EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
                           (GAsyncReadyCallback)secret_password_clear_cb,
-                          replacement ? manage_record_async_data_new (self, replacement) : NULL);
+                          clear_cb_data);
 
   ephy_password_manager_cache_remove (self,
                                       ephy_password_record_get_origin (record),
@@ -771,34 +794,52 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 
 static void
 forget_cb (GList    *records,
-           gpointer  user_data)
+           gpointer  data)
 {
-  EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (user_data);
+  GTask *task = data;
+  EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (g_task_get_source_object (task));
   EphyPasswordRecord *record;
 
   /* We expect only one matching record here. */
   if (g_list_length (records) == 1) {
     record = EPHY_PASSWORD_RECORD (records->data);
     g_signal_emit_by_name (self, "synchronizable-deleted", record);
-    ephy_password_manager_forget_record (self, record, NULL);
+    ephy_password_manager_forget_record (self, record, NULL, task);
   } else {
     g_warn_if_reached ();
   }
 }
 
+gboolean
+ephy_password_manager_forget_finish (EphyPasswordManager  *self,
+                                     GAsyncResult         *result,
+                                     GError              **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
 void
 ephy_password_manager_forget (EphyPasswordManager *self,
-                              const char          *id)
+                              const char          *id,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
 {
+  GTask *task = NULL;
+
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (id);
+
+  task = g_task_new (self, cancellable, callback, user_data);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
   * therefore we need to obtain the password record first and then emit
   * the signal before clearing the password from the secret schema. */
   ephy_password_manager_query (self, id,
                                NULL, NULL, NULL, NULL, NULL,
-                               forget_cb, self);
+                               forget_cb, task);
 }
 
 static void
@@ -887,7 +928,7 @@ synchronizable_manager_remove (EphySynchronizableManager *manager,
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (manager);
   EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (synchronizable);
 
-  ephy_password_manager_forget_record (self, record, NULL);
+  ephy_password_manager_forget_record (self, record, NULL, NULL);
 }
 
 static void
@@ -898,7 +939,7 @@ replace_existing_cb (GList    *records,
 
   /* We expect only one matching record here. */
   if (g_list_length (records) == 1)
-    ephy_password_manager_forget_record (data->manager, records->data, data->record);
+    ephy_password_manager_forget_record (data->manager, records->data, data->record, NULL);
   else
     g_warn_if_reached ();
 
@@ -915,7 +956,7 @@ ephy_password_manager_replace_existing (EphyPasswordManager *self,
   ephy_password_manager_query (self, ephy_password_record_get_id (record),
                                NULL, NULL, NULL, NULL, NULL,
                                replace_existing_cb,
-                               manage_record_async_data_new (self, record));
+                               manage_record_async_data_new (self, record, NULL));
 }
 
 static void
@@ -1039,7 +1080,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
           }
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
-          ephy_password_manager_forget_record (self, record, l->data);
+          ephy_password_manager_forget_record (self, record, l->data, NULL);
           g_hash_table_add (dont_upload, g_strdup (remote_id));
         }
       }
@@ -1058,7 +1099,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
           g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
-          ephy_password_manager_forget_record (self, record, l->data);
+          ephy_password_manager_forget_record (self, record, l->data, NULL);
           g_hash_table_add (dont_upload, g_strdup (remote_id));
         }
       } else {
@@ -1071,7 +1112,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
         if (record) {
           /* A leftover from migration: the local record has incorrect target_origin
            * Replace it with remote record */
-          ephy_password_manager_forget_record (self, record, l->data);
+          ephy_password_manager_forget_record (self, record, l->data, NULL);
           g_hash_table_add (dont_upload, g_strdup (ephy_password_record_get_id (record)));
         } else {
           /* Different id, different tuple. This is a new record. */
@@ -1119,7 +1160,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
     remote_id = ephy_password_record_get_id (l->data);
     record = get_record_by_id (*local_records, remote_id);
     if (record) {
-      ephy_password_manager_forget_record (self, record, NULL);
+      ephy_password_manager_forget_record (self, record, NULL, NULL);
       *local_records = delete_record_by_id (*local_records, remote_id);
     }
   }
@@ -1137,7 +1178,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
     record = get_record_by_id (*local_records, remote_id);
     if (record) {
       /* Same id. Overwrite local record. */
-      ephy_password_manager_forget_record (self, record, l->data);
+      ephy_password_manager_forget_record (self, record, l->data, NULL);
     } else {
       record = get_record_by_parameters (*local_records,
                                          remote_origin,
@@ -1154,7 +1195,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
           g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
-          ephy_password_manager_forget_record (self, record, l->data);
+          ephy_password_manager_forget_record (self, record, l->data, NULL);
         }
       } else {
         /* Different id, different tuple. This is a new record. */

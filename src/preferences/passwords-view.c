@@ -46,6 +46,7 @@ struct _EphyPasswordsView {
   GtkWidget *confirmation_dialog;
 
   GActionGroup *action_group;
+  GCancellable *cancellable;
 };
 
 G_DEFINE_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY_TYPE_DATA_VIEW)
@@ -59,6 +60,9 @@ ephy_passwords_view_dispose (GObject *object)
 
   g_list_free_full (passwords_view->records, g_object_unref);
   passwords_view->records = NULL;
+
+  g_cancellable_cancel (passwords_view->cancellable);
+  g_clear_object (&passwords_view->cancellable);
 
   G_OBJECT_CLASS (ephy_passwords_view_parent_class)->dispose (object);
 }
@@ -84,6 +88,24 @@ on_search_text_changed (EphyPasswordsView *passwords_view)
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (passwords_view->listbox));
 }
 
+static void
+forget_operation_finished_cb (GObject      *source_object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  EphyPasswordsView *passwords_view = user_data;
+  g_autoptr (GError) error = NULL;
+
+  if (!ephy_password_manager_forget_finish (EPHY_PASSWORD_MANAGER (source_object), result, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to forget password: %s", error->message);
+    return;
+  }
+
+  /* Repopulate the list */
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (passwords_view), FALSE);
+  populate_model (passwords_view);
+}
 
 static void
 forget_clicked (GtkWidget *button,
@@ -92,15 +114,19 @@ forget_clicked (GtkWidget *button,
   EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (user_data);
   EphyPasswordsView *passwords_view = g_object_get_data (G_OBJECT (record), "passwords-view");
 
-  ephy_password_manager_forget (passwords_view->manager, ephy_password_record_get_id (record));
-  clear_listbox (passwords_view->listbox);
+  ephy_password_manager_forget (passwords_view->manager,
+                                ephy_password_record_get_id (record),
+                                passwords_view->cancellable,
+                                forget_operation_finished_cb,
+                                passwords_view);
 
+  /* Clear internal state */
+  clear_listbox (passwords_view->listbox);
   g_list_free_full (passwords_view->records, g_object_unref);
   passwords_view->records = NULL;
 
-  ephy_data_view_set_has_data (EPHY_DATA_VIEW (passwords_view), FALSE);
-
-  populate_model (passwords_view);
+  /* Present loading spinner while waiting for the async forget op to finish */
+  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (passwords_view), TRUE);
 }
 
 
@@ -401,6 +427,8 @@ ephy_passwords_view_init (EphyPasswordsView *passwords_view)
 
   passwords_view->action_group = create_action_group (passwords_view);
   gtk_widget_insert_action_group (GTK_WIDGET (passwords_view), "passwords", passwords_view->action_group);
+
+  passwords_view->cancellable = g_cancellable_new ();
 
   g_signal_connect (GTK_WIDGET (passwords_view), "show", G_CALLBACK (show_dialog_cb), NULL);
 
