@@ -127,4 +127,6 @@ void                     ephy_shell_send_notification     (EphyShell        *she
                                                            gchar            *id,
                                                            GNotification    *notification);
 
+gboolean                 ephy_shell_startup_finished      (EphyShell *shell);
+
 G_END_DECLS

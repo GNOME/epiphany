@@ -955,7 +955,7 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
     gtk_notebook_set_current_page (gnotebook, position);
     g_object_set_data (G_OBJECT (embed), "jump_to",
                        GINT_TO_POINTER (jump_to));
-  } else {
+  } else if (ephy_shell_startup_finished (ephy_shell_get_default ())) {
     PresentTabData *pt_data = present_tab_data_new (notebook, gtk_notebook_get_current_page (gnotebook), position);
     pt_data->flash_id = g_idle_add (present_new_tab, pt_data);
   }
