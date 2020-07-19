@@ -117,6 +117,40 @@
       </object>
     </child>
     <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Web Content</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow" id="adblock_allow_row">
+            <property name="activatable_widget">adblock_allow_switch</property>
+            <property name="title" translatable="yes">Block _Advertisements</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkSwitch" id="adblock_allow_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">popups_allow_switch</property>
+            <property name="title" translatable="yes">Block _Popup Windows</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkSwitch" id="popups_allow_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="HdyPreferencesGroup" id="homepage_box">
         <property name="title" translatable="yes">Homepage</property>
         <property name="visible">True</property>

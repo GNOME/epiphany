@@ -53,6 +53,10 @@ struct _PrefsGeneralPage {
   GtkWidget *webapp_url;
   GtkWidget *webapp_title;
 
+  /* Web Content */
+  GtkWidget *adblock_allow_switch;
+  GtkWidget *popups_allow_switch;
+
   /* Homepage */
   GtkWidget *homepage_box;
   GtkWidget *new_tab_homepage_radiobutton;
@@ -1122,6 +1126,10 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_url);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title);
 
+  /* Web Content */
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, adblock_allow_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, popups_allow_switch);
+
   /* Homepage */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, homepage_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, new_tab_homepage_radiobutton);
@@ -1240,6 +1248,21 @@ setup_general_page (PrefsGeneralPage *general_page)
     gtk_entry_set_text (GTK_ENTRY (general_page->webapp_url), general_page->webapp->url);
     gtk_entry_set_text (GTK_ENTRY (general_page->webapp_title), general_page->webapp->name);
   }
+
+  /* ======================================================================== */
+  /* ========================== Web Content ================================= */
+  /* ======================================================================== */
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                   general_page->adblock_allow_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_POPUPS,
+                   general_page->popups_allow_switch,
+                   "active",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   /* ======================================================================== */
   /* ========================== Homepage ==================================== */

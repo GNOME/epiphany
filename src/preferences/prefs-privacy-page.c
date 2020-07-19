@@ -35,9 +35,7 @@ enum {
 struct _PrefsPrivacyPage {
   HdyPreferencesPage parent_instance;
 
-  /* Web Content */
-  GtkWidget *popups_allow_switch;
-  GtkWidget *adblock_allow_switch;
+  /* Web Safety */
   GtkWidget *enable_safe_browsing_switch;
   GtkWidget *enable_itp_switch;
 
@@ -69,19 +67,8 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
 
   /* ======================================================================== */
-  /* ========================== Web Content ================================= */
+  /* ========================== Web Safety ================================== */
   /* ======================================================================== */
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   privacy_page->adblock_allow_switch,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_POPUPS,
-                   privacy_page->popups_allow_switch,
-                   "active",
-                   G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
@@ -127,9 +114,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
-  /* Web Content */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, popups_allow_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, adblock_allow_switch);
+  /* Web Safety */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
 
