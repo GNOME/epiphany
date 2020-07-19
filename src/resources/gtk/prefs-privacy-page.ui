@@ -26,6 +26,12 @@
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Web Tracking</property>
+        <property name="visible">True</property>
         <child>
           <object class="HdyActionRow">
             <property name="activatable_widget">enable_itp_switch</property>
@@ -34,6 +40,21 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="enable_itp_switch">
+                <property name="valign">center</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable_widget">enable_website_data_storage_switch</property>
+            <property name="subtitle" translatable="yes">Allow websites to store cookies, databases, and local storage data.</property>
+            <property name="title" translatable="yes">_Website Data Storage</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkSwitch" id="enable_website_data_storage_switch">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
               </object>

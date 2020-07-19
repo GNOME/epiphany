@@ -450,6 +450,26 @@ webkit_pref_callback_enable_spell_checking (GSettings  *settings,
 }
 
 static void
+webkit_pref_callback_enable_website_data_storage (GSettings  *settings,
+                                                  const char *key,
+                                                  gpointer    data)
+{
+  EphyEmbedShell *shell;
+  WebKitWebContext *context;
+  WebKitCookieManager *manager;
+  gboolean value;
+
+  value = g_settings_get_boolean (settings, key);
+  webkit_settings_set_enable_html5_database (webkit_settings, value);
+  webkit_settings_set_enable_html5_local_storage (webkit_settings, value);
+
+  shell = ephy_embed_shell_get_default ();
+  context = ephy_embed_shell_get_web_context (shell);
+  manager = webkit_web_context_get_cookie_manager (context);
+  webkit_cookie_manager_set_accept_policy (manager, value ? WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS : WEBKIT_COOKIE_POLICY_ACCEPT_NEVER);
+}
+
+static void
 webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
                                                    const char *key,
                                                    gpointer    data)
@@ -528,6 +548,10 @@ static const PrefData webkit_pref_entries[] = {
     EPHY_PREFS_WEB_USER_AGENT,
     "user-agent",
     webkit_pref_callback_user_agent },
+  { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
+    NULL,
+    webkit_pref_callback_enable_website_data_storage },
   { EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
     "hardware-acceleration-policy",

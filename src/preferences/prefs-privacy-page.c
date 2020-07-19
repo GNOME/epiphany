@@ -37,7 +37,10 @@ struct _PrefsPrivacyPage {
 
   /* Web Safety */
   GtkWidget *enable_safe_browsing_switch;
+
+  /* Web Tracking */
   GtkWidget *enable_itp_switch;
+  GtkWidget *enable_website_data_storage_switch;
 
   /* Passwords */
   GtkWidget *remember_passwords_switch;
@@ -76,9 +79,19 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
+  /* ======================================================================== */
+  /* ========================== Web Tracking ================================ */
+  /* ======================================================================== */
+
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_ITP,
                    privacy_page->enable_itp_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
+                   privacy_page->enable_website_data_storage_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -116,7 +129,10 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
 
   /* Web Safety */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
+
+  /* Web Tracking */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_switch);
 
   /* Passwords */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);

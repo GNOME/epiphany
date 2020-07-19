@@ -109,6 +109,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING         "enable-safe-browsing"
 #define EPHY_PREFS_WEB_GSB_API_KEY                  "gsb-api-key"
 #define EPHY_PREFS_WEB_ENABLE_ITP                   "enable-itp"
+#define EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE  "enable-website-data-storage"
 #define EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL           "default-zoom-level"
 #define EPHY_PREFS_WEB_ENABLE_AUTOSEARCH            "enable-autosearch"
 #define EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES        "enable-mouse-gestures"
@@ -138,6 +139,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
   EPHY_PREFS_WEB_GSB_API_KEY,
   EPHY_PREFS_WEB_ENABLE_ITP,
+  EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
   EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL,
   EPHY_PREFS_WEB_ENABLE_AUTOSEARCH,
   EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES,
