@@ -65,6 +65,28 @@
     </child>
     <child>
       <object class="HdyPreferencesGroup">
+        <property name="title" translatable="yes">Personal Data</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">True</property>
+            <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
+            <property name="title" translatable="yes">Clear Personal _Data</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <signal name="activated" handler="on_clear_data_row_activated"/>
+            <child>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="HdyPreferencesGroup">
         <property name="title" translatable="yes">Passwords</property>
         <property name="visible">True</property>
         <child>
@@ -91,28 +113,6 @@
             <child>
               <object class="GtkSwitch" id="remember_passwords_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="HdyPreferencesGroup">
-        <property name="title" translatable="yes">Personal Data</property>
-        <property name="visible">True</property>
-        <child>
-          <object class="HdyActionRow">
-            <property name="activatable">True</property>
-            <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
-            <property name="title" translatable="yes">Clear Personal _Data</property>
-            <property name="use_underline">True</property>
-            <property name="visible">True</property>
-            <signal name="activated" handler="on_clear_data_row_activated"/>
-            <child>
-              <object class="GtkImage">
-                <property name="icon_name">go-next-symbolic</property>
                 <property name="visible">True</property>
               </object>
             </child>
