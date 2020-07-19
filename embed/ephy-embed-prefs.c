@@ -543,8 +543,6 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        "enable-plugins", FALSE,
-                                                       "enable-webaudio", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205334 */
-                                                       "enable-webgl", TRUE, /* FIXME: https://bugs.webkit.org/show_bug.cgi?id=205335 */
                                                        "javascript-can-open-windows-automatically", TRUE,
 #if WEBKIT_CHECK_VERSION (2, 27, 90) && !WEBKIT_CHECK_VERSION (2, 30, 0)
                                                        "allow-top-navigation-to-data-urls", FALSE,
