@@ -25,10 +25,15 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER,
+  EPHY_FAVICON_TYPE_NO_MISSING_PLACEHOLDER
+} EphyFaviconType;
+
 gboolean is_desktop_pantheon (void);
 
 GtkIconSize get_icon_size (void);
 
-const char *ephy_get_fallback_favicon_name (const char *title);
+const char *ephy_get_fallback_favicon_name (const char *title, EphyFaviconType type);
 
 G_END_DECLS

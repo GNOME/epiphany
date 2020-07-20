@@ -45,7 +45,8 @@ get_icon_size (void)
 }
 
 const char *
-ephy_get_fallback_favicon_name (const char *uri)
+ephy_get_fallback_favicon_name (const char      *uri,
+                                EphyFaviconType  type)
 {
   if (uri) {
     if (g_str_has_prefix (uri, "ephy-about:overview") || g_str_has_prefix (uri, "about:overview"))
@@ -54,5 +55,5 @@ ephy_get_fallback_favicon_name (const char *uri)
       return "web-browser-symbolic";
   }
 
-  return "ephy-missing-favicon-symbolic";
+  return type == EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER ? "ephy-missing-favicon-symbolic" : NULL;
 }

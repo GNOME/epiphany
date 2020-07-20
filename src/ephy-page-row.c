@@ -144,7 +144,7 @@ sync_favicon (EphyWebView *view,
   if (pixbuf) {
     gtk_image_set_from_pixbuf (self->icon, pixbuf);
   } else {
-    const char *favicon_name = ephy_get_fallback_favicon_name (ephy_web_view_get_display_address (view));
+    const char *favicon_name = ephy_get_fallback_favicon_name (ephy_web_view_get_display_address (view), EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
 
     gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
   }
