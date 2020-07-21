@@ -44,10 +44,10 @@ struct _PrefsSyncPage {
   GtkWidget *sync_firefox_account_box;
   GtkWidget *sync_firefox_account_row;
   GtkWidget *sync_options_box;
-  GtkWidget *sync_bookmarks_checkbutton;
-  GtkWidget *sync_passwords_checkbutton;
-  GtkWidget *sync_history_checkbutton;
-  GtkWidget *sync_open_tabs_checkbutton;
+  GtkWidget *sync_bookmarks_switch;
+  GtkWidget *sync_passwords_switch;
+  GtkWidget *sync_history_switch;
+  GtkWidget *sync_open_tabs_switch;
   GtkWidget *sync_frequency_row;
   GtkWidget *sync_now_button;
   GtkWidget *synced_tabs_button;
@@ -66,27 +66,28 @@ G_DEFINE_TYPE (PrefsSyncPage, prefs_sync_page, HDY_TYPE_PREFERENCES_PAGE)
 static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
 
 static void
-sync_collection_toggled_cb (GtkToggleButton *button,
-                            PrefsSyncPage   *sync_page)
+sync_collection_toggled_cb (GtkWidget     *sw,
+                            gboolean       sw_active,
+                            PrefsSyncPage *sync_page)
 {
   EphySynchronizableManager *manager = NULL;
   EphyShell *shell = ephy_shell_get_default ();
   EphySyncService *service = ephy_shell_get_sync_service (shell);
 
-  if (GTK_WIDGET (button) == sync_page->sync_bookmarks_checkbutton) {
+  if (GTK_WIDGET (sw) == sync_page->sync_bookmarks_switch) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
-  } else if (GTK_WIDGET (button) == sync_page->sync_passwords_checkbutton) {
+  } else if (GTK_WIDGET (sw) == sync_page->sync_passwords_switch) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
-  } else if (GTK_WIDGET (button) == sync_page->sync_history_checkbutton) {
+  } else if (GTK_WIDGET (sw) == sync_page->sync_history_switch) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
-  } else if (GTK_WIDGET (button) == sync_page->sync_open_tabs_checkbutton) {
+  } else if (GTK_WIDGET (sw) == sync_page->sync_open_tabs_switch) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
     ephy_open_tabs_manager_clear_cache (EPHY_OPEN_TABS_MANAGER (manager));
   } else {
     g_assert_not_reached ();
   }
 
-  if (gtk_toggle_button_get_active (button)) {
+  if (sw_active) {
     ephy_sync_service_register_manager (service, manager);
   } else {
     ephy_sync_service_unregister_manager (service, manager);
@@ -623,10 +624,10 @@ prefs_sync_page_class_init (PrefsSyncPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_account_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_firefox_account_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_options_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_bookmarks_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_passwords_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_history_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_open_tabs_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_bookmarks_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_passwords_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_history_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_open_tabs_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_frequency_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, sync_now_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsSyncPage, synced_tabs_button);
@@ -724,22 +725,22 @@ prefs_sync_page_setup (PrefsSyncPage *sync_page)
 
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
-                   sync_page->sync_bookmarks_checkbutton,
+                   sync_page->sync_bookmarks_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
-                   sync_page->sync_passwords_checkbutton,
+                   sync_page->sync_passwords_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_HISTORY_ENABLED,
-                   sync_page->sync_history_checkbutton,
+                   sync_page->sync_history_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
-                   sync_page->sync_open_tabs_checkbutton,
+                   sync_page->sync_open_tabs_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -757,7 +758,7 @@ prefs_sync_page_setup (PrefsSyncPage *sync_page)
                                 sync_frequency_set_mapping,
                                 NULL, NULL);
 
-  g_object_bind_property (sync_page->sync_open_tabs_checkbutton, "active",
+  g_object_bind_property (sync_page->sync_open_tabs_switch, "active",
                           sync_page->synced_tabs_button, "sensitive",
                           G_BINDING_SYNC_CREATE);
 
@@ -770,16 +771,16 @@ prefs_sync_page_setup (PrefsSyncPage *sync_page)
   g_signal_connect_object (service, "sync-finished",
                            G_CALLBACK (sync_finished_cb),
                            sync_page, 0);
-  g_signal_connect_object (sync_page->sync_bookmarks_checkbutton, "toggled",
+  g_signal_connect_object (sync_page->sync_bookmarks_switch, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_page, 0);
-  g_signal_connect_object (sync_page->sync_passwords_checkbutton, "toggled",
+  g_signal_connect_object (sync_page->sync_passwords_switch, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_page, 0);
-  g_signal_connect_object (sync_page->sync_history_checkbutton, "toggled",
+  g_signal_connect_object (sync_page->sync_history_switch, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_page, 0);
-  g_signal_connect_object (sync_page->sync_open_tabs_checkbutton, "toggled",
+  g_signal_connect_object (sync_page->sync_open_tabs_switch, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_page, 0);
 

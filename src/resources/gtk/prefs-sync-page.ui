@@ -53,13 +53,12 @@
         <property name="visible">True</property>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable_widget">sync_bookmarks_checkbutton</property>
+            <property name="activatable_widget">sync_bookmarks_switch</property>
             <property name="title" translatable="yes">Sync _Bookmarks</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
-            <child type="prefix">
-              <object class="GtkCheckButton" id="sync_bookmarks_checkbutton">
-                <property name="use-underline">True</property>
+            <child>
+              <object class="GtkSwitch" id="sync_bookmarks_switch">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
               </object>
@@ -68,13 +67,12 @@
         </child>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable_widget">sync_passwords_checkbutton</property>
+            <property name="activatable_widget">sync_passwords_switch</property>
             <property name="title" translatable="yes">Sync _Passwords</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
-            <child type="prefix">
-              <object class="GtkCheckButton" id="sync_passwords_checkbutton">
-                <property name="use-underline">True</property>
+            <child>
+              <object class="GtkSwitch" id="sync_passwords_switch">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
               </object>
@@ -83,13 +81,12 @@
         </child>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable_widget">sync_history_checkbutton</property>
+            <property name="activatable_widget">sync_history_switch</property>
             <property name="title" translatable="yes">Sync _History</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
-            <child type="prefix">
-              <object class="GtkCheckButton" id="sync_history_checkbutton">
-                <property name="use-underline">True</property>
+            <child>
+              <object class="GtkSwitch" id="sync_history_switch">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
               </object>
@@ -98,13 +95,12 @@
         </child>
         <child>
           <object class="HdyActionRow">
-            <property name="activatable_widget">sync_open_tabs_checkbutton</property>
+            <property name="activatable_widget">sync_open_tabs_switch</property>
             <property name="title" translatable="yes">Sync Open _Tabs</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
-            <child type="prefix">
-              <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
-                <property name="use-underline">True</property>
+            <child>
+              <object class="GtkSwitch" id="sync_open_tabs_switch">
                 <property name="valign">center</property>
                 <property name="visible">True</property>
               </object>
@@ -125,19 +121,19 @@
             <property name="title" translatable="yes">Frequency</property>
             <property name="visible">True</property>
             <child>
+              <object class="GtkSeparator">
+                <property name="margin_bottom">8</property>
+                <property name="margin_top">8</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkButton" id="sync_now_button">
                 <property name="label" translatable="yes">Sync _now</property>
                 <property name="use-underline">True</property>
                 <property name="valign">center</property>
                 <property name="visible">True</property>
                 <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="margin_bottom">8</property>
-                <property name="margin_top">8</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
