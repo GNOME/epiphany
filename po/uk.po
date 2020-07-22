@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-19 15:55+0000\n"
-"PO-Revision-Date: 2020-07-20 10:08+0300\n"
+"POT-Creation-Date: 2020-07-21 20:19+0000\n"
+"PO-Revision-Date: 2020-07-22 09:12+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -364,7 +364,7 @@ msgstr ""
 "Типове кодування. Допустимі значення — ті, які може розібрати WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:320
+#: src/resources/gtk/prefs-general-page.ui:354
 msgid "Languages"
 msgstr "Мови"
 
@@ -374,41 +374,29 @@ msgid ""
 msgstr "Бажані мови. Масив кодів локалей або «system» для поточної локалі."
 
 #: data/org.gnome.epiphany.gschema.xml:156
-msgid "Cookie accept"
-msgstr "Приймати куки"
-
-#: data/org.gnome.epiphany.gschema.xml:157
-msgid ""
-"Where to accept cookies from. Possible values are “always”, “no-third-party” "
-"and “never”."
-msgstr ""
-"Звідки приймати куки. Допустимі значення: «always» (завжди), «no-third-"
-"party» (без сторонніх сайтів) та «never» (ніколи)."
-
-#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Дозволити контекстні вікна"
 
-#: data/org.gnome.epiphany.gschema.xml:162
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Дозволити веб-сайтам відкривання нових вікон використовуючи JavaScript (якщо "
 "JavaScript увімкнено)."
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
 msgstr "Увімкнути плавне гортання"
 
-#: data/org.gnome.epiphany.gschema.xml:167
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid "Whether to enable smooth scrolling."
 msgstr "Вмикає плавне гортання."
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
 msgstr "User agent"
 
-#: data/org.gnome.epiphany.gschema.xml:172
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -416,29 +404,29 @@ msgstr ""
 "Рядок, що використовується як user agent, і ідентифікує переглядач для веб-"
 "сервера."
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Enable adblock"
 msgstr "Увімкнути блокування реклами"
 
-#: data/org.gnome.epiphany.gschema.xml:177
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Блокувати вбудовану рекламу, яку сайти вам бажають показати."
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Remember passwords"
 msgstr "Зберігати паролі"
 
-#: data/org.gnome.epiphany.gschema.xml:182
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Зберігати паролі та заповнювати поля з паролями на сайтах."
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Enable site-specific quirks"
 msgstr "Увімкнути сайт-специфічні примхи"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -446,17 +434,25 @@ msgstr ""
 "Увімкнути примхи, щоб покращити роботу конкретних веб-сайтів. Можливо, ви "
 "захочете відключити цей параметр, якщо налагоджуєте певну проблему."
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable safe browsing"
 msgstr "Увімкнути безпечний перегляд"
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
 "Увімкнути безпечний перегляд. Безпечний перегляд працює через Google Safe "
 "Browsing API v4."
+
+#: data/org.gnome.epiphany.gschema.xml:191
+msgid "Google Safe Browsing API key"
+msgstr "Ключ Google Safe Browsing API"
+
+#: data/org.gnome.epiphany.gschema.xml:192
+msgid "The API key used to access the Google Safe Browsing API v4."
+msgstr "Ключ API для доступу до Google Safe Browsing API v4."
 
 #: data/org.gnome.epiphany.gschema.xml:196
 msgid "Enable Intelligent Tracking Prevention (ITP)"
@@ -467,12 +463,17 @@ msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Чи слід вмикати Intelligent Tracking Prevention."
 
 #: data/org.gnome.epiphany.gschema.xml:201
-msgid "Google Safe Browsing API key"
-msgstr "Ключ Google Safe Browsing API"
+msgid "Allow websites to store local website data"
+msgstr "Дозволити сайтам зберігати локально дані сайта"
 
 #: data/org.gnome.epiphany.gschema.xml:202
-msgid "The API key used to access the Google Safe Browsing API v4."
-msgstr "Ключ API для доступу до Google Safe Browsing API v4."
+msgid ""
+"Whether to allow websites to store cookies, local storage data, and "
+"IndexedDB databases. Disabling this will break many websites."
+msgstr ""
+"Визначає, чи слід дозволяти сайтам зберігати куки, бази даних і дані"
+" локального сховища, а також бази даних IndexedDB. Вимикання цієї можливості"
+" може зробити непрацездатними багато сайтів."
 
 #: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
@@ -1823,7 +1824,7 @@ msgid "Unspecified"
 msgstr "Не визначено"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:179
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:213
 msgid "Downloads"
 msgstr "Завантажене"
 
@@ -1951,14 +1952,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:421
+#: lib/sync/ephy-password-manager.c:433
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s у формі на %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:425
+#: lib/sync/ephy-password-manager.c:437
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Пароль у формі на %s"
@@ -2661,7 +2662,6 @@ msgid "Save Media As"
 msgstr "Зберегти медіа як"
 
 #: src/preferences/clear-data-view.c:69
-#: src/resources/gtk/prefs-privacy-page.ui:75
 msgid "Cookies"
 msgstr "Куки"
 
@@ -2697,41 +2697,41 @@ msgstr "Кеш політик HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Дані Intelligent Tracking Prevention"
 
-#: src/preferences/passwords-view.c:169
+#: src/preferences/passwords-view.c:195
 msgid "Delete All Passwords?"
 msgstr "Вилучити усі паролі?"
 
-#: src/preferences/passwords-view.c:172
+#: src/preferences/passwords-view.c:198
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені паролі. Наслідки "
 "дії неможливо скасувати."
 
-#: src/preferences/passwords-view.c:177 src/resources/gtk/history-dialog.ui:75
+#: src/preferences/passwords-view.c:203 src/resources/gtk/history-dialog.ui:75
 msgid "_Delete"
 msgstr "В_илучити"
 
-#: src/preferences/passwords-view.c:235
+#: src/preferences/passwords-view.c:261
 msgid "Copy password"
 msgstr "С_копіювати пароль"
 
-#: src/preferences/passwords-view.c:241
+#: src/preferences/passwords-view.c:267
 msgid "Username"
 msgstr "Імʼя користувача"
 
-#: src/preferences/passwords-view.c:264
+#: src/preferences/passwords-view.c:290
 msgid "Copy username"
 msgstr "Ск_опіювати ім’я користувача"
 
-#: src/preferences/passwords-view.c:270
+#: src/preferences/passwords-view.c:296
 msgid "Password"
 msgstr "Пароль"
 
-#: src/preferences/passwords-view.c:295
+#: src/preferences/passwords-view.c:321
 msgid "Reveal password"
 msgstr "Показати усі паролі"
 
-#: src/preferences/passwords-view.c:305
+#: src/preferences/passwords-view.c:331
 msgid "Remove Password"
 msgstr "Вилучити пароль"
 
@@ -2751,16 +2751,16 @@ msgstr "Світла"
 msgid "Dark"
 msgstr "Темна"
 
-#: src/preferences/prefs-general-page.c:344
+#: src/preferences/prefs-general-page.c:348
 msgid "Add Language"
 msgstr "Додати мову"
 
-#: src/preferences/prefs-general-page.c:495
+#: src/preferences/prefs-general-page.c:499
 msgid "Delete language"
 msgstr "Вилучити мову"
 
-#: src/preferences/prefs-general-page.c:577
-#: src/preferences/prefs-general-page.c:736
+#: src/preferences/prefs-general-page.c:581
+#: src/preferences/prefs-general-page.c:740
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2768,15 +2768,15 @@ msgstr[0] "Системна мова (%s)"
 msgstr[1] "Системні мови (%s)"
 msgstr[2] "Системних мов (%s)"
 
-#: src/preferences/prefs-general-page.c:764
+#: src/preferences/prefs-general-page.c:768
 msgid "Select a directory"
 msgstr "Виберіть теку"
 
-#: src/preferences/prefs-general-page.c:915
+#: src/preferences/prefs-general-page.c:919
 msgid "Web Application Icon"
 msgstr "Піктограма веб-програми"
 
-#: src/preferences/prefs-general-page.c:920
+#: src/preferences/prefs-general-page.c:924
 msgid "Supported Image Files"
 msgstr "Підтримувані файли зображень"
 
@@ -2891,7 +2891,7 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Закладіть кілька сайтів, щоб бачити їх тут."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:161
+#: src/resources/gtk/prefs-privacy-page.ui:68
 msgid "Personal Data"
 msgstr "Особисті дані"
 
@@ -3117,7 +3117,7 @@ msgid "Close page"
 msgstr "Закрити сторінку"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:126
+#: src/resources/gtk/prefs-privacy-page.ui:90
 msgid "Passwords"
 msgstr "Паролі"
 
@@ -3233,132 +3233,132 @@ msgid "_Manage Additional URLs"
 msgstr "_Керувати додатковими URL-адресами"
 
 #: src/resources/gtk/prefs-general-page.ui:121
+msgid "Web Content"
+msgstr "Вміст сайтів"
+
+#: src/resources/gtk/prefs-general-page.ui:126
+#| msgid "Try to Block _Advertisements"
+msgid "Block _Advertisements"
+msgstr "Блокувати _рекламу"
+
+#: src/resources/gtk/prefs-general-page.ui:140
+#| msgid "Block Popup _Windows"
+msgid "Block _Popup Windows"
+msgstr "Блокувати _контекстні вікна"
+
+#: src/resources/gtk/prefs-general-page.ui:155
 msgid "Homepage"
 msgstr "Домівка"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:160
 msgid "Most _visited pages"
 msgstr "Найбільш _відвідувані"
 
-#: src/resources/gtk/prefs-general-page.ui:140
+#: src/resources/gtk/prefs-general-page.ui:174
 msgid "_Blank page"
 msgstr "_Порожня сторінка"
 
-#: src/resources/gtk/prefs-general-page.ui:155
+#: src/resources/gtk/prefs-general-page.ui:189
 msgid "_Custom"
 msgstr "_Інше"
 
-#: src/resources/gtk/prefs-general-page.ui:184
+#: src/resources/gtk/prefs-general-page.ui:218
 msgid "Ask o_n download"
 msgstr "Питати п_ри отриманні"
 
-#: src/resources/gtk/prefs-general-page.ui:199
+#: src/resources/gtk/prefs-general-page.ui:233
 msgid "_Download folder"
 msgstr "_Тека завантаження"
 
-#: src/resources/gtk/prefs-general-page.ui:208
+#: src/resources/gtk/prefs-general-page.ui:242
 msgid "Search Engines"
 msgstr "Пошукові рушії"
 
-#: src/resources/gtk/prefs-general-page.ui:213
-#| msgid "Manage Search Engines"
+#: src/resources/gtk/prefs-general-page.ui:247
 msgid "Manage Search _Engines"
 msgstr "Керування по_шуковими рушіями"
 
-#: src/resources/gtk/prefs-general-page.ui:238
+#: src/resources/gtk/prefs-general-page.ui:272
 msgid "Session"
 msgstr "Сеанс"
 
-#: src/resources/gtk/prefs-general-page.ui:243
+#: src/resources/gtk/prefs-general-page.ui:277
 msgid "Start in _Incognito Mode"
 msgstr "Запускати у _конфіденційному режимі"
 
-#: src/resources/gtk/prefs-general-page.ui:257
+#: src/resources/gtk/prefs-general-page.ui:291
 msgid "_Restore Tabs on Startup"
 msgstr "Від_новлювати вкладки при запуску"
 
-#: src/resources/gtk/prefs-general-page.ui:272
+#: src/resources/gtk/prefs-general-page.ui:306
 msgid "Browsing"
 msgstr "Перегляд"
 
-#: src/resources/gtk/prefs-general-page.ui:277
+#: src/resources/gtk/prefs-general-page.ui:311
 msgid "Sm_ooth Scrolling"
 msgstr "П_лавне гортання"
 
-#: src/resources/gtk/prefs-general-page.ui:291
+#: src/resources/gtk/prefs-general-page.ui:325
 msgid "Mouse _Gestures"
 msgstr "_Жести мишею"
 
-#: src/resources/gtk/prefs-general-page.ui:305
+#: src/resources/gtk/prefs-general-page.ui:339
 msgid "S_witch Immediately to New Tabs"
 msgstr "Негайно п_еремикатися на нові вкладки"
 
-#: src/resources/gtk/prefs-general-page.ui:340
+#: src/resources/gtk/prefs-general-page.ui:374
 msgid "_Spell Checking"
 msgstr "П_еревірка правопису"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:13
-#| msgid "Add Language"
 msgid "Add _Language"
 msgstr "Додати _мову"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
-#| msgid "Choose a l_anguage:"
 msgid "Choose a language:"
 msgstr "Виберіть мову:"
 
 #: src/resources/gtk/prefs-privacy-page.ui:13
-msgid "Web Content"
-msgstr "Вміст сайтів"
+#| msgid "Web pages"
+msgid "Web Safety"
+msgstr "Безпека у мережі"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-msgid "Try to Block _Advertisements"
-msgstr "Намагатись блокувати _рекламу"
+#| msgid "Try to Block Dangerous Web_sites"
+msgid "Block Dangerous Web_sites"
+msgstr "Блокувати небезпечні веб_сайти"
 
-#: src/resources/gtk/prefs-privacy-page.ui:32
-msgid "Block Popup _Windows"
-msgstr "Блокувати контекстні _вікна"
+#: src/resources/gtk/prefs-privacy-page.ui:33
+msgid "Web Tracking"
+msgstr "Вебстеження"
 
-#: src/resources/gtk/prefs-privacy-page.ui:46
-msgid "Try to Block Dangerous Web_sites"
-msgstr "Намагатись блокувати небезпечні веб_сайти"
-
-#: src/resources/gtk/prefs-privacy-page.ui:60
+#: src/resources/gtk/prefs-privacy-page.ui:38
 msgid "Intelligent _Tracking Prevention"
 msgstr "Intelligent _Tracking Prevention"
 
-#: src/resources/gtk/prefs-privacy-page.ui:80
-msgid "_Always accept"
-msgstr "Приймати зав_жди"
+#: src/resources/gtk/prefs-privacy-page.ui:52
+msgid "Allow websites to store cookies, databases, and local storage data."
+msgstr "Дозволити сайтам зберігати куки, бази даних і дані локального сховища."
 
-#. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-privacy-page.ui:94
-msgid "For example, not from advertisers on these sites."
-msgstr "Наприклад, не з рекламних оголошень на цих сайтах."
+#: src/resources/gtk/prefs-privacy-page.ui:53
+msgid "_Website Data Storage"
+msgstr "Сховище даних _вебсайта"
 
-#: src/resources/gtk/prefs-privacy-page.ui:95
-msgid "Only _from sites you visit"
-msgstr "Лише з _сайтів, які відвідуєте"
-
-#: src/resources/gtk/prefs-privacy-page.ui:110
-msgid "_Never accept"
-msgstr "_Ніколи не приймати"
-
-#: src/resources/gtk/prefs-privacy-page.ui:131
-msgid "_Passwords"
-msgstr "П_аролі"
-
-#: src/resources/gtk/prefs-privacy-page.ui:146
-msgid "_Remember Passwords"
-msgstr "_Зберігати паролі"
-
-#: src/resources/gtk/prefs-privacy-page.ui:166
+#: src/resources/gtk/prefs-privacy-page.ui:73
 msgid "You can clear stored personal data."
 msgstr "Можете очистити збережені особисті дані."
 
-#: src/resources/gtk/prefs-privacy-page.ui:167
+#: src/resources/gtk/prefs-privacy-page.ui:74
 msgid "Clear Personal _Data"
 msgstr "Вилучити _особисті дані"
+
+#: src/resources/gtk/prefs-privacy-page.ui:95
+msgid "_Passwords"
+msgstr "П_аролі"
+
+#: src/resources/gtk/prefs-privacy-page.ui:110
+msgid "_Remember Passwords"
+msgstr "_Зберігати паролі"
 
 #: src/resources/gtk/prefs-sync-page.ui:13
 msgid ""
@@ -3967,3 +3967,25 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Увімкнути"
+
+#~ msgid "Cookie accept"
+#~ msgstr "Приймати куки"
+
+#~ msgid ""
+#~ "Where to accept cookies from. Possible values are “always”, “no-third-"
+#~ "party” and “never”."
+#~ msgstr ""
+#~ "Звідки приймати куки. Допустимі значення: «always» (завжди), «no-third-"
+#~ "party» (без сторонніх сайтів) та «never» (ніколи)."
+
+#~ msgid "_Always accept"
+#~ msgstr "Приймати зав_жди"
+
+#~ msgid "For example, not from advertisers on these sites."
+#~ msgstr "Наприклад, не з рекламних оголошень на цих сайтах."
+
+#~ msgid "Only _from sites you visit"
+#~ msgstr "Лише з _сайтів, які відвідуєте"
+
+#~ msgid "_Never accept"
+#~ msgstr "_Ніколи не приймати"
