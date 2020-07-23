@@ -27,7 +27,7 @@ typedef struct {
   GtkWidget *child;
   GtkWidget *header_bar;
   GtkWidget *back_button;
-  GtkWidget *clear_all_button;
+  GtkWidget *clear_button;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkWidget *search_button;
@@ -48,9 +48,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (EphyDataView, ephy_data_view, GTK_TYPE_BIN)
 enum {
   PROP_0,
   PROP_TITLE,
-  PROP_CLEAR_ALL_ACTION_NAME,
-  PROP_CLEAR_ALL_ACTION_TARGET,
-  PROP_CLEAR_ALL_DESCRIPTION,
+  PROP_CLEAR_ACTION_NAME,
+  PROP_CLEAR_ACTION_TARGET,
+  PROP_CLEAR_BUTTON_LABEL,
+  PROP_CLEAR_BUTTON_TOOLTIP,
   PROP_SEARCH_DESCRIPTION,
   PROP_EMPTY_TITLE,
   PROP_EMPTY_DESCRIPTION,
@@ -66,7 +67,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 enum {
   BACK_BUTTON_CLICKED,
-  CLEAR_ALL_CLICKED,
+  CLEAR_BUTTON_CLICKED,
   LAST_SIGNAL,
 };
 
@@ -96,7 +97,7 @@ update (EphyDataView *self)
     gtk_spinner_stop (GTK_SPINNER (priv->spinner));
   }
 
-  gtk_widget_set_sensitive (priv->clear_all_button, has_data && priv->can_clear);
+  gtk_widget_set_sensitive (priv->clear_button, has_data && priv->can_clear);
   gtk_widget_set_sensitive (priv->search_button, has_data);
 }
 
@@ -108,9 +109,9 @@ on_back_button_clicked (GtkWidget    *button,
 }
 
 static void
-on_clear_all_button_clicked (EphyDataView *self)
+on_clear_button_clicked (EphyDataView *self)
 {
-  g_signal_emit (self, signals[CLEAR_ALL_CLICKED], 0);
+  g_signal_emit (self, signals[CLEAR_BUTTON_CLICKED], 0);
 }
 
 static void
@@ -150,7 +151,7 @@ ephy_data_view_handle_event (EphyDataView *self,
 
   /* Shift + Delete */
   if ((key->state & GDK_SHIFT_MASK) && key->keyval == GDK_KEY_Delete) {
-    gtk_button_clicked (GTK_BUTTON (priv->clear_all_button));
+    gtk_button_clicked (GTK_BUTTON (priv->clear_button));
     return GDK_EVENT_STOP;
   }
 
@@ -182,14 +183,17 @@ ephy_data_view_set_property (GObject      *object,
     case PROP_TITLE:
       gtk_header_bar_set_title (GTK_HEADER_BAR (priv->header_bar), g_value_get_string (value));
       break;
-    case PROP_CLEAR_ALL_ACTION_NAME:
-      gtk_actionable_set_action_name (GTK_ACTIONABLE (priv->clear_all_button), g_value_get_string (value));
+    case PROP_CLEAR_ACTION_NAME:
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (priv->clear_button), g_value_get_string (value));
       break;
-    case PROP_CLEAR_ALL_ACTION_TARGET:
-      gtk_actionable_set_action_target_value (GTK_ACTIONABLE (priv->clear_all_button), g_value_get_variant (value));
+    case PROP_CLEAR_ACTION_TARGET:
+      gtk_actionable_set_action_target_value (GTK_ACTIONABLE (priv->clear_button), g_value_get_variant (value));
       break;
-    case PROP_CLEAR_ALL_DESCRIPTION:
-      ephy_data_view_set_clear_all_description (self, g_value_get_string (value));
+    case PROP_CLEAR_BUTTON_LABEL:
+      ephy_data_view_set_clear_button_label (self, g_value_get_string (value));
+      break;
+    case PROP_CLEAR_BUTTON_TOOLTIP:
+      ephy_data_view_set_clear_button_tooltip (self, g_value_get_string (value));
       break;
     case PROP_SEARCH_DESCRIPTION:
       gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), g_value_get_string (value));
@@ -232,14 +236,17 @@ ephy_data_view_get_property (GObject    *object,
     case PROP_TITLE:
       g_value_set_string (value, gtk_header_bar_get_title (GTK_HEADER_BAR (priv->header_bar)));
       break;
-    case PROP_CLEAR_ALL_ACTION_NAME:
-      g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (priv->clear_all_button)));
+    case PROP_CLEAR_ACTION_NAME:
+      g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (priv->clear_button)));
       break;
-    case PROP_CLEAR_ALL_ACTION_TARGET:
-      g_value_set_variant (value, gtk_actionable_get_action_target_value (GTK_ACTIONABLE (priv->clear_all_button)));
+    case PROP_CLEAR_ACTION_TARGET:
+      g_value_set_variant (value, gtk_actionable_get_action_target_value (GTK_ACTIONABLE (priv->clear_button)));
       break;
-    case PROP_CLEAR_ALL_DESCRIPTION:
-      g_value_set_string (value, ephy_data_view_get_clear_all_description (self));
+    case PROP_CLEAR_BUTTON_LABEL:
+      g_value_set_string (value, ephy_data_view_get_clear_button_label (self));
+      break;
+    case PROP_CLEAR_BUTTON_TOOLTIP:
+      g_value_set_string (value, ephy_data_view_get_clear_button_tooltip (self));
       break;
     case PROP_SEARCH_DESCRIPTION:
       g_value_set_string (value, gtk_entry_get_placeholder_text (GTK_ENTRY (priv->search_entry)));
@@ -322,24 +329,31 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_CLEAR_ALL_ACTION_NAME] =
-    g_param_spec_string ("clear-all-action-name",
-                         "'Clear all' action name",
-                         "The name of the action associated to the 'Clear all' button",
+  obj_properties[PROP_CLEAR_ACTION_NAME] =
+    g_param_spec_string ("clear-action-name",
+                         "'Clear' action name",
+                         "The name of the action associated to the 'Clear' button",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_CLEAR_ALL_ACTION_TARGET] =
-    g_param_spec_variant ("clear-all-action-target",
-                          "'Clear all' action target value",
-                          "The parameter for 'Clear all' action invocations",
+  obj_properties[PROP_CLEAR_ACTION_TARGET] =
+    g_param_spec_variant ("clear-action-target",
+                          "'Clear' action target value",
+                          "The parameter for 'Clear' action invocations",
                           G_VARIANT_TYPE_ANY, NULL,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_CLEAR_ALL_DESCRIPTION] =
-    g_param_spec_string ("clear-all-description",
-                         "'Clear all' description",
-                         "The description of the 'Clear all' action",
+  obj_properties[PROP_CLEAR_BUTTON_LABEL] =
+    g_param_spec_string ("clear-button-label",
+                         "'Clear' button label",
+                         "The label of the 'Clear' button",
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_CLEAR_BUTTON_TOOLTIP] =
+    g_param_spec_string ("clear-button-tooltip",
+                         "'Clear' button tooltip",
+                         "The description of the 'Clear' action",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -415,8 +429,8 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
    * Emitted when the user changes the contents of the internal #GtkEntry
    *
    */
-  signals[CLEAR_ALL_CLICKED] =
-    g_signal_new ("clear-all-clicked",
+  signals[CLEAR_BUTTON_CLICKED] =
+    g_signal_new ("clear-button-clicked",
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
@@ -430,7 +444,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, box);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, back_button);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_all_button);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_title_label);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_description_label);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_bar);
@@ -440,7 +454,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_clear_all_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }
 
@@ -457,7 +471,7 @@ ephy_data_view_init (EphyDataView *self)
 }
 
 const gchar *
-ephy_data_view_get_clear_all_description (EphyDataView *self)
+ephy_data_view_get_clear_button_label (EphyDataView *self)
 {
   EphyDataViewPrivate *priv;
 
@@ -465,12 +479,12 @@ ephy_data_view_get_clear_all_description (EphyDataView *self)
 
   priv = ephy_data_view_get_instance_private (self);
 
-  return gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_all_button));
+  return gtk_button_get_label (GTK_BUTTON (priv->clear_button));
 }
 
 void
-ephy_data_view_set_clear_all_description (EphyDataView *self,
-                                          const gchar  *description)
+ephy_data_view_set_clear_button_label (EphyDataView *self,
+                                       const gchar  *label)
 {
   EphyDataViewPrivate *priv;
 
@@ -478,12 +492,42 @@ ephy_data_view_set_clear_all_description (EphyDataView *self,
 
   priv = ephy_data_view_get_instance_private (self);
 
-  if (g_strcmp0 (gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_all_button)), description) == 0)
+  if (g_strcmp0 (gtk_button_get_label (GTK_BUTTON (priv->clear_button)), label) == 0)
     return;
 
-  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->clear_all_button), description);
+  gtk_button_set_label (GTK_BUTTON (priv->clear_button), label);
 
-  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CLEAR_ALL_DESCRIPTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CLEAR_BUTTON_LABEL]);
+}
+
+const gchar *
+ephy_data_view_get_clear_button_tooltip (EphyDataView *self)
+{
+  EphyDataViewPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_VIEW (self));
+
+  priv = ephy_data_view_get_instance_private (self);
+
+  return gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_button));
+}
+
+void
+ephy_data_view_set_clear_button_tooltip (EphyDataView *self,
+                                         const gchar  *tooltip)
+{
+  EphyDataViewPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_VIEW (self));
+
+  priv = ephy_data_view_get_instance_private (self);
+
+  if (g_strcmp0 (gtk_widget_get_tooltip_text (GTK_WIDGET (priv->clear_button)), tooltip) == 0)
+    return;
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->clear_button), tooltip);
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CLEAR_BUTTON_TOOLTIP]);
 }
 
 gboolean

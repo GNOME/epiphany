@@ -34,9 +34,13 @@ struct _EphyDataViewClass
   GtkBinClass parent_class;
 };
 
-const gchar *ephy_data_view_get_clear_all_description (EphyDataView *self);
-void         ephy_data_view_set_clear_all_description (EphyDataView *self,
-                                                       const gchar  *description);
+const gchar *ephy_data_view_get_clear_button_label (EphyDataView *self);
+void         ephy_data_view_set_clear_button_label (EphyDataView *self,
+                                                    const gchar  *label);
+
+const gchar *ephy_data_view_get_clear_button_tooltip (EphyDataView *self);
+void         ephy_data_view_set_clear_button_tooltip (EphyDataView *self,
+                                                      const gchar  *description);
 
 gboolean ephy_data_view_get_is_loading (EphyDataView *self);
 void     ephy_data_view_set_is_loading (EphyDataView *self,

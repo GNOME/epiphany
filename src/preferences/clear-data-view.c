@@ -160,7 +160,7 @@ all_children_visible (GtkTreeModel       *model,
 }
 
 static void
-on_clear_all_clicked (ClearDataView *clear_data_view)
+on_clear_button_clicked (ClearDataView *clear_data_view)
 {
   GtkTreeIter top_iter;
   WebKitWebsiteDataTypes types_to_clear = 0;
@@ -231,6 +231,39 @@ on_clear_all_clicked (ClearDataView *clear_data_view)
                                      clear_data_view);
 }
 
+static gboolean
+any_item_checked (ClearDataView *self)
+{
+  GtkTreeIter top_iter;
+
+  if (!gtk_tree_model_get_iter_first (self->treestore, &top_iter))
+    return FALSE;
+
+  do {
+    gboolean active;
+    GtkTreeIter child_iter;
+
+    gtk_tree_model_get (self->treestore, &top_iter,
+                        ACTIVE_COLUMN, &active, -1);
+    if (active) {
+      return TRUE;
+    } else if (gtk_tree_model_iter_children (self->treestore, &child_iter, &top_iter)) {
+      do {
+        GtkTreeIter filter_iter;
+
+        if (gtk_tree_model_filter_convert_child_iter_to_iter (self->treemodelfilter, &filter_iter, &child_iter)) {
+          gtk_tree_model_get (self->treestore, &child_iter,
+                              ACTIVE_COLUMN, &active, -1);
+          if (active)
+            return TRUE;
+        }
+      } while (gtk_tree_model_iter_next (self->treestore, &child_iter));
+    }
+  } while (gtk_tree_model_iter_next (self->treestore, &top_iter));
+
+  return FALSE;
+}
+
 static void
 item_toggled_cb (GtkCellRendererToggle *renderer,
                  const char            *path_str,
@@ -291,6 +324,8 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
   }
 
   gtk_tree_path_free (path);
+
+  ephy_data_view_set_can_clear (EPHY_DATA_VIEW (clear_data_view), any_item_checked (clear_data_view));
 }
 
 static void
@@ -365,7 +400,7 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treestore);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treemodelfilter);
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_clear_all_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
 }
 

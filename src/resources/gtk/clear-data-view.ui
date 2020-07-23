@@ -20,13 +20,14 @@
   </object>
   <template class="ClearDataView" parent="EphyDataView">
     <property name="title" translatable="yes">Personal Data</property>
-    <property name="clear_all_description" translatable="yes">Remove all personal data</property>
+    <property name="clear_button_label" translatable="yes">_Clear Data</property>
+    <property name="clear_button_tooltip" translatable="yes">Remove selected personal data</property>
     <property name="search_description" translatable="yes">Search personal data</property>
     <property name="empty_title" translatable="yes">There is no Personal Data</property>
     <property name="empty_description" translatable="yes">Personal data will be listed here</property>
     <property name="has_search_results">True</property>
     <property name="can_clear">True</property>
-    <signal name="clear-all-clicked" handler="on_clear_all_clicked"/>
+    <signal name="clear-button-clicked" handler="on_clear_button_clicked"/>
     <signal name="notify::search-text" handler="search_text_changed_cb" swapped="yes"/>
     <child>
       <object class="GtkScrolledWindow" id="scrolled_window">
