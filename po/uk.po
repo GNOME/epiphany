@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-21 20:19+0000\n"
-"PO-Revision-Date: 2020-07-22 09:12+0300\n"
+"POT-Creation-Date: 2020-07-23 16:25+0000\n"
+"PO-Revision-Date: 2020-07-24 13:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -471,9 +471,9 @@ msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
-"Визначає, чи слід дозволяти сайтам зберігати куки, бази даних і дані"
-" локального сховища, а також бази даних IndexedDB. Вимикання цієї можливості"
-" може зробити непрацездатними багато сайтів."
+"Визначає, чи слід дозволяти сайтам зберігати куки, бази даних і дані "
+"локального сховища, а також бази даних IndexedDB. Вимикання цієї можливості "
+"може зробити непрацездатними багато сайтів."
 
 #: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
@@ -2092,7 +2092,8 @@ msgstr ""
 "Цей сертифікат — дійсний. Однак, ресурси на цій сторінці надіслано "
 "небезпечно."
 
-#: lib/widgets/ephy-downloads-popover.c:246 src/resources/gtk/data-view.ui:261
+#: lib/widgets/ephy-downloads-popover.c:246
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Очистити все"
 
@@ -2896,26 +2897,32 @@ msgid "Personal Data"
 msgstr "Особисті дані"
 
 #: src/resources/gtk/clear-data-view.ui:23
-msgid "Remove all personal data"
-msgstr "Вилучити усі особисті дані"
+#| msgid "_Clear All"
+msgid "_Clear Data"
+msgstr "_Очистити дані"
 
 #: src/resources/gtk/clear-data-view.ui:24
+#| msgid "Remove all personal data"
+msgid "Remove selected personal data"
+msgstr "Вилучити вибрані особисті дані"
+
+#: src/resources/gtk/clear-data-view.ui:25
 msgid "Search personal data"
 msgstr "Шукати у особистих даних"
 
-#: src/resources/gtk/clear-data-view.ui:25
+#: src/resources/gtk/clear-data-view.ui:26
 msgid "There is no Personal Data"
 msgstr "Немає особистих даних"
 
-#: src/resources/gtk/clear-data-view.ui:26
+#: src/resources/gtk/clear-data-view.ui:27
 msgid "Personal data will be listed here"
 msgstr "Тут буде показано список особистих даних"
 
-#: src/resources/gtk/clear-data-view.ui:63
+#: src/resources/gtk/clear-data-view.ui:64
 msgid "Clear selected personal data:"
 msgstr "Очистити вибрані особисті дані:"
 
-#: src/resources/gtk/clear-data-view.ui:124
+#: src/resources/gtk/clear-data-view.ui:125
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -3121,27 +3128,27 @@ msgstr "Закрити сторінку"
 msgid "Passwords"
 msgstr "Паролі"
 
-#: src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/passwords-view.ui:28
 msgid "Remove all passwords"
 msgstr "Вилучити усі паролі"
 
-#: src/resources/gtk/passwords-view.ui:28
+#: src/resources/gtk/passwords-view.ui:29
 msgid "Search passwords"
 msgstr "Пошук паролів"
 
-#: src/resources/gtk/passwords-view.ui:29
+#: src/resources/gtk/passwords-view.ui:30
 msgid "There are no Passwords"
 msgstr "Немає паролів"
 
-#: src/resources/gtk/passwords-view.ui:30
+#: src/resources/gtk/passwords-view.ui:31
 msgid "Saved passwords will be listed here"
 msgstr "Тут буде показано список збережених паролів"
 
-#: src/resources/gtk/passwords-view.ui:74
+#: src/resources/gtk/passwords-view.ui:75
 msgid "_Copy Password"
 msgstr "_Копіювати пароль"
 
-#: src/resources/gtk/passwords-view.ui:78
+#: src/resources/gtk/passwords-view.ui:79
 msgid "C_opy Username"
 msgstr "К_опіювати користувача"
 
@@ -3237,12 +3244,10 @@ msgid "Web Content"
 msgstr "Вміст сайтів"
 
 #: src/resources/gtk/prefs-general-page.ui:126
-#| msgid "Try to Block _Advertisements"
 msgid "Block _Advertisements"
 msgstr "Блокувати _рекламу"
 
 #: src/resources/gtk/prefs-general-page.ui:140
-#| msgid "Block Popup _Windows"
 msgid "Block _Popup Windows"
 msgstr "Блокувати _контекстні вікна"
 
@@ -3319,12 +3324,10 @@ msgid "Choose a language:"
 msgstr "Виберіть мову:"
 
 #: src/resources/gtk/prefs-privacy-page.ui:13
-#| msgid "Web pages"
 msgid "Web Safety"
 msgstr "Безпека у мережі"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-#| msgid "Try to Block Dangerous Web_sites"
 msgid "Block Dangerous Web_sites"
 msgstr "Блокувати небезпечні веб_сайти"
 
