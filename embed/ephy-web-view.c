@@ -101,6 +101,7 @@ struct _EphyWebView {
   GtkWidget *notification_info_bar;
   GtkWidget *microphone_info_bar;
   GtkWidget *webcam_info_bar;
+  GtkWidget *webcam_mic_info_bar;
   GtkWidget *password_info_bar;
   GtkWidget *password_form_info_bar;
   GtkWidget *itp_info_bar;
@@ -938,7 +939,7 @@ decide_on_permission_request (GtkWidget             *info_bar,
                               PermissionRequestData *data)
 {
   const char *address;
-  EphyPermissionType permission_type;
+  EphyPermissionType permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
 
   switch (response) {
     case GTK_RESPONSE_YES:
@@ -954,10 +955,17 @@ decide_on_permission_request (GtkWidget             *info_bar,
   } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request)) {
     permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (data->request)) {
-    if (webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request)))
+    gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request));
+    gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request));
+
+    if (is_for_audio_device) {
+      if (is_for_video_device)
+        permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE;
+      else
+        permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+    } else if (is_for_video_device) {
       permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
-    else
-      permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+    }
   } else {
     g_assert_not_reached ();
   }
@@ -971,11 +979,24 @@ decide_on_permission_request (GtkWidget             *info_bar,
     shell = ephy_embed_shell_get_default ();
     permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
 
-    ephy_permissions_manager_set_permission (permissions_manager,
-                                             permission_type,
-                                             data->origin,
-                                             response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
-                                                                          : EPHY_PERMISSION_DENY);
+    if (permission_type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
+      ephy_permissions_manager_set_permission (permissions_manager,
+                                               permission_type,
+                                               data->origin,
+                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
+                                                                            : EPHY_PERMISSION_DENY);
+    } else {
+      ephy_permissions_manager_set_permission (permissions_manager,
+                                               EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
+                                               data->origin,
+                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
+                                                                            : EPHY_PERMISSION_DENY);
+      ephy_permissions_manager_set_permission (permissions_manager,
+                                               EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
+                                               data->origin,
+                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
+                                                                            : EPHY_PERMISSION_DENY);
+    }
   }
 
   g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
@@ -1028,6 +1049,11 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
       message = g_strdup_printf (_("The page at %s wants to use your webcam."),
                                  bold_origin);
       break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
+      /* Translators: Webcam and microphone policy for a specific site. */
+      message = g_strdup_printf (_("The page at %s wants to use your webcam and microphone."),
+                                 bold_origin);
+      break;
     case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
     default:
       g_assert_not_reached ();
@@ -1062,6 +1088,9 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
       break;
     case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
       track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
+      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_mic_info_bar);
       break;
     case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
     default:
@@ -1159,7 +1188,7 @@ permission_request_cb (WebKitWebView           *web_view,
   EphyEmbedShell *shell;
   EphyPermissionsManager *permissions_manager;
   EphyPermission permission;
-  EphyPermissionType permission_type;
+  EphyPermissionType permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
 
   shell = ephy_embed_shell_get_default ();
 
@@ -1168,10 +1197,19 @@ permission_request_cb (WebKitWebView           *web_view,
   } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
     permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
-    if (webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision)))
+    gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
+    gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
+
+    if (is_for_audio_device) {
+      if (is_for_video_device)
+        permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE;
+      else
+        permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+    } else if (is_for_video_device) {
       permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
-    else
-      permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+    } else {
+      return FALSE;
+    }
   } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
     ephy_web_view_show_itp_permission_info_bar (EPHY_WEB_VIEW (web_view),
                                                 WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision));
@@ -1186,9 +1224,27 @@ permission_request_cb (WebKitWebView           *web_view,
     return FALSE;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
-  permission = ephy_permissions_manager_get_permission (permissions_manager,
-                                                        permission_type,
-                                                        origin);
+
+  if (permission_type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
+    permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                          permission_type,
+                                                          origin);
+  } else {
+    EphyPermission video_permission;
+    EphyPermission mic_permission;
+
+    video_permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                                EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
+                                                                origin);
+    mic_permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                              EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
+                                                              origin);
+
+    if (video_permission == mic_permission)
+      permission = video_permission;
+    else
+      permission = EPHY_PERMISSION_UNDECIDED;
+  }
 
   switch (permission) {
     case EPHY_PERMISSION_PERMIT:
@@ -3628,6 +3684,7 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->notification_info_bar);
   untrack_info_bar (&view->microphone_info_bar);
   untrack_info_bar (&view->webcam_info_bar);
+  untrack_info_bar (&view->webcam_mic_info_bar);
   untrack_info_bar (&view->password_info_bar);
   untrack_info_bar (&view->password_form_info_bar);
   untrack_info_bar (&view->itp_info_bar);
