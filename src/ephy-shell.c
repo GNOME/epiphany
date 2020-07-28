@@ -514,7 +514,7 @@ ephy_shell_startup (GApplication *application)
     set_accel_for_action (shell, "app.reopen-closed-tab", "<Primary><Shift>t");
     set_accel_for_action (shell, "app.import-bookmarks", "<Primary><Shift>m");
     set_accel_for_action (shell, "app.export-bookmarks", "<Primary><Shift>x");
-    set_accel_for_action (shell, "app.shortcuts", "<Primary>F1");
+    set_accel_for_action (shell, "app.shortcuts", "<Primary>question");
     set_accel_for_action (shell, "app.help", "F1");
   } else {
     g_action_map_add_action_entries (G_ACTION_MAP (application),
