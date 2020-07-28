@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2016 Iulian-Gabriel Radu <iulian.radu67@gmail.com>
+ *  Copyright © 2020 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -20,19 +20,9 @@
 
 #pragma once
 
-#include "ephy-header-bar.h"
+typedef enum {
+  EPHY_BOOKMARK_ICON_HIDDEN,
+  EPHY_BOOKMARK_ICON_EMPTY,
+  EPHY_BOOKMARK_ICON_BOOKMARKED
+} EphyBookmarkIconState;
 
-#include <gtk/gtk.h>
-
-G_BEGIN_DECLS
-
-#define EPHY_TYPE_ADD_BOOKMARK_POPOVER (ephy_add_bookmark_popover_get_type ())
-
-G_DECLARE_FINAL_TYPE (EphyAddBookmarkPopover, ephy_add_bookmark_popover, EPHY, ADD_BOOKMARK_POPOVER, GtkPopover)
-
-GtkWidget       *ephy_add_bookmark_popover_new      (GtkWidget *relative_to,
-                                                     GtkWidget *window);
-
-void             ephy_add_bookmark_popover_show     (EphyAddBookmarkPopover *self);
-
-G_END_DECLS

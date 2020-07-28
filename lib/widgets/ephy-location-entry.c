@@ -69,6 +69,7 @@ struct _EphyLocationEntry {
 
   gboolean reader_mode_active;
   gboolean button_release_is_blocked;
+  gboolean mobile_mode;
 
   char *saved_text;
   char *jump_tab;
@@ -87,6 +88,7 @@ struct _EphyLocationEntry {
   guint original_address : 1;
 
   EphySecurityLevel security_level;
+  EphyBookmarkIconState icon_state;
 };
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *,
@@ -1320,8 +1322,8 @@ ephy_location_entry_focus (EphyLocationEntry *entry)
 }
 
 void
-ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  *entry,
-                                             EphyLocationEntryBookmarkIconState  state)
+ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *entry,
+                                             EphyBookmarkIconState  state)
 {
   GtkStyleContext *context;
 
@@ -1329,13 +1331,18 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry->bookmark));
 
+  entry->icon_state = state;
+
+  if (entry->mobile_mode)
+    state = EPHY_BOOKMARK_ICON_HIDDEN;
+
   switch (state) {
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN:
+    case EPHY_BOOKMARK_ICON_HIDDEN:
       gtk_widget_set_visible (entry->bookmark_event_box, FALSE);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_remove_class (context, "non-starred");
       break;
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY:
+    case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (entry->bookmark_event_box, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark),
                                     "non-starred-symbolic",
@@ -1343,7 +1350,7 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_add_class (context, "non-starred");
       break;
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED:
+    case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (entry->bookmark_event_box, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark),
                                     "starred-symbolic",
@@ -1497,11 +1504,15 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
 }
 
 void
-ephy_location_entry_set_mobile_popdown (EphyLocationEntry *entry,
-                                        gboolean           mobile_popdown)
+ephy_location_entry_set_mobile_mode (EphyLocationEntry *entry,
+                                     gboolean           mobile)
 {
-  if (mobile_popdown)
+  if (mobile)
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
   else
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
+
+
+  entry->mobile_mode = mobile;
+  ephy_location_entry_set_bookmark_icon_state (entry, entry->icon_state);
 }

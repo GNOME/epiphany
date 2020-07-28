@@ -20,6 +20,8 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-add-bookmark-popover.h"
+#include "ephy-location-entry.h"
 #include "ephy-pages-button.h"
 #include "ephy-pages-popover.h"
 #include "ephy-settings.h"
@@ -224,6 +226,9 @@ void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
+  ephy_action_bar_end_set_show_bookmark_button (action_bar->action_bar_end,
+                                                adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
+
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
