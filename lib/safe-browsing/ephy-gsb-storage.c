@@ -503,9 +503,13 @@ ephy_gsb_storage_constructed (GObject *object)
   } else {
     LOG ("GSB database exists, opening...");
     success = ephy_gsb_storage_open_db (self);
-    if (success && !ephy_gsb_storage_check_schema_version (self)) {
-      LOG ("GSB database schema incompatibility, recreating database...");
-      ephy_gsb_storage_recreate_db (self);
+    if (success) {
+      if (!ephy_gsb_storage_check_schema_version (self)) {
+        LOG ("GSB database schema incompatibility, recreating database...");
+        ephy_gsb_storage_recreate_db (self);
+      } else {
+        self->is_operable = TRUE;
+      }
     }
   }
 }
