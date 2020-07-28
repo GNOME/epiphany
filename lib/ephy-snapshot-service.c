@@ -230,10 +230,13 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
                                       EPHY_THUMBNAIL_HEIGHT,
                                       GDK_INTERP_TILES);
   } else {
+    gfloat width_ratio = (gfloat)EPHY_THUMBNAIL_WIDTH / (gfloat)orig_width;
+    gfloat new_height = orig_height * width_ratio;
+
     snapshot = gdk_pixbuf_get_from_surface (surface, 0, 0, orig_width, orig_height);
     scaled = gdk_pixbuf_scale_simple (snapshot,
                                       EPHY_THUMBNAIL_WIDTH,
-                                      EPHY_THUMBNAIL_HEIGHT,
+                                      new_height,
                                       GDK_INTERP_BILINEAR);
   }
 
@@ -437,7 +440,7 @@ retrieve_snapshot_from_web_view (GTask *task)
   }
 
   webkit_web_view_get_snapshot (data->web_view,
-                                WEBKIT_SNAPSHOT_REGION_VISIBLE,
+                                WEBKIT_SNAPSHOT_REGION_FULL_DOCUMENT,
                                 WEBKIT_SNAPSHOT_OPTIONS_NONE,
                                 g_task_get_cancellable (task),
                                 (GAsyncReadyCallback)on_snapshot_ready,
