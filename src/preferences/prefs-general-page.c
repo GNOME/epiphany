@@ -482,7 +482,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   }
 
   row = hdy_action_row_new ();
-  hdy_action_row_set_title (HDY_ACTION_ROW (row), desc);
+  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), desc);
   g_object_set_data (G_OBJECT (row), "code", g_strdup (code));
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "row");
 

@@ -252,7 +252,7 @@ populate_model_cb (GList    *records,
 
     row = hdy_expander_row_new ();
     g_object_set_data (G_OBJECT (row), "record", record);
-    hdy_expander_row_set_title (HDY_EXPANDER_ROW (row), ephy_password_record_get_origin (record));
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), ephy_password_record_get_origin (record));
     hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), ephy_password_record_get_username (record));
     hdy_expander_row_set_show_enable_switch (HDY_EXPANDER_ROW (row), FALSE);
 
@@ -264,7 +264,7 @@ populate_model_cb (GList    *records,
 
     /* Username */
     sub_row = hdy_action_row_new ();
-    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Username"));
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Username"));
     gtk_container_add (GTK_CONTAINER (row), sub_row);
 
     entry = gtk_entry_new ();
@@ -293,7 +293,7 @@ populate_model_cb (GList    *records,
 
     /* Password */
     sub_row = hdy_action_row_new ();
-    hdy_action_row_set_title (HDY_ACTION_ROW (sub_row), _("Password"));
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Password"));
     gtk_container_add (GTK_CONTAINER (row), sub_row);
 
     entry = gtk_entry_new ();

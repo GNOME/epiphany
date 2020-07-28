@@ -161,8 +161,8 @@ sync_secrets_store_finished_cb (EphySyncService *service,
   g_assert (EPHY_IS_PREFS_SYNC_PAGE (sync_page));
 
   if (!error) {
-    hdy_action_row_set_title (HDY_ACTION_ROW (sync_page->sync_firefox_account_row),
-                              ephy_sync_utils_get_sync_user ());
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sync_page->sync_firefox_account_row),
+                                   ephy_sync_utils_get_sync_user ());
     gtk_widget_hide (sync_page->sync_page_box);
     gtk_widget_show (sync_page->sync_firefox_account_box);
     gtk_widget_show (sync_page->sync_options_box);
@@ -718,7 +718,7 @@ prefs_sync_page_setup (PrefsSyncPage *sync_page)
     gtk_widget_hide (sync_page->sync_options_box);
   } else {
     sync_set_last_sync_time (sync_page);
-    hdy_action_row_set_title (HDY_ACTION_ROW (sync_page->sync_firefox_account_row), user);
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sync_page->sync_firefox_account_row), user);
     gtk_widget_hide (sync_page->sync_page_box);
   }
 
