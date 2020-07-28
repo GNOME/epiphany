@@ -511,3 +511,15 @@ ephy_sync_utils_get_open_tabs_sync_time (void)
 {
   return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME);
 }
+
+char *
+ephy_sync_utils_get_token_server (void)
+{
+  return g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_TOKEN_SERVER);
+}
+
+char *
+ephy_sync_utils_get_accounts_server (void)
+{
+  return g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_ACCOUNTS_SERVER);
+}

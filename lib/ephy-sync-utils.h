@@ -30,9 +30,6 @@ const SecretSchema *ephy_sync_utils_get_secret_schema (void) G_GNUC_CONST;
 #define EPHY_SYNC_SECRET_SCHEMA       (ephy_sync_utils_get_secret_schema ())
 #define EPHY_SYNC_SECRET_ACCOUNT_KEY  "firefox_account"
 
-#define EPHY_SYNC_FX_TOKEN_SERVER_URL     "https://token.services.mozilla.com/1.0/sync/1.5"
-#define EPHY_SYNC_FX_ACCOUNTS_SERVER_URL  "https://api.accounts.firefox.com/v1"
-
 #define EPHY_SYNC_STORAGE_VERSION 5
 #define EPHY_SYNC_DEVICE_ID_LEN   32
 #define EPHY_SYNC_BSO_ID_LEN      12
@@ -99,5 +96,8 @@ gboolean  ephy_sync_utils_get_history_sync_is_initial   (void);
 gboolean  ephy_sync_utils_open_tabs_sync_is_enabled     (void);
 void      ephy_sync_utils_set_open_tabs_sync_time       (gint64 time);
 gint64    ephy_sync_utils_get_open_tabs_sync_time       (void);
+
+char     *ephy_sync_utils_get_token_server              (void);
+char     *ephy_sync_utils_get_accounts_server           (void);
 
 G_END_DECLS

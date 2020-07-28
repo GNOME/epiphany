@@ -465,6 +465,7 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   SoupMessage *msg;
   char *url;
   const char *content_type = "application/json; charset=utf-8";
+  g_autofree char *accounts_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (endpoint);
@@ -472,7 +473,8 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   g_assert (key);
   g_assert (request_body);
 
-  url = g_strdup_printf ("%s/%s", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL, endpoint);
+  accounts_server = ephy_sync_utils_get_accounts_server ();
+  url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
   msg = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY,
                             request_body, strlen (request_body));
@@ -502,13 +504,15 @@ ephy_sync_service_fxa_hawk_get (EphySyncService     *self,
   SyncCryptoHawkHeader *header;
   SoupMessage *msg;
   char *url;
+  g_autofree char *accounts_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (endpoint);
   g_assert (id);
   g_assert (key);
 
-  url = g_strdup_printf ("%s/%s", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL, endpoint);
+  accounts_server = ephy_sync_utils_get_accounts_server ();
+  url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
   msg = soup_message_new (SOUP_METHOD_GET, url);
   header = ephy_sync_crypto_hawk_header_new (url, "GET", id, key, key_len, NULL);
   soup_message_headers_append (msg->request_headers, "authorization", header->header);
@@ -613,6 +617,7 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
   const char *email;
   gsize len;
   gboolean retval = FALSE;
+  g_autofree char *accounts_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (ephy_sync_service_get_secret (self, secrets[UID]));
@@ -662,7 +667,8 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
     g_warning ("JSON object has missing or invalid 'email' member");
     goto out;
   }
-  uri = soup_uri_new (EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
+  accounts_server = ephy_sync_utils_get_accounts_server ();
+  uri = soup_uri_new (accounts_server);
   expected = g_strdup_printf ("%s@%s",
                               ephy_sync_service_get_secret (self, secrets[UID]),
                               soup_uri_get_host (uri));
@@ -749,6 +755,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   char *url;
   const char *content_type = "application/json; charset=utf-8";
   const char *request_body = "{}";
+  g_autofree char *accounts_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   if (!session_token)
@@ -756,7 +763,8 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   g_assert (session_token);
 
   /* This also destroys the device associated with the session token. */
-  url = g_strdup_printf ("%s/session/destroy", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
+  accounts_server = ephy_sync_utils_get_accounts_server ();
+  url = g_strdup_printf ("%s/session/destroy", accounts_server);
   ephy_sync_crypto_derive_session_token (session_token, &token_id,
                                          &req_hmac_key, &tmp);
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
@@ -880,12 +888,14 @@ ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
   char *audience;
   char *assertion;
   char *authorization;
+  g_autofree char *token_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (self->certificate);
   g_assert (self->key_pair);
 
-  audience = ephy_sync_utils_get_audience (EPHY_SYNC_FX_TOKEN_SERVER_URL);
+  token_server = ephy_sync_utils_get_token_server ();
+  audience = ephy_sync_utils_get_audience (token_server);
   assertion = ephy_sync_crypto_create_assertion (self->certificate, audience,
                                                  300, self->key_pair);
   kb = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
@@ -893,7 +903,7 @@ ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
   client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
 
-  msg = soup_message_new (SOUP_METHOD_GET, EPHY_SYNC_FX_TOKEN_SERVER_URL);
+  msg = soup_message_new (SOUP_METHOD_GET, token_server);
   /* We need to add the X-Client-State header so that the Token Server will
    * recognize accounts that were previously used to sync Firefox data too.
    */

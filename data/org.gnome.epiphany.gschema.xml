@@ -312,6 +312,16 @@
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/sync/" id="org.gnome.Epiphany.sync">
+		<key type="s" name="sync-token-server">
+			<default>'https://token.services.mozilla.com/1.0/sync/1.5'</default>
+			<summary>Firefox Sync Token Server URL</summary>
+			<description>URL to a custom Firefox Sync token server.</description>
+		</key>
+		<key type="s" name="sync-accounts-server">
+			<default>'https://api.accounts.firefox.com/v1'</default>
+			<summary>Firefox Sync Accounts Server URL</summary>
+			<description>URL to a custom Firefox Sync accounts server.</description>
+		</key>
 		<key type="s" name="sync-user">
 			<default>''</default>
 			<summary>Currently signed in sync user</summary>
