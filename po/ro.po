@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-23 16:25+0000\n"
-"PO-Revision-Date: 2020-07-24 13:53+0300\n"
+"POT-Creation-Date: 2020-07-27 17:07+0000\n"
+"PO-Revision-Date: 2020-07-28 13:47+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -1045,21 +1045,21 @@ msgstr ""
 "încă pot să vă urmărească activitatea."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:727
+#: embed/ephy-download.c:725
 #, c-format
 msgid "Finished downloading %s"
 msgstr "S-a terminat descărcarea lui %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:729
+#: embed/ephy-download.c:727
 msgid "Download finished"
 msgstr "Descărcare finalizată"
 
-#: embed/ephy-download.c:821
+#: embed/ephy-download.c:819
 msgid "Download requested"
 msgstr "Descărcare cerută"
 
-#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:164
+#: embed/ephy-download.c:820 lib/widgets/ephy-file-chooser.c:164
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -1068,28 +1068,28 @@ msgstr "Descărcare cerută"
 msgid "_Cancel"
 msgstr "_Anulează"
 
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:820
 msgid "_Download"
 msgstr "_Descarcă"
 
-#: embed/ephy-download.c:835
+#: embed/ephy-download.c:833
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tip: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:841
+#: embed/ephy-download.c:839
 #, c-format
 msgid "From: %s"
 msgstr "De la: %s"
 
 #. Question
-#: embed/ephy-download.c:846
+#: embed/ephy-download.c:844
 msgid "Where do you want to save the file?"
 msgstr "Unde doriți să salvați fișierul?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:851
+#: embed/ephy-download.c:849
 msgid "Save file"
 msgstr "Salvează fișierul"
 
@@ -1475,19 +1475,19 @@ msgstr "Caută următoarea apariție a șirului căutat"
 msgid "%s is not a valid URI"
 msgstr "%s nu este un URI valid"
 
-#: embed/ephy-web-view.c:182 src/window-commands.c:1336
+#: embed/ephy-web-view.c:183 src/window-commands.c:1336
 msgid "Open"
 msgstr "Deschide"
 
-#: embed/ephy-web-view.c:357
+#: embed/ephy-web-view.c:358
 msgid "Not No_w"
 msgstr "Nu acu_m"
 
-#: embed/ephy-web-view.c:358
+#: embed/ephy-web-view.c:359
 msgid "_Never Save"
 msgstr "_Nu salva niciodată"
 
-#: embed/ephy-web-view.c:359 lib/widgets/ephy-file-chooser.c:175
+#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
 #: src/resources/gtk/prefs-sync-page.ui:165 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Salvează"
@@ -1495,13 +1495,13 @@ msgstr "_Salvează"
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:366
+#: embed/ephy-web-view.c:367
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Doriți să salvați parola pentru „%s”?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:609
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1509,71 +1509,77 @@ msgstr ""
 "Atenție: acest formular este nesigur. Dacă tastați parola, nu va fi ținută "
 "privat."
 
-#: embed/ephy-web-view.c:816
+#: embed/ephy-web-view.c:817
 msgid "Web process crashed"
 msgstr "Procesul web a crăpat"
 
-#: embed/ephy-web-view.c:819
+#: embed/ephy-web-view.c:820
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Procesul web s-a terminat din cauza depășirii limitei de memorie"
 
-#: embed/ephy-web-view.c:999 embed/ephy-web-view.c:1112
+#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Refuză"
 
-#: embed/ephy-web-view.c:1000 embed/ephy-web-view.c:1113
+#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Permite"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1013
+#: embed/ephy-web-view.c:1034
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Pagina %s dorește să vă afișeze notificări desktop."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1018
+#: embed/ephy-web-view.c:1039
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Pagina %s dorește să știe locația dumneavoastră."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1023
+#: embed/ephy-web-view.c:1044
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Pagina %s dorește să acceseze microfonul."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1028
+#: embed/ephy-web-view.c:1049
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Pagina %s dorește să acceseze camera web."
 
-#: embed/ephy-web-view.c:1120
+#. Translators: Webcam and microphone policy for a specific site.
+#: embed/ephy-web-view.c:1054
+#, c-format
+msgid "The page at %s wants to use your webcam and microphone."
+msgstr "Pagina de la %s dorește să utilizeze camera web și microfonul."
+
+#: embed/ephy-web-view.c:1149
 #, c-format
 msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
 msgstr ""
 "Doriți să permiteți „%s” să utilizeze cookie-uri în timpul navigării „%s”?"
 
-#: embed/ephy-web-view.c:1129
+#: embed/ephy-web-view.c:1158
 #, c-format
 msgid "This will allow “%s“ to track your activity."
 msgstr "Acest lucru va permite „%s” să vă urmărească activitatea."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1280
+#: embed/ephy-web-view.c:1336
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Se încarcă „%s”…"
 
-#: embed/ephy-web-view.c:1282 embed/ephy-web-view.c:1288
+#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
 msgid "Loading…"
 msgstr "Se încarcă…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1621
+#: embed/ephy-web-view.c:1677
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1581,7 +1587,7 @@ msgstr ""
 "web."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1626
+#: embed/ephy-web-view.c:1682
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1590,19 +1596,19 @@ msgstr ""
 "Verificați data în calendarul calculatorului."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1631
+#: embed/ephy-web-view.c:1687
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identificarea sitului web nu a fost emisă de o organizație de încredere."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1636
+#: embed/ephy-web-view.c:1692
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Identificarea sitului web nu a putut fi procesată. Poate fi coruptă."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1641
+#: embed/ephy-web-view.c:1697
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1611,7 +1617,7 @@ msgstr ""
 "emis-o."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1646
+#: embed/ephy-web-view.c:1702
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1620,7 +1626,7 @@ msgstr ""
 "criptare foarte slabă."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1651
+#: embed/ephy-web-view.c:1707
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1630,24 +1636,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1714 embed/ephy-web-view.c:1770
+#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problemă la încărcarea paginii"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1717
+#: embed/ephy-web-view.c:1773
 msgid "Unable to display this website"
 msgstr "Nu s-a putut afișa acest sit web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1721
+#: embed/ephy-web-view.c:1777
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Situl de la %s pare a fi indisponibil."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1725
+#: embed/ephy-web-view.c:1781
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1656,7 +1662,7 @@ msgstr ""
 "să verificați dacă conexiunea la internet funcționează corespunzător."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1735
+#: embed/ephy-web-view.c:1791
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Eroarea precisă a fost: %s"
@@ -1664,49 +1670,49 @@ msgstr "Eroarea precisă a fost: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1740 embed/ephy-web-view.c:1793
-#: embed/ephy-web-view.c:1832 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
+#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
 msgid "Reload"
 msgstr "Reîncarcă"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1743 embed/ephy-web-view.c:1796
-#: embed/ephy-web-view.c:1835
+#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
+#: embed/ephy-web-view.c:1891
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1829
 msgid "Oops! There may be a problem"
 msgstr "Ups! Ar putea fi o problemă"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1833
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Este posibil ca pagina %s să fi cauzat închiderea neașteptată a lui Web."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1840
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Dacă se întâmplă din nou, raportați problema dezvoltatorilor lui %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1821
+#: embed/ephy-web-view.c:1877
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problemă la afișarea paginii"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1824
+#: embed/ephy-web-view.c:1880
 msgid "Oops!"
 msgstr "Ups!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1827
+#: embed/ephy-web-view.c:1883
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1715,18 +1721,18 @@ msgstr ""
 "vizitați o pagină diferită pentru a continua."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1861
+#: embed/ephy-web-view.c:1917
 #, c-format
 msgid "Security Violation"
 msgstr "Încălcare a securității"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1864
+#: embed/ephy-web-view.c:1920
 msgid "This Connection is Not Secure"
 msgstr "Această conexiune nu este sigură"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1868
+#: embed/ephy-web-view.c:1924
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1738,45 +1744,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1878 embed/ephy-web-view.c:1967
-#: embed/ephy-web-view.c:2018
+#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
+#: embed/ephy-web-view.c:2074
 msgid "Go Back"
 msgstr "Navighează înapoi"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1881 embed/ephy-web-view.c:1970
-#: embed/ephy-web-view.c:2021
+#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2077
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1884 embed/ephy-web-view.c:1973
+#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
 msgid "Accept Risk and Proceed"
 msgstr "Acceptă riscul și continuă"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1888 embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1918
+#: embed/ephy-web-view.c:1974
 #, c-format
 msgid "Security Warning"
 msgstr "Avertisment de securitate"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1921
+#: embed/ephy-web-view.c:1977
 msgid "Unsafe website detected!"
 msgstr "Sit web nesigur detectat!"
 
-#: embed/ephy-web-view.c:1928
+#: embed/ephy-web-view.c:1984
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1786,7 +1792,7 @@ msgstr ""
 "conține cod malițios care poate fi descărcat în calculatorul dumneavoastră "
 "fără aprobare."
 
-#: embed/ephy-web-view.c:1932
+#: embed/ephy-web-view.c:1988
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1795,7 +1801,7 @@ msgstr ""
 "Puteți învăța mai multe despre conținut web dăunător incluzând viruși și "
 "alte tipuri de cod malițios și despre cum să vă protejați calculatorul la %s."
 
-#: embed/ephy-web-view.c:1939
+#: embed/ephy-web-view.c:1995
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1806,14 +1812,14 @@ msgstr ""
 "instalarea de software sau dezvăluirea de informații personale (de exemplu, "
 "parole, numere de telefon, sau numere de cărți de credit)."
 
-#: embed/ephy-web-view.c:1944
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Puteți afla mai multe despre ingineria socială (phishing) la %s sau de la %s."
 
-#: embed/ephy-web-view.c:1953
+#: embed/ephy-web-view.c:2009
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1825,24 +1831,24 @@ msgstr ""
 "exemplu, schimbând pagina principală sau afișând reclame extra pe siturile "
 "pe care le vizitați)."
 
-#: embed/ephy-web-view.c:1958
+#: embed/ephy-web-view.c:2014
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Puteți afla mai multe despre programe nedorite la %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2002 embed/ephy-web-view.c:2005
+#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
 #, c-format
 msgid "File not found"
 msgstr "Fișier negăsit"
 
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2065
 #, c-format
 msgid "%s could not be found."
 msgstr "%s nu s-a găsit."
 
-#: embed/ephy-web-view.c:2011
+#: embed/ephy-web-view.c:2067
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1851,15 +1857,15 @@ msgstr ""
 "Verificați numele de fișier pentru capitalizare sau alte erori de tastare. "
 "Verificați și dacă a fost mutat, redenumit sau șters."
 
-#: embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:2130
 msgid "None specified"
 msgstr "Nespecificat"
 
-#: embed/ephy-web-view.c:2190
+#: embed/ephy-web-view.c:2246
 msgid "Technical information"
 msgstr "Informații tehnice"
 
-#: embed/ephy-web-view.c:3327
+#: embed/ephy-web-view.c:3383
 msgid "_OK"
 msgstr "_OK"
 
@@ -1909,7 +1915,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:332
+#: lib/ephy-sync-utils.c:342
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "Web GNOME al lui %s pe %s"
@@ -2137,12 +2143,12 @@ msgstr ""
 "Certificatul este valid. Cu toate acestea, resurse din această pagină au "
 "fost trimise în mod nesigur."
 
-#: lib/widgets/ephy-downloads-popover.c:246
+#: lib/widgets/ephy-downloads-popover.c:235
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Curăță tot"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:78
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
@@ -2150,7 +2156,7 @@ msgstr[0] "%d secundă rămasă"
 msgstr[1] "%d secunde rămase"
 msgstr[2] "%d de secunde rămase"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:82
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
@@ -2158,7 +2164,7 @@ msgstr[0] "%d minut rămas"
 msgstr[1] "%d minute rămase"
 msgstr[2] "%d de minute rămase"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:86
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
@@ -2166,7 +2172,7 @@ msgstr[0] "%d oră rămasă"
 msgstr[1] "%d ore rămase"
 msgstr[2] "%d de ore rămase"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:90
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
@@ -2174,7 +2180,7 @@ msgstr[0] "%d zi rămasă"
 msgstr[1] "%d zile rămase"
 msgstr[2] "%d de zile rămase"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:94
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
@@ -2182,7 +2188,7 @@ msgstr[0] "%d săptămână rămasă"
 msgstr[1] "%d săptămâni rămase"
 msgstr[2] "%d de săptămâni rămase"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:98
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
@@ -2190,26 +2196,26 @@ msgstr[0] "%d lună rămasă"
 msgstr[1] "%d luni rămase"
 msgstr[2] "%d de luni rămase"
 
-#: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:432
+#: lib/widgets/ephy-download-widget.c:213
+#: lib/widgets/ephy-download-widget.c:431
 msgid "Finished"
 msgstr "Finalizat"
 
-#: lib/widgets/ephy-download-widget.c:224
+#: lib/widgets/ephy-download-widget.c:223
 msgid "Moved or deleted"
 msgstr "Mutat sau șters"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:429
+#: lib/widgets/ephy-download-widget.c:238
+#: lib/widgets/ephy-download-widget.c:428
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Ups! Eroare la descărcare: %s"
 
-#: lib/widgets/ephy-download-widget.c:265
+#: lib/widgets/ephy-download-widget.c:264
 msgid "Cancelling…"
 msgstr "Se anulează…"
 
-#: lib/widgets/ephy-download-widget.c:434
+#: lib/widgets/ephy-download-widget.c:433
 msgid "Starting…"
 msgstr "Se pornește…"
 
