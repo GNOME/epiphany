@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-27 17:07+0000\n"
-"PO-Revision-Date: 2020-07-27 20:47+0300\n"
+"POT-Creation-Date: 2020-07-29 01:54+0000\n"
+"PO-Revision-Date: 2020-07-29 09:05+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -641,10 +641,27 @@ msgstr ""
 "найближчої історії переглядача"
 
 #: data/org.gnome.epiphany.gschema.xml:317
+msgid "Firefox Sync Token Server URL"
+msgstr "Адреса сервера синхронізації ключів Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:318
+msgid "URL to a custom Firefox Sync token server."
+msgstr "Адреса нетипового сервера синхронізації ключів Firefox."
+
+#: data/org.gnome.epiphany.gschema.xml:322
+#| msgid "Firefox Account"
+msgid "Firefox Sync Accounts Server URL"
+msgstr "Адреса сервера синхронізації облікових записів Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:323
+msgid "URL to a custom Firefox Sync accounts server."
+msgstr "Адреса нетипового сервера синхронізації облікових записів Firefox."
+
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Currently signed in sync user"
 msgstr "Авторизований на даний час користувач синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -652,43 +669,43 @@ msgstr ""
 "Пошта, зв'язана з обліковим записом Firefox для синхронізації даних з "
 "серверами Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Last sync timestamp"
 msgstr "Часова мітка останньої синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Час UNIX, в який відбулась остання синхронізація в секундах."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Sync device ID"
 msgstr "Ідентифікатор пристрою для синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The sync device ID of the current device."
 msgstr "Ідентифікатор цього пристрою для синхронізації."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Sync device name"
 msgstr "Ім'я пристрою для синхронізації"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The sync device name of the current device."
 msgstr "Ім'я цього пристрою для синхронізації."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "The sync frequency in minutes"
 msgstr "Частота синхронізації у хвилинах"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Кількість хвилин між двома послідовними синхронізаціями."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Sync data with Firefox"
 msgstr "Синхронізувати дані з Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -696,103 +713,103 @@ msgstr ""
 "TRUE, якщо колекції закладок Ephy мають бути синхронізовані з колекціями "
 "Firefox, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable bookmarks sync"
 msgstr "Увімкнути синхронізацію закладок"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція закладок має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Bookmarks sync timestamp"
 msgstr "Часова мітка синхронізації закладок"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію закладок."
 
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Initial sync or normal sync"
 msgstr "Початкова або звичайна синхронізація"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція закладок має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable passwords sync"
 msgstr "Увімкнути синхронізацію паролів"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція паролів має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Passwords sync timestamp"
 msgstr "Часова мітка синхронізації паролів"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію паролів."
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція паролів має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Enable history sync"
 msgstr "Увімкнути синхронізацію історії"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "TRUE, якщо колекція історії має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "History sync timestamp"
 msgstr "Часова мітка синхронізації історії"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid "The timestamp at which last history sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію історії."
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "TRUE, якщо колекція історії має бути синхронізована вперше, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Enable open tabs sync"
 msgstr "Увімкнути синхронізацію відкритих вкладок"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE, якщо колекція відкритих вкладок має бути синхронізована, інакше FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Open tabs sync timestamp"
 msgstr "Часова мітка синхронізації відкритих вкладок"
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію відкритих вкладок."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на мікрофон для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -804,12 +821,12 @@ msgstr ""
 "про дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір "
 "за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на розташування для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -821,12 +838,12 @@ msgstr ""
 "користувача про дозвіл, в той час, коли «allow» і «deny» будуть автоматично "
 "робити вибір за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на сповіщення для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -838,12 +855,12 @@ msgstr ""
 "про дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір "
 "за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на збереження паролю для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -855,11 +872,11 @@ msgstr ""
 "користувача про дозвіл, в той час, коли «allow» і «deny» будуть автоматично "
 "робити вибір за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на камеру для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -871,12 +888,12 @@ msgstr ""
 "дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір за "
 "користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на показ реклами для цього вузла"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -888,13 +905,13 @@ msgstr ""
 "про дозвіл, в той час, коли «allow» і «deny» будуть автоматично робити вибір "
 "за користувача."
 
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Що робити, коли цим вузлом надсилається запит щодо правил автоматичного "
 "відтворення"
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1510,7 +1527,6 @@ msgstr "Сторінка на %s бажає використовувати ва�
 #. Translators: Webcam and microphone policy for a specific site.
 #: embed/ephy-web-view.c:1054
 #, c-format
-#| msgid "The page at %s wants to use your microphone."
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "Сторінка на %s бажає використовувати вашу вебкамеру і мікрофон."
 
@@ -1971,22 +1987,22 @@ msgstr "Пароль для %s у формі на %s"
 msgid "Password in a form in %s"
 msgstr "Пароль у формі на %s"
 
-#: lib/sync/ephy-sync-service.c:854
+#: lib/sync/ephy-sync-service.c:862
 msgid "Failed to obtain storage credentials."
 msgstr "Не вдалося отримати облікові дані сховища."
 
-#: lib/sync/ephy-sync-service.c:855 lib/sync/ephy-sync-service.c:970
-#: lib/sync/ephy-sync-service.c:1745
+#: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
+#: lib/sync/ephy-sync-service.c:1755
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Перейдіть до вікна параметрів та увійдіть знову, щоб продовжити "
 "синхронізацію."
 
-#: lib/sync/ephy-sync-service.c:960
+#: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Пароль вашого облікового запису Firefox, здається, змінено."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:971
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1994,43 +2010,43 @@ msgstr ""
 "Перейдіть до вікна параметрів та увійдіть з новим паролем, щоб продовжити "
 "синхронізацію."
 
-#: lib/sync/ephy-sync-service.c:969
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
 msgstr "Не вдалося отримати підписаний сертифікат."
 
-#: lib/sync/ephy-sync-service.c:1711 lib/sync/ephy-sync-service.c:1716
+#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Неможливо знайти секрети синхронізації поточного користувача синхронізації."
 
-#: lib/sync/ephy-sync-service.c:1723 lib/sync/ephy-sync-service.c:1731
+#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Секрети синхронізації поточного користувача синхронізації недійсні."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1839
+#: lib/sync/ephy-sync-service.c:1849
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Секрети синхронізації %s"
 
-#: lib/sync/ephy-sync-service.c:1864
+#: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload client record."
 msgstr "Не вдалося передати запис клієнта."
 
-#: lib/sync/ephy-sync-service.c:2063
+#: lib/sync/ephy-sync-service.c:2073
 msgid "Failed to upload crypto/keys record."
 msgstr "Не вдалося передати запис криптографічних ключів."
 
-#: lib/sync/ephy-sync-service.c:2170
+#: lib/sync/ephy-sync-service.c:2180
 msgid "Failed to retrieve crypto keys."
 msgstr "Не вдалося отримати криптографічні ключі."
 
-#: lib/sync/ephy-sync-service.c:2221
+#: lib/sync/ephy-sync-service.c:2231
 msgid "Failed to upload meta/global record."
 msgstr "Не вдалося вивантажити запис мета/глобальний."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2338
+#: lib/sync/ephy-sync-service.c:2348
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -2038,15 +2054,15 @@ msgstr ""
 "Ваш обліковий запис Firefox Account використовує версію сховища %d. Тенет "
 "підтримує тільки версію %d."
 
-#: lib/sync/ephy-sync-service.c:2349
+#: lib/sync/ephy-sync-service.c:2359
 msgid "Failed to verify storage version."
 msgstr "Не вдалося перевірити версію сховища."
 
-#: lib/sync/ephy-sync-service.c:2405
+#: lib/sync/ephy-sync-service.c:2415
 msgid "Failed to upload device info"
 msgstr "Не вдалося передати інформацію про пристрій"
 
-#: lib/sync/ephy-sync-service.c:2478 lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
 msgid "Failed to retrieve the Sync Key"
 msgstr "Не вдалося отримати ключ синхронізації"
 
