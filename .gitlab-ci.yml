@@ -12,10 +12,8 @@ stages:
 
 check-code-style:
   stage: .pre
-  image: alpine:latest
+  image: registry.gitlab.gnome.org/gnome/epiphany/master:v1
   interruptible: true
-  before_script:
-    - apk update && apk add uncrustify bash python3
   script:
     - bash data/check-code-style
 
