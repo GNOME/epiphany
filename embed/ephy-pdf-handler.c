@@ -214,7 +214,6 @@ decide_destination_cb (WebKitDownload *wk_download,
 static void
 ephy_pdf_request_start (EphyPdfRequest *request)
 {
-  g_autoptr (SoupURI) soup_uri = NULL;
   const char *modified_uri;
   const char *original_uri;
 

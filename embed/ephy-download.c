@@ -802,7 +802,6 @@ filename_suggested_cb (EphyDownload *download,
   GtkWidget *filechooser;
   WebKitDownload *webkit_download;
   WebKitURIResponse *response;
-  g_autofree gchar *sanitized_filename = NULL;
   g_autofree gchar *type_text = NULL;
   g_autofree gchar *from_text = NULL;
   g_autofree gchar *content_length = NULL;

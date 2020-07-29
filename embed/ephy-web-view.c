@@ -2542,7 +2542,6 @@ authenticate_cb (WebKitWebView               *web_view,
                  gpointer                     user_data)
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
-  g_autoptr (WebKitCredential) credential = NULL;
   EphyPasswordManager *password_manager;
   AuthenticationData *data;
   g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
