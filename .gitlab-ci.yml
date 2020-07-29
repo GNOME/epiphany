@@ -1,5 +1,9 @@
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
+cache:
+  paths:
+    - _ccache/
+
 variables:
   BUNDLE: 'epiphany-git.flatpak'
   MANIFEST_PATH: 'org.gnome.Epiphany.json'
