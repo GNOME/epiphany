@@ -3,13 +3,11 @@
 
 .incognito-mode {
   $window_color: $incognito_color;
-  $window_icon: $incognito_icon;
   @import 'Adwaita-colored-window';
 }
 
 .automation-mode {
   $window_color: $automation_color;
-  $window_icon: '';
   @import 'Adwaita-colored-window';
 }
 
@@ -142,4 +140,8 @@ window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page) {
                                   center center, 0.5,
                                   to($_dot_color),
                                   to(transparent));
+}
+
+#title-box-container {
+  color: gtkalpha(themecolor(theme_fg_color), 0.2);
 }

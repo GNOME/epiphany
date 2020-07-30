@@ -171,6 +171,7 @@ ephy_header_bar_constructed (GObject *object)
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
   GtkWidget *button;
   GtkWidget *page_menu_popover;
+  GtkWidget *event_box;
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
   GtkSizeGroup *downloads_size_group;
@@ -207,13 +208,18 @@ ephy_header_bar_constructed (GObject *object)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
   }
 
+  event_box = gtk_event_box_new ();
+  gtk_widget_show (event_box);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), event_box);
+  gtk_widget_set_name (event_box, "title-box-container");
+
   if (is_desktop_pantheon ()) {
     /* Use a full-width entry on Pantheon */
     gtk_widget_set_hexpand (GTK_WIDGET (header_bar->title_widget), TRUE);
     gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 6);
     gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 6);
 
-    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
+    gtk_container_add (GTK_CONTAINER (event_box), GTK_WIDGET (header_bar->title_widget));
   } else {
     GtkWidget *clamp;
 
@@ -224,7 +230,7 @@ ephy_header_bar_constructed (GObject *object)
     hdy_clamp_set_tightening_threshold (HDY_CLAMP (clamp), 560);
     gtk_container_add (GTK_CONTAINER (clamp), GTK_WIDGET (header_bar->title_widget));
 
-    gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), clamp);
+    gtk_container_add (GTK_CONTAINER (event_box), clamp);
   }
 
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));

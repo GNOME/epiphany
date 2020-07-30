@@ -6,7 +6,11 @@
 
 .floating-bar:backdrop { background-color: @theme_unfocused_base_color; border-color: @unfocused_borders; }
 
-.incognito-mode headerbar { background-image: -gtk-icontheme("user-not-tracked-symbolic"); background-repeat: no-repeat; background-position: 157px 0; background-size: 64px 64px; color: rgba(0, 0, 0, 0.35); }
+#title-box-container { color: alpha(@theme_fg_color,0.5); transition: background 200ms ease-out; }
+
+.incognito-mode #title-box-container { background: -gtk-icontheme("user-not-tracked-symbolic") 16px 0/64px 64px no-repeat; }
+
+.incognito-mode #title-box-container:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)); }
 
 .automation-mode headerbar { background-color: #ff9600; color: rgba(0, 0, 0, 0.35); }
 
@@ -74,9 +78,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .incognito-mode { /*************************** Check and Radio buttons * */ }
 
-.incognito-mode headerbar { background: #c4d6e9 -gtk-icontheme("user-not-tracked-symbolic") 180px 0/64px 64px no-repeat, linear-gradient(to top, #bdd1e6, #c8d9ea); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #91b2d6; color: rgba(27, 49, 73, 0.2); }
+.incognito-mode headerbar { background: #c4d6e9 linear-gradient(to top, #bdd1e6, #c8d9ea); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #91b2d6; }
 
-.incognito-mode headerbar:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)), image(#eaf0f7); border-color: #b4cbe3; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+.incognito-mode headerbar:backdrop { background-image: image(#eaf0f7); border-color: #b4cbe3; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+
+.incognito-mode headerbar #title-box-container { color: rgba(27, 49, 73, 0.2); }
 
 .incognito-mode actionbar { background: #eaf0f7; }
 
@@ -144,9 +150,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .automation-mode { /*************************** Check and Radio buttons * */ }
 
-.automation-mode headerbar { background: #e68700 linear-gradient(to top, #db8100, #eb8a00); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #9e5d00; color: rgba(100, 59, 0, 0.2); }
+.automation-mode headerbar { background: #e68700 linear-gradient(to top, #db8100, #eb8a00); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #9e5d00; }
 
 .automation-mode headerbar:backdrop { background-image: image(#ffa11a); border-color: #ca7905; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+
+.automation-mode headerbar #title-box-container { color: rgba(100, 59, 0, 0.2); }
 
 .automation-mode actionbar { background: #ffa11a; }
 
@@ -282,3 +290,5 @@ window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:ho
 window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #d5d0cc; background-color: #f6f5f4; }
 
 .tab-attention { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3584e4), to(transparent)); }
+
+#title-box-container { color: alpha(@theme_fg_color,0.2); }

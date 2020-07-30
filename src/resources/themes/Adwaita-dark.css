@@ -6,7 +6,11 @@
 
 .floating-bar:backdrop { background-color: @theme_unfocused_base_color; border-color: @unfocused_borders; }
 
-.incognito-mode headerbar { background-image: -gtk-icontheme("user-not-tracked-symbolic"); background-repeat: no-repeat; background-position: 157px 0; background-size: 64px 64px; color: rgba(0, 0, 0, 0.35); }
+#title-box-container { color: alpha(@theme_fg_color,0.5); transition: background 200ms ease-out; }
+
+.incognito-mode #title-box-container { background: -gtk-icontheme("user-not-tracked-symbolic") 16px 0/64px 64px no-repeat; }
+
+.incognito-mode #title-box-container:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)); }
 
 .automation-mode headerbar { background-color: #ff9600; color: rgba(0, 0, 0, 0.35); }
 
@@ -74,9 +78,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .incognito-mode { /*************************** Check and Radio buttons * */ }
 
-.incognito-mode headerbar { background: #141927 -gtk-icontheme("user-not-tracked-symbolic") 180px 0/64px 64px no-repeat, linear-gradient(to top, #1a2235, #1e263b); box-shadow: inset 0 1px rgba(231, 234, 243, 0.07); border-color: #06080c; color: rgba(231, 234, 243, 0.2); }
+.incognito-mode headerbar { background: #141927 linear-gradient(to top, #1a2235, #1e263b); box-shadow: inset 0 1px rgba(231, 234, 243, 0.07); border-color: #06080c; }
 
-.incognito-mode headerbar:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)), image(#252f49); border-color: #171d2e; box-shadow: inset 0 1px rgba(231, 234, 243, 0.07); }
+.incognito-mode headerbar:backdrop { background-image: image(#252f49); border-color: #171d2e; box-shadow: inset 0 1px rgba(231, 234, 243, 0.07); }
+
+.incognito-mode headerbar #title-box-container { color: rgba(231, 234, 243, 0.2); }
 
 .incognito-mode actionbar { background: #252f49; }
 
@@ -144,9 +150,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .automation-mode { /*************************** Check and Radio buttons * */ }
 
-.automation-mode headerbar { background: #e68700 linear-gradient(to top, #fa9300, #ff9805); box-shadow: inset 0 1px rgba(255, 240, 219, 0.07); border-color: #bd6f00; color: rgba(255, 240, 219, 0.2); }
+.automation-mode headerbar { background: #e68700 linear-gradient(to top, #fa9300, #ff9805); box-shadow: inset 0 1px rgba(255, 240, 219, 0.07); border-color: #bd6f00; }
 
 .automation-mode headerbar:backdrop { background-image: image(#ffa11a); border-color: #eb8c05; box-shadow: inset 0 1px rgba(255, 240, 219, 0.07); }
+
+.automation-mode headerbar #title-box-container { color: rgba(255, 240, 219, 0.2); }
 
 .automation-mode actionbar { background: #ffa11a; }
 
@@ -282,3 +290,5 @@ window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:ho
 window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #202020; background-color: #353535; }
 
 .tab-attention { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#1f76e1), to(transparent)); }
+
+#title-box-container { color: alpha(@theme_fg_color,0.2); }

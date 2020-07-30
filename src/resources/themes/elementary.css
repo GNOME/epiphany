@@ -6,7 +6,11 @@
 
 .floating-bar:backdrop { background-color: @theme_unfocused_base_color; border-color: @unfocused_borders; }
 
-.incognito-mode headerbar { background-image: -gtk-icontheme("user-not-tracked-symbolic"); background-repeat: no-repeat; background-position: 157px 0; background-size: 64px 64px; color: rgba(0, 0, 0, 0.35); }
+#title-box-container { color: alpha(@theme_fg_color,0.5); transition: background 200ms ease-out; }
+
+.incognito-mode #title-box-container { background: -gtk-icontheme("user-not-tracked-symbolic") 16px 0/64px 64px no-repeat; }
+
+.incognito-mode #title-box-container:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)); }
 
 .automation-mode headerbar { background-color: #ff9600; color: rgba(0, 0, 0, 0.35); }
 
@@ -106,9 +110,7 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .floating-bar, .floating-bar label { color: #fff; text-shadow: 0 1px 2px alpha(#000,0.6); }
 
-.incognito-mode .titlebar { padding: 0; }
-
-.incognito-mode headerbar { padding: 8px 6px 6px; background-position: 100px; color: @text_shadow_color; }
+#title-box-container { color: @text_shadow_color; }
 
 .bookmark-tag-widget image { -gtk-icon-shadow: none; }
 
