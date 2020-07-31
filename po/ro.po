@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-27 17:07+0000\n"
-"PO-Revision-Date: 2020-07-28 13:47+0300\n"
+"POT-Creation-Date: 2020-07-29 15:51+0000\n"
+"PO-Revision-Date: 2020-07-31 16:47+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -657,10 +657,26 @@ msgstr ""
 "navigatorului"
 
 #: data/org.gnome.epiphany.gschema.xml:317
+msgid "Firefox Sync Token Server URL"
+msgstr "URL de server de jeton de sincronizare Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:318
+msgid "URL to a custom Firefox Sync token server."
+msgstr "URL la un server de jeton se sincronizare Firefox personalizat."
+
+#: data/org.gnome.epiphany.gschema.xml:322
+msgid "Firefox Sync Accounts Server URL"
+msgstr "URL de server de conturi de sincronizare Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:323
+msgid "URL to a custom Firefox Sync accounts server."
+msgstr "URL la un server de conturi de sincronizare Firefox personalizat."
+
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Currently signed in sync user"
 msgstr "Utilizatorul de sincronizare conectat curent"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -668,43 +684,43 @@ msgstr ""
 "Emailul conectat la contul Firefox folosit la sincronizarea datelor cu "
 "serverele Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Last sync timestamp"
 msgstr "Ultimul marcaj de timp al sincronizării"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Timpul UNIX în secunde la care ultima sincronizare a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Sync device ID"
 msgstr "ID de dispozitiv de sincronizare"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The sync device ID of the current device."
 msgstr "ID-ul dispozitivului de sincronizare al dispozitivului curent."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Sync device name"
 msgstr "Numele dispozitivului de sincronizare"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The sync device name of the current device."
 msgstr "Numele dispozitivului de sincronizare al dispozitivului curent."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "The sync frequency in minutes"
 msgstr "Frecvența de sincronizare în minute"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Numărul de minute dintre două sincronizări consecutive."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Sync data with Firefox"
 msgstr "Sincronizează datele cu Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -712,32 +728,32 @@ msgstr ""
 "ADEVĂRAT dacă colecțiile Ephy ar trebui sincronizare cu colecțiile Firefox, "
 "FALS în mod contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable bookmarks sync"
 msgstr "Activează sincronizarea marcajelor"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de marcaje ar trebui sincronizată, FALS în mod "
 "contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Bookmarks sync timestamp"
 msgstr "Marcajul de timp pentru sincronizarea marcajelor"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "Marcajul de timp la care ultima sincronizare a marcajelor a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Initial sync or normal sync"
 msgstr "Sincronizare inițială sau sincronizare normală"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -745,24 +761,24 @@ msgstr ""
 "ADEVĂRAT dacă colecția de marcaje trebuie să fie sincronizată pentru prima "
 "dată, FALS în mod contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable passwords sync"
 msgstr "Activează sincronizarea parolelor"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de parole ar trebui sincronizată, FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Passwords sync timestamp"
 msgstr "Marcaj de timp pentru sincronizarea parolelor"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Marcajul de timp când ultima sincronizare a parolelor a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -770,25 +786,25 @@ msgstr ""
 "ADEVĂRAT dacă colecția de parole trebuie sincronizată pentru prima dată, "
 "FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Enable history sync"
 msgstr "Activează sincronizarea istoricului"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția istoricului ar trebui sincronizată, FALS în caz "
 "contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "History sync timestamp"
 msgstr "Marcajul de sincronizare al istoricului"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid "The timestamp at which last history sync was made."
 msgstr "Marcajul la care ultima sincronizare a istoricului a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -796,33 +812,33 @@ msgstr ""
 "ADEVĂRAT dacă colecția istoricului trebuie să fie sincronizată pentru prima "
 "dată, FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Enable open tabs sync"
 msgstr "Activează sincronizarea taburilor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de taburi deschise ar trebui sincronizată, FALS în "
 "caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Open tabs sync timestamp"
 msgstr "Marcajul de timp al sincronizării taburilor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "Marcajul de timp la care ultima sincronizare a taburilor deschise a fost "
 "făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru microfon este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -835,14 +851,14 @@ msgstr ""
 "„permite” și „respinge” îi comunică să facă decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru geolocație este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -855,14 +871,14 @@ msgstr ""
 "ce „permite” și „respinge” îi comunică să facă decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de notificare este cerută pentru această "
 "gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -875,14 +891,14 @@ msgstr ""
 "„permite” și „respinge” îi comunică automat să facă o decizie la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a salva parola este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -894,13 +910,13 @@ msgstr ""
 "trebuie să ceară utilizatorului permisiunea, în timp ce „permite” și "
 "„respinge” îi va comunica automat să ia o decizie la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a accesa camera web este cerută "
 "pentru această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -913,14 +929,14 @@ msgstr ""
 "ce „permite” și „respinge” îi comunică să ia decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru reclame este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -932,13 +948,13 @@ msgstr ""
 "utilizată configurarea globală a navigatorului, în timp ce „permite” și "
 "„respinge” îi comunică să ia automat decizia la cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de autoredare este cerută pentru această "
 "gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1055,11 +1071,11 @@ msgstr "S-a terminat descărcarea lui %s"
 msgid "Download finished"
 msgstr "Descărcare finalizată"
 
-#: embed/ephy-download.c:819
+#: embed/ephy-download.c:818
 msgid "Download requested"
 msgstr "Descărcare cerută"
 
-#: embed/ephy-download.c:820 lib/widgets/ephy-file-chooser.c:164
+#: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -1068,28 +1084,28 @@ msgstr "Descărcare cerută"
 msgid "_Cancel"
 msgstr "_Anulează"
 
-#: embed/ephy-download.c:820
+#: embed/ephy-download.c:819
 msgid "_Download"
 msgstr "_Descarcă"
 
-#: embed/ephy-download.c:833
+#: embed/ephy-download.c:832
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tip: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:839
+#: embed/ephy-download.c:838
 #, c-format
 msgid "From: %s"
 msgstr "De la: %s"
 
 #. Question
-#: embed/ephy-download.c:844
+#: embed/ephy-download.c:843
 msgid "Where do you want to save the file?"
 msgstr "Unde doriți să salvați fișierul?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:849
+#: embed/ephy-download.c:848
 msgid "Save file"
 msgstr "Salvează fișierul"
 
@@ -1865,7 +1881,7 @@ msgstr "Nespecificat"
 msgid "Technical information"
 msgstr "Informații tehnice"
 
-#: embed/ephy-web-view.c:3383
+#: embed/ephy-web-view.c:3382
 msgid "_OK"
 msgstr "_OK"
 
@@ -2014,22 +2030,22 @@ msgstr "Parola pentru %s într-un formular în %s"
 msgid "Password in a form in %s"
 msgstr "Parola într-un formular în %s"
 
-#: lib/sync/ephy-sync-service.c:854
+#: lib/sync/ephy-sync-service.c:862
 msgid "Failed to obtain storage credentials."
 msgstr "Eșec la obținerea credențialelor de stocare."
 
-#: lib/sync/ephy-sync-service.c:855 lib/sync/ephy-sync-service.c:970
-#: lib/sync/ephy-sync-service.c:1745
+#: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
+#: lib/sync/ephy-sync-service.c:1755
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Vizitați Preferințe și autentificați-vă din nou pentru a continua "
 "sincronizarea."
 
-#: lib/sync/ephy-sync-service.c:960
+#: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Parola contului Firefox pare să se fi schimbat."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:971
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -2037,44 +2053,44 @@ msgstr ""
 "Vizitați Preferințe și autentificați-vă cu noua parolă pentru a continua "
 "sincronizarea."
 
-#: lib/sync/ephy-sync-service.c:969
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
 msgstr "Eșec la obținerea unui certificat semnat."
 
-#: lib/sync/ephy-sync-service.c:1711 lib/sync/ephy-sync-service.c:1716
+#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nu s-au putut găsi secretele de sincronizare pentru utilizatorul de "
 "sincronizare curent."
 
-#: lib/sync/ephy-sync-service.c:1723 lib/sync/ephy-sync-service.c:1731
+#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Secretele de sincronizare pentru sincronizarea curentă sunt nevalide."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1839
+#: lib/sync/ephy-sync-service.c:1849
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Sincronizarea secretelor lui %s"
 
-#: lib/sync/ephy-sync-service.c:1864
+#: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload client record."
 msgstr "Eșec la încărcarea registrului de client."
 
-#: lib/sync/ephy-sync-service.c:2063
+#: lib/sync/ephy-sync-service.c:2073
 msgid "Failed to upload crypto/keys record."
 msgstr "Eșec la încărcarea registrului cripto/de chei."
 
-#: lib/sync/ephy-sync-service.c:2170
+#: lib/sync/ephy-sync-service.c:2180
 msgid "Failed to retrieve crypto keys."
 msgstr "Eșec la obținerea cheilor cripto."
 
-#: lib/sync/ephy-sync-service.c:2221
+#: lib/sync/ephy-sync-service.c:2231
 msgid "Failed to upload meta/global record."
 msgstr "Eșec la încărcarea registrului meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2338
+#: lib/sync/ephy-sync-service.c:2348
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -2082,15 +2098,15 @@ msgstr ""
 "Contul de Firefox folosește versiunea de stocare %d. Web suportă numai "
 "versiunea %d."
 
-#: lib/sync/ephy-sync-service.c:2349
+#: lib/sync/ephy-sync-service.c:2359
 msgid "Failed to verify storage version."
 msgstr "Eșec la verificarea versiunii de stocare."
 
-#: lib/sync/ephy-sync-service.c:2405
+#: lib/sync/ephy-sync-service.c:2415
 msgid "Failed to upload device info"
 msgstr "Eșec la încărcarea informațiilor despre dispozitiv"
 
-#: lib/sync/ephy-sync-service.c:2478 lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
 msgid "Failed to retrieve the Sync Key"
 msgstr "Eșec la obținerea cheii de sincronizare"
 
@@ -3205,7 +3221,6 @@ msgid "C_opy Username"
 msgstr "C_opiză numele de utilizator"
 
 #: src/resources/gtk/prefs-appearance-page.ui:6
-#: src/resources/gtk/prefs-dialog.ui:77
 msgid "Appearance"
 msgstr "Aparență"
 
@@ -3257,23 +3272,9 @@ msgstr "Utilizează JavaScript personalizat"
 msgid "Default zoom level"
 msgstr "Nivelul implicit de focalizare"
 
-#: src/resources/gtk/prefs-dialog.ui:26
-msgid "Preferences"
-msgstr "Preferințe"
-
-#: src/resources/gtk/prefs-dialog.ui:42
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
 msgstr "Generale"
-
-#: src/resources/gtk/prefs-dialog.ui:60
-#: src/resources/gtk/prefs-privacy-page.ui:6
-msgid "Privacy"
-msgstr "Securitate"
-
-#: src/resources/gtk/prefs-dialog.ui:91 src/resources/gtk/prefs-sync-page.ui:6
-msgid "Sync"
-msgstr "_Sincronizează"
 
 #: src/resources/gtk/prefs-general-page.ui:13
 msgid "Web Application"
@@ -3375,6 +3376,10 @@ msgstr "Adaugă o _limbă"
 msgid "Choose a language:"
 msgstr "Alegeți o limbă:"
 
+#: src/resources/gtk/prefs-privacy-page.ui:6
+msgid "Privacy"
+msgstr "Securitate"
+
 #: src/resources/gtk/prefs-privacy-page.ui:13
 msgid "Web Safety"
 msgstr "Siguranță web"
@@ -3416,6 +3421,10 @@ msgstr "_Parole"
 #: src/resources/gtk/prefs-privacy-page.ui:110
 msgid "_Remember Passwords"
 msgstr "_Reține parolele"
+
+#: src/resources/gtk/prefs-sync-page.ui:6
+msgid "Sync"
+msgstr "_Sincronizează"
 
 #: src/resources/gtk/prefs-sync-page.ui:13
 msgid ""
@@ -4025,6 +4034,9 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "Activ_ează"
+
+#~ msgid "Preferences"
+#~ msgstr "Preferințe"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Acceptarea de cookie-uri"
