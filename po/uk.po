@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-29 01:54+0000\n"
-"PO-Revision-Date: 2020-07-29 09:05+0300\n"
+"POT-Creation-Date: 2020-08-01 14:09+0000\n"
+"PO-Revision-Date: 2020-08-01 18:38+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -364,7 +364,7 @@ msgstr ""
 "Типове кодування. Допустимі значення — ті, які може розібрати WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:354
+#: src/resources/gtk/prefs-general-page.ui:351
 msgid "Languages"
 msgstr "Мови"
 
@@ -649,7 +649,6 @@ msgid "URL to a custom Firefox Sync token server."
 msgstr "Адреса нетипового сервера синхронізації ключів Firefox."
 
 #: data/org.gnome.epiphany.gschema.xml:322
-#| msgid "Firefox Account"
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Адреса сервера синхронізації облікових записів Firefox"
 
@@ -1028,41 +1027,42 @@ msgstr "Завершено завантаження %s"
 msgid "Download finished"
 msgstr "Завантаження завершено"
 
-#: embed/ephy-download.c:819
+#: embed/ephy-download.c:818
 msgid "Download requested"
 msgstr "Запит на завантаження"
 
-#: embed/ephy-download.c:820 lib/widgets/ephy-file-chooser.c:164
+#: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/data-dialog.ui:100
 #: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
 #: src/window-commands.c:807 src/window-commands.c:1874
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: embed/ephy-download.c:820
+#: embed/ephy-download.c:819
 msgid "_Download"
 msgstr "_Завантажити"
 
-#: embed/ephy-download.c:833
+#: embed/ephy-download.c:832
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Тип: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:839
+#: embed/ephy-download.c:838
 #, c-format
 msgid "From: %s"
 msgstr "З: %s"
 
 #. Question
-#: embed/ephy-download.c:844
+#: embed/ephy-download.c:843
 msgid "Where do you want to save the file?"
 msgstr "Де бажаєте зберегти цей файл?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:849
+#: embed/ephy-download.c:848
 msgid "Save file"
 msgstr "Зберегти файл"
 
@@ -1461,7 +1461,7 @@ msgid "_Never Save"
 msgstr "_Ніколи не зберігати"
 
 #: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:165 src/window-commands.c:645
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -1838,7 +1838,7 @@ msgstr "Не вказано"
 msgid "Technical information"
 msgstr "Технічна інформація"
 
-#: embed/ephy-web-view.c:3383
+#: embed/ephy-web-view.c:3382
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -1847,7 +1847,7 @@ msgid "Unspecified"
 msgstr "Не визначено"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:213
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
 msgid "Downloads"
 msgstr "Завантажене"
 
@@ -2116,7 +2116,7 @@ msgstr ""
 "небезпечно."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Очистити все"
 
@@ -2191,7 +2191,7 @@ msgstr "Скасування…"
 msgid "Starting…"
 msgstr "Запускається…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:57
+#: lib/widgets/ephy-file-chooser.c:173
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -2215,7 +2215,7 @@ msgstr "Всі файли"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:365
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:428
 msgid "Cl_ear"
 msgstr "О_чистити"
 
@@ -2378,19 +2378,25 @@ msgstr "Мобільні"
 msgid "Reload the current page"
 msgstr "Перезавантажити поточну сторінку"
 
-#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
-#: src/ephy-history-dialog.c:270
+#: src/ephy-history-dialog.c:312
 msgid "Remove the selected pages from history"
 msgstr "Вилучити вибрані сторінки з історії"
 
-#: src/ephy-history-dialog.c:355
+#: src/ephy-history-dialog.c:319
+#| msgctxt "shortcut window"
+#| msgid "Copy"
+msgid "Copy URL"
+msgstr "Копіювати адресу"
+
+#: src/ephy-history-dialog.c:418
 msgid "Clear browsing history?"
 msgstr "Очистити історію перегляду?"
 
-#: src/ephy-history-dialog.c:359
+#: src/ephy-history-dialog.c:422
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2398,7 +2404,7 @@ msgstr ""
 "Очищення історії перегляду призведе до остаточного вилучення усіх посилань з "
 "історії."
 
-#: src/ephy-history-dialog.c:761
+#: src/ephy-history-dialog.c:833
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Неможливо редагувати історію в конфіденційному режимі."
 
@@ -2731,7 +2737,7 @@ msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені паролі. Наслідки "
 "дії неможливо скасувати."
 
-#: src/preferences/passwords-view.c:203 src/resources/gtk/history-dialog.ui:75
+#: src/preferences/passwords-view.c:203 src/resources/gtk/data-dialog.ui:366
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2915,7 +2921,7 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Закладіть кілька сайтів, щоб бачити їх тут."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:68
+#: src/resources/gtk/prefs-privacy-page.ui:65
 msgid "Personal Data"
 msgstr "Особисті дані"
 
@@ -2950,15 +2956,22 @@ msgid ""
 msgstr ""
 "Цю дію неможливо скасувати. Вибрані для очищення дані буде знищено назавжди."
 
-#: src/resources/gtk/data-dialog.ui:65 src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-dialog.ui:46
+#| msgctxt "shortcut window"
+#| msgid "Select all"
+msgid "Select Items"
+msgstr "Позначити пункти"
+
+#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
+#: src/resources/gtk/data-view.ui:50
 msgid "Search"
 msgstr "Пошук"
 
-#: src/resources/gtk/data-dialog.ui:230 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
 msgid "No Results Found"
 msgstr "Нічого не знайдено"
 
-#: src/resources/gtk/data-dialog.ui:245 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
 msgid "Try a different search"
 msgstr "Спробуйте пошукати інакше"
 
@@ -3001,10 +3014,6 @@ msgstr "Історія порожня"
 #: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "Тут будуть перелічені відвідані сторінки"
-
-#: src/resources/gtk/history-dialog.ui:66
-msgid "_Copy Location"
-msgstr "_Копіювати адресу"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -3145,7 +3154,7 @@ msgid "Close page"
 msgstr "Закрити сторінку"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:90
+#: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Passwords"
 msgstr "Паролі"
 
@@ -3174,165 +3183,150 @@ msgid "C_opy Username"
 msgstr "К_опіювати користувача"
 
 #: src/resources/gtk/prefs-appearance-page.ui:6
-#: src/resources/gtk/prefs-dialog.ui:77
 msgid "Appearance"
 msgstr "Вигляд"
 
-#: src/resources/gtk/prefs-appearance-page.ui:13
+#: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
 msgstr "Шрифти"
 
-#: src/resources/gtk/prefs-appearance-page.ui:18
+#: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
 msgstr "Використовувати нетипові шрифти"
 
-#: src/resources/gtk/prefs-appearance-page.ui:23
+#: src/resources/gtk/prefs-appearance-page.ui:20
 msgid "Sans serif font"
 msgstr "Шрифт без зарубок"
 
-#: src/resources/gtk/prefs-appearance-page.ui:38
+#: src/resources/gtk/prefs-appearance-page.ui:35
 msgid "Serif font"
 msgstr "Шрифт із зарубками"
 
-#: src/resources/gtk/prefs-appearance-page.ui:53
+#: src/resources/gtk/prefs-appearance-page.ui:50
 msgid "Monospace font"
 msgstr "Моноширинний шрифт"
 
-#: src/resources/gtk/prefs-appearance-page.ui:71
+#: src/resources/gtk/prefs-appearance-page.ui:68
 msgid "Reader Mode"
 msgstr "Режим читача"
 
-#: src/resources/gtk/prefs-appearance-page.ui:75
+#: src/resources/gtk/prefs-appearance-page.ui:72
 msgid "Font Style"
 msgstr "Стиль шрифту"
 
-#: src/resources/gtk/prefs-appearance-page.ui:81
+#: src/resources/gtk/prefs-appearance-page.ui:78
 msgid "Color Scheme"
 msgstr "Схема кольорів"
 
-#: src/resources/gtk/prefs-appearance-page.ui:94
+#: src/resources/gtk/prefs-appearance-page.ui:91
 msgid "Style"
 msgstr "Стиль"
 
-#: src/resources/gtk/prefs-appearance-page.ui:99
+#: src/resources/gtk/prefs-appearance-page.ui:96
 msgid "Use Custom Stylesheet"
 msgstr "Використовувати нетипову таблицю стилів"
 
-#: src/resources/gtk/prefs-appearance-page.ui:134
+#: src/resources/gtk/prefs-appearance-page.ui:131
 msgid "Use Custom JavaScript"
 msgstr "Використовувати нетиповий JavaScript"
 
-#: src/resources/gtk/prefs-appearance-page.ui:169
+#: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default zoom level"
 msgstr "Типовий масштаб"
 
-#: src/resources/gtk/prefs-dialog.ui:26
-msgid "Preferences"
-msgstr "Параметри"
-
-#: src/resources/gtk/prefs-dialog.ui:42
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
 msgstr "Загальне"
 
-#: src/resources/gtk/prefs-dialog.ui:60
-#: src/resources/gtk/prefs-privacy-page.ui:6
-msgid "Privacy"
-msgstr "Конфіденційність"
-
-#: src/resources/gtk/prefs-dialog.ui:91 src/resources/gtk/prefs-sync-page.ui:6
-msgid "Sync"
-msgstr "Синхронізація"
-
-#: src/resources/gtk/prefs-general-page.ui:13
+#: src/resources/gtk/prefs-general-page.ui:10
 msgid "Web Application"
 msgstr "Веб-програма"
 
-#: src/resources/gtk/prefs-general-page.ui:49
+#: src/resources/gtk/prefs-general-page.ui:46
 msgid "Homepage:"
 msgstr "Домівка:"
 
-#: src/resources/gtk/prefs-general-page.ui:71
+#: src/resources/gtk/prefs-general-page.ui:68
 msgid "Title:"
 msgstr "Назва:"
 
-#: src/resources/gtk/prefs-general-page.ui:96
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "_Керувати додатковими URL-адресами"
 
-#: src/resources/gtk/prefs-general-page.ui:121
+#: src/resources/gtk/prefs-general-page.ui:118
 msgid "Web Content"
 msgstr "Вміст сайтів"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:123
 msgid "Block _Advertisements"
 msgstr "Блокувати _рекламу"
 
-#: src/resources/gtk/prefs-general-page.ui:140
+#: src/resources/gtk/prefs-general-page.ui:137
 msgid "Block _Popup Windows"
 msgstr "Блокувати _контекстні вікна"
 
-#: src/resources/gtk/prefs-general-page.ui:155
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "Homepage"
 msgstr "Домівка"
 
-#: src/resources/gtk/prefs-general-page.ui:160
+#: src/resources/gtk/prefs-general-page.ui:157
 msgid "Most _visited pages"
 msgstr "Найбільш _відвідувані"
 
-#: src/resources/gtk/prefs-general-page.ui:174
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "_Blank page"
 msgstr "_Порожня сторінка"
 
-#: src/resources/gtk/prefs-general-page.ui:189
+#: src/resources/gtk/prefs-general-page.ui:186
 msgid "_Custom"
 msgstr "_Інше"
 
-#: src/resources/gtk/prefs-general-page.ui:218
+#: src/resources/gtk/prefs-general-page.ui:215
 msgid "Ask o_n download"
 msgstr "Питати п_ри отриманні"
 
-#: src/resources/gtk/prefs-general-page.ui:233
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "_Download folder"
 msgstr "_Тека завантаження"
 
-#: src/resources/gtk/prefs-general-page.ui:242
+#: src/resources/gtk/prefs-general-page.ui:239
 msgid "Search Engines"
 msgstr "Пошукові рушії"
 
-#: src/resources/gtk/prefs-general-page.ui:247
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "Manage Search _Engines"
 msgstr "Керування по_шуковими рушіями"
 
-#: src/resources/gtk/prefs-general-page.ui:272
+#: src/resources/gtk/prefs-general-page.ui:269
 msgid "Session"
 msgstr "Сеанс"
 
-#: src/resources/gtk/prefs-general-page.ui:277
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "Start in _Incognito Mode"
 msgstr "Запускати у _конфіденційному режимі"
 
-#: src/resources/gtk/prefs-general-page.ui:291
+#: src/resources/gtk/prefs-general-page.ui:288
 msgid "_Restore Tabs on Startup"
 msgstr "Від_новлювати вкладки при запуску"
 
-#: src/resources/gtk/prefs-general-page.ui:306
+#: src/resources/gtk/prefs-general-page.ui:303
 msgid "Browsing"
 msgstr "Перегляд"
 
-#: src/resources/gtk/prefs-general-page.ui:311
+#: src/resources/gtk/prefs-general-page.ui:308
 msgid "Sm_ooth Scrolling"
 msgstr "П_лавне гортання"
 
-#: src/resources/gtk/prefs-general-page.ui:325
+#: src/resources/gtk/prefs-general-page.ui:322
 msgid "Mouse _Gestures"
 msgstr "_Жести мишею"
 
-#: src/resources/gtk/prefs-general-page.ui:339
+#: src/resources/gtk/prefs-general-page.ui:336
 msgid "S_witch Immediately to New Tabs"
 msgstr "Негайно п_еремикатися на нові вкладки"
 
-#: src/resources/gtk/prefs-general-page.ui:374
+#: src/resources/gtk/prefs-general-page.ui:371
 msgid "_Spell Checking"
 msgstr "П_еревірка правопису"
 
@@ -3344,47 +3338,55 @@ msgstr "Додати _мову"
 msgid "Choose a language:"
 msgstr "Виберіть мову:"
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.ui:6
+msgid "Privacy"
+msgstr "Конфіденційність"
+
+#: src/resources/gtk/prefs-privacy-page.ui:10
 msgid "Web Safety"
 msgstr "Безпека у мережі"
 
-#: src/resources/gtk/prefs-privacy-page.ui:18
+#: src/resources/gtk/prefs-privacy-page.ui:15
 msgid "Block Dangerous Web_sites"
 msgstr "Блокувати небезпечні веб_сайти"
 
-#: src/resources/gtk/prefs-privacy-page.ui:33
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "Web Tracking"
 msgstr "Вебстеження"
 
-#: src/resources/gtk/prefs-privacy-page.ui:38
+#: src/resources/gtk/prefs-privacy-page.ui:35
 msgid "Intelligent _Tracking Prevention"
 msgstr "Intelligent _Tracking Prevention"
 
-#: src/resources/gtk/prefs-privacy-page.ui:52
+#: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr "Дозволити сайтам зберігати куки, бази даних і дані локального сховища."
 
-#: src/resources/gtk/prefs-privacy-page.ui:53
+#: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
 msgstr "Сховище даних _вебсайта"
 
-#: src/resources/gtk/prefs-privacy-page.ui:73
+#: src/resources/gtk/prefs-privacy-page.ui:70
 msgid "You can clear stored personal data."
 msgstr "Можете очистити збережені особисті дані."
 
-#: src/resources/gtk/prefs-privacy-page.ui:74
+#: src/resources/gtk/prefs-privacy-page.ui:71
 msgid "Clear Personal _Data"
 msgstr "Вилучити _особисті дані"
 
-#: src/resources/gtk/prefs-privacy-page.ui:95
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "_Passwords"
 msgstr "П_аролі"
 
-#: src/resources/gtk/prefs-privacy-page.ui:110
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "_Remember Passwords"
 msgstr "_Зберігати паролі"
 
-#: src/resources/gtk/prefs-sync-page.ui:13
+#: src/resources/gtk/prefs-sync-page.ui:6
+msgid "Sync"
+msgstr "Синхронізація"
+
+#: src/resources/gtk/prefs-sync-page.ui:10
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3394,59 +3396,59 @@ msgstr ""
 "та Firefox на інших пристроях. Тенет не є Firefox і не розробляється чи "
 "підтримується Mozilla."
 
-#: src/resources/gtk/prefs-sync-page.ui:14
+#: src/resources/gtk/prefs-sync-page.ui:11
 msgid "Firefox Sync"
 msgstr "Синхронізація Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:33
+#: src/resources/gtk/prefs-sync-page.ui:30
 msgid "Firefox Account"
 msgstr "Обліковий запис Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:37
+#: src/resources/gtk/prefs-sync-page.ui:34
 msgid "Logged in"
 msgstr "Вхід виконано"
 
-#: src/resources/gtk/prefs-sync-page.ui:42
+#: src/resources/gtk/prefs-sync-page.ui:39
 msgid "Sign _out"
 msgstr "Ви_йти"
 
-#: src/resources/gtk/prefs-sync-page.ui:55
+#: src/resources/gtk/prefs-sync-page.ui:52
 msgid "Sync Options"
 msgstr "Налаштування синхронізації"
 
-#: src/resources/gtk/prefs-sync-page.ui:60
+#: src/resources/gtk/prefs-sync-page.ui:57
 msgid "Sync _Bookmarks"
 msgstr "Синхронізувати _Закладки"
 
-#: src/resources/gtk/prefs-sync-page.ui:75
+#: src/resources/gtk/prefs-sync-page.ui:72
 msgid "Sync _Passwords"
 msgstr "Синхронізувати _Паролі"
 
-#: src/resources/gtk/prefs-sync-page.ui:90
+#: src/resources/gtk/prefs-sync-page.ui:87
 msgid "Sync _History"
 msgstr "Синхронізувати _Історію"
 
-#: src/resources/gtk/prefs-sync-page.ui:105
+#: src/resources/gtk/prefs-sync-page.ui:102
 msgid "Sync Open _Tabs"
 msgstr "Синхронізувати Відкриті _вкладки"
 
-#: src/resources/gtk/prefs-sync-page.ui:117
+#: src/resources/gtk/prefs-sync-page.ui:114
 msgid "S_ynced tabs"
 msgstr "Син_хронізовані вкладки"
 
-#: src/resources/gtk/prefs-sync-page.ui:128
+#: src/resources/gtk/prefs-sync-page.ui:125
 msgid "Frequency"
 msgstr "Періодичність"
 
-#: src/resources/gtk/prefs-sync-page.ui:132
+#: src/resources/gtk/prefs-sync-page.ui:129
 msgid "Sync _now"
 msgstr "Синхронізувати _зараз"
 
-#: src/resources/gtk/prefs-sync-page.ui:151
+#: src/resources/gtk/prefs-sync-page.ui:148
 msgid "Device name"
 msgstr "Назва пристрою"
 
-#: src/resources/gtk/prefs-sync-page.ui:174
+#: src/resources/gtk/prefs-sync-page.ui:171
 msgid "_Change"
 msgstr "_Змінити"
 
@@ -3991,6 +3993,12 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Увімкнути"
+
+#~ msgid "_Copy Location"
+#~ msgstr "_Копіювати адресу"
+
+#~ msgid "Preferences"
+#~ msgstr "Параметри"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Приймати куки"
