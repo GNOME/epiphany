@@ -220,6 +220,9 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
   orig_width = cairo_image_surface_get_width (surface);
   orig_height = cairo_image_surface_get_height (surface);
 
+  if (!orig_width || !orig_height)
+    return NULL;
+
   if (orig_width < EPHY_THUMBNAIL_WIDTH ||
       orig_height < EPHY_THUMBNAIL_HEIGHT) {
     snapshot = gdk_pixbuf_get_from_surface (surface,
@@ -396,6 +399,14 @@ save_snapshot (cairo_surface_t *surface,
   SnapshotAsyncData *data = g_task_get_task_data (task);
 
   data->snapshot = ephy_snapshot_service_prepare_snapshot (surface);
+  if (!data->snapshot) {
+    g_task_return_new_error (task,
+                             EPHY_SNAPSHOT_SERVICE_ERROR,
+                             EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
+                             "WebView returned invalid snapshot for \"%s\"", data->url);
+    g_object_unref (task);
+    return;
+  }
 
   ephy_snapshot_service_save_snapshot_async (g_task_get_source_object (task),
                                              data->snapshot,
