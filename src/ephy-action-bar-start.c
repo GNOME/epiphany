@@ -110,9 +110,16 @@ icon_loaded_cb (GObject      *source,
   }
 
   if (favicon) {
-    gtk_image_set_from_pixbuf (GTK_IMAGE (image), favicon);
+    cairo_surface_t *surface;
+
+    surface = gdk_cairo_surface_create_from_pixbuf (favicon,
+                                                    0,
+                                                    gtk_widget_get_window (GTK_WIDGET (image)));
+    gtk_image_set_from_surface (GTK_IMAGE (image), surface);
+
     gtk_widget_show (image);
 
+    cairo_surface_destroy (surface);
     g_object_unref (favicon);
   }
 
