@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-29 15:51+0000\n"
-"PO-Revision-Date: 2020-07-31 16:47+0300\n"
+"POT-Creation-Date: 2020-08-01 14:09+0000\n"
+"PO-Revision-Date: 2020-08-04 14:10+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -366,7 +366,7 @@ msgstr ""
 "înțelege."
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:354
+#: src/resources/gtk/prefs-general-page.ui:351
 msgid "Languages"
 msgstr "Limbi"
 
@@ -1076,8 +1076,9 @@ msgid "Download requested"
 msgstr "Descărcare cerută"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/data-dialog.ui:100
 #: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
 #: src/window-commands.c:807 src/window-commands.c:1874
@@ -1504,7 +1505,7 @@ msgid "_Never Save"
 msgstr "_Nu salva niciodată"
 
 #: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:165 src/window-commands.c:645
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Salvează"
 
@@ -1890,7 +1891,7 @@ msgid "Unspecified"
 msgstr "Nespecificat"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:213
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
 msgid "Downloads"
 msgstr "Descărcări"
 
@@ -2160,7 +2161,7 @@ msgstr ""
 "fost trimise în mod nesigur."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Curăță tot"
 
@@ -2235,7 +2236,7 @@ msgstr "Se anulează…"
 msgid "Starting…"
 msgstr "Se pornește…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:57
+#: lib/widgets/ephy-file-chooser.c:173
 msgid "_Open"
 msgstr "_Deschide"
 
@@ -2259,7 +2260,7 @@ msgstr "Toate fișierele"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:365
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:428
 msgid "Cl_ear"
 msgstr "Cu_răță"
 
@@ -2426,25 +2427,29 @@ msgstr "Mobil"
 msgid "Reload the current page"
 msgstr "Reîncarcă pagina curentă"
 
-#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "Oprește încărcarea paginii curente"
 
-#: src/ephy-history-dialog.c:270
+#: src/ephy-history-dialog.c:312
 msgid "Remove the selected pages from history"
 msgstr "Elimină paginile selectate din istoric"
 
-#: src/ephy-history-dialog.c:355
+#: src/ephy-history-dialog.c:319
+msgid "Copy URL"
+msgstr "Copiază URL-ul"
+
+#: src/ephy-history-dialog.c:418
 msgid "Clear browsing history?"
 msgstr "Ștergeți istoricul de navigare?"
 
-#: src/ephy-history-dialog.c:359
+#: src/ephy-history-dialog.c:422
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "Ștergerea istoricului va duce la pierderea tuturor adreselor reținute."
 
-#: src/ephy-history-dialog.c:761
+#: src/ephy-history-dialog.c:833
 msgid "It is not possible to modify history when in incognito mode."
 msgstr ""
 "Nu este posibil să modificați istoricul când sunteți în modul incognito."
@@ -2777,7 +2782,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Aceasta va curăța toate parolele stocate local, și nu poate fi refăcută."
 
-#: src/preferences/passwords-view.c:203 src/resources/gtk/history-dialog.ui:75
+#: src/preferences/passwords-view.c:203 src/resources/gtk/data-dialog.ui:366
 msgid "_Delete"
 msgstr "Șt_erge"
 
@@ -2961,7 +2966,7 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Marcați câteva pagini web pentru a le vedea aici."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:68
+#: src/resources/gtk/prefs-privacy-page.ui:65
 msgid "Personal Data"
 msgstr "Date personale"
 
@@ -2997,15 +3002,20 @@ msgstr ""
 "Nu veți putea recupera modificările acestei acțiuni. Datele pe care alegeți "
 "să le curățați, vor fi șterse pentru totdeauna."
 
-#: src/resources/gtk/data-dialog.ui:65 src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-dialog.ui:46
+msgid "Select Items"
+msgstr "Selectează elementele"
+
+#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
+#: src/resources/gtk/data-view.ui:50
 msgid "Search"
 msgstr "Caută"
 
-#: src/resources/gtk/data-dialog.ui:230 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
 msgid "No Results Found"
 msgstr "Nu s-au găsit rezultate"
 
-#: src/resources/gtk/data-dialog.ui:245 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
 msgid "Try a different search"
 msgstr "Încercați o căutare diferită"
 
@@ -3048,10 +3058,6 @@ msgstr "Istoricul este gol"
 #: src/resources/gtk/history-dialog.ui:12
 msgid "Visited pages will be listed here"
 msgstr "Paginile vizitate vor fi listate aici"
-
-#: src/resources/gtk/history-dialog.ui:66
-msgid "_Copy Location"
-msgstr "_Copiază locația"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -3192,7 +3198,7 @@ msgid "Close page"
 msgstr "Închide pagina"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:90
+#: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Passwords"
 msgstr "Parole"
 
@@ -3224,51 +3230,51 @@ msgstr "C_opiză numele de utilizator"
 msgid "Appearance"
 msgstr "Aparență"
 
-#: src/resources/gtk/prefs-appearance-page.ui:13
+#: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
 msgstr "Fonturi"
 
-#: src/resources/gtk/prefs-appearance-page.ui:18
+#: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
 msgstr "Utilizează fonturi personalizate"
 
-#: src/resources/gtk/prefs-appearance-page.ui:23
+#: src/resources/gtk/prefs-appearance-page.ui:20
 msgid "Sans serif font"
 msgstr "Font sans serif"
 
-#: src/resources/gtk/prefs-appearance-page.ui:38
+#: src/resources/gtk/prefs-appearance-page.ui:35
 msgid "Serif font"
 msgstr "Font serif"
 
-#: src/resources/gtk/prefs-appearance-page.ui:53
+#: src/resources/gtk/prefs-appearance-page.ui:50
 msgid "Monospace font"
 msgstr "Font monospațiat"
 
-#: src/resources/gtk/prefs-appearance-page.ui:71
+#: src/resources/gtk/prefs-appearance-page.ui:68
 msgid "Reader Mode"
 msgstr "Mod de citire"
 
-#: src/resources/gtk/prefs-appearance-page.ui:75
+#: src/resources/gtk/prefs-appearance-page.ui:72
 msgid "Font Style"
 msgstr "Stil font"
 
-#: src/resources/gtk/prefs-appearance-page.ui:81
+#: src/resources/gtk/prefs-appearance-page.ui:78
 msgid "Color Scheme"
 msgstr "Schemă de culori"
 
-#: src/resources/gtk/prefs-appearance-page.ui:94
+#: src/resources/gtk/prefs-appearance-page.ui:91
 msgid "Style"
 msgstr "Stil"
 
-#: src/resources/gtk/prefs-appearance-page.ui:99
+#: src/resources/gtk/prefs-appearance-page.ui:96
 msgid "Use Custom Stylesheet"
 msgstr "Utilizează foaie de stil personalizată"
 
-#: src/resources/gtk/prefs-appearance-page.ui:134
+#: src/resources/gtk/prefs-appearance-page.ui:131
 msgid "Use Custom JavaScript"
 msgstr "Utilizează JavaScript personalizat"
 
-#: src/resources/gtk/prefs-appearance-page.ui:169
+#: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default zoom level"
 msgstr "Nivelul implicit de focalizare"
 
@@ -3276,95 +3282,95 @@ msgstr "Nivelul implicit de focalizare"
 msgid "General"
 msgstr "Generale"
 
-#: src/resources/gtk/prefs-general-page.ui:13
+#: src/resources/gtk/prefs-general-page.ui:10
 msgid "Web Application"
 msgstr "Aplicație web"
 
-#: src/resources/gtk/prefs-general-page.ui:49
+#: src/resources/gtk/prefs-general-page.ui:46
 msgid "Homepage:"
 msgstr "Pagină principală:"
 
-#: src/resources/gtk/prefs-general-page.ui:71
+#: src/resources/gtk/prefs-general-page.ui:68
 msgid "Title:"
 msgstr "Titlu:"
 
-#: src/resources/gtk/prefs-general-page.ui:96
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "Ad_ministrează URL-uri adiționale"
 
-#: src/resources/gtk/prefs-general-page.ui:121
+#: src/resources/gtk/prefs-general-page.ui:118
 msgid "Web Content"
 msgstr "Conținut web"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:123
 msgid "Block _Advertisements"
 msgstr "Blochează _reclamele"
 
-#: src/resources/gtk/prefs-general-page.ui:140
+#: src/resources/gtk/prefs-general-page.ui:137
 msgid "Block _Popup Windows"
 msgstr "Blochează ferestrele _contextuale"
 
-#: src/resources/gtk/prefs-general-page.ui:155
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "Homepage"
 msgstr "Pagină principală"
 
-#: src/resources/gtk/prefs-general-page.ui:160
+#: src/resources/gtk/prefs-general-page.ui:157
 msgid "Most _visited pages"
 msgstr "Cele mai _vizitate pagini"
 
-#: src/resources/gtk/prefs-general-page.ui:174
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "_Blank page"
 msgstr "Pagină _goală"
 
-#: src/resources/gtk/prefs-general-page.ui:189
+#: src/resources/gtk/prefs-general-page.ui:186
 msgid "_Custom"
 msgstr "_Personalizat"
 
-#: src/resources/gtk/prefs-general-page.ui:218
+#: src/resources/gtk/prefs-general-page.ui:215
 msgid "Ask o_n download"
 msgstr "Întreabă la descărcare"
 
-#: src/resources/gtk/prefs-general-page.ui:233
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "_Download folder"
 msgstr "_Dosar descărcări"
 
-#: src/resources/gtk/prefs-general-page.ui:242
+#: src/resources/gtk/prefs-general-page.ui:239
 msgid "Search Engines"
 msgstr "Motoare de căutare"
 
-#: src/resources/gtk/prefs-general-page.ui:247
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "Manage Search _Engines"
 msgstr "Gestionează motoar_ele de căutare"
 
-#: src/resources/gtk/prefs-general-page.ui:272
+#: src/resources/gtk/prefs-general-page.ui:269
 msgid "Session"
 msgstr "Sesiune"
 
-#: src/resources/gtk/prefs-general-page.ui:277
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "Start in _Incognito Mode"
 msgstr "Pornește în modul incognito"
 
-#: src/resources/gtk/prefs-general-page.ui:291
+#: src/resources/gtk/prefs-general-page.ui:288
 msgid "_Restore Tabs on Startup"
 msgstr "_Restaurează taburile la pornire"
 
-#: src/resources/gtk/prefs-general-page.ui:306
+#: src/resources/gtk/prefs-general-page.ui:303
 msgid "Browsing"
 msgstr "Navigare"
 
-#: src/resources/gtk/prefs-general-page.ui:311
+#: src/resources/gtk/prefs-general-page.ui:308
 msgid "Sm_ooth Scrolling"
 msgstr "_Derularea lină"
 
-#: src/resources/gtk/prefs-general-page.ui:325
+#: src/resources/gtk/prefs-general-page.ui:322
 msgid "Mouse _Gestures"
 msgstr "_Gesturi maus"
 
-#: src/resources/gtk/prefs-general-page.ui:339
+#: src/resources/gtk/prefs-general-page.ui:336
 msgid "S_witch Immediately to New Tabs"
 msgstr "_Comută imediat la file noi"
 
-#: src/resources/gtk/prefs-general-page.ui:374
+#: src/resources/gtk/prefs-general-page.ui:371
 msgid "_Spell Checking"
 msgstr "_Verificare ortografică"
 
@@ -3380,45 +3386,45 @@ msgstr "Alegeți o limbă:"
 msgid "Privacy"
 msgstr "Securitate"
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.ui:10
 msgid "Web Safety"
 msgstr "Siguranță web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:18
+#: src/resources/gtk/prefs-privacy-page.ui:15
 msgid "Block Dangerous Web_sites"
 msgstr "Blochează _paginile web perioculoase"
 
-#: src/resources/gtk/prefs-privacy-page.ui:33
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "Web Tracking"
 msgstr "Urmărire web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:38
+#: src/resources/gtk/prefs-privacy-page.ui:35
 msgid "Intelligent _Tracking Prevention"
 msgstr "Prevenție de _Urmărire Inteligentă"
 
-#: src/resources/gtk/prefs-privacy-page.ui:52
+#: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr ""
 "Permite paginilor web să stocheze cookie-uri, baze de date, și date de "
 "stocare locale."
 
-#: src/resources/gtk/prefs-privacy-page.ui:53
+#: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
 msgstr "Stocare de date de pagină _web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:73
+#: src/resources/gtk/prefs-privacy-page.ui:70
 msgid "You can clear stored personal data."
 msgstr "Puteți curăța datele personale stocate."
 
-#: src/resources/gtk/prefs-privacy-page.ui:74
+#: src/resources/gtk/prefs-privacy-page.ui:71
 msgid "Clear Personal _Data"
 msgstr "Curăță _datele personale"
 
-#: src/resources/gtk/prefs-privacy-page.ui:95
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "_Passwords"
 msgstr "_Parole"
 
-#: src/resources/gtk/prefs-privacy-page.ui:110
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "_Remember Passwords"
 msgstr "_Reține parolele"
 
@@ -3426,7 +3432,7 @@ msgstr "_Reține parolele"
 msgid "Sync"
 msgstr "_Sincronizează"
 
-#: src/resources/gtk/prefs-sync-page.ui:13
+#: src/resources/gtk/prefs-sync-page.ui:10
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3436,59 +3442,59 @@ msgstr ""
 "Firefox pe alte calculatoare. Web nu este Firefox și nu este produs sau "
 "susținut de Mozilla."
 
-#: src/resources/gtk/prefs-sync-page.ui:14
+#: src/resources/gtk/prefs-sync-page.ui:11
 msgid "Firefox Sync"
 msgstr "Sincronizare Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:33
+#: src/resources/gtk/prefs-sync-page.ui:30
 msgid "Firefox Account"
 msgstr "Cont Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:37
+#: src/resources/gtk/prefs-sync-page.ui:34
 msgid "Logged in"
 msgstr "Autentificat"
 
-#: src/resources/gtk/prefs-sync-page.ui:42
+#: src/resources/gtk/prefs-sync-page.ui:39
 msgid "Sign _out"
 msgstr "De_autentificare"
 
-#: src/resources/gtk/prefs-sync-page.ui:55
+#: src/resources/gtk/prefs-sync-page.ui:52
 msgid "Sync Options"
 msgstr "Opțiuni sincronizare"
 
-#: src/resources/gtk/prefs-sync-page.ui:60
+#: src/resources/gtk/prefs-sync-page.ui:57
 msgid "Sync _Bookmarks"
 msgstr "Sincronizează _favoritele"
 
-#: src/resources/gtk/prefs-sync-page.ui:75
+#: src/resources/gtk/prefs-sync-page.ui:72
 msgid "Sync _Passwords"
 msgstr "Sincronizează _parolele"
 
-#: src/resources/gtk/prefs-sync-page.ui:90
+#: src/resources/gtk/prefs-sync-page.ui:87
 msgid "Sync _History"
 msgstr "Sincronizează istoricul"
 
-#: src/resources/gtk/prefs-sync-page.ui:105
+#: src/resources/gtk/prefs-sync-page.ui:102
 msgid "Sync Open _Tabs"
 msgstr "Deschide _filele deschise"
 
-#: src/resources/gtk/prefs-sync-page.ui:117
+#: src/resources/gtk/prefs-sync-page.ui:114
 msgid "S_ynced tabs"
 msgstr "Taburi sincroni_zate"
 
-#: src/resources/gtk/prefs-sync-page.ui:128
+#: src/resources/gtk/prefs-sync-page.ui:125
 msgid "Frequency"
 msgstr "Frecvență"
 
-#: src/resources/gtk/prefs-sync-page.ui:132
+#: src/resources/gtk/prefs-sync-page.ui:129
 msgid "Sync _now"
 msgstr "Si_ncronizează acum"
 
-#: src/resources/gtk/prefs-sync-page.ui:151
+#: src/resources/gtk/prefs-sync-page.ui:148
 msgid "Device name"
 msgstr "Nume dispozitiv"
 
-#: src/resources/gtk/prefs-sync-page.ui:174
+#: src/resources/gtk/prefs-sync-page.ui:171
 msgid "_Change"
 msgstr "S_chimbă"
 
@@ -4034,6 +4040,9 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "Activ_ează"
+
+#~ msgid "_Copy Location"
+#~ msgstr "_Copiază locația"
 
 #~ msgid "Preferences"
 #~ msgstr "Preferințe"
