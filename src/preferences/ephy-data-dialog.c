@@ -86,6 +86,7 @@ update (EphyDataDialog *self)
 {
   EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
   GtkStack *data_stack = GTK_STACK (priv->data_presentation_stack);
+  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
   GtkStack *action_bars_stack = GTK_STACK (priv->action_bars_stack);
   gboolean has_data = priv->has_data && priv->child && gtk_widget_get_visible (priv->child);
 
@@ -107,10 +108,13 @@ update (EphyDataDialog *self)
     gtk_spinner_stop (GTK_SPINNER (priv->spinner));
   }
 
-  if (priv->selection_active)
+  if (priv->selection_active) {
+    gtk_stack_set_visible_child (header_bars_stack, priv->selection_header_bar);
     gtk_stack_set_visible_child (action_bars_stack, priv->selection_action_bar);
-  else
+  } else {
+    gtk_stack_set_visible_child (header_bars_stack, priv->window_header_bar);
     gtk_stack_set_visible_child (action_bars_stack, priv->regular_action_bar);
+  }
 
   gtk_widget_set_sensitive (priv->clear_all_button, has_data && priv->can_clear);
   gtk_widget_set_sensitive (priv->search_button, has_data);
@@ -126,22 +130,14 @@ static void
 on_selection_button_clicked (GtkButton      *button,
                              EphyDataDialog *self)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
-  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
-
   ephy_data_dialog_set_selection_active (self, TRUE);
-  gtk_stack_set_visible_child (header_bars_stack, priv->selection_header_bar);
 }
 
 static void
 on_selection_cancel_button_clicked (GtkButton      *button,
                                     EphyDataDialog *self)
 {
-  EphyDataDialogPrivate *priv = ephy_data_dialog_get_instance_private (self);
-  GtkStack *header_bars_stack = GTK_STACK (priv->header_bars_stack);
-
   ephy_data_dialog_set_selection_active (self, FALSE);
-  gtk_stack_set_visible_child (header_bars_stack, priv->window_header_bar);
 }
 
 static void
@@ -149,6 +145,7 @@ on_selection_delete_button_clicked (GtkButton      *button,
                                     EphyDataDialog *self)
 {
   g_signal_emit (self, signals[SELECTION_DELETE_CLICKED], 0);
+  ephy_data_dialog_set_selection_active (self, FALSE);
 }
 
 static void
