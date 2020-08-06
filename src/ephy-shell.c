@@ -48,8 +48,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
-#define HANDY_USE_UNSTABLE_API
 #include <handy.h>
 
 struct _EphyShell {

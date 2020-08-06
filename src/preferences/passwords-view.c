@@ -20,14 +20,11 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
-
-#define HANDY_USE_UNSTABLE_API
 #include <handy.h>
-
-#include <dazzle.h>
+#include <string.h>
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>

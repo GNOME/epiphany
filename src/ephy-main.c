@@ -36,7 +36,6 @@
 #include <glib/gi18n.h>
 #include <glib-unix.h>
 #include <gtk/gtk.h>
-#define HANDY_USE_UNSTABLE_API
 #include <handy.h>
 #include <libxml/xmlreader.h>
 #include <libxml/xmlversion.h>
