@@ -1146,7 +1146,7 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
 
   requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (decision);
   current_domain = webkit_website_data_access_permission_request_get_current_domain (decision);
-  message = g_strdup_printf (_("Do you want to allow “%s“ to use cookies while browsing “%s“?"), requesting_domain, current_domain);
+  message = g_strdup_printf (_("Do you want to allow “%s” to use cookies while browsing “%s”?"), requesting_domain, current_domain);
   markup = g_strdup_printf ("<span size='xx-large' weight='bold'>%s</span>", message);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
@@ -1155,7 +1155,7 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_widget_show (label);
 
-  secondary_message = g_strdup_printf (_("This will allow “%s“ to track your activity."), requesting_domain);
+  secondary_message = g_strdup_printf (_("This will allow “%s” to track your activity."), requesting_domain);
   label = gtk_label_new (secondary_message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
