@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-01 14:09+0000\n"
-"PO-Revision-Date: 2020-08-01 18:38+0300\n"
+"POT-Creation-Date: 2020-08-07 20:34+0000\n"
+"PO-Revision-Date: 2020-08-08 17:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -56,8 +56,8 @@ msgid "The GNOME Project"
 msgstr "Проєкт GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:103 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:992
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
+#: src/ephy-main.c:406 src/window-commands.c:992
 msgid "Web"
 msgstr "Тенет"
 
@@ -1532,12 +1532,14 @@ msgstr "Сторінка на %s бажає використовувати ва�
 
 #: embed/ephy-web-view.c:1149
 #, c-format
-msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
+#| msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
+msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Чи дозволяєте ви «%s» використовувати куки під час перегляду «%s»?"
 
 #: embed/ephy-web-view.c:1158
 #, c-format
-msgid "This will allow “%s“ to track your activity."
+#| msgid "This will allow “%s“ to track your activity."
+msgid "This will allow “%s” to track your activity."
 msgstr "Це дозволить «%s» стежити за вашими діями."
 
 #. translators: %s here is the address of the web page
@@ -2215,7 +2217,7 @@ msgstr "Всі файли"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:428
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:427
 msgid "Cl_ear"
 msgstr "О_чистити"
 
@@ -2374,29 +2376,27 @@ msgid "Mobile"
 msgstr "Мобільні"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:52
+#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Перезавантажити поточну сторінку"
 
-#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:450
+#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
-#: src/ephy-history-dialog.c:312
+#: src/ephy-history-dialog.c:311
 msgid "Remove the selected pages from history"
 msgstr "Вилучити вибрані сторінки з історії"
 
-#: src/ephy-history-dialog.c:319
-#| msgctxt "shortcut window"
-#| msgid "Copy"
+#: src/ephy-history-dialog.c:318
 msgid "Copy URL"
 msgstr "Копіювати адресу"
 
-#: src/ephy-history-dialog.c:418
+#: src/ephy-history-dialog.c:417
 msgid "Clear browsing history?"
 msgstr "Очистити історію перегляду?"
 
-#: src/ephy-history-dialog.c:422
+#: src/ephy-history-dialog.c:421
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2404,52 +2404,52 @@ msgstr ""
 "Очищення історії перегляду призведе до остаточного вилучення усіх посилань з "
 "історії."
 
-#: src/ephy-history-dialog.c:833
+#: src/ephy-history-dialog.c:832
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Неможливо редагувати історію в конфіденційному режимі."
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
 msgstr "Відкрити нове вікно замість нової вкладки"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "Load the given session state file"
 msgstr "Завантажити вказаний файл стану сеансу"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/ephy-main.c:116
+#: src/ephy-main.c:115
 msgid "Start an instance with user data read-only"
 msgstr ""
 "Запустити приватний екземпляр в режимі «тільки читання» профілю користувача"
 
-#: src/ephy-main.c:118
+#: src/ephy-main.c:117
 msgid "Start a private instance with separate user data"
 msgstr "Запустити приватний екземпляр з окремим профілем користувача"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
 msgstr "Запустити приватний екземпляр у режимі веб-програми"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
 msgstr "Запустити приватний екземпляр для компонента WebDriver"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
 msgstr "Власна тека профілю для приватного екземпляра"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "DIR"
 msgstr "КАТАЛОГ"
 
-#: src/ephy-main.c:127
+#: src/ephy-main.c:126
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:256
+#: src/ephy-main.c:255
 msgid "Web options"
 msgstr "Параметри Тенет"
 
@@ -2727,41 +2727,41 @@ msgstr "Кеш політик HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Дані Intelligent Tracking Prevention"
 
-#: src/preferences/passwords-view.c:195
+#: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
 msgstr "Вилучити усі паролі?"
 
-#: src/preferences/passwords-view.c:198
+#: src/preferences/passwords-view.c:195
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені паролі. Наслідки "
 "дії неможливо скасувати."
 
-#: src/preferences/passwords-view.c:203 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/data-dialog.ui:366
 msgid "_Delete"
 msgstr "В_илучити"
 
-#: src/preferences/passwords-view.c:261
+#: src/preferences/passwords-view.c:258
 msgid "Copy password"
 msgstr "С_копіювати пароль"
 
-#: src/preferences/passwords-view.c:267
+#: src/preferences/passwords-view.c:264
 msgid "Username"
 msgstr "Імʼя користувача"
 
-#: src/preferences/passwords-view.c:290
+#: src/preferences/passwords-view.c:287
 msgid "Copy username"
 msgstr "Ск_опіювати ім’я користувача"
 
-#: src/preferences/passwords-view.c:296
+#: src/preferences/passwords-view.c:293
 msgid "Password"
 msgstr "Пароль"
 
-#: src/preferences/passwords-view.c:321
+#: src/preferences/passwords-view.c:318
 msgid "Reveal password"
 msgstr "Показати усі паролі"
 
-#: src/preferences/passwords-view.c:331
+#: src/preferences/passwords-view.c:328
 msgid "Remove Password"
 msgstr "Вилучити пароль"
 
@@ -2957,8 +2957,6 @@ msgstr ""
 "Цю дію неможливо скасувати. Вибрані для очищення дані буде знищено назавжди."
 
 #: src/resources/gtk/data-dialog.ui:46
-#| msgctxt "shortcut window"
-#| msgid "Select all"
 msgid "Select Items"
 msgstr "Позначити пункти"
 
