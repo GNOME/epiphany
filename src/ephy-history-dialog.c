@@ -81,6 +81,7 @@ struct _EphyHistoryDialog {
   gboolean shift_modifier_active;
   gboolean is_loading;
   gboolean selection_active;
+  gboolean is_selection_empty;
   gboolean can_clear;
   gboolean has_data;
   gboolean has_search_results;
@@ -101,10 +102,12 @@ static gboolean add_urls_source (EphyHistoryDialog *self);
 static void
 update_ui_state (EphyHistoryDialog *self)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkStack *header_bars_stack = GTK_STACK (self->header_bars_stack);
   GtkStack *history_presentation_stack = GTK_STACK (self->history_presentation_stack);
   GtkStack *action_bars_stack = GTK_STACK (self->action_bars_stack);
   gboolean has_data = self->has_data;
+  gboolean incognito_mode = (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
   if (self->is_loading) {
     gtk_stack_set_visible_child (history_presentation_stack, self->loading_spinner);
@@ -132,8 +135,15 @@ update_ui_state (EphyHistoryDialog *self)
     gtk_stack_set_visible_child (action_bars_stack, self->regular_action_bar);
   }
 
-  gtk_widget_set_sensitive (self->clear_all_button, has_data && self->can_clear);
+  if (incognito_mode) {
+    const char *selection_delete_tooltip = _("It is not possible to modify history when in incognito mode.");
+    gtk_widget_set_tooltip_text (self->selection_delete_button, selection_delete_tooltip);
+  }
+
   gtk_widget_set_sensitive (self->search_button, has_data);
+  gtk_widget_set_sensitive (self->clear_all_button, has_data && self->can_clear);
+  gtk_widget_set_sensitive (self->selection_open_button, !self->is_selection_empty);
+  gtk_widget_set_sensitive (self->selection_delete_button, !self->is_selection_empty && !incognito_mode);
 }
 
 static void
@@ -220,11 +230,14 @@ on_selection_cancel_button_clicked (GtkButton         *button,
 }
 
 static void
-set_selection_actions_sensitive (EphyHistoryDialog *self,
-                                 gboolean           sensitive)
+set_is_selection_empty (EphyHistoryDialog *self,
+                        gboolean           is_selection_empty)
 {
-  gtk_widget_set_sensitive (self->selection_delete_button, sensitive);
-  gtk_widget_set_sensitive (self->selection_open_button, sensitive);
+  if (is_selection_empty == self->is_selection_empty)
+    return;
+
+  self->is_selection_empty = is_selection_empty;
+  update_ui_state (self);
 }
 
 static EphyHistoryURL *
@@ -404,7 +417,7 @@ row_check_button_toggled (GtkCheckButton    *check_button,
   g_autoptr (GList) checked_rows = get_checked_rows (self);
   guint n_rows = g_list_length (checked_rows);
 
-  set_selection_actions_sensitive (self, n_rows > 0);
+  set_is_selection_empty (self, n_rows == 0);
 }
 
 static GtkWidget *
