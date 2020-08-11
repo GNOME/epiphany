@@ -484,7 +484,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   row = hdy_action_row_new ();
   hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), desc);
   g_object_set_data (G_OBJECT (row), "code", g_strdup (code));
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "row");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "draggable");
 
   event_box = gtk_event_box_new ();
   gtk_drag_source_set (GTK_WIDGET (event_box), GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
@@ -1169,41 +1169,11 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
 }
 
-static const char *css =
-  ".row.drag-icon { "
-  "  background: white; "
-  "  border: 1px solid black; "
-  "}"
-  ".row.drag-row { "
-  "  color: gray; "
-  "  background: alpha(gray,0.2); "
-  "}"
-  ".row.drag-row.drag-hover { "
-  "  border-top: 1px solid #4e9a06; "
-  "  border-bottom: 1px solid #4e9a06; "
-  "}"
-  ".row.drag-hover image, "
-  ".row.drag-hover label { "
-  "  color: #4e9a06; "
-  "}"
-  ".row.drag-hover-top {"
-  "  border-top: 1px solid #4e9a06; "
-  "}"
-  ".row.drag-hover-bottom {"
-  "  border-bottom: 1px solid #4e9a06; "
-  "}"
-;
-
 static void
 init_lang_listbox (PrefsGeneralPage *general_page)
 {
   char **list = NULL;
   int i;
-  GtkCssProvider *provider;
-
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1, NULL);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800);
 
   gtk_drag_dest_set (general_page->lang_listbox, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (general_page->lang_listbox, "drag-data-received", G_CALLBACK (drag_data_received), general_page);

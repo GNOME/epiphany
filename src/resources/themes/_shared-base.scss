@@ -221,3 +221,35 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 .transparent {
   background: none;
 }
+
+// Preferences languages list drag & drop style classes
+.draggable {
+  &.drag-icon {
+    background: white;
+    border: 1px solid black;
+  }
+
+  &.drag-row {
+    color: gray;
+    background: gtkalpha(gray, 0.2);
+
+    &.drag-hover {
+      border-top: 1px solid #4e9a06;
+      border-bottom: 1px solid #4e9a06;
+    }
+  }
+
+  &.drag-hover {
+    image, label {
+      color: #4e9a06;
+    }
+  }
+
+  &.drag-hover-top {
+    border-top: 1px solid #4e9a06;
+  }
+
+  &.drag-hover-bottom {
+    border-bottom: 1px solid #4e9a06;
+  }
+}
