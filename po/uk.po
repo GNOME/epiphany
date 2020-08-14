@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-07 20:34+0000\n"
-"PO-Revision-Date: 2020-08-08 17:41+0300\n"
+"POT-Creation-Date: 2020-08-14 09:59+0000\n"
+"PO-Revision-Date: 2020-08-14 13:12+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
 "=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 20.07.70\n"
+"X-Generator: Lokalize 20.11.70\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -576,12 +576,18 @@ msgid "Whether to show buttons for navigation."
 msgstr "Визначає, чи слід показувати кнопки для навігації."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Ховати вікно при виході"
+#| msgid "_Run in Background"
+msgid "Run in background"
+msgstr "Запускати у фоновому режимі"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
-msgstr "Якщо увімкнено, вікно програми буде приховано при закритті."
+#| msgid "If enabled, application window is hidden when closing window."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr ""
+"Якщо увімкнено, програма продовжуватиме працювати у фоновому режимі після"
+" закриття її вікна."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1032,7 +1038,7 @@ msgid "Download requested"
 msgstr "Запит на завантаження"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/data-dialog.ui:100
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -1532,13 +1538,11 @@ msgstr "Сторінка на %s бажає використовувати ва�
 
 #: embed/ephy-web-view.c:1149
 #, c-format
-#| msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Чи дозволяєте ви «%s» використовувати куки під час перегляду «%s»?"
 
 #: embed/ephy-web-view.c:1158
 #, c-format
-#| msgid "This will allow “%s“ to track your activity."
 msgid "This will allow “%s” to track your activity."
 msgstr "Це дозволить «%s» стежити за вашими діями."
 
@@ -2118,7 +2122,8 @@ msgstr ""
 "небезпечно."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Очистити все"
 
@@ -2193,7 +2198,7 @@ msgstr "Скасування…"
 msgid "Starting…"
 msgstr "Запускається…"
 
-#: lib/widgets/ephy-file-chooser.c:173
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -2217,7 +2222,7 @@ msgstr "Всі файли"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:427
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "О_чистити"
 
@@ -2384,19 +2389,23 @@ msgstr "Перезавантажити поточну сторінку"
 msgid "Stop loading the current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
-#: src/ephy-history-dialog.c:311
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "Неможливо редагувати історію в конфіденційному режимі."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Вилучити вибрані сторінки з історії"
 
-#: src/ephy-history-dialog.c:318
+#: src/ephy-history-dialog.c:463
 msgid "Copy URL"
 msgstr "Копіювати адресу"
 
-#: src/ephy-history-dialog.c:417
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Очистити історію перегляду?"
 
-#: src/ephy-history-dialog.c:421
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2404,9 +2413,9 @@ msgstr ""
 "Очищення історії перегляду призведе до остаточного вилучення усіх посилань з "
 "історії."
 
-#: src/ephy-history-dialog.c:832
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "Неможливо редагувати історію в конфіденційному режимі."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Видалити всю історію"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2737,7 +2746,7 @@ msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені паролі. Наслідки "
 "дії неможливо скасувати."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2956,20 +2965,16 @@ msgid ""
 msgstr ""
 "Цю дію неможливо скасувати. Вибрані для очищення дані буде знищено назавжди."
 
-#: src/resources/gtk/data-dialog.ui:46
-msgid "Select Items"
-msgstr "Позначити пункти"
-
-#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
-#: src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Пошук"
 
-#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Нічого не знайдено"
 
-#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Спробуйте пошукати інакше"
 
@@ -2993,23 +2998,19 @@ msgstr "Схожі кодування"
 msgid "Show all…"
 msgstr "Показати всі…"
 
-#: src/resources/gtk/history-dialog.ui:7
-msgid "History"
-msgstr "Історія"
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Позначити пункти"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Видалити всю історію"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Шукати в історії"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Історія порожня"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Тут будуть перелічені відвідані сторінки"
 
@@ -3991,6 +3992,12 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Увімкнути"
+
+#~ msgid "Hide window on quit"
+#~ msgstr "Ховати вікно при виході"
+
+#~ msgid "History"
+#~ msgstr "Історія"
 
 #~ msgid "_Copy Location"
 #~ msgstr "_Копіювати адресу"
