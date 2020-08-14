@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-01 14:09+0000\n"
-"PO-Revision-Date: 2020-08-04 14:10+0300\n"
+"POT-Creation-Date: 2020-08-14 09:59+0000\n"
+"PO-Revision-Date: 2020-08-14 14:57+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -54,8 +54,8 @@ msgid "The GNOME Project"
 msgstr "Proiectul GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:103 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:992
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
+#: src/ephy-main.c:406 src/window-commands.c:992
 msgid "Web"
 msgstr "Web"
 
@@ -585,14 +585,16 @@ msgid "Whether to show buttons for navigation."
 msgstr "Dacă să se arate butoanele pentru navigare."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Ascunde fereastra la ieșire"
+msgid "Run in background"
+msgstr "Rulează în fundal"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
 msgstr ""
-"Dacă este activat, fereastra aplicației este ascunsă când se închide "
-"fereastra."
+"Dacă este activat, aplicația continuă să ruleze în fundal după închiderea "
+"ferestrei."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1076,7 +1078,7 @@ msgid "Download requested"
 msgstr "Descărcare cerută"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/data-dialog.ui:100
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -1576,13 +1578,13 @@ msgstr "Pagina de la %s dorește să utilizeze camera web și microfonul."
 
 #: embed/ephy-web-view.c:1149
 #, c-format
-msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
+msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr ""
 "Doriți să permiteți „%s” să utilizeze cookie-uri în timpul navigării „%s”?"
 
 #: embed/ephy-web-view.c:1158
 #, c-format
-msgid "This will allow “%s“ to track your activity."
+msgid "This will allow “%s” to track your activity."
 msgstr "Acest lucru va permite „%s” să vă urmărească activitatea."
 
 #. translators: %s here is the address of the web page
@@ -2161,7 +2163,8 @@ msgstr ""
 "fost trimise în mod nesigur."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Curăță tot"
 
@@ -2236,7 +2239,7 @@ msgstr "Se anulează…"
 msgid "Starting…"
 msgstr "Se pornește…"
 
-#: lib/widgets/ephy-file-chooser.c:173
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Deschide"
 
@@ -2260,7 +2263,7 @@ msgstr "Toate fișierele"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:428
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "Cu_răță"
 
@@ -2423,78 +2426,82 @@ msgid "Mobile"
 msgstr "Mobil"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:52
+#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Reîncarcă pagina curentă"
 
-#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:450
+#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Oprește încărcarea paginii curente"
 
-#: src/ephy-history-dialog.c:312
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr ""
+"Nu este posibil să modificați istoricul când sunteți în modul incognito."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Elimină paginile selectate din istoric"
 
-#: src/ephy-history-dialog.c:319
+#: src/ephy-history-dialog.c:463
 msgid "Copy URL"
 msgstr "Copiază URL-ul"
 
-#: src/ephy-history-dialog.c:418
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Ștergeți istoricul de navigare?"
 
-#: src/ephy-history-dialog.c:422
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "Ștergerea istoricului va duce la pierderea tuturor adreselor reținute."
 
-#: src/ephy-history-dialog.c:833
-msgid "It is not possible to modify history when in incognito mode."
-msgstr ""
-"Nu este posibil să modificați istoricul când sunteți în modul incognito."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Elimină tot istoricul"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
 msgstr "Deschide o nouă fereastră în loc de un tab nou"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "Load the given session state file"
 msgstr "Încarcă fișierul dat de stare a sesiunii"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "FILE"
 msgstr "FILE"
 
-#: src/ephy-main.c:116
+#: src/ephy-main.c:115
 msgid "Start an instance with user data read-only"
 msgstr "Pornește o instanță cu date de utilizator protejate la scriere"
 
-#: src/ephy-main.c:118
+#: src/ephy-main.c:117
 msgid "Start a private instance with separate user data"
 msgstr "Pornește o instanță privată cu date te utilizator separate"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
 msgstr "Pornește o instanță privată în modul de aplicație web"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
 msgstr "Pornește o instanță privată pentru controlul WebDriver"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
 msgstr "Directorul de profil personalizat folosit în instanța privată"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:127
+#: src/ephy-main.c:126
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:256
+#: src/ephy-main.c:255
 msgid "Web options"
 msgstr "Opțiuni Web"
 
@@ -2773,40 +2780,40 @@ msgstr "Cache pentru politicile HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Date Prevenție de Urmărire Inteligentă"
 
-#: src/preferences/passwords-view.c:195
+#: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
 msgstr "Se elimină toate parolele?"
 
-#: src/preferences/passwords-view.c:198
+#: src/preferences/passwords-view.c:195
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Aceasta va curăța toate parolele stocate local, și nu poate fi refăcută."
 
-#: src/preferences/passwords-view.c:203 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "Șt_erge"
 
-#: src/preferences/passwords-view.c:261
+#: src/preferences/passwords-view.c:258
 msgid "Copy password"
 msgstr "Copiază parola"
 
-#: src/preferences/passwords-view.c:267
+#: src/preferences/passwords-view.c:264
 msgid "Username"
 msgstr "Nume de utilizator"
 
-#: src/preferences/passwords-view.c:290
+#: src/preferences/passwords-view.c:287
 msgid "Copy username"
 msgstr "Copiază numele de utilizator"
 
-#: src/preferences/passwords-view.c:296
+#: src/preferences/passwords-view.c:293
 msgid "Password"
 msgstr "Parolă"
 
-#: src/preferences/passwords-view.c:321
+#: src/preferences/passwords-view.c:318
 msgid "Reveal password"
 msgstr "Dezvăluie parola"
 
-#: src/preferences/passwords-view.c:331
+#: src/preferences/passwords-view.c:328
 msgid "Remove Password"
 msgstr "Elimină parola"
 
@@ -3002,20 +3009,16 @@ msgstr ""
 "Nu veți putea recupera modificările acestei acțiuni. Datele pe care alegeți "
 "să le curățați, vor fi șterse pentru totdeauna."
 
-#: src/resources/gtk/data-dialog.ui:46
-msgid "Select Items"
-msgstr "Selectează elementele"
-
-#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
-#: src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Caută"
 
-#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Nu s-au găsit rezultate"
 
-#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Încercați o căutare diferită"
 
@@ -3039,23 +3042,19 @@ msgstr "Codări relaționate"
 msgid "Show all…"
 msgstr "Arată toate…"
 
-#: src/resources/gtk/history-dialog.ui:7
-msgid "History"
-msgstr "Istoric"
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Selectează elementele"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Elimină tot istoricul"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Caută istoricul"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Istoricul este gol"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Paginile vizitate vor fi listate aici"
 
@@ -4040,6 +4039,12 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "Activ_ează"
+
+#~ msgid "Hide window on quit"
+#~ msgstr "Ascunde fereastra la ieșire"
+
+#~ msgid "History"
+#~ msgstr "Istoric"
 
 #~ msgid "_Copy Location"
 #~ msgstr "_Copiază locația"
