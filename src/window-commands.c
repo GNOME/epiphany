@@ -1353,7 +1353,7 @@ typedef struct {
   char *icon_href;
   GdkRGBA icon_rgba;
   GCancellable *cancellable;
-  gboolean mobile_capable;
+  EphyWebApplicationOptions webapp_options;
   WebKitDownload *download;
 } EphyApplicationDialogData;
 
@@ -1688,7 +1688,7 @@ fill_mobile_capable_cb (GObject      *source,
 
   capable = ephy_web_view_get_web_app_mobile_capable_finish (EPHY_WEB_VIEW (source), async_result, &error);
   if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    data->mobile_capable = capable;
+    data->webapp_options = capable ? EPHY_WEB_APPLICATION_MOBILE_CAPABLE : EPHY_WEB_APPLICATION_NONE;
 }
 
 static void
@@ -1806,7 +1806,7 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                                 webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
                                                 app_name,
                                                 gtk_image_get_pixbuf (GTK_IMAGE (data->image)),
-                                                data->mobile_capable);
+                                                data->webapp_options);
 
     if (desktop_file)
       message = g_strdup_printf (_("The application “%s” is ready to be used"),
