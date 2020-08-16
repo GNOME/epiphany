@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-07 20:34+0000\n"
-"PO-Revision-Date: 2020-08-11 02:56+0300\n"
+"POT-Creation-Date: 2020-08-14 09:59+0000\n"
+"PO-Revision-Date: 2020-08-17 02:30+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -490,8 +490,8 @@ msgid ""
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
 "Web sitelerinin çerez, yerel depo verisi ve IndexedDB veri tabanı "
-"saklamasına izin verilip verilmeyeceği. Bunu devre dışı bırakmak "
-"birçok web sitesini bozar."
+"saklamasına izin verilip verilmeyeceği. Bunu devre dışı bırakmak birçok web "
+"sitesini bozar."
 
 #: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
@@ -596,13 +596,16 @@ msgid "Whether to show buttons for navigation."
 msgstr "Gezinim için düğmelerin gösterilip gösterilmeyeceği."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Çıkışta pencereyi gizle"
+msgid "Run in background"
+msgstr "Arka planda çalıştır"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
 msgstr ""
-"Eğer etkinleştirilirse, pencere kapatıldığında uygulama penceresi gizlenir."
+"Eğer etkinleştirilirse, pencere kapatıldığında uygulama arka planda "
+"çalışmayı sürdürür."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1066,7 +1069,7 @@ msgid "Download requested"
 msgstr "İndirme istendi"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/data-dialog.ui:100
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -2148,7 +2151,8 @@ msgstr ""
 "gönderilmiş."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Tümünü Temiz_le"
 
@@ -2211,7 +2215,7 @@ msgstr "İptal ediliyor…"
 msgid "Starting…"
 msgstr "Başlatılıyor…"
 
-#: lib/widgets/ephy-file-chooser.c:173
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Aç"
 
@@ -2235,7 +2239,7 @@ msgstr "Tüm dosyalar"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:427
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "_Temizle"
 
@@ -2403,19 +2407,23 @@ msgstr "Geçerli sayfayı yeniden yükle"
 msgid "Stop loading the current page"
 msgstr "Geçerli sayfanın yüklenmesini durdur"
 
-#: src/ephy-history-dialog.c:311
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "Gizli tarama kipindeyken geçmişi düzenlemek olası değildir."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Seçili sayfaları geçmişten sil"
 
-#: src/ephy-history-dialog.c:318
+#: src/ephy-history-dialog.c:463
 msgid "Copy URL"
 msgstr "URL’yi Kopyala"
 
-#: src/ephy-history-dialog.c:417
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Tarama geçmişi temizlensin mi?"
 
-#: src/ephy-history-dialog.c:421
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2423,9 +2431,9 @@ msgstr ""
 "Tarama geçmişini temizlemek geçmişte ziyaret edilen bağlantıları kalıcı "
 "olarak siler."
 
-#: src/ephy-history-dialog.c:832
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "Gizli tarama kipindeyken geçmişi düzenlemek olası değildir."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Tüm geçmişi sil"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2751,7 +2759,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Bu, yerel olarak saklanan tüm parolaları temizleyecektir ve bu geri alınamaz."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2969,20 +2977,16 @@ msgstr ""
 "Bu eylemi geri alamazsınız. Temizlemek üzere seçtiğiniz veriler kalıcı "
 "olarak silinecektir."
 
-#: src/resources/gtk/data-dialog.ui:46
-msgid "Select Items"
-msgstr "Ögeleri Seç"
-
-#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
-#: src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Arama"
 
-#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Hiçbir Sonuç Bulunamadı"
 
-#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Farklı bir arama dene"
 
@@ -3006,23 +3010,19 @@ msgstr "İlgili kodlamalar"
 msgid "Show all…"
 msgstr "Tümünü göster…"
 
-#: src/resources/gtk/history-dialog.ui:7
-msgid "History"
-msgstr "Geçmiş"
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Ögeleri Seç"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Tüm geçmişi sil"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Arama geçmişi"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Geçmiş Boş"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Ziyaret edilen sayfalar burada listelenir"
 
@@ -3371,7 +3371,8 @@ msgstr "Zeki _Takip Önleme"
 
 #: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
-msgstr "Web sitelerinin çerez, veri tabanı ve yerel depo verisi saklamasına izin ver."
+msgstr ""
+"Web sitelerinin çerez, veri tabanı ve yerel depo verisi saklamasına izin ver."
 
 #: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
@@ -4009,6 +4010,12 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Etkinleştir"
+
+#~ msgid "Hide window on quit"
+#~ msgstr "Çıkışta pencereyi gizle"
+
+#~ msgid "History"
+#~ msgstr "Geçmiş"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Çerez kabulü"
