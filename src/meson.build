@@ -46,6 +46,7 @@ libephymain_sources = [
   'popup-commands.c',
   'preferences/clear-data-view.c',
   'preferences/ephy-data-view.c',
+  'preferences/ephy-lang-row.c',
   'preferences/ephy-prefs-dialog.c',
   'preferences/ephy-search-engine-dialog.c',
   'preferences/passwords-view.c',

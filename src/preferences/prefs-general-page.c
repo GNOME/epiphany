@@ -26,6 +26,7 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
+#include "ephy-lang-row.h"
 #include "ephy-langs.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-dialog.h"
@@ -113,7 +114,7 @@ prefs_general_page_finalize (GObject *object)
 }
 
 static int
-get_list_box_length (GtkWidget *list_box)
+get_list_box_length (GtkListBox *list_box)
 {
   GList *children = gtk_container_get_children (GTK_CONTAINER (list_box));
 
@@ -124,10 +125,11 @@ static void
 language_editor_update_pref (PrefsGeneralPage *general_page)
 {
   GVariantBuilder builder;
-  GtkListBoxRow *row;
-  int index = 0;
+  GtkListBox *lang_listbox = GTK_LIST_BOX (general_page->lang_listbox);
+  int len = get_list_box_length (lang_listbox);
+  int index;
 
-  if (get_list_box_length (general_page->lang_listbox) <= 1) {
+  if (get_list_box_length (lang_listbox) <= 1) {
     g_settings_set (EPHY_SETTINGS_WEB,
                     EPHY_PREFS_WEB_LANGUAGE,
                     "as", NULL);
@@ -136,10 +138,10 @@ language_editor_update_pref (PrefsGeneralPage *general_page)
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
 
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), index++))) {
-    char *code;
+  for (index = 0; index < len - 1; index++) {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (lang_listbox, index);
+    const char *code = ephy_lang_row_get_code (EPHY_LANG_ROW (row));
 
-    code = g_object_get_data (G_OBJECT (row), "code");
     if (code)
       g_variant_builder_add (&builder, "s", code);
   }
@@ -159,78 +161,46 @@ drag_data_received (GtkWidget        *widget,
                     guint32           time,
                     gpointer          data)
 {
-  GtkWidget *row_before;
-  GtkWidget *row_after;
-  GtkWidget *row;
-  GtkWidget *source;
   PrefsGeneralPage *general_page = data;
-  int len;
-  int pos;
+  GtkListBox *lang_listbox = GTK_LIST_BOX (general_page->lang_listbox);
+  GtkWidget *hovered_row;
+  GtkWidget *dragged_row;
+  int length;
+  int hovered_row_pos;
+  int dragged_row_pos;
+  int insert_pos;
 
-  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
-  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+  hovered_row = GTK_WIDGET (gtk_list_box_get_row_at_y (lang_listbox, y));
+  dragged_row = (gpointer) * (gpointer *)gtk_selection_data_get_data (selection_data);
 
-  g_object_set_data (G_OBJECT (widget), "row-before", NULL);
-  g_object_set_data (G_OBJECT (widget), "row-after", NULL);
+  length = get_list_box_length (GTK_LIST_BOX (widget));
+  hovered_row_pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (hovered_row));
+  dragged_row_pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (dragged_row));
 
-  if (row_before)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
-  if (row_after)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
-
-  row = (gpointer) * (gpointer *)gtk_selection_data_get_data (selection_data);
-  source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
-
-  if (source == row_after)
+  /* If the drag ended while hovering over the dragged row then we return */
+  if (hovered_row == dragged_row)
     return;
 
-  len = get_list_box_length (general_page->lang_listbox);
-  g_object_ref (source);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
+  /* If the drag ended while hovering over the "Add Language" row then we return */
+  if (hovered_row_pos == length - 1)
+    return;
 
-  if (row_after)
-    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_after));
-  else
-    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_before)) + 1;
+  g_object_ref (dragged_row);
+  gtk_container_remove (GTK_CONTAINER (lang_listbox), dragged_row);
 
-  if (pos + 1 == len)
-    pos--;
-
-  gtk_list_box_insert (GTK_LIST_BOX (widget), source, pos);
-  g_object_unref (source);
-
-  language_editor_update_pref (general_page);
-}
-
-static GtkListBoxRow *
-get_row_before (GtkListBox    *list,
-                GtkListBoxRow *row)
-{
-  int pos = gtk_list_box_row_get_index (row);
-  return gtk_list_box_get_row_at_index (list, pos - 1);
-}
-
-static GtkListBoxRow *
-get_row_after (GtkListBox    *list,
-               GtkListBoxRow *row)
-{
-  int pos = gtk_list_box_row_get_index (row);
-  return gtk_list_box_get_row_at_index (list, pos + 1);
-}
-
-static GtkListBoxRow *
-get_last_row (GtkListBox *list)
-{
-  int i;
-
-  for (i = 0;; i++) {
-    GtkListBoxRow *tmp;
-    tmp = gtk_list_box_get_row_at_index (list, i);
-    if (tmp == NULL)
-      break;
+  /* Calculation logic for insert_pos */
+  if (y < 20) {
+    insert_pos = 0;
+  } else if (dragged_row_pos < hovered_row_pos) {
+    insert_pos = hovered_row_pos;
+  } else { /* dragged_row_pos > hovered_row_pos is true here */
+    insert_pos = hovered_row_pos + 1;
   }
 
-  return i > 0 ? gtk_list_box_get_row_at_index (list, i - 1) : NULL;
+  gtk_list_box_insert (lang_listbox, dragged_row, insert_pos);
+  g_object_unref (dragged_row);
+
+  language_editor_update_pref (general_page);
 }
 
 static gboolean
@@ -240,77 +210,57 @@ drag_motion (GtkWidget      *widget,
              int             y,
              guint           time)
 {
-  GtkAllocation alloc;
-  GtkWidget *row;
-  int hover_row_y;
-  int hover_row_height;
-  GtkWidget *drag_row;
-  GtkWidget *row_before;
-  GtkWidget *row_after;
+  GtkListBoxRow *first_lang_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (widget), 0);
 
-  row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (widget), y));
+  GtkWidget *dragged_row;
+  GtkWidget *hovered_row;
+  GtkWidget *expanded_dnd_revealer;
+  GtkWidget *hovered_row_dnd_revealer = NULL;
 
-  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
-  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
-  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+  dragged_row = g_object_get_data (G_OBJECT (widget), "dragged-row");
+  hovered_row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (widget), y));
+  expanded_dnd_revealer = g_object_get_data (G_OBJECT (widget), "dnd-expanded-revealer");
 
-  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
-  if (row_before)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
-  if (row_after)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+  if (EPHY_IS_LANG_ROW (hovered_row))
+    hovered_row_dnd_revealer = ephy_lang_row_get_dnd_bottom_revealer (EPHY_LANG_ROW (hovered_row));
 
-  if (row) {
-    gtk_widget_get_allocation (row, &alloc);
-    hover_row_y = alloc.y;
-    hover_row_height = alloc.height;
+  /* Edge case: If the user is hovering with the dragged row close to the
+   * top of the list, then we reveal the top empty row of EphyLangRow */
+  if (y < 20 && dragged_row != GTK_WIDGET (first_lang_row)) {
+    GtkWidget *top_revealer = ephy_lang_row_get_dnd_top_revealer (EPHY_LANG_ROW (hovered_row));
 
-    if (y < hover_row_y + hover_row_height / 2) {
-      row_after = row;
-      row_before = GTK_WIDGET (get_row_before (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
-    } else {
-      row_before = row;
-      row_after = GTK_WIDGET (get_row_after (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
-    }
-  } else {
-    row_before = GTK_WIDGET (get_last_row (GTK_LIST_BOX (widget)));
-    row_after = NULL;
+    if (expanded_dnd_revealer)
+      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
+
+    gtk_revealer_set_reveal_child (GTK_REVEALER (top_revealer), TRUE);
+    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", top_revealer);
+
+    return TRUE;
   }
 
-  g_object_set_data (G_OBJECT (widget), "row-before", row_before);
-  g_object_set_data (G_OBJECT (widget), "row-after", row_after);
+  if (dragged_row == hovered_row) {
+    if (expanded_dnd_revealer)
+      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
 
-  if (drag_row == row_before || drag_row == row_after) {
-    gtk_style_context_add_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", NULL);
+
+    return TRUE;
+  }
+
+  if (EPHY_IS_LANG_ROW (hovered_row)) {
+    if (expanded_dnd_revealer)
+      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
+
+    gtk_revealer_set_reveal_child (GTK_REVEALER (hovered_row_dnd_revealer), TRUE);
+    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", hovered_row_dnd_revealer);
+    return TRUE;
+  } else {
+    if (expanded_dnd_revealer)
+      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
+
+    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", NULL);
     return FALSE;
   }
-
-  if (row_before)
-    gtk_style_context_add_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
-  if (row_after)
-    gtk_style_context_add_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
-
-  return TRUE;
-}
-
-static void
-drag_leave (GtkWidget      *widget,
-            GdkDragContext *context,
-            guint           time)
-{
-  GtkWidget *drag_row;
-  GtkWidget *row_before;
-  GtkWidget *row_after;
-
-  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
-  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
-  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
-
-  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
-  if (row_before)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
-  if (row_after)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
 }
 
 static GtkDialog *setup_add_language_dialog (PrefsGeneralPage *general_page);
@@ -357,36 +307,33 @@ language_editor_add_function_buttons (PrefsGeneralPage *general_page)
 static void
 language_editor_update_state (PrefsGeneralPage *general_page)
 {
-  int length = get_list_box_length (general_page->lang_listbox);
+  GtkListBox *lang_listbox = GTK_LIST_BOX (general_page->lang_listbox);
+  int length = get_list_box_length (lang_listbox);
   int index;
 
+  /* If there's only one language row in the list we want to make its
+   * remove button insensitive */
   if (length == 2) {
-    GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), 0);
-    GtkWidget *action = g_object_get_data (G_OBJECT (row), "action");
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (lang_listbox, 0);
 
-    gtk_widget_set_sensitive (action, FALSE);
+    ephy_lang_row_set_delete_sensitive (EPHY_LANG_ROW (row), FALSE);
     return;
   }
 
   for (index = 0; index < length - 1; index++) {
-    GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), index);
-    GtkWidget *action = g_object_get_data (G_OBJECT (row), "action");
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (lang_listbox, index);
 
-    gtk_widget_set_sensitive (action, TRUE);
+    ephy_lang_row_set_delete_sensitive (EPHY_LANG_ROW (row), TRUE);
   }
 }
 
 static void
-language_editor_remove_button_clicked_cb (GtkWidget        *button,
+language_editor_delete_button_clicked_cb (EphyLangRow      *row,
                                           PrefsGeneralPage *general_page)
 {
-  GtkWidget *row = g_object_get_data (G_OBJECT (button), "row");
-
-  if (row) {
-    gtk_container_remove (GTK_CONTAINER (general_page->lang_listbox), row);
-    language_editor_update_pref (general_page);
-    language_editor_update_state (general_page);
-  }
+  gtk_container_remove (GTK_CONTAINER (general_page->lang_listbox), GTK_WIDGET (row));
+  language_editor_update_pref (general_page);
+  language_editor_update_state (general_page);
 }
 
 void
@@ -397,10 +344,12 @@ drag_data_get (GtkWidget        *widget,
                guint             time,
                gpointer          data)
 {
+  GtkWidget *row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
+
   gtk_selection_data_set (selection_data,
-                          gdk_atom_intern_static_string ("GTK_LIST_BOX_ROW"),
+                          gdk_atom_intern_static_string ("EPHY_LANG_ROW"),
                           32,
-                          (const guchar *)&widget,
+                          (const guchar *)&row,
                           sizeof (gpointer));
 }
 
@@ -416,7 +365,7 @@ drag_begin (GtkWidget      *widget,
   int x, y;
   double sx, sy;
 
-  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
   gtk_widget_get_allocation (row, &alloc);
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
   cr = cairo_create (surface);
@@ -433,7 +382,7 @@ drag_begin (GtkWidget      *widget,
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
 
-  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", row);
+  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "dragged-row", row);
   gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-row");
 }
 
@@ -442,12 +391,21 @@ drag_end (GtkWidget      *widget,
           GdkDragContext *context,
           gpointer        data)
 {
-  GtkWidget *row;
+  GtkWidget *lang_row;
+  GtkWidget *lang_listbox;
+  GtkWidget *dnd_expanded_revealer;
 
-  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
-  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", NULL);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-row");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-hover");
+  lang_row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
+  lang_listbox = gtk_widget_get_parent (lang_row);
+  dnd_expanded_revealer = g_object_get_data (G_OBJECT (lang_listbox), "dnd-expanded-revealer");
+
+  g_object_set_data (G_OBJECT (lang_listbox), "dragged-row", NULL);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (lang_row), "drag-row");
+
+  if (dnd_expanded_revealer) {
+    gtk_revealer_set_reveal_child (GTK_REVEALER (dnd_expanded_revealer), FALSE);
+    g_object_set_data (G_OBJECT (lang_listbox), "dnd-expanded-revealer", NULL);
+  }
 }
 
 static GtkTargetEntry entries[] = {
@@ -459,53 +417,40 @@ language_editor_add (PrefsGeneralPage *general_page,
                      const char       *code,
                      const char       *desc)
 {
-  GtkWidget *event_box;
   GtkWidget *row;
-  GtkWidget *prefix;
-  GtkWidget *action;
+  GtkWidget *event_box;
   int len;
   int index;
 
   g_assert (code != NULL && desc != NULL);
 
-  len = get_list_box_length (general_page->lang_listbox);
+  len = get_list_box_length (GTK_LIST_BOX (general_page->lang_listbox));
 
-  for (index = 0; index < len; index++) {
+  for (index = 0; index < len - 1; index++) {
     GtkListBoxRow *widget;
-    char *row_code;
+    const char *row_code;
 
     widget = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), index);
 
-    row_code = g_object_get_data (G_OBJECT (widget), "code");
+    row_code = ephy_lang_row_get_code (EPHY_LANG_ROW (widget));
     if (row_code && strcmp (row_code, code) == 0)
       return;
   }
 
-  row = hdy_action_row_new ();
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), desc);
-  g_object_set_data (G_OBJECT (row), "code", g_strdup (code));
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)), "draggable");
+  row = ephy_lang_row_new ();
 
-  event_box = gtk_event_box_new ();
-  gtk_drag_source_set (GTK_WIDGET (event_box), GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
+  ephy_lang_row_set_title (EPHY_LANG_ROW (row), desc);
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "row");
+
+  event_box = ephy_lang_row_get_drag_event_box (EPHY_LANG_ROW (row));
+  gtk_drag_source_set (event_box, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (event_box, "drag-begin", G_CALLBACK (drag_begin), general_page);
   g_signal_connect (event_box, "drag-end", G_CALLBACK (drag_end), general_page);
   g_signal_connect (event_box, "drag-data-get", G_CALLBACK (drag_data_get), general_page);
-  prefix = gtk_image_new_from_icon_name ("list-drag-handle-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_container_add (GTK_CONTAINER (event_box), prefix);
-  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), event_box);
 
-  action = gtk_button_new_from_icon_name ("edit-delete-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text (action, _("Delete language"));
-  g_object_set_data (G_OBJECT (row), "action", action);
-  g_object_set_data (G_OBJECT (action), "row", row);
-  g_signal_connect (action, "clicked", G_CALLBACK (language_editor_remove_button_clicked_cb), general_page);
-  gtk_widget_set_valign (action, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (row), action);
+  g_signal_connect (row, "delete-button-clicked", G_CALLBACK (language_editor_delete_button_clicked_cb), general_page);
 
-  gtk_widget_show_all (GTK_WIDGET (row));
-
-  gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), GTK_WIDGET (row), len - 1);
+  gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), row, len - 1);
 }
 
 static void
@@ -1178,7 +1123,6 @@ init_lang_listbox (PrefsGeneralPage *general_page)
   gtk_drag_dest_set (general_page->lang_listbox, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (general_page->lang_listbox, "drag-data-received", G_CALLBACK (drag_data_received), general_page);
   g_signal_connect (general_page->lang_listbox, "drag-motion", G_CALLBACK (drag_motion), NULL);
-  g_signal_connect (general_page->lang_listbox, "drag-leave", G_CALLBACK (drag_leave), NULL);
 
   list = g_settings_get_strv (EPHY_SETTINGS_WEB,
                               EPHY_PREFS_WEB_LANGUAGE);
