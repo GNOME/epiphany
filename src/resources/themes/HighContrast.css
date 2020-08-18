@@ -8,6 +8,10 @@
 
 #title-box-container { color: alpha(@theme_fg_color,0.5); transition: background 200ms ease-out; }
 
+#title-box-container > clamp { color: @theme_fg_color; }
+
+#title-box-container > clamp:backdrop { color: @theme_unfocused_fg_color; }
+
 .incognito-mode #title-box-container { background: -gtk-icontheme("user-not-tracked-symbolic") 16px 0/64px 64px no-repeat; }
 
 .incognito-mode #title-box-container:backdrop { background-image: cross-fade(50% -gtk-icontheme("user-not-tracked-symbolic"), image(transparent)); }
@@ -78,9 +82,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .incognito-mode headerbar { background: #d0deed linear-gradient(to top, #c8d9ea, #d3e0ef); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: #345d8a; }
 
+.incognito-mode headerbar > clamp { color: @#172a3e; }
+
 .incognito-mode headerbar:backdrop { background-image: image(#f5f8fb); border-color: #b4cbe3; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
 
-.incognito-mode headerbar #title-box-container { color: rgba(23, 42, 62, 0.2); }
+.incognito-mode headerbar:backdrop > clamp { color: @#8291a0; }
 
 .incognito-mode actionbar { background: #f5f8fb; }
 
@@ -150,9 +156,11 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
 
 .automation-mode headerbar { background: #f59000 linear-gradient(to top, #eb8a00, #fa9300); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); border-color: black; }
 
+.automation-mode headerbar > clamp { color: @#553200; }
+
 .automation-mode headerbar:backdrop { background-image: image(#ffa729); border-color: #ca7905; box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
 
-.automation-mode headerbar #title-box-container { color: rgba(85, 50, 0, 0.2); }
+.automation-mode headerbar:backdrop > clamp { color: @#b26e0d; }
 
 .automation-mode actionbar { background: #ffa729; }
 
@@ -269,22 +277,16 @@ row.narrow .page-row-close-button image { padding: 6px; }
 
 .epiphany-downloads-button-needs-attention-multiple { animation: needs_attention_keyframes 3s ease-in-out; animation-iteration-count: 3; }
 
-.main-notebook tab:not(.reorderable-page) { min-width: 16px; }
+.main-notebook tab { min-width: 16px; }
 
 .main-notebook header.top tab, .main-notebook header.bottom tab { border-style: none solid; }
 
 .main-notebook header.left tab, .main-notebook header.right tab { border-style: solid none; }
 
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):hover { border-color: rgba(205, 199, 194, 0.3); background-color: rgba(246, 245, 244, 0.2); }
-
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop { border-color: transparent; background-color: transparent; }
-
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked { border-color: rgba(205, 199, 194, 0.5); background-color: rgba(246, 245, 244, 0.5); }
-
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):checked:hover { background-color: rgba(246, 245, 244, 0.7); }
-
-window:not(.incognito-mode) .main-notebook tab:not(.reorderable-page):backdrop:checked { border-color: #d5d0cc; background-color: #f6f5f4; }
-
 .tab-attention { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3584e4), to(transparent)); }
 
 #title-box-container { color: alpha(@theme_fg_color,0.2); }
+
+#title-box-container > clamp { color: @theme_fg_color; }
+
+#title-box-container > clamp:backdrop { color: @theme_unfocused_fg_color; }
