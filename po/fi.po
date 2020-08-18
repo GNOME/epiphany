@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-02-27 06:00+0000\n"
-"PO-Revision-Date: 2020-02-29 12:15+0200\n"
+"POT-Creation-Date: 2020-08-14 09:59+0000\n"
+"PO-Revision-Date: 2020-08-18 23:36+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-POT-Import-Date: 2012-03-05 15:05:49+0000\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -63,8 +63,8 @@ msgid "The GNOME Project"
 msgstr "Gnome-projekti"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:624
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
+#: src/ephy-main.c:406 src/window-commands.c:992
 msgid "Web"
 msgstr "Verkko"
 
@@ -183,16 +183,12 @@ msgid "Whether to ask for setting browser as default"
 msgstr "Kysytäänkö oletusselaimeksi asettamista"
 
 #: data/org.gnome.epiphany.gschema.xml:62
-#, fuzzy
-#| msgid ""
-#| "When this option is set to true, tabs will not start loading until the "
-#| "user switches to them, upon session restore."
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr ""
-"Kun tämä valinta on tosi, välilehtiä ei ladata istunnonpalautuksen "
-"yhteydessä, ennen kuin käyttäjä vaihtaa haluttuun välilehteen."
+"Kun tämä valinta on tosi, selain kysyy ollakseen oletus jos ei ole jo "
+"asetettu oletusselaimeksi."
 
 #: data/org.gnome.epiphany.gschema.xml:66
 msgid "Start in incognito mode"
@@ -323,44 +319,42 @@ msgstr ""
 "Käytä omavalintaista CSS-tiedostoa verkkosivuston CSS-tiedoston lisäksi."
 
 #: data/org.gnome.epiphany.gschema.xml:136
+msgid "Use a custom JS"
+msgstr "Käytä omavalintaista JS:iä"
+
+#: data/org.gnome.epiphany.gschema.xml:137
+msgid "Use a custom JS file to modify websites."
+msgstr "Käytä omavalintaista JS-tiedostoa verkkosivuston muokkaamiseksi."
+
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Enable spell checking"
 msgstr "Ota oikoluku käyttöön"
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Spell check any text typed in editable areas."
 msgstr "Oikolue mikä tahansa muokattaville alueille kirjoitettu teksti."
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Default encoding"
 msgstr "Oletusmerkistö"
 
-#: data/org.gnome.epiphany.gschema.xml:142
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Oletusmerkistökoodaus. Hyväkstytyt arvot ovat ne, joita WebKitGTK ymmärtää."
 
-#: data/org.gnome.epiphany.gschema.xml:146
-#: src/resources/gtk/prefs-dialog.ui:333
+#: data/org.gnome.epiphany.gschema.xml:151
+#: src/resources/gtk/prefs-general-page.ui:351
 msgid "Languages"
 msgstr "Kielet"
 
-#: data/org.gnome.epiphany.gschema.xml:147
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:151
-msgid "Cookie accept"
-msgstr "Evästeiden hyväksyntä"
-
-#: data/org.gnome.epiphany.gschema.xml:152
-msgid ""
-"Where to accept cookies from. Possible values are “always”, “no-third-party” "
-"and “never”."
-msgstr ""
-"Mistä evästeitä hyväksytään. Mahdolliset arvot ovat \"always\" (aina), \"no-"
-"third-party\" (ei kolmansilta osapuolilta) ja \"never\" (ei koskaan)."
+"Ensisijaiset kielet. Jono maa-asetusten locale-koodeja tai \"system\" "
+"käyttääksesi järjestelmän maa-asetustoa."
 
 #: data/org.gnome.epiphany.gschema.xml:156
 msgid "Allow popups"
@@ -392,72 +386,80 @@ msgid ""
 msgstr "Selaimen tunniste, jonka avulla verkkopalvelimet tunnistavat selaimen."
 
 #: data/org.gnome.epiphany.gschema.xml:171
-msgid "Mobile user agent"
-msgstr "Mobiilikäyttäjätunniste (user-agent)"
-
-#: data/org.gnome.epiphany.gschema.xml:172
-msgid ""
-"Whether to present a mobile user agent. If the user agent is overridden, "
-"this will have no effect."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Käytä mainossuodatusta (Adblock)"
 
-#: data/org.gnome.epiphany.gschema.xml:177
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
-msgstr ""
+msgstr "Estetäänkö upotetut mainokset, joita verkkosivustot saattavat näyttää."
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Remember passwords"
 msgstr "Muista salasanat"
 
-#: data/org.gnome.epiphany.gschema.xml:182
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid "Whether to store and prefill passwords in websites."
 msgstr ""
 "Tallennetaanko sivustojen salasanat ja käytetäänkö salasanakenttien "
 "automaattitäyttöä."
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Enable site-specific quirks"
-msgstr ""
+msgstr "Käytä sivustokohtaisia kikkoja"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable safe browsing"
 msgstr "Käytä Safe Browsing -ominaisuutta"
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Google Safe Browsing API key"
 msgstr "Google Safe Browsing -rajapinnan avain"
 
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:201
-msgid "Default zoom level for new pages"
+#: data/org.gnome.epiphany.gschema.xml:196
+msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:197
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "Käytetäänkö älykästä seurannan suojausta (ITP)."
+
+#: data/org.gnome.epiphany.gschema.xml:201
+msgid "Allow websites to store local website data"
+msgstr "Salli verkkosivustojen tallentaa paikallista verkkosivuston dataa"
+
+#: data/org.gnome.epiphany.gschema.xml:202
+msgid ""
+"Whether to allow websites to store cookies, local storage data, and "
+"IndexedDB databases. Disabling this will break many websites."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:206
+msgid "Default zoom level for new pages"
+msgstr "Uusien sivujen zoomauksen oletustaso"
+
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable autosearch"
 msgstr "Käytä automaattihakua"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -465,11 +467,11 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable mouse gestures"
 msgstr "Käytä hiirieleitä"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -477,27 +479,27 @@ msgstr ""
 "Käytetäänkö hiirieleitä. Hiirieleet pohjautuvat Operan toimintaan, ja eleet "
 "aktivoidaan käyttäen hiiren keskimmäistä painiketta sekä hiirielettä."
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last upload directory"
 msgstr "Viimeisin lähetyskansio"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last upload directory"
 msgstr "Pidä kirjaa viimeisimmästä lähetyskansiosta"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Last download directory"
 msgstr "Viimeisin latauskansio"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid "Keep track of last download directory"
 msgstr "Muista viimeisin latauskansio"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Hardware acceleration policy"
 msgstr "Laitteistokiihdytyksen käytäntö"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -507,217 +509,263 @@ msgid ""
 "required to display 3D transforms."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Always ask for download directory"
 msgstr "Kysy aina latauskansiota"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid "Whether to present a directory chooser dialog for every download."
+msgstr "Esitetäänkö jokaisen latauksen yhteydessä kansiovalitsin."
+
+#: data/org.gnome.epiphany.gschema.xml:240
+msgid "Enable immediately switch to new open tab"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:241
+msgid "Whether to automatically switch to a new open tab."
+msgstr "Vaihdetaanko automaattisesti uuteen välilehteen."
+
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "Web application additional URLs"
 msgstr "Verkkosovelluksen lisäosoitteet"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Luettelo osoitteista, jotka tulee avata verkkosovelluksella"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:252
+msgid "WebApp is mobile capable"
+msgstr "WebApp kykenee mobiiliin"
+
+#: data/org.gnome.epiphany.gschema.xml:253
+msgid "Whether to show buttons for navigation."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:257
+msgid "Run in background"
+msgstr "Suorita taustalla"
+
+#: data/org.gnome.epiphany.gschema.xml:258
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr ""
+"Jos käytössä, sovellus pidetään käynnissä taustalla kun ikkuna suljetaan."
+
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
 msgstr "Latauskansio"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid "Window position"
 msgstr "Ikkunan sijainti"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "Uuden ikkunan, ei aiemmasta istunnosta palautetun, sijainti näytöllä."
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid "Window size"
 msgstr "Ikkunan koko"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
+"Koko mitä käytetään uudelle ikkunalle, jota ei palauteta edellisestä "
+"istunnosta."
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Is maximized"
 msgstr "On suurennettu"
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid "Disable forward and back buttons"
 msgstr "Poista käytöstä eteen- ja taaksepäinpainikkeet"
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:299
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:317
+msgid "Firefox Sync Token Server URL"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:318
+msgid "URL to a custom Firefox Sync token server."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:322
+#| msgid "Firefox Account"
+msgid "Firefox Sync Accounts Server URL"
+msgstr "Firefox Sync -tilien palvelimen URL"
+
+#: data/org.gnome.epiphany.gschema.xml:323
+msgid "URL to a custom Firefox Sync accounts server."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Currently signed in sync user"
 msgstr "Parhaillaan sisäänkirjautuneena oleva synkronointikäyttäjä"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Last sync timestamp"
 msgstr "Viimeisimmän synkronoinnin aikaleima"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX-aika, jolloin viimeisin synkronointi tehtiin, sekunneissa."
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Sync device ID"
 msgstr "Synkronointilaitteen tunniste"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The sync device ID of the current device."
 msgstr "Nykyisen laitteen synkronointilaitetunniste (sync device ID)."
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Sync device name"
 msgstr "Synkronointilaitteen nimi"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The sync device name of the current device."
 msgstr "Nykyisen laitteen synkronointilaitenimi."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "The sync frequency in minutes"
 msgstr "Synkronointiväli minuuteissa"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The number of minutes between two consecutive syncs."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Sync data with Firefox"
 msgstr "Synkronoi tiedot Firefoxin kanssa"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable bookmarks sync"
 msgstr "Käytä kirjanmerkkien synkronointia"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Bookmarks sync timestamp"
 msgstr "Kirjanmerkkien synkronoinnin aikaleima"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Aikaleima milloin kirjanmerkkien viimeisin synkronointi tehtiin."
 
-#: data/org.gnome.epiphany.gschema.xml:337
-#: data/org.gnome.epiphany.gschema.xml:352
 #: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Initial sync or normal sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable passwords sync"
 msgstr "Käytä salasanojen synkronointia"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Passwords sync timestamp"
 msgstr "Salasanojen synkronoinnin aikaleima"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Aikaleima milloin salasanojen viimeisin synkronointi tehtiin."
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Enable history sync"
 msgstr "Käytä historian synkronointia"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "History sync timestamp"
 msgstr "Historian synkronoinnin aikaleima"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid "The timestamp at which last history sync was made."
 msgstr "Aikaleima milloin historian viimeisin synkronointi tehtiin."
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Enable open tabs sync"
 msgstr "Käytä avoimien välilehtien synkronointia"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Open tabs sync timestamp"
 msgstr "Avoimien välilehtien synkronoinnin aikaleima"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Aikaleima milloin avoimien välilehtien viimeisin synkronointi tehtiin."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -725,12 +773,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -738,12 +786,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -751,12 +799,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -764,11 +812,11 @@ msgid ""
 "make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -776,17 +824,29 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
 "setting is used, while “allow” and “deny” tell it to automatically make the "
 "decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:449
+msgid "Decision to apply when an autoplay policy is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:450
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to autoplay. The “undecided” default means to allow autoplay of muted media, "
+"while “allow” and “deny” tell it to allow / deny all requests to autoplay "
+"media respectively."
 msgstr ""
 
 #: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
@@ -802,7 +862,7 @@ msgstr "Versio %s"
 msgid "About Web"
 msgstr "Tietoja"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:626
+#: embed/ephy-about-handler.c:194 src/window-commands.c:994
 msgid "Epiphany Technology Preview"
 msgstr "Epiphanyn teknologiaesiversio"
 
@@ -882,50 +942,52 @@ msgstr ""
 "hallitukselta tai vierailemiltasi sivustoilta."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:727
+#: embed/ephy-download.c:725
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Lataus %s valmistui"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:729
+#: embed/ephy-download.c:727
 msgid "Download finished"
 msgstr "Lataus valmistui"
 
-#: embed/ephy-download.c:821
+#: embed/ephy-download.c:818
 msgid "Download requested"
 msgstr "Latauspyyntö"
 
-#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
-#: src/resources/gtk/prefs-dialog.ui:943
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
-#: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:481 src/window-commands.c:1453
+#: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/history-dialog.ui:96
+#: src/resources/gtk/prefs-lang-dialog.ui:16
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
+#: src/window-commands.c:333 src/window-commands.c:377
+#: src/window-commands.c:561 src/window-commands.c:646
+#: src/window-commands.c:807 src/window-commands.c:1874
 msgid "_Cancel"
 msgstr "_Peru"
 
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:819
 msgid "_Download"
 msgstr "_Lataa"
 
-#: embed/ephy-download.c:835
+#: embed/ephy-download.c:832
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tyyppi: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:841
+#: embed/ephy-download.c:838
 #, c-format
 msgid "From: %s"
 msgstr "Lähde: %s"
 
 #. Question
-#: embed/ephy-download.c:846
+#: embed/ephy-download.c:843
 msgid "Where do you want to save the file?"
 msgstr "Mihin haluan tallentaa tiedoston?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:851
+#: embed/ephy-download.c:848
 msgid "Save file"
 msgstr "Tallenna tiedosto"
 
@@ -948,7 +1010,7 @@ msgstr "F11"
 msgid "Web is being controlled by automation."
 msgstr "Verkkoselainta ohjataan automaation toimesta."
 
-#: embed/ephy-embed-utils.c:65
+#: embed/ephy-embed-utils.c:66
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Lähetä sähköposti osoitteeseen ”%s”"
@@ -1306,38 +1368,38 @@ msgstr "Etsi haettavan merkkijonon edellinen esiintymä"
 msgid "Find next occurrence of the search string"
 msgstr "Etsi haettavan merkkijonon seuraava esiintymä"
 
-#: embed/ephy-view-source-handler.c:257
+#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s ei ole kelvollinen URI"
 
-#: embed/ephy-web-view.c:184 src/window-commands.c:931
+#: embed/ephy-web-view.c:183 src/window-commands.c:1336
 msgid "Open"
 msgstr "Avaa"
 
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:358
 msgid "Not No_w"
 msgstr "_Ei nyt"
 
-#: embed/ephy-web-view.c:360
+#: embed/ephy-web-view.c:359
 msgid "_Never Save"
 msgstr "_Älä koskaan tallenna"
 
-#: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-dialog.ui:934 src/window-commands.c:480
+#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Tallenna"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:368
+#: embed/ephy-web-view.c:367
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Haluatko tallentaa salasanasi sivustolle \"%s\"?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:609
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1345,64 +1407,82 @@ msgstr ""
 "Huomio: tämä lomake ei ole salattu. Jos kirjoitat salasanan, se näkyy "
 "mahdollisesti myös muille."
 
-#: embed/ephy-web-view.c:830
+#: embed/ephy-web-view.c:817
 msgid "Web process crashed"
 msgstr "Web-prosessi kaatui"
 
-#: embed/ephy-web-view.c:833
+#: embed/ephy-web-view.c:820
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Web-prosessi lopetettiin koska se ylitti muistirajan"
 
-#: embed/ephy-web-view.c:1006
+#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Älä salli"
 
-#: embed/ephy-web-view.c:1007
+#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Salli"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1020
+#: embed/ephy-web-view.c:1034
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Sivu %s haluaa näyttää työpöytäilmoituksia."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1025
+#: embed/ephy-web-view.c:1039
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Sivu %s haluaa tietää sijaintisi."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1030
+#: embed/ephy-web-view.c:1044
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Sivu %s haluaa käyttää mikrofoniasi."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1035
+#: embed/ephy-web-view.c:1049
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Sivu %s haluaa käyttää web-kameraasi."
 
+#. Translators: Webcam and microphone policy for a specific site.
+#: embed/ephy-web-view.c:1054
+#, c-format
+msgid "The page at %s wants to use your webcam and microphone."
+msgstr "Sivu %s haluaa käyttää web-kameraasi ja mikrofoniasi."
+
+#: embed/ephy-web-view.c:1149
+#, c-format
+msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
+msgstr "Haluatko että “%s” voi käyttää evästeitä, kun selaat “%s”?"
+
+#: embed/ephy-web-view.c:1158
+#, c-format
+msgid "This will allow “%s” to track your activity."
+msgstr "Tämä mahdollistaa että “%s” voi seurata tekemisiäsi."
+
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1212
+#: embed/ephy-web-view.c:1336
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ladataan ”%s”…"
 
-#: embed/ephy-web-view.c:1214 embed/ephy-web-view.c:1220
+#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
 msgid "Loading…"
 msgstr "Ladataan…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1563
+#: embed/ephy-web-view.c:1677
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Tämä verkkosivusto esitti toiselle sivustolle kuuluvan tunnisteen."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1568
+#: embed/ephy-web-view.c:1682
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1411,20 +1491,20 @@ msgstr ""
 "Varmista, että tietokoneesi aika ja päivä ovat oikein."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1573
+#: embed/ephy-web-view.c:1687
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Tämän sivuston tunnistetta ei myönnetty luotetun organisaation toimesta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1692
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Tämän sivuston tunnistetta ei voitu käsitellä. Tunniste saattaa olla rikki."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1583
+#: embed/ephy-web-view.c:1697
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1432,7 +1512,7 @@ msgstr ""
 "Tämän sivuston tunniste on kumottu tunnisteen myöntäneen tahon toimesta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1588
+#: embed/ephy-web-view.c:1702
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1441,7 +1521,7 @@ msgstr ""
 "salausta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1593
+#: embed/ephy-web-view.c:1707
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1451,24 +1531,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1656 embed/ephy-web-view.c:1712
+#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Ongelma sivua ladatessa"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1659
+#: embed/ephy-web-view.c:1773
 msgid "Unable to display this website"
 msgstr "Tämän sivun esittäminen epäonnistui"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1777
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Sivu osoitteessa %s ei vaikuta olevan käytettävissä."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1667
+#: embed/ephy-web-view.c:1781
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1477,7 +1557,7 @@ msgstr ""
 "Varmistathan myös, että internetyhteytesi toimii oikein."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1677
+#: embed/ephy-web-view.c:1791
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Tarkka virhe: %s"
@@ -1485,48 +1565,48 @@ msgstr "Tarkka virhe: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1682 embed/ephy-web-view.c:1735
-#: embed/ephy-web-view.c:1774
+#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
+#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
 msgid "Reload"
 msgstr "Päivitä"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1685 embed/ephy-web-view.c:1738
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
+#: embed/ephy-web-view.c:1891
 msgctxt "reload-access-key"
 msgid "R"
 msgstr ""
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1715
+#: embed/ephy-web-view.c:1829
 msgid "Oops! There may be a problem"
 msgstr "Hups! Mahdollinen ongelma"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1719
+#: embed/ephy-web-view.c:1833
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Sivu %s saattoi aiheuttaa verkkoselaimen odottamattoman sulkeutumisen."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1726
+#: embed/ephy-web-view.c:1840
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Jos tämä tapahtuu uudelleen, ilmoita ongelmasta %s-kehittäjille."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1763
+#: embed/ephy-web-view.c:1877
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Ongelma sivua näyttäessä"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1766
+#: embed/ephy-web-view.c:1880
 msgid "Oops!"
 msgstr "Hups!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1883
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1535,18 +1615,18 @@ msgstr ""
 "toiselle sivulle jatkaaksesi."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1803
+#: embed/ephy-web-view.c:1917
 #, c-format
 msgid "Security Violation"
 msgstr "Tietoturvaloukkaus"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1920
 msgid "This Connection is Not Secure"
 msgstr "Tämä yhteys ei ole turvallinen"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1810
+#: embed/ephy-web-view.c:1924
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1558,16 +1638,16 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1820 embed/ephy-web-view.c:1909
-#: embed/ephy-web-view.c:1960
+#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
+#: embed/ephy-web-view.c:2074
 msgid "Go Back"
 msgstr "Siirry takaisin"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1823 embed/ephy-web-view.c:1912
-#: embed/ephy-web-view.c:1963
+#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2077
 #, fuzzy
 #| msgid "MB"
 msgctxt "back-access-key"
@@ -1576,29 +1656,29 @@ msgstr "Mt"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1826 embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
 msgid "Accept Risk and Proceed"
 msgstr "Hyväksy riski ja jatka"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1830 embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr ""
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1860
+#: embed/ephy-web-view.c:1974
 #, c-format
 msgid "Security Warning"
 msgstr "Turvallisuusvaroitus"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1863
+#: embed/ephy-web-view.c:1977
 msgid "Unsafe website detected!"
 msgstr "Turvaton verkkosivusto havaittu!"
 
-#: embed/ephy-web-view.c:1870
+#: embed/ephy-web-view.c:1984
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1608,7 +1688,7 @@ msgstr ""
 "sisältävän haitallista koodia, joka voidaan ladata koneellesi ilman "
 "hyväksyntääsi."
 
-#: embed/ephy-web-view.c:1874
+#: embed/ephy-web-view.c:1988
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1618,7 +1698,7 @@ msgstr ""
 "ja muu haitallinen koodi, sekä miten suojautua haitalliselta sisällöltä, on "
 "saatavilla osoitteessa %s."
 
-#: embed/ephy-web-view.c:1881
+#: embed/ephy-web-view.c:1995
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1629,7 +1709,7 @@ msgstr ""
 "vaarallista, kuten asentamaan ohjelmia tai paljastamaan henkilökohtaisia "
 "tietoja kuten salasanoja, puhelinnumeroita tai luottokortin tietoja."
 
-#: embed/ephy-web-view.c:1886
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1637,7 +1717,7 @@ msgstr ""
 "Saat lisätietoja sosiaalisesta manipuloinnista (ns. phishing) osoitteesta %s "
 "tai %s."
 
-#: embed/ephy-web-view.c:1895
+#: embed/ephy-web-view.c:2009
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1649,24 +1729,24 @@ msgstr ""
 "esimerkiksi vaihtamalla kotisivun tai näyttämällä ylimääräisiä mainoksia "
 "sivuilla."
 
-#: embed/ephy-web-view.c:1900
+#: embed/ephy-web-view.c:2014
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Saat lisätietoja ei-halutuista ohjelmista osoitteessa %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:1947
+#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
 #, c-format
 msgid "File not found"
 msgstr "Tiedostoa ei löytynyt"
 
-#: embed/ephy-web-view.c:1951
+#: embed/ephy-web-view.c:2065
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ei löytynyt."
 
-#: embed/ephy-web-view.c:1953
+#: embed/ephy-web-view.c:2067
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1675,15 +1755,15 @@ msgstr ""
 "Tarkista tiedoston nimi kirjoitusvirheiden varalta. Tarkista myös, onko "
 "tiedosto siirretty, nimetty uudelleen tai poistettu."
 
-#: embed/ephy-web-view.c:2016
+#: embed/ephy-web-view.c:2130
 msgid "None specified"
 msgstr "Ei määritetty"
 
-#: embed/ephy-web-view.c:2132
+#: embed/ephy-web-view.c:2246
 msgid "Technical information"
 msgstr "Tekniset tiedot"
 
-#: embed/ephy-web-view.c:3123
+#: embed/ephy-web-view.c:3382
 msgid "_OK"
 msgstr "_OK"
 
@@ -1692,7 +1772,7 @@ msgid "Unspecified"
 msgstr "Ei määritetty"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:206
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
 msgid "Downloads"
 msgstr "Lataukset"
 
@@ -1733,7 +1813,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:332
+#: lib/ephy-sync-utils.c:342
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "Käyttäjän %s Gnomen verkkoselain tietokoneella %s"
@@ -1802,35 +1882,47 @@ msgstr "%e. %Bta %Y"
 msgid "Unknown"
 msgstr "Tuntematon"
 
+#: lib/sync/ephy-password-import.c:132
+#, c-format
+msgid "Cannot create SQLite connection. Close browser and try again."
+msgstr "SQLite-yhteyttä ei voi luoda. Sulje selain ja yritä uudelleen."
+
+#: lib/sync/ephy-password-import.c:141 lib/sync/ephy-password-import.c:151
+#, c-format
+msgid ""
+"Browser password database could not be opened. Close browser and try again."
+msgstr ""
+"Selaimen salasanatietokantaa ei voitu avata. Sulje selain ja yritä uudelleen."
+
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:421
+#: lib/sync/ephy-password-manager.c:433
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Käyttäjän %s salasana lomakkeelle sivustolla %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:425
+#: lib/sync/ephy-password-manager.c:437
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Salasana lomakkeessa sivustolla %s"
 
-#: lib/sync/ephy-sync-service.c:851
+#: lib/sync/ephy-sync-service.c:862
 msgid "Failed to obtain storage credentials."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
-#: lib/sync/ephy-sync-service.c:1738
+#: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
+#: lib/sync/ephy-sync-service.c:1755
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr "Siirry asetuksiin ja kirjaudu uudelleen jatkaaksesi synkronointia."
 
-#: lib/sync/ephy-sync-service.c:957
+#: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Firefox-tilisi salasana vaikuttaa olevan muuttunut."
 
-#: lib/sync/ephy-sync-service.c:958
+#: lib/sync/ephy-sync-service.c:971
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1838,44 +1930,44 @@ msgstr ""
 "Siirry asetuksiin ja kirjaudu uudella salasanallasi jatkaaksesi "
 "synkronointia."
 
-#: lib/sync/ephy-sync-service.c:966
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
 msgstr "Allekirjoitetun varmenteen saaminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:1704 lib/sync/ephy-sync-service.c:1709
+#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "Nykyisen synkronointikäyttäjän synkronointisalaisuuksia ei löytynyt."
 
-#: lib/sync/ephy-sync-service.c:1716 lib/sync/ephy-sync-service.c:1724
+#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Nykyisen Sync-käyttäjän synkronointisalaisuudet ovat virheelliset."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1832
+#: lib/sync/ephy-sync-service.c:1849
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Käyttäjän %s synkronointisalaisuudet"
 
-#: lib/sync/ephy-sync-service.c:1858
+#: lib/sync/ephy-sync-service.c:1874
 #, fuzzy
 #| msgid "Failed to upload crypto/keys record."
 msgid "Failed to upload client record."
 msgstr "Tietueen crypto/keys lähettäminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:2051
+#: lib/sync/ephy-sync-service.c:2073
 msgid "Failed to upload crypto/keys record."
 msgstr "Tietueen crypto/keys lähettäminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:2158
+#: lib/sync/ephy-sync-service.c:2180
 msgid "Failed to retrieve crypto keys."
 msgstr "Salausavainten noutaminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:2209
+#: lib/sync/ephy-sync-service.c:2231
 msgid "Failed to upload meta/global record."
 msgstr "Tietueen meta/global lähettäminen epäonnistui."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2326
+#: lib/sync/ephy-sync-service.c:2348
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1883,17 +1975,17 @@ msgstr ""
 "Firefox-tilis käyttää tallennustilan versiota %d. Gnomen verkkoselain tukee "
 "ainoastaan versiota %d."
 
-#: lib/sync/ephy-sync-service.c:2337
+#: lib/sync/ephy-sync-service.c:2359
 msgid "Failed to verify storage version."
 msgstr "Tallennustilan version vahvistaminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:2393
+#: lib/sync/ephy-sync-service.c:2415
 #, fuzzy
 #| msgid "Failed to upload crypto/keys record."
 msgid "Failed to upload device info"
 msgstr "Tietueen crypto/keys lähettäminen epäonnistui."
 
-#: lib/sync/ephy-sync-service.c:2466 lib/sync/ephy-sync-service.c:2544
+#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
 msgid "Failed to retrieve the Sync Key"
 msgstr "Sync-avaimen noutaminen epäonnistui"
 
@@ -1946,92 +2038,94 @@ msgstr ""
 "Varmenne on kelvollinen. Siitä huolimatta sivuston resurssit lähetettiin "
 "turvattomasti."
 
-#: lib/widgets/ephy-downloads-popover.c:246
+#: lib/widgets/ephy-downloads-popover.c:235
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Tyhjenn_ä kaikki"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:78
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d sekunti jäljellä"
 msgstr[1] "%d sekuntia jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:82
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d minuutti jäljellä"
 msgstr[1] "%d minuuttia jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:86
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d tunti jäljellä"
 msgstr[1] "%d tuntia jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:90
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d päivä jäljellä"
 msgstr[1] "%d päivää jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:94
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d viikko jäljellä"
 msgstr[1] "%d viikkoa jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:98
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "%d kuukausi jäljellä"
 msgstr[1] "%d kuukautta jäljellä"
 
-#: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:410
+#: lib/widgets/ephy-download-widget.c:213
+#: lib/widgets/ephy-download-widget.c:431
 msgid "Finished"
 msgstr "Valmis"
 
-#: lib/widgets/ephy-download-widget.c:224
+#: lib/widgets/ephy-download-widget.c:223
 msgid "Moved or deleted"
 msgstr "Siirretty tai poistettu"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:407
+#: lib/widgets/ephy-download-widget.c:238
+#: lib/widgets/ephy-download-widget.c:428
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Virhe ladattaessa: %s"
 
-#: lib/widgets/ephy-download-widget.c:265
+#: lib/widgets/ephy-download-widget.c:264
 msgid "Cancelling…"
 msgstr "Perutaan…"
 
-#: lib/widgets/ephy-download-widget.c:412
+#: lib/widgets/ephy-download-widget.c:433
 msgid "Starting…"
 msgstr "Käynnistetään…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Avaa"
 
-#: lib/widgets/ephy-file-chooser.c:187
+#: lib/widgets/ephy-file-chooser.c:188
 msgid "All supported types"
 msgstr "Kaikki tuetut tyypit"
 
-#: lib/widgets/ephy-file-chooser.c:203
+#: lib/widgets/ephy-file-chooser.c:204
 msgid "Web pages"
 msgstr "WWW-sivut"
 
-#: lib/widgets/ephy-file-chooser.c:214
+#: lib/widgets/ephy-file-chooser.c:215
 msgid "Images"
 msgstr "Kuvat"
 
-#: lib/widgets/ephy-file-chooser.c:223
+#: lib/widgets/ephy-file-chooser.c:224
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -2039,41 +2133,41 @@ msgstr "Kaikki tiedostot"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:629 src/ephy-history-dialog.c:364
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "T_yhjennä"
 
-#: lib/widgets/ephy-location-entry.c:649
+#: lib/widgets/ephy-location-entry.c:689
 msgid "Paste and _Go"
 msgstr "Liitä ja sii_rry"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:670 src/ephy-window.c:935
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
 msgid "_Undo"
 msgstr "_Kumoa"
 
-#: lib/widgets/ephy-location-entry.c:677
+#: lib/widgets/ephy-location-entry.c:717
 msgid "_Redo"
 msgstr "_Tee uudelleen"
 
-#: lib/widgets/ephy-location-entry.c:963
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Show website security status and permissions"
 msgstr "Näytä sivuston turvallisuuden tila ja oikeudet"
 
-#: lib/widgets/ephy-location-entry.c:965
+#: lib/widgets/ephy-location-entry.c:1005
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Etsi verkkosivustoja, kirjanmerkkejä ja avoimia välilehtiä"
 
-#: lib/widgets/ephy-location-entry.c:1005
+#: lib/widgets/ephy-location-entry.c:1045
 msgid "Bookmark this page"
 msgstr "Lisää sivu kirjanmerkkeihin"
 
-#: lib/widgets/ephy-location-entry.c:1018
+#: lib/widgets/ephy-location-entry.c:1064
 msgid "Toggle reader mode"
 msgstr "Lukunäkymä päällä/pois"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:184
+#: lib/widgets/ephy-security-popover.c:186
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -2083,7 +2177,7 @@ msgstr ""
 "yhteydessä hyökkääjään, joka uskottelee olevansa %s."
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:191
+#: lib/widgets/ephy-security-popover.c:193
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -2093,78 +2187,74 @@ msgstr ""
 "lähettämäsi tiedot tai hallita näkemääsi sisältöä."
 
 #. Label in certificate popover when site sends mixed content.
-#: lib/widgets/ephy-security-popover.c:198
+#: lib/widgets/ephy-security-popover.c:200
 msgid "This web site did not properly secure your connection."
 msgstr "Tämä sivusto ei vaikuta turvaavan yhteyttä kunnollisesti."
 
 #. Label in certificate popover on secure sites.
-#: lib/widgets/ephy-security-popover.c:203
+#: lib/widgets/ephy-security-popover.c:205
 msgid "Your connection seems to be secure."
 msgstr "Yhteys vaikuttaa turvalliselta."
 
-#: lib/widgets/ephy-security-popover.c:249
+#: lib/widgets/ephy-security-popover.c:251
 msgid "_View Certificate…"
 msgstr "_Nä_ytä varmenne…"
 
-#: lib/widgets/ephy-security-popover.c:503
-msgid "Yes"
-msgstr "Kyllä"
-
-#: lib/widgets/ephy-security-popover.c:504
-msgid "No"
-msgstr "Ei"
-
-#: lib/widgets/ephy-security-popover.c:507
+#: lib/widgets/ephy-security-popover.c:518
 msgid "Ask"
 msgstr "Kysy"
 
-#: lib/widgets/ephy-security-popover.c:520
+#: lib/widgets/ephy-security-popover.c:535
 msgid "Permissions"
 msgstr "Oikeudet"
 
-#: lib/widgets/ephy-security-popover.c:556
+#: lib/widgets/ephy-security-popover.c:573
 msgid "Advertisements"
 msgstr "Mainokset"
 
-#: lib/widgets/ephy-security-popover.c:557
+#: lib/widgets/ephy-security-popover.c:574
 msgid "Notifications"
 msgstr "Ilmoitukset"
 
-#: lib/widgets/ephy-security-popover.c:558
+#: lib/widgets/ephy-security-popover.c:575
 msgid "Password saving"
 msgstr "Salasanan tallennus"
 
-#: lib/widgets/ephy-security-popover.c:559
+#: lib/widgets/ephy-security-popover.c:576
 msgid "Location access"
 msgstr "Sijainnin käyttö"
 
-#: lib/widgets/ephy-security-popover.c:560
+#: lib/widgets/ephy-security-popover.c:577
 msgid "Microphone access"
 msgstr "Mikrofonin käyttö"
 
-#: lib/widgets/ephy-security-popover.c:561
+#: lib/widgets/ephy-security-popover.c:578
 msgid "Webcam access"
 msgstr "Web-kameran käyttö"
 
-#: src/bookmarks/ephy-bookmark-row.c:61
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Media autoplay"
+msgstr "Median automaattinen toisto"
+
+#: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "Kirjanmerkin ominaisuudet"
 
-#: src/bookmarks/ephy-bookmarks-import.c:126
+#: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "Tiedosto ei ole kelvollinen Epiphany-kirjanmerkkitiedosto: tunnistetaulu "
 "puuttuu"
 
-#: src/bookmarks/ephy-bookmarks-import.c:144
+#: src/bookmarks/ephy-bookmarks-import.c:145
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Tiedosto ei ole kelvollinen Epiphany-kirjanmerkkitiedosto: kirjanmerkkitaulu "
 "puuttuu"
 
-#: src/bookmarks/ephy-bookmarks-import.c:246
+#: src/bookmarks/ephy-bookmarks-import.c:247
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2172,11 +2262,30 @@ msgstr ""
 "Firefox-kirjanmerkkitietokantaa ei voitu avata. Sulje Firefox ja yritä "
 "uudelleen."
 
-#: src/bookmarks/ephy-bookmarks-import.c:259
-#: src/bookmarks/ephy-bookmarks-import.c:291
+#: src/bookmarks/ephy-bookmarks-import.c:260
+#: src/bookmarks/ephy-bookmarks-import.c:292
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefox-kirjanmerkkejä ei voitu noutaa!"
+
+#: src/bookmarks/ephy-bookmarks-import.c:458
+#, c-format
+msgid "HTML bookmarks database could not be opened: %s"
+msgstr "HTML-kirjanmerkkitietokantaa ei voitu avata: %s"
+
+#: src/bookmarks/ephy-bookmarks-import.c:469
+msgid "HTML bookmarks database could not be read."
+msgstr "HTML-kirjanmerkkitietokantaa ei voitu lukea."
+
+#: src/bookmarks/ephy-bookmarks-import.c:490
+#, c-format
+msgid "HTML bookmarks database could not be parsed: %s"
+msgstr "HTML-kirjanmerkkitietokantaa ei voitu jäsentää: %s"
+
+#: src/bookmarks/ephy-bookmarks-import.c:643
+#, c-format
+msgid "Bookmarks file could not be parsed:"
+msgstr "Kirjanmerkkejä ei voitu jäsentää:"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
@@ -2186,56 +2295,32 @@ msgstr "Suosikit"
 msgid "Mobile"
 msgstr "Mobiili"
 
-#: src/clear-data-dialog.c:77
-msgid "HTTP disk cache"
-msgstr "HTTP-levyvälimuisti"
-
-#: src/clear-data-dialog.c:78
-msgid "Local storage data"
-msgstr "Paikallisen tallennustilan tiedot"
-
-#: src/clear-data-dialog.c:79
-msgid "Offline web application cache"
-msgstr "Offline-tilan verkkosovellusten välimuisti"
-
-#: src/clear-data-dialog.c:80
-msgid "IndexedDB databases"
-msgstr "IndexedDB-tietokannat"
-
-#: src/clear-data-dialog.c:81
-msgid "WebSQL databases"
-msgstr "WebSQL-tietokannat"
-
-#: src/clear-data-dialog.c:82
-msgid "Plugins data"
-msgstr "Liitännäisten tiedot"
-
-#: src/clear-data-dialog.c:83
-msgid "HSTS policies cache"
-msgstr "HSTS-käytäntöjen välimuisti"
-
-#: src/cookies-dialog.c:143
-msgid "Remove cookie"
-msgstr "Poista eväste"
-
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:35
+#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Lataa nykyinen sivu uudelleen"
 
-#: src/ephy-action-bar-start.c:620
+#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Lopeta nykyisen sivun lataaminen"
 
-#: src/ephy-history-dialog.c:269
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "Historian muokkaaminen ei ole mahdollista incognito-tilassa."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Poista valitut sivut historiasta"
 
-#: src/ephy-history-dialog.c:354
+#: src/ephy-history-dialog.c:463
+msgid "Copy URL"
+msgstr "Kopioi osoite"
+
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Tyhjennetäänkö sivuhistoria?"
 
-#: src/ephy-history-dialog.c:358
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2243,9 +2328,9 @@ msgstr ""
 "Sivuhistorian tyhjentämisen seurauksena kaikki linkit poistetaan "
 "sivuhistoriasta pysyvästi."
 
-#: src/ephy-history-dialog.c:782
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "Historian muokkaaminen ei ole mahdollista incognito-tilassa."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Poista koko historia"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2290,327 +2375,397 @@ msgstr "DIR"
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:256
+#: src/ephy-main.c:255
 msgid "Web options"
 msgstr "Verkkoasetukset"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-notebook.c:587 src/resources/gtk/action-bar-start.ui:96
+#: src/ephy-notebook.c:611 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "Avaa uusi välilehti"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:597
+#: src/ephy-notebook.c:621
 msgid "View open tabs"
 msgstr "Näytä avoimet välilehdet"
-
-#: src/ephy-search-engine-dialog.c:30
-msgid "New search engine"
-msgstr "Uusi hakukone"
-
-#: src/ephy-search-engine-dialog.c:31
-msgid "New address"
-msgstr "Uusi osoite"
-
-#: src/ephy-search-engine-dialog.c:32
-#: src/resources/gtk/search-engine-dialog.ui:177
-msgid "Bang"
-msgstr "Bang (pikavalinta)"
 
 #: src/ephy-tab-header-bar.c:68
 msgid "Tabs"
 msgstr "Välilehdet"
 
-#: src/ephy-tab-label.c:296
+#: src/ephy-tab-label.c:340
 msgid "New Tab"
 msgstr "Uusi välilehti"
 
-#: src/ephy-window.c:268
+#: src/ephy-window.c:272
 msgid "Do you want to leave this website?"
 msgstr "Haluatko poistua tältä sivulta?"
 
-#: src/ephy-window.c:269
+#: src/ephy-window.c:273 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "Muokkaamaasi lomaketta ei ole lähetetty."
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:274 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "_Hylkää lomake"
 
-#: src/ephy-window.c:285
+#: src/ephy-window.c:289
 msgid "There are multiple tabs open."
 msgstr "Useita välilehtiä on avoinna."
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:290
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Jos suljet tämän ikkunan, kaikki välilehdet suljetaan"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:291
 msgid "C_lose tabs"
 msgstr "_Sulje välilehdet"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:956
 msgid "Re_do"
 msgstr "_Tee uudelleen"
 
 #. Edit.
-#: src/ephy-window.c:939
+#: src/ephy-window.c:959
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:960
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:961
 msgid "_Paste"
 msgstr "L_iitä"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:962
+msgid "_Paste Text Only"
+msgstr "Liitä _vain teksti"
+
+#: src/ephy-window.c:963
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:965
 msgid "S_end Link by Email…"
 msgstr "Lähetä linkki _sähköpostitse…"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:967
 msgid "_Reload"
 msgstr "Päi_vitä"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:968
 msgid "_Back"
 msgstr "_Edellinen"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:969
 msgid "_Forward"
 msgstr "_Seuraava"
 
 #. Bookmarks
-#: src/ephy-window.c:951
+#: src/ephy-window.c:972
 msgid "Add Boo_kmark…"
 msgstr "Lisää _kirjanmerkki…"
 
 #. Links.
-#: src/ephy-window.c:955
+#: src/ephy-window.c:976
 msgid "Open Link in New _Window"
 msgstr "Avaa linkki _uudessa ikkunassa"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:977
 msgid "Open Link in New _Tab"
 msgstr "Avaa linkki uudessa _välilehdessä"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:978
 msgid "Open Link in I_ncognito Window"
 msgstr "Avaa linkki uudessa in_cognito-ikkunassa"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:979
 msgid "_Save Link As…"
 msgstr "Tallenna linkki _nimellä…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:980
 msgid "_Copy Link Address"
 msgstr "_Kopioi linkin osoite"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:981
 msgid "_Copy E-mail Address"
 msgstr "Kopioi  s_ähköpostiosoite"
 
 #. Images.
-#: src/ephy-window.c:964
+#: src/ephy-window.c:985
 msgid "View _Image in New Tab"
 msgstr "Näytä _kuva uudessa välilehdessä"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:986
 msgid "Copy I_mage Address"
 msgstr "Kopioi kuvan _osoite"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:987
 msgid "_Save Image As…"
 msgstr "_Tallenna kuva nimellä…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:988
 msgid "Set as _Wallpaper"
 msgstr "Aseta ta_ustakuvaksi"
 
 #. Video.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:992
 msgid "Open Video in New _Window"
 msgstr "Avaa video uuteen _ikkunaan"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:993
 msgid "Open Video in New _Tab"
 msgstr "Avaa video uuteen _välilehteen"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:994
 msgid "_Save Video As…"
 msgstr "_Tallenna video nimellä…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:995
 msgid "_Copy Video Address"
 msgstr "_Kopioi videon osoite"
 
 #. Audio.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:999
 msgid "Open Audio in New _Window"
 msgstr "Avaa ääni uudessa _ikkunassa"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Tab"
 msgstr "Avaa ääni uudessa _välilehdessä"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:1001
 msgid "_Save Audio As…"
 msgstr "_Tallenna äänitiedosto nimellä…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:1002
 msgid "_Copy Audio Address"
 msgstr "_Kopioi äänen osoite"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:1008
 msgid "Save Pa_ge As…"
 msgstr "Tallenna s_ivu nimellä…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:1009
 msgid "_Page Source"
 msgstr "_Sivun lähdekoodi"
 
-#: src/ephy-window.c:1348
+#: src/ephy-window.c:1369
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Etsi internetistä haulla “%s”"
 
-#: src/ephy-window.c:1377
+#: src/ephy-window.c:1398
 msgid "Open Link"
 msgstr "Avaa linkki"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1400
 msgid "Open Link In New Tab"
 msgstr "Avaa linkki uudessa välilehdessä"
 
-#: src/ephy-window.c:1381
+#: src/ephy-window.c:1402
 msgid "Open Link In New Window"
 msgstr "Avaa linkki uudessa ikkunassa"
 
-#: src/ephy-window.c:1383
+#: src/ephy-window.c:1404
 msgid "Open Link In Incognito Window"
 msgstr "Avaa linkki incognito-ikkunassa"
 
-#: src/ephy-window.c:2928
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Lataustoimenpide"
 
-#: src/ephy-window.c:2930
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Näytä tiedot"
 
-#: src/ephy-window.c:2932
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d lataustoimenpide on käynnissä"
 msgstr[1] "%d lataustoimenpidettä on käynnissä"
 
-#: src/ephy-window.c:3555
+#: src/ephy-window.c:3653
 msgid "Set Web as your default browser?"
 msgstr "Asetetaanko Gnomen selain oletusselaimeksi?"
 
-#: src/ephy-window.c:3557
+#: src/ephy-window.c:3655
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Asetetaanko Epiphanyn teknologiaesiversio oletusselaimeksi?"
 
-#: src/ephy-window.c:3569
+#: src/ephy-window.c:3667
 msgid "_Yes"
 msgstr "_Kyllä"
 
-#: src/ephy-window.c:3570
+#: src/ephy-window.c:3668
 msgid "_No"
 msgstr "_Ei"
 
-#: src/popup-commands.c:232
+#: src/popup-commands.c:234
 msgid "Save Link As"
 msgstr "Tallenna linkki _nimellä"
 
-#: src/popup-commands.c:240
+#: src/popup-commands.c:242
 msgid "Save Image As"
 msgstr "Tallenna kuva nimellä"
 
-#: src/popup-commands.c:248
+#: src/popup-commands.c:250
 msgid "Save Media As"
 msgstr "Tallenna media nimellä"
 
-#. Translators: the %s refers to the time at which the last sync was made.
-#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
-#.
-#: src/prefs-dialog.c:232
-#, c-format
-msgid "Last synchronized: %s"
-msgstr "Viimeksi synkronoitu: %s"
+#: src/preferences/clear-data-view.c:69
+msgid "Cookies"
+msgstr "Evästeet"
 
-#: src/prefs-dialog.c:520
-msgid "Something went wrong, please try again later."
-msgstr "Jokin meni pieleen, yritä myöhemmin uudelleen."
+#: src/preferences/clear-data-view.c:70
+msgid "HTTP disk cache"
+msgstr "HTTP-levyvälimuisti"
 
-#: src/prefs-dialog.c:809
-msgid "Web Application Icon"
-msgstr "Verkkosovelluksen kuvake"
+#: src/preferences/clear-data-view.c:71
+msgid "Local storage data"
+msgstr "Paikallisen tallennustilan tiedot"
 
-#: src/prefs-dialog.c:814
-msgid "Supported Image Files"
-msgstr "Tuetut kuvatiedostot"
+#: src/preferences/clear-data-view.c:72
+msgid "Offline web application cache"
+msgstr "Offline-tilan verkkosovellusten välimuisti"
 
-#: src/prefs-dialog.c:1463
-msgid "Delete language"
-msgstr "Poista kieli"
+#: src/preferences/clear-data-view.c:73
+msgid "IndexedDB databases"
+msgstr "IndexedDB-tietokannat"
 
-#: src/prefs-dialog.c:1482 src/resources/gtk/prefs-lang-dialog.ui:13
+#: src/preferences/clear-data-view.c:74
+msgid "WebSQL databases"
+msgstr "WebSQL-tietokannat"
+
+#: src/preferences/clear-data-view.c:75
+msgid "Plugins data"
+msgstr "Liitännäisten tiedot"
+
+#: src/preferences/clear-data-view.c:76
+msgid "HSTS policies cache"
+msgstr "HSTS-käytäntöjen välimuisti"
+
+#: src/preferences/clear-data-view.c:77
+msgid "Intelligent Tracking Prevention data"
+msgstr "Älykkään seurannan suojauksen tiedot"
+
+#: src/preferences/passwords-view.c:192
+msgid "Delete All Passwords?"
+msgstr "Haluatko poistaa kaikki salasanat?"
+
+#: src/preferences/passwords-view.c:195
+msgid "This will clear all locally stored passwords, and can not be undone."
+msgstr ""
+"Tämä tyhjentää kaikki paikallisesti tallennetut salasanat. Toimintoa ei voi "
+"perua."
+
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
+msgid "_Delete"
+msgstr "_Poista"
+
+#: src/preferences/passwords-view.c:258
+msgid "Copy password"
+msgstr "Kopioi salasana"
+
+#: src/preferences/passwords-view.c:264
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+#: src/preferences/passwords-view.c:287
+msgid "Copy username"
+msgstr "Kopioi käyttäjätunnus"
+
+#: src/preferences/passwords-view.c:293
+msgid "Password"
+msgstr "Salasana"
+
+#: src/preferences/passwords-view.c:318
+msgid "Reveal password"
+msgstr "Paljasta salasana"
+
+#: src/preferences/passwords-view.c:328
+msgid "Remove Password"
+msgstr "Poista salasana"
+
+#: src/preferences/prefs-appearance-page.c:66
+msgid "Sans"
+msgstr "Päätteetön"
+
+#: src/preferences/prefs-appearance-page.c:68
+msgid "Serif"
+msgstr "Päätteellinen"
+
+#: src/preferences/prefs-appearance-page.c:112
+msgid "Light"
+msgstr "Vaalea"
+
+#: src/preferences/prefs-appearance-page.c:114
+msgid "Dark"
+msgstr "Tumma"
+
+#: src/preferences/prefs-general-page.c:348
 msgid "Add Language"
 msgstr "Lisää kieli"
 
-#: src/prefs-dialog.c:1561 src/prefs-dialog.c:1581
+#: src/preferences/prefs-general-page.c:499
+msgid "Delete language"
+msgstr "Poista kieli"
+
+#: src/preferences/prefs-general-page.c:581
+#: src/preferences/prefs-general-page.c:740
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Järjestelmän kieli (%s)"
 msgstr[1] "Järjestelmän kielet (%s)"
 
-#: src/prefs-dialog.c:1816
+#: src/preferences/prefs-general-page.c:768
 msgid "Select a directory"
 msgstr "Valitse kansio"
 
-#: src/prefs-dialog.c:2203
-msgid "Sans"
-msgstr "Päätteetön"
+#: src/preferences/prefs-general-page.c:919
+msgid "Web Application Icon"
+msgstr "Verkkosovelluksen kuvake"
 
-#: src/prefs-dialog.c:2205
-msgid "Serif"
-msgstr "Päätteellinen"
+#: src/preferences/prefs-general-page.c:924
+msgid "Supported Image Files"
+msgstr "Tuetut kuvatiedostot"
 
-#: src/prefs-dialog.c:2249
-msgid "Light"
-msgstr "Vaalea"
+#. Translators: the %s refers to the time at which the last sync was made.
+#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+#.
+#: src/preferences/prefs-sync-page.c:107
+#, c-format
+msgid "Last synchronized: %s"
+msgstr "Viimeksi synkronoitu: %s"
 
-#: src/prefs-dialog.c:2251
-msgid "Dark"
-msgstr "Tumma"
+#: src/preferences/prefs-sync-page.c:395
+msgid "Something went wrong, please try again later."
+msgstr "Jokin meni pieleen, yritä myöhemmin uudelleen."
 
-#: src/profile-migrator/ephy-profile-migrator.c:1400
+#: src/preferences/synced-tabs-dialog.c:184
+msgid "Local Tabs"
+msgstr "Paikalliset välilehdet"
+
+#: src/profile-migrator/ephy-profile-migrator.c:1540
 msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1402
+#: src/profile-migrator/ephy-profile-migrator.c:1542
 msgid "Specifies the required version for the migrator"
 msgstr "Määrittää vaaditun version muuttajalle"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1404
+#: src/profile-migrator/ephy-profile-migrator.c:1544
 msgid "Specifies the profile where the migrator should run"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1425
+#: src/profile-migrator/ephy-profile-migrator.c:1565
 msgid "Web profile migrator"
 msgstr "Profiilin muuttaja"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1426
+#: src/profile-migrator/ephy-profile-migrator.c:1566
 msgid "Web profile migrator options"
 msgstr "Profiilin muuttajan valinnat"
 
@@ -2625,17 +2780,17 @@ msgid "View downloads"
 msgstr "Näytä lataukset"
 
 #. Translators: tooltip for the back button
-#: src/resources/gtk/action-bar-start.ui:20
+#: src/resources/gtk/action-bar-start.ui:19
 msgid "Go back to the previous page"
 msgstr "Siirry edelliselle sivulle"
 
 #. Translators: tooltip for the forward button
-#: src/resources/gtk/action-bar-start.ui:39
+#: src/resources/gtk/action-bar-start.ui:38
 msgid "Go forward to the next page"
 msgstr "Siirry seuraavalle sivulle"
 
 #. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:77
+#: src/resources/gtk/action-bar-start.ui:76
 msgid "Go to your homepage"
 msgstr "Siirry kotisivulle"
 
@@ -2649,12 +2804,12 @@ msgid "Bookmark"
 msgstr "Kirjanmerkki"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-dialog.ui:139
+#: src/resources/gtk/search-engine-dialog.ui:142
 msgid "Name"
 msgstr "Nimi"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-dialog.ui:152
+#: src/resources/gtk/search-engine-dialog.ui:155
 msgid "Address"
 msgstr "Osoite"
 
@@ -2688,62 +2843,36 @@ msgstr "Vailla kirjanmerkkejä?"
 msgid "Bookmark some webpages to view them here."
 msgstr "Lisää kirjanmerkkejä nähdäksesi kyseiset sivut täällä."
 
-#: src/resources/gtk/clear-data-dialog.ui:22
-#: src/resources/gtk/prefs-dialog.ui:551
+#: src/resources/gtk/clear-data-view.ui:22
+#: src/resources/gtk/prefs-privacy-page.ui:65
 msgid "Personal Data"
 msgstr "Henkilökohtaiset tiedot"
 
-#: src/resources/gtk/clear-data-dialog.ui:23
-msgid "Remove all personal data"
-msgstr "Poista kaikki henkilökohtaiset tiedot"
+#: src/resources/gtk/clear-data-view.ui:23
+msgid "_Clear Data"
+msgstr "Tyhjennä tie_dot"
 
-#: src/resources/gtk/clear-data-dialog.ui:24
+#: src/resources/gtk/clear-data-view.ui:24
+msgid "Remove selected personal data"
+msgstr "Poista valitut henkilökohtaiset tiedot"
+
+#: src/resources/gtk/clear-data-view.ui:25
 msgid "Search personal data"
 msgstr "Etsi henkilökohtaisia tietoja"
 
-#: src/resources/gtk/clear-data-dialog.ui:25
+#: src/resources/gtk/clear-data-view.ui:26
 msgid "There is no Personal Data"
 msgstr "Ei henkilökohtaisia tietoja"
 
-#: src/resources/gtk/clear-data-dialog.ui:26
+#: src/resources/gtk/clear-data-view.ui:27
 msgid "Personal data will be listed here"
 msgstr "Henkilökohtaiset tiedot tulevat näkyviin tänne"
 
-#: src/resources/gtk/clear-data-dialog.ui:53
-msgid ""
-"You can select a period of time to clear data for all websites modified in "
-"that period. If you choose from the beginning of time, then you can also "
-"clear data only for particular websites."
-msgstr ""
-"Voit valita aikajakson, jonka osalta poistetaan tiedot kaikista "
-"verkkosivustoista. Jos valitset koko ajan, voit poistaa tietoja vain "
-"tiettyjen sivustojen osalta."
+#: src/resources/gtk/clear-data-view.ui:64
+msgid "Clear selected personal data:"
+msgstr "Poista valitut henkilökohtaiset tiedot:"
 
-#: src/resources/gtk/clear-data-dialog.ui:74
-msgid "Clear selected personal data _from:"
-msgstr "Poista henkilökohtaiset tiedot _ajalta:"
-
-#: src/resources/gtk/clear-data-dialog.ui:89
-msgid "the past hour"
-msgstr "kulunut tunti"
-
-#: src/resources/gtk/clear-data-dialog.ui:90
-msgid "the past day"
-msgstr "kulunut päivä"
-
-#: src/resources/gtk/clear-data-dialog.ui:91
-msgid "the past week"
-msgstr "kulunut viikko"
-
-#: src/resources/gtk/clear-data-dialog.ui:92
-msgid "the past four weeks"
-msgstr "kuluneet neljä viikkoa"
-
-#: src/resources/gtk/clear-data-dialog.ui:93
-msgid "the beginning of time"
-msgstr "koko ajalta"
-
-#: src/resources/gtk/clear-data-dialog.ui:153
+#: src/resources/gtk/clear-data-view.ui:125
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -2751,35 +2880,16 @@ msgstr ""
 "Et voi perua tätä toimintoa. Tiedot, jotka valitset tyhjennettäväksi, "
 "poistetaan pysyvästi."
 
-#: src/resources/gtk/cookies-dialog.ui:7 src/resources/gtk/prefs-dialog.ui:432
-msgid "Cookies"
-msgstr "Evästeet"
-
-#: src/resources/gtk/cookies-dialog.ui:9
-msgid "Remove all cookies"
-msgstr "Poista kaikki evästeet"
-
-#: src/resources/gtk/cookies-dialog.ui:10
-msgid "Search cookies"
-msgstr "Etsi evästeitä"
-
-#: src/resources/gtk/cookies-dialog.ui:11
-msgid "There are no Cookies"
-msgstr "Ei evästeitä"
-
-#: src/resources/gtk/cookies-dialog.ui:12
-msgid "Cookies left by visited pages will be listed here"
-msgstr "Evästeet vierailluilta sivuilta tulevat näkyviin tänne"
-
-#: src/resources/gtk/data-dialog.ui:59
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Haku"
 
-#: src/resources/gtk/data-dialog.ui:229
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Tuloksia ei löytynyt"
 
-#: src/resources/gtk/data-dialog.ui:244
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Yritä eri hakuehdoilla"
 
@@ -2803,33 +2913,21 @@ msgstr "Liittyvät merkistöt"
 msgid "Show all…"
 msgstr "Näytä kaikki…"
 
-#: src/resources/gtk/history-dialog.ui:7
-msgid "History"
-msgstr "Sivuhistoria"
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Valitse kohteet"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Poista koko historia"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Etsi historiasta"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Historia on tyhjä"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Vieraillut sivut tulevat näkyviin tänne"
-
-#: src/resources/gtk/history-dialog.ui:67
-msgid "_Copy Location"
-msgstr "_Kopioi sijainti"
-
-#: src/resources/gtk/history-dialog.ui:76
-msgid "_Delete"
-msgstr "_Poista"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -2897,305 +2995,314 @@ msgstr "Etsi…"
 msgid "Fullscreen"
 msgstr "Koko näyttö"
 
-#: src/resources/gtk/page-menu-popover.ui:150
+#: src/resources/gtk/page-menu-popover.ui:172
+msgid "_Run in Background"
+msgstr "_Suorita taustalla"
+
+#: src/resources/gtk/page-menu-popover.ui:191
 msgid "_New Window"
 msgstr "Uusi _ikkuna"
 
-#: src/resources/gtk/page-menu-popover.ui:158
+#: src/resources/gtk/page-menu-popover.ui:199
 msgid "New _Incognito Window"
 msgstr "Uusi _incognito-ikkuna"
 
-#: src/resources/gtk/page-menu-popover.ui:175
+#: src/resources/gtk/page-menu-popover.ui:216
 msgid "Reopen Closed _Tab"
 msgstr "A_vaa uudelleen suljetut välilehdet"
 
-#: src/resources/gtk/page-menu-popover.ui:183
+#: src/resources/gtk/page-menu-popover.ui:224
 msgid "_History"
 msgstr "Sivu_historia"
 
-#: src/resources/gtk/page-menu-popover.ui:200
-msgid "I_mport Bookmarks…"
-msgstr "_Tuo kirjanmerkit…"
+#: src/resources/gtk/page-menu-popover.ui:240
+msgid "I_mport and Export"
+msgstr "_Tuo ja vie"
 
-#: src/resources/gtk/page-menu-popover.ui:208
-msgid "E_xport Bookmarks…"
-msgstr "_Vie kirjanmerkit…"
-
-#: src/resources/gtk/page-menu-popover.ui:225
+#: src/resources/gtk/page-menu-popover.ui:257
 msgid "Install Site as Web _Application…"
 msgstr "Tallenna sivu _verkkosovelluksena…"
 
-#: src/resources/gtk/page-menu-popover.ui:233
+#: src/resources/gtk/page-menu-popover.ui:265
 msgid "Open Appli_cation Manager"
 msgstr "A_vaa sovellushallinta"
 
-#: src/resources/gtk/page-menu-popover.ui:250
+#: src/resources/gtk/page-menu-popover.ui:282
 msgid "_Override Text Encoding…"
 msgstr "_Ohita tekstin merkistö…"
 
-#: src/resources/gtk/page-menu-popover.ui:266
+#: src/resources/gtk/page-menu-popover.ui:298
 msgid "Pr_eferences"
 msgstr "_Asetukset"
 
-#: src/resources/gtk/page-menu-popover.ui:275
+#: src/resources/gtk/page-menu-popover.ui:307
 msgid "_Keyboard Shortcuts"
 msgstr "_Pikanäppäimet"
 
-#: src/resources/gtk/page-menu-popover.ui:284
+#: src/resources/gtk/page-menu-popover.ui:316
 msgid "_Help"
 msgstr "O_hje"
 
-#: src/resources/gtk/page-menu-popover.ui:293
+#: src/resources/gtk/page-menu-popover.ui:325
 msgid "_About Web"
 msgstr "_Tietoja - Verkko"
+
+#: src/resources/gtk/page-menu-popover.ui:350
+msgid "Import and Export"
+msgstr "Tuo ja vie"
+
+#: src/resources/gtk/page-menu-popover.ui:361
+msgid "I_mport Bookmarks…"
+msgstr "_Tuo kirjanmerkit…"
+
+#: src/resources/gtk/page-menu-popover.ui:369
+msgid "E_xport Bookmarks…"
+msgstr "_Vie kirjanmerkit…"
+
+#: src/resources/gtk/page-menu-popover.ui:385
+msgid "I_mport Passwords…"
+msgstr "_Tuo salasanat…"
 
 #: src/resources/gtk/page-row.ui:85
 msgid "Close page"
 msgstr "Sulje sivu"
 
-#: src/resources/gtk/passwords-dialog.ui:25
-#: src/resources/gtk/prefs-dialog.ui:507
+#: src/resources/gtk/passwords-view.ui:25
+#: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Passwords"
 msgstr "Salasanat"
 
-#: src/resources/gtk/passwords-dialog.ui:27
+#: src/resources/gtk/passwords-view.ui:28
 msgid "Remove all passwords"
 msgstr "Poista kaikki salasanat"
 
-#: src/resources/gtk/passwords-dialog.ui:28
+#: src/resources/gtk/passwords-view.ui:29
 msgid "Search passwords"
 msgstr "Etsi salasanoja"
 
-#: src/resources/gtk/passwords-dialog.ui:29
+#: src/resources/gtk/passwords-view.ui:30
 msgid "There are no Passwords"
 msgstr "Ei salasanoja"
 
-#: src/resources/gtk/passwords-dialog.ui:30
+#: src/resources/gtk/passwords-view.ui:31
 msgid "Saved passwords will be listed here"
 msgstr "Tallennetut salasanat tulevat näkyviin tänne"
 
-#: src/resources/gtk/passwords-dialog.ui:61
-msgid "Site"
-msgstr "Sivusto"
-
-#: src/resources/gtk/passwords-dialog.ui:76
-msgid "User Name"
-msgstr "Tunnus"
-
-#: src/resources/gtk/passwords-dialog.ui:90
-msgid "Password"
-msgstr "Salasana"
-
-#: src/resources/gtk/passwords-dialog.ui:109
-msgid "Forget the selected passwords"
-msgstr "Unohda valitut salasanat"
-
-#: src/resources/gtk/passwords-dialog.ui:124
-msgid "Reveal all the passwords"
-msgstr "Näytä kaikki salasanat"
-
-#: src/resources/gtk/passwords-dialog.ui:144
+#: src/resources/gtk/passwords-view.ui:75
 msgid "_Copy Password"
 msgstr "_Kopioi salasana"
 
-#: src/resources/gtk/passwords-dialog.ui:148
+#: src/resources/gtk/passwords-view.ui:79
 msgid "C_opy Username"
 msgstr "K_opioi käyttäjätunnus"
 
-#: src/resources/gtk/prefs-dialog.ui:15
-msgid "Preferences"
-msgstr "Asetukset"
-
-#: src/resources/gtk/prefs-dialog.ui:33 src/resources/gtk/prefs-dialog.ui:368
-msgid "General"
-msgstr "Yleiset"
-
-#: src/resources/gtk/prefs-dialog.ui:40
-msgid "Web Application"
-msgstr "Verkkosovellus"
-
-#: src/resources/gtk/prefs-dialog.ui:76
-msgid "Homepage:"
-msgstr "Verkkosivu:"
-
-#: src/resources/gtk/prefs-dialog.ui:98
-msgid "Title:"
-msgstr "Nimi:"
-
-#: src/resources/gtk/prefs-dialog.ui:123
-msgid "_Manage Additional URLs"
-msgstr "_Hallitse lisäosoitteita"
-
-#: src/resources/gtk/prefs-dialog.ui:148
-msgid "Homepage"
-msgstr "Kotisivu"
-
-#: src/resources/gtk/prefs-dialog.ui:153
-msgid "Most _visited pages"
-msgstr "Useimmin vieraillut _sivut"
-
-#: src/resources/gtk/prefs-dialog.ui:167
-msgid "_Blank page"
-msgstr "_Tyhjä sivu"
-
-#: src/resources/gtk/prefs-dialog.ui:182
-msgid "_Custom"
-msgstr "_Omavalintainen"
-
-#: src/resources/gtk/prefs-dialog.ui:211
-msgid "Ask o_n download"
-msgstr "K_ysy aina latauksen yhteydessä"
-
-#: src/resources/gtk/prefs-dialog.ui:226
-msgid "_Download folder"
-msgstr "_Latauskansio"
-
-#: src/resources/gtk/prefs-dialog.ui:235
-msgid "Search Engines"
-msgstr "Hakukoneet"
-
-#: src/resources/gtk/prefs-dialog.ui:240
-msgid "_Manage Search Engines"
-msgstr "_Hallitse hakukoneita"
-
-#: src/resources/gtk/prefs-dialog.ui:265
-msgid "Session"
-msgstr "Istunto"
-
-#: src/resources/gtk/prefs-dialog.ui:270
-msgid "Start in _Incognito Mode"
-msgstr "Käynnistä in_cognito-tilassa"
-
-#: src/resources/gtk/prefs-dialog.ui:284
-msgid "_Restore Tabs on Startup"
-msgstr "_Palauta aiemmat välilehdet käynnistyessä"
-
-#: src/resources/gtk/prefs-dialog.ui:299
-msgid "Browsing"
-msgstr "Selaus"
-
-#: src/resources/gtk/prefs-dialog.ui:304
-msgid "Sm_ooth Scrolling"
-msgstr "Tasainen _vieritys"
-
-#: src/resources/gtk/prefs-dialog.ui:318
-msgid "Mouse _Gestures"
-msgstr "_Hiirieleet"
-
-#: src/resources/gtk/prefs-dialog.ui:350
-msgid "_Spell Checking"
-msgstr "_Oikoluku"
-
-#: src/resources/gtk/prefs-dialog.ui:377 src/resources/gtk/prefs-dialog.ui:587
-msgid "Privacy"
-msgstr "Yksityisyys"
-
-#: src/resources/gtk/prefs-dialog.ui:384
-msgid "Web Content"
-msgstr "WWW-sisältö"
-
-#: src/resources/gtk/prefs-dialog.ui:389
-msgid "Try to Block _Advertisements"
-msgstr "Yritä _estää mainokset"
-
-#: src/resources/gtk/prefs-dialog.ui:403
-msgid "Block Popup _Windows"
-msgstr "Estä _ponnahdusikkunat"
-
-#: src/resources/gtk/prefs-dialog.ui:417
-msgid "Try to Block Dangerous Web_sites"
-msgstr "Yrit_ä estää vaaralliset verkkosivustot"
-
-#: src/resources/gtk/prefs-dialog.ui:437
-msgid "Clear _Cookies"
-msgstr "T_yhjennä evästeet"
-
-#: src/resources/gtk/prefs-dialog.ui:461
-msgid "_Always accept"
-msgstr "Hyväksy _aina"
-
-#. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:475
-msgid "For example, not from advertisers on these sites."
-msgstr "Esimerkiksi ei näiden sivustojen mainostajilta."
-
-#: src/resources/gtk/prefs-dialog.ui:476
-msgid "Only _from sites you visit"
-msgstr "Vain _sivustoilta, joilla vieraillaan"
-
-#: src/resources/gtk/prefs-dialog.ui:491
-msgid "_Never accept"
-msgstr "_Älä hyväksy koskaan"
-
-#: src/resources/gtk/prefs-dialog.ui:512
-msgid "_Passwords"
-msgstr "Sa_lasanat"
-
-#: src/resources/gtk/prefs-dialog.ui:536
-msgid "_Remember Passwords"
-msgstr "_Muista salasanat"
-
-#: src/resources/gtk/prefs-dialog.ui:556
-msgid "You can clear stored personal data."
-msgstr "Voit poistaa tallennetut henkilökohtaiset tiedot."
-
-#: src/resources/gtk/prefs-dialog.ui:557
-msgid "Clear Personal _Data"
-msgstr "Tyhjennä henkilökohtaiset _tiedot"
-
-#: src/resources/gtk/prefs-dialog.ui:597 src/resources/gtk/prefs-dialog.ui:765
+#: src/resources/gtk/prefs-appearance-page.ui:6
 msgid "Appearance"
 msgstr "Ulkoasu"
 
-#: src/resources/gtk/prefs-dialog.ui:604
+#: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
 msgstr "Fontit"
 
-#: src/resources/gtk/prefs-dialog.ui:609
+#: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
 msgstr "Käytä mukautettuja fontteja"
 
-#: src/resources/gtk/prefs-dialog.ui:625
+#: src/resources/gtk/prefs-appearance-page.ui:20
 msgid "Sans serif font"
 msgstr "Pääteviivaton fontti"
 
-#: src/resources/gtk/prefs-dialog.ui:640
+#: src/resources/gtk/prefs-appearance-page.ui:35
 msgid "Serif font"
 msgstr "Päätteellinen fontti"
 
-#: src/resources/gtk/prefs-dialog.ui:655
+#: src/resources/gtk/prefs-appearance-page.ui:50
 msgid "Monospace font"
 msgstr "Tasalevyinen fontti"
 
-#: src/resources/gtk/prefs-dialog.ui:675
+#: src/resources/gtk/prefs-appearance-page.ui:68
 msgid "Reader Mode"
 msgstr "Lukunäkymä"
 
-#: src/resources/gtk/prefs-dialog.ui:679
+#: src/resources/gtk/prefs-appearance-page.ui:72
 msgid "Font Style"
 msgstr "Fonttityyli"
 
-#: src/resources/gtk/prefs-dialog.ui:685
+#: src/resources/gtk/prefs-appearance-page.ui:78
 msgid "Color Scheme"
 msgstr "Väriteema"
 
-#: src/resources/gtk/prefs-dialog.ui:698
+#: src/resources/gtk/prefs-appearance-page.ui:91
 msgid "Style"
 msgstr "Tyyli"
 
-#: src/resources/gtk/prefs-dialog.ui:703
+#: src/resources/gtk/prefs-appearance-page.ui:96
 msgid "Use Custom Stylesheet"
 msgstr "Käytä mukautettua tyylipohjaa"
 
-#: src/resources/gtk/prefs-dialog.ui:738
+#: src/resources/gtk/prefs-appearance-page.ui:131
+msgid "Use Custom JavaScript"
+msgstr "Käytä mukautettua JS:iä"
+
+#: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default zoom level"
 msgstr "Oletuslähennystaso"
 
-#: src/resources/gtk/prefs-dialog.ui:775 src/resources/gtk/prefs-dialog.ui:969
+#: src/resources/gtk/prefs-general-page.ui:6
+msgid "General"
+msgstr "Yleiset"
+
+#: src/resources/gtk/prefs-general-page.ui:10
+msgid "Web Application"
+msgstr "Verkkosovellus"
+
+#: src/resources/gtk/prefs-general-page.ui:46
+msgid "Homepage:"
+msgstr "Verkkosivu:"
+
+#: src/resources/gtk/prefs-general-page.ui:68
+msgid "Title:"
+msgstr "Nimi:"
+
+#: src/resources/gtk/prefs-general-page.ui:93
+msgid "_Manage Additional URLs"
+msgstr "_Hallitse lisäosoitteita"
+
+#: src/resources/gtk/prefs-general-page.ui:118
+msgid "Web Content"
+msgstr "WWW-sisältö"
+
+#: src/resources/gtk/prefs-general-page.ui:123
+msgid "Block _Advertisements"
+msgstr "_Estä mainokset"
+
+#: src/resources/gtk/prefs-general-page.ui:137
+msgid "Block _Popup Windows"
+msgstr "Estä _ponnahdusikkunat"
+
+#: src/resources/gtk/prefs-general-page.ui:152
+msgid "Homepage"
+msgstr "Kotisivu"
+
+#: src/resources/gtk/prefs-general-page.ui:157
+msgid "Most _visited pages"
+msgstr "Useimmin vieraillut _sivut"
+
+#: src/resources/gtk/prefs-general-page.ui:171
+msgid "_Blank page"
+msgstr "_Tyhjä sivu"
+
+#: src/resources/gtk/prefs-general-page.ui:186
+msgid "_Custom"
+msgstr "_Omavalintainen"
+
+#: src/resources/gtk/prefs-general-page.ui:215
+msgid "Ask o_n download"
+msgstr "K_ysy aina latauksen yhteydessä"
+
+#: src/resources/gtk/prefs-general-page.ui:230
+msgid "_Download folder"
+msgstr "_Latauskansio"
+
+#: src/resources/gtk/prefs-general-page.ui:239
+msgid "Search Engines"
+msgstr "Hakukoneet"
+
+#: src/resources/gtk/prefs-general-page.ui:244
+msgid "Manage Search _Engines"
+msgstr "Hallitse _hakukoneita"
+
+#: src/resources/gtk/prefs-general-page.ui:269
+msgid "Session"
+msgstr "Istunto"
+
+#: src/resources/gtk/prefs-general-page.ui:274
+msgid "Start in _Incognito Mode"
+msgstr "Käynnistä in_cognito-tilassa"
+
+#: src/resources/gtk/prefs-general-page.ui:288
+msgid "_Restore Tabs on Startup"
+msgstr "_Palauta aiemmat välilehdet käynnistyessä"
+
+#: src/resources/gtk/prefs-general-page.ui:303
+msgid "Browsing"
+msgstr "Selaus"
+
+#: src/resources/gtk/prefs-general-page.ui:308
+msgid "Sm_ooth Scrolling"
+msgstr "Tasainen _vieritys"
+
+#: src/resources/gtk/prefs-general-page.ui:322
+msgid "Mouse _Gestures"
+msgstr "_Hiirieleet"
+
+#: src/resources/gtk/prefs-general-page.ui:336
+msgid "S_witch Immediately to New Tabs"
+msgstr "Vaihda v_älittömästi uusiin välilehtiin"
+
+#: src/resources/gtk/prefs-general-page.ui:371
+msgid "_Spell Checking"
+msgstr "_Oikoluku"
+
+#: src/resources/gtk/prefs-lang-dialog.ui:13
+msgid "Add _Language"
+msgstr "_Lisää kieli"
+
+#: src/resources/gtk/prefs-lang-dialog.ui:67
+msgid "Choose a language:"
+msgstr "Valitse kieli:"
+
+#: src/resources/gtk/prefs-privacy-page.ui:6
+msgid "Privacy"
+msgstr "Yksityisyys"
+
+#: src/resources/gtk/prefs-privacy-page.ui:10
+msgid "Web Safety"
+msgstr "Verkon turvallisuus"
+
+#: src/resources/gtk/prefs-privacy-page.ui:15
+msgid "Block Dangerous Web_sites"
+msgstr "Est_ä vaaralliset verkkosivustot"
+
+#: src/resources/gtk/prefs-privacy-page.ui:30
+msgid "Web Tracking"
+msgstr "Seuranta verkossa"
+
+#: src/resources/gtk/prefs-privacy-page.ui:35
+msgid "Intelligent _Tracking Prevention"
+msgstr "Älykäs _seurannan suojaus"
+
+#: src/resources/gtk/prefs-privacy-page.ui:49
+msgid "Allow websites to store cookies, databases, and local storage data."
+msgstr ""
+"Salli verkkosivustojen tallettaa evästeitä, tietokantoja ja local storage -"
+"tietoa."
+
+#: src/resources/gtk/prefs-privacy-page.ui:50
+msgid "_Website Data Storage"
+msgstr "_Verkkosivuston tietojen tallennustila"
+
+#: src/resources/gtk/prefs-privacy-page.ui:70
+msgid "You can clear stored personal data."
+msgstr "Voit poistaa tallennetut henkilökohtaiset tiedot."
+
+#: src/resources/gtk/prefs-privacy-page.ui:71
+msgid "Clear Personal _Data"
+msgstr "Tyhjennä henkilökohtaiset _tiedot"
+
+#: src/resources/gtk/prefs-privacy-page.ui:92
+msgid "_Passwords"
+msgstr "Sa_lasanat"
+
+#: src/resources/gtk/prefs-privacy-page.ui:107
+msgid "_Remember Passwords"
+msgstr "_Muista salasanat"
+
+#: src/resources/gtk/prefs-sync-page.ui:6
 msgid "Sync"
 msgstr "Synkronoi"
 
-#: src/resources/gtk/prefs-dialog.ui:782
+#: src/resources/gtk/prefs-sync-page.ui:10
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3205,75 +3312,75 @@ msgstr ""
 "Gnomen verkkoselaimen sekä Firefoxin kanssa. Gnomen verkkoselain ei ole "
 "Mozillan valmistama tai tukema."
 
-#: src/resources/gtk/prefs-dialog.ui:783
+#: src/resources/gtk/prefs-sync-page.ui:11
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:802
+#: src/resources/gtk/prefs-sync-page.ui:30
 msgid "Firefox Account"
 msgstr "Firefox-tili"
 
-#: src/resources/gtk/prefs-dialog.ui:806
+#: src/resources/gtk/prefs-sync-page.ui:34
 msgid "Logged in"
 msgstr "Sisäänkirjautuneena"
 
-#: src/resources/gtk/prefs-dialog.ui:811
+#: src/resources/gtk/prefs-sync-page.ui:39
 msgid "Sign _out"
 msgstr "Kirjau_du ulos"
 
-#: src/resources/gtk/prefs-dialog.ui:824
+#: src/resources/gtk/prefs-sync-page.ui:52
 msgid "Sync Options"
 msgstr "Synkronointivalinnat"
 
-#: src/resources/gtk/prefs-dialog.ui:829
+#: src/resources/gtk/prefs-sync-page.ui:57
 msgid "Sync _Bookmarks"
 msgstr "Synkronoi _kirjanmerkit"
 
-#: src/resources/gtk/prefs-dialog.ui:844
+#: src/resources/gtk/prefs-sync-page.ui:72
 msgid "Sync _Passwords"
 msgstr "Synkronoi _salasanat"
 
-#: src/resources/gtk/prefs-dialog.ui:859
+#: src/resources/gtk/prefs-sync-page.ui:87
 msgid "Sync _History"
 msgstr "Synkronoi _historia"
 
-#: src/resources/gtk/prefs-dialog.ui:874
+#: src/resources/gtk/prefs-sync-page.ui:102
 msgid "Sync Open _Tabs"
 msgstr "Synkronoi avoimet _välilehdet"
 
-#: src/resources/gtk/prefs-dialog.ui:886
+#: src/resources/gtk/prefs-sync-page.ui:114
 msgid "S_ynced tabs"
 msgstr "S_ynkronoidut välilehdet"
 
-#: src/resources/gtk/prefs-dialog.ui:897
+#: src/resources/gtk/prefs-sync-page.ui:125
 msgid "Frequency"
 msgstr "Aikaväli"
 
-#: src/resources/gtk/prefs-dialog.ui:908
+#: src/resources/gtk/prefs-sync-page.ui:129
 msgid "Sync _now"
 msgstr "Synkronoi _nyt"
 
-#: src/resources/gtk/prefs-dialog.ui:920
+#: src/resources/gtk/prefs-sync-page.ui:148
 msgid "Device name"
 msgstr "Laitenimi"
 
-#: src/resources/gtk/prefs-dialog.ui:925
+#: src/resources/gtk/prefs-sync-page.ui:171
 msgid "_Change"
 msgstr "_Muuta"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:67
-msgid "Choose a l_anguage:"
-msgstr "Valitse k_ieli:"
 
 #: src/resources/gtk/search-engine-dialog.ui:11
 msgid "Manage Search Engines"
 msgstr "Hallitse hakukoneita"
 
-#: src/resources/gtk/search-engine-dialog.ui:212
+#: src/resources/gtk/search-engine-dialog.ui:180
+msgid "Bang"
+msgstr "Bang (pikavalinta)"
+
+#: src/resources/gtk/search-engine-dialog.ui:215
 msgid "Default"
 msgstr "Oletus"
 
-#: src/resources/gtk/search-engine-dialog.ui:265
+#: src/resources/gtk/search-engine-dialog.ui:268
 #, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine "
@@ -3411,134 +3518,159 @@ msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Siirrä nykyinen välilehti oikealle"
 
-#: src/resources/gtk/shortcuts-dialog.ui:207
+#: src/resources/gtk/shortcuts-dialog.ui:203
+msgctxt "shortcut window"
+msgid "Duplicate current tab"
+msgstr "Kahdenna nykyinen välilehti"
+
+#: src/resources/gtk/shortcuts-dialog.ui:214
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Muut"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:218
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Sivuhistoria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:218
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:232
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Lisää nykyinen sivu kirjanmerkkeihin"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:239
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "Tuo kirjanmerkit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:246
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "Vie kirjanmerkit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:253
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Aseta kohdistinselaustila päälle/pois"
 
-#: src/resources/gtk/shortcuts-dialog.ui:257
+#: src/resources/gtk/shortcuts-dialog.ui:264
+msgctxt "shortcut window"
+msgid "Web application"
+msgstr "Verkkosovellus"
+
+#: src/resources/gtk/shortcuts-dialog.ui:268
+msgctxt "shortcut window"
+msgid "Install site as web application"
+msgstr "Tallenna sivusto _verkkosovelluksena"
+
+#: src/resources/gtk/shortcuts-dialog.ui:275
+msgctxt "shortcut window"
+msgid "Open web application manager"
+msgstr "Avaa verkkosovellusten hallinta"
+
+#: src/resources/gtk/shortcuts-dialog.ui:286
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Näkymä"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Lähennä"
 
-#: src/resources/gtk/shortcuts-dialog.ui:268
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Loitonna"
 
-#: src/resources/gtk/shortcuts-dialog.ui:275
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Palauta mittasuhteet"
 
-#: src/resources/gtk/shortcuts-dialog.ui:282
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Koko näyttö"
 
-#: src/resources/gtk/shortcuts-dialog.ui:289
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Näytä sivun lähdekoodi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:296
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Näytä/piilota tarkistin"
 
-#: src/resources/gtk/shortcuts-dialog.ui:303
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Lukunäkymä päälle/pois"
 
-#: src/resources/gtk/shortcuts-dialog.ui:314
+#: src/resources/gtk/shortcuts-dialog.ui:343
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Muokkaaminen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:347
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Leikkaa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:354
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopioi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:361
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Liitä"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:368
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Kumoa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
+#: src/resources/gtk/shortcuts-dialog.ui:375
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Tee uudelleen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:353
+#: src/resources/gtk/shortcuts-dialog.ui:382
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Valitse kaikki"
 
-#: src/resources/gtk/shortcuts-dialog.ui:360
+#: src/resources/gtk/shortcuts-dialog.ui:389
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Valitse sivun osoite"
 
-#: src/resources/gtk/shortcuts-dialog.ui:367
+#: src/resources/gtk/shortcuts-dialog.ui:396
 msgctxt "shortcut window"
-msgid "Search"
+msgid "Search with default search engine"
+msgstr "Etsi oletushakukonella"
+
+#: src/resources/gtk/shortcuts-dialog.ui:403
+msgctxt "shortcut window"
+msgid "Find"
 msgstr "Haku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:374
+#: src/resources/gtk/shortcuts-dialog.ui:410
 msgctxt "shortcut window"
-msgid "Next search result"
+msgid "Next find result"
 msgstr "Seuraava hakutulos"
 
-#: src/resources/gtk/shortcuts-dialog.ui:381
+#: src/resources/gtk/shortcuts-dialog.ui:417
 msgctxt "shortcut window"
-msgid "Previous search result"
+msgid "Previous find result"
 msgstr "Edellinen hakutulos"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:22
@@ -3555,7 +3687,7 @@ msgstr ""
 "käyttäviltä laitteilta. Avaa välilehti kaksoisnapsauttamalla sen nimeä. "
 "Paikalliset välilehdet -otsakkeen alla olevia välilehtiä ei voi avata."
 
-#: src/resources/gtk/tab-label.ui:53
+#: src/resources/gtk/tab-label.ui:73
 msgid "Close Document"
 msgstr "Sulje asiakirja"
 
@@ -3587,70 +3719,93 @@ msgstr "Lisää uusi osoite"
 msgid "Remove the selected URLs"
 msgstr "Poista valitut osoitteet"
 
-#: src/search-provider/ephy-search-provider.c:196
+#: src/search-provider/ephy-search-provider.c:214
 #, c-format
 msgid "Search the web for “%s”"
 msgstr "Etsi internetistä haulla “%s”"
 
-#: src/synced-tabs-dialog.c:184
-msgid "Local Tabs"
-msgstr "Paikalliset välilehdet"
+#: src/search-provider/ephy-search-provider.c:224
+#, c-format
+#| msgid "Loading “%s”…"
+msgid "Load “%s”"
+msgstr "Lataa “%s”"
 
-#: src/window-commands.c:97
+#: src/window-commands.c:113
 msgid "GVDB File"
 msgstr "GVDB-tiedosto"
 
-#. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:98 src/window-commands.c:205
+#: src/window-commands.c:114
+msgid "HTML File"
+msgstr "HTML-tiedosto"
+
+#: src/window-commands.c:115
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:112
-msgid "Ch_oose File…"
-msgstr "_Valitse tiedosto…"
+#: src/window-commands.c:116 src/window-commands.c:695
+msgid "Chrome"
+msgstr "Chrome"
 
-#: src/window-commands.c:114 src/window-commands.c:298
-msgid "I_mport"
-msgstr "T_uo"
+#: src/window-commands.c:117 src/window-commands.c:696
+msgid "Chromium"
+msgstr "Chromium"
 
-#: src/window-commands.c:231
-msgid "Select Profile"
-msgstr "Valitse profiili"
-
-#: src/window-commands.c:236
-msgid "_Select"
-msgstr "_Valitse"
-
-#: src/window-commands.c:295 src/window-commands.c:477
-msgid "Choose File"
-msgstr "Valitse tiedosto"
-
-#: src/window-commands.c:322 src/window-commands.c:363
-msgid "Bookmarks successfully imported!"
-msgstr "Kirjanmerkit tuotu onnistuneesti!"
-
-#: src/window-commands.c:394
-msgid "Import Bookmarks"
-msgstr "Tuo kirjanmerkit"
-
-#: src/window-commands.c:398
+#: src/window-commands.c:131 src/window-commands.c:563
+#: src/window-commands.c:781
 msgid "Ch_oose File"
 msgstr "_Valitse tiedosto"
 
-#: src/window-commands.c:411
+#: src/window-commands.c:133 src/window-commands.c:332
+#: src/window-commands.c:376 src/window-commands.c:783
+#: src/window-commands.c:809
+msgid "I_mport"
+msgstr "T_uo"
+
+#: src/window-commands.c:272
+msgid "Select Profile"
+msgstr "Valitse profiili"
+
+#: src/window-commands.c:277
+msgid "_Select"
+msgstr "_Valitse"
+
+#: src/window-commands.c:329 src/window-commands.c:373
+#: src/window-commands.c:642
+msgid "Choose File"
+msgstr "Valitse tiedosto"
+
+#: src/window-commands.c:354 src/window-commands.c:398
+#: src/window-commands.c:445 src/window-commands.c:470
+#: src/window-commands.c:495
+msgid "Bookmarks successfully imported!"
+msgstr "Kirjanmerkit tuotu onnistuneesti!"
+
+#: src/window-commands.c:558
+msgid "Import Bookmarks"
+msgstr "Tuo kirjanmerkit"
+
+#: src/window-commands.c:576 src/window-commands.c:822
 msgid "From:"
 msgstr "Lähde:"
 
-#: src/window-commands.c:457
+#: src/window-commands.c:622
 msgid "Bookmarks successfully exported!"
 msgstr "Kirjanmerkit viety onnistuneesti!"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:485
+#: src/window-commands.c:650
 msgid "bookmarks.gvdb"
 msgstr "kirjanmerkit.gvdb"
 
-#: src/window-commands.c:612
+#: src/window-commands.c:737
+msgid "Passwords successfully imported!"
+msgstr "Salasanat tuotu onnistuneesti!!"
+
+#: src/window-commands.c:804
+msgid "Import Passwords"
+msgstr "Tuo salasanat"
+
+#: src/window-commands.c:980
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3659,11 +3814,11 @@ msgstr ""
 "Selkeä ja nätti näkymä internetiin.\n"
 "Tekniikkana takana WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:636
+#: src/window-commands.c:1004
 msgid "Website"
 msgstr "Verkkosivusto"
 
-#: src/window-commands.c:669
+#: src/window-commands.c:1037
 msgid "translator-credits"
 msgstr ""
 "Jiri Grönroos, 2012-2020\n"
@@ -3673,70 +3828,75 @@ msgstr ""
 "\n"
 "https://l10n.gnome.org/teams/fi/"
 
-#: src/window-commands.c:1309
+#: src/window-commands.c:1183
+msgid "Do you want to reload this website?"
+msgstr "Haluatko ladata tämän sivun uudelleen?"
+
+#: src/window-commands.c:1711
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Verkkosovellus nimeltä “%s” on jo olemassa. Korvataanko se?"
 
-#: src/window-commands.c:1312
+#: src/window-commands.c:1714
 msgid "Cancel"
 msgstr "Peru"
 
-#: src/window-commands.c:1314
+#: src/window-commands.c:1716
 msgid "Replace"
 msgstr "Korvaa"
 
-#: src/window-commands.c:1318
+#: src/window-commands.c:1720
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Tämän niminen sovellus on jo olemassa. Sen korvaaminen ylikirjoittaa sen."
 
-#: src/window-commands.c:1393
+#: src/window-commands.c:1812
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Sovellus “%s” on valmiina käytettäväksi"
 
-#: src/window-commands.c:1396
+#: src/window-commands.c:1815
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Sovellusta “%s” ei voitu luoda"
 
-#: src/window-commands.c:1404
+#. Translators: Desktop notification when a new web app is created.
+#: src/window-commands.c:1830
 msgid "Launch"
 msgstr "Käynnistä"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1450
+#: src/window-commands.c:1871
 msgid "Create Web Application"
 msgstr "Luo verkkosovellus"
 
-#: src/window-commands.c:1455
+#: src/window-commands.c:1876
 msgid "C_reate"
 msgstr "_Luo"
 
-#: src/window-commands.c:1669
+#: src/window-commands.c:2091
 msgid "Save"
 msgstr "Tallenna"
 
-#: src/window-commands.c:1678
+#: src/window-commands.c:2100
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:1683
+#: src/window-commands.c:2105
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:1688
+#: src/window-commands.c:2110
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2153
+#: src/window-commands.c:2595
 msgid "Enable caret browsing mode?"
 msgstr "Käytetäänkö kohdistinselaustilaa?"
 
-#: src/window-commands.c:2156
+#: src/window-commands.c:2598
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3746,9 +3906,116 @@ msgstr ""
 "käytöstä. Näin sivuille asetetaan liikuteltava kursori, jonka avulla sivulla "
 "on mahdollista liikkua. Haluatko ottaa nuolilla liikkumisen käyttöön?"
 
-#: src/window-commands.c:2159
+#: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Käytä"
+
+#~ msgid "Cookie accept"
+#~ msgstr "Evästeiden hyväksyntä"
+
+#~ msgid ""
+#~ "Where to accept cookies from. Possible values are “always”, “no-third-"
+#~ "party” and “never”."
+#~ msgstr ""
+#~ "Mistä evästeitä hyväksytään. Mahdolliset arvot ovat \"always\" (aina), "
+#~ "\"no-third-party\" (ei kolmansilta osapuolilta) ja \"never\" (ei koskaan)."
+
+#~ msgid "Mobile user agent"
+#~ msgstr "Mobiilikäyttäjätunniste (user-agent)"
+
+#~ msgid "Yes"
+#~ msgstr "Kyllä"
+
+#~ msgid "No"
+#~ msgstr "Ei"
+
+#~ msgid "Remove cookie"
+#~ msgstr "Poista eväste"
+
+#~ msgid "New search engine"
+#~ msgstr "Uusi hakukone"
+
+#~ msgid "New address"
+#~ msgstr "Uusi osoite"
+
+#~ msgid ""
+#~ "You can select a period of time to clear data for all websites modified "
+#~ "in that period. If you choose from the beginning of time, then you can "
+#~ "also clear data only for particular websites."
+#~ msgstr ""
+#~ "Voit valita aikajakson, jonka osalta poistetaan tiedot kaikista "
+#~ "verkkosivustoista. Jos valitset koko ajan, voit poistaa tietoja vain "
+#~ "tiettyjen sivustojen osalta."
+
+#~ msgid "the past hour"
+#~ msgstr "kulunut tunti"
+
+#~ msgid "the past day"
+#~ msgstr "kulunut päivä"
+
+#~ msgid "the past week"
+#~ msgstr "kulunut viikko"
+
+#~ msgid "the past four weeks"
+#~ msgstr "kuluneet neljä viikkoa"
+
+#~ msgid "the beginning of time"
+#~ msgstr "koko ajalta"
+
+#~ msgid "Remove all cookies"
+#~ msgstr "Poista kaikki evästeet"
+
+#~ msgid "Search cookies"
+#~ msgstr "Etsi evästeitä"
+
+#~ msgid "There are no Cookies"
+#~ msgstr "Ei evästeitä"
+
+#~ msgid "Cookies left by visited pages will be listed here"
+#~ msgstr "Evästeet vierailluilta sivuilta tulevat näkyviin tänne"
+
+#~ msgid "History"
+#~ msgstr "Sivuhistoria"
+
+#~ msgid "_Copy Location"
+#~ msgstr "_Kopioi sijainti"
+
+#~ msgid "Site"
+#~ msgstr "Sivusto"
+
+#~ msgid "Forget the selected passwords"
+#~ msgstr "Unohda valitut salasanat"
+
+#~ msgid "Reveal all the passwords"
+#~ msgstr "Näytä kaikki salasanat"
+
+#~ msgid "Preferences"
+#~ msgstr "Asetukset"
+
+#~ msgid "_Manage Search Engines"
+#~ msgstr "_Hallitse hakukoneita"
+
+#~ msgid "Clear _Cookies"
+#~ msgstr "T_yhjennä evästeet"
+
+#~ msgid "_Always accept"
+#~ msgstr "Hyväksy _aina"
+
+#~ msgid "For example, not from advertisers on these sites."
+#~ msgstr "Esimerkiksi ei näiden sivustojen mainostajilta."
+
+#~ msgid "Only _from sites you visit"
+#~ msgstr "Vain _sivustoilta, joilla vieraillaan"
+
+#~ msgid "_Never accept"
+#~ msgstr "_Älä hyväksy koskaan"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Search"
+#~ msgstr "Haku"
+
+#~ msgid "Ch_oose File…"
+#~ msgstr "_Valitse tiedosto…"
 
 #, fuzzy
 #~| msgid "The position of the tabs bar."
@@ -4206,9 +4473,6 @@ msgstr "_Käytä"
 #~ msgid "Saved _passwords"
 #~ msgstr "Talle_nnetut salasanat"
 
-#~ msgid "Tracking"
-#~ msgstr "Seuranta"
-
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Pyydä sivustoja olemaan seuraamatta minua"
 
@@ -4470,9 +4734,6 @@ msgstr "_Käytä"
 #~ msgid "Konqueror"
 #~ msgstr "Konqueror"
 
-#~ msgid "Import failed"
-#~ msgstr "Tuonti epäonnistui"
-
 #~ msgid "Import Failed"
 #~ msgstr "Tuonti epäonnistui"
 
@@ -4604,9 +4865,6 @@ msgstr "_Käytä"
 
 #~ msgid "Print"
 #~ msgstr "Tulosta"
-
-#~ msgid "Find"
-#~ msgstr "Etsi"
 
 #~ msgid "Encodings…"
 #~ msgstr "Merkistöt…"
