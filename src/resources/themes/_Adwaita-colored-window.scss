@@ -39,14 +39,18 @@ headerbar {
 
   border-color: $alt_borders_color;
 
+  > clamp {
+    color: themecolor($fg_color);
+  }
+
   &:backdrop {
     background-image: image($bg_color);
     border-color: $backdrop_borders_color;
     box-shadow: inset 0 1px $top_hilight;
-  }
 
-  #title-box-container {
-    color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
+    > clamp {
+      color: themecolor($backdrop_fg_color);
+    }
   }
 }
 

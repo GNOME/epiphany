@@ -103,6 +103,14 @@ dzlsuggestionpopover > revealer > box {
 
 #title-box-container {
   color: themecolor(text_shadow_color);
+
+  > clamp {
+    color: themecolor(theme_fg_color);
+
+    &:backdrop {
+      color: themecolor(theme_unfocused_fg_color);
+    }
+  }
 }
 
 .bookmark-tag-widget image {
