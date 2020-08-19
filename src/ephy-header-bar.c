@@ -208,6 +208,7 @@ ephy_header_bar_constructed (GObject *object)
   }
 
   event_box = gtk_event_box_new ();
+  gtk_widget_add_events (event_box, GDK_ALL_EVENTS_MASK);
   gtk_widget_show (event_box);
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), event_box);
   gtk_widget_set_name (event_box, "title-box-container");
