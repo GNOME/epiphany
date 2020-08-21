@@ -244,7 +244,7 @@ on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
 
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = gtk_adjustment_get_value (adjustment);
-  value = roundf (value) / 100;
+  value = round (value) / 100;
   g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value);
 }
 
