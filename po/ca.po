@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-07-29 15:51+0000\n"
+"POT-Creation-Date: 2020-08-14 09:59+0000\n"
 "PO-Revision-Date: 2020-07-22 23:35+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -56,8 +56,8 @@ msgid "The GNOME Project"
 msgstr "El projecte GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:103 src/ephy-main.c:255
-#: src/ephy-main.c:407 src/window-commands.c:992
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
+#: src/ephy-main.c:406 src/window-commands.c:992
 msgid "Web"
 msgstr "Web"
 
@@ -376,7 +376,7 @@ msgstr ""
 "entendre."
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:354
+#: src/resources/gtk/prefs-general-page.ui:351
 msgid "Languages"
 msgstr "Llengües"
 
@@ -478,7 +478,7 @@ msgstr "Habilita la Prevenció de Seguiment Intel·ligent (PSI)"
 
 #: data/org.gnome.epiphany.gschema.xml:197
 msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr "Si s'ha d'habilitar la Prevenció de Seguiment Intel·ligent (PSI)"
+msgstr "Si s'ha d'habilitar la Prevenció de Seguiment Intel·ligent (PSI)."
 
 #: data/org.gnome.epiphany.gschema.xml:201
 msgid "Allow websites to store local website data"
@@ -595,14 +595,16 @@ msgid "Whether to show buttons for navigation."
 msgstr "Si s'han de mostrar els botons de navegació."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Oculta la finestra en sortir"
+msgid "Run in background"
+msgstr "Executa en segon pla"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
 msgstr ""
-"Si s'habilita, la finestra de l'aplicació restarà oculta en tancar la "
-"finestra."
+"Si està habilitat, l'aplicació continua executant-se en segon pla després de "
+"tancar la finestra."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1085,8 +1087,9 @@ msgid "Download requested"
 msgstr "Baixada sol·licitada"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:156 src/window-commands.c:275
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
 #: src/window-commands.c:807 src/window-commands.c:1874
@@ -1511,7 +1514,7 @@ msgid "_Never Save"
 msgstr "_No ho desis mai"
 
 #: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:165 src/window-commands.c:645
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "De_sa"
 
@@ -1581,12 +1584,12 @@ msgstr "La pàgina %s vol utilitzar la càmera i el micròfon."
 
 #: embed/ephy-web-view.c:1149
 #, c-format
-msgid "Do you want to allow “%s“ to use cookies while browsing “%s“?"
+msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Voleu que «%s» utilitzi galetes mentre navegueu per «%s»?"
 
 #: embed/ephy-web-view.c:1158
 #, c-format
-msgid "This will allow “%s“ to track your activity."
+msgid "This will allow “%s” to track your activity."
 msgstr "Això permetrà que «%s» faci un seguiment de la vostra activitat."
 
 #. translators: %s here is the address of the web page
@@ -1908,7 +1911,7 @@ msgid "Unspecified"
 msgstr "Sense especificar"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:213
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
 msgid "Downloads"
 msgstr "Baixades"
 
@@ -2174,6 +2177,7 @@ msgstr ""
 "web s'han enviat de manera insegura."
 
 #: lib/widgets/ephy-downloads-popover.c:235
+#: src/resources/gtk/history-dialog.ui:345
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Neteja-ho tot"
@@ -2243,7 +2247,7 @@ msgstr "S'està cancel·lant..."
 msgid "Starting…"
 msgstr "S'està iniciant..."
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:57
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Obre"
 
@@ -2266,7 +2270,7 @@ msgstr "Tots els fitxers"
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:365
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "_Esborra"
 
@@ -2289,7 +2293,7 @@ msgstr "Mostra l'estat de la seguretat del lloc web i els permisos"
 
 #: lib/widgets/ephy-location-entry.c:1005
 msgid "Search for websites, bookmarks, and open tabs"
-msgstr "Cerca llocs web, adreces d'interès i pestanyes obertes "
+msgstr "Cerca llocs web, adreces d'interès i pestanyes obertes"
 
 #: lib/widgets/ephy-location-entry.c:1045
 msgid "Bookmark this page"
@@ -2429,23 +2433,31 @@ msgid "Mobile"
 msgstr "Mòbil"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:52
+#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Torna a carregar la pàgina actual"
 
-#: src/ephy-action-bar-start.c:635 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Atura la càrrega de la pàgina actual"
 
-#: src/ephy-history-dialog.c:270
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "No és possible modificar l'historial en mode d'incògnit."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Suprimeix les pàgines seleccionades de l'historial"
 
-#: src/ephy-history-dialog.c:355
+#: src/ephy-history-dialog.c:463
+msgid "Copy URL"
+msgstr "Copia l'URL"
+
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Voleu esborrar l'historial de navegació?"
 
-#: src/ephy-history-dialog.c:359
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently"
 " deleted."
@@ -2453,51 +2465,51 @@ msgstr ""
 "Si esborreu l'historial de navegació se suprimiran tots els enllaços de "
 "l'historial."
 
-#: src/ephy-history-dialog.c:761
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "No és possible modificar l'historial en mode d'incògnit."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Suprimeix tot l'historial"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
 msgstr "Obre una finestra de navegador nova en comptes d'una pestanya nova"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "Load the given session state file"
 msgstr "Carrega el fitxer d'estat de sessió especificat"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:113
 msgid "FILE"
 msgstr "FITXER"
 
-#: src/ephy-main.c:116
+#: src/ephy-main.c:115
 msgid "Start an instance with user data read-only"
 msgstr "Inicia una instància amb les dades d'usuari de només lectura"
 
-#: src/ephy-main.c:118
+#: src/ephy-main.c:117
 msgid "Start a private instance with separate user data"
 msgstr "Inicia una instància privada amb les dades d'usuari separades"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
 msgstr "Inicia una instància privada en mode aplicació d'aplicació"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
 msgstr "Inicia una instància privada pel control de WebDriver"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
 msgstr "Directori del perfil personalitzat a usar en la instància privada"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:124
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:127
+#: src/ephy-main.c:126
 msgid "URL …"
 msgstr "URL ..."
 
-#: src/ephy-main.c:256
+#: src/ephy-main.c:255
 msgid "Web options"
 msgstr "Opcions web"
 
@@ -2773,41 +2785,42 @@ msgstr "Memòria cau de polítiques HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Dades de la Prevenció de Seguiment Intel·ligent"
 
-#: src/preferences/passwords-view.c:195
+#: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
 msgstr "Suprimeix totes les contrasenyes?"
 
-#: src/preferences/passwords-view.c:198
+#: src/preferences/passwords-view.c:195
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Això netejarà totes les contrasenyes emmagatzemades localment i no es pot "
 "desfer."
 
-#: src/preferences/passwords-view.c:203 src/resources/gtk/history-dialog.ui:75
+#: src/preferences/passwords-view.c:200
+#: src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: src/preferences/passwords-view.c:261
+#: src/preferences/passwords-view.c:258
 msgid "Copy password"
 msgstr "Copia la contrasenya"
 
-#: src/preferences/passwords-view.c:267
+#: src/preferences/passwords-view.c:264
 msgid "Username"
 msgstr "Nom d'usuari"
 
-#: src/preferences/passwords-view.c:290
+#: src/preferences/passwords-view.c:287
 msgid "Copy username"
 msgstr "Copia el nom d'usuari"
 
-#: src/preferences/passwords-view.c:296
+#: src/preferences/passwords-view.c:293
 msgid "Password"
 msgstr "Contrasenya"
 
-#: src/preferences/passwords-view.c:321
+#: src/preferences/passwords-view.c:318
 msgid "Reveal password"
 msgstr "Descobreix la contrasenya"
 
-#: src/preferences/passwords-view.c:331
+#: src/preferences/passwords-view.c:328
 msgid "Remove Password"
 msgstr "Suprimeix la contrasenya"
 
@@ -2965,7 +2978,7 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Poseu adreces d'interès a algunes pàgines per veure-les aquí."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:68
+#: src/resources/gtk/prefs-privacy-page.ui:65
 msgid "Personal Data"
 msgstr "Dades personals"
 
@@ -3001,15 +3014,16 @@ msgstr ""
 "No podeu desfer aquesta acció. Les dades que seleccioneu netejar "
 "s'eliminaran per sempre."
 
-#: src/resources/gtk/data-dialog.ui:65 src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Cerca"
 
-#: src/resources/gtk/data-dialog.ui:230 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "No s'ha trobat cap resultat"
 
-#: src/resources/gtk/data-dialog.ui:245 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Proveu una cerca diferent"
 
@@ -3033,29 +3047,21 @@ msgstr "Codificacions relacionades"
 msgid "Show all…"
 msgstr "Mostra-ho tot…"
 
-#: src/resources/gtk/history-dialog.ui:7
-msgid "History"
-msgstr "Historial"
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Selecciona elements"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Suprimeix tot l'historial"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Cerca historial"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "L'historial és buit"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Les pàgines visitades es llistaran aquí"
-
-#: src/resources/gtk/history-dialog.ui:66
-msgid "_Copy Location"
-msgstr "_Copia la ubicació"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -3196,7 +3202,7 @@ msgid "Close page"
 msgstr "Tanca la pàgina"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:90
+#: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Passwords"
 msgstr "Contrasenyes"
 
@@ -3228,51 +3234,51 @@ msgstr "C_opia el nom d'usuari"
 msgid "Appearance"
 msgstr "Aparença"
 
-#: src/resources/gtk/prefs-appearance-page.ui:13
+#: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
 msgstr "Tipus de lletra"
 
-#: src/resources/gtk/prefs-appearance-page.ui:18
+#: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
 msgstr "Utilitza tipus de lletra personalitzats"
 
-#: src/resources/gtk/prefs-appearance-page.ui:23
+#: src/resources/gtk/prefs-appearance-page.ui:20
 msgid "Sans serif font"
 msgstr "Tipus de lletra Sans Serif"
 
-#: src/resources/gtk/prefs-appearance-page.ui:38
+#: src/resources/gtk/prefs-appearance-page.ui:35
 msgid "Serif font"
 msgstr "Tipus de lletra Serif"
 
-#: src/resources/gtk/prefs-appearance-page.ui:53
+#: src/resources/gtk/prefs-appearance-page.ui:50
 msgid "Monospace font"
 msgstr "Tipus de lletra de mida fixa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:71
+#: src/resources/gtk/prefs-appearance-page.ui:68
 msgid "Reader Mode"
 msgstr "Mode de lectura"
 
-#: src/resources/gtk/prefs-appearance-page.ui:75
+#: src/resources/gtk/prefs-appearance-page.ui:72
 msgid "Font Style"
 msgstr "Estil de la tipografia"
 
-#: src/resources/gtk/prefs-appearance-page.ui:81
+#: src/resources/gtk/prefs-appearance-page.ui:78
 msgid "Color Scheme"
 msgstr "Esquema de colors"
 
-#: src/resources/gtk/prefs-appearance-page.ui:94
+#: src/resources/gtk/prefs-appearance-page.ui:91
 msgid "Style"
 msgstr "Estil"
 
-#: src/resources/gtk/prefs-appearance-page.ui:99
+#: src/resources/gtk/prefs-appearance-page.ui:96
 msgid "Use Custom Stylesheet"
 msgstr "Usa un full d'estil personalitzat"
 
-#: src/resources/gtk/prefs-appearance-page.ui:134
+#: src/resources/gtk/prefs-appearance-page.ui:131
 msgid "Use Custom JavaScript"
 msgstr "Utilitza JavaScript personalitzat"
 
-#: src/resources/gtk/prefs-appearance-page.ui:169
+#: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default zoom level"
 msgstr "Nivell de zoom predeterminat"
 
@@ -3280,95 +3286,95 @@ msgstr "Nivell de zoom predeterminat"
 msgid "General"
 msgstr "General"
 
-#: src/resources/gtk/prefs-general-page.ui:13
+#: src/resources/gtk/prefs-general-page.ui:10
 msgid "Web Application"
 msgstr "Aplicació Web"
 
-#: src/resources/gtk/prefs-general-page.ui:49
+#: src/resources/gtk/prefs-general-page.ui:46
 msgid "Homepage:"
 msgstr "Pàgina d'inici:"
 
-#: src/resources/gtk/prefs-general-page.ui:71
+#: src/resources/gtk/prefs-general-page.ui:68
 msgid "Title:"
 msgstr "Títol:"
 
-#: src/resources/gtk/prefs-general-page.ui:96
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "_Gestiona URL addicionals"
 
-#: src/resources/gtk/prefs-general-page.ui:121
+#: src/resources/gtk/prefs-general-page.ui:118
 msgid "Web Content"
 msgstr "Contingut web"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:123
 msgid "Block _Advertisements"
 msgstr "Bloqueja els _anuncis"
 
-#: src/resources/gtk/prefs-general-page.ui:140
+#: src/resources/gtk/prefs-general-page.ui:137
 msgid "Block _Popup Windows"
 msgstr "Bloqueja les _finestres emergents"
 
-#: src/resources/gtk/prefs-general-page.ui:155
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "Homepage"
 msgstr "Pàgina d'inici"
 
-#: src/resources/gtk/prefs-general-page.ui:160
+#: src/resources/gtk/prefs-general-page.ui:157
 msgid "Most _visited pages"
 msgstr "_Pàgines més visitades"
 
-#: src/resources/gtk/prefs-general-page.ui:174
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "_Blank page"
 msgstr "Pàgina en _blanc"
 
-#: src/resources/gtk/prefs-general-page.ui:189
+#: src/resources/gtk/prefs-general-page.ui:186
 msgid "_Custom"
 msgstr "_Personalitzada"
 
-#: src/resources/gtk/prefs-general-page.ui:218
+#: src/resources/gtk/prefs-general-page.ui:215
 msgid "Ask o_n download"
 msgstr "Demana _en fer baixades"
 
-#: src/resources/gtk/prefs-general-page.ui:233
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "_Download folder"
 msgstr "Carpeta de _baixades"
 
-#: src/resources/gtk/prefs-general-page.ui:242
+#: src/resources/gtk/prefs-general-page.ui:239
 msgid "Search Engines"
 msgstr "Motors de cerca"
 
-#: src/resources/gtk/prefs-general-page.ui:247
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "Manage Search _Engines"
 msgstr "Gestiona els _motors de cerca"
 
-#: src/resources/gtk/prefs-general-page.ui:272
+#: src/resources/gtk/prefs-general-page.ui:269
 msgid "Session"
 msgstr "Sessió"
 
-#: src/resources/gtk/prefs-general-page.ui:277
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "Start in _Incognito Mode"
 msgstr "_Inicia en mode d'incògnit"
 
-#: src/resources/gtk/prefs-general-page.ui:291
+#: src/resources/gtk/prefs-general-page.ui:288
 msgid "_Restore Tabs on Startup"
 msgstr "_Restaura les pestanyes a l'inici"
 
-#: src/resources/gtk/prefs-general-page.ui:306
+#: src/resources/gtk/prefs-general-page.ui:303
 msgid "Browsing"
 msgstr "Navegació"
 
-#: src/resources/gtk/prefs-general-page.ui:311
+#: src/resources/gtk/prefs-general-page.ui:308
 msgid "Sm_ooth Scrolling"
 msgstr "_Desplaçament suau"
 
-#: src/resources/gtk/prefs-general-page.ui:325
+#: src/resources/gtk/prefs-general-page.ui:322
 msgid "Mouse _Gestures"
 msgstr "_Gestos del ratolí"
 
-#: src/resources/gtk/prefs-general-page.ui:339
+#: src/resources/gtk/prefs-general-page.ui:336
 msgid "S_witch Immediately to New Tabs"
 msgstr "Ca_nvia immediatament a les pestanyes noves"
 
-#: src/resources/gtk/prefs-general-page.ui:374
+#: src/resources/gtk/prefs-general-page.ui:371
 msgid "_Spell Checking"
 msgstr "_Verificació ortogràfica"
 
@@ -3384,45 +3390,45 @@ msgstr "Selecciona una llengua:"
 msgid "Privacy"
 msgstr "Privacitat"
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.ui:10
 msgid "Web Safety"
 msgstr "Seguretat web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:18
+#: src/resources/gtk/prefs-privacy-page.ui:15
 msgid "Block Dangerous Web_sites"
 msgstr "_Bloqueja llocs web perillosos"
 
-#: src/resources/gtk/prefs-privacy-page.ui:33
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "Web Tracking"
 msgstr "Seguiment web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:38
+#: src/resources/gtk/prefs-privacy-page.ui:35
 msgid "Intelligent _Tracking Prevention"
 msgstr "Prevenció de _Seguiment Intel·ligent"
 
-#: src/resources/gtk/prefs-privacy-page.ui:52
+#: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr ""
 "Permet que els llocs web emmagatzemin galetes, bases de dades i dades "
 "locals."
 
-#: src/resources/gtk/prefs-privacy-page.ui:53
+#: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
 msgstr "Dades emmagatzemades dels llocs _web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:73
+#: src/resources/gtk/prefs-privacy-page.ui:70
 msgid "You can clear stored personal data."
 msgstr "Podeu netejar les dades personals emmagatzemades."
 
-#: src/resources/gtk/prefs-privacy-page.ui:74
+#: src/resources/gtk/prefs-privacy-page.ui:71
 msgid "Clear Personal _Data"
 msgstr "_Suprimeix les dades personals"
 
-#: src/resources/gtk/prefs-privacy-page.ui:95
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "_Passwords"
 msgstr "_Contrasenyes"
 
-#: src/resources/gtk/prefs-privacy-page.ui:110
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "_Remember Passwords"
 msgstr "_Recorda les contrasenyes"
 
@@ -3430,7 +3436,7 @@ msgstr "_Recorda les contrasenyes"
 msgid "Sync"
 msgstr "Sincronitza"
 
-#: src/resources/gtk/prefs-sync-page.ui:13
+#: src/resources/gtk/prefs-sync-page.ui:10
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3440,59 +3446,59 @@ msgstr ""
 "vostres dades amb la Web i Firefox en altres equips. Web no està produït ni "
 "recolzat per Mozilla."
 
-#: src/resources/gtk/prefs-sync-page.ui:14
+#: src/resources/gtk/prefs-sync-page.ui:11
 msgid "Firefox Sync"
 msgstr "Sincronització de Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:33
+#: src/resources/gtk/prefs-sync-page.ui:30
 msgid "Firefox Account"
 msgstr "Compte de Firefox"
 
-#: src/resources/gtk/prefs-sync-page.ui:37
+#: src/resources/gtk/prefs-sync-page.ui:34
 msgid "Logged in"
 msgstr "Sessió iniciada"
 
-#: src/resources/gtk/prefs-sync-page.ui:42
+#: src/resources/gtk/prefs-sync-page.ui:39
 msgid "Sign _out"
 msgstr "Tan_ca la sessió"
 
-#: src/resources/gtk/prefs-sync-page.ui:55
+#: src/resources/gtk/prefs-sync-page.ui:52
 msgid "Sync Options"
 msgstr "Opcions de sincronització"
 
-#: src/resources/gtk/prefs-sync-page.ui:60
+#: src/resources/gtk/prefs-sync-page.ui:57
 msgid "Sync _Bookmarks"
 msgstr "_Sincronitza adreces d'interès"
 
-#: src/resources/gtk/prefs-sync-page.ui:75
+#: src/resources/gtk/prefs-sync-page.ui:72
 msgid "Sync _Passwords"
 msgstr "Si_ncronitza les contrasenyes"
 
-#: src/resources/gtk/prefs-sync-page.ui:90
+#: src/resources/gtk/prefs-sync-page.ui:87
 msgid "Sync _History"
 msgstr "Sinc_ronitza l'historial"
 
-#: src/resources/gtk/prefs-sync-page.ui:105
+#: src/resources/gtk/prefs-sync-page.ui:102
 msgid "Sync Open _Tabs"
 msgstr "Sincr_onitza les pestanyes obertes"
 
-#: src/resources/gtk/prefs-sync-page.ui:117
+#: src/resources/gtk/prefs-sync-page.ui:114
 msgid "S_ynced tabs"
 msgstr "Pestanyes _sincronitzades"
 
-#: src/resources/gtk/prefs-sync-page.ui:128
+#: src/resources/gtk/prefs-sync-page.ui:125
 msgid "Frequency"
 msgstr "Freqüència"
 
-#: src/resources/gtk/prefs-sync-page.ui:132
+#: src/resources/gtk/prefs-sync-page.ui:129
 msgid "Sync _now"
 msgstr "Sincro_nitza ara"
 
-#: src/resources/gtk/prefs-sync-page.ui:151
+#: src/resources/gtk/prefs-sync-page.ui:148
 msgid "Device name"
 msgstr "Nom de dispositiu"
 
-#: src/resources/gtk/prefs-sync-page.ui:174
+#: src/resources/gtk/prefs-sync-page.ui:171
 msgid "_Change"
 msgstr "_Canvia"
 
@@ -3857,7 +3863,7 @@ msgstr "Cerca «%s» al web"
 #: src/search-provider/ephy-search-provider.c:224
 #, c-format
 msgid "Load “%s”"
-msgstr "Carrega «%s»..."
+msgstr "Carrega «%s»"
 
 #: src/window-commands.c:113
 msgid "GVDB File"
@@ -4038,4 +4044,3 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Habilita"
-
