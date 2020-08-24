@@ -337,7 +337,7 @@ ephy_header_bar_constructed (GObject *object)
   if (ephy_profile_dir_is_web_application ()) {
     GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (header_bar->action_bar_start);
 
-    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, navigation_box, "visible", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_INVERT_BOOLEAN);
+    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, navigation_box, "visible", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
   }
 }
 
