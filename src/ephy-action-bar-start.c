@@ -27,6 +27,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -569,6 +570,12 @@ ephy_action_bar_start_constructed (GObject *object)
     gtk_button_set_image (GTK_BUTTON (action_bar_start->homepage_button),
                           gtk_image_new_from_icon_name ("go-home-symbolic",
                                                         get_icon_size ()));
+  }
+
+  if (ephy_profile_dir_is_web_application ()) {
+    GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (action_bar_start);
+
+    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, navigation_box, "visible", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
   }
 }
 
