@@ -950,6 +950,10 @@ ephy_filters_manager_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
+  /* Disable filter manager during tests */
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_TEST)
+    return;
+
   if (!manager->filters_dir) {
     g_autofree char *cache_dir = ephy_default_cache_dir ();
     manager->filters_dir = g_build_filename (cache_dir, "adblock", NULL);
