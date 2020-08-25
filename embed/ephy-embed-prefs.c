@@ -567,9 +567,6 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        "enable-plugins", FALSE,
-#if WEBKIT_CHECK_VERSION (2, 27, 90) && !WEBKIT_CHECK_VERSION (2, 30, 0)
-                                                       "allow-top-navigation-to-data-urls", FALSE,
-#endif
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
