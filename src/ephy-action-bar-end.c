@@ -189,7 +189,8 @@ download_completed_cb (EphyDownloadsManager *manager,
                        EphyDownload         *download,
                        EphyActionBarEnd     *action_bar_end)
 {
-  begin_complete_theatrics (action_bar_end);
+  if (gtk_widget_get_mapped (GTK_WIDGET (action_bar_end)))
+    begin_complete_theatrics (action_bar_end);
 }
 
 static void
