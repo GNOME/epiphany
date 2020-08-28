@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-26 05:50+0000\n"
-"PO-Revision-Date: 2020-08-26 09:50+0200\n"
+"POT-Creation-Date: 2020-08-27 18:14+0000\n"
+"PO-Revision-Date: 2020-08-28 09:35+0200\n"
 "Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -504,6 +504,14 @@ msgstr "Of Intelligent Tracking-preventie moet worden ingeschakeld."
 msgid "Allow websites to store local website data"
 msgstr "Websites toestaan lokale websitegegevens op te slaan"
 
+#: data/org.gnome.epiphany.gschema.xml:202
+msgid ""
+"Whether to allow websites to store cookies, local storage data, and "
+"IndexedDB databases. Disabling this will break many websites."
+msgstr ""
+"Of websites cookies, lokale opslaggegevens en geïndexeerde DB-databases op"
+" mogen slaan. Als u dit uitschakelt zullen veel websites afgebroken worden."
+
 #: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
 msgstr "Standaard zoomniveau voor nieuwe pagina’s"
@@ -602,6 +610,14 @@ msgstr "Aanvullende URL's van webtoepassingen"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "De lijst van URL's die geopend moet worden door de webtoepassing"
 
+#: data/org.gnome.epiphany.gschema.xml:252
+msgid "WebApp is mobile capable"
+msgstr "WebApp is geschikt voor mobiele apparaten"
+
+#: data/org.gnome.epiphany.gschema.xml:253
+msgid "Whether to show buttons for navigation."
+msgstr "Of er knoppen voor navigatie getoond moeten worden."
+
 #: data/org.gnome.epiphany.gschema.xml:257
 msgid "Run in background"
 msgstr "Op de achtergrond draaien"
@@ -684,7 +700,6 @@ msgid "Firefox Sync Token Server URL"
 msgstr "Firefox Sync Token Server-URL"
 
 #: data/org.gnome.epiphany.gschema.xml:318
-#| msgid "URL to a custom Firefox Sync accounts server."
 msgid "URL to a custom Firefox Sync token server."
 msgstr "Aangepaste Firefox Sync Token Server-URL."
 
@@ -3293,6 +3308,14 @@ msgstr "Items selecteren"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
+#: src/resources/gtk/history-dialog.ui:87
+msgid "History"
+msgstr "Geschiedenis"
+
+# src/prefs.c:367
+# src/toolbar.c:273
+# ui/epiphany.glade.h:78
+# ui/preferences.glade.h:88
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Geschiedenis doorzoeken"
@@ -4539,13 +4562,6 @@ msgstr "_Inschakelen"
 #~ msgstr ""
 #~ "Cookies achtergelaten door bezochte pagina’s zullen in deze lijst worden "
 #~ "opgenomen"
-
-# src/prefs.c:367
-# src/toolbar.c:273
-# ui/epiphany.glade.h:78
-# ui/preferences.glade.h:88
-#~ msgid "History"
-#~ msgstr "Geschiedenis"
 
 # ui/epiphany.glade.h:85
 #~ msgid "_Copy Location"
