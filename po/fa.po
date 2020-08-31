@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-14 09:59+0000\n"
-"PO-Revision-Date: 2020-08-26 11:43+0000\n"
+"POT-Creation-Date: 2020-08-30 14:56+0000\n"
+"PO-Revision-Date: 2020-08-31 06:23+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -340,6 +340,18 @@ msgstr "به‌کار انداختن مرور امن"
 msgid "Google Safe Browsing API key"
 msgstr "کلید رابط برنامه‌نویسی مرور امن گوگل"
 
+#: data/org.gnome.epiphany.gschema.xml:196
+msgid "Enable Intelligent Tracking Prevention (ITP)"
+msgstr "به کار اندازی جلوگیری از ردیابی هوشمند (ITP)"
+
+#: data/org.gnome.epiphany.gschema.xml:197
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "این که جلوگیری از ردیابی هوشمند به کار بیفتد یا نه."
+
+#: data/org.gnome.epiphany.gschema.xml:201
+msgid "Allow websites to store local website data"
+msgstr "اجازه به پایگاه‌های وب برای ذخیرهٔ داده‌های محلّی"
+
 #: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
 msgstr "سطح بزرگ‌نمایی پیش‌گزیده برای صفحه‌های جدید"
@@ -372,6 +384,10 @@ msgstr "نگه داشتن آمار آخرین شاخهٔ بارگیری"
 msgid "Always ask for download directory"
 msgstr "همیشه شاخهٔ بارگیری پرسیده شود"
 
+#: data/org.gnome.epiphany.gschema.xml:240
+msgid "Enable immediately switch to new open tab"
+msgstr "به کار انداختن تعویض خودکار به زبانهٔ تازه‌گشوده"
+
 #: data/org.gnome.epiphany.gschema.xml:241
 msgid "Whether to automatically switch to a new open tab."
 msgstr "این که به صورت خودکار به زبانه‌ای تازه‌گشوده تعویض شود یا نه."
@@ -383,6 +399,10 @@ msgstr "نشانی‌های اضافی کارهٔ وب"
 #: data/org.gnome.epiphany.gschema.xml:248
 msgid "The list of URLs that should be opened by the web application"
 msgstr "فهرستی از نشانی‌ها که باید با کارهٔ وب گشوده شوند"
+
+#: data/org.gnome.epiphany.gschema.xml:257
+msgid "Run in background"
+msgstr "اجرا در پس‌زمینه"
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -396,9 +416,21 @@ msgstr ""
 "مسیر شاخهٔ بارگیری پرونده‌ها؛ یا Downloads برای استفاده از شاخهٔ پیش‌گزیدهٔ "
 "بارگیری‌ها، یا Desktop برای استفاده از شاخهٔ میزکار."
 
+#: data/org.gnome.epiphany.gschema.xml:317
+msgid "Firefox Sync Token Server URL"
+msgstr "نشانی کارساز ژتون هم‌گام سازی فایرفاکس"
+
+#: data/org.gnome.epiphany.gschema.xml:318
+msgid "URL to a custom Firefox Sync token server."
+msgstr "نشانی یک کارساز سفارشی هم‌گام سازی فایرفاکس."
+
 #: data/org.gnome.epiphany.gschema.xml:322
 msgid "Firefox Sync Accounts Server URL"
 msgstr "نشانی کارساز حساب‌های هم‌گام سازی فایرفاکس"
+
+#: data/org.gnome.epiphany.gschema.xml:323
+msgid "URL to a custom Firefox Sync accounts server."
+msgstr "نشانی یک کارساز سفارشی حساب‌های هم‌گام سازی فایرفاکس."
 
 #: data/org.gnome.epiphany.gschema.xml:332
 msgid "Last sync timestamp"
@@ -1712,7 +1744,7 @@ msgid "Paste and _Go"
 msgstr "جای‌گذاری و _گشودن"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
 msgid "_Undo"
 msgstr "بر_گردان"
 
@@ -1862,11 +1894,11 @@ msgid "Mobile"
 msgstr "تلفن همراه"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "بازخوانی صفحهٔ کنونی"
 
-#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "توقف بار کردن صفحهٔ کنونی"
 
@@ -1959,221 +1991,221 @@ msgstr "زبانه‌ها"
 msgid "New Tab"
 msgstr "زبانهٔ جدید"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "Do you want to leave this website?"
 msgstr "می‌خواهید از این پایگاه وب خارج شوید؟"
 
-#: src/ephy-window.c:273 src/window-commands.c:1185
+#: src/ephy-window.c:274 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "فرمی که تغییر دادید، ثبت نشده است."
 
-#: src/ephy-window.c:274 src/window-commands.c:1187
+#: src/ephy-window.c:275 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "_دور انداختن فرم"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:290
 msgid "There are multiple tabs open."
 msgstr "چندین زبانه بازند."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "If you close this window, all open tabs will be lost"
 msgstr "اگر این پنجره را ببندید، همهٔ زبانه‌های باز از دست می‌روند"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:292
 msgid "C_lose tabs"
 msgstr "بستن _زبانه‌ها"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "دو_باره"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "Cu_t"
 msgstr "_بریدن"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:961
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:962
 msgid "_Paste"
 msgstr "_جای‌گذاری"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:963
 msgid "_Paste Text Only"
 msgstr "فقط _چسباندن متن"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "_ارسال پیوند با رایانامه…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "_بار کردن مجدد"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "_بازگشت"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "_پیشروی"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "افزودن _نشانک…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "گشودن پیوند در پنجرهٔ _جدید"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "گشودن پیوند در _زبانهٔ جدید"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "گشودن پیوند در پنجرهٔ _ناشناس"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "_ذخیرهٔ پیوند به عنوان…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "_رونوشت از آدرس رایانامه"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "نمایش _‌تصویر در زبانهٔ جدید"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "رونوشت از نشانی _تصویر"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "_ذخیرهٔ تصویر به عنوان…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "تنظیم به عنوان _‌کاغذ دیواری"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "گشودن ویدیو در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "گشودن ویدیو در _زبانهٔ جدید"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "_ذخیرهٔ ویدیو به عنوان…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "_رونوشت از نشانی ویدیو"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "گشودن صدا در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "گشودن صدا در _زبانهٔ جدید"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "_ذخیرهٔ صدا به عنوان…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "_‌نسخه‌برداری از نشانی صدا"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "_ذخیرهٔ _صفحه به عنوان…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1010
 msgid "_Page Source"
 msgstr "کد منبع _صفحه"
 
-#: src/ephy-window.c:1369
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "جست‌وجوی وب برای %s"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "گشودن پیوند"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "گشودن پیوند در زبانهٔ جدید"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "گشودن پیوند در پنجرهٔ جدید"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "گشودن پیوند در پنجرهٔ ناشناس"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3029
 msgid "Download operation"
 msgstr "عملیات بارگیری"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3031
 msgid "Show details"
 msgstr "نمایش جزییات"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3033
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%Id عملیات بارگیری فعّال"
 msgstr[1] "%Id عملیات بارگیری فعّال"
 
-#: src/ephy-window.c:3653
+#: src/ephy-window.c:3655
 msgid "Set Web as your default browser?"
 msgstr "تنظیم وب به عنوان مرورگر پیش‌گزیده‌تان؟"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3657
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "تنظیم پیش‌نمایش فنی اپیفنی به عنوان مرورگر پیش‌گزیده‌تان؟"
 
-#: src/ephy-window.c:3667
+#: src/ephy-window.c:3669
 msgid "_Yes"
 msgstr "_بله"
 
-#: src/ephy-window.c:3668
+#: src/ephy-window.c:3670
 msgid "_No"
 msgstr "_خیر"
 
-#: src/popup-commands.c:234
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "ذخیرهٔ پیوند به نام"
 
-#: src/popup-commands.c:242
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "ذخیرهٔ تصویر به نام"
 
-#: src/popup-commands.c:250
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "ذخیرهٔ رسانه به عنوان"
 
@@ -2478,6 +2510,10 @@ msgstr "نمایش همه…"
 #: src/resources/gtk/history-dialog.ui:42
 msgid "Select Items"
 msgstr "گزینش موارد"
+
+#: src/resources/gtk/history-dialog.ui:87
+msgid "History"
+msgstr "تاریخچه"
 
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
@@ -3519,9 +3555,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Cookies left by visited pages will be listed here"
 #~ msgstr "کوکی‌های به‌جا مانده از مشاهدهٔ صفحه‌ها این‌جا فهرست خواهند شد"
-
-#~ msgid "History"
-#~ msgstr "تاریخچه"
 
 #~ msgid "_Copy Location"
 #~ msgstr "_رونوشت از محل"
