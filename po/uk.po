@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-14 09:59+0000\n"
-"PO-Revision-Date: 2020-08-14 13:12+0300\n"
+"POT-Creation-Date: 2020-08-27 18:14+0000\n"
+"PO-Revision-Date: 2020-09-01 08:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -72,7 +72,7 @@ msgstr "Перегляд інтернету"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
 msgid "web;browser;internet;"
-msgstr "веб;інтернет;тенет;переглядач;бравзер;"
+msgstr "веб;інтернет;тенет;переглядач;бравзер;web;browser;internet;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:19
 msgid "New Window"
@@ -576,18 +576,16 @@ msgid "Whether to show buttons for navigation."
 msgstr "Визначає, чи слід показувати кнопки для навігації."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-#| msgid "_Run in Background"
 msgid "Run in background"
 msgstr "Запускати у фоновому режимі"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-#| msgid "If enabled, application window is hidden when closing window."
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
-"Якщо увімкнено, програма продовжуватиме працювати у фоновому режимі після"
-" закриття її вікна."
+"Якщо увімкнено, програма продовжуватиме працювати у фоновому режимі після "
+"закриття її вікна."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -2231,7 +2229,7 @@ msgid "Paste and _Go"
 msgstr "Вставити та пере_йти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
 msgid "_Undo"
 msgstr "Повер_нути"
 
@@ -2381,11 +2379,11 @@ msgid "Mobile"
 msgstr "Мобільні"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Перезавантажити поточну сторінку"
 
-#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
@@ -2480,190 +2478,190 @@ msgstr "Вкладки"
 msgid "New Tab"
 msgstr "Нова вкладка"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "Do you want to leave this website?"
 msgstr "Бажаєте покинути цей сайт?"
 
-#: src/ephy-window.c:273 src/window-commands.c:1185
+#: src/ephy-window.c:274 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "Змінену форму не було надіслано."
 
-#: src/ephy-window.c:274 src/window-commands.c:1187
+#: src/ephy-window.c:275 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "_Відхилити форму"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:290
 msgid "There are multiple tabs open."
 msgstr "Відкрито декілька вкладок."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Якщо закриєте вікно, всі відкриті вкладки будуть втрачені"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:292
 msgid "C_lose tabs"
 msgstr "_Закрити вкладки"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "Повт_орити"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:961
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:962
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:963
 msgid "_Paste Text Only"
 msgstr "Лише _вставити текст"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "_Надіслати посилання листом…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "Перезаванта_жити"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "_Далі"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "Додати _закладку…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "Відкрити посилання у _новому вікні"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "Відкрити посилання у новій вк_ладці"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "Відкрити посилання у _конфіденційному вікні"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "З_берегти посилання як…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати поштову адресу"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "Переглянути _зображення в новій вкладці"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "Копіювати адресу _зображення"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "З_берегти зображення як…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "Встановити як _шпалери"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "Відкрити відеозапис у новому _вікні"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "Відкрити відеозапис у новій в_кладці"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "З_берегти відеозапис як…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "_Копіювати адресу відеозапису"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "Відкрити аудіозапис у новому _вікні"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "Відкрити аудіозапис у новій в_кладці"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "З_берегти аудіозапис як…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "_Копіювати адресу аудіозапису"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "Зберегти _сторінку як…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1010
 msgid "_Page Source"
 msgstr "Вихідний текст с_торінки"
 
-#: src/ephy-window.c:1369
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Шукати «%s» в Тенет"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Відкрити посилання"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Відкрити посилання у новій вкладці"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Відкрити посилання у новому вікні"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Відкрити посилання у конфіденційному вікні"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3029
 msgid "Download operation"
 msgstr "Завантаження"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3031
 msgid "Show details"
 msgstr "Показати подробиці"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3033
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2671,32 +2669,32 @@ msgstr[0] "%d файл завантажується"
 msgstr[1] "%d файли завантажуються"
 msgstr[2] "%d файлів завантажуються"
 
-#: src/ephy-window.c:3653
+#: src/ephy-window.c:3655
 msgid "Set Web as your default browser?"
 msgstr "Бажаєте встановити Тенет своїм типовим браузером?"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3657
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Бажаєте встановити Epiphany Technology Preview своїм типовим браузером?"
 
-#: src/ephy-window.c:3667
+#: src/ephy-window.c:3669
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:3668
+#: src/ephy-window.c:3670
 msgid "_No"
 msgstr "_Ні"
 
-#: src/popup-commands.c:234
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "Зберегти посилання як"
 
-#: src/popup-commands.c:242
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "Зберегти зображення як"
 
-#: src/popup-commands.c:250
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "Зберегти медіа як"
 
@@ -3001,6 +2999,10 @@ msgstr "Показати всі…"
 #: src/resources/gtk/history-dialog.ui:42
 msgid "Select Items"
 msgstr "Позначити пункти"
+
+#: src/resources/gtk/history-dialog.ui:87
+msgid "History"
+msgstr "Історія"
 
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
@@ -3995,9 +3997,6 @@ msgstr "_Увімкнути"
 
 #~ msgid "Hide window on quit"
 #~ msgstr "Ховати вікно при виході"
-
-#~ msgid "History"
-#~ msgstr "Історія"
 
 #~ msgid "_Copy Location"
 #~ msgstr "_Копіювати адресу"
