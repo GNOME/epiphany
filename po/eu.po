@@ -11,7 +11,7 @@ msgid ""
 msgstr "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
 "POT-Creation-Date: 2020-08-07 20:34+0000\n"
-"PO-Revision-Date: 2020-08-09 10:00+0100\n"
+"PO-Revision-Date: 2020-09-01 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -503,12 +503,14 @@ msgid "Whether to show buttons for navigation."
 msgstr "Nabigaziorako botoiak erakutsiko diren ala ez."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Ezkutatu leihoa irtetean"
+msgid "Run in background"
+msgstr "Exekutatu atzeko planoan"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
-msgstr "Gaituta badago, aplikazioaren leihoa ezkutuan egongo da leihoa ixtean."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr "Gaituta badago, aplikazioa atzeko planoan exekutatuko da leihoa ixtean."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -903,7 +905,7 @@ msgid "Download requested"
 msgstr "Deskarga eskatu da"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/data-dialog.ui:100
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -1938,7 +1940,8 @@ msgid ""
 msgstr "Ziurtagiri hau baliozkoa da. Hala ere, orri honen baliabideak modu ez-seguruan bidali dira."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Garbitu _denak"
 
@@ -2007,7 +2010,7 @@ msgstr "Bertan behera uzten…"
 msgid "Starting…"
 msgstr "Hasieratzen…"
 
-#: lib/widgets/ephy-file-chooser.c:173
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "_Ireki"
 
@@ -2031,7 +2034,7 @@ msgstr "Fitxategi denak"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:427
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "_Garbitu"
 
@@ -2040,7 +2043,7 @@ msgid "Paste and _Go"
 msgstr "Itsatsi eta _joan"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
 msgid "_Undo"
 msgstr "_Desegin"
 
@@ -2184,35 +2187,39 @@ msgid "Mobile"
 msgstr "Mugikorra"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Kargatu berriro uneko orria"
 
-#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "Gelditu uneko orria kargatzea"
 
-#: src/ephy-history-dialog.c:311
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "Ezin da historia eraldatu anonimoaren moduan egotean."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Kendu hautatutako orriak historiatik"
 
-#: src/ephy-history-dialog.c:318
+#: src/ephy-history-dialog.c:463
 msgid "Copy URL"
 msgstr "Kopiatu URLa"
 
-#: src/ephy-history-dialog.c:417
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Arakatzearen historia garbitu?"
 
-#: src/ephy-history-dialog.c:421
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "Arakatzearen historia garbitzen bada, historiako esteka guztiak betiko ezabatuko dira."
 
-#: src/ephy-history-dialog.c:832
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "Ezin da historia eraldatu anonimoaren moduan egotean."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Kendu historia osoa"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2276,221 +2283,221 @@ msgstr "Fitxak"
 msgid "New Tab"
 msgstr "Fitxa berria"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "Do you want to leave this website?"
 msgstr "Webgune hau uztea nahi duzu?"
 
-#: src/ephy-window.c:273 src/window-commands.c:1185
+#: src/ephy-window.c:274 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "Zuk eraldatutako inprimakia ez da bidali."
 
-#: src/ephy-window.c:274 src/window-commands.c:1187
+#: src/ephy-window.c:275 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "_Baztertu inprimakia"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:290
 msgid "There are multiple tabs open."
 msgstr "Fitxa anitz daude irekita."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Leiho hau ixten baduzu, irekitako fitxa guztiak galduko dira"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:292
 msgid "C_lose tabs"
 msgstr "I_txi fitxak"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "Be_rregin"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "Cu_t"
 msgstr "_Moztu"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:961
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:962
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:963
 msgid "_Paste Text Only"
 msgstr "Itsatsi te_stua soilik"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "Bi_dali esteka postaz…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "Bir_kargatu"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "At_zera"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "A_urrera"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "_Gehitu laster-marka…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "Ireki esteka leiho _berrian"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "Ireki esteka _fitxa berrian"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "Ireki esteka _isilpeko leihoan"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "Gorde _esteka honela…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "_Kopiatu estekaren helbidea"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "_Kopiatu helbide elektronikoa"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "Ikusi _irudia fitxa berrian"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "Kopiatu ir_udiaren helbidea"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "Gorde _irudia honela…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "Ezarri _horma-paper gisa"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "Ireki bideoa _leiho berrian"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "Ireki bideoa _fitxa berrian"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "Gorde _bideoa honela…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "_Kopiatu bideoaren helbidea"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "Ireki audioa _leiho berrian"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "Ireki audioa _fitxa berrian"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "Gorde _audioa honela…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "_Kopiatu audioaren helbidea"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "Gorde _orria honela…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1010
 msgid "_Page Source"
 msgstr "_Orriaren iturburua"
 
-#: src/ephy-window.c:1369
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Bilatu '%s' webean"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Ireki esteka"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Ireki esteka fitxa berrian"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Ireki esteka leiho berrian"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Ireki esteka isilpeko leihoan"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3029
 msgid "Download operation"
 msgstr "Deskarga-eragiketa"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3031
 msgid "Show details"
 msgstr "Erakutsi xehetasunak"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3033
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "Desgarga-eragiketa %d aktibo"
 msgstr[1] "%d deskarga-eragiketa aktibo"
 
-#: src/ephy-window.c:3653
+#: src/ephy-window.c:3655
 msgid "Set Web as your default browser?"
 msgstr "Ezarri Web zure nabigatzaile lehenetsi gisa?"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3657
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Ezarri Epiphany Technology Preview zure nabigatzaile lehenetsi gisa?"
 
-#: src/ephy-window.c:3667
+#: src/ephy-window.c:3669
 msgid "_Yes"
 msgstr "_Bai"
 
-#: src/ephy-window.c:3668
+#: src/ephy-window.c:3670
 msgid "_No"
 msgstr "_Ez"
 
-#: src/popup-commands.c:234
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "Gorde esteka honela"
 
-#: src/popup-commands.c:242
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
 
-#: src/popup-commands.c:250
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "Gorde _multimedia honela"
 
@@ -2538,7 +2545,7 @@ msgstr "Ezabatu pasahitz guztiak?"
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "Horrek lokalean biltegiratutako pasahitz guztiak garbituko ditu, eta hori ezin da desegin."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -2755,20 +2762,16 @@ msgid ""
 "removed forever."
 msgstr "Ezin duzu ekintza hau desegin. Garbitu nahi dituzun datuak betiko kenduko dira."
 
-#: src/resources/gtk/data-dialog.ui:46
-msgid "Select Items"
-msgstr "Hautatu elementuak"
-
-#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
-#: src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Bilatu"
 
-#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Ez da emaitzarik aurkitu"
 
-#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Saiatu bestelako bilaketa"
 
@@ -2792,23 +2795,23 @@ msgstr "Erlazionatutako kodeketak"
 msgid "Show all…"
 msgstr "Erakutsi denak…"
 
-#: src/resources/gtk/history-dialog.ui:7
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Hautatu elementuak"
+
+#: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "Historia"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Kendu historia osoa"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Garbitu historia"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Historia hutsik dago"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Bisitatutako orriak hemen zerrendatuko dira"
 
@@ -3769,6 +3772,9 @@ msgstr "F7 sakatzen bada, kurtsore bidezko arakatzea aktibatu edo desaktibatuko 
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Gaitu"
+
+#~ msgid "Hide window on quit"
+#~ msgstr "Ezkutatu leihoa irtetean"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Cookie-ak onartzea"
