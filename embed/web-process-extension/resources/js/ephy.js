@@ -225,6 +225,11 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         if (autocompleteList)
             autocompleteList = autocompleteList.getElementsByTagName("div");
 
+        if (e.code == 'Tab' || e.code == 'Escape') {
+            this._closeAllLists();
+            return;
+        }
+
         if (e.code == 'ArrowDown') {
             this._currentFocus++;
             this._addActive(autocompleteList);
