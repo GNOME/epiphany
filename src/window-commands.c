@@ -2986,8 +2986,10 @@ window_cmd_open_application_manager (GSimpleAction *action,
   EphyEmbed *embed;
   EphyWebView *web_view;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                              window,
+                              NULL,
+                              EPHY_NEW_TAB_JUMP);
 
   web_view = ephy_embed_get_web_view (embed);
 
