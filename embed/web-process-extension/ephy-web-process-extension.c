@@ -60,25 +60,6 @@ struct _EphyWebProcessExtension {
 
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
-static gboolean
-web_page_send_request (WebKitWebPage           *web_page,
-                       WebKitURIRequest        *request,
-                       WebKitURIResponse       *redirected_response,
-                       EphyWebProcessExtension *extension)
-{
-  /* FIXME: We should probably remove ephy_remove_tracking_from_uri and instead
-   * trust Intelligent Tracking Prevention to mitigate potential privacy impact
-   * of tracking query parameters. But first we need to enable ITP.
-   */
-  const char *request_uri = webkit_uri_request_get_uri (request);
-  g_autofree char *modified_uri = ephy_remove_tracking_from_uri (request_uri);
-  if (modified_uri && g_strcmp0 (request_uri, modified_uri) != 0) {
-    LOG ("Rewrote %s to %s", request_uri, modified_uri);
-    webkit_uri_request_set_uri (request, modified_uri);
-  }
-  return FALSE;
-}
-
 static void
 web_page_will_submit_form (WebKitWebPage            *web_page,
                            WebKitDOMHTMLFormElement *dom_form,
@@ -246,9 +227,6 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
   js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
   (void)js_context;
 
-  g_signal_connect (web_page, "send-request",
-                    G_CALLBACK (web_page_send_request),
-                    extension);
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
                     extension);
