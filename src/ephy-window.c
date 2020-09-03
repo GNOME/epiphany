@@ -2047,7 +2047,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     if (soup_uri) {
       g_autoptr (GAppInfo) app_info = g_app_info_get_default_for_uri_scheme (soup_uri->scheme);
 
-      if (app_info && g_str_has_prefix (g_app_info_get_id (app_info), "org.gnome.Epiphany")) {
+      if (app_info && !g_str_has_prefix (g_app_info_get_id (app_info), "org.gnome.Epiphany")) {
         g_autoptr (GError) error = NULL;
 
         gtk_show_uri_on_window (GTK_WINDOW (window), uri, GDK_CURRENT_TIME, &error);
