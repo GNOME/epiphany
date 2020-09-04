@@ -426,14 +426,6 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                             thumbnail_style ? thumbnail_style : "", url->title);
   }
 
-  for (guint idx = list_length; idx < 9; idx++) {
-    g_string_append_printf (data_str,
-                            "<i class=\"overview-item\">"
-                            "  <span class=\"overview-thumbnail\"></span>"
-                            "  <span class=\"overview-title\"></span>"
-                            "</i>");
-  }
-
   data_str = g_string_append (data_str,
                               "  </div>\n"
                               "  </div>\n"

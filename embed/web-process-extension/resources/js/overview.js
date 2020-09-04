@@ -62,6 +62,7 @@ Ephy.Overview = class Overview
         for (let titleChange of this._pendingTitleChanges)
             this._onTitleChanged(titleChange.url, titleChange.title);
         this._pendingTitleChanges = [];
+        this._addPlaceholders();
     }
 
     _onKeyPress(event)
@@ -73,6 +74,33 @@ Ephy.Overview = class Overview
         if (item.classList.contains('overview-item')) {
             this._removeItem(item);
             event.preventDefault();
+        }
+    }
+
+    _addPlaceholders() {
+        let parentNode = document.getElementById('most-visited-grid');
+        let anchors = document.getElementsByTagName('a');
+
+        for (let i = anchors.length; i < 9; i++) {
+            let anchor = document.createElement('a');
+            anchor.className = 'overview-item';
+            let span_thumbnail = document.createElement('span');
+            span_thumbnail.className = 'overview-thumbnail';
+            anchor.appendChild(span_thumbnail);
+            let span_title = document.createElement('span');
+            span_title.className = 'overview-title';
+            anchor.appendChild(span_title);
+
+            parentNode.appendChild(anchor);
+        }
+      }
+
+    _removePlaceholders() {
+        let anchors = document.getElementsByTagName('a')
+
+        for (let anchor of anchors) {
+            if (anchor.href == '')
+                document.removeChild(anchor);
         }
     }
 
@@ -88,6 +116,7 @@ Ephy.Overview = class Overview
                     break;
                 }
             }
+            this._addPlaceholders();
             window.webkit.messageHandlers.overview.postMessage(item.href);
         }, 500);  // This value needs to be synced with the one in about.css
     }
@@ -102,6 +131,7 @@ Ephy.Overview = class Overview
             overview.classList.remove('overview-empty');
         }
 
+        this._removePlaceholders();
         for (let i = 0; i < urls.length; i++) {
             let url = urls[i];
 
