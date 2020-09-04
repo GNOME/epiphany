@@ -132,141 +132,155 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     {
         this._manager = manager;
         this._formAuth = formAuth;
-        this._userNode = formAuth.usernameNode;
+        this._userElement = formAuth.usernameNode;
         this._users = users;
-        this._passwordNode = formAuth.passwordNode;
-        this._currentFocus = -1;
+        this._passwordElement = formAuth.passwordNode;
+        this._selected = null;
+        this._wasEdited = false;
 
-        let style = document.createElement('style');
-        style.innerHTML =
-            '.autocomplete-items {' +
-                'position: absolute;' +
-                'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
-                'z-index: 99;' +
-                'top: 100%;' +
-                'left: 0;' +
-                'right: 0;' +
-            '}' +
-            '.autocomplete-items div {' +
-                'padding: 10px;' +
-                'cursor: pointer;' +
-                'background-color: #fff;' +
-                'border-bottom: 1px solid #d4d4d4;' +
-            '}' +
-            '.autocomplete-items div:hover {' +
-                'background-color: #e9e9e9;' +
-            '}' +
-            '.autocomplete-active {' +
-                'background-color: DodgerBlue !important;' +
-                'color: #ffffff;' +
-            '}';
-
-        document.getElementsByTagName("head")[0].appendChild(style);
-
-        this._userNode.addEventListener('input', this._onInput.bind(this), true);
-        this._userNode.addEventListener('keydown', this._onKeyDown.bind(this), true);
-        this._userNode.addEventListener('mouseup', this._onMouseUp.bind(this), true);
-        document.addEventListener("click", e => {
-            this._closeAllLists(e.target);
-        });
+        this._userElement.addEventListener('input', this._onInput.bind(this), true);
+        this._userElement.addEventListener('mouseup', this._onMouseUp.bind(this), false);
+        this._userElement.addEventListener('keydown', this._onKeyDown.bind(this), false);
+        this._userElement.addEventListener('change', this._removeMenu, false);
+        this._userElement.addEventListener('blur', this._removeMenu, false);
     }
+
+    // Private
 
     _onInput(event)
     {
-        if (this._manager.isAutoFilling(this._userNode))
+        if (this._manager.isAutoFilling(this._userElement))
             return;
 
-          this._showMenu(false);
+        this._wasEdited = true;
+        this._removeMenu();
+        this._showMenu(false);
     }
 
-    _onMouseUp(e)
+    _onMouseUp(event)
     {
-        this._showMenu(true);
+        if (document.getElementById('ephy-user-choices-container'))
+            return;
+
+        this._showMenu(!this._wasEdited);
     }
 
-    _showMenu(showAllUsers)
+    _onKeyDown(event)
     {
-        let a, b, i, val = this._userNode.value;
-
-        this._closeAllLists();
-        this._currentFocus = -1;
-        a = document.createElement("div");
-        a.id = this._userNode.id + "-autocomplete-list";
-        a.className = "autocomplete-items";
-        let elementRect = this._userNode.getBoundingClientRect();
-        a.style.width = this._userNode.offsetWidth + 'px';
-        a.style.left = elementRect.left + 'px';
-        a.style.top = elementRect.top + elementRect.height + 'px';
-        document.body.appendChild(a);
-        this._passwordNode.value = null;
-
-        for (let user of this._users) {
-          if (showAllUsers || !val || user.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-            b = document.createElement("div");
-            b.innerHTML = "<strong>" + user.substr(0, val.length) + "</strong>";
-            b.innerHTML += user.substr(val.length);
-            b.innerHTML += "<input type='hidden' value='" + user + "'>";
-
-            b.addEventListener("click", e => {
-              this._formAuth.username = e.target.getElementsByTagName("input")[0].value;
-              this._closeAllLists();
-              this._passwordNode.value = null;
-              this._manager.preFill(this._formAuth);
-            });
-
-            a.appendChild(b);
-          }
+        if (event.key == 'Escape') {
+            this._removeMenu();
+            return;
         }
-    }
 
-    _onKeyDown(e)
-    {
-        let autocompleteList = document.getElementById(this._userNode.id + "-autocomplete-list");
-        if (autocompleteList)
-            autocompleteList = autocompleteList.getElementsByTagName("div");
+        if (event.key != 'ArrowDown' && event.key != 'ArrowUp')
+            return;
 
-        if (e.code == 'ArrowDown') {
-            this._currentFocus++;
-            this._addActive(autocompleteList);
-        } else if (e.code == 'ArrowUp') {
-            this._currentFocus--;
-            this._addActive(autocompleteList);
-        } else if (e.code == 'Enter') {
-            e.preventDefault();
-            if (this._currentFocus > -1)
-                if (autocompleteList)
-                    autocompleteList[this._currentFocus].click();
+        let container = document.getElementById('ephy-user-choices-container');
+        if (!container) {
+            this._showMenu(!this._wasEdited);
+            return;
         }
+
+        let newSelect = null;
+        if (this._selected)
+            newSelect = event.key != 'ArrowUp' ? this._selected.previousSibling : this._selected.nextSibling;
+
+        if (!newSelect)
+            newSelect = event.key != 'ArrowUp' ? container.firstElementChild.lastElementChild : container.firstElementChild.firstElementChild;
+
+        if (newSelect) {
+            this._selected = newSelect;
+            this._userElement.value = this._selected.firstElementChild.textContent;
+            this._usernameSelected();
+        } else {
+            this._passwordElement.value = '';
+        }
+
+        event.preventDefault();
     }
 
-    _addActive(autocompleteList)
+    _showMenu(showAll)
     {
-        if (!autocompleteList)
-            return false;
+        let mainDiv = document.createElement('div');
+        mainDiv.id = 'ephy-user-choices-container';
 
-        this._removeActive(autocompleteList);
+        let elementRect = this._userElement.getBoundingClientRect();
 
-        if (this._currentFocus >= autocompleteList.length)
-            this._currentFocus = 0;
-        else if (this._currentFocus < 0)
-            this._currentFocus = (autocompleteList.length - 1);
+        // 2147483647 is the maximum value browsers will take for z-index.
+        // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
+        mainDiv.style.cssText = 'position: absolute;' +
+            'z-index: 2147483647;' +
+            'cursor: default;' +
+            'background-color: white;' +
+            'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
+            'border-top: 0px;' +
+            'border-radius: 8px;' +
+            'padding: 12px 0px;' +
+            '-webkit-user-modify: read-only ! important;';
+        mainDiv.style.width = this._userElement.offsetWidth + 'px';
+        mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
+        mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
 
-        autocompleteList[this._currentFocus].classList.add("autocomplete-active");
+        let ul = document.createElement('ul');
+        ul.style.cssText = 'margin: 0; padding: 0;';
+        ul.tabindex = -1;
+        mainDiv.appendChild(ul);
+
+        this._selected = null;
+        for (let i = 0; i < this._users.length; i++) {
+            let user = this._users[i];
+            if (!showAll && !user.startsWith(this._userElement.value))
+                continue;
+
+            let li = document.createElement('li');
+            li.style.cssText = 'list-style-type: none ! important;' +
+                'background-image: none ! important;' +
+                'padding: 3px 6px ! important;' +
+                'color: black;' +
+                'margin: 0px;';
+            // FIXME: selection colors.
+            li.tabindex = -1;
+            ul.appendChild(li);
+
+            if (user == this._userElement.value)
+                this._selected = li;
+
+            let anchor = document.createElement('a');
+            anchor.style.cssText = 'font-weight: normal ! important;' +
+                'font-family: sans ! important;' +
+                'text-decoration: none ! important;' +
+                'color: black;' +
+                '-webkit-user-modify: read-only ! important;';
+            // FIXME: selection colors.
+            anchor.textContent = user;
+            li.appendChild(anchor);
+
+            li.addEventListener('mousedown', event => {
+                this._userElement.value = user;
+                this._selected = li;
+                this._removeMenu();
+                this._usernameSelected();
+            }, true);
+        }
+
+        document.body.appendChild(mainDiv);
+
+        if (!this._selected)
+            this._passwordElement.value = '';
     }
 
-    _removeActive(autocompleteList)
+    _removeMenu()
     {
-        for (let autocomplete of autocompleteList)
-            autocomplete.classList.remove("autocomplete-active");
+        let menu = document.getElementById('ephy-user-choices-container');
+        if (menu)
+            menu.parentNode.removeChild(menu);
     }
 
-    _closeAllLists(elem)
+    _usernameSelected()
     {
-      let autocompleteItems = document.getElementsByClassName("autocomplete-items");
-
-      for (let autocomplete of autocompleteItems)
-        if (elem != autocomplete && elem != this._userNode)
-          autocomplete.parentNode.removeChild(autocomplete);
+        this._formAuth.username = this._userElement.value;
+        this._passwordElement.value = '';
+        this._manager.preFill(this._formAuth);
     }
 }
 
@@ -472,8 +486,7 @@ Ephy.FormManager = class FormManager
             Ephy.passwordManager.queryUsernames(formAuth.origin).then(users => {
                 if (users.length > 1) {
                     Ephy.log('More than one saved username, hooking menu for choosing which one to select');
-                    if (!this._preFillUserMenu)
-                        this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
+                    this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
                 }
                 this.preFill(formAuth);
             });
