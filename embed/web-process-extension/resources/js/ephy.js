@@ -475,8 +475,8 @@ Ephy.FormManager = class FormManager
 
         if (formAuth.usernameNode) {
             Ephy.passwordManager.queryUsernames(formAuth.origin).then(users => {
-                if (users.length) {
-                    Ephy.log('At least one saved username, hooking menu for selection');
+                if (users.length > 1) {
+                    Ephy.log('More than one saved username, hooking menu for choosing which one to select');
                     if (!this._preFillUserMenu)
                         this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
                 }
