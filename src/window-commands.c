@@ -2736,31 +2736,6 @@ window_cmd_tabs_duplicate (GSimpleAction *action,
 }
 
 void
-window_cmd_tabs_detach (GSimpleAction *action,
-                        GVariant      *variant,
-                        gpointer       user_data)
-{
-  EphyEmbed *embed;
-  GtkNotebook *notebook;
-  EphyWindow *new_window;
-
-  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
-  if (gtk_notebook_get_n_pages (notebook) <= 1)
-    return;
-
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
-
-  g_object_ref_sink (embed);
-  gtk_notebook_remove_page (notebook, gtk_notebook_page_num (notebook, GTK_WIDGET (embed)));
-
-  new_window = ephy_window_new ();
-  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (new_window), embed, 0, FALSE);
-  g_object_unref (embed);
-
-  gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
-}
-
-void
 window_cmd_tabs_close (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)

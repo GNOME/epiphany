@@ -878,7 +878,6 @@ static const GActionEntry tab_entries [] = {
   { "previous", window_cmd_tabs_previous },
   { "next", window_cmd_tabs_next },
   { "duplicate", window_cmd_tabs_duplicate },
-  { "detach", window_cmd_tabs_detach },
   { "close", window_cmd_tabs_close },
   { "close-left", window_cmd_tabs_close_left },
   { "close-right", window_cmd_tabs_close_right },

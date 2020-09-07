@@ -111,10 +111,6 @@ static const BindAction popup_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "open-link-in-new-window", "enabled" }
 };
 
-static const BindAction tab_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "detach", "enabled" }
-};
-
 static const BindAction toolbar_actions[] = {
   { EPHY_PREFS_LOCKDOWN_HISTORY, "navigation-back", "enabled" },
   { EPHY_PREFS_LOCKDOWN_HISTORY, "navigation-forward", "enabled" }
@@ -225,13 +221,6 @@ window_added_cb (GtkApplication *application,
                              action_group,
                              window_actions,
                              G_N_ELEMENTS (window_actions));
-
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                              "tab");
-  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             action_group,
-                             tab_actions,
-                             G_N_ELEMENTS (tab_actions));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "toolbar");

@@ -191,9 +191,6 @@ void window_cmd_tabs_move_right                 (GSimpleAction *action,
 void window_cmd_tabs_duplicate                  (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);
-void window_cmd_tabs_detach                     (GSimpleAction *action,
-                                                 GVariant      *state,
-                                                 gpointer       user_data);
 void window_cmd_tabs_close                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
