@@ -58,7 +58,6 @@ struct _EphyEmbed {
 
   EphyFindToolbar *find_toolbar;
   GtkBox *top_widgets_vbox;
-  GtkPaned *paned;
   WebKitWebView *web_view;
   GSList *destroy_on_transition_list;
   GtkWidget *overlay;
@@ -692,7 +691,6 @@ ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed *)object;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  GtkWidget *paned;
   WebKitWebInspector *inspector;
 
   g_signal_connect (shell, "window-restored",
@@ -745,23 +743,18 @@ ephy_embed_constructed (GObject *object)
                       GTK_WIDGET (embed->find_toolbar),
                       FALSE, FALSE, 0);
 
-  paned = GTK_WIDGET (embed->paned);
-
   if (embed->progress_bar_enabled)
     embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
                                                           G_CALLBACK (progress_update), object);
 
-  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (embed->overlay),
-                   TRUE, FALSE);
-
   gtk_box_pack_start (GTK_BOX (embed),
                       GTK_WIDGET (embed->top_widgets_vbox),
                       FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (embed), paned, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (embed), embed->overlay, TRUE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (embed->top_widgets_vbox));
   gtk_widget_show (GTK_WIDGET (embed->web_view));
-  gtk_widget_show_all (paned);
+  gtk_widget_show_all (embed->overlay);
 
   g_object_connect (embed->web_view,
                     "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
@@ -806,7 +799,6 @@ ephy_embed_init (EphyEmbed *embed)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
                                   GTK_ORIENTATION_VERTICAL);
 
-  embed->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
   embed->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   embed->seq_context_id = 1;
   embed->seq_message_id = 1;

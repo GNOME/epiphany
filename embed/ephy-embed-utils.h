@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define OVERVIEW_PAGE_TITLE N_("Most Visited") /* Title for the overview page */
 
 #define EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED(embed) (WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)))
-#define EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW(view) (EPHY_EMBED (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent ((GTK_WIDGET (view)))))))
+#define EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW(view) (EPHY_EMBED (gtk_widget_get_parent (gtk_widget_get_parent ((GTK_WIDGET (view))))))
 
 #define EPHY_WEBKIT_BACK_FORWARD_LIMIT 100
 
