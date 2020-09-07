@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-07 20:34+0000\n"
-"PO-Revision-Date: 2020-08-08 17:30+0300\n"
+"POT-Creation-Date: 2020-08-27 18:14+0000\n"
+"PO-Revision-Date: 2020-09-08 00:00+0300\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Ελληνικά <>\n"
 "Language: el\n"
@@ -623,14 +623,16 @@ msgid "Whether to show buttons for navigation."
 msgstr "Αν θα εμφανίζονται κουμπιά για πλοήγηση."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Hide window on quit"
-msgstr "Απόκρυψη παραθύρου στο κλείσιμο"
+msgid "Run in background"
+msgstr "Εκτέλεση στο παρασκήνιο"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-msgid "If enabled, application window is hidden when closing window."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
 msgstr ""
-"Εάν είναι ενεργοποιημένο, το παράθυρο εφαρμογής κρύβεται κατά το κλείσιμο "
-"του παραθύρου."
+"Εάν είναι ενεργποιημένο, η εφαρμογή συνεχίζει να εκτελείται στο παρασκήνιο "
+"μετά το κλείσιμο του παραθύρου."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1122,7 +1124,7 @@ msgid "Download requested"
 msgstr "Αιτήθηκε λήψη"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/data-dialog.ui:100
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
 #: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
@@ -2221,7 +2223,8 @@ msgstr ""
 "ασφάλεια."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/data-dialog.ui:341 src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Εκκαθάριση όλων"
 
@@ -2290,7 +2293,7 @@ msgstr "Γίνεται ακύρωση…"
 msgid "Starting…"
 msgstr "Εκκίνηση…"
 
-#: lib/widgets/ephy-file-chooser.c:173
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "Ά_νοιγμα"
 
@@ -2314,7 +2317,7 @@ msgstr "Όλα τα αρχεία"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:427
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "Ε_κκαθάριση"
 
@@ -2323,7 +2326,7 @@ msgid "Paste and _Go"
 msgstr "Επικόλληση και μετά_βαση"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
 msgid "_Undo"
 msgstr "Α_ναίρεση"
 
@@ -2477,27 +2480,33 @@ msgid "Mobile"
 msgstr "Κινητό"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "Επαναφόρτωση τρέχουσας σελίδας"
 
-#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "Διακοπή φόρτωσης της τρέχουσας σελίδας"
 
-#: src/ephy-history-dialog.c:311
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr ""
+"Δεν είναι δυνατή η τροποποίηση ιστορικού όταν βρίσκεστε σε κατάσταση "
+"ανώνυμης περιήγησης."
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "Αφαίρεση των επιλεγμένων σελίδων από το ιστορικό"
 
-#: src/ephy-history-dialog.c:318
+#: src/ephy-history-dialog.c:463
 msgid "Copy URL"
 msgstr "Αντιγραφή URL"
 
-#: src/ephy-history-dialog.c:417
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "Να καθαρισθεί το ιστορικό επισκέψεων;"
 
-#: src/ephy-history-dialog.c:421
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2505,11 +2514,9 @@ msgstr ""
 "Ο καθαρισμός του ιστορικού επισκέψεων θα προκαλέσει τη μόνιμη διαγραφή όλων "
 "των συνδέσμων του ιστορικού."
 
-#: src/ephy-history-dialog.c:832
-msgid "It is not possible to modify history when in incognito mode."
-msgstr ""
-"Δεν είναι δυνατή η τροποποίηση ιστορικού όταν βρίσκεστε σε κατάσταση "
-"ανώνυμης περιήγησης."
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "Αφαίρεση όλου του ιστορικού"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2573,223 +2580,223 @@ msgstr "Καρτέλες"
 msgid "New Tab"
 msgstr "Νέα καρτέλα"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:273
 msgid "Do you want to leave this website?"
 msgstr "Θέλετε να εγκαταλείψετε αυτή την ιστοσελίδα;"
 
-#: src/ephy-window.c:273 src/window-commands.c:1185
+#: src/ephy-window.c:274 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "Δεν έχετε υποβάλει μια φόρμα που τροποποιήσατε."
 
-#: src/ephy-window.c:274 src/window-commands.c:1187
+#: src/ephy-window.c:275 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "_Απόρριψη φόρμας"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:290
 msgid "There are multiple tabs open."
 msgstr "Υπάρχουν ανοικτές πολλαπλές καρτέλες."
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:291
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Εάν κλείσετε αυτό το παράθυρο, όλες οι ανοιχτές καρτέλες θα χαθούν"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:292
 msgid "C_lose tabs"
 msgstr "_Κλείσιμο καρτελών"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "Α_κύρωση αναίρεσης"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:960
 msgid "Cu_t"
 msgstr "_Αποκοπή"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:961
 msgid "_Copy"
 msgstr "Α_ντιγραφή"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:962
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:963
 msgid "_Paste Text Only"
 msgstr "_Επικόλληση μόνο κειμένου"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:964
 msgid "Select _All"
 msgstr "Επιλογή ό_λων"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "Α_ποστολή συνδέσμου με ηλ. αλληλογραφία…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "Α_νανέωση"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "_Πίσω"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "_Προώθηση"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "Προσθήκη σελιδο_δείκτη…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "Άνοιγμα συνδέσμου σε _νέο παράθυρο"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "Άνοιγμα συνδέσμου σε νέα καρ_τέλα"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "Άνοιγμα συνδέσμου σε παράθυρο α_νώνυμης περιήγηγης"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "_Αποθήκευση συνδέσμου ως…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "Αν_τιγραφή διεύθυνσης δεσμού"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "_Αντιγραφή διεύθυνσης αλληλογραφίας"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "Προβολή ε_ικόνας σε νέα καρτέλα"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "Αντιγραφή διεύθυνσης ε_ικόνας"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "Απο_θήκευση εικόνας ως…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "Ορισμός ως _ταπετσαρία"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "Άνοιγμα σε βίντεο νέο _παράθυρο"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "Άνοιγμα βίντεο σε νέα κ_αρτέλα"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "_Αποθήκευση βίντεο ως…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "_Αντιγραφή διεύθυνσης βίντεο"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "Άνοιγμα ήχου σε νέο _παράθυρο"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "Άνοιγμα ήχου σε νέα _καρτέλα"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "_Αποθήκευση ήχου ως…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "_Αντιγραφή διεύθυνσης ήχου"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "Αποθήκευση _σελίδας ως…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1010
 msgid "_Page Source"
 msgstr "Π_ηγαίος κώδικας σελίδας"
 
-#: src/ephy-window.c:1369
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Αναζήτηση στον Ιστό για «%s»"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Άνοιγμα συνδεσμού"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Άνοιγμα συνδέσμου σε νέα καρτέλα"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Άνοιγμα συνδέσμου σε νέο παράθυρο"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Άνοιγμα συνδέσμου σε παράθυρο ανώνυμης περιήγησης"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3029
 msgid "Download operation"
 msgstr "Λειτουργία λήψης"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3031
 msgid "Show details"
 msgstr "Εμφάνιση λεπτομερειών"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3033
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d ενεργή λειτουργία λήψης"
 msgstr[1] "%d ενεργές λειτουργίες λήψης"
 
-#: src/ephy-window.c:3653
+#: src/ephy-window.c:3655
 msgid "Set Web as your default browser?"
 msgstr "Ορισμός του Ιστού ως προεπιλεγμένου περιηγητή;"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3657
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Ορισμός της προεπισκόπησης τεχνολογίας του Epiphany ως προεπιλεγμένο "
 "περιηγητή;"
 
-#: src/ephy-window.c:3667
+#: src/ephy-window.c:3669
 msgid "_Yes"
 msgstr "_Ναι"
 
-#: src/ephy-window.c:3668
+#: src/ephy-window.c:3670
 msgid "_No"
 msgstr "Ό_χι"
 
-#: src/popup-commands.c:234
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "Αποθήκευση συνδέσμου ως"
 
-#: src/popup-commands.c:242
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "Αποθήκευση εικόνας ως"
 
-#: src/popup-commands.c:250
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "Αποθήκευση πολυμέσου ως"
 
@@ -2839,7 +2846,7 @@ msgstr ""
 "Αυτό θα διαγράψει όλα τα τοπικά αποθηκευμένα συνθηματικά και δεν μπορεί να "
 "αναιρεθεί."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/data-dialog.ui:366
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "_Διαγραφή"
 
@@ -3059,20 +3066,16 @@ msgstr ""
 "Δεν μπορείτε να αναιρέσετε αυτή την ενέργεια. Τα δεδομένα που επιλέγετε προς "
 "εκκαθάριση θα διαγραφούν οριστικά."
 
-#: src/resources/gtk/data-dialog.ui:46
-msgid "Select Items"
-msgstr "Επιλογή αντικειμένων"
-
-#: src/resources/gtk/data-dialog.ui:78 src/resources/gtk/data-dialog.ui:124
-#: src/resources/gtk/data-view.ui:50
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: src/resources/gtk/data-dialog.ui:291 src/resources/gtk/data-view.ui:215
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "Δεν βρέθηκαν αποτελέσματα"
 
-#: src/resources/gtk/data-dialog.ui:306 src/resources/gtk/data-view.ui:230
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "Δοκιμή μιας διαφορετικής αναζήτησης"
 
@@ -3096,23 +3099,23 @@ msgstr "Σχετικές κωδικοποιήσεις"
 msgid "Show all…"
 msgstr "Εμφάνιση όλων…"
 
-#: src/resources/gtk/history-dialog.ui:7
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Επιλογή αντικειμένων"
+
+#: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "Ιστορικό"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "Αφαίρεση όλου του ιστορικού"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Ιστορικό αναζήτησης"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "Το ιστορικό είναι κενό"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "Οι σελίδες που έχετε επισκεφθεί θα φαίνονται εδώ"
 
@@ -4109,6 +4112,9 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "Ε_νεργοποίηση"
+
+#~ msgid "Hide window on quit"
+#~ msgstr "Απόκρυψη παραθύρου στο κλείσιμο"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Αποδοχή cookie"
