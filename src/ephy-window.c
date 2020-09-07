@@ -880,7 +880,6 @@ static const GActionEntry tab_entries [] = {
   { "duplicate", window_cmd_tabs_duplicate },
   { "detach", window_cmd_tabs_detach },
   { "close", window_cmd_tabs_close },
-  { "close-tab", window_cmd_tabs_close },
   { "close-left", window_cmd_tabs_close_left },
   { "close-right", window_cmd_tabs_close_right },
   { "move-left", window_cmd_tabs_move_left },
@@ -2728,7 +2727,7 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), pinned);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                         "close-tab");
+                                         "close");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pinned);
 
     gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
