@@ -135,6 +135,7 @@ const struct {
   { "tab.move-right", { "<shift><Primary>Page_Down", NULL } },
   { "tab.duplicate", { "<shift><Primary>K", NULL } },
   { "tab.close", { "<Primary>W", NULL } },
+  { "tab.mute", { "<Primary>M", NULL } },
   { "tab.pin", { NULL } }
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Back", NULL } },
@@ -887,6 +888,7 @@ static const GActionEntry tab_entries [] = {
   { "reload-all", window_cmd_tabs_reload_all_tabs },
   { "pin", window_cmd_tabs_pin },
   { "unpin", window_cmd_tabs_unpin },
+  { "mute", NULL, NULL, "false", window_cmd_change_tabs_mute_state },
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -2689,14 +2691,21 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
 
   if (event != NULL) {
+    EphyWebView *view;
     int n_pages;
     int page_num;
     gboolean pinned;
+    gboolean audio_playing;
+    gboolean muted;
 
     tab = GTK_WIDGET (window->active_embed);
     n_pages = gtk_notebook_get_n_pages (notebook);
     page_num = gtk_notebook_page_num (notebook, tab);
     pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), EPHY_EMBED (tab));
+
+    view = ephy_embed_get_web_view (EPHY_EMBED (tab));
+    audio_playing = webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view));
+    muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
 
     /* enable/disable close others/left/right */
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
@@ -2722,6 +2731,12 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "unpin");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), pinned);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "mute");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), audio_playing);
+    g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                               g_variant_new_boolean (muted));
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close");

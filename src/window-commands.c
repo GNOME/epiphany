@@ -3039,3 +3039,25 @@ window_cmd_tabs_unpin (GSimpleAction *action,
 
   ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), FALSE);
 }
+
+void
+window_cmd_change_tabs_mute_state (GSimpleAction *action,
+                                   GVariant      *state,
+                                   gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyWebView *view;
+  gboolean mute;
+
+  mute = g_variant_get_boolean (state);
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  view = ephy_embed_get_web_view (embed);
+
+  webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), mute);
+
+  g_simple_action_set_state (action, g_variant_new_boolean (mute));
+}
