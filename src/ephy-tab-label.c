@@ -92,7 +92,7 @@ static void
 ephy_tab_label_update_audio_muted (GtkWidget *image,
                                    gboolean   muted)
 {
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), muted ? "audio-volume-muted-symbolic" : "audio-volume-high-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), muted ? "ephy-audio-muted-symbolic" : "ephy-audio-playing-symbolic", GTK_ICON_SIZE_MENU);
 }
 
 static void
