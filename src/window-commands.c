@@ -2919,17 +2919,6 @@ window_cmd_tabs_reload_all_tabs (GSimpleAction *action,
 }
 
 void
-window_cmd_tabs_reopen_closed_tab (GSimpleAction *action,
-                                   GVariant      *parameter,
-                                   gpointer       user_data)
-{
-  EphySession *session = ephy_shell_get_session (ephy_shell_get_default ());
-
-  g_assert (session != NULL);
-  ephy_session_undo_close_tab (session);
-}
-
-void
 window_cmd_show_tab (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       user_data)
