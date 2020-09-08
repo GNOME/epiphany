@@ -52,7 +52,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-tab-header-bar.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
@@ -3560,33 +3559,13 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
 static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
-  GtkWidget *title_bar;
   GtkWidget *header_bar;
-  GtkWidget *tab_header_bar;
-  GtkWidget *header_deck;
   EphyTitleWidget *title_widget;
-  HdySwipeGroup *swipe_group;
 
-  title_bar = hdy_title_bar_new ();
   header_bar = ephy_header_bar_new (window);
-  tab_header_bar = ephy_tab_header_bar_new ();
-  header_deck = hdy_deck_new ();
-  hdy_deck_set_can_swipe_back (HDY_DECK (header_deck), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (title_bar), header_deck);
-  gtk_container_add (GTK_CONTAINER (header_deck), header_bar);
-  gtk_container_add (GTK_CONTAINER (header_deck), tab_header_bar);
-
-  hdy_deck_set_visible_child (HDY_DECK (header_deck), header_bar);
-
-  swipe_group = hdy_swipe_group_new ();
-  hdy_swipe_group_add_swipeable (swipe_group, HDY_SWIPEABLE (header_deck));
-  hdy_swipe_group_add_swipeable (swipe_group, HDY_SWIPEABLE (window->main_deck));
-
-  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), title_bar);
-  gtk_widget_show (title_bar);
+  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
   gtk_widget_show (header_bar);
-  gtk_widget_show (header_deck);
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_widget, "lock-clicked",

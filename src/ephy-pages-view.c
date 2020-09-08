@@ -29,16 +29,15 @@
 #include "ephy-window.h"
 
 struct _EphyPagesView {
-  GtkScrolledWindow parent_instance;
+  GtkBox parent_instance;
 
   GtkListBox *list_box;
 
   GListStore *list_store;
   EphyNotebook *notebook;
-  EphyAdaptiveMode adaptive_mode;
 };
 
-G_DEFINE_TYPE (EphyPagesView, ephy_pages_view, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE (EphyPagesView, ephy_pages_view, GTK_TYPE_BOX)
 
 static void
 drop_notebook (EphyPagesView *self)
