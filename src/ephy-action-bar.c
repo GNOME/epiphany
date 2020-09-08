@@ -28,6 +28,7 @@
 enum {
   PROP_0,
   PROP_WINDOW,
+  PROP_CAN_REVEAL,
   N_PROPERTIES
 };
 
@@ -95,6 +96,10 @@ ephy_action_bar_set_property (GObject      *object,
       action_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
       break;
+    case PROP_CAN_REVEAL:
+      action_bar->can_reveal = g_value_get_boolean (value);
+      update_revealer (action_bar);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
@@ -112,28 +117,12 @@ ephy_action_bar_get_property (GObject    *object,
     case PROP_WINDOW:
       g_value_set_object (value, action_bar->window);
       break;
+    case PROP_CAN_REVEAL:
+      g_value_set_boolean (value, action_bar->can_reveal);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
-}
-
-static void
-titlebar_animation_changed (EphyActionBar *action_bar)
-{
-  switch (dzl_application_window_get_titlebar_animation (DZL_APPLICATION_WINDOW (action_bar->window))) {
-    case DZL_TITLEBAR_ANIMATION_SHOWN:
-    case DZL_TITLEBAR_ANIMATION_SHOWING:
-      action_bar->can_reveal = true;
-
-      break;
-    case DZL_TITLEBAR_ANIMATION_HIDING:
-    case DZL_TITLEBAR_ANIMATION_HIDDEN:
-      action_bar->can_reveal = false;
-
-      break;
-  }
-
-  update_revealer (action_bar);
 }
 
 static void
@@ -155,9 +144,6 @@ ephy_action_bar_constructed (GObject *object)
   g_signal_connect_object (action_bar->notebook, "page-removed",
                            G_CALLBACK (update_pages_button), action_bar,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (DZL_APPLICATION_WINDOW (action_bar->window), "notify::titlebar-animation",
-                           G_CALLBACK (titlebar_animation_changed), action_bar,
-                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -176,6 +162,13 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                          "The action_bar's EphyWindow",
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  object_properties[PROP_CAN_REVEAL] =
+    g_param_spec_boolean ("can-reveal",
+                          "Can Reveal",
+                          "Whether the action bar can be revealed",
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class,
                                      N_PROPERTIES,

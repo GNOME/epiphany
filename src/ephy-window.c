@@ -38,6 +38,7 @@
 #include "ephy-filters-manager.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-flatpak-utils.h"
+#include "ephy-fullscreen-box.h"
 #include "ephy-gsb-utils.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
@@ -148,10 +149,12 @@ const struct {
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
 struct _EphyWindow {
-  DzlApplicationWindow parent_instance;
+  HdyApplicationWindow parent_instance;
 
-  GtkWidget *header_bar;
   GtkWidget *main_deck;
+  EphyFullscreenBox *fullscreen_box;
+  GtkWidget *window_handle;
+  GtkWidget *header_bar;
   EphyPagesView *pages_view;
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
@@ -195,7 +198,8 @@ enum {
   PROP_0,
   PROP_ACTIVE_CHILD,
   PROP_CHROME,
-  PROP_SINGLE_TAB_MODE
+  PROP_SINGLE_TAB_MODE,
+  PROP_FULLSCREEN
 };
 
 /* Make sure not to overlap with those in ephy-lockdown.c */
@@ -424,7 +428,7 @@ ephy_window_link_iface_init (EphyLinkInterface *iface)
   iface->open_link = ephy_window_open_link;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, DZL_TYPE_APPLICATION_WINDOW,
+G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, HDY_TYPE_APPLICATION_WINDOW,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
                                                 ephy_window_link_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
@@ -562,6 +566,7 @@ ephy_window_fullscreen (EphyWindow *window)
   EphyEmbed *embed;
 
   window->is_fullscreen = TRUE;
+  g_object_notify (G_OBJECT (window), "fullscreen");
 
   /* sync status */
   embed = window->active_embed;
@@ -577,6 +582,7 @@ static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
   window->is_fullscreen = FALSE;
+  g_object_notify (G_OBJECT (window), "fullscreen");
 
   update_adaptive_mode (window);
   sync_chromes_visibility (window);
@@ -2620,13 +2626,6 @@ tab_accels_update (EphyWindow *window)
 }
 
 static void
-accel_cb_tabs_next (GtkWidget *widget,
-                    gpointer   user_data)
-{
-  window_cmd_tabs_next (NULL, NULL, user_data);
-}
-
-static void
 last_tab_accel_activate (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
@@ -2645,7 +2644,6 @@ setup_tab_accels (EphyWindow *window)
   GActionGroup *action_group;
   GApplication *app;
   guint i;
-  DzlShortcutController *controller = dzl_shortcut_controller_find (GTK_WIDGET (window));
   GSimpleAction *last_tab_action;
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
@@ -2686,26 +2684,6 @@ setup_tab_accels (EphyWindow *window)
   g_signal_connect (G_ACTION (last_tab_action), "activate",
                     G_CALLBACK (last_tab_accel_activate), window);
   g_object_unref (last_tab_action);
-
-  /* We have to setup the Ctrl + Tab shortcut in the window's ShortcutController
-   * because otherwise libdazzle would handle this shortcut by changing
-   * the focused widget instead of switching between the browser tabs
-   */
-  dzl_shortcut_controller_add_command_callback (controller,
-                                                "org.gnome.Epiphany.next-tab-pages",
-                                                "<Primary>Tab",
-                                                DZL_SHORTCUT_PHASE_DISPATCH,
-                                                accel_cb_tabs_next,
-                                                window,
-                                                NULL);
-
-  dzl_shortcut_controller_add_command_callback (controller,
-                                                "org.gnome.Epiphany.prev-tab-pages",
-                                                "<Primary>ISO_Left_Tab",
-                                                DZL_SHORTCUT_PHASE_DISPATCH,
-                                                accel_cb_tabs_next,
-                                                window,
-                                                NULL);
 }
 
 static gboolean
@@ -3339,6 +3317,9 @@ ephy_window_get_property (GObject    *object,
     case PROP_SINGLE_TAB_MODE:
       g_value_set_boolean (value, window->is_popup);
       break;
+    case PROP_FULLSCREEN:
+      g_value_set_boolean (value, window->is_fullscreen);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3351,10 +3332,6 @@ ephy_window_state_event (GtkWidget           *widget,
 {
   EphyWindow *window = EPHY_WINDOW (widget);
   gboolean result = GDK_EVENT_PROPAGATE;
-
-  if (GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event) {
-    result = GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event (widget, event);
-  }
 
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN) {
     GActionGroup *action_group;
@@ -3369,8 +3346,10 @@ ephy_window_state_event (GtkWidget           *widget,
       ephy_window_unfullscreen (window);
     }
 
-    if (window->show_fullscreen_header_bar)
-      dzl_application_window_set_fullscreen (DZL_APPLICATION_WINDOW (window), fullscreen);
+    ephy_fullscreen_box_set_fullscreen (window->fullscreen_box,
+                                        fullscreen && window->show_fullscreen_header_bar);
+    gtk_widget_set_visible (GTK_WIDGET (window->window_handle),
+                            !fullscreen || window->show_fullscreen_header_bar);
 
     window->show_fullscreen_header_bar = FALSE;
 
@@ -3384,6 +3363,9 @@ ephy_window_state_event (GtkWidget           *widget,
   }
 
   update_adaptive_mode (window);
+
+  if (GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event)
+    result = GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event (widget, event);
 
   return result;
 }
@@ -3562,10 +3544,15 @@ setup_header_bar (EphyWindow *window)
   GtkWidget *header_bar;
   EphyTitleWidget *title_widget;
 
+  window->window_handle = hdy_window_handle_new ();
   header_bar = ephy_header_bar_new (window);
 
-  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
+  gtk_container_add (GTK_CONTAINER (window->window_handle), header_bar);
+
+  gtk_widget_show (window->window_handle);
   gtk_widget_show (header_bar);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (header_bar), "titlebar");
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_widget, "lock-clicked",
@@ -3601,6 +3588,10 @@ setup_action_bar (EphyWindow *window)
   action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_widget_show (action_bar);
+
+  g_object_bind_property (window->fullscreen_box, "revealed",
+                          action_bar, "can-reveal",
+                          G_BINDING_SYNC_CREATE);
 
   return action_bar;
 }
@@ -3840,6 +3831,7 @@ ephy_window_constructed (GObject *object)
 
   window->notebook = setup_notebook (window);
   window->main_deck = hdy_deck_new ();
+  window->fullscreen_box = ephy_fullscreen_box_new ();
   window->pages_view = ephy_pages_view_new ();
 
   ephy_pages_view_set_notebook (window->pages_view, EPHY_NOTEBOOK (window->notebook));
@@ -3866,15 +3858,19 @@ ephy_window_constructed (GObject *object)
 
   gtk_box_pack_start (box, GTK_WIDGET (window->notebook), TRUE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (box));
+  gtk_container_add (GTK_CONTAINER (window->fullscreen_box), GTK_WIDGET (box));
+  ephy_fullscreen_box_set_titlebar (window->fullscreen_box, GTK_WIDGET (window->window_handle));
+
+  gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (window->fullscreen_box));
   gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (window->pages_view));
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->main_deck));
-  gtk_widget_show_all (GTK_WIDGET (window->pages_view));
   gtk_widget_show (GTK_WIDGET (window->main_deck));
+  gtk_widget_show (GTK_WIDGET (window->pages_view));
+  gtk_widget_show (GTK_WIDGET (window->fullscreen_box));
   gtk_widget_show (GTK_WIDGET (box));
   gtk_widget_show (GTK_WIDGET (window->notebook));
 
-  hdy_deck_set_visible_child (HDY_DECK (window->main_deck), GTK_WIDGET (box));
+  hdy_deck_set_visible_child (HDY_DECK (window->main_deck), GTK_WIDGET (window->fullscreen_box));
   hdy_deck_set_can_swipe_back (HDY_DECK (window->main_deck), TRUE);
 
   /* other notifiers */
@@ -3980,6 +3976,15 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                        EPHY_WINDOW_CHROME_DEFAULT,
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   PROP_FULLSCREEN,
+                                   g_param_spec_boolean ("fullscreen",
+                                                         NULL,
+                                                         NULL,
+                                                         FALSE,
+                                                         G_PARAM_READABLE |
+                                                         G_PARAM_STATIC_STRINGS));
 
   manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   g_signal_connect (manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);

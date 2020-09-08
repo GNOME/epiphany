@@ -26,13 +26,13 @@
 #include "ephy-location-controller.h"
 #include "ephy-web-view.h"
 
-#include <gtk/gtk.h>
+#include <handy.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_WINDOW (ephy_window_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, DzlApplicationWindow)
+G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, HdyApplicationWindow)
 
 typedef enum
 {
