@@ -594,7 +594,7 @@ portal_check (EphyShell *shell)
   if (g_network_monitor_get_connectivity (ephy_shell_get_net_monitor (shell)) == G_NETWORK_CONNECTIVITY_PORTAL) {
     EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
-    ephy_window_load_url (window, "http://nmcheck.gnome.org/");
+    ephy_link_open (EPHY_LINK (window), "http://nmcheck.gnome.org/", NULL, EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
   }
 }
 
