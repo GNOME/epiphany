@@ -35,6 +35,17 @@ is_desktop_pantheon (void)
   return strstr (xdg_current_desktop, "Pantheon") != NULL;
 }
 
+gboolean
+is_desktop_gnome (void)
+{
+  const gchar *xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+
+  if (!xdg_current_desktop)
+    return FALSE;
+
+  return strstr (xdg_current_desktop, "GNOME") != NULL;
+}
+
 GtkIconSize
 get_icon_size (void)
 {

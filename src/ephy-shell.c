@@ -24,6 +24,7 @@
 #include "ephy-shell.h"
 
 #include "ephy-debug.h"
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -611,8 +612,10 @@ ephy_shell_activate (GApplication *application)
   EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (shell);
 
-  g_signal_connect (ephy_shell_get_net_monitor (shell), "notify::connectivity", G_CALLBACK (connectivity_changed), shell);
-  portal_check (shell);
+  if (!is_desktop_gnome ()) {
+    g_signal_connect (ephy_shell_get_net_monitor (shell), "notify::connectivity", G_CALLBACK (connectivity_changed), shell);
+    portal_check (shell);
+  }
 
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     WebKitWebContext *web_context = ephy_embed_shell_get_web_context (embed_shell);
