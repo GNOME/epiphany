@@ -1,5 +1,5 @@
 /*
-  Highlight.js 10.1.0 (74de6eaa)
+  Highlight.js 10.2.0 (da7d149b)
   License: BSD-3-Clause
   Copyright (c) 2006-2020, Ivan Sagalaev
 */
@@ -912,6 +912,10 @@ var hljs = (function () {
         return matcher;
       }
 
+      resumingScanAtSamePosition() {
+        return this.regexIndex != 0;
+      }
+
       considerAll() {
         this.regexIndex = 0;
       }
@@ -1219,7 +1223,70 @@ var hljs = (function () {
     return COMMON_KEYWORDS.includes(keyword.toLowerCase());
   }
 
-  var version = "10.1.0";
+  var version = "10.2.0";
+
+  // @ts-nocheck
+
+  function hasValueOrEmptyAttribute(value) {
+    return Boolean(value || value === "");
+  }
+
+  const Component = {
+    props: ["language", "code", "autodetect"],
+    data: function() {
+      return {
+        detectedLanguage: "",
+        unknownLanguage: false
+      };
+    },
+    computed: {
+      className() {
+        if (this.unknownLanguage) return "";
+
+        return "hljs " + this.detectedLanguage;
+      },
+      highlighted() {
+        // no idea what language to use, return raw code
+        if (!this.autoDetect && !hljs.getLanguage(this.language)) {
+          console.warn(`The language "${this.language}" you specified could not be found.`);
+          this.unknownLanguage = true;
+          return escapeHTML(this.code);
+        }
+
+        let result;
+        if (this.autoDetect) {
+          result = hljs.highlightAuto(this.code);
+          this.detectedLanguage = result.language;
+        } else {
+          result = hljs.highlight(this.language, this.code, this.ignoreIllegals);
+          this.detectectLanguage = this.language;
+        }
+        return result.value;
+      },
+      autoDetect() {
+        return !this.language || hasValueOrEmptyAttribute(this.autodetect);
+      },
+      ignoreIllegals() {
+        return true;
+      }
+    },
+    // this avoids needing to use a whole Vue compilation pipeline just
+    // to build Highlight.js
+    render(createElement) {
+      return createElement("pre", {}, [
+        createElement("code", {
+          class: this.className,
+          domProps: { innerHTML: this.highlighted }})
+      ]);
+    }
+    // template: `<pre><code :class="className" v-html="highlighted"></code></pre>`
+  };
+
+  const VuePlugin = {
+    install(Vue) {
+      Vue.component('highlightjs', Component);
+    }
+  };
 
   /*
   Syntax highlighting with language autodetection.
@@ -1234,6 +1301,7 @@ var hljs = (function () {
 
   /**
    * @param {any} hljs - object that is extended (legacy)
+   * @returns {HLJSApi}
    */
   const HLJS = function(hljs) {
     // Convenience variables for build-in objects
@@ -1242,9 +1310,9 @@ var hljs = (function () {
 
     // Global internal variables used within the highlight.js library.
     /** @type {Record<string, Language>} */
-    var languages = {};
+    var languages = Object.create(null);
     /** @type {Record<string, string>} */
-    var aliases = {};
+    var aliases = Object.create(null);
     /** @type {HLJSPlugin[]} */
     var plugins = [];
 
@@ -1474,6 +1542,14 @@ var hljs = (function () {
       }
 
       /**
+       * Advance a single character
+       */
+      function advanceOne() {
+        mode_buffer += codeToHighlight[index];
+        index += 1;
+      }
+
+      /**
        * Handle matching but then ignoring a sequence of text
        *
        * @param {string} lexeme - string containing full match text
@@ -1487,7 +1563,7 @@ var hljs = (function () {
         } else {
           // no need to move the cursor, we still have additional regexes to try and
           // match at this very spot
-          continueScanAtSamePosition = true;
+          resumeScanAtSamePosition = true;
           return 0;
         }
       }
@@ -1690,23 +1766,32 @@ var hljs = (function () {
       var relevance = 0;
       var index = 0;
       var iterations = 0;
-      var continueScanAtSamePosition = false;
+      var resumeScanAtSamePosition = false;
 
       try {
         top.matcher.considerAll();
 
         for (;;) {
           iterations++;
-          if (continueScanAtSamePosition) {
+          if (resumeScanAtSamePosition) {
             // only regexes not matched previously will now be
             // considered for a potential match
-            continueScanAtSamePosition = false;
+            resumeScanAtSamePosition = false;
           } else {
             top.matcher.lastIndex = index;
             top.matcher.considerAll();
           }
+
           const match = top.matcher.exec(codeToHighlight);
           // console.log("match", match[0], match.rule && match.rule.begin)
+
+          // if our failure to match was the result of a "resumed scan" then we
+          // need to advance one position and revert to full scanning before we
+          // decide there are truly no more matches at all to be had
+          if (!match && top.matcher.resumingScanAtSamePosition()) {
+            advanceOne();
+            continue;
+          }
           if (!match) break;
 
           const beforeMatch = codeToHighlight.substring(index, match.index);
@@ -2043,12 +2128,19 @@ var hljs = (function () {
       });
     }
 
-    /* Interface definition */
+    /* fixMarkup is deprecated and will be removed entirely in v11 */
+    function deprecate_fixMarkup(arg) {
+      console.warn("fixMarkup is deprecated and will be removed entirely in v11.0");
+      console.warn("Please see https://github.com/highlightjs/highlight.js/issues/2534");
 
+      return fixMarkup(arg)
+    }
+
+    /* Interface definition */
     Object.assign(hljs, {
       highlight,
       highlightAuto,
-      fixMarkup,
+      fixMarkup: deprecate_fixMarkup,
       highlightBlock,
       configure,
       initHighlighting,
@@ -2060,7 +2152,9 @@ var hljs = (function () {
       requireLanguage,
       autoDetection,
       inherit: inherit$1,
-      addPlugin
+      addPlugin,
+      // plugins for frameworks
+      vuePlugin: VuePlugin
     });
 
     hljs.debugMode = function() { SAFE_MODE = false; };
@@ -2568,7 +2662,7 @@ hljs.registerLanguage('javascript', function () {
             lookahead(concat(
               // we also need to allow for multiple possible comments inbetween
               // the first key:value pairing
-              /(((\/\/.*)|(\/\*(.|\n)*\*\/))\s*)*/,
+              /(((\/\/.*$)|(\/\*(.|\n)*\*\/))\s*)*/,
               IDENT_RE$1 + '\\s*:'))),
           relevance: 0,
           contains: [
