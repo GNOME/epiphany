@@ -474,7 +474,7 @@ language_editor_add (PrefsGeneralPage *general_page,
     GtkListBoxRow *widget;
     char *row_code;
 
-    widget = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), index++);
+    widget = gtk_list_box_get_row_at_index (GTK_LIST_BOX (general_page->lang_listbox), index);
 
     row_code = g_object_get_data (G_OBJECT (widget), "code");
     if (row_code && strcmp (row_code, code) == 0)
