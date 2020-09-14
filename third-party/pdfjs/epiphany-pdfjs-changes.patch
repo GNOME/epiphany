@@ -1,25 +1,22 @@
-diff -urN web2/locale/bn/viewer.properties web/locale/bn/viewer.properties
-diff -urN web2/locale/bo/viewer.properties web/locale/bo/viewer.properties
-diff -urN web2/locale/dsb/viewer.properties web/locale/dsb/viewer.properties
-diff -urN web2/locale/trs/viewer.properties web/locale/trs/viewer.properties
-diff -urN web2/viewer.css web/viewer.css
---- web2/viewer.css	2019-10-03 23:09:02.000000000 +0200
-+++ web/viewer.css	2020-01-02 00:24:02.404916203 +0100
+diff --git a/third-party/pdfjs/web/viewer.css b/third-party/pdfjs/web/viewer.css
+index 595660ad3..8711953bf 100644
+--- a/third-party/pdfjs/web/viewer.css
++++ b/third-party/pdfjs/web/viewer.css
 @@ -1,4 +1,5 @@
  /* Copyright 2014 Mozilla Foundation
 + * Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1189,6 +1190,7 @@
+@@ -1192,6 +1193,7 @@ html[dir='rtl'] .dropdownToolbarButton::after {
  }
  
  .dropdownToolbarButton > select {
 +  -webkit-appearance: none;
-   min-width: 140px;
+   width: 162px;
+   height: 23px;
    font-size: 12px;
-   color: hsl(0,0%,95%);
-@@ -1523,6 +1525,7 @@
+@@ -1524,6 +1526,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
  }
  
  .toolbarField.pageNumber {
@@ -27,18 +24,19 @@ diff -urN web2/viewer.css web/viewer.css
    -moz-appearance: textfield; /* hides the spinner in moz */
    min-width: 16px;
    text-align: right;
-diff -urN web2/viewer.html web/viewer.html
---- web2/viewer.html	2019-10-03 23:09:02.000000000 +0200
-+++ web/viewer.html	2020-01-03 10:26:10.089369058 +0100
+diff --git a/third-party/pdfjs/web/viewer.html b/third-party/pdfjs/web/viewer.html
+index 1730b09b7..db8517b1a 100644
+--- a/third-party/pdfjs/web/viewer.html
++++ b/third-party/pdfjs/web/viewer.html
 @@ -1,6 +1,7 @@
  <!DOCTYPE html>
  <!--
  Copyright 2012 Mozilla Foundation
-+* Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
++Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
-@@ -21,7 +22,7 @@
+@@ -21,7 +22,7 @@ Adobe CMap resources are covered by their own copyright but the same license:
  See https://github.com/adobe-type-tools/cmap-resources
  -->
  <html dir="ltr" mozdisallowselectionprint>
@@ -47,7 +45,7 @@ diff -urN web2/viewer.html web/viewer.html
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
      <meta name="google" content="notranslate">
-@@ -29,6 +30,7 @@
+@@ -29,6 +30,7 @@ See https://github.com/adobe-type-tools/cmap-resources
      <title>PDF.js viewer</title>
  
  
@@ -55,34 +53,35 @@ diff -urN web2/viewer.html web/viewer.html
      <link rel="stylesheet" href="viewer.css">
  
  
-diff -urN web2/viewer.js web/viewer.js
---- web2/viewer.js	2019-10-03 23:09:32.000000000 +0200
-+++ web/viewer.js	2020-01-03 12:10:34.247711756 +0100
+diff --git a/third-party/pdfjs/web/viewer.js b/third-party/pdfjs/web/viewer.js
+index 3cf8beed8..e7a792006 100644
+--- a/third-party/pdfjs/web/viewer.js
++++ b/third-party/pdfjs/web/viewer.js
 @@ -3,6 +3,7 @@
   * Javascript code in this page
   *
-  * Copyright 2019 Mozilla Foundation
+  * Copyright 2020 Mozilla Foundation
 + * Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1829,8 +1830,7 @@
-   var file;
-   var queryString = document.location.search.substring(1);
-   var params = (0, _ui_utils.parseQueryString)(queryString);
--  file = 'file' in params ? params.file : _app_options.AppOptions.get('defaultUrl');
+@@ -1836,8 +1837,7 @@ function webViewerInitialized() {
+   let file;
+   const queryString = document.location.search.substring(1);
+   const params = (0, _ui_utils.parseQueryString)(queryString);
+-  file = "file" in params ? params.file : _app_options.AppOptions.get("defaultUrl");
 -  validateFileURL(file);
-+  file = ''
-   var fileInput = document.createElement('input');
++  file = '';
+   const fileInput = document.createElement("input");
    fileInput.id = appConfig.openFileInputName;
-   fileInput.className = 'fileInput';
-@@ -1838,12 +1838,10 @@
+   fileInput.className = "fileInput";
+@@ -1845,12 +1845,10 @@ function webViewerInitialized() {
    fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
    document.body.appendChild(fileInput);
  
 -  if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
--    appConfig.toolbar.openFile.setAttribute('hidden', 'true');
--    appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
+-    appConfig.toolbar.openFile.setAttribute("hidden", "true");
+-    appConfig.secondaryToolbar.openFileButton.setAttribute("hidden", "true");
 -  } else {
 -    fileInput.value = null;
 -  }
@@ -91,9 +90,9 @@ diff -urN web2/viewer.js web/viewer.js
 +
 +  appConfig.toolbar.viewBookmark.setAttribute('hidden', 'true');
  
-   fileInput.addEventListener('change', function (evt) {
-     var files = evt.target.files;
-@@ -1897,8 +1895,18 @@
+   fileInput.addEventListener("change", function (evt) {
+     const files = evt.target.files;
+@@ -1912,8 +1910,18 @@ function webViewerInitialized() {
      }
    }, true);
  
@@ -108,17 +107,24 @@ diff -urN web2/viewer.js web/viewer.js
 +
    try {
 -    webViewerOpenFileViaURL(file);
-+      PDFViewerApplication.open(array);
-+      PDFViewerApplication.setTitleUsingUrl(file_name);
++    PDFViewerApplication.open(array);
++    PDFViewerApplication.setTitleUsingUrl(file_name);
    } catch (reason) {
-     PDFViewerApplication.l10n.get('loading_error', null, 'An error occurred while loading the PDF.').then(function (msg) {
+     PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(msg => {
        PDFViewerApplication.error(msg, reason);
-@@ -7785,6 +7793,8 @@
-         }
+@@ -6520,6 +6528,8 @@ class PDFHistory {
        }
+     }
  
-+      // FIXME: This currently breaks Epiphany due to rewriting history with baseUrl
-+      return;
-       if (shouldReplace) {
-         if (newUrl) {
-           window.history.replaceState(newState, '', newUrl);
++    // FIXME: This currently breaks Epiphany due to rewriting history with baseUrl
++    return;
+     if (shouldReplace) {
+       window.history.replaceState(newState, "", newUrl);
+     } else {
+@@ -13276,4 +13286,4 @@ _app.PDFPrintServiceFactory.instance = {
+ 
+ /***/ })
+ /******/ ]);
+-//# sourceMappingURL=viewer.js.map
+\ No newline at end of file
++//# sourceMappingURL=viewer.js.map
