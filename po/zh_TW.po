@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.3.91\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-05-30 20:55+0000\n"
-"PO-Revision-Date: 2020-06-01 01:16+0800\n"
-"Last-Translator: Yi-Jyun Pan <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2020-09-14 16:07+0000\n"
+"PO-Revision-Date: 2020-09-17 21:32+0800\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -55,8 +55,8 @@ msgid "The GNOME Project"
 msgstr "GNOME 專案"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
-#: embed/ephy-about-handler.c:226 src/ephy-main.c:101 src/ephy-main.c:252
-#: src/ephy-main.c:404 src/window-commands.c:984
+#: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
+#: src/ephy-main.c:406 src/window-commands.c:992
 msgid "Web"
 msgstr "網頁"
 
@@ -339,7 +339,7 @@ msgid ""
 msgstr "預設編碼。可接受的數值為 WebKitGTK 所能瞭解的值。"
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:306
+#: src/resources/gtk/prefs-general-page.ui:351
 msgid "Languages"
 msgstr "語言"
 
@@ -349,66 +349,55 @@ msgid ""
 msgstr "偏好的語言。可以是地區代碼的陣列或「system」使用目前的地區設定。"
 
 #: data/org.gnome.epiphany.gschema.xml:156
-msgid "Cookie accept"
-msgstr "Cookie 接受"
-
-#: data/org.gnome.epiphany.gschema.xml:157
-msgid ""
-"Where to accept cookies from. Possible values are “always”, “no-third-party” "
-"and “never”."
-msgstr ""
-"是否接受 Cookie。可能的數值有「always」、「no-third-party」和「never」。"
-
-#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "允許彈出式視窗"
 
-#: data/org.gnome.epiphany.gschema.xml:162
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "允許網站使用 JavaScript 開啟新視窗 (如果啟用 JavaScript)。"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Enable smooth scrolling"
 msgstr "啟用平滑捲動"
 
-#: data/org.gnome.epiphany.gschema.xml:167
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid "Whether to enable smooth scrolling."
 msgstr "是否啟用平滑捲動。"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
 msgstr "使用者代理"
 
-#: data/org.gnome.epiphany.gschema.xml:172
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr "用作使用者代理的字串，讓網頁伺服器辨認瀏覽器時使用。"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Enable adblock"
 msgstr "啟用廣告阻擋"
 
-#: data/org.gnome.epiphany.gschema.xml:177
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "是否阻擋內嵌於網頁可能顯示的廣告。"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Remember passwords"
 msgstr "紀錄密碼"
 
-#: data/org.gnome.epiphany.gschema.xml:182
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid "Whether to store and prefill passwords in websites."
 msgstr "是否儲存並預先填寫網站密碼。"
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Enable site-specific quirks"
 msgstr "啟用針對特定網站的奇技淫巧"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -416,34 +405,54 @@ msgstr ""
 "啟用奇技淫巧來讓特定網站更順利表現。如果您需要對特定問題除錯，或許會想要停用"
 "此設定。"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable safe browsing"
 msgstr "啟用安全瀏覽"
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
 "是否要啟用安全瀏覽。安全瀏覽透過 Google Safe Browsing API v4 進行操作。"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Google Safe Browsing API key"
 msgstr "Google Safe Browsing API 金鑰"
 
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "用來存取 Google Safe Browsing API v4 的 API 金鑰。"
 
+#: data/org.gnome.epiphany.gschema.xml:196
+msgid "Enable Intelligent Tracking Prevention (ITP)"
+msgstr "啟用智慧追蹤預防 (ITP)"
+
+#: data/org.gnome.epiphany.gschema.xml:197
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "是否要啟用智慧追蹤預防。"
+
 #: data/org.gnome.epiphany.gschema.xml:201
+msgid "Allow websites to store local website data"
+msgstr "允許網站儲存本機的網站資料"
+
+#: data/org.gnome.epiphany.gschema.xml:202
+msgid ""
+"Whether to allow websites to store cookies, local storage data, and "
+"IndexedDB databases. Disabling this will break many websites."
+msgstr ""
+"是否要允許網站儲存 Cookie、本機儲存資料、IndexedDB 資料庫等。停用此功能會影響"
+"許多網站運作。"
+
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
 msgstr "新網頁的預設縮放倍率"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable autosearch"
 msgstr "啟用自動搜尋"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -453,11 +462,11 @@ msgstr ""
 "當輸入於位址列中的內容看起來不像網址時，是否要自動搜尋網路。若停用此設定，則"
 "任何輸入皆以網址載入，除非使用者有特別從下拉選單明確選取搜尋引擎。"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable mouse gestures"
 msgstr "啟用滑鼠手勢"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -465,27 +474,27 @@ msgstr ""
 "是否要啟用滑鼠手勢。滑鼠手勢根據 Opera 瀏覽器行為設計，請使用滑鼠中鍵 + 手勢"
 "繪製來啟用功能。"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last upload directory"
 msgstr "上次上傳目錄"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last upload directory"
 msgstr "記住上次的上傳目錄"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Last download directory"
 msgstr "上次下載目錄"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid "Keep track of last download directory"
 msgstr "記住上次的下載目錄"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Hardware acceleration policy"
 msgstr "硬體加速政策"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -499,35 +508,53 @@ msgstr ""
 "增加記憶體的使用量需求，而且可能暴露在特定硬體的圖形顯示驅動程式重大臭蟲的風"
 "險中。當政策選擇「on-demand」時，硬體加速只會在顯示 3D 變換時的要求下使用。"
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Always ask for download directory"
 msgstr "總是詢問下載目錄"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "是否每次下載時都要提出目錄選擇器對話盒。"
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:240
+msgid "Enable immediately switch to new open tab"
+msgstr "立即啟用切換至新開啟的分頁"
+
+#: data/org.gnome.epiphany.gschema.xml:241
+msgid "Whether to automatically switch to a new open tab."
+msgstr "是否要自動切換至新開啟的分頁。"
+
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "Web application additional URLs"
 msgstr "網頁應用程式的附加連結"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "The list of URLs that should be opened by the web application"
 msgstr "應該以網頁應用程式開啟的 URL 列表"
 
-#: data/org.gnome.epiphany.gschema.xml:242
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "WebApp is mobile capable"
 msgstr "WebApp 具有可攜行動能力"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Whether to show buttons for navigation."
 msgstr "是否要顯示導覽按鍵。"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:257
+msgid "Run in background"
+msgstr "在背景中執行"
+
+#: data/org.gnome.epiphany.gschema.xml:258
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr "如果啟用，則應用程式會在關閉視窗後仍繼續在背景中執行。"
+
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
 msgstr "下載資料夾"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -535,192 +562,208 @@ msgstr ""
 "放置下載的檔案的資料夾路徑；或是「Downloads」代表預設的下載目錄，或"
 "「Desktop」使用桌面資料夾。"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid "Window position"
 msgstr "視窗位置"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "不是從前一個工作階段還原的新視窗要使用的位置。"
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid "Window size"
 msgstr "視窗尺寸"
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "不是從前一個工作階段還原的新視窗要使用的大小。"
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Is maximized"
 msgstr "是否最大化"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr "當新視窗不是從前一個工作階段還原時是否應初始為最大化視窗。"
 
-#: data/org.gnome.epiphany.gschema.xml:283
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid "Disable forward and back buttons"
 msgstr "停用下一頁與上一頁按鈕"
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:299
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 "若設為「true」時，下一頁與上一頁按鈕會停用，阻止使用者存取即刻的瀏覽器歷史"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:317
+msgid "Firefox Sync Token Server URL"
+msgstr "Firefox Sync 代符伺服器 URL"
+
+#: data/org.gnome.epiphany.gschema.xml:318
+msgid "URL to a custom Firefox Sync token server."
+msgstr "自訂的 Firefox Sync 代符伺服器 URL。"
+
+#: data/org.gnome.epiphany.gschema.xml:322
+msgid "Firefox Sync Accounts Server URL"
+msgstr "Firefox Sync 帳號伺服器 URL"
+
+#: data/org.gnome.epiphany.gschema.xml:323
+msgid "URL to a custom Firefox Sync accounts server."
+msgstr "自訂的 Firefox Sync 帳號伺服器 URL。"
+
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Currently signed in sync user"
 msgstr "目前以同步使用者登入"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr "連結到 Firefox 帳號的電子郵件用來與 Mozilla 伺服器同步資料。"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Last sync timestamp"
 msgstr "上次同步時間戳記"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "上次同步的 UNIX 時間（以秒記）"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Sync device ID"
 msgstr "同步裝置 ID"
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The sync device ID of the current device."
 msgstr "目前裝置的同步裝置 ID。"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Sync device name"
 msgstr "同步裝置名稱"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The sync device name of the current device."
 msgstr "目前裝置的同步裝置名稱。"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "The sync frequency in minutes"
 msgstr "同步頻率（以分鐘記）"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The number of minutes between two consecutive syncs."
 msgstr "兩次連續同步之間的等待分鐘數。"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Sync data with Firefox"
 msgstr "與 Firefox 同步資料"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr "若 Ephiphany 的收藏集應該和 Firefox 收藏集同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Enable bookmarks sync"
 msgstr "啟用書籤同步"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "若書籤集應該同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Bookmarks sync timestamp"
 msgstr "書籤同步時間戳記"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "上次書籤同步的時間戳記。"
 
-#: data/org.gnome.epiphany.gschema.xml:342
-#: data/org.gnome.epiphany.gschema.xml:357
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Initial sync or normal sync"
 msgstr "初始同步或一般同步"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "若書籤集需要首次同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Enable passwords sync"
 msgstr "啟用密碼同步"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "若密碼集應該同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Passwords sync timestamp"
 msgstr "密碼同步時間戳記"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "The timestamp at which last passwords sync was made."
 msgstr "上次密碼同步的時間戳記。"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "若密碼集需要首次同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Enable history sync"
 msgstr "啟用歷史紀錄同步"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "若歷史紀錄集應該同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "History sync timestamp"
 msgstr "歷史紀錄同步時間戳記"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid "The timestamp at which last history sync was made."
 msgstr "上次歷史紀錄同步的時間戳記。"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "若歷史紀錄集需要首次同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Enable open tabs sync"
 msgstr "啟用開啟分頁同步"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "若開啟分頁集應該同步則為 TRUE，否則 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Open tabs sync timestamp"
 msgstr "開啟分頁同步時間戳記"
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "上次開啟分頁同步的時間戳記。"
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "這個主機要求麥克風的存取權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -731,12 +774,12 @@ msgstr ""
 "表瀏覽器需要詢問使用者以獲得授權，而「allow」與「deny」會在收到要求時自動決"
 "定。"
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "這個主機要求地理位置存取權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -747,12 +790,12 @@ msgstr ""
 "代表瀏覽器需要詢問使用者以獲得授權，而「allow」與「deny」會在收到要求時自動決"
 "定。"
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "這個主機要求通知許可權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -762,12 +805,12 @@ msgstr ""
 "這個選項是用來儲存指定的主機是否有顯示通知的許可權。預設值「undecided」代表瀏"
 "覽器需要詢問使用者以獲得授權，而「allow」與「deny」會在收到要求時自動決定。"
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "這個主機要求密碼儲存許可權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -777,11 +820,11 @@ msgstr ""
 "這個選項是用來儲存指定的主機是否有儲存密碼的許可權。預設值「undecided」代表瀏"
 "覽器需要詢問使用者以獲得授權，而「allow」與「deny」會在收到要求時自動決定。"
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "這個主機要求網路攝影機存取權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -792,12 +835,12 @@ msgstr ""
 "「undecided」代表瀏覽器需要詢問使用者以獲得授權，而「allow」與「deny」會在收"
 "到要求時自動決定。"
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "這個主機要求廣告許可權時所套用的決定"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -806,6 +849,21 @@ msgid ""
 msgstr ""
 "這個選項是用來儲存指定的主機是否有廣告的許可權。預設值「undecided」代表使用瀏"
 "覽器全域設定，而「allow」與「deny」則會在收到要求時給予主機對應的決定。"
+
+#: data/org.gnome.epiphany.gschema.xml:449
+msgid "Decision to apply when an autoplay policy is requested for this host"
+msgstr "這個主機詢問自動播放政策時所套用的決定"
+
+#: data/org.gnome.epiphany.gschema.xml:450
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to autoplay. The “undecided” default means to allow autoplay of muted media, "
+"while “allow” and “deny” tell it to allow / deny all requests to autoplay "
+"media respectively."
+msgstr ""
+"這個選項是用來儲存指定的主機是否有自動播放的許可權。預設值「undecided」代表允"
+"許以靜音自動播放媒體，而「allow」或「deny」則會在收到自動播放媒體要求時對應告"
+"知主機允許 / 拒絕。"
 
 #: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
@@ -820,7 +878,7 @@ msgstr "版本 %s"
 msgid "About Web"
 msgstr "關於《網頁》"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:986
+#: embed/ephy-about-handler.c:194 src/window-commands.c:994
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany 技術預覽版"
 
@@ -896,74 +954,75 @@ msgstr ""
 "服務供應商、您的政府、或是您造訪的網站以及這些網站的廣告主仍然可能追蹤您。"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:727
+#: embed/ephy-download.c:725
 #, c-format
 msgid "Finished downloading %s"
 msgstr "%s 下載完成"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:729
+#: embed/ephy-download.c:727
 msgid "Download finished"
 msgstr "下載完成"
 
-#: embed/ephy-download.c:821
+#: embed/ephy-download.c:818
 msgid "Download requested"
 msgstr "已請求下載"
 
-#: embed/ephy-download.c:822 lib/widgets/ephy-file-chooser.c:163
+#: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:174 src/window-commands.c:275
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
-#: src/window-commands.c:557 src/window-commands.c:642
-#: src/window-commands.c:799 src/window-commands.c:1823
+#: src/window-commands.c:561 src/window-commands.c:646
+#: src/window-commands.c:807 src/window-commands.c:1874
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: embed/ephy-download.c:822
+#: embed/ephy-download.c:819
 msgid "_Download"
 msgstr "下載(_D)"
 
-#: embed/ephy-download.c:835
+#: embed/ephy-download.c:832
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "類型：%s (%s)"
 
 #. From
-#: embed/ephy-download.c:841
+#: embed/ephy-download.c:838
 #, c-format
 msgid "From: %s"
 msgstr "從：%s"
 
 #. Question
-#: embed/ephy-download.c:846
+#: embed/ephy-download.c:843
 msgid "Where do you want to save the file?"
 msgstr "您想要將檔案儲存到哪裡？"
 
 #. File Chooser Button
-#: embed/ephy-download.c:851
+#: embed/ephy-download.c:848
 msgid "Save file"
 msgstr "儲存檔案"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "按下 %s 離開全螢幕"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:794
+#: embed/ephy-embed.c:787
 msgid "Web is being controlled by automation."
 msgstr "《網頁》正由自動化作業控制。"
 
-#: embed/ephy-embed-utils.c:65
+#: embed/ephy-embed-utils.c:66
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "傳送電子郵件至位址「%s」"
@@ -1322,133 +1381,151 @@ msgstr "尋找上一個出現搜尋字串的地方"
 msgid "Find next occurrence of the search string"
 msgstr "尋找下一個出現搜尋字串的地方"
 
-#: embed/ephy-view-source-handler.c:257
+#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s 不是有效的 URI"
 
-#: embed/ephy-web-view.c:184 src/window-commands.c:1285
+#: embed/ephy-web-view.c:183 src/window-commands.c:1336
 msgid "Open"
 msgstr "開啟"
 
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:358
 msgid "Not No_w"
 msgstr "現在不要(_W)"
 
-#: embed/ephy-web-view.c:360
+#: embed/ephy-web-view.c:359
 msgid "_Never Save"
 msgstr "永不儲存(_N)"
 
-#: embed/ephy-web-view.c:361 lib/widgets/ephy-file-chooser.c:174
-#: src/resources/gtk/prefs-sync-page.ui:165 src/window-commands.c:641
+#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "儲存(_S)"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:368
+#: embed/ephy-web-view.c:367
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "您是否要儲存您在「%s」的密碼？"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:608
+#: embed/ephy-web-view.c:609
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
 msgstr "注意：這份表單不安全。如果您輸入您的密碼，很有可能不被私密保存。"
 
-#: embed/ephy-web-view.c:830
+#: embed/ephy-web-view.c:817
 msgid "Web process crashed"
 msgstr "《網頁》程序崩潰"
 
-#: embed/ephy-web-view.c:833
+#: embed/ephy-web-view.c:820
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "《網頁》程序因為超出記憶體限制而被中止"
 
-#: embed/ephy-web-view.c:1005 lib/widgets/ephy-security-popover.c:504
+#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "禁止"
 
-#: embed/ephy-web-view.c:1006 lib/widgets/ephy-security-popover.c:503
+#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "允許"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1019
+#: embed/ephy-web-view.c:1034
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "位於 %s 的網頁想要顯示桌面通知。"
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1024
+#: embed/ephy-web-view.c:1039
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "位於 %s 的網頁想要知道您的位置。"
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1029
+#: embed/ephy-web-view.c:1044
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "位於 %s 的網頁想要使用您的麥克風。"
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1034
+#: embed/ephy-web-view.c:1049
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "位於 %s 的網頁想要使用您的網路攝影機。"
 
+#. Translators: Webcam and microphone policy for a specific site.
+#: embed/ephy-web-view.c:1054
+#, c-format
+msgid "The page at %s wants to use your webcam and microphone."
+msgstr "位於 %s 的網頁想要使用您的網路攝影機與麥克風。"
+
+#: embed/ephy-web-view.c:1149
+#, c-format
+msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
+msgstr "您是否要允許「%s」在瀏覽「%s」時使用 Cookie？"
+
+#: embed/ephy-web-view.c:1158
+#, c-format
+msgid "This will allow “%s” to track your activity."
+msgstr "這會允許「%s」追蹤您的活動。"
+
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1211
+#: embed/ephy-web-view.c:1336
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在載入「%s」…"
 
-#: embed/ephy-web-view.c:1213 embed/ephy-web-view.c:1219
+#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
 msgid "Loading…"
 msgstr "載入中…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1562
+#: embed/ephy-web-view.c:1677
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "這個網站呈現的識別屬於不同的網站。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1567
+#: embed/ephy-web-view.c:1682
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr "這個網站的識別太老以致難以信任。請檢查您電腦的日期是否正確。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1572
+#: embed/ephy-web-view.c:1687
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "這個網站的識別並非來自可信任的組織。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1577
+#: embed/ephy-web-view.c:1692
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "這個網站的識別無法處理。它可能已損壞。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1582
+#: embed/ephy-web-view.c:1697
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "這個網站的識別已被發行它的信任組織註銷。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1587
+#: embed/ephy-web-view.c:1702
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "這個網站的識別不可信任，因為它使用非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1592
+#: embed/ephy-web-view.c:1707
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1456,24 +1533,24 @@ msgstr "這個網站的識別有效日期在未來。請檢查您電腦的日期
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1655 embed/ephy-web-view.c:1711
+#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
 #, c-format
 msgid "Problem Loading Page"
 msgstr "載入頁面時發生錯誤"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1773
 msgid "Unable to display this website"
 msgstr "無法顯示這個網站"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1662
+#: embed/ephy-web-view.c:1777
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "在 %s 的網站似乎無法使用。"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1666
+#: embed/ephy-web-view.c:1781
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1482,7 +1559,7 @@ msgstr ""
 "常。"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1676
+#: embed/ephy-web-view.c:1791
 #, c-format
 msgid "The precise error was: %s"
 msgstr "精確的錯誤是：%s"
@@ -1490,66 +1567,66 @@ msgstr "精確的錯誤是：%s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1681 embed/ephy-web-view.c:1734
-#: embed/ephy-web-view.c:1773 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
+#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
 msgid "Reload"
 msgstr "重新載入"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1684 embed/ephy-web-view.c:1737
-#: embed/ephy-web-view.c:1776
+#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
+#: embed/ephy-web-view.c:1891
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1714
+#: embed/ephy-web-view.c:1829
 msgid "Oops! There may be a problem"
 msgstr "噢！可能有問題發生"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1718
+#: embed/ephy-web-view.c:1833
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "網頁 %s 可能導致《網頁》意外關閉。"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1725
+#: embed/ephy-web-view.c:1840
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "如果再發生這種情況，請將問題報告給 %s 開發團隊。"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1762
+#: embed/ephy-web-view.c:1877
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "顯示頁面時發生問題"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1765
+#: embed/ephy-web-view.c:1880
 msgid "Oops!"
 msgstr "噢！"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1768
+#: embed/ephy-web-view.c:1883
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr "顯示此頁面時遇到錯誤。請重新載入或瀏覽不同的頁面以繼續。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1802
+#: embed/ephy-web-view.c:1917
 #, c-format
 msgid "Security Violation"
 msgstr "違反安全性"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1805
+#: embed/ephy-web-view.c:1920
 msgid "This Connection is Not Secure"
 msgstr "這個連線並不安全"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1809
+#: embed/ephy-web-view.c:1924
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1560,45 +1637,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1819 embed/ephy-web-view.c:1908
-#: embed/ephy-web-view.c:1959
+#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
+#: embed/ephy-web-view.c:2074
 msgid "Go Back"
 msgstr "返回"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1822 embed/ephy-web-view.c:1911
-#: embed/ephy-web-view.c:1962
+#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2077
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1825 embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
 msgid "Accept Risk and Proceed"
 msgstr "接受風險並繼續"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1918
+#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1859
+#: embed/ephy-web-view.c:1974
 #, c-format
 msgid "Security Warning"
 msgstr "安全性警告"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1862
+#: embed/ephy-web-view.c:1977
 msgid "Unsafe website detected!"
 msgstr "偵測到不安全的網站！"
 
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1984
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1607,7 +1684,7 @@ msgstr ""
 "訪問 %s 可能會損害您的電腦。這個網頁似乎包含可不經您同意就下載到您電腦中的惡"
 "意程式碼。"
 
-#: embed/ephy-web-view.c:1873
+#: embed/ephy-web-view.c:1988
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1616,7 +1693,7 @@ msgstr ""
 "您可以前往 %s 深入學習何謂有害網頁，如病毒與其他惡意程式碼等，以及該如何保護"
 "您電腦的相關資訊。"
 
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1995
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1626,14 +1703,14 @@ msgstr ""
 "%s 的攻擊者可能欺騙您做些危險的事情，例如安裝軟體或是揭露您的個人資訊（舉例："
 "密碼、電話號碼、信用卡號碼等）。"
 
-#: embed/ephy-web-view.c:1885
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "您可以前往 %s 或從 %s 瞭解更多有關何謂社交工程（網路釣魚） 的相關資訊。"
 
-#: embed/ephy-web-view.c:1894
+#: embed/ephy-web-view.c:2009
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1643,24 +1720,24 @@ msgstr ""
 "%s 可能包含有害程式。攻擊者可能試圖欺騙您安裝會傷害瀏覽體驗的程式（例如：更換"
 "您的瀏覽器首頁，或是在您造訪的網頁中顯示額外的廣告）。"
 
-#: embed/ephy-web-view.c:1899
+#: embed/ephy-web-view.c:2014
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "您可以前往 %s 深入學習有關不需要軟體的相關資訊。"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1943 embed/ephy-web-view.c:1946
+#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
 #, c-format
 msgid "File not found"
 msgstr "找不到檔案"
 
-#: embed/ephy-web-view.c:1950
+#: embed/ephy-web-view.c:2065
 #, c-format
 msgid "%s could not be found."
 msgstr "找不到 %s。"
 
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:2067
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1669,15 +1746,15 @@ msgstr ""
 "請檢查檔案名稱的大小寫，或是有無其他輸入錯誤。也請檢查是否檔案已經移動、改"
 "名、刪除等。"
 
-#: embed/ephy-web-view.c:2015
+#: embed/ephy-web-view.c:2130
 msgid "None specified"
 msgstr "沒有指定"
 
-#: embed/ephy-web-view.c:2131
+#: embed/ephy-web-view.c:2246
 msgid "Technical information"
 msgstr "技術資料"
 
-#: embed/ephy-web-view.c:3175
+#: embed/ephy-web-view.c:3382
 msgid "_OK"
 msgstr "確定(_O)"
 
@@ -1686,7 +1763,7 @@ msgid "Unspecified"
 msgstr "沒有指定"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:179
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
 msgid "Downloads"
 msgstr "下載"
 
@@ -1727,7 +1804,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:332
+#: lib/ephy-sync-utils.c:342
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "%s 的 GNOME《網頁》，裝置為 %s"
@@ -1810,87 +1887,87 @@ msgstr "無法開啟瀏覽器密碼資料庫。請關閉瀏覽器後重試。"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:421
+#: lib/sync/ephy-password-manager.c:433
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "%s 用於 %s 表單的密碼"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:425
+#: lib/sync/ephy-password-manager.c:437
 #, c-format
 msgid "Password in a form in %s"
 msgstr "用於 %s 表單的密碼"
 
-#: lib/sync/ephy-sync-service.c:851
+#: lib/sync/ephy-sync-service.c:862
 msgid "Failed to obtain storage credentials."
 msgstr "無法取得儲存區憑證。"
 
-#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
-#: lib/sync/ephy-sync-service.c:1738
+#: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
+#: lib/sync/ephy-sync-service.c:1755
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr "請前往「偏好設定」再登入一次以繼續同步。"
 
-#: lib/sync/ephy-sync-service.c:957
+#: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "您的 Firefox 帳號密碼似乎已經更動。"
 
-#: lib/sync/ephy-sync-service.c:958
+#: lib/sync/ephy-sync-service.c:971
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
 msgstr "請前往「偏好設定」以新密碼再登入一次來繼續同步。"
 
-#: lib/sync/ephy-sync-service.c:966
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
 msgstr "無法取得簽署的憑證。"
 
-#: lib/sync/ephy-sync-service.c:1704 lib/sync/ephy-sync-service.c:1709
+#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "找不到目前同步使用者的同步暗記。"
 
-#: lib/sync/ephy-sync-service.c:1716 lib/sync/ephy-sync-service.c:1724
+#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "目前使用者的同步暗記無效。"
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1832
+#: lib/sync/ephy-sync-service.c:1849
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s 的同步暗記"
 
-#: lib/sync/ephy-sync-service.c:1858
+#: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload client record."
 msgstr "無法上傳客戶端紀錄。"
 
-#: lib/sync/ephy-sync-service.c:2051
+#: lib/sync/ephy-sync-service.c:2073
 msgid "Failed to upload crypto/keys record."
 msgstr "無法上傳加密/金鑰紀錄。"
 
-#: lib/sync/ephy-sync-service.c:2158
+#: lib/sync/ephy-sync-service.c:2180
 msgid "Failed to retrieve crypto keys."
 msgstr "無法擷取密鑰。"
 
-#: lib/sync/ephy-sync-service.c:2209
+#: lib/sync/ephy-sync-service.c:2231
 msgid "Failed to upload meta/global record."
 msgstr "無法上傳統理/全域紀錄。"
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2326
+#: lib/sync/ephy-sync-service.c:2348
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr "您的 Firefox 帳號使用的儲存區版本為 %d。而《網頁》僅支援 %d 版。"
 
-#: lib/sync/ephy-sync-service.c:2337
+#: lib/sync/ephy-sync-service.c:2359
 msgid "Failed to verify storage version."
 msgstr "無法驗證儲存區版本。"
 
-#: lib/sync/ephy-sync-service.c:2393
+#: lib/sync/ephy-sync-service.c:2415
 msgid "Failed to upload device info"
 msgstr "無法上傳裝置資訊"
 
-#: lib/sync/ephy-sync-service.c:2466 lib/sync/ephy-sync-service.c:2544
+#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
 msgid "Failed to retrieve the Sync Key"
 msgstr "無法擷取 Sync Key"
 
@@ -1941,86 +2018,88 @@ msgid ""
 "insecurely."
 msgstr "這個證書是有效的。然而，此頁面上的資源是以不安全的方式傳送。"
 
-#: lib/widgets/ephy-downloads-popover.c:246
+#: lib/widgets/ephy-downloads-popover.c:235
+#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "全部清除(_A)"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:78
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "剩下 %d 秒鐘"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:82
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "剩下 %d 分鐘"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:86
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "剩下 %d 小時"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:90
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "剩下 %d 天"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:94
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "剩下 %d 週"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:98
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "剩下 %d 月"
 
-#: lib/widgets/ephy-download-widget.c:214
-#: lib/widgets/ephy-download-widget.c:432
+#: lib/widgets/ephy-download-widget.c:213
+#: lib/widgets/ephy-download-widget.c:431
 msgid "Finished"
 msgstr "已完成"
 
-#: lib/widgets/ephy-download-widget.c:224
+#: lib/widgets/ephy-download-widget.c:223
 msgid "Moved or deleted"
 msgstr "已移動或刪除"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:429
+#: lib/widgets/ephy-download-widget.c:238
+#: lib/widgets/ephy-download-widget.c:428
 #, c-format
 msgid "Error downloading: %s"
 msgstr "下載時發生錯誤：%s"
 
-#: lib/widgets/ephy-download-widget.c:265
+#: lib/widgets/ephy-download-widget.c:264
 msgid "Cancelling…"
 msgstr "正在取消…"
 
-#: lib/widgets/ephy-download-widget.c:434
+#: lib/widgets/ephy-download-widget.c:433
 msgid "Starting…"
 msgstr "正在開始…"
 
-#: lib/widgets/ephy-file-chooser.c:172 src/resources/gtk/history-dialog.ui:58
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
 msgid "_Open"
 msgstr "開啟(_O)"
 
-#: lib/widgets/ephy-file-chooser.c:187
+#: lib/widgets/ephy-file-chooser.c:188
 msgid "All supported types"
 msgstr "所有支援的類型"
 
-#: lib/widgets/ephy-file-chooser.c:203
+#: lib/widgets/ephy-file-chooser.c:204
 msgid "Web pages"
 msgstr "網頁"
 
-#: lib/widgets/ephy-file-chooser.c:214
+#: lib/widgets/ephy-file-chooser.c:215
 msgid "Images"
 msgstr "圖形檔"
 
-#: lib/widgets/ephy-file-chooser.c:223
+#: lib/widgets/ephy-file-chooser.c:224
 msgid "All files"
 msgstr "所有檔案"
 
@@ -2028,41 +2107,41 @@ msgstr "所有檔案"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:630 src/ephy-history-dialog.c:364
+#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
-#: lib/widgets/ephy-location-entry.c:650
+#: lib/widgets/ephy-location-entry.c:689
 msgid "Paste and _Go"
 msgstr "貼上並瀏覽(_G)"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:671 src/ephy-window.c:943
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
 msgid "_Undo"
 msgstr "復原(_U)"
 
-#: lib/widgets/ephy-location-entry.c:678
+#: lib/widgets/ephy-location-entry.c:717
 msgid "_Redo"
 msgstr "取消復原(_R)"
 
-#: lib/widgets/ephy-location-entry.c:964
+#: lib/widgets/ephy-location-entry.c:1003
 msgid "Show website security status and permissions"
 msgstr "顯示網站安全性狀態與權限"
 
-#: lib/widgets/ephy-location-entry.c:966
+#: lib/widgets/ephy-location-entry.c:1005
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "搜尋網站、書籤、開啟的分頁"
 
-#: lib/widgets/ephy-location-entry.c:1006
+#: lib/widgets/ephy-location-entry.c:1045
 msgid "Bookmark this page"
 msgstr "將此頁面加入書籤"
 
-#: lib/widgets/ephy-location-entry.c:1025
+#: lib/widgets/ephy-location-entry.c:1064
 msgid "Toggle reader mode"
 msgstr "切換閱讀器模式"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:184
+#: lib/widgets/ephy-security-popover.c:186
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -2070,7 +2149,7 @@ msgid ""
 msgstr "這個網站的數位識別是不受信任的。您可能連線到攻擊者所偽造的 %s。"
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:191
+#: lib/widgets/ephy-security-popover.c:193
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -2079,50 +2158,54 @@ msgstr ""
 "這個網站沒有安全性。攻擊者可以看到您傳送的任何資訊，或控制您看到的內容。"
 
 #. Label in certificate popover when site sends mixed content.
-#: lib/widgets/ephy-security-popover.c:198
+#: lib/widgets/ephy-security-popover.c:200
 msgid "This web site did not properly secure your connection."
 msgstr "這個網站並未適當地保證您的連線安全。"
 
 #. Label in certificate popover on secure sites.
-#: lib/widgets/ephy-security-popover.c:203
+#: lib/widgets/ephy-security-popover.c:205
 msgid "Your connection seems to be secure."
 msgstr "您的連線似乎是安全的。"
 
-#: lib/widgets/ephy-security-popover.c:249
+#: lib/widgets/ephy-security-popover.c:251
 msgid "_View Certificate…"
 msgstr "檢視憑證(_V)…"
 
-#: lib/widgets/ephy-security-popover.c:507
+#: lib/widgets/ephy-security-popover.c:518
 msgid "Ask"
 msgstr "詢問"
 
-#: lib/widgets/ephy-security-popover.c:520
+#: lib/widgets/ephy-security-popover.c:535
 msgid "Permissions"
 msgstr "權限"
 
-#: lib/widgets/ephy-security-popover.c:556
+#: lib/widgets/ephy-security-popover.c:573
 msgid "Advertisements"
 msgstr "廣告"
 
-#: lib/widgets/ephy-security-popover.c:557
+#: lib/widgets/ephy-security-popover.c:574
 msgid "Notifications"
 msgstr "通知"
 
-#: lib/widgets/ephy-security-popover.c:558
+#: lib/widgets/ephy-security-popover.c:575
 msgid "Password saving"
 msgstr "密碼儲存"
 
-#: lib/widgets/ephy-security-popover.c:559
+#: lib/widgets/ephy-security-popover.c:576
 msgid "Location access"
 msgstr "地理位置存取權"
 
-#: lib/widgets/ephy-security-popover.c:560
+#: lib/widgets/ephy-security-popover.c:577
 msgid "Microphone access"
 msgstr "麥克風存取權"
 
-#: lib/widgets/ephy-security-popover.c:561
+#: lib/widgets/ephy-security-popover.c:578
 msgid "Webcam access"
 msgstr "網路攝影機存取權"
+
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Media autoplay"
+msgstr "媒體自動播放"
 
 #: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
@@ -2178,83 +2261,91 @@ msgid "Mobile"
 msgstr "行動裝置"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:52
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
 msgid "Reload the current page"
 msgstr "重新載入目前頁面"
 
-#: src/ephy-action-bar-start.c:631 src/ephy-header-bar.c:439
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
 msgid "Stop loading the current page"
 msgstr "停止載入目前頁面"
 
-#: src/ephy-history-dialog.c:269
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "在隱密模式中不可能修改歷史紀錄。"
+
+#: src/ephy-history-dialog.c:456
 msgid "Remove the selected pages from history"
 msgstr "從歷史紀錄中移除選取的頁面"
 
-#: src/ephy-history-dialog.c:354
+#: src/ephy-history-dialog.c:463
+msgid "Copy URL"
+msgstr "複製 URL"
+
+#: src/ephy-history-dialog.c:553
 msgid "Clear browsing history?"
 msgstr "是否清除歷史紀錄？"
 
-#: src/ephy-history-dialog.c:358
+#: src/ephy-history-dialog.c:557
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "清除歷史紀錄將會使所有歷史紀錄永遠被刪除。"
 
-#: src/ephy-history-dialog.c:781
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "在隱密模式中不可能修改歷史紀錄。"
+#: src/ephy-history-dialog.c:966
+msgid "Remove all history"
+msgstr "移除所有歷史紀錄"
 
-#: src/ephy-main.c:110
+#: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
 msgstr "開啟新的瀏覽器視窗而不是新的分頁"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "Load the given session state file"
 msgstr "載入指定的工作階段狀態檔案"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "FILE"
 msgstr "檔案"
 
-#: src/ephy-main.c:114
+#: src/ephy-main.c:115
 msgid "Start an instance with user data read-only"
 msgstr "以使用者資料唯讀模式啟動實體"
 
-#: src/ephy-main.c:116
+#: src/ephy-main.c:117
 msgid "Start a private instance with separate user data"
 msgstr "以獨立使用者資料啟動私密實體"
 
-#: src/ephy-main.c:119
+#: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
 msgstr "以網頁應用程式模式啟動私密實體"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
 msgstr "為 WebDriver 控制啟動私密實體"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
 msgstr "在私密實體中使用的個人設定檔目錄"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:124
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:126
 msgid "URL …"
 msgstr "URL…"
 
-#: src/ephy-main.c:253
+#: src/ephy-main.c:255
 msgid "Web options"
 msgstr "《網頁》選項"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-notebook.c:587 src/resources/gtk/action-bar-start.ui:93
+#: src/ephy-notebook.c:611 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "開啟新的分頁"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:597
+#: src/ephy-notebook.c:621
 msgid "View open tabs"
 msgstr "檢視開啟的分頁"
 
@@ -2262,334 +2353,340 @@ msgstr "檢視開啟的分頁"
 msgid "Tabs"
 msgstr "分頁"
 
-#: src/ephy-tab-label.c:296
+#: src/ephy-tab-label.c:340
 msgid "New Tab"
 msgstr "新增分頁"
 
-#: src/ephy-window.c:269
+#: src/ephy-window.c:273
 msgid "Do you want to leave this website?"
 msgstr "您想要離開這個網站？"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:274 src/window-commands.c:1185
 msgid "A form you modified has not been submitted."
 msgstr "您修改過的表單尚未提交。"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:275 src/window-commands.c:1187
 msgid "_Discard form"
 msgstr "放棄表單(_D)"
 
-#: src/ephy-window.c:286
+#: src/ephy-window.c:290
 msgid "There are multiple tabs open."
 msgstr "有開啟多個分頁。"
 
-#: src/ephy-window.c:287
+#: src/ephy-window.c:291
 msgid "If you close this window, all open tabs will be lost"
 msgstr "如果您關閉此視窗，所有開啟的分頁都會消失"
 
-#: src/ephy-window.c:288
+#: src/ephy-window.c:292
 msgid "C_lose tabs"
 msgstr "關閉分頁(_L)"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "取消復原(_D)"
 
 #. Edit.
-#: src/ephy-window.c:947
+#: src/ephy-window.c:960
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:961
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:962
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:963
+msgid "_Paste Text Only"
+msgstr "僅貼上文字(_P)"
+
+#: src/ephy-window.c:964
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "以電子郵件傳送連結(_E)…"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "重新載入(_R)"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "上一頁(_B)"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "下一頁(_F)"
 
 #. Bookmarks
-#: src/ephy-window.c:959
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "加入書籤(_K)…"
 
 #. Links.
-#: src/ephy-window.c:963
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "在新的視窗中開啟連結(_W)"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "在新的分頁中開啟連結(_T)"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "在隱密視窗中開啟連結(_N)"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "另存連結為(_S)…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "複製連結地址(_C)"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "複製電子郵件位址(_C)"
 
 #. Images.
-#: src/ephy-window.c:972
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "在新分頁中檢視影像(_I)"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "複製影像位址(_M)"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "另存影像為(_S)…"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "設為桌布(_W)"
 
 #. Video.
-#: src/ephy-window.c:979
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "在新的視窗中開啟視訊(_W)"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "在新的分頁中開啟視訊(_T)"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "另存視訊為(_S)…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "複製視訊位址(_C)"
 
 #. Audio.
-#: src/ephy-window.c:986
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "在新的視窗中開啟音訊(_W)"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "在新的分頁中開啟音訊(_T)"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "另存音訊為(_S)…"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "複製音訊位址(_C)"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "另存頁面為(_G)…"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:1010
 msgid "_Page Source"
 msgstr "頁面源始碼(_P)"
 
-#: src/ephy-window.c:1356
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "在網路搜尋「%s」"
 
-#: src/ephy-window.c:1385
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "開啟連結"
 
-#: src/ephy-window.c:1387
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "在新的分頁中開啟連結"
 
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "在新的視窗中開啟連結"
 
-#: src/ephy-window.c:1391
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "在隱密視窗中開啟連結"
 
-#: src/ephy-window.c:2972
+#: src/ephy-window.c:3029
 msgid "Download operation"
 msgstr "下載作業"
 
-#: src/ephy-window.c:2974
+#: src/ephy-window.c:3031
 msgid "Show details"
 msgstr "顯示詳細資料"
 
-#: src/ephy-window.c:2976
+#: src/ephy-window.c:3033
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d 個下載作業進行中"
 
-#: src/ephy-window.c:3598
+#: src/ephy-window.c:3655
 msgid "Set Web as your default browser?"
 msgstr "是否要將《網頁》設為您的預設瀏覽器？"
 
-#: src/ephy-window.c:3600
+#: src/ephy-window.c:3657
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "是否要將 Epiphany 技術預覽版設為您的預設瀏覽器？"
 
-#: src/ephy-window.c:3612
+#: src/ephy-window.c:3669
 msgid "_Yes"
 msgstr "是(_Y)"
 
-#: src/ephy-window.c:3613
+#: src/ephy-window.c:3670
 msgid "_No"
 msgstr "否(_N)"
 
-#: src/popup-commands.c:232
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "另存連結爲"
 
-#: src/popup-commands.c:240
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "另存影像"
 
-#: src/popup-commands.c:248
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "另存媒體"
 
-#: src/preferences/clear-data-dialog.c:77
+#: src/preferences/clear-data-view.c:69
+msgid "Cookies"
+msgstr "Cookie"
+
+#: src/preferences/clear-data-view.c:70
 msgid "HTTP disk cache"
 msgstr "HTTP 磁碟快取"
 
-#: src/preferences/clear-data-dialog.c:78
+#: src/preferences/clear-data-view.c:71
 msgid "Local storage data"
 msgstr "本地端儲存區資料"
 
-#: src/preferences/clear-data-dialog.c:79
+#: src/preferences/clear-data-view.c:72
 msgid "Offline web application cache"
 msgstr "離線網頁應用程式快取"
 
-#: src/preferences/clear-data-dialog.c:80
+#: src/preferences/clear-data-view.c:73
 msgid "IndexedDB databases"
 msgstr "IndexedDB 資料庫"
 
-#: src/preferences/clear-data-dialog.c:81
+#: src/preferences/clear-data-view.c:74
 msgid "WebSQL databases"
 msgstr "WebSQL 資料庫"
 
-#: src/preferences/clear-data-dialog.c:82
+#: src/preferences/clear-data-view.c:75
 msgid "Plugins data"
 msgstr "外掛程式資料"
 
-#: src/preferences/clear-data-dialog.c:83
+#: src/preferences/clear-data-view.c:76
 msgid "HSTS policies cache"
 msgstr "HSTS 政策快取"
 
-#: src/preferences/cookies-dialog.c:143
-msgid "Remove cookie"
-msgstr "移除 Cookie"
+#: src/preferences/clear-data-view.c:77
+msgid "Intelligent Tracking Prevention data"
+msgstr "智慧追蹤預防資料"
 
-#: src/preferences/passwords-dialog.c:225
+#: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
 msgstr "是否刪除所有密碼？"
 
-#: src/preferences/passwords-dialog.c:228
+#: src/preferences/passwords-view.c:195
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "這會清除本機儲存的所有密碼，而且無法還原。"
 
-#: src/preferences/passwords-dialog.c:233
-#: src/resources/gtk/history-dialog.ui:76
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: src/preferences/passwords-dialog.c:304
+#: src/preferences/passwords-view.c:258
 msgid "Copy password"
 msgstr "複製密碼"
 
-#: src/preferences/passwords-dialog.c:315
+#: src/preferences/passwords-view.c:264
 msgid "Username"
 msgstr "使用者名稱"
 
-#: src/preferences/passwords-dialog.c:320
+#: src/preferences/passwords-view.c:287
 msgid "Copy username"
 msgstr "複製使用者名稱"
 
-#: src/preferences/passwords-dialog.c:344
+#: src/preferences/passwords-view.c:293
 msgid "Password"
 msgstr "密碼"
 
-#: src/preferences/passwords-dialog.c:350
+#: src/preferences/passwords-view.c:318
 msgid "Reveal password"
 msgstr "顯示密碼"
 
-#. Remove button
-#: src/preferences/passwords-dialog.c:375
+#: src/preferences/passwords-view.c:328
 msgid "Remove Password"
 msgstr "移除密碼"
 
-#: src/preferences/prefs-appearance-page.c:67
+#: src/preferences/prefs-appearance-page.c:66
 msgid "Sans"
 msgstr "無襯線"
 
-#: src/preferences/prefs-appearance-page.c:69
+#: src/preferences/prefs-appearance-page.c:68
 msgid "Serif"
 msgstr "有襯線"
 
-#: src/preferences/prefs-appearance-page.c:113
+#: src/preferences/prefs-appearance-page.c:112
 msgid "Light"
 msgstr "亮"
 
-#: src/preferences/prefs-appearance-page.c:115
+#: src/preferences/prefs-appearance-page.c:114
 msgid "Dark"
 msgstr "暗"
 
-#: src/preferences/prefs-general-page.c:343
+#: src/preferences/prefs-general-page.c:348
 #: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "增加語言"
 
-#: src/preferences/prefs-general-page.c:494
+#: src/preferences/prefs-general-page.c:499
 msgid "Delete language"
 msgstr "刪除語言"
 
-#: src/preferences/prefs-general-page.c:576
-#: src/preferences/prefs-general-page.c:735
+#: src/preferences/prefs-general-page.c:581
+#: src/preferences/prefs-general-page.c:740
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "系統語言 (%s)"
 
-#: src/preferences/prefs-general-page.c:763
+#: src/preferences/prefs-general-page.c:768
 msgid "Select a directory"
 msgstr "選擇目錄"
 
-#: src/preferences/prefs-general-page.c:918
+#: src/preferences/prefs-general-page.c:919
 msgid "Web Application Icon"
 msgstr "網頁應用程式圖示"
 
-#: src/preferences/prefs-general-page.c:923
+#: src/preferences/prefs-general-page.c:924
 msgid "Supported Image Files"
 msgstr "支援的影像檔"
 
@@ -2609,23 +2706,23 @@ msgstr "有地方出錯，請再試一次。"
 msgid "Local Tabs"
 msgstr "本機分頁"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1400
+#: src/profile-migrator/ephy-profile-migrator.c:1540
 msgid "Executes only the n-th migration step"
 msgstr "只執行第 n 次轉移步驟"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1402
+#: src/profile-migrator/ephy-profile-migrator.c:1542
 msgid "Specifies the required version for the migrator"
 msgstr "指定轉移器需要的版本"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1404
+#: src/profile-migrator/ephy-profile-migrator.c:1544
 msgid "Specifies the profile where the migrator should run"
 msgstr "指定轉移器應執行的個人設定檔"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1425
+#: src/profile-migrator/ephy-profile-migrator.c:1565
 msgid "Web profile migrator"
 msgstr "《網頁》個人設定檔轉移器"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1426
+#: src/profile-migrator/ephy-profile-migrator.c:1566
 msgid "Web profile migrator options"
 msgstr "《網頁》個人設定檔轉移器選項"
 
@@ -2640,17 +2737,17 @@ msgid "View downloads"
 msgstr "檢視下載"
 
 #. Translators: tooltip for the back button
-#: src/resources/gtk/action-bar-start.ui:18
+#: src/resources/gtk/action-bar-start.ui:19
 msgid "Go back to the previous page"
 msgstr "返回上一頁"
 
 #. Translators: tooltip for the forward button
-#: src/resources/gtk/action-bar-start.ui:36
+#: src/resources/gtk/action-bar-start.ui:38
 msgid "Go forward to the next page"
 msgstr "前往下一頁"
 
 #. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:74
+#: src/resources/gtk/action-bar-start.ui:76
 msgid "Go to your homepage"
 msgstr "前往您的首頁"
 
@@ -2664,12 +2761,12 @@ msgid "Bookmark"
 msgstr "加入書籤"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-dialog.ui:139
+#: src/resources/gtk/search-engine-dialog.ui:142
 msgid "Name"
 msgstr "名稱"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-dialog.ui:152
+#: src/resources/gtk/search-engine-dialog.ui:155
 msgid "Address"
 msgstr "地址"
 
@@ -2703,96 +2800,51 @@ msgstr "還沒有書籤嗎？"
 msgid "Bookmark some webpages to view them here."
 msgstr "將某些網頁做成書籤以便在這裡檢視它們。"
 
-#: src/resources/gtk/clear-data-dialog.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:180
+#: src/resources/gtk/clear-data-view.ui:22
+#: src/resources/gtk/prefs-privacy-page.ui:65
 msgid "Personal Data"
 msgstr "個人資料"
 
-#: src/resources/gtk/clear-data-dialog.ui:23
-msgid "Remove all personal data"
-msgstr "移除所有個人資料"
+#: src/resources/gtk/clear-data-view.ui:23
+msgid "_Clear Data"
+msgstr "清除資料(_A)"
 
-#: src/resources/gtk/clear-data-dialog.ui:24
+#: src/resources/gtk/clear-data-view.ui:24
+msgid "Remove selected personal data"
+msgstr "移除選取的個人資料"
+
+#: src/resources/gtk/clear-data-view.ui:25
 msgid "Search personal data"
 msgstr "搜尋個人資料"
 
-#: src/resources/gtk/clear-data-dialog.ui:25
+#: src/resources/gtk/clear-data-view.ui:26
 msgid "There is no Personal Data"
 msgstr "沒有個人資料"
 
-#: src/resources/gtk/clear-data-dialog.ui:26
+#: src/resources/gtk/clear-data-view.ui:27
 msgid "Personal data will be listed here"
 msgstr "個人資料會列在這裡"
 
-#: src/resources/gtk/clear-data-dialog.ui:53
-msgid ""
-"You can select a period of time to clear data for all websites modified in "
-"that period. If you choose from the beginning of time, then you can also "
-"clear data only for particular websites."
-msgstr ""
-"您可以選擇一段時間，以清除這一時期中修改的所有的網站資料。如果您從開始的時候"
-"選擇，您還可以清除特定網站的資料。"
+#: src/resources/gtk/clear-data-view.ui:64
+msgid "Clear selected personal data:"
+msgstr "清除選擇的個人資料："
 
-#: src/resources/gtk/clear-data-dialog.ui:74
-msgid "Clear selected personal data _from:"
-msgstr "清除選擇的個人資料(_F)："
-
-#: src/resources/gtk/clear-data-dialog.ui:89
-msgid "the past hour"
-msgstr "過去一小時"
-
-#: src/resources/gtk/clear-data-dialog.ui:90
-msgid "the past day"
-msgstr "過去一天"
-
-#: src/resources/gtk/clear-data-dialog.ui:91
-msgid "the past week"
-msgstr "過去一週"
-
-#: src/resources/gtk/clear-data-dialog.ui:92
-msgid "the past four weeks"
-msgstr "過去四週"
-
-#: src/resources/gtk/clear-data-dialog.ui:93
-msgid "the beginning of time"
-msgstr "開始時刻"
-
-#: src/resources/gtk/clear-data-dialog.ui:153
+#: src/resources/gtk/clear-data-view.ui:125
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr "您不可以將這個動作復原。您選擇要清除的資料會永遠移除。"
 
-#: src/resources/gtk/cookies-dialog.ui:7
-#: src/resources/gtk/prefs-privacy-page.ui:61
-msgid "Cookies"
-msgstr "Cookie"
-
-#: src/resources/gtk/cookies-dialog.ui:9
-msgid "Remove all cookies"
-msgstr "移除所有 Cookie"
-
-#: src/resources/gtk/cookies-dialog.ui:10
-msgid "Search cookies"
-msgstr "搜尋 Cookie"
-
-#: src/resources/gtk/cookies-dialog.ui:11
-msgid "There are no Cookies"
-msgstr "沒有 Cookie"
-
-#: src/resources/gtk/cookies-dialog.ui:12
-msgid "Cookies left by visited pages will be listed here"
-msgstr "造訪過的頁面所留下的 Cookie 會列在這裡"
-
-#: src/resources/gtk/data-dialog.ui:59
+#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
 msgstr "搜尋"
 
-#: src/resources/gtk/data-dialog.ui:229
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
 msgid "No Results Found"
 msgstr "找不到結果"
 
-#: src/resources/gtk/data-dialog.ui:244
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
 msgid "Try a different search"
 msgstr "嘗試不同的搜尋內容"
 
@@ -2816,29 +2868,25 @@ msgstr "相關編碼"
 msgid "Show all…"
 msgstr "顯示全部…"
 
-#: src/resources/gtk/history-dialog.ui:7
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "選取項目"
+
+#: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "歷史紀錄"
 
-#: src/resources/gtk/history-dialog.ui:9
-msgid "Remove all history"
-msgstr "移除所有歷史紀錄"
-
-#: src/resources/gtk/history-dialog.ui:10
+#: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "搜尋歷史紀錄"
 
-#: src/resources/gtk/history-dialog.ui:11
+#: src/resources/gtk/history-dialog.ui:242
 msgid "The History is Empty"
 msgstr "空的歷史記錄"
 
-#: src/resources/gtk/history-dialog.ui:12
+#: src/resources/gtk/history-dialog.ui:258
 msgid "Visited pages will be listed here"
 msgstr "造訪過的頁面會列在這裡"
-
-#: src/resources/gtk/history-dialog.ui:67
-msgid "_Copy Location"
-msgstr "複製位置(_C)"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -2907,66 +2955,70 @@ msgid "Fullscreen"
 msgstr "全螢幕"
 
 #: src/resources/gtk/page-menu-popover.ui:172
+msgid "_Run in Background"
+msgstr "於背景中執行(_R)"
+
+#: src/resources/gtk/page-menu-popover.ui:191
 msgid "_New Window"
 msgstr "新視窗(_N)"
 
-#: src/resources/gtk/page-menu-popover.ui:180
+#: src/resources/gtk/page-menu-popover.ui:199
 msgid "New _Incognito Window"
 msgstr "新增隱密視窗(_I)"
 
-#: src/resources/gtk/page-menu-popover.ui:197
+#: src/resources/gtk/page-menu-popover.ui:216
 msgid "Reopen Closed _Tab"
 msgstr "重新開啟關閉的分頁(_T)"
 
-#: src/resources/gtk/page-menu-popover.ui:205
+#: src/resources/gtk/page-menu-popover.ui:224
 msgid "_History"
 msgstr "歷史紀錄(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:221
+#: src/resources/gtk/page-menu-popover.ui:240
 msgid "I_mport and Export"
 msgstr "匯入與匯出(_M)"
 
-#: src/resources/gtk/page-menu-popover.ui:238
+#: src/resources/gtk/page-menu-popover.ui:257
 msgid "Install Site as Web _Application…"
 msgstr "安裝網站為網頁應用程式(_A)…"
 
-#: src/resources/gtk/page-menu-popover.ui:246
+#: src/resources/gtk/page-menu-popover.ui:265
 msgid "Open Appli_cation Manager"
 msgstr "開啟應用程式管理員(_C)"
 
-#: src/resources/gtk/page-menu-popover.ui:263
+#: src/resources/gtk/page-menu-popover.ui:282
 msgid "_Override Text Encoding…"
 msgstr "凌駕字元編碼(_O)…"
 
-#: src/resources/gtk/page-menu-popover.ui:279
+#: src/resources/gtk/page-menu-popover.ui:298
 msgid "Pr_eferences"
 msgstr "偏好設定(_E)"
 
-#: src/resources/gtk/page-menu-popover.ui:288
+#: src/resources/gtk/page-menu-popover.ui:307
 msgid "_Keyboard Shortcuts"
 msgstr "鍵盤捷徑鍵(_K)"
 
-#: src/resources/gtk/page-menu-popover.ui:297
+#: src/resources/gtk/page-menu-popover.ui:316
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:306
+#: src/resources/gtk/page-menu-popover.ui:325
 msgid "_About Web"
 msgstr "關於《網頁》(_A)"
 
-#: src/resources/gtk/page-menu-popover.ui:331
+#: src/resources/gtk/page-menu-popover.ui:350
 msgid "Import and Export"
 msgstr "匯入與匯出"
 
-#: src/resources/gtk/page-menu-popover.ui:342
+#: src/resources/gtk/page-menu-popover.ui:361
 msgid "I_mport Bookmarks…"
 msgstr "匯入書籤(_M)…"
 
-#: src/resources/gtk/page-menu-popover.ui:350
+#: src/resources/gtk/page-menu-popover.ui:369
 msgid "E_xport Bookmarks…"
 msgstr "匯出書籤(_X)…"
 
-#: src/resources/gtk/page-menu-popover.ui:366
+#: src/resources/gtk/page-menu-popover.ui:385
 msgid "I_mport Passwords…"
 msgstr "匯入密碼(_M)…"
 
@@ -2974,240 +3026,236 @@ msgstr "匯入密碼(_M)…"
 msgid "Close page"
 msgstr "關閉頁面"
 
-#: src/resources/gtk/passwords-dialog.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:136
+#: src/resources/gtk/passwords-view.ui:25
+#: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Passwords"
 msgstr "密碼"
 
-#: src/resources/gtk/passwords-dialog.ui:27
+#: src/resources/gtk/passwords-view.ui:28
 msgid "Remove all passwords"
 msgstr "移除所有密碼"
 
-#: src/resources/gtk/passwords-dialog.ui:28
+#: src/resources/gtk/passwords-view.ui:29
 msgid "Search passwords"
 msgstr "搜尋密碼"
 
-#: src/resources/gtk/passwords-dialog.ui:29
+#: src/resources/gtk/passwords-view.ui:30
 msgid "There are no Passwords"
 msgstr "沒有密碼"
 
-#: src/resources/gtk/passwords-dialog.ui:30
+#: src/resources/gtk/passwords-view.ui:31
 msgid "Saved passwords will be listed here"
 msgstr "儲存的密碼會列在這裡"
 
-#: src/resources/gtk/passwords-dialog.ui:76
+#: src/resources/gtk/passwords-view.ui:75
 msgid "_Copy Password"
 msgstr "複製密碼(_C)"
 
-#: src/resources/gtk/passwords-dialog.ui:80
+#: src/resources/gtk/passwords-view.ui:79
 msgid "C_opy Username"
 msgstr "複製使用者名稱(_O)"
 
 #: src/resources/gtk/prefs-appearance-page.ui:6
-#: src/resources/gtk/prefs-dialog.ui:70
 msgid "Appearance"
 msgstr "外觀"
 
-#: src/resources/gtk/prefs-appearance-page.ui:13
+#: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
 msgstr "字型"
 
-#: src/resources/gtk/prefs-appearance-page.ui:18
+#: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
 msgstr "使用自訂字型"
 
-#: src/resources/gtk/prefs-appearance-page.ui:34
+#: src/resources/gtk/prefs-appearance-page.ui:20
 msgid "Sans serif font"
 msgstr "無襯線字型"
 
-#: src/resources/gtk/prefs-appearance-page.ui:49
+#: src/resources/gtk/prefs-appearance-page.ui:35
 msgid "Serif font"
 msgstr "襯線字型"
 
-#: src/resources/gtk/prefs-appearance-page.ui:64
+#: src/resources/gtk/prefs-appearance-page.ui:50
 msgid "Monospace font"
 msgstr "等寬字型"
 
-#: src/resources/gtk/prefs-appearance-page.ui:84
+#: src/resources/gtk/prefs-appearance-page.ui:68
 msgid "Reader Mode"
 msgstr "閱讀器模式"
 
-#: src/resources/gtk/prefs-appearance-page.ui:88
+#: src/resources/gtk/prefs-appearance-page.ui:72
 msgid "Font Style"
 msgstr "字型樣式"
 
-#: src/resources/gtk/prefs-appearance-page.ui:94
+#: src/resources/gtk/prefs-appearance-page.ui:78
 msgid "Color Scheme"
 msgstr "配色方案"
 
-#: src/resources/gtk/prefs-appearance-page.ui:107
+#: src/resources/gtk/prefs-appearance-page.ui:91
 msgid "Style"
 msgstr "樣式"
 
-#: src/resources/gtk/prefs-appearance-page.ui:112
+#: src/resources/gtk/prefs-appearance-page.ui:96
 msgid "Use Custom Stylesheet"
 msgstr "使用自訂樣式表"
 
-#: src/resources/gtk/prefs-appearance-page.ui:147
+#: src/resources/gtk/prefs-appearance-page.ui:131
 msgid "Use Custom JavaScript"
 msgstr "使用自訂 JavaScript"
 
-#: src/resources/gtk/prefs-appearance-page.ui:182
+#: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default zoom level"
 msgstr "預設縮放倍率"
 
-#: src/resources/gtk/prefs-dialog.ui:15
-msgid "Preferences"
-msgstr "偏好設定"
-
-#: src/resources/gtk/prefs-dialog.ui:37
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
 msgstr "一般"
 
-#: src/resources/gtk/prefs-dialog.ui:53
-#: src/resources/gtk/prefs-privacy-page.ui:6
-msgid "Privacy"
-msgstr "隱私"
-
-#: src/resources/gtk/prefs-dialog.ui:84 src/resources/gtk/prefs-sync-page.ui:6
-msgid "Sync"
-msgstr "同步"
-
-#: src/resources/gtk/prefs-general-page.ui:13
+#: src/resources/gtk/prefs-general-page.ui:10
 msgid "Web Application"
 msgstr "網頁應用程式"
 
-#: src/resources/gtk/prefs-general-page.ui:49
+#: src/resources/gtk/prefs-general-page.ui:46
 msgid "Homepage:"
 msgstr "首頁："
 
-#: src/resources/gtk/prefs-general-page.ui:71
+#: src/resources/gtk/prefs-general-page.ui:68
 msgid "Title:"
 msgstr "標題："
 
-#: src/resources/gtk/prefs-general-page.ui:96
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "管理附加連結 (_M)"
 
-#: src/resources/gtk/prefs-general-page.ui:121
+#: src/resources/gtk/prefs-general-page.ui:118
+msgid "Web Content"
+msgstr "網頁內容"
+
+#: src/resources/gtk/prefs-general-page.ui:123
+msgid "Block _Advertisements"
+msgstr "阻擋廣告(_A)"
+
+#: src/resources/gtk/prefs-general-page.ui:137
+msgid "Block _Popup Windows"
+msgstr "阻擋彈出式視窗(_P)"
+
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "Homepage"
 msgstr "首頁"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:157
 msgid "Most _visited pages"
 msgstr "最常瀏覽頁面(_V)"
 
-#: src/resources/gtk/prefs-general-page.ui:140
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "_Blank page"
 msgstr "空白頁面(_B)"
 
-#: src/resources/gtk/prefs-general-page.ui:155
+#: src/resources/gtk/prefs-general-page.ui:186
 msgid "_Custom"
 msgstr "自訂(_C)"
 
-#: src/resources/gtk/prefs-general-page.ui:184
+#: src/resources/gtk/prefs-general-page.ui:215
 msgid "Ask o_n download"
 msgstr "下載時詢問(_N)"
 
-#: src/resources/gtk/prefs-general-page.ui:199
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "_Download folder"
 msgstr "下載資料夾(_D)"
 
-#: src/resources/gtk/prefs-general-page.ui:208
+#: src/resources/gtk/prefs-general-page.ui:239
 msgid "Search Engines"
 msgstr "搜尋引擎"
 
-#: src/resources/gtk/prefs-general-page.ui:213
-msgid "_Manage Search Engines"
-msgstr "管理搜尋引擎(_M)"
+#: src/resources/gtk/prefs-general-page.ui:244
+msgid "Manage Search _Engines"
+msgstr "管理搜尋引擎(_E)"
 
-#: src/resources/gtk/prefs-general-page.ui:238
+#: src/resources/gtk/prefs-general-page.ui:269
 msgid "Session"
 msgstr "工作階段"
 
-#: src/resources/gtk/prefs-general-page.ui:243
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "Start in _Incognito Mode"
 msgstr "以隱密模式啟動(_I)"
 
-#: src/resources/gtk/prefs-general-page.ui:257
+#: src/resources/gtk/prefs-general-page.ui:288
 msgid "_Restore Tabs on Startup"
 msgstr "啟動時還原上次瀏覽的分頁(_R)"
 
-#: src/resources/gtk/prefs-general-page.ui:272
+#: src/resources/gtk/prefs-general-page.ui:303
 msgid "Browsing"
 msgstr "瀏覽"
 
-#: src/resources/gtk/prefs-general-page.ui:277
+#: src/resources/gtk/prefs-general-page.ui:308
 msgid "Sm_ooth Scrolling"
 msgstr "平滑捲動(_O)"
 
-#: src/resources/gtk/prefs-general-page.ui:291
+#: src/resources/gtk/prefs-general-page.ui:322
 msgid "Mouse _Gestures"
 msgstr "滑鼠手勢(_G)"
 
-#: src/resources/gtk/prefs-general-page.ui:323
+#: src/resources/gtk/prefs-general-page.ui:336
+msgid "S_witch Immediately to New Tabs"
+msgstr "立即切換至新分頁(_W)"
+
+#: src/resources/gtk/prefs-general-page.ui:371
 msgid "_Spell Checking"
 msgstr "拼字檢查(_S)"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
-msgid "Choose a l_anguage:"
-msgstr "選擇語言(_A)："
+msgid "Choose a language:"
+msgstr "選擇語言："
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
-msgid "Web Content"
-msgstr "網頁內容"
+#: src/resources/gtk/prefs-privacy-page.ui:6
+msgid "Privacy"
+msgstr "隱私"
 
-#: src/resources/gtk/prefs-privacy-page.ui:18
-msgid "Try to Block _Advertisements"
-msgstr "嘗試阻擋廣告(_A)"
+#: src/resources/gtk/prefs-privacy-page.ui:10
+msgid "Web Safety"
+msgstr "網頁安全"
 
-#: src/resources/gtk/prefs-privacy-page.ui:32
-msgid "Block Popup _Windows"
-msgstr "阻擋彈出式視窗(_W)"
+#: src/resources/gtk/prefs-privacy-page.ui:15
+msgid "Block Dangerous Web_sites"
+msgstr "阻擋危險的網站(_S)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:46
-msgid "Try to Block Dangerous Web_sites"
-msgstr "嘗試阻擋危險的網站(_S)"
+#: src/resources/gtk/prefs-privacy-page.ui:30
+msgid "Web Tracking"
+msgstr "網路追蹤"
 
-#: src/resources/gtk/prefs-privacy-page.ui:66
-msgid "Clear _Cookies"
-msgstr "清除 _Cookie"
+#: src/resources/gtk/prefs-privacy-page.ui:35
+msgid "Intelligent _Tracking Prevention"
+msgstr "智慧追蹤預防"
 
-#: src/resources/gtk/prefs-privacy-page.ui:90
-msgid "_Always accept"
-msgstr "總是接受(_A)"
+#: src/resources/gtk/prefs-privacy-page.ui:49
+msgid "Allow websites to store cookies, databases, and local storage data."
+msgstr "允許網站儲存 Cookie、資料庫、本機的儲存資料。"
 
-#. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-privacy-page.ui:104
-msgid "For example, not from advertisers on these sites."
-msgstr "例如，不要來自這些網站的廣告商。"
+#: src/resources/gtk/prefs-privacy-page.ui:50
+msgid "_Website Data Storage"
+msgstr "網站資料儲存(_W)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:105
-msgid "Only _from sites you visit"
-msgstr "只來自您瀏覽的網站(_F)"
-
-#: src/resources/gtk/prefs-privacy-page.ui:120
-msgid "_Never accept"
-msgstr "永不接受(_N)"
-
-#: src/resources/gtk/prefs-privacy-page.ui:141
-msgid "_Passwords"
-msgstr "密碼(_P)"
-
-#: src/resources/gtk/prefs-privacy-page.ui:165
-msgid "_Remember Passwords"
-msgstr "記住密碼(_R)"
-
-#: src/resources/gtk/prefs-privacy-page.ui:185
+#: src/resources/gtk/prefs-privacy-page.ui:70
 msgid "You can clear stored personal data."
 msgstr "選擇您想要清除的個人資料。"
 
-#: src/resources/gtk/prefs-privacy-page.ui:186
+#: src/resources/gtk/prefs-privacy-page.ui:71
 msgid "Clear Personal _Data"
 msgstr "清除個人資料(_D)"
 
-#: src/resources/gtk/prefs-sync-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.ui:92
+msgid "_Passwords"
+msgstr "密碼(_P)"
+
+#: src/resources/gtk/prefs-privacy-page.ui:107
+msgid "_Remember Passwords"
+msgstr "記住密碼(_R)"
+
+#: src/resources/gtk/prefs-sync-page.ui:6
+msgid "Sync"
+msgstr "同步"
+
+#: src/resources/gtk/prefs-sync-page.ui:10
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3216,59 +3264,59 @@ msgstr ""
 "登入您的 Firefox 帳號以便將您的資料同步到其他電腦上的《網頁》和《Firefox》。"
 "「網頁」不是 Firefox，亦非由 Mozilla 出品或得其讚許。"
 
-#: src/resources/gtk/prefs-sync-page.ui:14
+#: src/resources/gtk/prefs-sync-page.ui:11
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-sync-page.ui:33
+#: src/resources/gtk/prefs-sync-page.ui:30
 msgid "Firefox Account"
 msgstr "Firefox 帳號"
 
-#: src/resources/gtk/prefs-sync-page.ui:37
+#: src/resources/gtk/prefs-sync-page.ui:34
 msgid "Logged in"
 msgstr "已登入"
 
-#: src/resources/gtk/prefs-sync-page.ui:42
+#: src/resources/gtk/prefs-sync-page.ui:39
 msgid "Sign _out"
 msgstr "登出(_O)"
 
-#: src/resources/gtk/prefs-sync-page.ui:55
+#: src/resources/gtk/prefs-sync-page.ui:52
 msgid "Sync Options"
 msgstr "同步選項"
 
-#: src/resources/gtk/prefs-sync-page.ui:60
+#: src/resources/gtk/prefs-sync-page.ui:57
 msgid "Sync _Bookmarks"
 msgstr "同步書籤(_B)"
 
-#: src/resources/gtk/prefs-sync-page.ui:75
+#: src/resources/gtk/prefs-sync-page.ui:72
 msgid "Sync _Passwords"
 msgstr "同步密碼(_P)"
 
-#: src/resources/gtk/prefs-sync-page.ui:90
+#: src/resources/gtk/prefs-sync-page.ui:87
 msgid "Sync _History"
 msgstr "同步歷史紀錄(_H)"
 
-#: src/resources/gtk/prefs-sync-page.ui:105
+#: src/resources/gtk/prefs-sync-page.ui:102
 msgid "Sync Open _Tabs"
 msgstr "同步開啟分頁(_T)"
 
-#: src/resources/gtk/prefs-sync-page.ui:117
+#: src/resources/gtk/prefs-sync-page.ui:114
 msgid "S_ynced tabs"
 msgstr "同步的分頁(_Y)"
 
-#: src/resources/gtk/prefs-sync-page.ui:128
+#: src/resources/gtk/prefs-sync-page.ui:125
 msgid "Frequency"
 msgstr "頻率"
 
-#: src/resources/gtk/prefs-sync-page.ui:139
+#: src/resources/gtk/prefs-sync-page.ui:129
 msgid "Sync _now"
 msgstr "立刻同步(_N)"
 
-#: src/resources/gtk/prefs-sync-page.ui:151
+#: src/resources/gtk/prefs-sync-page.ui:148
 msgid "Device name"
 msgstr "裝置名稱"
 
-#: src/resources/gtk/prefs-sync-page.ui:156
+#: src/resources/gtk/prefs-sync-page.ui:171
 msgid "_Change"
 msgstr "變更(_C)"
 
@@ -3276,15 +3324,15 @@ msgstr "變更(_C)"
 msgid "Manage Search Engines"
 msgstr "管理搜尋引擎"
 
-#: src/resources/gtk/search-engine-dialog.ui:177
+#: src/resources/gtk/search-engine-dialog.ui:180
 msgid "Bang"
 msgstr "Bang"
 
-#: src/resources/gtk/search-engine-dialog.ui:212
+#: src/resources/gtk/search-engine-dialog.ui:215
 msgid "Default"
 msgstr "預設"
 
-#: src/resources/gtk/search-engine-dialog.ui:265
+#: src/resources/gtk/search-engine-dialog.ui:268
 #, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine "
@@ -3589,7 +3637,7 @@ msgstr ""
 "下方為您其他裝置上的開啟分頁，利用 Firefox Sync 和此帳號同步而來。雙點分頁名"
 "稱可開啟分頁（不會開啟「本機分頁」下的分頁）。"
 
-#: src/resources/gtk/tab-label.ui:53
+#: src/resources/gtk/tab-label.ui:73
 msgid "Close Document"
 msgstr "關閉文件"
 
@@ -3645,22 +3693,22 @@ msgstr "HTML 檔案"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:691
+#: src/window-commands.c:116 src/window-commands.c:695
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:692
+#: src/window-commands.c:117 src/window-commands.c:696
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:559
-#: src/window-commands.c:777
+#: src/window-commands.c:131 src/window-commands.c:563
+#: src/window-commands.c:781
 msgid "Ch_oose File"
 msgstr "選擇檔案(_O)"
 
 #: src/window-commands.c:133 src/window-commands.c:332
-#: src/window-commands.c:376 src/window-commands.c:779
-#: src/window-commands.c:801
+#: src/window-commands.c:376 src/window-commands.c:783
+#: src/window-commands.c:809
 msgid "I_mport"
 msgstr "匯入(_M)"
 
@@ -3673,7 +3721,7 @@ msgid "_Select"
 msgstr "選擇(_S)"
 
 #: src/window-commands.c:329 src/window-commands.c:373
-#: src/window-commands.c:638
+#: src/window-commands.c:642
 msgid "Choose File"
 msgstr "選取檔案"
 
@@ -3683,32 +3731,32 @@ msgstr "選取檔案"
 msgid "Bookmarks successfully imported!"
 msgstr "已成功匯入書籤！"
 
-#: src/window-commands.c:555
+#: src/window-commands.c:558
 msgid "Import Bookmarks"
 msgstr "匯入書籤"
 
-#: src/window-commands.c:572 src/window-commands.c:814
+#: src/window-commands.c:576 src/window-commands.c:822
 msgid "From:"
 msgstr "從："
 
-#: src/window-commands.c:618
+#: src/window-commands.c:622
 msgid "Bookmarks successfully exported!"
 msgstr "已成功匯出書籤！"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:646
+#: src/window-commands.c:650
 msgid "bookmarks.gvdb"
 msgstr "bookmarks.gvdb"
 
-#: src/window-commands.c:733
+#: src/window-commands.c:737
 msgid "Passwords successfully imported!"
 msgstr "成功匯入密碼！"
 
-#: src/window-commands.c:797
+#: src/window-commands.c:804
 msgid "Import Passwords"
 msgstr "匯入密碼"
 
-#: src/window-commands.c:972
+#: src/window-commands.c:980
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3717,11 +3765,11 @@ msgstr ""
 "簡單、乾淨、美麗的網頁面貌。\n"
 "使用 WebKitGTK %d.%d.%d 技術"
 
-#: src/window-commands.c:996
+#: src/window-commands.c:1004
 msgid "Website"
 msgstr "網站"
 
-#: src/window-commands.c:1029
+#: src/window-commands.c:1037
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電子郵件給\n"
@@ -3732,70 +3780,74 @@ msgstr ""
 "Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004\n"
 "Abel Cheung <maddog@linux.org.hk>, 2003"
 
-#: src/window-commands.c:1660
+#: src/window-commands.c:1183
+msgid "Do you want to reload this website?"
+msgstr "您是否要重新載入這個網站？"
+
+#: src/window-commands.c:1711
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "已存在名為「%s」的網頁應用程式。您想要取代它嗎？"
 
-#: src/window-commands.c:1663
+#: src/window-commands.c:1714
 msgid "Cancel"
 msgstr "取消"
 
-#: src/window-commands.c:1665
+#: src/window-commands.c:1716
 msgid "Replace"
 msgstr "取代"
 
-#: src/window-commands.c:1669
+#: src/window-commands.c:1720
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "以此為名的應用程式已經存在。取代它會將它覆蓋。"
 
-#: src/window-commands.c:1761
+#: src/window-commands.c:1812
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "應用程式「%s」已經準備好可以使用"
 
-#: src/window-commands.c:1764
+#: src/window-commands.c:1815
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "無法建立應用程式「%s」"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1779
+#: src/window-commands.c:1830
 msgid "Launch"
 msgstr "執行"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1820
+#: src/window-commands.c:1871
 msgid "Create Web Application"
 msgstr "建立網頁應用程式"
 
-#: src/window-commands.c:1825
+#: src/window-commands.c:1876
 msgid "C_reate"
 msgstr "建立(_R)"
 
-#: src/window-commands.c:2040
+#: src/window-commands.c:2091
 msgid "Save"
 msgstr "儲存"
 
-#: src/window-commands.c:2049
+#: src/window-commands.c:2100
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2054
+#: src/window-commands.c:2105
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2059
+#: src/window-commands.c:2110
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2532
+#: src/window-commands.c:2595
 msgid "Enable caret browsing mode?"
 msgstr "是否啟用鍵盤瀏覽？"
 
-#: src/window-commands.c:2535
+#: src/window-commands.c:2598
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3804,9 +3856,80 @@ msgstr ""
 "按下 F7 會開啟或關閉鍵盤瀏覽。這個功能會在網頁中放置一個可移動的游標，讓您可"
 "以使用鍵盤隨處移動。您是否要啟用鍵盤瀏覽？"
 
-#: src/window-commands.c:2538
+#: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "啟用(_E)"
+
+#~ msgid "Cookie accept"
+#~ msgstr "Cookie 接受"
+
+#~ msgid ""
+#~ "Where to accept cookies from. Possible values are “always”, “no-third-"
+#~ "party” and “never”."
+#~ msgstr ""
+#~ "是否接受 Cookie。可能的數值有「always」、「no-third-party」和「never」。"
+
+#~ msgid "Remove cookie"
+#~ msgstr "移除 Cookie"
+
+#~ msgid ""
+#~ "You can select a period of time to clear data for all websites modified "
+#~ "in that period. If you choose from the beginning of time, then you can "
+#~ "also clear data only for particular websites."
+#~ msgstr ""
+#~ "您可以選擇一段時間，以清除這一時期中修改的所有的網站資料。如果您從開始的時"
+#~ "候選擇，您還可以清除特定網站的資料。"
+
+#~ msgid "the past hour"
+#~ msgstr "過去一小時"
+
+#~ msgid "the past day"
+#~ msgstr "過去一天"
+
+#~ msgid "the past week"
+#~ msgstr "過去一週"
+
+#~ msgid "the past four weeks"
+#~ msgstr "過去四週"
+
+#~ msgid "the beginning of time"
+#~ msgstr "開始時刻"
+
+#~ msgid "Remove all cookies"
+#~ msgstr "移除所有 Cookie"
+
+#~ msgid "Search cookies"
+#~ msgstr "搜尋 Cookie"
+
+#~ msgid "There are no Cookies"
+#~ msgstr "沒有 Cookie"
+
+#~ msgid "Cookies left by visited pages will be listed here"
+#~ msgstr "造訪過的頁面所留下的 Cookie 會列在這裡"
+
+#~ msgid "_Copy Location"
+#~ msgstr "複製位置(_C)"
+
+#~ msgid "Preferences"
+#~ msgstr "偏好設定"
+
+#~ msgid "_Manage Search Engines"
+#~ msgstr "管理搜尋引擎(_M)"
+
+#~ msgid "Clear _Cookies"
+#~ msgstr "清除 _Cookie"
+
+#~ msgid "_Always accept"
+#~ msgstr "總是接受(_A)"
+
+#~ msgid "For example, not from advertisers on these sites."
+#~ msgstr "例如，不要來自這些網站的廣告商。"
+
+#~ msgid "Only _from sites you visit"
+#~ msgstr "只來自您瀏覽的網站(_F)"
+
+#~ msgid "_Never accept"
+#~ msgstr "永不接受(_N)"
 
 #~ msgid "New search engine"
 #~ msgstr "新增搜尋引擎"
@@ -4547,9 +4670,6 @@ msgstr "啟用(_E)"
 
 #~ msgid "Add _Bookmark"
 #~ msgstr "加入書籤(_B)"
-
-#~ msgid "Tracking"
-#~ msgstr "追蹤"
 
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "告訴網站我不想被追蹤(_T)"
