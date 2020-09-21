@@ -67,6 +67,12 @@ conf.set('EPHY_MICRO_VERSION', 0)
 
 conf.set_quoted('VERSION', '@VCS_TAG@')
 
+gsb_api_key = get_option('gsb_api_key')
+conf.set_quoted('GSB_API_KEY', gsb_api_key)
+if gsb_api_key != ''
+  message('GSB API Key provided')
+endif
+
 config_h = declare_dependency(
   sources: vcs_tag(
     input: configure_file(
@@ -128,3 +134,4 @@ subdir('src')
 subdir('tests')
 
 meson.add_install_script('post_install.py')
+
