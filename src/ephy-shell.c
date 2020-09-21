@@ -342,18 +342,6 @@ notification_clicked (GSimpleAction *action,
     webkit_notification_clicked (notification);
 }
 
-static void
-run_in_background_change_state (GSimpleAction *action,
-                                GVariant      *value,
-                                gpointer       user_data)
-{
-  gboolean active;
-
-  active = g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND);
-  g_simple_action_set_state (action, g_variant_new_boolean (!active));
-  g_settings_set_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND, !active);
-}
-
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -380,7 +368,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
-  { "run-in-background", NULL, "b", "false", run_in_background_change_state},
+  { "run-in-background", NULL, NULL, "false", NULL},
   { "notification-clicked", notification_clicked, "t", NULL, NULL},
 };
 
@@ -469,6 +457,16 @@ run_in_background_get_mapping (GValue   *value,
   return TRUE;
 }
 
+static GVariant *
+run_in_background_set_mapping (const GValue       *value,
+                               const GVariantType *expected_type,
+                               gpointer            user_data)
+{
+  GVariant *var = g_value_get_variant (value);
+
+  return g_variant_new_boolean (g_variant_get_boolean (var));
+}
+
 static void
 ephy_shell_startup (GApplication *application)
 {
@@ -523,11 +521,11 @@ ephy_shell_startup (GApplication *application)
     action = g_action_map_lookup_action (G_ACTION_MAP (application), "run-in-background");
     g_settings_bind_with_mapping (EPHY_SETTINGS_WEB_APP,
                                   EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND,
-                                  G_SIMPLE_ACTION (action),
+                                  action,
                                   "state",
-                                  G_SETTINGS_BIND_GET | G_SETTINGS_BIND_GET_NO_CHANGES,
+                                  G_SETTINGS_BIND_DEFAULT,
                                   run_in_background_get_mapping,
-                                  NULL,
+                                  run_in_background_set_mapping,
                                   NULL,
                                   NULL);
   }
