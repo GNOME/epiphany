@@ -62,7 +62,6 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                          "title", _("Bookmark Properties"),
                          "transient-for", GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
                          "use-header-bar", TRUE,
-                         "resizable", FALSE,
                          "modal", TRUE,
                          NULL);
 
