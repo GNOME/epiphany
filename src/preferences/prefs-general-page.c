@@ -800,23 +800,18 @@ static void
 prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
                                        const char       *icon_url)
 {
-  GdkPixbuf *icon, *scaled_icon;
-  int icon_width, icon_height;
-  double scale;
+  g_autoptr (GdkPixbuf) icon = gdk_pixbuf_new_from_file (icon_url, NULL);
 
-  icon = gdk_pixbuf_new_from_file (icon_url, NULL);
   if (!icon)
     return;
 
-  icon_width = gdk_pixbuf_get_width (icon);
-  icon_height = gdk_pixbuf_get_height (icon);
-  scale = MIN ((double)32 / icon_width, (double)32 / icon_height);
-  scaled_icon = gdk_pixbuf_scale_simple (icon, icon_width * scale, icon_height * scale, GDK_INTERP_NEAREST);
-  g_object_unref (icon);
-  gtk_image_set_from_pixbuf (GTK_IMAGE (general_page->webapp_icon), scaled_icon);
+  gtk_image_set_from_gicon (GTK_IMAGE (general_page->webapp_icon),
+                            G_ICON (icon),
+                            GTK_ICON_SIZE_DND);
+  gtk_image_set_pixel_size (GTK_IMAGE (general_page->webapp_icon), 32);
+
   g_object_set_data_full (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-url",
                           g_strdup (icon_url), g_free);
-  g_object_unref (scaled_icon);
 }
 
 static void
