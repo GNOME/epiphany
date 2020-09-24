@@ -10,79 +10,54 @@
         <property name="title" translatable="yes">Web Application</property>
         <property name="visible">True</property>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="HdyActionRow">
             <property name="activatable">False</property>
+            <property name="title" translatable="yes">_Icon</property>
+            <property name="use_underline">True</property>
             <property name="visible">True</property>
             <child>
-              <object class="GtkGrid">
-                <property name="column-spacing">12</property>
-                <property name="margin-bottom">8</property>
-                <property name="margin-end">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">8</property>
-                <property name="row-spacing">6</property>
+              <object class="GtkButton" id="webapp_icon_button">
+                <property name="visible">true</property>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage" id="webapp_icon">
+                    <property name="visible">True</property>
+                  </object>
+               </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="title" translatable="yes">_Homepage</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkEntry" id="webapp_url">
                 <property name="visible">True</property>
-                <child>
-                  <object class="GtkButton" id="webapp_icon_button">
-                    <property name="visible">true</property>
-                    <property name="halign">center</property>
-                    <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
-                    <child>
-                      <object class="GtkImage" id="webapp_icon">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Homepage:</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="webapp_url">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                    <signal name="changed" handler="on_webapp_entry_changed"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Title:</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="webapp_title">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                    <signal name="changed" handler="on_webapp_entry_changed"/>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
+                <property name="valign">center</property>
+                <signal name="changed" handler="on_webapp_entry_changed"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="HdyActionRow">
+            <property name="activatable">False</property>
+            <property name="title" translatable="yes">_Title</property>
+            <property name="use_underline">True</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkEntry" id="webapp_title">
+                <property name="visible">True</property>
+                <property name="valign">center</property>
+                <signal name="changed" handler="on_webapp_entry_changed"/>
               </object>
             </child>
           </object>
@@ -382,4 +357,11 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="webapp_url"/>
+      <widget name="webapp_title"/>
+    </widgets>
+  </object>
 </interface>

@@ -810,7 +810,7 @@ prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
 
   icon_width = gdk_pixbuf_get_width (icon);
   icon_height = gdk_pixbuf_get_height (icon);
-  scale = MIN ((double)64 / icon_width, (double)64 / icon_height);
+  scale = MIN ((double)32 / icon_width, (double)32 / icon_height);
   scaled_icon = gdk_pixbuf_scale_simple (icon, icon_width * scale, icon_height * scale, GDK_INTERP_NEAREST);
   g_object_unref (icon);
   gtk_image_set_from_pixbuf (GTK_IMAGE (general_page->webapp_icon), scaled_icon);
