@@ -82,7 +82,7 @@ static void
 ephy_tab_label_update_icon (EphyTabLabel *self)
 {
   if (!self->has_icon) {
-    const char *favicon_name = ephy_get_fallback_favicon_name (self->uri, EPHY_FAVICON_TYPE_NO_MISSING_PLACEHOLDER);
+    const char *favicon_name = self->is_pinned ? "ephy-missing-favicon-symbolic" : ephy_get_fallback_favicon_name (self->uri, EPHY_FAVICON_TYPE_NO_MISSING_PLACEHOLDER);
 
     gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
   }
