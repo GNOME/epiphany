@@ -418,22 +418,59 @@ ephy_web_application_create (const char                *id,
 char *
 ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 {
-  char *id;
-  char *profile_dir;
+  g_autofree char *id = NULL;
+  g_autofree char *profile_dir = NULL;
+  g_autofree char *app_file = NULL;
+  int fd;
 
   id = ephy_web_application_get_app_id_from_name (g_app_info_get_name (app_info));
   profile_dir = ephy_web_application_get_profile_directory (id);
-  g_free (id);
 
+  /* Create the profile directory, populate it. */
   if (g_mkdir (profile_dir, 488) == -1) {
     if (errno == EEXIST)
-      return profile_dir;
+      return g_steal_pointer (&profile_dir);
 
-    g_free (profile_dir);
     return NULL;
   }
 
-  return profile_dir;
+  /* Skip migration for new web apps. */
+  ephy_profile_utils_set_migration_version_for_profile_dir (EPHY_PROFILE_MIGRATION_VERSION, profile_dir);
+
+  /* Create an .app file. */
+  app_file = g_build_filename (profile_dir, ".app", NULL);
+  fd = g_open (app_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  if (fd < 0) {
+    g_warning ("Failed to create .app file: %s", g_strerror (errno));
+    return NULL;
+  }
+  close (fd);
+
+  /* Create the deskop file. */
+  if (G_IS_DESKTOP_APP_INFO (app_info)) {
+    const char *source_name = NULL;
+    g_autofree char *dest_name = NULL;
+    g_autofree char *desktop_basename = NULL;
+    g_autoptr (GFile) source = NULL;
+    g_autoptr (GFile) dest = NULL;
+    g_autoptr (GError) error = NULL;
+
+    source_name = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (app_info));
+    source = g_file_new_for_path (source_name);
+
+    desktop_basename = get_app_desktop_filename (id);
+    dest_name = g_build_filename (profile_dir, desktop_basename, NULL);
+    dest = g_file_new_for_path (dest_name);
+
+    g_file_copy (source, dest, G_FILE_COPY_NONE, NULL, NULL, NULL, &error);
+
+    if (error)
+      g_warning ("Couldn't copy desktop file: %s", error->message);
+
+    ephy_web_application_initialize_settings (profile_dir, EPHY_WEB_APPLICATION_NONE);
+  }
+
+  return g_steal_pointer (&profile_dir);
 }
 
 void
