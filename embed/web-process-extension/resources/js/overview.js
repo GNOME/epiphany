@@ -96,7 +96,7 @@ Ephy.Overview = class Overview
       }
 
     _removePlaceholders() {
-        let anchors = document.getElementsByTagName('a')
+        let anchors = document.getElementsByTagName('a');
 
         for (let anchor of anchors) {
             if (anchor.href == '')
