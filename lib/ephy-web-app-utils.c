@@ -963,3 +963,20 @@ ephy_web_application_save (EphyWebApplication *app)
 
   return saved;
 }
+
+gboolean
+ephy_web_application_is_system (EphyWebApplication *app)
+{
+  GSettings *web_app_settings;
+  g_autofree char *profile_directory = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *path = NULL;
+
+  profile_directory = ephy_web_application_get_profile_directory (app->id);
+  name = g_path_get_basename (profile_directory);
+
+  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "webapp/", NULL);
+  web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_APP_SCHEMA, path);
+
+  return g_settings_get_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SYSTEM);
+}

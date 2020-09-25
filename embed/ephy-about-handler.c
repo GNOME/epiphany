@@ -264,6 +264,9 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
     for (p = applications; p; p = p->next) {
       EphyWebApplication *app = (EphyWebApplication *)p->data;
 
+      if (ephy_web_application_is_system (app))
+        continue;
+
       g_string_append_printf (data_str,
                               "<tbody><tr id =\"%s\">"
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
