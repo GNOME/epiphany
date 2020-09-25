@@ -1153,9 +1153,12 @@ setup_general_page (PrefsGeneralPage *general_page)
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     general_page->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
     g_assert (general_page->webapp);
-    prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_url);
-    gtk_entry_set_text (GTK_ENTRY (general_page->webapp_url), general_page->webapp->url);
-    gtk_entry_set_text (GTK_ENTRY (general_page->webapp_title), general_page->webapp->name);
+
+    if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
+      prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_url);
+      gtk_entry_set_text (GTK_ENTRY (general_page->webapp_url), general_page->webapp->url);
+      gtk_entry_set_text (GTK_ENTRY (general_page->webapp_title), general_page->webapp->name);
+    }
   }
 
   /* ======================================================================== */
@@ -1300,8 +1303,12 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
 
   gtk_widget_init_template (GTK_WIDGET (general_page));
 
+  setup_general_page (general_page);
+
   gtk_widget_set_visible (general_page->webapp_box,
-                          mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
+                          mode == EPHY_EMBED_SHELL_MODE_APPLICATION &&
+                          !g_settings_get_boolean (EPHY_SETTINGS_WEB_APP,
+                                                   EPHY_PREFS_WEB_APP_SYSTEM));
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->search_box,
@@ -1310,6 +1317,4 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->browsing_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-
-  setup_general_page (general_page);
 }

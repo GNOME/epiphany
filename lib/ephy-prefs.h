@@ -198,6 +198,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_WEB_APP_ADDITIONAL_URLS   "additional-urls"
 #define EPHY_PREFS_WEB_APP_MOBILE_CAPABLE    "mobile-capable"
 #define EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND "run-in-background"
+#define EPHY_PREFS_WEB_APP_SYSTEM            "system"
 
 static struct {
   const char *schema;

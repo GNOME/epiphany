@@ -38,6 +38,7 @@ typedef struct {
 typedef enum {
   EPHY_WEB_APPLICATION_NONE,
   EPHY_WEB_APPLICATION_MOBILE_CAPABLE,
+  EPHY_WEB_APPLICATION_SYSTEM,
 } EphyWebApplicationOptions;
 
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
