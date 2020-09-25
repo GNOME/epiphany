@@ -205,7 +205,8 @@ enum {
   SENS_FLAG_DOCUMENT      = 1 << 2,
   SENS_FLAG_LOADING       = 1 << 3,
   SENS_FLAG_NAVIGATION    = 1 << 4,
-  SENS_FLAG_IS_BLANK      = 1 << 5
+  SENS_FLAG_IS_BLANK      = 1 << 5,
+  SENS_FLAG_IS_INTERNAL_PAGE = 1 << 6,
 };
 
 static gint
@@ -1072,16 +1073,21 @@ sync_tab_address (EphyWebView *view,
   const char *address;
   const char *typed_address;
   char *location;
+  gboolean is_internal_page;
 
   if (window->closing)
     return;
 
   address = ephy_web_view_get_display_address (view);
   typed_address = ephy_web_view_get_typed_address (view);
+  is_internal_page = g_str_has_prefix (address, "about:") || g_str_has_prefix (address, "ephy-about:");
 
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_BLANK,
                                               ephy_web_view_get_is_blank (view));
+
+  _ephy_window_set_default_actions_sensitive (window,
+                                              SENS_FLAG_IS_INTERNAL_PAGE, is_internal_page);
 
   location = calculate_location (typed_address, address);
   ephy_window_set_location (window, location);
