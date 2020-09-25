@@ -91,6 +91,7 @@ struct _EphyWebView {
   GdkPixbuf *icon;
 
   /* Reader mode */
+  gboolean entering_reader_mode;
   gboolean reader_mode_available;
   guint reader_js_timeout;
 
@@ -139,6 +140,7 @@ enum {
   PROP_IS_BLANK,
   PROP_READER_MODE,
   PROP_DISPLAY_ADDRESS,
+  PROP_ENTERING_READER_MODE,
   LAST_PROP
 };
 
@@ -244,6 +246,9 @@ ephy_web_view_get_property (GObject    *object,
     case PROP_DISPLAY_ADDRESS:
       g_value_set_string (value, view->display_address);
       break;
+    case PROP_ENTERING_READER_MODE:
+      g_value_set_boolean (value, view->entering_reader_mode);
+      break;
     default:
       break;
   }
@@ -269,6 +274,7 @@ ephy_web_view_set_property (GObject      *object,
     case PROP_IS_BLANK:
     case PROP_READER_MODE:
     case PROP_DISPLAY_ADDRESS:
+    case PROP_ENTERING_READER_MODE:
       /* read only */
       break;
     default:
@@ -1588,6 +1594,11 @@ load_changed_cb (WebKitWebView   *web_view,
 
       /* Reset visit type. */
       view->visit_type = EPHY_PAGE_VISIT_NONE;
+
+      if (view->entering_reader_mode) {
+        view->entering_reader_mode = FALSE;
+        g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_ENTERING_READER_MODE]);
+      }
 
       if (!ephy_web_view_is_history_frozen (view) &&
           ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
@@ -3649,6 +3660,9 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
 
   reader_uri = g_strconcat (EPHY_READER_SCHEME, ":", address, NULL);
 
+  view->entering_reader_mode = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_ENTERING_READER_MODE]);
+
   webkit_web_view_load_uri (web_view, reader_uri);
 }
 
@@ -3995,6 +4009,18 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                          "The view's display address",
                          "",
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+/**
+ * EphyWebView:entering-reader-mode:
+ *
+ * Whether the view is entering reader mode.
+ **/
+  obj_properties[PROP_ENTERING_READER_MODE] =
+    g_param_spec_boolean ("entering-reader-mode",
+                          "Entering reader mode",
+                          "If the EphyWebView is entering reader mode",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 
