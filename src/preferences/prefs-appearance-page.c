@@ -161,7 +161,7 @@ css_file_created_cb (GObject      *source,
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
     if (ephy_is_running_inside_flatpak ())
-      ephy_open_uri_via_flatpak_portal (g_file_get_path (file));
+      ephy_open_uri_via_flatpak_portal (g_file_get_uri (file));
     else
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
   }
@@ -200,7 +200,7 @@ js_file_created_cb (GObject      *source,
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
     if (ephy_is_running_inside_flatpak ())
-      ephy_open_uri_via_flatpak_portal (g_file_get_path (file));
+      ephy_open_uri_via_flatpak_portal (g_file_get_uri (file));
     else
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
   }
