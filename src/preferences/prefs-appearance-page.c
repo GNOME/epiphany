@@ -152,25 +152,21 @@ css_file_created_cb (GObject      *source,
                      GAsyncResult *result,
                      gpointer      user_data)
 {
-  GFile *file = G_FILE (source);
-  GFileOutputStream *stream;
-  GError *error = NULL;
+  g_autoptr (GFile) file = G_FILE (source);
+  g_autoptr (GFileOutputStream) stream = NULL;
+  g_autoptr (GError) error = NULL;
 
   stream = g_file_create_finish (file, result, &error);
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
-    if (ephy_is_running_inside_flatpak ())
-      ephy_open_uri_via_flatpak_portal (g_file_get_uri (file));
-    else
+    if (ephy_is_running_inside_flatpak ()) {
+      g_autofree char *uri = g_file_get_uri (file);
+      ephy_open_uri_via_flatpak_portal (uri);
+    } else {
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
+    }
   }
-
-  if (error != NULL)
-    g_error_free (error);
-  if (stream != NULL)
-    g_object_unref (stream);
-  g_object_unref (file);
 }
 
 static void
@@ -199,10 +195,12 @@ js_file_created_cb (GObject      *source,
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
-    if (ephy_is_running_inside_flatpak ())
-      ephy_open_uri_via_flatpak_portal (g_file_get_uri (file));
-    else
+    if (ephy_is_running_inside_flatpak ()) {
+      g_autofree char *uri = g_file_get_uri (file);
+      ephy_open_uri_via_flatpak_portal (uri);
+    } else {
       ephy_file_launch_handler (file, gtk_get_current_event_time ());
+    }
   }
 }
 
