@@ -26,14 +26,14 @@ check-code-style:
 flatpak:
   extends: '.flatpak'
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror -Dgsb_api_key=${GSB_API_KEY}'
   except:
     - master
 
 flatpak master:
   extends: '.flatpak'
   variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel'
+    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dgsb_api_key=${GSB_API_KEY}'
   only:
     - master
 
