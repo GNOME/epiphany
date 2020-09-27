@@ -57,4 +57,6 @@ void           ephy_notebook_tab_set_pinned    (EphyNotebook *notebook,
 gboolean       ephy_notebook_tab_is_pinned     (EphyNotebook *notebook,
                                                 EphyEmbed    *embed);
 
+void           ephy_notebook_switch_to_last_tab (EphyNotebook *notebook);
+
 G_END_DECLS

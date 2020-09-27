@@ -1162,3 +1162,24 @@ ephy_notebook_tab_is_pinned (EphyNotebook *notebook,
 
   return ephy_tab_label_is_pinned (tab_label);
 }
+
+void
+ephy_notebook_switch_to_last_tab (EphyNotebook *notebook)
+{
+  GList *l;
+  GtkWidget *child;
+  int page_num;
+
+  if (!notebook->focused_pages)
+    return;
+
+  l = g_list_last (notebook->focused_pages);
+  if (!l->prev)
+    return;
+
+  child = GTK_WIDGET (l->prev->data);
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook),
+                                    child);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook),
+                                 page_num);
+}

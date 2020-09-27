@@ -2637,6 +2637,17 @@ accel_cb_tabs_next (GtkWidget *widget,
   window_cmd_tabs_next (NULL, NULL, user_data);
 }
 
+static void
+last_tab_accel_activate (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyNotebook *notebook = EPHY_NOTEBOOK (window->notebook);
+
+  ephy_notebook_switch_to_last_tab (notebook);
+}
+
 #define TAB_ACCELS_N 10
 
 static void
@@ -2646,11 +2657,12 @@ setup_tab_accels (EphyWindow *window)
   GApplication *app;
   guint i;
   DzlShortcutController *controller = dzl_shortcut_controller_find (GTK_WIDGET (window));
+  GSimpleAction *last_tab_action;
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
   app = g_application_get_default ();
 
-  for (i = 0; i < TAB_ACCELS_N; i++) {
+  for (i = 0; i < TAB_ACCELS_N - 1; i++) {
     GSimpleAction *simple_action;
     char *action_name;
     char *action_name_with_tab;
@@ -2675,6 +2687,16 @@ setup_tab_accels (EphyWindow *window)
     g_free (action_name);
     g_free (action_name_with_tab);
   }
+
+  last_tab_action = g_simple_action_new ("switch-to-last-tab", NULL);
+  g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (last_tab_action));
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app),
+                                         "tab.switch-to-last-tab",
+                                         (const gchar *[]) {"<alt>0", NULL});
+
+  g_signal_connect (G_ACTION (last_tab_action), "activate",
+                    G_CALLBACK (last_tab_accel_activate), window);
+  g_object_unref (last_tab_action);
 
   /* We have to setup the Ctrl + Tab shortcut in the window's ShortcutController
    * because otherwise libdazzle would handle this shortcut by changing
