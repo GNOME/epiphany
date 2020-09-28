@@ -28,6 +28,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-firefox-sync-dialog.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
@@ -62,6 +63,7 @@ struct _EphyShell {
   EphyOpenTabsManager *open_tabs_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
+  GtkWidget *firefox_sync_dialog;
   GObject *prefs_dialog;
   EphyShellStartupContext *local_startup_context;
   EphyShellStartupContext *remote_startup_context;
@@ -242,6 +244,18 @@ show_history (GSimpleAction *action,
 }
 
 static void
+show_firefox_sync (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_show_firefox_sync (NULL, NULL, EPHY_WINDOW (window));
+}
+
+static void
 show_preferences (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -349,6 +363,7 @@ static GActionEntry app_entries[] = {
   { "export-bookmarks", export_bookmarks, NULL, NULL, NULL },
   { "import-passwords", import_passwords, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
+  { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
@@ -1214,6 +1229,25 @@ ephy_shell_get_history_dialog (EphyShell *shell)
   }
 
   return shell->history_dialog;
+}
+
+/**
+ * ephy_shell_get_firefox_sync_dialog:
+ *
+ * Return value: (transfer none):
+ **/
+GtkWidget *
+ephy_shell_get_firefox_sync_dialog (EphyShell *shell)
+{
+  if (shell->firefox_sync_dialog == NULL) {
+    shell->firefox_sync_dialog = ephy_firefox_sync_dialog_new ();
+    g_signal_connect (shell->firefox_sync_dialog,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &shell->firefox_sync_dialog);
+  }
+
+  return shell->firefox_sync_dialog;
 }
 
 /**

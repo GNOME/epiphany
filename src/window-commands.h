@@ -41,6 +41,9 @@ void window_cmd_export_bookmarks                (GSimpleAction *action,
 void window_cmd_show_history                    (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_show_firefox_sync               (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_show_preferences                (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

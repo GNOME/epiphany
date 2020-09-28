@@ -26,6 +26,7 @@ libephymain_sources = [
   'ephy-desktop-utils.c',
   'ephy-encoding-dialog.c',
   'ephy-encoding-row.c',
+  'ephy-firefox-sync-dialog.c',
   'ephy-header-bar.c',
   'ephy-history-dialog.c',
   'ephy-link.c',
