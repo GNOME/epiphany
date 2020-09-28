@@ -860,7 +860,7 @@ get_storage_credentials_cb (SoupSession *session,
 
 out_error:
   message = _("Failed to obtain storage credentials.");
-  suggestion = _("Please visit Preferences and sign in again to continue syncing.");
+  suggestion = _("Please visit Firefox Sync and sign in again to continue syncing.");
 
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
@@ -968,7 +968,7 @@ get_signed_certificate_cb (SoupSession *session,
    */
   if (json_object_get_int_member (json, "errno") == 110) {
     message = _("The password of your Firefox account seems to have been changed.");
-    suggestion = _("Please visit Preferences and sign in with the new password to continue syncing.");
+    suggestion = _("Please visit Firefox Sync and sign in with the new password to continue syncing.");
     ephy_sync_service_sign_out (self);
   }
 
@@ -977,7 +977,7 @@ get_signed_certificate_cb (SoupSession *session,
 
 out_error:
   message = message ? message : _("Failed to obtain signed certificate.");
-  suggestion = suggestion ? suggestion : _("Please visit Preferences and sign in again to continue syncing.");
+  suggestion = suggestion ? suggestion : _("Please visit Firefox Sync and sign in again to continue syncing.");
 
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
@@ -1752,7 +1752,7 @@ load_secrets_cb (GObject         *source_object,
   goto out_no_error;
 
 out_error:
-  suggestion = _("Please visit Preferences and sign in again to continue syncing.");
+  suggestion = _("Please visit Firefox Sync and sign in again to continue syncing.");
   ephy_notification_show (ephy_notification_new (message, suggestion));
   /* Reset the sync user so that it will be considered signed-out
    * when the preferences dialog is opened. */

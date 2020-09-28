@@ -54,9 +54,8 @@ libephymain_sources = [
   'preferences/prefs-appearance-page.c',
   'preferences/prefs-general-page.c',
   'preferences/prefs-privacy-page.c',
-  'preferences/prefs-sync-page.c',
-  'preferences/synced-tabs-dialog.c',
   'preferences/webapp-additional-urls-dialog.c',
+  'synced-tabs-dialog.c',
   'window-commands.c',
   compile_schemas,
   enums
