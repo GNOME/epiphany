@@ -35,25 +35,16 @@ struct _EphyAddBookmarkPopover {
   char *address;
 
   GtkWidget *grid;
-  GtkWidget *relative_to;
-  GtkWindow *window;
+  EphyHeaderBar *header_bar;
 };
 
 G_DEFINE_TYPE (EphyAddBookmarkPopover, ephy_add_bookmark_popover, GTK_TYPE_POPOVER)
 
 enum {
   PROP_0,
-  PROP_RELATIVE_TO,
-  PROP_WINDOW,
+  PROP_HEADER_BAR,
   LAST_PROP
 };
-
-enum signalsEnum {
-  UPDATE_STATE,
-  LAST_SIGNAL
-};
-
-static gint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *obj_properties[LAST_PROP];
 
@@ -66,11 +57,8 @@ ephy_bookmarks_popover_set_property (GObject      *object,
   EphyAddBookmarkPopover *self = EPHY_ADD_BOOKMARK_POPOVER (object);
 
   switch (prop_id) {
-    case PROP_RELATIVE_TO:
-      self->relative_to = g_value_get_object (value);
-      break;
-    case PROP_WINDOW:
-      self->window = g_value_get_object (value);
+    case PROP_HEADER_BAR:
+      self->header_bar = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -92,10 +80,16 @@ static void
 ephy_add_bookmark_popover_constructed (GObject *object)
 {
   EphyAddBookmarkPopover *self = EPHY_ADD_BOOKMARK_POPOVER (object);
+  GtkWidget *location_entry;
+  GtkWidget *bookmark;
 
   G_OBJECT_CLASS (ephy_add_bookmark_popover_parent_class)->constructed (object);
 
-  gtk_popover_set_relative_to (GTK_POPOVER (self), self->relative_to);
+  location_entry = GTK_WIDGET (ephy_header_bar_get_title_widget (self->header_bar));
+  g_assert (EPHY_IS_LOCATION_ENTRY (location_entry));
+  bookmark = ephy_location_entry_get_bookmark_widget (EPHY_LOCATION_ENTRY (location_entry));
+
+  gtk_popover_set_relative_to (GTK_POPOVER (self), bookmark);
 }
 
 static void
@@ -107,34 +101,14 @@ ephy_add_bookmark_popover_class_init (EphyAddBookmarkPopoverClass *klass)
   object_class->finalize = ephy_add_bookmark_popover_finalize;
   object_class->constructed = ephy_add_bookmark_popover_constructed;
 
-  obj_properties[PROP_RELATIVE_TO] =
-    g_param_spec_object ("relative-to",
-                         "A GtkWidget object",
-                         "The popover's parent widget",
-                         GTK_TYPE_WIDGET,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-  obj_properties[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         "A GtkWidget object",
-                         "The popover's parent window",
-                         GTK_TYPE_WIDGET,
+  obj_properties[PROP_HEADER_BAR] =
+    g_param_spec_object ("header-bar",
+                         "An EphyHeaderBar object",
+                         "The popover's parent EphyHeaderBar",
+                         EPHY_TYPE_HEADER_BAR,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-  /**
-   * EphAddBookmarkPopover::update-state:
-   * @entry: the object on which the signal is emitted
-   *
-   * Emitted when the bookmark state changes
-   *
-   */
-  signals[UPDATE_STATE] = g_signal_new ("update-state", G_OBJECT_CLASS_TYPE (klass),
-                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, NULL, NULL, NULL,
-                                        G_TYPE_NONE,
-                                        1,
-                                        G_TYPE_INT);
 }
 
 static void
@@ -171,12 +145,12 @@ ephy_add_bookmark_popover_init (EphyAddBookmarkPopover *self)
 }
 
 GtkWidget *
-ephy_add_bookmark_popover_new (GtkWidget *relative_to,
-                               GtkWidget *window)
+ephy_add_bookmark_popover_new (EphyHeaderBar *header_bar)
 {
+  g_assert (EPHY_IS_HEADER_BAR (header_bar));
+
   return g_object_new (EPHY_TYPE_ADD_BOOKMARK_POPOVER,
-                       "relative-to", relative_to,
-                       "window", window,
+                       "header-bar", header_bar,
                        NULL);
 }
 
@@ -193,6 +167,8 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
                                                        EphyBookmark           *bookmark,
                                                        EphyBookmarksManager   *manager)
 {
+  GtkWidget *location_entry;
+  EphyWindow *window;
   EphyEmbed *embed;
   EphyWebView *view;
   const char *address;
@@ -201,13 +177,17 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (self->window));
+  location_entry = GTK_WIDGET (ephy_header_bar_get_title_widget (self->header_bar));
+  window = ephy_header_bar_get_window (self->header_bar);
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   view = ephy_embed_get_web_view (embed);
 
   address = ephy_web_view_get_address (view);
 
-  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0)
-    g_signal_emit (self, signals[UPDATE_STATE], 0, EPHY_BOOKMARK_ICON_EMPTY);
+  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0) {
+    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (location_entry),
+                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY);
+  }
 
   ephy_bookmarks_manager_save (manager,
                                ephy_bookmarks_manager_save_warn_on_error_cancellable (manager),
@@ -222,11 +202,15 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
 {
   EphyBookmarksManager *manager;
   EphyBookmark *bookmark;
+  EphyWindow *window;
+  EphyLocationEntry *location_entry;
   EphyEmbed *embed;
   const char *address;
 
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (self->window));
+  location_entry = EPHY_LOCATION_ENTRY (ephy_header_bar_get_title_widget (self->header_bar));
+  window = ephy_header_bar_get_window (self->header_bar);
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
@@ -242,7 +226,8 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
                                       id);
 
     ephy_bookmarks_manager_add_bookmark (manager, new_bookmark);
-    g_signal_emit (self, signals[UPDATE_STATE], 0, EPHY_BOOKMARK_ICON_BOOKMARKED);
+    ephy_location_entry_set_bookmark_icon_state (location_entry,
+                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED);
 
     bookmark = new_bookmark;
   }

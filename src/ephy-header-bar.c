@@ -236,11 +236,8 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
   if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
-    EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (header_bar->title_widget);
-    GtkWidget *popover = ephy_add_bookmark_popover_new (ephy_location_entry_get_bookmark_widget (lentry), GTK_WIDGET (header_bar->window));
-
-    g_signal_connect_object (popover, "update-state", G_CALLBACK (ephy_window_sync_bookmark_state), header_bar, G_CONNECT_SWAPPED);
-    ephy_location_entry_set_add_bookmark_popover (lentry, GTK_POPOVER (popover));
+    ephy_location_entry_set_add_bookmark_popover (EPHY_LOCATION_ENTRY (header_bar->title_widget),
+                                                  GTK_POPOVER (ephy_add_bookmark_popover_new (header_bar)));
 
     g_signal_connect_object (header_bar->title_widget,
                              "bookmark-clicked",
@@ -420,9 +417,6 @@ void
 ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
-  ephy_action_bar_end_set_show_bookmark_button (header_bar->action_bar_end,
-                                                adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
-
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
@@ -439,7 +433,7 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
   }
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
-    ephy_location_entry_set_mobile_mode (EPHY_LOCATION_ENTRY (header_bar->title_widget), adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
+    ephy_location_entry_set_mobile_popdown (EPHY_LOCATION_ENTRY (header_bar->title_widget), adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 void
