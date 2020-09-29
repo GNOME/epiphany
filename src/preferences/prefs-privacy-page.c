@@ -20,6 +20,7 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "prefs-privacy-page.h"
 
 #include "ephy-settings.h"
@@ -36,6 +37,7 @@ struct _PrefsPrivacyPage {
   HdyPreferencesPage parent_instance;
 
   /* Web Safety */
+  GtkWidget *safe_browsing_group;
   GtkWidget *enable_safe_browsing_switch;
 
   /* Web Tracking */
@@ -78,6 +80,8 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    privacy_page->enable_safe_browsing_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+
+  gtk_widget_set_visible (privacy_page->safe_browsing_group, ENABLE_GSB);
 
   /* ======================================================================== */
   /* ========================== Web Tracking ================================ */
@@ -128,6 +132,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
                   G_TYPE_NONE, 0);
 
   /* Web Safety */
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, safe_browsing_group);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
 
   /* Web Tracking */

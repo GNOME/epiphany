@@ -72,6 +72,7 @@ conf.set_quoted('GSB_API_KEY', gsb_api_key)
 if gsb_api_key != ''
   message('GSB API Key provided')
 endif
+conf.set10('ENABLE_GSB', get_option('enable_gsb'))
 
 config_h = declare_dependency(
   sources: vcs_tag(

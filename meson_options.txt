@@ -28,9 +28,16 @@ option('unit_tests',
   description: 'Enable unit tests'
 )
 
+option('enable_gsb',
+  type: 'boolean',
+  value: false,
+  description: 'Enable Google Safe Browsing support'
+)
+
 option('gsb_api_key',
   type: 'string',
   value: '',
   description: 'The API key used to access the Google Safe Browsing API v4'
 )
+
 

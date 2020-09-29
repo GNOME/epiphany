@@ -475,6 +475,7 @@ EphyGSBService *
 ephy_gsb_service_new (const char *api_key,
                       const char *db_path)
 {
+#ifdef ENABLE_GSB
   EphyGSBService *service;
   EphyGSBStorage *storage;
 
@@ -486,6 +487,9 @@ ephy_gsb_service_new (const char *api_key,
   g_object_unref (storage);
 
   return service;
+#else
+  return NULL;
+#endif
 }
 
 static void
