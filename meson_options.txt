@@ -4,6 +4,12 @@ option('developer_mode',
   description: 'Enable developer mode'
 )
 
+option('libportal',
+  type: 'feature',
+  value: 'enabled',
+  description: 'Depend on libportal for Flatpak support'
+)
+
 option('network_tests',
   type: 'feature',
   value: 'disabled',

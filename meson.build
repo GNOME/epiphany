@@ -1,7 +1,7 @@
 project('epiphany', 'c',
   license: 'GPL3+',
   version: '40.alpha',
-  meson_version: '>= 0.46.0',
+  meson_version: '>= 0.47.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
 )
@@ -74,16 +74,6 @@ if gsb_api_key != ''
 endif
 conf.set10('ENABLE_GSB', get_option('enable_gsb'))
 
-config_h = declare_dependency(
-  sources: vcs_tag(
-    input: configure_file(
-      output: 'config.h.in',
-      configuration: conf
-    ),
-    output: 'config.h'
-  )
-)
-
 glib_requirement = '>= 2.61.2'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
@@ -108,10 +98,22 @@ libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 nettle_dep = dependency('nettle', version: nettle_requirement)
-portal_dep = dependency('libportal', version: '>= 0.0.2')
+portal_dep = dependency('libportal', version: '>= 0.0.2', required: get_option('libportal'))
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
+
+conf.set10('USE_LIBPORTAL', portal_dep.found())
+
+config_h = declare_dependency(
+  sources: vcs_tag(
+    input: configure_file(
+      output: 'config.h.in',
+      configuration: conf
+    ),
+    output: 'config.h'
+  )
+)
 
 cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
