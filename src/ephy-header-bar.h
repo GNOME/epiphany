@@ -36,7 +36,6 @@ G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, GtkHeade
 
 GtkWidget          *ephy_header_bar_new                            (EphyWindow    *window);
 EphyTitleWidget    *ephy_header_bar_get_title_widget               (EphyHeaderBar *header_bar);
-GtkWidget          *ephy_header_bar_get_zoom_level_button          (EphyHeaderBar *header_bar);
 GtkWidget          *ephy_header_bar_get_page_menu_button           (EphyHeaderBar *header_bar);
 EphyWindow         *ephy_header_bar_get_window                     (EphyHeaderBar *header_bar);
 void                ephy_header_bar_set_reader_mode_state          (EphyHeaderBar *header_bar,
@@ -47,5 +46,7 @@ void                ephy_header_bar_set_adaptive_mode              (EphyHeaderBa
                                                                     EphyAdaptiveMode  adaptive_mode);
 void                ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_bar,
                                                                              gboolean       loading);
+void                ephy_header_bar_set_zoom_level                 (EphyHeaderBar *header_bar,
+                                                                    gdouble        zoom);
 
 G_END_DECLS

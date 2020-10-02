@@ -60,7 +60,7 @@ struct _EphyHeaderBar {
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   GtkWidget *page_menu_button;
-  GtkWidget *zoom_level_button;
+  GtkWidget *zoom_level_label;
   GtkWidget *restore_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *combined_stop_reload_image;
@@ -265,7 +265,7 @@ ephy_header_bar_constructed (GObject *object)
   g_type_ensure (G_TYPE_THEMED_ICON);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
-  header_bar->zoom_level_button = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
+  header_bar->zoom_level_label = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-button")));
@@ -384,12 +384,6 @@ ephy_header_bar_get_title_widget (EphyHeaderBar *header_bar)
 }
 
 GtkWidget *
-ephy_header_bar_get_zoom_level_button (EphyHeaderBar *header_bar)
-{
-  return header_bar->zoom_level_button;
-}
-
-GtkWidget *
 ephy_header_bar_get_page_menu_button (EphyHeaderBar *header_bar)
 {
   return header_bar->page_menu_button;
@@ -454,4 +448,13 @@ ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_b
     gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button,
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
+}
+
+void
+ephy_header_bar_set_zoom_level (EphyHeaderBar *header_bar,
+                                gdouble        zoom)
+{
+  g_autofree gchar *zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
+
+  gtk_label_set_label (GTK_LABEL (header_bar->zoom_level_label), zoom_level);
 }

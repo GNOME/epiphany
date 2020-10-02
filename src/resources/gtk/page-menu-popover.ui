@@ -38,12 +38,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="zoom-level">
-                <property name="label">100%</property>
+              <object class="GtkButton">
                 <property name="tooltip_text" translatable="yes">Restore Zoom</property>
                 <property name="action-name">win.zoom-normal</property>
                 <property name="xalign">0.5</property>
                 <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="zoom-level">
+                    <property name="visible">True</property>
+                    <property name="width-chars">5</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
