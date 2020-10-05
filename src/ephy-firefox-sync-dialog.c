@@ -38,12 +38,12 @@
 struct _EphyFirefoxSyncDialog {
   HdyWindow parent_instance;
 
-  GtkWidget *sync_page_box;
+  GtkWidget *sync_page_group;
   GtkWidget *sync_firefox_iframe_box;
   GtkWidget *sync_firefox_iframe_label;
-  GtkWidget *sync_firefox_account_box;
+  GtkWidget *sync_firefox_account_group;
   GtkWidget *sync_firefox_account_row;
-  GtkWidget *sync_options_box;
+  GtkWidget *sync_options_group;
   GtkWidget *sync_bookmarks_switch;
   GtkWidget *sync_passwords_switch;
   GtkWidget *sync_history_switch;
@@ -164,9 +164,9 @@ sync_secrets_store_finished_cb (EphySyncService       *service,
   if (!error) {
     hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sync_dialog->sync_firefox_account_row),
                                    ephy_sync_utils_get_sync_user ());
-    gtk_widget_hide (sync_dialog->sync_page_box);
-    gtk_widget_show (sync_dialog->sync_firefox_account_box);
-    gtk_widget_show (sync_dialog->sync_options_box);
+    gtk_widget_hide (sync_dialog->sync_page_group);
+    gtk_widget_show (sync_dialog->sync_firefox_account_group);
+    gtk_widget_show (sync_dialog->sync_options_group);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (sync_dialog, error->message);
@@ -511,9 +511,9 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);
-  gtk_widget_hide (sync_dialog->sync_firefox_account_box);
-  gtk_widget_hide (sync_dialog->sync_options_box);
-  gtk_widget_show (sync_dialog->sync_page_box);
+  gtk_widget_hide (sync_dialog->sync_firefox_account_group);
+  gtk_widget_hide (sync_dialog->sync_options_group);
+  gtk_widget_show (sync_dialog->sync_page_group);
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (sync_dialog->sync_firefox_account_row), NULL);
 }
 
@@ -618,12 +618,12 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
 
   object_class->finalize = prefs_sync_page_finalize;
 
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_page_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_page_group);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_firefox_iframe_box);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_firefox_iframe_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_firefox_account_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_firefox_account_group);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_firefox_account_row);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_options_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_options_group);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_bookmarks_switch);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_passwords_switch);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_history_switch);
@@ -715,12 +715,12 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
 
   if (!user) {
     sync_setup_firefox_iframe (sync_dialog);
-    gtk_widget_hide (sync_dialog->sync_firefox_account_box);
-    gtk_widget_hide (sync_dialog->sync_options_box);
+    gtk_widget_hide (sync_dialog->sync_firefox_account_group);
+    gtk_widget_hide (sync_dialog->sync_options_group);
   } else {
     sync_set_last_sync_time (sync_dialog);
     hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sync_dialog->sync_firefox_account_row), user);
-    gtk_widget_hide (sync_dialog->sync_page_box);
+    gtk_widget_hide (sync_dialog->sync_page_group);
   }
 
   g_settings_bind (sync_settings,
