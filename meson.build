@@ -1,6 +1,6 @@
 project('epiphany', 'c',
   license: 'GPL3+',
-  version: '40.alpha',
+  version: '3.38.0',
   meson_version: '>= 0.46.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
@@ -58,12 +58,8 @@ conf.set10('TECH_PREVIEW', tech_preview)
 
 version_array = meson.project_version().split('.')
 conf.set('EPHY_MAJOR_VERSION', version_array[0].to_int())
-if version_array[1] in ['alpha', 'beta']
-  conf.set('EPHY_MINOR_VERSION', 0)
-else
-  conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
-endif
-conf.set('EPHY_MICRO_VERSION', 0)
+conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
+conf.set('EPHY_MICRO_VERSION', version_array[2].to_int())
 
 conf.set_quoted('VERSION', '@VCS_TAG@')
 
