@@ -1177,7 +1177,7 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_itp_permission_request),
                     decision);
-  g_object_set_data_full (G_OBJECT (info_bar), "ephy-itp-decision", decision, g_object_unref);
+  g_object_set_data_full (G_OBJECT (info_bar), "ephy-itp-decision", g_object_ref (decision), g_object_unref);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar,
