@@ -41,6 +41,9 @@ struct _EphyActionBar {
   EphyActionBarEnd *action_bar_end;
   EphyPagesButton *pages_button;
   GtkNotebook *notebook;
+
+  EphyAdaptiveMode adaptive_mode;
+  gboolean can_reveal;
 };
 
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
@@ -65,6 +68,18 @@ update_pages_button (EphyActionBar *action_bar)
 
   n_pages = gtk_notebook_get_n_pages (action_bar->notebook);
   ephy_pages_button_set_n_pages (action_bar->pages_button, n_pages);
+}
+
+static void
+update_revealer (EphyActionBar *action_bar)
+{
+  gboolean reveal = action_bar->can_reveal &&
+                    (action_bar->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
+
+  if (reveal)
+    gtk_widget_show (GTK_WIDGET (action_bar));
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), reveal);
 }
 
 static void
@@ -107,18 +122,18 @@ titlebar_animation_changed (EphyActionBar *action_bar)
 {
   switch (dzl_application_window_get_titlebar_animation (DZL_APPLICATION_WINDOW (action_bar->window))) {
     case DZL_TITLEBAR_ANIMATION_SHOWN:
-      gtk_widget_set_visible (GTK_WIDGET (action_bar), TRUE);
-      break;
     case DZL_TITLEBAR_ANIMATION_SHOWING:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
+      action_bar->can_reveal = true;
+
       break;
     case DZL_TITLEBAR_ANIMATION_HIDING:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
-      break;
     case DZL_TITLEBAR_ANIMATION_HIDDEN:
-      gtk_widget_set_visible (GTK_WIDGET (action_bar), FALSE);
+      action_bar->can_reveal = false;
+
       break;
   }
+
+  update_revealer (action_bar);
 }
 
 static void
@@ -198,6 +213,13 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
                                            EPHY_ADAPTIVE_MODE_NARROW);
+
+  g_object_bind_property (action_bar, "child-revealed",
+                          action_bar, "visible",
+                          G_BINDING_DEFAULT);
+
+  action_bar->can_reveal = true;
+  update_revealer (action_bar);
 }
 
 EphyActionBar *
@@ -224,14 +246,7 @@ void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
-  switch (adaptive_mode) {
-    case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), FALSE);
+  action_bar->adaptive_mode = adaptive_mode;
 
-      break;
-    case EPHY_ADAPTIVE_MODE_NARROW:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), TRUE);
-
-      break;
-  }
+  update_revealer (action_bar);
 }
