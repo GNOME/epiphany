@@ -350,6 +350,9 @@
                       <class name="image-button"/>
                     </style>
                   </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -357,34 +360,31 @@
               <object class="GtkActionBar" id="selection_action_bar">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkButton" id="selection_delete_button">
                     <property name="visible">True</property>
-                    <property name="spacing">5</property>
-                    <child>
-                      <object class="GtkButton" id="selection_delete_button">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="label" translatable="yes">_Delete</property>
-                        <signal name="clicked" handler="on_selection_delete_button_clicked"/>
-                        <style>
-                          <class name="destructive-action"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="selection_open_button">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="label" translatable="yes">_Open</property>
-                        <signal name="clicked" handler="on_selection_open_button_clicked"/>
-                      </object>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="label" translatable="yes">_Delete</property>
+                    <signal name="clicked" handler="on_selection_delete_button_clicked"/>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="selection_open_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="label" translatable="yes">_Open</property>
+                    <signal name="clicked" handler="on_selection_open_button_clicked"/>
                   </object>
                 </child>
               </object>
