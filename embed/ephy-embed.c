@@ -686,6 +686,26 @@ ephy_embed_mapped_cb (GtkWidget *widget,
   ephy_embed_maybe_load_delayed_request ((EphyEmbed *)widget);
 }
 
+static gboolean
+on_enter_notify_event (GtkWidget        *widget,
+                       GdkEventCrossing *event,
+                       gpointer          user_data)
+{
+  EphyEmbed *embed = EPHY_EMBED (user_data);
+
+  if (event->window != gtk_widget_get_window (embed->floating_bar))
+    return GDK_EVENT_PROPAGATE;
+
+  if (gtk_widget_get_halign (embed->floating_bar) == GTK_ALIGN_START)
+    gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_END);
+  else
+    gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
+
+  gtk_widget_queue_allocate (embed->overlay);
+
+  return GDK_EVENT_STOP;
+}
+
 static void
 ephy_embed_constructed (GObject *object)
 {
@@ -721,9 +741,9 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
   gtk_widget_set_no_show_all (embed->floating_bar, TRUE);
+  g_signal_connect_object (embed->overlay, "enter-notify-event", G_CALLBACK (on_enter_notify_event), embed, 0);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
-  gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (embed->overlay), embed->floating_bar, TRUE);
 
   if (embed->progress_bar_enabled) {
     embed->progress = gtk_progress_bar_new ();
