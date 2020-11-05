@@ -326,6 +326,9 @@ create_desktop_file (const char *id,
   wm_class = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
   g_free (wm_class);
+
+  g_key_file_set_value (file, "Desktop Entry", "X-Purism-FormFactor", "Workstation;Mobile;");
+
   data = g_key_file_to_data (file, NULL, NULL);
 
   desktop_file_path = g_build_filename (profile_dir, filename, NULL);
