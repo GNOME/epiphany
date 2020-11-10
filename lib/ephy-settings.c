@@ -28,9 +28,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-#define G_SETTINGS_ENABLE_BACKEND
-#include <gio/gsettingsbackend.h>
-
 static GHashTable *settings = NULL;
 
 static gboolean is_web_process = FALSE;
