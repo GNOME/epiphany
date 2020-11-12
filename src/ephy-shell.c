@@ -494,6 +494,15 @@ ephy_shell_startup (GApplication *application)
 
   hdy_init ();
 
+  /* If we are under Pantheon set the icon-theme and cursor-theme accordingly. */
+  if (is_desktop_pantheon ()) {
+    GtkSettings *settings = gtk_settings_get_default ();
+    g_object_set (settings,
+                  "gtk-icon-theme-name", "elementary",
+                  "gtk-cursor-theme-name", "elementary",
+                  NULL);
+  }
+
   /* We're not remoting; start our services */
 
   mode = ephy_embed_shell_get_mode (embed_shell);
