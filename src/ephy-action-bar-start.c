@@ -106,23 +106,14 @@ icon_loaded_cb (GObject      *source,
   cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
 
   if (icon_surface) {
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    gint scale = gtk_widget_get_scale_factor (image);
+
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
     cairo_surface_destroy (icon_surface);
   }
 
-  if (favicon) {
-    cairo_surface_t *surface;
-
-    surface = gdk_cairo_surface_create_from_pixbuf (favicon,
-                                                    0,
-                                                    gtk_widget_get_window (GTK_WIDGET (image)));
-    gtk_image_set_from_surface (GTK_IMAGE (image), surface);
-
-    gtk_widget_show (image);
-
-    cairo_surface_destroy (surface);
-    g_object_unref (favicon);
-  }
+  if (favicon)
+    gtk_image_set_from_gicon (GTK_IMAGE (image), G_ICON (favicon), GTK_ICON_SIZE_MENU);
 
   g_object_unref (image);
 }
