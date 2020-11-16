@@ -121,19 +121,10 @@ ephy_tab_label_set_property (GObject      *object,
       }
       break;
     case PROP_ICON_BUF:
-      if (g_value_get_object (value)) {
-        cairo_surface_t *surface;
-
-        surface = gdk_cairo_surface_create_from_pixbuf (g_value_get_object (value),
-                                                        0,
-                                                        gtk_widget_get_window (GTK_WIDGET (self)));
-        gtk_image_set_from_surface (GTK_IMAGE (self->icon), surface);
-        cairo_surface_destroy (surface);
-        self->has_icon = TRUE;
-      } else {
-        gtk_image_set_from_surface (GTK_IMAGE (self->icon), NULL);
-        self->has_icon = FALSE;
-      }
+      gtk_image_set_from_gicon (GTK_IMAGE (self->icon),
+                                g_value_get_object (value),
+                                GTK_ICON_SIZE_BUTTON);
+      self->has_icon = g_value_get_object (value) != NULL;
       ephy_tab_label_update_icon (self);
       break;
     case PROP_SPINNING:

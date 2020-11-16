@@ -570,15 +570,12 @@ maybe_take_snapshot (EphyWebView *view)
 static void
 _ephy_web_view_update_icon (EphyWebView *view)
 {
-  if (view->icon != NULL) {
-    g_object_unref (view->icon);
-    view->icon = NULL;
-  }
+  g_clear_object (&view->icon);
 
   if (view->address) {
     cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
     if (icon_surface) {
-      gint scale = gdk_window_get_scale_factor (gtk_widget_get_window (GTK_WIDGET (view)));
+      gint scale = gtk_widget_get_scale_factor (GTK_WIDGET (view));
       view->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, scale * FAVICON_SIZE, scale * FAVICON_SIZE);
     }
   }
@@ -2720,6 +2717,14 @@ user_message_received_cb (WebKitWebView     *web_view,
   return FALSE;
 }
 
+static void
+scale_factor_changed_cb (EphyWebView *web_view,
+                         GParamSpec  *pspec,
+                         gpointer     user_data)
+{
+  _ephy_web_view_update_icon (web_view);
+}
+
 /**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
@@ -3842,6 +3847,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "user-message-received",
                     G_CALLBACK (user_message_received_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::scale-factor",
+                    G_CALLBACK (scale_factor_changed_cb),
                     NULL);
 
   g_signal_connect_object (shell, "password-form-focused",

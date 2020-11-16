@@ -136,20 +136,11 @@ sync_favicon (EphyWebView *view,
               GParamSpec  *pspec,
               EphyPageRow *self)
 {
-  g_autoptr (GdkPixbuf) pixbuf = NULL;
+  GdkPixbuf *pixbuf = ephy_web_view_get_icon (view);
 
-  if (ephy_web_view_get_icon (view))
-    pixbuf = gdk_pixbuf_copy (ephy_web_view_get_icon (view));
-
-  if (pixbuf) {
-    cairo_surface_t *surface;
-
-    surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
-                                                    0,
-                                                    gtk_widget_get_window (GTK_WIDGET (view)));
-    gtk_image_set_from_surface (GTK_IMAGE (self->icon), surface);
-    cairo_surface_destroy (surface);
-  } else {
+  if (pixbuf)
+    gtk_image_set_from_gicon (GTK_IMAGE (self->icon), G_ICON (pixbuf), GTK_ICON_SIZE_MENU);
+  else {
     const char *favicon_name = ephy_get_fallback_favicon_name (ephy_web_view_get_display_address (view), EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
 
     gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
