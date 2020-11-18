@@ -261,10 +261,10 @@ on_address_entry_text_changed_cb (GObject    *instance,
   /* Address in invalid. */
   if (!validate_search_engine_address (gtk_entry_get_text (address_entry), &validation_message)) {
     set_entry_as_invalid (address_entry, validation_message);
-    row_data->invalid_fields |= SEARCH_ENGINE_NAME_FIELD;
+    row_data->invalid_fields |= SEARCH_ENGINE_ADDRESS_FIELD;
   } else { /* Address in valid. */
     set_entry_as_valid (address_entry);
-    row_data->invalid_fields &= ~SEARCH_ENGINE_NAME_FIELD;
+    row_data->invalid_fields &= ~SEARCH_ENGINE_ADDRESS_FIELD;
   }
 }
 
