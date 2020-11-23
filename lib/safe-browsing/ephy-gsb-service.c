@@ -141,7 +141,12 @@ ephy_gsb_service_schedule_update (EphyGSBService *self)
   gint64 interval;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
-  g_assert (ephy_gsb_storage_is_operable (self->storage));
+
+  if (!ephy_gsb_storage_is_operable (self->storage)) {
+    self->source_id = 0;
+    LOG ("Local GSB database is broken, cannot schedule update");
+    return;
+  }
 
   /* This function should only be called when self->next_list_updates_time is
    * greater than CURRENT_TIME. However, asserting (self->next_list_updates_time
@@ -178,7 +183,11 @@ ephy_gsb_service_update_thread (GTask          *task,
   char *body;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
-  g_assert (ephy_gsb_storage_is_operable (self->storage));
+
+  if (!ephy_gsb_storage_is_operable (self->storage)) {
+    LOG ("Local GSB database is broken, cannot update it");
+    goto out;
+  }
 
   /* Set up a default next update time in case of failure or non-existent
    * minimum wait duration.
