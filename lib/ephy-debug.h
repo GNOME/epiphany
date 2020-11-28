@@ -23,23 +23,13 @@
 #include <glib.h>
 
 G_BEGIN_DECLS
-
-#if DEVELOPER_MODE
 #define LOG(msg, args...) G_STMT_START { \
     g_autofree char *ephy_log_file_basename = g_path_get_basename (__FILE__); \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "[ %s ] " msg, ephy_log_file_basename, ## args); \
   } G_STMT_END
-#else
-#define LOG(...) G_STMT_START { } G_STMT_END
-#endif
 
-#if DEVELOPER_MODE
 #define START_PROFILER(name)	ephy_profiler_start (name, __FILE__);
 #define STOP_PROFILER(name)   ephy_profiler_stop (name);
-#else
-#define START_PROFILER(name)
-#define STOP_PROFILER(name)
-#endif
 
 typedef struct
 {
@@ -50,13 +40,9 @@ typedef struct
 
 void		ephy_debug_init		(void);
 
-#if DEVELOPER_MODE
-
 void		ephy_profiler_start	(const char *name,
 					 const char *module);
 
 void		ephy_profiler_stop	(const char *name);
-
-#endif
 
 G_END_DECLS

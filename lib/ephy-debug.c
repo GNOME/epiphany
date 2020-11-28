@@ -39,7 +39,6 @@
  * analyze modules. Refer to doc/debugging.txt for more information.
  */
 
-#if DEVELOPER_MODE
 static const char *ephy_debug_break = NULL;
 static GHashTable *ephy_profilers_hash = NULL;
 static char **ephy_profile_modules;
@@ -272,12 +271,3 @@ ephy_debug_init (void)
   ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
   g_log_set_default_handler (trap_handler, NULL);
 }
-
-#else
-
-void
-ephy_debug_init (void)
-{
-}
-
-#endif
