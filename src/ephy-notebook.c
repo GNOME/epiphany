@@ -1137,14 +1137,18 @@ ephy_notebook_tab_set_pinned (EphyNotebook *notebook,
                               gboolean      is_pinned)
 {
   GtkWidget *tab_label;
+  int last_pinned_tab;
   gboolean expanded;
 
   gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), embed, !is_pinned);
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), embed);
+
+  /* We have to compute the last pinned tab *before* we pin/unpin this tab. */
+  last_pinned_tab = get_last_pinned_tab_pos (notebook);
   ephy_tab_label_set_pinned (tab_label, is_pinned);
 
   if (is_pinned) {
-    gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), embed, 0);
+    gtk_notebook_reorder_child (GTK_NOTEBOOK (notebook), embed, last_pinned_tab != -1 ? last_pinned_tab + 1 : 0);
     expanded = FALSE;
   } else {
     expanded = expand_tabs_bar ();
