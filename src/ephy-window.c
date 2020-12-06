@@ -2287,13 +2287,15 @@ decide_navigation (EphyWindow               *window,
     }
 
     service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
-    ephy_gsb_service_verify_url (service, request_uri,
-                                 (GAsyncReadyCallback)verify_url_cb,
-                                 /* Note: this refs the policy decision, so we can complete it asynchronously. */
-                                 verify_url_async_data_new (window, web_view,
-                                                            decision, decision_type,
-                                                            request_uri));
-    return TRUE;
+    if (service) {
+      ephy_gsb_service_verify_url (service, request_uri,
+                                   (GAsyncReadyCallback)verify_url_cb,
+                                   /* Note: this refs the policy decision, so we can complete it asynchronously. */
+                                   verify_url_async_data_new (window, web_view,
+                                                              decision, decision_type,
+                                                              request_uri));
+      return TRUE;
+    }
   }
 
   return decide_navigation_policy (web_view, decision, decision_type, window);
