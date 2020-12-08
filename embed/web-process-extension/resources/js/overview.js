@@ -29,7 +29,7 @@ Ephy.Overview = class Overview
         let anchors = document.getElementsByTagName('a');
         for (let i = 0; i < anchors.length; i++) {
             let anchor = anchors[i];
-            if (anchor.className != 'overview-item')
+            if (anchor.className !== 'overview-item')
                 continue;
 
             let item = new Ephy.Overview.Item(anchor);
@@ -67,7 +67,7 @@ Ephy.Overview = class Overview
 
     _onKeyPress(event)
     {
-        if (event.which != 127)
+        if (event.which !== 127)
             return;
 
         let item = document.activeElement;
@@ -99,7 +99,7 @@ Ephy.Overview = class Overview
         let anchors = document.getElementsByTagName('a');
 
         for (let anchor of anchors) {
-            if (anchor.href == '')
+            if (anchor.href === '')
                 document.removeChild(anchor);
         }
     }
@@ -111,7 +111,7 @@ Ephy.Overview = class Overview
         setTimeout(() => {
             item.parentNode.removeChild(item);
             for (let i = 0; i < this._items.length; i++) {
-                if (this._items[i].url() == item.href) {
+                if (this._items[i].url() === item.href) {
                     this._items.splice(i, 1);
                     break;
                 }
@@ -175,14 +175,14 @@ Ephy.Overview = class Overview
 
     _onThumbnailChanged(url, path)
     {
-        if (this._items.length == 0) {
+        if (this._items.length === 0) {
             this._pendingThumbnailChanges.push({ url: url, path: path });
             return;
         }
 
         for (let i = 0; i < this._items.length; i++) {
             let item = this._items[i];
-            if (item.url() == url) {
+            if (item.url() === url) {
                 item.setThumbnailPath(path);
                 return;
             }
@@ -191,14 +191,14 @@ Ephy.Overview = class Overview
 
     _onTitleChanged(url, title)
     {
-        if (this._items.length == 0) {
+        if (this._items.length === 0) {
             this._pendingTitleChanges.push({ url: url, title: title });
             return;
         }
 
         for (let i = 0; i < this._items.length; i++) {
             let item = this._items[i];
-            if (item.url() == url) {
+            if (item.url() === url) {
                 item.setTitle(title);
                 return;
             }

@@ -9,7 +9,7 @@ Ephy.getAppleMobileWebAppCapable = function()
     for (let i = 0; i < metas.length; i++) {
         let meta = metas[i];
 
-        if (meta.name == 'apple-mobile-web-app-capable' && meta.getAttribute('content') == 'yes')
+        if (meta.name === 'apple-mobile-web-app-capable' && meta.getAttribute('content') === 'yes')
             return true;
     }
 
@@ -22,7 +22,7 @@ Ephy.getWebAppTitle = function()
 
     for (let i = 0; i < metas.length; i++) {
         const meta = metas[i];
-        if (meta.name == 'application-name')
+        if (meta.name === 'application-name')
             return meta.content;
 
         if (meta.name === 'apple-mobile-web-app-title')
@@ -30,7 +30,7 @@ Ephy.getWebAppTitle = function()
 
         // og:site_name is read from the property attribute (standard), but is
         // commonly seen on the web in the name attribute. Both are supported.
-        if (meta.getAttribute('property') == 'og:site_name' || meta.name == 'og:site_name')
+        if (meta.getAttribute('property') === 'og:site_name' || meta.name === 'og:site_name')
             return meta.content;
     }
 
@@ -62,16 +62,16 @@ Ephy.getWebAppIcon = function(baseURL)
     for (let i = 0; i < links.length; i++) {
         const link = links[i];
 
-        if (link.rel == 'icon' || link.rel == 'shortcut icon' || link.rel == 'icon shortcut' || link.rel == 'shortcut-icon' || link.rel == 'apple-touch-icon' || link.rel == 'apple-touch-icon-precomposed') {
+        if (link.rel === 'icon' || link.rel === 'shortcut icon' || link.rel === 'icon shortcut' || link.rel === 'shortcut-icon' || link.rel === 'apple-touch-icon' || link.rel === 'apple-touch-icon-precomposed') {
             const sizes = link.getAttribute('sizes');
 
             if (!sizes) {
-                if (largestIconSize == 0 && (!htmlIconURL || link.rel == 'apple-touch-icon' || link.rel == 'apple-touch-icon-precomposed'))
+                if (largestIconSize === 0 && (!htmlIconURL || link.rel === 'apple-touch-icon' || link.rel === 'apple-touch-icon-precomposed'))
                   htmlIconURL = link.href;
                 continue;
             }
 
-            if (sizes == 'any') {
+            if (sizes === 'any') {
                 // "any" means a vector, and thus it will always be the largest icon.
                 htmlIconURL = link.href;
                 break;
@@ -82,7 +82,7 @@ Ephy.getWebAppIcon = function(baseURL)
                 const size = sizesList[j].toLowerCase().split('x');
 
                 // Only accept square icons.
-                if (size.length != 2 || size[0] != size[1])
+                if (size.length !== 2 || size[0] !== size[1])
                     continue;
 
                 // Only accept icons of 96 px (smallest GNOME HIG app icon) or larger.
@@ -96,17 +96,17 @@ Ephy.getWebAppIcon = function(baseURL)
         }
     }
 
-    if (largestIconSize != 0 && htmlIconURL)
+    if (largestIconSize !== 0 && htmlIconURL)
         return { 'url' : new URL(htmlIconURL, baseURL).href, 'color' : null };
 
     for (let i = 0; i < metas.length; i++) {
         const meta = metas[i];
 
-        if (meta.name == 'msapplication-TileImage')
+        if (meta.name === 'msapplication-TileImage')
             msIconURL = meta.content;
-        else if (meta.name == 'msapplication-TileColor')
+        else if (meta.name === 'msapplication-TileColor')
             iconColor = meta.content;
-        else if (meta.getAttribute('property') == 'og:image' || meta.getAttribute('itemprop') == 'image')
+        else if (meta.getAttribute('property') === 'og:image' || meta.getAttribute('itemprop') === 'image')
             ogpIcon = meta.content;
     }
 
@@ -167,12 +167,12 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
     _onKeyDown(event)
     {
-        if (event.key == 'Escape') {
+        if (event.key === 'Escape') {
             this._removeMenu();
             return;
         }
 
-        if (event.key != 'ArrowDown' && event.key != 'ArrowUp')
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
             return;
 
         let container = document.getElementById('ephy-user-choices-container');
@@ -183,10 +183,10 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
         let newSelect = null;
         if (this._selected)
-            newSelect = event.key != 'ArrowUp' ? this._selected.previousSibling : this._selected.nextSibling;
+            newSelect = event.key !== 'ArrowUp' ? this._selected.previousSibling : this._selected.nextSibling;
 
         if (!newSelect)
-            newSelect = event.key != 'ArrowUp' ? container.firstElementChild.lastElementChild : container.firstElementChild.firstElementChild;
+            newSelect = event.key !== 'ArrowUp' ? container.firstElementChild.lastElementChild : container.firstElementChild.firstElementChild;
 
         if (newSelect) {
             this._selected = newSelect;
@@ -242,7 +242,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             li.tabindex = -1;
             ul.appendChild(li);
 
-            if (user == this._userElement.value)
+            if (user === this._userElement.value)
                 this._selected = li;
 
             let anchor = document.createElement('a');
@@ -304,7 +304,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
     let formManager = null;
     for (let i = 0; i < Ephy.formManagers.length; i++) {
         let manager = Ephy.formManagers[i];
-        if (manager.frameID() == frameID && manager.form() == form) {
+        if (manager.frameID() === frameID && manager.form() === form) {
             formManager = manager;
             break;
         }
@@ -538,12 +538,12 @@ Ephy.FormManager = class FormManager
             return;
 
         let permission = Ephy.permissionsManager.permission(Ephy.PermissionType.SAVE_PASSWORD, formAuth.origin);
-        if (permission == Ephy.Permission.DENY) {
+        if (permission === Ephy.Permission.DENY) {
             Ephy.log('User/password storage permission previously denied. Not asking about storing.');
             return;
         }
 
-        if (permission == Ephy.Permission.UNDECIDED && Ephy.isWebApplication())
+        if (permission === Ephy.Permission.UNDECIDED && Ephy.isWebApplication())
             permission = Ephy.Permission.PERMIT;
 
         Ephy.passwordManager.query(
@@ -553,12 +553,12 @@ Ephy.FormManager = class FormManager
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
                 if (authInfo) {
-                    if (authInfo.username == formAuth.username && authInfo.password == formAuth.password) {
+                    if (authInfo.username === formAuth.username && authInfo.password === formAuth.password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
                     }
 
-                    if (permission == Ephy.Permission.PERMIT) {
+                    if (permission === Ephy.Permission.PERMIT) {
                         Ephy.log('User/password not yet stored. Storing.');
                         Ephy.passwordManager.save(formAuth.origin,
                                                   formAuth.targetOrigin,
@@ -581,7 +581,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo == null,
+                                                 authInfo === null,
                                                  this._pageID);
             }
         );
@@ -606,12 +606,12 @@ Ephy.FormManager = class FormManager
         let isFormActionInsecure = false;
         if (this._form.action) {
             let url = new URL(this._form.action);
-            if (url.protocol == 'http:') {
+            if (url.protocol === 'http:') {
                 // We trust localhost to be local since glib!616.
                 let parts = url.hostname.split('.');
                 if (parts.length > 0) {
                     let tld = parts[parts.length - 1];
-                    isFormActionInsecure = tld != "127.0.0.1" && tld != "::1" && tld != "localhost";
+                    isFormActionInsecure = tld !== "127.0.0.1" && tld !== "::1" && tld !== "localhost";
                 }
             }
         }
@@ -629,7 +629,7 @@ Ephy.FormManager = class FormManager
                 // Old password, New password, Confirm new password.
                 // Forms with more than 3 password fields are unlikely,
                 // and we don't know how to process them, so reject them
-                if (passwordFields.length == 3)
+                if (passwordFields.length === 3)
                     return null;
                 passwordFields.push({ 'element' : element, 'index' : i });
             }
@@ -664,41 +664,41 @@ Ephy.FormManager = class FormManager
         // submits login data, because otherwise all the fields are empty. In that
         // case just pick the first field.
         let passwordNodeIndex = 0;
-        if (!forAutofill && passwordNodes.length != 1) {
+        if (!forAutofill && passwordNodes.length !== 1) {
             // Get values of all password fields.
             let passwords = [];
             for (let i = passwordNodes.length - 1; i >= 0; i--)
                 passwords[i] = passwordNodes[i].element.value;
 
-            if (passwordNodes.length == 2) {
+            if (passwordNodes.length === 2) {
                 // If there are two password fields, assume that the form has either
                 // Password and Confirm password fields, or Old password and New password.
                 // That can be guessed by comparing values in the fields. If they are
                 // different, we assume that the second password is "new" and use it.
                 // If they match, then just take the first field.
-                if (passwords[0] == passwords[1]) {
+                if (passwords[0] === passwords[1]) {
                     // Password / Confirm password.
                     passwordNodeIndex = 0;
                 } else {
                     // Old password / New password.
                     passwordNodeIndex = 1;
                 }
-            } else if (passwordNodes.length == 3) {
+            } else if (passwordNodes.length === 3) {
                 // This is probably a complete Old password, New password, Confirm
                 // new password case. Here we assume that if two fields have the same
                 // value, then it's the new password and we should take it. A special
                 // case is when all 3 passwords are different. We don't know what to
                 // do in this case, so just reject the form.
-                if (passwords[0] == passwords[1] && passwords[1] == passwords[2]) {
+                if (passwords[0] === passwords[1] && passwords[1] === passwords[2]) {
                     // All values are same.
                     passwordNodeIndex = 0;
-                } else if (passwords[0] == passwords[1]) {
+                } else if (passwords[0] === passwords[1]) {
                     // New password / Confirm new password / Old password.
                     passwordNodeIndex = 0;
-                } else if (passwords[0] == passwords[2]) {
+                } else if (passwords[0] === passwords[2]) {
                     // New password / Old password / Confirm new password.
                     passwordNodeIndex = 0;
-                } else if (passwords[1] == passwords[2]) {
+                } else if (passwords[1] === passwords[2]) {
                     // Old password / New password / Confirm new password.
                     passwordNodeIndex = 1;
                 } else {
@@ -720,7 +720,7 @@ Ephy.FormManager = class FormManager
 
     _generateFormAuth(forAutofill) {
         let formAuth = this._findFormAuthElements(forAutofill);
-        if (formAuth == null)
+        if (formAuth === null)
             return null;
 
         formAuth.origin = new URL(String(window.location)).origin;
