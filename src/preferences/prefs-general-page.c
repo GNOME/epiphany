@@ -72,7 +72,6 @@ struct _PrefsGeneralPage {
 
   /* Search Engines */
   GtkWidget *search_engine_group;
-  GtkWidget *search_engine_listbox;
 
   /* Session */
   GtkWidget *session_box;
@@ -1279,18 +1278,14 @@ setup_general_page (PrefsGeneralPage *general_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   init_lang_listbox (general_page);
-
-  /* ======================================================================== */
-  /* ========================== Search engines ============================== */
-  /* ======================================================================== */
-  general_page->search_engine_listbox = ephy_search_engine_list_box_new ();
-  gtk_container_add (GTK_CONTAINER (general_page->search_engine_group), general_page->search_engine_listbox);
 }
 
 static void
 prefs_general_page_init (PrefsGeneralPage *general_page)
 {
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
+  g_type_ensure (EPHY_TYPE_SEARCH_ENGINE_LIST_BOX);
 
   gtk_widget_init_template (GTK_WIDGET (general_page));
 
