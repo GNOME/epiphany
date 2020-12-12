@@ -740,7 +740,6 @@ ephy_search_engine_list_box_init (EphySearchEngineListBox *self)
   g_strfreev (names);
 
   row_add_search_engine = gtk_list_box_row_new ();
-  gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row_add_search_engine), FALSE);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row_add_search_engine), TRUE);
   gtk_widget_set_size_request (row_add_search_engine, -1, 50);
   gtk_list_box_prepend (GTK_LIST_BOX (self), row_add_search_engine);
@@ -757,6 +756,8 @@ ephy_search_engine_list_box_init (EphySearchEngineListBox *self)
 
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self), sort_search_engine_list_box_cb, NULL, NULL);
   gtk_list_box_invalidate_sort (GTK_LIST_BOX (self));
+
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (self), GTK_SELECTION_NONE);
 
   list_box_length = get_list_box_length (GTK_WIDGET (self));
   /* The list box should have at least one "Add search engine" row and one search engine (the default one). */
