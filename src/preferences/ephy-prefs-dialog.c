@@ -27,6 +27,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-gui.h"
 #include "ephy-prefs-dialog.h"
+#include "ephy-settings.h"
 #include "passwords-view.h"
 #include "prefs-general-page.h"
 
@@ -60,6 +61,7 @@ on_delete_event (EphyPrefsDialog *prefs_dialog)
 {
   prefs_general_page_on_pd_delete_event (prefs_dialog->general_page);
   gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
+  g_settings_apply (EPHY_SETTINGS_MAIN);
 }
 
 static void
@@ -131,4 +133,6 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
   gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
+
+  g_settings_delay (EPHY_SETTINGS_MAIN);
 }
