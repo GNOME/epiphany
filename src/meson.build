@@ -51,6 +51,7 @@ libephymain_sources = [
   'preferences/ephy-prefs-dialog.c',
   'preferences/passwords-view.c',
   'preferences/ephy-search-engine-listbox.c',
+  'preferences/ephy-search-engine-row.c',
   'preferences/prefs-appearance-page.c',
   'preferences/prefs-general-page.c',
   'preferences/prefs-privacy-page.c',

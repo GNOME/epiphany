@@ -23,12 +23,17 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#define EMPTY_NEW_SEARCH_ENGINE_NAME (_("New search engine"))
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_ENGINE_LIST_BOX (ephy_search_engine_list_box_get_type())
 
 G_DECLARE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, EPHY, SEARCH_ENGINE_LIST_BOX, GtkListBox)
 
-GtkWidget *ephy_search_engine_list_box_new (void);
+GtkWidget *ephy_search_engine_list_box_new                (void);
+
+void       ephy_search_engine_list_box_set_can_add_engine (EphySearchEngineListBox *self,
+                                                           gboolean                 can_add_engine);
 
 G_END_DECLS

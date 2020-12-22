@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <template class="EphySearchEngineRow" parent="HdyExpanderRow">
+    <property name="visible">True</property>
+    <child type="prefix">
+      <object class="GtkRadioButton" id="radio_button">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <property name="halign">center</property>
+        <property name="tooltip-text" translatable="yes">Selects the default search engine</property>
+        <signal name="clicked" handler="on_radio_button_clicked_cb" object="EphySearchEngineRow" swapped="yes"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBoxRow">
+        <property name="activatable">False</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <!-- Name field -->
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Name</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="name_entry">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <!-- Address field -->
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Address</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="address_entry">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+
+                <property name="placeholder-text">https://www.example.com/search?q=%s</property>
+                <property name="input-purpose">url</property>
+                <property name="secondary-icon-sensitive">False</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <!-- Bang field -->
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Shortcut</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="bang_entry">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+
+                <property name="placeholder-text">!e</property>
+                <property name="input-purpose">url</property>
+                <property name="secondary-icon-sensitive">False</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <!-- Search engine address insight -->
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+
+                <property name="label" translatable="yes">To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s.</property>
+                <property name="xalign">0</property>
+                <property name="wrap">True</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+                <!-- Span the whole parent grid width -->
+                <property name="width">2</property>
+              </packing>
+            </child>
+
+            <child>
+              <object class="GtkButton" id="remove_button">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <property name="hexpand">False</property>
+
+                <property name="label" translatable="yes">R_emove Search Engine</property>
+                <property name="use-underline">True</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+                <signal name="clicked" handler="on_remove_button_clicked_cb" object="EphySearchEngineRow" swapped="yes"/>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+                <!-- Span the whole parent grid width -->
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

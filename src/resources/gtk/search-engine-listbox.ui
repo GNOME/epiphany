@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <template class="EphySearchEngineListBox" parent="GtkListBox">
+    <property name="visible">True</property>
+    <property name="selection-mode">none</property>
+    <signal name="row-activated" handler="on_add_search_engine_row_clicked_cb"/>
+    <child>
+      <object class="GtkListBoxRow" id="add_search_engine_row">
+        <property name="visible">True</property>
+        <property name="activatable">True</property>
+        <property name="height-request">50</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">A_dd Search Engine…</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <style>
+      <class name="content"/>
+    </style>
+  </template>
+</interface>
