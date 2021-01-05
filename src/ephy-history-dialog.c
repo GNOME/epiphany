@@ -954,6 +954,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
   self->cancellable = g_cancellable_new ();
   self->urls = NULL;
   self->sorter_source = 0;
+  self->is_selection_empty = TRUE;
 
   hdy_search_bar_connect_entry (HDY_SEARCH_BAR (self->search_bar), GTK_ENTRY (self->search_entry));
 
