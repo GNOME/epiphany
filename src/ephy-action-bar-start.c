@@ -383,6 +383,8 @@ navigation_button_release_event_cb (GtkButton *button,
                                            "navigation-forward-new-tab");
       g_action_activate (action, NULL);
     }
+
+    /* Don't propagate the event to avoid other middle-click actions. */
     return GDK_EVENT_STOP;
   }
 
@@ -396,9 +398,13 @@ navigation_button_release_event_cb (GtkButton *button,
                                            "navigation-forward");
       g_action_activate (action, NULL);
     }
-    return GDK_EVENT_STOP;
+
+    /* Propagate the event to allow the button to correctly reset its internal
+     * state. */
+    return GDK_EVENT_PROPAGATE;
   }
 
+  /* Propagate other unhandled events. */
   return GDK_EVENT_PROPAGATE;
 }
 
