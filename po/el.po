@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-27 18:14+0000\n"
-"PO-Revision-Date: 2020-09-08 00:00+0300\n"
+"POT-Creation-Date: 2020-12-05 19:35+0000\n"
+"PO-Revision-Date: 2021-01-06 12:17+0200\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Ελληνικά <>\n"
 "Language: el\n"
@@ -75,13 +75,13 @@ msgstr "Ο Ιστός GNOME  αναφέρεται συχνά από το κωδ�
 msgid "The GNOME web site displayed in GNOME Web"
 msgstr "Ο ιστότοπος του GNOME όπως εμφανίζεται στον Ιστό GNOME"
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:37
+#: data/org.gnome.Epiphany.appdata.xml.in.in:36
 msgid "The GNOME Project"
 msgstr "Το έργο GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:992
+#: src/ephy-main.c:406 src/window-commands.c:1007
 msgid "Web"
 msgstr "Ιστός"
 
@@ -98,11 +98,11 @@ msgstr "Περιηγηθείτε στον Ιστό"
 msgid "web;browser;internet;"
 msgstr "ιστός;περιηγητής;διαδίκτυο;web;browser;internet;"
 
-#: data/org.gnome.Epiphany.desktop.in.in:19
+#: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
 msgstr "Νέο παράθυρο"
 
-#: data/org.gnome.Epiphany.desktop.in.in:23
+#: data/org.gnome.Epiphany.desktop.in.in:25
 msgid "New Incognito Window"
 msgstr "Νέο παράθυρο ανώνυμης περιήγησης"
 
@@ -399,7 +399,7 @@ msgstr ""
 "κατανοεί το WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:351
+#: src/resources/gtk/prefs-general-page.ui:302
 msgid "Languages"
 msgstr "Γλώσσες"
 
@@ -489,29 +489,19 @@ msgstr ""
 "λειτουργεί μέσω του API Ασφαλούς περιήγησης Google v4."
 
 #: data/org.gnome.epiphany.gschema.xml:191
-msgid "Google Safe Browsing API key"
-msgstr "Κλειδί API για ασφαλή περιήγηση Google"
-
-#: data/org.gnome.epiphany.gschema.xml:192
-msgid "The API key used to access the Google Safe Browsing API v4."
-msgstr ""
-"Το κλειδί API που χρησιμοποιήθηκε για την πρόσβαση στο API Ασφαλούς "
-"περιήγησης Google v4."
-
-#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Ενεργοποίηση Έξυπνης Πρόληψης Παρακολούθησης (ITP)"
 
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Αν θα ενεργοποιήσετε την Έξυπνη Πρόληψη Παρακολούθησης."
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Allow websites to store local website data"
 msgstr ""
 "Να επιτρέπεται στους ιστότοπους να αποθηκεύουν τοπικά δεδομένα ιστότοπου"
 
-#: data/org.gnome.epiphany.gschema.xml:202
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -520,15 +510,15 @@ msgstr ""
 "δεδομένα και βάσεις δεδομένων IndexedDB. Η απενεργοποίηση αυτού θα διακόψει "
 "πολλούς ιστότοπους."
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr "Προεπιλεγμένο επίπεδο εστίασης για νέες σελίδες"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr "Ενεργοποίηση της αυτόματης αναζήτησης"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -540,11 +530,11 @@ msgstr ""
 "ρύθμιση είναι απενεργοποιημένη, όλα θα φορτωθούν ως διεύθυνση URL εκτός αν "
 "μια μηχανή αναζήτησης είναι ρητά επιλεγμένη από το αναπτυσσόμενο μενού."
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "Ενεργοποίηση χειρονομιών ποντικιού"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -553,27 +543,27 @@ msgstr ""
 "είναι βασισμένες στην συμπεριφορά του Opera και ενεργοποιούνται "
 "χρησιμοποιώντας το μεσαίο κουμπί ποντικιού + χειρονομία."
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "Τελευταίος κατάλογος μεταφόρτωσης"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "Να παρακολουθείται ο τελευταίος κατάλογος μεταφόρτωσης"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "Τελευταίος κατάλογος λήψης"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr "Να παρακολουθείται ο τελευταίος κατάλογος λήψης"
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr "Πολιτική επιτάχυνσης υλικού"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -590,49 +580,59 @@ msgstr ""
 "η επιτάχυνση υλικού θα χρησιμοποιηθεί μόνο όταν απαιτείται για την εμφάνιση "
 "τρισδιάστατων μετασχηματισμών."
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr "Να γίνεται πάντα ερώτηση για τον κατάλογο λήψης"
 
-#: data/org.gnome.epiphany.gschema.xml:236
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Αν θα εμφανίζεται ο διάλογος επιλογής καταλόγου σε κάθε λήψη."
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Enable immediately switch to new open tab"
 msgstr "Ενεργοποίηση άμεσης μετάβαση σε νέα ανοιχτή καρτέλα"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Αν θα μεταβείτε αυτόματα σε νέα ανοιχτή καρτέλα."
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:242
 msgid "Web application additional URLs"
 msgstr "Επιπρόσθετα URL εφαρμογής ιστού"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Η λίστα των URL που θα ανοίγει από την εφαρμογή ιστού"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "WebApp is mobile capable"
 msgstr "Η εφαρμογή ιστού είναι κατάλληλη για κινητά"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Whether to show buttons for navigation."
 msgstr "Αν θα εμφανίζονται κουμπιά για πλοήγηση."
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Run in background"
 msgstr "Εκτέλεση στο παρασκήνιο"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
 "Εάν είναι ενεργποιημένο, η εφαρμογή συνεχίζει να εκτελείται στο παρασκήνιο "
 "μετά το κλείσιμο του παραθύρου."
+
+#: data/org.gnome.epiphany.gschema.xml:257
+msgid "WebApp is system-wide"
+msgstr "Το WebApp είναι σε όλο το σύστημα"
+
+#: data/org.gnome.epiphany.gschema.xml:258
+msgid "If enabled, application cannot be edited or removed."
+msgstr ""
+"Εάν είναι ενεργοποιημένη, δεν είναι δυνατή η επεξεργασία ή η κατάργηση της "
+"εφαρμογής."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "The downloads folder"
@@ -1025,7 +1025,7 @@ msgstr "Έκδοση %s"
 msgid "About Web"
 msgstr "Περί Ιστός"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:994
+#: embed/ephy-about-handler.c:194 src/window-commands.c:1009
 msgid "Epiphany Technology Preview"
 msgstr "Προεπισκόπηση τεχνολογίας του Epiphany"
 
@@ -1035,7 +1035,7 @@ msgstr "Μια απλή, καθαρή, και όμορφη εμφάνιση το
 
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:258 embed/ephy-about-handler.c:259
-#: embed/ephy-about-handler.c:287 embed/ephy-about-handler.c:302
+#: embed/ephy-about-handler.c:290 embed/ephy-about-handler.c:305
 msgid "Applications"
 msgstr "Εφαρμογές"
 
@@ -1043,16 +1043,16 @@ msgstr "Εφαρμογές"
 msgid "List of installed web applications"
 msgstr "Εμφάνιση λίστας διαδικτυακών εφαρμογών"
 
-#: embed/ephy-about-handler.c:273
+#: embed/ephy-about-handler.c:276
 msgid "Delete"
 msgstr "Διαγραφή"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:275
+#: embed/ephy-about-handler.c:278
 msgid "Installed on:"
 msgstr "Εγκαταστάθηκε:"
 
-#: embed/ephy-about-handler.c:302
+#: embed/ephy-about-handler.c:305
 msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
@@ -1061,25 +1061,25 @@ msgstr ""
 "<b>Εγκατάσταση της τοποθεσίας ως εφαρμογή Ιστού...</b> στο μενού σελίδας."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:394
+#: embed/ephy-about-handler.c:397
 msgid "Welcome to Web"
 msgstr "Καλώς ήλθατε στον Ιστό"
 
-#: embed/ephy-about-handler.c:394
+#: embed/ephy-about-handler.c:397
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Ξεκινήστε την περιήγηση και οι πιο δημοφιλείς ιστοσελίδες θα εμφανιστούν εδώ."
 
-#: embed/ephy-about-handler.c:425
-#: embed/web-process-extension/resources/js/overview.js:116
+#: embed/ephy-about-handler.c:428
+#: embed/web-process-extension/resources/js/overview.js:146
 msgid "Remove from overview"
 msgstr "Απομάκρυνση από την επισκόπηση"
 
-#: embed/ephy-about-handler.c:505 embed/ephy-about-handler.c:506
+#: embed/ephy-about-handler.c:500 embed/ephy-about-handler.c:501
 msgid "Private Browsing"
 msgstr "Ιδιωτική περιήγηση"
 
-#: embed/ephy-about-handler.c:507
+#: embed/ephy-about-handler.c:502
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1090,14 +1090,14 @@ msgstr ""
 "πληροφορίες θα διαγραφούν όταν κλείσετε το παράθυρο. Τα ληφθέντα αρχεία θα "
 "διατηρηθούν."
 
-#: embed/ephy-about-handler.c:511
+#: embed/ephy-about-handler.c:506
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Η κατάσταση ανώνυμης περιήγησης, αποκρύπτει την δραστηριότητα μόνο από άτομα "
 "που χρησιμοποιούν αυτόν τον υπολογιστή."
 
-#: embed/ephy-about-handler.c:513
+#: embed/ephy-about-handler.c:508
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1124,12 +1124,12 @@ msgid "Download requested"
 msgstr "Αιτήθηκε λήψη"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/resources/gtk/firefox-sync-dialog.ui:171
 #: src/resources/gtk/history-dialog.ui:96
-#: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
-#: src/window-commands.c:807 src/window-commands.c:1874
+#: src/window-commands.c:807 src/window-commands.c:1889
 msgid "_Cancel"
 msgstr "Α_κύρωση"
 
@@ -1159,21 +1159,21 @@ msgid "Save file"
 msgstr "Αποθήκευση αρχείου"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Πιέστε το πλήκτρο %s για να βγείτε από την πλήρη οθόνη"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:794
+#: embed/ephy-embed.c:787
 msgid "Web is being controlled by automation."
 msgstr "O Ιστός ελέγχεται από αυτοματοποίηση."
 
@@ -1535,38 +1535,38 @@ msgstr "Εύρεση προηγούμενης φοράς που εμφανίσθ
 msgid "Find next occurrence of the search string"
 msgstr "Εύρεση επόμενης φοράς που εμφανίσθηκε η συβολοσειρά αναζήτησης"
 
-#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:267 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "Το %s δεν είναι έγκυρο URI"
 
-#: embed/ephy-web-view.c:183 src/window-commands.c:1336
+#: embed/ephy-web-view.c:185 src/window-commands.c:1351
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: embed/ephy-web-view.c:358
+#: embed/ephy-web-view.c:364
 msgid "Not No_w"
 msgstr "Όχι τώ_ρα"
 
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:365
 msgid "_Never Save"
 msgstr "Να μην αποθηκεύονται _ποτέ"
 
-#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
+#: embed/ephy-web-view.c:366 lib/widgets/ephy-file-chooser.c:175
+#: src/resources/gtk/firefox-sync-dialog.ui:180 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Αποθήκευση"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:367
+#: embed/ephy-web-view.c:373
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Θέλετε να αποθηκεύσετε το συνθηματικό για «%s»;"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:609
+#: embed/ephy-web-view.c:612
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1574,82 +1574,82 @@ msgstr ""
 "Προειδοποίηση: αυτή η φόρμα δεν είναι ασφαλής. Εάν πληκτρολογήσετε το "
 "συνθηματικό σας, δεν θα παραμείνει ιδιωτικό."
 
-#: embed/ephy-web-view.c:817
+#: embed/ephy-web-view.c:820
 msgid "Web process crashed"
 msgstr "Κατέρρευσε η διεργασία της εφαρμογής Ιστός"
 
-#: embed/ephy-web-view.c:820
+#: embed/ephy-web-view.c:823
 msgid "Web process terminated due to exceeding memory limit"
 msgstr ""
 "Η διεργασία της εφαρμογής Ιστού τερματίστηκε εξαιτίας της υπέρβασης του "
 "ορίου μνήμης"
 
-#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: embed/ephy-web-view.c:1023 embed/ephy-web-view.c:1144
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Να μην επιτρέπεται"
 
-#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1024 embed/ephy-web-view.c:1145
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Να επιτρέπεται"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1034
+#: embed/ephy-web-view.c:1037
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr ""
 "Η σελίδα σε %s επιθυμεί να εμφανίζει ειδοποιήσεις της επιφάνειας εργασίας."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1039
+#: embed/ephy-web-view.c:1042
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Η σελίδα σε %s επιθυμεί να μάθει την τοποθεσία σας."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1044
+#: embed/ephy-web-view.c:1047
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Η σελίδα σε %s επιθυμεί να χρησιμοποιήσει το μικρόφωνό σας."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1049
+#: embed/ephy-web-view.c:1052
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Η σελίδα σε %s επιθυμεί να χρησιμοποιήσει την δικτυακή κάμερά σας."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1054
+#: embed/ephy-web-view.c:1057
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr ""
 "Η σελίδα σε %s επιθυμεί να χρησιμοποιήσει την κάμερα και το μικρόφωνό σας."
 
-#: embed/ephy-web-view.c:1149
+#: embed/ephy-web-view.c:1152
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr ""
 "Θέλετε να επιτρέψετε στο «%s» να χρησιμοποιεί cookies κατά την περιήγηση στο "
 "«%s»;"
 
-#: embed/ephy-web-view.c:1158
+#: embed/ephy-web-view.c:1161
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "Αυτό θα επιτρέψει στο «%s» να παρακολουθεί τη δραστηριότητά σας."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1336
+#: embed/ephy-web-view.c:1339
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Γίνεται φόρτωση “%s”…"
 
-#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1341 embed/ephy-web-view.c:1347
 msgid "Loading…"
 msgstr "Γίνεται φόρτωση…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1677
+#: embed/ephy-web-view.c:1685
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1657,7 +1657,7 @@ msgstr ""
 "ιστότοπο."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1682
+#: embed/ephy-web-view.c:1690
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1666,13 +1666,13 @@ msgstr ""
 "Ελέγξτε την ημερομηνία στο ημερολόγιο του υπολογιστή σας."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1687
+#: embed/ephy-web-view.c:1695
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Η ταυτότητα αυτού του ιστότοπου δεν έχει εκδοθεί από έναν έμπιστο οργανισμό."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1692
+#: embed/ephy-web-view.c:1700
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1680,7 +1680,7 @@ msgstr ""
 "κατεστραμμένη."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1697
+#: embed/ephy-web-view.c:1705
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1689,7 +1689,7 @@ msgstr ""
 "την εξέδωσε."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1702
+#: embed/ephy-web-view.c:1710
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1698,7 +1698,7 @@ msgstr ""
 "αδύναμη κρυπτογράφηση."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1707
+#: embed/ephy-web-view.c:1715
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1708,24 +1708,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:1778 embed/ephy-web-view.c:1834
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Πρόβλημα κατά τη φόρτωση της σελίδας"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1781
 msgid "Unable to display this website"
 msgstr "Αδύνατη η εμφάνιση της ιστοσελίδας"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1785
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Η ιστοσείδα στην %s δείχνει ότι δεν είναι διαθέσιμη."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1789
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1735,7 +1735,7 @@ msgstr ""
 "λειτουργεί σωστά."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1799
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Το ακριβές σφάλμα ήταν: %s"
@@ -1743,49 +1743,49 @@ msgstr "Το ακριβές σφάλμα ήταν: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
-#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1804 embed/ephy-web-view.c:1857
+#: embed/ephy-web-view.c:1896 src/resources/gtk/page-menu-popover.ui:134
 msgid "Reload"
 msgstr "Επαναφόρτωση"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
-#: embed/ephy-web-view.c:1891
+#: embed/ephy-web-view.c:1807 embed/ephy-web-view.c:1860
+#: embed/ephy-web-view.c:1899
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1837
 msgid "Oops! There may be a problem"
 msgstr "Ώχ! Μπορεί να υπάρχει πρόβλημα"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1841
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Η σελίδα %s μπορεί να προκαλέσει τον αναπάντεχο τερματισμό του περιηγητή."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1848
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Αν αυτό συμβεί ξανά, αναφέρετε το πρόβλημα στους προγραμματιστές %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1877
+#: embed/ephy-web-view.c:1885
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Πρόβλημα εμφάνισης της σελίδας"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1888
 msgid "Oops!"
 msgstr "Ώχ!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1883
+#: embed/ephy-web-view.c:1891
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1794,18 +1794,18 @@ msgstr ""
 "ξανά ή επισκεφθείτε μια διαφορετική σελίδα για να συνεχίσετε."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1925
 #, c-format
 msgid "Security Violation"
 msgstr "Παραβίαση ασφάλειας"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:1928
 msgid "This Connection is Not Secure"
 msgstr "Η σύνδεση δεν είναι ασφαλής"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1924
+#: embed/ephy-web-view.c:1932
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1818,45 +1818,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
-#: embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:1942 embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2082
 msgid "Go Back"
 msgstr "Μετάβαση πίσω"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
-#: embed/ephy-web-view.c:2077
+#: embed/ephy-web-view.c:1945 embed/ephy-web-view.c:2034
+#: embed/ephy-web-view.c:2085
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1948 embed/ephy-web-view.c:2037
 msgid "Accept Risk and Proceed"
 msgstr "Αποδοχή ρίσκου και συνέχεια"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
+#: embed/ephy-web-view.c:1952 embed/ephy-web-view.c:2041
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1974
+#: embed/ephy-web-view.c:1982
 #, c-format
 msgid "Security Warning"
 msgstr "Προειδοποίηση ασφάλειας"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:1985
 msgid "Unsafe website detected!"
 msgstr "Εντοπίστηκε επισφαλής ιστοσελίδα!"
 
-#: embed/ephy-web-view.c:1984
+#: embed/ephy-web-view.c:1992
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1866,7 +1866,7 @@ msgstr ""
 "φαίνεται να περιέχει κακόβουλο κώδικα που θα μπορούσε να ληφθεί από τον "
 "υπολογιστή σας χωρίς τη συγκατάθεσή σας."
 
-#: embed/ephy-web-view.c:1988
+#: embed/ephy-web-view.c:1996
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1876,7 +1876,7 @@ msgstr ""
 "συμπεριλαμβανομένων των ιών και άλλου κακόβουλου κωδικα, και τον τρόπο "
 "προστασίας του υπολογιστή σας στην %s."
 
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2003
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1887,7 +1887,7 @@ msgstr ""
 "η εγκατάσταση λογισμικού ή η αποκάλυψη των προσωπικών σας πληροφοριών (για "
 "παράδειγμα, κωδικοί πρόσβασης, αριθμοί τηλεφώνου ή πιστωτικές κάρτες)."
 
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:2008
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1895,7 +1895,7 @@ msgstr ""
 "Μπορείτε να μάθετε περισσότερα σχετικά με την κοινωνική μηχανική (phishing) "
 "στην %s ή από %s."
 
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2017
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1907,7 +1907,7 @@ msgstr ""
 "την εμπειρία περιήγησής σας (για παράδειγμα, αλλάζοντας την αρχική σας "
 "σελίδα ή εμφανίζοντας επιπλέον διαφημίσεις σε ιστότοπους που επισκέπτεστε)."
 
-#: embed/ephy-web-view.c:2014
+#: embed/ephy-web-view.c:2022
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr ""
@@ -1915,17 +1915,17 @@ msgstr ""
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
+#: embed/ephy-web-view.c:2066 embed/ephy-web-view.c:2069
 #, c-format
 msgid "File not found"
 msgstr "Δε βρέθηκε το αρχείο"
 
-#: embed/ephy-web-view.c:2065
+#: embed/ephy-web-view.c:2073
 #, c-format
 msgid "%s could not be found."
 msgstr "Το %s δε βρέθηκε."
 
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2075
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1935,15 +1935,15 @@ msgstr ""
 "πληκτρολόγησης. Ελέγξτε επίσης εάν έχει μετακινηθεί, μετονομαστεί ή "
 "διαγραφεί."
 
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2138
 msgid "None specified"
 msgstr "Αδιευκρίνιστο"
 
-#: embed/ephy-web-view.c:2246
+#: embed/ephy-web-view.c:2254
 msgid "Technical information"
 msgstr "Τεχνικές πληροφορίες"
 
-#: embed/ephy-web-view.c:3382
+#: embed/ephy-web-view.c:3398
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -1952,7 +1952,7 @@ msgid "Unspecified"
 msgstr "Μη καθορισμένο"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "Λήψεις"
 
@@ -2098,9 +2098,9 @@ msgstr "Αποτυχία ανάκτησης διαπιστευτηρίων απ�
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
 #: lib/sync/ephy-sync-service.c:1755
-msgid "Please visit Preferences and sign in again to continue syncing."
+msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
-"Παρακαλούμε επισκεφθείτε τις Προτιμήσεις και συνδεθείτε ξανά για να "
+"Παρακαλούμε επισκεφθείτε το Firefox Sync και συνδεθείτε ξανά για να "
 "συνεχίσετε τον συγχρονισμό."
 
 #: lib/sync/ephy-sync-service.c:970
@@ -2109,11 +2109,11 @@ msgstr "Το συνθηματικό του λογαριασμού Firefox δεί
 
 #: lib/sync/ephy-sync-service.c:971
 msgid ""
-"Please visit Preferences and sign in with the new password to continue "
+"Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 msgstr ""
-"Παρακαλούμε επισκεφτείτε τις Ιδιότητες και συνδεθείτε με το νέο συνθηματικό "
-"για να συνεχίσετε τον συγχρονισμό."
+"Παρακαλούμε επισκεφτείτε το Firefox Sync και συνδεθείτε με το νέο "
+"συνθηματικό για να συνεχίσετε τον συγχρονισμό."
 
 #: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
@@ -2223,7 +2223,7 @@ msgstr ""
 "ασφάλεια."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/history-dialog.ui:346
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Εκκαθάριση όλων"
@@ -2293,7 +2293,7 @@ msgstr "Γίνεται ακύρωση…"
 msgid "Starting…"
 msgstr "Εκκίνηση…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
+#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:387
 msgid "_Open"
 msgstr "Ά_νοιγμα"
 
@@ -2326,7 +2326,7 @@ msgid "Paste and _Go"
 msgstr "Επικόλληση και μετά_βαση"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:956
+#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
 msgid "_Undo"
 msgstr "Α_ναίρεση"
 
@@ -2484,9 +2484,21 @@ msgstr "Κινητό"
 msgid "Reload the current page"
 msgstr "Επαναφόρτωση τρέχουσας σελίδας"
 
-#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
+#: src/ephy-action-bar-start.c:640 src/ephy-header-bar.c:443
 msgid "Stop loading the current page"
 msgstr "Διακοπή φόρτωσης της τρέχουσας σελίδας"
+
+#. Translators: the %s refers to the time at which the last sync was made.
+#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+#.
+#: src/ephy-firefox-sync-dialog.c:108
+#, c-format
+msgid "Last synchronized: %s"
+msgstr "Τελευταίος συγχρονισμός: %s"
+
+#: src/ephy-firefox-sync-dialog.c:396
+msgid "Something went wrong, please try again later."
+msgstr "Κάτι πήγε στραβά, παρακαλούμε δοκιμάστε ξανά αργότερα."
 
 #: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
 msgid "It is not possible to modify history when in incognito mode."
@@ -2576,215 +2588,215 @@ msgstr "Προβολή ανοικτών καρτελών"
 msgid "Tabs"
 msgstr "Καρτέλες"
 
-#: src/ephy-tab-label.c:340
+#: src/ephy-tab-label.c:331
 msgid "New Tab"
 msgstr "Νέα καρτέλα"
 
-#: src/ephy-window.c:273
+#: src/ephy-window.c:275
 msgid "Do you want to leave this website?"
 msgstr "Θέλετε να εγκαταλείψετε αυτή την ιστοσελίδα;"
 
-#: src/ephy-window.c:274 src/window-commands.c:1185
+#: src/ephy-window.c:276 src/window-commands.c:1200
 msgid "A form you modified has not been submitted."
 msgstr "Δεν έχετε υποβάλει μια φόρμα που τροποποιήσατε."
 
-#: src/ephy-window.c:275 src/window-commands.c:1187
+#: src/ephy-window.c:277 src/window-commands.c:1202
 msgid "_Discard form"
 msgstr "_Απόρριψη φόρμας"
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:292
 msgid "There are multiple tabs open."
 msgstr "Υπάρχουν ανοικτές πολλαπλές καρτέλες."
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:293
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Εάν κλείσετε αυτό το παράθυρο, όλες οι ανοιχτές καρτέλες θα χαθούν"
 
-#: src/ephy-window.c:292
+#: src/ephy-window.c:294
 msgid "C_lose tabs"
 msgstr "_Κλείσιμο καρτελών"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:956
 msgid "Re_do"
 msgstr "Α_κύρωση αναίρεσης"
 
 #. Edit.
-#: src/ephy-window.c:960
+#: src/ephy-window.c:959
 msgid "Cu_t"
 msgstr "_Αποκοπή"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:960
 msgid "_Copy"
 msgstr "Α_ντιγραφή"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:961
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:962
 msgid "_Paste Text Only"
 msgstr "_Επικόλληση μόνο κειμένου"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:963
 msgid "Select _All"
 msgstr "Επιλογή ό_λων"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:965
 msgid "S_end Link by Email…"
 msgstr "Α_ποστολή συνδέσμου με ηλ. αλληλογραφία…"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:967
 msgid "_Reload"
 msgstr "Α_νανέωση"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:968
 msgid "_Back"
 msgstr "_Πίσω"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:969
 msgid "_Forward"
 msgstr "_Προώθηση"
 
 #. Bookmarks
-#: src/ephy-window.c:973
+#: src/ephy-window.c:972
 msgid "Add Boo_kmark…"
 msgstr "Προσθήκη σελιδο_δείκτη…"
 
 #. Links.
-#: src/ephy-window.c:977
+#: src/ephy-window.c:976
 msgid "Open Link in New _Window"
 msgstr "Άνοιγμα συνδέσμου σε _νέο παράθυρο"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:977
 msgid "Open Link in New _Tab"
 msgstr "Άνοιγμα συνδέσμου σε νέα καρ_τέλα"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:978
 msgid "Open Link in I_ncognito Window"
 msgstr "Άνοιγμα συνδέσμου σε παράθυρο α_νώνυμης περιήγηγης"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:979
 msgid "_Save Link As…"
 msgstr "_Αποθήκευση συνδέσμου ως…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:980
 msgid "_Copy Link Address"
 msgstr "Αν_τιγραφή διεύθυνσης δεσμού"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:981
 msgid "_Copy E-mail Address"
 msgstr "_Αντιγραφή διεύθυνσης αλληλογραφίας"
 
 #. Images.
-#: src/ephy-window.c:986
+#: src/ephy-window.c:985
 msgid "View _Image in New Tab"
 msgstr "Προβολή ε_ικόνας σε νέα καρτέλα"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:986
 msgid "Copy I_mage Address"
 msgstr "Αντιγραφή διεύθυνσης ε_ικόνας"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:987
 msgid "_Save Image As…"
 msgstr "Απο_θήκευση εικόνας ως…"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:988
 msgid "Set as _Wallpaper"
 msgstr "Ορισμός ως _ταπετσαρία"
 
 #. Video.
-#: src/ephy-window.c:993
+#: src/ephy-window.c:992
 msgid "Open Video in New _Window"
 msgstr "Άνοιγμα σε βίντεο νέο _παράθυρο"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:993
 msgid "Open Video in New _Tab"
 msgstr "Άνοιγμα βίντεο σε νέα κ_αρτέλα"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:994
 msgid "_Save Video As…"
 msgstr "_Αποθήκευση βίντεο ως…"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:995
 msgid "_Copy Video Address"
 msgstr "_Αντιγραφή διεύθυνσης βίντεο"
 
 #. Audio.
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:999
 msgid "Open Audio in New _Window"
 msgstr "Άνοιγμα ήχου σε νέο _παράθυρο"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Tab"
 msgstr "Άνοιγμα ήχου σε νέα _καρτέλα"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1001
 msgid "_Save Audio As…"
 msgstr "_Αποθήκευση ήχου ως…"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1002
 msgid "_Copy Audio Address"
 msgstr "_Αντιγραφή διεύθυνσης ήχου"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1008
 msgid "Save Pa_ge As…"
 msgstr "Αποθήκευση _σελίδας ως…"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1009
 msgid "_Page Source"
 msgstr "Π_ηγαίος κώδικας σελίδας"
 
-#: src/ephy-window.c:1370
+#: src/ephy-window.c:1368
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Αναζήτηση στον Ιστό για «%s»"
 
-#: src/ephy-window.c:1399
+#: src/ephy-window.c:1397
 msgid "Open Link"
 msgstr "Άνοιγμα συνδεσμού"
 
-#: src/ephy-window.c:1401
+#: src/ephy-window.c:1399
 msgid "Open Link In New Tab"
 msgstr "Άνοιγμα συνδέσμου σε νέα καρτέλα"
 
-#: src/ephy-window.c:1403
+#: src/ephy-window.c:1401
 msgid "Open Link In New Window"
 msgstr "Άνοιγμα συνδέσμου σε νέο παράθυρο"
 
-#: src/ephy-window.c:1405
+#: src/ephy-window.c:1403
 msgid "Open Link In Incognito Window"
 msgstr "Άνοιγμα συνδέσμου σε παράθυρο ανώνυμης περιήγησης"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3062
 msgid "Download operation"
 msgstr "Λειτουργία λήψης"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3064
 msgid "Show details"
 msgstr "Εμφάνιση λεπτομερειών"
 
-#: src/ephy-window.c:3033
+#: src/ephy-window.c:3066
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d ενεργή λειτουργία λήψης"
 msgstr[1] "%d ενεργές λειτουργίες λήψης"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3688
 msgid "Set Web as your default browser?"
 msgstr "Ορισμός του Ιστού ως προεπιλεγμένου περιηγητή;"
 
-#: src/ephy-window.c:3657
+#: src/ephy-window.c:3690
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Ορισμός της προεπισκόπησης τεχνολογίας του Epiphany ως προεπιλεγμένο "
 "περιηγητή;"
 
-#: src/ephy-window.c:3669
+#: src/ephy-window.c:3702
 msgid "_Yes"
 msgstr "_Ναι"
 
-#: src/ephy-window.c:3670
+#: src/ephy-window.c:3703
 msgid "_No"
 msgstr "Ό_χι"
 
@@ -2835,6 +2847,93 @@ msgstr "HSTS πολιτικές λανθάνουσα μνήμης"
 #: src/preferences/clear-data-view.c:77
 msgid "Intelligent Tracking Prevention data"
 msgstr "Δεδομένα Έξυπνης Πρόληψης Παρακολούθησης"
+
+#: src/preferences/ephy-search-engine-listbox.c:34
+msgid "New search engine"
+msgstr "Νέα μηχανή αναζήτησης"
+
+#: src/preferences/ephy-search-engine-listbox.c:161
+msgid "This field is required"
+msgstr "Αυτό το πεδίο είναι υποχρεωτικό"
+
+#: src/preferences/ephy-search-engine-listbox.c:166
+msgid "Address must start with either http:// or https://"
+msgstr "Η διεύθυνση πρέπει να ξεκινά με http:// ή https://"
+
+#: src/preferences/ephy-search-engine-listbox.c:172
+msgid "Address is not a valid URI"
+msgstr "Η διεύθυνση δεν είναι έγκυρο URI"
+
+#: src/preferences/ephy-search-engine-listbox.c:179
+#, c-format
+msgid ""
+"Address is not a valid URL. The address should look like https://www.example."
+"com/search?q=%s"
+msgstr ""
+"Η διεύθυνση δεν είναι έγκυρη διεύθυνση URL. Η διεύθυνση θα πρέπει να έχει τη "
+"μορφή  https://www.example.com/search?q=%s"
+
+#: src/preferences/ephy-search-engine-listbox.c:185
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr ""
+"Η διεύθυνση πρέπει να περιέχει τον όρο αναζήτησης που αντιπροσωπεύεται από %s"
+
+#: src/preferences/ephy-search-engine-listbox.c:191
+msgid "Address should not contain the search term several times"
+msgstr "Η διεύθυνση δεν πρέπει να περιέχει τον όρο αναζήτησης αρκετές φορές"
+
+#: src/preferences/ephy-search-engine-listbox.c:227
+msgid "This shortcut is already used."
+msgstr "Αυτή η συντόμευση χρησιμοποιείται ήδη."
+
+#: src/preferences/ephy-search-engine-listbox.c:395
+msgid "A name is required"
+msgstr "Απαιτείται όνομα"
+
+#: src/preferences/ephy-search-engine-listbox.c:398
+msgid "This search engine already exists"
+msgstr "Αυτή η μηχανή αναζήτησης υπάρχει ήδη"
+
+#: src/preferences/ephy-search-engine-listbox.c:591
+msgid "Selects the default search engine"
+msgstr "Επιλέγει την προεπιλεγμένη μηχανή αναζήτησης"
+
+#. Name label and entry pair
+#: src/preferences/ephy-search-engine-listbox.c:615
+#: src/resources/gtk/bookmark-properties-grid.ui:31
+msgid "Name"
+msgstr "Όνομα"
+
+#. Address label and entry pair
+#: src/preferences/ephy-search-engine-listbox.c:635
+#: src/resources/gtk/bookmark-properties-grid.ui:59
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#. Bang label and entry pair
+#: src/preferences/ephy-search-engine-listbox.c:656
+msgid "Shortcut"
+msgstr "Συντόμευση"
+
+#. Search engine address insight
+#: src/preferences/ephy-search-engine-listbox.c:675
+#, c-format
+msgid ""
+"To determine the search address, perform a search using the search engine "
+"that you want to add and replace the search term with %s."
+msgstr ""
+"Για να προσδιορίσετε τη διεύθυνση αναζήτησης, εκτελέστε μια αναζήτηση "
+"χρησιμοποιώντας τη μηχανή αναζήτησης που θέλετε να προσθέσετε και "
+"αντικαταστήστε τον όρο αναζήτησης με το %s."
+
+#: src/preferences/ephy-search-engine-listbox.c:682
+msgid "R_emove Search Engine"
+msgstr "_Κατάργηση μηχανής αναζήτησης"
+
+#: src/preferences/ephy-search-engine-listbox.c:752
+msgid "A_dd Search Engine…"
+msgstr "_Προσθήκη μηχανής αναζήτησης…"
 
 #: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
@@ -2890,49 +2989,30 @@ msgstr "Ανοιχτό"
 msgid "Dark"
 msgstr "Σκούρο"
 
-#: src/preferences/prefs-general-page.c:348
+#: src/preferences/prefs-general-page.c:299
+#: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "Προσθήκη γλώσσας"
 
-#: src/preferences/prefs-general-page.c:499
-msgid "Delete language"
-msgstr "Αφαίρεση γλώσσας"
-
-#: src/preferences/prefs-general-page.c:581
-#: src/preferences/prefs-general-page.c:740
+#: src/preferences/prefs-general-page.c:527
+#: src/preferences/prefs-general-page.c:686
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Γλώσσα συστήματος (%s)"
 msgstr[1] "Γλώσσες συστήματος (%s)"
 
-#: src/preferences/prefs-general-page.c:768
+#: src/preferences/prefs-general-page.c:714
 msgid "Select a directory"
 msgstr "Επιλογή ενός καταλόγου"
 
-#: src/preferences/prefs-general-page.c:919
+#: src/preferences/prefs-general-page.c:860
 msgid "Web Application Icon"
 msgstr "Εικονίδιο εφαρμογής Ιστού"
 
-#: src/preferences/prefs-general-page.c:924
+#: src/preferences/prefs-general-page.c:865
 msgid "Supported Image Files"
 msgstr "Υποστηριζόμενα αρχεία εικόνας"
-
-#. Translators: the %s refers to the time at which the last sync was made.
-#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
-#.
-#: src/preferences/prefs-sync-page.c:107
-#, c-format
-msgid "Last synchronized: %s"
-msgstr "Τελευταίος συγχρονισμός: %s"
-
-#: src/preferences/prefs-sync-page.c:395
-msgid "Something went wrong, please try again later."
-msgstr "Κάτι πήγε στραβά, παρακαλούμε δοκιμάστε ξανά αργότερα."
-
-#: src/preferences/synced-tabs-dialog.c:184
-msgid "Local Tabs"
-msgstr "Τοπικές καρτέλες"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1540
 msgid "Executes only the n-th migration step"
@@ -2988,16 +3068,6 @@ msgstr "Προβολή ανοικτών σελίδων"
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-dialog.ui:142
-msgid "Name"
-msgstr "Όνομα"
-
-#: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-dialog.ui:155
-msgid "Address"
-msgstr "Διεύθυνση"
-
 #: src/resources/gtk/bookmark-properties-grid.ui:86
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
@@ -3012,7 +3082,7 @@ msgstr "Προσθήκη ετικέτας…"
 msgid "_Add"
 msgstr "_Προσθήκη"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:175
+#: src/resources/gtk/bookmark-properties-grid.ui:176
 msgid "_Remove"
 msgstr "_Αφαίρεση"
 
@@ -3020,11 +3090,11 @@ msgstr "_Αφαίρεση"
 msgid "All"
 msgstr "Όλα"
 
-#: src/resources/gtk/bookmarks-popover.ui:166
+#: src/resources/gtk/bookmarks-popover.ui:167
 msgid "No bookmarks yet?"
 msgstr "Δεν υπάρχουν ακόμη σελιδοδείκτες;"
 
-#: src/resources/gtk/bookmarks-popover.ui:179
+#: src/resources/gtk/bookmarks-popover.ui:183
 msgid "Bookmark some webpages to view them here."
 msgstr ""
 "Προσθέστε μερικές ιστοσελίδες στους σελιδοδείκτες ώστε να τις προβάλλετε εδώ."
@@ -3071,11 +3141,11 @@ msgstr ""
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
+#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:300
 msgid "No Results Found"
 msgstr "Δεν βρέθηκαν αποτελέσματα"
 
-#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
+#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:315
 msgid "Try a different search"
 msgstr "Δοκιμή μιας διαφορετικής αναζήτησης"
 
@@ -3099,25 +3169,96 @@ msgstr "Σχετικές κωδικοποιήσεις"
 msgid "Show all…"
 msgstr "Εμφάνιση όλων…"
 
-#: src/resources/gtk/history-dialog.ui:42
-msgid "Select Items"
-msgstr "Επιλογή αντικειμένων"
+#: src/resources/gtk/firefox-sync-dialog.ui:21
+msgid "Firefox Sync"
+msgstr "Συγχρονισμός Firefox"
 
+#: src/resources/gtk/firefox-sync-dialog.ui:33
+msgid ""
+"Sign in with your Firefox account to sync your data with Web and Firefox on "
+"other computers. Web is not Firefox and is not produced or endorsed by "
+"Mozilla."
+msgstr ""
+"Συνδεθείτε με τον λογαριασμό σας στο Firefox για να συγχρονίσετε τα δεδομένα "
+"σας με την εφαρμογή Ιστός και το Firefox σε άλλους υπολογιστές. Η εφαρμογή "
+"Ιστός δεν είναι το Firefox και δεν παράγεται ή εγκρίνεται από την Mozilla."
+
+#: src/resources/gtk/firefox-sync-dialog.ui:52
+msgid "Firefox Account"
+msgstr "Λογαριασμός Firefox"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:56
+msgid "Logged in"
+msgstr "Συνδεδεμένος"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:61
+msgid "Sign _out"
+msgstr "_Αποσύνδεση"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:74
+msgid "Sync Options"
+msgstr "Επιλογές συγχρονισμού"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:79
+msgid "Sync _Bookmarks"
+msgstr "Συγχρονισμός _Σελιδοδεικτών"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:93
+msgid "Sync _Passwords"
+msgstr "Συγχρονισμός _Συνθηματικών"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:107
+msgid "Sync _History"
+msgstr "Συγχρονισμός _Ιστορικού"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:121
+msgid "Sync Open _Tabs"
+msgstr "Συγχρονισμός ανοικτών _καρτελών"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:132
+msgid "S_ynced tabs"
+msgstr "Σ_υγχρονισμένες καρτέλες"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:143
+msgid "Frequency"
+msgstr "Συχνότητα"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:154
+msgid "Sync _now"
+msgstr "Συγχρονισμός _τώρα"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:166
+msgid "Device name"
+msgstr "Όνομα συσκευής"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:189
+msgid "_Change"
+msgstr "_Αλλαγή"
+
+#: src/resources/gtk/history-dialog.ui:30
 #: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "Ιστορικό"
+
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Επιλογή αντικειμένων"
 
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
 msgstr "Ιστορικό αναζήτησης"
 
-#: src/resources/gtk/history-dialog.ui:242
+#: src/resources/gtk/history-dialog.ui:243
 msgid "The History is Empty"
 msgstr "Το ιστορικό είναι κενό"
 
-#: src/resources/gtk/history-dialog.ui:258
+#: src/resources/gtk/history-dialog.ui:259
 msgid "Visited pages will be listed here"
 msgstr "Οι σελίδες που έχετε επισκεφθεί θα φαίνονται εδώ"
+
+#: src/resources/gtk/lang-row.ui:39
+msgid "Delete language"
+msgstr "Αφαίρεση γλώσσας"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -3135,27 +3276,27 @@ msgstr "_Διπλότυπο"
 msgid "P_in Tab"
 msgstr "_Καρφίτσωμα καρτέλας"
 
-#: src/resources/gtk/notebook-context-menu.ui:25
-msgid "Unpi_n Tab"
-msgstr "_Αναίρεση καρφιτσώματος καρτέλας"
+#: src/resources/gtk/notebook-context-menu.ui:26
+msgid "Unp_in Tab"
+msgstr "_Ξεκαρφίτσωμα καρτέλας"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
-msgid "Reo_pen Closed Tab"
-msgstr "_Επαναφορά των κλειστών καρτελών"
+msgid "_Mute Tab"
+msgstr "_Σίγαση καρτέλας"
 
-#: src/resources/gtk/notebook-context-menu.ui:37
+#: src/resources/gtk/notebook-context-menu.ui:38
 msgid "Close Tabs to the _Left"
 msgstr "Κλείσιμο καρτελών προς τα _αριστερά"
 
-#: src/resources/gtk/notebook-context-menu.ui:41
+#: src/resources/gtk/notebook-context-menu.ui:42
 msgid "Close Tabs to the _Right"
 msgstr "Κλείσιμο καρτελών προς τα _δεξιά"
 
-#: src/resources/gtk/notebook-context-menu.ui:45
+#: src/resources/gtk/notebook-context-menu.ui:46
 msgid "Close _Other Tabs"
 msgstr "Κλείσιμο ό_λων των καρτελών"
 
-#: src/resources/gtk/notebook-context-menu.ui:49
+#: src/resources/gtk/notebook-context-menu.ui:50
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
@@ -3164,94 +3305,98 @@ msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Σμίκρυνση"
 
-#: src/resources/gtk/page-menu-popover.ui:43
+#: src/resources/gtk/page-menu-popover.ui:42
 msgid "Restore Zoom"
 msgstr "Επαναφορά εστίασης"
 
-#: src/resources/gtk/page-menu-popover.ui:56
+#: src/resources/gtk/page-menu-popover.ui:61
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Μεγέθυνση"
 
-#: src/resources/gtk/page-menu-popover.ui:84
+#: src/resources/gtk/page-menu-popover.ui:89
 msgid "Print…"
 msgstr "Εκτύπωση…"
 
-#: src/resources/gtk/page-menu-popover.ui:99
+#: src/resources/gtk/page-menu-popover.ui:104
 msgid "Find…"
 msgstr "Εύρεση…"
 
-#: src/resources/gtk/page-menu-popover.ui:114
+#: src/resources/gtk/page-menu-popover.ui:119
 msgid "Fullscreen"
 msgstr "Πλήρης οθόνη"
 
-#: src/resources/gtk/page-menu-popover.ui:172
+#: src/resources/gtk/page-menu-popover.ui:177
 msgid "_Run in Background"
 msgstr "_Εκτέλεση στο παρασκήνιο"
 
-#: src/resources/gtk/page-menu-popover.ui:191
+#: src/resources/gtk/page-menu-popover.ui:195
 msgid "_New Window"
 msgstr "_Νέο παράθυρο"
 
-#: src/resources/gtk/page-menu-popover.ui:199
+#: src/resources/gtk/page-menu-popover.ui:203
 msgid "New _Incognito Window"
 msgstr "Νέο παράθυρο _ανώνυμης περιήγησης"
 
-#: src/resources/gtk/page-menu-popover.ui:216
+#: src/resources/gtk/page-menu-popover.ui:220
 msgid "Reopen Closed _Tab"
 msgstr "Επαναφορά των κλειστών _καρτελών"
 
-#: src/resources/gtk/page-menu-popover.ui:224
+#: src/resources/gtk/page-menu-popover.ui:228
 msgid "_History"
 msgstr "_Ιστορικό"
 
-#: src/resources/gtk/page-menu-popover.ui:240
+#: src/resources/gtk/page-menu-popover.ui:244
 msgid "I_mport and Export"
 msgstr "_Εισαγωγή και Εξαγωγή"
 
-#: src/resources/gtk/page-menu-popover.ui:257
+#: src/resources/gtk/page-menu-popover.ui:261
 msgid "Install Site as Web _Application…"
 msgstr "Εγκατάσταση ως διαδικτυακή _εφαρμογή…"
 
-#: src/resources/gtk/page-menu-popover.ui:265
+#: src/resources/gtk/page-menu-popover.ui:269
 msgid "Open Appli_cation Manager"
 msgstr "Άνοιγμα διαχειριστή _εφαρμογής"
 
-#: src/resources/gtk/page-menu-popover.ui:282
+#: src/resources/gtk/page-menu-popover.ui:286
 msgid "_Override Text Encoding…"
 msgstr "_Παράκαμψη κωδικοποίησης κειμένου…"
 
-#: src/resources/gtk/page-menu-popover.ui:298
+#: src/resources/gtk/page-menu-popover.ui:302
 msgid "Pr_eferences"
 msgstr "Πρ_οτιμήσεις"
 
-#: src/resources/gtk/page-menu-popover.ui:307
+#: src/resources/gtk/page-menu-popover.ui:311
 msgid "_Keyboard Shortcuts"
 msgstr "Συντομεύσεις _πληκτρολογίου"
 
-#: src/resources/gtk/page-menu-popover.ui:316
+#: src/resources/gtk/page-menu-popover.ui:320
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: src/resources/gtk/page-menu-popover.ui:325
+#: src/resources/gtk/page-menu-popover.ui:329
 msgid "_About Web"
 msgstr "_Περί του Ιστός"
 
-#: src/resources/gtk/page-menu-popover.ui:350
+#: src/resources/gtk/page-menu-popover.ui:354
 msgid "Import and Export"
 msgstr "Εισαγωγή και Εξαγωγή"
 
-#: src/resources/gtk/page-menu-popover.ui:361
+#: src/resources/gtk/page-menu-popover.ui:365
 msgid "I_mport Bookmarks…"
 msgstr "_Εισαγωγή σελιδοδεικτών…"
 
-#: src/resources/gtk/page-menu-popover.ui:369
+#: src/resources/gtk/page-menu-popover.ui:373
 msgid "E_xport Bookmarks…"
 msgstr "Ε_ξαγωγή σελιδοδεικτών…"
 
-#: src/resources/gtk/page-menu-popover.ui:385
-msgid "I_mport Passwords…"
-msgstr "_Εισαγωγή συνθηματικών…"
+#: src/resources/gtk/page-menu-popover.ui:389
+msgid "Import _Passwords…"
+msgstr "Εισαγωγή _συνθηματικών…"
+
+#: src/resources/gtk/page-menu-popover.ui:405
+msgid "Firefox _Sync"
+msgstr "_Συγχρονισμός Firefox"
 
 #: src/resources/gtk/page-row.ui:85
 msgid "Close page"
@@ -3346,97 +3491,93 @@ msgstr "Γενικά"
 msgid "Web Application"
 msgstr "Εφαρμογή Ιστού"
 
-#: src/resources/gtk/prefs-general-page.ui:46
-msgid "Homepage:"
-msgstr "Αρχική σελίδα:"
+#: src/resources/gtk/prefs-general-page.ui:15
+msgid "_Icon"
+msgstr "_Εικονίδιο"
+
+#: src/resources/gtk/prefs-general-page.ui:38
+msgid "_Homepage"
+msgstr "_Αρχική σελίδα"
+
+#: src/resources/gtk/prefs-general-page.ui:53
+msgid "_Title"
+msgstr "_Τίτλος"
 
 #: src/resources/gtk/prefs-general-page.ui:68
-msgid "Title:"
-msgstr "Τίτλος:"
-
-#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "_Διαχείριση επιπρόσθετων URL"
 
-#: src/resources/gtk/prefs-general-page.ui:118
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "Web Content"
 msgstr "Περιεχόμενο Ιστού"
 
-#: src/resources/gtk/prefs-general-page.ui:123
+#: src/resources/gtk/prefs-general-page.ui:98
 msgid "Block _Advertisements"
 msgstr "Αποκλεισμός _διαφημίσεων"
 
-#: src/resources/gtk/prefs-general-page.ui:137
+#: src/resources/gtk/prefs-general-page.ui:112
 msgid "Block _Popup Windows"
 msgstr "Αποκλεισμός _αναδυόμενων παραθύρων"
 
-#: src/resources/gtk/prefs-general-page.ui:152
+#: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Αρχική σελίδα"
 
-#: src/resources/gtk/prefs-general-page.ui:157
+#: src/resources/gtk/prefs-general-page.ui:132
 msgid "Most _visited pages"
 msgstr "Πιο _δημοφιλής ιστοσελίδες"
 
-#: src/resources/gtk/prefs-general-page.ui:171
+#: src/resources/gtk/prefs-general-page.ui:146
 msgid "_Blank page"
 msgstr "_Κενή σελίδα"
 
-#: src/resources/gtk/prefs-general-page.ui:186
+#: src/resources/gtk/prefs-general-page.ui:161
 msgid "_Custom"
 msgstr "_Προσαρμοσμένο"
 
-#: src/resources/gtk/prefs-general-page.ui:215
+#: src/resources/gtk/prefs-general-page.ui:190
 msgid "Ask o_n download"
 msgstr "Ερώτηση _κατά τη λήψη"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:205
 msgid "_Download folder"
 msgstr "Φάκελος _λήψεων"
 
-#: src/resources/gtk/prefs-general-page.ui:239
+#: src/resources/gtk/prefs-general-page.ui:214
 msgid "Search Engines"
 msgstr "Μηχανές αναζήτησης"
 
-#: src/resources/gtk/prefs-general-page.ui:244
-msgid "Manage Search _Engines"
-msgstr "Διαχείριση _μηχανών αναζήτησης"
-
-#: src/resources/gtk/prefs-general-page.ui:269
+#: src/resources/gtk/prefs-general-page.ui:220
 msgid "Session"
 msgstr "Συνεδρία"
 
-#: src/resources/gtk/prefs-general-page.ui:274
+#: src/resources/gtk/prefs-general-page.ui:225
 msgid "Start in _Incognito Mode"
 msgstr "Έναρξη συνεδρίας σε κατάσταση _ανώνυμης περιήγησης"
 
-#: src/resources/gtk/prefs-general-page.ui:288
+#: src/resources/gtk/prefs-general-page.ui:239
 msgid "_Restore Tabs on Startup"
 msgstr "_Επαναφορά καρτελών κατά την εκκίνηση"
 
-#: src/resources/gtk/prefs-general-page.ui:303
+#: src/resources/gtk/prefs-general-page.ui:254
 msgid "Browsing"
 msgstr "Περιήγηση"
 
-#: src/resources/gtk/prefs-general-page.ui:308
+#: src/resources/gtk/prefs-general-page.ui:259
 msgid "Sm_ooth Scrolling"
 msgstr "_Φυσική κύλιση"
 
-#: src/resources/gtk/prefs-general-page.ui:322
+#: src/resources/gtk/prefs-general-page.ui:273
 msgid "Mouse _Gestures"
 msgstr "_Χειρονομίες ποντικιού"
 
-#: src/resources/gtk/prefs-general-page.ui:336
+#: src/resources/gtk/prefs-general-page.ui:287
 msgid "S_witch Immediately to New Tabs"
 msgstr "Άμεση _εναλλαγή στις νέες καρτέλες"
 
-#: src/resources/gtk/prefs-general-page.ui:371
+#: src/resources/gtk/prefs-general-page.ui:322
 msgid "_Spell Checking"
 msgstr "_Ορθογραφικός έλεγχος"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add _Language"
-msgstr "Προσθήκη _γλώσσας"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a language:"
@@ -3487,100 +3628,6 @@ msgstr "_Συνθηματικά"
 #: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "_Remember Passwords"
 msgstr "Α_πομνημόνευση συνθηματικών"
-
-#: src/resources/gtk/prefs-sync-page.ui:6
-msgid "Sync"
-msgstr "Συγχρονισμός"
-
-#: src/resources/gtk/prefs-sync-page.ui:10
-msgid ""
-"Sign in with your Firefox account to sync your data with Web and Firefox on "
-"other computers. Web is not Firefox and is not produced or endorsed by "
-"Mozilla."
-msgstr ""
-"Συνδεθείτε με τον λογαριασμό σας στο Firefox για να συγχρονίσετε τα δεδομένα "
-"σας με την εφαρμογή Ιστός και το Firefox σε άλλους υπολογιστές. Η εφαρμογή "
-"Ιστός δεν είναι το Firefox και δεν παράγεται ή εγκρίνεται από την Mozilla."
-
-#: src/resources/gtk/prefs-sync-page.ui:11
-msgid "Firefox Sync"
-msgstr "Συγχρονισμός Firefox"
-
-#: src/resources/gtk/prefs-sync-page.ui:30
-msgid "Firefox Account"
-msgstr "Λογαριασμός Firefox"
-
-#: src/resources/gtk/prefs-sync-page.ui:34
-msgid "Logged in"
-msgstr "Συνδεδεμένος"
-
-#: src/resources/gtk/prefs-sync-page.ui:39
-msgid "Sign _out"
-msgstr "_Αποσύνδεση"
-
-#: src/resources/gtk/prefs-sync-page.ui:52
-msgid "Sync Options"
-msgstr "Επιλογές συγχρονισμού"
-
-#: src/resources/gtk/prefs-sync-page.ui:57
-msgid "Sync _Bookmarks"
-msgstr "Συγχρονισμός _Σελιδοδεικτών"
-
-#: src/resources/gtk/prefs-sync-page.ui:72
-msgid "Sync _Passwords"
-msgstr "Συγχρονισμός _Συνθηματικών"
-
-#: src/resources/gtk/prefs-sync-page.ui:87
-msgid "Sync _History"
-msgstr "Συγχρονισμός _Ιστορικού"
-
-#: src/resources/gtk/prefs-sync-page.ui:102
-msgid "Sync Open _Tabs"
-msgstr "Συγχρονισμός ανοικτών _καρτελών"
-
-#: src/resources/gtk/prefs-sync-page.ui:114
-msgid "S_ynced tabs"
-msgstr "Σ_υγχρονισμένες καρτέλες"
-
-#: src/resources/gtk/prefs-sync-page.ui:125
-msgid "Frequency"
-msgstr "Συχνότητα"
-
-#: src/resources/gtk/prefs-sync-page.ui:129
-msgid "Sync _now"
-msgstr "Συγχρονισμός _τώρα"
-
-#: src/resources/gtk/prefs-sync-page.ui:148
-msgid "Device name"
-msgstr "Όνομα συσκευής"
-
-#: src/resources/gtk/prefs-sync-page.ui:171
-msgid "_Change"
-msgstr "_Αλλαγή"
-
-#: src/resources/gtk/search-engine-dialog.ui:11
-msgid "Manage Search Engines"
-msgstr "Διαχείριση μηχανών αναζήτησης"
-
-#: src/resources/gtk/search-engine-dialog.ui:180
-msgid "Bang"
-msgstr "Χτύπημα"
-
-#: src/resources/gtk/search-engine-dialog.ui:215
-msgid "Default"
-msgstr "Προεπιλογή"
-
-#: src/resources/gtk/search-engine-dialog.ui:268
-#, c-format
-msgid ""
-"To determine the search address, perform a search using the search engine "
-"that you want to add and check the resulting address. Remove the search term "
-"from the resulting address and replace it with %s."
-msgstr ""
-"Για να προσδιορίσετε τη διεύθυνση αναζήτησης, εκτελέστε μια αναζήτηση "
-"χρησιμοποιώντας τη μηχανή αναζήτησης που θέλετε να προσθέσετε και ελέγξτε τη "
-"διεύθυνση που προέκυψε. Αφαιρέστε τον όρο αναζήτησης από τη διεύθυνση που "
-"προκύπτει και αντικαταστήστε τον με το %s."
 
 #: src/resources/gtk/shortcuts-dialog.ui:15
 msgctxt "shortcut window"
@@ -3883,15 +3930,11 @@ msgstr ""
 msgid "Close Document"
 msgstr "Κλείσιμο εγγράφου"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:20
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:17
 msgid "Additional URLs"
 msgstr "Επιπρόσθετα URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "Εκκα_θάριση όλων"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:64
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:25
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded "
@@ -3901,18 +3944,22 @@ msgstr ""
 "URL θα ανοίξει από την εφαρμογή ιστού. Αν παραλείψετε το σχήμα διεύθυνσης "
 "URL, θα χρησιμοποιηθεί το από τη διεύθυνση URL που έχει φορτωθεί."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:49
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
 msgstr "URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:124
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:74
 msgid "Add new URL"
 msgstr "Προσθήκη νέας URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:137
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:87
 msgid "Remove the selected URLs"
 msgstr "Αφαίρεση των επιλεγμένων URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:101
+msgid "C_lear All"
+msgstr "Εκκα_θάριση όλων"
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -3923,6 +3970,10 @@ msgstr "Αναζήτηση στον ιστό για «%s»"
 #, c-format
 msgid "Load “%s”"
 msgstr "Φόρτωση «%s»"
+
+#: src/synced-tabs-dialog.c:184
+msgid "Local Tabs"
+msgstr "Τοπικές καρτέλες"
 
 #: src/window-commands.c:113
 msgid "GVDB File"
@@ -3999,7 +4050,7 @@ msgstr "Επιτυχής εισαγωγή συνθηματικών!"
 msgid "Import Passwords"
 msgstr "Εισαγωγή συνθηματικών"
 
-#: src/window-commands.c:980
+#: src/window-commands.c:995
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -4008,11 +4059,11 @@ msgstr ""
 "Μια απλή, καθαρή, και όμορφη προβολή του ιστού.\n"
 "Με τη δύναμη του WebKitGTK+ %d.%d.%d"
 
-#: src/window-commands.c:1004
+#: src/window-commands.c:1019
 msgid "Website"
 msgstr "Ιστότοπος"
 
-#: src/window-commands.c:1037
+#: src/window-commands.c:1052
 msgid "translator-credits"
 msgstr ""
 "Ελληνική μεταφραστική ομάδα GNOME\n"
@@ -4028,25 +4079,25 @@ msgstr ""
 "Για περισσότερες πληροφορίες, επισκεφθείτε τη σελίδα\n"
 "http://gnome.gr/"
 
-#: src/window-commands.c:1183
+#: src/window-commands.c:1198
 msgid "Do you want to reload this website?"
 msgstr "Θέλετε να φορτώσετε ξανά αυτή την ιστοσελίδα;"
 
-#: src/window-commands.c:1711
+#: src/window-commands.c:1726
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Υπάρχει ήδη μια εφαρμογή ιστού με όνομα «%s» . Θέλετε να την αντικαταστήσετε;"
 
-#: src/window-commands.c:1714
+#: src/window-commands.c:1729
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: src/window-commands.c:1716
+#: src/window-commands.c:1731
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: src/window-commands.c:1720
+#: src/window-commands.c:1735
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -4054,51 +4105,51 @@ msgstr ""
 "Μια εφαρμογή με το ίδιο όνομα υπάρχει ήδη. Αν την αντικαταστασήσετε θα γίνει "
 "εγγραφή επάνω στην ήδη υπάρχουσα."
 
-#: src/window-commands.c:1812
+#: src/window-commands.c:1827
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Η εφαρμογή «%s» είναι έτοιμη να χρησιμοποιηθεί"
 
-#: src/window-commands.c:1815
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Η εφαρμογή «%s» δεν μπόρεσε να δημιουργηθεί"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1830
+#: src/window-commands.c:1845
 msgid "Launch"
 msgstr "Εκκίνηση"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1871
+#: src/window-commands.c:1886
 msgid "Create Web Application"
 msgstr "Δημιουργία εφαρμογής Ιστού"
 
-#: src/window-commands.c:1876
+#: src/window-commands.c:1891
 msgid "C_reate"
 msgstr "Δ_ημιουργία"
 
-#: src/window-commands.c:2091
+#: src/window-commands.c:2106
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/window-commands.c:2100
+#: src/window-commands.c:2115
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2120
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2110
+#: src/window-commands.c:2125
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2595
+#: src/window-commands.c:2610
 msgid "Enable caret browsing mode?"
 msgstr "Ενεργοποίηση της περιήγησης με δρομέα;"
 
-#: src/window-commands.c:2598
+#: src/window-commands.c:2613
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4109,9 +4160,44 @@ msgstr ""
 "επιτρέπει να μετακινείσθε σε αυτές με το πληκτρολόγιό σας. Θέλετε να την "
 "ενεργοποιήσετε τώρα;"
 
-#: src/window-commands.c:2601
+#: src/window-commands.c:2616
 msgid "_Enable"
 msgstr "Ε_νεργοποίηση"
+
+#~ msgid "Google Safe Browsing API key"
+#~ msgstr "Κλειδί API για ασφαλή περιήγηση Google"
+
+#~ msgid "The API key used to access the Google Safe Browsing API v4."
+#~ msgstr ""
+#~ "Το κλειδί API που χρησιμοποιήθηκε για την πρόσβαση στο API Ασφαλούς "
+#~ "περιήγησης Google v4."
+
+#~ msgid "Reo_pen Closed Tab"
+#~ msgstr "_Επαναφορά των κλειστών καρτελών"
+
+#~ msgid "Homepage:"
+#~ msgstr "Αρχική σελίδα:"
+
+#~ msgid "Title:"
+#~ msgstr "Τίτλος:"
+
+#~ msgid "Manage Search _Engines"
+#~ msgstr "Διαχείριση _μηχανών αναζήτησης"
+
+#~ msgid "Add _Language"
+#~ msgstr "Προσθήκη _γλώσσας"
+
+#~ msgid "Sync"
+#~ msgstr "Συγχρονισμός"
+
+#~ msgid "Manage Search Engines"
+#~ msgstr "Διαχείριση μηχανών αναζήτησης"
+
+#~ msgid "Bang"
+#~ msgstr "Χτύπημα"
+
+#~ msgid "Default"
+#~ msgstr "Προεπιλογή"
 
 #~ msgid "Hide window on quit"
 #~ msgstr "Απόκρυψη παραθύρου στο κλείσιμο"
@@ -4128,9 +4214,6 @@ msgstr "Ε_νεργοποίηση"
 
 #~ msgid "Remove cookie"
 #~ msgstr "Αφαίρεση cookie"
-
-#~ msgid "New search engine"
-#~ msgstr "Νέα μηχανή αναζήτησης"
 
 #~ msgid "New address"
 #~ msgstr "Νέα διεύθυνση"
@@ -4177,9 +4260,6 @@ msgstr "Ε_νεργοποίηση"
 
 #~ msgid "Preferences"
 #~ msgstr "Προτιμήσεις"
-
-#~ msgid "_Manage Search Engines"
-#~ msgstr "_Διαχείρηση μηχανών αναζήτησης"
 
 #~ msgid "Clear _Cookies"
 #~ msgstr "Εκκαθάριση _Cookies"
@@ -4890,9 +4970,6 @@ msgstr "Ε_νεργοποίηση"
 #~ msgid "Display credits for the web browser creators"
 #~ msgstr "Εμφάνιση μνείας των δημιουργών του προγράμματος περιήγησης ιστού"
 
-#~ msgid "_Title"
-#~ msgstr "_Τίτλος"
-
 #~ msgid "Show the title column"
 #~ msgstr "Εμφάνιση της στήλης τίτλων"
 
@@ -5074,9 +5151,6 @@ msgstr "Ε_νεργοποίηση"
 
 #~ msgid "_Previous Tab"
 #~ msgstr "_Προηγούμενη καρτέλα"
-
-#~ msgid "_Next Tab"
-#~ msgstr "_Επόμενη καρτέλα"
 
 #~ msgid "_Detach Tab"
 #~ msgstr "Από_σπαση καρτέλας"
