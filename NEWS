@@ -1,3 +1,72 @@
+40.alpha - January 7, 2021
+==========================
+
+The Safe Browsing phishing protection feature is now disabled by default (#682)
+to comply with changes to Google's terms of service, which now prohibit
+inclusion of API keys in open source projects. You may provide your own Google
+API key to enable this feature using the -Dgsb_api_key build option at your own
+risk. Most Linux distributions will be unable to do this without similarly
+violating Google's terms of service, since it would require some way to inject
+a secret into the build. Most distributions include a Google API key in Firefox
+or Chromium packaging in apparant violation of the new terms of service; such
+distros may consider using the same key for Epiphany as well. Epiphany
+Technology Preview is built using a secret API key. Flathub builds will likely
+have Safe Browsing disabled.
+
+ * Replace seach engine dialog with a listbox (#441, #631, Vanadiae)
+ * Firefox Sync dialog is no longer modal (#468)
+ * Fix primary menu popover changing size (#953)
+ * Visit most recently-viewed tab with Alt+0 (#1050)
+ * Fix hidpi favicons (#1298)
+ * Allow history dialog to grow wider (#1354)
+ * Remove Reopen Closed Tab from tab context menu (#1371)
+ * Fix mnemonic conflict between Import Passwords and Import Bookmarks (#1386)
+ * Fix Remove button sensitivity in history dialog (#1417)
+ * Remove Firefox Sync from Preferences and add it to Import/Export menu (!766, Andrei Lișiță)
+ * Improve language selection widget (!800, Andrei Lișiță)
+ * Refine tab context menu (!815)
+ * Improve tab muting icons (!817)
+ * Update to highlight.js 10.5.0 (!824, !831, !862, !875)
+ * Update to PDF.js 2.5.207 (!825)
+ * Make bookmarks properties dialog resizable (!832)
+ * Additional bookmarks popover fixes for mobile (!833)
+ * Improve web app preferences (!834)
+ * Various fixes for system web apps (!835)
+ * libportal may not be disabled using -Dlibportal=disabled (!840, Simon McVittie)
+ * Move destructive buttons in clear data and history dialogs (!848)
+ * New Epiphany app icon (!849, Tobias Bernard)
+ * Add X-Purism-FormFactor to appdata and desktop file (!855, Adrien Plazas)
+ * Also add X-Purism-FormFactor to web app desktop files (!856)
+ * Improve support for dark header bars in otherwise light themes (!857, Ian Santopietro)
+ * Improve flatpak support for elementary OS (!858, Jordan Petridis)
+ * Remove compulsory_for_desktop (gnome-software#445)
+
+3.38.2 - December 1, 2020
+=========================
+
+ * Fix pinned tabs reordering themselves (#1341)
+ * Avoid crash during Storage Access API permission requests (#1357)
+ * Reduce size of Storage Access API permission request info bar (#1358)
+ * Fix fullscreen reveal animation (!847)
+ * Fix crash when Safe Browsing database is corrupted (!863)
+ * History dialog title should be translatable (Piotr Drąg)
+
+3.38.1 - October 6, 2020
+========================
+
+ * Fix failure to display new overview items (#1326)
+ * Open portal helper in new tab (#1329)
+ * Only run portal helper in non-GNOME environments (#1330)
+ * Prevent configuring the same language multiple times (#1335, Andrei Lisita)
+ * Run in Background setting should use a checkbox, not a radio button (#1337)
+ * Fix new ephy-reader: URIs (#1339)
+ * Show placeholder icon for pinned pages without favicon (#1351)
+ * Fix opening custom CSS and JS under flatpak (#1352)
+ * Remove ad-hoc query parameter stripping (!812)
+ * Fix criticals when starting web apps (!828)
+ * Fix launching system web apps (!835, Alexander Mikhaylenko)
+ * Remove rogue underscore from title of Add Language dialog
+
 3.38.0 - September 11, 2020
 ===========================
 
