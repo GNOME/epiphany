@@ -177,7 +177,7 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
-  if get_option('network_tests').enabled()
+  if get_option('network_tests').enabled() and gsb_api_key != ''
     gsb_service_test = executable('test-ephy-gsb-service',
       'ephy-gsb-service-test.c',
       dependencies: ephymain_dep,
