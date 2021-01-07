@@ -70,10 +70,7 @@ conf.set_quoted('VERSION', '@VCS_TAG@')
 
 gsb_api_key = get_option('gsb_api_key')
 conf.set_quoted('GSB_API_KEY', gsb_api_key)
-if gsb_api_key != ''
-  message('GSB API Key provided')
-endif
-conf.set10('ENABLE_GSB', get_option('enable_gsb'))
+conf.set10('ENABLE_GSB', gsb_api_key != '')
 
 glib_requirement = '>= 2.61.2'
 gtk_requirement = '>= 3.24.0'
