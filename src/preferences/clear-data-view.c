@@ -28,6 +28,7 @@
 
 #include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
+#include "ephy-settings.h"
 
 struct _ClearDataView {
   EphyDataView parent_instance;
@@ -60,21 +61,21 @@ G_DEFINE_TYPE (ClearDataView, clear_data_view, EPHY_TYPE_DATA_VIEW)
   WEBKIT_WEBSITE_DATA_ITP
 
 typedef struct {
+  guint id;
   WebKitWebsiteDataTypes type;
-  gboolean initial_state;
   const char *name;
 } DataEntry;
 
 static const DataEntry data_entries[] = {
-  { WEBKIT_WEBSITE_DATA_COOKIES, TRUE, N_("Cookies") },
-  { WEBKIT_WEBSITE_DATA_DISK_CACHE, TRUE, N_("HTTP disk cache") },
-  { WEBKIT_WEBSITE_DATA_LOCAL_STORAGE, FALSE, N_("Local storage data") },
-  { WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, TRUE, N_("Offline web application cache") },
-  { WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, FALSE, N_("IndexedDB databases") },
-  { WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES, FALSE, N_("WebSQL databases") },
-  { WEBKIT_WEBSITE_DATA_PLUGIN_DATA, FALSE, N_("Plugins data") },
-  { WEBKIT_WEBSITE_DATA_HSTS_CACHE, FALSE, N_("HSTS policies cache") },
-  { WEBKIT_WEBSITE_DATA_ITP, FALSE, N_("Intelligent Tracking Prevention data") }
+  { 0x001, WEBKIT_WEBSITE_DATA_COOKIES, N_("Cookies") },
+  { 0x002, WEBKIT_WEBSITE_DATA_DISK_CACHE, N_("HTTP disk cache") },
+  { 0x004, WEBKIT_WEBSITE_DATA_LOCAL_STORAGE, N_("Local storage data") },
+  { 0x008, WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, N_("Offline web application cache") },
+  { 0x010, WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, N_("IndexedDB databases") },
+  { 0x020, WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES, N_("WebSQL databases") },
+  { 0x040, WEBKIT_WEBSITE_DATA_PLUGIN_DATA, N_("Plugins data") },
+  { 0x080, WEBKIT_WEBSITE_DATA_HSTS_CACHE, N_("HSTS policies cache") },
+  { 0x100, WEBKIT_WEBSITE_DATA_ITP, N_("Intelligent Tracking Prevention data") }
 };
 
 static WebKitWebsiteDataManager *
@@ -94,6 +95,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
   GList *data_list;
   GtkTreeStore *treestore;
   GError *error = NULL;
+  int active_items;
 
   data_list = webkit_website_data_manager_fetch_finish (manager, result, &error);
   if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
@@ -112,6 +114,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
   }
 
   ephy_data_view_set_has_data (EPHY_DATA_VIEW (clear_data_view), TRUE);
+  active_items = g_settings_get_int (EPHY_SETTINGS_MAIN, EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS);
 
   treestore = GTK_TREE_STORE (clear_data_view->treestore);
   for (guint i = 0; i < G_N_ELEMENTS (data_entries); i++) {
@@ -120,7 +123,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
 
     gtk_tree_store_insert_with_values (treestore, &parent_iter, NULL, -1,
                                        TYPE_COLUMN, data_entries[i].type,
-                                       ACTIVE_COLUMN, data_entries[i].initial_state,
+                                       ACTIVE_COLUMN, active_items & data_entries[i].id,
                                        NAME_COLUMN, _(data_entries[i].name),
                                        DATA_COLUMN, NULL,
                                        SENSITIVE_COLUMN, TRUE,
@@ -133,7 +136,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
 
       gtk_tree_store_insert_with_values (treestore, NULL, &parent_iter, -1,
                                          TYPE_COLUMN, data_entries[i].type,
-                                         ACTIVE_COLUMN, data_entries[i].initial_state,
+                                         ACTIVE_COLUMN, active_items & data_entries[i].id,
                                          NAME_COLUMN, webkit_website_data_get_name (data),
                                          DATA_COLUMN, webkit_website_data_ref (data),
                                          SENSITIVE_COLUMN, TRUE,
@@ -286,6 +289,26 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
 
   if (gtk_tree_model_iter_has_child (clear_data_view->treestore, &iter)) {
     GtkTreeIter child_iter;
+    g_autofree char *name = NULL;
+    int active_items;
+
+    active_items = g_settings_get_int (EPHY_SETTINGS_MAIN, EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS);
+
+    gtk_tree_model_get (clear_data_view->treestore, &iter,
+                        NAME_COLUMN, &name,
+                        -1);
+    for (guint i = 0; i < G_N_ELEMENTS (data_entries); i++) {
+      if (g_strcmp0 (gettext (data_entries[i].name), name) == 0) {
+        if (active)
+          active_items &= ~data_entries[i].id;
+        else
+          active_items |= data_entries[i].id;
+
+        break;
+      }
+    }
+
+    g_settings_set_int (EPHY_SETTINGS_MAIN, EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS, active_items);
 
     gtk_tree_model_iter_children (clear_data_view->treestore, &child_iter, &iter);
     do {

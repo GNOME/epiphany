@@ -66,6 +66,11 @@
 			<summary>Start in incognito mode</summary>
 			<description>When this option is set to true, browser will always start in incognito mode</description>
 		</key>
+		<key type="i" name="active-clear-data-items">
+			<default>5</default>
+			<summary>Active clear data items.</summary>
+			<description>Selection (bitmask) which clear data items should be active by default. 1 = Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking Prevention data.</description>
+		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key type="b" name="expand-tabs-bar">
