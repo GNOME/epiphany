@@ -332,7 +332,7 @@ gvdb_table_list_from_item (GvdbTable                    *table,
 /**
  * gvdb_table_get_names:
  * @table: a #GvdbTable
- * @length: (optional): the number of items returned, or %NULL
+ * @length: (out) (optional): the number of items returned, or %NULL
  *
  * Gets a list of all names contained in @table.
  *
@@ -379,7 +379,7 @@ gvdb_table_get_names (GvdbTable *table,
    * a pass that fills in no additional items.
    *
    * This takes an O(n) algorithm and turns it into O(n*m) where m is
-   * the depth of the tree, but in all sane cases the tree won't be very
+   * the depth of the tree, but typically the tree won't be very
    * deep and the constant factor of this algorithm is lower (and the
    * complexity of coding it, as well).
    */

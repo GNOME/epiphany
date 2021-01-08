@@ -206,7 +206,7 @@ item_to_index (GvdbItem *item)
   if (item != NULL)
     return item->assigned_index;
 
-  return guint32_to_le (-1u);
+  return guint32_to_le ((guint32) -1);
 }
 
 typedef struct
@@ -234,7 +234,7 @@ file_builder_allocate (FileBuilder         *fb,
   if (size == 0)
     return NULL;
 
-  fb->offset += (-fb->offset) & (alignment - 1);
+  fb->offset += (guint64) (-fb->offset) & (alignment - 1);
   chunk = g_slice_new (FileChunk);
   chunk->offset = fb->offset;
   chunk->size = size;
@@ -312,7 +312,6 @@ file_builder_allocate_for_hash (FileBuilder            *fb,
                                 struct gvdb_hash_item **hash_items,
                                 struct gvdb_pointer    *pointer)
 {
-#ifndef __clang_analyzer__
   guint32_le bloom_hdr, table_hdr;
   guchar *data;
   gsize size;
@@ -328,6 +327,7 @@ file_builder_allocate_for_hash (FileBuilder            *fb,
          n_items       * sizeof (struct gvdb_hash_item);
 
   data = file_builder_allocate (fb, 4, size, pointer);
+  g_assert (data);
 
 #define chunk(s) (size -= (s), data += (s), data - (s))
   memcpy (chunk (sizeof bloom_hdr), &bloom_hdr, sizeof bloom_hdr);
@@ -349,7 +349,6 @@ file_builder_allocate_for_hash (FileBuilder            *fb,
    * http://en.wikipedia.org/wiki/Bloom_filter
    * http://0pointer.de/blog/projects/bloom.html
    */
-#endif
 }
 
 static void
@@ -357,7 +356,6 @@ file_builder_add_hash (FileBuilder         *fb,
                        GHashTable          *table,
                        struct gvdb_pointer *pointer)
 {
-#ifndef __clang_analyzer__
   guint32_le *buckets, *bloom_filter;
   struct gvdb_hash_item *items;
   HashTable *mytable;
@@ -440,7 +438,6 @@ file_builder_add_hash (FileBuilder         *fb,
     }
 
   hash_table_free (mytable);
-#endif
 }
 
 static FileBuilder *
@@ -456,12 +453,21 @@ file_builder_new (gboolean byteswap)
   return builder;
 }
 
+static void
+file_builder_free (FileBuilder *fb)
+{
+  g_queue_free (fb->chunks);
+  g_slice_free (FileBuilder, fb);
+}
+
 static GString *
 file_builder_serialise (FileBuilder          *fb,
                         struct gvdb_pointer   root)
 {
-  struct gvdb_header header = { { 0, }, };
+  struct gvdb_header header;
   GString *result;
+
+  memset (&header, 0, sizeof (header));
 
   if (fb->byteswap)
     {
@@ -500,9 +506,6 @@ file_builder_serialise (FileBuilder          *fb,
       g_slice_free (FileChunk, chunk);
     }
 
-  g_queue_free (fb->chunks);
-  g_slice_free (FileBuilder, fb);
-
   return result;
 }
 
@@ -524,6 +527,7 @@ gvdb_table_write_contents (GHashTable   *table,
   fb = file_builder_new (byteswap);
   file_builder_add_hash (fb, table, &root);
   str = file_builder_serialise (fb, root);
+  file_builder_free (fb);
 
   status = g_file_set_contents (filename, str->str, str->len, error);
   g_string_free (str, TRUE);
@@ -600,6 +604,7 @@ gvdb_table_write_contents_async (GHashTable          *table,
   file_builder_add_hash (fb, table, &root);
   str = file_builder_serialise (fb, root);
   bytes = g_string_free_to_bytes (str);
+  file_builder_free (fb);
 
   file = g_file_new_for_path (filename);
   data = write_contents_data_new (bytes, file);

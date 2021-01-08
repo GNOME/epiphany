@@ -1,10 +1,4 @@
 GVariant Database
 
- * Copied from https://git.gnome.org/browse/gvdb commit a6f0eadb51aae5351a0cfd6b9da3dcba6b134e1a
- * Removed G_GNUC_INTERNAL and GVDB_GNUC_WEAK
- * Fix -Wsign-compare
- * Add clang ifdef guards (#ifndef __clang_analyzer__) around:
-   - file_builder_allocate_for_hash
-   - file_builder_add_hash
- * Removed G_FILE_CREATE_REPLACE_DESTINATION in gvdb_table_write_contents_async
- * Fix valgrind warnings (gvdb#2)
+ * Copied from https://gitlab.gnome.org/GNOME/gvdb commit 3d50fe28e8e8f8b215a36581c6b4c9b199b60eb6
+ * scan-build fix https://gitlab.gnome.org/GNOME/gvdb/-/merge_requests/14
