@@ -1,13 +1,9 @@
 {
-    "app-id" : "org.gnome.Epiphany.Devel",
+    "app-id" : "org.gnome.Epiphany",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "master",
+    "runtime-version" : "40",
     "sdk" : "org.gnome.Sdk",
     "command" : "epiphany",
-    "tags" : [
-        "nightly"
-    ],
-    "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
     "finish-args" : [
         "--device=dri",
         "--filesystem=/run/.heim_org.h5l.kcm-socket",
@@ -90,6 +86,198 @@
             ]
         },
         {
+            "name": "x264",
+            "config-opts": [
+                "--enable-shared",
+                "--enable-static",
+                "--enable-pic",
+                "--disable-lavf"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://code.videolan.org/videolan/x264.git"
+                }
+            ]
+        },
+        {
+            "name": "vo-aacenc",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://downloads.sourceforge.net/opencore-amr/vo-aacenc/vo-aacenc-0.1.3.tar.gz",
+                    "mirror-urls": [
+                        "http://ftp.debian.org/debian/pool/main/v/vo-aacenc/vo-aacenc_0.1.3.orig.tar.gz"
+                    ],
+                    "sha256": "e51a7477a359f18df7c4f82d195dab4e14e7414cbd48cf79cc195fc446850f36"
+                }
+            ]
+        },
+        {
+            "name": "x265",
+            "buildsystem": "cmake",
+            "subdir": "source",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/videolan/x265.git",
+                    "tag": "3.4"
+                }
+            ]
+        },
+        {
+            "name": "ffmpeg",
+            "config-opts": [
+                "--disable-static",
+                "--enable-shared",
+                "--enable-pic",
+                "--disable-avdevice",
+                "--disable-postproc",
+                "--disable-swscale",
+                "--disable-programs",
+                "--disable-ffplay",
+                "--disable-ffprobe",
+                "--disable-ffmpeg",
+                "--disable-encoder=flac",
+                "--disable-protocols",
+                "--disable-devices",
+                "--disable-network",
+                "--disable-hwaccels",
+                "--disable-dxva2",
+                "--disable-vdpau",
+                "--disable-filters",
+                "--enable-filter=yadif",
+                "--disable-doc",
+                "--disable-d3d11va",
+                "--disable-dxva2",
+                "--disable-audiotoolbox",
+                "--disable-videotoolbox",
+                "--disable-vaapi",
+                "--disable-crystalhd",
+                "--disable-mediacodec",
+                "--disable-nvenc",
+                "--disable-mmal",
+                "--disable-omx",
+                "--disable-omx-rpi",
+                "--disable-cuda",
+                "--disable-cuvid",
+                "--disable-libmfx",
+                "--disable-libnpp",
+                "--disable-iconv",
+                "--disable-jni",
+                "--disable-v4l2_m2m",
+                "--enable-gpl",
+                "--enable-optimizations"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/FFmpeg/FFmpeg.git",
+                    "commit": "n4.3.2"
+                }
+            ]
+        },
+        {
+            "name" : "gstreamer",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dexamples=disabled",
+                "-Dtests=disabled",
+                "-Ddoc=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "1.18",
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gstreamer.git"
+                }
+            ]
+        },
+        {
+            "name" : "gst-plugins-base",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Ddoc=disabled",
+                "-Dexamples=disabled",
+                "-Dtests=disabled",
+                "-Dorc=enabled",
+                "--wrap-mode=nodownload"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "1.18",
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git"
+                }
+            ]
+        },
+        {
+            "name" : "gst-plugins-good",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk3=enabled",
+                "-Ddoc=disabled",
+                "-Dexamples=disabled",
+                "-Dtests=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "1.18",
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git"
+                }
+            ]
+        },
+        {
+            "name" : "gst-plugins-ugly",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Ddoc=disabled",
+                "-Dexamples=disabled",
+                "-Dtests=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "1.18",
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly.git"
+                }
+            ]
+        },
+        {
+            "name" : "gst-plugins-bad",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Ddoc=disabled",
+                "-Dexamples=disabled",
+                "-Dtests=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "1.18",
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git"
+                }
+            ]
+        },
+        {
+            "name" : "gst-libav",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Ddoc=disabled",
+                "-Dexamples=disabled",
+                "-Dtests=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "disable-shallow-clone" : true,
+                    "url" : "https://gitlab.freedesktop.org/gstreamer/gst-libav.git",
+                    "branch" : "1.18"
+                }
+            ]
+        },
+        {
             "name" : "libdazzle",
             "buildsystem" : "meson",
             "sources" : [
@@ -115,14 +303,11 @@
         {
             "name" : "epiphany",
             "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dtech_preview=true",
-                "-Dprofile=Devel"
-            ],
             "sources" : [
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "commit" : "048feea94d40f638993c3d4c7ecd69db8579e3a8",
                     "disable-shallow-clone" : true
                 }
             ]
