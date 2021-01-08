@@ -3618,7 +3618,8 @@ static const char *disabled_actions_for_app_mode[] = {
   "encoding",
   "bookmark-page",
   "new-tab",
-  "home"
+  "home",
+  "open-application-manager"
 };
 
 static gboolean
