@@ -802,7 +802,7 @@ ephy_web_application_initialize_settings (const char                *profile_dir
     g_free (path);
 
     if (options & EPHY_WEB_APPLICATION_MOBILE_CAPABLE)
-      g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_MOBILE_CAPABLE, TRUE);
+      g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SHOW_NAVIGATION_BUTTONS, TRUE);
 
     if (options & EPHY_WEB_APPLICATION_SYSTEM)
       g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SYSTEM, TRUE);
