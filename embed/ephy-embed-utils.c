@@ -218,9 +218,13 @@ is_bang_search (const char *address)
 static gboolean
 is_host_with_port (const char *address)
 {
-  g_auto (GStrv) split = g_strsplit (address, ":", -1);
+  g_auto (GStrv) split = NULL;
   gint64 port = 0;
 
+  if (strchr (address, ' '))
+    return FALSE;
+
+  split = g_strsplit (address, ":", -1);
   if (g_strv_length (split) == 2)
     port = g_ascii_strtoll (split[1], NULL, 10);
 
