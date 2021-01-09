@@ -97,6 +97,53 @@ write_contents_cb (GObject      *source_object,
   g_task_return_boolean (task, TRUE);
 }
 
+static void
+add_tags_to_string (const char *tag,
+                    GString    *tags)
+{
+  g_string_append_printf (tags, "%s%s", tags->len ? ", " : "", tag);
+}
+
+static void
+add_bookmark_to_html (EphyBookmark *bookmark,
+                      GString      *html)
+{
+  GSequence *tag_sequence;
+  g_autoptr (GString) tags = NULL;
+
+  tag_sequence = ephy_bookmark_get_tags (bookmark);
+  if (tag_sequence) {
+    tags = g_string_new ("");
+    g_sequence_foreach (tag_sequence, (GFunc)add_tags_to_string, tags);
+  }
+
+  g_string_append_printf (html,
+                          "<DT><A HREF=\"%s\" ADD_DATE=\"%ld\" TAGS=\"%s\">%s</A>\n",
+                          ephy_bookmark_get_url (bookmark),
+                          ephy_bookmark_get_time_added (bookmark),
+                          tags ? tags->str : "",
+                          ephy_bookmark_get_title (bookmark));
+}
+
+static void
+write_html_contents_cb (GObject      *source_object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  g_autoptr (GTask) task = user_data;
+  GFile *file;
+  GError *error = NULL;
+
+  file = g_task_get_task_data (task);
+
+  if (!g_file_replace_contents_finish (file, result, NULL, &error)) {
+    g_task_return_error (task, error);
+    return;
+  }
+
+  g_task_return_boolean (task, TRUE);
+}
+
 void
 ephy_bookmarks_export (EphyBookmarksManager *manager,
                        const char           *filename,
@@ -104,25 +151,59 @@ ephy_bookmarks_export (EphyBookmarksManager *manager,
                        GAsyncReadyCallback   callback,
                        gpointer              user_data)
 {
-  GHashTable *root_table;
-  GHashTable *table;
-  GTask *task;
+  if (g_str_has_suffix (filename, ".gvdb")) {
+    GHashTable *root_table;
+    GHashTable *table;
+    GTask *task;
 
-  root_table = gvdb_hash_table_new (NULL, NULL);
+    root_table = gvdb_hash_table_new (NULL, NULL);
 
-  table = gvdb_hash_table_new (root_table, "tags");
-  g_sequence_foreach (ephy_bookmarks_manager_get_tags (manager), (GFunc)add_tag_to_table, table);
-  g_hash_table_unref (table);
+    table = gvdb_hash_table_new (root_table, "tags");
+    g_sequence_foreach (ephy_bookmarks_manager_get_tags (manager), (GFunc)add_tag_to_table, table);
+    g_hash_table_unref (table);
 
-  table = gvdb_hash_table_new (root_table, "bookmarks");
-  g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks (manager), (GFunc)add_bookmark_to_table, table);
-  g_hash_table_unref (table);
+    table = gvdb_hash_table_new (root_table, "bookmarks");
+    g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks (manager), (GFunc)add_bookmark_to_table, table);
+    g_hash_table_unref (table);
 
-  task = g_task_new (manager, cancellable, callback, user_data);
-  g_task_set_task_data (task, root_table, (GDestroyNotify)g_hash_table_unref);
+    task = g_task_new (manager, cancellable, callback, user_data);
+    g_task_set_task_data (task, root_table, (GDestroyNotify)g_hash_table_unref);
 
-  gvdb_table_write_contents_async (root_table, filename, FALSE,
-                                   cancellable, write_contents_cb, task);
+    gvdb_table_write_contents_async (root_table, filename, FALSE,
+                                     cancellable, write_contents_cb, task);
+  } else {
+    g_autoptr (GString) html = NULL;
+    g_autoptr (GBytes) bytes = NULL;
+    g_autoptr (GFile) file = NULL;
+    GTask *task;
+
+    html = g_string_new ("<!DOCTYPE NETSCAPE-Bookmark-file-1>\n");
+    g_string_append (html, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n");
+    g_string_append (html, "<TITLE>Bookmarks</TITLE>\n");
+    g_string_append (html, "<H1>Epiphany Bookmarks</H1>\n");
+    g_string_append (html, "<DL><p>\n");
+    g_string_append (html, "<DT><H3>Epiphany</H3>\n");
+    g_string_append (html, "<DL><p>\n");
+
+    g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks (manager), (GFunc)add_bookmark_to_html, html);
+
+    g_string_append (html, "</DL>\n");
+
+    file = g_file_new_for_path (filename);
+
+    task = g_task_new (manager, cancellable, callback, user_data);
+    g_task_set_task_data (task, file, (GDestroyNotify)g_object_unref);
+
+    bytes = g_bytes_new (html->str, html->len);
+    g_file_replace_contents_bytes_async (g_steal_pointer (&file),
+                                         bytes,
+                                         NULL,
+                                         FALSE,
+                                         G_FILE_CREATE_REPLACE_DESTINATION,
+                                         cancellable,
+                                         write_html_contents_cb,
+                                         g_steal_pointer (&task));
+  }
 }
 
 gboolean

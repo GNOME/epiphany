@@ -646,10 +646,11 @@ window_cmd_export_bookmarks (GSimpleAction *action,
                                                           _("_Cancel")));
   gtk_file_chooser_set_show_hidden (dialog, TRUE);
 
-  /* Translators: Only translate the part before ".gvdb" (e.g. "bookmarks") */
-  gtk_file_chooser_set_current_name (dialog, _("bookmarks.gvdb"));
+  /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
+  gtk_file_chooser_set_current_name (dialog, _("bookmarks.html"));
 
   filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.html");
   gtk_file_filter_add_pattern (filter, "*.gvdb");
   gtk_file_chooser_set_filter (dialog, filter);
 
