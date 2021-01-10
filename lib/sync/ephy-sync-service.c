@@ -1023,6 +1023,9 @@ ephy_sync_service_get_storage_credentials (EphySyncService *self)
 
   /* Derive tokenID and reqHMACkey from sessionToken. */
   session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
+  if (!session_token)
+    return;
+
   ephy_sync_crypto_derive_session_token (session_token, &token_id,
                                          &req_hmac_key, &tmp);
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
@@ -2430,6 +2433,10 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
+  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
+  if (!session_token)
+    return;
+
   object = json_object_new ();
   device_name = ephy_sync_utils_get_device_name ();
   json_object_set_string_member (object, "name", device_name);
@@ -2448,7 +2455,6 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
   json_node_take_object (node, object);
   body = json_to_string (node, FALSE);
 
-  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
   ephy_sync_crypto_derive_session_token (session_token, &token_id, &req_hmac_key, &tmp);
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
 
