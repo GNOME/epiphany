@@ -20,8 +20,11 @@
 #include "ephy-suggestion-model.h"
 
 #include "ephy-embed-shell.h"
+#include "ephy-prefs.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-settings.h"
 #include "ephy-suggestion.h"
+#include "ephy-user-agent.h"
 #include "ephy-window.h"
 
 #include <dazzle.h>
@@ -37,6 +40,7 @@ struct _EphySuggestionModel {
   GSequence *items;
   GCancellable *icon_cancellable;
   guint num_custom_entries;
+  SoupSession *session;
 };
 
 enum {
@@ -62,6 +66,7 @@ ephy_suggestion_model_finalize (GObject *object)
   g_clear_object (&self->history_service);
   g_clear_pointer (&self->urls, g_sequence_free);
   g_clear_pointer (&self->items, g_sequence_free);
+  g_clear_object (&self->session);
 
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
@@ -139,6 +144,7 @@ static void
 ephy_suggestion_model_init (EphySuggestionModel *self)
 {
   self->items = g_sequence_new (g_object_unref);
+  self->session = soup_session_new_with_options ("user-agent", ephy_user_agent_get (), NULL);
 }
 
 static GType
@@ -283,8 +289,12 @@ static gboolean
 append_suggestion (EphySuggestionModel *self,
                    EphySuggestion      *suggestion)
 {
+  if (g_sequence_lookup (self->urls, (char *)ephy_suggestion_get_uri (suggestion), (GCompareDataFunc)g_strcmp0, NULL))
+    return FALSE;
+
   if (self->num_custom_entries < MAX_URL_ENTRIES) {
-    g_sequence_append (self->items, suggestion);
+    g_sequence_append (self->items, g_object_ref (suggestion));
+    load_favicon (self, suggestion, ephy_suggestion_get_uri (suggestion));
     self->num_custom_entries++;
 
     return TRUE;
@@ -344,42 +354,6 @@ add_bookmarks (EphySuggestionModel *self,
   for (GList *p = new_urls; p != NULL; p = p->next)
     g_sequence_append (self->urls, g_steal_pointer (&p->data));
   g_sequence_sort (self->urls, (GCompareDataFunc)g_strcmp0, NULL);
-
-  return added;
-}
-
-static guint
-add_history (EphySuggestionModel *self,
-             GList               *urls,
-             const char          *query)
-{
-  guint added = 0;
-
-  for (const GList *p = urls; p != NULL; p = p->next) {
-    EphyHistoryURL *url = (EphyHistoryURL *)p->data;
-    EphySuggestion *suggestion;
-    g_autofree gchar *escaped_title = NULL;
-    g_autofree gchar *markup = NULL;
-    const gchar *title = url->title;
-
-    if (g_sequence_lookup (self->urls, url->url, (GCompareDataFunc)g_strcmp0,
-                           NULL))
-      continue;
-
-    if (strlen (url->title) == 0)
-      title = url->url;
-
-    escaped_title = g_markup_escape_text (title, -1);
-
-    markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new (markup, title, url->url);
-    load_favicon (self, suggestion, url->url);
-
-    if (append_suggestion (self, suggestion))
-      added++;
-    else
-      break;
-  }
 
   return added;
 }
@@ -505,6 +479,9 @@ add_tabs (EphySuggestionModel *self,
 typedef struct {
   char *query;
   gboolean include_search_engines;
+  GSequence *history;
+  GSequence *google_suggestions;
+  int active_sources;
 } QueryData;
 
 static QueryData *
@@ -516,6 +493,8 @@ query_data_new (const char *query,
   data = g_malloc0 (sizeof (QueryData));
   data->query = g_strdup (query);
   data->include_search_engines = include_search_engines;
+  data->history = g_sequence_new (g_object_unref);
+  data->google_suggestions = g_sequence_new (g_object_unref);
 
   return data;
 }
@@ -524,26 +503,27 @@ static void
 query_data_free (QueryData *data)
 {
   g_assert (data != NULL);
+  g_clear_pointer (&data->history, g_sequence_free);
+  g_clear_pointer (&data->google_suggestions, g_sequence_free);
   g_free (data->query);
   g_free (data);
 }
 
 static void
-query_completed_cb (EphyHistoryService *service,
-                    gboolean            success,
-                    gpointer            result_data,
-                    gpointer            user_data)
+query_collection_done (EphySuggestionModel *self,
+                       GTask               *task)
 {
-  GTask *task = user_data;
-  EphySuggestionModel *self;
   QueryData *data;
-  GList *urls;
   guint removed;
   guint added = 0;
 
   self = g_task_get_source_object (task);
   data = g_task_get_task_data (task);
-  urls = (GList *)result_data;
+
+  if (--data->active_sources) {
+    g_object_unref (task);
+    return;
+  }
 
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
@@ -560,8 +540,26 @@ query_completed_cb (EphyHistoryService *service,
 
   if (strlen (data->query) > 0) {
     added = add_tabs (self, data->query);
+
+    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->google_suggestions); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      EphySuggestion *tmp = g_sequence_get (iter);
+
+      if (append_suggestion (self, tmp))
+        added++;
+      else
+        break;
+    }
+
     added += add_bookmarks (self, data->query);
-    added += add_history (self, urls, data->query);
+
+    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->history); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      EphySuggestion *tmp = g_sequence_get (iter);
+
+      if (append_suggestion (self, tmp))
+        added++;
+      else
+        break;
+    }
 
     if (data->include_search_engines)
       added += add_search_engines (self, data->query);
@@ -571,6 +569,119 @@ query_completed_cb (EphyHistoryService *service,
 
   g_task_return_boolean (task, TRUE);
   g_object_unref (task);
+}
+
+static void
+history_query_completed_cb (EphyHistoryService *service,
+                            gboolean            success,
+                            gpointer            result_data,
+                            gpointer            user_data)
+{
+  GTask *task = user_data;
+  EphySuggestionModel *self;
+  QueryData *data;
+  GList *urls;
+
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+  urls = (GList *)result_data;
+
+  if (strlen (data->query) > 0) {
+    for (const GList *p = urls; p != NULL; p = p->next) {
+      EphyHistoryURL *url = (EphyHistoryURL *)p->data;
+      EphySuggestion *suggestion;
+      g_autofree gchar *escaped_title = NULL;
+      g_autofree gchar *markup = NULL;
+      const gchar *title = url->title;
+
+      if (strlen (url->title) == 0)
+        title = url->url;
+
+      escaped_title = g_markup_escape_text (title, -1);
+
+      markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
+      suggestion = ephy_suggestion_new (markup, title, url->url);
+
+      g_sequence_append (data->history, g_steal_pointer (&suggestion));
+    }
+  }
+
+  query_collection_done (self, g_steal_pointer (&task));
+}
+
+static void
+google_search_suggestions_cb (SoupSession *session,
+                              SoupMessage *msg,
+                              gpointer     user_data)
+{
+  GTask *task = G_TASK (user_data);
+  EphySuggestionModel *self = g_task_get_source_object (task);
+  EphyEmbedShell *shell;
+  EphySearchEngineManager *manager;
+  QueryData *data;
+  JsonNode *node;
+  JsonArray *array;
+  JsonArray *suggestions;
+  char *engine;
+  int added = 0;
+
+  if (msg->status_code != 200)
+    goto out;
+
+  shell = ephy_embed_shell_get_default ();
+  manager = ephy_embed_shell_get_search_engine_manager (shell);
+  engine = ephy_search_engine_manager_get_default_engine (manager);
+
+  node = json_from_string (msg->response_body->data, NULL);
+  if (!node || !JSON_NODE_HOLDS_ARRAY (node)) {
+    g_warning ("Google search suggestion response is not a valid JSON object: %s", msg->response_body->data);
+    goto out;
+  }
+
+  array = json_node_get_array (node);
+  suggestions = json_array_get_array_element (array, 1);
+  data = g_task_get_task_data (task);
+
+  for (guint i = 0; i < json_array_get_length (suggestions) && added < 5; i++) {
+    EphySuggestion *suggestion;
+    const char *str = json_array_get_string_element (suggestions, i);
+    g_autofree char *address = NULL;
+    g_autofree char *escaped_title = NULL;
+    g_autofree char *markup = NULL;
+
+    address = ephy_search_engine_manager_build_search_address (manager, engine, str);
+    escaped_title = g_markup_escape_text (str, -1);
+    markup = dzl_fuzzy_highlight (escaped_title, str, FALSE);
+    suggestion = ephy_suggestion_new (markup, engine, address);
+
+    g_sequence_append (data->google_suggestions, g_steal_pointer (&suggestion));
+    added++;
+  }
+
+out:
+  query_collection_done (self, g_steal_pointer (&task));
+}
+
+static void
+google_search_suggestions_query (EphySuggestionModel *self,
+                                 const gchar         *query,
+                                 GTask               *task)
+{
+  SoupMessage *msg;
+  g_auto (GStrv) split = g_strsplit (query, " ", -1);
+  g_autofree char *url = NULL;
+  g_autofree char *escaped_query = NULL;
+
+  if (g_strv_length (split) < 2) {
+    query_collection_done (self, g_steal_pointer (&task));
+    return;
+  }
+
+  escaped_query = g_markup_escape_text (query, -1);
+  url = g_strdup_printf ("http://suggestqueries.google.com/complete/search?client=firefox&q=%s", escaped_query);
+  msg = soup_message_new (SOUP_METHOD_GET, url);
+
+  soup_session_queue_message (self->session, g_steal_pointer (&msg), google_search_suggestions_cb, g_steal_pointer (&task));
 }
 
 void
@@ -601,13 +712,22 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   for (guint i = 0; strings[i]; i++)
     qlist = g_list_append (qlist, g_strdup (strings[i]));
 
+  /* History */
+  data->active_sources = 1;
+
+  /* Google Search Suggestions */
+  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS)) {
+    data->active_sources++;
+    google_search_suggestions_query (self, query, g_object_ref (task));
+  }
+
   ephy_history_service_find_urls (self->history_service,
                                   0, 0,
                                   MAX_URL_ENTRIES, 0,
                                   qlist,
                                   EPHY_HISTORY_SORT_MOST_VISITED,
                                   cancellable,
-                                  (EphyHistoryJobCallback)query_completed_cb,
+                                  (EphyHistoryJobCallback)history_query_completed_cb,
                                   task);
 
   g_strfreev (strings);

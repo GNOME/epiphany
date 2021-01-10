@@ -44,6 +44,9 @@ struct _PrefsPrivacyPage {
   GtkWidget *enable_itp_switch;
   GtkWidget *enable_website_data_storage_switch;
 
+  /* Search Suggestions */
+  GtkWidget *enable_google_search_suggestions_switch;
+
   /* Passwords */
   GtkWidget *remember_passwords_switch;
 };
@@ -107,6 +110,15 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    privacy_page->remember_passwords_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+
+  /* ======================================================================== */
+  /* ========================== Search Suggestions ========================== */
+  /* ======================================================================== */
+  g_settings_bind (EPHY_SETTINGS_MAIN,
+                   EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS,
+                   privacy_page->enable_google_search_suggestions_switch,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -138,6 +150,9 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   /* Web Tracking */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_switch);
+
+  /* Search Suggestions */
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_switch);
 
   /* Passwords */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);
