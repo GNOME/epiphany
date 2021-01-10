@@ -81,7 +81,6 @@ struct _PrefsGeneralPage {
 
   /* Browsing */
   GtkWidget *browsing_box;
-  GtkWidget *enable_smooth_scrolling_switch;
   GtkWidget *enable_mouse_gesture_switch;
   GtkWidget *enable_switch_to_new_tab;
 
@@ -1078,7 +1077,6 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 
   /* Browsing */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, browsing_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_smooth_scrolling_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_mouse_gesture_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_switch_to_new_tab);
 
@@ -1250,12 +1248,6 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   /* ========================== Browsing ==================================== */
   /* ======================================================================== */
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
-                   general_page->enable_smooth_scrolling_switch,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES,
                    general_page->enable_mouse_gesture_switch,

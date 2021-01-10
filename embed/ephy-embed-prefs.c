@@ -600,10 +600,6 @@ ephy_embed_prefs_init (gpointer user_data)
                    webkit_settings, DEFAULT_ENCODING_SETTING,
                    G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
-                   webkit_settings, "enable-smooth-scrolling",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
                    webkit_settings, "enable-site-specific-quirks",
                    G_SETTINGS_BIND_GET);

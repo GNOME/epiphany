@@ -100,7 +100,6 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_USER_JS               "enable-user-js"
 #define EPHY_PREFS_WEB_ENABLE_POPUPS                "enable-popups"
 #define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING        "enable-spell-checking"
-#define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING      "enable-smooth-scrolling"
 #define EPHY_PREFS_WEB_USER_AGENT                   "user-agent"
 #define EPHY_PREFS_WEB_DEFAULT_ENCODING             "default-encoding"
 #define EPHY_PREFS_WEB_ENABLE_ADBLOCK               "enable-adblock"
@@ -131,7 +130,6 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ENABLE_USER_JS,
   EPHY_PREFS_WEB_ENABLE_POPUPS,
   EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-  EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
   EPHY_PREFS_WEB_USER_AGENT,
   EPHY_PREFS_WEB_DEFAULT_ENCODING,
   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
