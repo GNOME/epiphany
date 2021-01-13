@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.38.x\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-09-14 16:07+0000\n"
-"PO-Revision-Date: 2020-11-30 13:16+0100\n"
+"POT-Creation-Date: 2020-12-01 12:49+0000\n"
+"PO-Revision-Date: 2021-01-13 14:36+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -182,7 +182,9 @@ msgstr ""
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
-msgstr "Hvis dette valget har positiv verdi («true»), vil nettleser spørre om å få bli standard nettleser hvis den ikke allerede er det."
+msgstr ""
+"Hvis dette valget har positiv verdi («true»), vil nettleser spørre om å få "
+"bli standard nettleser hvis den ikke allerede er det."
 
 #: data/org.gnome.epiphany.gschema.xml:66
 msgid "Start in incognito mode"
@@ -191,7 +193,9 @@ msgstr "Start i inkognitomodus"
 #: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
-msgstr "Hvis dette valget har positiv verdi («true») vil nettleser alltid starte i inkognito modus."
+msgstr ""
+"Hvis dette valget har positiv verdi («true») vil nettleser alltid starte i "
+"inkognito modus."
 
 #: data/org.gnome.epiphany.gschema.xml:73
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -367,7 +371,9 @@ msgstr "Språk"
 #: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
-msgstr "Foretrukne språk. Tabell med koder eller «system» for å bruke nåværende språk."
+msgstr ""
+"Foretrukne språk. Tabell med koder eller «system» for å bruke nåværende "
+"språk."
 
 #: data/org.gnome.epiphany.gschema.xml:156
 msgid "Allow popups"
@@ -495,24 +501,20 @@ msgid "Last upload directory"
 msgstr "Velg en katalog for opplasting"
 
 #: data/org.gnome.epiphany.gschema.xml:221
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
-msgstr "Velg en katalog"
+msgstr "Husk siste katalog for opplasting"
 
 #: data/org.gnome.epiphany.gschema.xml:225
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Last download directory"
-msgstr "Velg en katalog"
+msgstr "Siste katalog for nedlasting"
 
 #: data/org.gnome.epiphany.gschema.xml:226
 msgid "Keep track of last download directory"
-msgstr ""
+msgstr "Husk siste katalog for nedlasting"
 
 #: data/org.gnome.epiphany.gschema.xml:230
 msgid "Hardware acceleration policy"
-msgstr ""
+msgstr "Regelsett for maskinvareaksellerasjon"
 
 #: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
@@ -916,7 +918,9 @@ msgstr "Installert:"
 msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
-msgstr "Du kan legge til ditt favorittnettsted ved å klikke på <b>Installer nettsted som nettstedsapplikasjon…</b> i sidemenyen."
+msgstr ""
+"Du kan legge til ditt favorittnettsted ved å klikke på <b>Installer nettsted "
+"som nettstedsapplikasjon…</b> i sidemenyen."
 
 #. Displayed when opening the browser for the first time.
 #: embed/ephy-about-handler.c:394
@@ -929,15 +933,15 @@ msgstr ""
 "De mest besøkte sidene vil vises her etter hvert som du bruker nettleseren."
 
 #: embed/ephy-about-handler.c:425
-#: embed/web-process-extension/resources/js/overview.js:116
+#: embed/web-process-extension/resources/js/overview.js:146
 msgid "Remove from overview"
 msgstr "Fjern fra oversikt"
 
-#: embed/ephy-about-handler.c:505 embed/ephy-about-handler.c:506
+#: embed/ephy-about-handler.c:497 embed/ephy-about-handler.c:498
 msgid "Private Browsing"
 msgstr "Privat nettlesing"
 
-#: embed/ephy-about-handler.c:507
+#: embed/ephy-about-handler.c:499
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -947,14 +951,14 @@ msgstr ""
 "nettleserhistorikken, og all lagret informasjon fjernes når du lukker "
 "vinduet. Filer du laster ned beholdes."
 
-#: embed/ephy-about-handler.c:511
+#: embed/ephy-about-handler.c:503
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Inkognitomodus skjuler kun din aktivitet fra personer som bruker denne "
 "datamaskinen."
 
-#: embed/ephy-about-handler.c:513
+#: embed/ephy-about-handler.c:505
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1392,25 +1396,25 @@ msgstr "Finn forrige forekomst av søketeksten"
 msgid "Find next occurrence of the search string"
 msgstr "Finn neste forekomst av søketeksten"
 
-#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:267 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s er ikke en gyldig URI"
 
-#: embed/ephy-web-view.c:183 src/window-commands.c:1336
+#: embed/ephy-web-view.c:185 src/window-commands.c:1336
 msgid "Open"
 msgstr "Åpne"
 
-#: embed/ephy-web-view.c:358
+#: embed/ephy-web-view.c:364
 msgid "Not No_w"
 msgstr "Ikke n_å"
 
 # (ugh)
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:365
 msgid "_Never Save"
 msgstr "Al_dri lagre"
 
-#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
+#: embed/ephy-web-view.c:366 lib/widgets/ephy-file-chooser.c:175
 #: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Lagre"
@@ -1418,13 +1422,13 @@ msgstr "_Lagre"
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:367
+#: embed/ephy-web-view.c:373
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Vil du lagre passordet til «%s»?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:609
+#: embed/ephy-web-view.c:615
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1432,82 +1436,82 @@ msgstr ""
 "Merk: dette skjemaet er ikke sikkert. Hvis du skriver inn passordet vil det "
 "ikke være privat."
 
-#: embed/ephy-web-view.c:817
+#: embed/ephy-web-view.c:823
 msgid "Web process crashed"
 msgstr "Nettleserprosessen krasjet"
 
-#: embed/ephy-web-view.c:820
+#: embed/ephy-web-view.c:826
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Nettleserprosessen avsluttet på grunn av overstigelse av minnegrensen"
 
-#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: embed/ephy-web-view.c:1026 embed/ephy-web-view.c:1147
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Nekt"
 
-#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1027 embed/ephy-web-view.c:1148
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Tillat"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1034
+#: embed/ephy-web-view.c:1040
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Siden på %s vil vise skrivebordsvarsler."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1039
+#: embed/ephy-web-view.c:1045
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Siden på %s vil vite hvor du befinner deg."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1044
+#: embed/ephy-web-view.c:1050
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Siden på %s vil bruke mikrofonen din."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1049
+#: embed/ephy-web-view.c:1055
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Siden på %s vil bruke nettkameraet ditt."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1054
+#: embed/ephy-web-view.c:1060
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "Siden på %s vil bruke kameraet og mikrofonen din."
 
-#: embed/ephy-web-view.c:1149
+#: embed/ephy-web-view.c:1155
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Vil du la «%s» bruke informasjonskapsler mens du ser på «%s»?"
 
-#: embed/ephy-web-view.c:1158
+#: embed/ephy-web-view.c:1164
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "Dette lar «%s» spore din aktivitet."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1336
+#: embed/ephy-web-view.c:1342
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laster inn «%s» …"
 
-#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1344 embed/ephy-web-view.c:1350
 msgid "Loading…"
 msgstr "Laster inn …"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1677
+#: embed/ephy-web-view.c:1688
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Nettstedet presenterte identifikasjon som tilhører et annet nettsted."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1682
+#: embed/ephy-web-view.c:1693
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1516,20 +1520,20 @@ msgstr ""
 "datamaskinens kalender."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1687
+#: embed/ephy-web-view.c:1698
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Nettstedets identifikasjon er ikke utstedt av en pålitelig organisasjon."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1692
+#: embed/ephy-web-view.c:1703
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Klarte ikke å behandle nettstedets identifikasjon. Den kan være korrupt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1697
+#: embed/ephy-web-view.c:1708
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1538,7 +1542,7 @@ msgstr ""
 "organisasjonen som utstedte den."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1702
+#: embed/ephy-web-view.c:1713
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1547,7 +1551,7 @@ msgstr ""
 "svak krypteringsmetode."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1707
+#: embed/ephy-web-view.c:1718
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1557,24 +1561,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:1781 embed/ephy-web-view.c:1837
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problem ved lasting av side"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1784
 msgid "Unable to display this website"
 msgstr "Kan ikke vise dette nettstedet"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1788
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Nettstedet på %s ser ut til å være utilgjengelig."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1792
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1583,7 +1587,7 @@ msgstr ""
 "Ikke glem å sjekke at tilkoblingen til internett fungerer."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1802
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Eksakt feilmelding var: %s"
@@ -1591,50 +1595,50 @@ msgstr "Eksakt feilmelding var: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
-#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1807 embed/ephy-web-view.c:1860
+#: embed/ephy-web-view.c:1899 src/resources/gtk/page-menu-popover.ui:129
 msgid "Reload"
 msgstr "Last på nytt"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
-#: embed/ephy-web-view.c:1891
+#: embed/ephy-web-view.c:1810 embed/ephy-web-view.c:1863
+#: embed/ephy-web-view.c:1902
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "L"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1840
 msgid "Oops! There may be a problem"
 msgstr "Oops! Det kan være problemer"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1844
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Nettstedet på %s kan ha forårsaket at Nettleser ble lukket på uventet vis."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1851
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Vennligst rapporter dette til utviklerene for %s hvis dette skjer igjen."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1877
+#: embed/ephy-web-view.c:1888
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problem ved visning av side"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1891
 msgid "Oops!"
 msgstr "Oops!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1883
+#: embed/ephy-web-view.c:1894
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1643,18 +1647,18 @@ msgstr ""
 "gå til et annet nettsted for å fortsette."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1928
 #, c-format
 msgid "Security Violation"
 msgstr "Sikkerhetsbrudd"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:1931
 msgid "This Connection is Not Secure"
 msgstr "Denne tilkoblingen er ikke sikker"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1924
+#: embed/ephy-web-view.c:1935
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1666,45 +1670,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
-#: embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:1945 embed/ephy-web-view.c:2034
+#: embed/ephy-web-view.c:2085
 msgid "Go Back"
 msgstr "Gå tilbake"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
-#: embed/ephy-web-view.c:2077
+#: embed/ephy-web-view.c:1948 embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:2088
 msgctxt "back-access-key"
 msgid "B"
 msgstr "T"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1951 embed/ephy-web-view.c:2040
 msgid "Accept Risk and Proceed"
 msgstr "Godta risiko og fortsett"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
+#: embed/ephy-web-view.c:1955 embed/ephy-web-view.c:2044
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "F"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1974
+#: embed/ephy-web-view.c:1985
 #, c-format
 msgid "Security Warning"
 msgstr "Sikkerhetsvarsel"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:1988
 msgid "Unsafe website detected!"
 msgstr "Utrygt nettsted oppdaget!"
 
-#: embed/ephy-web-view.c:1984
+#: embed/ephy-web-view.c:1995
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1713,7 +1717,7 @@ msgstr ""
 "Du kan skade datamaskinen din ved å besøke %s. Denne siden inneholder "
 "ondsinnet kode som kan bli lastet ned til din datamaskin uten ditt samtykke."
 
-#: embed/ephy-web-view.c:1988
+#: embed/ephy-web-view.c:1999
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1722,7 +1726,7 @@ msgstr ""
 "Du kan lære mer om skadelig innhold på nettet, som virus og annen ondsinnet "
 "kode, og hvordan du beskytter datamaskinen din på %s."
 
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2006
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1733,14 +1737,14 @@ msgstr ""
 "programvare eller å få tak i din personlige informasjon (for eksempel "
 "passord, telefonnummer eller kredittkort)."
 
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:2011
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Du kan finne ut mer om sosial manipulering (phishing) på %s eller fra %s."
 
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2020
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1751,24 +1755,24 @@ msgstr ""
 "å installere programmer som skader din nettleseropplevelse (for eksempel ved "
 "å endre din hjemmeside eller å vise ekstra reklame på sider du besøker)."
 
-#: embed/ephy-web-view.c:2014
+#: embed/ephy-web-view.c:2025
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Du kan lære mer om uønsket programvare på %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
+#: embed/ephy-web-view.c:2069 embed/ephy-web-view.c:2072
 #, c-format
 msgid "File not found"
 msgstr "Fant ikke filen"
 
-#: embed/ephy-web-view.c:2065
+#: embed/ephy-web-view.c:2076
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ble ikke funnet."
 
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2078
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1778,15 +1782,15 @@ msgstr ""
 "feil i filnavnet. Sjekk også om den har blitt flyttet, endret navn eller "
 "blit slettet."
 
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2141
 msgid "None specified"
 msgstr "Ingen valgt"
 
-#: embed/ephy-web-view.c:2246
+#: embed/ephy-web-view.c:2257
 msgid "Technical information"
 msgstr "Teknisk informasjon"
 
-#: embed/ephy-web-view.c:3382
+#: embed/ephy-web-view.c:3393
 msgid "_OK"
 msgstr "_OK"
 
@@ -1914,7 +1918,8 @@ msgstr "Kan ikke lage tilkobling til SQLite. Lukk nettleser og prøv igjen."
 #, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
-msgstr "Nettlesers bokmerkedatabase kunne ikke åpnes. Lukk nettleser og prøv igjen."
+msgstr ""
+"Nettlesers bokmerkedatabase kunne ikke åpnes. Lukk nettleser og prøv igjen."
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
@@ -2315,7 +2320,7 @@ msgstr "Mobil"
 msgid "Reload the current page"
 msgstr "Last denne siden på nytt"
 
-#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Stopp lasting av denne siden"
 
@@ -2923,13 +2928,14 @@ msgstr "Relaterte kodinger"
 msgid "Show all…"
 msgstr "Vis alle …"
 
-#: src/resources/gtk/history-dialog.ui:42
-msgid "Select Items"
-msgstr "Velg oppføringer"
-
+#: src/resources/gtk/history-dialog.ui:30
 #: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "Historikk"
+
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Velg oppføringer"
 
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
@@ -3013,67 +3019,67 @@ msgstr "Fullskjerm"
 msgid "_Run in Background"
 msgstr "Kjø_r i bakgrunnen"
 
-#: src/resources/gtk/page-menu-popover.ui:191
+#: src/resources/gtk/page-menu-popover.ui:190
 msgid "_New Window"
 msgstr "_Nytt vindu"
 
-#: src/resources/gtk/page-menu-popover.ui:199
+#: src/resources/gtk/page-menu-popover.ui:198
 msgid "New _Incognito Window"
 msgstr "Nytt _inkognitovindu"
 
-#: src/resources/gtk/page-menu-popover.ui:216
+#: src/resources/gtk/page-menu-popover.ui:215
 msgid "Reopen Closed _Tab"
 msgstr "Gjenåpne lukket _fane"
 
-#: src/resources/gtk/page-menu-popover.ui:224
+#: src/resources/gtk/page-menu-popover.ui:223
 msgid "_History"
 msgstr "_Historikk"
 
-#: src/resources/gtk/page-menu-popover.ui:240
+#: src/resources/gtk/page-menu-popover.ui:239
 msgid "I_mport and Export"
 msgstr "I_mport og eksport"
 
-#: src/resources/gtk/page-menu-popover.ui:257
+#: src/resources/gtk/page-menu-popover.ui:256
 msgid "Install Site as Web _Application…"
 msgstr "Installer nettsted som nettsideprogr_am …"
 
-#: src/resources/gtk/page-menu-popover.ui:265
+#: src/resources/gtk/page-menu-popover.ui:264
 msgid "Open Appli_cation Manager"
 msgstr "Åpne appli_kasjonshåndtering"
 
-#: src/resources/gtk/page-menu-popover.ui:282
+#: src/resources/gtk/page-menu-popover.ui:281
 msgid "_Override Text Encoding…"
 msgstr "_Overstyr tekstkoding …"
 
-#: src/resources/gtk/page-menu-popover.ui:298
+#: src/resources/gtk/page-menu-popover.ui:297
 msgid "Pr_eferences"
 msgstr "Bruk_ervalg"
 
-#: src/resources/gtk/page-menu-popover.ui:307
+#: src/resources/gtk/page-menu-popover.ui:306
 msgid "_Keyboard Shortcuts"
 msgstr "_Tastatursnarveier"
 
-#: src/resources/gtk/page-menu-popover.ui:316
+#: src/resources/gtk/page-menu-popover.ui:315
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: src/resources/gtk/page-menu-popover.ui:325
+#: src/resources/gtk/page-menu-popover.ui:324
 msgid "_About Web"
 msgstr "_Om Nettleser"
 
-#: src/resources/gtk/page-menu-popover.ui:350
+#: src/resources/gtk/page-menu-popover.ui:349
 msgid "Import and Export"
 msgstr "Import og eksport"
 
-#: src/resources/gtk/page-menu-popover.ui:361
+#: src/resources/gtk/page-menu-popover.ui:360
 msgid "I_mport Bookmarks…"
 msgstr "I_mporter bokmerker …"
 
-#: src/resources/gtk/page-menu-popover.ui:369
+#: src/resources/gtk/page-menu-popover.ui:368
 msgid "E_xport Bookmarks…"
 msgstr "E_ksporter bokmerker …"
 
-#: src/resources/gtk/page-menu-popover.ui:385
+#: src/resources/gtk/page-menu-popover.ui:384
 msgid "I_mport Passwords…"
 msgstr "I_mporter passord …"
 
@@ -3284,7 +3290,8 @@ msgstr "Intelligent _hindring av sporing"
 
 #: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
-msgstr "La nettsteder lagre informasjonskapsler, databaser og data på lokal lagring."
+msgstr ""
+"La nettsteder lagre informasjonskapsler, databaser og data på lokal lagring."
 
 #: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
@@ -3712,7 +3719,10 @@ msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded "
 "URL will be used."
-msgstr "En URL som starter med en av tilleggs-URLene vil åpnes av nettsideapplikasjonen. Hvis du utelater URL schema vil dette gjenbrukes fra nåværende URL."
+msgstr ""
+"En URL som starter med en av tilleggs-URLene vil åpnes av "
+"nettsideapplikasjonen. Hvis du utelater URL schema vil dette gjenbrukes fra "
+"nåværende URL."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:99
 msgctxt "Column header in the Additional URLs dialog"
