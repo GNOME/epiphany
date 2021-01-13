@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-12-05 19:35+0000\n"
-"PO-Revision-Date: 2020-12-08 19:39+0200\n"
+"POT-Creation-Date: 2021-01-13 13:38+0000\n"
+"PO-Revision-Date: 2021-01-13 16:49+0100\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -55,7 +55,7 @@ msgstr "Proiectul GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:1007
+#: src/ephy-main.c:406 src/window-commands.c:1008
 msgid "Web"
 msgstr "Web"
 
@@ -199,13 +199,31 @@ msgstr ""
 "Când această opțiune este stabilită la adevărat, navigatorul web va începe "
 "în modul incognito"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:71
+msgid "Active clear data items."
+msgstr "Curăță activ elementele de date"
+
+#: data/org.gnome.epiphany.gschema.xml:72
+msgid ""
+"Selection (bitmask) which clear data items should be active by default. 1 = "
+"Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
+"application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = "
+"Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
+"Prevention data."
+msgstr ""
+"Selecția (mască bit) care curăță elementele de date ar trebui să fie activă "
+"implicit. 1 = Cookies, 2 = Cache-ul HTTP de pe disc, 4 = Datele stocate "
+"local, 8 = Cache-ul offline al aplicației web, 16 = Bazele de date IndexDB, "
+"32 = Bazele de date WebSQL, 64 = Datele modulelor, 128 = Cache-ul "
+"politicilor HSTS, 256 = Datele de prevenție inteligentă a urmăririi."
+
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Expandează dimensiunea taburilor pentru a umple spațiul disponibil în bara "
 "cu taburi."
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
@@ -214,11 +232,11 @@ msgstr ""
 "disponibil în bara cu taburi. Această configurare este ignorată în desktopul "
 "Pantheon."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "The position of the tabs bar."
 msgstr "Poziția barei cu taburi."
 
-#: data/org.gnome.epiphany.gschema.xml:79
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -228,11 +246,11 @@ msgstr ""
 "„sus” (implicit), „jos”, „stânga” (taburi verticale cu bara pe stânga) și "
 "„dreapta” (taburi verticale cu bara pe dreapta)."
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "Politica vizibilității pentru bara cu taburi."
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -245,21 +263,21 @@ msgstr ""
 "„never” (bara cu taburi nu este afișată niciodată). Această configurare este "
 "ignorată de desktopul Pantheon, și valoarea „always” este folosită."
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
 msgstr "Păstrează fereastra deschisă când ultimul tab se închide"
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Dacă este activată, fereastra aplicației este păstrată deschisă când se "
 "închide ultimul tab."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
 msgstr "Stilul de font al articolului din modul citire."
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -267,11 +285,11 @@ msgstr ""
 "Alege stilul corpului principal de text pentru articolele din modul citire. "
 "Valori posibile sunt „sans” și „serif”."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
 msgstr "Schema de culori a modului citire."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -281,23 +299,23 @@ msgstr ""
 "Valori posibile sunt „light” (text închis pe fundal deschis) și „dark” (text "
 "deschis pe fundal închis)."
 
-#: data/org.gnome.epiphany.gschema.xml:107
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "Dimensiunea minimă a fontului"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "Utilizează fonturile GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "Utilizează configurările fonturilor GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "Font sans-serif personalizat"
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -305,11 +323,11 @@ msgstr ""
 "O valoare de folosit pentru a suprascrie fontul pentru desktop sans-serif "
 "când „use-gnome-fonts” este stabilit."
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "Font serif personalizat"
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -317,11 +335,11 @@ msgstr ""
 "O valoare de folosit pentru a suprascrie fontul serif pentru desktop când "
 "„use-gnome-fonts” este stabilit."
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "Font monospațiat personalizat"
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -329,78 +347,78 @@ msgstr ""
 "O valoare de folosit pentru a suprascrie fontul monospațiat pentru desktop "
 "când „use-gnome-fonts” este stabilit."
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "Utilizează un CSS personalizat"
 
-#: data/org.gnome.epiphany.gschema.xml:132
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Utilizează un fișier personalizat de CSS pentru a modifica CSS-ul siturilor."
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Use a custom JS"
 msgstr "Utilizează un JS personalizat"
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Use a custom JS file to modify websites."
 msgstr "Utilizează un fișier JS personalizat pentru a modifica pagini web."
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Enable spell checking"
 msgstr "Activează verificarea ortografică"
 
-#: data/org.gnome.epiphany.gschema.xml:142
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid "Spell check any text typed in editable areas."
 msgstr "Verifică ortografic orice text tastat în zonele editabile."
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Default encoding"
 msgstr "Codare implicită"
 
-#: data/org.gnome.epiphany.gschema.xml:147
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Codare implicită. Valorile acceptate sunt cele pe care WebKitGTK+ le "
 "înțelege."
 
-#: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:302
+#: data/org.gnome.epiphany.gschema.xml:156
+#: src/resources/gtk/prefs-general-page.ui:307
 msgid "Languages"
 msgstr "Limbi"
 
-#: data/org.gnome.epiphany.gschema.xml:152
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Limbile preferate. Matrice de coduri de localizare sau „system” pentru a "
 "utiliza localizarea curentă."
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "Permiterea de ferestre pop-up"
 
-#: data/org.gnome.epiphany.gschema.xml:157
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permite siturilor să deschidă ferestre noi utilizând JavaScript (dacă "
 "JavaScript este activat)"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Enable smooth scrolling"
 msgstr "Activează derularea lină"
 
-#: data/org.gnome.epiphany.gschema.xml:162
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid "Whether to enable smooth scrolling."
 msgstr "Dacă să se activeze derularea lină."
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "User agent"
 msgstr "Agent de utilizator"
 
-#: data/org.gnome.epiphany.gschema.xml:167
+#: data/org.gnome.epiphany.gschema.xml:172
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -408,29 +426,29 @@ msgstr ""
 "Șir de caractere folosit ca agent utilizator, pentru a identifica "
 "navigatorul la serverele web."
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Enable adblock"
 msgstr "Activează blocarea reclamelor"
 
-#: data/org.gnome.epiphany.gschema.xml:172
+#: data/org.gnome.epiphany.gschema.xml:177
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Dacă să se blocheze reclamele înglobate în unele pagini web."
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Remember passwords"
 msgstr "Reține parolele"
 
-#: data/org.gnome.epiphany.gschema.xml:177
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Dacă să se stocheze parolele precompletate în situri web."
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Enable site-specific quirks"
 msgstr "Activează ciudățenii specifice unor situri"
 
-#: data/org.gnome.epiphany.gschema.xml:182
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -439,11 +457,11 @@ msgstr ""
 "Posibil că doriți să dezactivați această configurare dacă depanați o "
 "problemă anume."
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid "Enable safe browsing"
 msgstr "Activează navigarea sigură"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -451,19 +469,19 @@ msgstr ""
 "Dacă sau nu să se activeze navigarea sigură. Navigarea sigură operează prin "
 "API-ul Google Safe Browsing v4."
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Activează Prevenția de Urmărire Inteligentă (ITP)"
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Dacă să se activeze Prevenția de Urmărire Inteligentă."
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Allow websites to store local website data"
 msgstr "Permite paginilor web să stocheze date ale paginii web locale"
 
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:202
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -472,15 +490,15 @@ msgstr ""
 "locale, și baze de date IndexedDB. Dezactivarea acesteia va sparge multe "
 "pagini web."
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid "Default zoom level for new pages"
 msgstr "Nivelul implicit de zoom pentru noile pagini"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable autosearch"
 msgstr "Activează căutarea automată"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -492,11 +510,11 @@ msgstr ""
 "va fi încărcat ca un URL cu excepția cazului în care un motor de căutare "
 "este selectat explicit din meniul derulant."
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable mouse gestures"
 msgstr "Activează gesturi maus"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -505,27 +523,27 @@ msgstr ""
 "comportamentul lui Opera și sunt activate folosind butonul mijloc al "
 "mausului + o gestură."
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last upload directory"
 msgstr "Ultimul director de încărcare"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last upload directory"
 msgstr "Ține evidența ultimului director de încărcare"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Last download directory"
 msgstr "Ultimul director de descărcare"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid "Keep track of last download directory"
 msgstr "Ține evidența ultimului dosar de descărcare"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Hardware acceleration policy"
 msgstr "Politica accelerării hardware"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -542,45 +560,45 @@ msgstr ""
 "accelerarea hardware va fi folosită numai când este necesară afișarea "
 "transformărilor tridimensionale."
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Always ask for download directory"
 msgstr "Întreabă întotdeauna de directorul de descărcări"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
 "Dacă se prezintă un dialog de alegere a directorului pentru fiecare "
 "descărcare."
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Enable immediately switch to new open tab"
 msgstr "Activează imediat comutarea la o filă nouă"
 
-#: data/org.gnome.epiphany.gschema.xml:236
+#: data/org.gnome.epiphany.gschema.xml:241
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Dacă să se comute automat la o filă nouă deschisă."
 
-#: data/org.gnome.epiphany.gschema.xml:242
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "Web application additional URLs"
 msgstr "URL-uri adiționale pentru aplicații web"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Lista de URL-uri care ar trebui deschise de aplicația web"
 
-#: data/org.gnome.epiphany.gschema.xml:247
-msgid "WebApp is mobile capable"
-msgstr "WebApp este capabil mobil"
-
-#: data/org.gnome.epiphany.gschema.xml:248
-msgid "Whether to show buttons for navigation."
-msgstr "Dacă să se arate butoanele pentru navigare."
-
 #: data/org.gnome.epiphany.gschema.xml:252
+msgid "Show navigation buttons in WebApp"
+msgstr "Arată butoanele pentru navigare în WebApp"
+
+#: data/org.gnome.epiphany.gschema.xml:253
+msgid "Whether to show buttons for navigation in WebApp."
+msgstr "Dacă să se arate butoanele pentru navigare în WebApp."
+
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Run in background"
 msgstr "Rulează în fundal"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
@@ -588,19 +606,19 @@ msgstr ""
 "Dacă este activat, aplicația continuă să ruleze în fundal după închiderea "
 "ferestrei."
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "WebApp is system-wide"
 msgstr "WebApp este la nivel de sistem"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "If enabled, application cannot be edited or removed."
 msgstr "Dacă este activat, aplicația nu poate fi editată sau eliminată."
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "The downloads folder"
 msgstr "Dosarul pentru descărcări"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -609,11 +627,11 @@ msgstr ""
 "utiliza dosarul de descărcări implicit, sau „Desktop” pentru a utiliza "
 "dosarul desktop."
 
-#: data/org.gnome.epiphany.gschema.xml:272
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid "Window position"
 msgstr "Poziția ferestrei"
 
-#: data/org.gnome.epiphany.gschema.xml:273
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -621,11 +639,11 @@ msgstr ""
 "Poziția de folosit pentru noua fereastră care nu este restaurată din o "
 "sesiune anterioară."
 
-#: data/org.gnome.epiphany.gschema.xml:277
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Window size"
 msgstr "Dimensiunea ferestrei"
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -633,11 +651,11 @@ msgstr ""
 "Dimensiunea de folosit pentru o nouă fereastră care nu este restaurată dintr-"
 "o sesiune anterioară."
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "Is maximized"
 msgstr "Este maximizată"
 
-#: data/org.gnome.epiphany.gschema.xml:283
+#: data/org.gnome.epiphany.gschema.xml:288
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -645,11 +663,11 @@ msgstr ""
 "Dacă o nouă fereastră care nu este restaurată din sesiunea anterioară ar "
 "trebui maximizată inițial."
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid "Disable forward and back buttons"
 msgstr "Dezactivează butoanele înainte și înapoi"
 
-#: data/org.gnome.epiphany.gschema.xml:299
+#: data/org.gnome.epiphany.gschema.xml:304
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -658,27 +676,27 @@ msgstr ""
 "dezactivate, prevenind utilizatorii de la accesarea imediată a istoricului "
 "navigatorului"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid "Firefox Sync Token Server URL"
 msgstr "URL de server de jeton de sincronizare Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:323
 msgid "URL to a custom Firefox Sync token server."
 msgstr "URL la un server de jeton se sincronizare Firefox personalizat."
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Firefox Sync Accounts Server URL"
 msgstr "URL de server de conturi de sincronizare Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "URL la un server de conturi de sincronizare Firefox personalizat."
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Currently signed in sync user"
 msgstr "Utilizatorul de sincronizare conectat curent"
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -686,43 +704,43 @@ msgstr ""
 "Emailul conectat la contul Firefox folosit la sincronizarea datelor cu "
 "serverele Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Last sync timestamp"
 msgstr "Ultimul marcaj de timp al sincronizării"
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Timpul UNIX în secunde la care ultima sincronizare a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Sync device ID"
 msgstr "ID de dispozitiv de sincronizare"
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The sync device ID of the current device."
 msgstr "ID-ul dispozitivului de sincronizare al dispozitivului curent."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Sync device name"
 msgstr "Numele dispozitivului de sincronizare"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The sync device name of the current device."
 msgstr "Numele dispozitivului de sincronizare al dispozitivului curent."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "The sync frequency in minutes"
 msgstr "Frecvența de sincronizare în minute"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Numărul de minute dintre două sincronizări consecutive."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "Sync data with Firefox"
 msgstr "Sincronizează datele cu Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -730,32 +748,32 @@ msgstr ""
 "ADEVĂRAT dacă colecțiile Ephy ar trebui sincronizare cu colecțiile Firefox, "
 "FALS în mod contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Enable bookmarks sync"
 msgstr "Activează sincronizarea marcajelor"
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de marcaje ar trebui sincronizată, FALS în mod "
 "contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "Bookmarks sync timestamp"
 msgstr "Marcajul de timp pentru sincronizarea marcajelor"
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "Marcajul de timp la care ultima sincronizare a marcajelor a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:367
-#: data/org.gnome.epiphany.gschema.xml:382
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Initial sync or normal sync"
 msgstr "Sincronizare inițială sau sincronizare normală"
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -763,24 +781,24 @@ msgstr ""
 "ADEVĂRAT dacă colecția de marcaje trebuie să fie sincronizată pentru prima "
 "dată, FALS în mod contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "Enable passwords sync"
 msgstr "Activează sincronizarea parolelor"
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de parole ar trebui sincronizată, FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "Passwords sync timestamp"
 msgstr "Marcaj de timp pentru sincronizarea parolelor"
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Marcajul de timp când ultima sincronizare a parolelor a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -788,25 +806,25 @@ msgstr ""
 "ADEVĂRAT dacă colecția de parole trebuie sincronizată pentru prima dată, "
 "FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "Enable history sync"
 msgstr "Activează sincronizarea istoricului"
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția istoricului ar trebui sincronizată, FALS în caz "
 "contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "History sync timestamp"
 msgstr "Marcajul de sincronizare al istoricului"
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid "The timestamp at which last history sync was made."
 msgstr "Marcajul la care ultima sincronizare a istoricului a fost făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -814,33 +832,33 @@ msgstr ""
 "ADEVĂRAT dacă colecția istoricului trebuie să fie sincronizată pentru prima "
 "dată, FALS în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Enable open tabs sync"
 msgstr "Activează sincronizarea taburilor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "ADEVĂRAT dacă colecția de taburi deschise ar trebui sincronizată, FALS în "
 "caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "Open tabs sync timestamp"
 msgstr "Marcajul de timp al sincronizării taburilor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:413
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "Marcajul de timp la care ultima sincronizare a taburilor deschise a fost "
 "făcută."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru microfon este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -853,14 +871,14 @@ msgstr ""
 "„permite” și „respinge” îi comunică să facă decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru geolocație este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -873,14 +891,14 @@ msgstr ""
 "ce „permite” și „respinge” îi comunică să facă decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de notificare este cerută pentru această "
 "gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -893,14 +911,14 @@ msgstr ""
 "„permite” și „respinge” îi comunică automat să facă o decizie la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a salva parola este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -912,13 +930,13 @@ msgstr ""
 "trebuie să ceară utilizatorului permisiunea, în timp ce „permite” și "
 "„respinge” îi va comunica automat să ia o decizie la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a accesa camera web este cerută "
 "pentru această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -931,14 +949,14 @@ msgstr ""
 "ce „permite” și „respinge” îi comunică să ia decizia automat la fiecare "
 "cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:444
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru reclame este cerută pentru "
 "această gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -950,13 +968,13 @@ msgstr ""
 "utilizată configurarea globală a navigatorului, în timp ce „permite” și "
 "„respinge” îi comunică să ia automat decizia la cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:449
+#: data/org.gnome.epiphany.gschema.xml:454
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de autoredare este cerută pentru această "
 "gazdă"
 
-#: data/org.gnome.epiphany.gschema.xml:450
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -981,7 +999,7 @@ msgstr "Versiunea %s"
 msgid "About Web"
 msgstr "Despre Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:1009
+#: embed/ephy-about-handler.c:194 src/window-commands.c:1010
 msgid "Epiphany Technology Preview"
 msgstr "Previzualizarea tehnologiei epiphany"
 
@@ -1078,12 +1096,12 @@ msgid "Download requested"
 msgstr "Descărcare cerută"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/resources/gtk/firefox-sync-dialog.ui:171
+#: src/resources/gtk/firefox-sync-dialog.ui:173
 #: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:275
 #: src/window-commands.c:333 src/window-commands.c:377
 #: src/window-commands.c:561 src/window-commands.c:646
-#: src/window-commands.c:807 src/window-commands.c:1889
+#: src/window-commands.c:808 src/window-commands.c:1890
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -1494,7 +1512,7 @@ msgstr "Caută următoarea apariție a șirului căutat"
 msgid "%s is not a valid URI"
 msgstr "%s nu este un URI valid"
 
-#: embed/ephy-web-view.c:185 src/window-commands.c:1351
+#: embed/ephy-web-view.c:185 src/window-commands.c:1352
 msgid "Open"
 msgstr "Deschide"
 
@@ -1507,7 +1525,7 @@ msgid "_Never Save"
 msgstr "_Nu salva niciodată"
 
 #: embed/ephy-web-view.c:366 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/firefox-sync-dialog.ui:180 src/window-commands.c:645
+#: src/resources/gtk/firefox-sync-dialog.ui:182 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Salvează"
 
@@ -2038,7 +2056,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Eșec la obținerea credențialelor de stocare."
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
-#: lib/sync/ephy-sync-service.c:1755
+#: lib/sync/ephy-sync-service.c:1758
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Vizitați Sincronizare Firefox și conectați-vă din nou pentru a continua "
@@ -2060,40 +2078,40 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Eșec la obținerea unui certificat semnat."
 
-#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
+#: lib/sync/ephy-sync-service.c:1724 lib/sync/ephy-sync-service.c:1729
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nu s-au putut găsi secretele de sincronizare pentru utilizatorul de "
 "sincronizare curent."
 
-#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1736 lib/sync/ephy-sync-service.c:1744
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Secretele de sincronizare pentru sincronizarea curentă sunt nevalide."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1849
+#: lib/sync/ephy-sync-service.c:1852
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Sincronizarea secretelor lui %s"
 
-#: lib/sync/ephy-sync-service.c:1874
+#: lib/sync/ephy-sync-service.c:1877
 msgid "Failed to upload client record."
 msgstr "Eșec la încărcarea registrului de client."
 
-#: lib/sync/ephy-sync-service.c:2073
+#: lib/sync/ephy-sync-service.c:2076
 msgid "Failed to upload crypto/keys record."
 msgstr "Eșec la încărcarea registrului cripto/de chei."
 
-#: lib/sync/ephy-sync-service.c:2180
+#: lib/sync/ephy-sync-service.c:2183
 msgid "Failed to retrieve crypto keys."
 msgstr "Eșec la obținerea cheilor cripto."
 
-#: lib/sync/ephy-sync-service.c:2231
+#: lib/sync/ephy-sync-service.c:2234
 msgid "Failed to upload meta/global record."
 msgstr "Eșec la încărcarea registrului meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2348
+#: lib/sync/ephy-sync-service.c:2351
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -2101,15 +2119,15 @@ msgstr ""
 "Contul de Firefox folosește versiunea de stocare %d. Web suportă numai "
 "versiunea %d."
 
-#: lib/sync/ephy-sync-service.c:2359
+#: lib/sync/ephy-sync-service.c:2362
 msgid "Failed to verify storage version."
 msgstr "Eșec la verificarea versiunii de stocare."
 
-#: lib/sync/ephy-sync-service.c:2415
+#: lib/sync/ephy-sync-service.c:2418
 msgid "Failed to upload device info"
 msgstr "Eșec la încărcarea informațiilor despre dispozitiv"
 
-#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
+#: lib/sync/ephy-sync-service.c:2494 lib/sync/ephy-sync-service.c:2572
 msgid "Failed to retrieve the Sync Key"
 msgstr "Eșec la obținerea cheii de sincronizare"
 
@@ -2446,7 +2464,7 @@ msgstr "Ultima sincronizare: %s"
 msgid "Something went wrong, please try again later."
 msgstr "Ceva nu a funcționat, încercați mai târziu."
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:964
 msgid "It is not possible to modify history when in incognito mode."
 msgstr ""
 "Nu este posibil să modificați istoricul când sunteți în modul incognito."
@@ -2469,7 +2487,7 @@ msgid ""
 "deleted."
 msgstr "Ștergerea istoricului va duce la pierderea tuturor adreselor reținute."
 
-#: src/ephy-history-dialog.c:966
+#: src/ephy-history-dialog.c:967
 msgid "Remove all history"
 msgstr "Elimină tot istoricul"
 
@@ -2539,11 +2557,11 @@ msgstr "Filă nouă"
 msgid "Do you want to leave this website?"
 msgstr "Doriți să părăsiți acest sit web?"
 
-#: src/ephy-window.c:276 src/window-commands.c:1200
+#: src/ephy-window.c:276 src/window-commands.c:1201
 msgid "A form you modified has not been submitted."
 msgstr "Un formular pe care l-ați modificat nu a fost trimis."
 
-#: src/ephy-window.c:277 src/window-commands.c:1202
+#: src/ephy-window.c:277 src/window-commands.c:1203
 msgid "_Discard form"
 msgstr "I_gnoră formularul"
 
@@ -2711,15 +2729,15 @@ msgstr "Deschide adresa în fereastră nouă"
 msgid "Open Link In Incognito Window"
 msgstr "Deschide legătura în fereastră incognito"
 
-#: src/ephy-window.c:3062
+#: src/ephy-window.c:3064
 msgid "Download operation"
 msgstr "Operație de descărcare"
 
-#: src/ephy-window.c:3064
+#: src/ephy-window.c:3066
 msgid "Show details"
 msgstr "Arată detaliile"
 
-#: src/ephy-window.c:3066
+#: src/ephy-window.c:3068
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2727,20 +2745,20 @@ msgstr[0] "%d operație de descărcare activă"
 msgstr[1] "%d operații de descărcare active"
 msgstr[2] "%d de operații de descărcare active"
 
-#: src/ephy-window.c:3688
+#: src/ephy-window.c:3691
 msgid "Set Web as your default browser?"
 msgstr "Stabiliți Web ca navigatorul web implicit?"
 
-#: src/ephy-window.c:3690
+#: src/ephy-window.c:3693
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Stabiliți previzualizarea tehnologiei Epiphany ca navigatorul web implicit?"
 
-#: src/ephy-window.c:3702
+#: src/ephy-window.c:3705
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:3703
+#: src/ephy-window.c:3706
 msgid "_No"
 msgstr "_Nu"
 
@@ -2756,127 +2774,41 @@ msgstr "Salvează imaginea ca"
 msgid "Save Media As"
 msgstr "Salvează media ca"
 
-#: src/preferences/clear-data-view.c:69
+#: src/preferences/clear-data-view.c:70
 msgid "Cookies"
 msgstr "Cookie-uri"
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:71
 msgid "HTTP disk cache"
 msgstr "Cache HTTP pe disc"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:72
 msgid "Local storage data"
 msgstr "Date din local storage"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:73
 msgid "Offline web application cache"
 msgstr "Cache offline al aplicațiilor web"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:74
 msgid "IndexedDB databases"
 msgstr "Baze de date IndexedDB"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:75
 msgid "WebSQL databases"
 msgstr "Baze de date WebSQL"
 
-#: src/preferences/clear-data-view.c:75
+#: src/preferences/clear-data-view.c:76
 msgid "Plugins data"
 msgstr "Datele modulelor"
 
-#: src/preferences/clear-data-view.c:76
+#: src/preferences/clear-data-view.c:77
 msgid "HSTS policies cache"
 msgstr "Cache pentru politicile HSTS"
 
-#: src/preferences/clear-data-view.c:77
+#: src/preferences/clear-data-view.c:78
 msgid "Intelligent Tracking Prevention data"
 msgstr "Date Prevenție de Urmărire Inteligentă"
-
-#: src/preferences/ephy-search-engine-listbox.c:34
-msgid "New search engine"
-msgstr "Motor de căutare nou"
-
-#: src/preferences/ephy-search-engine-listbox.c:161
-msgid "This field is required"
-msgstr "Acest câmp este necesar"
-
-#: src/preferences/ephy-search-engine-listbox.c:166
-msgid "Address must start with either http:// or https://"
-msgstr "Adresa trebuie să înceapă cu http:// sau https://"
-
-#: src/preferences/ephy-search-engine-listbox.c:172
-msgid "Address is not a valid URI"
-msgstr "Adresa nu este un URI valid"
-
-#: src/preferences/ephy-search-engine-listbox.c:179
-#, c-format
-msgid ""
-"Address is not a valid URL. The address should look like https://www.example."
-"com/search?q=%s"
-msgstr ""
-"Adresa nu este un URL valid. Adresa ar trebui să arate ca https://www."
-"example.com/search?q=%s"
-
-#: src/preferences/ephy-search-engine-listbox.c:185
-#, c-format
-msgid "Address must contain the search term represented by %s"
-msgstr "Adresa trebuie să conțină termenul de căutare reprezentat de %s"
-
-#: src/preferences/ephy-search-engine-listbox.c:191
-msgid "Address should not contain the search term several times"
-msgstr "Adresa nu ar trebui să conțină termenul de căutare de mai multe ori"
-
-#: src/preferences/ephy-search-engine-listbox.c:227
-msgid "This shortcut is already used."
-msgstr "Această scurtătură este deja utilizată."
-
-#: src/preferences/ephy-search-engine-listbox.c:395
-msgid "A name is required"
-msgstr "Este necesar un nume"
-
-#: src/preferences/ephy-search-engine-listbox.c:398
-msgid "This search engine already exists"
-msgstr "Acest motor de căutare există deja"
-
-#: src/preferences/ephy-search-engine-listbox.c:591
-msgid "Selects the default search engine"
-msgstr "Selectează motorul de căutare implicit"
-
-#. Name label and entry pair
-#: src/preferences/ephy-search-engine-listbox.c:615
-#: src/resources/gtk/bookmark-properties-grid.ui:31
-msgid "Name"
-msgstr "Nume"
-
-#. Address label and entry pair
-#: src/preferences/ephy-search-engine-listbox.c:635
-#: src/resources/gtk/bookmark-properties-grid.ui:59
-msgid "Address"
-msgstr "Adresă"
-
-#. Bang label and entry pair
-#: src/preferences/ephy-search-engine-listbox.c:656
-msgid "Shortcut"
-msgstr "Scurtătură"
-
-#. Search engine address insight
-#: src/preferences/ephy-search-engine-listbox.c:675
-#, c-format
-msgid ""
-"To determine the search address, perform a search using the search engine "
-"that you want to add and replace the search term with %s."
-msgstr ""
-"Pentru a determina adresa de căutare, executați o căutare utilizând motorul "
-"de căutare pe care doriți să îl adăugați și înlocuiți termenul de căutare cu "
-"%s."
-
-#: src/preferences/ephy-search-engine-listbox.c:682
-msgid "R_emove Search Engine"
-msgstr "_Elimină motorul de căutare"
-
-#: src/preferences/ephy-search-engine-listbox.c:752
-msgid "A_dd Search Engine…"
-msgstr "A_daugă un motor de căutare…"
 
 #: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
@@ -2931,13 +2863,13 @@ msgstr "Light"
 msgid "Dark"
 msgstr "Dark"
 
-#: src/preferences/prefs-general-page.c:299
+#: src/preferences/prefs-general-page.c:298
 #: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "Adaugă o limbă"
 
-#: src/preferences/prefs-general-page.c:527
-#: src/preferences/prefs-general-page.c:686
+#: src/preferences/prefs-general-page.c:526
+#: src/preferences/prefs-general-page.c:685
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2945,15 +2877,15 @@ msgstr[0] "Limba sistemului (%s)"
 msgstr[1] "Limbile sistemului (%s)"
 msgstr[2] "Limbile sistemului (%s)"
 
-#: src/preferences/prefs-general-page.c:714
+#: src/preferences/prefs-general-page.c:713
 msgid "Select a directory"
 msgstr "Selectați un director"
 
-#: src/preferences/prefs-general-page.c:860
+#: src/preferences/prefs-general-page.c:859
 msgid "Web Application Icon"
 msgstr "Iconița aplicației web"
 
-#: src/preferences/prefs-general-page.c:865
+#: src/preferences/prefs-general-page.c:864
 msgid "Supported Image Files"
 msgstr "Fișiere imagine suportate"
 
@@ -3010,6 +2942,14 @@ msgstr "Vizualizează paginile deschise"
 #: src/resources/gtk/bookmark-properties-grid.ui:16
 msgid "Bookmark"
 msgstr "Marcaj"
+
+#: src/resources/gtk/bookmark-properties-grid.ui:31
+msgid "Name"
+msgstr "Nume"
+
+#: src/resources/gtk/bookmark-properties-grid.ui:59
+msgid "Address"
+msgstr "Adresă"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:86
 #: src/resources/gtk/bookmarks-popover.ui:75
@@ -3115,7 +3055,7 @@ msgstr "Arată toate…"
 msgid "Firefox Sync"
 msgstr "Sincronizare Firefox"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:33
+#: src/resources/gtk/firefox-sync-dialog.ui:35
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not Firefox and is not produced or endorsed by "
@@ -3125,55 +3065,55 @@ msgstr ""
 "Firefox pe alte calculatoare. Web nu este Firefox și nu este produs sau "
 "susținut de Mozilla."
 
-#: src/resources/gtk/firefox-sync-dialog.ui:52
+#: src/resources/gtk/firefox-sync-dialog.ui:54
 msgid "Firefox Account"
 msgstr "Cont Firefox"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:56
+#: src/resources/gtk/firefox-sync-dialog.ui:58
 msgid "Logged in"
 msgstr "Autentificat"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:61
+#: src/resources/gtk/firefox-sync-dialog.ui:63
 msgid "Sign _out"
 msgstr "De_autentificare"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:74
+#: src/resources/gtk/firefox-sync-dialog.ui:76
 msgid "Sync Options"
 msgstr "Opțiuni sincronizare"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:79
+#: src/resources/gtk/firefox-sync-dialog.ui:81
 msgid "Sync _Bookmarks"
 msgstr "Sincronizează _favoritele"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:93
+#: src/resources/gtk/firefox-sync-dialog.ui:95
 msgid "Sync _Passwords"
 msgstr "Sincronizează _parolele"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:107
+#: src/resources/gtk/firefox-sync-dialog.ui:109
 msgid "Sync _History"
 msgstr "Sincronizează istoricul"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:121
+#: src/resources/gtk/firefox-sync-dialog.ui:123
 msgid "Sync Open _Tabs"
 msgstr "Deschide _filele deschise"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:132
+#: src/resources/gtk/firefox-sync-dialog.ui:134
 msgid "S_ynced tabs"
 msgstr "Taburi sincroni_zate"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:143
+#: src/resources/gtk/firefox-sync-dialog.ui:145
 msgid "Frequency"
 msgstr "Frecvență"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:154
+#: src/resources/gtk/firefox-sync-dialog.ui:156
 msgid "Sync _now"
 msgstr "Si_ncronizează acum"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:166
+#: src/resources/gtk/firefox-sync-dialog.ui:168
 msgid "Device name"
 msgstr "Nume dispozitiv"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:189
+#: src/resources/gtk/firefox-sync-dialog.ui:191
 msgid "_Change"
 msgstr "S_chimbă"
 
@@ -3489,35 +3429,35 @@ msgstr "_Dosar descărcări"
 msgid "Search Engines"
 msgstr "Motoare de căutare"
 
-#: src/resources/gtk/prefs-general-page.ui:220
+#: src/resources/gtk/prefs-general-page.ui:225
 msgid "Session"
 msgstr "Sesiune"
 
-#: src/resources/gtk/prefs-general-page.ui:225
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "Start in _Incognito Mode"
 msgstr "Pornește în modul incognito"
 
-#: src/resources/gtk/prefs-general-page.ui:239
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "_Restore Tabs on Startup"
 msgstr "_Restaurează taburile la pornire"
 
-#: src/resources/gtk/prefs-general-page.ui:254
+#: src/resources/gtk/prefs-general-page.ui:259
 msgid "Browsing"
 msgstr "Navigare"
 
-#: src/resources/gtk/prefs-general-page.ui:259
+#: src/resources/gtk/prefs-general-page.ui:264
 msgid "Sm_ooth Scrolling"
 msgstr "_Derularea lină"
 
-#: src/resources/gtk/prefs-general-page.ui:273
+#: src/resources/gtk/prefs-general-page.ui:278
 msgid "Mouse _Gestures"
 msgstr "_Gesturi maus"
 
-#: src/resources/gtk/prefs-general-page.ui:287
+#: src/resources/gtk/prefs-general-page.ui:292
 msgid "S_witch Immediately to New Tabs"
 msgstr "_Comută imediat la file noi"
 
-#: src/resources/gtk/prefs-general-page.ui:322
+#: src/resources/gtk/prefs-general-page.ui:327
 msgid "_Spell Checking"
 msgstr "_Verificare ortografică"
 
@@ -3928,22 +3868,22 @@ msgstr "Fișier HTML"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:695
+#: src/window-commands.c:116 src/window-commands.c:696
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:696
+#: src/window-commands.c:117 src/window-commands.c:697
 msgid "Chromium"
 msgstr "Chromium"
 
 #: src/window-commands.c:131 src/window-commands.c:563
-#: src/window-commands.c:781
+#: src/window-commands.c:782
 msgid "Ch_oose File"
 msgstr "Alegeț_i fișier"
 
 #: src/window-commands.c:133 src/window-commands.c:332
-#: src/window-commands.c:376 src/window-commands.c:783
-#: src/window-commands.c:809
+#: src/window-commands.c:376 src/window-commands.c:784
+#: src/window-commands.c:810
 msgid "I_mport"
 msgstr "I_mportă"
 
@@ -3970,7 +3910,7 @@ msgstr "Marcajele au fost importate cu succes!"
 msgid "Import Bookmarks"
 msgstr "Importă marcaje"
 
-#: src/window-commands.c:576 src/window-commands.c:822
+#: src/window-commands.c:576 src/window-commands.c:823
 msgid "From:"
 msgstr "Din:"
 
@@ -3978,20 +3918,20 @@ msgstr "Din:"
 msgid "Bookmarks successfully exported!"
 msgstr "Marcajele au fost exportate cu succes!"
 
-#. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
+#. Translators: Only translate the part before ".html" (e.g. "bookmarks")
 #: src/window-commands.c:650
-msgid "bookmarks.gvdb"
-msgstr "marcaje.gvdb"
+msgid "bookmarks.html"
+msgstr "marcaje.html"
 
-#: src/window-commands.c:737
+#: src/window-commands.c:738
 msgid "Passwords successfully imported!"
 msgstr "Parolele au fost importate cu succes!"
 
-#: src/window-commands.c:804
+#: src/window-commands.c:805
 msgid "Import Passwords"
 msgstr "Importă parolele"
 
-#: src/window-commands.c:995
+#: src/window-commands.c:996
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -4000,88 +3940,88 @@ msgstr ""
 "O vizualizarea frumoasă, curată și simplă a web-ului.\n"
 "Propulsat de WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:1019
+#: src/window-commands.c:1020
 msgid "Website"
 msgstr "Sit web"
 
-#: src/window-commands.c:1052
+#: src/window-commands.c:1053
 msgid "translator-credits"
 msgstr ""
 "Mișu Moldovan <dumol@gnome.ro>\n"
 "Mugurel Tudor <mugurelu@gnome.ro>\n"
 "Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
-"Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018-2020\n"
+"Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018-2021\n"
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, "
 "2018-2020"
 
-#: src/window-commands.c:1198
+#: src/window-commands.c:1199
 msgid "Do you want to reload this website?"
 msgstr "Doriți să încărcați această pagină web?"
 
-#: src/window-commands.c:1726
+#: src/window-commands.c:1727
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "O aplicație web numită „%s” există deja. Doriți să o înlocuiți?"
 
-#: src/window-commands.c:1729
+#: src/window-commands.c:1730
 msgid "Cancel"
 msgstr "Anulează"
 
-#: src/window-commands.c:1731
+#: src/window-commands.c:1732
 msgid "Replace"
 msgstr "Înlocuiește"
 
-#: src/window-commands.c:1735
+#: src/window-commands.c:1736
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "O aplicație cu același nume există deja. Înlocuind-o o va suprascrie."
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1828
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplicația „%s” este gata de utilizare"
 
-#: src/window-commands.c:1830
+#: src/window-commands.c:1831
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Aplicația „%s” nu poate fi creeată"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1845
+#: src/window-commands.c:1846
 msgid "Launch"
 msgstr "Lansează"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1886
+#: src/window-commands.c:1887
 msgid "Create Web Application"
 msgstr "Creează aplicație web"
 
-#: src/window-commands.c:1891
+#: src/window-commands.c:1892
 msgid "C_reate"
 msgstr "C_reează"
 
-#: src/window-commands.c:2106
+#: src/window-commands.c:2107
 msgid "Save"
 msgstr "Salvează"
 
-#: src/window-commands.c:2115
+#: src/window-commands.c:2116
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2120
+#: src/window-commands.c:2121
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2125
+#: src/window-commands.c:2126
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2610
+#: src/window-commands.c:2611
 msgid "Enable caret browsing mode?"
 msgstr "Activați modul de navigare cu cursor?"
 
-#: src/window-commands.c:2613
+#: src/window-commands.c:2614
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4091,9 +4031,66 @@ msgstr ""
 "plasează un cursor care se poate muta în paginile web, permițându-vă să vă "
 "mișcați folosind tastatura. Doriți să activați modul de navigare cu cursor?"
 
-#: src/window-commands.c:2616
+#: src/window-commands.c:2617
 msgid "_Enable"
 msgstr "Activ_ează"
+
+#~ msgid "WebApp is mobile capable"
+#~ msgstr "WebApp este capabil mobil"
+
+#~ msgid "New search engine"
+#~ msgstr "Motor de căutare nou"
+
+#~ msgid "This field is required"
+#~ msgstr "Acest câmp este necesar"
+
+#~ msgid "Address must start with either http:// or https://"
+#~ msgstr "Adresa trebuie să înceapă cu http:// sau https://"
+
+#~ msgid "Address is not a valid URI"
+#~ msgstr "Adresa nu este un URI valid"
+
+#~ msgid ""
+#~ "Address is not a valid URL. The address should look like https://www."
+#~ "example.com/search?q=%s"
+#~ msgstr ""
+#~ "Adresa nu este un URL valid. Adresa ar trebui să arate ca https://www."
+#~ "example.com/search?q=%s"
+
+#~ msgid "Address must contain the search term represented by %s"
+#~ msgstr "Adresa trebuie să conțină termenul de căutare reprezentat de %s"
+
+#~ msgid "Address should not contain the search term several times"
+#~ msgstr "Adresa nu ar trebui să conțină termenul de căutare de mai multe ori"
+
+#~ msgid "This shortcut is already used."
+#~ msgstr "Această scurtătură este deja utilizată."
+
+#~ msgid "A name is required"
+#~ msgstr "Este necesar un nume"
+
+#~ msgid "This search engine already exists"
+#~ msgstr "Acest motor de căutare există deja"
+
+#~ msgid "Selects the default search engine"
+#~ msgstr "Selectează motorul de căutare implicit"
+
+#~ msgid "Shortcut"
+#~ msgstr "Scurtătură"
+
+#~ msgid ""
+#~ "To determine the search address, perform a search using the search engine "
+#~ "that you want to add and replace the search term with %s."
+#~ msgstr ""
+#~ "Pentru a determina adresa de căutare, executați o căutare utilizând "
+#~ "motorul de căutare pe care doriți să îl adăugați și înlocuiți termenul de "
+#~ "căutare cu %s."
+
+#~ msgid "R_emove Search Engine"
+#~ msgstr "_Elimină motorul de căutare"
+
+#~ msgid "A_dd Search Engine…"
+#~ msgstr "A_daugă un motor de căutare…"
 
 #~ msgid "Google Safe Browsing API key"
 #~ msgstr "Cheia pentru API-ul Google Safe Browsing"
