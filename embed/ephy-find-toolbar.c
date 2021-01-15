@@ -645,10 +645,12 @@ ephy_find_toolbar_selection_async (GObject      *source_object,
 
     str_value = jsc_value_to_string (value);
     exception = jsc_context_get_exception (jsc_value_get_context (value));
-    if (exception)
+    if (exception) {
       g_warning ("Error running javascript: %s", jsc_exception_get_message (exception));
-    else if (strlen (str_value))
+    } else if (strlen (str_value)) {
       gtk_entry_set_text (GTK_ENTRY (toolbar->entry), str_value);
+      gtk_editable_select_region (GTK_EDITABLE (toolbar->entry), 0, -1);
+    }
   }
 }
 
