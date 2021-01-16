@@ -9,6 +9,7 @@ Ephy.getAppleMobileWebAppCapable = function()
     for (let i = 0; i < metas.length; i++) {
         let meta = metas[i];
 
+        // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
         if (meta.name === 'apple-mobile-web-app-capable' && meta.getAttribute('content') === 'yes')
             return true;
     }
@@ -22,37 +23,41 @@ Ephy.getWebAppTitle = function()
 
     for (let i = 0; i < metas.length; i++) {
         const meta = metas[i];
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name#standard_metadata_names_defined_in_the_html_specification
         if (meta.name === 'application-name')
             return meta.content;
 
+        // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
         if (meta.name === 'apple-mobile-web-app-title')
             return meta.content;
 
+        // https://ogp.me/
         // og:site_name is read from the property attribute (standard), but is
         // commonly seen on the web in the name attribute. Both are supported.
         if (meta.getAttribute('property') === 'og:site_name' || meta.name === 'og:site_name')
             return meta.content;
     }
 
-    // Fallback to document title
+    // document title
+    // Prefer HTML tag over dynamic updates
     const titles = document.head.getElementsByTagName('title');
-
     if (titles.length > 0) {
       const title = titles[titles.length - 1];
 
       if (title && title.innerText)
           return title.innerText;
     }
+    if (document.title)
+        return document.title;
 
-    // Last resort: hostname
-    return document.location.hostname;
+    // set_default_application_title will fallback to the formatted hostname
+    return null;
 }
 
 Ephy.getWebAppIcon = function(baseURL)
 {
     let htmlIconURL = null;
     let msIconURL = null;
-    let appleTouchIconURL = null;
     let largestIconSize = 0;
     let iconColor = null;
     let ogpIcon = null;
