@@ -568,6 +568,7 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-dns-prefetching", TRUE,
                                                        "enable-plugins", FALSE,
                                                        "enable-media-stream", TRUE,
+                                                       "enable-smooth-scrolling", TRUE,
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
