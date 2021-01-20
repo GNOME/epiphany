@@ -208,6 +208,7 @@ on_add_button_clicked (GtkButton *button,
   GtkFileFilter *filter;
   gint res;
 
+  /* Translators: this is the title of a file chooser dialog. */
   dialog = gtk_file_chooser_dialog_new (_("Open File (manifest.json/xpi)"),
                                         GTK_WINDOW (self),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
