@@ -10,6 +10,7 @@ variables:
   RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
   FLATPAK_MODULE: 'epiphany'
   APP_ID: 'org.gnome.Epiphany.Devel'
+  ESLINT_LOG: "eslint-report.txt"
 
 stages:
   - test
@@ -19,9 +20,15 @@ check-code-style:
   image: alpine:latest
   interruptible: true
   before_script:
-    - apk update && apk add uncrustify bash python3
+    - apk update && apk add uncrustify bash python3 nodejs nodejs-npm
+    - npm install -g eslint
   script:
     - bash data/check-code-style
+    - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
+  artifacts:
+    paths:
+      - ${ESLINT_LOG}
+    when: on_failure
 
 flatpak:
   extends: '.flatpak'
