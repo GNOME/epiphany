@@ -1,5 +1,7 @@
 'use strict';
 
+/* exported pageActionOnClicked, browserActionClicked, browserActionClicked, tabsOnUpdated, runtimeSendMessage, runtimeOnConnect */
+
 let promises = [];
 let last_promise = 0;
 
@@ -18,32 +20,32 @@ let ephy_message = function (fn, args, cb) {
         last_promise = promises.push({resolve: resolve, reject: reject});
     });
     return promise;
-}
+};
 
 let pageActionOnClicked = function(x) {
   for (let listener of page_listeners)
     listener.callback(x);
-}
+};
 
 let browserActionClicked = function(x) {
   for (let listener of browser_listeners)
     listener.callback(x);
-}
+};
 
 let tabsOnUpdated = function(x) {
   for (let listener of tabs_listeners)
     listener.callback(x);
-}
+};
 
 let runtimeSendMessage = function(x) {
   for (let listener of runtime_onmessage_listeners)
     listener.callback(x);
-}
+};
 
 let runtimeOnConnect = function(x) {
   for (let listener of runtime_onconnect_listeners)
     listener.callback(x);
-}
+};
 
 // Browser async API
 window.browser.alarms = {
@@ -52,7 +54,7 @@ window.browser.alarms = {
 
 window.browser.windows = {
     onRemoved: {
-      addListener: function (cb) { windows_onremoved_listeners.push({callback: cb}) }
+      addListener: function (cb) { windows_onremoved_listeners.push({callback: cb}); }
     }
 };
 
@@ -64,7 +66,7 @@ window.browser.tabs = {
     insertCSS: function (args, cb) { return ephy_message ('tabs.insertCSS', args, cb); },
     removeCSS: function (args, cb) { return ephy_message ('tabs.removeCSS', args, cb); },
     onUpdated: {
-      addListener: function (cb) { tabs_listeners.push({callback: cb}) }
+      addListener: function (cb) { tabs_listeners.push({callback: cb}); }
     }
 };
 
@@ -73,7 +75,7 @@ window.browser.notifications = {
 };
 
 window.browser.runtime = {
-    getManifest: function (args, cb) { return "[]"; },
+    getManifest: function (args, cb) { return '[]'; },
     getBrowserInfo: function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); },
     onInstalled: {
       addListener: function (cb) { runtime_listeners.push({callback: cb}); }

@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-var
 var Ephy = {};
 
 Ephy.getAppleMobileWebAppCapable = function()
@@ -15,7 +16,7 @@ Ephy.getAppleMobileWebAppCapable = function()
     }
 
     return false;
-}
+};
 
 Ephy.getWebAppTitle = function()
 {
@@ -52,7 +53,7 @@ Ephy.getWebAppTitle = function()
 
     // set_default_application_title will fallback to the formatted hostname
     return null;
-}
+};
 
 Ephy.getWebAppIcon = function(baseURL)
 {
@@ -129,7 +130,7 @@ Ephy.getWebAppIcon = function(baseURL)
 
     // Last ditch effort: just fallback to the default favicon location.
     return { 'url' : new URL('/favicon.ico', baseURL).href, 'color' : null };
-}
+};
 
 Ephy.PreFillUserMenu = class PreFillUserMenu
 {
@@ -287,7 +288,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         this._passwordElement.value = '';
         this._manager.preFill(this._formAuth);
     }
-}
+};
 
 Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
 {
@@ -301,7 +302,7 @@ Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
     }
-}
+};
 
 Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
@@ -321,7 +322,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
     }
 
     formManager.handleFormSubmission();
-}
+};
 
 Ephy.hasModifiedForms = function()
 {
@@ -349,7 +350,7 @@ Ephy.hasModifiedForms = function()
             }
         }
     }
-}
+};
 
 Ephy.PasswordManager = class PasswordManager
 {
@@ -433,7 +434,7 @@ Ephy.PasswordManager = class PasswordManager
             this._pendingPromises.push({promiseID, resolver});
         });
     }
-}
+};
 
 Ephy.FormManager = class FormManager
 {
@@ -616,7 +617,7 @@ Ephy.FormManager = class FormManager
                 let parts = url.hostname.split('.');
                 if (parts.length > 0) {
                     let tld = parts[parts.length - 1];
-                    isFormActionInsecure = tld !== "127.0.0.1" && tld !== "::1" && tld !== "localhost";
+                    isFormActionInsecure = tld !== '127.0.0.1' && tld !== '::1' && tld !== 'localhost';
                 }
             }
         }
@@ -762,4 +763,4 @@ Ephy.FormManager = class FormManager
 
         return formAuth;
     }
-}
+};

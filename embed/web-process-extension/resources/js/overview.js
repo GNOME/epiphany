@@ -1,5 +1,7 @@
 'use strict';
 
+/* global Ephy */
+
 Ephy.Overview = class Overview
 {
     constructor(model)
@@ -143,7 +145,7 @@ Ephy.Overview = class Overview
                 let anchor = document.createElement('a');
                 anchor.classList.add('overview-item');
                 let closeButton = document.createElement('div');
-                closeButton.title = Ephy._("Remove from overview");
+                closeButton.title = Ephy._('Remove from overview');
                 closeButton.onclick = (event) => {
                     this._removeItem(anchor);
                     event.preventDefault();
