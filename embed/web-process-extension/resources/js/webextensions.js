@@ -2,48 +2,48 @@
 
 /* exported pageActionOnClicked, browserActionClicked, browserActionClicked, tabsOnUpdated, runtimeSendMessage, runtimeOnConnect */
 
-let promises = [];
+const promises = [];
 let last_promise = 0;
 
-let tabs_listeners = [];
-let page_listeners = [];
-let browser_listeners = [];
-let runtime_listeners = [];
-let runtime_onmessage_listeners = [];
-let runtime_onmessageexternal_listeners = [];
-let runtime_onconnect_listeners = [];
-let windows_onremoved_listeners = [];
+const tabs_listeners = [];
+const page_listeners = [];
+const browser_listeners = [];
+const runtime_listeners = [];
+const runtime_onmessage_listeners = [];
+const runtime_onmessageexternal_listeners = [];
+const runtime_onconnect_listeners = [];
+const windows_onremoved_listeners = [];
 
-let ephy_message = function (fn, args, cb) {
-    let promise = new Promise (function (resolve, reject) {
+const ephy_message = function (fn, args, cb) {
+    const promise = new Promise (function (resolve, reject) {
         window.webkit.messageHandlers.epiphany.postMessage ({fn: fn, args: args, promise: last_promise});
         last_promise = promises.push({resolve: resolve, reject: reject});
     });
     return promise;
 };
 
-let pageActionOnClicked = function(x) {
-  for (let listener of page_listeners)
+const pageActionOnClicked = function(x) {
+  for (const listener of page_listeners)
     listener.callback(x);
 };
 
-let browserActionClicked = function(x) {
-  for (let listener of browser_listeners)
+const browserActionClicked = function(x) {
+  for (const listener of browser_listeners)
     listener.callback(x);
 };
 
-let tabsOnUpdated = function(x) {
-  for (let listener of tabs_listeners)
+const tabsOnUpdated = function(x) {
+  for (const listener of tabs_listeners)
     listener.callback(x);
 };
 
-let runtimeSendMessage = function(x) {
-  for (let listener of runtime_onmessage_listeners)
+const runtimeSendMessage = function(x) {
+  for (const listener of runtime_onmessage_listeners)
     listener.callback(x);
 };
 
-let runtimeOnConnect = function(x) {
-  for (let listener of runtime_onconnect_listeners)
+const runtimeOnConnect = function(x) {
+  for (const listener of runtime_onconnect_listeners)
     listener.callback(x);
 };
 

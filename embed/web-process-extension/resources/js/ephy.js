@@ -5,10 +5,10 @@ var Ephy = {};
 
 Ephy.getAppleMobileWebAppCapable = function()
 {
-    let metas = document.getElementsByTagName('meta');
+    const metas = document.getElementsByTagName('meta');
 
     for (let i = 0; i < metas.length; i++) {
-        let meta = metas[i];
+        const meta = metas[i];
 
         // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
         if (meta.name === 'apple-mobile-web-app-capable' && meta.getAttribute('content') === 'yes')
@@ -181,7 +181,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
             return;
 
-        let container = document.getElementById('ephy-user-choices-container');
+        const container = document.getElementById('ephy-user-choices-container');
         if (!container) {
             this._showMenu(!this._wasEdited);
             return;
@@ -207,10 +207,10 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
     _showMenu(showAll)
     {
-        let mainDiv = document.createElement('div');
+        const mainDiv = document.createElement('div');
         mainDiv.id = 'ephy-user-choices-container';
 
-        let elementRect = this._userElement.getBoundingClientRect();
+        const elementRect = this._userElement.getBoundingClientRect();
 
         // 2147483647 is the maximum value browsers will take for z-index.
         // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
@@ -227,18 +227,18 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
         mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
 
-        let ul = document.createElement('ul');
+        const ul = document.createElement('ul');
         ul.style.cssText = 'margin: 0; padding: 0;';
         ul.tabindex = -1;
         mainDiv.appendChild(ul);
 
         this._selected = null;
         for (let i = 0; i < this._users.length; i++) {
-            let user = this._users[i];
+            const user = this._users[i];
             if (!showAll && !user.startsWith(this._userElement.value))
                 continue;
 
-            let li = document.createElement('li');
+            const li = document.createElement('li');
             li.style.cssText = 'list-style-type: none ! important;' +
                 'background-image: none ! important;' +
                 'padding: 3px 6px ! important;' +
@@ -251,7 +251,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             if (user === this._userElement.value)
                 this._selected = li;
 
-            let anchor = document.createElement('a');
+            const anchor = document.createElement('a');
             anchor.style.cssText = 'font-weight: normal ! important;' +
                 'font-family: sans ! important;' +
                 'text-decoration: none ! important;' +
@@ -277,7 +277,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
     _removeMenu()
     {
-        let menu = document.getElementById('ephy-user-choices-container');
+        const menu = document.getElementById('ephy-user-choices-container');
         if (menu)
             menu.parentNode.removeChild(menu);
     }
@@ -297,7 +297,7 @@ Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
     for (let i = 0; i < forms.length; i++) {
         if (!(forms[i] instanceof HTMLFormElement))
             continue;
-        let formManager = new Ephy.FormManager(pageID, frameID, forms[i]);
+        const formManager = new Ephy.FormManager(pageID, frameID, forms[i]);
         formManager.handlePasswordForms(serializer);
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
@@ -309,7 +309,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
     // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
     for (let i = 0; i < Ephy.formManagers.length; i++) {
-        let manager = Ephy.formManagers[i];
+        const manager = Ephy.formManagers[i];
         if (manager.frameID() === frameID && manager.form() === form) {
             formManager = manager;
             break;
@@ -327,10 +327,10 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 Ephy.hasModifiedForms = function()
 {
     for (let i = 0; i < document.forms.length; i++) {
-        let form = document.forms[i];
+        const form = document.forms[i];
         let modifiedInputElement = false;
         for (let j = 0; j < form.elements.length; j++) {
-            let element = form.elements[j];
+            const element = form.elements[j];
             if (!Ephy.isEdited(element))
                 continue;
 
@@ -364,7 +364,7 @@ Ephy.PasswordManager = class PasswordManager
 
     _takePendingPromise(id)
     {
-        let element = this._pendingPromises.find(element => element.promiseID === id);
+        const element = this._pendingPromises.find(element => element.promiseID === id);
         if (element)
             this._pendingPromises = this._pendingPromises.filter(element => element.promiseID !== id);
         return element;
@@ -374,7 +374,7 @@ Ephy.PasswordManager = class PasswordManager
     {
         Ephy.log(`Received password query response for username=${username}`);
 
-        let element = this._takePendingPromise(id);
+        const element = this._takePendingPromise(id);
         if (element) {
             if (password)
                 element.resolver({username, password});
@@ -388,7 +388,7 @@ Ephy.PasswordManager = class PasswordManager
         Ephy.log(`Querying passwords for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}`);
 
         return new Promise((resolver, reject) => {
-            let promiseID = this._promiseCounter++;
+            const promiseID = this._promiseCounter++;
             Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this._pageID, this._frameID);
             this._pendingPromises.push({promiseID, resolver});
         });
@@ -419,7 +419,7 @@ Ephy.PasswordManager = class PasswordManager
     {
         Ephy.log(`Received query usernames response with users=${users}`);
 
-        let element = this._takePendingPromise(id);
+        const element = this._takePendingPromise(id);
         if (element)
             element.resolver(users);
     }
@@ -429,7 +429,7 @@ Ephy.PasswordManager = class PasswordManager
         Ephy.log(`Requesting usernames for origin=${origin}`);
 
         return new Promise((resolver, reject) => {
-            let promiseID = this._promiseCounter++;
+            const promiseID = this._promiseCounter++;
             Ephy.queryUsernames(origin, promiseID, this._pageID, this._frameID);
             this._pendingPromises.push({promiseID, resolver});
         });
@@ -480,7 +480,7 @@ Ephy.FormManager = class FormManager
         if (!Ephy.shouldRememberPasswords())
             return;
 
-        let formAuth = this._generateFormAuth(true);
+        const formAuth = this._generateFormAuth(true);
         if (!formAuth) {
             Ephy.log('No pre-fillable/hookable form found');
             return;
@@ -539,7 +539,7 @@ Ephy.FormManager = class FormManager
         if (!Ephy.shouldRememberPasswords())
             return;
 
-        let formAuth = this._generateFormAuth(false);
+        const formAuth = this._generateFormAuth(false);
         if (!formAuth || !formAuth.password)
             return;
 
@@ -598,7 +598,7 @@ Ephy.FormManager = class FormManager
     _containsPasswordElement()
     {
         for (let i = 0; i < this._form.elements.length; i++) {
-            let element = this._form.elements[i];
+            const element = this._form.elements[i];
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'password' || element.type === 'adminpw')
                     return true;
@@ -611,12 +611,12 @@ Ephy.FormManager = class FormManager
     {
         let isFormActionInsecure = false;
         if (this._form.action) {
-            let url = new URL(this._form.action);
+            const url = new URL(this._form.action);
             if (url.protocol === 'http:') {
                 // We trust localhost to be local since glib!616.
-                let parts = url.hostname.split('.');
+                const parts = url.hostname.split('.');
                 if (parts.length > 0) {
-                    let tld = parts[parts.length - 1];
+                    const tld = parts[parts.length - 1];
                     isFormActionInsecure = tld !== '127.0.0.1' && tld !== '::1' && tld !== 'localhost';
                 }
             }
@@ -626,9 +626,9 @@ Ephy.FormManager = class FormManager
 
     _findPasswordFields()
     {
-        let passwordFields = [];
+        const passwordFields = [];
         for (let i = 0; i < this._form.elements.length; i++) {
-            let element = this._form.elements[i];
+            const element = this._form.elements[i];
             if (element instanceof HTMLInputElement && element.type === 'password') {
                 // We only want to process forms with 1-3 fields. A common
                 // case is to have a "change password" form with 3 fields:
@@ -645,16 +645,16 @@ Ephy.FormManager = class FormManager
 
     _findFormAuthElements(forAutofill)
     {
-        let passwordNodes = this._findPasswordFields();
+        const passwordNodes = this._findPasswordFields();
         if (!passwordNodes || !passwordNodes.length)
             return null;
 
         // Start at the first found password field and search backwards.
         // Assume the first eligible field to contain username.
         let usernameNode = null;
-        let firstPasswordNodeData = passwordNodes[0];
+        const firstPasswordNodeData = passwordNodes[0];
         for (let i = firstPasswordNodeData.index; i >= 0; i--) {
-            let element = this._form.elements[i];
+            const element = this._form.elements[i];
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'text' || element.type === 'email' ||
                     element.type === 'tel' || element.type === 'url' ||
@@ -672,7 +672,7 @@ Ephy.FormManager = class FormManager
         let passwordNodeIndex = 0;
         if (!forAutofill && passwordNodes.length !== 1) {
             // Get values of all password fields.
-            let passwords = [];
+            const passwords = [];
             for (let i = passwordNodes.length - 1; i >= 0; i--)
                 passwords[i] = passwordNodes[i].element.value;
 
@@ -725,7 +725,7 @@ Ephy.FormManager = class FormManager
     }
 
     _generateFormAuth(forAutofill) {
-        let formAuth = this._findFormAuthElements(forAutofill);
+        const formAuth = this._findFormAuthElements(forAutofill);
         if (formAuth === null)
             return null;
 
