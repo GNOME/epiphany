@@ -225,3 +225,19 @@ dzlsuggestionpopover > revealer > box > elastic > scrolledwindow > viewport > li
     background: gtkalpha(gray, 0.2);
   }
 }
+
+fullscreenbox > flap {
+  > dimming,
+  > outline,
+  > border {
+    min-height: 0;
+    min-width: 0;
+    background: none;
+  }
+
+  > shadow {
+    min-height: 9px;
+    min-width: 9px;
+    background: linear-gradient(to bottom, gtkalpha(black, .1), gtkalpha(black, .0));
+  }
+}
