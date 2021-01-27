@@ -181,32 +181,9 @@ ephy_pages_view_class_init (EphyPagesViewClass *klass)
 }
 
 static void
-separator_header (GtkListBoxRow *row,
-                  GtkListBoxRow *before,
-                  gpointer       user_data)
-{
-  GtkWidget *header;
-
-  if (before == NULL) {
-    gtk_list_box_row_set_header (row, NULL);
-
-    return;
-  }
-
-  if (gtk_list_box_row_get_header (row) != NULL)
-    return;
-
-  header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_widget_show (header);
-  gtk_list_box_row_set_header (row, header);
-}
-
-static void
 ephy_pages_view_init (EphyPagesView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_list_box_set_header_func (self->list_box, separator_header, NULL, NULL);
 
   self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
 

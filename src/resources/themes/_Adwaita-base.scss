@@ -13,27 +13,24 @@
 
 @import 'drawing';
 
-$close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken($fg_color, 10%));
-@mixin close_button($bg:$bg_color, $fg:$close_button_fg_color) {
+@mixin close_button($fg:$fg_color) {
   background: none;
   border: none;
   box-shadow: none;
+  -gtk-icon-shadow: none;
+  text-shadow: none;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 99px;
+  color: inherit;
+  padding: 0;
+  margin: 2px;
 
-  &:last-child {
-    image {
-      color: $fg;
-      border: 1px solid transparent;
-      border-radius: 5px;
-    }
+  &:hover {
+    background: gtkalpha($fg, .15);
 
-    &:hover image {
-      @include button(normal, $bg, $fg);
-      @include button(hover, $bg, $fg);
-    }
-
-    &:active image {
-      @include button(normal, $bg, $fg);
-      @include button(active, $bg, $fg);
+    &:active {
+      background: gtkalpha(black, .2);
     }
   }
 }
@@ -53,19 +50,7 @@ $close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken(
 }
 
 .bookmark-tag-widget-selected button {
-  @include close_button($selected_bg_color, $selected_fg_color);
-}
-
-.page-row-close-button {
-  @include close_button();
-
-  row:selected & {
-    @include close_button($selected_bg_color, $selected_fg_color);
-  }
-
-  row.narrow & image {
-    padding: 6px;
-  }
+  @include close_button($selected_fg_color);
 }
 
 @keyframes needs_attention_keyframes {
@@ -126,6 +111,48 @@ $close_button_fg_color: if($variant == 'light', lighten($fg_color, 10%), darken(
 
     &:backdrop {
       color: themecolor(theme_unfocused_fg_color);
+    }
+  }
+}
+
+$menu_selected_color: if($variant == 'light', darken($bg_color, 6%), darken($bg_color, 8%));
+
+@if $high_contrast {
+  $menu_selected_color: darken($bg_color,10%);
+}
+
+.pages-list {
+  margin: 5px;
+
+  row {
+    min-height: 36px;
+    padding: 3px;
+    border-radius: 5px;
+    -gtk-outline-radius: 5px;
+    border: none;
+    color: $fg_color;
+    transition: none;
+    box-shadow: none;
+
+    &:not(:last-child) {
+      margin-bottom: 2px;
+    }
+
+    &:selected {
+      background: $menu_selected_color;
+    }
+
+    &:hover {
+      background: darken($menu_selected_color,5%);
+    }
+
+    .close-button {
+      @include close_button();
+
+      #pages-view & {
+        min-width: 36px;
+        min-height: 36px;
+      }
     }
   }
 }
