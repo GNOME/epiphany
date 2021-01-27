@@ -288,9 +288,8 @@ ephy_web_extension_manager_update_location_entry (EphyWebExtensionManager *self,
 {
   GtkWidget *title_widget;
   EphyLocationEntry *lentry;
-  GtkWidget *notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
-  int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-  GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), current_page);
+  EphyTabView *tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+  GtkWidget *page = ephy_tab_view_get_selected_page (tab_view);
   EphyWebView *web_view;
 
   if (!page)
@@ -561,16 +560,16 @@ ephy_web_extension_manager_add_web_extension_to_webview (EphyWebExtensionManager
 }
 
 static void
-page_added_cb (GtkNotebook *notebook,
-               GtkWidget   *child,
-               guint        page_num,
-               gpointer     user_data)
+page_attached_cb (HdyTabView *tab_view,
+                  HdyTabPage *page,
+                  gint        position,
+                  gpointer    user_data)
 {
   EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
+  GtkWidget *child = hdy_tab_page_get_child (page);
   EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (child));
-  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (notebook)));
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab_view)));
   EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
-
 
   ephy_web_extension_manager_add_web_extension_to_webview (self, web_extension, window, web_view);
   ephy_web_extension_manager_update_location_entry (self, window);
@@ -756,14 +755,15 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
                                                         EphyWebExtension        *web_extension,
                                                         EphyWindow              *window)
 {
-  GtkWidget *notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+  EphyTabView *tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+  HdyTabView *view = ephy_tab_view_get_tab_view (tab_view);
 
   if (!ephy_web_extension_manager_is_active (self, web_extension))
     return;
 
   /* Add page actions and add content script */
-  for (int i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)); i++) {
-    GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+  for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+    GtkWidget *page = ephy_tab_view_get_nth_page (tab_view, i);
     EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
 
     ephy_web_extension_manager_add_web_extension_to_webview (self, web_extension, window, web_view);
@@ -776,7 +776,7 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
   }
 
   ephy_web_extension_manager_update_location_entry (self, window);
-  g_signal_connect_object (notebook, "page-added", G_CALLBACK (page_added_cb), web_extension, 0);
+  g_signal_connect_object (view, "page-attached", G_CALLBACK (page_attached_cb), web_extension, 0);
 }
 
 static gboolean
@@ -822,14 +822,15 @@ ephy_web_extension_manager_remove_web_extension_from_window (EphyWebExtensionMan
                                                              EphyWebExtension        *web_extension,
                                                              EphyWindow              *window)
 {
-  GtkWidget *notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+  EphyTabView *tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+  HdyTabView *view = ephy_tab_view_get_tab_view (tab_view);
   GtkWidget *browser_action_widget;
 
   if (ephy_web_extension_manager_is_active (self, web_extension))
     return;
 
-  for (int i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)); i++) {
-    GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+  for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+    GtkWidget *page = ephy_tab_view_get_nth_page (tab_view, i);
     EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
 
     ephy_web_extension_manager_remove_web_extension_from_webview (self, web_extension, window, web_view);
@@ -842,7 +843,7 @@ ephy_web_extension_manager_remove_web_extension_from_window (EphyWebExtensionMan
 
   ephy_web_extension_manager_update_location_entry (self, window);
 
-  g_signal_handlers_disconnect_by_data (notebook, web_extension);
+  g_signal_handlers_disconnect_by_data (view, web_extension);
 }
 
 gboolean

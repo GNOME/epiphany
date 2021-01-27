@@ -70,39 +70,6 @@
   animation-iteration-count: 3;
 }
 
-// Pinned tabs
-.main-notebook {
-  tab {
-    min-width: 16px;
-  }
-
-  header {
-    &.top,
-    &.bottom {
-      tab {
-        border-style: none solid;
-      }
-    }
-
-    &.left,
-    &.right {
-      tab {
-        border-style: solid none;
-      }
-    }
-  }
-}
-
-.tab-attention {
-  $_dot_color: if($variant=='light', $selected_bg_color,
-                                   lighten($selected_bg_color,15%));
-  background-image: -gtk-gradient(radial,
-                                  center center, 0,
-                                  center center, 0.5,
-                                  to($_dot_color),
-                                  to(transparent));
-}
-
 #title-box-container {
   color: gtkalpha(themecolor(theme_fg_color), 0.2);
 

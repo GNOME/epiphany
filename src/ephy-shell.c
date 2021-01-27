@@ -935,23 +935,22 @@ webkit_notification_clicked_cb (WebKitNotification *notification,
 
   for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
     EphyWindow *window;
-    GtkWidget *notebook;
+    EphyTabView *tab_view;
     int n_pages;
 
     window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
-
-    notebook = ephy_window_get_notebook (window);
-    n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+    tab_view = ephy_window_get_tab_view (window);
+    n_pages = ephy_tab_view_get_n_pages (tab_view);
 
     for (int i = 0; i < n_pages; i++) {
       EphyEmbed *embed;
       WebKitWebView *webview;
 
-      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+      embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i));
       webview = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
 
       if (webview == notification_webview) {
-        gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), i);
+        ephy_tab_view_select_page (tab_view, GTK_WIDGET (embed));
         gtk_window_present (GTK_WINDOW (window));
         return;
       }
@@ -1025,6 +1024,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
   EphyEmbed *embed = NULL;
   gboolean jump_to = FALSE;
   int position = -1;
+  EphyEmbed *parent = NULL;
 
   g_assert (EPHY_IS_SHELL (shell));
   g_assert (EPHY_IS_WINDOW (window));
@@ -1040,7 +1040,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
 
   if (flags & EPHY_NEW_TAB_APPEND_AFTER) {
     if (previous_embed)
-      position = ephy_window_get_position_for_new_embed (window, previous_embed);
+      parent = previous_embed;
     else
       g_warning ("Requested to append new tab after parent, but 'previous_embed' was NULL");
   }
@@ -1061,7 +1061,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                                     "progress-bar-enabled", ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION,
                                     NULL));
   gtk_widget_show (GTK_WIDGET (embed));
-  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
+  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, parent, position, jump_to);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
@@ -1556,16 +1556,16 @@ ephy_shell_get_web_view (EphyShell *shell,
 {
   GList *windows;
   GtkWindow *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
 
   windows = gtk_application_get_windows (GTK_APPLICATION (shell));
 
   for (GList *list = windows; list && list->data; list = list->next) {
     window = GTK_WINDOW (list->data);
-    notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+    tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
 
-    for (int i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)); i++) {
-      GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+    for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+      GtkWidget *page = ephy_tab_view_get_nth_page (tab_view, i);
       EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
 
       if (ephy_web_view_get_uid (web_view) == id)
@@ -1580,18 +1580,15 @@ EphyWebView *
 ephy_shell_get_active_web_view (EphyShell *shell)
 {
   GtkWindow *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
   GtkWidget *page;
-  gint page_num;
 
   window = gtk_application_get_active_window (GTK_APPLICATION (shell));
   if (!window)
     return NULL;
 
-  notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
-
-  page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-  page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
+  tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+  page = ephy_tab_view_get_selected_page (tab_view);
 
   return ephy_embed_get_web_view (EPHY_EMBED (page));
 }

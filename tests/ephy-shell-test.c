@@ -168,19 +168,12 @@ test_ephy_shell_tab_load (void)
   gtk_widget_destroy (window);
 }
 
-static int
-get_notebook_page_num (GtkWidget *notebook,
-                       EphyEmbed *embed)
-{
-  return gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (embed));
-}
-
 static void
 test_ephy_shell_tab_append (void)
 {
   EphyShell *ephy_shell;
   GtkWidget *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
 
   EphyEmbed *embed1;
   EphyEmbed *embed2;
@@ -190,37 +183,37 @@ test_ephy_shell_tab_append (void)
 
   ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
-  notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+  tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
 
   embed1 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
 
   embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 1);
 
   embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 2);
 
   embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 2);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed4), ==, 3);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed4), ==, 3);
 
   embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed3,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed1), ==, 0);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed3), ==, 1);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed5), ==, 2);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed2), ==, 3);
-  g_assert_cmpint (get_notebook_page_num (notebook, embed4), ==, 4);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed5), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 3);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed4), ==, 4);
 
   gtk_widget_destroy (window);
 }
@@ -231,7 +224,7 @@ test_ephy_shell_tab_from_external (void)
 {
   EphyShell *ephy_shell;
   GtkWidget *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
   GMainLoop *loop;
 
   EphyEmbed *embed;
@@ -247,7 +240,7 @@ test_ephy_shell_tab_from_external (void)
   embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, "about:epiphany",
                               EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
   window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
-  notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+  tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
 
   /* This embed should be used in load-from-external. */
   embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, NULL,
@@ -268,7 +261,7 @@ test_ephy_shell_tab_from_external (void)
 
   /* This one should fail, because the active embed is not @embed2. */
   ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
-  g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_selected_index (tab_view), ==, 0);
 
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
@@ -281,11 +274,11 @@ test_ephy_shell_tab_from_external (void)
   ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
   ephy_test_utils_check_ephy_embed_address (embed4, "ephy-about:applications");
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), 1);
+  ephy_tab_view_select_nth_page (tab_view, 1);
 
   /* This should work */
   ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
-  g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_selected_index (tab_view), ==, 1);
 
   loop = ephy_test_utils_setup_wait_until_load_is_committed (ephy_embed_get_web_view (embed2));
 

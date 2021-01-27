@@ -46,13 +46,13 @@
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
-#include "ephy-notebook.h"
 #include "ephy-password-import.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-tab-view.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-dialog.h"
@@ -1180,16 +1180,13 @@ window_cmd_stop (GSimpleAction *action,
 static void
 check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
                                             GAsyncResult *result,
-                                            gpointer      user_data)
+                                            EphyEmbed    *embed)
 {
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyEmbed *embed;
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view)));
   GtkWidget *dialog;
   GtkWidget *button;
   gboolean has_modified_forms;
   int response = GTK_RESPONSE_ACCEPT;
-
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
   if (has_modified_forms) {
@@ -1220,7 +1217,7 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
     webkit_web_view_reload (view);
   }
 
-  g_object_unref (window);
+  g_object_unref (embed);
 }
 
 void
@@ -1231,13 +1228,13 @@ window_cmd_reload (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  embed = EPHY_EMBED (ephy_tab_view_get_current_page (ephy_window_get_tab_view (window)));
   g_assert (embed != NULL);
 
   ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
                                     NULL,
                                     (GAsyncReadyCallback)check_tab_has_modified_forms_and_reload_cb,
-                                    g_object_ref (window));
+                                    g_object_ref (embed));
 }
 
 void
@@ -2658,79 +2655,20 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
 }
 
 void
-window_cmd_tabs_previous (GSimpleAction *action,
-                          GVariant      *variant,
-                          gpointer       user_data)
-{
-  GtkWidget *nb;
-
-  nb = ephy_window_get_notebook (EPHY_WINDOW (user_data));
-  g_assert (nb != NULL);
-
-  ephy_notebook_prev_page (EPHY_NOTEBOOK (nb));
-}
-
-void
-window_cmd_tabs_next (GSimpleAction *action,
-                      GVariant      *variant,
-                      gpointer       user_data)
-{
-  GtkWidget *nb;
-
-  nb = ephy_window_get_notebook (EPHY_WINDOW (user_data));
-  g_assert (nb != NULL);
-
-  ephy_notebook_next_page (EPHY_NOTEBOOK (nb));
-}
-
-void
-window_cmd_tabs_move_left (GSimpleAction *action,
-                           GVariant      *variant,
-                           gpointer       user_data)
-{
-  GtkWidget *child;
-  GtkNotebook *notebook;
-  int page;
-
-  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
-  page = gtk_notebook_get_current_page (notebook);
-  if (page < 1)
-    return;
-
-  child = gtk_notebook_get_nth_page (notebook, page);
-  gtk_notebook_reorder_child (notebook, child, page - 1);
-}
-
-void window_cmd_tabs_move_right (GSimpleAction *action,
-                                 GVariant      *variant,
-                                 gpointer       user_data)
-{
-  GtkWidget *child;
-  GtkNotebook *notebook;
-  int page, n_pages;
-
-  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
-  page = gtk_notebook_get_current_page (notebook);
-  n_pages = gtk_notebook_get_n_pages (notebook) - 1;
-  if (page > n_pages - 1)
-    return;
-
-  child = gtk_notebook_get_nth_page (notebook, page);
-  gtk_notebook_reorder_child (notebook, child, page + 1);
-}
-
-void
 window_cmd_tabs_duplicate (GSimpleAction *action,
                            GVariant      *variant,
                            gpointer       user_data)
 {
+  EphyTabView *tab_view;
   EphyEmbed *embed, *new_embed;
   WebKitWebView *view, *new_view;
   WebKitWebViewSessionState *session_state;
   WebKitBackForwardList *bf_list;
   WebKitBackForwardListItem *item;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
+  tab_view = ephy_window_get_tab_view (EPHY_WINDOW (user_data));
+  embed = EPHY_EMBED (ephy_tab_view_get_current_page (tab_view));
+
   view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
   session_state = webkit_web_view_get_session_state (view);
 
@@ -2758,25 +2696,17 @@ window_cmd_tabs_close (GSimpleAction *action,
                        gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-  gboolean pinned;
+  EphyTabView *tab_view;
 
-  notebook = ephy_window_get_notebook (window);
+  tab_view = ephy_window_get_tab_view (window);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
+      ephy_tab_view_get_n_pages (tab_view) <= 1) {
     return;
   }
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
-
-  pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed);
-
-  if (!pinned)
-    g_signal_emit_by_name (notebook, "tab-close-request", embed);
+  ephy_tab_view_close_selected (tab_view);
 }
 
 void
@@ -2785,27 +2715,8 @@ window_cmd_tabs_close_left (GSimpleAction *action,
                             gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-  int current_page_no;
-  GSList *pages_to_close = NULL;
 
-  notebook = ephy_window_get_notebook (window);
-  current_page_no = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-
-  for (int i = 0; i < current_page_no; i++) {
-    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-
-    if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
-      pages_to_close = g_slist_prepend (pages_to_close, embed);
-  }
-
-  for (GSList *l = pages_to_close; l != NULL; l = l->next) {
-    g_assert (l->data != NULL);
-    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
-  }
-
-  g_slist_free (pages_to_close);
+  ephy_tab_view_close_left (ephy_window_get_tab_view (window));
 }
 
 void
@@ -2814,28 +2725,8 @@ window_cmd_tabs_close_right (GSimpleAction *action,
                              gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-  int n_pages, current_page_no;
-  GSList *pages_to_close = NULL;
 
-  notebook = ephy_window_get_notebook (window);
-  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-  current_page_no = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-
-  for (int i = current_page_no + 1; i < n_pages; i++) {
-    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-
-    if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
-      pages_to_close = g_slist_prepend (pages_to_close, embed);
-  }
-
-  for (GSList *l = pages_to_close; l != NULL; l = l->next) {
-    g_assert (l->data != NULL);
-    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
-  }
-
-  g_slist_free (pages_to_close);
+  ephy_tab_view_close_right (ephy_window_get_tab_view (window));
 }
 
 void
@@ -2844,30 +2735,18 @@ window_cmd_tabs_close_others (GSimpleAction *action,
                               gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-  int n_pages, current_page;
-  GSList *pages_to_close = NULL;
 
-  notebook = ephy_window_get_notebook (window);
-  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+  ephy_tab_view_close_other (ephy_window_get_tab_view (window));
+}
 
-  for (int i = 0; i < n_pages; i++) {
-    if (i != current_page) {
-      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+static void
+reload_cb (GtkWidget *widget,
+           gpointer   user_data)
+{
+  EphyEmbed *embed = EPHY_EMBED (widget);
+  WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-      if (!ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed))
-        pages_to_close = g_slist_prepend (pages_to_close, embed);
-    }
-  }
-
-  for (GSList *l = pages_to_close; l != NULL; l = l->next) {
-    g_assert (l->data != NULL);
-    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
-  }
-
-  g_slist_free (pages_to_close);
+  webkit_web_view_reload (view);
 }
 
 void
@@ -2876,45 +2755,10 @@ window_cmd_tabs_reload_all_tabs (GSimpleAction *action,
                                  gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  EphyEmbed *embed;
-  WebKitWebView *view;
-  GtkWidget *notebook;
-  int n_pages;
 
-  notebook = ephy_window_get_notebook (window);
-  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-
-  for (int i = 0; i < n_pages; i++) {
-    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-
-    view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-    webkit_web_view_reload (view);
-  }
-}
-
-void
-window_cmd_show_tab (GSimpleAction *action,
-                     GVariant      *parameter,
-                     gpointer       user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  GtkWidget *notebook;
-  guint32 tab_num;
-
-  g_assert (g_variant_is_of_type (parameter, G_VARIANT_TYPE_UINT32));
-  tab_num = g_variant_get_uint32 (parameter);
-
-  notebook = ephy_window_get_notebook (window);
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), tab_num);
-  g_simple_action_set_state (action, parameter);
-}
-
-void
-window_cmd_change_show_tab_state (GSimpleAction *action,
-                                  GVariant      *parameter,
-                                  gpointer       user_data)
-{
-  /* This page intentionally left blank. */
+  ephy_tab_view_foreach (ephy_window_get_tab_view (window),
+                         reload_cb,
+                         NULL);
 }
 
 void
@@ -3029,15 +2873,8 @@ window_cmd_tabs_pin (GSimpleAction *action,
                      gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyEmbed *embed;
-  EphyNotebook *notebook;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
-
-  notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
-
-  ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), TRUE);
+  ephy_tab_view_pin (ephy_window_get_tab_view (window));
 }
 
 void
@@ -3046,15 +2883,8 @@ window_cmd_tabs_unpin (GSimpleAction *action,
                        gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyEmbed *embed;
-  EphyNotebook *notebook;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
-
-  notebook = EPHY_NOTEBOOK (ephy_window_get_notebook (window));
-
-  ephy_notebook_tab_set_pinned (notebook, GTK_WIDGET (embed), FALSE);
+  ephy_tab_view_unpin (ephy_window_get_tab_view (window));
 }
 
 void
@@ -3067,12 +2897,15 @@ window_cmd_change_tabs_mute_state (GSimpleAction *action,
   EphyWebView *view;
   gboolean mute;
 
-  mute = g_variant_get_boolean (state);
-
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  embed = EPHY_EMBED (ephy_tab_view_get_current_page (ephy_window_get_tab_view (window)));
   g_assert (embed != NULL);
 
   view = ephy_embed_get_web_view (embed);
+
+  if (!webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view)))
+    return;
+
+  mute = !webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
 
   webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), mute);
 

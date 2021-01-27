@@ -38,7 +38,8 @@ struct _EphyEmbedContainerInterface
 
   gint (* add_child)               (EphyEmbedContainer *container,
                                     EphyEmbed *child,
-                                    gint position,
+                                    EphyEmbed *parent,
+                                    int position,
                                     gboolean set_active);
 
   void (* set_active_child)        (EphyEmbedContainer *container,
@@ -58,7 +59,8 @@ struct _EphyEmbedContainerInterface
 
 gint              ephy_embed_container_add_child        (EphyEmbedContainer *container,
                                                          EphyEmbed          *child,
-                                                         gint                position,
+                                                         EphyEmbed          *parent,
+                                                         int                 position,
                                                          gboolean            set_active);
 void              ephy_embed_container_set_active_child (EphyEmbedContainer *container,
                                                          EphyEmbed          *child);

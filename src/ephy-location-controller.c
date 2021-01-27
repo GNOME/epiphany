@@ -147,15 +147,14 @@ entry_activate_cb (GtkEntry               *entry,
     return;
 
   if (g_str_has_prefix (content, "ephy-tab://")) {
-    GtkWidget *notebook = ephy_window_get_notebook (controller->window);
+    EphyTabView *tab_view = ephy_window_get_tab_view (controller->window);
     GtkWidget *tab;
     EphyWebView *webview;
-    gint current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
     g_auto (GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
 
     g_assert (g_strv_length (split) == 2);
 
-    tab = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), current);
+    tab = ephy_tab_view_get_selected_page (tab_view);
     webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
 
     if (atoi (split[1]) != 0) {
@@ -169,15 +168,15 @@ entry_activate_cb (GtkEntry               *entry,
       windows = gtk_application_get_windows (GTK_APPLICATION (application));
 
       window = g_list_nth_data (windows, atoi (split[1]));
-      notebook = ephy_window_get_notebook (window);
+      tab_view = ephy_window_get_tab_view (window);
 
       gtk_window_present (GTK_WINDOW (window));
     }
 
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), atoi (split[0]));
+    ephy_tab_view_select_nth_page (tab_view, atoi (split[0]));
 
     if (ephy_web_view_is_overview (webview))
-      g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", tab);
+      ephy_tab_view_close (tab_view, tab);
 
     return;
   }
@@ -295,10 +294,7 @@ focus_out_event_cb (GtkWidget              *entry,
 }
 
 static void
-switch_page_cb (GtkNotebook            *notebook,
-                GtkWidget              *page,
-                guint                   page_num,
-                EphyLocationController *controller)
+notify_selected_index_cb (EphyLocationController *controller)
 {
   if (controller->sync_address_is_blocked == TRUE) {
     controller->sync_address_is_blocked = FALSE;
@@ -343,15 +339,17 @@ ephy_location_controller_constructed (GObject *object)
   EphyHistoryService *history_service;
   EphyBookmarksManager *bookmarks_manager;
   EphySuggestionModel *model;
-  GtkWidget *notebook, *widget, *reader_mode, *entry;
+  EphyTabView *tab_view;
+  GtkWidget *widget, *reader_mode, *entry;
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->constructed (object);
 
-  notebook = ephy_window_get_notebook (controller->window);
+  tab_view = ephy_window_get_tab_view (controller->window);
   widget = GTK_WIDGET (controller->title_widget);
 
-  g_signal_connect (notebook, "switch-page",
-                    G_CALLBACK (switch_page_cb), controller);
+  g_signal_connect_object (tab_view, "notify::selected-index",
+                           G_CALLBACK (notify_selected_index_cb), controller,
+                           G_CONNECT_SWAPPED);
 
   sync_address (controller, NULL, widget);
   g_signal_connect_object (controller, "notify::address",
@@ -446,14 +444,9 @@ static void
 ephy_location_controller_dispose (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
-  GtkWidget *notebook;
 
-  notebook = ephy_window_get_notebook (controller->window);
-
-  if (notebook == NULL ||
-      controller->title_widget == NULL) {
+  if (!controller->title_widget)
     return;
-  }
 
   g_clear_object (&controller->longpress_gesture);
 
@@ -463,8 +456,6 @@ ephy_location_controller_dispose (GObject *object)
     g_signal_handlers_disconnect_matched (controller->title_widget, G_SIGNAL_MATCH_DATA,
                                           0, 0, NULL, NULL, controller);
   }
-  g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL, NULL, controller);
   controller->title_widget = NULL;
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->dispose (object);

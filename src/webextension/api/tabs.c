@@ -46,7 +46,7 @@ tabs_handler_query (EphyWebExtension *self,
   g_autoptr (JsonNode) root = NULL;
   EphyShell *shell = ephy_shell_get_default ();
   GtkWindow *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
   gboolean current_window = TRUE;
   gboolean active = TRUE;
 
@@ -66,18 +66,18 @@ tabs_handler_query (EphyWebExtension *self,
 
   if (current_window) {
     window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-    notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
+    tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
 
     json_builder_begin_array (builder);
 
     if (active) {
-      GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)));
+      GtkWidget *page = ephy_tab_view_get_selected_page (tab_view);
       EphyWebView *tmp_webview = ephy_embed_get_web_view (EPHY_EMBED (page));
 
       add_web_view_to_json (builder, tmp_webview);
     } else {
-      for (int i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)); i++) {
-        GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
+      for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+        GtkWidget *page = ephy_tab_view_get_nth_page (tab_view, i);
         EphyWebView *tmp_webview = ephy_embed_get_web_view (EPHY_EMBED (page));
 
         add_web_view_to_json (builder, tmp_webview);

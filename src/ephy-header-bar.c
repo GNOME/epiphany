@@ -29,7 +29,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-location-entry.h"
-#include "ephy-notebook.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"

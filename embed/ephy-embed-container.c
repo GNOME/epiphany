@@ -43,18 +43,21 @@ ephy_embed_container_default_init (EphyEmbedContainerInterface *iface)
  * ephy_embed_container_add_child:
  * @container: an #EphyEmbedContainer
  * @child: an #EphyEmbed
- * @position: the position in @container's
+ * @parent: (nullable): the parent #EphyEmbed, or %NULL
+ * @position: the position in @container if @parent is %NULL
  * @set_active: whether to set @embed as the active child of @container
  * after insertion
  *
- * Inserts @child into @container.
+ * Inserts @child into @container. The new embed will be inserted after @parent,
+ * or at @position if it's %NULL.
  *
  * Return value: @child's new position inside @container.
  **/
 gint
 ephy_embed_container_add_child (EphyEmbedContainer *container,
                                 EphyEmbed          *child,
-                                gint                position,
+                                EphyEmbed          *parent,
+                                int                 position,
                                 gboolean            set_active)
 {
   EphyEmbedContainerInterface *iface;
@@ -63,7 +66,7 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
   g_assert (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  return iface->add_child (container, child, position, set_active);
+  return iface->add_child (container, child, parent, position, set_active);
 }
 
 /**

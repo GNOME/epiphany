@@ -24,6 +24,7 @@
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
 #include "ephy-location-controller.h"
+#include "ephy-tab-view.h"
 #include "ephy-web-view.h"
 
 #include <handy.h>
@@ -46,7 +47,7 @@ typedef enum
 
 EphyWindow       *ephy_window_new                 (void);
 
-GtkWidget        *ephy_window_get_notebook        (EphyWindow *window);
+EphyTabView      *ephy_window_get_tab_view        (EphyWindow *window);
 
 void              ephy_window_open_pages_view     (EphyWindow *window);
 void              ephy_window_close_pages_view    (EphyWindow *window);
@@ -83,9 +84,6 @@ void              ephy_window_set_default_position     (EphyWindow *window,
                                                         gint        x,
                                                         gint        y);
 void              ephy_window_show_fullscreen_header_bar (EphyWindow *window);
-
-int               ephy_window_get_position_for_new_embed (EphyWindow *window,
-                                                          EphyEmbed  *embed);
 
 void              ephy_window_update_entry_focus         (EphyWindow  *window,
                                                           EphyWebView *view);

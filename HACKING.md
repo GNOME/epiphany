@@ -93,7 +93,7 @@ not `EphyShell`.
 `EphyWindow` is a subclass of `GtkApplicationWindow`, which is a subclass of
 `GtkWindow`. It's the window. You can have any number of windows open at a time.
 `EphyWindow` contains (a) an `EphyHeaderBar` (subclass of `GtkHeaderBar`), and
-(b) an `EphyNotebook` (subclass of `GtkNotebook`). `EphyNotebook` contains one
+(b) an `EphyTabView` (contains a `HdyTabView`). `EphyTabView` contains one
 or more tabs, and each tab is an `EphyEmbed`. That's worth repeating: an
 `EphyEmbed` corresponds to one browser tab. Each `EphyEmbed` contains an
 `EphyWebView` (subclass of `WebKitWebView`). This is the object that actually

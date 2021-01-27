@@ -179,18 +179,6 @@ void window_cmd_change_browse_with_caret_state  (GSimpleAction *action,
 void window_cmd_change_fullscreen_state         (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);
-void window_cmd_tabs_previous                   (GSimpleAction *action,
-                                                 GVariant      *state,
-                                                 gpointer       user_data);
-void window_cmd_tabs_next                       (GSimpleAction *action,
-                                                 GVariant      *state,
-                                                 gpointer       user_data);
-void window_cmd_tabs_move_left                  (GSimpleAction *action,
-                                                 GVariant      *state,
-                                                 gpointer       user_data);
-void window_cmd_tabs_move_right                 (GSimpleAction *action,
-                                                 GVariant      *state,
-                                                 gpointer       user_data);
 void window_cmd_tabs_duplicate                  (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);

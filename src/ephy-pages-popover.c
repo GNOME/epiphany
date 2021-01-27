@@ -27,8 +27,8 @@
 #include <gdk/gdkx.h>
 #endif
 
-#include "ephy-notebook.h"
 #include "ephy-page-row.h"
+#include "ephy-window.h"
 
 struct _EphyPagesPopover {
   GtkPopover parent_instance;
@@ -36,120 +36,79 @@ struct _EphyPagesPopover {
   GtkListBox *list_box;
   GtkScrolledWindow *scrolled_window;
 
-  GListStore *list_store;
-  EphyNotebook *notebook;
+  GListModel *model;
+  EphyTabView *tab_view;
 };
 
 G_DEFINE_TYPE (EphyPagesPopover, ephy_pages_popover, GTK_TYPE_POPOVER)
 
 static void
-drop_notebook (EphyPagesPopover *self)
+drop_tab_view (EphyPagesPopover *self)
 {
-  self->notebook = NULL;
-  g_list_store_remove_all (self->list_store);
+  self->tab_view = NULL;
 }
 
 static void
-release_notebook (EphyPagesPopover *self)
+release_tab_view (EphyPagesPopover *self)
 {
-  GMenu *pages_menu;
-
-  if (self->notebook) {
-    pages_menu = ephy_notebook_get_pages_menu (self->notebook);
-    g_signal_handlers_disconnect_by_data (pages_menu, self);
-    g_signal_handlers_disconnect_by_data (self->notebook, self);
-
-    g_object_weak_unref (G_OBJECT (self->notebook), (GWeakNotify)drop_notebook, self);
-    drop_notebook (self);
+  if (self->tab_view) {
+    g_object_weak_unref (G_OBJECT (self->tab_view), (GWeakNotify)drop_tab_view, self);
+    drop_tab_view (self);
   }
 }
 
-static GtkWidget *
-create_row (gpointer item,
-            gpointer user_data)
-{
-  return GTK_WIDGET (g_object_ref (G_OBJECT (item)));
-}
-
 static void
-row_selected_cb (EphyPagesPopover *self,
-                 GtkListBoxRow    *row)
+row_activated_cb (EphyPagesPopover *self,
+                  EphyPageRow      *row)
 {
-  gint current_page;
-  gint new_page;
+  EphyWindow *window;
+  GApplication *application;
+  HdyTabPage *page;
 
-  g_assert (EPHY_IS_PAGES_POPOVER (self));
-  g_assert (!row || GTK_IS_LIST_BOX_ROW (row));
-
-  if (!row)
-    return;
-
-  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (self->notebook));
-  new_page = gtk_list_box_row_get_index (row);
-  if (current_page == new_page)
-    return;
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (self->notebook), new_page);
-}
-
-static void
-row_closed_cb (EphyPagesPopover *self,
-               EphyPageRow      *row)
-{
   g_assert (EPHY_IS_PAGES_POPOVER (self));
   g_assert (EPHY_IS_PAGE_ROW (row));
 
-  gtk_notebook_remove_page (GTK_NOTEBOOK (self->notebook),
-                            gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)));
+  application = g_application_get_default ();
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
+  page = ephy_page_row_get_page (EPHY_PAGE_ROW (row));
+
+  hdy_tab_view_set_selected_page (ephy_tab_view_get_tab_view (self->tab_view), page);
+  ephy_window_close_pages_view (window);
+
+  gtk_popover_popdown (GTK_POPOVER (self));
+}
+
+static GtkWidget *
+create_row (HdyTabPage       *page,
+            EphyPagesPopover *self)
+{
+  EphyPageRow *row = ephy_page_row_new (self->tab_view, page);
+
+  ephy_page_row_set_adaptive_mode (row, EPHY_ADAPTIVE_MODE_NORMAL);
+
+  gtk_widget_show (GTK_WIDGET (row));
+
+  return GTK_WIDGET (row);
 }
 
 static void
-current_page_changed_cb (EphyPagesPopover *self)
+selected_page_changed_cb (HdyTabView       *tab_view,
+                          GParamSpec       *pspec,
+                          EphyPagesPopover *self)
 {
-  GtkListBoxRow *current_row, *new_row;
-  gint current_page;
+  HdyTabPage *page = hdy_tab_view_get_selected_page (tab_view);
+  gint position;
+  GtkListBoxRow *row;
 
-  g_assert (EPHY_IS_PAGES_POPOVER (self));
+  if (!page) {
+    gtk_list_box_unselect_all (self->list_box);
 
-  current_row = gtk_list_box_get_selected_row (self->list_box);
-  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (self->notebook));
-  if (current_row != NULL && gtk_list_box_row_get_index (current_row) == current_page)
     return;
-
-  new_row = gtk_list_box_get_row_at_index (self->list_box, current_page);
-  gtk_list_box_select_row (self->list_box, new_row);
-}
-
-static void
-items_changed_cb (EphyPagesPopover *self,
-                  gint              position,
-                  gint              removed,
-                  gint              added,
-                  GMenuModel       *menu_model)
-{
-  g_autofree EphyPageRow **items = g_new (EphyPageRow *, added);
-
-  if ((guint)(position + removed) > g_list_model_get_n_items (G_LIST_MODEL (self->list_store)))
-    return;
-
-  for (int i = 0; i < added; i++) {
-    items[i] = ephy_page_row_new (self->notebook, position + i);
-    g_signal_connect_swapped (items[i], "closed", G_CALLBACK (row_closed_cb), self);
   }
 
-  g_list_store_splice (self->list_store, position, removed, (gpointer)items, added);
-
-  current_page_changed_cb (self);
-}
-
-static void
-ephy_pages_popover_finalize (GObject *object)
-{
-  EphyPagesPopover *self = EPHY_PAGES_POPOVER (object);
-
-  g_object_unref (self->list_store);
-
-  G_OBJECT_CLASS (ephy_pages_popover_parent_class)->finalize (object);
+  position = hdy_tab_view_get_page_position (tab_view, page);
+  row = gtk_list_box_get_row_at_index (self->list_box, position);
+  gtk_list_box_select_row (self->list_box, row);
 }
 
 static void
@@ -157,7 +116,7 @@ ephy_pages_popover_dispose (GObject *object)
 {
   EphyPagesPopover *self = EPHY_PAGES_POPOVER (object);
 
-  release_notebook (self);
+  release_tab_view (self);
 
   G_OBJECT_CLASS (ephy_pages_popover_parent_class)->dispose (object);
 }
@@ -175,7 +134,7 @@ ephy_pages_popover_get_preferred_height (GtkWidget *widget,
                                                                             minimum_height,
                                                                             natural_height);
   /* Ensure that popover won't leave current window */
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (self->notebook));
+  height = gtk_widget_get_allocated_height (GTK_WIDGET (self->tab_view));
   gtk_scrolled_window_set_max_content_height (self->scrolled_window, height);
 }
 
@@ -193,7 +152,6 @@ ephy_pages_popover_class_init (EphyPagesPopoverClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ephy_pages_popover_dispose;
-  object_class->finalize = ephy_pages_popover_finalize;
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gdk_display_get_default ())) {
@@ -205,21 +163,13 @@ ephy_pages_popover_class_init (EphyPagesPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/pages-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyPagesPopover, list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyPagesPopover, scrolled_window);
-  gtk_widget_class_bind_template_callback (widget_class, row_selected_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
 }
 
 static void
 ephy_pages_popover_init (EphyPagesPopover *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->list_store = g_list_store_new (EPHY_TYPE_PAGE_ROW);
-
-  gtk_list_box_bind_model (self->list_box,
-                           G_LIST_MODEL (self->list_store),
-                           create_row,
-                           NULL,
-                           NULL);
 }
 
 EphyPagesPopover *
@@ -232,43 +182,40 @@ ephy_pages_popover_new (GtkWidget *relative_to)
                        NULL);
 }
 
-EphyNotebook *
-ephy_pages_popover_get_notebook (EphyPagesPopover *self)
+EphyTabView *
+ephy_pages_popover_get_tab_view (EphyPagesPopover *self)
 {
   g_assert (EPHY_IS_PAGES_POPOVER (self));
 
-  return self->notebook;
+  return self->tab_view;
 }
 
 void
-ephy_pages_popover_set_notebook (EphyPagesPopover *self,
-                                 EphyNotebook     *notebook)
+ephy_pages_popover_set_tab_view (EphyPagesPopover *self,
+                                 EphyTabView      *tab_view)
 {
-  GMenu *pages_menu;
-
   g_assert (EPHY_IS_PAGES_POPOVER (self));
 
-  if (self->notebook)
-    release_notebook (self);
+  if (self->tab_view)
+    release_tab_view (self);
 
-  if (!notebook)
+  if (!tab_view)
     return;
 
-  g_object_weak_ref (G_OBJECT (notebook), (GWeakNotify)drop_notebook, self);
-  self->notebook = notebook;
-  pages_menu = ephy_notebook_get_pages_menu (EPHY_NOTEBOOK (notebook));
+  g_object_weak_ref (G_OBJECT (tab_view), (GWeakNotify)drop_tab_view, self);
+  self->tab_view = tab_view;
 
-  items_changed_cb (self, 0, 0,
-                    g_menu_model_get_n_items (G_MENU_MODEL (pages_menu)),
-                    G_MENU_MODEL (pages_menu));
-  current_page_changed_cb (self);
+  self->model = hdy_tab_view_get_pages (ephy_tab_view_get_tab_view (tab_view));
 
-  g_signal_connect_swapped (pages_menu,
-                            "items-changed",
-                            G_CALLBACK (items_changed_cb),
-                            self);
-  g_signal_connect_swapped (notebook,
-                            "notify::page",
-                            G_CALLBACK (current_page_changed_cb),
-                            self);
+  gtk_list_box_bind_model (self->list_box,
+                           self->model,
+                           (GtkListBoxCreateWidgetFunc)create_row,
+                           self,
+                           NULL);
+
+  g_signal_connect_object (ephy_tab_view_get_tab_view (tab_view),
+                           "notify::selected-page",
+                           G_CALLBACK (selected_page_changed_cb),
+                           self,
+                           0);
 }

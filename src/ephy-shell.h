@@ -48,9 +48,9 @@ G_DECLARE_FINAL_TYPE (EphyShell, ephy_shell, EPHY, SHELL, EphyEmbedShell)
  * @EPHY_NEW_TAB_DONT_SHOW_WINDOW: do not show the window where the new
  *        tab is attached.
  * @EPHY_NEW_TAB_APPEND_LAST: appends the new tab at the end of the
- *        notebook.
+ *        tab bar.
  * @EPHY_NEW_TAB_APPEND_AFTER: appends the new tab right after the
- *        current one in the notebook.
+ *        current one in the tab bar.
  * @EPHY_NEW_TAB_FROM_EXTERNAL: tries to open the new tab in the current
  *        active tab if it is currently not loading anything and is
  *        blank.

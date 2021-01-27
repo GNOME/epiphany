@@ -407,10 +407,9 @@ add_tabs (EphySuggestionModel *self,
   GApplication *application;
   EphyEmbedShell *shell;
   EphyWindow *window;
-  GtkWidget *notebook;
+  EphyTabView *tab_view;
   GList *windows;
-  gint n_pages;
-  gint current;
+  gint n_pages, selected;
   guint added = 0;
 
   shell = ephy_embed_shell_get_default ();
@@ -420,9 +419,9 @@ add_tabs (EphySuggestionModel *self,
   for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
     window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
 
-    notebook = ephy_window_get_notebook (window);
-    n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-    current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+    tab_view = ephy_window_get_tab_view (window);
+    n_pages = ephy_tab_view_get_n_pages (tab_view);
+    selected = ephy_tab_view_get_selected_index (tab_view);
 
     for (int i = 0; i < n_pages; i++) {
       EphyEmbed *embed;
@@ -438,10 +437,10 @@ add_tabs (EphySuggestionModel *self,
       g_autofree gchar *display_address_casefold = NULL;
       g_autofree gchar *query_casefold = NULL;
 
-      if (win_idx == 0 && i == current)
+      if (win_idx == 0 && i == selected)
         continue;
 
-      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+      embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i));
       webview = ephy_embed_get_web_view (embed);
       display_address = ephy_web_view_get_display_address (webview);
       url = ephy_web_view_get_address (webview);

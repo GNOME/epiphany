@@ -23,8 +23,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-adaptive-mode.h"
-#include "ephy-notebook.h"
+#include "ephy-tab-view.h"
 
 G_BEGIN_DECLS
 
@@ -34,8 +33,8 @@ G_DECLARE_FINAL_TYPE (EphyPagesPopover, ephy_pages_popover, EPHY, PAGES_POPOVER,
 
 EphyPagesPopover *ephy_pages_popover_new (GtkWidget *relative_to);
 
-EphyNotebook *ephy_pages_popover_get_notebook (EphyPagesPopover *popover);
-void          ephy_pages_popover_set_notebook (EphyPagesPopover *popover,
-                                               EphyNotebook     *notebook);
+EphyTabView *ephy_pages_popover_get_tab_view (EphyPagesPopover *self);
+void         ephy_pages_popover_set_tab_view (EphyPagesPopover *self,
+                                              EphyTabView      *tab_view);
 
 G_END_DECLS

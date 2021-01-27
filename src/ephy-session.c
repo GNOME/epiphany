@@ -32,11 +32,12 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-link.h"
-#include "ephy-notebook.h"
+#include "ephy-tab-view.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-tab-view.h"
 #include "ephy-window.h"
 
 #include <glib/gi18n.h>
@@ -45,12 +46,12 @@
 #include <libxml/xmlwriter.h>
 
 typedef struct {
-  EphyNotebook *notebook;
+  EphyTabView *tab_view;
   gint ref_count;
-} NotebookTracker;
+} TabViewTracker;
 
 typedef struct {
-  NotebookTracker *notebook_tracker;
+  TabViewTracker *tab_view_tracker;
   int position;
   char *url;
   WebKitWebViewSessionState *state;
@@ -132,35 +133,34 @@ load_changed_cb (WebKitWebView   *view,
 }
 
 static void
-notebook_tracker_set_notebook (NotebookTracker *tracker,
-                               EphyNotebook    *notebook)
+tab_view_tracker_set_tab_view (TabViewTracker *tracker,
+                               EphyTabView    *tab_view)
 {
-  if (tracker->notebook == notebook) {
+  if (tracker->tab_view == tab_view)
     return;
-  }
 
-  if (tracker->notebook) {
-    g_object_remove_weak_pointer (G_OBJECT (tracker->notebook), (gpointer *)&tracker->notebook);
-  }
-  tracker->notebook = notebook;
-  if (tracker->notebook) {
-    g_object_add_weak_pointer (G_OBJECT (tracker->notebook), (gpointer *)&tracker->notebook);
-  }
+  if (tracker->tab_view)
+    g_object_remove_weak_pointer (G_OBJECT (tracker->tab_view), (gpointer *)&tracker->tab_view);
+
+  tracker->tab_view = tab_view;
+
+  if (tracker->tab_view)
+    g_object_add_weak_pointer (G_OBJECT (tracker->tab_view), (gpointer *)&tracker->tab_view);
 }
 
-static NotebookTracker *
-notebook_tracker_new (EphyNotebook *notebook)
+static TabViewTracker *
+tab_view_tracker_new (EphyTabView *tab_view)
 {
-  NotebookTracker *tracker = g_new0 (NotebookTracker, 1);
+  TabViewTracker *tracker = g_new0 (TabViewTracker, 1);
 
   tracker->ref_count = 1;
-  notebook_tracker_set_notebook (tracker, notebook);
+  tab_view_tracker_set_tab_view (tracker, tab_view);
 
   return tracker;
 }
 
-static NotebookTracker *
-notebook_tracker_ref (NotebookTracker *tracker)
+static TabViewTracker *
+tab_view_tracker_ref (TabViewTracker *tracker)
 {
   g_atomic_int_inc (&tracker->ref_count);
 
@@ -168,57 +168,57 @@ notebook_tracker_ref (NotebookTracker *tracker)
 }
 
 static void
-notebook_tracker_unref (NotebookTracker *tracker)
+tab_view_tracker_unref (TabViewTracker *tracker)
 {
   if (!g_atomic_int_dec_and_test (&tracker->ref_count))
     return;
 
-  notebook_tracker_set_notebook (tracker, NULL);
+  tab_view_tracker_set_tab_view (tracker, NULL);
   g_free (tracker);
 }
 
-static EphyNotebook *
-closed_tab_get_notebook (ClosedTab *tab)
+static EphyTabView *
+closed_tab_get_tab_view (ClosedTab *tab)
 {
-  return tab->notebook_tracker->notebook;
+  return tab->tab_view_tracker->tab_view;
 }
 
 static int
-compare_func (ClosedTab    *iter,
-              EphyNotebook *notebook)
+compare_func (ClosedTab   *iter,
+              EphyTabView *tab_view)
 {
-  return GTK_NOTEBOOK (closed_tab_get_notebook (iter)) - GTK_NOTEBOOK (notebook);
+  return (gpointer)closed_tab_get_tab_view (iter) - (gpointer)tab_view;
 }
 
-static NotebookTracker *
-ephy_session_ref_or_create_notebook_tracker (EphySession  *session,
-                                             EphyNotebook *notebook)
+static TabViewTracker *
+ephy_session_ref_or_create_tab_view_tracker (EphySession *session,
+                                             EphyTabView *tab_view)
 {
-  GList *item = g_queue_find_custom (session->closed_tabs, notebook, (GCompareFunc)compare_func);
-  return item ? notebook_tracker_ref (((ClosedTab *)item->data)->notebook_tracker) : notebook_tracker_new (notebook);
+  GList *item = g_queue_find_custom (session->closed_tabs, tab_view, (GCompareFunc)compare_func);
+  return item ? tab_view_tracker_ref (((ClosedTab *)item->data)->tab_view_tracker) : tab_view_tracker_new (tab_view);
 }
 
 static void
 closed_tab_free (ClosedTab *tab)
 {
   g_free (tab->url);
-  notebook_tracker_unref (tab->notebook_tracker);
+  tab_view_tracker_unref (tab->tab_view_tracker);
   webkit_web_view_session_state_unref (tab->state);
 
   g_free (tab);
 }
 
 static ClosedTab *
-closed_tab_new (EphyWebView     *web_view,
-                int              position,
-                NotebookTracker *notebook_tracker)
+closed_tab_new (EphyWebView    *web_view,
+                int             position,
+                TabViewTracker *tab_view_tracker)
 {
   ClosedTab *tab = g_new0 (ClosedTab, 1);
 
   tab->url = g_strdup (ephy_web_view_get_address (web_view));
   tab->position = position;
   /* Takes the ownership of the tracker */
-  tab->notebook_tracker = notebook_tracker;
+  tab->tab_view_tracker = tab_view_tracker;
   tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
 
   return tab;
@@ -233,7 +233,7 @@ ephy_session_undo_close_tab (EphySession *session)
   WebKitBackForwardListItem *item;
   ClosedTab *tab;
   EphyWindow *window;
-  EphyNotebook *notebook;
+  EphyTabView *tab_view;
   EphyNewTabFlags flags = EPHY_NEW_TAB_JUMP;
 
   g_assert (EPHY_IS_SESSION (session));
@@ -243,12 +243,12 @@ ephy_session_undo_close_tab (EphySession *session)
     return;
 
   LOG ("UNDO CLOSE TAB: %s", tab->url);
-  notebook = closed_tab_get_notebook (tab);
-  if (notebook) {
+  tab_view = closed_tab_get_tab_view (tab);
+  if (tab_view) {
     if (tab->position > 0) {
       /* Append in the n-th position. */
-      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
-                                                     tab->position - 1));
+      embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view,
+                                                      tab->position - 1));
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
     } else {
       /* Just prepend in the first position. */
@@ -256,7 +256,7 @@ ephy_session_undo_close_tab (EphySession *session)
       flags |= EPHY_NEW_TAB_FIRST;
     }
 
-    window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (notebook)));
+    window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab_view)));
     new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
                                   window, embed,
                                   flags);
@@ -264,8 +264,8 @@ ephy_session_undo_close_tab (EphySession *session)
     window = ephy_window_new ();
     new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
                                   window, NULL, flags);
-    notebook_tracker_set_notebook (tab->notebook_tracker,
-                                   EPHY_NOTEBOOK (ephy_window_get_notebook (window)));
+    tab_view_tracker_set_tab_view (tab->tab_view_tracker,
+                                   ephy_window_get_tab_view (window));
   }
 
   web_view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (new_tab));
@@ -288,10 +288,10 @@ ephy_session_undo_close_tab (EphySession *session)
 }
 
 static void
-ephy_session_tab_closed (EphySession  *session,
-                         EphyNotebook *notebook,
-                         EphyEmbed    *embed,
-                         gint          position)
+ephy_session_tab_closed (EphySession *session,
+                         EphyTabView *tab_view,
+                         EphyEmbed   *embed,
+                         gint         position)
 {
   EphyWebView *view;
   WebKitWebView *wk_view;
@@ -306,7 +306,7 @@ ephy_session_tab_closed (EphySession  *session,
   }
 
   tab = closed_tab_new (view, position,
-                        ephy_session_ref_or_create_notebook_tracker (session, notebook));
+                        ephy_session_ref_or_create_tab_view_tracker (session, tab_view));
   g_queue_push_head (session->closed_tabs, tab);
 
   if (g_queue_get_length (session->closed_tabs) == 1)
@@ -325,33 +325,38 @@ ephy_session_get_can_undo_tab_closed (EphySession *session)
 }
 
 static void
-notebook_page_added_cb (GtkWidget   *notebook,
-                        EphyEmbed   *embed,
-                        guint        position,
-                        EphySession *session)
+tab_view_page_attached_cb (HdyTabView  *tab_view,
+                           HdyTabPage  *page,
+                           guint        position,
+                           EphySession *session)
 {
+  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+
   g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
                     G_CALLBACK (load_changed_cb), session);
 }
 
 static void
-notebook_page_removed_cb (GtkWidget   *notebook,
-                          EphyEmbed   *embed,
-                          guint        position,
-                          EphySession *session)
+tab_view_page_detached_cb (HdyTabView  *tab_view,
+                           HdyTabPage  *page,
+                           gint         position,
+                           EphySession *session)
 {
+  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyTabView *ephy_tab_view = EPHY_TAB_VIEW (g_object_get_data (G_OBJECT (tab_view), "ephy-tab-view"));
+
   ephy_session_save (session);
 
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
     session);
 
-  ephy_session_tab_closed (session, EPHY_NOTEBOOK (notebook), embed, position);
+  ephy_session_tab_closed (session, ephy_tab_view, embed, position);
 }
 
 static void
-notebook_page_reordered_cb (GtkWidget   *notebook,
-                            GtkWidget   *tab,
+tab_view_page_reordered_cb (HdyTabView  *tab_view,
+                            HdyTabPage  *page,
                             guint        position,
                             EphySession *session)
 {
@@ -359,10 +364,9 @@ notebook_page_reordered_cb (GtkWidget   *notebook,
 }
 
 static void
-notebook_switch_page_cb (GtkNotebook *notebook,
-                         GtkWidget   *page,
-                         guint        page_num,
-                         EphySession *session)
+tab_view_notify_selected_page_cb (HdyTabView  *tab_view,
+                                  GParamSpec  *pspec,
+                                  EphySession *session)
 {
   ephy_session_save (session);
 }
@@ -386,8 +390,8 @@ window_added_cb (GtkApplication *application,
                  GtkWindow      *window,
                  EphySession    *session)
 {
-  GtkWidget *notebook;
   EphyWindow *ephy_window;
+  HdyTabView *tab_view;
 
   ephy_session_save (session);
 
@@ -396,15 +400,16 @@ window_added_cb (GtkApplication *application,
 
   ephy_window = EPHY_WINDOW (window);
 
-  notebook = ephy_window_get_notebook (ephy_window);
-  g_signal_connect (notebook, "page-added",
-                    G_CALLBACK (notebook_page_added_cb), session);
-  g_signal_connect (notebook, "page-removed",
-                    G_CALLBACK (notebook_page_removed_cb), session);
-  g_signal_connect (notebook, "page-reordered",
-                    G_CALLBACK (notebook_page_reordered_cb), session);
-  g_signal_connect_after (notebook, "switch-page",
-                          G_CALLBACK (notebook_switch_page_cb), session);
+  tab_view = ephy_tab_view_get_tab_view (ephy_window_get_tab_view (ephy_window));
+  g_signal_connect_object (tab_view, "page-attached",
+                           G_CALLBACK (tab_view_page_attached_cb), session, 0);
+  g_signal_connect_object (tab_view, "page-detached",
+                           G_CALLBACK (tab_view_page_detached_cb), session, 0);
+  g_signal_connect_object (tab_view, "page-reordered",
+                           G_CALLBACK (tab_view_page_reordered_cb), session, 0);
+  g_signal_connect_object (tab_view, "notify::selected-page",
+                           G_CALLBACK (tab_view_notify_selected_page_cb), session,
+                           G_CONNECT_AFTER);
 
   /* Set unique identifier as role, so that on restore, the WM can
    * place the window on the right workspace
@@ -563,7 +568,7 @@ typedef struct {
 static SessionTab *
 session_tab_new (EphyEmbed   *embed,
                  EphySession *session,
-                 GtkNotebook *notebook)
+                 EphyTabView *tab_view)
 {
   SessionTab *session_tab;
   const char *address;
@@ -592,7 +597,7 @@ session_tab_new (EphyEmbed   *embed,
   session_tab->crashed = (error_page == EPHY_WEB_VIEW_ERROR_PAGE_CRASH ||
                           error_page == EPHY_WEB_VIEW_ERROR_PROCESS_CRASH);
   session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
-  session_tab->pinned = ephy_notebook_tab_is_pinned (EPHY_NOTEBOOK (notebook), embed);
+  session_tab->pinned = ephy_tab_view_get_is_pinned (tab_view, GTK_WIDGET (embed));
 
   return session_tab;
 }
@@ -613,7 +618,7 @@ session_window_new (EphyWindow  *window,
 {
   SessionWindow *session_window;
   GList *tabs, *l;
-  GtkNotebook *notebook;
+  EphyTabView *tab_view;
 
   tabs = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
   /* Do not save an empty EphyWindow.
@@ -626,18 +631,18 @@ session_window_new (EphyWindow  *window,
   session_window = g_new0 (SessionWindow, 1);
   get_window_geometry (window, session_window);
   session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
-  notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
+  tab_view = ephy_window_get_tab_view (window);
 
   for (l = tabs; l != NULL; l = l->next) {
     SessionTab *tab;
 
-    tab = session_tab_new (EPHY_EMBED (l->data), session, notebook);
+    tab = session_tab_new (EPHY_EMBED (l->data), session, tab_view);
     session_window->tabs = g_list_prepend (session_window->tabs, tab);
   }
   g_list_free (tabs);
   session_window->tabs = g_list_reverse (session_window->tabs);
 
-  session_window->active_tab = gtk_notebook_get_current_page (notebook);
+  session_window->active_tab = ephy_tab_view_get_selected_index (tab_view);
 
   return session_window;
 }
@@ -1184,7 +1189,7 @@ session_parse_embed (SessionParserContext  *context,
                      const gchar          **names,
                      const gchar          **values)
 {
-  GtkWidget *notebook;
+  HdyTabView *tab_view;
   const char *url = NULL;
   const char *title = NULL;
   const char *history = NULL;
@@ -1201,7 +1206,7 @@ session_parse_embed (SessionParserContext  *context,
     return;
   }
 
-  notebook = ephy_window_get_notebook (context->window);
+  tab_view = ephy_tab_view_get_tab_view (ephy_window_get_tab_view (context->window));
 
   for (i = 0; names[i]; i++) {
     if (strcmp (names[i], "url") == 0) {
@@ -1251,7 +1256,9 @@ session_parse_embed (SessionParserContext  *context,
                                      context->window, NULL, flags,
                                      0);
 
-    ephy_notebook_tab_set_pinned (EPHY_NOTEBOOK (notebook), GTK_WIDGET (embed), is_pin);
+    hdy_tab_view_set_page_pinned (tab_view,
+                                  hdy_tab_view_get_page (tab_view, GTK_WIDGET (embed)),
+                                  is_pin);
 
     web_view = ephy_embed_get_web_view (embed);
     if (history) {
@@ -1327,7 +1334,7 @@ session_end_element (GMarkupParseContext  *ctx,
   SessionParserContext *context = (SessionParserContext *)user_data;
 
   if (strcmp (element_name, "window") == 0) {
-    GtkWidget *notebook;
+    EphyTabView *tab_view;
     EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
     if (!context->window) {
@@ -1337,8 +1344,8 @@ session_end_element (GMarkupParseContext  *ctx,
       return;
     }
 
-    notebook = ephy_window_get_notebook (context->window);
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), context->active_tab);
+    tab_view = ephy_window_get_tab_view (context->window);
+    ephy_tab_view_select_nth_page (tab_view, context->active_tab);
 
     if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST) {
       EphyEmbed *active_child;

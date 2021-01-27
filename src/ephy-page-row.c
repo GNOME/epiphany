@@ -22,15 +22,9 @@
 #include "config.h"
 
 #include "ephy-desktop-utils.h"
-#include "ephy-embed-utils.h"
+#include "ephy-embed.h"
 #include "ephy-page-row.h"
 #include "ephy-web-view.h"
-
-enum {
-  CLOSED,
-
-  LAST_SIGNAL
-};
 
 struct _EphyPageRow {
   GtkPopover parent_instance;
@@ -42,47 +36,17 @@ struct _EphyPageRow {
   GtkSpinner *spinner;
   GtkLabel *title;
   GtkButton *close_button;
-};
 
-static guint signals[LAST_SIGNAL];
+  HdyTabPage *page;
+  EphyTabView *tab_view;
+};
 
 G_DEFINE_TYPE (EphyPageRow, ephy_page_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
-sync_load_status (EphyWebView *view,
-                  GParamSpec  *pspec,
-                  EphyPageRow *self)
-{
-  EphyEmbed *embed;
-
-  g_assert (EPHY_IS_WEB_VIEW (view));
-  g_assert (EPHY_IS_PAGE_ROW (self));
-
-  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-
-  g_assert (EPHY_IS_EMBED (embed));
-
-  if (ephy_web_view_is_loading (view) && !ephy_embed_has_load_pending (embed)) {
-    gtk_stack_set_visible_child (self->icon_stack, GTK_WIDGET (self->spinner));
-    gtk_spinner_start (GTK_SPINNER (self->spinner));
-  } else {
-    gtk_stack_set_visible_child (self->icon_stack, GTK_WIDGET (self->icon));
-    gtk_spinner_stop (GTK_SPINNER (self->spinner));
-  }
-}
-
-static void
-load_changed_cb (EphyWebView     *view,
-                 WebKitLoadEvent  load_event,
-                 EphyPageRow     *self)
-{
-  sync_load_status (view, NULL, self);
-}
-
-static void
 close_clicked_cb (EphyPageRow *self)
 {
-  g_signal_emit (self, signals[CLOSED], 0);
+  hdy_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
 }
 
 static gboolean
@@ -93,7 +57,7 @@ button_release_event (GtkWidget   *widget,
   GdkEventButton *button_event = (GdkEventButton *)event;
 
   if (button_event->button == GDK_BUTTON_MIDDLE) {
-    g_signal_emit (self, signals[CLOSED], 0);
+    hdy_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
 
     return GDK_EVENT_STOP;
   }
@@ -105,13 +69,6 @@ static void
 ephy_page_row_class_init (EphyPageRowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  signals[CLOSED] =
-    g_signal_new ("closed",
-                  EPHY_TYPE_PAGE_ROW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/page-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, box);
@@ -131,52 +88,92 @@ ephy_page_row_init (EphyPageRow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-static void
-sync_favicon (EphyWebView *view,
-              GParamSpec  *pspec,
-              EphyPageRow *self)
+static gboolean
+loading_to_visible_child (GBinding     *binding,
+                          const GValue *input,
+                          GValue       *output,
+                          EphyPageRow  *self)
 {
-  GdkPixbuf *pixbuf = ephy_web_view_get_icon (view);
+  if (g_value_get_boolean (input))
+    g_value_set_object (output, self->spinner);
+  else
+    g_value_set_object (output, self->icon);
 
-  if (pixbuf)
-    gtk_image_set_from_gicon (GTK_IMAGE (self->icon), G_ICON (pixbuf), GTK_ICON_SIZE_MENU);
-  else {
-    const char *favicon_name = ephy_get_fallback_favicon_name (ephy_web_view_get_display_address (view), EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
+  return TRUE;
+}
 
-    gtk_image_set_from_icon_name (GTK_IMAGE (self->icon), favicon_name, GTK_ICON_SIZE_MENU);
+static void
+update_icon_cb (EphyPageRow *self)
+{
+  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (self->page));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  GIcon *icon = G_ICON (ephy_web_view_get_icon (view));
+  const char *uri, *favicon_name;
+  HdyTabView *tab_view;
+
+  if (icon) {
+    gtk_image_set_from_gicon (self->icon, icon, GTK_ICON_SIZE_MENU);
+
+    return;
   }
+
+  uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+  favicon_name = ephy_get_fallback_favicon_name (uri, EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
+
+  if (favicon_name) {
+    g_autoptr (GIcon) fallback_icon = g_themed_icon_new (favicon_name);
+
+    gtk_image_set_from_gicon (self->icon, fallback_icon, GTK_ICON_SIZE_MENU);
+
+    return;
+  }
+
+  tab_view = ephy_tab_view_get_tab_view (self->tab_view);
+
+  gtk_image_set_from_gicon (self->icon, hdy_tab_view_get_default_icon (tab_view), GTK_ICON_SIZE_MENU);
 }
 
 EphyPageRow *
-ephy_page_row_new (EphyNotebook *notebook,
-                   gint          position)
+ephy_page_row_new (EphyTabView *tab_view,
+                   HdyTabPage  *page)
 {
   EphyPageRow *self;
-  GtkWidget *embed;
-  GtkWidget *tab_label;
+  GtkWidget *embed = hdy_tab_page_get_child (page);
   EphyWebView *view;
 
-  g_assert (notebook != NULL);
-  g_assert (position >= 0);
-
-  self = g_object_new (EPHY_TYPE_PAGE_ROW, NULL);
-
-  embed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), position);
-
+  g_assert (HDY_IS_TAB_PAGE (page));
   g_assert (EPHY_IS_EMBED (embed));
 
-  tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (notebook), embed);
   view = ephy_embed_get_web_view (EPHY_EMBED (embed));
 
-  sync_favicon (view, NULL, self);
-  g_signal_connect_object (view, "notify::icon", G_CALLBACK (sync_favicon), self, 0);
-  g_object_bind_property (embed, "title", self->title, "label", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (embed, "title", self->title, "tooltip-text", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (view, "is-playing-audio", self->speaker_icon, "visible", G_BINDING_SYNC_CREATE);
-  g_object_bind_property (tab_label, "pinned", self->close_button, "visible", G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  sync_load_status (view, NULL, self);
-  g_signal_connect_object (view, "load-changed",
-                           G_CALLBACK (load_changed_cb), self, 0);
+  self = g_object_new (EPHY_TYPE_PAGE_ROW, NULL);
+  self->tab_view = tab_view;
+  self->page = page;
+
+  g_object_bind_property (page, "title",
+                          self->title, "label",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (page, "indicator-icon",
+                          self->speaker_icon, "gicon",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (page, "pinned",
+                          self->close_button, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  g_object_bind_property_full (page, "loading",
+                               self->icon_stack, "visible-child",
+                               G_BINDING_SYNC_CREATE,
+                               (GBindingTransformFunc)loading_to_visible_child,
+                               NULL,
+                               self, NULL);
+
+  g_signal_connect_object (view, "notify::icon",
+                           G_CALLBACK (update_icon_cb), self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (view, "notify::uri",
+                           G_CALLBACK (update_icon_cb), self,
+                           G_CONNECT_SWAPPED);
+
+  update_icon_cb (self);
 
   return self;
 }
@@ -201,4 +198,12 @@ ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
 
       break;
   }
+}
+
+HdyTabPage *
+ephy_page_row_get_page (EphyPageRow *self)
+{
+  g_assert (EPHY_IS_PAGE_ROW (self));
+
+  return self->page;
 }
