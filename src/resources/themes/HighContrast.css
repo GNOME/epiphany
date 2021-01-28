@@ -100,61 +100,75 @@ fullscreenbox > flap > shadow { min-height: 9px; min-width: 9px; background: lin
 
 .incognito-mode actionbar:backdrop > revealer > box { border-color: #b4cbe3; }
 
-.incognito-mode notebook > header { border-color: #4074ab; background-color: #c8d9ea; }
+.incognito-mode headerbar > *, .incognito-mode actionbar > * { color: #172a3e; }
 
-.incognito-mode notebook > header:backdrop { border-color: #b4cbe3; background-color: #d7e3f0; }
+.incognito-mode headerbar > *:backdrop, .incognito-mode actionbar > *:backdrop { color: #8291a0; }
 
-.incognito-mode notebook > header > tabs > tab { color: #86919c; }
+.incognito-mode headerbar button, .incognito-mode actionbar button { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; border-bottom-color: #345d8a; background-image: linear-gradient(to top, #e6edf6 2px, #f5f8fb); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); }
 
-.incognito-mode notebook > header > tabs > tab button.flat:hover { color: currentColor; }
+.incognito-mode headerbar button.flat, .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.flat, .incognito-mode actionbar button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode notebook > header > tabs > tab button.flat, .incognito-mode notebook > header > tabs > tab button.flat:backdrop { color: alpha(currentColor,0.3); }
+.incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
-.incognito-mode notebook > header > tabs > tab:hover { color: #4f5d6d; border-color: rgba(64, 116, 171, 0.3); background-color: rgba(245, 248, 251, 0.2); box-shadow: inset 0 -3px #4074ab; }
+.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; border-bottom-color: #345d8a; background-image: linear-gradient(to top, #f5f8fb, #f8fafd 1px); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); }
 
-.incognito-mode notebook > header > tabs > tab:backdrop { color: #abb7c3; border-color: transparent; background-color: transparent; box-shadow: none; }
+.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; background-image: image(#c1d3e8); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode notebook > header > tabs > tab:checked { color: #172a3e; border-color: rgba(64, 116, 171, 0.5); background-color: rgba(245, 248, 251, 0.5); box-shadow: inset 0 -3px #3584e4; }
+.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled { color: #86919c; border-color: #648ebb; background-image: image(#f0f5f9); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode notebook > header > tabs > tab:checked:hover { background-color: rgba(245, 248, 251, 0.7); }
+.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop { color: #8291a0; border-color: #b4cbe3; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode notebook > header > tabs > tab:backdrop:checked { color: #8291a0; border-color: #b4cbe3; background-color: #eaf0f7; }
+.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active { color: #8291a0; border-color: #b4cbe3; background-image: image(#d4e3f1); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode notebook > header > tabs > arrow:active { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; background-image: image(#c1d3e8); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled { color: #b2c9e2; border-color: #b4cbe3; background-image: image(#f0f5f9); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode headerbar > *, .incognito-mode actionbar > *, .incognito-mode notebook > header > * { color: #172a3e; }
+.incognito-mode headerbar button:checked, .incognito-mode actionbar button:checked { background: image(#b6cce3); border-color: #3c6ca0; border-top-color: #35608e; }
 
-.incognito-mode headerbar > *:backdrop, .incognito-mode actionbar > *:backdrop, .incognito-mode notebook > header > *:backdrop { color: #8291a0; }
+.incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop { color: #8291a0; border-color: #b4cbe3; background-image: image(#d4e3f1); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.incognito-mode headerbar button, .incognito-mode actionbar button, .incognito-mode notebook > header button { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; border-bottom-color: #345d8a; background-image: linear-gradient(to top, #e6edf6 2px, #f5f8fb); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); }
+.incognito-mode headerbar button.flat:backdrop, .incognito-mode headerbar button.titlebutton:backdrop, .incognito-mode actionbar button.flat:backdrop, .incognito-mode actionbar button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.incognito-mode headerbar button.flat, .incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.flat, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.flat, .incognito-mode notebook > header button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode headerbar entry, .incognito-mode actionbar entry { border-color: #4074ab; }
 
-.incognito-mode headerbar button.titlebutton, .incognito-mode actionbar button.titlebutton, .incognito-mode notebook > header button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
+.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
 
-.incognito-mode headerbar button:hover, .incognito-mode actionbar button:hover, .incognito-mode notebook > header button:hover { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; border-bottom-color: #345d8a; background-image: linear-gradient(to top, #f5f8fb, #f8fafd 1px); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.07); }
+.incognito-mode headerbar entry:backdrop, .incognito-mode actionbar entry:backdrop { box-shadow: none; border-color: #b4cbe3; }
 
-.incognito-mode headerbar button:active, .incognito-mode headerbar button:checked, .incognito-mode actionbar button:active, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:active, .incognito-mode notebook > header button:checked { color: #172a3e; outline-color: rgba(23, 42, 62, 0.3); border-color: #4074ab; background-image: image(#c1d3e8); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode tabbar .box { background: #bdd1e6; border-bottom: 1px solid #345d8a; }
 
-.incognito-mode headerbar button:disabled, .incognito-mode actionbar button:disabled, .incognito-mode notebook > header button:disabled { color: #86919c; border-color: #648ebb; background-image: image(#f0f5f9); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode tabbar .box:backdrop { background-color: #c8d9ea; border-color: #b4cbe3; }
 
-.incognito-mode headerbar button:backdrop, .incognito-mode actionbar button:backdrop, .incognito-mode notebook > header button:backdrop { color: #8291a0; border-color: #b4cbe3; background-image: image(#eaf0f7); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode tabbar scrolledwindow.pinned undershoot { border-color: #345d8a; }
 
-.incognito-mode headerbar button:backdrop:active, .incognito-mode actionbar button:backdrop:active, .incognito-mode notebook > header button:backdrop:active { color: #8291a0; border-color: #b4cbe3; background-image: image(#d4e3f1); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode tabbar scrolledwindow.pinned:backdrop undershoot { border-color: #b4cbe3; }
 
-.incognito-mode headerbar button:backdrop:disabled, .incognito-mode actionbar button:backdrop:disabled, .incognito-mode notebook > header button:backdrop:disabled { color: #b2c9e2; border-color: #b4cbe3; background-image: image(#f0f5f9); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode tabbar scrolledwindow.pinned tabbox:dir(ltr) { box-shadow: inset -1px 0 #345d8a; }
 
-.incognito-mode headerbar button:checked, .incognito-mode actionbar button:checked, .incognito-mode notebook > header button:checked { background: image(#b6cce3); border-color: #3c6ca0; border-top-color: #35608e; }
+.incognito-mode tabbar scrolledwindow.pinned tabbox:dir(ltr):backdrop { box-shadow: inset -1px 0 #b4cbe3; }
 
-.incognito-mode headerbar button:checked:backdrop, .incognito-mode actionbar button:checked:backdrop, .incognito-mode notebook > header button:checked:backdrop { color: #8291a0; border-color: #b4cbe3; background-image: image(#d4e3f1); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.incognito-mode tabbar scrolledwindow.pinned tabbox:dir(rtl) { box-shadow: inset 1px 0 #345d8a; }
 
-.incognito-mode headerbar button.flat:backdrop, .incognito-mode headerbar button.titlebutton:backdrop, .incognito-mode actionbar button.flat:backdrop, .incognito-mode actionbar button.titlebutton:backdrop, .incognito-mode notebook > header button.flat:backdrop, .incognito-mode notebook > header button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.incognito-mode tabbar scrolledwindow.pinned tabbox:dir(rtl):backdrop { box-shadow: inset 1px 0 #b4cbe3; }
 
-.incognito-mode headerbar entry, .incognito-mode actionbar entry, .incognito-mode notebook > header entry { border-color: #4074ab; }
+.incognito-mode tabbar tab { border-color: #345d8a; background-color: #c8d9ea; }
 
-.incognito-mode headerbar entry:focus, .incognito-mode actionbar entry:focus, .incognito-mode notebook > header entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+.incognito-mode tabbar tab:checked { background-color: #dee8f3; }
 
-.incognito-mode headerbar entry:backdrop, .incognito-mode actionbar entry:backdrop, .incognito-mode notebook > header entry:backdrop { box-shadow: none; border-color: #b4cbe3; }
+.incognito-mode tabbar tab:checked:hover { background-color: #eaf0f7; }
+
+.incognito-mode tabbar tab:hover { background-color: #d3e0ef; }
+
+.incognito-mode tabbar tab:backdrop { border-color: #b4cbe3; background-color: #d3e0ef; }
+
+.incognito-mode tabbar tab:backdrop:checked { background-color: #eaf0f7; }
+
+.incognito-mode tabbar tab .tab-close-button:hover, .incognito-mode tabbar tab .tab-indicator.clickable:hover { background: alpha(#172a3e,0.15); }
+
+.incognito-mode tabbar tab .tab-close-button:active, .incognito-mode tabbar tab .tab-indicator.clickable:active { background: alpha(black,0.2); }
+
+.incognito-mode tabbar .start-action, .incognito-mode tabbar .end-action { background: #c8d9ea; border-color: #345d8a; }
+
+.incognito-mode tabbar .start-action:backdrop, .incognito-mode tabbar .end-action:backdrop { border-color: #b4cbe3; background-color: #d3e0ef; }
 
 .automation-mode { /*************************** Check and Radio buttons * */ }
 
@@ -174,61 +188,75 @@ fullscreenbox > flap > shadow { min-height: 9px; min-width: 9px; background: lin
 
 .automation-mode actionbar:backdrop > revealer > box { border-color: #ca7905; }
 
-.automation-mode notebook > header { border-color: #241500; background-color: #de880d; }
+.automation-mode headerbar > *, .automation-mode actionbar > * { color: #553200; }
 
-.automation-mode notebook > header:backdrop { border-color: #ca7905; background-color: #ec9312; }
+.automation-mode headerbar > *:backdrop, .automation-mode actionbar > *:backdrop { color: #b26e0d; }
 
-.automation-mode notebook > header > tabs > tab { color: #aa6c14; }
+.automation-mode headerbar button, .automation-mode actionbar button { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; border-bottom-color: black; background-image: linear-gradient(to top, #ff9e14 2px, #ffa729); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); }
 
-.automation-mode notebook > header > tabs > tab button.flat:hover { color: currentColor; }
+.automation-mode headerbar button.flat, .automation-mode headerbar button.titlebutton, .automation-mode actionbar button.flat, .automation-mode actionbar button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.automation-mode notebook > header > tabs > tab button.flat, .automation-mode notebook > header > tabs > tab button.flat:backdrop { color: alpha(currentColor,0.3); }
+.automation-mode headerbar button.titlebutton, .automation-mode actionbar button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
 
-.automation-mode notebook > header > tabs > tab:hover { color: #7f4f0a; border-color: rgba(36, 21, 0, 0.3); background-color: rgba(255, 167, 41, 0.2); box-shadow: inset 0 -3px #241500; }
+.automation-mode headerbar button:hover, .automation-mode actionbar button:hover { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; border-bottom-color: black; background-image: linear-gradient(to top, #ffa729, #ffa92e 1px); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); }
 
-.automation-mode notebook > header > tabs > tab:backdrop { color: #d18212; border-color: transparent; background-color: transparent; box-shadow: none; }
+.automation-mode headerbar button:active, .automation-mode headerbar button:checked, .automation-mode actionbar button:active, .automation-mode actionbar button:checked { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; background-image: image(#e08400); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.automation-mode notebook > header > tabs > tab:checked { color: #553200; border-color: rgba(36, 21, 0, 0.5); background-color: rgba(255, 167, 41, 0.5); box-shadow: inset 0 -3px #3584e4; }
+.automation-mode headerbar button:disabled, .automation-mode actionbar button:disabled { color: #aa6c14; border-color: #503208; background-image: image(#ffa423); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode notebook > header > tabs > tab:checked:hover { background-color: rgba(255, 167, 41, 0.7); }
+.automation-mode headerbar button:backdrop, .automation-mode actionbar button:backdrop { color: #b26e0d; border-color: #ca7905; background-image: image(#ffa11a); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode notebook > header > tabs > tab:backdrop:checked { color: #b26e0d; border-color: #ca7905; background-color: #ffa11a; }
+.automation-mode headerbar button:backdrop:active, .automation-mode actionbar button:backdrop:active { color: #b26e0d; border-color: #ca7905; background-image: image(#fd9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode notebook > header > tabs > arrow:active { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; background-image: image(#e08400); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.automation-mode headerbar button:backdrop:disabled, .automation-mode actionbar button:backdrop:disabled { color: #cc7800; border-color: #ca7905; background-image: image(#ffa423); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode headerbar > *, .automation-mode actionbar > *, .automation-mode notebook > header > * { color: #553200; }
+.automation-mode headerbar button:checked, .automation-mode actionbar button:checked { background: image(#d17b00); border-color: #140c00; border-top-color: black; }
 
-.automation-mode headerbar > *:backdrop, .automation-mode actionbar > *:backdrop, .automation-mode notebook > header > *:backdrop { color: #b26e0d; }
+.automation-mode headerbar button:checked:backdrop, .automation-mode actionbar button:checked:backdrop { color: #b26e0d; border-color: #ca7905; background-image: image(#fd9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.automation-mode headerbar button, .automation-mode actionbar button, .automation-mode notebook > header button { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; border-bottom-color: black; background-image: linear-gradient(to top, #ff9e14 2px, #ffa729); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); }
+.automation-mode headerbar button.flat:backdrop, .automation-mode headerbar button.titlebutton:backdrop, .automation-mode actionbar button.flat:backdrop, .automation-mode actionbar button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
 
-.automation-mode headerbar button.flat, .automation-mode headerbar button.titlebutton, .automation-mode actionbar button.flat, .automation-mode actionbar button.titlebutton, .automation-mode notebook > header button.flat, .automation-mode notebook > header button.titlebutton { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.automation-mode headerbar entry, .automation-mode actionbar entry { border-color: #241500; }
 
-.automation-mode headerbar button.titlebutton, .automation-mode actionbar button.titlebutton, .automation-mode notebook > header button.titlebutton { text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); }
+.automation-mode headerbar entry:focus, .automation-mode actionbar entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
 
-.automation-mode headerbar button:hover, .automation-mode actionbar button:hover, .automation-mode notebook > header button:hover { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; border-bottom-color: black; background-image: linear-gradient(to top, #ffa729, #ffa92e 1px); text-shadow: 0 1px rgba(255, 255, 255, 0.769231); -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.769231); box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.07); }
+.automation-mode headerbar entry:backdrop, .automation-mode actionbar entry:backdrop { box-shadow: none; border-color: #ca7905; }
 
-.automation-mode headerbar button:active, .automation-mode headerbar button:checked, .automation-mode actionbar button:active, .automation-mode actionbar button:checked, .automation-mode notebook > header button:active, .automation-mode notebook > header button:checked { color: #553200; outline-color: rgba(85, 50, 0, 0.3); border-color: #241500; background-image: image(#e08400); box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.automation-mode tabbar .box { background: #db8100; border-bottom: 1px solid black; }
 
-.automation-mode headerbar button:disabled, .automation-mode actionbar button:disabled, .automation-mode notebook > header button:disabled { color: #aa6c14; border-color: #503208; background-image: image(#ffa423); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode tabbar .box:backdrop { background-color: #eb8a00; border-color: #ca7905; }
 
-.automation-mode headerbar button:backdrop, .automation-mode actionbar button:backdrop, .automation-mode notebook > header button:backdrop { color: #b26e0d; border-color: #ca7905; background-image: image(#ffa11a); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode tabbar scrolledwindow.pinned undershoot { border-color: black; }
 
-.automation-mode headerbar button:backdrop:active, .automation-mode actionbar button:backdrop:active, .automation-mode notebook > header button:backdrop:active { color: #b26e0d; border-color: #ca7905; background-image: image(#fd9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode tabbar scrolledwindow.pinned:backdrop undershoot { border-color: #ca7905; }
 
-.automation-mode headerbar button:backdrop:disabled, .automation-mode actionbar button:backdrop:disabled, .automation-mode notebook > header button:backdrop:disabled { color: #cc7800; border-color: #ca7905; background-image: image(#ffa423); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode tabbar scrolledwindow.pinned tabbox:dir(ltr) { box-shadow: inset -1px 0 black; }
 
-.automation-mode headerbar button:checked, .automation-mode actionbar button:checked, .automation-mode notebook > header button:checked { background: image(#d17b00); border-color: #140c00; border-top-color: black; }
+.automation-mode tabbar scrolledwindow.pinned tabbox:dir(ltr):backdrop { box-shadow: inset -1px 0 #ca7905; }
 
-.automation-mode headerbar button:checked:backdrop, .automation-mode actionbar button:checked:backdrop, .automation-mode notebook > header button:checked:backdrop { color: #b26e0d; border-color: #ca7905; background-image: image(#fd9500); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.automation-mode tabbar scrolledwindow.pinned tabbox:dir(rtl) { box-shadow: inset 1px 0 black; }
 
-.automation-mode headerbar button.flat:backdrop, .automation-mode headerbar button.titlebutton:backdrop, .automation-mode actionbar button.flat:backdrop, .automation-mode actionbar button.titlebutton:backdrop, .automation-mode notebook > header button.flat:backdrop, .automation-mode notebook > header button.titlebutton:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; }
+.automation-mode tabbar scrolledwindow.pinned tabbox:dir(rtl):backdrop { box-shadow: inset 1px 0 #ca7905; }
 
-.automation-mode headerbar entry, .automation-mode actionbar entry, .automation-mode notebook > header entry { border-color: #241500; }
+.automation-mode tabbar tab { border-color: black; background-color: #eb8a00; }
 
-.automation-mode headerbar entry:focus, .automation-mode actionbar entry:focus, .automation-mode notebook > header entry:focus { border-color: #3584e4; box-shadow: inset 0 0 0 1px #3584e4; }
+.automation-mode tabbar tab:checked { background-color: #ff9a0a; }
 
-.automation-mode headerbar entry:backdrop, .automation-mode actionbar entry:backdrop, .automation-mode notebook > header entry:backdrop { box-shadow: none; border-color: #ca7905; }
+.automation-mode tabbar tab:checked:hover { background-color: #ffa11a; }
+
+.automation-mode tabbar tab:hover { background-color: #fa9300; }
+
+.automation-mode tabbar tab:backdrop { border-color: #ca7905; background-color: #fa9300; }
+
+.automation-mode tabbar tab:backdrop:checked { background-color: #ffa11a; }
+
+.automation-mode tabbar tab .tab-close-button:hover, .automation-mode tabbar tab .tab-indicator.clickable:hover { background: alpha(#553200,0.15); }
+
+.automation-mode tabbar tab .tab-close-button:active, .automation-mode tabbar tab .tab-indicator.clickable:active { background: alpha(black,0.2); }
+
+.automation-mode tabbar .start-action, .automation-mode tabbar .end-action { background: #eb8a00; border-color: black; }
+
+.automation-mode tabbar .start-action:backdrop, .automation-mode tabbar .end-action:backdrop { border-color: #ca7905; background-color: #fa9300; }
 
 /*************************** Check and Radio buttons * */
 .bookmark-tag-widget { border-radius: 5px; }
@@ -258,14 +286,6 @@ fullscreenbox > flap > shadow { min-height: 9px; min-width: 9px; background: lin
 .epiphany-downloads-button-needs-attention { animation: needs_attention_keyframes 2s ease-in-out; }
 
 .epiphany-downloads-button-needs-attention-multiple { animation: needs_attention_keyframes 3s ease-in-out; animation-iteration-count: 3; }
-
-.main-notebook tab { min-width: 16px; }
-
-.main-notebook header.top tab, .main-notebook header.bottom tab { border-style: none solid; }
-
-.main-notebook header.left tab, .main-notebook header.right tab { border-style: solid none; }
-
-.tab-attention { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3584e4), to(transparent)); }
 
 #title-box-container { color: alpha(@theme_fg_color,0.2); }
 
