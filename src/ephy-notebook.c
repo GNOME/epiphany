@@ -419,66 +419,6 @@ expand_tabs_changed_cb (GSettings    *settings,
   g_list_free (tabs);
 }
 
-static GtkPositionType
-ephy_settings_get_tabs_bar_position (void)
-{
-  EphyPrefsUITabsBarPosition position;
-  position = g_settings_get_enum (EPHY_SETTINGS_UI,
-                                  EPHY_PREFS_UI_TABS_BAR_POSITION);
-
-  switch (position) {
-    case EPHY_PREFS_UI_TABS_BAR_POSITION_TOP:
-      return GTK_POS_TOP;
-    case EPHY_PREFS_UI_TABS_BAR_POSITION_BOTTOM:
-      return GTK_POS_BOTTOM;
-    case EPHY_PREFS_UI_TABS_BAR_POSITION_LEFT:
-      return GTK_POS_LEFT;
-    case EPHY_PREFS_UI_TABS_BAR_POSITION_RIGHT:
-      return GTK_POS_RIGHT;
-    default:
-      g_assert_not_reached ();
-  }
-}
-
-static void
-box_set_halign (GtkWidget       *box,
-                GtkPositionType  type)
-{
-  switch (type) {
-    case GTK_POS_LEFT:
-    case GTK_POS_RIGHT:
-      gtk_widget_set_halign (box, GTK_ALIGN_FILL);
-      break;
-    case GTK_POS_TOP:
-    case GTK_POS_BOTTOM:
-      gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
-      break;
-    default:
-      break;
-  }
-}
-
-static void
-position_changed_cb (GSettings    *settings,
-                     char         *key,
-                     EphyNotebook *nb)
-{
-  GtkPositionType type = ephy_settings_get_tabs_bar_position ();
-  gint pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
-  gint i;
-
-  /* Update halign of all notebook label widgets (sub-box) */
-  for (i = 0; i < pages; i++) {
-    GtkWidget *child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), i);
-    GtkWidget *label_widget = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
-    GtkWidget *box = gtk_container_get_children (GTK_CONTAINER (label_widget))->data;
-
-    box_set_halign (box, type);
-  }
-
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (nb), type);
-}
-
 static void
 show_tabs_changed_cb (GSettings    *settings,
                       char         *key,
@@ -562,7 +502,6 @@ ephy_notebook_init (EphyNotebook *notebook)
   gtk_notebook_set_show_border (gnotebook, FALSE);
   gtk_notebook_set_show_tabs (gnotebook, FALSE);
   gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
-  gtk_notebook_set_tab_pos (gnotebook, ephy_settings_get_tabs_bar_position ());
 
   notebook->tabs_allowed = TRUE;
 
@@ -586,9 +525,6 @@ ephy_notebook_init (EphyNotebook *notebook)
   g_signal_connect (EPHY_SETTINGS_UI,
                     "changed::" EPHY_PREFS_UI_EXPAND_TABS_BAR,
                     G_CALLBACK (expand_tabs_changed_cb), notebook);
-  g_signal_connect (EPHY_SETTINGS_UI,
-                    "changed::" EPHY_PREFS_UI_TABS_BAR_POSITION,
-                    G_CALLBACK (position_changed_cb), notebook);
   g_signal_connect (EPHY_SETTINGS_UI,
                     "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
                     G_CALLBACK (show_tabs_changed_cb), notebook);
@@ -638,9 +574,6 @@ ephy_notebook_finalize (GObject *object)
 
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
                                         expand_tabs_changed_cb,
-                                        notebook);
-  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
-                                        position_changed_cb,
                                         notebook);
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
                                         show_tabs_changed_cb,

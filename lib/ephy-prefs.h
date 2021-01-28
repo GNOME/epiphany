@@ -25,14 +25,6 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  EPHY_PREFS_UI_TABS_BAR_POSITION_TOP,
-  EPHY_PREFS_UI_TABS_BAR_POSITION_BOTTOM,
-  EPHY_PREFS_UI_TABS_BAR_POSITION_LEFT,
-  EPHY_PREFS_UI_TABS_BAR_POSITION_RIGHT
-} EphyPrefsUITabsBarPosition;
-
-typedef enum
-{
   EPHY_PREFS_READER_FONT_STYLE_SANS,
   EPHY_PREFS_READER_FONT_STYLE_SERIF,
 } EphyPrefsReaderFontStyle;
@@ -66,7 +58,6 @@ typedef enum
 
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_EXPAND_TABS_BAR            "expand-tabs-bar"
-#define EPHY_PREFS_UI_TABS_BAR_POSITION          "tabs-bar-position"
 #define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
 #define EPHY_PREFS_UI_KEEP_WINDOW_OPEN           "keep-window-open"
 
