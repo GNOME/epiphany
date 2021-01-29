@@ -189,11 +189,13 @@ ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
 
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_widget_set_margin_end (GTK_WIDGET (self->box), 2);
+      gtk_widget_set_margin_start (GTK_WIDGET (self->box), 3);
+      gtk_widget_set_margin_end (GTK_WIDGET (self->box), 1);
       gtk_box_set_spacing (self->box, 0);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
+      gtk_widget_set_margin_start (GTK_WIDGET (self->box), 8);
       gtk_widget_set_margin_end (GTK_WIDGET (self->box), 0);
       gtk_box_set_spacing (self->box, 4);
 
