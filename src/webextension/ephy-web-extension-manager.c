@@ -372,6 +372,7 @@ create_page_action_widget (EphyWebExtensionManager *self,
 {
   GtkWidget *image;
   GtkWidget *event_box;
+  GtkStyleContext *context;
 
   /* Create new event box with page action */
   event_box = gtk_event_box_new ();
@@ -379,6 +380,9 @@ create_page_action_widget (EphyWebExtensionManager *self,
   gtk_container_add (GTK_CONTAINER (event_box), image);
   g_signal_connect_object (event_box, "button_press_event", G_CALLBACK (page_action_clicked), web_extension, 0);
   gtk_widget_show_all (event_box);
+
+  context = gtk_widget_get_style_context (image);
+  gtk_style_context_add_class (context, "entry_icon");
 
   return g_object_ref (event_box);
 }
