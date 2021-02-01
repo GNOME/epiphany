@@ -34,8 +34,7 @@ struct _EphyWebExtensionDialog {
   EphyWebExtensionManager *web_extension_manager;
 
   GtkWidget *listbox;
-  GtkWidget *add_button;
-  GtkWidget *remove_button;
+  GtkStack *stack;
 };
 
 G_DEFINE_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, HDY_TYPE_WINDOW)
@@ -63,7 +62,7 @@ on_remove_button_clicked (GtkButton *button,
   GtkWidget *widget;
   gint res;
 
-  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (self->listbox));
+  row = g_object_get_data (G_OBJECT (button), "row");
   if (!row)
     return;
 
@@ -104,6 +103,23 @@ toggle_state_set_cb (GtkSwitch *widget,
   ephy_web_extension_manager_set_active (manager, web_extension, state);
 }
 
+static void
+homepage_activated_cb (HdyActionRow *row,
+                       gpointer      user_data)
+{
+  EphyWebExtensionDialog *self = EPHY_WEB_EXTENSION_DIALOG (user_data);
+  EphyWebExtension *web_extension = g_object_get_data (G_OBJECT (row), "web_extension");
+  g_autoptr (GError) error = NULL;
+
+  gtk_show_uri_on_window (GTK_WINDOW (self),
+                          ephy_web_extension_get_homepage_url (web_extension),
+                          GDK_CURRENT_TIME,
+                          &error);
+
+  if (error)
+    g_warning ("Couldn't to open homepage: %s", error->message);
+}
+
 static GtkWidget *
 create_row (EphyWebExtensionDialog *self,
             EphyWebExtension       *web_extension)
@@ -113,7 +129,7 @@ create_row (EphyWebExtensionDialog *self,
   GtkWidget *image;
   GtkWidget *toggle;
   GtkWidget *button;
-  GtkWidget *homepage;
+  GtkWidget *homepage_icon;
   GtkWidget *author;
   GtkWidget *version;
   g_autoptr (GdkPixbuf) icon = NULL;
@@ -126,8 +142,9 @@ create_row (EphyWebExtensionDialog *self,
   gtk_widget_set_tooltip_text (GTK_WIDGET (row), ephy_web_extension_get_name (web_extension));
 
   /* Icon */
-  icon = ephy_web_extension_get_icon (web_extension, 48);
-  image = icon ? gtk_image_new_from_pixbuf (icon) : gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_DIALOG);
+  icon = ephy_web_extension_get_icon (web_extension, 32);
+  image = icon ? gtk_image_new_from_pixbuf (icon) : gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_DND);
+  gtk_image_set_pixel_size (GTK_IMAGE (image), 32);
   hdy_expander_row_add_prefix (HDY_EXPANDER_ROW (row), image);
 
   /* Titles */
@@ -156,6 +173,7 @@ create_row (EphyWebExtensionDialog *self,
   gtk_container_add (GTK_CONTAINER (row), sub_row);
   hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Version"));
   version = gtk_label_new (ephy_web_extension_get_version (web_extension));
+  dzl_gtk_widget_add_style_class (version, "dim-label");
   gtk_container_add (GTK_CONTAINER (sub_row), version);
 
   /* Homepage url */
@@ -163,20 +181,25 @@ create_row (EphyWebExtensionDialog *self,
     sub_row = hdy_action_row_new ();
     gtk_container_add (GTK_CONTAINER (row), sub_row);
     hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Homepage"));
-    homepage = gtk_link_button_new_with_label (ephy_web_extension_get_homepage_url (web_extension), _("Open"));
-    gtk_container_add (GTK_CONTAINER (sub_row), homepage);
+    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (sub_row), TRUE);
+    g_signal_connect (sub_row, "activated", G_CALLBACK (homepage_activated_cb), self);
+    homepage_icon = gtk_image_new_from_icon_name ("ephy-open-link-symbolic", GTK_ICON_SIZE_BUTTON);
+    dzl_gtk_widget_add_style_class (homepage_icon, "dim-label");
+    gtk_container_add (GTK_CONTAINER (sub_row), homepage_icon);
+    g_object_set_data (G_OBJECT (sub_row), "web_extension", web_extension);
   }
 
   /* Remove button */
   sub_row = hdy_action_row_new ();
   gtk_container_add (GTK_CONTAINER (row), sub_row);
 
-  button = gtk_button_new_with_label (_("Remove"));
+  button = gtk_button_new_with_mnemonic (_("_Remove"));
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
   dzl_gtk_widget_add_style_class (button, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
   g_signal_connect (button, "clicked", G_CALLBACK (on_remove_button_clicked), self);
   gtk_widget_set_tooltip_text (button, _("Remove selected WebExtension"));
   gtk_container_add (GTK_CONTAINER (sub_row), button);
+  g_object_set_data (G_OBJECT (button), "row", row);
 
   gtk_widget_show_all (GTK_WIDGET (row));
 
@@ -187,6 +210,7 @@ static void
 ephy_web_extension_dialog_refresh_listbox (EphyWebExtensionDialog *self)
 {
   GList *extensions = ephy_web_extension_manager_get_web_extensions (self->web_extension_manager);
+  gboolean empty = TRUE;
 
   clear_listbox (self->listbox);
 
@@ -196,7 +220,10 @@ ephy_web_extension_dialog_refresh_listbox (EphyWebExtensionDialog *self)
 
     row = create_row (self, web_extension);
     gtk_list_box_insert (GTK_LIST_BOX (self->listbox), row, -1);
+    empty = FALSE;
   }
+
+  gtk_stack_set_visible_child_name (self->stack, empty ? "empty" : "list");
 }
 
 static void
@@ -262,6 +289,7 @@ ephy_web_extension_dialog_class_init (EphyWebExtensionDialogClass *klass)
                                                "/org/gnome/epiphany/gtk/web-extensions-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyWebExtensionDialog, listbox);
+  gtk_widget_class_bind_template_child (widget_class, EphyWebExtensionDialog, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_add_button_clicked);
 }
