@@ -204,19 +204,16 @@ on_add_button_clicked (GtkButton *button,
                        gpointer   user_data)
 {
   EphyWebExtensionDialog *self = EPHY_WEB_EXTENSION_DIALOG (user_data);
-  GtkWidget *dialog = NULL;
+  GtkFileChooserNative *dialog = NULL;
   GtkFileFilter *filter;
   gint res;
 
   /* Translators: this is the title of a file chooser dialog. */
-  dialog = gtk_file_chooser_dialog_new (_("Open File (manifest.json/xpi)"),
+  dialog = gtk_file_chooser_native_new (_("Open File (manifest.json/xpi)"),
                                         GTK_WINDOW (self),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("_Cancel"),
-                                        GTK_RESPONSE_CANCEL,
-                                        _("_Open"),
-                                        GTK_RESPONSE_ACCEPT,
-                                        NULL);
+                                        _("_Open"));
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), "WebExtensions");
@@ -224,14 +221,14 @@ on_add_button_clicked (GtkButton *button,
   gtk_file_filter_add_mime_type (GTK_FILE_FILTER (filter), "application/x-xpinstall");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), g_steal_pointer (&filter));
 
-  res = gtk_dialog_run (GTK_DIALOG (dialog));
+  res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
   if (res == GTK_RESPONSE_ACCEPT) {
     g_autoptr (GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
 
     ephy_web_extension_manager_install (self->web_extension_manager, file);
   }
 
-  gtk_widget_destroy (dialog);
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
 }
 
 static void
