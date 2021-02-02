@@ -875,9 +875,12 @@ run_background_script (EphyWebExtensionManager *self,
 
     base_uri = g_strdup_printf ("webextension://%s/", ephy_web_extension_get_guid (web_extension));
     for (unsigned int i = 0; i < scripts->len; i++) {
-      char *script_file = g_ptr_array_index (scripts, i);
+      const char *script_file = g_ptr_array_index (scripts, i);
       g_autofree char *data = NULL;
       WebKitUserScript *user_script;
+
+      if (!script_file)
+        continue;
 
       data = ephy_web_extension_get_resource_as_string (web_extension, script_file);
       user_script = webkit_user_script_new_for_world (data,
