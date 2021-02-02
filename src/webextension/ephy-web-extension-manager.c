@@ -784,7 +784,7 @@ remove_page_action (gpointer key,
                     gpointer value,
                     gpointer user_data)
 {
-  return TRUE;
+  return key == user_data;
 }
 
 void
@@ -795,11 +795,20 @@ ephy_web_extension_manager_remove_web_extension_from_webview (EphyWebExtensionMa
 {
   GtkWidget *title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (ephy_window_get_header_bar (window))));
   EphyLocationEntry *lentry = NULL;
+  GHashTableIter iter;
+  gpointer key;
+  GHashTable *table;
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget))
     lentry = EPHY_LOCATION_ENTRY (title_widget);
 
-  g_hash_table_foreach_remove (self->page_action_map, remove_page_action, web_view);
+  g_hash_table_iter_init (&iter, self->page_action_map);
+  while (g_hash_table_iter_next (&iter, &key, (gpointer) & table)) {
+    if (key != web_extension)
+      continue;
+
+    g_hash_table_foreach_remove (table, remove_page_action, web_view);
+  }
 
   if (lentry)
     ephy_location_entry_page_action_clear (lentry);
