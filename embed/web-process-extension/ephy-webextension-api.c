@@ -74,7 +74,7 @@ static char *
 js_geturl (const char *path,
            gpointer    user_data)
 {
-  return g_strdup_printf ("webextension:///%s", path);
+  return g_strdup_printf ("ephy-webextension:///%s", path);
 }
 
 void

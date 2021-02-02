@@ -1431,7 +1431,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   if (view->loading_error_page)
     return;
 
-  if (g_str_has_prefix (uri, "webextension://")) {
+  if (g_str_has_prefix (uri, "ephy-webextension://")) {
     /* Hidden WebExtension webview, ignoring */
     return;
   }
