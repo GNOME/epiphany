@@ -90,9 +90,12 @@ set_up_webextensions (EphyWebProcessExtension *extension,
   g_autoptr (JSCValue) result = NULL;
   const char *data;
   gsize data_size;
+  static gboolean setup = FALSE;
 
-  result = jsc_context_get_value (js_context, "browser");
-  g_assert (jsc_value_is_undefined (result));
+  if (setup)
+    return;
+
+  setup = TRUE;
 
   js_browser = jsc_value_new_object (js_context, NULL, NULL);
   jsc_context_set_value (js_context, "browser", js_browser);
