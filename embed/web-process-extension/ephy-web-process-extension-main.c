@@ -63,11 +63,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 static void __attribute__((destructor))
 ephy_web_process_extension_shutdown (void)
 {
-  if (extension) {
-    ephy_web_process_extension_deinitialize (extension);
-    g_object_unref (extension);
-  }
-
+  g_clear_object (&extension);
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
 }

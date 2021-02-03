@@ -396,6 +396,8 @@ ephy_web_process_extension_dispose (GObject *object)
     g_clear_pointer (&extension->frames_map, g_hash_table_unref);
   }
 
+  g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
+
   G_OBJECT_CLASS (ephy_web_process_extension_parent_class)->dispose (object);
 }
 
@@ -822,10 +824,4 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                                  g_free, NULL);
 
   extension->translation_table = g_hash_table_new (g_str_hash, NULL);
-}
-
-void
-ephy_web_process_extension_deinitialize (EphyWebProcessExtension *extension)
-{
-  g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
 }
