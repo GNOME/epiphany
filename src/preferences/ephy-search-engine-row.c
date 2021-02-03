@@ -444,7 +444,12 @@ static void
 on_radio_button_clicked_cb (EphySearchEngineRow *row,
                             GtkButton           *button)
 {
-  ephy_search_engine_manager_set_default_engine (row->manager, row->saved_name);
+  /* This avoids having some random engines being set as default when adding a new row,
+   * since when it default initialize the "active" property to %FALSE on object construction,
+   * it records a "clicked" signal
+   */
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    ephy_search_engine_manager_set_default_engine (row->manager, row->saved_name);
 }
 
 static void
@@ -537,7 +542,7 @@ on_ephy_search_engine_row_constructed (GObject *object)
 
   /* Tick the radio button if it's the default search engine. */
   if (g_strcmp0 (self->saved_name, default_search_engine_name) == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->radio_button), TRUE);
+    ephy_search_engine_row_set_as_default (self);
 
   g_signal_connect_object (self->name_entry, "notify::text", G_CALLBACK (on_name_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->address_entry, "notify::text", G_CALLBACK (on_address_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
