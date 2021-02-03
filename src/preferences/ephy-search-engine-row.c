@@ -45,6 +45,8 @@ struct _EphySearchEngineRow {
    * It is always a valid name.
    */
   char *saved_name;
+  /* This is the name that was previously in the entry. Use this only from on_name_entry_text_changed_cb() */
+  char *previous_name;
   EphySearchEngineManager *manager;
 };
 
@@ -163,7 +165,7 @@ search_engine_already_exists (EphySearchEngineRow *searched_row,
     EphySearchEngineRow *iterated_row;
 
     /* As it iterates on the whole list box, this function will run on the "add search engine" row, which isn't an EphySearchEngineRow. */
-    if (EPHY_IS_SEARCH_ENGINE_ROW (children->data))
+    if (!EPHY_IS_SEARCH_ENGINE_ROW (children->data))
       continue;
 
     iterated_row = EPHY_SEARCH_ENGINE_ROW (children->data);
@@ -404,8 +406,11 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
    * if the name didn't actually change. This could toggle the entry as invalid
    * because the engine would already exist, so don't go any further in this case.
    */
-  if (g_strcmp0 (row->saved_name, new_name) == 0)
+  if (g_strcmp0 (row->previous_name, new_name) == 0)
     return;
+
+  g_free (row->previous_name);
+  row->previous_name = g_strdup (new_name);
 
   hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), new_name);
 
@@ -488,6 +493,7 @@ ephy_search_engine_row_finalize (GObject *object)
   EphySearchEngineRow *self = (EphySearchEngineRow *)object;
 
   g_free (self->saved_name);
+  g_free (self->previous_name);
 
   G_OBJECT_CLASS (ephy_search_engine_row_parent_class)->finalize (object);
 }
@@ -504,6 +510,8 @@ ephy_search_engine_row_set_property (GObject      *object,
     case PROP_SEARCH_ENGINE_NAME:
       g_free (self->saved_name);
       self->saved_name = g_value_dup_string (value);
+      g_free (self->previous_name);
+      self->previous_name = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -517,6 +525,7 @@ on_ephy_search_engine_row_constructed (GObject *object)
   g_autofree char *default_search_engine_name = ephy_search_engine_manager_get_default_engine (self->manager);
 
   g_assert (self->saved_name != NULL);
+  g_assert (g_strcmp0 (self->previous_name, self->saved_name) == 0);
 
   gtk_entry_set_text (GTK_ENTRY (self->name_entry), self->saved_name);
   hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (self), self->saved_name);
