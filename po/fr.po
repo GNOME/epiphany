@@ -38,8 +38,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-27 18:14+0000\n"
-"PO-Revision-Date: 2020-08-29 16:45+0200\n"
+"POT-Creation-Date: 2020-09-14 16:07+0000\n"
+"PO-Revision-Date: 2020-09-18 11:27+0200\n"
 "Last-Translator: Charles Monzat <charles.monzat@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -534,10 +534,10 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 "Indique s’il faut rechercher automatiquement sur le Web lorsque quelque "
-"chose qui ne ressemble pas à un URL est renseigné dans la barre d’adresse. "
-"Si cette option est désactivée, toute recherche sera considérée comme un URL "
-"à moins qu’un moteur de recherche ne soit explicitement sélectionné dans le "
-"menu déroulant."
+"chose qui ne ressemble pas à une URL est renseigné dans la barre d’adresse. "
+"Si cette option est désactivée, toute recherche sera considérée comme une "
+"URL à moins qu’un moteur de recherche ne soit explicitement sélectionné dans "
+"le menu déroulant."
 
 #: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable mouse gestures"
@@ -615,7 +615,7 @@ msgstr "URL supplémentaires de l’application Web"
 
 #: data/org.gnome.epiphany.gschema.xml:248
 msgid "The list of URLs that should be opened by the web application"
-msgstr "Liste des URL qui doivent être ouverts par l’application Web"
+msgstr "Liste des URL qui doivent être ouvertes par l’application Web"
 
 #: data/org.gnome.epiphany.gschema.xml:252
 msgid "WebApp is mobile capable"
@@ -1158,21 +1158,21 @@ msgid "Save file"
 msgstr "Enregistrer le fichier"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Appuyez sur %s pour quitter le mode plein écran"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "Échap"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:794
+#: embed/ephy-embed.c:787
 msgid "Web is being controlled by automation."
 msgstr "Web est contrôlé par l’automatisation."
 
@@ -1537,7 +1537,7 @@ msgstr "Recherche la prochaine occurrence de la chaîne"
 #: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
-msgstr "« %s » n’est pas un URL valide"
+msgstr "« %s » n’est pas une URI valide"
 
 #: embed/ephy-web-view.c:183 src/window-commands.c:1336
 msgid "Open"
@@ -2884,6 +2884,7 @@ msgid "Dark"
 msgstr "Sombre"
 
 #: src/preferences/prefs-general-page.c:348
+#: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "Ajouter une langue"
 
@@ -3426,10 +3427,6 @@ msgstr "_Basculer immédiatement sur le nouvel onglet"
 msgid "_Spell Checking"
 msgstr "_Vérification orthographique"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add _Language"
-msgstr "Ajouter une _langue"
-
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a language:"
 msgstr "Choisir une langue :"
@@ -3888,9 +3885,9 @@ msgid ""
 "application. If you omit the URL scheme, the one from the currently loaded "
 "URL will be used."
 msgstr ""
-"Un URL qui débute comme n’importe quel URL supplémentaire sera ouvert par "
-"l’application Web. Si vous omettez le schéma d’URL, celui chargé par l’URL "
-"actuel sera utilisé."
+"Une URL qui débute comme n’importe quelle URL supplémentaire sera ouverte "
+"par l’application Web. Si vous omettez le schéma d’URL, celui chargé par "
+"l’URL actuelle sera utilisé."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:99
 msgctxt "Column header in the Additional URLs dialog"
@@ -3899,11 +3896,11 @@ msgstr "URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
-msgstr "Ajouter un nouvel URL"
+msgstr "Ajouter une nouvelle URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:137
 msgid "Remove the selected URLs"
-msgstr "Retirer les URL sélectionnés"
+msgstr "Retirer les URL sélectionnées"
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -4118,6 +4115,9 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Activer"
+
+#~ msgid "Add _Language"
+#~ msgstr "Ajouter une _langue"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Cookie accepté"
