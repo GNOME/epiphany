@@ -1014,7 +1014,7 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_version (dialog, VERSION);
   gtk_about_dialog_set_copyright (dialog,
                                   "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                                  "Copyright © 2003–2020 The GNOME Web Developers");
+                                  "Copyright © 2003–2021 The GNOME Web Developers");
   gtk_about_dialog_set_comments (dialog, comments);
   gtk_about_dialog_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
   gtk_about_dialog_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
