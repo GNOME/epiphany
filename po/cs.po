@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-01-28 15:43+0000\n"
-"PO-Revision-Date: 2021-01-30 10:20+0100\n"
+"POT-Creation-Date: 2021-02-04 11:08+0000\n"
+"PO-Revision-Date: 2021-02-06 08:00+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1097,7 +1097,7 @@ msgid "Download requested"
 msgstr "Požadováno stažení"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/ephy-web-extension-dialog.c:76 src/ephy-web-extension-dialog.c:215
+#: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:242
 #: src/resources/gtk/firefox-sync-dialog.ui:173
 #: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:276
@@ -1147,7 +1147,7 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:787
+#: embed/ephy-embed.c:807
 msgid "Web is being controlled by automation."
 msgstr "Web je ovládán automaticky."
 
@@ -1514,8 +1514,7 @@ msgstr "Hledat následující výskyt hledaného řetězce"
 msgid "%s is not a valid URI"
 msgstr "%s není platná adresa URI"
 
-#: embed/ephy-web-view.c:189 src/ephy-web-extension-dialog.c:166
-#: src/window-commands.c:1353
+#: embed/ephy-web-view.c:189 src/window-commands.c:1353
 msgid "Open"
 msgstr "Otevřít"
 
@@ -2262,7 +2261,7 @@ msgstr "Ruší se…"
 msgid "Starting…"
 msgstr "Spouští se…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:217
+#: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:243
 #: src/resources/gtk/history-dialog.ui:387
 msgid "_Open"
 msgstr "_Otevřít"
@@ -2287,20 +2286,20 @@ msgstr "Všechny soubory"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:671 src/ephy-history-dialog.c:563
+#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:563
 msgid "Cl_ear"
 msgstr "Vy_mazat"
 
-#: lib/widgets/ephy-location-entry.c:691
+#: lib/widgets/ephy-location-entry.c:690
 msgid "Paste and _Go"
 msgstr "Vložit a pře_jít"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:712 src/ephy-window.c:957
+#: lib/widgets/ephy-location-entry.c:711 src/ephy-window.c:962
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: lib/widgets/ephy-location-entry.c:719
+#: lib/widgets/ephy-location-entry.c:718
 msgid "_Redo"
 msgstr "Zn_ovu"
 
@@ -2312,11 +2311,11 @@ msgstr "Zobrazit bezpečnostní hlášení a oprávnění stránky"
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Vyhledat weby, záložky a otevřené karty"
 
-#: lib/widgets/ephy-location-entry.c:1058
+#: lib/widgets/ephy-location-entry.c:1050
 msgid "Bookmark this page"
 msgstr "Aktuální stránku do záložek"
 
-#: lib/widgets/ephy-location-entry.c:1077
+#: lib/widgets/ephy-location-entry.c:1069
 msgid "Toggle reader mode"
 msgstr "Přepnout režim čtečky"
 
@@ -2454,7 +2453,7 @@ msgstr "Mobilní"
 msgid "Reload the current page"
 msgstr "Znovu načíst aktuální stránku"
 
-#: src/ephy-action-bar-start.c:640 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:444
 msgid "Stop loading the current page"
 msgstr "Zastavit načítání aktuální stránky"
 
@@ -2551,233 +2550,225 @@ msgstr "Otevřít novou kartu"
 msgid "View open tabs"
 msgstr "Zobrazit otevřené karty"
 
-#: src/ephy-tab-header-bar.c:68
-msgid "Tabs"
-msgstr "Karty"
-
 #: src/ephy-tab-label.c:331
 msgid "New Tab"
 msgstr "Nová karta"
 
-#: src/ephy-web-extension-dialog.c:74
+#: src/ephy-web-extension-dialog.c:73
 msgid "Do you really want to remove this extension?"
 msgstr "Opravdu chcete odebrat toto rozšíření?"
 
-#: src/ephy-web-extension-dialog.c:78
+#: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
 #: src/resources/gtk/bookmark-properties-grid.ui:176
 msgid "_Remove"
 msgstr "Odeb_rat"
 
-#: src/ephy-web-extension-dialog.c:148
+#: src/ephy-web-extension-dialog.c:165
 msgid "Author"
 msgstr "Autor"
 
-#: src/ephy-web-extension-dialog.c:157
+#: src/ephy-web-extension-dialog.c:174
 msgid "Version"
 msgstr "Verze"
 
-#: src/ephy-web-extension-dialog.c:165
+#: src/ephy-web-extension-dialog.c:183
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Domovská stránka"
 
-#: src/ephy-web-extension-dialog.c:174
-msgid "Remove"
-msgstr "Odebrat"
-
-#: src/ephy-web-extension-dialog.c:178
+#: src/ephy-web-extension-dialog.c:200
 msgid "Remove selected WebExtension"
 msgstr "Odebrat vybrané webové rozšíření"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:212
+#: src/ephy-web-extension-dialog.c:239
 msgid "Open File (manifest.json/xpi)"
 msgstr "Otevření souboru (manifest.json/xpi)"
 
-#: src/ephy-window.c:276
+#: src/ephy-window.c:279
 msgid "Do you want to leave this website?"
 msgstr "Opravdu chcete opustit tuto stránku www?"
 
-#: src/ephy-window.c:277 src/window-commands.c:1202
+#: src/ephy-window.c:280 src/window-commands.c:1202
 msgid "A form you modified has not been submitted."
 msgstr "Formulář, který jste upravili, nebyl odeslán."
 
-#: src/ephy-window.c:278 src/window-commands.c:1204
+#: src/ephy-window.c:281 src/window-commands.c:1204
 msgid "_Discard form"
 msgstr "Zaho_dit formulář"
 
-#: src/ephy-window.c:293
+#: src/ephy-window.c:296
 msgid "There are multiple tabs open."
 msgstr "Je otevřeno více karet."
 
-#: src/ephy-window.c:294
+#: src/ephy-window.c:297
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Pokud toto okno zavřete, všechny otevřené karty budou ztraceny"
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:298
 msgid "C_lose tabs"
 msgstr "Zavřít _karty"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:963
 msgid "Re_do"
 msgstr "Zn_ovu"
 
 #. Edit.
-#: src/ephy-window.c:961
+#: src/ephy-window.c:966
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:967
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:968
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:969
 msgid "_Paste Text Only"
 msgstr "Vložit _pouze text"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:970
 msgid "Select _All"
 msgstr "Vy_brat vše"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:972
 msgid "S_end Link by Email…"
 msgstr "Odeslat odkaz _e-mailem…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:974
 msgid "_Reload"
 msgstr "_Obnovit"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:975
 msgid "_Back"
 msgstr "_Zpět"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:976
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:979
 msgid "Add Boo_kmark…"
 msgstr "Přid_at záložku…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:983
 msgid "Open Link in New _Window"
 msgstr "Otevřít odkaz v novém _okně"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:984
 msgid "Open Link in New _Tab"
 msgstr "Otevřít odkaz v nové _kartě"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:985
 msgid "Open Link in I_ncognito Window"
 msgstr "Otevřít odkaz v a_nonymním okně"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:986
 msgid "_Save Link As…"
 msgstr "_Uložit odkaz jako…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:987
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:988
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:992
 msgid "View _Image in New Tab"
 msgstr "Zobraz_it obrázek v nové kartě"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:993
 msgid "Copy I_mage Address"
 msgstr "Kopírovat adresu _obrázku"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:994
 msgid "_Save Image As…"
 msgstr "_Uložit obrázek jako…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:995
 msgid "Set as _Wallpaper"
 msgstr "Nastavit jako _tapetu plochy"
 
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:999
 msgid "Open Video in New _Window"
 msgstr "Otevřít video v novém _okně"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:1000
 msgid "Open Video in New _Tab"
 msgstr "Otevřít video v nové kar_tě"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:1001
 msgid "_Save Video As…"
 msgstr "_Uložit video jako…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:1002
 msgid "_Copy Video Address"
 msgstr "_Kopírovat adresu videa"
 
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1006
 msgid "Open Audio in New _Window"
 msgstr "Otevřít zvuk v novém _okně"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1007
 msgid "Open Audio in New _Tab"
 msgstr "Otevřít zvuk v nové kar_tě"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1008
 msgid "_Save Audio As…"
 msgstr "_Uložit zvuk jako…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1009
 msgid "_Copy Audio Address"
 msgstr "_Kopírovat adresu zvuku"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1015
 msgid "Save Pa_ge As…"
 msgstr "_Uložit stránku jako…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1016
 msgid "_Page Source"
 msgstr "Z_drojový kód stránky"
 
-#: src/ephy-window.c:1381
+#: src/ephy-window.c:1386
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Na webu vyhledat „%s“"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1415
 msgid "Open Link"
 msgstr "Otevřít odkaz"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1417
 msgid "Open Link In New Tab"
 msgstr "Otevřít odkaz v nové kartě"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1419
 msgid "Open Link In New Window"
 msgstr "Otevřít odkaz v novém okně"
 
-#: src/ephy-window.c:1416
+#: src/ephy-window.c:1421
 msgid "Open Link In Incognito Window"
 msgstr "Otevřít odkaz v anonymním okně"
 
-#: src/ephy-window.c:3078
+#: src/ephy-window.c:3055
 msgid "Download operation"
 msgstr "Operace stahování"
 
-#: src/ephy-window.c:3080
+#: src/ephy-window.c:3057
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
-#: src/ephy-window.c:3082
+#: src/ephy-window.c:3059
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2785,19 +2776,19 @@ msgstr[0] "%d aktivní stahování"
 msgstr[1] "%d aktivní stahování"
 msgstr[2] "%d aktivních stahování"
 
-#: src/ephy-window.c:3705
+#: src/ephy-window.c:3675
 msgid "Set Web as your default browser?"
 msgstr "Nastavit aplikaci Web jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3707
+#: src/ephy-window.c:3677
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Nastavit Epiphany Technology Preview jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3719
+#: src/ephy-window.c:3689
 msgid "_Yes"
 msgstr "_Ano"
 
-#: src/ephy-window.c:3720
+#: src/ephy-window.c:3690
 msgid "_No"
 msgstr "_Ne"
 
@@ -2867,8 +2858,8 @@ msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
 "com/search?q=%s"
 msgstr ""
-"Adresa není platné URL. Měla by vypadat nějak jako ttps://www.example."
-"com/search?q=%s"
+"Adresa není platné URL. Měla by vypadat nějak jako ttps://www.example.com/"
+"search?q=%s"
 
 #: src/preferences/ephy-search-engine-row.c:221
 #, c-format
@@ -3319,8 +3310,8 @@ msgid "Open Appli_cation Manager"
 msgstr "Otevřít správu a_plikací"
 
 #: src/resources/gtk/page-menu-popover.ui:277
-msgid "_Extensions"
-msgstr "Rozšíř_ení"
+msgid "E_xtensions"
+msgstr "_Rozšíření"
 
 #: src/resources/gtk/page-menu-popover.ui:294
 msgid "_Override Text Encoding…"
@@ -3362,9 +3353,13 @@ msgstr "Naimportovat _hesla…"
 msgid "Firefox _Sync"
 msgstr "Firefox _Sync"
 
-#: src/resources/gtk/page-row.ui:86
+#: src/resources/gtk/page-row.ui:87
 msgid "Close page"
 msgstr "Zavřít stránku"
+
+#: src/resources/gtk/pages-view.ui:11
+msgid "Tabs"
+msgstr "Karty"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:108
@@ -3952,13 +3947,22 @@ msgstr "Odstranit vybrané URL"
 msgid "C_lear All"
 msgstr "Vy_mazat vše"
 
-#: src/resources/gtk/web-extensions-dialog.ui:22
+#: src/resources/gtk/web-extensions-dialog.ui:12
+#: src/resources/gtk/web-extensions-dialog.ui:21
 msgid "Extensions"
 msgstr "Rozšíření"
 
-#: src/resources/gtk/web-extensions-dialog.ui:28
-msgid "Add…"
-msgstr "Přidat…"
+#: src/resources/gtk/web-extensions-dialog.ui:26
+msgid "_Add…"
+msgstr "Přid_at…"
+
+#: src/resources/gtk/web-extensions-dialog.ui:40
+msgid "No Extensions Installed"
+msgstr "Není nainstalováno žádné rozšíření"
+
+#: src/resources/gtk/web-extensions-dialog.ui:41
+msgid "Add some extensions to display them here."
+msgstr "Přidejte si nějaké rozšíření a uvidíte je zde."
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
