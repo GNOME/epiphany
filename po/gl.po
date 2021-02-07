@@ -17,10 +17,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-02-04 11:08+0000\n"
-"PO-Revision-Date: 2021-02-04 17:56+0100\n"
+"POT-Creation-Date: 2021-02-06 12:58+0000\n"
+"PO-Revision-Date: 2021-02-07 01:22+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -218,9 +218,8 @@ msgstr ""
 "incógnito"
 
 #: data/org.gnome.epiphany.gschema.xml:76
-#, fuzzy
 msgid "Active clear data items."
-msgstr "Activar os elementos de datos limpos."
+msgstr "Activar limpeza de datos de elementos."
 
 #: data/org.gnome.epiphany.gschema.xml:77
 msgid ""
@@ -230,6 +229,12 @@ msgid ""
 "Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
 "Prevention data."
 msgstr ""
+"Selección (máscara de bits) cos elementos dos que limpar datos de maneira "
+"predeterminada. 1 = Cookies, 2 = Caché de disco HTTP, 4 = Datos de "
+"almacenamento local, 8 = caché de aplicacións web en modo desconectado, 16 = "
+"bases de datos IndexDB, 32 = bases de datos WebSQL, 64 = datos de "
+"complementos, 128 = caché de políticas HSTS, 256 = datos de prevención "
+"intelixente do rastreo."
 
 #: data/org.gnome.epiphany.gschema.xml:83
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -1109,7 +1114,7 @@ msgstr "Descarga solicitada"
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:276
 #: src/window-commands.c:334 src/window-commands.c:378
 #: src/window-commands.c:562 src/window-commands.c:647
-#: src/window-commands.c:809 src/window-commands.c:1891
+#: src/window-commands.c:809 src/window-commands.c:1888
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1520,7 +1525,7 @@ msgstr "Busca a seguinte aparición da cadea de busca"
 msgid "%s is not a valid URI"
 msgstr "%s non é un URI válido"
 
-#: embed/ephy-web-view.c:189 src/window-commands.c:1353
+#: embed/ephy-web-view.c:189 src/window-commands.c:1350
 msgid "Open"
 msgstr "Abrir"
 
@@ -2296,7 +2301,7 @@ msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:711 src/ephy-window.c:962
+#: lib/widgets/ephy-location-entry.c:711 src/ephy-window.c:964
 msgid "_Undo"
 msgstr "_Desfacer"
 
@@ -2450,11 +2455,11 @@ msgid "Mobile"
 msgstr "Móbil"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:50
 msgid "Reload the current page"
 msgstr "Recargar a páxina actual"
 
-#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:443
 msgid "Stop loading the current page"
 msgstr "Deter a carga da páxina actual"
 
@@ -2543,18 +2548,9 @@ msgid "Web options"
 msgstr "Opcións de Web"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-notebook.c:547 src/resources/gtk/action-bar-start.ui:95
+#: src/ephy-tab-view.c:628 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "Abrir unha lapela nova"
-
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:557
-msgid "View open tabs"
-msgstr "Ver lapelas abertas"
-
-#: src/ephy-tab-label.c:331
-msgid "New Tab"
-msgstr "Lapela nova"
 
 #: src/ephy-web-extension-dialog.c:73
 msgid "Do you really want to remove this extension?"
@@ -2587,211 +2583,216 @@ msgstr "Quitar a WebExtension seleccionada"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Abrir ficheiro (manifest.json/xpi)"
 
-#: src/ephy-window.c:279
+#: src/ephy-window.c:282
 msgid "Do you want to leave this website?"
 msgstr "Desexa saír do sitio web?"
 
-#: src/ephy-window.c:280 src/window-commands.c:1202
+#: src/ephy-window.c:283 src/window-commands.c:1199
 msgid "A form you modified has not been submitted."
 msgstr "Un formulario que modificou non foi remitido."
 
-#: src/ephy-window.c:281 src/window-commands.c:1204
+#: src/ephy-window.c:284 src/window-commands.c:1201
 msgid "_Discard form"
 msgstr "_Rexeitar formulario"
 
-#: src/ephy-window.c:296
+#: src/ephy-window.c:299
 msgid "There are multiple tabs open."
 msgstr "Hai varias lapelas abertas."
 
-#: src/ephy-window.c:297
+#: src/ephy-window.c:300
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se pecha a xanela, perderanse todas as lapelas"
 
-#: src/ephy-window.c:298
+#: src/ephy-window.c:301
 msgid "C_lose tabs"
 msgstr "P_echar lapelas"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:965
 msgid "Re_do"
 msgstr "Re_facer"
 
 #. Edit.
-#: src/ephy-window.c:966
+#: src/ephy-window.c:968
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:969
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:970
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:971
 msgid "_Paste Text Only"
 msgstr "_Pegar só texto"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:972
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:974
 msgid "S_end Link by Email…"
 msgstr "_Enviar a ligazón por correo electrónico…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:976
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:977
 msgid "_Back"
 msgstr "_Atrás"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:978
 msgid "_Forward"
 msgstr "_Adiante"
 
 #. Bookmarks
-#: src/ephy-window.c:979
+#: src/ephy-window.c:981
 msgid "Add Boo_kmark…"
 msgstr "Engadir mar_cador…"
 
 #. Links.
-#: src/ephy-window.c:983
+#: src/ephy-window.c:985
 msgid "Open Link in New _Window"
 msgstr "Abrir a ligazón nunha xanela _nova"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:986
 msgid "Open Link in New _Tab"
 msgstr "Abrir ligazón nunha _lapela nova"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:987
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir a ligazón nunha xanela de i_ncógnito"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:988
 msgid "_Save Link As…"
 msgstr "_Gardar a ligazón como…"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:989
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:990
 msgid "_Copy E-mail Address"
 msgstr "_Copiar enderezo de correo"
 
 #. Images.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:994
 msgid "View _Image in New Tab"
 msgstr "Ver _imaxe nunha lapela nova"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:995
 msgid "Copy I_mage Address"
 msgstr "Copiar o enderezo da i_maxe"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:996
 msgid "_Save Image As…"
 msgstr "_Gardar a imaxe como…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:997
 msgid "Set as _Wallpaper"
 msgstr "Definir como _fondo do escritorio"
 
 #. Video.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1001
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo nunha nova _xanela"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1002
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo nunha _lapela nova"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1003
 msgid "_Save Video As…"
 msgstr "_Gardar vídeo como…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1004
 msgid "_Copy Video Address"
 msgstr "_Copiar enderezo do vídeo"
 
 #. Audio.
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:1008
 msgid "Open Audio in New _Window"
 msgstr "Abrir audio nunha _xanela nova"
 
-#: src/ephy-window.c:1007
+#: src/ephy-window.c:1009
 msgid "Open Audio in New _Tab"
 msgstr "Abrir audio nunha _lapela nova"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1010
 msgid "_Save Audio As…"
 msgstr "_Gardar audio como…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1011
 msgid "_Copy Audio Address"
 msgstr "_Copiar enderezo do audio"
 
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:1017
 msgid "Save Pa_ge As…"
 msgstr "Gardar _páxina como…"
 
-#: src/ephy-window.c:1016
+#: src/ephy-window.c:1018
 msgid "_Page Source"
 msgstr "Código da _páxina"
 
-#: src/ephy-window.c:1386
+#: src/ephy-window.c:1388
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Busca no web por «%s»"
 
-#: src/ephy-window.c:1415
+#: src/ephy-window.c:1417
 msgid "Open Link"
 msgstr "Abrir ligazón"
 
-#: src/ephy-window.c:1417
+#: src/ephy-window.c:1419
 msgid "Open Link In New Tab"
 msgstr "Abrir ligazón nunha nova lapela"
 
-#: src/ephy-window.c:1419
+#: src/ephy-window.c:1421
 msgid "Open Link In New Window"
 msgstr "Abrir ligazón na nova xanela"
 
-#: src/ephy-window.c:1421
+#: src/ephy-window.c:1423
 msgid "Open Link In Incognito Window"
 msgstr "Abrir a ligazón nunha xanela de incógnito"
 
-#: src/ephy-window.c:3055
+#: src/ephy-window.c:2927
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:3057
+#: src/ephy-window.c:2929
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:3059
+#: src/ephy-window.c:2931
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operación de descarga activa"
 msgstr[1] "%d operacións de descarga activas"
 
-#: src/ephy-window.c:3675
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3450
+msgid "View open tabs"
+msgstr "Ver lapelas abertas"
+
+#: src/ephy-window.c:3581
 msgid "Set Web as your default browser?"
 msgstr "Desexa estabelecer Web como o seu navegador predeterminado?"
 
-#: src/ephy-window.c:3677
+#: src/ephy-window.c:3583
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Estabelecer a Tecnoloxía experimental de Epiphany como o seu navegador "
 "predeterminado?"
 
-#: src/ephy-window.c:3689
+#: src/ephy-window.c:3595
 msgid "_Yes"
 msgstr "_Si"
 
-#: src/ephy-window.c:3690
+#: src/ephy-window.c:3596
 msgid "_No"
 msgstr "_Non"
 
@@ -3314,7 +3315,6 @@ msgid "Open Appli_cation Manager"
 msgstr "Abrir o xestor de _aplicacións"
 
 #: src/resources/gtk/page-menu-popover.ui:277
-#| msgid "Extensions"
 msgid "E_xtensions"
 msgstr "E_xtensións"
 
@@ -3358,7 +3358,7 @@ msgstr "_Importar contrasinais…"
 msgid "Firefox _Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/page-row.ui:87
+#: src/resources/gtk/page-row.ui:88
 msgid "Close page"
 msgstr "Pechar páxina"
 
@@ -3918,10 +3918,6 @@ msgstr ""
 "dispositivos que usan Firefox Sync con esta conta. Abra unha lapela para "
 "comprobar o seu nome (as lapelas en Lapelas locais non se poden abrir)"
 
-#: src/resources/gtk/tab-label.ui:73
-msgid "Close Document"
-msgstr "Pechar o documento"
-
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:17
 msgid "Additional URLs"
 msgstr "URLs adicionais"
@@ -3959,17 +3955,14 @@ msgid "Extensions"
 msgstr "Extensións"
 
 #: src/resources/gtk/web-extensions-dialog.ui:26
-#| msgid "Add…"
 msgid "_Add…"
 msgstr "_Engadir…"
 
 #: src/resources/gtk/web-extensions-dialog.ui:40
-#| msgid "Extensions"
 msgid "No Extensions Installed"
 msgstr "Non hai ningunha extensión instalada"
 
 #: src/resources/gtk/web-extensions-dialog.ui:41
-#| msgid "Bookmark some webpages to view them here."
 msgid "Add some extensions to display them here."
 msgstr "Engada algunhas extensións para mostralas aquí."
 
@@ -4079,75 +4072,75 @@ msgstr "Sitio web"
 msgid "translator-credits"
 msgstr "Fran Dieguez <frandieguez@gnome.org>, 2010-2021."
 
-#: src/window-commands.c:1200
+#: src/window-commands.c:1197
 msgid "Do you want to reload this website?"
 msgstr "Desexa recargar este sitio web?"
 
-#: src/window-commands.c:1728
+#: src/window-commands.c:1725
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Xa existe unha aplicación web co nome «%s». Desexa substituilo?"
 
-#: src/window-commands.c:1731
+#: src/window-commands.c:1728
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1733
+#: src/window-commands.c:1730
 msgid "Replace"
 msgstr "Substituír"
 
-#: src/window-commands.c:1737
+#: src/window-commands.c:1734
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Xa existe unha aplicación co mesmo nome. Ao substituílo sobrescribirase."
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1826
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "A aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1832
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Non foi posíbel crear a aplicación «%s»"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1847
+#: src/window-commands.c:1844
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1888
+#: src/window-commands.c:1885
 msgid "Create Web Application"
 msgstr "Crear unha aplicación web"
 
-#: src/window-commands.c:1893
+#: src/window-commands.c:1890
 msgid "C_reate"
 msgstr "C_rear"
 
-#: src/window-commands.c:2108
+#: src/window-commands.c:2105
 msgid "Save"
 msgstr "Gardar"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2114
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2122
+#: src/window-commands.c:2119
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2127
+#: src/window-commands.c:2124
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2612
+#: src/window-commands.c:2609
 msgid "Enable caret browsing mode?"
 msgstr "Quere activar o modo de navegación co cursor?"
 
-#: src/window-commands.c:2615
+#: src/window-commands.c:2612
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4158,9 +4151,15 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: src/window-commands.c:2618
+#: src/window-commands.c:2615
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "New Tab"
+#~ msgstr "Lapela nova"
+
+#~ msgid "Close Document"
+#~ msgstr "Pechar o documento"
 
 #~ msgid "The position of the tabs bar."
 #~ msgstr "A posición da barra de lapelas."
