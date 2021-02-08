@@ -357,7 +357,10 @@ nautilus_floating_bar_constructed (GObject *obj)
   w = gtk_spinner_new ();
   gtk_box_pack_start (GTK_BOX (box), w, FALSE, FALSE, 0);
   gtk_widget_set_visible (w, self->show_spinner);
-  gtk_spinner_start (GTK_SPINNER (w));
+
+  g_object_bind_property (obj, "show-spinner",
+                          w, "active",
+                          G_BINDING_SYNC_CREATE);
   self->spinner = w;
 
   gtk_widget_set_size_request (w, 16, 16);
