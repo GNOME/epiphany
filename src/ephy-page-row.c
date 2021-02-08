@@ -44,6 +44,16 @@ struct _EphyPageRow {
 G_DEFINE_TYPE (EphyPageRow, ephy_page_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
+update_spinner (EphyPageRow *self)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)) &&
+      hdy_tab_page_get_loading (self->page))
+    gtk_spinner_start (self->spinner);
+  else
+    gtk_spinner_stop (self->spinner);
+}
+
+static void
 close_clicked_cb (EphyPageRow *self)
 {
   hdy_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
@@ -78,6 +88,7 @@ ephy_page_row_class_init (EphyPageRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, title);
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, close_button);
+  gtk_widget_class_bind_template_callback (widget_class, update_spinner);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, button_release_event);
 }
@@ -165,6 +176,9 @@ ephy_page_row_new (EphyTabView *tab_view,
                                (GBindingTransformFunc)loading_to_visible_child,
                                NULL,
                                self, NULL);
+  g_signal_connect_object (page, "notify::loading",
+                           G_CALLBACK (update_spinner), self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (view, "notify::icon",
                            G_CALLBACK (update_icon_cb), self,

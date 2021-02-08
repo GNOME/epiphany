@@ -4,6 +4,8 @@
   <requires lib="gtk+" version="3.16"/>
   <template class="EphyPageRow" parent="GtkListBoxRow">
     <property name="can_focus">True</property>
+    <signal name="map" handler="update_spinner" swapped="true"/>
+    <signal name="unmap" handler="update_spinner" swapped="true"/>
     <child>
       <object class="GtkEventBox">
         <property name="visible">True</property>
@@ -34,11 +36,7 @@
                   <object class="GtkSpinner" id="spinner">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="active">True</property>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
               <packing>
