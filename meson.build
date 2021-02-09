@@ -75,7 +75,7 @@ conf.set10('ENABLE_GSB', gsb_api_key != '')
 glib_requirement = '>= 2.64.0'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.31.1'
+webkitgtk_requirement = '>= 2.31.2'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
