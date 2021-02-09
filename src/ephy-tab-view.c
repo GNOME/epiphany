@@ -316,6 +316,9 @@ ephy_tab_view_get_selected_page (EphyTabView *self)
 {
   HdyTabPage *page = hdy_tab_view_get_selected_page (self->tab_view);
 
+  if (!page)
+    return NULL;
+
   return hdy_tab_page_get_child (page);
 }
 
@@ -476,7 +479,12 @@ ephy_tab_view_add_tab (EphyTabView *self,
 GtkWidget *
 ephy_tab_view_get_current_page (EphyTabView *self)
 {
-  return hdy_tab_page_get_child (get_current_page (self));
+  HdyTabPage *page = get_current_page (self);
+
+  if (!page)
+    return NULL;
+
+  return hdy_tab_page_get_child (page);
 }
 
 static void
