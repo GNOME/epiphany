@@ -667,7 +667,27 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
 
-  set_up_webextensions (extension, page, js_context);
+  /* If we are using the default script world, then we are a WebExtension. We
+   * must not register any internal Epiphany APIs, since they must never be
+   * accessible in the default script world. We don't want them exposed to the
+   * web or to WebExtensions. If we were to improperly allow access to our
+   * internal APIs, then malicious web content could do nasty things like
+   * iterate through passwords stored in EphyPasswordsManager, for example.
+   *
+   * And if we are not using the default script world, then we are not a
+   * WebExtension. There is no point in registering WebExtension APIs, because
+   * WebExtensions only have access to what is in the default script world
+   * anyway.
+   *
+   * FIXME: let's try to make this less confusing:
+   *
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/1448
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/1449
+   */
+  if (extension->script_world == webkit_script_world_get_default ()) {
+    set_up_webextensions (extension, page, js_context);
+    return;
+  }
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
