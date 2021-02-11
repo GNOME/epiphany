@@ -43,8 +43,8 @@ html {
 }
 
 h1 {
-    opacity: 0.55; /* Adwaita's dim-label */
-    text-shadow: 0 1px 0 var(--base-color);
+    font-size: 24pt;
+    font-weight: 300;
     margin-bottom: 0;
 }
 
@@ -80,7 +80,6 @@ h1 {
 }
 
 #about-title {
-    opacity: 1;
     font-weight: 800;
 }
 
@@ -234,7 +233,6 @@ html.epiphany-html {
 }
 
 .incognito-body h1 {
-    opacity: 0.55; /* Adwaita's dim-label */
     text-align:center;
 }
 
@@ -393,20 +391,21 @@ html[dir="rtl"] .overview-item {
     margin-right: auto;
     height: 80%;
     max-width: 800px;
-    opacity: 0.55; /* Adwaita's dim-label */
     -webkit-user-select: none;
     -webkit-user-drag: none;
 }
 
 .overview-empty h1 {
     color: var(--text-color);
-    opacity: 0.55; /* Adwaita's dim-label */
-    text-shadow: none;
+}
+
+.overview-empty p {
+    text-align: center;
 }
 
 .overview-empty img {
     -webkit-user-select: none;
     -webkit-user-drag: none;
-    filter: grayscale(100%);
+    opacity: 0.55; /* Adwaita's dim-label */
     width: 128px;
 }
