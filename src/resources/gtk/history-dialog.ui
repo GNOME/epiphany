@@ -162,21 +162,21 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkStack" id="history_presentation_stack">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
             <property name="vexpand">True</property>
-            <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
             <child>
-              <object class="HdyClamp">
+              <object class="GtkScrolledWindow" id="history_scrolled_window">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_start">6</property>
-                <property name="margin_end">6</property>
-                <property name="maximum_size">1024</property>
+                <property name="can_focus">True</property>
+                <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
                 <child>
-                  <object class="GtkStack" id="history_presentation_stack">
+                  <object class="HdyClamp">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
+                    <property name="maximum_size">1024</property>
                     <child>
                       <object class="GtkListBox" id="listbox">
                         <property name="visible">True</property>
@@ -193,139 +193,29 @@
                         </style>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkSpinner" id="loading_spinner">
-                        <property name="can_focus">False</property>
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="name">loading</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="empty_history_message">
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="orientation">vertical</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">web-browser-symbolic</property>
-                            <property name="icon_size">0</property>
-                            <property name="margin_bottom">18</property>
-                            <property name="pixel_size">128</property>
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="can_focus">False</property>
-                            <property name="margin_end">12</property>
-                            <property name="margin_start">12</property>
-                            <property name="orientation">vertical</property>
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel" id="empty_title_label">
-                                <property name="can_focus">False</property>
-                                <property name="halign">center</property>
-                                <property name="justify">center</property>
-                                <property name="margin_bottom">12</property>
-                                <property name="opacity">0.5</property>
-                                <property name="visible">True</property>
-                                <property name="wrap">True</property>
-                                <property name="label" translatable="yes">The History is Empty</property>
-                                <attributes>
-                                  <attribute name="scale" value="2"/>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="empty_description_label">
-                                <property name="can_focus">False</property>
-                                <property name="justify">center</property>
-                                <property name="margin_bottom">6</property>
-                                <property name="opacity">0.5</property>
-                                <property name="use_markup">True</property>
-                                <property name="visible">True</property>
-                                <property name="wrap">True</property>
-                                <property name="label" translatable="yes">Visited pages will be listed here</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="no_search_results_message">
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="orientation">vertical</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">edit-find-symbolic</property>
-                            <property name="icon_size">0</property>
-                            <property name="margin_bottom">18</property>
-                            <property name="pixel_size">128</property>
-                            <property name="valign">center</property>
-                            <property name="visible">True</property>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="can_focus">False</property>
-                            <property name="margin_end">12</property>
-                            <property name="margin_start">12</property>
-                            <property name="orientation">vertical</property>
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="can_focus">False</property>
-                                <property name="halign">center</property>
-                                <property name="justify">center</property>
-                                <property name="label" translatable="yes">No Results Found</property>
-                                <property name="margin_bottom">12</property>
-                                <property name="opacity">0.5</property>
-                                <property name="visible">True</property>
-                                <property name="wrap">True</property>
-                                <attributes>
-                                  <attribute name="scale" value="2"/>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="can_focus">False</property>
-                                <property name="justify">center</property>
-                                <property name="label" translatable="yes">Try a different search</property>
-                                <property name="margin_bottom">6</property>
-                                <property name="opacity">0.5</property>
-                                <property name="use_markup">True</property>
-                                <property name="visible">True</property>
-                                <property name="wrap">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="loading_spinner">
+                <property name="can_focus">False</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="HdyStatusPage" id="empty_history_message">
+                <property name="visible">True</property>
+                <property name="title" translatable="yes">The History is Empty</property>
+                <property name="description" translatable="yes">Visited pages will be listed here</property>
+              </object>
+            </child>
+            <child>
+              <object class="HdyStatusPage" id="no_search_results_message">
+                <property name="visible">True</property>
+                <property name="icon_name">edit-find-symbolic</property>
+                <property name="title" translatable="yes">No Results Found</property>
+                <property name="description" translatable="yes">Try a different search</property>
               </object>
             </child>
           </object>

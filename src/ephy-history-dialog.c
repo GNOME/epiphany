@@ -59,6 +59,7 @@ struct _EphyHistoryDialog {
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkWidget *history_presentation_stack;
+  GtkWidget *history_scrolled_window;
   GtkWidget *listbox;
   GtkWidget *loading_spinner;
   GtkWidget *empty_history_message;
@@ -115,12 +116,12 @@ update_ui_state (EphyHistoryDialog *self)
   } else {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button))) {
       if (has_data && self->has_search_results)
-        gtk_stack_set_visible_child (history_presentation_stack, self->listbox);
+        gtk_stack_set_visible_child (history_presentation_stack, self->history_scrolled_window);
       else
         gtk_stack_set_visible_child (history_presentation_stack, self->no_search_results_message);
     } else {
       if (has_data)
-        gtk_stack_set_visible_child (history_presentation_stack, self->listbox);
+        gtk_stack_set_visible_child (history_presentation_stack, self->history_scrolled_window);
       else
         gtk_stack_set_visible_child (history_presentation_stack, self->empty_history_message);
     }
@@ -904,6 +905,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_entry);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, history_presentation_stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, history_scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, loading_spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, empty_history_message);
@@ -970,4 +972,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   gtk_widget_set_tooltip_text (self->clear_all_button, tooltip);
   set_is_loading (self, TRUE);
+
+  hdy_status_page_set_icon_name (HDY_STATUS_PAGE (self->empty_history_message),
+                                 APPLICATION_ID "-symbolic");
 }
