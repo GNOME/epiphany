@@ -18,6 +18,7 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "ephy-data-view.h"
 
 #include <ctype.h>
@@ -32,8 +33,7 @@ typedef struct {
   GtkWidget *search_entry;
   GtkWidget *search_button;
   GtkWidget *stack;
-  GtkWidget *empty_title_label;
-  GtkWidget *empty_description_label;
+  GtkWidget *empty_page;
   GtkWidget *spinner;
 
   gboolean is_loading : 1;
@@ -200,10 +200,10 @@ ephy_data_view_set_property (GObject      *object,
       atk_object_set_description (gtk_widget_get_accessible (GTK_WIDGET (self)), g_value_get_string (value));
       break;
     case PROP_EMPTY_TITLE:
-      gtk_label_set_text (GTK_LABEL (priv->empty_title_label), g_value_get_string (value));
+      hdy_status_page_set_title (HDY_STATUS_PAGE (priv->empty_page), g_value_get_string (value));
       break;
     case PROP_EMPTY_DESCRIPTION:
-      gtk_label_set_text (GTK_LABEL (priv->empty_description_label), g_value_get_string (value));
+      hdy_status_page_set_description (HDY_STATUS_PAGE (priv->empty_page), g_value_get_string (value));
       break;
     case PROP_IS_LOADING:
       ephy_data_view_set_is_loading (self, g_value_get_boolean (value));
@@ -252,10 +252,10 @@ ephy_data_view_get_property (GObject    *object,
       g_value_set_string (value, gtk_entry_get_placeholder_text (GTK_ENTRY (priv->search_entry)));
       break;
     case PROP_EMPTY_TITLE:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->empty_title_label)));
+      g_value_set_string (value, hdy_status_page_get_title (HDY_STATUS_PAGE (priv->empty_page)));
       break;
     case PROP_EMPTY_DESCRIPTION:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->empty_description_label)));
+      g_value_set_string (value, hdy_status_page_get_description (HDY_STATUS_PAGE (priv->empty_page)));
       break;
     case PROP_SEARCH_TEXT:
       g_value_set_string (value, ephy_data_view_get_search_text (self));
@@ -445,8 +445,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, back_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_button);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_title_label);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_description_label);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_page);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_entry);
@@ -466,6 +465,9 @@ ephy_data_view_init (EphyDataView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   hdy_search_bar_connect_entry (HDY_SEARCH_BAR (priv->search_bar), GTK_ENTRY (priv->search_entry));
+
+  hdy_status_page_set_icon_name (HDY_STATUS_PAGE (priv->empty_page),
+                                 APPLICATION_ID "-symbolic");
 
   update (self);
 }
