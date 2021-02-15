@@ -63,12 +63,46 @@ reader_font_style_get_name (HdyEnumValueObject *value,
 
   switch (hdy_enum_value_object_get_value (value)) {
     case EPHY_PREFS_READER_FONT_STYLE_SANS:
-      return g_strdup (_("Sans"));
+      return g_strdup_printf ("<span font-family=\"%s\">%s</span>", "sans", _("Sans"));
     case EPHY_PREFS_READER_FONT_STYLE_SERIF:
-      return g_strdup (_("Serif"));
+      return g_strdup_printf ("<span font-family=\"%s\">%s</span>", "serif", _("Serif"));
     default:
       return NULL;
   }
+}
+
+static GtkWidget *
+reader_font_style_create_list_widget (gpointer item,
+                                      gpointer user_data)
+{
+  g_autofree gchar *name = reader_font_style_get_name (item, NULL);
+
+  return g_object_new (GTK_TYPE_LABEL,
+                       "ellipsize", PANGO_ELLIPSIZE_END,
+                       "label", name,
+                       "use-markup", TRUE,
+                       "max-width-chars", 20,
+                       "valign", GTK_ALIGN_CENTER,
+                       "visible", TRUE,
+                       "xalign", 0.0,
+                       NULL);
+}
+
+static GtkWidget *
+reader_font_style_create_current_widget (gpointer item,
+                                         gpointer user_data)
+{
+  g_autofree gchar *name = reader_font_style_get_name (item, NULL);
+
+  return g_object_new (GTK_TYPE_LABEL,
+                       "ellipsize", PANGO_ELLIPSIZE_END,
+                       "halign", GTK_ALIGN_END,
+                       "label", name,
+                       "use-markup", TRUE,
+                       "valign", GTK_ALIGN_CENTER,
+                       "visible", TRUE,
+                       "xalign", 0.0,
+                       NULL);
 }
 
 static gboolean
@@ -247,6 +281,26 @@ on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
 }
 
 static void
+setup_font_row (PrefsAppearancePage *appearance_page)
+{
+  g_autoptr (GListStore) store = g_list_store_new (HDY_TYPE_ENUM_VALUE_OBJECT);
+  g_autoptr (GEnumClass) enum_class = g_type_class_ref (EPHY_TYPE_PREFS_READER_FONT_STYLE);
+
+  for (guint i = 0; i < enum_class->n_values; i++) {
+    g_autoptr (HdyEnumValueObject) obj = hdy_enum_value_object_new (&enum_class->values[i]);
+
+    g_list_store_append (store, obj);
+  }
+
+  hdy_combo_row_bind_model (HDY_COMBO_ROW (appearance_page->reader_mode_font_style),
+                            G_LIST_MODEL (store),
+                            (GtkListBoxCreateWidgetFunc)reader_font_style_create_list_widget,
+                            (GtkListBoxCreateWidgetFunc)reader_font_style_create_current_widget,
+                            NULL,
+                            NULL);
+}
+
+static void
 setup_appearance_page (PrefsAppearancePage *appearance_page)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
@@ -282,9 +336,8 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
   /* ======================================================================== */
   /* ========================== Reader Mode ================================= */
   /* ======================================================================== */
-  hdy_combo_row_set_for_enum (HDY_COMBO_ROW (appearance_page->reader_mode_font_style),
-                              EPHY_TYPE_PREFS_READER_FONT_STYLE,
-                              reader_font_style_get_name, NULL, NULL);
+
+  setup_font_row (appearance_page);
 
   g_settings_bind_with_mapping (reader_settings,
                                 EPHY_PREFS_READER_FONT_STYLE,
