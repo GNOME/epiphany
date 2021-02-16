@@ -17,23 +17,23 @@
 # Bernd Homuth <dev@hmt.im>, 2015, 2016.
 # Franco Della-Monica <franco.della.monica@gmail.com>, 2016.
 # Benjamin Steinwender <b@stbe.at>, 2017.
-# Tim Sabsch <tim@sabsch.com>, 2019-2020.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2021.
+# Tim Sabsch <tim@sabsch.com>, 2019-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-02-06 12:58+0000\n"
-"PO-Revision-Date: 2021-02-10 01:00+0100\n"
-"Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
+"POT-Creation-Date: 2021-02-16 09:23+0000\n"
+"PO-Revision-Date: 2021-02-14 14:26+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -145,6 +145,8 @@ msgstr "Google-Suchvorschläge aktivieren"
 #: data/org.gnome.epiphany.gschema.xml:39
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr ""
+"Legt fest, ob Google-Suchvorschläge in der Auswahlliste unterhalb der "
+"Adressleiste angezeigt werden sollen"
 
 #: data/org.gnome.epiphany.gschema.xml:43
 msgid "Force new windows to be opened in tabs"
@@ -225,7 +227,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:76
 msgid "Active clear data items."
-msgstr ""
+msgstr "Voreinstellung der zu löschenden Daten"
 
 #: data/org.gnome.epiphany.gschema.xml:77
 msgid ""
@@ -235,6 +237,11 @@ msgid ""
 "Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
 "Prevention data."
 msgstr ""
+"Auswahl (als Bitmaske), welche Daten standardmäßig gelöscht werden sollen. 1 "
+"= Cookies, 2 = HTTP-Laufwerkzwischenspeicher, 4 = Lokal gespeicherte Daten, "
+"8 = Offline-Speicher für Web-Anwendungen, 16 = IndexDB-Datenbanken, 32 = "
+"WebSQL-Datenbanken, 64 = Daten von Erweiterungen, 128 = Cache der HSTS-Richtlinien, 256 "
+"= Daten zur intelligenten Nachverfolgungsunterbindung"
 
 #: data/org.gnome.epiphany.gschema.xml:83
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -2219,7 +2226,7 @@ msgstr ""
 "unsicher gesendet."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:346
+#: src/resources/gtk/history-dialog.ui:236
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Alle _leeren"
@@ -2290,7 +2297,7 @@ msgid "Starting…"
 msgstr "Wird gestartet …"
 
 #: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:243
-#: src/resources/gtk/history-dialog.ui:387
+#: src/resources/gtk/history-dialog.ui:277
 msgid "_Open"
 msgstr "Ö_ffnen"
 
@@ -2314,7 +2321,7 @@ msgstr "Alle Dateien"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:563
+#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:564
 msgid "Cl_ear"
 msgstr "_Leeren"
 
@@ -2498,23 +2505,23 @@ msgstr "Zuletzt abgeglichen: %s"
 msgid "Something went wrong, please try again later."
 msgstr "Etwas ging schief, bitte versuchen Sie es später erneut."
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:964
+#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:966
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Es ist im Inkognito-Modus nicht möglich, die Chronik zu bearbeiten."
 
-#: src/ephy-history-dialog.c:456
+#: src/ephy-history-dialog.c:457
 msgid "Remove the selected pages from history"
 msgstr "Die gewählten Seiten aus der Chronik löschen"
 
-#: src/ephy-history-dialog.c:463
+#: src/ephy-history-dialog.c:464
 msgid "Copy URL"
 msgstr "Adresse kopieren"
 
-#: src/ephy-history-dialog.c:553
+#: src/ephy-history-dialog.c:554
 msgid "Clear browsing history?"
 msgstr "Soll die Browser-Chronik geleert werden?"
 
-#: src/ephy-history-dialog.c:557
+#: src/ephy-history-dialog.c:558
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2522,7 +2529,7 @@ msgstr ""
 "Das Leeren der Browser-Chronik sorgt dafür, dass alle Verweise in der "
 "Chronik dauerhaft gelöscht werden."
 
-#: src/ephy-history-dialog.c:967
+#: src/ephy-history-dialog.c:969
 msgid "Remove all history"
 msgstr "Gesamte Chronik entfernen"
 
@@ -2572,7 +2579,7 @@ msgid "Web options"
 msgstr "Web-Einstellungen"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:628 src/resources/gtk/action-bar-start.ui:95
+#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "Einen neuen Reiter öffnen"
 
@@ -2867,19 +2874,19 @@ msgstr "Cache der HSTS-Richtlinien"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Daten zur intelligenten Nachverfolgungsunterbindung"
 
-#: src/preferences/ephy-search-engine-row.c:197
+#: src/preferences/ephy-search-engine-row.c:199
 msgid "This field is required"
 msgstr "Dieses Feld ist erforderlich"
 
-#: src/preferences/ephy-search-engine-row.c:202
+#: src/preferences/ephy-search-engine-row.c:204
 msgid "Address must start with either http:// or https://"
 msgstr "Adresse muss entweder mit http:// oder https:// beginnen"
 
-#: src/preferences/ephy-search-engine-row.c:208
+#: src/preferences/ephy-search-engine-row.c:210
 msgid "Address is not a valid URI"
 msgstr "Adresse ist keine gültige URI"
 
-#: src/preferences/ephy-search-engine-row.c:215
+#: src/preferences/ephy-search-engine-row.c:217
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2888,24 +2895,24 @@ msgstr ""
 "Adresse ist keine gültige URL. Die Adresse sollte so aussehen: https://www."
 "example.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:221
+#: src/preferences/ephy-search-engine-row.c:223
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Die Adresse muss den Suchbegriff enthalten, der mit %s gegeben ist"
 
-#: src/preferences/ephy-search-engine-row.c:227
+#: src/preferences/ephy-search-engine-row.c:229
 msgid "Address should not contain the search term several times"
 msgstr "Adresse sollte den Suchbegriff nicht mehrmals enthalten"
 
-#: src/preferences/ephy-search-engine-row.c:272
+#: src/preferences/ephy-search-engine-row.c:274
 msgid "This shortcut is already used."
 msgstr "Diese Tastenkombination wird bereits verwendet."
 
-#: src/preferences/ephy-search-engine-row.c:417
+#: src/preferences/ephy-search-engine-row.c:422
 msgid "A name is required"
 msgstr "Ein Name ist erforderlich"
 
-#: src/preferences/ephy-search-engine-row.c:419
+#: src/preferences/ephy-search-engine-row.c:424
 msgid "This search engine already exists"
 msgstr "Diese Suchmaschine existiert bereits"
 
@@ -2919,7 +2926,7 @@ msgstr ""
 "Dadurch werden alle lokal gespeicherten Passwörter gelöscht und dieser "
 "Vorgang kann nicht rückgängig gemacht werden."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:260
 msgid "_Delete"
 msgstr "_Löschen"
 
@@ -3120,11 +3127,11 @@ msgstr ""
 msgid "Search"
 msgstr "Suchen"
 
-#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:300
+#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
 msgid "No Results Found"
 msgstr "Keine Ergebnisse gefunden"
 
-#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:315
+#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
 msgid "Try a different search"
 msgstr "Eine andere Suche ausprobieren"
 
@@ -3227,11 +3234,11 @@ msgstr "Elemente auswählen"
 msgid "Search history"
 msgstr "Suchchronik"
 
-#: src/resources/gtk/history-dialog.ui:243
+#: src/resources/gtk/history-dialog.ui:209
 msgid "The History is Empty"
 msgstr "Die Chronik ist leer"
 
-#: src/resources/gtk/history-dialog.ui:259
+#: src/resources/gtk/history-dialog.ui:210
 msgid "Visited pages will be listed here"
 msgstr "Hier werden besuchte Seiten aufgelistet"
 
@@ -3381,7 +3388,7 @@ msgstr "Passwörter _importieren …"
 msgid "Firefox _Sync"
 msgstr "Firefox _Sync"
 
-#: src/resources/gtk/page-row.ui:88
+#: src/resources/gtk/page-row.ui:87
 msgid "Close page"
 msgstr "Seite schließen"
 
@@ -3598,7 +3605,7 @@ msgstr "Suchvorschläge"
 
 #: src/resources/gtk/prefs-privacy-page.ui:70
 msgid "Enable search suggestions in the URL entry."
-msgstr ""
+msgstr "Suchvorschläge in der Adressleiste aktivieren."
 
 #: src/resources/gtk/prefs-privacy-page.ui:71
 msgid "_Google Search Suggestions"
