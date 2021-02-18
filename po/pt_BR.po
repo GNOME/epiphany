@@ -30,8 +30,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-01-28 15:43+0000\n"
-"PO-Revision-Date: 2021-01-30 18:01-0300\n"
+"POT-Creation-Date: 2021-02-13 08:37+0000\n"
+"PO-Revision-Date: 2021-02-17 22:28-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -145,7 +145,6 @@ msgstr ""
 "pesquisa é descrito por um nome, um endereço e um “bang” (atalho)."
 
 #: data/org.gnome.epiphany.gschema.xml:38
-#| msgid "Manage Search Engines"
 msgid "Enable Google Search Suggestions"
 msgstr "Habilitar sugestões de pesquisa do Google"
 
@@ -587,7 +586,6 @@ msgid "Whether to automatically switch to a new open tab."
 msgstr "Se deve automaticamente alternar para uma nova aba."
 
 #: data/org.gnome.epiphany.gschema.xml:240
-#| msgid "Enable WebAudio"
 msgid "Enable WebExtensions"
 msgstr "Habilitar WebExtensions"
 
@@ -620,7 +618,6 @@ msgid "Show navigation buttons in WebApp"
 msgstr "Mostrar botões de navegação em WebApp"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-#| msgid "Whether to show buttons for navigation."
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "Se deve mostrar botões para navegação em WebApp."
 
@@ -1122,13 +1119,13 @@ msgid "Download requested"
 msgstr "Download requisitado"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
-#: src/ephy-web-extension-dialog.c:76 src/ephy-web-extension-dialog.c:215
+#: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:242
 #: src/resources/gtk/firefox-sync-dialog.ui:173
 #: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:276
 #: src/window-commands.c:334 src/window-commands.c:378
 #: src/window-commands.c:562 src/window-commands.c:647
-#: src/window-commands.c:809 src/window-commands.c:1891
+#: src/window-commands.c:809 src/window-commands.c:1888
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1172,7 +1169,7 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:787
+#: embed/ephy-embed.c:807
 msgid "Web is being controlled by automation."
 msgstr "Web está sendo controlado por automação."
 
@@ -1539,8 +1536,7 @@ msgstr "Localiza a próxima ocorrência da palavra ou frase"
 msgid "%s is not a valid URI"
 msgstr "%s não é uma URI válida"
 
-#: embed/ephy-web-view.c:189 src/ephy-web-extension-dialog.c:166
-#: src/window-commands.c:1353
+#: embed/ephy-web-view.c:189 src/window-commands.c:1350
 msgid "Open"
 msgstr "Abrir"
 
@@ -2213,7 +2209,7 @@ msgstr ""
 "forma insegura."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:346
+#: src/resources/gtk/history-dialog.ui:236
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Limpar tudo"
@@ -2283,8 +2279,8 @@ msgstr "Cancelando…"
 msgid "Starting…"
 msgstr "Iniciando…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:217
-#: src/resources/gtk/history-dialog.ui:387
+#: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:243
+#: src/resources/gtk/history-dialog.ui:277
 msgid "_Open"
 msgstr "A_brir"
 
@@ -2308,20 +2304,20 @@ msgstr "Todos os arquivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:671 src/ephy-history-dialog.c:563
+#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:564
 msgid "Cl_ear"
 msgstr "_Limpar"
 
-#: lib/widgets/ephy-location-entry.c:691
+#: lib/widgets/ephy-location-entry.c:690
 msgid "Paste and _Go"
 msgstr "C_olar e ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:712 src/ephy-window.c:957
+#: lib/widgets/ephy-location-entry.c:711 src/ephy-window.c:964
 msgid "_Undo"
 msgstr "Desfa_zer"
 
-#: lib/widgets/ephy-location-entry.c:719
+#: lib/widgets/ephy-location-entry.c:718
 msgid "_Redo"
 msgstr "_Refazer"
 
@@ -2333,11 +2329,11 @@ msgstr "Mostra o status e permissões de segurança do site"
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Pesquisa por sites, favoritos e abas abertas"
 
-#: lib/widgets/ephy-location-entry.c:1058
+#: lib/widgets/ephy-location-entry.c:1050
 msgid "Bookmark this page"
 msgstr "Adiciona esta página aos favoritos"
 
-#: lib/widgets/ephy-location-entry.c:1077
+#: lib/widgets/ephy-location-entry.c:1069
 msgid "Toggle reader mode"
 msgstr "Ativa/desativa o modo de leitura"
 
@@ -2471,11 +2467,11 @@ msgid "Mobile"
 msgstr "Móvel"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:50
 msgid "Reload the current page"
 msgstr "Recarrega a página atual"
 
-#: src/ephy-action-bar-start.c:640 src/ephy-header-bar.c:444
+#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:443
 msgid "Stop loading the current page"
 msgstr "Para de carregar a página atual"
 
@@ -2491,23 +2487,23 @@ msgstr "Última sincronização: %s"
 msgid "Something went wrong, please try again later."
 msgstr "Alguma coisa deu errado, por favor tente novamente depois."
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:964
+#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:966
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Não é possível modificar o histórico no modo anônimo."
 
-#: src/ephy-history-dialog.c:456
+#: src/ephy-history-dialog.c:457
 msgid "Remove the selected pages from history"
 msgstr "Remove as páginas selecionadas do histórico"
 
-#: src/ephy-history-dialog.c:463
+#: src/ephy-history-dialog.c:464
 msgid "Copy URL"
 msgstr "Copia URL"
 
-#: src/ephy-history-dialog.c:553
+#: src/ephy-history-dialog.c:554
 msgid "Clear browsing history?"
 msgstr "Limpar o histórico de navegação?"
 
-#: src/ephy-history-dialog.c:557
+#: src/ephy-history-dialog.c:558
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2515,7 +2511,7 @@ msgstr ""
 "Limpar o histórico de navegação fará com que todos os links do histórico "
 "sejam apagados."
 
-#: src/ephy-history-dialog.c:967
+#: src/ephy-history-dialog.c:969
 msgid "Remove all history"
 msgstr "Remover todo histórico"
 
@@ -2564,264 +2560,249 @@ msgid "Web options"
 msgstr "Opções da web"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-notebook.c:547 src/resources/gtk/action-bar-start.ui:95
+#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "Abre em nova aba"
 
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:557
-msgid "View open tabs"
-msgstr "Visualiza as abas abertas"
-
-#: src/ephy-tab-header-bar.c:68
-msgid "Tabs"
-msgstr "Abas"
-
-#: src/ephy-tab-label.c:331
-msgid "New Tab"
-msgstr "Nova aba"
-
-#: src/ephy-web-extension-dialog.c:74
-#| msgid "Do you want to leave this website?"
+#: src/ephy-web-extension-dialog.c:73
 msgid "Do you really want to remove this extension?"
 msgstr "Tem certeza de que deseja remover esta extensão?"
 
-#: src/ephy-web-extension-dialog.c:78
+#: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
 #: src/resources/gtk/bookmark-properties-grid.ui:176
 msgid "_Remove"
 msgstr "_Remover"
 
-#: src/ephy-web-extension-dialog.c:148
+#: src/ephy-web-extension-dialog.c:165
 msgid "Author"
 msgstr "Autor"
 
-#: src/ephy-web-extension-dialog.c:157
-#| msgid "Version %s"
+#: src/ephy-web-extension-dialog.c:174
 msgid "Version"
 msgstr "Versão"
 
-#: src/ephy-web-extension-dialog.c:165
+#: src/ephy-web-extension-dialog.c:183
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Página inicial"
 
-#: src/ephy-web-extension-dialog.c:174
-msgid "Remove"
-msgstr "Remover"
-
-#: src/ephy-web-extension-dialog.c:178
-#| msgid "Remove selected personal data"
+#: src/ephy-web-extension-dialog.c:200
 msgid "Remove selected WebExtension"
 msgstr "Remove a WebExtension selecionada"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:212
+#: src/ephy-web-extension-dialog.c:239
 msgid "Open File (manifest.json/xpi)"
 msgstr "Abrir arquivo (manifest.json/xpi)"
 
-#: src/ephy-window.c:276
+#: src/ephy-window.c:282
 msgid "Do you want to leave this website?"
 msgstr "Você deseja sair deste site?"
 
-#: src/ephy-window.c:277 src/window-commands.c:1202
+#: src/ephy-window.c:283 src/window-commands.c:1199
 msgid "A form you modified has not been submitted."
 msgstr "Uma formulário que você modificou não foi enviado."
 
-#: src/ephy-window.c:278 src/window-commands.c:1204
+#: src/ephy-window.c:284 src/window-commands.c:1201
 msgid "_Discard form"
 msgstr "_Descartar formulário"
 
-#: src/ephy-window.c:293
+#: src/ephy-window.c:299
 msgid "There are multiple tabs open."
 msgstr "Há várias abas abertas."
 
-#: src/ephy-window.c:294
+#: src/ephy-window.c:300
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se você fechar essa janela, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:295
+#: src/ephy-window.c:301
 msgid "C_lose tabs"
 msgstr "_Fechar abas"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:965
 msgid "Re_do"
 msgstr "_Refazer"
 
 #. Edit.
-#: src/ephy-window.c:961
+#: src/ephy-window.c:968
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:969
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:970
 msgid "_Paste"
 msgstr "C_olar"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:971
 msgid "_Paste Text Only"
 msgstr "C_olar apenas texto"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:972
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:974
 msgid "S_end Link by Email…"
 msgstr "E_nviar link por e-mail…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:976
 msgid "_Reload"
 msgstr "_Recarregar"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:977
 msgid "_Back"
 msgstr "_Voltar"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:978
 msgid "_Forward"
 msgstr "Ava_nçar"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:981
 msgid "Add Boo_kmark…"
 msgstr "Adicionar aos _favoritos…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:985
 msgid "Open Link in New _Window"
 msgstr "Abrir link em nova _janela"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:986
 msgid "Open Link in New _Tab"
 msgstr "Abrir link em nova a_ba"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:987
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir link em janela anôn_ima"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:988
 msgid "_Save Link As…"
 msgstr "Salvar link _como…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:989
 msgid "_Copy Link Address"
 msgstr "Copiar endereço do _link"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:990
 msgid "_Copy E-mail Address"
 msgstr "_Copiar endereço de e-mail"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:994
 msgid "View _Image in New Tab"
 msgstr "Ver _imagem em nova aba"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:995
 msgid "Copy I_mage Address"
 msgstr "Copiar endereço da i_magem"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:996
 msgid "_Save Image As…"
 msgstr "_Salvar imagem como…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:997
 msgid "Set as _Wallpaper"
 msgstr "Definir como _papel de parede"
 
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:1001
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo em nova _janela"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:1002
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo em nova a_ba"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:1003
 msgid "_Save Video As…"
 msgstr "Sal_var vídeo como…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:1004
 msgid "_Copy Video Address"
 msgstr "_Copiar endereço de vídeo"
 
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1008
 msgid "Open Audio in New _Window"
 msgstr "Abrir áudio em nova _janela"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1009
 msgid "Open Audio in New _Tab"
 msgstr "Abrir áudio em nova a_ba"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1010
 msgid "_Save Audio As…"
 msgstr "Sal_var áudio como…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1011
 msgid "_Copy Audio Address"
 msgstr "_Copiar endereço de áudio"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1017
 msgid "Save Pa_ge As…"
 msgstr "Salvar pá_gina como…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1018
 msgid "_Page Source"
 msgstr "Có_digo-fonte da página"
 
-#: src/ephy-window.c:1381
+#: src/ephy-window.c:1388
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Pesquisar na web por “%s”"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1417
 msgid "Open Link"
 msgstr "Abrir link"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1419
 msgid "Open Link In New Tab"
 msgstr "Abrir link em nova aba"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1421
 msgid "Open Link In New Window"
 msgstr "Abrir link em nova janela"
 
-#: src/ephy-window.c:1416
+#: src/ephy-window.c:1423
 msgid "Open Link In Incognito Window"
 msgstr "Abrir link em janela anônima"
 
-#: src/ephy-window.c:3078
+#: src/ephy-window.c:2927
 msgid "Download operation"
 msgstr "Operação de download"
 
-#: src/ephy-window.c:3080
+#: src/ephy-window.c:2929
 msgid "Show details"
 msgstr "Mostrar detalhes"
 
-#: src/ephy-window.c:3082
+#: src/ephy-window.c:2931
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operação de download ativa"
 msgstr[1] "%d operações de download ativas"
 
-#: src/ephy-window.c:3705
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3450
+msgid "View open tabs"
+msgstr "Visualiza as abas abertas"
+
+#: src/ephy-window.c:3581
 msgid "Set Web as your default browser?"
 msgstr "Definir o Web como seu navegador padrão?"
 
-#: src/ephy-window.c:3707
+#: src/ephy-window.c:3583
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Definir Teste de Tecnologia do Epiphany como seu navegador padrão?"
 
-#: src/ephy-window.c:3719
+#: src/ephy-window.c:3595
 msgid "_Yes"
 msgstr "_Sim"
 
-#: src/ephy-window.c:3720
+#: src/ephy-window.c:3596
 msgid "_No"
 msgstr "_Não"
 
@@ -2873,19 +2854,19 @@ msgstr "Cache de políticas HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Dados de Prevenção Inteligente de Rastreamento"
 
-#: src/preferences/ephy-search-engine-row.c:197
+#: src/preferences/ephy-search-engine-row.c:199
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:202
+#: src/preferences/ephy-search-engine-row.c:204
 msgid "Address must start with either http:// or https://"
 msgstr "O endereço deve iniciar com http:// ou https://"
 
-#: src/preferences/ephy-search-engine-row.c:208
+#: src/preferences/ephy-search-engine-row.c:210
 msgid "Address is not a valid URI"
 msgstr "O endereço não é uma URI válida"
 
-#: src/preferences/ephy-search-engine-row.c:215
+#: src/preferences/ephy-search-engine-row.c:217
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2894,24 +2875,24 @@ msgstr ""
 "O endereço não é uma URI válida. O endereço deve parecer com https://www."
 "example.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:221
+#: src/preferences/ephy-search-engine-row.c:223
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "O endereço deve conter o termo de pesquisa representado por %s"
 
-#: src/preferences/ephy-search-engine-row.c:227
+#: src/preferences/ephy-search-engine-row.c:229
 msgid "Address should not contain the search term several times"
 msgstr "O endereço não deve conter o termo de pesquisa várias vezes"
 
-#: src/preferences/ephy-search-engine-row.c:272
+#: src/preferences/ephy-search-engine-row.c:274
 msgid "This shortcut is already used."
 msgstr "Este atalho já está sendo usado."
 
-#: src/preferences/ephy-search-engine-row.c:417
+#: src/preferences/ephy-search-engine-row.c:422
 msgid "A name is required"
 msgstr "Um nome é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:419
+#: src/preferences/ephy-search-engine-row.c:424
 msgid "This search engine already exists"
 msgstr "Este mecanismo de pesquisa já existe"
 
@@ -2924,7 +2905,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Isso apagará todas as senhas armazenadas localmente e não pode ser desfeito."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:260
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -3125,11 +3106,11 @@ msgstr ""
 msgid "Search"
 msgstr "Pesquisar"
 
-#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:300
+#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
 msgid "No Results Found"
 msgstr "Nenhum resultado localizado"
 
-#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:315
+#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
 msgid "Try a different search"
 msgstr "Tente uma pesquisa diferente"
 
@@ -3232,11 +3213,11 @@ msgstr "Selecionar itens"
 msgid "Search history"
 msgstr "Pesquisar histórico"
 
-#: src/resources/gtk/history-dialog.ui:243
+#: src/resources/gtk/history-dialog.ui:209
 msgid "The History is Empty"
 msgstr "O histórico está vazio"
 
-#: src/resources/gtk/history-dialog.ui:259
+#: src/resources/gtk/history-dialog.ui:210
 msgid "Visited pages will be listed here"
 msgstr "As páginas visitadas serão listadas aqui"
 
@@ -3345,8 +3326,9 @@ msgid "Open Appli_cation Manager"
 msgstr "Abrir geren_ciador de aplicativo"
 
 #: src/resources/gtk/page-menu-popover.ui:277
-msgid "_Extensions"
-msgstr "_Extensões"
+#| msgid "Extensions"
+msgid "E_xtensions"
+msgstr "E_xtensões"
 
 #: src/resources/gtk/page-menu-popover.ui:294
 msgid "_Override Text Encoding…"
@@ -3391,6 +3373,10 @@ msgstr "Firefox _Sync"
 #: src/resources/gtk/page-row.ui:86
 msgid "Close page"
 msgstr "Fechar página"
+
+#: src/resources/gtk/pages-view.ui:11
+msgid "Tabs"
+msgstr "Abas"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:108
@@ -3597,7 +3583,6 @@ msgid "_Website Data Storage"
 msgstr "_Armazenamento de dados de sites"
 
 #: src/resources/gtk/prefs-privacy-page.ui:65
-#| msgid "Search Engines"
 msgid "Search Suggestions"
 msgstr "Sugestões de pesquisa"
 
@@ -3948,10 +3933,6 @@ msgstr ""
 "Firefox Sync com essa conta. Abra a aba com clique duplo em seu nome (abas "
 "sob “Abas locais” não podem ser abertas)."
 
-#: src/resources/gtk/tab-label.ui:73
-msgid "Close Document"
-msgstr "Fecha o documento"
-
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:17
 msgid "Additional URLs"
 msgstr "URLs adicionais"
@@ -3983,15 +3964,25 @@ msgstr "Remover as URLs selecionadas"
 msgid "C_lear All"
 msgstr "_Limpar tudo"
 
-#: src/resources/gtk/web-extensions-dialog.ui:22
-#| msgid "Version %s"
+#: src/resources/gtk/web-extensions-dialog.ui:12
+#: src/resources/gtk/web-extensions-dialog.ui:21
 msgid "Extensions"
 msgstr "Extensões"
 
-#: src/resources/gtk/web-extensions-dialog.ui:28
-#| msgid "_Add…"
-msgid "Add…"
-msgstr "Adicionar…"
+#: src/resources/gtk/web-extensions-dialog.ui:26
+#| msgid "Add…"
+msgid "_Add…"
+msgstr "_Adicionar…"
+
+#: src/resources/gtk/web-extensions-dialog.ui:40
+#| msgid "Extensions"
+msgid "No Extensions Installed"
+msgstr "Nenhuma extensão instalada"
+
+#: src/resources/gtk/web-extensions-dialog.ui:41
+#| msgid "Bookmark some webpages to view them here."
+msgid "Add some extensions to display them here."
+msgstr "Adicione algumas extensões para exibi-las aqui."
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -4072,7 +4063,6 @@ msgstr "Favoritos exportados com sucesso!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
 #: src/window-commands.c:651
-#| msgid "bookmarks.gvdb"
 msgid "bookmarks.html"
 msgstr "favoritos.html"
 
@@ -4124,75 +4114,75 @@ msgstr ""
 "Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Bruno Lopes <brunolopesdsilv@gmail.com>"
 
-#: src/window-commands.c:1200
+#: src/window-commands.c:1197
 msgid "Do you want to reload this website?"
 msgstr "Você deseja recarregar este site?"
 
-#: src/window-commands.c:1728
+#: src/window-commands.c:1725
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Um aplicativo web com o nome “%s” já existe. Você deseja substituí-lo?"
 
-#: src/window-commands.c:1731
+#: src/window-commands.c:1728
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1733
+#: src/window-commands.c:1730
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/window-commands.c:1737
+#: src/window-commands.c:1734
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Um aplicativo com mesmo nome já existe. Substituí-lo irá sobrescrevê-lo."
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1826
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "O aplicativo “%s” está pronto para ser usado"
 
-#: src/window-commands.c:1832
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "O aplicativo “%s” não pôde ser criado"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1847
+#: src/window-commands.c:1844
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1888
+#: src/window-commands.c:1885
 msgid "Create Web Application"
 msgstr "Cria um aplicativo web"
 
-#: src/window-commands.c:1893
+#: src/window-commands.c:1890
 msgid "C_reate"
 msgstr "C_riar"
 
-#: src/window-commands.c:2108
+#: src/window-commands.c:2105
 msgid "Save"
 msgstr "Salvar"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2114
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2122
+#: src/window-commands.c:2119
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2127
+#: src/window-commands.c:2124
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2612
+#: src/window-commands.c:2609
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: src/window-commands.c:2615
+#: src/window-commands.c:2612
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4203,9 +4193,21 @@ msgstr ""
 "lhe navegar nelas com o seu teclado. Você deseja habilitar o modo de "
 "navegação com cursor?"
 
-#: src/window-commands.c:2618
+#: src/window-commands.c:2615
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid "New Tab"
+#~ msgstr "Nova aba"
+
+#~ msgid "Remove"
+#~ msgstr "Remover"
+
+#~ msgid "_Extensions"
+#~ msgstr "_Extensões"
+
+#~ msgid "Close Document"
+#~ msgstr "Fecha o documento"
 
 #~ msgid "The position of the tabs bar."
 #~ msgstr "A posição da barra de abas."
