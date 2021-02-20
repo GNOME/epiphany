@@ -633,6 +633,16 @@ on_key_press_event (EphyHistoryDialog *self,
     }
   }
 
+  if (key->keyval == GDK_KEY_Escape &&
+      !hdy_search_bar_get_search_mode (search_bar)) {
+    if (self->selection_active)
+      set_selection_active (self, FALSE);
+    else
+      gtk_window_close (GTK_WINDOW (self));
+
+    return GDK_EVENT_STOP;
+  }
+
   /* Edge case: Shift + Enter in selection mode
    * Pressing simply Enter without any modifiers activates the focused row,
    * but pressing Enter with modifiers doesn't do anything.
