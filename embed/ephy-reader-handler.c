@@ -123,8 +123,9 @@ enum_nick (GType enum_type,
 }
 
 static
-char *readability_get_property_string (WebKitJavascriptResult *js_result,
-                                       char                   *property)
+char *
+readability_get_property_string (WebKitJavascriptResult *js_result,
+                                 char                   *property)
 {
   JSCValue *jsc_value;
   char *result = NULL;

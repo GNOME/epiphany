@@ -1120,8 +1120,9 @@ ephy_web_extension_browser_action_get_tooltip (EphyWebExtension *self)
   return self->browser_action->title;
 }
 
-WebExtensionCustomCSS *web_extension_custom_css_new (EphyWebExtension *self,
-                                                     const char       *code)
+WebExtensionCustomCSS *
+web_extension_custom_css_new (EphyWebExtension *self,
+                              const char       *code)
 
 {
   WebExtensionCustomCSS *css = g_malloc0 (sizeof (WebExtensionCustomCSS));

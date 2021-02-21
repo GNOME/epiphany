@@ -1255,9 +1255,10 @@ window_cmd_reload_bypass_cache (GSimpleAction *action,
   webkit_web_view_reload_bypass_cache (view);
 }
 
-void window_cmd_combined_stop_reload (GSimpleAction *action,
-                                      GVariant      *parameter,
-                                      gpointer       user_data)
+void
+window_cmd_combined_stop_reload (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
   GActionGroup *action_group;
   GAction *gaction;

@@ -88,7 +88,8 @@ ephy_downloads_progress_icon_init (EphyDownloadsProgressIcon *icon)
   gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
 }
 
-GtkWidget *ephy_downloads_progress_icon_new (void)
+GtkWidget *
+ephy_downloads_progress_icon_new (void)
 {
   return GTK_WIDGET (g_object_new (EPHY_TYPE_DOWNLOADS_PROGRESS_ICON, NULL));
 }

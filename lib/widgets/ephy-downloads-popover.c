@@ -247,7 +247,8 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   gtk_widget_show (vbox);
 }
 
-GtkWidget *ephy_downloads_popover_new (GtkWidget *relative_to)
+GtkWidget *
+ephy_downloads_popover_new (GtkWidget *relative_to)
 {
   return GTK_WIDGET (g_object_new (EPHY_TYPE_DOWNLOADS_POPOVER, "relative-to", relative_to, NULL));
 }

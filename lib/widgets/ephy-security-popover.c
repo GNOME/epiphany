@@ -582,11 +582,12 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_widget_show_all (popover->grid);
 }
 
-GtkWidget *ephy_security_popover_new (GtkWidget           *relative_to,
-                                      const char          *address,
-                                      GTlsCertificate     *certificate,
-                                      GTlsCertificateFlags tls_errors,
-                                      EphySecurityLevel    security_level)
+GtkWidget *
+ephy_security_popover_new (GtkWidget            *relative_to,
+                           const char           *address,
+                           GTlsCertificate      *certificate,
+                           GTlsCertificateFlags  tls_errors,
+                           EphySecurityLevel     security_level)
 {
   g_assert (address != NULL);
 

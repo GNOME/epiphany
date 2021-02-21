@@ -310,9 +310,10 @@ out:
   return ret;
 }
 
-void replace_str (char **src,
-                  char  *find,
-                  char  *replace)
+void
+replace_str (char **src,
+             char  *find,
+             char  *replace)
 {
   g_auto (GStrv) split = g_strsplit (*src, find, -1);
   g_free (*src);

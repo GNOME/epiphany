@@ -67,7 +67,8 @@ typedef enum {
   EPHY_PROCESS_OTHER
 } EphyProcess;
 
-static const char *get_ephy_process_name (EphyProcess process)
+static const char *
+get_ephy_process_name (EphyProcess process)
 {
   switch (process) {
     case EPHY_PROCESS_EPIPHANY:
@@ -84,7 +85,8 @@ static const char *get_ephy_process_name (EphyProcess process)
   return NULL;
 }
 
-static void vma_free (VMA_t *vma)
+static void
+vma_free (VMA_t *vma)
 {
   g_free (vma->start);
   g_free (vma->end);
@@ -105,13 +107,15 @@ static void vma_free (VMA_t *vma)
   g_free (vma);
 }
 
-static void perm_entry_free (PermEntry *entry)
+static void
+perm_entry_free (PermEntry *entry)
 {
   g_free (entry);
 }
 
-static void add_to_perm_entry (GHashTable *hash,
-                               VMA_t      *entry)
+static void
+add_to_perm_entry (GHashTable *hash,
+                   VMA_t      *entry)
 {
   const char *perms = entry->perms;
   PermEntry *value;
@@ -138,8 +142,9 @@ static void add_to_perm_entry (GHashTable *hash,
     g_hash_table_insert (hash, g_strdup (perms), value);
 }
 
-static void add_to_totals (PermEntry *entry,
-                           PermEntry *totals)
+static void
+add_to_totals (PermEntry *entry,
+               PermEntry *totals)
 {
   totals->shared_clean += entry->shared_clean;
   totals->shared_dirty += entry->shared_dirty;
@@ -147,9 +152,10 @@ static void add_to_totals (PermEntry *entry,
   totals->private_dirty += entry->private_dirty;
 }
 
-static void print_vma_table (GString    *str,
-                             GHashTable *hash,
-                             const char *caption)
+static void
+print_vma_table (GString    *str,
+                 GHashTable *hash,
+                 const char *caption)
 {
   PermEntry *pentry, totals;
 
@@ -192,10 +198,11 @@ static void print_vma_table (GString    *str,
   g_string_append (str, "</table>");
 }
 
-static void ephy_smaps_pid_to_html (EphySMaps  *smaps,
-                                    GString    *str,
-                                    pid_t       pid,
-                                    EphyProcess process)
+static void
+ephy_smaps_pid_to_html (EphySMaps   *smaps,
+                        GString     *str,
+                        pid_t        pid,
+                        EphyProcess  process)
 {
   GFileInputStream *stream;
   GDataInputStream *data_stream;
@@ -324,7 +331,8 @@ out:
   g_hash_table_unref (mapped_hash);
 }
 
-static pid_t get_pid_from_proc_name (const char *name)
+static pid_t
+get_pid_from_proc_name (const char *name)
 {
   guint i;
   char *end_ptr = NULL;
@@ -343,7 +351,8 @@ static pid_t get_pid_from_proc_name (const char *name)
   return pid;
 }
 
-static pid_t get_parent_pid (pid_t pid)
+static pid_t
+get_parent_pid (pid_t pid)
 {
   char *path;
   char *data;
@@ -381,7 +390,8 @@ static pid_t get_parent_pid (pid_t pid)
   return ppid;
 }
 
-static EphyProcess get_ephy_process (pid_t pid)
+static EphyProcess
+get_ephy_process (pid_t pid)
 {
   char *path;
   char *data;
@@ -414,9 +424,10 @@ static EphyProcess get_ephy_process (pid_t pid)
   return process;
 }
 
-static void ephy_smaps_pid_children_to_html (EphySMaps *smaps,
-                                             GString   *str,
-                                             pid_t      parent_pid)
+static void
+ephy_smaps_pid_children_to_html (EphySMaps *smaps,
+                                 GString   *str,
+                                 pid_t      parent_pid)
 {
   GDir *proc;
   const char *name;
@@ -447,7 +458,8 @@ static void ephy_smaps_pid_children_to_html (EphySMaps *smaps,
   g_dir_close (proc);
 }
 
-char *ephy_smaps_to_html (EphySMaps *smaps)
+char *
+ephy_smaps_to_html (EphySMaps *smaps)
 {
   GString *str = g_string_new ("");
   pid_t pid = getpid ();
@@ -492,7 +504,8 @@ ephy_smaps_class_init (EphySMapsClass *smaps_class)
   gobject_class->finalize = ephy_smaps_finalize;
 }
 
-EphySMaps *ephy_smaps_new (void)
+EphySMaps *
+ephy_smaps_new (void)
 {
   return EPHY_SMAPS (g_object_new (EPHY_TYPE_SMAPS, NULL));
 }

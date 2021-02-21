@@ -107,7 +107,8 @@ ephy_sqlite_connection_init (EphySQLiteConnection *self)
   self->database = NULL;
 }
 
-GQuark ephy_sqlite_error_quark (void)
+GQuark
+ephy_sqlite_error_quark (void)
 {
   return g_quark_from_static_string ("ephy-sqlite");
 }

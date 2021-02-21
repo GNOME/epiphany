@@ -417,8 +417,9 @@ ephy_bookmarks_manager_remove_bookmark_internal (EphyBookmarksManager *self,
   g_object_unref (bookmark);
 }
 
-void ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
-                                             EphyBookmark         *bookmark)
+void
+ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
+                                        EphyBookmark         *bookmark)
 {
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));

@@ -41,7 +41,8 @@ typedef enum {
   PASSWORDS_IMPORT_ERROR_PASSWORDS = 1001
 } PasswordsImportErrorCode;
 
-const SecretSchema *libsecret_get_schema (void)
+const SecretSchema *
+libsecret_get_schema (void)
 {
   static const SecretSchema the_schema = {
     "chrome_libsecret_os_crypt_password_v2",

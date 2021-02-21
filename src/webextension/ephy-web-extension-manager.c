@@ -194,7 +194,8 @@ ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 {
 }
 
-EphyWebExtensionManager *ephy_web_extension_manager_new (void)
+EphyWebExtensionManager *
+ephy_web_extension_manager_new (void)
 {
   return g_object_new (EPHY_TYPE_WEB_EXTENSION_MANAGER, NULL);
 }

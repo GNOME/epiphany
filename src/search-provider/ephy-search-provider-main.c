@@ -27,8 +27,9 @@
 #include <glib/gi18n.h>
 #include <locale.h>
 
-gint main (gint    argc,
-           gchar **argv)
+gint
+main (gint    argc,
+      gchar **argv)
 {
   EphySearchProvider *search_provider;
   int status;
