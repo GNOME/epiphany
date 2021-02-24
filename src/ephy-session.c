@@ -77,7 +77,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-static gboolean ephy_session_save_idle_cb (EphySession *session);
+static void ephy_session_save_now (EphySession *session);
 
 G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
@@ -527,7 +527,7 @@ ephy_session_close (EphySession *session)
 
   policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
   if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS) {
-    ephy_session_save_idle_cb (session);
+    ephy_session_save_now (session);
   } else {
     session_delete (session);
   }
@@ -974,21 +974,21 @@ out:
 }
 
 static EphySession *
-ephy_session_save_idle_started (EphySession *session)
+ephy_session_save_timeout_started (EphySession *session)
 {
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
   return g_object_ref (session);
 }
 
 static void
-ephy_session_save_idle_finished (EphySession *session)
+ephy_session_save_timeout_finished (EphySession *session)
 {
   g_application_release (G_APPLICATION (ephy_shell_get_default ()));
   g_object_unref (session);
 }
 
 static gboolean
-ephy_session_save_idle_cb (EphySession *session)
+ephy_session_save_timeout_cb (EphySession *session)
 {
   EphyShell *shell = ephy_shell_get_default ();
   SaveData *data;
@@ -1043,10 +1043,19 @@ ephy_session_save (EphySession *session)
   if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
     return;
 
+  /* Schedule the save to occur one second in the future to ensure we don't
+   * repeatedly write to disk when opening or closing many tabs at once.
+   */
   session->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
-                                                        (GSourceFunc)ephy_session_save_idle_cb,
-                                                        ephy_session_save_idle_started (session),
-                                                        (GDestroyNotify)ephy_session_save_idle_finished);
+                                                        (GSourceFunc)ephy_session_save_timeout_cb,
+                                                        ephy_session_save_timeout_started (session),
+                                                        (GDestroyNotify)ephy_session_save_timeout_finished);
+}
+
+static void
+ephy_session_save_now (EphySession *session)
+{
+  ephy_session_save_timeout_cb (session);
 }
 
 static void
