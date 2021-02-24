@@ -997,6 +997,9 @@ ephy_session_save_timeout_cb (EphySession *session)
 
   session->save_source_id = 0;
 
+  if (!session->loaded_page)
+    return G_SOURCE_REMOVE;
+
   /* If we have never successfully loaded any page, or any web view has an
    * insane URL, then something has probably gone wrong inside WebKit. For
    * instance, if the web process is nonfunctional, the UI process could have
@@ -1005,7 +1008,7 @@ ephy_session_save_timeout_cb (EphySession *session)
    * file with our new bogus state. Bug #768250.
    */
   data = save_data_new (session);
-  if (!session->loaded_page || !session_seems_reasonable (data->windows)) {
+  if (!session_seems_reasonable (data->windows)) {
     save_data_free (data);
     return G_SOURCE_REMOVE;
   }
