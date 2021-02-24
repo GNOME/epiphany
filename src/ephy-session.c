@@ -409,21 +409,6 @@ window_added_cb (GtkApplication *application,
   g_signal_connect_object (tab_view, "notify::selected-page",
                            G_CALLBACK (tab_view_notify_selected_page_cb), session,
                            G_CONNECT_AFTER);
-
-  /* Set unique identifier as role, so that on restore, the WM can
-   * place the window on the right workspace
-   */
-
-  if (gtk_window_get_role (window) == NULL) {
-    /* I guess rand() is unique enough, otherwise we could use
-     * time + pid or something
-     */
-    char *role;
-
-    role = g_strdup_printf ("epiphany-window-%x", rand ());
-    gtk_window_set_role (window, role);
-    g_free (role);
-  }
 }
 
 static void
@@ -539,7 +524,6 @@ typedef struct {
   GdkRectangle geometry;
   gboolean is_maximized;
   gboolean is_fullscreen;
-  char *role;
 
   GList *tabs;
   gint active_tab;
@@ -629,7 +613,6 @@ session_window_new (EphyWindow  *window,
 
   session_window = g_new0 (SessionWindow, 1);
   get_window_geometry (window, session_window);
-  session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
   tab_view = ephy_window_get_tab_view (window);
 
   for (l = tabs; l != NULL; l = l->next) {
@@ -649,7 +632,6 @@ session_window_new (EphyWindow  *window,
 static void
 session_window_free (SessionWindow *session_window)
 {
-  g_free (session_window->role);
   g_list_free_full (session_window->tabs, (GDestroyNotify)session_tab_free);
 
   g_free (session_window);
@@ -820,14 +802,6 @@ write_ephy_window (xmlTextWriterPtr  writer,
                                            window->active_tab);
   if (ret < 0)
     return ret;
-
-  if (window->role != NULL) {
-    ret = xmlTextWriterWriteAttribute (writer,
-                                       (const xmlChar *)"role",
-                                       (const xmlChar *)window->role);
-    if (ret < 0)
-      return ret;
-  }
 
   for (l = window->tabs; l != NULL; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
@@ -1170,8 +1144,6 @@ session_parse_window (SessionParserContext  *context,
     } else if (strcmp (names[i], "is-fullscreen") == 0) {
       ephy_string_to_int (values[i], &int_value);
       is_fullscreen = int_value != 0;
-    } else if (strcmp (names[i], "role") == 0) {
-      gtk_window_set_role (GTK_WINDOW (context->window), values[i]);
     } else if (strcmp (names[i], "active-tab") == 0) {
       ephy_string_to_int (values[i], &int_value);
       context->active_tab = int_value;
