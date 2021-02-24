@@ -62,7 +62,6 @@ struct _EphySession {
 
   GQueue *closed_tabs;
   guint save_source_id;
-  GCancellable *save_cancellable;
   guint closing : 1;
   guint dont_save : 1;
   guint loaded_page : 1;
@@ -950,7 +949,7 @@ out:
   if (writer)
     xmlFreeTextWriter (writer);
 
-  if (ret >= 0 && !g_cancellable_is_cancelled (cancellable)) {
+  if (ret >= 0) {
     GError *error = NULL;
     GFile *session_file;
 
@@ -959,11 +958,8 @@ out:
     if (!g_file_replace_contents (session_file,
                                   (const char *)buffer->content,
                                   buffer->use,
-                                  NULL, TRUE, 0, NULL,
-                                  cancellable, &error)) {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-        g_warning ("Error saving session: %s", error->message);
-      }
+                                  NULL, TRUE, 0, NULL, NULL, &error)) {
+      g_warning ("Error saving session: %s", error->message);
       g_error_free (error);
     }
 
@@ -1013,12 +1009,6 @@ ephy_session_save_idle_cb (EphySession *session)
     return G_SOURCE_REMOVE;
   }
 
-  if (session->save_cancellable) {
-    g_cancellable_cancel (session->save_cancellable);
-    g_object_unref (session->save_cancellable);
-    session->save_cancellable = NULL;
-  }
-
   LOG ("ephy_sesion_save");
 
   if (ephy_shell_get_n_windows (shell) == 0) {
@@ -1028,9 +1018,7 @@ ephy_session_save_idle_cb (EphySession *session)
   }
 
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
-  session->save_cancellable = g_cancellable_new ();
-  task = g_task_new (session, session->save_cancellable,
-                     save_session_in_thread_finished_cb, NULL);
+  task = g_task_new (session, NULL, save_session_in_thread_finished_cb, NULL);
   g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
   g_task_run_in_thread (task, save_session_sync);
   g_object_unref (task);
