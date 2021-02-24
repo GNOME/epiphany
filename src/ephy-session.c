@@ -852,7 +852,7 @@ save_session_in_thread_finished_cb (GObject      *source_object,
 }
 
 static gboolean
-session_seems_sane (GList *windows)
+session_seems_reasonable (GList *windows)
 {
   for (GList *w = windows; w != NULL; w = w->next) {
     for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
@@ -1008,7 +1008,7 @@ ephy_session_save_idle_cb (EphySession *session)
    * file with our new bogus state. Bug #768250.
    */
   data = save_data_new (session);
-  if (!session->loaded_page || !session_seems_sane (data->windows)) {
+  if (!session->loaded_page || !session_seems_reasonable (data->windows)) {
     save_data_free (data);
     return G_SOURCE_REMOVE;
   }
