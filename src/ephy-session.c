@@ -847,6 +847,7 @@ save_session_in_thread_finished_cb (GObject      *source_object,
                                     GAsyncResult *res,
                                     gpointer      user_data)
 {
+  g_object_unref (EPHY_SESSION (source_object));
   g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
 
@@ -1018,6 +1019,8 @@ ephy_session_save_timeout_cb (EphySession *session)
   }
 
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+  g_object_ref (session);
+
   task = g_task_new (session, NULL, save_session_in_thread_finished_cb, NULL);
   g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
   g_task_run_in_thread (task, save_session_sync);
