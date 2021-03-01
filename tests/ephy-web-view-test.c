@@ -38,6 +38,14 @@
 #define HTML_STRING "testing-ephy-web-view"
 #define SERVER_PORT 12321
 
+#if SOUP_CHECK_VERSION (2, 99, 4)
+static void
+server_callback (SoupServer        *server,
+                 SoupServerMessage *msg,
+                 const char        *path,
+                 GHashTable        *query,
+                 gpointer           data)
+#else
 static void
 server_callback (SoupServer        *server,
                  SoupMessage       *msg,
@@ -45,20 +53,39 @@ server_callback (SoupServer        *server,
                  GHashTable        *query,
                  SoupClientContext *context,
                  gpointer           data)
+#endif
 {
-  if (!strcmp (path, "/cancelled"))
-    soup_message_set_status (msg, SOUP_STATUS_CANT_CONNECT);
-  else if (!strcmp (path, "/redirect")) {
+  SoupMessageHeaders *response_headers;
+  SoupMessageBody *response_body;
+
+#if SOUP_CHECK_VERSION (2, 99, 4)
+  response_headers = soup_server_message_get_response_headers (msg);
+  response_body = soup_server_message_get_response_body (msg);
+#else
+  response_headers = msg->response_headers;
+  response_body = msg->response_body;
+#endif
+
+  if (!strcmp (path, "/redirect")) {
+#if SOUP_CHECK_VERSION (2, 99, 4)
+    soup_server_message_set_status (msg, SOUP_STATUS_MOVED_PERMANENTLY, NULL);
+#else
     soup_message_set_status (msg, SOUP_STATUS_MOVED_PERMANENTLY);
-    soup_message_headers_append (msg->response_headers, "Location", "/redirect-result");
-  } else
+#endif
+    soup_message_headers_append (response_headers, "Location", "/redirect-result");
+  } else {
+#if SOUP_CHECK_VERSION (2, 99, 4)
+    soup_server_message_set_status (msg, SOUP_STATUS_OK, NULL);
+#else
     soup_message_set_status (msg, SOUP_STATUS_OK);
+#endif
+  }
 
 
-  soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,
+  soup_message_body_append (response_body, SOUP_MEMORY_STATIC,
                             HTML_STRING, strlen (HTML_STRING));
 
-  soup_message_body_complete (msg->response_body);
+  soup_message_body_complete (response_body);
 }
 
 static void
