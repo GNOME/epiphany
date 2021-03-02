@@ -68,7 +68,6 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libsoup/soup.h>
 #include <stdlib.h>
 
 #include <webkit2/webkit2.h>
@@ -1577,8 +1576,7 @@ populate_context_menu (WebKitWebView       *web_view,
 
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text) {
-    SoupURI *uri = soup_uri_new (selected_text);
-    if (uri) {
+    if (g_uri_is_valid (selected_text, G_URI_FLAGS_NONE, NULL)) {
       GVariant *value;
 
       value = g_variant_new_string (selected_text);
@@ -1586,8 +1584,6 @@ populate_context_menu (WebKitWebView       *web_view,
                                                                  value);
       g_variant_unref (value);
       can_open_selection = TRUE;
-
-      soup_uri_free (uri);
     } else {
       GVariant *value;
 

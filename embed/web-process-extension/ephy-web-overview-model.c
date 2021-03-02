@@ -21,8 +21,6 @@
 #include "config.h"
 #include "ephy-web-overview-model.h"
 
-#include <libsoup/soup.h>
-
 struct _EphyWebOverviewModel {
   GObject parent_instance;
 
@@ -286,17 +284,17 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
   l = model->items;
   while (l) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
-    SoupURI *uri = soup_uri_new (item->url);
+    g_autoptr (GUri) uri = NULL;
     GList *next = l->next;
 
-    if (g_strcmp0 (soup_uri_get_host (uri), host) == 0) {
+    uri = g_uri_parse (item->url, G_URI_FLAGS_NONE, NULL);
+    if (g_strcmp0 (g_uri_get_host (uri), host) == 0) {
       changed = TRUE;
 
       ephy_web_overview_model_item_free (item);
       model->items = g_list_delete_link (model->items, l);
     }
 
-    soup_uri_free (uri);
     l = next;
   }
 

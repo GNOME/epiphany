@@ -23,9 +23,9 @@
 
 #include "ephy-debug.h"
 #include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 
 #include <arpa/inet.h>
-#include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -520,7 +520,7 @@ ephy_gsb_utils_full_unescape (const char *part)
   g_assert (part);
 
   prev = g_strdup (part);
-  retval = soup_uri_decode (part);
+  retval = ephy_uri_unescape (part);
 
   /* Iteratively unescape the string until it cannot be unescaped anymore.
    * This is useful for strings that have been escaped multiple times.
@@ -528,7 +528,7 @@ ephy_gsb_utils_full_unescape (const char *part)
   while (g_strcmp0 (prev, retval) != 0 && attempts++ < MAX_UNESCAPE_STEP) {
     prev_prev = prev;
     prev = retval;
-    retval = soup_uri_decode (retval);
+    retval = ephy_uri_unescape (retval);
     g_free (prev_prev);
   }
 
@@ -547,7 +547,7 @@ ephy_gsb_utils_escape (const char *part)
 
   str = g_string_new (NULL);
 
-  /* Use this instead of soup_uri_encode() because that escapes other
+  /* Use this instead of g_uri_escape_string() because that escapes other
    * characters that we don't want to be escaped.
    */
   while (*s) {
@@ -632,7 +632,8 @@ ephy_gsb_utils_canonicalize (const char  *url,
                              char       **path_out,
                              char       **query_out)
 {
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
+  g_autoptr (GUri) base = NULL;
   char *tmp;
   char *host;
   char *path;
@@ -653,45 +654,45 @@ ephy_gsb_utils_canonicalize (const char  *url,
   else
     tmp = g_strdup (url);
 
-  /* soup_uri_new() prepares the URL for us:
+  /* GLib only applies the remove_dot_segments algorithm when using g_uri_parse_relative
+   * See https://gitlab.gnome.org/GNOME/glib/-/issues/2342
+   */
+  base = g_uri_parse (tmp, G_URI_FLAGS_ENCODED | G_URI_FLAGS_SCHEME_NORMALIZE | G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_NON_DNS, NULL);
+
+  /* g_uri_parse() prepares the URL for us:
    * 1. Strips trailing and leading whitespaces.
    * 2. Includes the path component if missing.
    * 3. Removes tab (0x09), CR (0x0d), LF (0x0a) characters.
    */
-  uri = soup_uri_new (tmp);
+  uri = g_uri_parse_relative (base, tmp, G_URI_FLAGS_ENCODED | G_URI_FLAGS_SCHEME_NORMALIZE | G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_NON_DNS, NULL);
   g_free (tmp);
   if (!uri) {
-    LOG ("Cannot make SoupURI from URL %s", url);
+    LOG ("Cannot make GUri from URL %s", url);
     return NULL;
   }
 
   /* Check for e.g. blob or data URIs */
-  if (!uri->host) {
-    soup_uri_free (uri);
+  if (!g_uri_get_host (uri))
     return NULL;
-  }
-
-  /* Remove fragment. */
-  soup_uri_set_fragment (uri, NULL);
 
   /* Canonicalize host. */
-  host = ephy_gsb_utils_normalize_escape (soup_uri_get_host (uri));
+  host = ephy_gsb_utils_normalize_escape (g_uri_get_host (uri));
   host_canonical = ephy_gsb_utils_canonicalize_host (host);
 
-  /* Canonicalize path. "/../" and "/./" have already been resolved by soup_uri_new(). */
-  path = ephy_gsb_utils_normalize_escape (soup_uri_get_path (uri));
+  /* Canonicalize path. "/../" and "/./" have already been resolved by g_uri_parse(). */
+  path = ephy_gsb_utils_normalize_escape (g_uri_get_path (uri));
   path_canonical = ephy_string_find_and_replace (path, "//", "/");
 
   /* Combine all parts. */
-  query = soup_uri_get_query (uri);
+  query = g_uri_get_query (uri);
   if (query) {
     retval = g_strdup_printf ("%s://%s%s?%s",
-                              soup_uri_get_scheme (uri),
+                              g_uri_get_scheme (uri),
                               host_canonical, path_canonical,
                               query);
   } else {
     retval = g_strdup_printf ("%s://%s%s",
-                              soup_uri_get_scheme (uri),
+                              g_uri_get_scheme (uri),
                               host_canonical, path_canonical);
   }
 
@@ -706,7 +707,6 @@ ephy_gsb_utils_canonicalize (const char  *url,
   g_free (path);
   g_free (host_canonical);
   g_free (path_canonical);
-  soup_uri_free (uri);
 
   return retval;
 }

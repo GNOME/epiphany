@@ -608,7 +608,7 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
   JsonObject *json;
   JsonObject *principal;
   GError *error = NULL;
-  SoupURI *uri = NULL;
+  g_autoptr (GUri) uri = NULL;
   char **pieces;
   char *header;
   char *payload;
@@ -668,10 +668,10 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
     goto out;
   }
   accounts_server = ephy_sync_utils_get_accounts_server ();
-  uri = soup_uri_new (accounts_server);
+  uri = g_uri_parse (accounts_server, G_URI_FLAGS_NONE, NULL);
   expected = g_strdup_printf ("%s@%s",
                               ephy_sync_service_get_secret (self, secrets[UID]),
-                              soup_uri_get_host (uri));
+                              g_uri_get_host (uri));
   retval = g_strcmp0 (email, expected) == 0;
 
 out:
@@ -680,8 +680,6 @@ out:
   g_free (payload);
   g_free (header);
   g_strfreev (pieces);
-  if (uri)
-    soup_uri_free (uri);
   if (error)
     g_error_free (error);
 

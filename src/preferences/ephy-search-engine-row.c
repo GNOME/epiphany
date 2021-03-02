@@ -23,7 +23,6 @@
 
 #include <glib/gi18n.h>
 #include <gmodule.h>
-#include <libsoup/soup.h>
 
 #include "ephy-search-engine-listbox.h"
 #include "ephy-search-engine-manager.h"
@@ -192,8 +191,7 @@ static gboolean
 validate_search_engine_address (const char  *address,
                                 const char **error_message)
 {
-  g_autoptr (SoupURI) soup_uri = NULL;
-  g_autofree char *path_and_query = NULL;
+  g_autoptr (GUri) uri = NULL;
 
   if (g_strcmp0 (address, "") == 0) {
     *error_message = _("This field is required");
@@ -205,21 +203,18 @@ validate_search_engine_address (const char  *address,
     return FALSE;
   }
 
-  soup_uri = soup_uri_new (address);
-  if (!soup_uri) {
+  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  if (!uri) {
     *error_message = _("Address is not a valid URI");
     return FALSE;
   }
 
-  if (!SOUP_URI_VALID_FOR_HTTP (soup_uri) ||
-      /* It seems you can dodge the first condition. When we have URI "http:///", without the host part, libsoup fills the host part with "" but SOUP_URI_VALID_FOR_HTTP checks for non-NULL host, not empty host. This line fixes it. */
-      g_strcmp0 (soup_uri->host, "") == 0) {
+  if (!g_uri_get_host (uri) || g_strcmp0 (g_uri_get_host (uri), "") == 0) {
     *error_message = _("Address is not a valid URL. The address should look like https://www.example.com/search?q=%s");
     return FALSE;
   }
 
-  path_and_query = soup_uri_to_string (soup_uri, TRUE);
-  if (!strstr (path_and_query, "%s")) {
+  if (!g_uri_get_query (uri) || !strstr (g_uri_get_query (uri), "%s")) {
     *error_message = _("Address must contain the search term represented by %s");
     return FALSE;
   }

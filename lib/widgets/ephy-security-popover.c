@@ -22,7 +22,6 @@
 #include "ephy-security-popover.h"
 
 #include <glib/gi18n.h>
-#include <libsoup/soup.h>
 
 #include "ephy-certificate-dialog.h"
 #include "ephy-embed-shell.h"
@@ -131,19 +130,17 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
                                    const char          *address)
 {
   EphyPermissionsManager *permissions_manager;
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
   g_autofree gchar *origin = NULL;
   g_autofree gchar *uri_text = NULL;
 
-  uri = soup_uri_new (address);
-  uri_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", uri->host);
+  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  uri_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", g_uri_get_host (uri));
   /* Label when clicking the lock icon on a secure page. %s is the website's hostname. */
   gtk_label_set_markup (GTK_LABEL (popover->host_label), uri_text);
 
   popover->address = g_strdup (address);
-  popover->hostname = g_strdup (uri->host);
-
-  soup_uri_free (uri);
+  popover->hostname = g_strdup (g_uri_get_host (uri));
 
   origin = ephy_uri_to_security_origin (address);
   if (!origin)

@@ -29,7 +29,6 @@
 #include <errno.h>
 #include <gio/gio.h>
 #include <glib/gstdio.h>
-#include <libsoup/soup.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -817,29 +816,31 @@ static gboolean
 urls_have_same_origin (const char *a_url,
                        const char *b_url)
 {
-  SoupURI *a_uri, *b_uri;
-  gboolean retval = FALSE;
+  g_autoptr (GUri) a_uri = NULL;
+  g_autoptr (GUri) b_uri = NULL;
 
-  a_uri = soup_uri_new (a_url);
-  if (!a_uri)
-    return retval;
+  a_uri = g_uri_parse (a_url, G_URI_FLAGS_NONE, NULL);
+  if (!a_uri || !g_uri_get_host (a_uri))
+    return FALSE;
 
-  b_uri = soup_uri_new (b_url);
-  if (b_uri) {
-    retval = a_uri->host && b_uri->host && soup_uri_host_equal (a_uri, b_uri);
-    soup_uri_free (b_uri);
-  }
+  b_uri = g_uri_parse (b_url, G_URI_FLAGS_NONE, NULL);
+  if (!b_uri || !g_uri_get_host (b_uri))
+    return FALSE;
 
-  soup_uri_free (a_uri);
+  if (strcmp (g_uri_get_scheme (a_uri), g_uri_get_scheme (b_uri)) != 0)
+    return FALSE;
 
-  return retval;
+  if (g_uri_get_port (a_uri) != g_uri_get_port (b_uri))
+    return FALSE;
+
+  return g_ascii_strcasecmp (g_uri_get_host (a_uri), g_uri_get_host (b_uri)) == 0;
 }
 
 gboolean
 ephy_web_application_is_uri_allowed (const char *uri)
 {
   EphyWebApplication *webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
-  SoupURI *request_uri;
+  const char *scheme;
   char **urls;
   guint i;
   gboolean matched = FALSE;
@@ -855,24 +856,23 @@ ephy_web_application_is_uri_allowed (const char *uri)
   if (g_strcmp0 (uri, "about:blank") == 0)
     return TRUE;
 
-  request_uri = soup_uri_new (uri);
-  if (!request_uri)
+  scheme = g_uri_peek_scheme (uri);
+  if (!scheme)
     return FALSE;
 
   urls = g_settings_get_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS);
   for (i = 0; urls[i] && !matched; i++) {
     if (!strstr (urls[i], "://")) {
-      char *url = g_strdup_printf ("%s://%s", request_uri->scheme, urls[i]);
+      g_autofree char *url = NULL;
+
+      url = g_strdup_printf ("%s://%s", scheme, urls[i]);
 
       matched = g_str_has_prefix (uri, url);
-      g_free (url);
     } else {
       matched = g_str_has_prefix (uri, urls[i]);
     }
   }
   g_strfreev (urls);
-
-  soup_uri_free (request_uri);
 
   return matched;
 }

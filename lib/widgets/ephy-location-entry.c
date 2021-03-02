@@ -41,7 +41,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
@@ -1130,14 +1129,14 @@ ephy_location_entry_new (void)
 }
 
 typedef struct {
-  SoupURI *uri;
+  GUri *uri;
   EphyLocationEntry *entry;
 } PrefetchHelper;
 
 static void
 free_prefetch_helper (PrefetchHelper *helper)
 {
-  soup_uri_free (helper->uri);
+  g_uri_unref (helper->uri);
   g_object_unref (helper->entry);
   g_free (helper);
 }
@@ -1148,7 +1147,7 @@ do_dns_prefetch (PrefetchHelper *helper)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   if (helper->uri)
-    webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), helper->uri->host);
+    webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), g_uri_get_host (helper->uri));
 
   helper->entry->dns_prefetch_handle_id = 0;
 
@@ -1196,20 +1195,18 @@ schedule_dns_prefetch (EphyLocationEntry *entry,
 {
   GProxyResolver *resolver = g_proxy_resolver_get_default ();
   PrefetchHelper *helper;
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
 
   if (resolver == NULL)
     return;
 
-  uri = soup_uri_new (url);
-  if (!uri || !uri->host) {
-    soup_uri_free (uri);
+  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+  if (!uri || !g_uri_get_host (uri))
     return;
-  }
 
   helper = g_new0 (PrefetchHelper, 1);
   helper->entry = g_object_ref (entry);
-  helper->uri = uri;
+  helper->uri = g_steal_pointer (&uri);
 
   g_proxy_resolver_lookup_async (resolver, url, NULL, proxy_resolver_ready_cb, helper);
 }

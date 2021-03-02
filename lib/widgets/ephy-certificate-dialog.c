@@ -26,7 +26,6 @@
 #define GCR_API_SUBJECT_TO_CHANGE
 #include <gcr/gcr.h>
 #include <glib/gi18n.h>
-#include <libsoup/soup.h>
 
 /**
  * SECTION:ephy-certificate-dialog
@@ -63,11 +62,10 @@ static void
 ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
                                      const char            *address)
 {
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
 
-  uri = soup_uri_new (address);
-  gtk_window_set_title (GTK_WINDOW (dialog), uri->host);
-  soup_uri_free (uri);
+  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  gtk_window_set_title (GTK_WINDOW (dialog), g_uri_get_host (uri));
 }
 
 static void

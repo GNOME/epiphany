@@ -22,8 +22,7 @@
 #include "ephy-string.h"
 
 #include <errno.h>
-#include <glib.h>
-#include <libsoup/soup.h>
+#include <gio/gio.h>
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -175,8 +174,7 @@ ephy_string_collate_key_for_domain (const char *str,
 char *
 ephy_string_get_host_name (const char *url)
 {
-  SoupURI *uri;
-  char *ret;
+  g_autoptr (GUri) uri = NULL;
 
   if (url == NULL ||
       g_str_has_prefix (url, "file://") ||
@@ -184,22 +182,19 @@ ephy_string_get_host_name (const char *url)
       g_str_has_prefix (url, "ephy-about:"))
     return NULL;
 
-  uri = soup_uri_new (url);
+  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
   /* If uri is NULL it's very possible that we just got
    * something without a scheme, let's try to prepend
    * 'http://' */
   if (uri == NULL) {
     char *effective_url = g_strconcat ("http://", url, NULL);
-    uri = soup_uri_new (effective_url);
+    uri = g_uri_parse (effective_url, G_URI_FLAGS_NONE, NULL);
     g_free (effective_url);
   }
 
   if (uri == NULL) return NULL;
 
-  ret = g_strdup (uri->host);
-  soup_uri_free (uri);
-
-  return ret;
+  return g_strdup (g_uri_get_host (uri));
 }
 
 /**

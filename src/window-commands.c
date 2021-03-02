@@ -62,7 +62,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
@@ -1645,11 +1644,11 @@ set_default_application_title (EphyApplicationDialogData *data,
                                char                      *title)
 {
   if (title == NULL || title[0] == '\0') {
-    SoupURI *uri;
+    g_autoptr (GUri) uri = NULL;
     const char *host;
 
-    uri = soup_uri_new (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)));
-    host = soup_uri_get_host (uri);
+    uri = g_uri_parse (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)), G_URI_FLAGS_NONE, NULL);
+    host = g_uri_get_host (uri);
 
     if (host != NULL && host[0] != '\0') {
       title = get_special_case_application_title_for_host (host);
@@ -1661,8 +1660,6 @@ set_default_application_title (EphyApplicationDialogData *data,
           title = g_strdup (host);
       }
     }
-
-    soup_uri_free (uri);
   }
 
   if (title == NULL || title[0] == '\0') {
@@ -1959,36 +1956,35 @@ static char *
 get_suggested_filename (EphyEmbed *embed)
 {
   EphyWebView *view;
-  char *suggested_filename = NULL;
+  const char *suggested_filename;
   const char *mimetype;
   WebKitURIResponse *response;
   WebKitWebResource *web_resource;
-  SoupURI *soup_uri;
+  g_autoptr (GUri) uri = NULL;
 
   view = ephy_embed_get_web_view (embed);
   web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
   response = webkit_web_resource_get_response (web_resource);
   mimetype = webkit_uri_response_get_mime_type (response);
-  soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
+  uri = g_uri_parse (webkit_web_resource_get_uri (web_resource), G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
 
-  if (g_ascii_strncasecmp (mimetype, "text/html", 9) == 0 && g_strcmp0 (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) != 0) {
+  if (g_ascii_strncasecmp (mimetype, "text/html", 9) == 0 && g_strcmp0 (g_uri_get_scheme (uri), EPHY_VIEW_SOURCE_SCHEME) != 0) {
     /* Web Title will be used as suggested filename */
-    suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
-  } else {
-    suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
-    if (!suggested_filename) {
-      char *last_slash = strrchr (soup_uri->path, '/');
-      suggested_filename = soup_uri_decode (last_slash ? (last_slash + 1) : soup_uri->path);
-
-      if (!strlen (suggested_filename)) {
-        g_free (suggested_filename);
-        suggested_filename = g_strdup ("index.html");
-      }
-    }
+    return g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
   }
 
-  soup_uri_free (soup_uri);
-  return suggested_filename;
+  suggested_filename = webkit_uri_response_get_suggested_filename (response);
+  if (!suggested_filename) {
+    const char *path = g_uri_get_path (uri);
+    char *last_slash = strrchr (path, '/');
+    if (last_slash)
+      path = last_slash + 1;
+
+    if (path[0] != '\0')
+      return g_strdup (path);
+  }
+
+  return suggested_filename ? g_strdup (suggested_filename) : g_strdup ("index.html");
 }
 
 
@@ -2423,10 +2419,10 @@ window_cmd_page_source (GSimpleAction *action,
   EphyWindow *window = user_data;
   EphyEmbed *embed;
   EphyEmbed *new_embed;
-  SoupURI *soup_uri;
+  g_autoptr (GUri) uri = NULL;
+  g_autoptr (GUri) converted_uri = NULL;
   char *source_uri;
   const char *address;
-  guint port;
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -2438,20 +2434,22 @@ window_cmd_page_source (GSimpleAction *action,
   if (strstr (address, EPHY_VIEW_SOURCE_SCHEME) == address)
     return;
 
-  soup_uri = soup_uri_new (address);
-  if (!soup_uri) {
-    g_critical ("Failed to construct SoupURI for %s", address);
+  uri = g_uri_parse (address, G_URI_FLAGS_ENCODED | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  if (!uri) {
+    g_critical ("Failed to construct GUri for %s", address);
     return;
   }
 
-  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https,
-   * taking care to prevent soup_uri_set_scheme() from forcing the default port.
-   */
-  port = soup_uri_get_port (soup_uri);
-  soup_uri_set_fragment (soup_uri, soup_uri->scheme);
-  soup_uri_set_scheme (soup_uri, EPHY_VIEW_SOURCE_SCHEME);
-  soup_uri_set_port (soup_uri, port);
-  source_uri = soup_uri_to_string (soup_uri, FALSE);
+  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https */
+  converted_uri = g_uri_build (g_uri_get_flags (uri),
+                               EPHY_VIEW_SOURCE_SCHEME,
+                               g_uri_get_userinfo (uri),
+                               g_uri_get_host (uri),
+                               g_uri_get_port (uri),
+                               g_uri_get_path (uri),
+                               g_uri_get_query (uri),
+                               g_uri_get_scheme (uri));
+  source_uri = g_uri_to_string (converted_uri);
 
   new_embed = ephy_shell_new_tab
                 (ephy_shell_get_default (),
@@ -2463,7 +2461,6 @@ window_cmd_page_source (GSimpleAction *action,
   gtk_widget_grab_focus (GTK_WIDGET (new_embed));
 
   g_free (source_uri);
-  soup_uri_free (soup_uri);
 }
 
 void

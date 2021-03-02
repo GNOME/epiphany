@@ -72,7 +72,7 @@ gsb_api_key = get_option('gsb_api_key')
 conf.set_quoted('GSB_API_KEY', gsb_api_key)
 conf.set10('ENABLE_GSB', gsb_api_key != '')
 
-glib_requirement = '>= 2.64.0'
+glib_requirement = '>= 2.67.1'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.31.2'

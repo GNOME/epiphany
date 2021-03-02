@@ -505,12 +505,12 @@ history_service_host_deleted_cb (EphyHistoryService *service,
                                  EphyEmbedShell     *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  g_autoptr (SoupURI) deleted_uri = NULL;
+  g_autoptr (GUri) deleted_uri = NULL;
 
-  deleted_uri = soup_uri_new (deleted_url);
+  deleted_uri = g_uri_parse (deleted_url, G_URI_FLAGS_NONE, NULL);
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("History.DeleteHost",
-                                                                              g_variant_new ("s", soup_uri_get_host (deleted_uri))));
+                                                                              g_variant_new ("s", g_uri_get_host (deleted_uri))));
 }
 
 static void

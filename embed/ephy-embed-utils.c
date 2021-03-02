@@ -287,21 +287,21 @@ ephy_embed_utils_normalize_address (const char *address)
     return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
-    g_autoptr (SoupURI) uri = NULL;
+    const char *scheme;
 
-    uri = soup_uri_new (address);
+    scheme = g_uri_peek_scheme (address);
 
     /* Auto-prepend http:// to anything that is not
-     * one according to soup, because it probably will be
+     * one according to GLib, because it probably will be
      * something like "google.com". Special case localhost(:port)
-     * and IP(:port), because SoupURI, correctly, thinks it is a
+     * and IP(:port), because GUri, correctly, thinks it is a
      * URI with scheme being localhost/IP and, optionally, path
      * being the port. Ideally we should check if we have a
      * handler for the scheme, and since we'll fail for localhost
      * and IP, we'd fallback to loading it as a domain. */
-    if (!uri ||
-        !g_strcmp0 (uri->scheme, "localhost") ||
-        g_hostname_is_ip_address (uri->scheme) ||
+    if (!scheme ||
+        !g_strcmp0 (scheme, "localhost") ||
+        g_hostname_is_ip_address (scheme) ||
         is_host_with_port (address))
       effective_address = g_strconcat ("http://", address, NULL);
   }

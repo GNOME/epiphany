@@ -837,7 +837,7 @@ session_seems_reasonable (GList *windows)
   for (GList *w = windows; w != NULL; w = w->next) {
     for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
       const char *url = ((SessionTab *)t->data)->url;
-      SoupURI *uri;
+      g_autoptr (GUri) uri = NULL;
       gboolean sane = FALSE;
 
       /* NULL URLs are possible when an invalid URL is opened by JS.
@@ -856,15 +856,14 @@ session_seems_reasonable (GList *windows)
       if (g_str_has_prefix (url, "about:"))
         continue;
 
-      uri = soup_uri_new (url);
+      uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
       if (uri) {
-        if (uri->host != NULL ||
-            uri->scheme == SOUP_URI_SCHEME_DATA ||
-            uri->scheme == SOUP_URI_SCHEME_FILE ||
-            strcmp (uri->scheme, "ephy-reader") == 0 ||
-            strcmp (uri->scheme, "ephy-pdf") == 0)
+        if (g_uri_get_host (uri) != NULL ||
+            strcmp (g_uri_get_scheme (uri), "data") == 0 ||
+            strcmp (g_uri_get_scheme (uri), "file") == 0 ||
+            strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
+            strcmp (g_uri_get_scheme (uri), "ephy-pdf") == 0)
           sane = TRUE;
-        soup_uri_free (uri);
       }
 
       if (!sane) {

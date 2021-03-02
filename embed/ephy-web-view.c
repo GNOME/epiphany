@@ -54,7 +54,6 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <libsoup/soup.h>
 
 /**
  * SECTION:ephy-web-view
@@ -639,7 +638,7 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
                           guint64         page_id,
                           EphyWebView    *view)
 {
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
 
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
@@ -647,12 +646,11 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
   g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
   g_assert (view->tls_error_failing_uri != NULL);
 
-  uri = soup_uri_new (view->tls_error_failing_uri);
+  uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_NONE, NULL);
   webkit_web_context_allow_tls_certificate_for_host (ephy_embed_shell_get_web_context (shell),
                                                      view->certificate,
-                                                     uri->host);
+                                                     g_uri_get_host (uri));
   ephy_web_view_load_url (view, ephy_web_view_get_address (view));
-  soup_uri_free (uri);
 }
 
 static void
@@ -1379,16 +1377,13 @@ ephy_web_view_set_committed_location (EphyWebView *view,
   if (location == NULL || location[0] == '\0') {
     ephy_web_view_set_address (view, NULL);
   } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME ":applications")) {
-    SoupURI *uri = soup_uri_new (location);
-    char *new_address;
+    g_autoptr (GUri) uri = NULL;
+    g_autofree char *new_address = NULL;
 
     /* Strip the query from the URL for about:applications. */
-    soup_uri_set_query (uri, NULL);
-    new_address = soup_uri_to_string (uri, FALSE);
-    soup_uri_free (uri);
-
+    uri = g_uri_parse (location, G_URI_FLAGS_NONE, NULL);
+    new_address = g_uri_to_string_partial (uri, G_URI_HIDE_QUERY);
     ephy_web_view_set_address (view, new_address);
-    g_free (new_address);
   } else {
     /* We do this to get rid of an eventual password in the URL. */
     ephy_web_view_set_address (view, location);
@@ -1429,7 +1424,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   GtkWidget *toplevel;
   WebKitWebContext *web_context;
   WebKitSecurityManager *security_manager;
-  SoupURI *soup_uri;
+  g_autoptr (GUri) guri = NULL;
   g_autofree char *tld = NULL;
 
   if (view->loading_error_page)
@@ -1445,23 +1440,23 @@ update_security_status_for_committed_load (EphyWebView *view,
     embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   web_context = webkit_web_view_get_context (WEBKIT_WEB_VIEW (view));
   security_manager = webkit_web_context_get_security_manager (web_context);
-  soup_uri = soup_uri_new (uri);
+  guri = g_uri_parse (uri, G_URI_FLAGS_NONE, NULL);
 
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
-  if (soup_uri && soup_uri->host)
-    tld = hostname_to_tld (soup_uri->host);
+  if (guri && g_uri_get_host (guri))
+    tld = hostname_to_tld (g_uri_get_host (guri));
 
-  if (!soup_uri ||
-      strcmp (soup_uri->scheme, EPHY_VIEW_SOURCE_SCHEME) == 0 ||
-      strcmp (soup_uri->scheme, EPHY_READER_SCHEME) == 0 ||
-      strcmp (soup_uri->scheme, EPHY_PDF_SCHEME) == 0 ||
+  if (!guri ||
+      strcmp (g_uri_get_scheme (guri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
+      strcmp (g_uri_get_scheme (guri), EPHY_READER_SCHEME) == 0 ||
+      strcmp (g_uri_get_scheme (guri), EPHY_PDF_SCHEME) == 0 ||
       g_strcmp0 (tld, "127.0.0.1") == 0 ||
       g_strcmp0 (tld, "::1") == 0 ||
       g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
-      webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme) ||
-      webkit_security_manager_uri_scheme_is_empty_document (security_manager, soup_uri->scheme)) {
+      webkit_security_manager_uri_scheme_is_local (security_manager, g_uri_get_scheme (guri)) ||
+      webkit_security_manager_uri_scheme_is_empty_document (security_manager, g_uri_get_scheme (guri))) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;
   } else if (webkit_web_view_get_tls_info (WEBKIT_WEB_VIEW (view), &view->certificate, &view->tls_errors)) {
     g_object_ref (view->certificate);
@@ -1472,9 +1467,6 @@ update_security_status_for_committed_load (EphyWebView *view,
   }
 
   ephy_web_view_set_security_level (view, security_level);
-
-  if (soup_uri)
-    soup_uri_free (soup_uri);
 }
 
 static void
@@ -2797,11 +2789,12 @@ ephy_web_view_load_url (EphyWebView *view,
 
   effective_url = ephy_embed_utils_normalize_address (url);
   if (g_str_has_prefix (effective_url, "javascript:")) {
-    char *decoded_url;
+    g_autoptr (GUri) uri = NULL;
+    g_autofree char *decoded_url = NULL;
 
-    decoded_url = soup_uri_decode (effective_url);
+    uri = g_uri_parse (effective_url, G_URI_FLAGS_NONE, NULL);
+    decoded_url = g_uri_to_string (uri);
     webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view), decoded_url, NULL, NULL, NULL);
-    g_free (decoded_url);
   } else
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
 

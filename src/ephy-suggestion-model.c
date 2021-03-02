@@ -332,17 +332,17 @@ add_search_engines (EphySuggestionModel *self,
     g_autofree char *address = NULL;
     g_autofree char *escaped_title = NULL;
     g_autofree char *markup = NULL;
-    g_autoptr (SoupURI) uri = NULL;
+    g_autoptr (GUri) uri = NULL;
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     escaped_title = g_markup_escape_text (engines[i], -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
     suggestion = ephy_suggestion_new (markup, engines[i], address);
 
-    uri = soup_uri_new (address);
+    uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
     if (uri) {
       g_free (address);
-      address = g_strdup_printf ("%s://%s/", soup_uri_get_scheme (uri), soup_uri_get_host (uri));
+      address = g_strdup_printf ("%s://%s/", g_uri_get_scheme (uri), g_uri_get_host (uri));
     }
 
     load_favicon (self, suggestion, address);

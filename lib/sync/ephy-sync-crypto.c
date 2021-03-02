@@ -28,7 +28,6 @@
 #include <glib/gstdio.h>
 #include <inttypes.h>
 #include <json-glib/json-glib.h>
-#include <libsoup/soup.h>
 #include <nettle/aes.h>
 #include <nettle/cbc.h>
 #include <nettle/hkdf.h>
@@ -283,7 +282,7 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
 {
   SyncCryptoHawkHeader *hawk_header;
   SyncCryptoHawkArtifacts *artifacts;
-  SoupURI *uri;
+  g_autoptr (GUri) uri = NULL;
   char *resource;
   char *hash;
   char *header;
@@ -303,12 +302,12 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
   hash = options ? g_strdup (options->hash) : NULL;
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
-  uri = soup_uri_new (url);
-  resource = !soup_uri_get_query (uri) ? g_strdup (soup_uri_get_path (uri))
-                                       : g_strconcat (soup_uri_get_path (uri),
-                                                      "?",
-                                                      soup_uri_get_query (uri),
-                                                      NULL);
+  uri = g_uri_parse (url, G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  resource = !g_uri_get_query (uri) ? g_strdup (g_uri_get_path (uri))
+                                    : g_strconcat (g_uri_get_path (uri),
+                                                   "?",
+                                                   g_uri_get_query (uri),
+                                                   NULL);
 
   if (options && options->nonce) {
     nonce = g_strdup (options->nonce);
@@ -340,10 +339,10 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
                                                    options ? options->dlg : NULL,
                                                    options ? options->ext : NULL,
                                                    hash,
-                                                   soup_uri_get_host (uri),
+                                                   g_uri_get_host (uri),
                                                    method,
                                                    nonce,
-                                                   soup_uri_get_port (uri),
+                                                   g_uri_get_port (uri),
                                                    resource,
                                                    ts);
 
@@ -386,7 +385,6 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
   hawk_header->header = g_strdup (header);
   hawk_header->artifacts = artifacts;
 
-  soup_uri_free (uri);
   g_free (hash);
   g_free (mac);
   g_free (nonce);

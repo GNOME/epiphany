@@ -23,7 +23,6 @@
 #include "ephy-uri-helpers.h"
 
 #include <glib.h>
-#include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
@@ -47,20 +46,16 @@ ephy_uri_decode (const char *uri_string)
 char *
 ephy_uri_normalize (const char *uri_string)
 {
-  SoupURI *uri;
-  char *encoded_uri;
+  g_autoptr (GUri) uri = NULL;
 
   if (!uri_string || !*uri_string)
     return NULL;
 
-  uri = soup_uri_new (uri_string);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   if (!uri)
     return g_strdup (uri_string);
 
-  encoded_uri = soup_uri_normalize (uri_string, NULL);
-  soup_uri_free (uri);
-
-  return encoded_uri;
+  return g_uri_to_string (uri);
 }
 
 char *
@@ -76,4 +71,35 @@ ephy_uri_to_security_origin (const char *uri_string)
 
   /* May be NULL. */
   return result;
+}
+
+#define XDIGIT(c) ((c) <= '9' ? (c) - '0' : ((c) & 0x4F) - 'A' + 10)
+#define HEXCHAR(s) ((XDIGIT (s[1]) << 4) + XDIGIT (s[2]))
+
+char *
+ephy_uri_unescape (const char *uri_string)
+{
+  unsigned char *s, *d;
+  char *decoded;
+
+  g_assert (uri_string);
+
+  decoded = g_strdup (uri_string);
+  s = d = (unsigned char *)decoded;
+  do {
+    if (*s == '%') {
+      if (s[1] == '\0' ||
+          s[2] == '\0' ||
+          !g_ascii_isxdigit (s[1]) ||
+          !g_ascii_isxdigit (s[2])) {
+        *d++ = *s;
+        continue;
+      }
+      *d++ = HEXCHAR (s);
+      s += 2;
+    } else
+      *d++ = *s;
+  } while (*s++);
+
+  return decoded;
 }

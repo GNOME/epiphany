@@ -254,14 +254,14 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
 static void
 ephy_reader_request_start (EphyReaderRequest *request)
 {
-  g_autoptr (SoupURI) soup_uri = NULL;
+  g_autoptr (GUri) uri = NULL;
   const char *original_uri;
   WebKitWebView *web_view;
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
-  soup_uri = soup_uri_new (original_uri);
+  uri = g_uri_parse (original_uri, G_URI_FLAGS_NONE, NULL);
 
-  if (!soup_uri) {
+  if (!uri) {
     /* Can't assert because user could theoretically input something weird */
     GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
                                  WEBKIT_NETWORK_ERROR_FAILED,
@@ -283,15 +283,11 @@ ephy_reader_request_start (EphyReaderRequest *request)
   if (web_view) {
     ephy_reader_request_begin_get_source_from_web_view (request, web_view);
   } else {
-    const char *source_uri;
-
     /* Extract URI:
      * ephy-reader:https://example.com/whatever?xyz into https://example.com/whatever?xyz
      */
-    source_uri = soup_uri_to_string (soup_uri, TRUE);
-    g_assert (source_uri);
-
-    ephy_reader_request_begin_get_source_from_uri (request, source_uri);
+    g_assert (g_str_has_prefix (original_uri, "ephy-reader:"));
+    ephy_reader_request_begin_get_source_from_uri (request, original_uri + strlen ("ephy-reader:"));
   }
 
   request->source_handler->outstanding_requests =

@@ -27,9 +27,9 @@
 #include <glib/gi18n.h>
 #include <inttypes.h>
 #include <json-glib/json-glib.h>
-#include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
+#include <webkit2/webkit2.h>
 #if defined(__linux__)
 #include <sys/random.h>
 #elif defined(__FreeBSD__) || defined(__OpenBSD__)
@@ -200,29 +200,9 @@ ephy_sync_utils_generate_random_bytes (void   *random_ctx,
 char *
 ephy_sync_utils_get_audience (const char *url)
 {
-  SoupURI *uri;
-  const char *scheme;
-  const char *host;
-  char *audience;
-  char *port;
+  g_autoptr (WebKitSecurityOrigin) origin = webkit_security_origin_new_for_uri (url);
 
-  g_assert (url);
-
-  uri = soup_uri_new (url);
-  scheme = soup_uri_get_scheme (uri);
-  host = soup_uri_get_host (uri);
-  /* soup_uri_get_port returns the default port if URI does not have any port. */
-  port = g_strdup_printf (":%u", soup_uri_get_port (uri));
-
-  if (g_strstr_len (url, -1, port))
-    audience = g_strdup_printf ("%s://%s%s", scheme, host, port);
-  else
-    audience = g_strdup_printf ("%s://%s", scheme, host);
-
-  g_free (port);
-  soup_uri_free (uri);
-
-  return audience;
+  return webkit_security_origin_to_string (origin);
 }
 
 char *
