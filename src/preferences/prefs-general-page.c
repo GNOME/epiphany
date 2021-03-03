@@ -438,6 +438,7 @@ language_editor_add (PrefsGeneralPage *general_page,
 
   row = ephy_lang_row_new ();
 
+  ephy_lang_row_set_code (EPHY_LANG_ROW (row), code);
   ephy_lang_row_set_title (EPHY_LANG_ROW (row), desc);
   gtk_style_context_add_class (gtk_widget_get_style_context (row), "row");
 
