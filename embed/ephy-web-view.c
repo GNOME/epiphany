@@ -739,6 +739,10 @@ title_changed_cb (WebKitWebView *web_view,
   if (!title && uri)
     title = title_from_address = ephy_embed_utils_get_title_from_address (uri);
 
+  /* FIXME: we don't follow the same rules for transforming uri here that we do
+   * when adding it to the history db in load_committed. Should probably try to
+   * use EphyWebView:address instead?
+   */
   if (uri && title && *title && !ephy_web_view_is_history_frozen (webview))
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
 
@@ -1560,6 +1564,8 @@ load_changed_cb (WebKitWebView   *web_view,
         /* TODO: move the normalization down to the history service? */
         if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
           history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
+        else if (g_str_has_prefix (uri, EPHY_PDF_SCHEME))
+          history_uri = g_strdup (uri + strlen (EPHY_PDF_SCHEME) + 1);
         else
           history_uri = g_strdup (uri);
 
