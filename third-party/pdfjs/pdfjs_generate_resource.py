@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Pack pdf.js into a gresource file for Epiphany
 """

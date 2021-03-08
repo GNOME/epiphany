@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <!--
 Copyright 2012 Mozilla Foundation
-Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +21,7 @@ Adobe CMap resources are covered by their own copyright but the same license:
 See https://github.com/adobe-type-tools/cmap-resources
 -->
 <html dir="ltr" mozdisallowselectionprint>
-  <head pdf_data="%s" pdf_name="%s">
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
@@ -30,7 +29,6 @@ See https://github.com/adobe-type-tools/cmap-resources
     <title>PDF.js viewer</title>
 
 
-    <base href="ephy-resource:///org/gnome/epiphany/pdfjs/web/">
     <link rel="stylesheet" href="viewer.css">
 
 
@@ -39,7 +37,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script src="../build/pdf.js"></script>
 
 
-  <script src="viewer.js"></script>  
+  <script src="viewer.js"></script>
 
   </head>
 
@@ -58,6 +56,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             <button id="viewAttachments" class="toolbarButton" title="Show Attachments" tabindex="4" data-l10n-id="attachments">
                <span data-l10n-id="attachments_label">Attachments</span>
             </button>
+            <button id="viewLayers" class="toolbarButton" title="Show Layers (double-click to reset all layers to the default state)" tabindex="5" data-l10n-id="layers">
+               <span data-l10n-id="layers_label">Layers</span>
+            </button>
           </div>
         </div>
         <div id="sidebarContent">
@@ -66,6 +67,8 @@ See https://github.com/adobe-type-tools/cmap-resources
           <div id="outlineView" class="hidden">
           </div>
           <div id="attachmentsView" class="hidden">
+          </div>
+          <div id="layersView" class="hidden">
           </div>
         </div>
         <div id="sidebarResizer" class="hidden"></div>
