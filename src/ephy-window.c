@@ -3636,6 +3636,23 @@ download_completed_cb (EphyDownload *download,
 }
 
 static void
+notify_deck_child_cb (EphyWindow *window)
+{
+  GActionGroup *action_group;
+  GAction *action;
+  gboolean pages_open;
+
+  pages_open = hdy_deck_get_visible_child (HDY_DECK (window->main_deck)) == GTK_WIDGET (window->pages_view);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "content");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), pages_open);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "tabs-view");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pages_open);
+}
+
+static void
 ephy_window_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
@@ -3738,6 +3755,9 @@ ephy_window_constructed (GObject *object)
   window->main_deck = hdy_deck_new ();
   window->fullscreen_box = ephy_fullscreen_box_new ();
   window->pages_view = ephy_pages_view_new ();
+
+  g_signal_connect_swapped (window->main_deck, "notify::visible-child",
+                            G_CALLBACK (notify_deck_child_cb), window);
 
   gtk_revealer_set_transition_type (window->tab_bar_revealer, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
   hdy_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
