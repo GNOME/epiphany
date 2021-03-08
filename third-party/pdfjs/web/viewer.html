@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
 Copyright 2012 Mozilla Foundation
+Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,14 +22,14 @@ Adobe CMap resources are covered by their own copyright but the same license:
 See https://github.com/adobe-type-tools/cmap-resources
 -->
 <html dir="ltr" mozdisallowselectionprint>
-  <head>
+  <head pdf_data="%s" pdf_name="%s">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>PDF.js viewer</title>
 
-
+    <base href="ephy-resource:///org/gnome/epiphany/pdfjs/web/">
     <link rel="stylesheet" href="viewer.css">
 
 

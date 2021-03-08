@@ -1,5 +1,5 @@
 diff --git a/third-party/pdfjs/web/viewer.css b/third-party/pdfjs/web/viewer.css
-index 595660ad3..8711953bf 100644
+index 605cad57e..21af9931d 100644
 --- a/third-party/pdfjs/web/viewer.css
 +++ b/third-party/pdfjs/web/viewer.css
 @@ -1,4 +1,5 @@
@@ -8,15 +8,15 @@ index 595660ad3..8711953bf 100644
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1192,6 +1193,7 @@ html[dir='rtl'] .dropdownToolbarButton::after {
+@@ -2361,6 +2362,7 @@ html[dir="rtl"] .dropdownToolbarButton::after {
  }
  
  .dropdownToolbarButton > select {
 +  -webkit-appearance: none;
    width: 162px;
-   height: 23px;
+   height: 28px;
    font-size: 12px;
-@@ -1524,6 +1526,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
+@@ -3132,6 +3134,7 @@ html[dir="rtl"] .toolbarField[type="checkbox"] {
  }
  
  .toolbarField.pageNumber {
@@ -25,7 +25,7 @@ index 595660ad3..8711953bf 100644
    min-width: 16px;
    text-align: right;
 diff --git a/third-party/pdfjs/web/viewer.html b/third-party/pdfjs/web/viewer.html
-index 1730b09b7..db8517b1a 100644
+index 123a47d2c..61f1a0e21 100644
 --- a/third-party/pdfjs/web/viewer.html
 +++ b/third-party/pdfjs/web/viewer.html
 @@ -1,6 +1,7 @@
@@ -36,7 +36,7 @@ index 1730b09b7..db8517b1a 100644
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
-@@ -21,7 +22,7 @@ Adobe CMap resources are covered by their own copyright but the same license:
+@@ -21,14 +22,14 @@ Adobe CMap resources are covered by their own copyright but the same license:
  See https://github.com/adobe-type-tools/cmap-resources
  -->
  <html dir="ltr" mozdisallowselectionprint>
@@ -45,16 +45,16 @@ index 1730b09b7..db8517b1a 100644
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
      <meta name="google" content="notranslate">
-@@ -29,6 +30,7 @@ See https://github.com/adobe-type-tools/cmap-resources
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <title>PDF.js viewer</title>
  
- 
+-
 +    <base href="ephy-resource:///org/gnome/epiphany/pdfjs/web/">
      <link rel="stylesheet" href="viewer.css">
  
  
 diff --git a/third-party/pdfjs/web/viewer.js b/third-party/pdfjs/web/viewer.js
-index 3cf8beed8..e7a792006 100644
+index d89902345..1d54e92c7 100644
 --- a/third-party/pdfjs/web/viewer.js
 +++ b/third-party/pdfjs/web/viewer.js
 @@ -3,6 +3,7 @@
@@ -65,7 +65,7 @@ index 3cf8beed8..e7a792006 100644
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1836,8 +1837,7 @@ function webViewerInitialized() {
+@@ -1973,8 +1974,7 @@ function webViewerInitialized() {
    let file;
    const queryString = document.location.search.substring(1);
    const params = (0, _ui_utils.parseQueryString)(queryString);
@@ -75,7 +75,7 @@ index 3cf8beed8..e7a792006 100644
    const fileInput = document.createElement("input");
    fileInput.id = appConfig.openFileInputName;
    fileInput.className = "fileInput";
-@@ -1845,12 +1845,10 @@ function webViewerInitialized() {
+@@ -1982,12 +1982,8 @@ function webViewerInitialized() {
    fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
    document.body.appendChild(fileInput);
  
@@ -87,12 +87,10 @@ index 3cf8beed8..e7a792006 100644
 -  }
 +  appConfig.toolbar.openFile.setAttribute('hidden', 'true');
 +  appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
-+
-+  appConfig.toolbar.viewBookmark.setAttribute('hidden', 'true');
  
    fileInput.addEventListener("change", function (evt) {
      const files = evt.target.files;
-@@ -1912,8 +1910,18 @@ function webViewerInitialized() {
+@@ -2049,8 +2045,18 @@ function webViewerInitialized() {
      }
    }, true);
  
@@ -112,7 +110,7 @@ index 3cf8beed8..e7a792006 100644
    } catch (reason) {
      PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(msg => {
        PDFViewerApplication.error(msg, reason);
-@@ -6520,6 +6528,8 @@ class PDFHistory {
+@@ -6877,6 +6883,8 @@ class PDFHistory {
        }
      }
  
@@ -121,7 +119,7 @@ index 3cf8beed8..e7a792006 100644
      if (shouldReplace) {
        window.history.replaceState(newState, "", newUrl);
      } else {
-@@ -13276,4 +13286,4 @@ _app.PDFPrintServiceFactory.instance = {
+@@ -13897,4 +13905,4 @@ _app.PDFPrintServiceFactory.instance = {
  
  /***/ })
  /******/ ]);

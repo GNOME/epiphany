@@ -4,7 +4,7 @@ This directory contains an official pdf.js release version, distributed at: http
 
 ## Update process
 Grab a new official release (*-dist.zip) distributed at github and extract everything except viewer.[html/js/css] and map files into this directory.
-Then recreate the resource xml file with `python pdfjs-generate-resource.py`
+Then recreate the resource xml file with `python ./pdfjs_generate_resource.py`
 
 The additional files within this directory are modified for Epiphany and shouldn't be changed automatically.
 
@@ -61,6 +61,9 @@ Here are two small changes for webkit specific layout:
 ## Patch with changes for Epiphany
 
 For easier updating to a newer version there is a patch file `epiphany-pdfjs-changes.patch` containing the necessary changes to the viewer files.
+
+## Note
+Do not add map files to this bundle (webinspector will complain about it), but they are not needed here and would increase our storage size otherwise.
 
 # Documentation created by Jan-Michael Brummer <jan.brummer@tabos.org>
 

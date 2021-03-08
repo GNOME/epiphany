@@ -3,6 +3,7 @@
  * Javascript code in this page
  *
  * Copyright 2020 Mozilla Foundation
+ * Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1973,8 +1974,7 @@ function webViewerInitialized() {
   let file;
   const queryString = document.location.search.substring(1);
   const params = (0, _ui_utils.parseQueryString)(queryString);
-  file = "file" in params ? params.file : _app_options.AppOptions.get("defaultUrl");
-  validateFileURL(file);
+  file = '';
   const fileInput = document.createElement("input");
   fileInput.id = appConfig.openFileInputName;
   fileInput.className = "fileInput";
@@ -1982,12 +1982,8 @@ function webViewerInitialized() {
   fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
   document.body.appendChild(fileInput);
 
-  if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-    appConfig.toolbar.openFile.setAttribute("hidden", "true");
-    appConfig.secondaryToolbar.openFileButton.setAttribute("hidden", "true");
-  } else {
-    fileInput.value = null;
-  }
+  appConfig.toolbar.openFile.setAttribute('hidden', 'true');
+  appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
 
   fileInput.addEventListener("change", function (evt) {
     const files = evt.target.files;
@@ -2049,8 +2045,18 @@ function webViewerInitialized() {
     }
   }, true);
 
+  var file_name = document.head.getAttribute('pdf_name')
+  var raw = atob(document.head.getAttribute('pdf_data'));
+  var raw_length = raw.length;
+  var array = new Uint8Array(new ArrayBuffer(raw_length));
+
+  for(var i = 0; i < raw_length; i++) {
+    array[i] = raw.charCodeAt(i);
+  }
+
   try {
-    webViewerOpenFileViaURL(file);
+    PDFViewerApplication.open(array);
+    PDFViewerApplication.setTitleUsingUrl(file_name);
   } catch (reason) {
     PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(msg => {
       PDFViewerApplication.error(msg, reason);
@@ -6877,6 +6883,8 @@ class PDFHistory {
       }
     }
 
+    // FIXME: This currently breaks Epiphany due to rewriting history with baseUrl
+    return;
     if (shouldReplace) {
       window.history.replaceState(newState, "", newUrl);
     } else {
