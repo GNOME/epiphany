@@ -703,7 +703,7 @@ on_enter_notify_event (GtkWidget        *widget,
 
   gtk_widget_queue_allocate (embed->overlay);
 
-  return GDK_EVENT_STOP;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
