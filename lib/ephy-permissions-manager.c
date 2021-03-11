@@ -191,13 +191,25 @@ static gint
 webkit_security_origin_compare (WebKitSecurityOrigin *a,
                                 WebKitSecurityOrigin *b)
 {
-  if (webkit_security_origin_is_opaque (a))
-    return -1;
-  if (webkit_security_origin_is_opaque (b))
-    return 1;
+  const char *protocol_a, *protocol_b;
+  const char *host_a, *host_b;
 
-  return g_strcmp0 (webkit_security_origin_get_protocol (a), webkit_security_origin_get_protocol (b)) ||
-         g_strcmp0 (webkit_security_origin_get_host (a), webkit_security_origin_get_host (b)) ||
+  protocol_a = webkit_security_origin_get_protocol (a);
+  protocol_b = webkit_security_origin_get_protocol (b);
+  host_a = webkit_security_origin_get_host (a);
+  host_b = webkit_security_origin_get_host (b);
+
+  /* Security origins objects with NULL protocol or host do not represent the
+   * same origin as others with NULL protocol or host. That is, they're not
+   * equal. Therefore, they cannot be ordered, and must not be passed to this
+   * compare function.
+   */
+  g_assert (protocol_a != NULL);
+  g_assert (protocol_b != NULL);
+  g_assert (host_a != NULL);
+  g_assert (host_b != NULL);
+
+  return strcmp (protocol_a, protocol_b) || strcmp (host_a, host_b) ||
          webkit_security_origin_get_port (b) - webkit_security_origin_get_port (a);
 }
 
