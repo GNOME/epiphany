@@ -2883,6 +2883,11 @@ tab_has_modified_forms_cb (EphyWebView             *view,
     HdyTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
     if (!has_modified_forms || confirm_close_with_modified_forms (data->window)) {
+      /* It's safe to close the tab immediately because we are only checking a
+       * single tab for modified forms here. There is an entirely separate
+       * codepath for checking modified forms when closing the whole window,
+       * see ephy_window_check_modified_forms().
+       */
       hdy_tab_view_close_page_finish (tab_view, data->page, TRUE);
       ephy_window_close_tab (data->window, data->embed);
     } else
@@ -4204,10 +4209,10 @@ typedef struct {
 
   guint embeds_to_check;
   EphyEmbed *modified_embed;
-} ModifiedFormsData;
+} WindowHasModifiedFormsData;
 
 static void
-modified_forms_data_free (ModifiedFormsData *data)
+window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
 {
   g_object_unref (data->cancellable);
 
@@ -4215,7 +4220,7 @@ modified_forms_data_free (ModifiedFormsData *data)
 }
 
 static void
-continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
+continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
   gboolean should_close;
 
@@ -4230,6 +4235,10 @@ continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
       return;
   }
 
+  /* FIXME: We only checked the first tab with modified forms. If more tabs
+   * have modified forms, they will be lost and the user will not be warned.
+   */
+
   data->window->force_close = TRUE;
   should_close = ephy_window_close (data->window);
   data->window->force_close = FALSE;
@@ -4238,16 +4247,20 @@ continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
 }
 
 static void
-has_modified_forms_cb (EphyWebView       *view,
-                       GAsyncResult      *result,
-                       ModifiedFormsData *data)
+window_has_modified_forms_cb (EphyWebView                *view,
+                              GAsyncResult               *result,
+                              WindowHasModifiedFormsData *data)
 {
   gboolean has_modified_forms;
 
   data->embeds_to_check--;
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
   if (has_modified_forms) {
-    /* Cancel all others */
+    /* Cancel all others
+     *
+     * FIXME: If more tabs have modified forms, they will be lost and the user
+     * will not be warned.
+     */
     g_cancellable_cancel (data->cancellable);
     data->modified_embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   }
@@ -4256,11 +4269,11 @@ has_modified_forms_cb (EphyWebView       *view,
     return;
 
   continue_window_close_after_modified_forms_check (data);
-  modified_forms_data_free (data);
+  window_has_modified_forms_data_free (data);
 }
 
 static gboolean
-has_modified_forms_timeout_cb (ModifiedFormsData *data)
+window_has_modified_forms_timeout_cb (WindowHasModifiedFormsData *data)
 {
   data->window->modified_forms_timeout_id = 0;
 
@@ -4274,15 +4287,19 @@ has_modified_forms_timeout_cb (ModifiedFormsData *data)
   return G_SOURCE_REMOVE;
 }
 
+/* This function checks an entire EphyWindow to see if it contains any tab with
+ * modified forms. There is an entirely separate codepath for checking whether
+ * a single tab has modified forms, see tab_view_close_page_cb().
+ */
 static void
 ephy_window_check_modified_forms (EphyWindow *window)
 {
   GList *tabs, *l;
-  ModifiedFormsData *data;
+  WindowHasModifiedFormsData *data;
 
   window->checking_modified_forms = TRUE;
 
-  data = g_new0 (ModifiedFormsData, 1);
+  data = g_new0 (WindowHasModifiedFormsData, 1);
   data->window = window;
   data->cancellable = g_cancellable_new ();
   data->embeds_to_check = ephy_tab_view_get_n_pages (window->tab_view);
@@ -4293,7 +4310,7 @@ ephy_window_check_modified_forms (EphyWindow *window)
 
     ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
                                       data->cancellable,
-                                      (GAsyncReadyCallback)has_modified_forms_cb,
+                                      (GAsyncReadyCallback)window_has_modified_forms_cb,
                                       data);
   }
 
@@ -4301,7 +4318,7 @@ ephy_window_check_modified_forms (EphyWindow *window)
    * unresponsive web process would prevent the window from closing.
    */
   window->modified_forms_timeout_id =
-    g_timeout_add_seconds (1, (GSourceFunc)has_modified_forms_timeout_cb, data);
+    g_timeout_add_seconds (1, (GSourceFunc)window_has_modified_forms_timeout_cb, data);
 
   g_list_free (tabs);
 }
