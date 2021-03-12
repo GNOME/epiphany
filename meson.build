@@ -1,6 +1,6 @@
 project('epiphany', 'c',
   license: 'GPL3+',
-  version: '40.beta',
+  version: '40.rc',
   meson_version: '>= 0.47.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
@@ -59,7 +59,7 @@ conf.set_quoted('G_LOG_DOMAIN', 'epiphany')
 
 version_array = meson.project_version().split('.')
 conf.set('EPHY_MAJOR_VERSION', version_array[0].to_int())
-if version_array[1] in ['alpha', 'beta']
+if version_array[1] in ['alpha', 'beta', 'rc']
   conf.set('EPHY_MINOR_VERSION', 0)
 else
   conf.set('EPHY_MINOR_VERSION', version_array[1].to_int())
