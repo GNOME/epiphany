@@ -567,6 +567,7 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        "enable-plugins", FALSE,
+                                                       "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
