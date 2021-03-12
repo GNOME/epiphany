@@ -2905,19 +2905,6 @@ ephy_window_close_tab (EphyWindow *window,
    * web process (or network process) has hung. E.g. the user could
    * click the close button several times. This is difficult to guard
    * against elsewhere.
-   *
-   * Even if there is only one close request,
-   * tab_has_modified_forms_timeout_cb() will run when the web process
-   * has hung, calling ephy_window_close_tab(). Then in the first call
-   * to gtk_widget_destroy() below, that will trigger the completion of
-   * a stalled call to ephy_web_view_has_modified_forms(), so
-   * tab_has_modified_forms_cb() will execute, and that also calls this
-   * function.
-   *
-   * Either way, a second call to ephy_web_view_close_tab() can be
-   * triggered recursively before gtk_widget_destroy() has completed.
-   * And it turns out that calling gtk_widget_destroy() recursively
-   * inside itself is bad. So guard against this.
    */
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "ephy-window-close-tab-closed")))
     return;
@@ -2953,7 +2940,6 @@ ephy_window_close_tab (EphyWindow *window,
 typedef struct {
   EphyWindow *window;
   EphyEmbed *embed;
-  guint id;
 } TabHasModifiedFormsData;
 
 static TabHasModifiedFormsData *
@@ -2963,7 +2949,6 @@ tab_has_modified_forms_data_new (EphyWindow *window,
   TabHasModifiedFormsData *data = g_new (TabHasModifiedFormsData, 1);
   data->window = window;
   data->embed = embed;
-  data->id = 0;
   g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&data->window);
   g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *)&data->embed);
   return data;
@@ -2974,7 +2959,6 @@ tab_has_modified_forms_data_free (TabHasModifiedFormsData *data)
 {
   g_clear_weak_pointer (&data->window);
   g_clear_weak_pointer (&data->embed);
-  g_clear_handle_id (&data->id, g_source_remove);
   g_clear_pointer (&data, g_free);
 }
 
@@ -2987,36 +2971,13 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
 
-  if (data->id != 0) {
-    /* Ensure tab doesn't close while waiting for the user. */
-    g_source_remove (data->id);
-  }
-
-  if (data->id != 0 &&
-      data->window != NULL &&
+  if (data->window != NULL &&
       data->embed != NULL &&
       (!has_modified_forms || confirm_close_with_modified_forms (data->window))) {
     ephy_window_close_tab (data->window, data->embed);
   }
 
-  data->id = 0;
   tab_has_modified_forms_data_free (data);
-}
-
-static gboolean
-tab_has_modified_forms_timeout_cb (TabHasModifiedFormsData *data)
-{
-  /* The web process has stalled and ephy_web_view_has_modified_forms()
-   * will probably not complete unless we destroy the tab. So do that
-   * now. Beware: this will trigger the callback to complete before it
-   * returns! So data will be freed during the call to
-   * ephy_window_close_tab().
-   */
-  data->id = 0;
-  if (data->window != NULL && data->embed != NULL)
-    ephy_window_close_tab (data->window, data->embed);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -3079,7 +3040,6 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
      * been hung if there's no response after one second.
      */
     data = tab_has_modified_forms_data_new (window, embed);
-    data->id = g_timeout_add_seconds (1, (GSourceFunc)tab_has_modified_forms_timeout_cb, data);
     ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
                                       NULL,
                                       (GAsyncReadyCallback)tab_has_modified_forms_cb,
@@ -4299,28 +4259,11 @@ has_modified_forms_cb (EphyWebView       *view,
   modified_forms_data_free (data);
 }
 
-static gboolean
-has_modified_forms_timeout_cb (ModifiedFormsData *data)
-{
-  data->window->modified_forms_timeout_id = 0;
-
-  /* We have a stalled web process. Using the cancellable is not enough.
-   * Nothing for it but to force things. Each web view's
-   * has_modified_forms_cb() will complete as that view is being
-   * destroyed.
-   */
-  gtk_widget_destroy (GTK_WIDGET (data->window));
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 ephy_window_check_modified_forms (EphyWindow *window)
 {
   GList *tabs, *l;
   ModifiedFormsData *data;
-
-  window->checking_modified_forms = TRUE;
 
   data = g_new0 (ModifiedFormsData, 1);
   data->window = window;
@@ -4328,6 +4271,13 @@ ephy_window_check_modified_forms (EphyWindow *window)
   data->embeds_to_check = gtk_notebook_get_n_pages (window->notebook);
 
   tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
+  if (!tabs) {
+    modified_forms_data_free (data);
+    return;
+  }
+
+  window->checking_modified_forms = TRUE;
+
   for (l = tabs; l != NULL; l = l->next) {
     EphyEmbed *embed = (EphyEmbed *)l->data;
 
@@ -4336,12 +4286,6 @@ ephy_window_check_modified_forms (EphyWindow *window)
                                       (GAsyncReadyCallback)has_modified_forms_cb,
                                       data);
   }
-
-  /* Set timeout to guard against web process hangs. Otherwise, a single
-   * unresponsive web process would prevent the window from closing.
-   */
-  window->modified_forms_timeout_id =
-    g_timeout_add_seconds (1, (GSourceFunc)has_modified_forms_timeout_cb, data);
 
   g_list_free (tabs);
 }
