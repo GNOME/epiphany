@@ -191,10 +191,13 @@ static gint
 webkit_security_origin_compare (WebKitSecurityOrigin *a,
                                 WebKitSecurityOrigin *b)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   if (webkit_security_origin_is_opaque (a))
     return -1;
   if (webkit_security_origin_is_opaque (b))
     return 1;
+#pragma GCC diagnostic pop
 
   return g_strcmp0 (webkit_security_origin_get_protocol (a), webkit_security_origin_get_protocol (b)) ||
          g_strcmp0 (webkit_security_origin_get_host (a), webkit_security_origin_get_host (b)) ||

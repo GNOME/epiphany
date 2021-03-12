@@ -903,8 +903,11 @@ ephy_embed_shell_startup (GApplication *application)
     favicon_db_path = g_build_filename (ephy_cache_dir (), "icondatabase", NULL);
     webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     /* Do not ignore TLS errors. */
     webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
+#pragma GCC diagnostic pop
   }
 
   /* about: URIs handler */
