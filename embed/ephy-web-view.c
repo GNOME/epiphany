@@ -3110,6 +3110,18 @@ ephy_web_view_set_should_bypass_safe_browsing (EphyWebView *view,
   view->bypass_safe_browsing = bypass_safe_browsing;
 }
 
+static gboolean
+has_modified_forms_timeout_cb (gpointer user_data)
+{
+  GTask *task = user_data;
+
+  g_assert (!g_task_get_completed (task));
+  g_task_set_task_data (task, GINT_TO_POINTER (0), NULL);
+  g_task_return_boolean (task, FALSE);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 has_modified_forms_cb (WebKitWebView *view,
                        GAsyncResult  *result,
@@ -3118,8 +3130,18 @@ has_modified_forms_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   gboolean retval = FALSE;
   GError *error = NULL;
+  gulong id;
 
   js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+
+  id = GPOINTER_TO_INT (g_task_get_task_data (task));
+  if (id == 0) {
+    /* We hit the timeout. Our task has already returned. */
+    g_assert (g_task_get_completed (task));
+    goto out;
+  }
+  g_source_remove (id);
+
   if (!js_result) {
     g_task_return_error (task, error);
   } else {
@@ -3128,6 +3150,9 @@ has_modified_forms_cb (WebKitWebView *view,
     webkit_javascript_result_unref (js_result);
   }
 
+out:
+  if (js_result)
+    webkit_javascript_result_unref (js_result);
   g_object_unref (task);
 }
 
@@ -3152,10 +3177,23 @@ ephy_web_view_has_modified_forms (EphyWebView         *view,
                                   gpointer             user_data)
 {
   GTask *task;
+  gulong id;
 
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
+
+  /* Set timeout to guard against web process hangs. Otherwise, a single
+   * unresponsive web process would prevent the window from closing. Note that
+   * although webkit_web_view_run_javascript_in_world() takes a cancellable,
+   * it's not *really* cancellable and attempting to cancel it just causes it to
+   * return G_IO_ERROR_CANCELLED after however long it takes to finish, which
+   * will be never if the web process is unresponsive, so we always fake
+   * completion after a two second delay.
+   */
+  id = g_timeout_add_seconds (2, has_modified_forms_timeout_cb, task);
+  g_task_set_task_data (task, GINT_TO_POINTER (id), NULL);
+
   webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
                                            "Ephy.hasModifiedForms();",
                                            ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
