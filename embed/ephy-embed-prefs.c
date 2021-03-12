@@ -569,6 +569,7 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-plugins", FALSE,
                                                        "enable-media-stream", TRUE,
                                                        "enable-smooth-scrolling", TRUE,
+                                                       "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
   for (i = 0; i < G_N_ELEMENTS (webkit_pref_entries); i++) {
