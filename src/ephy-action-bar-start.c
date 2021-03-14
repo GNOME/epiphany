@@ -49,7 +49,6 @@ struct _EphyActionBarStart {
   GtkWidget *placeholder;
 
   guint navigation_buttons_menu_timeout;
-  gboolean is_fullscreen;
 };
 
 G_DEFINE_TYPE (EphyActionBarStart, ephy_action_bar_start, GTK_TYPE_BOX)
@@ -503,8 +502,7 @@ update_new_tab_button_visibility (EphyActionBarStart *action_bar_start)
 
   gtk_widget_set_visible (action_bar_start->new_tab_button,
                           (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
-                          !is_desktop_pantheon () &&
-                          !action_bar_start->is_fullscreen);
+                          !is_desktop_pantheon ());
 }
 
 static void
@@ -617,7 +615,6 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
 static void
 ephy_action_bar_start_init (EphyActionBarStart *action_bar_start)
 {
-  action_bar_start->is_fullscreen = FALSE;
 }
 
 EphyActionBarStart *
@@ -651,17 +648,6 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
                                  _(REFRESH_BUTTON_TOOLTIP));
   }
-}
-
-void
-ephy_action_bar_set_is_fullscreen (EphyActionBarStart *action_bar_start,
-                                   gboolean            fullscreen)
-{
-  if (action_bar_start->is_fullscreen == fullscreen)
-    return;
-
-  action_bar_start->is_fullscreen = fullscreen;
-  update_new_tab_button_visibility (action_bar_start);
 }
 
 GtkWidget *
