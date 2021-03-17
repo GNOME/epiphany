@@ -239,8 +239,8 @@ on_add_button_clicked (GtkButton *button,
   dialog = gtk_file_chooser_native_new (_("Open File (manifest.json/xpi)"),
                                         GTK_WINDOW (self),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        _("_Cancel"),
-                                        _("_Open"));
+                                        _("_Open"),
+                                        _("_Cancel"));
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), "WebExtensions");
