@@ -576,7 +576,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->access_microphone_combobox = add_permission_combobox (popover, _("Microphone access"), on_access_microphone_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
-  popover->autoplay_combobox = add_permission_combobox (popover, _("Media autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, "Without Sound");
+  popover->autoplay_combobox = add_permission_combobox (popover, _("Media autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
 
   gtk_container_add (GTK_CONTAINER (popover), popover->grid);
   gtk_widget_show_all (popover->grid);
