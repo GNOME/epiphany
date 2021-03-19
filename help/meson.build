@@ -15,7 +15,6 @@ help_files = [
   'data-personal-data.page',
   'history.page',
   'history-delete.page',
-  'pref.page',
   'pref-cookies.page',
   'pref-css.page',
   'pref-downloads.page',
