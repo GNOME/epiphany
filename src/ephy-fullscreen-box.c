@@ -31,6 +31,7 @@ struct _EphyFullscreenBox {
 
   HdyFlap *flap;
   GtkEventController *controller;
+  GtkGesture *gesture;
 
   gboolean fullscreen;
   gboolean autohide;
@@ -39,6 +40,7 @@ struct _EphyFullscreenBox {
 
   GtkWidget *last_focus;
   gdouble last_y;
+  gboolean is_touch;
 };
 
 static void ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface);
@@ -123,20 +125,27 @@ is_descendant_of (GtkWidget *widget,
   return parent == target;
 }
 
-static void
-update (EphyFullscreenBox *self,
-        gboolean           hide_immediately)
+static double
+get_titlebar_area_height (EphyFullscreenBox *self)
 {
   gdouble height;
-
-  if (!self->autohide || !self->fullscreen)
-    return;
 
   height = gtk_widget_get_allocated_height (hdy_flap_get_flap (self->flap));
   height *= hdy_flap_get_reveal_progress (self->flap);
   height = MAX (height, SHOW_HEADERBAR_DISTANCE_PX);
 
-  if (self->last_y <= height) {
+  return height;
+}
+
+static void
+update (EphyFullscreenBox *self,
+        gboolean           hide_immediately)
+{
+  if (!self->autohide || !self->fullscreen)
+    return;
+
+  if (!self->is_touch &&
+      self->last_y <= get_titlebar_area_height (self)) {
     show_ui (self);
     return;
   }
@@ -155,9 +164,24 @@ motion_cb (EphyFullscreenBox *self,
            gdouble            x,
            gdouble            y)
 {
+  self->is_touch = FALSE;
   self->last_y = y;
 
   update (self, FALSE);
+}
+
+static void
+press_cb (EphyFullscreenBox *self,
+          int                n_press,
+          double             x,
+          double             y)
+{
+  gtk_gesture_set_state (self->gesture, GTK_EVENT_SEQUENCE_DENIED);
+
+  self->is_touch = TRUE;
+
+  if (y > get_titlebar_area_height (self))
+    update (self, TRUE);
 }
 
 static void
@@ -306,6 +330,7 @@ ephy_fullscreen_box_dispose (GObject *object)
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
 
   g_clear_object (&self->controller);
+  g_clear_object (&self->gesture);
 
   G_OBJECT_CLASS (ephy_fullscreen_box_parent_class)->dispose (object);
 }
@@ -390,6 +415,13 @@ ephy_fullscreen_box_init (EphyFullscreenBox *self)
   gtk_event_controller_set_propagation_phase (self->controller, GTK_PHASE_CAPTURE);
   g_signal_connect_object (self->controller, "motion",
                            G_CALLBACK (motion_cb), self, G_CONNECT_SWAPPED);
+
+  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->gesture),
+                                              GTK_PHASE_CAPTURE);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), TRUE);
+  g_signal_connect_object (self->gesture, "pressed",
+                           G_CALLBACK (press_cb), self, G_CONNECT_SWAPPED);
 }
 
 static void
