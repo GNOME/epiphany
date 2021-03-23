@@ -38,6 +38,8 @@
 #include <glib/gi18n.h>
 #include <handy.h>
 
+#define POPOVER_HIDE_DELAY 300
+
 enum {
   PROP_0,
   PROP_WINDOW,
@@ -63,6 +65,9 @@ struct _EphyHeaderBar {
   GtkWidget *restore_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *combined_stop_reload_image;
+  GtkWidget *page_menu_popover;
+
+  guint popover_hide_timeout_id;
 };
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
@@ -116,6 +121,16 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
 }
 
+static gboolean
+hide_timeout_cb (EphyHeaderBar *header_bar)
+{
+  gtk_popover_popdown (GTK_POPOVER (header_bar->page_menu_popover));
+
+  header_bar->popover_hide_timeout_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 fullscreen_changed_cb (EphyHeaderBar *header_bar)
 {
@@ -126,6 +141,13 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar), !fullscreen);
   gtk_widget_set_visible (header_bar->restore_button, fullscreen);
   ephy_action_bar_set_is_fullscreen (header_bar->action_bar_start, fullscreen);
+
+  if (fullscreen) {
+    g_clear_handle_id (&header_bar->popover_hide_timeout_id, g_source_remove);
+
+    header_bar->popover_hide_timeout_id =
+      g_timeout_add (POPOVER_HIDE_DELAY, (GSourceFunc)hide_timeout_cb, header_bar);
+  }
 }
 
 static void
@@ -168,7 +190,6 @@ ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
   GtkWidget *button;
-  GtkWidget *page_menu_popover;
   GtkWidget *event_box;
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
@@ -263,7 +284,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_type_ensure (G_TYPE_THEMED_ICON);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
-  page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
+  header_bar->page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
   header_bar->zoom_level_label = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-separator")));
@@ -306,7 +327,7 @@ ephy_header_bar_constructed (GObject *object)
   }
   g_settings_bind (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS, gtk_builder_get_object (builder, "extensions-button"), "visible", G_SETTINGS_BIND_DEFAULT);
 
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->page_menu_popover);
   g_object_unref (builder);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
@@ -341,6 +362,16 @@ ephy_header_bar_constructed (GObject *object)
 }
 
 static void
+ephy_header_bar_dispose (GObject *object)
+{
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
+
+  g_clear_handle_id (&header_bar->popover_hide_timeout_id, g_source_remove);
+
+  G_OBJECT_CLASS (ephy_header_bar_parent_class)->dispose (object);
+}
+
+static void
 ephy_header_bar_init (EphyHeaderBar *header_bar)
 {
 }
@@ -353,6 +384,7 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   gobject_class->set_property = ephy_header_bar_set_property;
   gobject_class->get_property = ephy_header_bar_get_property;
   gobject_class->constructed = ephy_header_bar_constructed;
+  gobject_class->dispose = ephy_header_bar_dispose;
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
