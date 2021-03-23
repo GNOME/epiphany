@@ -497,7 +497,7 @@ ephy_fullscreen_box_set_fullscreen (EphyFullscreenBox *self,
 
   if (fullscreen) {
     hdy_flap_set_fold_policy (self->flap, HDY_FLAP_FOLD_POLICY_ALWAYS);
-    start_hide_timeout (self);
+    update (self, FALSE);
   } else {
     hdy_flap_set_fold_policy (self->flap, HDY_FLAP_FOLD_POLICY_NEVER);
     show_ui (self);
