@@ -161,13 +161,27 @@ update (EphyFullscreenBox *self,
 
 static void
 motion_cb (EphyFullscreenBox *self,
-           gdouble            x,
-           gdouble            y)
+           double             x,
+           double             y)
 {
   self->is_touch = FALSE;
   self->last_y = y;
 
   update (self, FALSE);
+}
+
+static void
+enter_cb (EphyFullscreenBox *self,
+          double             x,
+          double             y)
+{
+  g_autoptr (GdkEvent) event = gtk_get_current_event ();
+
+  if (event->crossing.window != gtk_widget_get_window (GTK_WIDGET (self)) ||
+      event->crossing.detail == GDK_NOTIFY_INFERIOR)
+    return;
+
+  motion_cb (self, x, y);
 }
 
 static void
@@ -413,6 +427,8 @@ ephy_fullscreen_box_init (EphyFullscreenBox *self)
 
   self->controller = gtk_event_controller_motion_new (GTK_WIDGET (self));
   gtk_event_controller_set_propagation_phase (self->controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_object (self->controller, "enter",
+                           G_CALLBACK (enter_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->controller, "motion",
                            G_CALLBACK (motion_cb), self, G_CONNECT_SWAPPED);
 
