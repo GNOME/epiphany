@@ -1180,8 +1180,11 @@ session_parse_window (SessionParserContext  *context,
   if (is_maximized)
     gtk_window_maximize (GTK_WINDOW (context->window));
 
-  if (is_fullscreen)
+  if (is_fullscreen) {
+    /* Treat fullscreen on session restore same as fullscreen action */
+    ephy_window_show_fullscreen_header_bar (context->window);
     gtk_window_fullscreen (GTK_WINDOW (context->window));
+  }
 }
 
 static void
