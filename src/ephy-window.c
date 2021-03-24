@@ -627,10 +627,6 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
            keyval != GDK_KEY_KP_Page_Up &&   /* Previous Tab */
            keyval != GDK_KEY_Page_Down &&    /* Next Tab */
            keyval != GDK_KEY_KP_Page_Down && /* Next Tab */
-           keyval != GDK_KEY_Home &&         /* First Tab */
-           keyval != GDK_KEY_KP_Home &&      /* First Tab */
-           keyval != GDK_KEY_End &&          /* Last Tab */
-           keyval != GDK_KEY_KP_End &&       /* Last Tab */
            keyval != GDK_KEY_Tab &&          /* Next Tab */
            keyval != GDK_KEY_KP_Tab &&       /* Next Tab */
            keyval != GDK_KEY_ISO_Left_Tab;   /* Previous Tab (Shift+Tab -> ISO Left Tab) */
@@ -640,11 +636,7 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
            keyval != GDK_KEY_Page_Up &&      /* Move Tab Left */
            keyval != GDK_KEY_KP_Page_Up &&   /* Move Tab Left */
            keyval != GDK_KEY_Page_Down &&    /* Move Tab Right */
-           keyval != GDK_KEY_KP_Page_Down && /* Move Tab Right */
-           keyval != GDK_KEY_Home &&         /* First Tab */
-           keyval != GDK_KEY_KP_Home &&      /* First Tab */
-           keyval != GDK_KEY_End &&          /* Last Tab */
-           keyval != GDK_KEY_KP_End;         /* Last Tab */
+           keyval != GDK_KEY_KP_Page_Down;   /* Move Tab Right */
 
   if ((event->state & state_mask) == GDK_MOD1_MASK)
     return keyval != GDK_KEY_Left &&      /* Back */
