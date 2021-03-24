@@ -23,7 +23,7 @@
 
 #include <handy.h>
 
-#define INACTIVITY_TIME_MS 3000
+#define FULLSCREEN_HIDE_DELAY 300
 #define SHOW_HEADERBAR_DISTANCE_PX 5
 
 struct _EphyFullscreenBox {
@@ -99,7 +99,9 @@ start_hide_timeout (EphyFullscreenBox *self)
   if (self->timeout_id)
     return;
 
-  self->timeout_id = g_timeout_add (INACTIVITY_TIME_MS, (GSourceFunc)hide_timeout_cb, self);
+  self->timeout_id = g_timeout_add (FULLSCREEN_HIDE_DELAY,
+                                    (GSourceFunc)hide_timeout_cb,
+                                    self);
 }
 
 static gboolean
@@ -167,7 +169,7 @@ motion_cb (EphyFullscreenBox *self,
   self->is_touch = FALSE;
   self->last_y = y;
 
-  update (self, FALSE);
+  update (self, TRUE);
 }
 
 static void
