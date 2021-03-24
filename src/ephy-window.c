@@ -665,14 +665,15 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
 }
 
 static gboolean
-ephy_window_key_press_event (GtkWidget   *widget,
-                             GdkEventKey *event)
+key_press_event_cb (EphyWindow  *window,
+                    GdkEventKey *event)
 {
   EphyWebView *view;
 
-  view = ephy_embed_get_web_view (EPHY_WINDOW (widget)->active_embed);
-  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view))
-    return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+  view = ephy_embed_get_web_view (window->active_embed);
+
+  if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
+    return GDK_EVENT_PROPAGATE;
 
   /* GtkWindow's key press handler first calls gtk_window_activate_key,
    * then gtk_window_propagate_key_event. We want to do the opposite,
@@ -684,12 +685,8 @@ ephy_window_key_press_event (GtkWidget   *widget,
    * short-circuit the event propagation if it's a special keybinding
    * that is reserved for Epiphany not allowed to be seen by webpages.
    */
-  if (!ephy_window_should_view_receive_key_press_event (EPHY_WINDOW (widget), event) ||
-      !gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
-    gtk_window_activate_key (GTK_WINDOW (widget), event);
-
-    return GDK_EVENT_STOP;
-  }
+  if (ephy_window_should_view_receive_key_press_event (window, event))
+    return gtk_widget_event (GTK_WIDGET (view), (GdkEvent *)event);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -3847,7 +3844,6 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->get_property = ephy_window_get_property;
   object_class->set_property = ephy_window_set_property;
 
-  widget_class->key_press_event = ephy_window_key_press_event;
   widget_class->window_state_event = ephy_window_state_event;
   widget_class->show = ephy_window_show;
   widget_class->destroy = ephy_window_destroy;
@@ -3889,6 +3885,8 @@ static void
 ephy_window_init (EphyWindow *window)
 {
   LOG ("EphyWindow initialising %p", window);
+
+  g_signal_connect (window, "key-press-event", G_CALLBACK (key_press_event_cb), NULL);
 }
 
 /**
