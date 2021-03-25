@@ -3104,7 +3104,6 @@ has_modified_forms_cb (WebKitWebView *view,
   id = GPOINTER_TO_INT (g_task_get_task_data (task));
   if (id == 0) {
     /* We hit the timeout. Our task has already returned. */
-    g_assert (g_task_get_completed (task));
     goto out;
   }
   g_source_remove (id);
