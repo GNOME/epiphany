@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the epiphany package.
 # Alessandro Costantino <shaihulud@supereva.it>, 2003
 # Francesco Marletta <francesco.marletta@tiscali.it>, 2003-2010.
-# Gianvito Cavasoli <gianvito@gmx.it>, 2011-2020.
+# Gianvito Cavasoli <gianvito@gmx.it>, 2011-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-27 18:14+0000\n"
-"PO-Revision-Date: 2020-09-04 11:41+0200\n"
+"POT-Creation-Date: 2021-03-22 10:01+0000\n"
+"PO-Revision-Date: 2021-03-22 12:11+0100\n"
 "Last-Translator: Gianvito Cavasoli <gianvito@gmx.it>\n"
 "Language-Team: Italian <gnome-it-list@gnome.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -342,12 +342,10 @@ msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Usa un file CSS personalizzato per modificare il CSS dei siti web."
 
 #: data/org.gnome.epiphany.gschema.xml:136
-#| msgid "Use a custom CSS"
 msgid "Use a custom JS"
 msgstr "Usare un JS personalizzato"
 
 #: data/org.gnome.epiphany.gschema.xml:137
-#| msgid "Use a custom CSS file to modify websites own CSS."
 msgid "Use a custom JS file to modify websites."
 msgstr "Usa un file JS personalizzato per modificare i siti web."
 
@@ -574,7 +572,6 @@ msgid "Enable immediately switch to new open tab"
 msgstr "Abilita il passaggio immediato alla nuova scheda aperta"
 
 #: data/org.gnome.epiphany.gschema.xml:241
-#| msgid "Whether to automatically restore the last session"
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Indica se passare automaticamente alla nuova scheda aperta."
 
@@ -599,8 +596,6 @@ msgid "Run in background"
 msgstr "Avvia in backgrouns"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-#| msgid ""
-#| "If enabled application window is kept open when closing the last tab."
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
@@ -678,7 +673,6 @@ msgid "URL to a custom Firefox Sync token server."
 msgstr "Token dell'URL di un server personalizzato di Firefox Sync."
 
 #: data/org.gnome.epiphany.gschema.xml:322
-#| msgid "Firefox Account"
 msgid "Firefox Sync Accounts Server URL"
 msgstr "URL del server degli account Firefox Sync"
 
@@ -963,19 +957,12 @@ msgstr ""
 "\"allow\" e \"deny\" applicano automaticamente la decisione su richiesta."
 
 #: data/org.gnome.epiphany.gschema.xml:449
-#| msgid ""
-#| "Decision to apply when notification permission is requested for this host"
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Decisione da applicare quando sono richiesti i permessi di riproduzione "
 "automatica da questo host"
 
 #: data/org.gnome.epiphany.gschema.xml:450
-#| msgid ""
-#| "This option is used to save whether a given host has been given "
-#| "permission to allow advertisements. The “undecided” default means the "
-#| "browser global setting is used, while “allow” and “deny” tell it to "
-#| "automatically make the decision upon request."
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1046,15 +1033,15 @@ msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Avviare la navigazione e i siti più visitati appariranno qui."
 
 #: embed/ephy-about-handler.c:425
-#: embed/web-process-extension/resources/js/overview.js:116
+#: embed/web-process-extension/resources/js/overview.js:146
 msgid "Remove from overview"
 msgstr "Rimuove dalla panoramica"
 
-#: embed/ephy-about-handler.c:505 embed/ephy-about-handler.c:506
+#: embed/ephy-about-handler.c:497 embed/ephy-about-handler.c:498
 msgid "Private Browsing"
 msgstr "Navigazione privata"
 
-#: embed/ephy-about-handler.c:507
+#: embed/ephy-about-handler.c:499
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1065,14 +1052,14 @@ msgstr ""
 "memorizzate andranno perse alla chiusura della finestra. I file scaricati "
 "saranno conservati."
 
-#: embed/ephy-about-handler.c:511
+#: embed/ephy-about-handler.c:503
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "La modalità incognito nasconde la propria attività solo da persone che usano "
 "questo computer."
 
-#: embed/ephy-about-handler.c:513
+#: embed/ephy-about-handler.c:505
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1134,21 +1121,21 @@ msgid "Save file"
 msgstr "Salva file"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Premere %s per tornare alla finestra normale"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "Esc"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:794
+#: embed/ephy-embed.c:787
 msgid "Web is being controlled by automation."
 msgstr "L'applicazione viene controllata dall'automazione."
 
@@ -1510,24 +1497,24 @@ msgstr "Trova la precedente occorrenza della stringa di ricerca"
 msgid "Find next occurrence of the search string"
 msgstr "Trova la successiva occorrenza della stringa di ricerca"
 
-#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:267 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s è un URI non valido"
 
-#: embed/ephy-web-view.c:183 src/window-commands.c:1336
+#: embed/ephy-web-view.c:185 src/window-commands.c:1336
 msgid "Open"
 msgstr "Apri"
 
-#: embed/ephy-web-view.c:358
+#: embed/ephy-web-view.c:364
 msgid "Not No_w"
 msgstr "Non o_ra"
 
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:365
 msgid "_Never Save"
 msgstr "_Mai salvare"
 
-#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
+#: embed/ephy-web-view.c:366 lib/widgets/ephy-file-chooser.c:175
 #: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
 msgid "_Save"
 msgstr "_Salva"
@@ -1535,13 +1522,13 @@ msgstr "_Salva"
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:367
+#: embed/ephy-web-view.c:373
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Salvare la password per «%s»?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:609
+#: embed/ephy-web-view.c:615
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1549,77 +1536,76 @@ msgstr ""
 "Attenzione: questo modulo non è sicuro. Se si digita la password, non sarà "
 "mantenuta privata."
 
-#: embed/ephy-web-view.c:817
+#: embed/ephy-web-view.c:823
 msgid "Web process crashed"
 msgstr "Processo Web crashato"
 
-#: embed/ephy-web-view.c:820
+#: embed/ephy-web-view.c:826
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Il processo Web è terminato a causa dell'eccesso del limite di memoria"
 
-#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: embed/ephy-web-view.c:1026 embed/ephy-web-view.c:1147
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Nega"
 
-#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1027 embed/ephy-web-view.c:1148
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Consenti"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1034
+#: embed/ephy-web-view.c:1040
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "La pagina su %s vuole mostrare delle notifiche sul desktop."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1039
+#: embed/ephy-web-view.c:1045
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "La pagina su %s vuole conoscere la posizione dell'utente."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1044
+#: embed/ephy-web-view.c:1050
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "La pagina su %s vuole usare il microfono."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1049
+#: embed/ephy-web-view.c:1055
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "La pagina su %s vuole usare la webcam."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1054
+#: embed/ephy-web-view.c:1060
 #, c-format
-#| msgid "The page at %s wants to use your microphone."
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "La pagina su %s vuole usare la webcam e il microfono."
 
-#: embed/ephy-web-view.c:1149
+#: embed/ephy-web-view.c:1155
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "consentire a «%s» di usare i cookie durante la navigazione in «%s»?"
 
-#: embed/ephy-web-view.c:1158
+#: embed/ephy-web-view.c:1164
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "Questo consente a «%s» di tracciare le proprie attività."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1336
+#: embed/ephy-web-view.c:1342
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Caricamento di «%s»…"
 
-#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1344 embed/ephy-web-view.c:1350
 msgid "Loading…"
 msgstr "Caricamento…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1677
+#: embed/ephy-web-view.c:1688
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1627,7 +1613,7 @@ msgstr ""
 "differente sito web."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1682
+#: embed/ephy-web-view.c:1693
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1636,14 +1622,14 @@ msgstr ""
 "attendibile. Verificare la data sul calendario del computer."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1687
+#: embed/ephy-web-view.c:1698
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "L'identificazione di questo sito web non è stata emanata da "
 "un'organizzazione fidata."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1692
+#: embed/ephy-web-view.c:1703
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1651,7 +1637,7 @@ msgstr ""
 "essere corrotta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1697
+#: embed/ephy-web-view.c:1708
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1660,7 +1646,7 @@ msgstr ""
 "fidata che l'ha emanata."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1702
+#: embed/ephy-web-view.c:1713
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1669,7 +1655,7 @@ msgstr ""
 "una crittografia molto debole."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1707
+#: embed/ephy-web-view.c:1718
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1679,24 +1665,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:1781 embed/ephy-web-view.c:1837
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema nel caricamento della pagina"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1784
 msgid "Unable to display this website"
 msgstr "Impossibile mostrare questo sito web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1788
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Il sito su %s sembra essere non disponibile."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1792
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1705,7 +1691,7 @@ msgstr ""
 "Verificare anche che la connessione Internet funzioni correttamente."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1802
 #, c-format
 msgid "The precise error was: %s"
 msgstr "L'errore preciso era: %s"
@@ -1713,49 +1699,49 @@ msgstr "L'errore preciso era: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
-#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1807 embed/ephy-web-view.c:1860
+#: embed/ephy-web-view.c:1899 src/resources/gtk/page-menu-popover.ui:129
 msgid "Reload"
 msgstr "Ricarica"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
-#: embed/ephy-web-view.c:1891
+#: embed/ephy-web-view.c:1810 embed/ephy-web-view.c:1863
+#: embed/ephy-web-view.c:1902
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1840
 msgid "Oops! There may be a problem"
 msgstr "Poffarbacco! Si è verificato un problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1844
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "La pagina %s potrebbe aver causato la chiusura imprevista dell'applicazione."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1851
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Se succede di nuovo, segnalare il problema agli sviluppatori di %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1877
+#: embed/ephy-web-view.c:1888
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema visualizzazione della pagina"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1891
 msgid "Oops!"
 msgstr "Poffarbacco!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1883
+#: embed/ephy-web-view.c:1894
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1764,18 +1750,18 @@ msgstr ""
 "continuare, ricaricare o visitare una pagina differente."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1928
 #, c-format
 msgid "Security Violation"
 msgstr "Violazione della sicurezza"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:1931
 msgid "This Connection is Not Secure"
 msgstr "Questa connessione non è sicura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1924
+#: embed/ephy-web-view.c:1935
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1787,45 +1773,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
-#: embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:1945 embed/ephy-web-view.c:2034
+#: embed/ephy-web-view.c:2085
 msgid "Go Back"
 msgstr "Va indietro"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
-#: embed/ephy-web-view.c:2077
+#: embed/ephy-web-view.c:1948 embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:2088
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1951 embed/ephy-web-view.c:2040
 msgid "Accept Risk and Proceed"
 msgstr "Accetta il rischio e procedi"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
+#: embed/ephy-web-view.c:1955 embed/ephy-web-view.c:2044
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1974
+#: embed/ephy-web-view.c:1985
 #, c-format
 msgid "Security Warning"
 msgstr "Avviso di sicurezza"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:1988
 msgid "Unsafe website detected!"
 msgstr "Rilevato sito non sicuro."
 
-#: embed/ephy-web-view.c:1984
+#: embed/ephy-web-view.c:1995
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1835,7 +1821,7 @@ msgstr ""
 "codice malevolo che potrebbe essere scaricato sul proprio computer senza "
 "alcun consenso."
 
-#: embed/ephy-web-view.c:1988
+#: embed/ephy-web-view.c:1999
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1844,7 +1830,7 @@ msgstr ""
 "È possibile saperne di più sui contenuti Web dannosi, inclusi virus e altri "
 "codici malevoli, e come proteggere il proprio computer, su %s."
 
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2006
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1855,7 +1841,7 @@ msgstr ""
 "installare software o rivelare le proprie informazioni personali (ad "
 "esempio: password, numeri di telefono o carte di credito)."
 
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:2011
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1863,7 +1849,7 @@ msgstr ""
 "È possibile trovare maggiori informazioni sull'ingegneria sociale (phishing) "
 "su %s o da %s."
 
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2020
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1875,24 +1861,24 @@ msgstr ""
 "navigazione (ad esempio: cambiare la propria pagina principale o mostrare "
 "altre inserzioni pubblicitarie sui siti che si visitano)."
 
-#: embed/ephy-web-view.c:2014
+#: embed/ephy-web-view.c:2025
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "È possibile saperne di più sul software indesiderato su %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
+#: embed/ephy-web-view.c:2069 embed/ephy-web-view.c:2072
 #, c-format
 msgid "File not found"
 msgstr "File non trovato"
 
-#: embed/ephy-web-view.c:2065
+#: embed/ephy-web-view.c:2076
 #, c-format
 msgid "%s could not be found."
 msgstr "Impossibile trovare %s."
 
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2078
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1901,15 +1887,15 @@ msgstr ""
 "Controllare le maiuscole del nome del file o altri errori di battitura. "
 "Controllare anche se è stato spostato, rinominato o eliminato."
 
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2141
 msgid "None specified"
 msgstr "Nessuno specificato"
 
-#: embed/ephy-web-view.c:2246
+#: embed/ephy-web-view.c:2257
 msgid "Technical information"
 msgstr "Informazioni tecniche"
 
-#: embed/ephy-web-view.c:3382
+#: embed/ephy-web-view.c:3431
 msgid "_OK"
 msgstr "_OK"
 
@@ -2037,9 +2023,6 @@ msgstr ""
 
 #: lib/sync/ephy-password-import.c:141 lib/sync/ephy-password-import.c:151
 #, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr ""
@@ -2066,7 +2049,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Recupero credenziali di archiviazione non riuscito."
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
-#: lib/sync/ephy-sync-service.c:1755
+#: lib/sync/ephy-sync-service.c:1758
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Andare nelle Preferenze e accedere di nuovo per continuare la "
@@ -2088,41 +2071,41 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Recupero del certificato firmato non riuscito."
 
-#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
+#: lib/sync/ephy-sync-service.c:1724 lib/sync/ephy-sync-service.c:1729
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Impossibile trovare la chiave segreta di sincronizzazione per l'attuale "
 "utente."
 
-#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1736 lib/sync/ephy-sync-service.c:1744
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "La chiave segreta di sincronizzazione dell'attuale utente non è valida."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1849
+#: lib/sync/ephy-sync-service.c:1852
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "La chiave segreta di sincronizzazione di %s"
 
-#: lib/sync/ephy-sync-service.c:1874
+#: lib/sync/ephy-sync-service.c:1877
 msgid "Failed to upload client record."
 msgstr "Caricamento registro del client non riuscito."
 
-#: lib/sync/ephy-sync-service.c:2073
+#: lib/sync/ephy-sync-service.c:2076
 msgid "Failed to upload crypto/keys record."
 msgstr "Caricamento registro chiavi crittografiche non riuscito."
 
-#: lib/sync/ephy-sync-service.c:2180
+#: lib/sync/ephy-sync-service.c:2183
 msgid "Failed to retrieve crypto keys."
 msgstr "Recupero chiavi crittografiche non riuscito."
 
-#: lib/sync/ephy-sync-service.c:2231
+#: lib/sync/ephy-sync-service.c:2234
 msgid "Failed to upload meta/global record."
 msgstr "Caricamento registro metadati globale non riuscito."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2348
+#: lib/sync/ephy-sync-service.c:2351
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -2130,15 +2113,15 @@ msgstr ""
 "L'account Firefox usa la versione di archiviazione %d. Web supporta solo la "
 "versione %d."
 
-#: lib/sync/ephy-sync-service.c:2359
+#: lib/sync/ephy-sync-service.c:2362
 msgid "Failed to verify storage version."
 msgstr "Verifica della versione di archiviazione non riuscita."
 
-#: lib/sync/ephy-sync-service.c:2415
+#: lib/sync/ephy-sync-service.c:2418
 msgid "Failed to upload device info"
 msgstr "Caricamento informazioni del dispositivo non riuscito"
 
-#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
+#: lib/sync/ephy-sync-service.c:2494 lib/sync/ephy-sync-service.c:2572
 msgid "Failed to retrieve the Sync Key"
 msgstr "Recupero della chiave di sincronizzazione non riuscito"
 
@@ -2391,6 +2374,10 @@ msgstr "Accesso webcam"
 msgid "Media autoplay"
 msgstr "Riproduzione automatica file multimediali"
 
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Without Sound"
+msgstr "Senza audio"
+
 #: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "Proprietà segnalibri"
@@ -2425,28 +2412,20 @@ msgstr "Impossibile recuperare i segnalibri di Firefox."
 
 #: src/bookmarks/ephy-bookmarks-import.c:458
 #, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "Impossibile aprire il database HTML dei segnalibri: %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:469
-#| msgid "Firefox bookmarks could not be retrieved!"
 msgid "HTML bookmarks database could not be read."
 msgstr "Impossibile leggere il database HTML segnalibri."
 
 #: src/bookmarks/ephy-bookmarks-import.c:490
 #, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "Impossibile analizzare il database HTML segnalibri: %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:643
 #, c-format
-#| msgid "Firefox bookmarks could not be retrieved!"
 msgid "Bookmarks file could not be parsed:"
 msgstr "Impossibile analizzare il file dei segnalibri:"
 
@@ -2463,11 +2442,11 @@ msgstr "Mobile"
 msgid "Reload the current page"
 msgstr "Ricarica l'attuale pagina"
 
-#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:450
+#: src/ephy-action-bar-start.c:649 src/ephy-header-bar.c:449
 msgid "Stop loading the current page"
 msgstr "Ferma il caricamento dell'attuale pagina"
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:964
 msgid "It is not possible to modify history when in incognito mode."
 msgstr ""
 "Non è possibile modificare la cronologia quando si è in modalità incognito."
@@ -2477,8 +2456,6 @@ msgid "Remove the selected pages from history"
 msgstr "Rimuove le pagine selezionate dalla cronologia"
 
 #: src/ephy-history-dialog.c:463
-#| msgctxt "shortcut window"
-#| msgid "Copy"
 msgid "Copy URL"
 msgstr "Copia URL"
 
@@ -2494,7 +2471,7 @@ msgstr ""
 "Pulire la cronologia della navigazione comporta l'eliminazione permanente di "
 "tutti i collegamenti della cronologia."
 
-#: src/ephy-history-dialog.c:966
+#: src/ephy-history-dialog.c:967
 msgid "Remove all history"
 msgstr "Rimuove tutta la cronologia"
 
@@ -2738,34 +2715,34 @@ msgstr "Apri collegamento in una nuova finestra"
 msgid "Open Link In Incognito Window"
 msgstr "Apri collegamento nella finestra in incognito"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:2990
 msgid "Download operation"
 msgstr "Operazione di scaricamento"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:2992
 msgid "Show details"
 msgstr "Mostra dettagli"
 
-#: src/ephy-window.c:3033
+#: src/ephy-window.c:2994
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "È in corso %d operazione di scaricamento"
 msgstr[1] "Sono in corso %d operazioni di scaricamento"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3615
 msgid "Set Web as your default browser?"
 msgstr "Impostare Web come browser predefinito?"
 
-#: src/ephy-window.c:3657
+#: src/ephy-window.c:3617
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Impostare Epiphany Technology Preview come browser predefinito?"
 
-#: src/ephy-window.c:3669
+#: src/ephy-window.c:3629
 msgid "_Yes"
 msgstr "_Sì"
 
-#: src/ephy-window.c:3670
+#: src/ephy-window.c:3630
 msgid "_No"
 msgstr "_No"
 
@@ -2819,7 +2796,6 @@ msgstr "Dati della prevenzione intelligente del tracciamento"
 
 # all'infinito, è opzione di preferenza
 #: src/preferences/passwords-view.c:192
-#| msgid "Remove all passwords"
 msgid "Delete All Passwords?"
 msgstr "Eliminare tutte le password?"
 
@@ -2834,17 +2810,14 @@ msgid "_Delete"
 msgstr "Eli_mina"
 
 #: src/preferences/passwords-view.c:258
-#| msgid "_Copy Password"
 msgid "Copy password"
 msgstr "Copia password"
 
 #: src/preferences/passwords-view.c:264
-#| msgid "User Name"
 msgid "Username"
 msgstr "Nome utente"
 
 #: src/preferences/passwords-view.c:287
-#| msgid "C_opy Username"
 msgid "Copy username"
 msgstr "Copia nome utente"
 
@@ -2854,13 +2827,11 @@ msgstr "Password"
 
 #
 #: src/preferences/passwords-view.c:318
-#| msgid "Remove all passwords"
 msgid "Reveal password"
 msgstr "Rivela password"
 
 #
 #: src/preferences/passwords-view.c:328
-#| msgid "Remove all passwords"
 msgid "Remove Password"
 msgstr "Rimuovi password"
 
@@ -2881,6 +2852,7 @@ msgid "Dark"
 msgstr "Scuro"
 
 #: src/preferences/prefs-general-page.c:348
+#: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "Aggiungi lingua"
 
@@ -3029,12 +3001,10 @@ msgid "Personal Data"
 msgstr "Dati personali"
 
 #: src/resources/gtk/clear-data-view.ui:23
-#| msgid "_Clear All"
 msgid "_Clear Data"
 msgstr "_Pulisci dati"
 
 #: src/resources/gtk/clear-data-view.ui:24
-#| msgid "Remove all personal data"
 msgid "Remove selected personal data"
 msgstr "Rimuove i dati personali selezionati"
 
@@ -3051,7 +3021,6 @@ msgid "Personal data will be listed here"
 msgstr "I dati personali saranno elencati qui"
 
 #: src/resources/gtk/clear-data-view.ui:64
-#| msgid "Clear selected personal data _from:"
 msgid "Clear selected personal data:"
 msgstr "Pulire i dati personali selezionati:"
 
@@ -3096,15 +3065,14 @@ msgstr "Codifiche correlate"
 msgid "Show all…"
 msgstr "Mostra tutte…"
 
-#: src/resources/gtk/history-dialog.ui:42
-#| msgctxt "shortcut window"
-#| msgid "Select all"
-msgid "Select Items"
-msgstr "Seleziona elementi"
-
+#: src/resources/gtk/history-dialog.ui:30
 #: src/resources/gtk/history-dialog.ui:87
 msgid "History"
 msgstr "Cronologia"
+
+#: src/resources/gtk/history-dialog.ui:42
+msgid "Select Items"
+msgstr "Seleziona elementi"
 
 #: src/resources/gtk/history-dialog.ui:150
 msgid "Search history"
@@ -3188,68 +3156,67 @@ msgstr "Schermo intero"
 msgid "_Run in Background"
 msgstr "_Avvia in background"
 
-#: src/resources/gtk/page-menu-popover.ui:191
+#: src/resources/gtk/page-menu-popover.ui:190
 msgid "_New Window"
 msgstr "_Nuova finestra"
 
-#: src/resources/gtk/page-menu-popover.ui:199
+#: src/resources/gtk/page-menu-popover.ui:198
 msgid "New _Incognito Window"
 msgstr "Nuova finestra in _incognito"
 
-#: src/resources/gtk/page-menu-popover.ui:216
+#: src/resources/gtk/page-menu-popover.ui:215
 msgid "Reopen Closed _Tab"
 msgstr "Riapri _scheda chiusa"
 
-#: src/resources/gtk/page-menu-popover.ui:224
+#: src/resources/gtk/page-menu-popover.ui:223
 msgid "_History"
 msgstr "Cronolo_gia"
 
-#: src/resources/gtk/page-menu-popover.ui:240
+#: src/resources/gtk/page-menu-popover.ui:239
 msgid "I_mport and Export"
 msgstr "I_mporta ed esporta"
 
-#: src/resources/gtk/page-menu-popover.ui:257
+#: src/resources/gtk/page-menu-popover.ui:256
 msgid "Install Site as Web _Application…"
 msgstr "Installa sito come _applicazione web…"
 
-#: src/resources/gtk/page-menu-popover.ui:265
+#: src/resources/gtk/page-menu-popover.ui:264
 msgid "Open Appli_cation Manager"
 msgstr "Apri gestore appli_cazione"
 
-#: src/resources/gtk/page-menu-popover.ui:282
+#: src/resources/gtk/page-menu-popover.ui:281
 msgid "_Override Text Encoding…"
 msgstr "_Sovrascrivi la codifica del testo…"
 
-#: src/resources/gtk/page-menu-popover.ui:298
+#: src/resources/gtk/page-menu-popover.ui:297
 msgid "Pr_eferences"
 msgstr "Pr_eferenze"
 
-#: src/resources/gtk/page-menu-popover.ui:307
+#: src/resources/gtk/page-menu-popover.ui:306
 msgid "_Keyboard Shortcuts"
 msgstr "Scorciatoie da _tastiera"
 
-#: src/resources/gtk/page-menu-popover.ui:316
+#: src/resources/gtk/page-menu-popover.ui:315
 msgid "_Help"
 msgstr "A_iuto"
 
-#: src/resources/gtk/page-menu-popover.ui:325
+#: src/resources/gtk/page-menu-popover.ui:324
 msgid "_About Web"
 msgstr "Informa_zioni su Web"
 
-#: src/resources/gtk/page-menu-popover.ui:350
+#: src/resources/gtk/page-menu-popover.ui:349
 msgid "Import and Export"
 msgstr "Importa ed esporta"
 
-#: src/resources/gtk/page-menu-popover.ui:361
+#: src/resources/gtk/page-menu-popover.ui:360
 msgid "I_mport Bookmarks…"
 msgstr "I_mporta segnalibri…"
 
-#: src/resources/gtk/page-menu-popover.ui:369
+#: src/resources/gtk/page-menu-popover.ui:368
 msgid "E_xport Bookmarks…"
 msgstr "E_sporta segnalibri…"
 
-#: src/resources/gtk/page-menu-popover.ui:385
-#| msgid "I_mport Bookmarks…"
+#: src/resources/gtk/page-menu-popover.ui:384
 msgid "I_mport Passwords…"
 msgstr "I_mporta password…"
 
@@ -3332,7 +3299,6 @@ msgid "Use Custom Stylesheet"
 msgstr "Usare foglio di stile personalizzato"
 
 #: src/resources/gtk/prefs-appearance-page.ui:131
-#| msgid "Use Custom Fonts"
 msgid "Use Custom JavaScript"
 msgstr "Usare JavaScript personalizzato"
 
@@ -3365,12 +3331,10 @@ msgid "Web Content"
 msgstr "Contenuto web"
 
 #: src/resources/gtk/prefs-general-page.ui:123
-#| msgid "Try to Block _Advertisements"
 msgid "Block _Advertisements"
 msgstr "Bloccare le _inserzioni pubblicitarie"
 
 #: src/resources/gtk/prefs-general-page.ui:137
-#| msgid "Block Popup _Windows"
 msgid "Block _Popup Windows"
 msgstr "Bloccare le finestre _popup"
 
@@ -3403,7 +3367,6 @@ msgid "Search Engines"
 msgstr "Motori di ricerca"
 
 #: src/resources/gtk/prefs-general-page.ui:244
-#| msgid "Manage Search Engines"
 msgid "Manage Search _Engines"
 msgstr "Gestione _motori di ricerca"
 
@@ -3439,13 +3402,7 @@ msgstr "_Passare immediatamente alle nuove schede"
 msgid "_Spell Checking"
 msgstr "Controllo ortogra_fico"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-#| msgid "Add Language"
-msgid "Add _Language"
-msgstr "Aggiungi _lingua"
-
 #: src/resources/gtk/prefs-lang-dialog.ui:67
-#| msgid "Choose a l_anguage:"
 msgid "Choose a language:"
 msgstr "Scegliere una lingua:"
 
@@ -3454,12 +3411,10 @@ msgid "Privacy"
 msgstr "Privacy"
 
 #: src/resources/gtk/prefs-privacy-page.ui:10
-#| msgid "Web pages"
 msgid "Web Safety"
 msgstr "Sicurezza web"
 
 #: src/resources/gtk/prefs-privacy-page.ui:15
-#| msgid "Try to Block Dangerous Web_sites"
 msgid "Block Dangerous Web_sites"
 msgstr "Bloccare i _siti web pericolosi"
 
@@ -3720,8 +3675,6 @@ msgid "Move current tab to the right"
 msgstr "Sposta l'attuale scheda alla destra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:203
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "Duplica l'attuale scheda"
@@ -3762,19 +3715,16 @@ msgid "Toggle caret browsing"
 msgstr "Abilita/Disabilita la navigazione con cursore"
 
 #: src/resources/gtk/shortcuts-dialog.ui:264
-#| msgid "Web Application"
 msgctxt "shortcut window"
 msgid "Web application"
 msgstr "Applicazione web"
 
 #: src/resources/gtk/shortcuts-dialog.ui:268
-#| msgid "Install Site as Web _Application…"
 msgctxt "shortcut window"
 msgid "Install site as web application"
 msgstr "Installa sito come applicazione web"
 
 #: src/resources/gtk/shortcuts-dialog.ui:275
-#| msgid "Open Appli_cation Manager"
 msgctxt "shortcut window"
 msgid "Open web application manager"
 msgstr "Apre il gestore applicazione web"
@@ -3860,27 +3810,21 @@ msgid "Select page URL"
 msgstr "Seleziona l'URL della pagina"
 
 #: src/resources/gtk/shortcuts-dialog.ui:396
-#| msgid "Default search engine."
 msgctxt "shortcut window"
 msgid "Search with default search engine"
 msgstr "Cerca con il motore di ricerca predefinito"
 
 #: src/resources/gtk/shortcuts-dialog.ui:403
-#| msgid "Find…"
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Trova"
 
 #: src/resources/gtk/shortcuts-dialog.ui:410
-#| msgctxt "shortcut window"
-#| msgid "Next search result"
 msgctxt "shortcut window"
 msgid "Next find result"
 msgstr "Risultato successivo della ricerca"
 
 #: src/resources/gtk/shortcuts-dialog.ui:417
-#| msgctxt "shortcut window"
-#| msgid "Previous search result"
 msgctxt "shortcut window"
 msgid "Previous find result"
 msgstr "Risultato precedente della ricerca"
@@ -3941,7 +3885,6 @@ msgstr "Cerca nel web per «%s»"
 
 #: src/search-provider/ephy-search-provider.c:224
 #, c-format
-#| msgid "Loading “%s”…"
 msgid "Load “%s”"
 msgstr "Carica «%s»"
 
@@ -3950,7 +3893,6 @@ msgid "GVDB File"
 msgstr "File GVDB"
 
 #: src/window-commands.c:114
-#| msgid "HTML"
 msgid "HTML File"
 msgstr "File HTML"
 
@@ -4014,12 +3956,10 @@ msgid "bookmarks.gvdb"
 msgstr "segnalibri.gvdb"
 
 #: src/window-commands.c:737
-#| msgid "Bookmarks successfully imported!"
 msgid "Passwords successfully imported!"
 msgstr "Password importate con successo."
 
 #: src/window-commands.c:804
-#| msgid "Passwords"
 msgid "Import Passwords"
 msgstr "Importa password"
 
@@ -4046,7 +3986,6 @@ msgstr ""
 "...e un ringraziamento ai revisori del Translation Project."
 
 #: src/window-commands.c:1183
-#| msgid "Do you want to leave this website?"
 msgid "Do you want to reload this website?"
 msgstr "Ricaricare questo sito web?"
 
@@ -4128,3 +4067,7 @@ msgstr ""
 #: src/window-commands.c:2601
 msgid "_Enable"
 msgstr "_Abilita"
+
+#~| msgid "Add Language"
+#~ msgid "Add _Language"
+#~ msgstr "Aggiungi _lingua"
