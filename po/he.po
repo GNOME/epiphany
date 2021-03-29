@@ -11,16 +11,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-03-28 20:27+0000\n"
-"PO-Revision-Date: 2021-03-30 01:17+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2021-03-29 22:19+0000\n"
+"PO-Revision-Date: 2021-03-30 01:56+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3);\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -2002,24 +2003,18 @@ msgstr "אירע כשל בקבלת תעודות אחסון."
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
 #: lib/sync/ephy-sync-service.c:1758
-#, fuzzy
-#| msgid "Please visit Preferences and sign in again to continue syncing."
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
-msgstr "יש להיכנס להעדפות ולהתחבר שוב להמשך תהליך התיאום."
+msgstr "נא לבקר ב־Firefox Sync ולהיכנס שוב כדי להמשיך את הסנכרון."
 
 #: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "כפי הנראה ססמתך לחשבון Firefox ‏שלך שונתה."
 
 #: lib/sync/ephy-sync-service.c:971
-#, fuzzy
-#| msgid ""
-#| "Please visit Preferences and sign in with the new password to continue "
-#| "syncing."
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
-msgstr "יש להיכנס להעדפות ולהתחבר עם הססמה החדשה להמשך תהליך התיאום."
+msgstr "‫נא לבקר ב־Firefox Sync ולהיכנס עם הססמה החדשה כדי להמשיך את הסנכרון."
 
 #: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
@@ -2027,36 +2022,33 @@ msgstr "נכשל קבלת אישור חתום."
 
 #: lib/sync/ephy-sync-service.c:1724 lib/sync/ephy-sync-service.c:1729
 msgid "Could not find the sync secrets for the current sync user."
-msgstr ""
+msgstr "לא ניתן למצוא את סודות הסנכרון למשתמש הסנכרון הנוכחי."
 
 #: lib/sync/ephy-sync-service.c:1736 lib/sync/ephy-sync-service.c:1744
 msgid "The sync secrets for the current sync user are invalid."
-msgstr ""
+msgstr "סודות הסנכרון למשתמש הסנכרון הנוכחי שגויים."
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:1852
-#, fuzzy, c-format
-#| msgid "The sync user currently logged in"
+#, c-format
 msgid "The sync secrets of %s"
-msgstr "The sync user currently logged in"
+msgstr "סודות הסנכרון של %s"
 
 #: lib/sync/ephy-sync-service.c:1877
 msgid "Failed to upload client record."
-msgstr ""
+msgstr "העלאת רשומת הלקוח נכשלה."
 
 #: lib/sync/ephy-sync-service.c:2076
 msgid "Failed to upload crypto/keys record."
-msgstr ""
+msgstr "העלאת רשומת הצפנה/מפתחות נכשלה."
 
 #: lib/sync/ephy-sync-service.c:2183
-#, fuzzy
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to retrieve crypto keys."
-msgstr "יצירת התיקייה „%s“ נכשלה."
+msgstr "קבלת מפתחות ההצפנה נכשלה."
 
 #: lib/sync/ephy-sync-service.c:2234
 msgid "Failed to upload meta/global record."
-msgstr ""
+msgstr "העלאת רשומת מטא/גלובלית נכשלה."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:2351
@@ -2064,18 +2056,19 @@ msgstr ""
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
+"חשבון ה־Firefox שלך משתמש באחסון בגרסה %d. דרך הדפדפן יש תמיכה בגרסה %d בלבד."
 
 #: lib/sync/ephy-sync-service.c:2362
 msgid "Failed to verify storage version."
-msgstr ""
+msgstr "אימות גרסת האחסון נכשלה."
 
 #: lib/sync/ephy-sync-service.c:2418
 msgid "Failed to upload device info"
-msgstr ""
+msgstr "העלאת פרטי המכשיר נכשלה"
 
 #: lib/sync/ephy-sync-service.c:2494 lib/sync/ephy-sync-service.c:2572
 msgid "Failed to retrieve the Sync Key"
-msgstr ""
+msgstr "קבלת מפתח הסנכרון נכשלה"
 
 #: lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate does not match this website"
@@ -2128,55 +2121,61 @@ msgstr "אישור זה תקף. אולם, משאבים בדף זה נשלחו ב
 #: src/resources/gtk/history-dialog.ui:236
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
-msgstr "_ניקוי הכל"
+msgstr "_ניקוי של הכול"
 
 #: lib/widgets/ephy-download-widget.c:78
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "נותרה שנייה אחת"
-msgstr[1] "נותרו %d שניות"
-msgstr[2] "נותרו שתי שניות"
+msgstr[1] "נותרו שתי שניות"
+msgstr[2] "‫נותרו %d שניות"
+msgstr[3] "‫נותרו %d שניות"
 
 #: lib/widgets/ephy-download-widget.c:82
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "נותרה דקה אחת"
-msgstr[1] "נותרו %d דקות"
-msgstr[2] "נותרו שתי דקות"
+msgstr[1] "נותרו שתי דקות"
+msgstr[2] "‫נותרו %d דקות"
+msgstr[3] "‫נותרו %d דקות"
 
 #: lib/widgets/ephy-download-widget.c:86
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "נותרה שעה אחת"
-msgstr[1] "נותרו %d שעות"
-msgstr[2] "נותרו שעתיים"
+msgstr[1] "נותרו שעתיים"
+msgstr[2] "‫נותרו %d שעות"
+msgstr[3] "‫נותרו %d שעות"
 
 #: lib/widgets/ephy-download-widget.c:90
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "נותר יום אחד"
-msgstr[1] "נותרו %d ימים"
-msgstr[2] "נותרו יומיים"
+msgstr[1] "‫נותרו יומיים"
+msgstr[2] "נותרו %d ימים"
+msgstr[3] "‫נותרו %d ימים"
 
 #: lib/widgets/ephy-download-widget.c:94
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "נותר שבוע אחד"
-msgstr[1] "נותרו %d שבועות"
-msgstr[2] "נותרו שבועיים"
+msgstr[1] "נותרו שבועיים"
+msgstr[2] "‫נותרו %d שבועות"
+msgstr[3] "‫‫נותרו %d שבועות"
 
 #: lib/widgets/ephy-download-widget.c:98
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "נותר חודש אחד"
-msgstr[1] "נותרו %d חודשים"
-msgstr[2] "נותרו חודשיים"
+msgstr[1] "‫נותרו חודשיים"
+msgstr[2] "נותרו %d חודשים"
+msgstr[3] "‫נותרו %d חודשים"
 
 #: lib/widgets/ephy-download-widget.c:213
 #: lib/widgets/ephy-download-widget.c:431
@@ -2363,7 +2362,7 @@ msgstr "קובץ HTML של מסד הנתונים של הסימניות לא נת
 
 #: src/bookmarks/ephy-bookmarks-import.c:470
 msgid "HTML bookmarks database could not be read."
-msgstr "קובץ HTML של מסד הנתונים של הסימניות לא נתן לקריאה"
+msgstr "לא ניתן לקרוא את מסד נתוני סימניות ה־HTML."
 
 #: src/bookmarks/ephy-bookmarks-import.c:491
 #, c-format
@@ -2699,8 +2698,9 @@ msgstr "הצגת פרטים"
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "הורדה אחת פעילה"
-msgstr[1] "‏%d הורדות פעילות"
+msgstr[1] "שתי הורדות פעילות"
 msgstr[2] "‏%d הורדות פעילות"
+msgstr[3] "‫‏%d הורדות פעילות"
 
 #. Translators: tooltip for the tab switcher menu button
 #: src/ephy-window.c:3407
@@ -2877,6 +2877,7 @@ msgid_plural "System languages (%s)"
 msgstr[0] "שפת המערכת (%s)"
 msgstr[1] "שפות המערכת (%s)"
 msgstr[2] "שפות המערכת (%s)"
+msgstr[3] "‫שפות המערכת (%s)"
 
 #: src/preferences/prefs-general-page.c:713
 msgid "Select a directory"
@@ -3018,7 +3019,7 @@ msgstr "לא ניתן לבטל פעולה זו. המידע שייבחר לפינ
 #: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
 #: src/resources/gtk/history-dialog.ui:120
 msgid "Search"
-msgstr "חיפוש:"
+msgstr "חיפוש"
 
 #: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
 msgid "No Results Found"
@@ -3242,7 +3243,7 @@ msgstr "ה_רחבות"
 
 #: src/resources/gtk/page-menu-popover.ui:294
 msgid "_Override Text Encoding…"
-msgstr "דריסת קידוד הטקסט…_"
+msgstr "_דריסת קידוד הטקסט…"
 
 #: src/resources/gtk/page-menu-popover.ui:310
 msgid "Pr_eferences"
