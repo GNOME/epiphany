@@ -1,7 +1,7 @@
 /*
-  Highlight.js 10.6.0 (eb122d3b)
+  Highlight.js 10.7.1 (421b23b0)
   License: BSD-3-Clause
-  Copyright (c) 2006-2020, Ivan Sagalaev
+  Copyright (c) 2006-2021, Ivan Sagalaev
 */
 var hljs = (function () {
     'use strict';
@@ -36,17 +36,21 @@ var hljs = (function () {
     var _default = deepFreeze;
     deepFreezeEs6.default = _default;
 
+    
     class Response {
-      
+      /**
+       * @param {CompiledMode} mode
+       */
       constructor(mode) {
         // eslint-disable-next-line no-undefined
         if (mode.data === undefined) mode.data = {};
 
         this.data = mode.data;
+        this.isMatchIgnored = false;
       }
 
       ignoreMatch() {
-        this.ignore = true;
+        this.isMatchIgnored = true;
       }
     }
 
@@ -393,6 +397,15 @@ var hljs = (function () {
       return match && match.index === 0;
     }
 
+    // BACKREF_RE matches an open parenthesis or backreference. To avoid
+    // an incorrect parse, it additionally matches the following:
+    // - [...] elements, where the meaning of parentheses and escapes change
+    // - other escape sequences, so we do not misparse escape sequences as
+    //   interesting elements
+    // - non-matching or lookahead parentheses, which do not capture. These
+    //   follow the '(' with a '?'.
+    const BACKREF_RE = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./;
+
     // join logically computes regexps.join(separator), but fixes the
     // backreferences so they continue to match.
     // it also places each individual regular expression into it's own
@@ -404,45 +417,34 @@ var hljs = (function () {
      * @returns {string}
      */
     function join(regexps, separator = "|") {
-      // backreferenceRe matches an open parenthesis or backreference. To avoid
-      // an incorrect parse, it additionally matches the following:
-      // - [...] elements, where the meaning of parentheses and escapes change
-      // - other escape sequences, so we do not misparse escape sequences as
-      //   interesting elements
-      // - non-matching or lookahead parentheses, which do not capture. These
-      //   follow the '(' with a '?'.
-      const backreferenceRe = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./;
       let numCaptures = 0;
-      let ret = '';
-      for (let i = 0; i < regexps.length; i++) {
+
+      return regexps.map((regex) => {
         numCaptures += 1;
         const offset = numCaptures;
-        let re = source(regexps[i]);
-        if (i > 0) {
-          ret += separator;
-        }
-        ret += "(";
+        let re = source(regex);
+        let out = '';
+
         while (re.length > 0) {
-          const match = backreferenceRe.exec(re);
-          if (match == null) {
-            ret += re;
+          const match = BACKREF_RE.exec(re);
+          if (!match) {
+            out += re;
             break;
           }
-          ret += re.substring(0, match.index);
+          out += re.substring(0, match.index);
           re = re.substring(match.index + match[0].length);
           if (match[0][0] === '\\' && match[1]) {
             // Adjust the backreference.
-            ret += '\\' + String(Number(match[1]) + offset);
+            out += '\\' + String(Number(match[1]) + offset);
           } else {
-            ret += match[0];
+            out += match[0];
             if (match[0] === '(') {
               numCaptures++;
             }
           }
         }
-        ret += ")";
-      }
-      return ret;
+        return out;
+      }).map(re => `(${re})`).join(separator);
     }
 
     // Common regexps
@@ -1093,7 +1095,7 @@ var hljs = (function () {
        */
       function compileMode(mode, parent) {
         const cmode = /** @type CompiledMode */ (mode);
-        if (mode.compiled) return cmode;
+        if (mode.isCompiled) return cmode;
 
         [
           // do this early so compiler extensions generally don't have to worry about
@@ -1115,7 +1117,7 @@ var hljs = (function () {
           compileRelevance
         ].forEach(ext => ext(mode, parent));
 
-        mode.compiled = true;
+        mode.isCompiled = true;
 
         let keywordPattern = null;
         if (typeof mode.keywords === "object") {
@@ -1234,7 +1236,7 @@ var hljs = (function () {
       return mode;
     }
 
-    var version = "10.6.0";
+    var version = "10.7.1";
 
     // @ts-nocheck
 
@@ -1308,8 +1310,8 @@ var hljs = (function () {
 
     /** @type {HLJSPlugin} */
     const mergeHTMLPlugin = {
-      "after:highlightBlock": ({ block, result, text }) => {
-        const originalStream = nodeStream(block);
+      "after:highlightElement": ({ el, result, text }) => {
+        const originalStream = nodeStream(el);
         if (!originalStream.length) return;
 
         const resultNode = document.createElement('div');
@@ -1571,8 +1573,14 @@ var hljs = (function () {
       /**
        * Core highlighting function.
        *
-       * @param {string} languageName - the language to use for highlighting
-       * @param {string} code - the code to highlight
+       * OLD API
+       * highlight(lang, code, ignoreIllegals, continuation)
+       *
+       * NEW API
+       * highlight(code, {lang, ignoreIllegals})
+       *
+       * @param {string} codeOrlanguageName - the language to use for highlighting
+       * @param {string | HighlightOptions} optionsOrCode - the code to highlight
        * @param {boolean} [ignoreIllegals] - whether to ignore illegal matches, default is to bail
        * @param {CompiledMode} [continuation] - current continuation mode, if any
        *
@@ -1584,7 +1592,24 @@ var hljs = (function () {
        * @property {CompiledMode} top - top of the current mode stack
        * @property {boolean} illegal - indicates whether any illegal matches were found
       */
-      function highlight(languageName, code, ignoreIllegals, continuation) {
+      function highlight(codeOrlanguageName, optionsOrCode, ignoreIllegals, continuation) {
+        let code = "";
+        let languageName = "";
+        if (typeof optionsOrCode === "object") {
+          code = codeOrlanguageName;
+          ignoreIllegals = optionsOrCode.ignoreIllegals;
+          languageName = optionsOrCode.language;
+          // continuation not supported at all via the new API
+          // eslint-disable-next-line no-undefined
+          continuation = undefined;
+        } else {
+          // old API
+          deprecated("10.7.0", "highlight(lang, code, ...args) has been deprecated.");
+          deprecated("10.7.0", "Please use highlight(code, options) instead.\nhttps://github.com/highlightjs/highlight.js/issues/2277");
+          languageName = codeOrlanguageName;
+          code = optionsOrCode;
+        }
+
         /** @type {BeforeHighlightContext} */
         const context = {
           code,
@@ -1611,14 +1636,12 @@ var hljs = (function () {
        * private highlight that's used internally and does not fire callbacks
        *
        * @param {string} languageName - the language to use for highlighting
-       * @param {string} code - the code to highlight
-       * @param {boolean} [ignoreIllegals] - whether to ignore illegal matches, default is to bail
-       * @param {CompiledMode} [continuation] - current continuation mode, if any
+       * @param {string} codeToHighlight - the code to highlight
+       * @param {boolean?} [ignoreIllegals] - whether to ignore illegal matches, default is to bail
+       * @param {CompiledMode?} [continuation] - current continuation mode, if any
        * @returns {HighlightResult} - result of the highlight operation
       */
-      function _highlight(languageName, code, ignoreIllegals, continuation) {
-        const codeToHighlight = code;
-
+      function _highlight(languageName, codeToHighlight, ignoreIllegals, continuation) {
         /**
          * Return keyword data if a match is a keyword
          * @param {CompiledMode} mode - current mode
@@ -1650,8 +1673,14 @@ var hljs = (function () {
               buf = "";
 
               relevance += keywordRelevance;
-              const cssClass = language.classNameAliases[kind] || kind;
-              emitter.addKeyword(match[0], cssClass);
+              if (kind.startsWith("_")) {
+                // _ implied for relevance only, do not highlight
+                // by applying a class name
+                buf += match[0];
+              } else {
+                const cssClass = language.classNameAliases[kind] || kind;
+                emitter.addKeyword(match[0], cssClass);
+              }
             } else {
               buf += match[0];
             }
@@ -1721,7 +1750,7 @@ var hljs = (function () {
             if (mode["on:end"]) {
               const resp = new Response(mode);
               mode["on:end"](match, resp);
-              if (resp.ignore) matched = false;
+              if (resp.isMatchIgnored) matched = false;
             }
 
             if (matched) {
@@ -1773,7 +1802,7 @@ var hljs = (function () {
           for (const cb of beforeCallbacks) {
             if (!cb) continue;
             cb(match, resp);
-            if (resp.ignore) return doIgnore(lexeme);
+            if (resp.isMatchIgnored) return doIgnore(lexeme);
           }
 
           if (newMode && newMode.endSameAsBegin) {
@@ -2137,12 +2166,12 @@ var hljs = (function () {
 
       /** @type {HLJSPlugin} */
       const brPlugin = {
-        "before:highlightBlock": ({ block }) => {
+        "before:highlightElement": ({ el }) => {
           if (options.useBR) {
-            block.innerHTML = block.innerHTML.replace(/\n/g, '').replace(/<br[ /]*>/g, '\n');
+            el.innerHTML = el.innerHTML.replace(/\n/g, '').replace(/<br[ /]*>/g, '\n');
           }
         },
-        "after:highlightBlock": ({ result }) => {
+        "after:highlightElement": ({ result }) => {
           if (options.useBR) {
             result.value = result.value.replace(/\n/g, "<br>");
           }
@@ -2152,7 +2181,7 @@ var hljs = (function () {
       const TAB_REPLACE_RE = /^(<[^>]+>|\t)+/gm;
       /** @type {HLJSPlugin} */
       const tabReplacePlugin = {
-        "after:highlightBlock": ({ result }) => {
+        "after:highlightElement": ({ result }) => {
           if (options.tabReplace) {
             result.value = result.value.replace(TAB_REPLACE_RE, (m) =>
               m.replace(/\t/g, options.tabReplace)
@@ -2167,21 +2196,23 @@ var hljs = (function () {
        *
        * @param {HighlightedHTMLElement} element - the HTML element to highlight
       */
-      function highlightBlock(element) {
+      function highlightElement(element) {
         /** @type HTMLElement */
         let node = null;
         const language = blockLanguage(element);
 
         if (shouldNotHighlight(language)) return;
 
-        fire("before:highlightBlock",
-          { block: element, language: language });
+        // support for v10 API
+        fire("before:highlightElement",
+          { el: element, language: language });
 
         node = element;
         const text = node.textContent;
-        const result = language ? highlight(language, text, true) : highlightAuto(text);
+        const result = language ? highlight(text, { language, ignoreIllegals: true }) : highlightAuto(text);
 
-        fire("after:highlightBlock", { block: element, result, text });
+        // support for v10 API
+        fire("after:highlightElement", { el: element, result, text });
 
         element.innerHTML = result.value;
         updateClassName(element, language, result.language);
@@ -2227,7 +2258,7 @@ var hljs = (function () {
         deprecated("10.6.0", "initHighlighting() is deprecated.  Use highlightAll() instead.");
 
         const blocks = document.querySelectorAll('pre code');
-        blocks.forEach(highlightBlock);
+        blocks.forEach(highlightElement);
       };
 
       // Higlights all when DOMContentLoaded fires
@@ -2238,21 +2269,22 @@ var hljs = (function () {
       }
 
       let wantsHighlight = false;
-      let domLoaded = false;
 
       /**
        * auto-highlights all pre>code elements on the page
        */
       function highlightAll() {
         // if we are called too early in the loading process
-        if (!domLoaded) { wantsHighlight = true; return; }
+        if (document.readyState === "loading") {
+          wantsHighlight = true;
+          return;
+        }
 
         const blocks = document.querySelectorAll('pre code');
-        blocks.forEach(highlightBlock);
+        blocks.forEach(highlightElement);
       }
 
       function boot() {
-        domLoaded = true;
         // if a highlight was requested before DOM was loaded, do now
         if (wantsHighlight) highlightAll();
       }
@@ -2289,6 +2321,20 @@ var hljs = (function () {
 
         if (lang.aliases) {
           registerAliases(lang.aliases, { languageName });
+        }
+      }
+
+      /**
+       * Remove a language grammar module
+       *
+       * @param {string} languageName
+       */
+      function unregisterLanguage(languageName) {
+        delete languages[languageName];
+        for (const alias of Object.keys(aliases)) {
+          if (aliases[alias] === languageName) {
+            delete aliases[alias];
+          }
         }
       }
 
@@ -2337,7 +2383,7 @@ var hljs = (function () {
         if (typeof aliasList === 'string') {
           aliasList = [aliasList];
         }
-        aliasList.forEach(alias => { aliases[alias] = languageName; });
+        aliasList.forEach(alias => { aliases[alias.toLowerCase()] = languageName; });
       }
 
       /**
@@ -2350,9 +2396,33 @@ var hljs = (function () {
       }
 
       /**
+       * Upgrades the old highlightBlock plugins to the new
+       * highlightElement API
+       * @param {HLJSPlugin} plugin
+       */
+      function upgradePluginAPI(plugin) {
+        // TODO: remove with v12
+        if (plugin["before:highlightBlock"] && !plugin["before:highlightElement"]) {
+          plugin["before:highlightElement"] = (data) => {
+            plugin["before:highlightBlock"](
+              Object.assign({ block: data.el }, data)
+            );
+          };
+        }
+        if (plugin["after:highlightBlock"] && !plugin["after:highlightElement"]) {
+          plugin["after:highlightElement"] = (data) => {
+            plugin["after:highlightBlock"](
+              Object.assign({ block: data.el }, data)
+            );
+          };
+        }
+      }
+
+      /**
        * @param {HLJSPlugin} plugin
        */
       function addPlugin(plugin) {
+        upgradePluginAPI(plugin);
         plugins.push(plugin);
       }
 
@@ -2383,17 +2453,31 @@ var hljs = (function () {
         return fixMarkup(arg);
       }
 
+      /**
+       *
+       * @param {HighlightedHTMLElement} el
+       */
+      function deprecateHighlightBlock(el) {
+        deprecated("10.7.0", "highlightBlock will be removed entirely in v12.0");
+        deprecated("10.7.0", "Please use highlightElement now.");
+
+        return highlightElement(el);
+      }
+
       /* Interface definition */
       Object.assign(hljs, {
         highlight,
         highlightAuto,
         highlightAll,
         fixMarkup: deprecateFixMarkup,
-        highlightBlock,
+        highlightElement,
+        // TODO: Remove with v12 API
+        highlightBlock: deprecateHighlightBlock,
         configure,
         initHighlighting,
         initHighlightingOnLoad,
         registerLanguage,
+        unregisterLanguage,
         listLanguages,
         getLanguage,
         registerAliases,
@@ -2757,6 +2841,7 @@ hljs.registerLanguage('css', function () {
     'font-language-override',
     'font-size',
     'font-size-adjust',
+    'font-smoothing',
     'font-stretch',
     'font-style',
     'font-variant',
@@ -3137,7 +3222,10 @@ hljs.registerLanguage('javascript', function () {
     "Array",
     "Uint8Array",
     "Uint8ClampedArray",
-    "ArrayBuffer"
+    "ArrayBuffer",
+    "BigInt64Array",
+    "BigUint64Array",
+    "BigInt"
   ];
 
   const ERROR_TYPES = [
@@ -3939,7 +4027,8 @@ hljs.registerLanguage('xml', function () {
             },
             {
               begin: />/,
-              relevance: 0
+              relevance: 0,
+              endsParent: true
             }
           ]
         }
