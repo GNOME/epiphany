@@ -43,6 +43,13 @@ struct _EphySuggestionModel {
   SoupSession *session;
 };
 
+#define QUERY_SCOPE_ALL         ' '
+#define QUERY_SCOPE_TABS        '%'
+#define QUERY_SCOPE_SUGGESTIONS '?'
+#define QUERY_SCOPE_BOOKMARKS   '*'
+#define QUERY_SCOPE_HISTORY     '^'
+#define MAX_QUERY_SCOPES        4
+
 enum {
   PROP_0,
   PROP_BOOKMARKS_MANAGER,
@@ -293,69 +300,18 @@ append_suggestion (EphySuggestionModel *self,
     return FALSE;
 
   if (self->num_custom_entries < MAX_URL_ENTRIES) {
+    const char *uri = ephy_suggestion_get_uri (suggestion);
+
     g_sequence_append (self->items, g_object_ref (suggestion));
-    load_favicon (self, suggestion, ephy_suggestion_get_uri (suggestion));
+    g_sequence_append (self->urls, g_strdup (uri));
+
+    load_favicon (self, suggestion, uri);
     self->num_custom_entries++;
 
     return TRUE;
   }
 
   return FALSE;
-}
-
-static guint
-add_bookmarks (EphySuggestionModel *self,
-               const char          *query)
-{
-  g_autoptr (GList) new_urls = NULL;
-  GSequence *bookmarks;
-  guint added = 0;
-
-  bookmarks = ephy_bookmarks_manager_get_bookmarks (self->bookmarks_manager);
-
-  for (GSequenceIter *iter = g_sequence_get_begin_iter (bookmarks);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    EphyBookmark *bookmark;
-    GSequence *tags;
-    const char *url, *title;
-
-    bookmark = g_sequence_get (iter);
-
-    url = ephy_bookmark_get_url (bookmark);
-    if (g_sequence_lookup (self->urls, (gpointer)url, (GCompareDataFunc)g_strcmp0, NULL))
-      continue;
-
-    title = ephy_bookmark_get_title (bookmark);
-    if (strlen (title) == 0)
-      title = url;
-
-    tags = ephy_bookmark_get_tags (bookmark);
-    if (should_add_bookmark_to_model (self, query, title, url, tags)) {
-      EphySuggestion *suggestion;
-      g_autofree gchar *escaped_title = NULL;
-      g_autofree gchar *markup = NULL;
-
-      escaped_title = g_markup_escape_text (title, -1);
-      markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-      suggestion = ephy_suggestion_new (markup, title, url);
-      load_favicon (self, suggestion, url);
-      ephy_suggestion_set_secondary_icon (suggestion, "starred-symbolic");
-
-      if (append_suggestion (self, suggestion)) {
-        new_urls = g_list_prepend (new_urls, g_strdup (url));
-        added++;
-      } else {
-        break;
-      }
-    }
-  }
-
-  for (GList *p = new_urls; p != NULL; p = p->next)
-    g_sequence_append (self->urls, g_steal_pointer (&p->data));
-  g_sequence_sort (self->urls, (GCompareDataFunc)g_strcmp0, NULL);
-
-  return added;
 }
 
 static guint
@@ -399,85 +355,12 @@ add_search_engines (EphySuggestionModel *self,
 
   return added;
 }
-
-static guint
-add_tabs (EphySuggestionModel *self,
-          const char          *query)
-{
-  GApplication *application;
-  EphyEmbedShell *shell;
-  EphyWindow *window;
-  EphyTabView *tab_view;
-  GList *windows;
-  gint n_pages, selected;
-  guint added = 0;
-
-  shell = ephy_embed_shell_get_default ();
-  application = G_APPLICATION (shell);
-  windows = gtk_application_get_windows (GTK_APPLICATION (application));
-
-  for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
-    window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
-
-    tab_view = ephy_window_get_tab_view (window);
-    n_pages = ephy_tab_view_get_n_pages (tab_view);
-    selected = ephy_tab_view_get_selected_index (tab_view);
-
-    for (int i = 0; i < n_pages; i++) {
-      EphyEmbed *embed;
-      EphyWebView *webview;
-      EphySuggestion *suggestion;
-      g_autofree gchar *escaped_title = NULL;
-      g_autofree gchar *markup = NULL;
-      const gchar *display_address;
-      const gchar *url;
-      g_autofree gchar *address = NULL;
-      const gchar *title;
-      g_autofree gchar *title_casefold = NULL;
-      g_autofree gchar *display_address_casefold = NULL;
-      g_autofree gchar *query_casefold = NULL;
-
-      if (win_idx == 0 && i == selected)
-        continue;
-
-      embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i));
-      webview = ephy_embed_get_web_view (embed);
-      display_address = ephy_web_view_get_display_address (webview);
-      url = ephy_web_view_get_address (webview);
-      address = g_strdup_printf ("ephy-tab://%d@%d", i, win_idx);
-      title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
-
-      display_address_casefold = g_utf8_casefold (display_address, -1);
-      query_casefold = g_utf8_casefold (query, -1);
-      if (!title)
-        title = "";
-
-      title_casefold = g_utf8_casefold (title, -1);
-
-      if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
-        char *escaped_address = g_markup_escape_text (display_address, -1);
-
-        escaped_title = g_markup_escape_text (title, -1);
-        markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-        suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
-        load_favicon (self, suggestion, display_address);
-        ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
-
-        g_sequence_append (self->urls, g_strdup (url));
-        g_sequence_append (self->items, suggestion);
-        added++;
-      }
-    }
-  }
-
-  g_sequence_sort (self->urls, (GCompareDataFunc)g_strcmp0, NULL);
-
-  return added;
-}
-
 typedef struct {
   char *query;
+  char scope;
   gboolean include_search_engines;
+  GSequence *tabs;
+  GSequence *bookmarks;
   GSequence *history;
   GSequence *google_suggestions;
   int active_sources;
@@ -490,10 +373,26 @@ query_data_new (const char *query,
   QueryData *data;
 
   data = g_malloc0 (sizeof (QueryData));
-  data->query = g_strdup (query);
   data->include_search_engines = include_search_engines;
+  data->tabs = g_sequence_new (g_object_unref);
+  data->bookmarks = g_sequence_new (g_object_unref);
   data->history = g_sequence_new (g_object_unref);
   data->google_suggestions = g_sequence_new (g_object_unref);
+
+  /* Split the search string. */
+  if (strlen (query) > 1 && query[1] == ' ' &&
+      (query[0] == QUERY_SCOPE_TABS ||
+       query[0] == QUERY_SCOPE_BOOKMARKS ||
+       query[0] == QUERY_SCOPE_HISTORY ||
+       query[0] == QUERY_SCOPE_SUGGESTIONS)) {
+    data->query = g_strdup (query + 2);
+    data->scope = query[0];
+    data->active_sources = 1;
+  } else {
+    data->query = g_strdup (query);
+    data->scope = QUERY_SCOPE_ALL;
+    data->active_sources = MAX_QUERY_SCOPES;
+  }
 
   return data;
 }
@@ -502,6 +401,8 @@ static void
 query_data_free (QueryData *data)
 {
   g_assert (data != NULL);
+  g_clear_pointer (&data->tabs, g_sequence_free);
+  g_clear_pointer (&data->bookmarks, g_sequence_free);
   g_clear_pointer (&data->history, g_sequence_free);
   g_clear_pointer (&data->google_suggestions, g_sequence_free);
   g_free (data->query);
@@ -538,7 +439,19 @@ query_collection_done (EphySuggestionModel *self,
   self->num_custom_entries = 0;
 
   if (strlen (data->query) > 0) {
-    added = add_tabs (self, data->query);
+    /* Search results have the following order:
+     * - Open Tabs
+     * - Search Suggestions
+     * - Bookmarks
+     * - History
+     * - Search Engines
+     */
+    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->tabs); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      EphySuggestion *tmp = g_sequence_get (iter);
+
+      g_sequence_append (self->items, g_object_ref (tmp));
+      added++;
+    }
 
     for (GSequenceIter *iter = g_sequence_get_begin_iter (data->google_suggestions); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
       EphySuggestion *tmp = g_sequence_get (iter);
@@ -549,7 +462,14 @@ query_collection_done (EphySuggestionModel *self,
         break;
     }
 
-    added += add_bookmarks (self, data->query);
+    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->bookmarks); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      EphySuggestion *tmp = g_sequence_get (iter);
+
+      if (append_suggestion (self, tmp))
+        added++;
+      else
+        break;
+    }
 
     for (GSequenceIter *iter = g_sequence_get_begin_iter (data->history); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
       EphySuggestion *tmp = g_sequence_get (iter);
@@ -560,7 +480,7 @@ query_collection_done (EphySuggestionModel *self,
         break;
     }
 
-    if (data->include_search_engines)
+    if (data->scope == QUERY_SCOPE_ALL && data->include_search_engines)
       added += add_search_engines (self, data->query);
   }
 
@@ -568,6 +488,116 @@ query_collection_done (EphySuggestionModel *self,
 
   g_task_return_boolean (task, TRUE);
   g_object_unref (task);
+}
+
+static void
+tabs_query (EphySuggestionModel *self,
+            QueryData           *data,
+            GTask               *task)
+{
+  GApplication *application;
+  EphyEmbedShell *shell;
+  EphyWindow *window;
+  EphyTabView *tab_view;
+  GList *windows;
+  gint n_pages, selected;
+
+  shell = ephy_embed_shell_get_default ();
+  application = G_APPLICATION (shell);
+  windows = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  for (guint win_idx = 0; win_idx < g_list_length (windows); win_idx++) {
+    window = EPHY_WINDOW (g_list_nth_data (windows, win_idx));
+
+    tab_view = ephy_window_get_tab_view (window);
+    n_pages = ephy_tab_view_get_n_pages (tab_view);
+    selected = ephy_tab_view_get_selected_index (tab_view);
+
+    for (int i = 0; i < n_pages; i++) {
+      EphyEmbed *embed;
+      EphyWebView *webview;
+      EphySuggestion *suggestion;
+      g_autofree gchar *escaped_title = NULL;
+      g_autofree gchar *markup = NULL;
+      const gchar *display_address;
+      g_autofree gchar *address = NULL;
+      const gchar *title;
+      g_autofree gchar *title_casefold = NULL;
+      g_autofree gchar *display_address_casefold = NULL;
+      g_autofree gchar *query_casefold = NULL;
+
+      if (win_idx == 0 && i == selected)
+        continue;
+
+      embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i));
+      webview = ephy_embed_get_web_view (embed);
+      display_address = ephy_web_view_get_display_address (webview);
+      address = g_strdup_printf ("ephy-tab://%d@%d", i, win_idx);
+      title = webkit_web_view_get_title (WEBKIT_WEB_VIEW (webview));
+
+      display_address_casefold = g_utf8_casefold (display_address, -1);
+      query_casefold = g_utf8_casefold (data->query, -1);
+      if (!title)
+        title = "";
+
+      title_casefold = g_utf8_casefold (title, -1);
+
+      if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
+        char *escaped_address = g_markup_escape_text (display_address, -1);
+
+        escaped_title = g_markup_escape_text (title, -1);
+        markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
+        suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
+        ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
+
+        g_sequence_append (data->tabs, g_object_ref (suggestion));
+      }
+    }
+  }
+
+  query_collection_done (self, g_steal_pointer (&task));
+}
+
+static void
+bookmarks_query (EphySuggestionModel *self,
+                 QueryData           *data,
+                 GTask               *task)
+{
+  g_autoptr (GList) new_urls = NULL;
+  GSequence *bookmarks;
+
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (self->bookmarks_manager);
+
+  for (GSequenceIter *iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark;
+    GSequence *tags;
+    const char *url, *title;
+
+    bookmark = g_sequence_get (iter);
+
+    url = ephy_bookmark_get_url (bookmark);
+    title = ephy_bookmark_get_title (bookmark);
+    if (strlen (title) == 0)
+      title = url;
+
+    tags = ephy_bookmark_get_tags (bookmark);
+    if (should_add_bookmark_to_model (self, data->query, title, url, tags)) {
+      EphySuggestion *suggestion;
+      g_autofree gchar *escaped_title = NULL;
+      g_autofree gchar *markup = NULL;
+
+      escaped_title = g_markup_escape_text (title, -1);
+      markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
+      suggestion = ephy_suggestion_new (markup, title, url);
+      ephy_suggestion_set_secondary_icon (suggestion, "starred-symbolic");
+
+      g_sequence_append (data->bookmarks, g_object_ref (suggestion));
+    }
+  }
+
+  query_collection_done (self, g_steal_pointer (&task));
 }
 
 static void
@@ -692,8 +722,6 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
                                    gpointer             user_data)
 {
   GTask *task = NULL;
-  char **strings;
-  GList *qlist = NULL;
   QueryData *data;
 
   g_assert (EPHY_IS_SUGGESTION_MODEL (self));
@@ -706,30 +734,38 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   data = query_data_new (query, include_search_engines);
   g_task_set_task_data (task, data, (GDestroyNotify)query_data_free);
 
-  /* Split the search string. */
-  strings = g_strsplit (query, " ", -1);
-  for (guint i = 0; strings[i]; i++)
-    qlist = g_list_append (qlist, g_strdup (strings[i]));
-
-  /* History */
-  data->active_sources = 1;
-
   /* Google Search Suggestions */
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS)) {
-    data->active_sources++;
-    google_search_suggestions_query (self, query, g_object_ref (task));
+  if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_SUGGESTIONS) {
+    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS))
+      google_search_suggestions_query (self, query, g_object_ref (task));
+    else
+      query_collection_done (self, task);
   }
 
-  ephy_history_service_find_urls (self->history_service,
-                                  0, 0,
-                                  MAX_URL_ENTRIES, 0,
-                                  qlist,
-                                  EPHY_HISTORY_SORT_MOST_VISITED,
-                                  cancellable,
-                                  (EphyHistoryJobCallback)history_query_completed_cb,
-                                  task);
+  if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_HISTORY) {
+    GList *qlist = NULL;
+    g_auto (GStrv) strings = NULL;
 
-  g_strfreev (strings);
+    strings = g_strsplit (data->query, " ", -1);
+
+    for (guint i = 0; strings[i]; i++)
+      qlist = g_list_append (qlist, g_strdup (strings[i]));
+
+    ephy_history_service_find_urls (self->history_service,
+                                    0, 0,
+                                    MAX_URL_ENTRIES, 0,
+                                    qlist,
+                                    EPHY_HISTORY_SORT_MOST_VISITED,
+                                    cancellable,
+                                    (EphyHistoryJobCallback)history_query_completed_cb,
+                                    task);
+  }
+
+  if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_TABS)
+    tabs_query (self, data, g_object_ref (task));
+
+  if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_BOOKMARKS)
+    bookmarks_query (self, data, g_object_ref (task));
 }
 
 gboolean
