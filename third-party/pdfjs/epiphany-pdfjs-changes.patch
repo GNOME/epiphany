@@ -1,13 +1,14 @@
-diff -urN web2/viewer.css web/viewer.css
---- web2/viewer.css	2020-09-03 23:18:08.000000000 +0200
-+++ web/viewer.css	2021-04-05 11:25:24.181448360 +0200
+diff --git a/third-party/pdfjs/web/viewer.css b/third-party/pdfjs/web/viewer.css
+index b7277df3d..d7322b41e 100644
+--- a/third-party/pdfjs/web/viewer.css
++++ b/third-party/pdfjs/web/viewer.css
 @@ -1,4 +1,5 @@
  /* Copyright 2014 Mozilla Foundation
 + * Modifications made for Epiphany by Jan-Michael Brummer <jan.brummer@tabos.org>
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -2361,6 +2362,7 @@
+@@ -2321,6 +2322,7 @@ html[dir="rtl"] .dropdownToolbarButton::after {
  }
  
  .dropdownToolbarButton > select {
@@ -15,7 +16,7 @@ diff -urN web2/viewer.css web/viewer.css
    width: 162px;
    height: 28px;
    font-size: 12px;
-@@ -3132,6 +3134,7 @@
+@@ -2942,6 +2944,7 @@ html[dir="rtl"] .toolbarField[type="checkbox"] {
  }
  
  .toolbarField.pageNumber {
@@ -23,9 +24,10 @@ diff -urN web2/viewer.css web/viewer.css
    -moz-appearance: textfield; /* hides the spinner in moz */
    min-width: 16px;
    text-align: right;
-diff -urN web2/viewer.html web/viewer.html
---- web2/viewer.html	2020-09-03 23:18:08.000000000 +0200
-+++ web/viewer.html	2021-04-05 11:25:24.181448360 +0200
+diff --git a/third-party/pdfjs/web/viewer.html b/third-party/pdfjs/web/viewer.html
+index f661cb9f5..7b8dd7663 100644
+--- a/third-party/pdfjs/web/viewer.html
++++ b/third-party/pdfjs/web/viewer.html
 @@ -1,6 +1,7 @@
  <!DOCTYPE html>
  <!--
@@ -34,7 +36,7 @@ diff -urN web2/viewer.html web/viewer.html
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
-@@ -21,14 +22,14 @@
+@@ -21,14 +22,14 @@ Adobe CMap resources are covered by their own copyright but the same license:
  See https://github.com/adobe-type-tools/cmap-resources
  -->
  <html dir="ltr" mozdisallowselectionprint>
@@ -51,7 +53,7 @@ diff -urN web2/viewer.html web/viewer.html
      <link rel="stylesheet" href="viewer.css">
  
  
-@@ -124,7 +125,7 @@
+@@ -136,7 +137,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                <span data-l10n-id="download_label">Download</span>
              </button>
  
@@ -60,7 +62,7 @@ diff -urN web2/viewer.html web/viewer.html
                <span data-l10n-id="bookmark_label">Current View</span>
              </a>
  
-@@ -226,7 +227,7 @@
+@@ -238,7 +239,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                  <button id="download" class="toolbarButton download hiddenMediumView" title="Download" tabindex="34" data-l10n-id="download">
                    <span data-l10n-id="download_label">Download</span>
                  </button>
@@ -69,9 +71,10 @@ diff -urN web2/viewer.html web/viewer.html
                    <span data-l10n-id="bookmark_label">Current View</span>
                  </a>
  
-diff -urN web2/viewer.js web/viewer.js
---- web2/viewer.js	2020-09-03 23:18:20.000000000 +0200
-+++ web/viewer.js	2021-04-05 11:25:24.184448405 +0200
+diff --git a/third-party/pdfjs/web/viewer.js b/third-party/pdfjs/web/viewer.js
+index d093d773b..ed36e7f02 100644
+--- a/third-party/pdfjs/web/viewer.js
++++ b/third-party/pdfjs/web/viewer.js
 @@ -3,6 +3,7 @@
   * Javascript code in this page
   *
@@ -80,7 +83,7 @@ diff -urN web2/viewer.js web/viewer.js
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1973,8 +1974,7 @@
+@@ -2663,8 +2664,7 @@ function webViewerInitialized() {
    let file;
    const queryString = document.location.search.substring(1);
    const params = (0, _ui_utils.parseQueryString)(queryString);
@@ -90,7 +93,7 @@ diff -urN web2/viewer.js web/viewer.js
    const fileInput = document.createElement("input");
    fileInput.id = appConfig.openFileInputName;
    fileInput.className = "fileInput";
-@@ -1982,12 +1982,8 @@
+@@ -2672,12 +2672,8 @@ function webViewerInitialized() {
    fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
    document.body.appendChild(fileInput);
  
@@ -105,7 +108,7 @@ diff -urN web2/viewer.js web/viewer.js
  
    fileInput.addEventListener("change", function (evt) {
      const files = evt.target.files;
-@@ -2049,8 +2045,18 @@
+@@ -2739,8 +2735,18 @@ function webViewerInitialized() {
      }
    }, true);
  
@@ -125,19 +128,19 @@ diff -urN web2/viewer.js web/viewer.js
    } catch (reason) {
      PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(msg => {
        PDFViewerApplication.error(msg, reason);
-@@ -6877,6 +6883,8 @@
+@@ -6977,6 +6983,8 @@ class PDFHistory {
        }
      }
  
-+    // FIXME: This currently breaks Epiphany due to rewriting history with baseUrl
-+    return;
++// FIXME: This currently breaks Epiphany due to rewriting history with baseUrl
++return;
      if (shouldReplace) {
        window.history.replaceState(newState, "", newUrl);
      } else {
-@@ -13897,4 +13905,4 @@
- 
- /***/ })
- /******/ ]);
+@@ -14896,4 +14904,4 @@ _app.PDFPrintServiceFactory.instance = {
+ /******/ 	// This entry module used 'exports' so it can't be inlined
+ /******/ })()
+ ;
 -//# sourceMappingURL=viewer.js.map
-\ Kein Zeilenumbruch am Dateiende.
+\ No newline at end of file
 +//# sourceMappingURL=viewer.js.map
