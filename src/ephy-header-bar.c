@@ -297,7 +297,8 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "keyboard-shortcuts-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "firefox-sync-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "firefox-sync-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-menu")));
   } else if (ephy_is_running_inside_flatpak ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));

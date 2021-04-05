@@ -232,10 +232,18 @@
             </child>
             <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
             <child>
-              <object class="GtkSeparator" id="import-export-separator">
+              <object class="GtkSeparator" id="firefox-sync-separator">
                 <property name="orientation">horizontal</property>
                 <property name="margin-top">6</property>
                 <property name="margin-bottom">6</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton" id="firefox-sync-button">
+                <property name="can_focus">True</property>
+                <property name="text" translatable="yes">Firefox _Sync</property>
+                <property name="action-name">app.firefox-sync-dialog</property>
                 <property name="visible">True</property>
               </object>
             </child>
@@ -396,22 +404,6 @@
             <property name="can_focus">True</property>
             <property name="text" translatable="yes">Import _Passwords…</property>
             <property name="action-name">app.import-passwords</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="orientation">horizontal</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">Firefox _Sync</property>
-            <property name="action-name">app.firefox-sync-dialog</property>
             <property name="visible">True</property>
           </object>
         </child>
