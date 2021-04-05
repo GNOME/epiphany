@@ -46,6 +46,8 @@ function webViewerInitialized() has been changed:
 
 In _pushOrReplaceState early return before the window.history.xxx changes
 
+4. Hide secondaryViewBookmark and viewBookmark
+Switch id's secondaryViewBookmark and viewBookmark from visibleSmallView and hiddenSmallView to hidden.
 
 ## Modifications to viewer.css
 
