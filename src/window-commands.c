@@ -137,22 +137,24 @@ static gchar *
 get_path (GIOChannel *channel)
 {
   gchar *line;
-  gchar *path;
+  const gchar *path;
+  gchar *result;
   gsize length;
 
   do {
     g_io_channel_read_line (channel, &line, &length, NULL, NULL);
 
     if (g_str_has_prefix (line, "Path")) {
-      path = g_strdup (line);
+      path = line;
 
       /* Extract value (e.g. Path=Value\n -> Value) */
       path = strchr (path, '=');
       path++;
-      path[strcspn (path, "\n")] = 0;
+      ((gchar *)path)[strcspn (path, "\n")] = '\0';
+      result = g_strdup (path);
 
       g_free (line);
-      return path;
+      return result;
     }
 
     g_free (line);
