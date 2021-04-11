@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-02-06 12:58+0000\n"
-"PO-Revision-Date: 2021-02-24 23:14+0200\n"
+"POT-Creation-Date: 2021-04-04 16:10+0000\n"
+"PO-Revision-Date: 2021-04-11 20:12+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -127,12 +127,10 @@ msgstr ""
 "описан називом, адресом и пречицом."
 
 #: data/org.gnome.epiphany.gschema.xml:38
-#| msgid "Manage Search Engines"
 msgid "Enable Google Search Suggestions"
 msgstr "Укључује предлоге Гугл претраге"
 
 #: data/org.gnome.epiphany.gschema.xml:39
-#| msgid "Whether to show the address column in the history window."
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr "Да ли ће бити приказан предлог Гугл претраге у уносу адресе."
 
@@ -222,8 +220,8 @@ msgid ""
 "Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
 "Prevention data."
 msgstr ""
-"Избор (битмаска) који чисти ставке података треба бити активан по основи. 1 ="
-" Колачићи, 2 = ХТТП остава диска, 4 = Подаци локалног смештаја, 8 = Ван "
+"Избор (битмаска) који чисти ставке података треба бити активан по основи. 1 "
+"= Колачићи, 2 = ХТТП остава диска, 4 = Подаци локалног смештаја, 8 = Ван "
 "мрежна остава веб програма, 16 = Базе података ИндексБП, 32 = Базе података "
 "ВебСКуЛ-а, 64 = Подаци прикључака, 128 = Остава HSTS политика, 256 = Подаци "
 "паметног спречавања праћења."
@@ -562,7 +560,6 @@ msgid "Whether to automatically switch to a new open tab."
 msgstr "Да ли самостално треба пребацити на нови отворени језичак."
 
 #: data/org.gnome.epiphany.gschema.xml:240
-#| msgid "Enable WebAudio"
 msgid "Enable WebExtensions"
 msgstr "Укључује Веб проширења"
 
@@ -595,7 +592,6 @@ msgid "Show navigation buttons in WebApp"
 msgstr "Приказује дугмад навигације у Веб програму"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-#| msgid "Whether to show buttons for navigation."
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "Да ли ће приказати дугмад за навигацију у Веб програму."
 
@@ -1091,7 +1087,7 @@ msgstr "Преузимање је затражено"
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:276
 #: src/window-commands.c:334 src/window-commands.c:378
 #: src/window-commands.c:562 src/window-commands.c:647
-#: src/window-commands.c:809 src/window-commands.c:1888
+#: src/window-commands.c:809 src/window-commands.c:1889
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -1497,12 +1493,12 @@ msgstr "Пронађите претходан израз у низу за пре
 msgid "Find next occurrence of the search string"
 msgstr "Пронађите следећи израз у низу за претраживање"
 
-#: embed/ephy-reader-handler.c:267 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:268 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s није исправан УРИ"
 
-#: embed/ephy-web-view.c:189 src/window-commands.c:1350
+#: embed/ephy-web-view.c:189 src/window-commands.c:1351
 msgid "Open"
 msgstr "Отвори"
 
@@ -1536,82 +1532,82 @@ msgstr ""
 "Пажња: овај образац није безбедан. Ако укуцате лозинку, она неће остати "
 "приватна."
 
-#: embed/ephy-web-view.c:824
+#: embed/ephy-web-view.c:828
 msgid "Web process crashed"
 msgstr "Веб процес је пукао"
 
-#: embed/ephy-web-view.c:827
+#: embed/ephy-web-view.c:831
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Веб процес је окончан зато што је прекорачио ограничење меморије"
 
-#: embed/ephy-web-view.c:1027 embed/ephy-web-view.c:1148
+#: embed/ephy-web-view.c:1031 embed/ephy-web-view.c:1152
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "Забрани"
 
-#: embed/ephy-web-view.c:1028 embed/ephy-web-view.c:1149
+#: embed/ephy-web-view.c:1032 embed/ephy-web-view.c:1153
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "Прихвати"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1041
+#: embed/ephy-web-view.c:1045
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Страница %s жели да прикаже поруку у виду обавештења на радној површи."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1046
+#: embed/ephy-web-view.c:1050
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Страница %s жели да сазна где се тренутно налазите."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1051
+#: embed/ephy-web-view.c:1055
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Страница %s жели да користи ваш микрофон."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1056
+#: embed/ephy-web-view.c:1060
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Страница %s жели да користи вашу камерицу."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1061
+#: embed/ephy-web-view.c:1065
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "Страница %s жели да користи вашу веб камеру и микрофон."
 
-#: embed/ephy-web-view.c:1156
+#: embed/ephy-web-view.c:1160
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Да ли желите дозволити „%s“ да користи колачиће током прегледања „%s“?"
 
-#: embed/ephy-web-view.c:1165
+#: embed/ephy-web-view.c:1169
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "Ово ће дозволити „%s“ да прати вашу активност."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1343
+#: embed/ephy-web-view.c:1347
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Учитавам „%s“…"
 
-#: embed/ephy-web-view.c:1345 embed/ephy-web-view.c:1351
+#: embed/ephy-web-view.c:1349 embed/ephy-web-view.c:1355
 msgid "Loading…"
 msgstr "Учитавам…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1694
+#: embed/ephy-web-view.c:1700
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Овај веб страница се лажно представља као друга страница."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1699
+#: embed/ephy-web-view.c:1705
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1620,18 +1616,18 @@ msgstr ""
 "Проверите датум на календару вашег рачунара."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1704
+#: embed/ephy-web-view.c:1710
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Уверење са ове веб странице није издала поверљива организација."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1709
+#: embed/ephy-web-view.c:1715
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Уверење са ове веб странице не може бити обрађено. Можда је оштећено."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1714
+#: embed/ephy-web-view.c:1720
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1640,7 +1636,7 @@ msgstr ""
 "издала."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1719
+#: embed/ephy-web-view.c:1725
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1649,7 +1645,7 @@ msgstr ""
 "шифровање."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1724
+#: embed/ephy-web-view.c:1730
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1659,24 +1655,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787 embed/ephy-web-view.c:1843
+#: embed/ephy-web-view.c:1793 embed/ephy-web-view.c:1849
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Проблем приликом учитавања странице"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1790
+#: embed/ephy-web-view.c:1796
 msgid "Unable to display this website"
 msgstr "Не могу да прикажем ову веб страницу"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1794
+#: embed/ephy-web-view.c:1800
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Изгледа да није доступан сајт на „%s“."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1798
+#: embed/ephy-web-view.c:1804
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1685,7 +1681,7 @@ msgstr ""
 "да проверите да ли сте повезани на интернет."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1808
+#: embed/ephy-web-view.c:1814
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Тачан опис грешке: %s"
@@ -1693,48 +1689,48 @@ msgstr "Тачан опис грешке: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1813 embed/ephy-web-view.c:1866
-#: embed/ephy-web-view.c:1905 src/resources/gtk/page-menu-popover.ui:134
+#: embed/ephy-web-view.c:1819 embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1911 src/resources/gtk/page-menu-popover.ui:134
 msgid "Reload"
 msgstr "Освежи"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1816 embed/ephy-web-view.c:1869
-#: embed/ephy-web-view.c:1908
+#: embed/ephy-web-view.c:1822 embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1914
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1846
+#: embed/ephy-web-view.c:1852
 msgid "Oops! There may be a problem"
 msgstr "Упс! Изгледа да постоји неки проблем"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1850
+#: embed/ephy-web-view.c:1856
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Страница „%s“ је можда изазвала неочекивано затварање веб прегледача."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1857
+#: embed/ephy-web-view.c:1863
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Ако се ово понови, обавестите програмере „%s“ о томе."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1894
+#: embed/ephy-web-view.c:1900
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Проблем приликом приказивања странице"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1897
+#: embed/ephy-web-view.c:1903
 msgid "Oops!"
 msgstr "Упс!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1900
+#: embed/ephy-web-view.c:1906
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1743,18 +1739,18 @@ msgstr ""
 "посетите неку другу страницу да наставите."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1934
+#: embed/ephy-web-view.c:1940
 #, c-format
 msgid "Security Violation"
 msgstr "Кршење сигурносних правила"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1937
+#: embed/ephy-web-view.c:1943
 msgid "This Connection is Not Secure"
 msgstr "Ова веза није безбедна"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1941
+#: embed/ephy-web-view.c:1947
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1767,45 +1763,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1951 embed/ephy-web-view.c:2040
-#: embed/ephy-web-view.c:2091
+#: embed/ephy-web-view.c:1957 embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2097
 msgid "Go Back"
 msgstr "Врати ме назад"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1954 embed/ephy-web-view.c:2043
-#: embed/ephy-web-view.c:2094
+#: embed/ephy-web-view.c:1960 embed/ephy-web-view.c:2049
+#: embed/ephy-web-view.c:2100
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1957 embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:1963 embed/ephy-web-view.c:2052
 msgid "Accept Risk and Proceed"
 msgstr "Настави, прихватам ризик"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1961 embed/ephy-web-view.c:2050
+#: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2056
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1991
+#: embed/ephy-web-view.c:1997
 #, c-format
 msgid "Security Warning"
 msgstr "Безбедоносно упозорење"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1994
+#: embed/ephy-web-view.c:2000
 msgid "Unsafe website detected!"
 msgstr "Пронађен је небезбедан веб сајт!"
 
-#: embed/ephy-web-view.c:2001
+#: embed/ephy-web-view.c:2007
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1815,7 +1811,7 @@ msgstr ""
 "садржи злонамеран код који се може преузети на ваш рачунар без вашег "
 "пристанка."
 
-#: embed/ephy-web-view.c:2005
+#: embed/ephy-web-view.c:2011
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1824,7 +1820,7 @@ msgstr ""
 "Можете сазнати више о штетном веб садржају укључујући вирусе и други "
 "злонамерни код и о томе како да заштитите ваш рачунар на %s."
 
-#: embed/ephy-web-view.c:2012
+#: embed/ephy-web-view.c:2018
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1835,13 +1831,13 @@ msgstr ""
 "софтвера или одавања личних података (на пример, лозинки, бројева телефона "
 "или бројева кредитних картица)."
 
-#: embed/ephy-web-view.c:2017
+#: embed/ephy-web-view.c:2023
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "Можете сазнати више о социјалном инжењерингу (пецању) на %s или %s."
 
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2032
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1853,24 +1849,24 @@ msgstr ""
 "мењањем почетне странице или приказивањем додатних реклама на страницама "
 "које посећујете)."
 
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2037
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "О непожељном софтверу можете сазнати више на %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2075 embed/ephy-web-view.c:2078
+#: embed/ephy-web-view.c:2081 embed/ephy-web-view.c:2084
 #, c-format
 msgid "File not found"
 msgstr "Датотека није пронађена"
 
-#: embed/ephy-web-view.c:2082
+#: embed/ephy-web-view.c:2088
 #, c-format
 msgid "%s could not be found."
 msgstr "%s није пронађена."
 
-#: embed/ephy-web-view.c:2084
+#: embed/ephy-web-view.c:2090
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1879,15 +1875,15 @@ msgstr ""
 "Проверите назив датотеке, обратите пажњу на велика и мала слова и уверите се "
 "да датотека није померена, преименована или обрисана."
 
-#: embed/ephy-web-view.c:2147
+#: embed/ephy-web-view.c:2153
 msgid "None specified"
 msgstr "Ништа није одређено"
 
-#: embed/ephy-web-view.c:2263
+#: embed/ephy-web-view.c:2269
 msgid "Technical information"
 msgstr "Технички подаци"
 
-#: embed/ephy-web-view.c:3420
+#: embed/ephy-web-view.c:3463
 msgid "_OK"
 msgstr "У _реду"
 
@@ -2006,12 +2002,12 @@ msgstr "%d. %b %Y."
 msgid "Unknown"
 msgstr "Непознато"
 
-#: lib/sync/ephy-password-import.c:132
+#: lib/sync/ephy-password-import.c:133
 #, c-format
 msgid "Cannot create SQLite connection. Close browser and try again."
 msgstr "Не могу направити SQLite везу. Затворите прегледач и покушајте поново."
 
-#: lib/sync/ephy-password-import.c:141 lib/sync/ephy-password-import.c:151
+#: lib/sync/ephy-password-import.c:142 lib/sync/ephy-password-import.c:152
 #, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
@@ -2040,7 +2036,6 @@ msgstr "Не могу да добијем овлашћења за приступ
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
 #: lib/sync/ephy-sync-service.c:1758
-#| msgid "Please visit Preferences and sign in again to continue syncing."
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Посетите Фајерфоксово усаглашавање и поново се пријавите да наставите "
@@ -2051,9 +2046,6 @@ msgid "The password of your Firefox account seems to have been changed."
 msgstr "Изгледа да је измењена лозинка вашег Firefox налога."
 
 #: lib/sync/ephy-sync-service.c:971
-#| msgid ""
-#| "Please visit Preferences and sign in with the new password to continue "
-#| "syncing."
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2165,7 +2157,7 @@ msgstr ""
 "небезбедно."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:346
+#: src/resources/gtk/history-dialog.ui:236
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Очисти _све"
@@ -2248,7 +2240,7 @@ msgid "Starting…"
 msgstr "Покрећем…"
 
 #: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:243
-#: src/resources/gtk/history-dialog.ui:387
+#: src/resources/gtk/history-dialog.ui:277
 msgid "_Open"
 msgstr "_Отвори"
 
@@ -2272,7 +2264,7 @@ msgstr "Све датотеке"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:563
+#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:564
 msgid "Cl_ear"
 msgstr "_Очисти"
 
@@ -2375,6 +2367,10 @@ msgstr "Приступ камери"
 msgid "Media autoplay"
 msgstr "Самопуштање медија"
 
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Without Sound"
+msgstr "Без звука"
+
 #: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "Својства обележивача"
@@ -2406,21 +2402,21 @@ msgstr ""
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Не могу да довучем обележиваче из програма Firefox!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:458
+#: src/bookmarks/ephy-bookmarks-import.c:459
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "Не могу да отворим базу података са ХТМЛ обележивачима: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:469
+#: src/bookmarks/ephy-bookmarks-import.c:470
 msgid "HTML bookmarks database could not be read."
 msgstr "Не могу да прочитам базу података са ХТМЛ обележивачима."
 
-#: src/bookmarks/ephy-bookmarks-import.c:490
+#: src/bookmarks/ephy-bookmarks-import.c:491
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "База података са ХТМЛ обележивачима се не може обрадити: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:643
+#: src/bookmarks/ephy-bookmarks-import.c:644
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Датотека са обележивачима се не може обрадити:"
@@ -2434,11 +2430,11 @@ msgid "Mobile"
 msgstr "Мобилни"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:50
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:52
 msgid "Reload the current page"
 msgstr "Освежите тренутну страницу"
 
-#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:443
+#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:475
 msgid "Stop loading the current page"
 msgstr "Зауставите учитавање текуће странице"
 
@@ -2454,23 +2450,23 @@ msgstr "Последње усаглашавање: %s"
 msgid "Something went wrong, please try again later."
 msgstr "Нешто је пошло наопако, покушајте поново."
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:964
+#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:976
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "Није могуће изменити историјат у анонимном режиму."
 
-#: src/ephy-history-dialog.c:456
+#: src/ephy-history-dialog.c:457
 msgid "Remove the selected pages from history"
 msgstr "Уклоните изабране странице из историјата"
 
-#: src/ephy-history-dialog.c:463
+#: src/ephy-history-dialog.c:464
 msgid "Copy URL"
 msgstr "Копирај адресу"
 
-#: src/ephy-history-dialog.c:553
+#: src/ephy-history-dialog.c:554
 msgid "Clear browsing history?"
 msgstr "Да очистим записе о прегледу страница?"
 
-#: src/ephy-history-dialog.c:557
+#: src/ephy-history-dialog.c:558
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2478,7 +2474,7 @@ msgstr ""
 "Чишћење записа о прегледу страница ће трајно уклонити све ставке из "
 "историјата."
 
-#: src/ephy-history-dialog.c:967
+#: src/ephy-history-dialog.c:979
 msgid "Remove all history"
 msgstr "Уклони читав историјат"
 
@@ -2531,12 +2527,11 @@ msgstr "Опције Веба"
 
 # bug: no plural-forms
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:628 src/resources/gtk/action-bar-start.ui:95
+#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "Отворите нови језичак"
 
 #: src/ephy-web-extension-dialog.c:73
-#| msgid "Do you want to leave this website?"
 msgid "Do you really want to remove this extension?"
 msgstr "Да ли заиста желите да уклоните ово проширење?"
 
@@ -2550,7 +2545,6 @@ msgid "Author"
 msgstr "Аутор"
 
 #: src/ephy-web-extension-dialog.c:174
-#| msgid "Version %s"
 msgid "Version"
 msgstr "Издање"
 
@@ -2560,7 +2554,6 @@ msgid "Homepage"
 msgstr "Матична страница"
 
 #: src/ephy-web-extension-dialog.c:200
-#| msgid "Remove selected personal data"
 msgid "Remove selected WebExtension"
 msgstr "Уклони изабрано Веб проширење"
 
@@ -2746,15 +2739,15 @@ msgstr "Отвори везу у новом прозору"
 msgid "Open Link In Incognito Window"
 msgstr "Отвори везу у тајном прозору"
 
-#: src/ephy-window.c:2927
+#: src/ephy-window.c:2885
 msgid "Download operation"
 msgstr "Преузимања"
 
-#: src/ephy-window.c:2929
+#: src/ephy-window.c:2887
 msgid "Show details"
 msgstr "Прикажи детаље"
 
-#: src/ephy-window.c:2931
+#: src/ephy-window.c:2889
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2764,24 +2757,24 @@ msgstr[2] "У току је %d преузимања"
 msgstr[3] "Преузимање је у току"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3450
+#: src/ephy-window.c:3407
 msgid "View open tabs"
 msgstr "Прегледајте отворене језичке"
 
-#: src/ephy-window.c:3581
+#: src/ephy-window.c:3538
 msgid "Set Web as your default browser?"
 msgstr "Да ли да поставим Веб као подразумевани програм?"
 
-#: src/ephy-window.c:3583
+#: src/ephy-window.c:3540
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Да ли да поставим Техничко предиздање Спознаје као подразумевани прегледач?"
 
-#: src/ephy-window.c:3595
+#: src/ephy-window.c:3552
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:3596
+#: src/ephy-window.c:3553
 msgid "_No"
 msgstr "_Не"
 
@@ -2833,20 +2826,19 @@ msgstr "Кеш ХСТС полиса"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Подаци о паметном спречавању праћења"
 
-#: src/preferences/ephy-search-engine-row.c:197
+#: src/preferences/ephy-search-engine-row.c:199
 msgid "This field is required"
 msgstr "Ово поље је обавезно"
 
-#: src/preferences/ephy-search-engine-row.c:202
+#: src/preferences/ephy-search-engine-row.c:204
 msgid "Address must start with either http:// or https://"
 msgstr "Адреса мора почети или са „http://“ или „https://“"
 
-#: src/preferences/ephy-search-engine-row.c:208
-#| msgid "%s is not a valid URI"
+#: src/preferences/ephy-search-engine-row.c:210
 msgid "Address is not a valid URI"
 msgstr "Адреса није исправна путања"
 
-#: src/preferences/ephy-search-engine-row.c:215
+#: src/preferences/ephy-search-engine-row.c:217
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2855,24 +2847,24 @@ msgstr ""
 "Адреса није исправан јединствени ресурсни локатор. Адреса треба да изгледа "
 "као „https://www.example.com/search?q=%s“"
 
-#: src/preferences/ephy-search-engine-row.c:221
+#: src/preferences/ephy-search-engine-row.c:223
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Адреса мора да садржи термин претраге који је представљен са „%s“"
 
-#: src/preferences/ephy-search-engine-row.c:227
+#: src/preferences/ephy-search-engine-row.c:229
 msgid "Address should not contain the search term several times"
 msgstr "Адреса не треба да садржи термин претраге неколико пута"
 
-#: src/preferences/ephy-search-engine-row.c:272
+#: src/preferences/ephy-search-engine-row.c:274
 msgid "This shortcut is already used."
 msgstr "Ова пречица је већ у употреби."
 
-#: src/preferences/ephy-search-engine-row.c:417
+#: src/preferences/ephy-search-engine-row.c:422
 msgid "A name is required"
 msgstr "Назив је потребан"
 
-#: src/preferences/ephy-search-engine-row.c:419
+#: src/preferences/ephy-search-engine-row.c:424
 msgid "This search engine already exists"
 msgstr "Овај погон претраге већ постоји"
 
@@ -2884,7 +2876,7 @@ msgstr "Обрисати све лозинке?"
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "Ова радња чисти све локално сачуване лозинке и не може се опозвати."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:260
 msgid "_Delete"
 msgstr "_Обриши"
 
@@ -2933,8 +2925,8 @@ msgstr "Таман"
 msgid "Add Language"
 msgstr "Додај језик"
 
-#: src/preferences/prefs-general-page.c:525
-#: src/preferences/prefs-general-page.c:684
+#: src/preferences/prefs-general-page.c:526
+#: src/preferences/prefs-general-page.c:685
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2943,15 +2935,15 @@ msgstr[1] "Језици на систему (%s)"
 msgstr[2] "Језици на систему (%s)"
 msgstr[3] "Језик на систему (%s)"
 
-#: src/preferences/prefs-general-page.c:712
+#: src/preferences/prefs-general-page.c:713
 msgid "Select a directory"
 msgstr "Изаберите директоријум"
 
-#: src/preferences/prefs-general-page.c:858
+#: src/preferences/prefs-general-page.c:859
 msgid "Web Application Icon"
 msgstr "Иконица веб програма"
 
-#: src/preferences/prefs-general-page.c:863
+#: src/preferences/prefs-general-page.c:864
 msgid "Supported Image Files"
 msgstr "Подржане датотеке са сликама"
 
@@ -3088,11 +3080,11 @@ msgstr ""
 msgid "Search"
 msgstr "Потражи"
 
-#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:300
+#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
 msgid "No Results Found"
 msgstr "Није пронађено"
 
-#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:315
+#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
 msgid "Try a different search"
 msgstr "Покушајте другачију претрагу"
 
@@ -3196,11 +3188,11 @@ msgstr "Изабери ставке"
 msgid "Search history"
 msgstr "Историјат претраге"
 
-#: src/resources/gtk/history-dialog.ui:243
+#: src/resources/gtk/history-dialog.ui:209
 msgid "The History is Empty"
 msgstr "Историјат је празан"
 
-#: src/resources/gtk/history-dialog.ui:259
+#: src/resources/gtk/history-dialog.ui:210
 msgid "Visited pages will be listed here"
 msgstr "Странице које сте посетили се приказују овде"
 
@@ -3225,12 +3217,10 @@ msgid "P_in Tab"
 msgstr "Зака_чи језичак"
 
 #: src/resources/gtk/notebook-context-menu.ui:26
-#| msgid "Unpi_n Tab"
 msgid "Unp_in Tab"
 msgstr "От_качи језичак"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
-#| msgid "_Next Tab"
 msgid "_Mute Tab"
 msgstr "_Утишај језичак"
 
@@ -3345,16 +3335,14 @@ msgid "E_xport Bookmarks…"
 msgstr "Изв_ези обележиваче…"
 
 #: src/resources/gtk/page-menu-popover.ui:397
-#| msgid "I_mport Passwords…"
 msgid "Import _Passwords…"
 msgstr "Увези _лозинке…"
 
 #: src/resources/gtk/page-menu-popover.ui:413
-#| msgid "Firefox Sync"
 msgid "Firefox _Sync"
 msgstr "Фајерфокс _усклађивање"
 
-#: src/resources/gtk/page-row.ui:88
+#: src/resources/gtk/page-row.ui:87
 msgid "Close page"
 msgstr "Затвори страницу"
 
@@ -3456,7 +3444,6 @@ msgid "_Icon"
 msgstr "_Иконица"
 
 #: src/resources/gtk/prefs-general-page.ui:38
-#| msgid "Homepage"
 msgid "_Homepage"
 msgstr "_Почетна страница"
 
@@ -3566,7 +3553,6 @@ msgid "_Website Data Storage"
 msgstr "Складиштење података _веб страница"
 
 #: src/resources/gtk/prefs-privacy-page.ui:65
-#| msgid "Search Engines"
 msgid "Search Suggestions"
 msgstr "Предлози претраге"
 
@@ -3575,7 +3561,6 @@ msgid "Enable search suggestions in the URL entry."
 msgstr "Укључите предлоге претраге у уносу адресе."
 
 #: src/resources/gtk/prefs-privacy-page.ui:71
-#| msgid "_Manage Search Engines"
 msgid "_Google Search Suggestions"
 msgstr "_Предлози Гугл претраге"
 
@@ -3596,28 +3581,19 @@ msgid "_Remember Passwords"
 msgstr "_Запамти лозинке"
 
 #: src/resources/gtk/search-engine-listbox.ui:18
-#| msgid "_Manage Search Engines…"
 msgid "A_dd Search Engine…"
 msgstr "Додај _погон претраге…"
 
 #: src/resources/gtk/search-engine-row.ui:11
-#| msgctxt "shortcut window"
-#| msgid "Search with default search engine"
 msgid "Selects the default search engine"
 msgstr "Изаберите основни погон претраге"
 
 #: src/resources/gtk/search-engine-row.ui:80
-#| msgctxt "shortcut window"
-#| msgid "Shortcuts"
 msgid "Shortcut"
 msgstr "Пречица"
 
 #: src/resources/gtk/search-engine-row.ui:107
 #, c-format
-#| msgid ""
-#| "To determine the search address, perform a search using the search engine "
-#| "that you want to add and check the resulting address. Remove the search "
-#| "term from the resulting address and replace it with %s."
 msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s."
@@ -3626,7 +3602,6 @@ msgstr ""
 "претраге који желите да додате и замените термин претраге са „%s“."
 
 #: src/resources/gtk/search-engine-row.ui:128
-#| msgid "_Manage Search Engines"
 msgid "R_emove Search Engine"
 msgstr "_Уклони погон претраге"
 
@@ -3960,7 +3935,6 @@ msgstr "Очисти _све"
 
 #: src/resources/gtk/web-extensions-dialog.ui:12
 #: src/resources/gtk/web-extensions-dialog.ui:21
-#| msgid "Version %s"
 msgid "Extensions"
 msgstr "Проширења"
 
@@ -3973,7 +3947,6 @@ msgid "No Extensions Installed"
 msgstr "Нема инсталираних проширења"
 
 #: src/resources/gtk/web-extensions-dialog.ui:41
-#| msgid "Bookmark some webpages to view them here."
 msgid "Add some extensions to display them here."
 msgstr "Додајте нека проширења да их видите овде."
 
@@ -4055,7 +4028,6 @@ msgstr "Обележивачи су успешно извезени!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
 #: src/window-commands.c:651
-#| msgid "bookmarks.gvdb"
 msgid "bookmarks.html"
 msgstr "обележивач.html"
 
@@ -4096,20 +4068,20 @@ msgstr ""
 msgid "Do you want to reload this website?"
 msgstr "Да ли желите да поново учитате овај веб сајт?"
 
-#: src/window-commands.c:1725
+#: src/window-commands.c:1726
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Већ постоји веб програм под називом „%s“. Да ли желите да га замените?"
 
-#: src/window-commands.c:1728
+#: src/window-commands.c:1729
 msgid "Cancel"
 msgstr "Откажи"
 
-#: src/window-commands.c:1730
+#: src/window-commands.c:1731
 msgid "Replace"
 msgstr "Замени"
 
-#: src/window-commands.c:1734
+#: src/window-commands.c:1735
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -4117,51 +4089,51 @@ msgstr ""
 "Програм под истим називом већ постоји. Ако га замените, преписаћете његов "
 "садржај."
 
-#: src/window-commands.c:1826
+#: src/window-commands.c:1827
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Програм „%s“ је спреман за употребу"
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Не могу да направим програм „%s“"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1844
+#: src/window-commands.c:1845
 msgid "Launch"
 msgstr "Покрени"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1885
+#: src/window-commands.c:1886
 msgid "Create Web Application"
 msgstr "Направите веб програм"
 
-#: src/window-commands.c:1890
+#: src/window-commands.c:1891
 msgid "C_reate"
 msgstr "_Направи"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2106
 msgid "Save"
 msgstr "Сачувај"
 
-#: src/window-commands.c:2114
+#: src/window-commands.c:2115
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2119
+#: src/window-commands.c:2120
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2124
+#: src/window-commands.c:2125
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2609
+#: src/window-commands.c:2610
 msgid "Enable caret browsing mode?"
 msgstr "Да ли да укључим преглед са показивачем?"
 
-#: src/window-commands.c:2612
+#: src/window-commands.c:2613
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4172,7 +4144,7 @@ msgstr ""
 "листате садржај помоћу тастатуре. Да ли желите да укључите прегледање са "
 "показивачем?"
 
-#: src/window-commands.c:2615
+#: src/window-commands.c:2616
 msgid "_Enable"
 msgstr "_Укључи"
 
