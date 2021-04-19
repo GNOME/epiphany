@@ -2103,27 +2103,15 @@ decide_navigation_policy (WebKitWebView            *web_view,
   request = webkit_navigation_action_get_request (navigation_action);
   uri = webkit_uri_request_get_uri (request);
 
-  if (!ephy_embed_utils_address_has_web_scheme (uri)) {
-    g_autoptr (SoupURI) soup_uri = soup_uri_new (uri);
-
-    if (soup_uri) {
-      g_autoptr (GAppInfo) app_info = g_app_info_get_default_for_uri_scheme (soup_uri->scheme);
-
-      if (app_info && !g_str_has_prefix (g_app_info_get_id (app_info), "org.gnome.Epiphany")) {
-        g_autoptr (GError) error = NULL;
-
-        gtk_show_uri_on_window (GTK_WINDOW (window), uri, GDK_CURRENT_TIME, &error);
-
-        if (error) {
-          LOG ("failed to handle non web scheme: %s", error->message);
-          g_error_free (error);
-          return accept_navigation_policy_decision (window, decision, uri);
-        }
-      }
+  if (!ephy_embed_utils_address_has_web_scheme (uri) && webkit_navigation_action_is_user_gesture (navigation_action)) {
+    g_autoptr (GError) error = NULL;
+    gtk_show_uri_on_window (GTK_WINDOW (window), uri, GDK_CURRENT_TIME, &error);
+    if (error) {
+      LOG ("failed to handle non-web scheme: %s", error->message);
+      return accept_navigation_policy_decision (window, decision, uri);
     }
 
     webkit_policy_decision_ignore (decision);
-
     return TRUE;
   }
 
