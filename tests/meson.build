@@ -97,8 +97,9 @@ if get_option('unit_tests').enabled()
     c_args: test_cargs,
   )
   test('Migration test',
-       migration_test,
-       env: envs
+    migration_test,
+    env: envs,
+    depends: ephy_profile_migrator
   )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707220
@@ -162,8 +163,9 @@ if get_option('unit_tests').enabled()
     c_args: test_cargs,
   )
   test('Web app utils test',
-       web_app_utils_test,
-       env: envs
+     web_app_utils_test,
+     env: envs,
+     depends: epiphany
   )
 
   web_view_test = executable('test-ephy-web-view',

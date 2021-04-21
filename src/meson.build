@@ -94,7 +94,7 @@ ephymain_dep = declare_dependency(
 )
 
 
-executable('ephy-profile-migrator',
+ephy_profile_migrator = executable('ephy-profile-migrator',
   'profile-migrator/ephy-profile-migrator.c',
   dependencies: ephymain_dep,
   install: true,
@@ -139,7 +139,7 @@ epiphany_sources = [
   readability_resources,
 ]
 
-executable('epiphany',
+epiphany = executable('epiphany',
   epiphany_sources,
   dependencies: ephymain_dep,
   install: true,

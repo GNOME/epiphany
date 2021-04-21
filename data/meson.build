@@ -124,9 +124,8 @@ if desktop_file_validate.found()
   test(
     'validate-desktop',
     desktop_file_validate,
-    args: [
-      desktop.full_path()
-    ]
+    args: desktop.full_path(),
+    depends: desktop
   )
 endif
 
@@ -136,6 +135,7 @@ if appstream_util.found()
     'validate-appdata', appstream_util,
     args: [
       'validate-relax', '--nonet', appdata.full_path()
-    ]
+    ],
+    depends: appdata
   )
 endif
