@@ -649,6 +649,9 @@ ephy_tab_view_set_tab_bar (EphyTabView *self,
                              "changed::" EPHY_PREFS_UI_EXPAND_TABS_BAR,
                              G_CALLBACK (expand_changed_cb), self,
                              G_CONNECT_SWAPPED);
+
+    visibility_policy_changed_cb (self);
+    expand_changed_cb (self);
   }
 
   settings = gtk_settings_get_default ();
