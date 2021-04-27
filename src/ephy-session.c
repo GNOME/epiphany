@@ -823,6 +823,12 @@ save_session_in_thread_finished_cb (GObject      *source_object,
 {
   g_object_unref (EPHY_SESSION (source_object));
   g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+
+  /* FIXME: this is a workaround for https://gitlab.gnome.org/GNOME/glib/-/issues/1346.
+   * After this GLib issue is fixed, we should instead pass save_data_free() as the
+   * GDestroyNotify parameter to g_task_set_task_data().
+   */
+  save_data_free (g_task_get_task_data (G_TASK (res)));
 }
 
 static gboolean
@@ -999,7 +1005,7 @@ ephy_session_save_timeout_cb (EphySession *session)
   g_object_ref (session);
 
   task = g_task_new (session, NULL, save_session_in_thread_finished_cb, NULL);
-  g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
+  g_task_set_task_data (task, data, NULL);
   g_task_run_in_thread (task, save_session_sync);
   g_object_unref (task);
 
