@@ -36,7 +36,7 @@ flatpak:
 flatpak master:
   extends: '.flatpak'
   variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true'
+    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true'
   only:
     - master
 
