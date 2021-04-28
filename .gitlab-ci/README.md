@@ -6,11 +6,11 @@ GitLab CI jobs run in a Docker image, defined here. To update that image
 (perhaps to install some more packages):
 
 1. Edit `.gitlab-ci/Dockerfile` with the changes you want
-2. Edit `.gitlab-ci/run-docker.sh` and bump the version in `TAG`
-3. Run `.gitlab-ci/run-docker.sh` to build the new image, and launch a shell
+2. Edit `.gitlab-ci/run-podman.sh` and bump the version in `TAG`
+3. Run `.gitlab-ci/run-podman.sh` to build the new image, and launch a shell
    inside it
     * When you're done, exit the shell in the usual way
-4. Run `.gitlab-ci/run-docker.sh --push` to upload the new image to the GNOME
+4. Run `.gitlab-ci/run-podman.sh --push` to upload the new image to the GNOME
    GitLab Docker registry
     * If this is the first time you're doing this, you'll need to log into the
       registry
