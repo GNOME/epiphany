@@ -51,8 +51,6 @@ struct _EphyGSBService {
   gint64 back_off_exit_time;
   gint64 back_off_num_fails;
 
-  GThread *update_thread;
-  GMainLoop *update_loop;
   SoupSession *session;
 };
 
@@ -170,18 +168,11 @@ ephy_gsb_service_schedule_update (EphyGSBService *self)
   LOG ("Next update scheduled in %ld seconds", interval);
 }
 
-static gboolean
-ephy_gsb_service_update_finished_cb (EphyGSBService *self)
-{
-  g_atomic_int_set (&self->is_updating, FALSE);
-  g_signal_emit (self, signals[UPDATE_FINISHED], 0);
-  ephy_gsb_service_schedule_update (self);
-
-  return G_SOURCE_REMOVE;
-}
-
-static gboolean
-ephy_gsb_service_update_in_thread (EphyGSBService *self)
+static void
+ephy_gsb_service_update_thread (GTask          *task,
+                                EphyGSBService *self,
+                                gpointer        task_data,
+                                GCancellable   *cancellable)
 {
   JsonNode *body_node = NULL;
   JsonObject *body_obj;
@@ -190,12 +181,6 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   GList *threat_lists = NULL;
   char *url = NULL;
   char *body;
-  g_autoptr (GBytes) response_body = NULL;
-  guint status_code;
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  g_autoptr (GBytes) bytes = NULL;
-  g_autoptr (GError) error = NULL;
-#endif
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
@@ -220,28 +205,12 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   body = ephy_gsb_utils_make_list_updates_request (threat_lists);
   url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  bytes = g_bytes_new_take (body, strlen (body));
-  soup_message_set_request_body_from_bytes (msg, "application/json", bytes);
-  response_body = soup_session_send_and_read (self->session, msg, NULL, &error);
-  if (!response_body) {
-    LOG ("Cannot update threat lists: %s", error->message);
-    ephy_gsb_service_update_back_off_mode (self);
-    self->next_list_updates_time = self->back_off_exit_time;
-    goto out;
-  }
-
-  status_code = soup_message_get_status (msg);
-#else
   soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_send_message (self->session, msg);
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Handle unsuccessful responses. */
-  if (status_code != 200) {
-    LOG ("Cannot update threat lists, got: %u, %s", status_code, (const char *)g_bytes_get_data (response_body, NULL));
+  if (msg->status_code != 200) {
+    LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
     self->next_list_updates_time = self->back_off_exit_time;
     goto out;
@@ -250,7 +219,7 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   /* Successful response, reset back-off mode. */
   ephy_gsb_service_reset_back_off_mode (self);
 
-  body_node = json_from_string (g_bytes_get_data (response_body, NULL), NULL);
+  body_node = json_from_string (msg->response_body->data, NULL);
   if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
     g_warning ("Response is not a valid JSON object");
     goto out;
@@ -333,46 +302,33 @@ out:
 
   ephy_gsb_storage_set_metadata (self->storage, "next_list_updates_time", self->next_list_updates_time);
 
-  g_idle_add_full (G_PRIORITY_DEFAULT,
-                   (GSourceFunc)ephy_gsb_service_update_finished_cb,
-                   g_object_ref (self),
-                   (GDestroyNotify)g_object_unref);
-
-  return G_SOURCE_REMOVE;
+  g_object_unref (self);
 }
 
-static gpointer
-run_update_thread (EphyGSBService *self)
+static void
+ephy_gsb_service_update_finished_cb (EphyGSBService *self,
+                                     GAsyncResult   *result,
+                                     gpointer        user_data)
 {
-  GMainContext *context;
-
-  context = g_main_loop_get_context (self->update_loop);
-  g_main_context_push_thread_default (context);
-  self->session = soup_session_new_with_options ("user-agent", ephy_user_agent_get (), NULL);
-  g_main_loop_run (self->update_loop);
-  g_object_unref (self->session);
-  g_main_context_pop_thread_default (context);
-
-  return NULL;
+  g_atomic_int_set (&self->is_updating, FALSE);
+  g_signal_emit (self, signals[UPDATE_FINISHED], 0);
+  ephy_gsb_service_schedule_update (self);
 }
 
 static gboolean
 ephy_gsb_service_update (EphyGSBService *self)
 {
-  GSource *source;
+  GTask *task;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
 
   g_atomic_int_set (&self->is_updating, TRUE);
-  source = g_timeout_source_new (0);
-  g_source_set_name (source, "[epiphany] gsb_service_update_in_thread");
-  g_source_set_callback (source,
-                         (GSourceFunc)ephy_gsb_service_update_in_thread,
-                         g_object_ref (self),
-                         (GDestroyNotify)g_object_unref);
-  g_source_attach (source, g_main_loop_get_context (self->update_loop));
-  g_source_unref (source);
+  task = g_task_new (g_object_ref (self), NULL,
+                     (GAsyncReadyCallback)ephy_gsb_service_update_finished_cb,
+                     NULL);
+  g_task_run_in_thread (task, (GTaskThreadFunc)ephy_gsb_service_update_thread);
+  g_object_unref (task);
 
   return G_SOURCE_REMOVE;
 }
@@ -427,9 +383,6 @@ ephy_gsb_service_finalize (GObject *object)
 
   g_free (self->api_key);
 
-  g_thread_join (self->update_thread);
-  g_main_loop_unref (self->update_loop);
-
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->finalize (object);
 }
 
@@ -439,11 +392,9 @@ ephy_gsb_service_dispose (GObject *object)
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
 
   g_clear_object (&self->storage);
+  g_clear_object (&self->session);
 
   g_clear_handle_id (&self->source_id, g_source_remove);
-
-  if (g_main_loop_is_running (self->update_loop))
-    g_main_loop_quit (self->update_loop);
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->dispose (object);
 }
@@ -490,11 +441,8 @@ ephy_gsb_service_constructed (GObject *object)
 static void
 ephy_gsb_service_init (EphyGSBService *self)
 {
-  GMainContext *context = g_main_context_new ();
-
-  self->update_loop = g_main_loop_new (context, FALSE);
-  self->update_thread = g_thread_new ("EphyGSBService", (GThreadFunc)run_update_thread, self);
-  g_object_unref (context);
+  self->session = soup_session_new ();
+  g_object_set (self->session, "user-agent", ephy_user_agent_get (), NULL);
 }
 
 static void
@@ -553,17 +501,10 @@ ephy_gsb_service_new (const char *api_key,
 #endif
 }
 
-typedef struct {
-  EphyGSBService *self;
-  GList *prefixes;
-  GMutex mutex;
-  GCond condition;
-} UpdateFullHashesData;
-
-static gboolean
-ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
+static void
+ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
+                                          GList          *prefixes)
 {
-  EphyGSBService *self = data->self;
   SoupMessage *msg;
   GList *threat_lists;
   JsonNode *body_node;
@@ -573,60 +514,36 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   char *url;
   char *body;
   double duration;
-  g_autoptr (GBytes) response_body = NULL;
-  guint status_code;
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  g_autoptr (GBytes) bytes = NULL;
-  g_autoptr (GError) error = NULL;
-#endif
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
-  g_assert (data->prefixes);
-
-  g_mutex_lock (&data->mutex);
+  g_assert (prefixes);
 
   if (self->next_full_hashes_time > CURRENT_TIME) {
     LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
          self->next_full_hashes_time - CURRENT_TIME);
-    goto unlock;
+    return;
   }
 
   if (ephy_gsb_service_is_back_off_mode (self)) {
     LOG ("Cannot send fullHashes:find request. Back-off mode is enabled for %ld seconds",
          self->back_off_exit_time - CURRENT_TIME);
-    goto unlock;
+    return;
   }
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists)
-    goto unlock;
+    return;
 
-  body = ephy_gsb_utils_make_full_hashes_request (threat_lists, data->prefixes);
+  body = ephy_gsb_utils_make_full_hashes_request (threat_lists, prefixes);
   url = g_strdup_printf ("%sfullHashes:find?key=%s", API_PREFIX, self->api_key);
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  bytes = g_bytes_new_take (body, strlen (body));
-  soup_message_set_request_body_from_bytes (msg, "application/json", bytes);
-  response_body = soup_session_send_and_read (self->session, msg, NULL, &error);
-  if (!response_body) {
-    LOG ("Cannot update full hashes: %s", error->message);
-    ephy_gsb_service_update_back_off_mode (self);
-    self->next_list_updates_time = self->back_off_exit_time;
-    goto out;
-  }
-
-  status_code = soup_message_get_status (msg);
-#else
   soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_send_message (self->session, msg);
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Handle unsuccessful responses. */
-  if (status_code != 200) {
-    LOG ("Cannot update full hashes, got: %u, %s", status_code, (const char *)g_bytes_get_data (response_body, NULL));
+  if (msg->status_code != 200) {
+    LOG ("Cannot update full hashes, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
     goto out;
   }
@@ -634,7 +551,7 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   /* Successful response, reset back-off mode. */
   ephy_gsb_service_reset_back_off_mode (self);
 
-  body_node = json_from_string (g_bytes_get_data (response_body, NULL), NULL);
+  body_node = json_from_string (msg->response_body->data, NULL);
   if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
     g_warning ("Response is not a valid JSON object");
     goto out;
@@ -675,7 +592,7 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   duration_str = json_object_get_string_member (body_obj, "negativeCacheDuration");
   /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
   duration = g_ascii_strtod (duration_str, NULL);
-  for (GList *l = data->prefixes; l && l->data; l = l->next)
+  for (GList *l = prefixes; l && l->data; l = l->next)
     ephy_gsb_storage_update_hash_prefix_expiration (self->storage, l->data, floor (duration));
 
   /* Handle minimum wait duration. */
@@ -691,34 +608,7 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
 out:
   g_free (url);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
-  g_clear_object (&msg);
-
-unlock:
-  g_cond_signal (&data->condition);
-  g_mutex_unlock (&data->mutex);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
-                                          GList          *prefixes)
-{
-  UpdateFullHashesData data = { self, prefixes, { }, { } };
-  GSource *source;
-
-  g_mutex_lock (&data.mutex);
-
-  source = g_timeout_source_new (0);
-  g_source_set_name (source, "[epiphany] gsb_service_update_full_hashes_in_thread");
-  g_source_set_callback (source,
-                         (GSourceFunc)ephy_gsb_service_update_full_hashes_in_thread,
-                         &data, NULL);
-  g_source_attach (source, g_main_loop_get_context (self->update_loop));
-  g_source_unref (source);
-
-  g_cond_wait (&data.condition, &data.mutex);
-  g_mutex_unlock (&data.mutex);
+  g_object_unref (msg);
 }
 
 static void

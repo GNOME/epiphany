@@ -225,7 +225,6 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
   SyncCryptoHawkOptions *options = NULL;
   SyncCryptoHawkHeader *header;
   SoupMessage *msg;
-  SoupMessageHeaders *request_headers;
   const char *content_type = "application/json";
 
   g_assert (url);
@@ -237,33 +236,18 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
 
   msg = soup_message_new (method, url);
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
-
   if (body) {
-#if SOUP_CHECK_VERSION (2, 99, 4)
-    g_autoptr (GBytes) bytes = NULL;
-#endif
-
     options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
                                                  NULL, NULL, NULL, body, NULL);
-#if SOUP_CHECK_VERSION (2, 99, 4)
-    bytes = g_bytes_new (body, strlen (body));
-    soup_message_set_request_body_from_bytes (msg, content_type, bytes);
-#else
     soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY, body, strlen (body));
-#endif
   }
 
   if (!g_strcmp0 (method, "PUT") || !g_strcmp0 (method, "POST"))
-    soup_message_headers_append (request_headers, "content-type", content_type);
+    soup_message_headers_append (msg->request_headers, "content-type", content_type);
 
   header = ephy_sync_crypto_hawk_header_new (url, method, hawk_id,
                                              hawk_key, hawk_key_len, options);
-  soup_message_headers_append (request_headers, "authorization", header->header);
+  soup_message_headers_append (msg->request_headers, "authorization", header->header);
 
   ephy_sync_crypto_hawk_header_free (header);
   if (options)
@@ -283,7 +267,7 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   JsonObject *json;
   JsonObject *public_key;
   JsonObject *json_body;
-  g_autoptr (GError) error = NULL;
+  GError *error = NULL;
   guint8 *id;
   guint8 *key;
   guint8 *tmp;
@@ -295,7 +279,6 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   char *e;
   guint status_code;
   g_autofree char *accounts_server = NULL;
-  g_autoptr (GBytes) response_body = NULL;
 
   g_assert (session_token);
   g_assert (keypair);
@@ -321,27 +304,17 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   msg = ephy_sync_debug_prepare_soup_message (url, "POST", body,
                                               id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  response_body = soup_session_send_and_read (session, msg, NULL, &error);
-  if (!response_body) {
-    LOG ("Failed to get signed certificate: %s", error->message);
-    goto free_session;
-  }
-
-  status_code = soup_message_get_status (msg);
-#else
   status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
-    LOG ("Failed to get signed certificate: %s", (const char *)g_bytes_get_data (response_body, NULL));
+    LOG ("Failed to get signed certificate: %s", msg->response_body->data);
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_string (msg->response_body->data, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
+    g_error_free (error);
     goto free_session;
   }
 
@@ -377,7 +350,7 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   JsonNode *response;
   JsonObject *secrets;
   JsonObject *json;
-  g_autoptr (GError) error = NULL;
+  GError *error = NULL;
   char *certificate;
   char *audience;
   char *assertion;
@@ -387,8 +360,6 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   guint8 *kb;
   const char *session_token;
   guint status_code;
-  SoupMessageHeaders *request_headers;
-  g_autoptr (GBytes) response_body = NULL;
   gboolean success = FALSE;
   g_autofree char *token_server = NULL;
 
@@ -410,35 +381,20 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
   msg = soup_message_new ("GET", token_server);
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
-  soup_message_headers_append (request_headers, "X-Client-State", client_state);
-  soup_message_headers_append (request_headers, "authorization", authorization);
+  soup_message_headers_append (msg->request_headers, "X-Client-State", client_state);
+  soup_message_headers_append (msg->request_headers, "authorization", authorization);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  response_body = soup_session_send_and_read (session, msg, NULL, &error);
-  if (!response_body) {
-    LOG ("Failed to get storage credentials: %s", error->message);
-    goto free_session;
-  }
-
-  status_code = soup_message_get_status (msg);
-#else
   status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
-    LOG ("Failed to get storage credentials: %s", (const char *)g_bytes_get_data (response_body, NULL));
+    LOG ("Failed to get storage credentials: %s", msg->response_body->data);
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_string (msg->response_body->data, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
+    g_error_free (error);
     goto free_session;
   }
 
@@ -474,12 +430,11 @@ ephy_sync_debug_send_request (const char *endpoint,
   SoupSession *session;
   SoupMessage *msg;
   char *response = NULL;
-  char *storage_endpoint = NULL;
-  char *storage_id = NULL;
-  char *storage_key = NULL;
+  char *storage_endpoint;
+  char *storage_id;
+  char *storage_key;
   char *url;
   guint status_code;
-  g_autoptr (GBytes) response_body = NULL;
 
   g_assert (endpoint);
   g_assert (method);
@@ -498,20 +453,12 @@ ephy_sync_debug_send_request (const char *endpoint,
                                               (const guint8 *)storage_key,
                                               strlen (storage_key));
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  response_body = soup_session_send_and_read (session, msg, NULL, NULL);
-  status_code = soup_message_get_status (msg);
-#else
   status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
-  if (response_body) {
-    if (status_code == 200)
-      response = g_strdup (g_bytes_get_data (response_body, NULL));
-    else
-      LOG ("Failed to send storage request: %s", (const char *)g_bytes_get_data (response_body, NULL));
-  }
+  if (status_code == 200)
+    response = g_strdup (msg->response_body->data);
+  else
+    LOG ("Failed to send storage request: %s", msg->response_body->data);
 
   g_free (url);
   g_free (storage_endpoint);
@@ -656,7 +603,7 @@ ephy_sync_debug_view_record (const char *collection,
   g_assert (collection);
   g_assert (id);
 
-  id_safe = g_uri_escape_string (id, NULL, TRUE);
+  id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   response = ephy_sync_debug_send_request (endpoint, "GET", NULL);
 
@@ -724,7 +671,7 @@ ephy_sync_debug_upload_record (const char *collection,
   if (!bundle)
     return;
 
-  id_safe = g_uri_escape_string (id, NULL, TRUE);
+  id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   body = ephy_sync_debug_make_upload_body (id, record, bundle);
   response = ephy_sync_debug_send_request (endpoint, "PUT", body);
@@ -777,7 +724,7 @@ ephy_sync_debug_delete_collection (const char *collection)
   array = json_node_get_array (node);
   for (guint i = 0; i < json_array_get_length (array); i++) {
     const char *id = json_array_get_string_element (array, i);
-    char *id_safe = g_uri_escape_string (id, NULL, TRUE);
+    char *id_safe = soup_uri_encode (id, NULL);
     char *body = ephy_sync_debug_make_delete_body (id, bundle);
     char *to = g_strdup_printf ("storage/%s/%s", collection, id_safe);
     char *resp = ephy_sync_debug_send_request (to, "PUT", body);
@@ -825,7 +772,7 @@ ephy_sync_debug_delete_record (const char *collection,
   if (!bundle)
     return;
 
-  id_safe = g_uri_escape_string (id, NULL, TRUE);
+  id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   body = ephy_sync_debug_make_delete_body (id, bundle);
   response = ephy_sync_debug_send_request (endpoint, "PUT", body);
@@ -892,7 +839,7 @@ ephy_sync_debug_erase_record (const char *collection,
   g_assert (collection);
   g_assert (id);
 
-  id_safe = g_uri_escape_string (id, NULL, TRUE);
+  id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   response = ephy_sync_debug_send_request (endpoint, "DELETE", NULL);
 
@@ -1082,7 +1029,6 @@ ephy_sync_debug_view_connected_devices (void)
   char *url;
   const char *session_token;
   g_autofree char *accounts_server = NULL;
-  g_autoptr (GBytes) response_body = NULL;
 
   secrets = ephy_sync_debug_load_secrets ();
   if (!secrets)
@@ -1096,15 +1042,9 @@ ephy_sync_debug_view_connected_devices (void)
   id_hex = ephy_sync_utils_encode_hex (id, 32);
   msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  response_body = soup_session_send_and_read (session, msg, NULL, NULL);
-#else
   soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
-  if (response_body)
-    LOG ("%s", (const char *)g_bytes_get_data (response_body, NULL));
+  LOG ("%s", msg->response_body->data);
 
   g_object_unref (session);
   g_object_unref (msg);
@@ -1134,7 +1074,7 @@ ephy_sync_debug_get_current_device (void)
   JsonArray *array;
   SoupSession *session;
   SoupMessage *msg;
-  g_autoptr (GError) error = NULL;
+  GError *error = NULL;
   guint8 *id;
   guint8 *key;
   guint8 *tmp;
@@ -1143,7 +1083,6 @@ ephy_sync_debug_get_current_device (void)
   const char *session_token;
   guint status_code;
   g_autofree char *accounts_server = NULL;
-  g_autoptr (GBytes) response_body = NULL;
 
   secrets = ephy_sync_debug_load_secrets ();
   if (!secrets)
@@ -1157,27 +1096,17 @@ ephy_sync_debug_get_current_device (void)
   id_hex = ephy_sync_utils_encode_hex (id, 32);
   msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
-  response_body = soup_session_send_and_read (session, msg, NULL, &error);
-  if (!response_body) {
-    LOG ("Failed to GET account devices: %s", error->message);
-    goto free_session;
-  }
-
-  status_code = soup_message_get_status (msg);
-#else
   status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
-    LOG ("Failed to GET account devices: %s", (const char *)g_bytes_get_data (response_body, NULL));
+    LOG ("Failed to GET account devices: %s", msg->response_body->data);
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_string (msg->response_body->data, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
+    g_error_free (error);
     goto free_session;
   }
 
