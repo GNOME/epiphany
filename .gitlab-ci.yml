@@ -1,60 +1,65 @@
-include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
-
+# You can override the included template(s) by including variable overrides
+# See https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#priority-of-environment-variables
+include:
+- https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml
+- template: Security/SAST.gitlab-ci.yml
 cache:
   paths:
-    - _ccache/
-
+  - _ccache/
 variables:
-  BUNDLE: 'epiphany-git.flatpak'
-  MANIFEST_PATH: 'org.gnome.Epiphany.json'
-  RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
-  FLATPAK_MODULE: 'epiphany'
-  APP_ID: 'org.gnome.Epiphany.Devel'
-  ESLINT_LOG: "eslint-report.txt"
-
+  BUNDLE: epiphany-git.flatpak
+  MANIFEST_PATH: org.gnome.Epiphany.json
+  RUNTIME_REPO: https://nightly.gnome.org/gnome-nightly.flatpakrepo
+  FLATPAK_MODULE: epiphany
+  APP_ID: org.gnome.Epiphany.Devel
+  ESLINT_LOG: eslint-report.txt
 stages:
-  - test
-
+- test
 check-code-style:
   image: registry.gitlab.gnome.org/gnome/epiphany/master:v2
   interruptible: true
   script:
-    - bash data/check-code-style
-    - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
+  - bash data/check-code-style
+  - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/
+    || { cat $ESLINT_LOG; false; }
   artifacts:
     paths:
-      - ${ESLINT_LOG}
+    - "${ESLINT_LOG}"
     when: on_failure
-
 flatpak:
-  extends: '.flatpak'
+  extends: ".flatpak"
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true'
+    CONFIG_OPTS: "-Dprofile=Devel -Dunit_tests=enabled --werror -Dgsb_api_key=${GSB_API_KEY}
+      -Denable_gsb=true"
   except:
-    - master
-
+  - master
 flatpak master:
-  extends: '.flatpak'
+  extends: ".flatpak"
   variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true'
+    CONFIG_OPTS: "-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}
+      -Denable_gsb=true"
   only:
-    - master
-
+  - master
 scanbuild:
   image: registry.gitlab.gnome.org/gnome/epiphany/master:v2
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+    CONFIG_OPTS: "-Dprofile=Devel -Dunit_tests=enabled --werror"
   script:
-    - mkdir _build
-    - meson ${CONFIG_OPTS} _build
-    - ninja -C _build scan-build
-    - bash -c 'if [[ -n "$(ls -A _build/meson-logs/scanbuild/)" ]]; then echo "Scan build log found, assuming defects exist"; exit 1; fi'
+  - mkdir _build
+  - meson ${CONFIG_OPTS} _build
+  - ninja -C _build scan-build
+  - bash -c 'if [[ -n "$(ls -A _build/meson-logs/scanbuild/)" ]]; then echo "Scan
+    build log found, assuming defects exist"; exit 1; fi'
   artifacts:
     when: on_failure
     paths:
-      - _build/meson-logs/scanbuild
-
+    - _build/meson-logs/scanbuild
 nightly:
-  extends: '.publish_nightly'
-  stage: .post
-  dependencies: ['flatpak master']
+  extends: ".publish_nightly"
+  stage: ".post"
+  dependencies:
+  - flatpak master
+sast:
+  stage: test
