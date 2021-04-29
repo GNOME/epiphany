@@ -405,7 +405,7 @@ query_data_free (QueryData *data)
   g_clear_pointer (&data->bookmarks, g_sequence_free);
   g_clear_pointer (&data->history, g_sequence_free);
   g_clear_pointer (&data->google_suggestions, g_sequence_free);
-  g_free (data->query);
+  g_clear_pointer (&data->query, g_free);
   g_free (data);
 }
 
@@ -420,10 +420,8 @@ query_collection_done (EphySuggestionModel *self,
   self = g_task_get_source_object (task);
   data = g_task_get_task_data (task);
 
-  if (--data->active_sources) {
-    g_object_unref (task);
+  if (--data->active_sources)
     return;
-  }
 
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
@@ -737,7 +735,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   /* Google Search Suggestions */
   if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_SUGGESTIONS) {
     if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS))
-      google_search_suggestions_query (self, query, g_object_ref (task));
+      google_search_suggestions_query (self, query, task);
     else
       query_collection_done (self, task);
   }
@@ -762,10 +760,10 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   }
 
   if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_TABS)
-    tabs_query (self, data, g_object_ref (task));
+    tabs_query (self, data, task);
 
   if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_BOOKMARKS)
-    bookmarks_query (self, data, g_object_ref (task));
+    bookmarks_query (self, data, task);
 }
 
 gboolean
