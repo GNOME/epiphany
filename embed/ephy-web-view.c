@@ -3139,7 +3139,6 @@ has_modified_forms_cb (WebKitWebView *view,
   } else {
     retval = jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result));
     g_task_return_boolean (task, retval);
-    webkit_javascript_result_unref (js_result);
   }
 
 out:
