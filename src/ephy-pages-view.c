@@ -39,21 +39,6 @@ struct _EphyPagesView {
 G_DEFINE_TYPE (EphyPagesView, ephy_pages_view, GTK_TYPE_BOX)
 
 static void
-drop_tab_view (EphyPagesView *self)
-{
-  self->tab_view = NULL;
-}
-
-static void
-release_tab_view (EphyPagesView *self)
-{
-  if (self->tab_view) {
-    g_object_weak_unref (G_OBJECT (self->tab_view), (GWeakNotify)drop_tab_view, self);
-    drop_tab_view (self);
-  }
-}
-
-static void
 row_activated_cb (EphyPagesView *self,
                   EphyPageRow   *row)
 {
@@ -110,7 +95,7 @@ ephy_pages_view_dispose (GObject *object)
 {
   EphyPagesView *self = EPHY_PAGES_VIEW (object);
 
-  release_tab_view (self);
+  g_clear_weak_pointer (&self->tab_view);
 
   G_OBJECT_CLASS (ephy_pages_view_parent_class)->dispose (object);
 }
@@ -154,13 +139,12 @@ ephy_pages_view_set_tab_view (EphyPagesView *self,
 {
   g_assert (EPHY_IS_PAGES_VIEW (self));
 
-  if (self->tab_view)
-    release_tab_view (self);
+  g_clear_weak_pointer (&self->tab_view);
 
   if (!tab_view)
     return;
 
-  g_object_weak_ref (G_OBJECT (tab_view), (GWeakNotify)drop_tab_view, self);
+  g_object_add_weak_pointer (G_OBJECT (tab_view), (gpointer *)&self->tab_view);
   self->tab_view = tab_view;
 
   self->model = hdy_tab_view_get_pages (ephy_tab_view_get_tab_view (tab_view));
