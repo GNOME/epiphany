@@ -639,8 +639,9 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 
   if (!priv->global_gsb_service) {
     g_autofree char *db_path = NULL;
+    g_autofree char *default_cache_dir = ephy_default_cache_dir ();
 
-    db_path = g_build_filename (ephy_default_cache_dir (), EPHY_GSB_FILE, NULL);
+    db_path = g_build_filename (default_cache_dir, EPHY_GSB_FILE, NULL);
     priv->global_gsb_service = ephy_gsb_service_new (GSB_API_KEY, db_path);
   }
 
