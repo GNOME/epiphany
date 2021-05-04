@@ -880,6 +880,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
+  g_clear_object (&shell->web_extension_manager);
 
   g_hash_table_destroy (shell->notifications);
 
