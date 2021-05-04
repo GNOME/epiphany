@@ -276,6 +276,8 @@ on_find_urls_cb (gpointer service,
   if (!success)
     return;
 
+  if (self->urls)
+    ephy_history_url_list_free (self->urls);
   self->urls = ephy_history_url_list_copy (result_data);
 
   clear_listbox (self->listbox);
