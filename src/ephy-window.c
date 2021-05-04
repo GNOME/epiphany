@@ -2070,11 +2070,10 @@ accept_navigation_policy_decision (EphyWindow           *window,
   g_autoptr (WebKitWebsitePolicies) website_policies = NULL;
   EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
   EphyEmbedShell *shell;
-  const char *origin;
+  g_autofree char *origin = ephy_uri_to_security_origin (uri);
 
   shell = ephy_embed_shell_get_default ();
 
-  origin = ephy_uri_to_security_origin (uri);
   if (origin) {
     permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
                                                           EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY,
