@@ -230,6 +230,7 @@ sidecar_bytes_loaded_cb (GFile        *file,
   } else {
     g_task_return_error (task, error);
   }
+  g_object_unref (task);
 }
 
 static void
