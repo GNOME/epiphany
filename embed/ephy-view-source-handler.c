@@ -132,7 +132,7 @@ web_resource_data_cb (WebKitWebResource     *resource,
                           "<body class='hljs'>"
                           "  <script src='ephy-resource:///org/gnome/epiphany/highlightjs/highlight.js'></script>"
                           "  <script src='ephy-resource:///org/gnome/epiphany/highlightjs/highlightjs-line-numbers.js'></script>"
-                          "  <script>hljs.initHighlightingOnLoad();"
+                          "  <script>hljs.highlightAll();"
                           "          hljs.initLineNumbersOnLoad();</script>"
                           "  <pre><code class='html'>%s</code></pre>"
                           "</body>",
