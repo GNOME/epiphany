@@ -7,21 +7,22 @@
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # 
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2020.
+# 
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-02-04 15:50+0000\n"
-"PO-Revision-Date: 2020-09-01 10:58+0200\n"
+"POT-Creation-Date: 2021-05-01 15:27+0000\n"
+"PO-Revision-Date: 2021-05-05 10:26+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 40.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -58,7 +59,7 @@ msgstr "El proyecto GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:992
+#: src/ephy-main.c:406 src/window-commands.c:994
 msgid "Web"
 msgstr "Web"
 
@@ -986,7 +987,7 @@ msgstr "Versión %s"
 msgid "About Web"
 msgstr "Acerca de Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:994
+#: embed/ephy-about-handler.c:194 src/window-commands.c:996
 msgid "Epiphany Technology Preview"
 msgstr "Tecnología de vista previa de Epiphany"
 
@@ -1085,10 +1086,10 @@ msgstr "Descarga requerida"
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
 #: src/resources/gtk/history-dialog.ui:96
 #: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
-#: src/window-commands.c:333 src/window-commands.c:377
-#: src/window-commands.c:561 src/window-commands.c:646
-#: src/window-commands.c:807 src/window-commands.c:1874
+#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:277
+#: src/window-commands.c:335 src/window-commands.c:379
+#: src/window-commands.c:563 src/window-commands.c:648
+#: src/window-commands.c:809 src/window-commands.c:1876
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1499,7 +1500,7 @@ msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 msgid "%s is not a valid URI"
 msgstr "%s no es un URI válido"
 
-#: embed/ephy-web-view.c:185 src/window-commands.c:1336
+#: embed/ephy-web-view.c:185 src/window-commands.c:1338
 msgid "Open"
 msgstr "Abrir"
 
@@ -1512,7 +1513,7 @@ msgid "_Never Save"
 msgstr "_Nunca guardar"
 
 #: embed/ephy-web-view.c:366 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
+#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:647
 msgid "_Save"
 msgstr "_Guardar"
 
@@ -1894,7 +1895,7 @@ msgstr "Ninguna espacificada"
 msgid "Technical information"
 msgstr "Información técnica"
 
-#: embed/ephy-web-view.c:3393
+#: embed/ephy-web-view.c:3430
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2369,6 +2370,10 @@ msgstr "Acceso a la cámara web"
 msgid "Media autoplay"
 msgstr "Reproducir medio automáticamente"
 
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Without Sound"
+msgstr "Sin sonido"
+
 #: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "Propiedades de los marcadores"
@@ -2531,11 +2536,11 @@ msgstr "_Pestaña nueva"
 msgid "Do you want to leave this website?"
 msgstr "¿quiere salir de esta página web?"
 
-#: src/ephy-window.c:274 src/window-commands.c:1185
+#: src/ephy-window.c:274 src/window-commands.c:1187
 msgid "A form you modified has not been submitted."
 msgstr "El formulario que ha modificado no se ha enviado."
 
-#: src/ephy-window.c:275 src/window-commands.c:1187
+#: src/ephy-window.c:275 src/window-commands.c:1189
 msgid "_Discard form"
 msgstr "_Descartar formulario"
 
@@ -2703,36 +2708,36 @@ msgstr "Abrir enlace en una ventana nueva"
 msgid "Open Link In Incognito Window"
 msgstr "Abrir enlace en una ventana de incógnito"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:2978
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:2980
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:3033
+#: src/ephy-window.c:2982
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d descarga activa"
 msgstr[1] "%d descargas activas"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3603
 msgid "Set Web as your default browser?"
 msgstr "¿Establecer Web como su navegador predeterminado?"
 
-#: src/ephy-window.c:3657
+#: src/ephy-window.c:3605
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "¿Quiere establecer la tecnología de vista previa de Epiphany como su "
 "navegador predeterminado?"
 
-#: src/ephy-window.c:3669
+#: src/ephy-window.c:3617
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3670
+#: src/ephy-window.c:3618
 msgid "_No"
 msgstr "_No"
 
@@ -3880,70 +3885,70 @@ msgstr "Archivo HTML"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:695
+#: src/window-commands.c:116 src/window-commands.c:697
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:696
+#: src/window-commands.c:117 src/window-commands.c:698
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:563
-#: src/window-commands.c:781
+#: src/window-commands.c:131 src/window-commands.c:565
+#: src/window-commands.c:783
 msgid "Ch_oose File"
 msgstr "Selecci_onar archivo"
 
-#: src/window-commands.c:133 src/window-commands.c:332
-#: src/window-commands.c:376 src/window-commands.c:783
-#: src/window-commands.c:809
+#: src/window-commands.c:133 src/window-commands.c:334
+#: src/window-commands.c:378 src/window-commands.c:785
+#: src/window-commands.c:811
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: src/window-commands.c:272
+#: src/window-commands.c:274
 msgid "Select Profile"
 msgstr "Seleccionar perfil"
 
-#: src/window-commands.c:277
+#: src/window-commands.c:279
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: src/window-commands.c:329 src/window-commands.c:373
-#: src/window-commands.c:642
+#: src/window-commands.c:331 src/window-commands.c:375
+#: src/window-commands.c:644
 msgid "Choose File"
 msgstr "Seleccionar archivo"
 
-#: src/window-commands.c:354 src/window-commands.c:398
-#: src/window-commands.c:445 src/window-commands.c:470
-#: src/window-commands.c:495
+#: src/window-commands.c:356 src/window-commands.c:400
+#: src/window-commands.c:447 src/window-commands.c:472
+#: src/window-commands.c:497
 msgid "Bookmarks successfully imported!"
 msgstr "Marcadores importados satisfactoriamente."
 
-#: src/window-commands.c:558
+#: src/window-commands.c:560
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: src/window-commands.c:576 src/window-commands.c:822
+#: src/window-commands.c:578 src/window-commands.c:824
 msgid "From:"
 msgstr "De:"
 
-#: src/window-commands.c:622
+#: src/window-commands.c:624
 msgid "Bookmarks successfully exported!"
 msgstr "Marcadores exportados satisfactoriamente."
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:650
+#: src/window-commands.c:652
 msgid "bookmarks.gvdb"
 msgstr "bookmarks.gvdb"
 
-#: src/window-commands.c:737
+#: src/window-commands.c:739
 msgid "Passwords successfully imported!"
 msgstr "Contraseñas importados correctamente."
 
-#: src/window-commands.c:804
+#: src/window-commands.c:806
 msgid "Import Passwords"
 msgstr "Importar contraseñas"
 
-#: src/window-commands.c:980
+#: src/window-commands.c:982
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3952,86 +3957,86 @@ msgstr ""
 "Una vista simple, limpia y bonita de la web.\n"
 "Basado en WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:1004
+#: src/window-commands.c:1006
 msgid "Website"
 msgstr "Página web"
 
-#: src/window-commands.c:1037
+#: src/window-commands.c:1039
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2020\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: src/window-commands.c:1183
+#: src/window-commands.c:1185
 msgid "Do you want to reload this website?"
 msgstr "¿Quiere volver a cargar ésta página web?"
 
-#: src/window-commands.c:1711
+#: src/window-commands.c:1713
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: src/window-commands.c:1714
+#: src/window-commands.c:1716
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1716
+#: src/window-commands.c:1718
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: src/window-commands.c:1720
+#: src/window-commands.c:1722
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: src/window-commands.c:1812
+#: src/window-commands.c:1814
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1815
+#: src/window-commands.c:1817
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1830
+#: src/window-commands.c:1832
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1871
+#: src/window-commands.c:1873
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: src/window-commands.c:1876
+#: src/window-commands.c:1878
 msgid "C_reate"
 msgstr "C_rear"
 
-#: src/window-commands.c:2091
+#: src/window-commands.c:2093
 msgid "Save"
 msgstr "Guardar"
 
-#: src/window-commands.c:2100
+#: src/window-commands.c:2102
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2107
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2110
+#: src/window-commands.c:2112
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2595
+#: src/window-commands.c:2597
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2598
+#: src/window-commands.c:2600
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4041,7 +4046,7 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2601
+#: src/window-commands.c:2603
 msgid "_Enable"
 msgstr "_Activar"
 
