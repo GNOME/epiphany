@@ -23,7 +23,7 @@ check-code-style:
 flatpak:
   extends: '.flatpak'
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   except:
     - master
 
@@ -37,7 +37,7 @@ flatpak master:
 scanbuild:
   image: registry.gitlab.gnome.org/gnome/epiphany/master:v2
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
     - mkdir _build
     - meson ${CONFIG_OPTS} _build
