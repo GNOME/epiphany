@@ -75,6 +75,7 @@ conf.set10('ENABLE_GSB', gsb_api_key != '')
 glib_requirement = '>= 2.67.1'
 gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
+webkitgtk_requirement = '>= 2.33.1'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
@@ -99,12 +100,10 @@ portal_dep = dependency('libportal', version: '>= 0.0.2', required: get_option('
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 
 if get_option('soup2').enabled()
-  webkitgtk_requirement = '>= 2.31.2'
   libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
   webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
   webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
 else
-  webkitgtk_requirement = '>= 2.33.0'
   libsoup_dep = dependency('libsoup-3.0', version: '>= 2.99.4')
   webkit2gtk_dep = dependency('webkit2gtk-4.1', version: webkitgtk_requirement)
   webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.1', version: webkitgtk_requirement)

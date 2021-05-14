@@ -821,6 +821,8 @@ process_terminated_cb (EphyWebView                       *web_view,
                        WebKitWebProcessTerminationReason  reason,
                        gpointer                           user_data)
 {
+  EphyWebViewErrorPage error_page = EPHY_WEB_VIEW_ERROR_PROCESS_CRASH;
+
   switch (reason) {
     case WEBKIT_WEB_PROCESS_CRASHED:
       g_warning (_("Web process crashed"));
@@ -828,12 +830,27 @@ process_terminated_cb (EphyWebView                       *web_view,
     case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
       g_warning (_("Web process terminated due to exceeding memory limit"));
       break;
+    case WEBKIT_WEB_PROCESS_TERMINATED_BY_API:
+      g_warning (_("Web process terminated by API request"));
+      error_page = EPHY_WEB_VIEW_ERROR_UNRESPONSIVE_PROCESS;
+      break;
   }
 
   if (!ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view))) {
     ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
-                                   EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL, NULL);
+                                   error_page, NULL, NULL);
   }
+}
+
+static void
+is_web_process_responsive_changed_cb (EphyWebView *web_view,
+                                      GParamSpec  *pspec,
+                                      gpointer     user_data)
+{
+  WebKitWebView *view = WEBKIT_WEB_VIEW (web_view);
+
+  if (!webkit_web_view_get_is_web_process_responsive (view))
+    webkit_web_view_terminate_web_process (view);
 }
 
 static gboolean
@@ -1910,6 +1927,40 @@ format_process_crash_error_page (const char  *uri,
 }
 
 static void
+format_unresponsive_process_error_page (const char  *uri,
+                                        char       **page_title,
+                                        char       **message_title,
+                                        char       **message_body,
+                                        char       **button_label,
+                                        char       **button_action,
+                                        const char **button_accesskey,
+                                        const char **icon_name,
+                                        const char **style)
+{
+  const char *first_paragraph;
+
+  /* Page title when web content has become unresponsive. */
+  *page_title = g_strdup_printf (_("Unresponsive Page"));
+
+  /* Message title when web content has become unresponsive. */
+  *message_title = g_strdup (_("Uh-oh!"));
+
+  /* Error details when web content has become unresponsive. */
+  first_paragraph = _("This page has been unresponsive for too long. Please reload or visit a different page to continue.");
+  *message_body = g_strdup_printf ("<p>%s</p>",
+                                   first_paragraph);
+
+  /* The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE. */
+  *button_label = g_strdup (_("Reload"));
+  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  /* Mnemonic for the Reload button on browser error pages. */
+  *button_accesskey = C_("reload-access-key", "R");
+
+  *icon_name = "computer-fail-symbolic.svg";
+  *style = "default";
+}
+
+static void
 format_tls_error_page (EphyWebView  *view,
                        const char   *origin,
                        char        **page_title,
@@ -2189,6 +2240,17 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                        &button_accesskey,
                                        &icon_name,
                                        &style);
+      break;
+    case EPHY_WEB_VIEW_ERROR_UNRESPONSIVE_PROCESS:
+      format_unresponsive_process_error_page (uri,
+                                              &page_title,
+                                              &msg_title,
+                                              &msg_body,
+                                              &button_label,
+                                              &button_action,
+                                              &button_accesskey,
+                                              &icon_name,
+                                              &style);
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
       format_tls_error_page (view,
@@ -3886,6 +3948,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::uri",
                     G_CALLBACK (uri_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "notify::is-web-process-responsive",
+                    G_CALLBACK (is_web_process_responsive_changed_cb),
                     NULL);
 
   g_signal_connect (web_view, "mouse-target-changed",
