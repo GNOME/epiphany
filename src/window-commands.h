@@ -134,6 +134,9 @@ void window_cmd_open_bookmark                   (GSimpleAction *action,
 void window_cmd_bookmark_page                   (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_bookmarks                       (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_zoom_in                         (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

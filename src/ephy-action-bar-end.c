@@ -312,6 +312,12 @@ ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
   gtk_widget_set_visible (action_bar_end->bookmarks_button, show);
 }
 
+void
+ephy_action_bar_end_show_bookmarks (EphyActionBarEnd *action_bar_end)
+{
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->bookmarks_button), TRUE);
+}
+
 GtkWidget *
 ephy_action_bar_end_get_bookmarks_button (EphyActionBarEnd *action_bar_end)
 {

@@ -2370,6 +2370,20 @@ window_cmd_bookmark_page (GSimpleAction *action,
 }
 
 void
+window_cmd_bookmarks (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyHeaderBar *header_bar;
+  EphyActionBarEnd *action_bar_end;
+
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  action_bar_end = EPHY_ACTION_BAR_END (ephy_header_bar_get_action_bar_end (header_bar));
+  ephy_action_bar_end_show_bookmarks (action_bar_end);
+}
+
+void
 window_cmd_zoom_in (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
