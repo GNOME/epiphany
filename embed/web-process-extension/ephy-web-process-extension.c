@@ -330,18 +330,6 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       return;
 
     g_variant_get (parameters, "b", &extension->should_remember_passwords);
-  } else if (g_strcmp0 (name, "WebExtension.Add") == 0) {
-    GVariant *parameters;
-    const char *name;
-    const char *data;
-    guint64 length;
-
-    parameters = webkit_user_message_get_parameters (message);
-    if (!parameters)
-      return;
-
-    g_variant_get (parameters, "(&s&st)", &name, &data, &length);
-    webextensions_add_translation (extension, name, data, length);
   }
 }
 
@@ -662,28 +650,6 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
-
-  /* If we are using the default script world, then we are a WebExtension. We
-   * must not register any internal Epiphany APIs, since they must never be
-   * accessible in the default script world. We don't want them exposed to the
-   * web or to WebExtensions. If we were to improperly allow access to our
-   * internal APIs, then malicious web content could do nasty things like
-   * iterate through passwords stored in EphyPasswordsManager, for example.
-   *
-   * And if we are not using the default script world, then we are not a
-   * WebExtension. There is no point in registering WebExtension APIs, because
-   * WebExtensions only have access to what is in the default script world
-   * anyway.
-   *
-   * FIXME: let's try to make this less confusing:
-   *
-   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/1448
-   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/1449
-   */
-  if (extension->script_world == webkit_script_world_get_default ()) {
-    set_up_webextensions (extension, page, js_context);
-    return;
-  }
 
   result = jsc_context_get_value (js_context, "Ephy");
   g_assert (jsc_value_is_undefined (result));

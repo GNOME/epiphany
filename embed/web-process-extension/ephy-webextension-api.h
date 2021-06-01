@@ -25,13 +25,8 @@
 
 G_BEGIN_DECLS
 
-void set_up_webextensions          (EphyWebProcessExtension *extension,
-                                    WebKitWebPage           *page,
-                                    JSCContext              *js_context);
+#define EPHY_TYPE_WEB_EXTENSION_EXTENSION (ephy_web_extension_extension_get_type())
 
-void webextensions_add_translation (EphyWebProcessExtension *extension,
-                                    const char              *name,
-                                    const char              *data,
-                                    guint64                  length);
+G_DECLARE_FINAL_TYPE (EphyWebExtensionExtension, ephy_web_extension_extension, EPHY, WEB_EXTENSION_EXTENSION, GObject)
 
 G_END_DECLS
