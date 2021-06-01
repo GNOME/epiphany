@@ -2,7 +2,7 @@
 
 set -e
 
-TAG="registry.gitlab.gnome.org/gnome/epiphany/master:v2"
+TAG="registry.gitlab.gnome.org/gnome/epiphany/master:v4"
 
 cd "$(dirname "$0")"
 
