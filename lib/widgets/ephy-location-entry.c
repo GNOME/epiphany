@@ -133,12 +133,72 @@ entry_button_release (GtkWidget *widget,
   return GDK_EVENT_STOP;
 }
 
+static void
+update_entry_style (GtkWidget *entry)
+{
+  PangoAttrList *attrs;
+  PangoAttribute *color_normal;
+  PangoAttribute *color_dimmed;
+  g_autoptr (GUri) uri = NULL;
+  const char *text = gtk_entry_get_text (GTK_ENTRY (entry));
+  const char *host;
+  const char *base_domain;
+  char *sub_string;
+
+  attrs = pango_attr_list_new ();
+
+  if (gtk_widget_has_focus (entry))
+    goto out;
+
+  uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
+  if (!uri)
+    goto out;
+
+  host = g_uri_get_host (uri);
+  if (!host || strlen (host) == 0)
+    goto out;
+
+  base_domain = soup_tld_get_base_domain (host, NULL);
+  if (!base_domain)
+    goto out;
+
+  sub_string = strstr (text, base_domain);
+  if (!sub_string)
+    goto out;
+
+  /* Complete text is dimmed */
+  color_dimmed = pango_attr_foreground_alpha_new (32768);
+  pango_attr_list_insert (attrs, color_dimmed);
+
+  /* Base domain with normal style */
+  color_normal = pango_attr_foreground_alpha_new (65535);
+  color_normal->start_index = sub_string - text;
+  color_normal->end_index = color_normal->start_index + strlen (base_domain);
+  pango_attr_list_insert (attrs, color_normal);
+
+out:
+  gtk_entry_set_attributes (GTK_ENTRY (entry), attrs);
+
+  pango_attr_list_unref (attrs);
+}
+
+static gboolean
+entry_focus_in_event (GtkWidget *widget,
+                      GdkEvent  *event,
+                      gpointer   user_data)
+{
+  update_entry_style (widget);
+  return GDK_EVENT_PROPAGATE;
+}
+
 static gboolean
 entry_focus_out_event (GtkWidget *widget,
                        GdkEvent  *event,
                        gpointer   user_data)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+
+  update_entry_style (widget);
 
   if (((GdkEventButton *)event)->button != GDK_BUTTON_PRIMARY)
     return GDK_EVENT_PROPAGATE;
@@ -194,6 +254,7 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   g_autofree char *effective_text = NULL;
   g_autofree char *selection = NULL;
   int start, end;
+  const char *final_text;
 
   g_assert (widget);
 
@@ -224,12 +285,15 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
     text = "";
   }
 
+  final_text = effective_text ? effective_text : text;
+
   /* First record the new hash, then update the entry text */
-  entry->hash = g_str_hash (effective_text ? effective_text : text);
+  entry->hash = g_str_hash (final_text);
 
   entry->block_update = TRUE;
   g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), effective_text ? effective_text : text);
+  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), final_text);
+  update_entry_style (entry->url_entry);
   g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
 
   dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
@@ -1089,6 +1153,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                     G_CALLBACK (ephy_location_entry_suggestion_activated), entry);
 
   g_signal_connect (entry->url_entry, "button-release-event", G_CALLBACK (entry_button_release), entry);
+  g_signal_connect (entry->url_entry, "focus-in-event", G_CALLBACK (entry_focus_in_event), entry);
   g_signal_connect (entry->url_entry, "focus-out-event", G_CALLBACK (entry_focus_out_event), entry);
 
   controller = dzl_shortcut_controller_find (entry->url_entry);
