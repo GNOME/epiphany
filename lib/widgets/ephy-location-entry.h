@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-adaptive-mode.h"
 #include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
@@ -84,7 +85,7 @@ void            ephy_location_entry_page_action_add            (EphyLocationEntr
 
 void            ephy_location_entry_page_action_clear          (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_mobile_popdown         (EphyLocationEntry *entry,
-                                                                gboolean           mobile_popdown);
+void            ephy_location_entry_set_adaptive_mode          (EphyLocationEntry *entry,
+                                                                EphyAdaptiveMode   adpative_mode);
 
 G_END_DECLS
