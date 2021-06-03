@@ -87,6 +87,7 @@ struct _EphyLocationEntry {
   guint original_address : 1;
 
   EphySecurityLevel security_level;
+  EphyAdaptiveMode adaptive_mode;
 };
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *,
@@ -134,20 +135,26 @@ entry_button_release (GtkWidget *widget,
 }
 
 static void
-update_entry_style (GtkWidget *entry)
+update_entry_style (EphyLocationEntry *self)
 {
   PangoAttrList *attrs;
   PangoAttribute *color_normal;
   PangoAttribute *color_dimmed;
+  PangoAttribute *scaled;
   g_autoptr (GUri) uri = NULL;
-  const char *text = gtk_entry_get_text (GTK_ENTRY (entry));
+  const char *text = gtk_entry_get_text (GTK_ENTRY (self->url_entry));
   const char *host;
   const char *base_domain;
   char *sub_string;
 
   attrs = pango_attr_list_new ();
 
-  if (gtk_widget_has_focus (entry))
+  if (self->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
+    scaled = pango_attr_scale_new (PANGO_SCALE_SMALL);
+    pango_attr_list_insert (attrs, scaled);
+  }
+
+  if (gtk_widget_has_focus (self->url_entry))
     goto out;
 
   uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
@@ -177,7 +184,7 @@ update_entry_style (GtkWidget *entry)
   pango_attr_list_insert (attrs, color_normal);
 
 out:
-  gtk_entry_set_attributes (GTK_ENTRY (entry), attrs);
+  gtk_entry_set_attributes (GTK_ENTRY (self->url_entry), attrs);
 
   pango_attr_list_unref (attrs);
 }
@@ -187,7 +194,9 @@ entry_focus_in_event (GtkWidget *widget,
                       GdkEvent  *event,
                       gpointer   user_data)
 {
-  update_entry_style (widget);
+  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
+
+  update_entry_style (self);
   return GDK_EVENT_PROPAGATE;
 }
 
@@ -198,7 +207,7 @@ entry_focus_out_event (GtkWidget *widget,
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
 
-  update_entry_style (widget);
+  update_entry_style (entry);
 
   if (((GdkEventButton *)event)->button != GDK_BUTTON_PRIMARY)
     return GDK_EVENT_PROPAGATE;
@@ -293,7 +302,7 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   entry->block_update = TRUE;
   g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   gtk_entry_set_text (GTK_ENTRY (entry->url_entry), final_text);
-  update_entry_style (entry->url_entry);
+  update_entry_style (entry);
   g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
 
   dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
@@ -1564,13 +1573,17 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
 }
 
 void
-ephy_location_entry_set_mobile_popdown (EphyLocationEntry *entry,
-                                        gboolean           mobile_popdown)
+ephy_location_entry_set_adaptive_mode (EphyLocationEntry *entry,
+                                       EphyAdaptiveMode   adaptive_mode)
 {
-  if (mobile_popdown)
+  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
   else
     dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry->url_entry), position_func, NULL, NULL);
+
+  entry->adaptive_mode = adaptive_mode;
+
+  update_entry_style (entry);
 }
 
 void
