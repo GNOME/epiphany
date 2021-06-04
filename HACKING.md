@@ -131,40 +131,41 @@ several subprocesses:
  * Any number of WebKitWebProcesses, which handle rendering web content
  * One WebKitNetworkProcess, which handles network requests, storage, etc.
 
-In WebKitGTK, by default each WebKitWebView shares the same WebKitWebProcess.
-This can reduce overall resource usage, but it results in a less-stable browser
-as a crash in one tab will crash all other tabs, and the effects of memory leaks
-are greatly amplified. So Epiphany runs a separate WebKitWebProcess for each
-browser tab. (This is almost true. Sometimes a tab will create another tab using
-JavaScript. In such cases, the web views are "related" and share the same
-WebKitWebProcess.) There is a GSettings option to switch back to single-process
-mode if required, but we do not claim to support this!
+WebKit runs a separate WebKitWebProcess for each browser tab. Well, this is almost
+true. Sometimes a tab will create another tab using JavaScript. In such cases,
+the web views are "related" and share the same WebKitWebProcess. Additionally,
+WebKit will swap a view from one web process to another when navigating between
+different domains.
 
 Epiphany uses GtkApplication to ensure uniqueness, so you usually only have one
 UI process running at a time. An exception is if you use incognito mode, or
 private profile mode (which is only available from the command line). In such
 cases, there is no shared state with the main Epiphany browser process.
 
-## Epiphany Web Extension
+## Epiphany Web Process Extension
 
 For some Epiphany features, we need to run code in the web process. This code is
-called the "web extension" and lives in `embed/web-extension/`. It is compiled
-into a shared library `libephywebextension.so` and installed in `$(pkglibdir)`
-(e.g. `/usr/lib64/epiphany`). `EphyEmbedShell` tells WebKit to look for web
-extensions in that location using `webkit_web_context_set_web_extensions_directory()`,
-starts a private D-Bus server (a D-Bus server that is completely separate from
-the shared system and session busses), and advertises the address of its D-Bus
-server to the web extension by passing it in a `GVariant` parameter to
-`webkit_web_context_set_web_extensions_initialization_user_data()`. Now the
-Epiphany UI process and web extension can communicate back and forth via D-Bus.
-`EphyWebExtensionProxy` encapsulates this IPC in the UI process;
-`EphyEmbedShell` uses it to communicate with the web process.
+called the "web process extension" and lives in `embed/web-process-extension/`.
+It is compiled into a shared library `libephywebprocessextension.so` and
+installed in `$(pkglibdir)` (e.g. `/usr/lib64/epiphany`). `EphyEmbedShell` tells
+WebKit to look for extensions in that location using
+`webkit_web_context_set_web_extensions_directory()`. Now the Epiphany UI process
+and web process extension can communicate back and forth via the WebKit IPC
+functions webkit_web_context_send_message_to_all_extensions(),
+webkit_web_view_send_message_to_page(), webkit_web_extension_send_message_to_context(),
+and webkit_web_page_send_message_to_view().
 
-Epiphany uses script message handlers as an additional form of IPC besides
-D-Bus. This allows the web extension to send a `WebKitJavascriptResult` directly
-to the UI process, which is received in `EphyEmbedShell`. This should generally
-be used rather than D-Bus when you need to send a message from the web process
-to the UI process.
+Epiphany uses script message handlers as an additional form of IPC. This allows
+the web extension to send a `WebKitJavascriptResult` to the UI process, which
+is received in `EphyEmbedShell`.
+
+Corresponding to `WebKitWebContext` and `WebKitWebView`, the central classes of
+the UI process API, the web process API has `WebKitWebExtension` and
+`WebKitWebPage`. Confusingly, the `WebKitWebExtension` class refers to the web
+process extension, NOT to WebExtensions. Each `WebKitWebContext` may have one or
+more `WebKitWebExtension`s (web process extensions). Meanwhile, each
+`WebKitWebView` will have one or more `WebKitWebPage`s. Only one page will be
+active in a view at a given time: the other pages are for process swaps.
 
 # Debugging
 
@@ -211,7 +212,8 @@ Use `START_PROFILER STOP_PROFILER` macros to profile pieces of code.
 ## valgrind
 
 To use valgrind, you must use environment variables to disable WebKit's sandbox
-and JavaScriptCore's Gigacage:
+and JavaScriptCore's Gigacage. You will also want to disable GSlice and bmalloc
+in order to force all allocations though the system allocator:
 
 ```
 WEBKIT_FORCE_SANDBOX=0 GIGACAGE_ENABLED=0 G_SLICE=always-malloc Malloc=1 valgrind --track-origins=yes --leak-check=full epiphany
