@@ -231,9 +231,11 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
 {
   g_autoptr (JSCContext) js_context = NULL;
 
+#if !WEBKIT_CHECK_VERSION(2, 33, 2)
   /* Enforce the creation of the script world global context in the main frame */
   js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
   (void)js_context;
+#endif
 
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
