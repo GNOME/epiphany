@@ -3,10 +3,12 @@
 This directory contains an official pdf.js release version, distributed at: https://github.com/mozilla/pdf.js
 
 ## Update process
-Grab a new official release (*-dist.zip) distributed at github and extract everything except viewer.[html/js/css] and map files into this directory.
-Then recreate the resource xml file with `python ./pdfjs_generate_resource.py`
-
-The additional files within this directory are modified for Epiphany and shouldn't be changed automatically.
+1. Delete existing files except epiphany-pdfjs-changes.patch, pdfjs_generate_resource.py, and README.epiphany.md.
+2. Grab a new official release (*-dist.zip) distributed at github and extract everything into this directory.
+3. Delete precompiled .map files (viewer.js.map, pdf.js.map, pdf.worker.js.map, pdf.sandbox.js.map).
+4. Manually merge changes from epiphany-pdfjs-changes.patch into web/viewer.[html/js/css].
+5. Recreate epiphany-pdfjs-changes.patch.
+6. Recreate the resource xml file with `./pdfjs_generate_resource.py`
 
 ## Modifications to viewer.html
 1. In order to circumvent CORS the pdf is downloaded and then embedded into the viewer.html file. Therefore the head has an
