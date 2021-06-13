@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-06-01 11:30+0000\n"
-"PO-Revision-Date: 2021-06-02 18:55+0300\n"
+"POT-Creation-Date: 2021-06-12 22:11+0000\n"
+"PO-Revision-Date: 2021-06-13 11:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1521,7 +1521,6 @@ msgid "Web process terminated due to exceeding memory limit"
 msgstr "Процес Тенет було припинено через перевищення межі пам'яті"
 
 #: embed/ephy-web-view.c:834
-#| msgid "Web process terminated due to exceeding memory limit"
 msgid "Web process terminated by API request"
 msgstr "Вебпроцес перервано у відповідь на запит із програмного інтерфейсу"
 
@@ -1732,26 +1731,21 @@ msgstr ""
 #: embed/ephy-web-view.c:1943
 #, c-format
 msgid "Unresponsive Page"
-msgstr ""
-"Сторінка не відповідає на запити"
+msgstr "Сторінка не відповідає на запити"
 
 #. Message title when web content has become unresponsive.
 #: embed/ephy-web-view.c:1946
 msgid "Uh-oh!"
-msgstr ""
-"Ох-ох-о!"
+msgstr "Ох-ох-о!"
 
 #. Error details when web content has become unresponsive.
 #: embed/ephy-web-view.c:1949
-#| msgid ""
-#| "Something went wrong while displaying this page. Please reload or visit a "
-#| "different page to continue."
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr ""
-"Ця сторінка надто довго не відповідає на запити. Будь ласка, перезавантажте її або перейдіть на іншу "
-"сторінку."
+"Ця сторінка надто довго не відповідає на запити. Будь ласка, перезавантажте "
+"її або перейдіть на іншу сторінку."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:1983
@@ -2280,36 +2274,36 @@ msgstr "Всі файли"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:566
+#: lib/widgets/ephy-location-entry.c:733 src/ephy-history-dialog.c:566
 msgid "Cl_ear"
 msgstr "О_чистити"
 
-#: lib/widgets/ephy-location-entry.c:689
+#: lib/widgets/ephy-location-entry.c:753
 msgid "Paste and _Go"
 msgstr "Вставити та пере_йти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:774 src/ephy-window.c:959
 msgid "_Undo"
 msgstr "Повер_нути"
 
-#: lib/widgets/ephy-location-entry.c:717
+#: lib/widgets/ephy-location-entry.c:781
 msgid "_Redo"
 msgstr "По_вторити"
 
-#: lib/widgets/ephy-location-entry.c:1003
+#: lib/widgets/ephy-location-entry.c:1067
 msgid "Show website security status and permissions"
 msgstr "Показати стан безпеки та дозволи сайта"
 
-#: lib/widgets/ephy-location-entry.c:1005
+#: lib/widgets/ephy-location-entry.c:1069
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Шукати сайти, закладки і відкривати вкладки"
 
-#: lib/widgets/ephy-location-entry.c:1049
+#: lib/widgets/ephy-location-entry.c:1113
 msgid "Bookmark this page"
 msgstr "Закласти цю сторінку"
 
-#: lib/widgets/ephy-location-entry.c:1068
+#: lib/widgets/ephy-location-entry.c:1132
 msgid "Toggle reader mode"
 msgstr "Перемкнути режим читача"
 
@@ -2572,190 +2566,190 @@ msgstr "Вилучити вибране веброзширення"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Відкрити файл (manifest.json/xpi)"
 
-#: src/ephy-window.c:281
+#: src/ephy-window.c:283
 msgid "Do you want to leave this website?"
 msgstr "Бажаєте покинути цей сайт?"
 
-#: src/ephy-window.c:282 src/window-commands.c:1200
+#: src/ephy-window.c:284 src/window-commands.c:1200
 msgid "A form you modified has not been submitted."
 msgstr "Змінену форму не було надіслано."
 
-#: src/ephy-window.c:283 src/window-commands.c:1202
+#: src/ephy-window.c:285 src/window-commands.c:1202
 msgid "_Discard form"
 msgstr "_Відхилити форму"
 
-#: src/ephy-window.c:298
+#: src/ephy-window.c:300
 msgid "There are multiple tabs open."
 msgstr "Відкрито декілька вкладок."
 
-#: src/ephy-window.c:299
+#: src/ephy-window.c:301
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Якщо закриєте вікно, всі відкриті вкладки будуть втрачені"
 
-#: src/ephy-window.c:300
+#: src/ephy-window.c:302
 msgid "C_lose tabs"
 msgstr "_Закрити вкладки"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:960
 msgid "Re_do"
 msgstr "Повт_орити"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:963
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:964
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:965
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:966
 msgid "_Paste Text Only"
 msgstr "Лише _вставити текст"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:967
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:969
 msgid "S_end Link by Email…"
 msgstr "_Надіслати посилання листом…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:971
 msgid "_Reload"
 msgstr "Перезаванта_жити"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:972
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:973
 msgid "_Forward"
 msgstr "_Далі"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:976
 msgid "Add Boo_kmark…"
 msgstr "Додати _закладку…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:980
 msgid "Open Link in New _Window"
 msgstr "Відкрити посилання у _новому вікні"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:981
 msgid "Open Link in New _Tab"
 msgstr "Відкрити посилання у новій вк_ладці"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:982
 msgid "Open Link in I_ncognito Window"
 msgstr "Відкрити посилання у _конфіденційному вікні"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:983
 msgid "_Save Link As…"
 msgstr "З_берегти посилання як…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:984
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:985
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати поштову адресу"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:989
 msgid "View _Image in New Tab"
 msgstr "Переглянути _зображення в новій вкладці"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:990
 msgid "Copy I_mage Address"
 msgstr "Копіювати адресу _зображення"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:991
 msgid "_Save Image As…"
 msgstr "З_берегти зображення як…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:992
 msgid "Set as _Wallpaper"
 msgstr "Встановити як _шпалери"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:996
 msgid "Open Video in New _Window"
 msgstr "Відкрити відеозапис у новому _вікні"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:997
 msgid "Open Video in New _Tab"
 msgstr "Відкрити відеозапис у новій в_кладці"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:998
 msgid "_Save Video As…"
 msgstr "З_берегти відеозапис як…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:999
 msgid "_Copy Video Address"
 msgstr "_Копіювати адресу відеозапису"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1003
 msgid "Open Audio in New _Window"
 msgstr "Відкрити аудіозапис у новому _вікні"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1004
 msgid "Open Audio in New _Tab"
 msgstr "Відкрити аудіозапис у новій в_кладці"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1005
 msgid "_Save Audio As…"
 msgstr "З_берегти аудіозапис як…"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1006
 msgid "_Copy Audio Address"
 msgstr "_Копіювати адресу аудіозапису"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1012
 msgid "Save Pa_ge As…"
 msgstr "Зберегти _сторінку як…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1013
 msgid "_Page Source"
 msgstr "Вихідний текст с_торінки"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1383
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Шукати «%s» в Тенет"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1412
 msgid "Open Link"
 msgstr "Відкрити посилання"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1414
 msgid "Open Link In New Tab"
 msgstr "Відкрити посилання у новій вкладці"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1416
 msgid "Open Link In New Window"
 msgstr "Відкрити посилання у новому вікні"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1418
 msgid "Open Link In Incognito Window"
 msgstr "Відкрити посилання у конфіденційному вікні"
 
-#: src/ephy-window.c:2860
+#: src/ephy-window.c:2864
 msgid "Download operation"
 msgstr "Завантаження"
 
-#: src/ephy-window.c:2862
+#: src/ephy-window.c:2866
 msgid "Show details"
 msgstr "Показати подробиці"
 
-#: src/ephy-window.c:2864
+#: src/ephy-window.c:2868
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2764,24 +2758,24 @@ msgstr[1] "%d файли завантажуються"
 msgstr[2] "%d файлів завантажуються"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3382
+#: src/ephy-window.c:3386
 msgid "View open tabs"
 msgstr "Переглянути відкриті вкладки"
 
-#: src/ephy-window.c:3513
+#: src/ephy-window.c:3517
 msgid "Set Web as your default browser?"
 msgstr "Бажаєте встановити Тенет своїм типовим браузером?"
 
-#: src/ephy-window.c:3515
+#: src/ephy-window.c:3519
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Бажаєте встановити Epiphany Technology Preview своїм типовим браузером?"
 
-#: src/ephy-window.c:3527
+#: src/ephy-window.c:3531
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:3528
+#: src/ephy-window.c:3532
 msgid "_No"
 msgstr "_Ні"
 
@@ -3659,234 +3653,241 @@ msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Скорочення"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
+#: src/resources/gtk/shortcuts-dialog.ui:82
+#: src/resources/gtk/shortcuts-dialog.ui:246
+#| msgid "No bookmarks yet?"
+msgctxt "shortcut window"
+msgid "Show bookmarks list"
+msgstr "Показати список закладок"
+
+#: src/resources/gtk/shortcuts-dialog.ui:93
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Пересування"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Перейти до домівки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Перезавантажити поточну сторінку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "Перезавантажити оминувши кеш"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:118
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:125
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Перейти до попередньої сторінки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:125
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:132
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Перейти до наступної сторінки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:150
+#: src/resources/gtk/shortcuts-dialog.ui:157
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Вкладки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Нова вкладка"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Закрити поточну вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Перевідкрити закриту вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:182
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Перейти до наступної вкладки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
+#: src/resources/gtk/shortcuts-dialog.ui:189
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Перейти до попередньої вкладки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:189
+#: src/resources/gtk/shortcuts-dialog.ui:196
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Перемістити поточну вкладку ліворуч"
 
-#: src/resources/gtk/shortcuts-dialog.ui:196
+#: src/resources/gtk/shortcuts-dialog.ui:203
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Перемістити поточну вкладку праворуч"
 
-#: src/resources/gtk/shortcuts-dialog.ui:203
+#: src/resources/gtk/shortcuts-dialog.ui:210
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "Здублювати поточну вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:214
+#: src/resources/gtk/shortcuts-dialog.ui:221
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Інше"
 
-#: src/resources/gtk/shortcuts-dialog.ui:218
+#: src/resources/gtk/shortcuts-dialog.ui:225
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Історія"
 
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:232
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Параметри"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:239
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Закласти поточну сторінку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:253
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "Імпортувати закладки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:260
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "Експортувати закладки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:253
+#: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Перемкнути перегляд з курсором"
 
-#: src/resources/gtk/shortcuts-dialog.ui:264
+#: src/resources/gtk/shortcuts-dialog.ui:278
 msgctxt "shortcut window"
 msgid "Web application"
 msgstr "Вебпрограма"
 
-#: src/resources/gtk/shortcuts-dialog.ui:268
+#: src/resources/gtk/shortcuts-dialog.ui:282
 msgctxt "shortcut window"
 msgid "Install site as web application"
 msgstr "Встановити сайт як вебпрограму"
 
-#: src/resources/gtk/shortcuts-dialog.ui:275
+#: src/resources/gtk/shortcuts-dialog.ui:289
 msgctxt "shortcut window"
 msgid "Open web application manager"
 msgstr "Відкрити керування вебпрограмами"
 
-#: src/resources/gtk/shortcuts-dialog.ui:286
+#: src/resources/gtk/shortcuts-dialog.ui:300
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Вигляд"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Наблизити"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Віддалити"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Відновити масштаб"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "На весь екран"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Переглянути вихідний код сторінки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Перемкнути ревізора"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Перемкнути режим читача"
 
-#: src/resources/gtk/shortcuts-dialog.ui:343
+#: src/resources/gtk/shortcuts-dialog.ui:357
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Редагування"
 
-#: src/resources/gtk/shortcuts-dialog.ui:347
+#: src/resources/gtk/shortcuts-dialog.ui:361
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Вирізати"
 
-#: src/resources/gtk/shortcuts-dialog.ui:354
+#: src/resources/gtk/shortcuts-dialog.ui:368
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Копіювати"
 
-#: src/resources/gtk/shortcuts-dialog.ui:361
+#: src/resources/gtk/shortcuts-dialog.ui:375
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Вставити"
 
-#: src/resources/gtk/shortcuts-dialog.ui:368
+#: src/resources/gtk/shortcuts-dialog.ui:382
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Повернути"
 
-#: src/resources/gtk/shortcuts-dialog.ui:375
+#: src/resources/gtk/shortcuts-dialog.ui:389
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Повторити"
 
-#: src/resources/gtk/shortcuts-dialog.ui:382
+#: src/resources/gtk/shortcuts-dialog.ui:396
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Вибрати все"
 
-#: src/resources/gtk/shortcuts-dialog.ui:389
+#: src/resources/gtk/shortcuts-dialog.ui:403
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Вибрати адресу сторінки"
 
-#: src/resources/gtk/shortcuts-dialog.ui:396
+#: src/resources/gtk/shortcuts-dialog.ui:410
 msgctxt "shortcut window"
 msgid "Search with default search engine"
 msgstr "Шукати за допомогою типового пошукового рушія"
 
-#: src/resources/gtk/shortcuts-dialog.ui:403
+#: src/resources/gtk/shortcuts-dialog.ui:417
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Знайти"
 
-#: src/resources/gtk/shortcuts-dialog.ui:410
+#: src/resources/gtk/shortcuts-dialog.ui:424
 msgctxt "shortcut window"
 msgid "Next find result"
 msgstr "Наступний результат пошуку"
 
-#: src/resources/gtk/shortcuts-dialog.ui:417
+#: src/resources/gtk/shortcuts-dialog.ui:431
 msgctxt "shortcut window"
 msgid "Previous find result"
 msgstr "Попередній результат пошуку"
@@ -4127,11 +4128,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2609
+#: src/window-commands.c:2637
 msgid "Enable caret browsing mode?"
 msgstr "Увімкнути режим перегляду з курсором??"
 
-#: src/window-commands.c:2612
+#: src/window-commands.c:2640
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4141,7 +4142,7 @@ msgstr ""
 "помістити рухомий курсор на сторінку, дозволяючи вам вибирати блоки тексту "
 "клавіатурою. Хочете увімкнути Перегляд з курсором?"
 
-#: src/window-commands.c:2615
+#: src/window-commands.c:2643
 msgid "_Enable"
 msgstr "_Увімкнути"
 
