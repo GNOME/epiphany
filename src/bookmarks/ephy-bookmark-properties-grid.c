@@ -172,7 +172,6 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
   default_tag = (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0);
 
   widget = gtk_flow_box_child_new ();
-  gtk_widget_set_can_focus (widget, FALSE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -200,7 +199,6 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
                                                         GTK_ICON_SIZE_MENU));
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-    gtk_widget_set_can_focus (button, FALSE);
     gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
     g_signal_connect_object (button, "clicked",
                              G_CALLBACK (ephy_bookmark_properties_grid_tag_widget_button_clicked_cb),

@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.18"/>
   <template class="EphyBookmarkPropertiesGrid" parent="GtkGrid">
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
     <property name="border_width">12</property>
     <property name="orientation">vertical</property>
     <property name="row_spacing">6</property>
@@ -12,7 +11,6 @@
     <child>
       <object class="GtkLabel" id="popover_bookmark_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Bookmark</property>
         <attributes>
           <attribute name="weight" value="bold"/>
@@ -26,7 +24,6 @@
     <child>
       <object class="GtkLabel">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes">Name</property>
         <style>
@@ -41,7 +38,6 @@
     <child>
       <object class="GtkEntry" id="name_entry">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="max_width_chars">32</property>
       </object>
       <packing>
@@ -52,7 +48,6 @@
     <child>
       <object class="GtkLabel" id="address_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="margin_top">6</property>
@@ -69,7 +64,6 @@
     <child>
       <object class="GtkEntry" id="address_entry">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -79,7 +73,6 @@
     <child>
       <object class="GtkLabel" id="popover_tags_label">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="margin_top">12</property>
@@ -96,11 +89,9 @@
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkEntry" id="add_tag_entry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
             <property name="placeholder_text" translatable="yes">Add Tag…</property>
@@ -115,7 +106,6 @@
           <object class="GtkButton" id="add_tag_button">
             <property name="label" translatable="yes">_Add</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="can_default">True</property>
             <property name="receives_default">False</property>
             <property name="action_name">grid.add-tag</property>
@@ -139,7 +129,6 @@
     <child>
       <object class="GtkScrolledWindow" id="tags_scrolled_window">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="vexpand">True</property>
         <property name="min_content_height">38</property>
         <property name="max_content_width">270</property>
@@ -149,11 +138,9 @@
         <child>
           <object class="GtkViewport">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <child>
               <object class="GtkFlowBox" id="tags_box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <property name="valign">start</property>
                 <property name="column_spacing">6</property>
@@ -175,7 +162,6 @@
       <object class="GtkButton" id="remove_bookmark_button">
         <property name="label" translatable="yes">_Remove</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">end</property>
         <property name="action_name">grid.remove-bookmark</property>
