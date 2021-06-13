@@ -18,13 +18,15 @@
 
 .entry_icon_box:dir(rtl) { margin-left: 5px; margin-right: 2px; }
 
-.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); margin: 0 4px; }
+.entry_icon_box > button { box-shadow: none; border: transparent; background: transparent; padding: 0px; -gtk-icon-shadow: none; outline-offset: -1px; }
 
-.entry_icon:hover { color: @theme_fg_color; }
+.entry_icon_box > button:hover:not(:backdrop) .entry_icon { opacity: 1; }
+
+.entry_icon { color: @theme_fg_color; margin: 0 4px; opacity: .8; }
 
 .entry_icon:active { color: @theme_selected_bg_color; }
 
-.entry_icon:backdrop { color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.2); }
+.entry_icon:backdrop { color: @theme_unfocused_fg_color; }
 
 .entry_icon.selected { color: @theme_selected_bg_color; }
 

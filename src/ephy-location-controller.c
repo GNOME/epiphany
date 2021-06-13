@@ -314,9 +314,8 @@ longpress_gesture_cb (GtkGestureLongPress *gesture,
 }
 
 static void
-reader_mode_button_press_event_cb (GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   user_data)
+reader_mode_button_clicked_cb (GtkButton *button,
+                               gpointer   user_data)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
   EphyWindow *window = controller->window;
@@ -372,7 +371,7 @@ ephy_location_controller_constructed (GObject *object)
   g_object_unref (model);
 
   reader_mode = ephy_location_entry_get_reader_mode_widget (EPHY_LOCATION_ENTRY (controller->title_widget));
-  g_signal_connect (G_OBJECT (reader_mode), "button-press-event", G_CALLBACK (reader_mode_button_press_event_cb), controller);
+  g_signal_connect (G_OBJECT (reader_mode), "clicked", G_CALLBACK (reader_mode_button_clicked_cb), controller);
 
   g_object_bind_property (controller, "editable",
                           entry, "editable",

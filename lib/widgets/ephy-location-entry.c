@@ -57,10 +57,10 @@ struct _EphyLocationEntry {
 
   GtkWidget *url_entry;
   GtkWidget *page_action_box;
-  GtkWidget *bookmark;
-  GtkWidget *bookmark_event_box;
-  GtkWidget *reader_mode;
-  GtkWidget *reader_mode_event_box;
+  GtkWidget *bookmark_icon;
+  GtkWidget *bookmark_button;
+  GtkWidget *reader_mode_icon;
+  GtkWidget *reader_mode_button;
 
   GBinding *paste_binding;
 
@@ -836,18 +836,11 @@ icon_button_icon_press_event_cb (GtkWidget            *widget,
   return FALSE;
 }
 
-static gboolean
-bookmark_icon_button_press_event_cb (GtkWidget         *entry,
-                                     GdkEventButton    *event,
-                                     EphyLocationEntry *lentry)
+static void
+bookmark_icon_button_clicked_cb (GtkButton         *button,
+                                 EphyLocationEntry *lentry)
 {
-  if (((event->type == GDK_BUTTON_PRESS &&
-        event->button == 1) ||
-       (event->type == GDK_TOUCH_BEGIN))) {
-    g_signal_emit (lentry, signals[BOOKMARK_CLICKED], 0);
-  }
-
-  return TRUE;
+  g_signal_emit (lentry, signals[BOOKMARK_CLICKED], 0);
 }
 
 static GtkBorder
@@ -1070,7 +1063,7 @@ update_reader_icon (EphyLocationEntry *entry)
   else
     name = "ephy-reader-mode-symbolic";
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode),
+  gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode_icon),
                                 name, GTK_ICON_SIZE_MENU);
 }
 
@@ -1133,34 +1126,30 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_style_context_add_class (context, "entry_icon_box");
 
   /* Bookmark */
-  entry->bookmark_event_box = gtk_event_box_new ();
-  gtk_widget_set_tooltip_text (entry->bookmark_event_box, _("Bookmark this page"));
-  entry->bookmark = gtk_image_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_widget_set_valign (entry->bookmark, GTK_ALIGN_CENTER);
-  gtk_widget_show (entry->bookmark);
-  g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
-  gtk_container_add (GTK_CONTAINER (entry->bookmark_event_box), entry->bookmark);
-  gtk_box_pack_end (GTK_BOX (box), entry->bookmark_event_box, FALSE, FALSE, 0);
+  entry->bookmark_button = gtk_button_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_widget_set_tooltip_text (entry->bookmark_button, _("Bookmark this page"));
+  entry->bookmark_icon = gtk_button_get_image (GTK_BUTTON (entry->bookmark_button));
+  gtk_widget_set_valign (entry->bookmark_icon, GTK_ALIGN_CENTER);
+  g_signal_connect (G_OBJECT (entry->bookmark_button), "clicked", G_CALLBACK (bookmark_icon_button_clicked_cb), entry);
+  gtk_box_pack_end (GTK_BOX (box), entry->bookmark_button, FALSE, FALSE, 0);
 
-  context = gtk_widget_get_style_context (entry->bookmark);
+  context = gtk_widget_get_style_context (entry->bookmark_icon);
   gtk_style_context_add_class (context, "entry_icon");
 
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
-                   entry->bookmark_event_box,
+                   entry->bookmark_button,
                    "visible",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   /* Reader Mode */
-  entry->reader_mode_event_box = gtk_event_box_new ();
-  gtk_widget_set_tooltip_text (entry->reader_mode_event_box, _("Toggle reader mode"));
-  entry->reader_mode = gtk_image_new ();
-  gtk_widget_set_valign (entry->reader_mode, GTK_ALIGN_CENTER);
-  gtk_widget_show (entry->reader_mode);
-  gtk_container_add (GTK_CONTAINER (entry->reader_mode_event_box), entry->reader_mode);
-  gtk_box_pack_end (GTK_BOX (box), entry->reader_mode_event_box, FALSE, FALSE, 0);
+  entry->reader_mode_button = gtk_button_new_from_icon_name (NULL, GTK_ICON_SIZE_MENU);
+  gtk_widget_set_tooltip_text (entry->reader_mode_button, _("Toggle reader mode"));
+  entry->reader_mode_icon = gtk_button_get_image (GTK_BUTTON (entry->reader_mode_button));
+  gtk_widget_set_valign (entry->reader_mode_icon, GTK_ALIGN_CENTER);
+  gtk_box_pack_end (GTK_BOX (box), entry->reader_mode_button, FALSE, FALSE, 0);
 
-  context = gtk_widget_get_style_context (entry->reader_mode);
+  context = gtk_widget_get_style_context (entry->reader_mode_icon);
   gtk_style_context_add_class (context, "entry_icon");
 
   update_reader_icon (entry);
@@ -1418,25 +1407,25 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  
 
   g_assert (EPHY_IS_LOCATION_ENTRY (entry));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry->bookmark));
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry->bookmark_icon));
 
   switch (state) {
     case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN:
-      gtk_widget_set_visible (entry->bookmark_event_box, FALSE);
+      gtk_widget_set_visible (entry->bookmark_button, FALSE);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_remove_class (context, "non-starred");
       break;
     case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY:
-      gtk_widget_set_visible (entry->bookmark_event_box, TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark),
+      gtk_widget_set_visible (entry->bookmark_button, TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark_icon),
                                     "non-starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_add_class (context, "non-starred");
       break;
     case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED:
-      gtk_widget_set_visible (entry->bookmark_event_box, TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark),
+      gtk_widget_set_visible (entry->bookmark_button, TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark_icon),
                                     "starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "non-starred");
@@ -1489,20 +1478,20 @@ ephy_location_entry_get_entry (EphyLocationEntry *entry)
 GtkWidget *
 ephy_location_entry_get_bookmark_widget (EphyLocationEntry *entry)
 {
-  return entry->bookmark_event_box;
+  return entry->bookmark_button;
 }
 
 GtkWidget *
 ephy_location_entry_get_reader_mode_widget (EphyLocationEntry *entry)
 {
-  return entry->reader_mode_event_box;
+  return entry->reader_mode_button;
 }
 
 void
 ephy_location_entry_set_reader_mode_visible (EphyLocationEntry *entry,
                                              gboolean           visible)
 {
-  gtk_widget_set_visible (entry->reader_mode_event_box, visible);
+  gtk_widget_set_visible (entry->reader_mode_button, visible);
 }
 
 void
@@ -1510,9 +1499,9 @@ ephy_location_entry_set_reader_mode_state (EphyLocationEntry *entry,
                                            gboolean           active)
 {
   if (active)
-    gtk_style_context_add_class (gtk_widget_get_style_context (entry->reader_mode), "selected");
+    gtk_style_context_add_class (gtk_widget_get_style_context (entry->reader_mode_icon), "selected");
   else
-    gtk_style_context_remove_class (gtk_widget_get_style_context (entry->reader_mode), "selected");
+    gtk_style_context_remove_class (gtk_widget_get_style_context (entry->reader_mode_icon), "selected");
 
   entry->reader_mode_active = active;
 }
