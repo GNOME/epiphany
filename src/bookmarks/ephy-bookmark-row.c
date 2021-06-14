@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "ephy-bookmark-properties-grid.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-bookmark-row.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -67,11 +67,11 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  grid = ephy_bookmark_properties_grid_new (ephy_bookmark_row_get_bookmark (row),
-                                            EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG,
-                                            dialog);
+  grid = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
+                                       EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
+                                       dialog);
   gtk_window_set_default (GTK_WINDOW (dialog),
-                          ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (grid)));
+                          ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
 
   gtk_container_add (GTK_CONTAINER (content_area), grid);
 

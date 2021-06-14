@@ -26,19 +26,19 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARK_PROPERTIES_GRID (ephy_bookmark_properties_grid_get_type ())
+#define EPHY_TYPE_BOOKMARK_PROPERTIES (ephy_bookmark_properties_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyBookmarkPropertiesGrid, ephy_bookmark_properties_grid, EPHY, BOOKMARK_PROPERTIES_GRID, GtkGrid)
+G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, GtkBox)
 
 typedef enum {
-  EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG,
-  EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER
-} EphyBookmarkPropertiesGridType;
+  EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
+  EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER
+} EphyBookmarkPropertiesType;
 
-GtkWidget *ephy_bookmark_properties_grid_new                (EphyBookmark                   *bookmark,
-                                                             EphyBookmarkPropertiesGridType  type,
-                                                             GtkWidget                      *parent);
+GtkWidget *ephy_bookmark_properties_new                (EphyBookmark                   *bookmark,
+                                                        EphyBookmarkPropertiesType  type,
+                                                        GtkWidget                      *parent);
 
-GtkWidget *ephy_bookmark_properties_grid_get_add_tag_button (EphyBookmarkPropertiesGrid *self);
+GtkWidget *ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self);
 
 G_END_DECLS

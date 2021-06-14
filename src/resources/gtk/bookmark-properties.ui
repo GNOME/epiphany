@@ -2,12 +2,11 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.18"/>
-  <template class="EphyBookmarkPropertiesGrid" parent="GtkGrid">
+  <template class="EphyBookmarkProperties" parent="GtkBox">
     <property name="visible">True</property>
     <property name="border_width">12</property>
     <property name="orientation">vertical</property>
-    <property name="row_spacing">6</property>
-    <property name="column_spacing">6</property>
+    <property name="spacing">6</property>
     <child>
       <object class="GtkLabel" id="popover_bookmark_label">
         <property name="visible">True</property>
@@ -16,10 +15,6 @@
           <attribute name="weight" value="bold"/>
         </attributes>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel">
@@ -32,20 +27,12 @@
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkEntry" id="name_entry">
         <property name="visible">True</property>
         <property name="max_width_chars">32</property>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel" id="address_label">
@@ -60,19 +47,11 @@
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
-      </packing>
     </child>
     <child>
       <object class="GtkEntry" id="address_entry">
         <property name="visible">True</property>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel" id="popover_tags_label">
@@ -85,50 +64,6 @@
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <child>
-          <object class="GtkEntry" id="add_tag_entry">
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
-            <property name="activates_default">True</property>
-            <property name="placeholder_text" translatable="yes">Add Tag…</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="add_tag_button">
-            <property name="label" translatable="yes">_Add</property>
-            <property name="visible">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">False</property>
-            <property name="action_name">grid.add-tag</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <style>
-          <class name="linked"/>
-        </style>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">7</property>
-      </packing>
     </child>
     <child>
       <object class="GtkScrolledWindow" id="tags_scrolled_window">
@@ -157,10 +92,40 @@
           </object>
         </child>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">6</property>
-      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkEntry" id="add_tag_entry">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
+            <property name="placeholder_text" translatable="yes">Add Tag…</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="add_tag_button">
+            <property name="label" translatable="yes">_Add</property>
+            <property name="visible">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="action_name">bookmark-properties.add-tag</property>
+            <property name="use_underline">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <style>
+          <class name="linked"/>
+        </style>
+      </object>
     </child>
     <child>
       <object class="GtkButton" id="remove_bookmark_button">
@@ -168,17 +133,13 @@
         <property name="visible">True</property>
         <property name="receives_default">False</property>
         <property name="halign">end</property>
-        <property name="action_name">grid.remove-bookmark</property>
+        <property name="action_name">bookmark-properties.remove-bookmark</property>
         <property name="use_underline">True</property>
         <property name="margin_top">6</property>
         <style>
           <class name="destructive-action"/>
         </style>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">8</property>
-      </packing>
     </child>
   </template>
 </interface>

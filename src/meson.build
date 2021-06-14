@@ -1,5 +1,5 @@
 types_headers = [
-  'bookmarks/ephy-bookmark-properties-grid.h',
+  'bookmarks/ephy-bookmark-properties.h',
   'ephy-link.h',
   'ephy-session.h',
   'ephy-shell.h',
@@ -15,7 +15,7 @@ subdir('webextension')
 libephymain_sources = [
   'bookmarks/ephy-add-bookmark-popover.c',
   'bookmarks/ephy-bookmark.c',
-  'bookmarks/ephy-bookmark-properties-grid.c',
+  'bookmarks/ephy-bookmark-properties.c',
   'bookmarks/ephy-bookmark-row.c',
   'bookmarks/ephy-bookmarks-export.c',
   'bookmarks/ephy-bookmarks-import.c',

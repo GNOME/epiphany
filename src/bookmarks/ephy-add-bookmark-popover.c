@@ -22,7 +22,7 @@
 
 #include "ephy-add-bookmark-popover.h"
 
-#include "ephy-bookmark-properties-grid.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-location-entry.h"
@@ -237,12 +237,12 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->grid = ephy_bookmark_properties_grid_new (bookmark,
-                                                  EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
-                                                  GTK_WIDGET (self));
+  self->grid = ephy_bookmark_properties_new (bookmark,
+                                             EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER,
+                                             GTK_WIDGET (self));
   gtk_container_add (GTK_CONTAINER (self), self->grid);
   gtk_popover_set_default_widget (GTK_POPOVER (self),
-                                  ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (self->grid)));
+                                  ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (self->grid)));
 
   g_free (self->address);
   self->address = g_strdup (address);
