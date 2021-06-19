@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "ephy-bookmark-states.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
@@ -94,5 +95,8 @@ gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
 
 void              ephy_window_get_geometry               (EphyWindow   *window,
                                                           GdkRectangle *rectangle);
+
+void ephy_window_sync_bookmark_state (GtkWidget             *widget,
+                                      EphyBookmarkIconState  state);
 
 G_END_DECLS

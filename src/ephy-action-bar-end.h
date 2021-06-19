@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "ephy-bookmark-states.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -38,5 +40,11 @@ GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEn
 
 void              ephy_action_bar_end_add_browser_action        (EphyActionBarEnd *action_bar_end,
                                                                  GtkWidget        *action);
+
+void              ephy_action_bar_end_set_show_bookmark_button (EphyActionBarEnd *action_bar_end,
+                                                                gboolean          show);
+
+void              ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd       *action_bar_end,
+                                                               EphyBookmarkIconState  state);
 
 G_END_DECLS

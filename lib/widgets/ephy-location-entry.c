@@ -79,6 +79,7 @@ struct _EphyLocationEntry {
   guint progress_timeout;
   gdouble progress_fraction;
   guint update_url_id;
+  guint update_bookmark_id;
 
   guint dns_prefetch_handle_id;
 
@@ -89,6 +90,7 @@ struct _EphyLocationEntry {
 
   EphySecurityLevel security_level;
   EphyAdaptiveMode adaptive_mode;
+  EphyBookmarkIconState icon_state;
 };
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *,
@@ -503,6 +505,7 @@ ephy_location_entry_dispose (GObject *object)
 
   g_clear_handle_id (&entry->progress_timeout, g_source_remove);
   g_clear_handle_id (&entry->update_url_id, g_source_remove);
+  g_clear_handle_id (&entry->update_bookmark_id, g_source_remove);
 
   g_clear_object (&entry->css_provider);
 
@@ -1399,33 +1402,37 @@ ephy_location_entry_focus (EphyLocationEntry *entry)
   gtk_widget_grab_focus (GTK_WIDGET (entry->url_entry));
 }
 
-void
-ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  *entry,
-                                             EphyLocationEntryBookmarkIconState  state)
+gboolean
+ephy_location_entry_set_bookmark_icon_state_idle (gpointer user_data)
 {
+  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
   GtkStyleContext *context;
+  EphyBookmarkIconState state = self->icon_state;
 
-  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+  g_assert (EPHY_IS_LOCATION_ENTRY (self));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry->bookmark_icon));
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->bookmark_icon));
+
+  if (self->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
+    state = EPHY_BOOKMARK_ICON_HIDDEN;
 
   switch (state) {
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN:
-      gtk_widget_set_visible (entry->bookmark_button, FALSE);
+    case EPHY_BOOKMARK_ICON_HIDDEN:
+      gtk_widget_set_visible (self->bookmark_button, FALSE);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_remove_class (context, "non-starred");
       break;
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY:
-      gtk_widget_set_visible (entry->bookmark_button, TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark_icon),
+    case EPHY_BOOKMARK_ICON_EMPTY:
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (self->bookmark_icon),
                                     "non-starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_add_class (context, "non-starred");
       break;
-    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED:
-      gtk_widget_set_visible (entry->bookmark_button, TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->bookmark_icon),
+    case EPHY_BOOKMARK_ICON_BOOKMARKED:
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (self->bookmark_icon),
                                     "starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "non-starred");
@@ -1434,6 +1441,18 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  
     default:
       g_assert_not_reached ();
   }
+
+  self->update_bookmark_id = 0;
+  return G_SOURCE_REMOVE;
+}
+
+void
+ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
+                                             EphyBookmarkIconState  state)
+{
+  self->icon_state = state;
+  g_clear_handle_id (&self->update_bookmark_id, g_source_remove);
+  self->update_bookmark_id = g_idle_add (ephy_location_entry_set_bookmark_icon_state_idle, self);
 }
 
 /**
@@ -1588,6 +1607,8 @@ ephy_location_entry_set_adaptive_mode (EphyLocationEntry *entry,
   entry->adaptive_mode = adaptive_mode;
 
   update_entry_style (entry);
+
+  ephy_location_entry_set_bookmark_icon_state (entry, entry->icon_state);
 }
 
 void

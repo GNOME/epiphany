@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "ephy-adaptive-mode.h"
+#include "ephy-bookmark-states.h"
 #include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
@@ -34,11 +35,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkOverlay)
 
-typedef enum {
-  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN,
-  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY,
-  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED
-} EphyLocationEntryBookmarkIconState;
 
 GtkWidget      *ephy_location_entry_new                        (void);
 
@@ -52,8 +48,8 @@ void            ephy_location_entry_undo_reset                 (EphyLocationEntr
 
 void            ephy_location_entry_focus                      (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry                  *entry,
-                                                                EphyLocationEntryBookmarkIconState  state);
+void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry     *entry,
+                                                                EphyBookmarkIconState  state);
 
 void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
                                                                 const char        *tooltip);

@@ -27,10 +27,31 @@
         <child>
           <object class="GtkImage" id="bookmarks_image">
             <property name="visible">True</property>
-            <property name="icon-name">ephy-bookmarks-symbolic</property>
+            <property name="icon-name">ephy-library-symbolic</property>
             <property name="icon-size">1</property>
           </object>
         </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="bookmark_button">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <!-- Translators: tooltip for the bookmark button -->
+        <property name="tooltip_text" translatable="yes">Bookmark page</property>
+        <child>
+          <object class="GtkImage" id="bookmark_image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">non-starred-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="image-button"/>
+        </style>
       </object>
       <packing>
         <property name="pack-type">end</property>

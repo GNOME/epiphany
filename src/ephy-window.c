@@ -26,6 +26,7 @@
 
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
+#include "ephy-bookmark-states.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-desktop-utils.h"
@@ -1226,15 +1227,34 @@ sync_tab_is_blank (EphyWebView *view,
                                               ephy_web_view_get_is_blank (view));
 }
 
+void
+ephy_window_sync_bookmark_state (GtkWidget             *widget,
+                                 EphyBookmarkIconState  state)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (widget));
+  EphyWindow *window = EPHY_WINDOW (toplevel);
+  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
+  GtkWidget *lentry;
+
+  if (action_bar_end)
+    ephy_action_bar_end_set_bookmark_icon_state (EPHY_ACTION_BAR_END (action_bar_end), state);
+
+  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+
+  if (EPHY_IS_LOCATION_ENTRY (lentry))
+    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (lentry), state);
+}
+
 static void
 sync_tab_bookmarked_status (EphyWebView *view,
                             GParamSpec  *pspec,
                             EphyWindow  *window)
 {
+  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyEmbedShellMode mode;
-  EphyLocationEntryBookmarkIconState state;
+  EphyBookmarkIconState state;
   GtkWidget *widget;
   EphyBookmark *bookmark;
   const char *address;
@@ -1251,13 +1271,14 @@ sync_tab_bookmarked_status (EphyWebView *view,
       ephy_embed_utils_is_no_show_address (address) ||
       mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
       mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    state = EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN;
+    state = EPHY_BOOKMARK_ICON_HIDDEN;
   } else {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
-    state = bookmark ? EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED
-                     : EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY;
+    state = bookmark ? EPHY_BOOKMARK_ICON_BOOKMARKED
+                     : EPHY_BOOKMARK_ICON_EMPTY;
   }
 
+  ephy_action_bar_end_set_bookmark_icon_state (EPHY_ACTION_BAR_END (action_bar_end), state);
   ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (widget), state);
 }
 
