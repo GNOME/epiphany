@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-06-12 22:11+0000\n"
-"PO-Revision-Date: 2021-06-13 11:22+0300\n"
+"POT-Creation-Date: 2021-06-24 15:38+0000\n"
+"PO-Revision-Date: 2021-06-24 19:43+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2274,36 +2274,36 @@ msgstr "Всі файли"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:733 src/ephy-history-dialog.c:566
+#: lib/widgets/ephy-location-entry.c:757 src/ephy-history-dialog.c:566
 msgid "Cl_ear"
 msgstr "О_чистити"
 
-#: lib/widgets/ephy-location-entry.c:753
+#: lib/widgets/ephy-location-entry.c:777
 msgid "Paste and _Go"
 msgstr "Вставити та пере_йти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:774 src/ephy-window.c:959
+#: lib/widgets/ephy-location-entry.c:798 src/ephy-window.c:959
 msgid "_Undo"
 msgstr "Повер_нути"
 
-#: lib/widgets/ephy-location-entry.c:781
+#: lib/widgets/ephy-location-entry.c:805
 msgid "_Redo"
 msgstr "По_вторити"
 
-#: lib/widgets/ephy-location-entry.c:1067
+#: lib/widgets/ephy-location-entry.c:1091
 msgid "Show website security status and permissions"
 msgstr "Показати стан безпеки та дозволи сайта"
 
-#: lib/widgets/ephy-location-entry.c:1069
+#: lib/widgets/ephy-location-entry.c:1093
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Шукати сайти, закладки і відкривати вкладки"
 
-#: lib/widgets/ephy-location-entry.c:1113
+#: lib/widgets/ephy-location-entry.c:1137
 msgid "Bookmark this page"
 msgstr "Закласти цю сторінку"
 
-#: lib/widgets/ephy-location-entry.c:1132
+#: lib/widgets/ephy-location-entry.c:1156
 msgid "Toggle reader mode"
 msgstr "Перемкнути режим читача"
 
@@ -2540,7 +2540,7 @@ msgid "Do you really want to remove this extension?"
 msgstr "Ви справді хочете вилучити це розширення?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
-#: src/resources/gtk/bookmark-properties-grid.ui:176
+#: src/resources/gtk/bookmark-properties.ui:132
 msgid "_Remove"
 msgstr "В_илучити"
 
@@ -2999,30 +2999,30 @@ msgstr "Перейти до домівки"
 msgid "View open pages"
 msgstr "Переглянути відкриті сторінки"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:16
+#: src/resources/gtk/bookmark-properties.ui:13
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-row.ui:32
-msgid "Name"
-msgstr "Назва"
+#: src/resources/gtk/bookmark-properties.ui:23
+#| msgid "Name"
+msgid "_Name"
+msgstr "_Назва"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-row.ui:54
-msgid "Address"
-msgstr "Адреса"
+#: src/resources/gtk/bookmark-properties.ui:43
+#| msgid "Address"
+msgid "_Address"
+msgstr "_Адреса"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:86
+#: src/resources/gtk/bookmark-properties.ui:62
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Мітки"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:106
+#: src/resources/gtk/bookmark-properties.ui:104
 msgid "Add Tag…"
 msgstr "Додати мітку…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:116
+#: src/resources/gtk/bookmark-properties.ui:113
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Додати"
@@ -3586,6 +3586,14 @@ msgstr "Д_одати рушій пошуку…"
 msgid "Selects the default search engine"
 msgstr "Вибирає типовий рушій пошуку"
 
+#: src/resources/gtk/search-engine-row.ui:32
+msgid "Name"
+msgstr "Назва"
+
+#: src/resources/gtk/search-engine-row.ui:54
+msgid "Address"
+msgstr "Адреса"
+
 #: src/resources/gtk/search-engine-row.ui:80
 msgid "Shortcut"
 msgstr "Скорочення"
@@ -3655,7 +3663,6 @@ msgstr "Скорочення"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
 #: src/resources/gtk/shortcuts-dialog.ui:246
-#| msgid "No bookmarks yet?"
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "Показати список закладок"
