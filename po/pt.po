@@ -7,17 +7,17 @@
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
 # Sérgio Cardeira <cardeira.sergio@gmail.com>, 2016.
 # Tiago Carrrondo <tcarrondo@ubuntu.com>, 2016.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020-2021.
 # Juliano de Souza Camargo <julianosc@protonmail.com>, 2020-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.22\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-06-12 22:11+0000\n"
-"PO-Revision-Date: 2021-06-17 15:19+0100\n"
+"POT-Creation-Date: 2021-06-24 15:38+0000\n"
+"PO-Revision-Date: 2021-06-25 19:00+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
-"Language-Team: Portuguese < >\n"
+"Language-Team: Portuguese (https://l10n.gnome.org/teams/pt/)\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2301,36 +2301,36 @@ msgstr "Todos os ficheiros"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:733 src/ephy-history-dialog.c:566
+#: lib/widgets/ephy-location-entry.c:757 src/ephy-history-dialog.c:566
 msgid "Cl_ear"
 msgstr "_Limpar"
 
-#: lib/widgets/ephy-location-entry.c:753
+#: lib/widgets/ephy-location-entry.c:777
 msgid "Paste and _Go"
 msgstr "Colar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:774 src/ephy-window.c:959
+#: lib/widgets/ephy-location-entry.c:798 src/ephy-window.c:959
 msgid "_Undo"
 msgstr "_Desfazer"
 
-#: lib/widgets/ephy-location-entry.c:781
+#: lib/widgets/ephy-location-entry.c:805
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: lib/widgets/ephy-location-entry.c:1067
+#: lib/widgets/ephy-location-entry.c:1091
 msgid "Show website security status and permissions"
 msgstr "Ver informação de segurança e permissões do website"
 
-#: lib/widgets/ephy-location-entry.c:1069
+#: lib/widgets/ephy-location-entry.c:1093
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Procure por websites, marcadores e separadores abertos"
 
-#: lib/widgets/ephy-location-entry.c:1113
+#: lib/widgets/ephy-location-entry.c:1137
 msgid "Bookmark this page"
 msgstr "Marcar esta página"
 
-#: lib/widgets/ephy-location-entry.c:1132
+#: lib/widgets/ephy-location-entry.c:1156
 msgid "Toggle reader mode"
 msgstr "Ativar modo de leitura"
 
@@ -2570,7 +2570,7 @@ msgid "Do you really want to remove this extension?"
 msgstr "Deseja realmente remover esta extensão?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
-#: src/resources/gtk/bookmark-properties-grid.ui:176
+#: src/resources/gtk/bookmark-properties.ui:132
 msgid "_Remove"
 msgstr "_Remover"
 
@@ -3028,30 +3028,28 @@ msgstr "Ir para a página inicial"
 msgid "View open pages"
 msgstr "Ver páginas abertas"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:16
+#: src/resources/gtk/bookmark-properties.ui:13
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-row.ui:32
-msgid "Name"
-msgstr "Nome"
+#: src/resources/gtk/bookmark-properties.ui:23
+msgid "_Name"
+msgstr "_Nome"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-row.ui:54
-msgid "Address"
-msgstr "Endereço"
+#: src/resources/gtk/bookmark-properties.ui:43
+msgid "_Address"
+msgstr "_Endereço"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:86
+#: src/resources/gtk/bookmark-properties.ui:62
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:106
+#: src/resources/gtk/bookmark-properties.ui:104
 msgid "Add Tag…"
 msgstr "Adicionar etiqueta…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:116
+#: src/resources/gtk/bookmark-properties.ui:113
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Adicionar"
@@ -3615,6 +3613,14 @@ msgstr "A_dicionar motor de busca…"
 #: src/resources/gtk/search-engine-row.ui:11
 msgid "Selects the default search engine"
 msgstr "Seleciona o motor de busca predefinido"
+
+#: src/resources/gtk/search-engine-row.ui:32
+msgid "Name"
+msgstr "Nome"
+
+#: src/resources/gtk/search-engine-row.ui:54
+msgid "Address"
+msgstr "Endereço"
 
 #: src/resources/gtk/search-engine-row.ui:80
 msgid "Shortcut"
