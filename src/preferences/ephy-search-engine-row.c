@@ -192,6 +192,8 @@ validate_search_engine_address (const char  *address,
                                 const char **error_message)
 {
   g_autoptr (GUri) uri = NULL;
+  g_autoptr (GString) uri_friendly_pattern_address = NULL;
+  guint search_terms_count = 0;
 
   if (g_strcmp0 (address, "") == 0) {
     *error_message = _("This field is required");
@@ -203,7 +205,22 @@ validate_search_engine_address (const char  *address,
     return FALSE;
   }
 
-  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  uri_friendly_pattern_address = g_string_new (address);
+  /* As %s is not correctly percent-encoded, g_uri_parse() will fail here if it
+   * is in the address. So workaround this by replacing the user-facing %s with
+   * a percent-encoded %s.
+   */
+  search_terms_count = g_string_replace (uri_friendly_pattern_address,
+                                         "%s", "%25s", 0);
+  if (search_terms_count == 0) {
+    *error_message = _("Address must contain the search term represented by %s");
+    return FALSE;
+  } else if (search_terms_count > 1) {
+    *error_message = _("Address should not contain the search term several times");
+    return FALSE;
+  }
+
+  uri = g_uri_parse (uri_friendly_pattern_address->str, G_URI_FLAGS_NONE, NULL);
   if (!uri) {
     *error_message = _("Address is not a valid URI");
     return FALSE;
@@ -211,17 +228,6 @@ validate_search_engine_address (const char  *address,
 
   if (!g_uri_get_host (uri) || g_strcmp0 (g_uri_get_host (uri), "") == 0) {
     *error_message = _("Address is not a valid URL. The address should look like https://www.example.com/search?q=%s");
-    return FALSE;
-  }
-
-  if (!g_uri_get_query (uri) || !strstr (g_uri_get_query (uri), "%s")) {
-    *error_message = _("Address must contain the search term represented by %s");
-    return FALSE;
-  }
-
-  /* If both are different, this means there are at least two occurences of "%s" since one starts searching from the beginning while the other one starts from the end. */
-  if (strstr (address, "%s") != g_strrstr (address, "%s")) {
-    *error_message = _("Address should not contain the search term several times");
     return FALSE;
   }
 
