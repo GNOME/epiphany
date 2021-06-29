@@ -1,7 +1,7 @@
 project('epiphany', 'c',
   license: 'GPL3+',
   version: '40.0',
-  meson_version: '>= 0.47.0',
+  meson_version: '>= 0.51.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
 )
@@ -110,6 +110,15 @@ else
 endif
 
 conf.set10('USE_LIBPORTAL', portal_dep.found())
+
+webkit_revision = webkit2gtk_dep.get_variable(pkgconfig : 'revision', default_value : '')
+if webkit_revision == 'tarball'
+  webkit_revision = ''
+else
+  template = ' (@0@)'
+  webkit_revision = template.format(webkit_revision)
+endif
+conf.set_quoted('WEBKIT_REVISION', webkit_revision)
 
 config_h = declare_dependency(
   sources: vcs_tag(
