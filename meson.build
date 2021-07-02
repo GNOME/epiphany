@@ -114,7 +114,7 @@ conf.set10('USE_LIBPORTAL', portal_dep.found())
 webkit_revision = webkit2gtk_dep.get_variable(pkgconfig : 'revision', default_value : '')
 if webkit_revision == 'tarball'
   webkit_revision = ''
-else
+elif webkit_revision != ''
   template = ' (@0@)'
   webkit_revision = template.format(webkit_revision)
 endif
