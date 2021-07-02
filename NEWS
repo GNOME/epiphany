@@ -1,3 +1,46 @@
+41.alpha - July 2, 2021
+=======================
+
+Epiphany now depends on libsoup-3.0 and webkit2gtk-4.1 by default (!921, !957).
+If you're not yet ready for this, you can build with -Dsoup2=enabled for now,
+but we'll probably remove this fallback pretty soon. libsoup-3.0 and
+webkit2gtk-4.1 add support for HTTP/2.
+
+ * User smaller address bar font in narrow mode (#1172)
+ * The address bar dropdown now supports various useful filters (#1461)
+ * Move Firefox Sync to toplevel window menu (#1470)
+ * Update to highlight.js 11.0.0 (#1480, #1501, !966, Jim Mason)
+ * Highlight base domain in address bar (#1540)
+ * Use actual reader mode fonts in preferences dialog (!912)
+ * Update to PDF.js 2.6.347 (!924)
+ * Minimize delays when toggling fullscreen mode (!939)
+ * Use French quotes in St-Exupéry quotation (!950, Guillaume Bernard)
+ * Fix various small memory leaks (!958)
+ * Kill web process when it is unresponsive for too long (!965)
+ * Add new keyboard shortcuts (!969, Vanadiae)
+ * Improvements to bookmarks properties view (!978, Vanadiae)
+ * Display WebKit Subversion revision for non-tarball builds (!982, Philippe Normand)
+
+40.2 - June 4, 2021
+===================
+
+ * Fix some memory leaks (from !958)
+ * Fix memory corruption in history dialog (!960)
+ * Fix crash when checking for modified forms (!962)
+
+40.1 - April 29, 2021
+=====================
+
+ * Allow launching external URLs when triggered by user action (#1385)
+ * Fix untranslatable string in security popover (#1478)
+ * Improvements to user help (Andre Klapper, #1481)
+ * Stop advertising support for XML files (#1487)
+ * Fix hidden expand-tabs-bar setting (#1512)
+ * More improvements to user help (Sabri Ünal, !935)
+ * Several improvements to fullscreen mode (!938)
+ * Remove bad assert added in 40.rc (!941)
+ * Fix crash importing bookmarks from Firefox (!949)
+
 40.0 - March 19, 2021
 =====================
 
