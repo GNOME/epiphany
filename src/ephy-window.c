@@ -165,6 +165,7 @@ struct _EphyWindow {
   guint modified_forms_timeout_id;
   EphyMouseGestureController *mouse_gesture_controller;
   EphyEmbed *last_opened_embed;
+  EphyAdaptiveMode adaptive_mode;
   int last_opened_pos;
   gboolean show_fullscreen_header_bar;
 
@@ -543,6 +544,12 @@ update_adaptive_mode (EphyWindow *window)
   adaptive_mode = (is_narrow || is_mobile_landscape) && !is_desktop_pantheon () ?
                   EPHY_ADAPTIVE_MODE_NARROW :
                   EPHY_ADAPTIVE_MODE_NORMAL;
+
+  if (window->adaptive_mode == adaptive_mode)
+    return;
+
+  window->adaptive_mode = adaptive_mode;
+
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
   ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
   ephy_notebook_set_adaptive_mode (notebook, adaptive_mode);
