@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-06-15 11:02+0000\n"
-"PO-Revision-Date: 2021-06-15 13:37+0200\n"
+"POT-Creation-Date: 2021-06-24 15:38+0000\n"
+"PO-Revision-Date: 2021-07-13 10:04+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -2590,7 +2590,7 @@ msgid "Do you really want to remove this extension?"
 msgstr "¿Realmente quiere quitar esta extensión?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
-#: src/resources/gtk/bookmark-properties-grid.ui:176
+#: src/resources/gtk/bookmark-properties.ui:132
 msgid "_Remove"
 msgstr "_Quitar"
 
@@ -3049,30 +3049,29 @@ msgstr "Ir página de inicio"
 msgid "View open pages"
 msgstr "Ver las páginas abiertas"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:16
+#: src/resources/gtk/bookmark-properties.ui:13
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-row.ui:32
-msgid "Name"
-msgstr "Nombre"
+#: src/resources/gtk/bookmark-properties.ui:23
+#| msgid "Name"
+msgid "_Name"
+msgstr "_Nombre"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-row.ui:54
-msgid "Address"
-msgstr "Dirección"
+#: src/resources/gtk/bookmark-properties.ui:43
+msgid "_Address"
+msgstr "_Dirección"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:86
+#: src/resources/gtk/bookmark-properties.ui:62
 #: src/resources/gtk/bookmarks-popover.ui:75
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:106
+#: src/resources/gtk/bookmark-properties.ui:104
 msgid "Add Tag…"
 msgstr "Añadir etiqueta…"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:116
+#: src/resources/gtk/bookmark-properties.ui:113
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Añadir"
@@ -3640,6 +3639,14 @@ msgstr "Aña_dir motor de búsqueda…"
 msgid "Selects the default search engine"
 msgstr "Selecciona el motor de búsqueda predeterminado"
 
+#: src/resources/gtk/search-engine-row.ui:32
+msgid "Name"
+msgstr "Nombre"
+
+#: src/resources/gtk/search-engine-row.ui:54
+msgid "Address"
+msgstr "Dirección"
+
 #: src/resources/gtk/search-engine-row.ui:80
 msgid "Shortcut"
 msgstr "Atajo"
@@ -3709,7 +3716,6 @@ msgstr "Atajos"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
 #: src/resources/gtk/shortcuts-dialog.ui:246
-#| msgid "No bookmarks yet?"
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "Mostrar la lista de marcadores"
@@ -5592,9 +5598,6 @@ msgstr "_Activar"
 
 #~ msgid "Display history help"
 #~ msgstr "Muestra la ayuda del histórico"
-
-#~ msgid "_Address"
-#~ msgstr "_Dirección"
 
 #~ msgid "_Date and Time"
 #~ msgstr "Fecha y _hora"
