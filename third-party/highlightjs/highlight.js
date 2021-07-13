@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.0.0 (git: 21857218b9)
+  Highlight.js v11.1.0 (git: 83ad2fbd99)
   (c) 2006-2021 Ivan Sagalaev and other contributors
   License: BSD-3-Clause
  */
@@ -39,7 +39,7 @@ var hljs = (function () {
 
     var deepFreeze$1 = deepFreezeEs6.exports;
 
-    
+    /** @typedef {import('highlight.js').CallbackResponse} CallbackResponse */
     /** @typedef {import('highlight.js').CompiledMode} CompiledMode */
     /** @implements CallbackResponse */
 
@@ -1540,7 +1540,7 @@ var hljs = (function () {
       return mode;
     }
 
-    var version = "11.0.0";
+    var version = "11.1.0";
 
     /*
     Syntax highlighting with language autodetection.
@@ -1654,7 +1654,6 @@ var hljs = (function () {
        * @param {string} codeOrLanguageName - the language to use for highlighting
        * @param {string | HighlightOptions} optionsOrCode - the code to highlight
        * @param {boolean} [ignoreIllegals] - whether to ignore illegal matches, default is to bail
-       * @param {CompiledMode} [continuation] - current continuation mode, if any
        *
        * @returns {HighlightResult} Result - an object that represents the result
        * @property {string} language - the language name
@@ -1664,16 +1663,13 @@ var hljs = (function () {
        * @property {CompiledMode} top - top of the current mode stack
        * @property {boolean} illegal - indicates whether any illegal matches were found
       */
-      function highlight(codeOrLanguageName, optionsOrCode, ignoreIllegals, continuation) {
+      function highlight(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
         let code = "";
         let languageName = "";
         if (typeof optionsOrCode === "object") {
           code = codeOrLanguageName;
           ignoreIllegals = optionsOrCode.ignoreIllegals;
           languageName = optionsOrCode.language;
-          // continuation not supported at all via the new API
-          // eslint-disable-next-line no-undefined
-          continuation = undefined;
         } else {
           // old API
           deprecated("10.7.0", "highlight(lang, code, ...args) has been deprecated.");
@@ -1699,7 +1695,7 @@ var hljs = (function () {
         // in which case we don't even need to call highlight
         const result = context.result
           ? context.result
-          : _highlight(context.language, context.code, ignoreIllegals, continuation);
+          : _highlight(context.language, context.code, ignoreIllegals);
 
         result.code = context.code;
         // the plugin can change anything in result to suite it
@@ -2463,7 +2459,7 @@ var hljs = (function () {
       }
 
       /**
-       *
+       * DEPRECATED
        * @param {HighlightedHTMLElement} el
        */
       function deprecateHighlightBlock(el) {
@@ -2547,6 +2543,10 @@ var hljs = (function () {
             '|dpi|dpcm|dppx' +
             ')?',
           relevance: 0
+        },
+        CSS_VARIABLE: {
+          className: "attr",
+          begin: /--[A-Za-z][A-Za-z0-9_-]*/
         }
       };
     };
@@ -3026,6 +3026,7 @@ var hljs = (function () {
           //   end: /\)/,
           //   contains: [ hljs.CSS_NUMBER_MODE ]
           // },
+          modes.CSS_VARIABLE,
           {
             className: 'attribute',
             begin: '\\b(' + ATTRIBUTES.join('|') + ')\\b'
@@ -3540,7 +3541,7 @@ var hljs = (function () {
 
       const UPPER_CASE_CONSTANT = {
         relevance: 0,
-        match: /\b[A-Z][A-Z_]+\b/,
+        match: /\b[A-Z][A-Z_0-9]+\b/,
         className: "variable.constant"
       };
 
@@ -4009,7 +4010,11 @@ var hljs = (function () {
     const hljs = HighlightJS;
 
     for (const key of Object.keys(builtIns)) {
-      const languageName = key.replace("grmr_", "");
+      // our builtInLanguages Rollup plugin has to use `_` to allow identifiers to be
+      // compatible with `export` naming conventions, so we need to convert the
+      // identifiers back into the more typical dash style that we use for language
+      // naming via the API
+      const languageName = key.replace("grmr_", "").replace("_", "-");
       hljs.registerLanguage(languageName, builtIns[key]);
     }
 
