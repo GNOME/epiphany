@@ -75,20 +75,15 @@
         <property name="propagate_natural_width">True</property>
         <property name="propagate_natural_height">True</property>
         <child>
-          <object class="GtkViewport">
+          <object class="GtkFlowBox" id="tags_box">
             <property name="visible">True</property>
-            <child>
-              <object class="GtkFlowBox" id="tags_box">
-                <property name="visible">True</property>
-                <property name="homogeneous">True</property>
-                <property name="valign">start</property>
-                <property name="column_spacing">6</property>
-                <property name="row_spacing">6</property>
-                <property name="min_children_per_line">2</property>
-                <property name="max_children_per_line">3</property>
-                <property name="selection_mode">none</property>
-              </object>
-            </child>
+            <property name="homogeneous">True</property>
+            <property name="valign">start</property>
+            <property name="column_spacing">6</property>
+            <property name="row_spacing">6</property>
+            <property name="min_children_per_line">2</property>
+            <property name="max_children_per_line">3</property>
+            <property name="selection_mode">none</property>
           </object>
         </child>
       </object>
