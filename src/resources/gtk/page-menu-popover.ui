@@ -3,7 +3,6 @@
   <object class="GtkPopoverMenu" id="page-menu-popover">
     <child>
       <object class="GtkBox">
-        <property name="can_focus">False</property>
         <property name="margin-top">12</property>
         <property name="orientation">vertical</property>
         <property name="visible">True</property>
@@ -155,7 +154,6 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <style>
@@ -173,7 +171,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="run-in-background-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_Run in Background</property>
                 <property name="action-name">app.run-in-background</property>
                 <property name="visible">True</property>
@@ -191,7 +188,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="new-window-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_New Window</property>
                 <property name="action-name">app.new-window</property>
                 <property name="visible">True</property>
@@ -199,7 +195,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="new-incognito-window-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">New _Incognito Window</property>
                 <property name="action-name">app.new-incognito</property>
                 <property name="visible">True</property>
@@ -216,7 +211,6 @@
             <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
             <child>
               <object class="GtkModelButton" id="reopen-closed-tab-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">Reopen Closed _Tab</property>
                 <property name="action-name">app.reopen-closed-tab</property>
                 <property name="visible">True</property>
@@ -224,7 +218,6 @@
             </child>
             <child>
               <object class="GtkModelButton">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_History</property>
                 <property name="action-name">app.history</property>
                 <property name="visible">True</property>
@@ -241,7 +234,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="firefox-sync-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">Firefox _Sync</property>
                 <property name="action-name">app.firefox-sync-dialog</property>
                 <property name="visible">True</property>
@@ -265,7 +257,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="save-as-application-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">Install Site as Web _Application…</property>
                 <property name="action-name">win.save-as-application</property>
                 <property name="visible">True</property>
@@ -273,7 +264,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="application-manager-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">Open Appli_cation Manager</property>
                 <property name="action-name">win.open-application-manager</property>
                 <property name="visible">True</property>
@@ -281,7 +271,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="extensions-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">E_xtensions</property>
                 <property name="action-name">win.extensions</property>
                 <property name="visible">True</property>
@@ -298,7 +287,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="override-text-encoding-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_Override Text Encoding…</property>
                 <property name="action-name">win.encoding</property>
                 <property name="visible">True</property>
@@ -314,7 +302,6 @@
             </child>
             <child>
               <object class="GtkModelButton">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">Pr_eferences</property>
                 <property name="action-name">app.preferences</property>
                 <property name="visible">True</property>
@@ -323,7 +310,6 @@
             <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
             <child>
               <object class="GtkModelButton" id="keyboard-shortcuts-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_Keyboard Shortcuts</property>
                 <property name="action-name">app.shortcuts</property>
                 <property name="visible">True</property>
@@ -332,7 +318,6 @@
             <!-- FRAGILE: This button is manually removed for app mode/Pantheon in ephy-header-bar.c. -->
             <child>
               <object class="GtkModelButton" id="help-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_Help</property>
                 <property name="action-name">app.help</property>
                 <property name="visible">True</property>
@@ -341,7 +326,6 @@
             <!-- FRAGILE: This button is manually removed for Pantheon in ephy-header-bar.c. -->
             <child>
               <object class="GtkModelButton" id="about-button">
-                <property name="can_focus">True</property>
                 <property name="text" translatable="yes">_About Web</property>
                 <property name="action-name">app.about</property>
                 <property name="visible">True</property>
@@ -357,7 +341,6 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="can_focus">False</property>
         <property name="margin-top">12</property>
         <property name="orientation">vertical</property>
         <property name="visible">True</property>
@@ -366,7 +349,6 @@
         </style>
         <child>
           <object class="GtkModelButton">
-            <property name="can_focus">True</property>
             <property name="text" translatable="yes">Import and Export</property>
             <property name="visible">True</property>
             <property name="centered">True</property>
@@ -377,7 +359,6 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="can_focus">True</property>
             <property name="text" translatable="yes">I_mport Bookmarks…</property>
             <property name="action-name">app.import-bookmarks</property>
             <property name="visible">True</property>
@@ -385,7 +366,6 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="can_focus">True</property>
             <property name="text" translatable="yes">E_xport Bookmarks…</property>
             <property name="action-name">app.export-bookmarks</property>
             <property name="visible">True</property>
@@ -401,7 +381,6 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="can_focus">True</property>
             <property name="text" translatable="yes">Import _Passwords…</property>
             <property name="action-name">app.import-passwords</property>
             <property name="visible">True</property>

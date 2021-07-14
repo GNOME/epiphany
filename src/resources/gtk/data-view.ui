@@ -4,19 +4,16 @@
   <requires lib="libhandy" version="0.0"/>
   <object class="GtkImage" id="search_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="icon_name">edit-find-symbolic</property>
   </object>
   <object class="GtkImage" id="back_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="icon_name">go-previous-symbolic</property>
   </object>
   <template class="EphyDataView" parent="GtkBin">
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="HdyWindowHandle">
@@ -24,12 +21,10 @@
             <child>
               <object class="GtkHeaderBar" id="header_bar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="show_close_button">True</property>
                 <child>
                   <object class="GtkButton" id="back_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="image">back_image</property>
                     <signal name="clicked" handler="on_back_button_clicked"/>
                   </object>
@@ -37,7 +32,6 @@
                 <child>
                   <object class="GtkToggleButton" id="search_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">search_image</property>
                     <property name="always_show_image">True</property>
@@ -62,7 +56,6 @@
         <child>
           <object class="HdySearchBar" id="search_bar">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="hexpand">True</property>
             <property name="search_mode_enabled">False</property>
@@ -73,7 +66,6 @@
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="primary_icon_name">edit-find-symbolic</property>
                     <property name="primary_icon_activatable">False</property>
@@ -90,12 +82,10 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="can_focus">False</property>
             <property name="expand">True</property>
             <property name="visible">True</property>
             <child>
               <object class="GtkSpinner" id="spinner">
-                <property name="can_focus">False</property>
                 <property name="visible">True</property>
               </object>
               <packing>
@@ -132,7 +122,6 @@
             <child>
               <object class="GtkButton" id="clear_button">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_clear_button_clicked" swapped="yes"/>

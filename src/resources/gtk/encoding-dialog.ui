@@ -3,7 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <template class="EphyEncodingDialog" parent="GtkDialog">
-    <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Text Encoding</property>
     <property name="role">epiphany-encoding-chooser</property>
@@ -17,12 +16,10 @@
     </child>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -33,13 +30,11 @@
         <child>
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin_left">6</property>
                 <property name="hexpand">True</property>
@@ -74,26 +69,22 @@
           <object class="GtkStack" id="type_stack">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">False</property>
             <property name="vexpand">True</property>
             <property name="interpolate_size">True</property>
             <child>
               <object class="GtkGrid" id="suggested_grid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="row_spacing">16</property>
                 <child>
                   <object class="GtkGrid" id="recent_grid">
                     <property name="visible">True</property>
                     <property name="vexpand">True</property>
-                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_start">8</property>
                         <property name="label" translatable="yes">Recent encodings</property>
@@ -110,14 +101,12 @@
                       <object class="GtkFrame">
                         <property name="visible">True</property>
                         <property name="vexpand">True</property>
-                        <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkListBox" id="recent_list_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
                           </object>
                         </child>
@@ -139,13 +128,11 @@
                 <child>
                   <object class="GtkGrid" id="related_grid">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_start">8</property>
                         <property name="label" translatable="yes">Related encodings</property>
@@ -161,7 +148,6 @@
                     <child>
                       <object class="GtkFrame">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="border_width">6</property>
                         <property name="label_xalign">0</property>
@@ -169,7 +155,6 @@
                         <child>
                           <object class="GtkListBox" id="related_list_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
                           </object>
                         </child>
@@ -210,17 +195,14 @@
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkListBox" id="list_box">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <signal name="row-activated" handler="row_activated_cb"/>
                       </object>
                     </child>

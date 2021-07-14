@@ -4,7 +4,6 @@
   <requires lib="libhandy" version="0.0"/>
   <template class="EphyHistoryDialog" parent="HdyWindow">
     <!--property name="search_description" translatable="yes">Search history</property-->
-    <property name="can-focus">False</property>
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
     <property name="default-width">640</property>
@@ -16,7 +15,6 @@
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkStack" id="header_bars_stack">
@@ -25,7 +23,6 @@
             <child>
               <object class="HdyHeaderBar" id="window_header_bar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="show_close_button">True</property>
                 <property name="title" translatable="yes">History</property>
                 <child>
@@ -57,7 +54,6 @@
                 <child>
                   <object class="GtkToggleButton" id="search_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="always_show_image">True</property>
                     <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
@@ -65,7 +61,6 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="icon_name">edit-find-symbolic</property>
                       </object>
                     </child>
@@ -111,7 +106,6 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="icon_name">edit-find-symbolic</property>
                       </object>
                     </child>
@@ -132,7 +126,6 @@
         <child>
           <object class="HdySearchBar" id="search_bar">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="hexpand">True</property>
             <property name="search_mode_enabled">False</property>
@@ -145,7 +138,6 @@
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="placeholder-text" translatable="yes">Search history</property>
                     <property name="primary_icon_name">edit-find-symbolic</property>
@@ -168,19 +160,16 @@
             <child>
               <object class="GtkScrolledWindow" id="history_scrolled_window">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
                 <child>
                   <object class="HdyClamp">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="margin_start">6</property>
                     <property name="margin_end">6</property>
                     <property name="maximum_size">1024</property>
                     <child>
                       <object class="GtkListBox" id="listbox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="margin_top">6</property>
                         <property name="margin_bottom">6</property>
                         <property name="valign">start</property>
@@ -199,7 +188,6 @@
             </child>
             <child>
               <object class="GtkSpinner" id="loading_spinner">
-                <property name="can_focus">False</property>
                 <property name="visible">True</property>
               </object>
             </child>
@@ -230,7 +218,6 @@
                 <child>
                   <object class="GtkButton" id="clear_all_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use-underline">True</property>
                     <property name="label" translatable="yes">_Clear All</property>
@@ -253,7 +240,6 @@
                 <child>
                   <object class="GtkButton" id="selection_delete_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
@@ -270,7 +256,6 @@
                 <child>
                   <object class="GtkButton" id="selection_open_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
