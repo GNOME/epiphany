@@ -260,22 +260,45 @@ ephy_embed_utils_address_is_valid (const char *address)
   return retval;
 }
 
+static char *
+ensure_host_name_is_lowercase (const char *address)
+{
+  g_autofree gchar *host = ephy_string_get_host_name (address);
+  g_autofree gchar *lowercase_host = NULL;
+
+  if (!host)
+    return g_strdup (address);
+
+  lowercase_host = g_utf8_strdown (host, -1);
+
+  if (strcmp (host, lowercase_host) != 0)
+    return ephy_string_find_and_replace (address, host, lowercase_host);
+  else
+    return g_strdup (address);
+}
+
 char *
-ephy_embed_utils_normalize_address (const char *address)
+ephy_embed_utils_normalize_address (const char *input_address)
 {
   char *effective_address = NULL;
+  g_autofree gchar *address = NULL;
 
-  g_assert (address);
-
-  if (is_bang_search (address)) {
+  g_assert (input_address);
+  /* We don't want to lowercase the host name if it's a bang search, as it's not a URI.
+   * It would otherwise lowercase the entire search string, bang included, which is not
+   * what we want. So use input_address directly.
+   */
+  if (is_bang_search (input_address)) {
     EphyEmbedShell *shell;
     EphySearchEngineManager *search_engine_manager;
 
     shell = ephy_embed_shell_get_default ();
     search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
     return ephy_search_engine_manager_parse_bang_search (search_engine_manager,
-                                                         address);
+                                                         input_address);
   }
+
+  address = ensure_host_name_is_lowercase (input_address);
 
   if (ephy_embed_utils_address_is_existing_absolute_filename (address))
     return g_strconcat ("file://", address, NULL);
@@ -337,35 +360,11 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   return effective_address;
 }
 
-static char *
-ensure_host_name_is_lowercase (const char *address)
-{
-  g_autofree gchar *host = ephy_string_get_host_name (address);
-  g_autofree gchar *lowercase_host = NULL;
-  char *ret = NULL;
-
-  if (host == NULL) {
-    return g_strdup (address);
-  }
-
-  lowercase_host = g_utf8_strdown (host, -1);
-
-  if (strcmp (host, lowercase_host) != 0) {
-    ret = ephy_string_find_and_replace (address, host, lowercase_host);
-  } else {
-    ret = g_strdup (address);
-  }
-
-  return ret;
-}
-
 char *
 ephy_embed_utils_normalize_or_autosearch_address (const char *address)
 {
-  g_autofree gchar *lower_case_address = ensure_host_name_is_lowercase (address);
-
-  if (ephy_embed_utils_address_is_valid (lower_case_address))
-    return ephy_embed_utils_normalize_address (lower_case_address);
+  if (ephy_embed_utils_address_is_valid (address))
+    return ephy_embed_utils_normalize_address (address);
   else
     return ephy_embed_utils_autosearch_address (address);
 }
