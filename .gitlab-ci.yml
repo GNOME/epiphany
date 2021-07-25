@@ -68,3 +68,49 @@ nightly:
   extends: '.publish_nightly'
   stage: .post
   dependencies: ['flatpak master']
+
+canary:
+  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  stage: 'test'
+  interruptible: true
+  tags:
+    - flatpak
+  variables:
+    SDK_REPO: 'https://software.igalia.com/flatpak-refs/webkit-sdk.flatpakrepo'
+    BUNDLE: 'epiphany-canary.flatpak'
+  script:
+    - pip3 install --user requests
+    # TODO: Switch to debug? 5GB downloads though.
+    - python generate-canary-manifest.py --release
+    - flatpak remote-add --user --if-not-exists webkit-sdk ${SDK_REPO}
+    - flatpak-builder --user --install-deps-from=webkit-sdk --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
+    - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${SDK_REPO} org.gnome.Epiphany.Canary
+    - tar cf canary-repo.tar repo/
+    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json webkitgtk.zip
+
+  artifacts:
+    name: 'Canary Flatpak artifacts'
+    expose_as: 'Get Canary Flatpak bundle here'
+    when: 'always'
+    paths:
+      - "${BUNDLE}"
+      - "canary-repo.tar"
+    expire_in: 14 days
+  cache:
+    - key: "$CI_JOB_NAME"
+      paths:
+        - '.flatpak-builder/downloads'
+        - '.flatpak-builder/git'
+    - key: "$CI_JOB_NAME"
+      paths:
+        - '.flatpak-builder/cache'
+        - '.flatpak-builder/ccache'
+  except:
+    - gnome-*
+
+canary nightly:
+  extends: '.publish_nightly'
+  stage: .post
+  dependencies: ['canary']
+  before_script:
+    - mv canary-repo.tar repo.tar

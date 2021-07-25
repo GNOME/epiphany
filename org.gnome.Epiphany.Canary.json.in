@@ -1,0 +1,212 @@
+{
+    "app-id" : "org.gnome.Epiphany.Canary",
+    "runtime" : "org.webkit.Platform",
+    "runtime-version" : "0.3",
+    "sdk" : "org.webkit.Sdk",
+    "command" : "ephy-wrapper",
+    "tags" : [
+        "nightly"
+    ],
+    "desktop-file-name-suffix" : " (Canary)",
+    "finish-args" : [
+        "--device=dri",
+        "--filesystem=/run/.heim_org.h5l.kcm-socket",
+        "--filesystem=xdg-download",
+        "--share=ipc",
+        "--share=network",
+        "--socket=fallback-x11",
+        "--socket=pulseaudio",
+        "--socket=wayland",
+        "--system-talk-name=org.freedesktop.GeoClue2"
+    ],
+    "modules" : [
+         {
+            "name": "elementary-icons",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/elementary/icons.git"
+                }
+            ],
+            "modules": [
+                {
+                    "name": "xcursorgen",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "git",
+                            "url": "https://gitlab.freedesktop.org/xorg/app/xcursorgen.git",
+                            "tag": "xcursorgen-1.0.7"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "elementary-stylesheet",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/elementary/stylesheet.git"
+                }
+            ],
+            "modules": [
+                {
+                    "name": "sassc",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "git",
+                            "url": "https://github.com/sass/sassc.git",
+                            "tag": "3.6.1"
+                        },
+                        {
+                            "type": "script",
+                            "dest-filename": "autogen.sh",
+                            "commands": [ "autoreconf -si" ]
+                        }
+                    ],
+                    "modules": [
+                        {
+                            "name": "libsass",
+                            "cleanup": [ "*" ],
+                            "sources": [
+                                {
+                                    "type": "git",
+                                    "url": "https://github.com/sass/libsass.git",
+                                    "tag": "3.6.4"
+                                },
+                                {
+                                    "type": "script",
+                                    "dest-filename": "autogen.sh",
+                                    "commands": [ "autoreconf -si" ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name" : "libdazzle",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dwith_vapi=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                }
+            ]
+        },
+        {
+            "name" : "libportal",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk_doc=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/flatpak/libportal.git"
+                }
+            ]
+        },
+        {
+            "name": "gcr",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk_doc=false",
+                "-Dintrospection=false",
+                "-Dssh_agent=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git"
+                }
+            ]
+        },
+        {
+            "name" : "json-glib",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/json-glib.git"
+                }
+            ]
+        },
+        {
+            "name": "libhandy",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgtk_doc=false",
+                "-Dvapi=false",
+                "-Dtests=false",
+                "-Dexamples=false",
+                "-Dglade_catalog=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libhandy.git"
+                }
+            ]
+        },
+        {
+            "name" : "webkitgtk",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "cp -a lib/libjavascriptcore* /app/lib",
+                "cp -a lib/libwebkit2gtk* /app/lib",
+                "mkdir -p /app/libexec",
+                "cp bin/WebKit*Process /app/libexec",
+                "cp -r install/lib/pkgconfig /app/lib/",
+                "sed -i 's;/app/webkit/WebKitBuild/Release/install;/app;g' /app/lib/pkgconfig/*.pc",
+                "cp -r install/include /app/"
+            ],
+            "sources" : [
+            ]
+        },
+        {
+            "name" : "epiphany",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dprofile=Canary",
+                "-Dsoup2=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "disable-shallow-clone" : true
+                }
+            ],
+            "post-install" : [
+                "sed -i 's;Exec=epiphany;Exec=ephy-wrapper;g' /app/share/applications/org.gnome.Epiphany.Canary.desktop"
+            ]
+        },
+        {
+            "name" : "ephy-wrapper",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "install -m a+rx ephy-wrapper.sh /app/bin/ephy-wrapper"
+            ],
+            "sources" : [
+                {
+                    "type" : "script",
+                    "dest-filename" : "ephy-wrapper.sh",
+                    "commands" : [
+                        "export WEBKIT_INJECTED_BUNDLE_PATH=/app/lib",
+                        "export WEBKIT_EXEC_PATH=/app/libexec",
+                        "exec epiphany \"$@\""
+                    ]
+                }
+            ]
+        }
+    ]
+}
