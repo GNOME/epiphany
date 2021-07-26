@@ -1006,11 +1006,15 @@ window_cmd_show_about (GSimpleAction *action,
   if (window)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
 
+  if (g_str_equal (PROFILE, "Canary"))
+    gtk_about_dialog_set_program_name (dialog, _("Epiphany Canary"));
+  else {
 #if !TECH_PREVIEW
-  gtk_about_dialog_set_program_name (dialog, _("Web"));
+    gtk_about_dialog_set_program_name (dialog, _("Web"));
 #else
-  gtk_about_dialog_set_program_name (dialog, _("Epiphany Technology Preview"));
+    gtk_about_dialog_set_program_name (dialog, _("Epiphany Technology Preview"));
 #endif
+  }
 
   gtk_about_dialog_set_version (dialog, VERSION);
   gtk_about_dialog_set_copyright (dialog,
