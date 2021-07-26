@@ -340,13 +340,15 @@ ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
 void
 ephy_action_bar_end_show_downloads (EphyActionBarEnd *action_bar_end)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->downloads_button), TRUE);
+  if (gtk_widget_get_visible (action_bar_end->downloads_button))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->downloads_button), TRUE);
 }
 
 void
 ephy_action_bar_end_show_bookmarks (EphyActionBarEnd *action_bar_end)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->bookmarks_button), TRUE);
+  if (gtk_widget_get_visible (action_bar_end->bookmarks_button))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (action_bar_end->bookmarks_button), TRUE);
 }
 
 GtkWidget *
