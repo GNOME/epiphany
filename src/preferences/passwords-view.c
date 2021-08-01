@@ -183,9 +183,13 @@ confirmation_dialog_response_cb (GtkWidget         *dialog,
 static GtkWidget *
 confirmation_dialog_construct (EphyPasswordsView *self)
 {
-  GtkWidget *dialog, *button;
+  GtkWidget *dialog;
+  GtkWidget *button;
+  GtkWidget *window;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (self),
+  window = gtk_widget_get_toplevel (GTK_WIDGET (self));
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_WARNING,
                                    GTK_BUTTONS_CANCEL,
@@ -194,7 +198,7 @@ confirmation_dialog_construct (EphyPasswordsView *self)
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             _("This will clear all locally stored passwords, and can not be undone."));
 
-  gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (self)),
+  gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (window)),
                                GTK_WINDOW (dialog));
 
   button = gtk_button_new_with_mnemonic (_("_Delete"));
