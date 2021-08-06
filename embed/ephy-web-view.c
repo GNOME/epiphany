@@ -127,6 +127,8 @@ struct _EphyWebView {
 
   EphyWebViewErrorPage error_page;
 
+  guint unresponsive_process_timeout_id;
+
   guint64 uid;
 };
 
@@ -842,15 +844,30 @@ process_terminated_cb (EphyWebView                       *web_view,
   }
 }
 
+static gboolean
+unresponsive_process_timeout_cb (gpointer user_data)
+{
+  EphyWebView *web_view = EPHY_WEB_VIEW (user_data);
+
+  webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
+
+  web_view->unresponsive_process_timeout_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 is_web_process_responsive_changed_cb (EphyWebView *web_view,
                                       GParamSpec  *pspec,
                                       gpointer     user_data)
 {
-  WebKitWebView *view = WEBKIT_WEB_VIEW (web_view);
+  g_clear_handle_id (&web_view->unresponsive_process_timeout_id, g_source_remove);
 
-  if (!webkit_web_view_get_is_web_process_responsive (view))
-    webkit_web_view_terminate_web_process (view);
+  if (!webkit_web_view_get_is_web_process_responsive (WEBKIT_WEB_VIEW (web_view))) {
+    web_view->unresponsive_process_timeout_id = g_timeout_add_seconds (10,
+                                                                       (GSourceFunc)unresponsive_process_timeout_cb,
+                                                                       web_view);
+  }
 }
 
 static gboolean
@@ -3837,6 +3854,7 @@ ephy_web_view_dispose (GObject *object)
 
   g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
   g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
+  g_clear_handle_id (&view->unresponsive_process_timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
