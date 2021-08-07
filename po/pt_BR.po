@@ -23,23 +23,23 @@
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018, 2020.
-# Enrico Nicoletto <liverig@gmail.com>, 2013-2016, 2021.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021.
+# Enrico Nicoletto <liverig@gmail.com>, 2013-2016, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-06-24 15:38+0000\n"
-"PO-Revision-Date: 2021-07-10 16:56-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2021-08-02 12:04+0000\n"
+"PO-Revision-Date: 2021-08-07 15:20-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -76,7 +76,7 @@ msgstr "O projeto GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:1010
+#: src/ephy-main.c:406 src/window-commands.c:1013
 msgid "Web"
 msgstr "Web"
 
@@ -1023,7 +1023,7 @@ msgstr "Versão %s"
 msgid "About Web"
 msgstr "Sobre o Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:1012
+#: embed/ephy-about-handler.c:194 src/window-commands.c:1015
 msgid "Epiphany Technology Preview"
 msgstr "Teste de tecnologia do Epiphany"
 
@@ -1121,11 +1121,11 @@ msgstr "Download requisitado"
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
 #: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:243
 #: src/resources/gtk/firefox-sync-dialog.ui:167
-#: src/resources/gtk/history-dialog.ui:96
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:277
+#: src/resources/gtk/history-dialog.ui:91
+#: src/resources/gtk/prefs-lang-dialog.ui:15 src/window-commands.c:277
 #: src/window-commands.c:335 src/window-commands.c:379
 #: src/window-commands.c:563 src/window-commands.c:648
-#: src/window-commands.c:810 src/window-commands.c:1888
+#: src/window-commands.c:810 src/window-commands.c:1892
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1536,7 +1536,7 @@ msgstr "Localiza a próxima ocorrência da palavra ou frase"
 msgid "%s is not a valid URI"
 msgstr "%s não é uma URI válida"
 
-#: embed/ephy-web-view.c:188 src/window-commands.c:1352
+#: embed/ephy-web-view.c:188 src/window-commands.c:1356
 msgid "Open"
 msgstr "Abrir"
 
@@ -1579,7 +1579,6 @@ msgid "Web process terminated due to exceeding memory limit"
 msgstr "O processo web foi encerrado por exceder o limite de memória"
 
 #: embed/ephy-web-view.c:834
-#| msgid "Web process terminated due to exceeding memory limit"
 msgid "Web process terminated by API request"
 msgstr "O processo web foi encerrado por requisição da API"
 
@@ -1740,7 +1739,7 @@ msgstr "O erro específico foi: %s"
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #: embed/ephy-web-view.c:1828 embed/ephy-web-view.c:1881
 #: embed/ephy-web-view.c:1920 embed/ephy-web-view.c:1954
-#: src/resources/gtk/page-menu-popover.ui:134
+#: src/resources/gtk/page-menu-popover.ui:133
 msgid "Reload"
 msgstr "Recarregar"
 
@@ -1802,9 +1801,6 @@ msgstr "Eita!"
 
 #. Error details when web content has become unresponsive.
 #: embed/ephy-web-view.c:1949
-#| msgid ""
-#| "Something went wrong while displaying this page. Please reload or visit a "
-#| "different page to continue."
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -2238,7 +2234,7 @@ msgstr ""
 "forma insegura."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:236
+#: src/resources/gtk/history-dialog.ui:223
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Limpar tudo"
@@ -2309,7 +2305,7 @@ msgid "Starting…"
 msgstr "Iniciando…"
 
 #: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:242
-#: src/resources/gtk/history-dialog.ui:277
+#: src/resources/gtk/history-dialog.ui:262
 msgid "_Open"
 msgstr "A_brir"
 
@@ -2342,7 +2338,7 @@ msgid "Paste and _Go"
 msgstr "C_olar e ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:798 src/ephy-window.c:959
+#: lib/widgets/ephy-location-entry.c:798 src/ephy-window.c:966
 msgid "_Undo"
 msgstr "Desfa_zer"
 
@@ -2350,20 +2346,20 @@ msgstr "Desfa_zer"
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: lib/widgets/ephy-location-entry.c:1091
+#: lib/widgets/ephy-location-entry.c:1084
 msgid "Show website security status and permissions"
 msgstr "Mostra o status e permissões de segurança do site"
 
 # Texto da caixa de pesquisa antes de começar a digitar; deixar tempo verbal no imperativo -- Rafael
-#: lib/widgets/ephy-location-entry.c:1093
+#: lib/widgets/ephy-location-entry.c:1086
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Pesquise por sites, favoritos e abas abertas"
 
-#: lib/widgets/ephy-location-entry.c:1137
+#: lib/widgets/ephy-location-entry.c:1130
 msgid "Bookmark this page"
 msgstr "Adiciona esta página aos favoritos"
 
-#: lib/widgets/ephy-location-entry.c:1156
+#: lib/widgets/ephy-location-entry.c:1147
 msgid "Toggle reader mode"
 msgstr "Ativa/desativa o modo de leitura"
 
@@ -2604,7 +2600,7 @@ msgid "Do you really want to remove this extension?"
 msgstr "Tem certeza de que deseja remover esta extensão?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
-#: src/resources/gtk/bookmark-properties.ui:132
+#: src/resources/gtk/bookmark-properties.ui:127
 msgid "_Remove"
 msgstr "_Remover"
 
@@ -2630,190 +2626,190 @@ msgstr "Remove a WebExtension selecionada"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Abrir arquivo (manifest.json/xpi)"
 
-#: src/ephy-window.c:283
+#: src/ephy-window.c:284
 msgid "Do you want to leave this website?"
 msgstr "Você deseja sair deste site?"
 
-#: src/ephy-window.c:284 src/window-commands.c:1200
+#: src/ephy-window.c:285 src/window-commands.c:1204
 msgid "A form you modified has not been submitted."
 msgstr "Uma formulário que você modificou não foi enviado."
 
-#: src/ephy-window.c:285 src/window-commands.c:1202
+#: src/ephy-window.c:286 src/window-commands.c:1206
 msgid "_Discard form"
 msgstr "_Descartar formulário"
 
-#: src/ephy-window.c:300
+#: src/ephy-window.c:301
 msgid "There are multiple tabs open."
 msgstr "Há várias abas abertas."
 
-#: src/ephy-window.c:301
+#: src/ephy-window.c:302
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se você fechar essa janela, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:302
+#: src/ephy-window.c:303
 msgid "C_lose tabs"
 msgstr "_Fechar abas"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:967
 msgid "Re_do"
 msgstr "_Refazer"
 
 #. Edit.
-#: src/ephy-window.c:963
+#: src/ephy-window.c:970
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:971
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:972
 msgid "_Paste"
 msgstr "C_olar"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:973
 msgid "_Paste Text Only"
 msgstr "C_olar apenas texto"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:974
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:976
 msgid "S_end Link by Email…"
 msgstr "E_nviar link por e-mail…"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:978
 msgid "_Reload"
 msgstr "_Recarregar"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:979
 msgid "_Back"
 msgstr "_Voltar"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:980
 msgid "_Forward"
 msgstr "Ava_nçar"
 
 #. Bookmarks
-#: src/ephy-window.c:976
+#: src/ephy-window.c:983
 msgid "Add Boo_kmark…"
 msgstr "Adicionar aos _favoritos…"
 
 #. Links.
-#: src/ephy-window.c:980
+#: src/ephy-window.c:987
 msgid "Open Link in New _Window"
 msgstr "Abrir link em nova _janela"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:988
 msgid "Open Link in New _Tab"
 msgstr "Abrir link em nova a_ba"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:989
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir link em janela anôn_ima"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:990
 msgid "_Save Link As…"
 msgstr "Salvar link _como…"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:991
 msgid "_Copy Link Address"
 msgstr "Copiar endereço do _link"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:992
 msgid "_Copy E-mail Address"
 msgstr "_Copiar endereço de e-mail"
 
 #. Images.
-#: src/ephy-window.c:989
+#: src/ephy-window.c:996
 msgid "View _Image in New Tab"
 msgstr "Ver _imagem em nova aba"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:997
 msgid "Copy I_mage Address"
 msgstr "Copiar endereço da i_magem"
 
-#: src/ephy-window.c:991
+#: src/ephy-window.c:998
 msgid "_Save Image As…"
 msgstr "_Salvar imagem como…"
 
-#: src/ephy-window.c:992
+#: src/ephy-window.c:999
 msgid "Set as _Wallpaper"
 msgstr "Definir como _papel de parede"
 
 #. Video.
-#: src/ephy-window.c:996
+#: src/ephy-window.c:1003
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo em nova _janela"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:1004
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo em nova a_ba"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:1005
 msgid "_Save Video As…"
 msgstr "Sal_var vídeo como…"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1006
 msgid "_Copy Video Address"
 msgstr "_Copiar endereço de vídeo"
 
 #. Audio.
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1010
 msgid "Open Audio in New _Window"
 msgstr "Abrir áudio em nova _janela"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1011
 msgid "Open Audio in New _Tab"
 msgstr "Abrir áudio em nova a_ba"
 
-#: src/ephy-window.c:1005
+#: src/ephy-window.c:1012
 msgid "_Save Audio As…"
 msgstr "Sal_var áudio como…"
 
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:1013
 msgid "_Copy Audio Address"
 msgstr "_Copiar endereço de áudio"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1019
 msgid "Save Pa_ge As…"
 msgstr "Salvar pá_gina como…"
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1020
 msgid "_Page Source"
 msgstr "Có_digo-fonte da página"
 
-#: src/ephy-window.c:1383
+#: src/ephy-window.c:1390
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Pesquisar na web por “%s”"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1419
 msgid "Open Link"
 msgstr "Abrir link"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1421
 msgid "Open Link In New Tab"
 msgstr "Abrir link em nova aba"
 
-#: src/ephy-window.c:1416
+#: src/ephy-window.c:1423
 msgid "Open Link In New Window"
 msgstr "Abrir link em nova janela"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1425
 msgid "Open Link In Incognito Window"
 msgstr "Abrir link em janela anônima"
 
-#: src/ephy-window.c:2864
+#: src/ephy-window.c:2871
 msgid "Download operation"
 msgstr "Operação de download"
 
-#: src/ephy-window.c:2866
+#: src/ephy-window.c:2873
 msgid "Show details"
 msgstr "Mostrar detalhes"
 
-#: src/ephy-window.c:2868
+#: src/ephy-window.c:2875
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2821,23 +2817,23 @@ msgstr[0] "%d operação de download ativa"
 msgstr[1] "%d operações de download ativas"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3386
+#: src/ephy-window.c:3393
 msgid "View open tabs"
 msgstr "Visualiza as abas abertas"
 
-#: src/ephy-window.c:3517
+#: src/ephy-window.c:3524
 msgid "Set Web as your default browser?"
 msgstr "Definir o Web como seu navegador padrão?"
 
-#: src/ephy-window.c:3519
+#: src/ephy-window.c:3526
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Definir Teste de Tecnologia do Epiphany como seu navegador padrão?"
 
-#: src/ephy-window.c:3531
+#: src/ephy-window.c:3538
 msgid "_Yes"
 msgstr "_Sim"
 
-#: src/ephy-window.c:3532
+#: src/ephy-window.c:3539
 msgid "_No"
 msgstr "_Não"
 
@@ -2889,19 +2885,28 @@ msgstr "Cache de políticas HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Dados de Prevenção Inteligente de Rastreamento"
 
-#: src/preferences/ephy-search-engine-row.c:197
+#: src/preferences/ephy-search-engine-row.c:199
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:202
+#: src/preferences/ephy-search-engine-row.c:204
 msgid "Address must start with either http:// or https://"
 msgstr "O endereço deve iniciar com http:// ou https://"
 
-#: src/preferences/ephy-search-engine-row.c:208
+#: src/preferences/ephy-search-engine-row.c:216
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr "O endereço deve conter o termo de pesquisa representado por %s"
+
+#: src/preferences/ephy-search-engine-row.c:219
+msgid "Address should not contain the search term several times"
+msgstr "O endereço não deve conter o termo de pesquisa várias vezes"
+
+#: src/preferences/ephy-search-engine-row.c:225
 msgid "Address is not a valid URI"
 msgstr "O endereço não é uma URI válida"
 
-#: src/preferences/ephy-search-engine-row.c:213
+#: src/preferences/ephy-search-engine-row.c:230
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2910,24 +2915,15 @@ msgstr ""
 "O endereço não é uma URI válida. O endereço deve parecer com https://www."
 "example.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:218
-#, c-format
-msgid "Address must contain the search term represented by %s"
-msgstr "O endereço deve conter o termo de pesquisa representado por %s"
-
-#: src/preferences/ephy-search-engine-row.c:224
-msgid "Address should not contain the search term several times"
-msgstr "O endereço não deve conter o termo de pesquisa várias vezes"
-
-#: src/preferences/ephy-search-engine-row.c:269
+#: src/preferences/ephy-search-engine-row.c:275
 msgid "This shortcut is already used."
 msgstr "Este atalho já está sendo usado."
 
-#: src/preferences/ephy-search-engine-row.c:417
+#: src/preferences/ephy-search-engine-row.c:423
 msgid "A name is required"
 msgstr "Um nome é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:419
+#: src/preferences/ephy-search-engine-row.c:425
 msgid "This search engine already exists"
 msgstr "Este mecanismo de pesquisa já existe"
 
@@ -2940,7 +2936,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Isso apagará todas as senhas armazenadas localmente e não pode ser desfeito."
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:260
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:246
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -2985,7 +2981,7 @@ msgid "Dark"
 msgstr "Escuro"
 
 #: src/preferences/prefs-general-page.c:297
-#: src/resources/gtk/prefs-lang-dialog.ui:13
+#: src/resources/gtk/prefs-lang-dialog.ui:12
 msgid "Add Language"
 msgstr "Adicionar idioma"
 
@@ -3064,12 +3060,10 @@ msgid "Bookmark"
 msgstr "Favorito"
 
 #: src/resources/gtk/bookmark-properties.ui:23
-#| msgid "Name"
 msgid "_Name"
 msgstr "_Nome"
 
 #: src/resources/gtk/bookmark-properties.ui:43
-#| msgid "Address"
 msgid "_Address"
 msgstr "_Endereço"
 
@@ -3078,12 +3072,12 @@ msgstr "_Endereço"
 msgid "Tags"
 msgstr "Marcadores"
 
-#: src/resources/gtk/bookmark-properties.ui:104
+#: src/resources/gtk/bookmark-properties.ui:99
 msgid "Add Tag…"
 msgstr "Adicionar marcador…"
 
-#: src/resources/gtk/bookmark-properties.ui:113
-#: src/resources/gtk/prefs-lang-dialog.ui:27
+#: src/resources/gtk/bookmark-properties.ui:108
+#: src/resources/gtk/prefs-lang-dialog.ui:25
 msgid "_Add"
 msgstr "_Adicionar"
 
@@ -3124,11 +3118,11 @@ msgstr "Não há dados pessoais"
 msgid "Personal data will be listed here"
 msgstr "Os dados pessoais serão listados aqui"
 
-#: src/resources/gtk/clear-data-view.ui:64
+#: src/resources/gtk/clear-data-view.ui:55
 msgid "Clear selected personal data:"
 msgstr "Limpar dados pessoais selecionados:"
 
-#: src/resources/gtk/clear-data-view.ui:125
+#: src/resources/gtk/clear-data-view.ui:114
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -3136,36 +3130,36 @@ msgstr ""
 "Você não pode desfazer esta ação. Os dados escolhidos para serem limpos "
 "serão excluídos permanentemente."
 
-#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
-#: src/resources/gtk/history-dialog.ui:120
+#: src/resources/gtk/data-view.ui:44 src/resources/gtk/history-dialog.ui:69
+#: src/resources/gtk/history-dialog.ui:114
 msgid "Search"
 msgstr "Pesquisar"
 
-#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
+#: src/resources/gtk/data-view.ui:107 src/resources/gtk/history-dialog.ui:205
 msgid "No Results Found"
 msgstr "Nenhum resultado localizado"
 
-#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
+#: src/resources/gtk/data-view.ui:108 src/resources/gtk/history-dialog.ui:206
 msgid "Try a different search"
 msgstr "Tente uma pesquisa diferente"
 
-#: src/resources/gtk/encoding-dialog.ui:8
+#: src/resources/gtk/encoding-dialog.ui:7
 msgid "Text Encoding"
 msgstr "Codificação de texto"
 
-#: src/resources/gtk/encoding-dialog.ui:46
+#: src/resources/gtk/encoding-dialog.ui:41
 msgid "Use the encoding specified by the document"
 msgstr "Usar a codificação especificada pelo documento"
 
-#: src/resources/gtk/encoding-dialog.ui:99
+#: src/resources/gtk/encoding-dialog.ui:89
 msgid "Recent encodings"
 msgstr "Codificações recentes"
 
-#: src/resources/gtk/encoding-dialog.ui:151
+#: src/resources/gtk/encoding-dialog.ui:137
 msgid "Related encodings"
 msgstr "Codificações relacionadas"
 
-#: src/resources/gtk/encoding-dialog.ui:193
+#: src/resources/gtk/encoding-dialog.ui:177
 msgid "Show all…"
 msgstr "Mostrar todas…"
 
@@ -3174,10 +3168,6 @@ msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:29
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not Firefox and is not produced or endorsed by "
-#| "Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3240,24 +3230,24 @@ msgstr "Nome do dispositivo"
 msgid "_Change"
 msgstr "_Mudar"
 
-#: src/resources/gtk/history-dialog.ui:30
-#: src/resources/gtk/history-dialog.ui:87
+#: src/resources/gtk/history-dialog.ui:27
+#: src/resources/gtk/history-dialog.ui:82
 msgid "History"
 msgstr "Histórico"
 
-#: src/resources/gtk/history-dialog.ui:42
+#: src/resources/gtk/history-dialog.ui:39
 msgid "Select Items"
 msgstr "Selecionar itens"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:142
 msgid "Search history"
 msgstr "Pesquisar histórico"
 
-#: src/resources/gtk/history-dialog.ui:209
+#: src/resources/gtk/history-dialog.ui:197
 msgid "The History is Empty"
 msgstr "O histórico está vazio"
 
-#: src/resources/gtk/history-dialog.ui:210
+#: src/resources/gtk/history-dialog.ui:198
 msgid "Visited pages will be listed here"
 msgstr "As páginas visitadas serão listadas aqui"
 
@@ -3306,110 +3296,110 @@ msgstr "Fechar _outras abas"
 msgid "_Close"
 msgstr "_Fechar"
 
-#: src/resources/gtk/page-menu-popover.ui:24
+#: src/resources/gtk/page-menu-popover.ui:23
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Reduzir"
 
-#: src/resources/gtk/page-menu-popover.ui:42
+#: src/resources/gtk/page-menu-popover.ui:41
 msgid "Restore Zoom"
 msgstr "Restaurar ampliação"
 
-#: src/resources/gtk/page-menu-popover.ui:61
+#: src/resources/gtk/page-menu-popover.ui:60
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: src/resources/gtk/page-menu-popover.ui:89
+#: src/resources/gtk/page-menu-popover.ui:88
 msgid "Print…"
 msgstr "Imprimir…"
 
-#: src/resources/gtk/page-menu-popover.ui:104
+#: src/resources/gtk/page-menu-popover.ui:103
 msgid "Find…"
 msgstr "Localizar…"
 
-#: src/resources/gtk/page-menu-popover.ui:119
+#: src/resources/gtk/page-menu-popover.ui:118
 msgid "Fullscreen"
 msgstr "Tela cheia"
 
-#: src/resources/gtk/page-menu-popover.ui:177
+#: src/resources/gtk/page-menu-popover.ui:174
 msgid "_Run in Background"
 msgstr "_Executar em segundo plano"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:191
 msgid "_New Window"
 msgstr "_Nova janela"
 
 # Seguindo ideia do Chromium: icognito -> anônimo.
-#: src/resources/gtk/page-menu-popover.ui:203
+#: src/resources/gtk/page-menu-popover.ui:198
 msgid "New _Incognito Window"
 msgstr "Nova janela _anônima"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:214
 msgid "Reopen Closed _Tab"
 msgstr "_Reabrir aba fechada"
 
-#: src/resources/gtk/page-menu-popover.ui:228
+#: src/resources/gtk/page-menu-popover.ui:221
 msgid "_History"
 msgstr "_Histórico"
 
-#: src/resources/gtk/page-menu-popover.ui:245
+#: src/resources/gtk/page-menu-popover.ui:237
 msgid "Firefox _Sync"
 msgstr "Firefox _Sync"
 
-#: src/resources/gtk/page-menu-popover.ui:252
+#: src/resources/gtk/page-menu-popover.ui:244
 msgid "I_mport and Export"
 msgstr "I_mportar e exportar"
 
-#: src/resources/gtk/page-menu-popover.ui:269
+#: src/resources/gtk/page-menu-popover.ui:260
 msgid "Install Site as Web _Application…"
 msgstr "Instalar página como _aplicativo web…"
 
-#: src/resources/gtk/page-menu-popover.ui:277
+#: src/resources/gtk/page-menu-popover.ui:267
 msgid "Open Appli_cation Manager"
 msgstr "Abrir geren_ciador de aplicativo"
 
-#: src/resources/gtk/page-menu-popover.ui:285
+#: src/resources/gtk/page-menu-popover.ui:274
 msgid "E_xtensions"
 msgstr "E_xtensões"
 
-#: src/resources/gtk/page-menu-popover.ui:302
+#: src/resources/gtk/page-menu-popover.ui:290
 msgid "_Override Text Encoding…"
 msgstr "Sobrescrever _codificação de texto…"
 
-#: src/resources/gtk/page-menu-popover.ui:318
+#: src/resources/gtk/page-menu-popover.ui:305
 msgid "Pr_eferences"
 msgstr "_Preferências"
 
-#: src/resources/gtk/page-menu-popover.ui:327
+#: src/resources/gtk/page-menu-popover.ui:313
 msgid "_Keyboard Shortcuts"
 msgstr "Atalhos de _teclado"
 
-#: src/resources/gtk/page-menu-popover.ui:336
+#: src/resources/gtk/page-menu-popover.ui:321
 msgid "_Help"
 msgstr "Aj_uda"
 
-#: src/resources/gtk/page-menu-popover.ui:345
+#: src/resources/gtk/page-menu-popover.ui:329
 msgid "_About Web"
 msgstr "_Sobre o Web"
 
-#: src/resources/gtk/page-menu-popover.ui:370
+#: src/resources/gtk/page-menu-popover.ui:352
 msgid "Import and Export"
 msgstr "Importar e exportar"
 
-#: src/resources/gtk/page-menu-popover.ui:381
+#: src/resources/gtk/page-menu-popover.ui:362
 msgid "I_mport Bookmarks…"
 msgstr "I_mportar favoritos…"
 
-#: src/resources/gtk/page-menu-popover.ui:389
+#: src/resources/gtk/page-menu-popover.ui:369
 msgid "E_xport Bookmarks…"
 msgstr "E_xportar favoritos…"
 
-#: src/resources/gtk/page-menu-popover.ui:405
+#: src/resources/gtk/page-menu-popover.ui:384
 msgid "Import _Passwords…"
 msgstr "Im_portar senhas…"
 
-#: src/resources/gtk/page-row.ui:87
+#: src/resources/gtk/page-row.ui:78
 msgid "Close page"
 msgstr "Fechar página"
 
@@ -3438,11 +3428,11 @@ msgstr "Não há senha"
 msgid "Saved passwords will be listed here"
 msgstr "As senhas salvas serão listadas aqui"
 
-#: src/resources/gtk/passwords-view.ui:75
+#: src/resources/gtk/passwords-view.ui:73
 msgid "_Copy Password"
 msgstr "_Copiar senha"
 
-#: src/resources/gtk/passwords-view.ui:79
+#: src/resources/gtk/passwords-view.ui:77
 msgid "C_opy Username"
 msgstr "C_opiar nome de usuário"
 
@@ -3587,7 +3577,7 @@ msgid "_Spell Checking"
 msgstr "_Verificação ortográfica"
 
 # Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
-#: src/resources/gtk/prefs-lang-dialog.ui:67
+#: src/resources/gtk/prefs-lang-dialog.ui:60
 msgid "Choose a language:"
 msgstr "Escolha um idioma:"
 
@@ -3736,7 +3726,6 @@ msgstr "Atalhos"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
 #: src/resources/gtk/shortcuts-dialog.ui:246
-#| msgid "No bookmarks yet?"
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "Mostra a lista de favoritos"
@@ -4134,11 +4123,15 @@ msgstr ""
 "Uma visão simples, limpa e bonita da web.\n"
 "Oferecido por WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:1022
+#: src/window-commands.c:1010
+msgid "Epiphany Canary"
+msgstr "Epiphany Canário"
+
+#: src/window-commands.c:1026
 msgid "Website"
 msgstr "Site"
 
-#: src/window-commands.c:1055
+#: src/window-commands.c:1059
 msgid "translator-credits"
 msgstr ""
 "Afonso Celso Medina <medina@maua.br>\n"
@@ -4165,75 +4158,75 @@ msgstr ""
 "Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Bruno Lopes <brunolopesdsilv@gmail.com>"
 
-#: src/window-commands.c:1198
+#: src/window-commands.c:1202
 msgid "Do you want to reload this website?"
 msgstr "Você deseja recarregar este site?"
 
-#: src/window-commands.c:1725
+#: src/window-commands.c:1729
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Um aplicativo web com o nome “%s” já existe. Você deseja substituí-lo?"
 
-#: src/window-commands.c:1728
+#: src/window-commands.c:1732
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1730
+#: src/window-commands.c:1734
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/window-commands.c:1734
+#: src/window-commands.c:1738
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Um aplicativo com mesmo nome já existe. Substituí-lo irá sobrescrevê-lo."
 
-#: src/window-commands.c:1826
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "O aplicativo “%s” está pronto para ser usado"
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1833
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "O aplicativo “%s” não pôde ser criado"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1844
+#: src/window-commands.c:1848
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1885
+#: src/window-commands.c:1889
 msgid "Create Web Application"
 msgstr "Cria um aplicativo web"
 
-#: src/window-commands.c:1890
+#: src/window-commands.c:1894
 msgid "C_reate"
 msgstr "C_riar"
 
-#: src/window-commands.c:2104
+#: src/window-commands.c:2108
 msgid "Save"
 msgstr "Salvar"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2117
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2118
+#: src/window-commands.c:2122
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2123
+#: src/window-commands.c:2127
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2637
+#: src/window-commands.c:2641
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: src/window-commands.c:2640
+#: src/window-commands.c:2644
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4244,1240 +4237,6 @@ msgstr ""
 "lhe navegar nelas com o seu teclado. Você deseja habilitar o modo de "
 "navegação com cursor?"
 
-#: src/window-commands.c:2643
+#: src/window-commands.c:2647
 msgid "_Enable"
 msgstr "_Ativar"
-
-#~ msgid "New Tab"
-#~ msgstr "Nova aba"
-
-#~ msgid "Remove"
-#~ msgstr "Remover"
-
-#~ msgid "_Extensions"
-#~ msgstr "_Extensões"
-
-#~ msgid "Close Document"
-#~ msgstr "Fecha o documento"
-
-#~ msgid "The position of the tabs bar."
-#~ msgstr "A posição da barra de abas."
-
-#~ msgid ""
-#~ "Controls where the tabs bar is shown. Possible values are “top” (the "
-#~ "default), “bottom”, “left” (vertical tabs with bar on the left) and "
-#~ "“right” (vertical tabs with bar on the right)."
-#~ msgstr ""
-#~ "Controla onde a barra de abas é mostrada. Valores possíveis são "
-#~ "“top” (por padrão), “bottom”, “left” (abas na vertical com a barra à "
-#~ "esquerda) e “right” (abas na vertical com a barra à direita)."
-
-#~ msgid "Enable smooth scrolling"
-#~ msgstr "Habilita rolagem suave"
-
-#~ msgid "Whether to enable smooth scrolling."
-#~ msgstr "Se deve-se habilitar rolagem suave."
-
-#~ msgid "WebApp is mobile capable"
-#~ msgstr "WebApp tem capacidade móvel"
-
-#~ msgid "New search engine"
-#~ msgstr "Novo mecanismo de pesquisa"
-
-#~ msgid "Sm_ooth Scrolling"
-#~ msgstr "R_olagem suave"
-
-#~ msgid "Google Safe Browsing API key"
-#~ msgstr "Chave da API Google Safe Browsing"
-
-#~ msgid "The API key used to access the Google Safe Browsing API v4."
-#~ msgstr ""
-#~ "A chave da API usada para acessar a versão 4 da API Google Safe Browsing."
-
-#~ msgid "Reo_pen Closed Tab"
-#~ msgstr "_Reabrir aba fechada"
-
-#~ msgid "Homepage:"
-#~ msgstr "Página inicial:"
-
-#~ msgid "Title:"
-#~ msgstr "Título:"
-
-#~| msgid "Manage Search Engines"
-#~ msgid "Manage Search _Engines"
-#~ msgstr "Gerenciar _mecanismos de pesquisa"
-
-#~| msgid "Add Language"
-#~ msgid "Add _Language"
-#~ msgstr "Adicionar _idioma"
-
-#~ msgid "Sync"
-#~ msgstr "Sincronização"
-
-#~ msgid "Bang"
-#~ msgstr "Atalho"
-
-#~ msgid "Default"
-#~ msgstr "Padrão"
-
-#~ msgid "Hide window on quit"
-#~ msgstr "Ocultar janela ao sair"
-
-#~ msgid "Cookie accept"
-#~ msgstr "Aceitar cookies"
-
-#~ msgid ""
-#~ "Where to accept cookies from. Possible values are “always”, “no-third-"
-#~ "party” and “never”."
-#~ msgstr ""
-#~ "De onde aceitar cookies. Valores possíveis são “always”, “no-third-party” "
-#~ "e “never”."
-
-#~ msgid "Mobile user agent"
-#~ msgstr "Agente de usuário móvel"
-
-#~ msgid ""
-#~ "Whether to present a mobile user agent. If the user agent is overridden, "
-#~ "this will have no effect."
-#~ msgstr ""
-#~ "Se deve apresentar um User-Agent móvel. Se o agente de usuário for "
-#~ "sobrescrito, não haverá efeito nenhum."
-
-#~ msgid "Yes"
-#~ msgstr "Sim"
-
-#~ msgid "No"
-#~ msgstr "Não"
-
-#~ msgid "Remove cookie"
-#~ msgstr "Remover cookie"
-
-#~ msgid "'Clear all' action name"
-#~ msgstr "Nome da ação “Limpar tudo”"
-
-#~ msgid "The name of the action associated to the 'Clear all' button"
-#~ msgstr "O nome da ação associada ao botão “Limpar tudo”"
-
-#~ msgid "'Clear all' action target value"
-#~ msgstr "Valor alvo da ação “Limpar tudo”"
-
-#~ msgid "The parameter for 'Clear all' action invocations"
-#~ msgstr "O parâmetro para invocações da ação “Limpar tudo”"
-
-#~ msgid "'Clear all' description"
-#~ msgstr "Descrição de “Limpar tudo”"
-
-#~ msgid "The description of the 'Clear all' action"
-#~ msgstr "A descrição da ação “Limpar tudo”"
-
-#~ msgid "'Search' description"
-#~ msgstr "Descrição de “Pesquisar”"
-
-#~ msgid "The description of the 'Search' action"
-#~ msgstr "A descrição da ação “Pesquisar”"
-
-#~ msgid "'Empty' title"
-#~ msgstr "Título “Vazio”"
-
-#~ msgid "The title of the 'Empty' state page"
-#~ msgstr "O título da página de estado “Vazio”"
-
-#~ msgid "'Empty' description"
-#~ msgstr "Descrição de “Vazio”"
-
-#~ msgid "The description of the 'Empty' state page"
-#~ msgstr "A descrição da página de estado “Vazio”"
-
-#~ msgid "Search text"
-#~ msgstr "Texto de pesquisa"
-
-#~ msgid "The text of the search entry"
-#~ msgstr "O texto da entrada de pesquisa"
-
-#~ msgid "Is loading"
-#~ msgstr "Está carregando"
-
-#~ msgid "Whether the dialog is loading its data"
-#~ msgstr "Se o diálogo está carregando seus dados"
-
-#~ msgid "Has data"
-#~ msgstr "Possui dados"
-
-#~ msgid "Whether the dialog has data"
-#~ msgstr "Se o diálogo possui dados"
-
-#~ msgid "Has search results"
-#~ msgstr "Possui resultados de pesquisa"
-
-#~ msgid "Whether the dialog has search results"
-#~ msgstr "Se o diálogo possui resultados de pesquisa"
-
-#~ msgid "Can clear"
-#~ msgstr "Pode limpar"
-
-#~ msgid "Whether the data can be cleared"
-#~ msgstr "Se os dados podem ser apagados"
-
-#~ msgid "New address"
-#~ msgstr "Novo endereço"
-
-#~ msgid ""
-#~ "You can select a period of time to clear data for all websites modified "
-#~ "in that period. If you choose from the beginning of time, then you can "
-#~ "also clear data only for particular websites."
-#~ msgstr ""
-#~ "Você pode selecionar um período de tempo para limpar dados de todos os "
-#~ "sites modificados naquele período. Se você escolher a partir do início "
-#~ "dos tempos, então você também pode limpar os dados apenas de sites "
-#~ "específicos."
-
-#~ msgid "the past hour"
-#~ msgstr "a última hora"
-
-#~ msgid "the past day"
-#~ msgstr "o último dia"
-
-#~ msgid "the past week"
-#~ msgstr "a última semana"
-
-#~ msgid "the past four weeks"
-#~ msgstr "as últimas quatro semanas"
-
-#~ msgid "the beginning of time"
-#~ msgstr "o início dos tempos"
-
-#~ msgid "Remove all cookies"
-#~ msgstr "Remover todos cookies"
-
-#~ msgid "Search cookies"
-#~ msgstr "Pesquisar cookies"
-
-#~ msgid "There are no Cookies"
-#~ msgstr "Não há cookies"
-
-#~ msgid "Cookies left by visited pages will be listed here"
-#~ msgstr "Os cookies deixados por páginas visitadas serão listados aqui"
-
-#~ msgid "_Copy Location"
-#~ msgstr "Co_piar localização"
-
-#~ msgid "Site"
-#~ msgstr "Site"
-
-#~ msgid "Forget the selected passwords"
-#~ msgstr "Esquece as senhas selecionadas"
-
-#~ msgid "Reveal all the passwords"
-#~ msgstr "Revela todas as senhas"
-
-#~ msgid "Preferences"
-#~ msgstr "Preferências"
-
-#~ msgid "Clear _Cookies"
-#~ msgstr "Limpar _cookies"
-
-#~ msgid "_Always accept"
-#~ msgstr "Sempre _aceitar"
-
-#~ msgid "For example, not from advertisers on these sites."
-#~ msgstr "Por exemplo, não de anunciantes nesses sites."
-
-#~ msgid "Only _from sites you visit"
-#~ msgstr "Apenas de sites que você _visita"
-
-#~ msgid "_Never accept"
-#~ msgstr "_Nunca aceitar"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Search"
-#~ msgstr "Pesquisa"
-
-#~ msgid "Ch_oose File…"
-#~ msgstr "Esc_olher arquivo…"
-
-#~ msgid "Switch to Tab"
-#~ msgstr "Alternar para aba"
-
-#~ msgid "Language"
-#~ msgstr "Idioma"
-
-#~ msgid "C_lear"
-#~ msgstr "_Limpar"
-
-#~ msgid "Filter domains"
-#~ msgstr "Filtrar domínios"
-
-#~ msgid "Search domains"
-#~ msgstr "Pesquisar domínios"
-
-#~ msgid "No data found"
-#~ msgstr "Nenhum dado localizado"
-
-#~ msgid "Filter passwords"
-#~ msgstr "Filtrar senhas"
-
-#~ msgid "Enable mouse _gesture"
-#~ msgstr "Habilitar _gesto do mouse"
-
-#~ msgid "You can select different search engines to use"
-#~ msgstr "Você pode selecionar mecanismos de pesquisa diferentes para usar"
-
-#~ msgid "Always start browser in _incognito mode"
-#~ msgstr "Sempre iniciar o navegador no modo anôn_imo"
-
-#~ msgid "Fonts & Style"
-#~ msgstr "Fontes e estilos"
-
-#~ msgid "Stored Data"
-#~ msgstr "Dados armazenados"
-
-#~ msgid "Manage _Cookies"
-#~ msgstr "Gerenciar _cookies"
-
-#~ msgid "Manage _Passwords"
-#~ msgstr "Gerenciar _senhas"
-
-#~ msgid "Manage Personal _Data"
-#~ msgstr "Gerenciar _dados pessoais"
-
-#~ msgid "Add language"
-#~ msgstr "Adicionar idioma"
-
-# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
-#~ msgid "Move language up"
-#~ msgstr "Mover idioma para cima"
-
-#~ msgid "Move language down"
-#~ msgstr "Mover idioma para baixo"
-
-#~ msgid "_Enable spell checking"
-#~ msgstr "_Habilitar verificação ortográfica"
-
-#~ msgid "_Remove Bookmark"
-#~ msgstr "_Remover favoritos"
-
-#~ msgid "Don’t use an external application to view page source."
-#~ msgstr "Não usa um aplicativo externo para visualizar a fonte de páginas."
-
-#~ msgid "Enable Plugins"
-#~ msgstr "Habilitar plug-ins"
-
-#~ msgid "Enable WebGL"
-#~ msgstr "Habilitar WebGL"
-
-#~ msgid "Whether to enable support for WebGL contexts."
-#~ msgstr "Habilita suporte para contextos WebGL."
-
-#~ msgid "Whether to enable support for WebAudio."
-#~ msgstr "Habilita suporte para WebAudio."
-
-#~ msgid "Do Not Track"
-#~ msgstr "Não rastrear"
-
-#~ msgid "Enables tracking query parameter removal."
-#~ msgstr "Habilita remoção de parâmetro de consulta de rastreamento."
-
-#~ msgid "Something went wrong while displaying this page."
-#~ msgstr "Alguma coisa deu errado ao exibir esta página."
-
-#~| msgid "Spell Checking"
-#~ msgid "Spell checking language"
-#~ msgstr "Idioma para verificação ortográfica"
-
-#~ msgid ""
-#~ "Language which is used by Spell checker in locale format (e.g. en_US, "
-#~ "de_DE)."
-#~ msgstr ""
-#~ "Idioma que é usado pelo verificador ortográfico no formato de localidade "
-#~ "(p.ex., en_US, de_DE)."
-
-#~ msgid ""
-#~ "Enables tracking query parameter removal. Note that when changing this "
-#~ "setting from the preferences dialog, the adblock-filters setting will "
-#~ "additionally be updated to add/remove EasyPrivacy filters."
-#~ msgstr ""
-#~ "Habilita remoção de parâmetro de consulta de rastreamento. Note que ao "
-#~ "alterar essa configuração a partir de um diálogo de preferências, a "
-#~ "configuração de filtros de adblock serão atualizados para adição/remoção "
-#~ "de filtros do EasyPrivacy."
-
-#~ msgid "Epiphany adblocker refused to load %s"
-#~ msgstr "O adblocker do Epiphany se recusou em carregar %s"
-
-#~ msgid "Try to block web _trackers"
-#~ msgstr "Tentar bloquear ras_treadores web"
-
-#~ msgid "Current maintainers"
-#~ msgstr "Mantenedores atuais"
-
-#~ msgid "Past maintainers"
-#~ msgstr "Mantenedores anteriores"
-
-#~ msgid "Documented by"
-#~ msgstr "Documentado por"
-
-#~ msgid "Artwork by"
-#~ msgstr "Arte por"
-
-#~ msgid "Contributors"
-#~ msgstr "Contribuidores"
-
-#~ msgid "org.gnome.Epiphany"
-#~ msgstr "org.gnome.Epiphany"
-
-#~ msgid "Process model"
-#~ msgstr "Modelo de processo"
-
-#~ msgid ""
-#~ "This option allows to set the process model used. Use “shared-secondary-"
-#~ "process” to use a single web process shared by all the tabs and “one-"
-#~ "secondary-process-per-web-view” to use a different web process for each "
-#~ "tab."
-#~ msgstr ""
-#~ "Esta opção permite definir o modelo de processo utilizado. Use “shared-"
-#~ "secondary-process” para usar um único processo web compartilhado por "
-#~ "todas as abas e “one-secondary-process-per-web-view” para usar um "
-#~ "processo web diferente para cada aba."
-
-#~ msgid ""
-#~ "Maximum number of web processes created at the same time when using “one-"
-#~ "secondary-process-per-web-view” model"
-#~ msgstr ""
-#~ "Número máximo de processos web criados ao mesmo tempo ao usar o modelo "
-#~ "“one-secondary-process-per-web-view”"
-
-#~ msgid ""
-#~ "This option sets a limit to the number of web processes that will be used "
-#~ "at the same time for the “one-secondary-process-per-web-view” model. The "
-#~ "default value is “0” and means no limit."
-#~ msgstr ""
-#~ "Esta opção define um limite ao número de processos web a serem usados ao "
-#~ "mesmo tempo para o modelo “one-secondary-process-per-web-view”. O valor "
-#~ "padrão é “0” e significa nenhum limite."
-
-#~ msgid "Others"
-#~ msgstr "Outros"
-
-#~ msgid "Local files"
-#~ msgstr "Arquivos locais"
-
-#~ msgid "If you quit, the downloads will be cancelled"
-#~ msgstr "Se você sair, os downloads serão cancelados"
-
-#~ msgid "Quit and cancel downloads"
-#~ msgstr "Sair e cancelar downloads"
-
-#~ msgid "Delete the selected cookies"
-#~ msgstr "Exclui os cookies selecionados"
-
-#~ msgid "C_lear all"
-#~ msgstr "_Limpar tudo"
-
-#~ msgid "_Edit Stylesheet"
-#~ msgstr "_Editar folha de estilo"
-
-#~ msgid "_Up"
-#~ msgstr "_Cima"
-
-#~ msgid "_Down"
-#~ msgstr "_Baixo"
-
-#~ msgid "Collections"
-#~ msgstr "Coleções"
-
-#~ msgid "_5 min"
-#~ msgstr "_5 min"
-
-#~ msgid "_15 min"
-#~ msgstr "_15 min"
-
-#~ msgid "_30 min"
-#~ msgstr "_30 min"
-
-#~ msgid "_60 min"
-#~ msgstr "_60 min"
-
-#~ msgid "URL Search"
-#~ msgstr "Pesquisar URL"
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "search-engines instead."
-#~ msgstr ""
-#~ "OBSOLETA: Essa chave está obsoleta e é ignorada. Em vez disso, use /org/"
-#~ "gnome/epiphany/search-engines."
-
-#~ msgid ""
-#~ "String that will be used as user agent, to identify the browser to the "
-#~ "web servers. DEPRECATED: This key is deprecated and ignored. Use /org/"
-#~ "gnome/epiphany/web/user-agent instead."
-#~ msgstr ""
-#~ "Texto que será usado como agente de usuário, para identificar o navegador "
-#~ "nos servidores web. OBSOLETO: Essa chave está obsoleta e é ignorada. Em "
-#~ "vez disso, use /org/gnome/epiphany/web/user-agent."
-
-#~ msgid ""
-#~ "Whether to store and prefill passwords in websites. DEPRECATED: This key "
-#~ "is deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords "
-#~ "instead."
-#~ msgstr ""
-#~ "Se deve-se armazenar e pré-preencher senhas em sites. OBSOLETO: Essa "
-#~ "chave está obsoleta e é ignorar. Em vez disso, use /org/gnome/epiphany/"
-#~ "web/remember-passwords."
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "web/enable-smooth-scrolling instead."
-#~ msgstr ""
-#~ "OBSOLETA: Essa chave está obsoleta e é ignorada. Em vez disso, use /org/"
-#~ "gnome/epiphany/web/enable-smooth-scrolling."
-
-#~ msgid ""
-#~ "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#~ "sync/ instead."
-#~ msgstr ""
-#~ "OBSOLETA: Essa chave está obsoleta e é ignorada. Em vez disso, use /org/"
-#~ "gnome/epiphany/sync/."
-
-#~ msgid "You are connected to %s"
-#~ msgstr "Você está conectado a %s"
-
-#~ msgid "Open a new tab in an existing browser window"
-#~ msgstr "Abre uma nova aba em uma janela existente do navegador"
-
-#~ msgid "Import bookmarks from the given file"
-#~ msgstr "Importa favoritos do arquivo dado"
-
-#~ msgid "Add a bookmark"
-#~ msgstr "Adiciona um favorito"
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgctxt "language"
-#~ msgid "User defined (%s)"
-#~ msgstr "Definido pelo usuário (%s)"
-
-#~ msgid "I_mport Bookmarks"
-#~ msgstr "I_mportar favoritos"
-
-#~ msgid "_About"
-#~ msgstr "_Sobre"
-
-#~ msgid "_Quit"
-#~ msgstr "_Sair"
-
-#~ msgid "Date"
-#~ msgstr "Data"
-
-#~ msgid "Open the selected pages in new tabs"
-#~ msgstr "Abre as páginas selecionadas em novas abas"
-
-#~ msgid "Zoom Out"
-#~ msgstr "Reduzir"
-
-#~ msgid "Zoom In"
-#~ msgstr "Ampliar"
-
-#~ msgid "Text _Encoding"
-#~ msgstr "Codificação de te_xto"
-
-#~ msgid "New _tab page"
-#~ msgstr "Página de nova _aba"
-
-#~ msgid "Search the Web for %s"
-#~ msgstr "Pesquisar na web por %s"
-
-#~ msgid "Contact us at:"
-#~ msgstr "Contate-nos em:"
-
-#~ msgid "Automatic downloads"
-#~ msgstr "Baixa arquivos automaticamente"
-
-#~ msgid ""
-#~ "When files cannot be opened by the browser they are automatically "
-#~ "downloaded to the download folder and opened with the appropriate "
-#~ "application."
-#~ msgstr ""
-#~ "Arquivos que não podem ser abertos pelo navegador são automaticamente "
-#~ "baixados na pasta de download e abertos com o aplicativo apropriado."
-
-#~ msgid "Installed plugins"
-#~ msgstr "Plug-ins instalados"
-
-#~ msgid "Plugins"
-#~ msgstr "Plug-ins"
-
-#~ msgid "Plugins are disabled in the preferences"
-#~ msgstr "Os plug-ins estão desabilitados nas preferências"
-
-#~ msgid "Enabled"
-#~ msgstr "Ativado"
-
-#~ msgid "MIME type"
-#~ msgstr "Tipo MIME"
-
-#~ msgid "Suffixes"
-#~ msgstr "Sufixos"
-
-#~ msgid "Open in browser"
-#~ msgstr "Abre no navegador"
-
-#~ msgid "New _Window"
-#~ msgstr "Nova _janela"
-
-#~ msgid "A_utomatically open downloaded files"
-#~ msgstr "Abrir arquivos baixados a_utomaticamente"
-
-#~ msgid "Enable _plugins"
-#~ msgstr "Habilitar _plug-ins"
-
-#~ msgid "Web Website"
-#~ msgstr "Site do Navegador web"
-
-#~ msgid "50%"
-#~ msgstr "50%"
-
-#~ msgid "75%"
-#~ msgstr "75%"
-
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgid "125%"
-#~ msgstr "125%"
-
-#~ msgid "150%"
-#~ msgstr "150%"
-
-#~ msgid "175%"
-#~ msgstr "175%"
-
-#~ msgid "200%"
-#~ msgstr "200%"
-
-#~ msgid "300%"
-#~ msgstr "300%"
-
-#~ msgid "400%"
-#~ msgstr "400%"
-
-#~ msgid ""
-#~ "Web 3.6 deprecated this directory and tried migrating this configuration "
-#~ "to ~/.config/epiphany"
-#~ msgstr ""
-#~ "Este diretório é obsoleto em Web 3.6 e foi feito uma tentativa de migrar "
-#~ "esta configuração para ~/.config/epiphany"
-
-#~ msgid "Past developers:"
-#~ msgstr "Desenvolvedores no passado:"
-
-#~ msgid "Failed to register device."
-#~ msgstr "Falha ao registrar o dispositivo."
-
-#~ msgid ""
-#~ "Please don’t leave this page until you have completed the verification."
-#~ msgstr "Por favor, não saia dessa página até ter completado a verificação."
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save page as web app"
-#~ msgstr "Salva a página como aplicativo web"
-
-#~ msgid "The sync secrets for the current sync user are null."
-#~ msgstr ""
-#~ "Os segredos de sincronização para o usuário de sincronização atual são "
-#~ "nulos."
-
-#~ msgid "The sync user currently logged in"
-#~ msgstr "O usuário de sincronização atualmente autenticado"
-
-#~ msgid "Sign out if you wish to stop syncing."
-#~ msgstr "Desconecte-se se você quiser interromper a sincronização."
-
-#~ msgid "Found more than one set of sync tokens."
-#~ msgstr "Localizados mais de um conjunto de tokens de sincronização."
-
-#~ msgid "Could not get the secret value of the sync tokens."
-#~ msgstr ""
-#~ "Não foi possível obter o valor do segredo dos tokens de sincronização."
-
-#~ msgid "The sync tokens are not a valid JSON."
-#~ msgstr "Os tokens de sincronização não são um JSON válido."
-
-# Parâmetro é "br-pt", conforme link informado
-#~ msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
-#~ msgstr "'https://duckduckgo.com/?q=%s&t=epiphany&kl=br-pt'"
-
-#~ msgid "Search string for keywords entered in the URL bar."
-#~ msgstr "Pesquisa texto por palavras-chave digitadas na barra de URL."
-
-#~ msgid "DuckDuckGo"
-#~ msgstr "DuckDuckGo"
-
-# Parâmetro é "br-pt", conforme link informado
-#~ msgid "https://duckduckgo.com/?q=%s&t=epiphany"
-#~ msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=br-pt"
-
-#~ msgid "Google"
-#~ msgstr "Google"
-
-#~ msgid "https://google.com/search?q=%s"
-#~ msgstr "https://google.com.br/search?q=%s"
-
-#~ msgid "Bing"
-#~ msgstr "Bing"
-
-#~ msgid "https://www.bing.com/search?q=%s"
-#~ msgstr "https://www.bing.com/search?q=%s&cc=br"
-
-# Tradução baseada na ideia de "mecanismo de pesquisa" (ex.: google, bing, yahoo, etc.). Também é conhecido como motor de pesquisa.
-#~ msgid "_Engine:"
-#~ msgstr "_Mecanismo:"
-
-#~ msgid "Encodings"
-#~ msgstr "Codificações"
-
-#~ msgid ""
-#~ "Whether to tell websites that we do not wish to be tracked. Please note "
-#~ "that web pages are not forced to follow this setting."
-#~ msgstr ""
-#~ "Avisa aos sites que não desejamos ser rastreados. Favor notar que páginas "
-#~ "web não são forçadas a seguirem esta configuração."
-
-#~ msgid "There are unsubmitted changes to form elements"
-#~ msgstr "Há mudanças em elementos de formulário que não foram enviadas"
-
-#~ msgid "If you close the document anyway, you will lose that information."
-#~ msgstr "Se você fechar o documento você perderá esta informação."
-
-#~ msgid "Select the personal data you wish to clear"
-#~ msgstr "Selecione os dados pessoais que você deseja limpar"
-
-#~ msgid ""
-#~ "You are about to clear personal data that is stored about the web pages "
-#~ "you have visited. Check the types of information that you want to remove:"
-#~ msgstr ""
-#~ "Você está prestes a limpar os dados pessoais armazenados sobre as páginas "
-#~ "da web que visitou. Verifique os tipos de informação que deseja remover:"
-
-#~ msgid "Coo_kies"
-#~ msgstr "Coo_kies"
-
-#~ msgid "Cache and _temporary files"
-#~ msgstr "Arquivos te_mporários e cache"
-
-#~ msgid "Browsing _history"
-#~ msgstr "_Histórico de navegação"
-
-#~ msgid "Saved _passwords"
-#~ msgstr "Senhas sa_lvas"
-
-#~ msgid "_Tell websites I do not want to be tracked"
-#~ msgstr "_Avisar aos sites que eu não quero ser rastreado"
-
-#~ msgid "web-browser"
-#~ msgstr "web-browser"
-
-#~ msgid "Automatically manage offline status with NetworkManager"
-#~ msgstr "Gerencia automaticamente status de offline com o NetworkManager"
-
-#~ msgid "[Deprecated]"
-#~ msgstr "[Obsoleto]"
-
-#~ msgid ""
-#~ "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
-#~ "instead."
-#~ msgstr ""
-#~ "[Obsoleto] Esta configuração está obsoleta; invés usar \"tabs-bar-"
-#~ "visibility-policy\"."
-
-#~ msgid "Visibility of the downloads window"
-#~ msgstr "Visibilidade da janela de downloads"
-
-#~ msgid ""
-#~ "Hide or show the downloads window. When hidden, a notification will be "
-#~ "shown when new downloads are started."
-#~ msgstr ""
-#~ "Ocultar janela de downloads. Quando oculta, uma notificação será mostrada "
-#~ "quando novos downloads forem iniciados."
-
-#~ msgid "Use own colors"
-#~ msgstr "Usar cores próprias"
-
-#~ msgid "Use your own colors instead of the colors the page requests."
-#~ msgstr "Usar suas próprias cores invés das cores requeridas pela página."
-
-#~ msgid "Use own fonts"
-#~ msgstr "Usar fontes próprias"
-
-#~ msgid "Use your own fonts instead of the fonts the page requests."
-#~ msgstr "Usar suas próprias fontes invés das fontes requeridas pela página."
-
-#~ msgid "Preferred languages, two letter codes."
-#~ msgstr "Idiomas preferidos, em código de duas letras."
-
-#~ msgid "Image animation mode"
-#~ msgstr "Modo de animação de imagens"
-
-#~ msgid ""
-#~ "How to present animated images. Possible values are \"normal\", \"once\" "
-#~ "and \"disabled\"."
-#~ msgstr ""
-#~ "Como apresentar imagens animadas. Valores possíveis são \"normal\", \"once"
-#~ "\" e \"disabled\"."
-
-#~ msgid "Enable JavaScript"
-#~ msgstr "Habilitar JavaScript"
-
-#~ msgid "Whether to show the title column in the bookmarks window."
-#~ msgstr "Mostra a coluna de títulos na janela de favoritos."
-
-#~ msgid "Whether to show the address column in the bookmarks window."
-#~ msgstr "Mostra a coluna de endereços na janela de favoritos."
-
-#~ msgid "_Don’t Save"
-#~ msgstr "_Não salvar"
-
-#~ msgid ""
-#~ "<p>The site at <strong>%s</strong> may have caused Web to close "
-#~ "unexpectedly.</p><p>If this happens again, please report the problem to "
-#~ "the <strong>%s</strong>  developers.</p>"
-#~ msgstr ""
-#~ "<p>A página web em <strong>%s</strong> pode ter causado o fechamento "
-#~ "inesperado da página.</p><p>Se isto acontecer novamente, por favor "
-#~ "informe o problema aos desenvolvedores do <strong>%s</strong>.</p>"
-
-#~ msgid "Directory “%s” is not writable"
-#~ msgstr "O diretório \"%s\" não é gravável"
-
-#~ msgid "You do not have permission to create files in this directory."
-#~ msgstr "Você não tem permissão para criar arquivos neste diretório."
-
-#~ msgid "Directory not Writable"
-#~ msgstr "Diretório não gravável"
-
-#~ msgid "Cannot overwrite existing file “%s”"
-#~ msgstr "Não foi possível sobrescrever arquivo \"%s\" existente"
-
-#~ msgid ""
-#~ "A file with this name already exists and you don't have permission to "
-#~ "overwrite it."
-#~ msgstr ""
-#~ "Um arquivo com este nome já existe e você não tem permissões para "
-#~ "sobrescrevê-lo."
-
-#~ msgid "Cannot Overwrite File"
-#~ msgstr "Não foi possível sobrescrever o arquivo"
-
-#~ msgid "Failed to copy cookies file from Mozilla."
-#~ msgstr "Falha ao copiar os arquivos de cookie do Mozilla."
-
-#~ msgid "Drag and drop this icon to create a link to this page"
-#~ msgstr "Arraste e solte esse ícone para criar um link para essa página"
-
-#~ msgid "%d bookmark is similar"
-#~ msgid_plural "%d bookmarks are similar"
-#~ msgstr[0] "%d favorito é igual"
-#~ msgstr[1] "%d favoritos são iguais"
-
-#~ msgid "Add Bookmark"
-#~ msgstr "Adicionar favorito"
-
-#~ msgid "“%s” Properties"
-#~ msgstr "Propriedades de \"%s\""
-
-#~ msgid "Entertainment"
-#~ msgstr "Entretenimento"
-
-#~ msgid "News"
-#~ msgstr "Notícias"
-
-#~ msgid "Shopping"
-#~ msgstr "Compras"
-
-#~ msgid "Sports"
-#~ msgstr "Esportes"
-
-#~ msgid "Travel"
-#~ msgstr "Viagens"
-
-#~ msgid "Work"
-#~ msgstr "Trabalho"
-
-#~ msgctxt "bookmarks"
-#~ msgid "Not Categorized"
-#~ msgstr "Sem categoria"
-
-#~ msgctxt "bookmarks"
-#~ msgid "Nearby Sites"
-#~ msgstr "Sites vizinhos"
-
-#~ msgid "Untitled"
-#~ msgstr "Sem título"
-
-#~ msgid "Web (RDF)"
-#~ msgstr "Web (RDF)"
-
-#~ msgid "Mozilla (HTML)"
-#~ msgstr "Mozilla (HTML)"
-
-#~ msgid "_File"
-#~ msgstr "_Arquivo"
-
-#~ msgid "_Edit"
-#~ msgstr "_Editar"
-
-#~ msgid "_View"
-#~ msgstr "_Ver"
-
-#~ msgid "_New Topic"
-#~ msgstr "_Novo tópico"
-
-#~ msgid "Create a new topic"
-#~ msgstr "Cria um novo tópico"
-
-#~ msgid "Open in New _Window"
-#~ msgid_plural "Open in New _Windows"
-#~ msgstr[0] "Abrir em nova _janela"
-#~ msgstr[1] "Abrir em novas _janelas"
-
-#~ msgid "Open the selected bookmark in a new window"
-#~ msgstr "Abre o favorito selecionado em uma nova janela"
-
-#~ msgid "Open the selected bookmark in a new tab"
-#~ msgstr "Abre o favorito selecionado em uma nova aba"
-
-#~ msgid "_Rename…"
-#~ msgstr "_Renomear…"
-
-#~ msgid "Rename the selected bookmark or topic"
-#~ msgstr "Renomeia o favorito ou tópico selecionado"
-
-#~ msgid "View or modify the properties of the selected bookmark"
-#~ msgstr "Vê ou modifica propriedades do favorito selecionado"
-
-#~ msgid "Import bookmarks from another browser or a bookmarks file"
-#~ msgstr "Importa favoritos de outro navegador ou de um arquivo de favoritos"
-
-#~ msgid "Export bookmarks to a file"
-#~ msgstr "Exporta favoritos para um arquivo"
-
-#~ msgid "Close the bookmarks window"
-#~ msgstr "Fecha a janela de favoritos"
-
-#~ msgid "Cut the selection"
-#~ msgstr "Corta a seleção"
-
-#~ msgid "Copy the selection"
-#~ msgstr "Copia a seleção"
-
-#~ msgid "Paste the clipboard"
-#~ msgstr "Cola a área de transferência"
-
-#~ msgid "Delete the selected bookmark or topic"
-#~ msgstr "Exclui o favorito ou tópico selecionado"
-
-#~ msgid "Select all bookmarks or text"
-#~ msgstr "Seleciona todos favoritos ou texto"
-
-#~ msgid "_Contents"
-#~ msgstr "S_umário"
-
-#~ msgid "Display bookmarks help"
-#~ msgstr "Mostra a ajuda sobre os favoritos"
-
-#~ msgid "Display credits for the web browser creators"
-#~ msgstr "Mostra os créditos dos criadores do navegador web"
-
-#~ msgid "Show the title column"
-#~ msgstr "Mostra a coluna de título"
-
-#~ msgid "Show the address column"
-#~ msgstr "Mostrar a coluna de endereço"
-
-#~ msgid "Type a topic"
-#~ msgstr "Digite um tópico"
-
-#~ msgid "Delete topic “%s”?"
-#~ msgstr "Excluir o tópico \"%s\"?"
-
-#~ msgid "Delete this topic?"
-#~ msgstr "Excluir esse tópico?"
-
-#~ msgid ""
-#~ "Deleting this topic will cause all its bookmarks to become uncategorized, "
-#~ "unless they also belong to other topics. The bookmarks will not be "
-#~ "deleted."
-#~ msgstr ""
-#~ "Excluir esse tópico irá fazer com que os favoritos dele sejam "
-#~ "descategorizados, a menos que eles também pertençam a outros tópicos. Os "
-#~ "favoritos não serão excluídos."
-
-#~ msgid "_Delete Topic"
-#~ msgstr "E_xcluir tópico"
-
-#~ msgid "Firebird"
-#~ msgstr "Firebird"
-
-#~ msgid "Mozilla “%s” profile"
-#~ msgstr "Perfil \"%s\" do Mozilla"
-
-#~ msgid "Galeon"
-#~ msgstr "Galeon"
-
-#~ msgid "Konqueror"
-#~ msgstr "Konqueror"
-
-#~ msgid "Import Failed"
-#~ msgstr "Falha ao importar"
-
-#~ msgid ""
-#~ "The bookmarks from “%s” could not be imported because the file is "
-#~ "corrupted or of an unsupported type."
-#~ msgstr ""
-#~ "Os favoritos de \"%s\" não foram importados pois o arquivo está "
-#~ "corrompido ou é de um tipo sem suporte."
-
-#~ msgid "Import Bookmarks from File"
-#~ msgstr "Importar favoritos de arquivo"
-
-#~ msgid "Firefox/Mozilla bookmarks"
-#~ msgstr "Favoritos do Firefox/Mozilla"
-
-#~ msgid "Galeon/Konqueror bookmarks"
-#~ msgstr "Favoritos do Konqueror/Galeon"
-
-#~ msgid "File f_ormat:"
-#~ msgstr "_Formato do arquivo:"
-
-#~ msgid "Import bookmarks from:"
-#~ msgstr "Importar favoritos de:"
-
-#~ msgid "_Copy Address"
-#~ msgstr "_Copiar endereço"
-
-#~ msgid "Topics"
-#~ msgstr "Tópicos"
-
-#~ msgid "Title"
-#~ msgstr "Título"
-
-#~ msgid "Open the bookmarks in this topic in new tabs"
-#~ msgstr "Abre os favoritos neste tópico em novas abas"
-
-#~ msgid "Create topic “%s”"
-#~ msgstr "Criar o tópico \"%s\""
-
-#~ msgid "Could not start Web"
-#~ msgstr "Não foi possível iniciar o navegador web"
-
-#~ msgid ""
-#~ "Startup failed because of the following error:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Inicialização falhou pelo seguinte erro:\n"
-#~ "%s"
-
-#~ msgid "Search the Web for '%s'"
-#~ msgstr "Pesquisar na web por \"%s\""
-
-#~ msgid "A_ddress:"
-#~ msgstr "_Endereço:"
-
-#~ msgid "T_opics:"
-#~ msgstr "Tópic_os:"
-
-#~ msgid "Sho_w all topics"
-#~ msgstr "Mos_trar todos os tópicos"
-
-#~ msgid "_Open…"
-#~ msgstr "_Abrir…"
-
-#~ msgid "Save _As…"
-#~ msgstr "Salvar _como…"
-
-#~ msgid "_Add Bookmark…"
-#~ msgstr "_Adicionar favorito…"
-
-#~ msgid "Add _Bookmark"
-#~ msgstr "A_dicionar favorito"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Bookmarks"
-#~ msgstr "Favoritos"
-
-# Parâmetro é "br-pt", conforme link informado
-#~ msgid "https://duckduckgo.com/?t=epiphany"
-#~ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=br-pt"
-
-#~ msgid "Epiphany Web Browser"
-#~ msgstr "Navegador da web Epiphany"
-
-# Acrescentei "&amp;kl=br-pt" para que a pesquisa retorne resultados mais adequados para brasileiros. -- Rafael
-#~ msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
-#~ msgstr "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=br-pt'"
-
-#~ msgid "This might not be the real %s."
-#~ msgstr "Este pode não ser o(a) verdadeiro(a) %s."
-
-#~ msgid ""
-#~ "When you try to connect securely, websites present identification to "
-#~ "prove that your connection has not been maliciously intercepted. There is "
-#~ "something wrong with this website’s identification:"
-#~ msgstr ""
-#~ "Quando você tenta se conectar de forma segura, sites da web apresentam "
-#~ "uma identificação para provar que sua conexão não foi interceptada "
-#~ "maliciosamente. Há algo de errado com a identificação deste site:"
-
-#~ msgid ""
-#~ "A third party may have hijacked your connection. You should continue only "
-#~ "if you know there is a good reason why this website does not use trusted "
-#~ "identification."
-#~ msgstr ""
-#~ "Uma entidade desconhecida pode ter sequestrado sua conexão. Você somente "
-#~ "deve continuar caso você tenha ciência de uma boa razão sobre o porquê "
-#~ "este site não usa identificação confiável."
-
-#~ msgid ""
-#~ "Legitimate banks, stores, and other public sites will not ask you to do "
-#~ "this."
-#~ msgstr ""
-#~ "Bancos, lojas e outros sites públicos legítimos não irão lhe pedir para "
-#~ "fazer isto."
-
-# Acrescentei a interjeição 'Ei' para chamar a atenção do usuário final --Enrico
-#~ msgid "Look out!"
-#~ msgstr "Ei, cuidado!"
-
-#~ msgctxt "accept-risk-access-key"
-#~ msgid "R"
-#~ msgstr "R"
-
-#~ msgid "Master password needed"
-#~ msgstr "Senha mestre necessária"
-
-#~ msgid ""
-#~ "The passwords from the previous version are locked with a master "
-#~ "password. If you want to import them, please enter your master password "
-#~ "below."
-#~ msgstr ""
-#~ "As senhas provenientes da versão anterior estão bloqueadas por uma senha "
-#~ "mestre. Se você deseja que o Epiphany importe essas senhas, por favor "
-#~ "digite sua senha mestre abaixo."
-
-#~ msgid "Stop"
-#~ msgstr "Parar"
-
-#~ msgid "Stop current data transfer"
-#~ msgstr "Para a transferência atual"
-
-#~ msgid "Display the latest content of the current page"
-#~ msgstr "Exibe o conteúdo mais recente da página atual"
-
-#~ msgid "Find Ne_xt"
-#~ msgstr "Localizar pró_xima"
-
-#~ msgid "Find Pre_vious"
-#~ msgstr "Localizar a_nterior"
-
-#~ msgid "Edit _Bookmarks"
-#~ msgstr "Editar _Marcadores"
-
-#~ msgid "_Stop"
-#~ msgstr "_Parar"
-
-#~ msgid "_Normal Size"
-#~ msgstr "_Tamanho normal"
-
-#~ msgid "_Location…"
-#~ msgstr "_Localização…"
-
-#~ msgid "_Previous Tab"
-#~ msgstr "Aba a_nterior"
-
-#~ msgid "_Detach Tab"
-#~ msgstr "_Destacar aba"
-
-#~ msgid "Popup _Windows"
-#~ msgstr "_Janelas instantâneas"
-
-#~ msgid "Save As"
-#~ msgstr "Salvar como"
-
-#~ msgid "Save As Application"
-#~ msgstr "Salva como aplicativo"
-
-#~ msgid "Encodings…"
-#~ msgstr "Codificações…"
-
-#~ msgid "Larger"
-#~ msgstr "Ampliar"
-
-#~ msgid "Smaller"
-#~ msgstr "Reduzir"
-
-#~ msgid "Zoom"
-#~ msgstr "Zoom"
-
-#~ msgid "Try Again"
-#~ msgstr "Tente de novo"
-
-# D de De novo, De qualquer forma, etc...
-#~ msgid "A"
-#~ msgstr "D"
-
-#~ msgid "Load Anyway"
-#~ msgstr "Carregar mesmo assim"
-
-#~ msgid "Part of this page is insecure."
-#~ msgstr "Parte desta página é insegura."
-
-#~ msgid "Show in folder"
-#~ msgstr "Mostrar na pasta"
-
-#~ msgid "_Automatic"
-#~ msgstr "_Automático"
-
-#~ msgid "_Other…"
-#~ msgstr "_Outros…"
-
-#~ msgid "Other encodings"
-#~ msgstr "Outras codificações"
-
-#~ msgid "_Downloads Bar"
-#~ msgstr "Barra de downloads"
-
-#~ msgid "Toolbar style"
-#~ msgstr "Estilo de barras de ferramentas"
-
-#~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
-#~ msgstr ""
-#~ "Estilo de barras de ferramentas. Valores permitidos são \"\" (usar estilo "
-#~ "padrão do GNOME), \"both\" (texto e icones), \"both-horiz\" (texto ao "
-#~ "lado de icones), \"icons\", e \"text\"."
-
-#~ msgid "Size of disk cache, in MB."
-#~ msgstr "Tamanho de cache de disco, em MB."
-
-#~ msgid "Temporary Files"
-#~ msgstr "Arquivos temporários"
-
-#~ msgid "_Disk space:"
-#~ msgstr "Espaço em _disco:"
-
-#~ msgid ""
-#~ "This web site’s identification uses very weak encryption. It has probably "
-#~ "been forged."
-#~ msgstr ""
-#~ "A identificação deste site usa codificação muito fraca. Provavelmente ela "
-#~ "foi forjada."
-
-#~ msgid ""
-#~ "This web site’s identification time-travelled from the future. Check the "
-#~ "date on your computer’s calendar."
-#~ msgstr ""
-#~ "A identificação deste site \"viajou no tempo\" futuro. Verifique a data "
-#~ "no calendário do seu computador."
