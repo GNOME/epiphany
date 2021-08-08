@@ -78,8 +78,6 @@ struct _EphyLocationEntry {
   guint allocation_width;
   guint progress_timeout;
   gdouble progress_fraction;
-  guint update_url_id;
-  guint update_bookmark_id;
 
   guint dns_prefetch_handle_id;
 
@@ -137,10 +135,9 @@ entry_button_release (GtkWidget *widget,
   return GDK_EVENT_STOP;
 }
 
-static gboolean
-update_entry_style_idle (gpointer user_data)
+static void
+update_entry_style (EphyLocationEntry *self)
 {
-  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
   PangoAttrList *attrs;
   PangoAttribute *color_normal;
   PangoAttribute *color_dimmed;
@@ -190,19 +187,6 @@ update_entry_style_idle (gpointer user_data)
 out:
   gtk_entry_set_attributes (GTK_ENTRY (self->url_entry), attrs);
   pango_attr_list_unref (attrs);
-  self->update_url_id = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-update_entry_style (EphyLocationEntry *self)
-{
-  /* Workaround using g_idle, ideally this won't be necessary at all
-   * The UI breaks if we do this immediately, so run it later as a workaround.
-   */
-  g_clear_handle_id (&self->update_url_id, g_source_remove);
-  self->update_url_id = g_idle_add (update_entry_style_idle, self);
 }
 
 static gboolean
@@ -504,8 +488,6 @@ ephy_location_entry_dispose (GObject *object)
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
   g_clear_handle_id (&entry->progress_timeout, g_source_remove);
-  g_clear_handle_id (&entry->update_url_id, g_source_remove);
-  g_clear_handle_id (&entry->update_bookmark_id, g_source_remove);
 
   g_clear_object (&entry->css_provider);
 
@@ -1402,12 +1384,13 @@ ephy_location_entry_focus (EphyLocationEntry *entry)
   gtk_widget_grab_focus (GTK_WIDGET (entry->url_entry));
 }
 
-gboolean
-ephy_location_entry_set_bookmark_icon_state_idle (gpointer user_data)
+void
+ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
+                                             EphyBookmarkIconState  state)
 {
-  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
   GtkStyleContext *context;
-  EphyBookmarkIconState state = self->icon_state;
+
+  self->icon_state = state;
 
   g_assert (EPHY_IS_LOCATION_ENTRY (self));
 
@@ -1441,18 +1424,6 @@ ephy_location_entry_set_bookmark_icon_state_idle (gpointer user_data)
     default:
       g_assert_not_reached ();
   }
-
-  self->update_bookmark_id = 0;
-  return G_SOURCE_REMOVE;
-}
-
-void
-ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
-                                             EphyBookmarkIconState  state)
-{
-  self->icon_state = state;
-  g_clear_handle_id (&self->update_bookmark_id, g_source_remove);
-  self->update_bookmark_id = g_idle_add (ephy_location_entry_set_bookmark_icon_state_idle, self);
 }
 
 /**
