@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/epiphany">
-    <file preprocess="xml-stripblanks" compressed="true">channel-insecure-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">computer-fail-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">private-mode.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">web-watermark.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">overview-remove-item.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">network-error-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" compressed="true">security-high-symbolic.svg</file>
     <file compressed="true">about.ini</file>
-    <file alias="page-templates/about.css" compressed="true">about.css</file>
-    <file alias="page-templates/error.css" compressed="true">error.css</file>
-    <file alias="page-templates/error.html" compressed="true">error.html</file>
     <file preprocess="xml-stripblanks" compressed="true">gtk/action-bar-end.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">gtk/action-bar-start.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">gtk/action-bar.ui</file>
@@ -44,8 +34,22 @@
     <file preprocess="xml-stripblanks" compressed="true">gtk/webapp-additional-urls-dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">gtk/web-extensions-dialog.ui</file>
   </gresource>
+  <gresource prefix="/org/gnome/epiphany/page-templates">
+    <file compressed="true">about.css</file>
+    <file compressed="true">error.css</file>
+    <file compressed="true">error.html</file>
+  </gresource>
+  <gresource prefix="/org/gnome/epiphany/page-icons">
+    <file preprocess="xml-stripblanks" compressed="true">channel-insecure-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">computer-fail-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">private-mode.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">web-watermark.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">overview-remove-item.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">network-error-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" compressed="true">security-high-symbolic.svg</file>
+  </gresource>
   <gresource prefix="/org/gnome/Epiphany/icons">
-    <file compressed="true" alias="scalable/actions/ephy-download-symbolic.svg" preprocess="xml-stripblanks">ephy-download-symbolic.svg</file>
+    <file compressed="true" alias="scalable/actions/ephy-download-symbolic.svg">ephy-download-symbolic.svg</file>
     <file compressed="true" alias="scalable/actions/ephy-bookmark-tag-symbolic.svg">ephy-bookmark-tag-symbolic.svg</file>
     <file compressed="true" alias="scalable/actions/ephy-reader-mode-symbolic.svg">ephy-reader-mode-symbolic.svg</file>
     <file compressed="true" alias="scalable/status/ephy-audio-muted-symbolic.svg">ephy-audio-muted-symbolic.svg</file>

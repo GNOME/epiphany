@@ -3880,6 +3880,7 @@ static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
+  g_auto (GStrv) cors_allowlist = NULL;
   GtkStyleContext *context;
   GdkRGBA color;
 
@@ -3899,6 +3900,11 @@ ephy_web_view_constructed (GObject *object)
   context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
   if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
     webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
+
+  cors_allowlist = g_new (char *, 2);
+  cors_allowlist[0] = g_strdup ("ephy-resource://*/*");
+  cors_allowlist[1] = NULL;
+  webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), (const char * const *)cors_allowlist);
 }
 
 static void

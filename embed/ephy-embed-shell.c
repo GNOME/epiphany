@@ -714,6 +714,8 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
   gsize size;
+  WebKitWebView *request_view;
+  const char *uri;
   g_autoptr (GInputStream) stream = NULL;
   g_autoptr (GError) error = NULL;
 
@@ -723,11 +725,34 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
     return;
   }
 
-  stream = g_resources_open_stream (path, 0, &error);
-  if (stream)
-    webkit_uri_scheme_request_finish (request, stream, size, NULL);
-  else
-    webkit_uri_scheme_request_finish_error (request, error);
+  request_view = webkit_uri_scheme_request_get_web_view (request);
+  uri = webkit_web_view_get_uri (request_view);
+
+  /* ephy-resource:// requests bypass CORS in order to allow ephy-pdf:// to
+   * access ephy-resource://. Accordingly, we need some custom security to
+   * prevent websites from directly accessing ephy-resource://.
+   *
+   * We'll have to leave open /page-icons and /page-templates since they are
+   * needed for our alternate HTML error pages.
+   */
+  if (g_str_has_prefix (uri, "ephy-resource:") ||
+      g_str_has_prefix (path, "/org/gnome/epiphany/page-icons/") ||
+      g_str_has_prefix (path, "/org/gnome/epiphany/page-templates/") ||
+      (g_str_has_prefix (uri, "ephy-pdf:") && g_str_has_prefix (path, "/org/gnome/epiphany/pdfjs/")) ||
+      (g_str_has_prefix (uri, "ephy-reader:") && g_str_has_prefix (path, "/org/gnome/epiphany/readability/")) ||
+      (g_str_has_prefix (uri, "ephy-source:") && g_str_has_prefix (path, "/org/gnome/epiphany/highlightjs/"))) {
+    stream = g_resources_open_stream (path, 0, &error);
+    if (stream)
+      webkit_uri_scheme_request_finish (request, stream, size, NULL);
+    else
+      webkit_uri_scheme_request_finish_error (request, error);
+    return;
+  }
+
+  error = g_error_new (WEBKIT_NETWORK_ERROR, WEBKIT_NETWORK_ERROR_FAILED,
+                       _("URI %s not authorized to access Epiphany resource %s"),
+                       uri, path);
+  webkit_uri_scheme_request_finish_error (request, error);
 }
 
 static void
