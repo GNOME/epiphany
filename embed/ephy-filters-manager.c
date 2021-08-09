@@ -571,9 +571,59 @@ filter_info_setup_load_file (FilterInfo *self,
 }
 
 static void
+json_file_deleted (GObject      *source,
+                   GAsyncResult *res,
+                   gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  if (!g_file_delete_finish (G_FILE (source), res, &error))
+    g_warning ("Could not delete filter json file: %s", error->message);
+}
+
+typedef struct {
+  EphyDownload *download;
+  FilterInfo *self;
+} FilterJsonInfoAsyncData;
+
+static void
+json_file_info_callback (GObject      *source_object,
+                         GAsyncResult *res,
+                         gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  FilterJsonInfoAsyncData *data = user_data;
+  GFile *json_file = G_FILE (source_object);
+  g_autoptr (GFileInfo) info = g_file_query_info_finish (json_file, res, &error);
+  const char *content_type = NULL;
+
+  if (info)
+    content_type = g_file_info_get_content_type (info);
+  else
+    g_warning ("Couldn't query filter file %s: %s", ephy_download_get_destination_uri (data->download), error->message);
+
+  if (content_type && g_strcmp0 ("application/json", content_type) == 0) {
+    filter_info_setup_load_file (data->self, json_file);
+  } else {
+    g_warning ("Filter source %s has invalid MIME type: %s",
+               ephy_download_get_destination_uri (data->download),
+               content_type);
+
+    g_file_delete_async (json_file, G_PRIORITY_DEFAULT, NULL, json_file_deleted, NULL);
+
+    filter_info_setup_done (data->self);
+  }
+
+  g_object_unref (data->download);
+  g_free (data);
+}
+
+static void
 download_completed_cb (EphyDownload *download,
                        FilterInfo   *self)
 {
+  g_autoptr (GFile) json_file = NULL;
+  FilterJsonInfoAsyncData *data = NULL;
+
   g_assert (download);
   g_assert (self);
 
@@ -581,17 +631,18 @@ download_completed_cb (EphyDownload *download,
 
   LOG ("Filter source %s fetched from <%s>", filter_info_get_identifier (self), self->source_uri);
 
-  if (g_strcmp0 ("application/json", ephy_download_get_content_type (download)) == 0) {
-    g_autoptr (GFile) json_file = g_file_new_for_uri (ephy_download_get_destination_uri (download));
-    filter_info_setup_load_file (self, json_file);
-  } else {
-    g_warning ("Filter source %s has invalid MIME type: %s",
-               ephy_download_get_destination_uri (download),
-               ephy_download_get_content_type (download));
-    filter_info_setup_done (self);
-  }
+  data = g_new0 (FilterJsonInfoAsyncData, 1);
+  data->download = download;
+  data->self = self;
 
-  g_object_unref (download);
+  json_file = g_file_new_for_uri (ephy_download_get_destination_uri (download));
+  g_file_query_info_async (json_file,
+                           G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           NULL,
+                           json_file_info_callback,
+                           data);
 }
 
 static void
