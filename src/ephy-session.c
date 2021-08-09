@@ -494,8 +494,6 @@ ephy_session_class_init (EphySessionClass *class)
 void
 ephy_session_close (EphySession *session)
 {
-  EphyPrefsRestoreSessionPolicy policy;
-
   g_assert (EPHY_IS_SESSION (session));
 
   LOG ("ephy_session_close");
@@ -510,12 +508,7 @@ ephy_session_close (EphySession *session)
 
   session->closing = TRUE;
 
-  policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
-  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS) {
-    ephy_session_save_now (session);
-  } else {
-    session_delete (session);
-  }
+  ephy_session_save_now (session);
 
   session->dont_save = TRUE;
 }
@@ -789,6 +782,24 @@ write_ephy_window (xmlTextWriterPtr  writer,
 {
   GList *l;
   int ret;
+  EphyPrefsRestoreSessionPolicy policy;
+  int last_pinned_tab = -1;
+  gboolean only_pinned_tabs = FALSE;
+
+  policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
+  only_pinned_tabs = policy == EPHY_PREFS_RESTORE_SESSION_POLICY_CRASHED;
+
+  if (only_pinned_tabs) {
+    for (l = window->tabs; l != NULL; l = l->next, last_pinned_tab++) {
+      SessionTab *tab = (SessionTab *)l->data;
+
+      if (!tab->pinned)
+        break;
+    }
+
+    if (last_pinned_tab == -1)
+      return 0;
+  }
 
   ret = xmlTextWriterStartElement (writer, (xmlChar *)"window");
   if (ret < 0)
@@ -798,6 +809,9 @@ write_ephy_window (xmlTextWriterPtr  writer,
   if (ret < 0)
     return ret;
 
+  if (last_pinned_tab != -1 && window->active_tab >= last_pinned_tab)
+    window->active_tab = last_pinned_tab + 1;
+
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"active-tab", "%d",
                                            window->active_tab);
   if (ret < 0)
@@ -805,12 +819,29 @@ write_ephy_window (xmlTextWriterPtr  writer,
 
   for (l = window->tabs; l != NULL; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
+
+    if (only_pinned_tabs && !tab->pinned)
+      break;
+
     ret = write_tab (writer, tab);
     if (ret < 0)
       break;
   }
   if (ret < 0)
     return ret;
+
+  if (only_pinned_tabs && last_pinned_tab != -1) {
+    /* We are in EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER with pinned tabs
+     * Create a new overview page after the pinned tab
+     */
+    SessionTab *new_session_tab = g_new0 (SessionTab, 1);
+
+    new_session_tab->url = g_strdup ("about:overview");
+    new_session_tab->title = g_strdup ("");
+
+    write_tab (writer, new_session_tab);
+    session_tab_free (new_session_tab);
+  }
 
   ret = xmlTextWriterEndElement (writer);       /* window */
   return ret;
@@ -1014,18 +1045,12 @@ ephy_session_save_timeout_cb (EphySession *session)
 void
 ephy_session_save (EphySession *session)
 {
-  EphyPrefsRestoreSessionPolicy policy;
-
   g_assert (EPHY_IS_SESSION (session));
 
   if (session->save_source_id)
     return;
 
   if (session->dont_save)
-    return;
-
-  policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
-  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
     return;
 
   /* Schedule the save to occur one second in the future to ensure we don't
@@ -1722,7 +1747,6 @@ ephy_session_resume (EphySession         *session,
 {
   GTask *task;
   gboolean has_session_state;
-  EphyPrefsRestoreSessionPolicy policy;
   EphyShell *shell;
 
   LOG ("ephy_session_resume");
@@ -1731,20 +1755,13 @@ ephy_session_resume (EphySession         *session,
 
   has_session_state = session_state_file_exists (session);
 
-  policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
-                                EPHY_PREFS_RESTORE_SESSION_POLICY);
-
   shell = ephy_shell_get_default ();
 
   /* If we are auto-resuming, and we never want to
    * restore the session, clobber the session state
    * file.
    */
-  if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-    session_delete (session);
-
-  if (has_session_state == FALSE ||
-      policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER) {
+  if (has_session_state == FALSE) {
     session_maybe_open_window (session, user_time);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     ephy_session_load (session, SESSION_STATE, user_time, cancellable,
