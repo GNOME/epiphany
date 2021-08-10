@@ -146,6 +146,7 @@ epiphany_sources = [
   pdfjs_resources,
   highlightjs_resources,
   readability_resources,
+  adguard_resources
 ]
 
 epiphany = executable('epiphany',
