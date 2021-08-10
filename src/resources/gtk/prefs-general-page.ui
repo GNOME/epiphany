@@ -131,6 +131,26 @@
       </object>
     </child>
     <child>
+      <object class="AdwPreferencesGroup" id="new_tab_box">
+        <property name="title" translatable="yes">New Tab</property>
+        <child>
+          <object class="AdwComboRow" id="new_tab_page">
+            <property name="title" translatable="yes">New Tab Page</property>
+            <property name="expression">
+              <closure type="gchararray" function="new_tab_page_get_name">
+                <lookup name="value" type="AdwEnumListItem"/>
+              </closure>
+            </property>
+            <property name="model">
+              <object class="AdwEnumListModel">
+                <property name="enum-type">EphyPrefsNewTabPage</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="AdwPreferencesGroup" id="download_box">
         <property name="title" translatable="yes">Downloads</property>
         <child>

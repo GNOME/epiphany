@@ -3810,6 +3810,7 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
 {
   EphyEmbedShell *shell;
   EphyEmbedShellMode mode;
+  g_autofree char *home = NULL;
 
   g_assert (EPHY_IS_WEB_VIEW (view));
 
@@ -3822,8 +3823,20 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
     ephy_web_view_load_url (view, "about:incognito");
   else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     ephy_web_view_load_url (view, "about:blank");
-  else
-    ephy_web_view_load_url (view, "about:overview");
+  else {
+    EphyPrefsNewTabPage new_tab_page = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_NEW_TAB_PAGE);
+
+    if (new_tab_page == EPHY_PREFS_NEW_TAB_PAGE_BLANK)
+      ephy_web_view_load_url (view, "about:blank");
+    else {
+      home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+
+      if (new_tab_page == EPHY_PREFS_NEW_TAB_PAGE_HOMEPAGE && home && home[0] != '\0')
+        ephy_web_view_load_url (view, home);
+      else
+        ephy_web_view_load_url (view, "about:overview");
+    }
+  }
 }
 
 /**
