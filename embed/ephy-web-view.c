@@ -873,6 +873,8 @@ decide_policy_cb (WebKitWebView            *web_view,
 
   /* If it's not the main resource, we don't need to set the document type. */
   if (is_main_resource) {
+    const char *method = webkit_uri_request_get_http_method (request);
+
     type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
     if (strcmp (mime_type, "text/html") == 0 || strcmp (mime_type, "text/plain") == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_HTML;
@@ -880,7 +882,7 @@ decide_policy_cb (WebKitWebView            *web_view,
       type = EPHY_WEB_VIEW_DOCUMENT_XML;
     } else if (strncmp (mime_type, "image/", 6) == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-    } else if (strcmp (mime_type, "application/pdf") == 0) {
+    } else if (strcmp (mime_type, "application/pdf") == 0 && strcmp (method, "GET") == 0) {
       g_autofree char *pdf_uri = NULL;
 
       /* FIXME: figure out how to make PDFs work in iframes. */
