@@ -1,3 +1,10 @@
+adguard_resource_files = files('adguard/adguard.gresource.xml')
+adguard_resources = gnome.compile_resources('adguard-resources',
+    adguard_resource_files,
+    c_name: 'adguard',
+    source_dir: 'adguard'
+)
+
 pdfjs_resource_files = files('pdfjs/pdfjs.gresource.xml')
 pdfjs_resources = gnome.compile_resources('pdfjs-resources',
     pdfjs_resource_files,
