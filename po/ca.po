@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-07-13 09:25+0000\n"
+"POT-Creation-Date: 2021-08-10 05:26+0000\n"
 "PO-Revision-Date: 2020-12-19 14:02+0100\n"
 "Last-Translator: Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -57,7 +57,7 @@ msgstr "El projecte GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:1010
+#: src/ephy-main.c:406 src/window-commands.c:1013
 msgid "Web"
 msgstr "Web"
 
@@ -155,14 +155,12 @@ msgstr "Si s'ha de restaurar de forma automàtica la darrera sessió"
 #: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
-"“always” (the previous state of the application is always restored), "
-"“crashed” (the session is only restored if the application crashes) and "
-"“never” (the homepage is always shown)."
+"“always” (the previous state of the application is always restored) and "
+"“crashed” (the session is only restored if the application crashes)."
 msgstr ""
-"Defineix com es restaurarà la sessió durant l'inici. Els valors permesos "
-"són«always» (l'estat previ de l'aplicació sempre es restaura), «crashed» (la"
-" sessió només es restaura si l'aplicació falla) i «never» (la pàgina d'inici"
-" es mostra sempre)."
+"Defineix com es restaurarà la sessió durant l'inici. Els valors permesos són"
+" «always» (l'estat previ de l'aplicació sempre es restaura), «crashed» (la "
+"sessió només es restaura si l'aplicació falla)."
 
 #: data/org.gnome.epiphany.gschema.xml:56
 msgid ""
@@ -1016,7 +1014,7 @@ msgstr "Versió %s"
 msgid "About Web"
 msgstr "Quant al Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:1012
+#: embed/ephy-about-handler.c:194 src/window-commands.c:1015
 msgid "Epiphany Technology Preview"
 msgstr "Tecnologia de previsualització Epiphany"
 
@@ -1116,11 +1114,11 @@ msgstr "Baixada sol·licitada"
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
 #: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:243
 #: src/resources/gtk/firefox-sync-dialog.ui:167
-#: src/resources/gtk/history-dialog.ui:96
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:277
+#: src/resources/gtk/history-dialog.ui:91
+#: src/resources/gtk/prefs-lang-dialog.ui:15 src/window-commands.c:277
 #: src/window-commands.c:335 src/window-commands.c:379
 #: src/window-commands.c:563 src/window-commands.c:648
-#: src/window-commands.c:810 src/window-commands.c:1888
+#: src/window-commands.c:810 src/window-commands.c:1892
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -1167,6 +1165,11 @@ msgstr "F11"
 #: embed/ephy-embed.c:807
 msgid "Web is being controlled by automation."
 msgstr "Web està sent controlat per automatització."
+
+#: embed/ephy-embed-shell.c:753
+#, c-format
+msgid "URI %s not authorized to access Epiphany resource %s"
+msgstr "L'URI %s no està autoritzat a accedir al recurs de l'Epiphany %s"
 
 #: embed/ephy-embed-utils.c:66
 #, c-format
@@ -1529,32 +1532,32 @@ msgstr "Troba l'ocurrència següent de les cadenes cercades"
 msgid "%s is not a valid URI"
 msgstr "«%s» no és un URI vàlid"
 
-#: embed/ephy-web-view.c:188 src/window-commands.c:1352
+#: embed/ephy-web-view.c:190 src/window-commands.c:1356
 msgid "Open"
 msgstr "Obre"
 
-#: embed/ephy-web-view.c:367
+#: embed/ephy-web-view.c:369
 msgid "Not No_w"
 msgstr "_Ara no"
 
-#: embed/ephy-web-view.c:368
+#: embed/ephy-web-view.c:370
 msgid "_Never Save"
 msgstr "_No ho desis mai"
 
-#: embed/ephy-web-view.c:369 lib/widgets/ephy-file-chooser.c:175
+#: embed/ephy-web-view.c:371 lib/widgets/ephy-file-chooser.c:175
 #: src/resources/gtk/firefox-sync-dialog.ui:176 src/window-commands.c:647
 msgid "_Save"
 msgstr "De_sa"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
-#: embed/ephy-web-view.c:376
+#: embed/ephy-web-view.c:378
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Segur que voleu desar la contrasenya per «%s»?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:615
+#: embed/ephy-web-view.c:617
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be"
 " kept private."
@@ -1562,80 +1565,80 @@ msgstr ""
 "Atenció: aquest formulari no és segur. Si escriviu la contrasenya, no es "
 "mantindrà privada."
 
-#: embed/ephy-web-view.c:828
+#: embed/ephy-web-view.c:830
 msgid "Web process crashed"
 msgstr "El procés Web ha fallat"
 
-#: embed/ephy-web-view.c:831
+#: embed/ephy-web-view.c:833
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "S'ha finalitzat el procés Web perquè s'ha superat el límit de memòria"
 
-#: embed/ephy-web-view.c:834
+#: embed/ephy-web-view.c:836
 msgid "Web process terminated by API request"
 msgstr "S'ha finalitzat el procés Web per una petició API"
 
-#: embed/ephy-web-view.c:1046 embed/ephy-web-view.c:1167
+#: embed/ephy-web-view.c:1063 embed/ephy-web-view.c:1184
 #: lib/widgets/ephy-security-popover.c:512
 msgid "Deny"
 msgstr "Denega"
 
-#: embed/ephy-web-view.c:1047 embed/ephy-web-view.c:1168
+#: embed/ephy-web-view.c:1064 embed/ephy-web-view.c:1185
 #: lib/widgets/ephy-security-popover.c:511
 msgid "Allow"
 msgstr "Permet"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1060
+#: embed/ephy-web-view.c:1077
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "La pàgina %s vol mostrar notificacions a l'escriptori."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1065
+#: embed/ephy-web-view.c:1082
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "La pàgina %s vol saber la vostra ubicació."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1070
+#: embed/ephy-web-view.c:1087
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "La pàgina %s vol utilitzar el vostre micròfon."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1075
+#: embed/ephy-web-view.c:1092
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "La pàgina %s vol utilitzar la vostra càmera web."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1080
+#: embed/ephy-web-view.c:1097
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "La pàgina %s vol utilitzar la càmera i el micròfon."
 
-#: embed/ephy-web-view.c:1175
+#: embed/ephy-web-view.c:1192
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "Voleu que «%s» utilitzi galetes mentre navegueu per «%s»?"
 
-#: embed/ephy-web-view.c:1184
+#: embed/ephy-web-view.c:1201
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "Això permetrà que «%s» faci un seguiment de la vostra activitat."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1362
+#: embed/ephy-web-view.c:1379
 #, c-format
 msgid "Loading “%s”…"
 msgstr "S'està carregant «%s»…"
 
-#: embed/ephy-web-view.c:1364 embed/ephy-web-view.c:1370
+#: embed/ephy-web-view.c:1381 embed/ephy-web-view.c:1387
 msgid "Loading…"
 msgstr "S'està carregant…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1709
+#: embed/ephy-web-view.c:1726
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1643,7 +1646,7 @@ msgstr ""
 "diferent."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1714
+#: embed/ephy-web-view.c:1731
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1652,7 +1655,7 @@ msgstr ""
 "Consulteu la data al calendari del vostre ordinador."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1719
+#: embed/ephy-web-view.c:1736
 msgid ""
 "This website’s identification was not issued by a trusted organization."
 msgstr ""
@@ -1660,7 +1663,7 @@ msgstr ""
 " confiança."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1724
+#: embed/ephy-web-view.c:1741
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1668,7 +1671,7 @@ msgstr ""
 "danyada."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1729
+#: embed/ephy-web-view.c:1746
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1677,7 +1680,7 @@ msgstr ""
 "certificació que el va emetre."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1734
+#: embed/ephy-web-view.c:1751
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1685,7 +1688,7 @@ msgstr ""
 "La identificació del lloc web no és confiable perquè usa xifrat molt dèbil."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1739
+#: embed/ephy-web-view.c:1756
 msgid ""
 "This website’s identification is only valid for future dates. Check the date"
 " on your computer’s calendar."
@@ -1695,24 +1698,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1802 embed/ephy-web-view.c:1858
+#: embed/ephy-web-view.c:1819 embed/ephy-web-view.c:1875
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema carregant la pàgina"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1805
+#: embed/ephy-web-view.c:1822
 msgid "Unable to display this website"
 msgstr "No es pot visualitzar aquest lloc web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1809
+#: embed/ephy-web-view.c:1826
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "El lloc %s sembla no estar disponible."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1813
+#: embed/ephy-web-view.c:1830
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1722,7 +1725,7 @@ msgstr ""
 " correctament."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1823
+#: embed/ephy-web-view.c:1840
 #, c-format
 msgid "The precise error was: %s"
 msgstr "L'error concret ha estat: %s"
@@ -1732,33 +1735,33 @@ msgstr "L'error concret ha estat: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS
 #. HERE.
-#: embed/ephy-web-view.c:1828 embed/ephy-web-view.c:1881
-#: embed/ephy-web-view.c:1920 embed/ephy-web-view.c:1954
-#: src/resources/gtk/page-menu-popover.ui:134
+#: embed/ephy-web-view.c:1845 embed/ephy-web-view.c:1898
+#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:1971
+#: src/resources/gtk/page-menu-popover.ui:133
 msgid "Reload"
 msgstr "Torna a carregar"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1831 embed/ephy-web-view.c:1884
-#: embed/ephy-web-view.c:1923 embed/ephy-web-view.c:1957
+#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1901
+#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:1974
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1861
+#: embed/ephy-web-view.c:1878
 msgid "Oops! There may be a problem"
 msgstr "Vaja! Sembla que hi ha un problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1865
+#: embed/ephy-web-view.c:1882
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "La pàgina %s pot haver fet que la web es tanqui inesperadament."
 
 #. Further error details when a site cannot be loaded due to a page crash
 #. error.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1889
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1766,18 +1769,18 @@ msgstr ""
 "%s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1909
+#: embed/ephy-web-view.c:1926
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema mostrant la pàgina"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1912
+#: embed/ephy-web-view.c:1929
 msgid "Oops!"
 msgstr "Error!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:1932
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1786,18 +1789,18 @@ msgstr ""
 " a carregar o aneu a una altra pàgina per a continuar."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1943
+#: embed/ephy-web-view.c:1960
 #, c-format
 msgid "Unresponsive Page"
 msgstr "La pàgina no respon"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1946
+#: embed/ephy-web-view.c:1963
 msgid "Uh-oh!"
 msgstr "Vaja!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1949
+#: embed/ephy-web-view.c:1966
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1806,18 +1809,18 @@ msgstr ""
 "visiteu una pàgina diferent per a continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1983
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid "Security Violation"
 msgstr "Violació de seguretat"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1986
+#: embed/ephy-web-view.c:2003
 msgid "This Connection is Not Secure"
 msgstr "Aquesta connexió NO és segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1990
+#: embed/ephy-web-view.c:2007
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1830,16 +1833,16 @@ msgstr ""
 #. HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2000 embed/ephy-web-view.c:2089
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2106
+#: embed/ephy-web-view.c:2157
 msgid "Go Back"
 msgstr "Torna enrere"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2003 embed/ephy-web-view.c:2092
-#: embed/ephy-web-view.c:2143
+#: embed/ephy-web-view.c:2020 embed/ephy-web-view.c:2109
+#: embed/ephy-web-view.c:2160
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
@@ -1848,7 +1851,7 @@ msgstr "B"
 #. mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics
 #. here.
-#: embed/ephy-web-view.c:2006 embed/ephy-web-view.c:2095
+#: embed/ephy-web-view.c:2023 embed/ephy-web-view.c:2112
 msgid "Accept Risk and Proceed"
 msgstr "Accepta el risc i procedeix"
 
@@ -1856,23 +1859,23 @@ msgstr "Accepta el risc i procedeix"
 #. certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing
 #. error page.
-#: embed/ephy-web-view.c:2010 embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:2027 embed/ephy-web-view.c:2116
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2040
+#: embed/ephy-web-view.c:2057
 #, c-format
 msgid "Security Warning"
 msgstr "Avís de seguretat"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2043
+#: embed/ephy-web-view.c:2060
 msgid "Unsafe website detected!"
 msgstr "Lloc web no segur detectat!"
 
-#: embed/ephy-web-view.c:2050
+#: embed/ephy-web-view.c:2067
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1882,7 +1885,7 @@ msgstr ""
 "maliciós que es pot descarregar al vostre 'ordinador sense el vostre "
 "consentiment."
 
-#: embed/ephy-web-view.c:2054
+#: embed/ephy-web-view.c:2071
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1891,7 +1894,7 @@ msgstr ""
 "Podeu obtenir més informació sobre el contingut web perillós, inclosos els "
 "virus i altres codis maliciosos i com protegir l'ordinador a %s."
 
-#: embed/ephy-web-view.c:2061
+#: embed/ephy-web-view.c:2078
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing"
@@ -1902,7 +1905,7 @@ msgstr ""
 "ara instal·lar programari o revelar la vostra informació personal (per "
 "exemple, contrasenyes, números de telèfon o targetes de crèdit)."
 
-#: embed/ephy-web-view.c:2066
+#: embed/ephy-web-view.c:2083
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1910,7 +1913,7 @@ msgstr ""
 "Podeu obtenir més informació sobre l'enginyeria social (pesca) a %s o des de"
 " %s."
 
-#: embed/ephy-web-view.c:2075
+#: embed/ephy-web-view.c:2092
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1922,24 +1925,24 @@ msgstr ""
 "navegació (per exemple, canviant la vostra pàgina d'inici o mostrant anuncis"
 " addicionals als llocs que visiteu)."
 
-#: embed/ephy-web-view.c:2080
+#: embed/ephy-web-view.c:2097
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Podeu obtenir més informació sobre el programari no desitjat a %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2124 embed/ephy-web-view.c:2127
+#: embed/ephy-web-view.c:2141 embed/ephy-web-view.c:2144
 #, c-format
 msgid "File not found"
 msgstr "No s'ha trobat el fitxer"
 
-#: embed/ephy-web-view.c:2131
+#: embed/ephy-web-view.c:2148
 #, c-format
 msgid "%s could not be found."
 msgstr "No s'ha pogut trobar %s."
 
-#: embed/ephy-web-view.c:2133
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1949,15 +1952,15 @@ msgstr ""
 "errors tipogràfics. Comproveu també que no s'hagi mogut, canviat el nom o "
 "suprimit."
 
-#: embed/ephy-web-view.c:2196
+#: embed/ephy-web-view.c:2213
 msgid "None specified"
 msgstr "Res especificat"
 
-#: embed/ephy-web-view.c:2323
+#: embed/ephy-web-view.c:2340
 msgid "Technical information"
 msgstr "Informació tècnica"
 
-#: embed/ephy-web-view.c:3517
+#: embed/ephy-web-view.c:3534
 msgid "_OK"
 msgstr "_D'acord"
 
@@ -2232,7 +2235,7 @@ msgstr ""
 "web s'han enviat de manera insegura."
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:236
+#: src/resources/gtk/history-dialog.ui:223
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_Neteja-ho tot"
@@ -2303,7 +2306,7 @@ msgid "Starting…"
 msgstr "S'està iniciant..."
 
 #: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:242
-#: src/resources/gtk/history-dialog.ui:277
+#: src/resources/gtk/history-dialog.ui:262
 msgid "_Open"
 msgstr "_Obre"
 
@@ -2326,36 +2329,36 @@ msgstr "Tots els fitxers"
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
-#: lib/widgets/ephy-location-entry.c:757 src/ephy-history-dialog.c:566
+#: lib/widgets/ephy-location-entry.c:742 src/ephy-history-dialog.c:566
 msgid "Cl_ear"
 msgstr "_Esborra"
 
-#: lib/widgets/ephy-location-entry.c:777
+#: lib/widgets/ephy-location-entry.c:762
 msgid "Paste and _Go"
 msgstr "Enganxa i _ves"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:798 src/ephy-window.c:966
+#: lib/widgets/ephy-location-entry.c:783 src/ephy-window.c:967
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: lib/widgets/ephy-location-entry.c:805
+#: lib/widgets/ephy-location-entry.c:790
 msgid "_Redo"
 msgstr "_Refés"
 
-#: lib/widgets/ephy-location-entry.c:1084
+#: lib/widgets/ephy-location-entry.c:1069
 msgid "Show website security status and permissions"
 msgstr "Mostra l'estat de la seguretat del lloc web i els permisos"
 
-#: lib/widgets/ephy-location-entry.c:1086
+#: lib/widgets/ephy-location-entry.c:1071
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Cerca llocs web, adreces d'interès i pestanyes obertes"
 
-#: lib/widgets/ephy-location-entry.c:1130
+#: lib/widgets/ephy-location-entry.c:1115
 msgid "Bookmark this page"
 msgstr "Afegeix aquesta pàgina a les adreces d'interès"
 
-#: lib/widgets/ephy-location-entry.c:1147
+#: lib/widgets/ephy-location-entry.c:1132
 msgid "Toggle reader mode"
 msgstr "Commuta el mode de lectura"
 
@@ -2497,7 +2500,7 @@ msgstr "Mòbil"
 msgid "Reload the current page"
 msgstr "Torna a carregar la pàgina actual"
 
-#: src/ephy-action-bar-start.c:643 src/ephy-header-bar.c:475
+#: src/ephy-action-bar-start.c:643 src/ephy-header-bar.c:481
 msgid "Stop loading the current page"
 msgstr "Atura la càrrega de la pàgina actual"
 
@@ -2594,7 +2597,7 @@ msgid "Do you really want to remove this extension?"
 msgstr "Esteu segur que voleu suprimir aquesta extensió?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
-#: src/resources/gtk/bookmark-properties.ui:132
+#: src/resources/gtk/bookmark-properties.ui:127
 msgid "_Remove"
 msgstr "_Suprimeix"
 
@@ -2620,190 +2623,190 @@ msgstr "Elimina l'extensió web seleccionada"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Obre el fitxer (manifest.json/xpi)"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:285
 msgid "Do you want to leave this website?"
 msgstr "Voleu sortir d'aquest lloc web?"
 
-#: src/ephy-window.c:285 src/window-commands.c:1200
+#: src/ephy-window.c:286 src/window-commands.c:1204
 msgid "A form you modified has not been submitted."
 msgstr "Un formulari que heu modificat no ha estat enviat."
 
-#: src/ephy-window.c:286 src/window-commands.c:1202
+#: src/ephy-window.c:287 src/window-commands.c:1206
 msgid "_Discard form"
 msgstr "_Descarta el formulari"
 
-#: src/ephy-window.c:301
+#: src/ephy-window.c:302
 msgid "There are multiple tabs open."
 msgstr "Hi ha múltiples pestanyes obertes."
 
-#: src/ephy-window.c:302
+#: src/ephy-window.c:303
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Si tanqueu aquesta finestra, totes les pestanyes obertes es perdran"
 
-#: src/ephy-window.c:303
+#: src/ephy-window.c:304
 msgid "C_lose tabs"
 msgstr "_Tanca les pestanyes"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:968
 msgid "Re_do"
 msgstr "_Refés"
 
 #. Edit.
-#: src/ephy-window.c:970
+#: src/ephy-window.c:971
 msgid "Cu_t"
 msgstr "_Retalla"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:972
 msgid "_Copy"
 msgstr "_Copia"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:973
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:974
 msgid "_Paste Text Only"
 msgstr "_Enganxa només text"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:975
 msgid "Select _All"
 msgstr "_Selecciona-ho tot"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:977
 msgid "S_end Link by Email…"
 msgstr "Envia l'_enllaç per correu electrònic..."
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:979
 msgid "_Reload"
 msgstr "_Torna a carregar"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:980
 msgid "_Back"
 msgstr "E_nrere"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:981
 msgid "_Forward"
 msgstr "Se_güent"
 
 #. Bookmarks
-#: src/ephy-window.c:983
+#: src/ephy-window.c:984
 msgid "Add Boo_kmark…"
 msgstr "Afege_ix una adreça d'interès…"
 
 #. Links.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:988
 msgid "Open Link in New _Window"
 msgstr "Obre l'enllaç en una _finestra nova"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:989
 msgid "Open Link in New _Tab"
 msgstr "Obre l'enllaç en una _pestanya nova"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:990
 msgid "Open Link in I_ncognito Window"
 msgstr "Obre l'enllaç en una finestra _incògnita"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:991
 msgid "_Save Link As…"
 msgstr "Anomena i de_sa l'enllaç..."
 
-#: src/ephy-window.c:991
+#: src/ephy-window.c:992
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: src/ephy-window.c:992
+#: src/ephy-window.c:993
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça del correu"
 
 #. Images.
-#: src/ephy-window.c:996
+#: src/ephy-window.c:997
 msgid "View _Image in New Tab"
 msgstr "Mostra la _imatge en una pestanya nova"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:998
 msgid "Copy I_mage Address"
 msgstr "Copia l'adreça de la _imatge"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:999
 msgid "_Save Image As…"
 msgstr "Anomena i de_sa la imatge..."
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1000
 msgid "Set as _Wallpaper"
 msgstr "Estableix com _fons de pantalla"
 
 #. Video.
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1004
 msgid "Open Video in New _Window"
 msgstr "Obre el vídeo en una _finestra nova"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1005
 msgid "Open Video in New _Tab"
 msgstr "Obre el vídeo en una _pestanya nova"
 
-#: src/ephy-window.c:1005
+#: src/ephy-window.c:1006
 msgid "_Save Video As…"
 msgstr "Anomena i de_sa el vídeo..."
 
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:1007
 msgid "_Copy Video Address"
 msgstr "_Copia l'adreça del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1011
 msgid "Open Audio in New _Window"
 msgstr "Obre l'àudio en una _finestra nova"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1012
 msgid "Open Audio in New _Tab"
 msgstr "Obre l'àudio en una _pestanya nova"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1013
 msgid "_Save Audio As…"
 msgstr "Anomena i de_sa l'àudio..."
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1014
 msgid "_Copy Audio Address"
 msgstr "_Copia l'adreça de l'àudio"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1020
 msgid "Save Pa_ge As…"
 msgstr "Anomena i de_sa la pàgina…"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1021
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
-#: src/ephy-window.c:1390
+#: src/ephy-window.c:1411
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cerca al web «%s»"
 
-#: src/ephy-window.c:1419
+#: src/ephy-window.c:1440
 msgid "Open Link"
 msgstr "Obre l'enllaç"
 
-#: src/ephy-window.c:1421
+#: src/ephy-window.c:1442
 msgid "Open Link In New Tab"
 msgstr "Obre l'enllaç en una pestanya nova"
 
-#: src/ephy-window.c:1423
+#: src/ephy-window.c:1444
 msgid "Open Link In New Window"
 msgstr "Obre l'enllaç en una finestra nova"
 
-#: src/ephy-window.c:1425
+#: src/ephy-window.c:1446
 msgid "Open Link In Incognito Window"
 msgstr "Obre l'enllaç en una d'incògnit nova"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2892
 msgid "Download operation"
 msgstr "Operació de baixada"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2894
 msgid "Show details"
 msgstr "Mostra els detalls"
 
-#: src/ephy-window.c:2875
+#: src/ephy-window.c:2896
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2811,23 +2814,23 @@ msgstr[0] "%d operació de baixada activa"
 msgstr[1] "%d operacions de baixada actives"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3393
+#: src/ephy-window.c:3414
 msgid "View open tabs"
 msgstr "Mostra pestanyes obertes"
 
-#: src/ephy-window.c:3524
+#: src/ephy-window.c:3545
 msgid "Set Web as your default browser?"
 msgstr "Voleu configurar Web com el navegador per defecte?"
 
-#: src/ephy-window.c:3526
+#: src/ephy-window.c:3547
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Estableix Epiphany Technology Preview com a navegador per defecte?"
 
-#: src/ephy-window.c:3538
+#: src/ephy-window.c:3559
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3539
+#: src/ephy-window.c:3560
 msgid "_No"
 msgstr "_No"
 
@@ -2932,7 +2935,7 @@ msgstr ""
 "desfer."
 
 #: src/preferences/passwords-view.c:200
-#: src/resources/gtk/history-dialog.ui:260
+#: src/resources/gtk/history-dialog.ui:246
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2977,7 +2980,7 @@ msgid "Dark"
 msgstr "Fosc"
 
 #: src/preferences/prefs-general-page.c:297
-#: src/resources/gtk/prefs-lang-dialog.ui:13
+#: src/resources/gtk/prefs-lang-dialog.ui:12
 msgid "Add Language"
 msgstr "Afegeix llengua"
 
@@ -3026,8 +3029,13 @@ msgstr "Opcions del migrador de perfils web"
 msgid "View and manage your bookmarks"
 msgstr "Mostra i gestiona les vostres adreces d'interès"
 
+#. Translators: tooltip for the bookmark button
+#: src/resources/gtk/action-bar-end.ui:44
+msgid "Bookmark page"
+msgstr "Afegeix la pàgina a les adreces d'interès"
+
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:46
+#: src/resources/gtk/action-bar-end.ui:67
 msgid "View downloads"
 msgstr "Mostra les baixades"
 
@@ -3044,7 +3052,7 @@ msgstr "Avança a la pàgina següent"
 #. Translators: tooltip for the secret homepage button
 #: src/resources/gtk/action-bar-start.ui:76
 msgid "Go to your homepage"
-msgstr "Va a la vostra pàgina d'inici"
+msgstr "Ves a la pàgina d'inici"
 
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:21
@@ -3068,12 +3076,12 @@ msgstr "_Adreça"
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: src/resources/gtk/bookmark-properties.ui:104
+#: src/resources/gtk/bookmark-properties.ui:99
 msgid "Add Tag…"
 msgstr "Afegeix una etiqueta..."
 
-#: src/resources/gtk/bookmark-properties.ui:113
-#: src/resources/gtk/prefs-lang-dialog.ui:27
+#: src/resources/gtk/bookmark-properties.ui:108
+#: src/resources/gtk/prefs-lang-dialog.ui:25
 msgid "_Add"
 msgstr "_Afegeix"
 
@@ -3114,11 +3122,11 @@ msgstr "No hi ha dades personals"
 msgid "Personal data will be listed here"
 msgstr "Les dades personals es llistaran aquí"
 
-#: src/resources/gtk/clear-data-view.ui:64
+#: src/resources/gtk/clear-data-view.ui:55
 msgid "Clear selected personal data:"
 msgstr "Neteja les dades personals seleccionades:"
 
-#: src/resources/gtk/clear-data-view.ui:125
+#: src/resources/gtk/clear-data-view.ui:114
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
@@ -3126,36 +3134,36 @@ msgstr ""
 "No podeu desfer aquesta acció. Les dades que seleccioneu netejar "
 "s'eliminaran per sempre."
 
-#: src/resources/gtk/data-view.ui:50 src/resources/gtk/history-dialog.ui:74
-#: src/resources/gtk/history-dialog.ui:120
+#: src/resources/gtk/data-view.ui:44 src/resources/gtk/history-dialog.ui:69
+#: src/resources/gtk/history-dialog.ui:114
 msgid "Search"
 msgstr "Cerca"
 
-#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
+#: src/resources/gtk/data-view.ui:107 src/resources/gtk/history-dialog.ui:205
 msgid "No Results Found"
 msgstr "No s'ha trobat cap resultat"
 
-#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
+#: src/resources/gtk/data-view.ui:108 src/resources/gtk/history-dialog.ui:206
 msgid "Try a different search"
 msgstr "Proveu una cerca diferent"
 
-#: src/resources/gtk/encoding-dialog.ui:8
+#: src/resources/gtk/encoding-dialog.ui:7
 msgid "Text Encoding"
 msgstr "Codificació del text"
 
-#: src/resources/gtk/encoding-dialog.ui:46
+#: src/resources/gtk/encoding-dialog.ui:41
 msgid "Use the encoding specified by the document"
 msgstr "Usa la codificació especificada al document"
 
-#: src/resources/gtk/encoding-dialog.ui:99
+#: src/resources/gtk/encoding-dialog.ui:89
 msgid "Recent encodings"
 msgstr "Codificacions recents"
 
-#: src/resources/gtk/encoding-dialog.ui:151
+#: src/resources/gtk/encoding-dialog.ui:137
 msgid "Related encodings"
 msgstr "Codificacions relacionades"
 
-#: src/resources/gtk/encoding-dialog.ui:193
+#: src/resources/gtk/encoding-dialog.ui:177
 msgid "Show all…"
 msgstr "Mostra-ho tot…"
 
@@ -3225,24 +3233,24 @@ msgstr "Nom de dispositiu"
 msgid "_Change"
 msgstr "_Canvia"
 
-#: src/resources/gtk/history-dialog.ui:30
-#: src/resources/gtk/history-dialog.ui:87
+#: src/resources/gtk/history-dialog.ui:27
+#: src/resources/gtk/history-dialog.ui:82
 msgid "History"
 msgstr "Historial"
 
-#: src/resources/gtk/history-dialog.ui:42
+#: src/resources/gtk/history-dialog.ui:39
 msgid "Select Items"
 msgstr "Selecciona elements"
 
-#: src/resources/gtk/history-dialog.ui:150
+#: src/resources/gtk/history-dialog.ui:142
 msgid "Search history"
 msgstr "Cerca historial"
 
-#: src/resources/gtk/history-dialog.ui:209
+#: src/resources/gtk/history-dialog.ui:197
 msgid "The History is Empty"
 msgstr "L'historial és buit"
 
-#: src/resources/gtk/history-dialog.ui:210
+#: src/resources/gtk/history-dialog.ui:198
 msgid "Visited pages will be listed here"
 msgstr "Les pàgines visitades es llistaran aquí"
 
@@ -3290,109 +3298,109 @@ msgstr "_Tanca les altres pestanyes"
 msgid "_Close"
 msgstr "_Tanca"
 
-#: src/resources/gtk/page-menu-popover.ui:24
+#: src/resources/gtk/page-menu-popover.ui:23
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Allunya"
 
-#: src/resources/gtk/page-menu-popover.ui:42
+#: src/resources/gtk/page-menu-popover.ui:41
 msgid "Restore Zoom"
 msgstr "Restaura el zoom"
 
-#: src/resources/gtk/page-menu-popover.ui:61
+#: src/resources/gtk/page-menu-popover.ui:60
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Apropa"
 
-#: src/resources/gtk/page-menu-popover.ui:89
+#: src/resources/gtk/page-menu-popover.ui:88
 msgid "Print…"
 msgstr "Imprimeix…"
 
-#: src/resources/gtk/page-menu-popover.ui:104
+#: src/resources/gtk/page-menu-popover.ui:103
 msgid "Find…"
 msgstr "Cerca…"
 
-#: src/resources/gtk/page-menu-popover.ui:119
+#: src/resources/gtk/page-menu-popover.ui:118
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: src/resources/gtk/page-menu-popover.ui:177
+#: src/resources/gtk/page-menu-popover.ui:174
 msgid "_Run in Background"
 msgstr "_Executa en segon pla"
 
-#: src/resources/gtk/page-menu-popover.ui:195
+#: src/resources/gtk/page-menu-popover.ui:191
 msgid "_New Window"
 msgstr "Finestra _nova"
 
-#: src/resources/gtk/page-menu-popover.ui:203
+#: src/resources/gtk/page-menu-popover.ui:198
 msgid "New _Incognito Window"
 msgstr "_Finestra d'incògnit nova"
 
-#: src/resources/gtk/page-menu-popover.ui:220
+#: src/resources/gtk/page-menu-popover.ui:214
 msgid "Reopen Closed _Tab"
 msgstr "Torna a obrir la _pestanya tancada"
 
-#: src/resources/gtk/page-menu-popover.ui:228
+#: src/resources/gtk/page-menu-popover.ui:221
 msgid "_History"
 msgstr "_Historial"
 
-#: src/resources/gtk/page-menu-popover.ui:245
+#: src/resources/gtk/page-menu-popover.ui:237
 msgid "Firefox _Sync"
 msgstr "_Sincronització del Firefox"
 
-#: src/resources/gtk/page-menu-popover.ui:252
+#: src/resources/gtk/page-menu-popover.ui:244
 msgid "I_mport and Export"
 msgstr "_Importa i exporta"
 
-#: src/resources/gtk/page-menu-popover.ui:269
+#: src/resources/gtk/page-menu-popover.ui:260
 msgid "Install Site as Web _Application…"
 msgstr "Instal·la el lloc com una _aplicació web…"
 
-#: src/resources/gtk/page-menu-popover.ui:277
+#: src/resources/gtk/page-menu-popover.ui:267
 msgid "Open Appli_cation Manager"
 msgstr "O_bre el gestor d'aplicacions"
 
-#: src/resources/gtk/page-menu-popover.ui:285
+#: src/resources/gtk/page-menu-popover.ui:274
 msgid "E_xtensions"
 msgstr "E_xtensions"
 
-#: src/resources/gtk/page-menu-popover.ui:302
+#: src/resources/gtk/page-menu-popover.ui:290
 msgid "_Override Text Encoding…"
 msgstr "_Sobreescriu la codificació del text…"
 
-#: src/resources/gtk/page-menu-popover.ui:318
+#: src/resources/gtk/page-menu-popover.ui:305
 msgid "Pr_eferences"
 msgstr "Pr_eferències"
 
-#: src/resources/gtk/page-menu-popover.ui:327
+#: src/resources/gtk/page-menu-popover.ui:313
 msgid "_Keyboard Shortcuts"
 msgstr "_Dreceres de teclat"
 
-#: src/resources/gtk/page-menu-popover.ui:336
+#: src/resources/gtk/page-menu-popover.ui:321
 msgid "_Help"
 msgstr "A_juda"
 
-#: src/resources/gtk/page-menu-popover.ui:345
+#: src/resources/gtk/page-menu-popover.ui:329
 msgid "_About Web"
 msgstr "_Quant al Web"
 
-#: src/resources/gtk/page-menu-popover.ui:370
+#: src/resources/gtk/page-menu-popover.ui:352
 msgid "Import and Export"
 msgstr "Importa i exporta"
 
-#: src/resources/gtk/page-menu-popover.ui:381
+#: src/resources/gtk/page-menu-popover.ui:362
 msgid "I_mport Bookmarks…"
 msgstr "I_mporta adreces d'interès…"
 
-#: src/resources/gtk/page-menu-popover.ui:389
+#: src/resources/gtk/page-menu-popover.ui:369
 msgid "E_xport Bookmarks…"
 msgstr "E_xporta adreces d'interès…"
 
-#: src/resources/gtk/page-menu-popover.ui:405
+#: src/resources/gtk/page-menu-popover.ui:384
 msgid "Import _Passwords…"
 msgstr "Im_porta contrasenyes..."
 
-#: src/resources/gtk/page-row.ui:87
+#: src/resources/gtk/page-row.ui:78
 msgid "Close page"
 msgstr "Tanca la pàgina"
 
@@ -3421,11 +3429,11 @@ msgstr "No hi ha cap contrasenya"
 msgid "Saved passwords will be listed here"
 msgstr "Les contrasenyes desades es llistaran aquí"
 
-#: src/resources/gtk/passwords-view.ui:75
+#: src/resources/gtk/passwords-view.ui:73
 msgid "_Copy Password"
 msgstr "_Copia la contrasenya"
 
-#: src/resources/gtk/passwords-view.ui:79
+#: src/resources/gtk/passwords-view.ui:77
 msgid "C_opy Username"
 msgstr "C_opia el nom d'usuari"
 
@@ -3569,7 +3577,7 @@ msgstr "Ca_nvia immediatament a les pestanyes noves"
 msgid "_Spell Checking"
 msgstr "_Verificació ortogràfica"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:67
+#: src/resources/gtk/prefs-lang-dialog.ui:60
 msgid "Choose a language:"
 msgstr "Selecciona una llengua:"
 
@@ -4111,11 +4119,15 @@ msgstr ""
 "Una visualització senzilla, neta i bonica de la web.\n"
 "Funciona amb WebKitGTK+ %d.%d.%d"
 
-#: src/window-commands.c:1022
+#: src/window-commands.c:1010
+msgid "Epiphany Canary"
+msgstr ""
+
+#: src/window-commands.c:1026
 msgid "Website"
 msgstr "Lloc web"
 
-#: src/window-commands.c:1055
+#: src/window-commands.c:1059
 msgid "translator-credits"
 msgstr ""
 "Jordi Mallach <jordi@sindominio.net>\n"
@@ -4124,25 +4136,25 @@ msgstr ""
 "Jordi Mas <jmas@softcatala.org>\n"
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>"
 
-#: src/window-commands.c:1198
+#: src/window-commands.c:1202
 msgid "Do you want to reload this website?"
 msgstr "Voleu tornar a carregar aquest lloc web?"
 
-#: src/window-commands.c:1725
+#: src/window-commands.c:1729
 #, c-format
 msgid ""
 "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Una aplicació web anomenada «%s» ja existeix. Voleu reemplaçar-la?"
 
-#: src/window-commands.c:1728
+#: src/window-commands.c:1732
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: src/window-commands.c:1730
+#: src/window-commands.c:1734
 msgid "Replace"
 msgstr "Reemplaça"
 
-#: src/window-commands.c:1734
+#: src/window-commands.c:1738
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -4150,51 +4162,51 @@ msgstr ""
 "Ja existeix una aplicació amb aquest nom, si la reemplaceu l'estareu "
 "sobreescrivint."
 
-#: src/window-commands.c:1826
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "L'aplicació «%s» està llesta per a ser usada"
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1833
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "L'aplicació «%s» no ha pogut ser creada"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1844
+#: src/window-commands.c:1848
 msgid "Launch"
 msgstr "Llança"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1885
+#: src/window-commands.c:1889
 msgid "Create Web Application"
 msgstr "Crea una aplicació web"
 
-#: src/window-commands.c:1890
+#: src/window-commands.c:1894
 msgid "C_reate"
 msgstr "C_rea"
 
-#: src/window-commands.c:2104
+#: src/window-commands.c:2108
 msgid "Save"
 msgstr "Desa"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2117
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2118
+#: src/window-commands.c:2122
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2123
+#: src/window-commands.c:2127
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2637
+#: src/window-commands.c:2641
 msgid "Enable caret browsing mode?"
 msgstr "Habiliteu el mode de navegació amb el cursor?"
 
-#: src/window-commands.c:2640
+#: src/window-commands.c:2644
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4204,7 +4216,7 @@ msgstr ""
 "característica col·loca un cursor mòbil a les pàgines web que us permet "
 "moure's amb el vostre teclat. Voleu habilitar la navegació amb el cursor?"
 
-#: src/window-commands.c:2643
+#: src/window-commands.c:2647
 msgid "_Enable"
 msgstr "_Habilita"
 
