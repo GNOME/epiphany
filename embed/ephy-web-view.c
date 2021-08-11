@@ -128,6 +128,7 @@ struct _EphyWebView {
   EphyWebViewErrorPage error_page;
 
   guint unresponsive_process_timeout_id;
+  GtkWidget *unresponsive_process_dialog;
 
   guint64 uid;
 };
@@ -845,11 +846,43 @@ process_terminated_cb (EphyWebView                       *web_view,
 }
 
 static gboolean
+unresponsive_process_timeout_cb (gpointer user_data);
+
+static void
+on_unresponsive_dialog_response (GtkDialog *dialog,
+                                 int        response_id,
+                                 gpointer   user_data)
+{
+  EphyWebView *web_view = EPHY_WEB_VIEW (user_data);
+
+  if (response_id == GTK_RESPONSE_YES)
+    webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
+  else
+    web_view->unresponsive_process_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_HIGH,
+                                                                            5,
+                                                                            (GSourceFunc)unresponsive_process_timeout_cb,
+                                                                            web_view,
+                                                                            NULL);
+  g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_widget_destroy);
+}
+
+static gboolean
 unresponsive_process_timeout_cb (gpointer user_data)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (user_data);
 
-  webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
+  web_view->unresponsive_process_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
+                                                                  GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
+                                                                  GTK_MESSAGE_QUESTION,
+                                                                  GTK_BUTTONS_NONE,
+                                                                  _("The current page '%s' is unresponsive"),
+                                                                  ephy_web_view_get_address (web_view));
+
+  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Wait"), GTK_RESPONSE_NO);
+  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Kill"), GTK_RESPONSE_YES);
+
+  g_signal_connect (web_view->unresponsive_process_dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view);
+  gtk_widget_show_all (web_view->unresponsive_process_dialog);
 
   web_view->unresponsive_process_timeout_id = 0;
 
@@ -861,12 +894,21 @@ is_web_process_responsive_changed_cb (EphyWebView *web_view,
                                       GParamSpec  *pspec,
                                       gpointer     user_data)
 {
+  gboolean responsive = webkit_web_view_get_is_web_process_responsive (WEBKIT_WEB_VIEW (web_view));
+
   g_clear_handle_id (&web_view->unresponsive_process_timeout_id, g_source_remove);
 
-  if (!webkit_web_view_get_is_web_process_responsive (WEBKIT_WEB_VIEW (web_view))) {
-    web_view->unresponsive_process_timeout_id = g_timeout_add_seconds (10,
-                                                                       (GSourceFunc)unresponsive_process_timeout_cb,
-                                                                       web_view);
+  if (web_view->unresponsive_process_dialog && responsive) {
+    g_signal_handlers_disconnect_by_func (web_view->unresponsive_process_dialog, on_unresponsive_dialog_response, web_view);
+    g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_widget_destroy);
+  }
+
+  if (!responsive) {
+    web_view->unresponsive_process_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_HIGH,
+                                                                            10,
+                                                                            (GSourceFunc)unresponsive_process_timeout_cb,
+                                                                            web_view,
+                                                                            NULL);
   }
 }
 
@@ -3848,6 +3890,7 @@ ephy_web_view_dispose (GObject *object)
   g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
   g_clear_object (&view->icon);
+  g_clear_pointer (&view->unresponsive_process_dialog, gtk_widget_destroy);
 
   if (view->cancellable) {
     g_cancellable_cancel (view->cancellable);
