@@ -635,7 +635,7 @@ ephy_shell_activate (GApplication *application)
   EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (shell);
 
-  if (!is_desktop_gnome ()) {
+  if (!is_desktop_gnome () && !is_desktop_pantheon ()) {
     g_signal_connect (ephy_shell_get_net_monitor (shell), "notify::connectivity", G_CALLBACK (connectivity_changed), shell);
     portal_check (shell);
   }
