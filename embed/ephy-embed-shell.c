@@ -888,6 +888,27 @@ enable_itp_setting_changed_cb (GSettings      *settings,
 }
 
 static void
+update_system_scrollbars (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  const char *theme_name;
+  gboolean enabled;
+
+  g_object_get (gtk_settings_get_default (),
+                "gtk-theme_name", &theme_name,
+                NULL);
+
+  /* Don't enable system scrollbars for Adwaita */
+  enabled = g_strcmp0 (theme_name, "Adwaita") &&
+            g_strcmp0 (theme_name, "Adwaita-dark") &&
+            g_strcmp0 (theme_name, "HighContrast") &&
+            g_strcmp0 (theme_name, "HighContrastInverse");
+
+  webkit_web_context_set_use_system_appearance_for_scrollbars (priv->web_context,
+                                                               enabled);
+}
+
+static void
 ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
@@ -979,6 +1000,13 @@ ephy_embed_shell_startup (GApplication *application)
 
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
                            G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
+
+  update_system_scrollbars (shell);
+
+  g_signal_connect_swapped (gtk_settings_get_default (),
+                            "notify::gtk-theme-name",
+                            G_CALLBACK (update_system_scrollbars),
+                            shell);
 }
 
 static void
