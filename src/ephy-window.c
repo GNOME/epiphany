@@ -2435,6 +2435,11 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   ephy_embed_attach_notification_container (window->active_embed);
 
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+    ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_reader_mode_state (view));
+
   sync_tab_security (view, NULL, window);
   sync_tab_document_type (view, NULL, window);
   sync_tab_load_status (view, WEBKIT_LOAD_STARTED, window);
@@ -2447,8 +2452,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   sync_tab_zoom (web_view, NULL, window);
   sync_tab_page_action (view, NULL, window);
-
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
     gdouble progress = webkit_web_view_get_estimated_load_progress (web_view);
