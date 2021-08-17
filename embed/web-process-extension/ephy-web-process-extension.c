@@ -22,6 +22,7 @@
 #include "ephy-web-process-extension.h"
 #include "ephy-webextension-api.h"
 
+#include "ephy-autofill-field.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-permissions-manager.h"
@@ -724,6 +725,66 @@ js_exception_handler (JSCContext   *context,
 }
 
 static void
+ephy_autofill_js_change_value (JSCValue   *js_input_element,
+                               const char *value)
+{
+  webkit_web_form_manager_input_element_auto_fill (js_input_element, value);
+}
+
+static void
+web_view_get_field_value_ready_cb (WebKitWebPage *web_page,
+                                   GAsyncResult  *result,
+                                   gpointer       user_data)
+{
+  WebKitUserMessage *reply = NULL;
+  g_autoptr (JSCValue) cb = jsc_weak_value_get_value (user_data);
+  g_autoptr (GVariant) parameters = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (JSCValue) ret = NULL;
+  const char *value;
+
+  reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error getting autofill field value from WebView: %s", error->message);
+    return;
+  }
+
+  if (!cb)
+    return;
+
+  parameters = webkit_user_message_get_parameters (reply);
+  if (!parameters)
+    return;
+
+  g_variant_get (parameters, "(&s)", &value);
+
+  ret = jsc_value_function_call (cb, G_TYPE_STRING, value, G_TYPE_NONE);
+  (void)ret;
+}
+
+static void
+ephy_autofill_js_get_field_value (EphyAutofillField        field,
+                                  guint64                  page_id,
+                                  JSCValue                *cb,
+                                  EphyWebProcessExtension *extension)
+{
+  WebKitWebPage *web_page;
+  WebKitUserMessage *message;
+
+  web_page = webkit_web_process_extension_get_page (extension->extension, page_id);
+  if (!web_page)
+    return;
+
+  message = webkit_user_message_new ("EphyAutoFill.GetFieldValue",
+                                     g_variant_new ("(t)", field));
+  webkit_web_page_send_message_to_view (web_page, message,
+                                        extension->cancellable,
+                                        (GAsyncReadyCallback)web_view_get_field_value_ready_cb,
+                                        jsc_weak_value_new (cb));
+}
+
+static void
 window_object_cleared_cb (WebKitScriptWorld       *world,
                           WebKitWebPage           *page,
                           WebKitFrame             *frame,
@@ -734,7 +795,9 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   const char *data;
   gsize data_size;
   g_autoptr (JSCValue) js_ephy = NULL;
+  g_autoptr (JSCValue) js_ephy_autofill = NULL;
   g_autoptr (JSCValue) js_function = NULL;
+  g_autoptr (JSCValue) js_value = NULL;
   g_autoptr (JSCValue) result = NULL;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
@@ -744,6 +807,13 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
   g_assert (jsc_value_is_undefined (result));
   g_clear_object (&result);
 
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  data = g_bytes_get_data (bytes, &data_size);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", 1);
+  g_clear_pointer (&bytes, g_bytes_unref);
+  g_clear_object (&result);
+
+  js_ephy_autofill = jsc_context_get_value (js_context, "EphyAutofill");
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy.js", 1);
@@ -830,6 +900,40 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
                                           G_TYPE_UINT64, G_TYPE_UINT64);
     jsc_value_object_set_property (js_ephy, "queryPassword", js_function);
     g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "getFieldValue",
+                                          G_CALLBACK (ephy_autofill_js_get_field_value),
+                                          extension,
+                                          NULL,
+                                          G_TYPE_NONE,
+                                          3,
+                                          G_TYPE_INT,
+                                          G_TYPE_UINT64,
+                                          JSC_TYPE_VALUE);
+    jsc_value_object_set_property (js_ephy_autofill,
+                                   "getFieldValue",
+                                   js_function);
+    g_clear_object (&js_function);
+
+    js_function = jsc_value_new_function (js_context,
+                                          "changeValue",
+                                          G_CALLBACK (ephy_autofill_js_change_value),
+                                          NULL,
+                                          NULL,
+                                          G_TYPE_NONE,
+                                          2,
+                                          JSC_TYPE_VALUE,
+                                          G_TYPE_STRING);
+    jsc_value_object_set_property (js_ephy_autofill, "changeValue", js_function);
+    g_clear_object (&js_function);
+
+    js_value = jsc_value_new_number (js_context,
+                                     (double)webkit_web_page_get_id (page));
+    jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
+    g_clear_object (&js_value);
+
+    g_clear_object (&js_ephy_autofill);
   }
 
   js_function = jsc_value_new_function (js_context,

@@ -52,6 +52,7 @@ libephymain_sources = [
   'ephy-title-widget.c',
   'ephy-window.c',
   'context-menu-commands.c',
+  'preferences/autofill-view.c',
   'preferences/clear-data-view.c',
   'preferences/ephy-data-view.c',
   'preferences/ephy-lang-row.c',

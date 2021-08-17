@@ -108,6 +108,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_WEBEXTENSIONS_ACTIVE         "webextensions-active"
 #define EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS       "show-developer-actions"
 #define EPHY_PREFS_WEB_ENABLE_NAVIGATION_GESTURES   "enable-navigation-gestures"
+#define EPHY_PREFS_WEB_AUTOFILL_DATA                "autofill-data"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -137,6 +138,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB,
   EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
   EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS,
+  EPHY_PREFS_WEB_AUTOFILL_DATA,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"

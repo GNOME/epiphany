@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "autofill-view.h"
 #include "clear-data-view.h"
 #include "ephy-data-view.h"
 #include "ephy-embed-shell.h"
@@ -80,6 +81,15 @@ on_passwords_row_activated (GtkWidget       *privacy_page,
 }
 
 static void
+on_autofill_row_activated (GtkWidget       *privacy_page,
+                           EphyPrefsDialog *prefs_dialog)
+{
+  AdwNavigationPage *page = g_object_new (EPHY_TYPE_AUTOFILL_VIEW, NULL);
+
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
+}
+
+static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
@@ -127,6 +137,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 
   /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_closed);
+  gtk_widget_class_bind_template_callback (widget_class, on_autofill_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }

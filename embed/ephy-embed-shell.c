@@ -23,6 +23,7 @@
 #include "ephy-embed-shell.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-autofill-field.h"
 #include "ephy-debug.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
@@ -76,6 +77,7 @@ enum {
   WEB_VIEW_CREATED,
   PASSWORD_FORM_FOCUSED,
   PASSWORD_FORM_SUBMITTED,
+  AUTOFILL_SIGNAL,
 
   LAST_SIGNAL
 };
@@ -310,6 +312,33 @@ property_to_uint64 (JSCValue   *value,
 {
   g_autoptr (JSCValue) prop = jsc_value_object_get_property (value, name);
   return (guint64)jsc_value_to_double (prop);
+}
+
+static gboolean
+property_to_boolean (JSCValue   *value,
+                     const char *name)
+{
+  g_autoptr (JSCValue) prop = jsc_value_object_get_property (value, name);
+  return jsc_value_to_boolean (prop);
+}
+
+static void
+web_process_extension_autofill_askuser_received_cb (WebKitUserContentManager *manager,
+                                                    JSCValue                 *value,
+                                                    EphyEmbedShell           *shell)
+{
+  guint64 page_id = property_to_uint64 (value, "pageId");
+  char *selector = property_to_string_or_null (value, "selector");
+  gboolean is_fillable_element = property_to_boolean (value, "isFillableElement");
+  gboolean has_personal_fields = property_to_boolean (value, "hasPersonalFields");
+  gboolean has_card_fields = property_to_boolean (value, "hasCardFields");
+  guint64 x = property_to_uint64 (value, "x");
+  guint64 y = property_to_uint64 (value, "y");
+  guint64 element_width = property_to_uint64 (value, "width");
+  guint64 element_height = property_to_uint64 (value, "height");
+
+  g_signal_emit (shell, signals[AUTOFILL_SIGNAL], 0,
+                 page_id, selector, is_fillable_element, has_personal_fields, has_card_fields, x, y, element_width, element_height);
 }
 
 static void
@@ -1006,6 +1035,39 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_POINTER);
+
+  /**
+   * EphyEmbedShell::autofill:
+   * @shell: the #EphyEmbedShell
+   * @page_id: the identifier of the web page created
+   * @css_selector: css selector of input element
+   * @is_fillable_element: is input element fillable
+   * @has_personal_fields: does input element's form has personal fields
+   * @has_card_fields: does input element's form has credit card fields
+   * @element_x: x position of input element
+   * @element_y: y position of input element
+   * @element_width: width on input element
+   * @element_height: height of input element
+   *
+   * Emitted when the user double clicks on:
+   * 1. A fillable input element
+   * 2. An input element where its form has fillable fields
+   */
+  signals[AUTOFILL_SIGNAL] =
+    g_signal_new ("autofill",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 9,
+                  G_TYPE_UINT64,
+                  G_TYPE_STRING,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64);
 }
 
 /**
@@ -1265,6 +1327,13 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordManagerRequestSave",
                            G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "autofillAskUser",
+                                                               priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::autofillAskUser",
+                           G_CALLBACK (web_process_extension_autofill_askuser_received_cb),
                            shell, 0);
 
   /* Filter Manager */

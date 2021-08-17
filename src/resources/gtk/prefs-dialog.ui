@@ -10,6 +10,7 @@
     </child>
     <child>
       <object class="PrefsPrivacyPage">
+        <signal name="autofill-row-activated" handler="on_autofill_row_activated"/>
         <signal name="passwords-row-activated" handler="on_passwords_row_activated"/>
         <signal name="clear-data-row-activated" handler="on_clear_data_row_activated"/>
       </object>

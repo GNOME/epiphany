@@ -29,6 +29,7 @@
 enum {
   PASSWORDS_ROW_ACTIVATED,
   CLEAR_DATA_ROW_ACTIVATED,
+  AUTOFILL_ROW_ACTIVATED,
 
   LAST_SIGNAL
 };
@@ -46,11 +47,21 @@ struct _PrefsPrivacyPage {
 
   /* Passwords */
   GtkWidget *remember_passwords_row;
+
+  /* Autofill Data */
+  GtkWidget *autofill_data_row;
 };
 
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_FINAL_TYPE (PrefsPrivacyPage, prefs_privacy_page, ADW_TYPE_PREFERENCES_PAGE)
+
+static void
+on_autofill_row_activated (GtkWidget        *row,
+                           PrefsPrivacyPage *privacy_page)
+{
+  g_signal_emit (privacy_page, signals[AUTOFILL_ROW_ACTIVATED], 0);
+}
 
 static void
 on_passwords_row_activated (GtkWidget        *row,
@@ -97,6 +108,15 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   /* ======================================================================== */
+  /* ====================== Forms and Autofill ============================== */
+  /* ======================================================================== */
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_AUTOFILL_DATA,
+                   privacy_page->autofill_data_row,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  /* ======================================================================== */
   /* ========================== Search Suggestions ========================== */
   /* ======================================================================== */
   g_settings_bind (EPHY_SETTINGS_MAIN,
@@ -128,6 +148,13 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
+  signals[AUTOFILL_ROW_ACTIVATED] =
+    g_signal_new ("autofill-row-activated",
+                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
   /* Web Tracking */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_row);
@@ -139,7 +166,11 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   /* Passwords */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_row);
 
+  /* Forms and Autofill */
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, autofill_data_row);
+
   /* Template file callbacks */
+  gtk_widget_class_bind_template_callback (widget_class, on_autofill_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }

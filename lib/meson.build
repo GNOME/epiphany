@@ -96,4 +96,5 @@ ephymisc_dep = declare_dependency(
   sources: enums
 )
 
+subdir('autofill')
 subdir('sync')

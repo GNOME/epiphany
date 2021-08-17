@@ -72,5 +72,29 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Forms and Autofill</property>
+        <child>
+          <object class="AdwSwitchRow" id="autofill_data_row">
+            <property name="title" translatable="yes">_Autofill Forms</property>
+            <property name="use_underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="activatable">True</property>
+            <property name="title" translatable="yes">Autofill _Data</property>
+            <property name="use_underline">True</property>
+            <signal name="activated" handler="on_autofill_row_activated"/>
+            <child>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>

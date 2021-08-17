@@ -23,6 +23,7 @@
 
 #include <webkit/webkit.h>
 
+#include "ephy-autofill-fill-choice.h"
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"
 #include "ephy-security-levels.h"
@@ -197,5 +198,12 @@ void                       ephy_web_view_register_message_handler (EphyWebView  
                                                                    EphyWebViewMessageHandler       handler,
                                                                    EphyWebViewMessageHandlerScope  scope);
 
+void ephy_web_view_autofill                                       (EphyWebView               *view,
+                                                                   const char                *selector,
+                                                                   EphyAutofillFillChoice     fill_choice);
+
+gboolean ephy_web_view_autofill_popup_enabled                     (EphyWebView               *web_view);
+
+void ephy_web_view_autofill_disable_popup                         (EphyWebView               *web_view);
 
 G_END_DECLS

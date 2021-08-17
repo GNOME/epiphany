@@ -17,6 +17,7 @@ libephyembed_sources = [
   'ephy-downloads-manager.c',
   'ephy-download.c',
   'ephy-embed.c',
+  'ephy-embed-autofill.c',
   'ephy-embed-container.c',
   'ephy-embed-prefs.c',
   'ephy-embed-shell.c',
@@ -36,6 +37,7 @@ libephyembed_sources = [
 
 libephyembed_deps = [
   config_h,
+  ephyautofill_dep,
   ephymisc_dep,
   gck_dep,
   gcr_dep,
@@ -53,6 +55,7 @@ libephyembed_includes = include_directories(
   '.',
   '..',
   '../lib',
+  '../lib/autofill',
   '../lib/contrib',
   '../lib/history',
   '../lib/sync',

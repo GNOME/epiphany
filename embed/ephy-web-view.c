@@ -23,8 +23,11 @@
 #include "ephy-web-view.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-autofill-field.h"
+#include "ephy-autofill-storage.h"
 #include "ephy-client-certificate-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed-autofill.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
@@ -129,6 +132,9 @@ struct _EphyWebView {
   guint64 uid;
 
   EphyClientCertificateManager *client_certificate_manager;
+
+  /* Autofill */
+  gboolean autofill_popup_enabled;
 };
 
 enum {
@@ -547,6 +553,47 @@ password_form_banner_response_cb (AdwBanner *self,
 }
 
 static void
+autofill_cb (GObject      *source_object,
+             GAsyncResult *res,
+             gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (JSCValue) value = NULL;
+
+  value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source_object), res, &error);
+  if (error || !value)
+    g_warning ("autofill returned error: %s", error ? error->message : "");
+}
+
+void
+ephy_web_view_autofill (EphyWebView            *view,
+                        const char             *selector,
+                        EphyAutofillFillChoice  fill_choice)
+{
+  guint64 page_id;
+  const char *world_name;
+  g_autofree char *script = NULL;
+
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  page_id = webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view));
+  world_name = ephy_embed_shell_get_guid (ephy_embed_shell_get_default ());
+  script = g_strdup_printf ("EphyAutofill.fill(%lu, '%s', %i);",
+                            page_id,
+                            selector,
+                            fill_choice);
+
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
+                                       script,
+                                       -1,
+                                       world_name,
+                                       NULL,
+                                       view->cancellable,
+                                       autofill_cb,
+                                       NULL);
+}
+
+static void
 password_form_focused_cb (EphyEmbedShell *shell,
                           guint64         page_id,
                           gboolean        insecure_form_action,
@@ -712,6 +759,7 @@ uri_changed_cb (WebKitWebView *web_view,
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
   ephy_web_view_set_address (view, webkit_web_view_get_uri (web_view));
+  view->autofill_popup_enabled = TRUE;
 }
 
 static void
@@ -2250,6 +2298,18 @@ reader_setting_changed_cb (EphyWebView *web_view)
   g_free (js_snippet);
 }
 
+gboolean
+ephy_web_view_autofill_popup_enabled (EphyWebView *web_view)
+{
+  return web_view->autofill_popup_enabled;
+}
+
+void
+ephy_web_view_autofill_disable_popup (EphyWebView *web_view)
+{
+  web_view->autofill_popup_enabled = FALSE;
+}
+
 typedef struct {
   EphyWebView *web_view;
   WebKitAuthenticationRequest *request;
@@ -2493,6 +2553,45 @@ password_manager_handle_query_password_message (WebKitWebView     *web_view,
   return TRUE;
 }
 
+static void
+ephy_autofill_get_field_value_finished_cb (GObject      *source_object,
+                                           GAsyncResult *res,
+                                           gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (WebKitUserMessage) message = WEBKIT_USER_MESSAGE (user_data);
+  g_autofree char *autofill_value = ephy_autofill_storage_get_finish (res, &error);
+
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Could not get autofill storage data: %s", error->message);
+
+    return;
+  }
+
+  webkit_user_message_send_reply (message, webkit_user_message_new ("EphyAutoFill.GetFieldValueResponse",
+                                                                    g_variant_new ("(s)", autofill_value ? autofill_value : "")));
+}
+
+static gboolean
+ephy_autofill_get_field_value (WebKitWebView     *web_view,
+                               WebKitUserMessage *message)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  GVariant *parameters;
+  EphyAutofillField field;
+
+  parameters = webkit_user_message_get_parameters (message);
+  if (!parameters)
+    return FALSE;
+
+  g_variant_get (parameters, "(t)", &field);
+
+  ephy_autofill_storage_get (field, view->cancellable, ephy_autofill_get_field_value_finished_cb, g_object_ref (message));
+
+  return TRUE;
+}
+
 static gboolean
 user_message_received_cb (WebKitWebView     *web_view,
                           WebKitUserMessage *message)
@@ -2505,6 +2604,9 @@ user_message_received_cb (WebKitWebView     *web_view,
 
   if (g_strcmp0 (name, "PasswordManager.QueryPassword") == 0)
     return password_manager_handle_query_password_message (web_view, message);
+
+  if (g_strcmp0 (name, "EphyAutoFill.GetFieldValue") == 0)
+    return ephy_autofill_get_field_value (web_view, message);
 
   return FALSE;
 }
@@ -3670,6 +3772,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
+  web_view->autofill_popup_enabled = TRUE;
   web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
   web_view->security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
 
@@ -3778,6 +3881,9 @@ ephy_web_view_init (EphyWebView *web_view)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), web_view);
   gtk_widget_add_controller (GTK_WIDGET (web_view), GTK_EVENT_CONTROLLER (gesture));
+  g_signal_connect_object (ephy_embed_shell_get_default (), "autofill",
+                           G_CALLBACK (ephy_embed_autofill_signal_received_cb),
+                           web_view, 0);
 }
 
 static void
