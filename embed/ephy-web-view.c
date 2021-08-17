@@ -871,6 +871,9 @@ unresponsive_process_timeout_cb (gpointer user_data)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (user_data);
 
+  if (!gtk_widget_get_mapped (GTK_WIDGET (web_view)))
+    return G_SOURCE_CONTINUE;
+
   web_view->unresponsive_process_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
                                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
                                                                   GTK_MESSAGE_QUESTION,
