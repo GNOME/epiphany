@@ -3863,6 +3863,8 @@ ephy_web_view_is_reader_mode_available (EphyWebView *view)
 gboolean
 ephy_web_view_get_reader_mode_state (EphyWebView *view)
 {
+  if (!view->address)
+    return FALSE;
   return g_str_has_prefix (view->address, EPHY_READER_SCHEME);
 }
 
