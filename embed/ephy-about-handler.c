@@ -488,7 +488,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "</head>\n"
                           "<body class=\"incognito-body\">\n"
-                          "  <img class=\"incognito-body-image\" src=\"ephy-resource:///org/gnome/epiphany/private-mode.svg\">\n" \
+                          "  <img class=\"incognito-body-image\" src=\"ephy-resource:///org/gnome/epiphany/page-icons/private-mode.svg\">\n" \
                           "  <br/>\n"
                           "  <h1>%s</h1>\n"
                           "  <p>%s</p>\n"
