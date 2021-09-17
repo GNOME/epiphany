@@ -81,8 +81,5 @@ gboolean             ephy_password_manager_forget_finish             (EphyPasswo
                                                                       GAsyncResult         *result,
                                                                       GError              **error);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
-void                 ephy_password_manager_export_to_js_context      (EphyPasswordManager *self,
-                                                                      JSCContext          *js_context,
-                                                                      JSCValue            *js_namespace);
 
 G_END_DECLS
