@@ -7,11 +7,14 @@ html {
     --base-color: #fff;
     --text-color: #000;
     --borders: #d3d7cf;
+    --icon-invert: 0.2; /* average(0x2e, 0x34, 0x36) / 0xff */
 
     /* Misc colors */
     --header-color: #999;
     --header-text-color: white;
     --row-hover-color: rgba(0, 0, 0, .1);
+
+    color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +25,7 @@ html {
         --base-color: #2d2d2d;
         --text-color: #fff;
         --borders: #1b1b1b;
+        --icon-invert: 0.93; /* average(0xee, 0xee, 0xec) / 0xff */
 
         /* Misc colors */
         --header-color: #666;
@@ -239,6 +243,8 @@ html.epiphany-html {
 .incognito-body-image {
     margin:auto;
     display:block;
+    filter: brightness(0) invert(var(--icon-invert));
+    opacity: 0.5;
 }
 
 /* about:overview */
@@ -395,10 +401,6 @@ html[dir="rtl"] .overview-item {
     -webkit-user-drag: none;
 }
 
-.overview-empty h1 {
-    color: var(--text-color);
-}
-
 .overview-empty p {
     text-align: center;
 }
@@ -406,6 +408,7 @@ html[dir="rtl"] .overview-item {
 .overview-empty img {
     -webkit-user-select: none;
     -webkit-user-drag: none;
-    opacity: 0.55; /* Adwaita's dim-label */
+    opacity: 0.5;
     width: 128px;
+    filter: brightness(0) invert(var(--icon-invert));
 }
