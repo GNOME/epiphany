@@ -495,6 +495,9 @@ ephy_shell_startup (GApplication *application)
 
   hdy_init ();
 
+  hdy_style_manager_set_color_scheme (hdy_style_manager_get_default (),
+                                      HDY_COLOR_SCHEME_PREFER_LIGHT);
+
   /* If we are under Pantheon set the icon-theme and cursor-theme accordingly. */
   if (is_desktop_pantheon ()) {
     GtkSettings *settings = gtk_settings_get_default ();
