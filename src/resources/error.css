@@ -7,11 +7,18 @@ html {
     --base-color: #fff;
     --text-color: #000;
     --borders: #d3d7cf;
+    --error-color: #c01c28;
+
+    --icon-invert: 0.2; /* average(0x2e, 0x34, 0x36) / 0xff */
+    /* turns #cc0000 into #c01c28 */
+    --error-filter: hue-rotate(-5.1deg) grayscale(45%) brightness(144%);
 
     /* Misc colors */
     --header-color: #999;
     --header-text-color: white;
     --row-hover-color: rgba(0, 0, 0, .1);
+
+    color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +29,11 @@ html {
         --base-color: #2d2d2d;
         --text-color: #fff;
         --borders: #1b1b1b;
+        --error-color: #f66151;
+
+        --icon-invert: 0.93; /* average(0xee, 0xee, 0xec) / 0xff */
+        /* turns #cc0000 into #f66151 */
+        --error-filter: grayscale(74%) brightness(295%) hue-rotate(6.2deg);
 
         /* Misc colors */
         --header-color: #666;
@@ -59,12 +71,12 @@ html {
 
 .error-body .clickable {
     cursor: pointer;
-    color: #888a85;
+    opacity: 0.6;
 }
 
 .error-body .clickable:hover,
 .error-body .clickable:focus {
-    color: #a6ad9c;
+    opacity: 0.8;
 }
 
 #msg-title {
@@ -73,12 +85,23 @@ html {
     font-weight: 300;
 }
 
-#msg-title.default {
-    color: #2e3436;
+#msg-icon {
+    margin-left: auto;
+    margin-right: auto;
+    width: 128px;
+    height: 128px;
+    background-size: cover;
+    opacity: 0.5;
+    filter: brightness(0) invert(var(--icon-invert));
 }
 
-#msg-title.danger {
-    color: #cc0000;
+.danger #msg-title {
+    color: var(--error-color);
+}
+
+.danger #msg-icon {
+    filter: var(--error-filter);
+    opacity: 1;
 }
 
 #msg-details {
@@ -150,5 +173,5 @@ html {
 }
 
 details > summary::-webkit-details-marker {
-  color: black;
+  color: var(--fg-color);
 }

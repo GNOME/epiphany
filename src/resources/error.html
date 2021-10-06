@@ -37,16 +37,10 @@
     }
   </script>
 </head>
-<body class="error-body">
-  <span style="margin-left: auto;
-               margin-right: auto;
-               display: block;
-               width: 128px;
-               height: 128px;
-               background: url(ephy-resource:///org/gnome/epiphany/page-icons/%s) center no-repeat;
-               background-size: cover;"></span>
+<body class="error-body %s">
+  <span id="msg-icon" style="background-image: url(ephy-resource:///org/gnome/epiphany/page-icons/%s);"></span>
   <br>
-  <h1 id="msg-title" class="%s">%s</h1>
+  <h1 id="msg-title">%s</h1>
   %s
   <div id="msg-details" class="%s">
     <details>
