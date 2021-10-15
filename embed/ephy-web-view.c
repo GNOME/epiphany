@@ -4282,7 +4282,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 static void
 ephy_web_view_ucm_add_custom_scripts (WebKitUserContentManager *ucm)
 {
-  WebKitUserScript *script;
+  g_autoptr (WebKitUserScript) script = NULL;
   g_autoptr (GBytes) youtube_js = NULL;
   g_auto (GStrv) allow_list = NULL;
   g_autoptr (GError) error = NULL;
@@ -4317,7 +4317,7 @@ GtkWidget *
 ephy_web_view_new (void)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+  g_autoptr (WebKitUserContentManager) ucm = webkit_user_content_manager_new ();
 
   ephy_embed_shell_register_ucm_handler (shell, ucm);
   ephy_embed_prefs_register_ucm (ucm);
@@ -4336,7 +4336,7 @@ GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitUserContentManager *ucm = webkit_user_content_manager_new ();
+  g_autoptr (WebKitUserContentManager) ucm = webkit_user_content_manager_new ();
 
   ephy_web_view_ucm_add_custom_scripts (ucm);
 

@@ -620,7 +620,7 @@ static GtkWidget *
 create_web_extensions_webview (EphyWebExtension *web_extension,
                                gboolean          custom_web_context)
 {
-  WebKitUserContentManager *ucm;
+  g_autoptr (WebKitUserContentManager) ucm = NULL;
   WebKitWebContext *web_context;
   WebKitSettings *settings;
   GtkWidget *web_view;
