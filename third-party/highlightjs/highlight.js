@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.2.0 (git: 2a5c592e5e)
+  Highlight.js v11.3.1 (git: 2a972d8658)
   (c) 2006-2021 Ivan Sagalaev and other contributors
   License: BSD-3-Clause
  */
@@ -392,6 +392,14 @@ var hljs = (function () {
      * @param {RegExp | string } re
      * @returns {string}
      */
+    function anyNumberOfTimes(re) {
+      return concat('(?:', re, ')*');
+    }
+
+    /**
+     * @param {RegExp | string } re
+     * @returns {string}
+     */
     function optional(re) {
       return concat('(?:', re, ')?');
     }
@@ -405,6 +413,10 @@ var hljs = (function () {
       return joined;
     }
 
+    /**
+     * @param { Array<string | RegExp | Object> } args
+     * @returns {object}
+     */
     function stripOptionsFromArgs(args) {
       const opts = args[args.length - 1];
 
@@ -424,15 +436,16 @@ var hljs = (function () {
      * @returns {string}
      */
     function either(...args) {
+      /** @type { object & {capture?: boolean} }  */
       const opts = stripOptionsFromArgs(args);
-      const joined = '(' +
-        (opts.capture ? "" : "?:") +
-        args.map((x) => source(x)).join("|") + ")";
+      const joined = '('
+        + (opts.capture ? "" : "?:")
+        + args.map((x) => source(x)).join("|") + ")";
       return joined;
     }
 
     /**
-     * @param {RegExp} re
+     * @param {RegExp | string} re
      * @returns {number}
      */
     function countMatchGroups(re) {
@@ -1022,7 +1035,7 @@ var hljs = (function () {
      * are 1, 2, and 5.  This function handles this behavior.
      *
      * @param {CompiledMode} mode
-     * @param {Array<RegExp>} regexes
+     * @param {Array<RegExp | string>} regexes
      * @param {{key: "beginScope"|"endScope"}} opts
      */
     function remapScopeNames(mode, regexes, { key }) {
@@ -1061,7 +1074,7 @@ var hljs = (function () {
         throw MultiClassError;
       }
 
-      remapScopeNames(mode, mode.begin, {key: "beginScope"});
+      remapScopeNames(mode, mode.begin, { key: "beginScope" });
       mode.begin = _rewriteBackreferences(mode.begin, { joinWith: "" });
     }
 
@@ -1081,7 +1094,7 @@ var hljs = (function () {
         throw MultiClassError;
       }
 
-      remapScopeNames(mode, mode.end, {key: "endScope"});
+      remapScopeNames(mode, mode.end, { key: "endScope" });
       mode.end = _rewriteBackreferences(mode.end, { joinWith: "" });
     }
 
@@ -1148,7 +1161,10 @@ var hljs = (function () {
       function langRe(value, global) {
         return new RegExp(
           source(value),
-          'm' + (language.case_insensitive ? 'i' : '') + (global ? 'g' : '')
+          'm'
+          + (language.case_insensitive ? 'i' : '')
+          + (language.unicodeRegex ? 'u' : '')
+          + (global ? 'g' : '')
         );
       }
 
@@ -1446,10 +1462,10 @@ var hljs = (function () {
 
         if (parent) {
           if (!mode.begin) mode.begin = /\B|\b/;
-          cmode.beginRe = langRe(mode.begin);
+          cmode.beginRe = langRe(cmode.begin);
           if (!mode.end && !mode.endsWithParent) mode.end = /\B|\b/;
-          if (mode.end) cmode.endRe = langRe(mode.end);
-          cmode.terminatorEnd = source(mode.end) || '';
+          if (mode.end) cmode.endRe = langRe(cmode.end);
+          cmode.terminatorEnd = source(cmode.end) || '';
           if (mode.endsWithParent && parent.terminatorEnd) {
             cmode.terminatorEnd += (mode.end ? '|' : '') + parent.terminatorEnd;
           }
@@ -1540,7 +1556,15 @@ var hljs = (function () {
       return mode;
     }
 
-    var version = "11.2.0";
+    var version = "11.3.1";
+
+    class HTMLInjectionError extends Error {
+      constructor(reason, html) {
+        super(reason);
+        this.name = "HTMLInjectionError";
+        this.html = html;
+      }
+    }
 
     /*
     Syntax highlighting with language autodetection.
@@ -1550,6 +1574,7 @@ var hljs = (function () {
     /**
     @typedef {import('highlight.js').Mode} Mode
     @typedef {import('highlight.js').CompiledMode} CompiledMode
+    @typedef {import('highlight.js').CompiledScope} CompiledScope
     @typedef {import('highlight.js').Language} Language
     @typedef {import('highlight.js').HLJSApi} HLJSApi
     @typedef {import('highlight.js').HLJSPlugin} HLJSPlugin
@@ -1598,6 +1623,7 @@ var hljs = (function () {
       /** @type HLJSOptions */
       let options = {
         ignoreUnescapedHTML: false,
+        throwUnescapedHTML: false,
         noHighlightRe: /^(no-?highlight)$/i,
         languageDetectRe: /\blang(?:uage)?-([\w-]+)\b/i,
         classPrefix: 'hljs-',
@@ -1802,7 +1828,7 @@ var hljs = (function () {
         }
 
         /**
-         * @param {CompiledMode} mode
+         * @param {CompiledScope} scope
          * @param {RegExpMatchArray} match
          */
         function emitMultiClass(scope, match) {
@@ -2256,11 +2282,24 @@ var hljs = (function () {
         fire("before:highlightElement",
           { el: element, language: language });
 
-        // we should be all text, no child nodes
-        if (!options.ignoreUnescapedHTML && element.children.length > 0) {
-          console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk.");
-          console.warn("https://github.com/highlightjs/highlight.js/issues/2886");
-          console.warn(element);
+        // we should be all text, no child nodes (unescaped HTML) - this is possibly
+        // an HTML injection attack - it's likely too late if this is already in
+        // production (the code has likely already done its damage by the time
+        // we're seeing it)... but we yell loudly about this so that hopefully it's
+        // more likely to be caught in development before making it to production
+        if (element.children.length > 0) {
+          if (!options.ignoreUnescapedHTML) {
+            console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk.");
+            console.warn("https://github.com/highlightjs/highlight.js/issues/2886");
+            console.warn(element);
+          }
+          if (options.throwUnescapedHTML) {
+            const err = new HTMLInjectionError(
+              "One of your code blocks includes unescaped HTML.",
+              element.innerHTML
+            );
+            throw err;
+          }
         }
 
         node = element;
@@ -2494,6 +2533,14 @@ var hljs = (function () {
       hljs.safeMode = function() { SAFE_MODE = true; };
       hljs.versionString = version;
 
+      hljs.regex = {
+        concat: concat,
+        lookahead: lookahead,
+        either: either,
+        optional: optional,
+        anyNumberOfTimes: anyNumberOfTimes
+      };
+
       for (const key in MODES$1) {
         // @ts-ignore
         if (typeof MODES$1[key] === "object") {
@@ -2517,9 +2564,14 @@ var hljs = (function () {
           scope: 'meta',
           begin: '!important'
         },
+        BLOCK_COMMENT: hljs.C_BLOCK_COMMENT_MODE,
         HEXCOLOR: {
           scope: 'number',
-          begin: '#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})'
+          begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+        },
+        FUNCTION_DISPATCH: {
+          className: "built_in",
+          begin: /[\w-]+(?=\()/
         },
         ATTRIBUTE_SELECTOR_MODE: {
           scope: 'selector-attr',
@@ -2748,6 +2800,7 @@ var hljs = (function () {
       'align-content',
       'align-items',
       'align-self',
+      'all',
       'animation',
       'animation-delay',
       'animation-direction',
@@ -2757,7 +2810,6 @@ var hljs = (function () {
       'animation-name',
       'animation-play-state',
       'animation-timing-function',
-      'auto',
       'backface-visibility',
       'background',
       'background-attachment',
@@ -2809,9 +2861,11 @@ var hljs = (function () {
       'break-before',
       'break-inside',
       'caption-side',
+      'caret-color',
       'clear',
       'clip',
       'clip-path',
+      'clip-rule',
       'color',
       'column-count',
       'column-fill',
@@ -2823,9 +2877,14 @@ var hljs = (function () {
       'column-span',
       'column-width',
       'columns',
+      'contain',
       'content',
+      'content-visibility',
       'counter-increment',
       'counter-reset',
+      'cue',
+      'cue-after',
+      'cue-before',
       'cursor',
       'direction',
       'display',
@@ -2839,6 +2898,7 @@ var hljs = (function () {
       'flex-shrink',
       'flex-wrap',
       'float',
+      'flow',
       'font',
       'font-display',
       'font-family',
@@ -2850,10 +2910,34 @@ var hljs = (function () {
       'font-smoothing',
       'font-stretch',
       'font-style',
+      'font-synthesis',
       'font-variant',
+      'font-variant-caps',
+      'font-variant-east-asian',
       'font-variant-ligatures',
+      'font-variant-numeric',
+      'font-variant-position',
       'font-variation-settings',
       'font-weight',
+      'gap',
+      'glyph-orientation-vertical',
+      'grid',
+      'grid-area',
+      'grid-auto-columns',
+      'grid-auto-flow',
+      'grid-auto-rows',
+      'grid-column',
+      'grid-column-end',
+      'grid-column-start',
+      'grid-gap',
+      'grid-row',
+      'grid-row-end',
+      'grid-row-start',
+      'grid-template',
+      'grid-template-areas',
+      'grid-template-columns',
+      'grid-template-rows',
+      'hanging-punctuation',
       'height',
       'hyphens',
       'icon',
@@ -2861,11 +2945,11 @@ var hljs = (function () {
       'image-rendering',
       'image-resolution',
       'ime-mode',
-      'inherit',
-      'initial',
+      'isolation',
       'justify-content',
       'left',
       'letter-spacing',
+      'line-break',
       'line-height',
       'list-style',
       'list-style-image',
@@ -2878,10 +2962,27 @@ var hljs = (function () {
       'margin-top',
       'marks',
       'mask',
+      'mask-border',
+      'mask-border-mode',
+      'mask-border-outset',
+      'mask-border-repeat',
+      'mask-border-slice',
+      'mask-border-source',
+      'mask-border-width',
+      'mask-clip',
+      'mask-composite',
+      'mask-image',
+      'mask-mode',
+      'mask-origin',
+      'mask-position',
+      'mask-repeat',
+      'mask-size',
+      'mask-type',
       'max-height',
       'max-width',
       'min-height',
       'min-width',
+      'mix-blend-mode',
       'nav-down',
       'nav-index',
       'nav-left',
@@ -2911,23 +3012,68 @@ var hljs = (function () {
       'page-break-after',
       'page-break-before',
       'page-break-inside',
+      'pause',
+      'pause-after',
+      'pause-before',
       'perspective',
       'perspective-origin',
       'pointer-events',
       'position',
       'quotes',
       'resize',
+      'rest',
+      'rest-after',
+      'rest-before',
       'right',
+      'row-gap',
+      'scroll-margin',
+      'scroll-margin-block',
+      'scroll-margin-block-end',
+      'scroll-margin-block-start',
+      'scroll-margin-bottom',
+      'scroll-margin-inline',
+      'scroll-margin-inline-end',
+      'scroll-margin-inline-start',
+      'scroll-margin-left',
+      'scroll-margin-right',
+      'scroll-margin-top',
+      'scroll-padding',
+      'scroll-padding-block',
+      'scroll-padding-block-end',
+      'scroll-padding-block-start',
+      'scroll-padding-bottom',
+      'scroll-padding-inline',
+      'scroll-padding-inline-end',
+      'scroll-padding-inline-start',
+      'scroll-padding-left',
+      'scroll-padding-right',
+      'scroll-padding-top',
+      'scroll-snap-align',
+      'scroll-snap-stop',
+      'scroll-snap-type',
+      'shape-image-threshold',
+      'shape-margin',
+      'shape-outside',
+      'speak',
+      'speak-as',
       'src', // @font-face
       'tab-size',
       'table-layout',
       'text-align',
+      'text-align-all',
       'text-align-last',
+      'text-combine-upright',
       'text-decoration',
       'text-decoration-color',
       'text-decoration-line',
       'text-decoration-style',
+      'text-emphasis',
+      'text-emphasis-color',
+      'text-emphasis-position',
+      'text-emphasis-style',
       'text-indent',
+      'text-justify',
+      'text-orientation',
       'text-overflow',
       'text-rendering',
       'text-shadow',
@@ -2935,6 +3081,7 @@ var hljs = (function () {
       'text-underline-position',
       'top',
       'transform',
+      'transform-box',
       'transform-origin',
       'transform-style',
       'transition',
@@ -2945,12 +3092,22 @@ var hljs = (function () {
       'unicode-bidi',
       'vertical-align',
       'visibility',
+      'voice-balance',
+      'voice-duration',
+      'voice-family',
+      'voice-pitch',
+      'voice-range',
+      'voice-rate',
+      'voice-stress',
+      'voice-volume',
       'white-space',
       'widows',
       'width',
+      'will-change',
       'word-break',
       'word-spacing',
       'word-wrap',
+      'writing-mode',
       'z-index'
       // reverse makes sure longer attributes `font-weight` are matched fully
       // instead of getting false positives on say `font`
@@ -2964,11 +3121,8 @@ var hljs = (function () {
 
     /** @type LanguageFn */
     function css(hljs) {
+      const regex = hljs.regex;
       const modes = MODES(hljs);
-      const FUNCTION_DISPATCH = {
-        className: "built_in",
-        begin: /[\w-]+(?=\()/
-      };
       const VENDOR_PREFIX = {
         begin: /-(webkit|moz|ms|o)-(?=[a-z])/
       };
@@ -2993,7 +3147,7 @@ var hljs = (function () {
           keyframePosition: "selector-tag"
         },
         contains: [
-          hljs.C_BLOCK_COMMENT_MODE,
+          modes.BLOCK_COMMENT,
           VENDOR_PREFIX,
           // to recognize keyframe 40% etc which are outside the scope of our
           // attribute value mode
@@ -3016,7 +3170,7 @@ var hljs = (function () {
                 begin: ':(' + PSEUDO_CLASSES.join('|') + ')'
               },
               {
-                begin: '::(' + PSEUDO_ELEMENTS.join('|') + ')'
+                begin: ':(:)?(' + PSEUDO_ELEMENTS.join('|') + ')'
               }
             ]
           },
@@ -3033,9 +3187,10 @@ var hljs = (function () {
           },
           // attribute values
           {
-            begin: ':',
-            end: '[;}]',
+            begin: /:/,
+            end: /[;}{]/,
             contains: [
+              modes.BLOCK_COMMENT,
               modes.HEXCOLOR,
               modes.IMPORTANT,
               modes.CSS_NUMBER_MODE,
@@ -3061,11 +3216,11 @@ var hljs = (function () {
                   }
                 ]
               },
-              FUNCTION_DISPATCH
+              modes.FUNCTION_DISPATCH
             ]
           },
           {
-            begin: lookahead(/@/),
+            begin: regex.lookahead(/@/),
             end: '[{;]',
             relevance: 0,
             illegal: /:/, // break on Less variables @var: ...
@@ -3156,44 +3311,61 @@ var hljs = (function () {
       "Infinity"
     ];
 
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
     const TYPES = [
-      "Intl",
-      "DataView",
-      "Number",
-      "Math",
-      "Date",
-      "String",
-      "RegExp",
+      // Fundamental objects
       "Object",
       "Function",
       "Boolean",
-      "Error",
       "Symbol",
+      // numbers and dates
+      "Math",
+      "Date",
+      "Number",
+      "BigInt",
+      // text
+      "String",
+      "RegExp",
+      // Indexed collections
+      "Array",
+      "Float32Array",
+      "Float64Array",
+      "Int8Array",
+      "Uint8Array",
+      "Uint8ClampedArray",
+      "Int16Array",
+      "Int32Array",
+      "Uint16Array",
+      "Uint32Array",
+      "BigInt64Array",
+      "BigUint64Array",
+      // Keyed collections
       "Set",
       "Map",
       "WeakSet",
       "WeakMap",
-      "Proxy",
-      "Reflect",
-      "JSON",
-      "Promise",
-      "Float64Array",
-      "Int16Array",
-      "Int32Array",
-      "Int8Array",
-      "Uint16Array",
-      "Uint32Array",
-      "Float32Array",
-      "Array",
-      "Uint8Array",
-      "Uint8ClampedArray",
+      // Structured data
       "ArrayBuffer",
-      "BigInt64Array",
-      "BigUint64Array",
-      "BigInt"
+      "SharedArrayBuffer",
+      "Atomics",
+      "DataView",
+      "JSON",
+      // Control abstraction objects
+      "Promise",
+      "Generator",
+      "GeneratorFunction",
+      "AsyncFunction",
+      // Reflection
+      "Reflect",
+      "Proxy",
+      // Internationalization
+      "Intl",
+      // WebAssembly
+      "WebAssembly"
     ];
 
     const ERROR_TYPES = [
+      "Error",
       "EvalError",
       "InternalError",
       "RangeError",
@@ -3252,6 +3424,7 @@ var hljs = (function () {
 
     /** @type LanguageFn */
     function javascript(hljs) {
+      const regex = hljs.regex;
       /**
        * Takes a string like "<Booger" and checks to see
        * if we can find a matching "</Booger" later in the
@@ -3270,6 +3443,8 @@ var hljs = (function () {
         begin: '<>',
         end: '</>'
       };
+      // to avoid some special cases inside isTrulyOpeningTag
+      const XML_SELF_CLOSING = /<[A-Za-z0-9\\._:-]+\s*\/>/;
       const XML_TAG = {
         begin: /<[A-Za-z0-9\\._:-]+/,
         end: /\/[A-Za-z0-9\\._:-]+>|\/>/,
@@ -3280,20 +3455,41 @@ var hljs = (function () {
         isTrulyOpeningTag: (match, response) => {
           const afterMatchIndex = match[0].length + match.index;
           const nextChar = match.input[afterMatchIndex];
-          // nested type?
-          // HTML should not include another raw `<` inside a tag
-          // But a type might: `<Array<Array<number>>`, etc.
-          if (nextChar === "<") {
+          if (
+            // HTML should not include another raw `<` inside a tag
+            // nested type?
+            // `<Array<Array<number>>`, etc.
+            nextChar === "<" ||
+            // the , gives away that this is not HTML
+            // `<T, A extends keyof T, V>`
+            nextChar === ",") {
             response.ignoreMatch();
             return;
           }
-          // <something>
-          // This is now either a tag or a type.
+
+          // `<something>`
+          // Quite possibly a tag, lets look for a matching closing tag...
           if (nextChar === ">") {
             // if we cannot find a matching closing tag, then we
             // will ignore it
             if (!hasClosingTag(match, { after: afterMatchIndex })) {
               response.ignoreMatch();
+            }
+          }
+
+          // `<blah />` (self-closing)
+          // handled by simpleSelfClosing rule
+
+          // `<From extends string>`
+          // technically this could be HTML, but it smells like a type
+          let m;
+          const afterMatch = match.input.substr(afterMatchIndex);
+          // NOTE: This is ugh, but added specifically for https://github.com/highlightjs/highlight.js/issues/3276
+          if ((m = afterMatch.match(/^\s+extends\s+/))) {
+            if (m.index === 0) {
+              response.ignoreMatch();
+              // eslint-disable-next-line no-useless-return
+              return;
             }
           }
         }
@@ -3431,7 +3627,9 @@ var hljs = (function () {
         CSS_TEMPLATE,
         TEMPLATE_STRING,
         NUMBER,
-        hljs.REGEXP_MODE
+        // This is intentional:
+        // See https://github.com/highlightjs/highlight.js/issues/3288
+        // hljs.REGEXP_MODE
       ];
       SUBST.contains = SUBST_INTERNALS
         .concat({
@@ -3467,6 +3665,25 @@ var hljs = (function () {
       // ES6 classes
       const CLASS_OR_EXTENDS = {
         variants: [
+          // class Car extends vehicle
+          {
+            match: [
+              /class/,
+              /\s+/,
+              IDENT_RE$1,
+              /\s+/,
+              /extends/,
+              /\s+/,
+              regex.concat(IDENT_RE$1, "(", regex.concat(/\./, IDENT_RE$1), ")*")
+            ],
+            scope: {
+              1: "keyword",
+              3: "title.class",
+              5: "keyword",
+              7: "title.class.inherited"
+            }
+          },
+          // class Car
           {
             match: [
               /class/,
@@ -3478,23 +3695,23 @@ var hljs = (function () {
               3: "title.class"
             }
           },
-          {
-            match: [
-              /extends/,
-              /\s+/,
-              concat(IDENT_RE$1, "(", concat(/\./, IDENT_RE$1), ")*")
-            ],
-            scope: {
-              1: "keyword",
-              3: "title.class.inherited"
-            }
-          }
+
         ]
       };
 
       const CLASS_REFERENCE = {
         relevance: 0,
-        match: /\b[A-Z][a-z]+([A-Z][a-z]+)*/,
+        match:
+        regex.either(
+          // Hard coded exceptions
+          /\bJSON/,
+          // Float32Array
+          /\b[A-Z][a-z]+([A-Z][a-z]+|\d)*/,
+          // CSSFactory
+          /\b[A-Z]{2,}([A-Z][a-z]+|\d)+/,
+          // BLAH
+          // this will be flagged as a UPPER_CASE_CONSTANT instead
+        ),
         className: "title.class",
         keywords: {
           _: [
@@ -3546,24 +3763,24 @@ var hljs = (function () {
       };
 
       function noneOf(list) {
-        return concat("(?!", list.join("|"), ")");
+        return regex.concat("(?!", list.join("|"), ")");
       }
 
       const FUNCTION_CALL = {
-        match: concat(
+        match: regex.concat(
           /\b/,
           noneOf([
             ...BUILT_IN_GLOBALS,
             "super"
           ]),
-          IDENT_RE$1, lookahead(/\(/)),
+          IDENT_RE$1, regex.lookahead(/\(/)),
         className: "title.function",
         relevance: 0
       };
 
       const PROPERTY_ACCESS = {
-        begin: concat(/\./, lookahead(
-          concat(IDENT_RE$1, /(?![0-9A-Za-z$_(])/)
+        begin: regex.concat(/\./, regex.lookahead(
+          regex.concat(IDENT_RE$1, /(?![0-9A-Za-z$_(])/)
         )),
         end: IDENT_RE$1,
         excludeBegin: true,
@@ -3604,7 +3821,7 @@ var hljs = (function () {
           /const|var|let/, /\s+/,
           IDENT_RE$1, /\s*/,
           /=\s*/,
-          lookahead(FUNC_LEAD_IN_RE)
+          regex.lookahead(FUNC_LEAD_IN_RE)
         ],
         className: {
           1: "keyword",
@@ -3620,7 +3837,7 @@ var hljs = (function () {
         aliases: ['js', 'jsx', 'mjs', 'cjs'],
         keywords: KEYWORDS$1,
         // this will be extended by TypeScript
-        exports: { PARAMS_CONTAINS },
+        exports: { PARAMS_CONTAINS, CLASS_REFERENCE },
         illegal: /#(?![$_A-z])/,
         contains: [
           hljs.SHEBANG({
@@ -3639,7 +3856,7 @@ var hljs = (function () {
           CLASS_REFERENCE,
           {
             className: 'attr',
-            begin: IDENT_RE$1 + lookahead(':'),
+            begin: IDENT_RE$1 + regex.lookahead(':'),
             relevance: 0
           },
           FUNCTION_VARIABLE,
@@ -3694,6 +3911,7 @@ var hljs = (function () {
               { // JSX
                 variants: [
                   { begin: FRAGMENT.begin, end: FRAGMENT.end },
+                  { match: XML_SELF_CLOSING },
                   {
                     begin: XML_TAG.begin,
                     // we carefully check the opening tag to see if it truly
@@ -3777,8 +3995,9 @@ var hljs = (function () {
 
     /** @type LanguageFn */
     function xml(hljs) {
+      const regex = hljs.regex;
       // Element names can contain letters, digits, hyphens, underscores, and periods
-      const TAG_NAME_RE = concat(/[A-Z_]/, optional(/[A-Z0-9_.-]*:/), /[A-Z0-9_.-]*/);
+      const TAG_NAME_RE = regex.concat(/[A-Z_]/, regex.optional(/[A-Z0-9_.-]*:/), /[A-Z0-9_.-]*/);
       const XML_IDENT_RE = /[A-Za-z0-9._:-]+/;
       const XML_ENTITIES = {
         className: 'symbol',
@@ -3954,14 +4173,14 @@ var hljs = (function () {
           // open tag
           {
             className: 'tag',
-            begin: concat(
+            begin: regex.concat(
               /</,
-              lookahead(concat(
+              regex.lookahead(regex.concat(
                 TAG_NAME_RE,
                 // <tag/>
                 // <tag>
                 // <tag ...
-                either(/\/>/, />/, /\s/)
+                regex.either(/\/>/, />/, /\s/)
               ))
             ),
             end: /\/?>/,
@@ -3977,9 +4196,9 @@ var hljs = (function () {
           // close tag
           {
             className: 'tag',
-            begin: concat(
+            begin: regex.concat(
               /<\//,
-              lookahead(concat(
+              regex.lookahead(regex.concat(
                 TAG_NAME_RE, />/
               ))
             ),
@@ -4020,5 +4239,5 @@ var hljs = (function () {
 
     return hljs;
 
-}());
+})();
 if (typeof exports === 'object' && typeof module !== 'undefined') { module.exports = hljs; }
