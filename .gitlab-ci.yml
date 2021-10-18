@@ -79,7 +79,6 @@ canary:
     SDK_REPO: 'https://software.igalia.com/flatpak-refs/webkit-sdk.flatpakrepo'
     BUNDLE: 'epiphany-canary.flatpak'
   script:
-    - pip3 install --user requests
     # TODO: Switch to debug? 5GB downloads though.
     - python generate-canary-manifest.py --release
     - flatpak remote-add --user --if-not-exists webkit-sdk ${SDK_REPO}

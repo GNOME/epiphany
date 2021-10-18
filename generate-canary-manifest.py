@@ -24,7 +24,6 @@ import os
 import re
 import sys
 import urllib.request
-import requests
 
 ZIP_FILE = "webkitgtk.zip"
 
@@ -52,24 +51,16 @@ def download_zipped_build(build_type):
     print(f"Downloading build {latest} from {url}")
     zip_file = open(ZIP_FILE, "wb")
 
-    # https://sumit-ghosh.com/articles/python-download-progress-bar/
-    response = requests.get(f"{url}/{latest}", stream=True)
-    total = response.headers.get('content-length')
+    def update(blocks, bs, size):
+        done = int(50 * blocks * bs / size)
+        sys.stdout.write('\r[{}{}]'.format('█' * done, '.' * (50 - done)))
+        sys.stdout.flush()
+
+    urllib.request.urlretrieve(f"{url}/{latest}", ZIP_FILE, update)
     h = hashlib.new('sha256')
-    if total is None:
-        h.update(response.content)
-        zip_file.write(response.content)
-    else:
-        downloaded = 0
-        total = int(total)
-        for data in response.iter_content(chunk_size=max(int(total / 1000), 1024 * 1024)):
-            downloaded += len(data)
-            h.update(data)
-            zip_file.write(data)
-            done = int(50 * downloaded / total)
-            sys.stdout.write('\r[{}{}]'.format('█' * done, '.' * (50 - done)))
-            sys.stdout.flush()
-    sys.stdout.write('\n')
+    with open(ZIP_FILE, "rb") as f:
+        h.update(f.read())
+
     checksum = h.hexdigest()
     return (ZIP_FILE, checksum)
 
