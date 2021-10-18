@@ -882,7 +882,7 @@ decide_policy_cb (WebKitWebView            *web_view,
       type = EPHY_WEB_VIEW_DOCUMENT_XML;
     } else if (strncmp (mime_type, "image/", 6) == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-    } else if (strcmp (mime_type, "application/pdf") == 0 && strcmp (method, "GET") == 0) {
+    } else if (strcmp (mime_type, "application/pdf") == 0 && (!method || strcmp (method, "GET") == 0)) {
       g_autofree char *pdf_uri = NULL;
 
       /* FIXME: figure out how to make PDFs work in iframes. */
