@@ -660,4 +660,5 @@ ephy_tab_view_set_tab_bar (EphyTabView *self,
                            G_CONNECT_SWAPPED);
 
   visibility_policy_changed_cb (self);
+  notify_decoration_layout_cb (self);
 }
