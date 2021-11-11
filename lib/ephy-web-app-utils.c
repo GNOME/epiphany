@@ -118,7 +118,7 @@ ephy_web_application_get_program_name_from_profile_directory (const char *profil
   /* Just get the basename */
   name = strrchr (profile_dir, G_DIR_SEPARATOR);
   if (name == NULL) {
-    g_warning ("Profile directoroy %s is not a valid path", profile_dir);
+    g_warning ("Profile directory %s is not a valid path", profile_dir);
     return NULL;
   }
 
