@@ -5,21 +5,24 @@
 # Милош Поповић <gpopac@gmail.com>, 2010–2016.
 # Борисав Живановић <borisavzivanovic@gmail.com>, 2017.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011–2021.
+# Ђорђе Манчић <djordjemancic@outlook.com>, 2021.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-09-17 09:53+0000\n"
-"PO-Revision-Date: 2021-09-25 21:38+0200\n"
-"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"POT-Creation-Date: 2021-10-27 17:45+0000\n"
+"PO-Revision-Date: 2021-11-17 00:12+0100\n"
+"Last-Translator: Ђорђе Манчић <djordjemancic@outlook.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Project-Style: gnome\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -90,11 +93,11 @@ msgstr "Разгледање са показивачем"
 
 #: data/org.gnome.epiphany.gschema.xml:17
 msgid "Home page"
-msgstr "Матична страница"
+msgstr "Почетна страница"
 
 #: data/org.gnome.epiphany.gschema.xml:18
 msgid "Address of the user’s home page."
-msgstr "Адреса корисникове матичне странице."
+msgstr "Адреса корисникове почетне странице."
 
 #: data/org.gnome.epiphany.gschema.xml:22
 msgid "Default search engine."
@@ -102,7 +105,7 @@ msgstr "Основни погон претраге."
 
 #: data/org.gnome.epiphany.gschema.xml:23
 msgid "Name of the search engine selected by default."
-msgstr "Назив погона претрегае који се бира по основи."
+msgstr "Назив погона претраге који се бира по основи."
 
 #: data/org.gnome.epiphany.gschema.xml:26
 msgid ""
@@ -128,7 +131,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:38
 msgid "Enable Google Search Suggestions"
-msgstr "Укључује предлоге Гугл претраге"
+msgstr "Укључи предлоге Гугл претраге"
 
 #: data/org.gnome.epiphany.gschema.xml:39
 msgid "Whether to show Google Search Suggestion in url entry popdown."
@@ -148,19 +151,14 @@ msgid "Whether to automatically restore the last session"
 msgstr "Да ли да програм поврати последњу сесију"
 
 #: data/org.gnome.epiphany.gschema.xml:52
-#| msgid ""
-#| "Defines how the session will be restored during startup. Allowed values "
-#| "are “always” (the previous state of the application is always restored), "
-#| "“crashed” (the session is only restored if the application crashes) and "
-#| "“never” (the homepage is always shown)."
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
 "Одређује како ће сесија бити повраћена за време покретања. Дозвољене "
-"вредности су „always“ (увек враћа претходно стање програма), „crashed“ ("
-"враћа сесију само у случају пада програма)."
+"вредности су „always“ (увек враћа претходно стање програма), "
+"„crashed“ (враћа сесију само у случају пада програма)."
 
 #: data/org.gnome.epiphany.gschema.xml:56
 msgid ""
@@ -1026,7 +1024,7 @@ msgstr ""
 #. Displayed when opening the browser for the first time.
 #: embed/ephy-about-handler.c:397
 msgid "Welcome to Web"
-msgstr "Добродошли у Веб"
+msgstr "Добро дошли у Веб"
 
 #: embed/ephy-about-handler.c:397
 msgid "Start browsing and your most-visited sites will appear here."
@@ -1549,7 +1547,6 @@ msgid "Web process terminated due to exceeding memory limit"
 msgstr "Веб процес је окончан зато што је прекорачио ограничење меморије"
 
 #: embed/ephy-web-view.c:837
-#| msgid "Web process terminated due to exceeding memory limit"
 msgid "Web process terminated by API request"
 msgstr "Веб процес је окончан АПИ захтевом"
 
@@ -1779,9 +1776,6 @@ msgstr "Ух-бре!"
 
 #. Error details when web content has become unresponsive.
 #: embed/ephy-web-view.c:2013
-#| msgid ""
-#| "Something went wrong while displaying this page. Please reload or visit a "
-#| "different page to continue."
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -3026,7 +3020,6 @@ msgstr "Прегледајте и управљајте вашим обележи
 
 #. Translators: tooltip for the bookmark button
 #: src/resources/gtk/action-bar-end.ui:44
-#| msgid "Bookmark this page"
 msgid "Bookmark page"
 msgstr "Обележите страницу"
 
@@ -3060,12 +3053,10 @@ msgid "Bookmark"
 msgstr "Обележивач"
 
 #: src/resources/gtk/bookmark-properties.ui:23
-#| msgid "Name"
 msgid "_Name"
 msgstr "_Назив"
 
 #: src/resources/gtk/bookmark-properties.ui:43
-#| msgid "Address"
 msgid "_Address"
 msgstr "_Адреса"
 
@@ -3170,10 +3161,6 @@ msgid "Firefox Sync"
 msgstr "Firefox усаглашавање"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:29
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not Firefox and is not produced or endorsed by "
-#| "Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3489,7 +3476,6 @@ msgid "Use Custom JavaScript"
 msgstr "Користи прилагођени јаваскрипт"
 
 #: src/resources/gtk/prefs-appearance-page.ui:166
-#| msgid "Default zoom level"
 msgid "Default Zoom Level"
 msgstr "Подразумевани ниво увећања"
 
@@ -3530,12 +3516,10 @@ msgid "Block _Popup Windows"
 msgstr "Блокирај искачуће _прозоре"
 
 #: src/resources/gtk/prefs-general-page.ui:132
-#| msgid "Most _visited pages"
 msgid "Most _Visited Pages"
 msgstr "Најпосећеније _странице"
 
 #: src/resources/gtk/prefs-general-page.ui:146
-#| msgid "_Blank page"
 msgid "_Blank Page"
 msgstr "Празна _страница"
 
@@ -3544,12 +3528,10 @@ msgid "_Custom"
 msgstr "_Произвољно"
 
 #: src/resources/gtk/prefs-general-page.ui:190
-#| msgid "Ask o_n download"
 msgid "Ask o_n Download"
 msgstr "Питај _приликом преузимања"
 
 #: src/resources/gtk/prefs-general-page.ui:205
-#| msgid "_Download folder"
 msgid "_Download Folder"
 msgstr "_Фасцикла преузимања"
 
@@ -3731,7 +3713,6 @@ msgstr "Пречице"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
 #: src/resources/gtk/shortcuts-dialog.ui:246
-#| msgid "No bookmarks yet?"
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "Прикажи списак обележивача"
@@ -4130,7 +4111,6 @@ msgstr ""
 "Погони га ВебКитГТК %d.%d.%d"
 
 #: src/window-commands.c:1010
-#| msgid "Epiphany bookmarks"
 msgid "Epiphany Canary"
 msgstr "Спознаја Канари"
 
