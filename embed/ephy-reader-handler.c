@@ -163,6 +163,7 @@ readability_js_finish_cb (GObject      *object,
   const gchar *title;
   const gchar *font_style;
   const gchar *color_scheme;
+  HdyStyleManager *style_manager;
 
   js_result = webkit_web_view_run_javascript_finish (web_view, result, &error);
   if (!js_result) {
@@ -181,9 +182,15 @@ readability_js_finish_cb (GObject      *object,
   font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
                           g_settings_get_enum (EPHY_SETTINGS_READER,
                                                EPHY_PREFS_READER_FONT_STYLE));
-  color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
-                            g_settings_get_enum (EPHY_SETTINGS_READER,
-                                                 EPHY_PREFS_READER_COLOR_SCHEME));
+
+  style_manager = hdy_style_manager_get_default ();
+
+  if (hdy_style_manager_get_system_supports_color_schemes (style_manager))
+    color_scheme = hdy_style_manager_get_dark (style_manager) ? "dark" : "light";
+  else
+    color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                              g_settings_get_enum (EPHY_SETTINGS_READER,
+                                                   EPHY_PREFS_READER_COLOR_SCHEME));
 
   g_string_append_printf (html, "<style>%s</style>"
                           "<title>%s</title>"

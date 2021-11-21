@@ -348,6 +348,10 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                                 reader_font_style_set_mapping,
                                 NULL, NULL);
 
+  g_object_bind_property (hdy_style_manager_get_default (), "system-supports-color-schemes",
+                          appearance_page->reader_mode_color_scheme, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+
   hdy_combo_row_set_for_enum (HDY_COMBO_ROW (appearance_page->reader_mode_color_scheme),
                               EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
                               reader_color_scheme_get_name, NULL, NULL);

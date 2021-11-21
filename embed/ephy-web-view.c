@@ -2576,10 +2576,9 @@ enum_nick (GType enum_type,
 }
 
 static void
-reader_setting_changed_cb (GSettings   *settings,
-                           gchar       *key,
-                           EphyWebView *web_view)
+reader_setting_changed_cb (EphyWebView *web_view)
 {
+  HdyStyleManager *style_manager;
   const gchar *font_style;
   const gchar *color_scheme;
   gchar *js_snippet;
@@ -2588,11 +2587,17 @@ reader_setting_changed_cb (GSettings   *settings,
     return;
 
   font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
-                          g_settings_get_enum (settings,
+                          g_settings_get_enum (EPHY_SETTINGS_READER,
                                                EPHY_PREFS_READER_FONT_STYLE));
-  color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
-                            g_settings_get_enum (settings,
-                                                 EPHY_PREFS_READER_COLOR_SCHEME));
+
+  style_manager = hdy_style_manager_get_default ();
+
+  if (hdy_style_manager_get_system_supports_color_schemes (style_manager))
+    color_scheme = hdy_style_manager_get_dark (style_manager) ? "dark" : "light";
+  else
+    color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                              g_settings_get_enum (EPHY_SETTINGS_READER,
+                                                   EPHY_PREFS_READER_COLOR_SCHEME));
 
   js_snippet = g_strdup_printf ("document.body.className = '%s %s'",
                                 font_style,
@@ -3979,11 +3984,21 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
                            G_CALLBACK (reader_setting_changed_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
                            G_CALLBACK (reader_setting_changed_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (hdy_style_manager_get_default (),
+                           "notify::system-supports-color-schemes",
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (hdy_style_manager_get_default (),
+                           "notify::dark",
+                           G_CALLBACK (reader_setting_changed_cb),
+                           web_view, G_CONNECT_SWAPPED);
 
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
