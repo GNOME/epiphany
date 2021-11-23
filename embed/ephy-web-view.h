@@ -105,6 +105,7 @@ gboolean            ephy_web_view_get_should_bypass_safe_browsing (EphyWebView  
 void                ephy_web_view_set_should_bypass_safe_browsing (EphyWebView               *view,
                                                                    gboolean                   bypass_safe_browsing);
 gboolean                   ephy_web_view_get_is_blank             (EphyWebView               *view);
+gboolean                   ephy_web_view_is_newtab                (EphyWebView               *view);
 gboolean                   ephy_web_view_is_overview              (EphyWebView               *view);
 void                       ephy_web_view_has_modified_forms       (EphyWebView               *view,
                                                                    GCancellable              *cancellable,

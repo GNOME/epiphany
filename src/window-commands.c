@@ -1309,7 +1309,7 @@ window_cmd_new_tab (GSimpleAction *action,
   char *url;
 
   url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-  if (g_strcmp0 (url, "about:blank") != 0) {
+  if (g_strcmp0 (url, "about:newtab") != 0) {
     g_free (url);
     url = NULL;
   }

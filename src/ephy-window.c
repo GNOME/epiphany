@@ -2806,7 +2806,9 @@ ephy_window_close_tab (EphyWindow *window,
   if (keep_window_open && ephy_tab_view_get_n_pages (window->tab_view) == 1) {
     EphyWebView *view = ephy_embed_get_web_view (tab);
 
-    if (ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view))
+    if (ephy_web_view_get_is_blank (view) ||
+        ephy_web_view_is_newtab (view) ||
+        ephy_web_view_is_overview (view))
       return;
 
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_NEW_TAB);
@@ -2987,7 +2989,9 @@ ephy_window_update_entry_focus (EphyWindow  *window,
   const char *address = NULL;
 
   address = ephy_web_view_get_address (view);
-  if (!ephy_embed_utils_is_no_show_address (address) && !ephy_web_view_is_overview (view))
+  if (!ephy_embed_utils_is_no_show_address (address) &&
+      !ephy_web_view_is_newtab (view) &&
+      !ephy_web_view_is_overview (view))
     return;
 
   title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));

@@ -475,7 +475,7 @@ homepage_url_changed (GSettings  *settings,
 
   setting = g_settings_get_string (settings, key);
   if (setting && setting[0])
-    show_button = g_strcmp0 (setting, "about:blank") != 0;
+    show_button = g_strcmp0 (setting, "about:newtab") != 0;
   else
     show_button = is_desktop_pantheon ();
 

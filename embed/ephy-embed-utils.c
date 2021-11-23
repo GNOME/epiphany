@@ -375,6 +375,7 @@ ephy_embed_utils_url_is_empty (const char *location)
   return (location == NULL ||
           location[0] == '\0' ||
           strcmp (location, "about:blank") == 0 ||
+          strcmp (location, "ephy-about:newtab") == 0 ||
           strcmp (location, "ephy-about:overview") == 0 ||
           strcmp (location, "ephy-about:incognito") == 0);
 }
@@ -383,6 +384,7 @@ ephy_embed_utils_url_is_empty (const char *location)
  * window's location entry. */
 static const char *do_not_show_address[] = {
   "about:blank",
+  "ephy-about:newtab",
   "ephy-about:incognito",
   "ephy-about:overview",
   NULL
@@ -415,6 +417,10 @@ ephy_embed_utils_get_title_from_address (const char *address)
   if (!strcmp (address, EPHY_ABOUT_SCHEME ":overview") ||
       !strcmp (address, "about:overview"))
     return g_strdup (_(OVERVIEW_PAGE_TITLE));
+
+  if (!strcmp (address, EPHY_ABOUT_SCHEME ":newtab") ||
+      !strcmp (address, "about:newtab"))
+    return g_strdup (_(NEW_TAB_PAGE_TITLE));
 
   return ephy_string_get_host_name (address);
 }

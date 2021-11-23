@@ -960,7 +960,7 @@ blank_homepage_get_mapping (GValue   *value,
   const char *setting;
 
   setting = g_variant_get_string (variant, NULL);
-  if (g_strcmp0 (setting, "about:blank") == 0)
+  if (g_strcmp0 (setting, "about:newtab") == 0)
     g_value_set_boolean (value, TRUE);
 
   return TRUE;
@@ -978,7 +978,7 @@ blank_homepage_set_mapping (const GValue       *value,
 
   gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), "");
 
-  return g_variant_new_string ("about:blank");
+  return g_variant_new_string ("about:newtab");
 }
 
 static gboolean
@@ -989,7 +989,7 @@ custom_homepage_get_mapping (GValue   *value,
   const char *setting;
 
   setting = g_variant_get_string (variant, NULL);
-  if (setting && setting[0] != '\0' && g_strcmp0 (setting, "about:blank") != 0)
+  if (setting && setting[0] != '\0' && g_strcmp0 (setting, "about:newtab") != 0)
     g_value_set_boolean (value, TRUE);
   return TRUE;
 }

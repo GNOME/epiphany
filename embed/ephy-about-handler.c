@@ -440,6 +440,23 @@ out:
   g_object_unref (request);
 }
 
+static gboolean
+ephy_about_handler_handle_newtab (EphyAboutHandler       *handler,
+                                  WebKitURISchemeRequest *request)
+{
+  char *data;
+
+  data = g_strdup_printf ("<html><head><title>%s</title>"
+                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+                          "</head><body style=\"color-scheme: light dark;\">"
+                          "</body></html>",
+                          _(NEW_TAB_PAGE_TITLE));
+
+  ephy_about_handler_finish_request (request, data, -1);
+
+  return TRUE;
+}
+
 EphyHistoryQuery *
 ephy_history_query_new_for_overview (void)
 {
@@ -543,6 +560,8 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
     handled = ephy_about_handler_handle_epiphany (handler, request);
   else if (!g_strcmp0 (path, "applications") && !ephy_is_running_inside_flatpak ())
     handled = ephy_about_handler_handle_applications (handler, request);
+  else if (!g_strcmp0 (path, "newtab"))
+    handled = ephy_about_handler_handle_newtab (handler, request);
   else if (!g_strcmp0 (path, "overview"))
     handled = ephy_about_handler_handle_html_overview (handler, request);
   else if (!g_strcmp0 (path, "incognito"))

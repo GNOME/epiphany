@@ -300,7 +300,8 @@ ephy_session_tab_closed (EphySession *session,
   wk_view = WEBKIT_WEB_VIEW (view);
 
   if (!webkit_web_view_can_go_back (wk_view) && !webkit_web_view_can_go_forward (wk_view) &&
-      (ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view))) {
+      (ephy_web_view_get_is_blank (view) || ephy_web_view_is_newtab (view) ||
+       ephy_web_view_is_overview (view))) {
     return;
   }
 

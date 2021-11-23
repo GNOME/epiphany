@@ -156,7 +156,9 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
     for (GList *t = tabs; t && t->data; t = t->next) {
       title = ephy_embed_get_title (t->data);
 
-      if (!g_strcmp0 (title, _(BLANK_PAGE_TITLE)) || !g_strcmp0 (title, _(OVERVIEW_PAGE_TITLE)))
+      if (!g_strcmp0 (title, _(BLANK_PAGE_TITLE)) ||
+          !g_strcmp0 (title, _(NEW_TAB_PAGE_TITLE)) ||
+          !g_strcmp0 (title, _(OVERVIEW_PAGE_TITLE)))
         continue;
 
       url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));

@@ -62,6 +62,8 @@ ephy_get_fallback_favicon_name (const char      *uri,
   if (uri) {
     if (g_str_has_prefix (uri, "ephy-about:overview") || g_str_has_prefix (uri, "about:overview"))
       return type == EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER ? "view-grid-symbolic" : NULL;
+    else if (g_str_has_prefix (uri, "ephy-about:newtab") || g_str_has_prefix (uri, "about:newtab"))
+      return NULL;
     else if (g_str_has_prefix (uri, "ephy-about:") || g_str_has_prefix (uri, "about:"))
       return "web-browser-symbolic";
   }

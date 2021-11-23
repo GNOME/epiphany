@@ -2956,6 +2956,16 @@ ephy_web_view_is_overview (EphyWebView *view)
           !strcmp (view->address, "about:overview"));
 }
 
+gboolean
+ephy_web_view_is_newtab (EphyWebView *view)
+{
+  if (!view->address)
+    return FALSE;
+
+  return (!strcmp (view->address, EPHY_ABOUT_SCHEME ":newtab") ||
+          !strcmp (view->address, "about:newtab"));
+}
+
 /**
  * ephy_web_view_get_address:
  * @view: an #EphyWebView
