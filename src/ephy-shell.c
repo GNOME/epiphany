@@ -1290,9 +1290,10 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
 
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     const char *profile_dir = ephy_profile_dir ();
-    const char *web_id = ephy_web_application_get_program_name_from_profile_directory (profile_dir);
 
-    id = web_id;
+    id = ephy_web_application_get_gapplication_id_from_profile_directory (profile_dir);
+    if (id == NULL)
+      g_error ("Cannot start web app instance: %s is not a valid profile directory", profile_dir);
   } else {
     id = APPLICATION_ID;
   }

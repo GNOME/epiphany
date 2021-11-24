@@ -58,7 +58,7 @@ ephy_settings_init (void)
                                     g_object_unref);
 
   if (ephy_profile_dir_is_web_application ()) {
-    const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (profile_directory);
+    const char *web_app_name = ephy_web_application_get_gapplication_id_from_profile_directory (profile_directory);
     base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
   } else {
     base_path = g_strdup ("/org/gnome/epiphany/");
