@@ -45,7 +45,7 @@ typedef enum {
 
 char               *ephy_web_application_get_app_id_from_name (const char *name);
 
-const char         *ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir);
+const char         *ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir);
 
 char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon, EphyWebApplicationOptions options);
 
