@@ -376,7 +376,7 @@ ephy_file_helpers_init (const char            *profile_dir,
 
     app_file = g_build_filename (profile_dir, ".app", NULL);
     if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
-      const char *app_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir_global);
+      const char *app_name = ephy_web_application_get_gapplication_id_from_profile_directory (profile_dir_global);
       cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);
       config_dir = g_build_filename (g_get_user_config_dir (), app_name, NULL);
       profile_dir_type = EPHY_PROFILE_DIR_WEB_APP;

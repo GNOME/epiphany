@@ -33,20 +33,31 @@
 #include <string.h>
 #include <fcntl.h>
 
-/* Web Apps are installed in the default config dir of the user.
- * Every app has its own profile directory. To create a web app
- * an id needs to be generated using the given name as
- * <normalized-name>-checksum.
+/* Web apps are installed in the default data dir of the user. Every
+ * app has its own profile directory. To create a web app, an ID needs
+ * to be generated using the given name as <normalized-name>-checksum.
+ * The ID is used to uniquely identify the app.
  *
- * The id is used to uniquely identify the app.
- *  - Program name: org.gnome.Epiphany.WebApp-<id>
- *  - Profile directory: <program-name>
- *  - Desktop file: <profile-dir>/<program-name>.desktop
+ *  - Name: the user-visible pretty app name
+ *  - Normalized name: lowercase name
+ *  - Checksum: SHA-1 of name
+ *  - ID: <normalized-name>-<checksum>
+ *  - GApplication ID: see below
+ *  - Profile directory: <gapplication-id>
+ *  - Desktop file: <profile-dir>/<gapplication-id>.desktop
+ *
+ * Note that our ID and GApplication ID are different. Yes, this is confusing.
+ *
+ * For GApplication ID, there are two cases:
+ *
+ *  - If <id> is safe to use in a D-Bus identifier,
+ *    then: GApplication ID is org.gnome.Epiphany.WebApp-<id>
+ *  - otherwise: GAppliation ID is org.gnome.Epiphany.WebApp-<checksum>
  *
  * System web applications have a profile dir without a desktop file.
  */
 
-#define EPHY_WEB_APP_PROGRAM_NAME_PREFIX "org.gnome.Epiphany.WebApp-"
+#define EPHY_WEB_APP_GAPPLICATION_ID_PREFIX "org.gnome.Epiphany.WebApp-"
 
 char *
 ephy_web_application_get_app_id_from_name (const char *name)
@@ -84,34 +95,90 @@ get_encoded_path (const char *path)
   return encoded;
 }
 
+static const char *
+get_app_id_from_gapplication_id (const char *name)
+{
+  if (!g_str_has_prefix (name, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX)) {
+    g_warning ("GApplication ID %s does not begin with required prefix %s", name, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX);
+    return NULL;
+  }
+
+  return name + strlen (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX);
+}
+
+static char *
+get_gapplication_id_from_id (const char *id)
+{
+  g_auto (GStrv) split = NULL;
+  g_autofree char *gapplication_id = NULL;
+
+  /* Ideally we would convert hyphens to underscores here, because
+   * hyphens are not very friendly to D-Bus. However, changing this
+   * would require a new profile migration, because the GApplication ID
+   * must exactly match the desktop file basename.
+   *
+   * If we're willing to do another migration in the future, then we
+   * should drop this path and always return just the prefix plus hash,
+   * using underscores rather than hyphens.
+   */
+  gapplication_id = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, id, NULL);
+  if (g_application_id_is_valid (gapplication_id))
+    return g_steal_pointer (&gapplication_id);
+
+  /* Split ID into: <normalized-name>-<checksum> */
+  split = g_strsplit (id, "-", -1);
+  if (g_strv_length (split) != 2) {
+    g_warning ("Web app ID %s is broken: must have two hyphens", id);
+    return NULL;
+  }
+
+  /* We'll simply omit the <normalized-name> from the app ID, in order
+   * to avoid problematic characters. Ideally we would use an underscore
+   * here too, rather than a hyphen, but let's be consistent with
+   * existing web apps.
+   */
+  g_clear_pointer (&gapplication_id, g_free);
+  gapplication_id = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, split[1], NULL);
+
+  if (!g_application_id_is_valid (gapplication_id)) {
+    g_warning ("Web app ID %s is broken: derived GApplication ID %s is not a valid app ID (is the final component alphanumeric?)", id, gapplication_id);
+    return NULL;
+  }
+
+  return g_steal_pointer (&gapplication_id);
+}
+
 static char *
 get_app_profile_directory_name (const char *id)
 {
-  char *profile_dir;
-  char *encoded;
+  g_autofree char *gapplication_id = NULL;
 
-  profile_dir = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
-  encoded = get_encoded_path (profile_dir);
-  g_free (profile_dir);
+  gapplication_id = get_gapplication_id_from_id (id);
+  if (!gapplication_id)
+    g_error ("Failed to get GApplication ID from app ID %s", id);
 
-  return encoded;
+  return get_encoded_path (gapplication_id);
 }
 
 static char *
 get_app_desktop_filename (const char *id)
 {
-  char *filename;
-  char *encoded;
+  g_autofree char *gapplication_id = NULL;
+  g_autofree char *filename = NULL;
 
-  filename = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, ".desktop", NULL);
-  encoded = get_encoded_path (filename);
-  g_free (filename);
+  /* Warning: the GApplication ID must exactly match the desktop file's
+   * basename. Don't overthink this or stuff will break, e.g. GNotification.
+   */
+  gapplication_id = get_gapplication_id_from_id (id);
+  if (!gapplication_id)
+    g_error ("Failed to get GApplication ID from app ID %s", id);
 
-  return encoded;
+  filename = g_strconcat (gapplication_id, ".desktop", NULL);
+  return get_encoded_path (filename);
 }
 
 const char *
-ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir)
+ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir)
 {
   const char *name;
 
@@ -128,8 +195,8 @@ ephy_web_application_get_program_name_from_profile_directory (const char *profil
   if (g_str_has_prefix (name, "app-"))
     name += strlen ("app-");
 
-  if (!g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX)) {
-    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
+  if (!g_str_has_prefix (name, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX)) {
+    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX);
     return NULL;
   }
 
@@ -137,23 +204,12 @@ ephy_web_application_get_program_name_from_profile_directory (const char *profil
 }
 
 static const char *
-get_app_id_from_program_name (const char *name)
-{
-  if (!g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX)) {
-    g_warning ("Program name %s does not begin with required prefix %s", name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
-    return NULL;
-  }
-
-  return name + strlen (EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
-}
-
-static const char *
 get_app_id_from_profile_directory (const char *profile_dir)
 {
-  const char *program_name;
+  const char *gapplication_id;
 
-  program_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir);
-  return program_name ? get_app_id_from_program_name (program_name) : NULL;
+  gapplication_id = ephy_web_application_get_gapplication_id_from_profile_directory (profile_dir);
+  return gapplication_id ? get_app_id_from_gapplication_id (gapplication_id) : NULL;
 }
 
 static char *
@@ -322,7 +378,7 @@ create_desktop_file (const char *id,
     g_free (path);
   }
 
-  wm_class = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
+  wm_class = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, id, NULL);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
   g_free (wm_class);
 
@@ -478,7 +534,7 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 void
 ephy_web_application_setup_from_profile_directory (const char *profile_directory)
 {
-  const char *program_name;
+  const char *gapplication_id;
   const char *id;
   char *desktop_basename;
   char *desktop_filename;
@@ -486,24 +542,23 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 
   g_assert (profile_directory != NULL);
 
-  program_name = ephy_web_application_get_program_name_from_profile_directory (profile_directory);
-  if (!program_name)
-    exit (1);
+  gapplication_id = ephy_web_application_get_gapplication_id_from_profile_directory (profile_directory);
+  if (!gapplication_id)
+    g_error ("Failed to get GApplication ID from profile directory %s", profile_directory);
 
-  g_set_prgname (program_name);
+  /* FIXME: is this actually necessary? Probably not? */
+  g_set_prgname (gapplication_id);
 
-  id = get_app_id_from_program_name (program_name);
+  id = get_app_id_from_gapplication_id (gapplication_id);
   if (!id)
-    exit (1);
+    g_error ("Failed to get app ID from GApplication ID %s", gapplication_id);
 
   /* Get display name from desktop file */
   desktop_basename = get_app_desktop_filename (id);
   desktop_filename = g_build_filename (profile_directory, desktop_basename, NULL);
   desktop_info = g_desktop_app_info_new_from_filename (desktop_filename);
-  if (!desktop_info) {
-    g_warning ("Required desktop file not present at %s", desktop_filename);
-    exit (1);
-  }
+  if (!desktop_info)
+    g_error ("Required desktop file not present at %s", desktop_filename);
   g_set_application_name (g_app_info_get_name (G_APP_INFO (desktop_info)));
 
   g_free (desktop_basename);
@@ -621,7 +676,7 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
 
     name = g_file_info_get_name (info);
     if ((only_legacy && g_str_has_prefix (name, "app-")) ||
-        (!only_legacy && g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX))) {
+        (!only_legacy && g_str_has_prefix (name, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX))) {
       EphyWebApplication *app;
       char *profile_dir;
 
