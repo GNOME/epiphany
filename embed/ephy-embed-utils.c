@@ -415,10 +415,8 @@ ephy_embed_utils_get_title_from_address (const char *address)
     return g_strdup (address + 7);
 
   if (!strcmp (address, EPHY_ABOUT_SCHEME ":overview") ||
-      !strcmp (address, "about:overview"))
-    return g_strdup (_(OVERVIEW_PAGE_TITLE));
-
-  if (!strcmp (address, EPHY_ABOUT_SCHEME ":newtab") ||
+      !strcmp (address, EPHY_ABOUT_SCHEME ":newtab") ||
+      !strcmp (address, "about:overview") ||
       !strcmp (address, "about:newtab"))
     return g_strdup (_(NEW_TAB_PAGE_TITLE));
 

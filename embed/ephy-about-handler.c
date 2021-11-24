@@ -372,7 +372,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           "<body>\n",
                           lang, lang,
                           ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
-                          _(OVERVIEW_PAGE_TITLE));
+                          _(NEW_TAB_PAGE_TITLE));
   g_free (lang);
 
   list_length = g_list_length (urls);
