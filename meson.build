@@ -79,7 +79,6 @@ webkitgtk_requirement = '>= 2.33.2'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
-gdk_dep = dependency('gdk-3.0', version: gtk_requirement)
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
 gio_dep = dependency('gio-2.0', version: glib_requirement)
 gio_unix_dep = dependency('gio-unix-2.0', version: glib_requirement)

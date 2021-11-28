@@ -71,7 +71,6 @@ libephymain_deps = [
   ephymisc_dep,
   ephysync_dep,
   ephywidgets_dep,
-  gdk_dep,
   gvdb_dep,
   libarchive_dep,
   libhandy_dep

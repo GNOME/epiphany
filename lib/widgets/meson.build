@@ -24,7 +24,6 @@ libephywidgets_deps = [
   libdazzle_dep,
   ephymisc_dep,
   gcr_dep,
-  gdk_dep,
   gdk_pixbuf_dep,
   gio_dep,
   glib_dep,
