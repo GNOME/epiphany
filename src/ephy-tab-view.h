@@ -30,6 +30,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyTabView, ephy_tab_view, EPHY, TAB_VIEW, GtkBin)
 
+typedef void (*EphyTabViewCallback) (GtkWidget *widget,
+                                     gpointer   data);
+
 EphyTabView *ephy_tab_view_new                (void);
 
 void         ephy_tab_view_next               (EphyTabView *self);
@@ -44,9 +47,9 @@ void         ephy_tab_view_close_left         (EphyTabView *self);
 void         ephy_tab_view_close_right        (EphyTabView *self);
 void         ephy_tab_view_close_other        (EphyTabView *self);
 
-void         ephy_tab_view_foreach            (EphyTabView *self,
-                                               GtkCallback  callback,
-                                               gpointer     user_data);
+void         ephy_tab_view_foreach            (EphyTabView         *self,
+                                               EphyTabViewCallback  callback,
+                                               gpointer             user_data);
 
 gint         ephy_tab_view_get_n_pages        (EphyTabView *self);
 gint         ephy_tab_view_get_selected_index (EphyTabView *self);

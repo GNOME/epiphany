@@ -240,9 +240,9 @@ ephy_tab_view_close_other (EphyTabView *self)
 }
 
 void
-ephy_tab_view_foreach (EphyTabView *self,
-                       GtkCallback  callback,
-                       gpointer     user_data)
+ephy_tab_view_foreach (EphyTabView         *self,
+                       EphyTabViewCallback  callback,
+                       gpointer             user_data)
 {
   int i, n;
 
