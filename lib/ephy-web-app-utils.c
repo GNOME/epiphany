@@ -480,7 +480,6 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 {
   const char *program_name;
   const char *id;
-  char *app_icon;
   char *desktop_basename;
   char *desktop_filename;
   GDesktopAppInfo *desktop_info;
@@ -507,10 +506,6 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   }
   g_set_application_name (g_app_info_get_name (G_APP_INFO (desktop_info)));
 
-  app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
-  gtk_window_set_default_icon_from_file (app_icon, NULL);
-
-  g_free (app_icon);
   g_free (desktop_basename);
   g_free (desktop_filename);
   g_object_unref (desktop_info);
@@ -520,29 +515,12 @@ void
 ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
 {
   GAppInfo *app_info;
-  GIcon *icon;
 
   g_assert (G_IS_DESKTOP_APP_INFO (desktop_info));
 
   app_info = G_APP_INFO (desktop_info);
   g_set_prgname (g_app_info_get_name (app_info));
   g_set_application_name (g_app_info_get_display_name (app_info));
-
-  icon = g_app_info_get_icon (app_info);
-  if (G_IS_FILE_ICON (icon)) {
-    GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
-    char *path = file ? g_file_get_path (file) : NULL;
-
-    if (path) {
-      gtk_window_set_default_icon_from_file (path, NULL);
-      g_free (path);
-    }
-    g_clear_object (&file);
-  } else if (G_IS_THEMED_ICON (icon)) {
-    const char * const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
-    if (names)
-      gtk_window_set_default_icon_name (names[0]);
-  }
 }
 
 void
