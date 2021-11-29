@@ -373,12 +373,9 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
   GtkWidget *clamp;
   GtkWidget *box;
-  GtkSizeGroup *size_group;
 
   toolbar->search_bar = hdy_search_bar_new ();
   gtk_container_add (GTK_CONTAINER (toolbar), toolbar->search_bar);
-
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   clamp = GTK_WIDGET (hdy_clamp_new ());
   hdy_clamp_set_maximum_size (HDY_CLAMP (clamp), 400);
@@ -416,11 +413,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
                                _("Find next occurrence of the search string"));
   gtk_container_add (GTK_CONTAINER (box), toolbar->next);
   gtk_widget_set_sensitive (toolbar->next, FALSE);
-
-  gtk_size_group_add_widget (size_group, GTK_WIDGET (toolbar->entry));
-  gtk_size_group_add_widget (size_group, toolbar->next);
-  gtk_size_group_add_widget (size_group, toolbar->prev);
-  g_object_unref (size_group);
 
   /* connect signals */
   g_signal_connect (toolbar->entry, "icon-release",
