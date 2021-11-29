@@ -510,11 +510,6 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
   gtk_window_set_default_icon_from_file (app_icon, NULL);
 
-  /* We need to re-set this because we have already parsed the
-   * options, which inits GTK+ and sets this as a side effect.
-   */
-  gdk_set_program_class (program_name);
-
   g_free (app_icon);
   g_free (desktop_basename);
   g_free (desktop_filename);
@@ -525,7 +520,6 @@ void
 ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
 {
   GAppInfo *app_info;
-  const char *wm_class;
   GIcon *icon;
 
   g_assert (G_IS_DESKTOP_APP_INFO (desktop_info));
@@ -549,13 +543,6 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
     if (names)
       gtk_window_set_default_icon_name (names[0]);
   }
-
-  /* We need to re-set this because we have already parsed the
-   * options, which inits GTK+ and sets this as a side effect.
-   */
-  wm_class = g_desktop_app_info_get_startup_wm_class (desktop_info);
-  if (wm_class)
-    gdk_set_program_class (wm_class);
 }
 
 void
