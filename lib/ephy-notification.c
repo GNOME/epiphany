@@ -24,7 +24,7 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotification {
-  GtkFrame parent_instance;
+  GtkBin parent_instance;
 
   GtkWidget *grid;
 
@@ -36,17 +36,13 @@ struct _EphyNotification {
   char *body_msg;
 };
 
-struct _EphyNotificationClass {
-  GtkFrameClass parent_class;
-};
-
 enum {
   PROP_0,
   PROP_HEAD,
   PROP_BODY
 };
 
-G_DEFINE_TYPE (EphyNotification, ephy_notification, GTK_TYPE_GRID);
+G_DEFINE_TYPE (EphyNotification, ephy_notification, GTK_TYPE_BIN);
 
 static void
 ephy_notification_constructed (GObject *object)
