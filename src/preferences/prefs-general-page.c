@@ -42,7 +42,7 @@ enum {
 };
 
 struct _PrefsGeneralPage {
-  HdyPreferencesPage parent_instance;
+  AdwPreferencesPage parent_instance;
 
   /* Web Application */
   EphyWebApplication *webapp;
@@ -87,7 +87,7 @@ struct _PrefsGeneralPage {
   GtkWidget *enable_switch_to_new_tab;
 
   /* Languages */
-  HdyPreferencesGroup *lang_group;
+  AdwPreferencesGroup *lang_group;
   GtkWidget *lang_listbox;
   GtkWidget *enable_spell_checking_switch;
 
@@ -95,7 +95,7 @@ struct _PrefsGeneralPage {
   GtkTreeView *add_lang_treeview;
 };
 
-G_DEFINE_TYPE (PrefsGeneralPage, prefs_general_page, HDY_TYPE_PREFERENCES_PAGE)
+G_DEFINE_TYPE (PrefsGeneralPage, prefs_general_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
 prefs_general_page_finalize (GObject *object)
@@ -154,130 +154,25 @@ language_editor_update_pref (PrefsGeneralPage *general_page)
                   "as", &builder);
 }
 
-static void
-drag_data_received (GtkWidget        *widget,
-                    GdkDragContext   *context,
-                    gint              x,
-                    gint              y,
-                    GtkSelectionData *selection_data,
-                    guint             info,
-                    guint32           time,
-                    gpointer          data)
-{
-  PrefsGeneralPage *general_page = data;
-  GtkListBox *lang_listbox = GTK_LIST_BOX (general_page->lang_listbox);
-  GtkWidget *hovered_row;
-  GtkWidget *dragged_row;
-  int length;
-  int hovered_row_pos;
-  int dragged_row_pos;
-  int insert_pos;
-
-  hovered_row = GTK_WIDGET (gtk_list_box_get_row_at_y (lang_listbox, y));
-  dragged_row = (gpointer) * (gpointer *)gtk_selection_data_get_data (selection_data);
-
-  length = get_list_box_length (GTK_LIST_BOX (widget));
-  hovered_row_pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (hovered_row));
-  dragged_row_pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (dragged_row));
-
-  /* If the drag ended while hovering over the dragged row then we return */
-  if (hovered_row == dragged_row)
-    return;
-
-  /* If the drag ended while hovering over the "Add Language" row then we return */
-  if (hovered_row_pos == length - 1)
-    return;
-
-  g_object_ref (dragged_row);
-  gtk_container_remove (GTK_CONTAINER (lang_listbox), dragged_row);
-
-  /* Calculation logic for insert_pos */
-  if (y < 20) {
-    insert_pos = 0;
-  } else if (dragged_row_pos < hovered_row_pos) {
-    insert_pos = hovered_row_pos;
-  } else { /* dragged_row_pos > hovered_row_pos is true here */
-    insert_pos = hovered_row_pos + 1;
-  }
-
-  gtk_list_box_insert (lang_listbox, dragged_row, insert_pos);
-  g_object_unref (dragged_row);
-
-  language_editor_update_pref (general_page);
-}
-
-static gboolean
-drag_motion (GtkWidget      *widget,
-             GdkDragContext *context,
-             int             x,
-             int             y,
-             guint           time)
-{
-  GtkListBoxRow *first_lang_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (widget), 0);
-
-  GtkWidget *dragged_row;
-  GtkWidget *hovered_row;
-  GtkWidget *expanded_dnd_revealer;
-  GtkWidget *hovered_row_dnd_revealer = NULL;
-
-  dragged_row = g_object_get_data (G_OBJECT (widget), "dragged-row");
-  hovered_row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (widget), y));
-  expanded_dnd_revealer = g_object_get_data (G_OBJECT (widget), "dnd-expanded-revealer");
-
-  if (EPHY_IS_LANG_ROW (hovered_row))
-    hovered_row_dnd_revealer = ephy_lang_row_get_dnd_bottom_revealer (EPHY_LANG_ROW (hovered_row));
-
-  /* Edge case: If the user is hovering with the dragged row close to the
-   * top of the list, then we reveal the top empty row of EphyLangRow */
-  if (y < 20 && dragged_row != GTK_WIDGET (first_lang_row)) {
-    GtkWidget *top_revealer = ephy_lang_row_get_dnd_top_revealer (EPHY_LANG_ROW (hovered_row));
-
-    if (expanded_dnd_revealer)
-      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
-
-    gtk_revealer_set_reveal_child (GTK_REVEALER (top_revealer), TRUE);
-    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", top_revealer);
-
-    return TRUE;
-  }
-
-  if (dragged_row == hovered_row) {
-    if (expanded_dnd_revealer)
-      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
-
-    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", NULL);
-
-    return TRUE;
-  }
-
-  if (EPHY_IS_LANG_ROW (hovered_row)) {
-    if (expanded_dnd_revealer)
-      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
-
-    gtk_revealer_set_reveal_child (GTK_REVEALER (hovered_row_dnd_revealer), TRUE);
-    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", hovered_row_dnd_revealer);
-    return TRUE;
-  } else {
-    if (expanded_dnd_revealer)
-      gtk_revealer_set_reveal_child (GTK_REVEALER (expanded_dnd_revealer), FALSE);
-
-    g_object_set_data (G_OBJECT (widget), "dnd-expanded-revealer", NULL);
-    return FALSE;
-  }
-}
-
 static GtkDialog *setup_add_language_dialog (PrefsGeneralPage *general_page);
 
 static void
-language_editor_add_button_release_event (GtkWidget        *button,
-                                          GdkEvent         *event,
-                                          PrefsGeneralPage *general_page)
+language_editor_add_activated (GtkWidget *listbox,
+                               GtkWidget *activated_row,
+                               GtkWidget *add_row)
 {
+  PrefsGeneralPage *general_page;
+
+  if (add_row != activated_row)
+    return;
+
+  general_page = EPHY_PREFS_GENERAL_PAGE (gtk_widget_get_ancestor (listbox, EPHY_TYPE_PREFS_GENERAL_PAGE));
+
   if (general_page->add_lang_dialog == NULL) {
     GtkWindow *prefs_dialog;
     GtkDialog **add_lang_dialog;
 
-    prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (general_page)));
+    prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
     general_page->add_lang_dialog = setup_add_language_dialog (general_page);
     gtk_window_set_transient_for (GTK_WINDOW (general_page->add_lang_dialog), prefs_dialog);
 
@@ -294,17 +189,18 @@ language_editor_add_button_release_event (GtkWidget        *button,
 static void
 language_editor_add_function_buttons (PrefsGeneralPage *general_page)
 {
-  GtkWidget *box;
+  GtkWidget *row;
   GtkWidget *label;
 
-  box = gtk_event_box_new ();
+  row = gtk_list_box_row_new ();
   label = gtk_label_new (_("Add Language"));
-  g_signal_connect (box, "button-release-event", G_CALLBACK (language_editor_add_button_release_event), general_page);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_set_size_request (box, -1, 50);
-  gtk_widget_show_all (GTK_WIDGET (box));
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
+  gtk_widget_set_size_request (row, -1, 50);
 
-  gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), box, -1);
+  gtk_list_box_append (GTK_LIST_BOX (general_page->lang_listbox), row);
+
+  g_signal_connect_object (general_page->lang_listbox, "row-activated",
+                           G_CALLBACK (language_editor_add_activated), row, 0);
 }
 
 static void
@@ -334,86 +230,27 @@ static void
 language_editor_delete_button_clicked_cb (EphyLangRow      *row,
                                           PrefsGeneralPage *general_page)
 {
-  gtk_container_remove (GTK_CONTAINER (general_page->lang_listbox), GTK_WIDGET (row));
+  gtk_list_box_remove (GTK_LIST_BOX (general_page->lang_listbox), GTK_WIDGET (row));
   language_editor_update_pref (general_page);
   language_editor_update_state (general_page);
 }
 
-void
-drag_data_get (GtkWidget        *widget,
-               GdkDragContext   *context,
-               GtkSelectionData *selection_data,
-               guint             info,
-               guint             time,
-               gpointer          data)
-{
-  GtkWidget *row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
-
-  gtk_selection_data_set (selection_data,
-                          gdk_atom_intern_static_string ("EPHY_LANG_ROW"),
-                          32,
-                          (const guchar *)&row,
-                          sizeof (gpointer));
-}
-
 static void
-drag_begin (GtkWidget      *widget,
-            GdkDragContext *context,
-            gpointer        data)
+language_editor_move_row_cb (EphyLangRow      *row,
+                             EphyLangRow      *dest_row,
+                             PrefsGeneralPage *general_page)
 {
-  GtkWidget *row;
-  GtkAllocation alloc;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  int x, y;
-  double sx, sy;
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (dest_row));
 
-  row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
-  gtk_widget_get_allocation (row, &alloc);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
-  cr = cairo_create (surface);
+  g_object_ref (row);
+  gtk_list_box_remove (GTK_LIST_BOX (general_page->lang_listbox),
+                       GTK_WIDGET (row));
+  gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox),
+                       GTK_WIDGET (row), index);
+  g_object_unref (row);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-icon");
-  gtk_widget_draw (row, cr);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-icon");
-
-  gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
-  cairo_surface_get_device_scale (surface, &sx, &sy);
-  cairo_surface_set_device_offset (surface, -x * sy, -y * sy);
-  gtk_drag_set_icon_surface (context, surface);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
-
-  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "dragged-row", row);
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-row");
+  language_editor_update_pref (general_page);
 }
-
-static void
-drag_end (GtkWidget      *widget,
-          GdkDragContext *context,
-          gpointer        data)
-{
-  GtkWidget *lang_row;
-  GtkWidget *lang_listbox;
-  GtkWidget *dnd_expanded_revealer;
-
-  lang_row = gtk_widget_get_ancestor (widget, EPHY_TYPE_LANG_ROW);
-  lang_listbox = gtk_widget_get_parent (lang_row);
-  dnd_expanded_revealer = g_object_get_data (G_OBJECT (lang_listbox), "dnd-expanded-revealer");
-
-  g_object_set_data (G_OBJECT (lang_listbox), "dragged-row", NULL);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (lang_row), "drag-row");
-
-  if (dnd_expanded_revealer) {
-    gtk_revealer_set_reveal_child (GTK_REVEALER (dnd_expanded_revealer), FALSE);
-    g_object_set_data (G_OBJECT (lang_listbox), "dnd-expanded-revealer", NULL);
-  }
-}
-
-static GtkTargetEntry entries[] = {
-  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
-};
 
 static void
 language_editor_add (PrefsGeneralPage *general_page,
@@ -421,7 +258,6 @@ language_editor_add (PrefsGeneralPage *general_page,
                      const char       *desc)
 {
   GtkWidget *row;
-  GtkWidget *event_box;
   int len;
   int index;
 
@@ -443,16 +279,10 @@ language_editor_add (PrefsGeneralPage *general_page,
   row = ephy_lang_row_new ();
 
   ephy_lang_row_set_code (EPHY_LANG_ROW (row), code);
-  ephy_lang_row_set_title (EPHY_LANG_ROW (row), desc);
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "row");
-
-  event_box = ephy_lang_row_get_drag_event_box (EPHY_LANG_ROW (row));
-  gtk_drag_source_set (event_box, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
-  g_signal_connect (event_box, "drag-begin", G_CALLBACK (drag_begin), general_page);
-  g_signal_connect (event_box, "drag-end", G_CALLBACK (drag_end), general_page);
-  g_signal_connect (event_box, "drag-data-get", G_CALLBACK (drag_data_get), general_page);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), desc);
 
   g_signal_connect (row, "delete-button-clicked", G_CALLBACK (language_editor_delete_button_clicked_cb), general_page);
+  g_signal_connect (row, "move-row", G_CALLBACK (language_editor_move_row_cb), general_page);
 
   gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), row, len - 1);
 }
@@ -500,7 +330,8 @@ add_lang_dialog_response_cb (GtkWidget        *widget,
     language_editor_update_state (general_page);
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
+  general_page->add_lang_dialog = NULL;
 }
 
 static void
@@ -555,11 +386,11 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   GtkTreeIter iter;
   guint i, n;
   GtkBuilder *builder;
-  GtkWidget *prefs_dialog;
+  GtkWindow *prefs_dialog;
   g_auto (GStrv) locales = NULL;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
-  prefs_dialog = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
+  prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
   add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
   treeview = GTK_TREE_VIEW (gtk_builder_get_object (builder, "languages_treeview"));
@@ -603,7 +434,7 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   gtk_tree_sortable_set_sort_column_id
     (GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-  gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (prefs_dialog)),
+  gtk_window_group_add_window (gtk_window_get_group (prefs_dialog),
                                GTK_WINDOW (ad));
   gtk_window_set_modal (GTK_WINDOW (ad), TRUE);
 
@@ -715,13 +546,13 @@ download_folder_file_chooser_cb (GtkNativeDialog  *chooser,
 static void
 download_folder_row_activated_cb (PrefsGeneralPage *general_page)
 {
-  GtkWidget *parent;
+  GtkRoot *root;
   g_autofree char *downloads_path = NULL;
   GtkFileChooserNative *chooser;
 
-  parent = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
+  root = gtk_widget_get_root (GTK_WIDGET (general_page));
   chooser = gtk_file_chooser_native_new (_("Select a Directory"),
-                                         GTK_WINDOW (parent),
+                                         GTK_WINDOW (root),
                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                          _("_Select"),
                                          _("_Cancel"));
@@ -735,9 +566,9 @@ download_folder_row_activated_cb (PrefsGeneralPage *general_page)
 
     downloads_dir = g_file_new_for_path (downloads_path);
 
-    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (chooser),
-                                              downloads_dir,
-                                              &error);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser),
+                                         downloads_dir,
+                                         &error);
 
     if (error)
       g_warning ("Failed to set current folder %s: %s", downloads_path, error->message);
@@ -794,14 +625,14 @@ save_web_application (PrefsGeneralPage *general_page)
   if (!general_page->webapp)
     return G_SOURCE_REMOVE;
 
-  text = gtk_entry_get_text (GTK_ENTRY (general_page->webapp_url));
+  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_url));
   if (g_strcmp0 (general_page->webapp->url, text) != 0) {
     g_free (general_page->webapp->url);
     general_page->webapp->url = g_strdup (text);
     changed = TRUE;
   }
 
-  text = gtk_entry_get_text (GTK_ENTRY (general_page->webapp_title));
+  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_title));
   if (g_strcmp0 (general_page->webapp->name, text) != 0) {
     g_free (general_page->webapp->name);
     general_page->webapp->name = g_strdup (text);
@@ -840,9 +671,7 @@ prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
   if (!icon)
     return;
 
-  gtk_image_set_from_gicon (GTK_IMAGE (general_page->webapp_icon),
-                            G_ICON (icon),
-                            GTK_ICON_SIZE_DND);
+  gtk_image_set_from_gicon (GTK_IMAGE (general_page->webapp_icon), G_ICON (icon));
   gtk_image_set_pixel_size (GTK_IMAGE (general_page->webapp_icon), 32);
 
   g_object_set_data_full (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-path",
@@ -875,7 +704,7 @@ on_webapp_entry_changed (GtkEditable      *editable,
 }
 
 void
-prefs_general_page_on_pd_delete_event (PrefsGeneralPage *general_page)
+prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page)
 {
   if (general_page->webapp_save_id) {
     g_source_remove (general_page->webapp_save_id);
@@ -935,15 +764,15 @@ on_webapp_icon_button_clicked (GtkWidget        *button,
 }
 
 static void
-custom_homepage_entry_changed (GtkEntry         *entry,
+custom_homepage_entry_changed (GtkEditable      *editable,
                                PrefsGeneralPage *general_page)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (general_page->custom_homepage_radiobutton))) {
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (general_page->custom_homepage_radiobutton))) {
     g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
-                           gtk_entry_get_text (entry));
-  } else if ((gtk_entry_get_text (entry) != NULL) &&
-             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (general_page->new_tab_homepage_radiobutton))) {
-    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, gtk_entry_get_text (entry));
+                           gtk_editable_get_text (editable));
+  } else if ((gtk_editable_get_text (editable) != NULL) &&
+             gtk_check_button_get_active (GTK_CHECK_BUTTON (general_page->new_tab_homepage_radiobutton))) {
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, gtk_editable_get_text (editable));
     gtk_widget_set_sensitive (general_page->custom_homepage_entry, TRUE);
     gtk_widget_grab_focus (general_page->custom_homepage_entry);
   }
@@ -954,7 +783,7 @@ custom_homepage_entry_icon_released (GtkEntry             *entry,
                                      GtkEntryIconPosition  icon_pos)
 {
   if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_set_text (entry, "");
+    gtk_editable_set_text (GTK_EDITABLE (entry), "");
 }
 
 static gboolean
@@ -982,7 +811,7 @@ new_tab_homepage_set_mapping (const GValue       *value,
     return NULL;
 
   /* In case the new tab button is pressed while there's text in the custom homepage entry */
-  gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry), "");
   gtk_widget_set_sensitive (general_page->custom_homepage_entry, FALSE);
 
   return g_variant_new_string ("");
@@ -1012,7 +841,7 @@ blank_homepage_set_mapping (const GValue       *value,
   if (!g_value_get_boolean (value))
     return NULL;
 
-  gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry), "");
 
   return g_variant_new_string ("about:newtab");
 }
@@ -1040,17 +869,17 @@ custom_homepage_set_mapping (const GValue       *value,
 
   if (!g_value_get_boolean (value)) {
     gtk_widget_set_sensitive (general_page->custom_homepage_entry, FALSE);
-    gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), "");
+    gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry), "");
     return NULL;
   }
 
   gtk_widget_set_sensitive (general_page->custom_homepage_entry, TRUE);
   gtk_widget_grab_focus (general_page->custom_homepage_entry);
-  setting = gtk_entry_get_text (GTK_ENTRY (general_page->custom_homepage_entry));
+  setting = gtk_editable_get_text (GTK_EDITABLE (general_page->custom_homepage_entry));
   if (!setting || setting[0] == '\0')
     return NULL;
 
-  gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), setting);
+  gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry), setting);
 
   return g_variant_new_string (setting);
 }
@@ -1063,7 +892,7 @@ on_manage_webapp_additional_urls_button_clicked (GtkWidget        *button,
   GtkWindow *prefs_dialog;
 
   urls_dialog = ephy_webapp_additional_urls_dialog_new ();
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (general_page)));
+  prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
 
   gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), prefs_dialog);
   gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
@@ -1139,10 +968,6 @@ init_lang_listbox (PrefsGeneralPage *general_page)
   char **list = NULL;
   int i;
 
-  gtk_drag_dest_set (general_page->lang_listbox, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
-  g_signal_connect (general_page->lang_listbox, "drag-data-received", G_CALLBACK (drag_data_received), general_page);
-  g_signal_connect (general_page->lang_listbox, "drag-motion", G_CALLBACK (drag_motion), NULL);
-
   list = g_settings_get_strv (EPHY_SETTINGS_WEB,
                               EPHY_PREFS_WEB_LANGUAGE);
 
@@ -1182,8 +1007,8 @@ setup_general_page (PrefsGeneralPage *general_page)
 
     if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
       prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_path);
-      gtk_entry_set_text (GTK_ENTRY (general_page->webapp_url), general_page->webapp->url);
-      gtk_entry_set_text (GTK_ENTRY (general_page->webapp_title), general_page->webapp->name);
+      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_url), general_page->webapp->url);
+      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_title), general_page->webapp->name);
     }
   }
 
@@ -1235,13 +1060,13 @@ setup_general_page (PrefsGeneralPage *general_page)
                                 general_page,
                                 NULL);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (general_page->custom_homepage_radiobutton))) {
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (general_page->custom_homepage_radiobutton))) {
     gtk_widget_set_sensitive (general_page->custom_homepage_entry, TRUE);
-    gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry),
-                        g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL));
+    gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry),
+                           g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL));
   } else {
     gtk_widget_set_sensitive (general_page->custom_homepage_entry, FALSE);
-    gtk_entry_set_text (GTK_ENTRY (general_page->custom_homepage_entry), "");
+    gtk_editable_set_text (GTK_EDITABLE (general_page->custom_homepage_entry), "");
   }
 
   g_signal_connect (general_page->custom_homepage_entry, "changed",

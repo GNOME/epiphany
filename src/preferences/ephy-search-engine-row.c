@@ -29,7 +29,7 @@
 #include "ephy-embed-shell.h"
 
 struct _EphySearchEngineRow {
-  HdyExpanderRow parent_instance;
+  AdwExpanderRow parent_instance;
 
   /* Widgets */
   GtkWidget *name_entry;
@@ -42,7 +42,7 @@ struct _EphySearchEngineRow {
   EphySearchEngineManager *manager;
 };
 
-G_DEFINE_TYPE (EphySearchEngineRow, ephy_search_engine_row, HDY_TYPE_EXPANDER_ROW)
+G_DEFINE_TYPE (EphySearchEngineRow, ephy_search_engine_row, ADW_TYPE_EXPANDER_ROW)
 
 enum {
   PROP_0,
@@ -86,10 +86,10 @@ ephy_search_engine_row_new (EphySearchEngine        *engine,
  */
 void
 ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
-                                               GtkRadioButton      *radio_button_group)
+                                               GtkCheckButton      *radio_button_group)
 {
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (self->radio_button),
-                              gtk_radio_button_get_group (radio_button_group));
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (self->radio_button),
+                              radio_button_group);
 }
 
 /***** Private implementation *****/
@@ -160,8 +160,7 @@ set_entry_as_invalid (GtkEntry   *entry,
   gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_SECONDARY,
                                    error_message);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)),
-                               "error");
+  gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
 }
 
 static void
@@ -173,8 +172,7 @@ set_entry_as_valid (GtkEntry *entry)
   gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_SECONDARY,
                                    NULL);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (entry)),
-                                  "error");
+  gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
 }
 
 static void
@@ -182,7 +180,7 @@ on_bang_entry_text_changed_cb (EphySearchEngineRow *row,
                                GParamSpec          *pspec,
                                GtkEntry            *bang_entry)
 {
-  const char *bang = gtk_entry_get_text (bang_entry);
+  const char *bang = gtk_editable_get_text (GTK_EDITABLE (bang_entry));
 
   /* Checks if the bang already exists */
   if (g_strcmp0 (bang, ephy_search_engine_get_bang (row->engine)) != 0 &&
@@ -210,7 +208,7 @@ on_address_entry_text_changed_cb (EphySearchEngineRow *row,
                                   GtkEntry            *address_entry)
 {
   const char *validation_message = NULL;
-  const char *url = gtk_entry_get_text (address_entry);
+  const char *url = gtk_editable_get_text (GTK_EDITABLE (address_entry));
 
   /* Address in invalid. */
   if (!validate_search_engine_address (url, &validation_message)) {
@@ -309,7 +307,7 @@ update_bang_for_name (EphySearchEngineRow *row,
   }
   lowercase_acronym = g_utf8_strdown (acronym, -1); /* Bangs are usually lowercase */
   final_bang = g_strconcat ("!", lowercase_acronym, NULL); /* "!" is the prefix for the bang */
-  gtk_entry_set_text (GTK_ENTRY (row->bang_entry), final_bang);
+  gtk_editable_set_text (GTK_EDITABLE (row->bang_entry), final_bang);
   ephy_search_engine_set_bang (row->engine, final_bang);
 }
 
@@ -318,7 +316,7 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
                                GParamSpec          *pspec,
                                GtkEntry            *name_entry)
 {
-  const char *new_name = gtk_entry_get_text (name_entry);
+  const char *new_name = gtk_editable_get_text (GTK_EDITABLE (name_entry));
 
   /* This is an edge case when you copy the whole name then paste it again in
    * place of the whole current name. GtkEntry will record a notify signal even
@@ -342,7 +340,7 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
      * "Wikipedia (en)". That's just annoying, so only do it when there hasn't
      * been any bang added yet.
      */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (row->bang_entry)), "") == 0)
+    if (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (row->bang_entry)), "") == 0)
       update_bang_for_name (row, new_name);
 
     ephy_search_engine_set_name (row->engine, new_name);
@@ -354,7 +352,7 @@ on_radio_button_active_changed_cb (EphySearchEngineRow *self,
                                    GParamSpec          *pspec,
                                    GtkButton           *button)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) &&
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)) &&
       /* Avoid infinite loop between this callback and on_default_engine_changed_cb() */
       ephy_search_engine_manager_get_default_engine (self->manager) != self->engine)
     ephy_search_engine_manager_set_default_engine (self->manager, self->engine);
@@ -366,19 +364,13 @@ on_default_engine_changed_cb (EphySearchEngineManager *manager,
                               EphySearchEngineRow     *self)
 {
   if (ephy_search_engine_manager_get_default_engine (manager) == self->engine)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->radio_button), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (self->radio_button), TRUE);
 }
 
 static void
 on_remove_button_clicked_cb (EphySearchEngineRow *row,
                              GtkButton           *button)
 {
-  /* FIXME: this should be fixed in libhandy
-   * Unexpand the row before removing it so the styling isn't broken.
-   * See the checked-expander-row-previous-sibling style class in HdyExpanderRow documentation.
-   */
-  hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (row), FALSE);
-
   ephy_search_engine_manager_delete_engine (row->manager, row->engine);
 }
 
@@ -426,7 +418,8 @@ on_ephy_search_engine_row_constructed (GObject *object)
   g_assert (self->engine != NULL);
   g_assert (self->manager != NULL);
 
-  gtk_entry_set_text (GTK_ENTRY (self->name_entry), ephy_search_engine_get_name (self->engine));
+  gtk_editable_set_text (GTK_EDITABLE (self->name_entry),
+                         ephy_search_engine_get_name (self->engine));
 
   /* We can't directly bind that in the UI file because there's issues with
    * properties bindings that involve the root widget (the <template> root one).
@@ -435,10 +428,10 @@ on_ephy_search_engine_row_constructed (GObject *object)
                           self, "title",
                           G_BINDING_SYNC_CREATE);
 
-  gtk_entry_set_text (GTK_ENTRY (self->address_entry),
-                      ephy_search_engine_get_url (self->engine));
-  gtk_entry_set_text (GTK_ENTRY (self->bang_entry),
-                      ephy_search_engine_get_bang (self->engine));
+  gtk_editable_set_text (GTK_EDITABLE (self->address_entry),
+                         ephy_search_engine_get_url (self->engine));
+  gtk_editable_set_text (GTK_EDITABLE (self->bang_entry),
+                         ephy_search_engine_get_bang (self->engine));
 
   g_signal_connect_object (self->name_entry, "notify::text", G_CALLBACK (on_name_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->address_entry, "notify::text", G_CALLBACK (on_address_entry_text_changed_cb), self, G_CONNECT_SWAPPED);

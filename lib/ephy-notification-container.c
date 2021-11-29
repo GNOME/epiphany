@@ -23,13 +23,13 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotificationContainer {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   GtkWidget *revealer;
   GtkWidget *box;
 };
 
-G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GTK_TYPE_BIN);
+G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, ADW_TYPE_BIN);
 
 static EphyNotificationContainer *notification_container = NULL;
 
@@ -46,10 +46,12 @@ ephy_notification_container_init (EphyNotificationContainer *self)
   gtk_widget_set_valign (GTK_WIDGET (self), GTK_ALIGN_START);
 
   self->revealer = gtk_revealer_new ();
-  gtk_container_add (GTK_CONTAINER (self), self->revealer);
+  adw_bin_set_child (ADW_BIN (self), self->revealer);
 
   self->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (self->revealer), self->box);
+  gtk_revealer_set_child (GTK_REVEALER (self->revealer), self->box);
+
+  gtk_widget_hide (GTK_WIDGET (self));
 }
 
 static void
@@ -67,28 +69,13 @@ ephy_notification_container_get_default (void)
                        NULL);
 }
 
-static guint
-get_num_children (EphyNotificationContainer *self)
-{
-  GList *children;
-  guint retval;
-
-  g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->box));
-  retval = g_list_length (children);
-  g_list_free (children);
-
-  return retval;
-}
-
 static void
 notification_close_cb (EphyNotification          *notification,
                        EphyNotificationContainer *self)
 {
-  gtk_container_remove (GTK_CONTAINER (self->box), GTK_WIDGET (notification));
+  gtk_box_remove (GTK_BOX (self->box), GTK_WIDGET (notification));
 
-  if (get_num_children (self) == 0) {
+  if (!gtk_widget_get_first_child (self->box)) {
     gtk_widget_hide (GTK_WIDGET (self));
     gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), FALSE);
   }
@@ -98,24 +85,24 @@ void
 ephy_notification_container_add_notification (EphyNotificationContainer *self,
                                               GtkWidget                 *notification)
 {
-  g_autoptr (GList) children = NULL;
-  GList *list;
+  GtkWidget *child;
 
   g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
   g_assert (GTK_IS_WIDGET (notification));
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->box));
-  for (list = children; list && list->data; list = list->next) {
-    EphyNotification *child_notification = EPHY_NOTIFICATION (children->data);
+  for (child = gtk_widget_get_first_child (self->box);
+       child;
+       child = gtk_widget_get_next_sibling (child)) {
+    EphyNotification *child_notification = EPHY_NOTIFICATION (child);
 
     if (ephy_notification_is_duplicate (child_notification, EPHY_NOTIFICATION (notification))) {
-      gtk_widget_destroy (notification);
+      gtk_box_remove (GTK_BOX (self->box), notification);
       return;
     }
   }
 
-  gtk_container_add (GTK_CONTAINER (self->box), notification);
-  gtk_widget_show_all (GTK_WIDGET (self));
+  gtk_box_append (GTK_BOX (self->box), notification);
+  gtk_widget_show (GTK_WIDGET (self));
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 
   g_signal_connect (notification, "close", G_CALLBACK (notification_close_cb), self);

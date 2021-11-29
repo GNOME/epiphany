@@ -31,8 +31,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySecurityPopover, ephy_security_popover, EPHY, SECURITY_POPOVER, GtkPopover)
 
-GtkWidget *ephy_security_popover_new      (GtkWidget *relative_to,
-                                           const char *address,
+GtkWidget *ephy_security_popover_new      (const char *address,
                                            GTlsCertificate *certificate,
                                            GTlsCertificateFlags tls_errors,
                                            EphySecurityLevel security_level);

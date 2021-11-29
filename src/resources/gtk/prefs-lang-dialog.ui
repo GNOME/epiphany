@@ -2,9 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="add_language_dialog">
-    <property name="role">epiphany-preferences-add-language</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
     <property name="default_width">300</property>
     <property name="default_height">420</property>
     <property name="use_header_bar">1</property>
@@ -12,8 +10,6 @@
     <child type="action">
       <object class="GtkButton" id="cancelbutton1">
         <property name="label" translatable="yes">_Cancel</property>
-        <property name="visible">True</property>
-        <property name="can_default">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
       </object>
@@ -21,20 +17,16 @@
     <child type="action">
       <object class="GtkButton" id="add_button">
         <property name="label" translatable="yes">_Add</property>
-        <property name="visible">True</property>
-        <property name="can_default">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
       </object>
     </child>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox3">
-        <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkBox" id="vbox198">
-            <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="margin-top">10</property>
             <property name="margin-bottom">10</property>
@@ -43,7 +35,6 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1309">
-                <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Choose a language:</property>
                 <property name="use_underline">True</property>
@@ -52,7 +43,6 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow3">
-                <property name="visible">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="vexpand">True</property>
                 <style>
@@ -60,7 +50,6 @@
                 </style>
                 <child>
                   <object class="GtkTreeView" id="languages_treeview">
-                    <property name="visible">True</property>
                     <property name="headers_visible">False</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection2"/>

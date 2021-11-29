@@ -580,14 +580,11 @@ launch_application (GAppInfo *app,
   g_autoptr (GdkAppLaunchContext) context = NULL;
   g_autoptr (GError) error = NULL;
   GdkDisplay *display;
-  GdkScreen *screen;
   gboolean res;
 
   display = gdk_display_get_default ();
-  screen = gdk_screen_get_default ();
 
   context = gdk_display_get_app_launch_context (display);
-  gdk_app_launch_context_set_screen (context, screen);
 
   res = g_app_info_launch (app, files,
                            G_APP_LAUNCH_CONTEXT (context), &error);
@@ -661,15 +658,14 @@ ephy_file_launch_handler (GFile *file)
 static gboolean
 open_in_default_handler (const char *uri,
                          const char *mime_type,
-                         GdkScreen  *screen)
+                         GdkDisplay *display)
 {
   g_autoptr (GdkAppLaunchContext) context = NULL;
   g_autoptr (GAppInfo) appinfo = NULL;
   g_autoptr (GError) error = NULL;
   GList uris;
 
-  context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
-  gdk_app_launch_context_set_screen (context, screen);
+  context = gdk_display_get_app_launch_context (display ? display : gdk_display_get_default ());
 
   appinfo = g_app_info_get_default_for_type (mime_type, TRUE);
   if (!appinfo) {
@@ -690,13 +686,13 @@ open_in_default_handler (const char *uri,
 
 gboolean
 ephy_file_open_uri_in_default_browser (const char *uri,
-                                       GdkScreen  *screen)
+                                       GdkDisplay *display)
 {
   if (ephy_is_running_inside_sandbox ()) {
     ephy_open_uri_via_flatpak_portal (uri);
     return TRUE;
   }
-  return open_in_default_handler (uri, "x-scheme-handler/http", screen);
+  return open_in_default_handler (uri, "x-scheme-handler/http", display);
 }
 
 /**

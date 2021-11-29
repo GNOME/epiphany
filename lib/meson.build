@@ -10,9 +10,10 @@ enums = gnome.mkenums_simple('ephy-lib-type-builtins',
 )
 
 libephymisc_sources = [
+  'contrib/dzl-fuzzy-mutable-index.c',
+  'contrib/dzl-suggestion.c',
   'contrib/gnome-languages.c',
   'ephy-debug.c',
-  'ephy-dnd.c',
   'ephy-favicon-helpers.c',
   'ephy-file-helpers.c',
   'ephy-flatpak-utils.c',
@@ -61,7 +62,7 @@ libephymisc_deps = [
   gsettings_desktop_schemas,
   gtk_dep,
   json_glib_dep,
-  libdazzle_dep,
+  libadwaita_dep,
   libsecret_dep,
   libsoup_dep,
   libxml_dep,

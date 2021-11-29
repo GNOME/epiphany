@@ -84,6 +84,7 @@ if get_option('unit_tests').enabled()
 
   location_entry_test = executable('test-location-entry',
     'ephy-location-entry-test.c',
+    resources,
     dependencies: ephymain_dep,
     c_args: test_cargs,
   )

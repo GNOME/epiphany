@@ -161,18 +161,16 @@ runtime_handler_open_options_page (EphyWebExtensionSender *sender,
   title = g_strdup_printf (_("Options for %s"), ephy_web_extension_get_name (sender->extension));
   options_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (sender->extension), options_ui);
 
-  new_window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+  new_window = GTK_WINDOW (gtk_window_new ());
   gtk_window_set_transient_for (new_window, gtk_application_get_active_window (GTK_APPLICATION (shell)));
   gtk_window_set_destroy_with_parent (new_window, TRUE);
   gtk_window_set_title (new_window, title);
-  gtk_window_set_position (new_window, GTK_WIN_POS_CENTER_ON_PARENT);
 
   new_web_view = ephy_web_extensions_manager_create_web_extensions_webview (sender->extension);
-  gtk_container_add (GTK_CONTAINER (new_window), new_web_view);
+  gtk_window_set_child (GTK_WINDOW (new_window), new_web_view);
 
   webkit_web_view_load_uri (WEBKIT_WEB_VIEW (new_web_view), options_uri);
 
-  gtk_widget_show (new_web_view);
   gtk_window_present (new_window);
 
   g_task_return_pointer (task, NULL, NULL);

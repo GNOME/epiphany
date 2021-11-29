@@ -48,7 +48,7 @@ ephy_title_widget_default_init (EphyTitleWidgetInterface *iface)
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE,
                 1,
-                GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+                GTK_TYPE_MENU_BUTTON);
 }
 
 const char *

@@ -90,20 +90,10 @@
             ]
         },
         {
-            "name" : "libdazzle",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "buildsystem" : "meson",
             "config-opts" : [
-                "-Dbackends=gtk3",
+                "-Dbackends=gtk4",
                 "-Dintrospection=false",
                 "-Ddocs=false"
             ],
@@ -112,6 +102,24 @@
                     "type" : "git",
                     "url" : "https://github.com/flatpak/libportal.git",
                     "tag" : "0.6"
+                }
+            ]
+        },
+        {
+            "name" : "gcr",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dintrospection=false",
+                "-Dvapi=false",
+                "-Dgtk3=false",
+                "-Dgtk_doc=false",
+                "-Dssh_agent=false",
+                "-Dsystemd=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git"
                 }
             ]
         },

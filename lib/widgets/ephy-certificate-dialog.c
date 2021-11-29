@@ -23,8 +23,9 @@
 
 #include "ephy-lib-type-builtins.h"
 
+#define GCK_API_SUBJECT_TO_CHANGE
 #define GCR_API_SUBJECT_TO_CHANGE
-#include <gcr/gcr.h>
+#include <gcr-4/gcr-gtk4/gcr-certificate-widget.h>
 #include <glib/gi18n.h>
 
 /**
@@ -51,6 +52,7 @@ struct _EphyCertificateDialog {
   GtkWidget *icon;
   GtkWidget *title;
   GtkWidget *text;
+  GtkWidget *box;
 
   GTlsCertificateFlags tls_errors;
   EphySecurityLevel security_level;
@@ -75,7 +77,6 @@ ephy_certificate_dialog_set_certificate (EphyCertificateDialog *dialog,
   GcrCertificate *simple_certificate;
   GByteArray *certificate_data;
   GtkWidget *certificate_widget;
-  GtkWidget *content_area;
 
   g_object_get (certificate, "certificate", &certificate_data, NULL);
   simple_certificate = gcr_simple_certificate_new ((const guchar *)certificate_data->data,
@@ -86,9 +87,7 @@ ephy_certificate_dialog_set_certificate (EphyCertificateDialog *dialog,
   gtk_widget_set_vexpand (certificate_widget, TRUE);
   g_object_unref (simple_certificate);
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_pack_start (GTK_BOX (content_area), certificate_widget, FALSE, TRUE, 0);
-  gtk_widget_show (certificate_widget);
+  gtk_box_append (GTK_BOX (dialog->box), certificate_widget);
 }
 
 static char *
@@ -152,7 +151,7 @@ ephy_certificate_dialog_constructed (GObject *object)
   icon_name = ephy_security_level_to_icon_name (dialog->security_level);
   if (icon_name) {
     icon = g_themed_icon_new_with_default_fallbacks (icon_name);
-    gtk_image_set_from_gicon (GTK_IMAGE (dialog->icon), icon, GTK_ICON_SIZE_DIALOG);
+    gtk_image_set_from_gicon (GTK_IMAGE (dialog->icon), icon);
     g_object_unref (icon);
   }
 
@@ -185,7 +184,6 @@ ephy_certificate_dialog_constructed (GObject *object)
         g_assert_not_reached ();
     }
   }
-  gtk_widget_show (dialog->text);
 }
 
 static void
@@ -279,33 +277,31 @@ static void
 ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 {
   GtkWidget *grid;
+  GtkWidget *scrolled_window;
   GtkWidget *content_area;
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
-
-  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   dialog->icon = gtk_image_new ();
+  gtk_image_set_pixel_size (GTK_IMAGE (dialog->icon), 48);
   gtk_grid_attach (GTK_GRID (grid), dialog->icon,
                    0, 0, 1, 2);
-  gtk_widget_show (dialog->icon);
 
   dialog->title = gtk_label_new (NULL);
   gtk_label_set_use_markup (GTK_LABEL (dialog->title), TRUE);
-  gtk_label_set_line_wrap (GTK_LABEL (dialog->title), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (dialog->title), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->title), TRUE);
   gtk_label_set_xalign (GTK_LABEL (dialog->title), 0.0);
   gtk_grid_attach_next_to (GTK_GRID (grid), dialog->title,
                            dialog->icon, GTK_POS_RIGHT,
                            1, 1);
-  gtk_widget_show (dialog->title);
 
   dialog->text = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (dialog->text), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (dialog->text), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->text), TRUE);
   gtk_label_set_xalign (GTK_LABEL (dialog->text), 0.0);
   gtk_label_set_yalign (GTK_LABEL (dialog->text), 0.0);
@@ -313,14 +309,21 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
                            dialog->title, GTK_POS_BOTTOM,
                            1, 1);
 
+  dialog->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_widget_set_margin_top (dialog->box, 12);
+  gtk_widget_set_margin_bottom (dialog->box, 12);
+  gtk_widget_set_margin_start (dialog->box, 12);
+  gtk_widget_set_margin_end (dialog->box, 12);
+  gtk_box_append (GTK_BOX (dialog->box), grid);
+
+  scrolled_window = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), dialog->box);
+
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_set_spacing (GTK_BOX (content_area), 14);
-  gtk_widget_set_margin_top (content_area, 10);
-  gtk_widget_set_margin_bottom (content_area, 10);
-  gtk_widget_set_margin_start (content_area, 10);
-  gtk_widget_set_margin_end (content_area, 10);
-  gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, TRUE, 0);
-  gtk_widget_show (grid);
+  gtk_box_append (GTK_BOX (content_area), scrolled_window);
 }
 
 GtkWidget *

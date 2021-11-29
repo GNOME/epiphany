@@ -50,11 +50,11 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
 
+#include <adwaita.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <handy.h>
 
 /**
  * SECTION:ephy-web-view
@@ -129,7 +129,7 @@ struct _EphyWebView {
   EphyWebViewErrorPage error_page;
 
   guint unresponsive_process_timeout_id;
-  GtkWidget *unresponsive_process_dialog;
+  GtkWindow *unresponsive_process_dialog;
 
   guint64 uid;
 };
@@ -161,20 +161,25 @@ open_response_cb (GtkFileChooser           *dialog,
                   WebKitFileChooserRequest *request)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    GSList *file_list = gtk_file_chooser_get_filenames (dialog);
+    g_autoptr (GListModel) files = gtk_file_chooser_get_files (dialog);
     GPtrArray *file_array = g_ptr_array_new ();
     g_autoptr (GFile) current_folder = NULL;
     g_autofree char *current_folder_path = NULL;
+    guint i, n = g_list_model_get_n_items (files);
 
-    for (GSList *file = file_list; file; file = g_slist_next (file))
-      g_ptr_array_add (file_array, file->data);
+    for (i = 0; i < n; i++) {
+      g_autoptr (GFile) file = g_list_model_get_item (files, i);
+
+      g_ptr_array_add (file_array, g_file_get_path (file));
+    }
 
     g_ptr_array_add (file_array, NULL);
     webkit_file_chooser_request_select_files (request, (const char * const *)file_array->pdata);
-    g_slist_free_full (file_list, g_free);
+
+    g_ptr_array_set_free_func (file_array, g_free);
     g_ptr_array_free (file_array, TRUE);
 
-    current_folder = gtk_file_chooser_get_current_folder_file (dialog);
+    current_folder = gtk_file_chooser_get_current_folder (dialog);
     if (current_folder) {
       current_folder_path = g_file_get_path (current_folder);
       g_settings_set_string (EPHY_SETTINGS_WEB,
@@ -193,14 +198,14 @@ static gboolean
 ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                 WebKitFileChooserRequest *request)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (web_view));
   GtkFileChooser *dialog;
   gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
   GtkFileFilter *filter = webkit_file_chooser_request_get_mime_types_filter (request);
   g_autofree char *last_directory_path = NULL;
 
   dialog = ephy_create_file_chooser (_("Open"),
-                                     GTK_WIDGET (toplevel),
+                                     GTK_WIDGET (root),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      EPHY_FILE_FILTER_ALL);
 
@@ -216,7 +221,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
     g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder_file (dialog, last_directory, &error);
+    gtk_file_chooser_set_current_folder (dialog, last_directory, &error);
 
     if (error)
       g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
@@ -311,26 +316,39 @@ ephy_web_view_set_property (GObject      *object,
   }
 }
 
-static gboolean
-ephy_web_view_button_press_event (GtkWidget      *widget,
-                                  GdkEventButton *event)
+static void
+button_pressed_cb (GtkGesture  *gesture,
+                   int          n_clicks,
+                   double       x,
+                   double       y,
+                   EphyWebView *web_view)
 {
-  /* These are the special cases WebkitWebView doesn't handle but we have an
-   * interest in handling. */
+  guint button;
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
   /* Handle typical back/forward mouse buttons. */
-  if (event->button == 8) {
-    webkit_web_view_go_back (WEBKIT_WEB_VIEW (widget));
-    return TRUE;
+  if (button == 8) {
+    webkit_web_view_go_back (WEBKIT_WEB_VIEW (web_view));
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+    return;
   }
 
-  if (event->button == 9) {
-    webkit_web_view_go_forward (WEBKIT_WEB_VIEW (widget));
-    return TRUE;
+  if (button == 9) {
+    webkit_web_view_go_forward (WEBKIT_WEB_VIEW (web_view));
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+    return;
   }
 
-  /* Let WebKitWebView handle this. */
-  return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+}
+
+static inline void
+remove_info_bar (GtkWidget *info_bar)
+{
+  EphyEmbed *embed = EPHY_EMBED (gtk_widget_get_ancestor (info_bar, EPHY_TYPE_EMBED));
+
+  ephy_embed_remove_top_widget (embed, info_bar);
 }
 
 static void
@@ -341,7 +359,7 @@ untrack_info_bar (GtkWidget **tracked_info_bar)
 
   if (*tracked_info_bar) {
     g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar), (gpointer *)tracked_info_bar);
-    gtk_widget_destroy (*tracked_info_bar);
+    remove_info_bar (*tracked_info_bar);
     *tracked_info_bar = NULL;
   }
 }
@@ -367,7 +385,6 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
                                                            const char  *username)
 {
   GtkWidget *info_bar;
-  GtkWidget *content_area;
   GtkWidget *label;
   char *message;
 
@@ -384,13 +401,11 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
    */
   message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"), origin);
   gtk_label_set_markup (GTK_LABEL (label), message);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   g_free (message);
 
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_container_add (GTK_CONTAINER (content_area), label);
-  gtk_widget_show (label);
+  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
 
   track_info_bar (info_bar, &web_view->password_info_bar);
 
@@ -424,7 +439,7 @@ info_bar_save_request_response_cb (GtkInfoBar      *info_bar,
 {
   g_assert (data->callback);
   data->callback (response_id, data->callback_data);
-  gtk_widget_destroy (GTK_WIDGET (info_bar));
+  remove_info_bar (GTK_WIDGET (info_bar));
 }
 
 void
@@ -611,7 +626,6 @@ password_form_focused_cb (EphyEmbedShell *shell,
 {
   GtkWidget *info_bar;
   GtkWidget *label;
-  GtkWidget *content_area;
 
   if (web_view->password_form_info_bar)
     return;
@@ -622,15 +636,13 @@ password_form_focused_cb (EphyEmbedShell *shell,
 
   /* Translators: Message appears when insecure password form is focused. */
   label = gtk_label_new (_("Heads-up: this form is not secure. If you type your password, it will not be kept private."));
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_widget_show (label);
 
   info_bar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
   gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_container_add (GTK_CONTAINER (content_area), label);
+  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
 
   g_signal_connect (info_bar, "response", G_CALLBACK (gtk_widget_hide), NULL);
 
@@ -639,7 +651,6 @@ password_form_focused_cb (EphyEmbedShell *shell,
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar,
                              EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
-  gtk_widget_show (info_bar);
 }
 
 static void
@@ -874,7 +885,7 @@ on_unresponsive_dialog_response (GtkDialog *dialog,
                                                                             (GSourceFunc)unresponsive_process_timeout_cb,
                                                                             web_view,
                                                                             NULL);
-  g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_widget_destroy);
+  g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_window_destroy);
 }
 
 static gboolean
@@ -885,18 +896,19 @@ unresponsive_process_timeout_cb (gpointer user_data)
   if (!gtk_widget_get_mapped (GTK_WIDGET (web_view)))
     return G_SOURCE_CONTINUE;
 
-  web_view->unresponsive_process_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
-                                                                  GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
-                                                                  GTK_MESSAGE_QUESTION,
-                                                                  GTK_BUTTONS_NONE,
-                                                                  _("The current page '%s' is unresponsive"),
-                                                                  ephy_web_view_get_address (web_view));
+  web_view->unresponsive_process_dialog =
+    GTK_WINDOW (gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view))),
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
+                                        GTK_MESSAGE_QUESTION,
+                                        GTK_BUTTONS_NONE,
+                                        _("The current page '%s' is unresponsive"),
+                                        ephy_web_view_get_address (web_view)));
 
   gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Wait"), GTK_RESPONSE_NO);
   gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("Force _Stop"), GTK_RESPONSE_YES);
 
   g_signal_connect (web_view->unresponsive_process_dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view);
-  gtk_widget_show_all (web_view->unresponsive_process_dialog);
+  gtk_window_present (web_view->unresponsive_process_dialog);
 
   web_view->unresponsive_process_timeout_id = 0;
 
@@ -914,7 +926,7 @@ is_web_process_responsive_changed_cb (EphyWebView *web_view,
 
   if (web_view->unresponsive_process_dialog && responsive) {
     g_signal_handlers_disconnect_by_func (web_view->unresponsive_process_dialog, on_unresponsive_dialog_response, web_view);
-    g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_widget_destroy);
+    g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_window_destroy);
   }
 
   if (!responsive) {
@@ -1088,7 +1100,7 @@ decide_on_permission_request (GtkWidget             *info_bar,
   }
 
   g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
-  gtk_widget_destroy (info_bar);
+  remove_info_bar (info_bar);
   permission_request_data_free (data);
 }
 
@@ -1099,7 +1111,6 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 {
   PermissionRequestData *data;
   GtkWidget *info_bar;
-  GtkWidget *content_area;
   GtkWidget *label;
   char *message;
   char *origin;
@@ -1149,13 +1160,10 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), message);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
 
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_container_add (GTK_CONTAINER (content_area), label);
-
-  gtk_widget_show_all (info_bar);
+  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
 
   data = permission_request_data_new (EPHY_WEB_VIEW (web_view), decision, origin);
 
@@ -1209,7 +1217,7 @@ decide_on_itp_permission_request (GtkWidget               *info_bar,
   }
 
   g_object_set_data (G_OBJECT (info_bar), "ephy-itp-decision", NULL);
-  gtk_widget_destroy (info_bar);
+  remove_info_bar (info_bar);
 }
 
 static void
@@ -1217,7 +1225,6 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
                                             WebKitWebsiteDataAccessPermissionRequest *decision)
 {
   GtkWidget *info_bar;
-  GtkWidget *content_area;
   GtkWidget *box;
   GtkWidget *label;
   g_autofree char *message = NULL;
@@ -1238,21 +1245,17 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
   markup = g_strdup_printf ("<span weight='bold'>%s</span>", message);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_show (label);
+  gtk_box_append (GTK_BOX (box), label);
 
   secondary_message = g_strdup_printf (_("This will allow “%s” to track your activity."), requesting_domain);
   label = gtk_label_new (secondary_message);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_show (label);
+  gtk_box_append (GTK_BOX (box), label);
 
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_container_add (GTK_CONTAINER (content_area), box);
-  gtk_widget_show (box);
+  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), box);
 
   track_info_bar (info_bar, &web_view->itp_info_bar);
 
@@ -1264,7 +1267,6 @@ ephy_web_view_show_itp_permission_info_bar (EphyWebView                         
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar,
                              EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
-  gtk_widget_show (info_bar);
 }
 
 static gboolean
@@ -1500,7 +1502,7 @@ update_security_status_for_committed_load (EphyWebView *view,
 {
   EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
   EphyEmbed *embed = NULL;
-  GtkWidget *toplevel;
+  GtkRoot *root;
   WebKitWebContext *web_context;
   WebKitSecurityManager *security_manager;
   g_autoptr (GUri) guri = NULL;
@@ -1514,8 +1516,8 @@ update_security_status_for_committed_load (EphyWebView *view,
     return;
   }
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
-  if (EPHY_IS_EMBED_CONTAINER (toplevel))
+  root = gtk_widget_get_root (GTK_WIDGET (view));
+  if (EPHY_IS_EMBED_CONTAINER (root))
     embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   web_context = webkit_web_view_get_context (WEBKIT_WEB_VIEW (view));
   security_manager = webkit_web_context_get_security_manager (web_context);
@@ -2495,15 +2497,15 @@ close_web_view_cb (WebKitWebView *web_view,
                    gpointer       user_data)
 
 {
-  GtkWidget *widget = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (web_view));
 
   LOG ("close web view");
 
-  if (EPHY_IS_EMBED_CONTAINER (widget))
-    ephy_embed_container_remove_child (EPHY_EMBED_CONTAINER (widget),
+  if (EPHY_IS_EMBED_CONTAINER (root))
+    ephy_embed_container_remove_child (EPHY_EMBED_CONTAINER (root),
                                        EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
   else
-    gtk_widget_destroy (widget);
+    gtk_window_destroy (GTK_WINDOW (root));
 }
 
 
@@ -2563,7 +2565,7 @@ enum_nick (GType enum_type,
 static void
 reader_setting_changed_cb (EphyWebView *web_view)
 {
-  HdyStyleManager *style_manager;
+  AdwStyleManager *style_manager;
   const gchar *font_style;
   const gchar *color_scheme;
   gchar *js_snippet;
@@ -2575,10 +2577,10 @@ reader_setting_changed_cb (EphyWebView *web_view)
                           g_settings_get_enum (EPHY_SETTINGS_READER,
                                                EPHY_PREFS_READER_FONT_STYLE));
 
-  style_manager = hdy_style_manager_get_default ();
+  style_manager = adw_style_manager_get_default ();
 
-  if (hdy_style_manager_get_system_supports_color_schemes (style_manager))
-    color_scheme = hdy_style_manager_get_dark (style_manager) ? "dark" : "light";
+  if (adw_style_manager_get_system_supports_color_schemes (style_manager))
+    color_scheme = adw_style_manager_get_dark (style_manager) ? "dark" : "light";
   else
     color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
                               g_settings_get_enum (EPHY_SETTINGS_READER,
@@ -3570,25 +3572,28 @@ ephy_web_view_get_security_level (EphyWebView           *view,
 }
 
 static void
+info_bar_response_cb (GtkInfoBar *info_bar,
+                      int         response_id,
+                      EphyEmbed  *embed)
+{
+  ephy_embed_remove_top_widget (embed, GTK_WIDGET (info_bar));
+}
+
+static void
 ephy_web_view_print_failed (EphyWebView *view,
                             GError      *error)
 {
   GtkWidget *info_bar;
   GtkWidget *label;
-  GtkContainer *content_area;
   EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
 
   info_bar = gtk_info_bar_new_with_buttons (_("_OK"), GTK_RESPONSE_OK, NULL);
   label = gtk_label_new (error->message);
-  content_area = GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar)));
 
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_ERROR);
-  gtk_container_add (content_area, label);
-  g_signal_connect (info_bar, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
+  g_signal_connect (info_bar, "response", G_CALLBACK (info_bar_response_cb), embed);
 
   ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
-  gtk_widget_show_all (info_bar);
 }
 
 static void
@@ -3895,7 +3900,7 @@ ephy_web_view_dispose (GObject *object)
   g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
   g_clear_object (&view->icon);
-  g_clear_pointer (&view->unresponsive_process_dialog, gtk_widget_destroy);
+  g_clear_pointer (&view->unresponsive_process_dialog, gtk_window_destroy);
 
   if (view->cancellable) {
     g_cancellable_cancel (view->cancellable);
@@ -3961,6 +3966,7 @@ static void
 ephy_web_view_init (EphyWebView *web_view)
 {
   EphyEmbedShell *shell;
+  GtkGesture *gesture;
 
   shell = ephy_embed_shell_get_default ();
 
@@ -3985,12 +3991,12 @@ ephy_web_view_init (EphyWebView *web_view)
                            G_CALLBACK (reader_setting_changed_cb),
                            web_view, G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (hdy_style_manager_get_default (),
+  g_signal_connect_object (adw_style_manager_get_default (),
                            "notify::system-supports-color-schemes",
                            G_CALLBACK (reader_setting_changed_cb),
                            web_view, G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (hdy_style_manager_get_default (),
+  g_signal_connect_object (adw_style_manager_get_default (),
                            "notify::dark",
                            G_CALLBACK (reader_setting_changed_cb),
                            web_view, G_CONNECT_SWAPPED);
@@ -4077,13 +4083,19 @@ ephy_web_view_init (EphyWebView *web_view)
   g_signal_connect_object (shell, "reload-page",
                            G_CALLBACK (reload_page_cb),
                            web_view, 0);
+
+  gtk_widget_set_overflow (GTK_WIDGET (web_view), GTK_OVERFLOW_HIDDEN);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), web_view);
+  gtk_widget_add_controller (GTK_WIDGET (web_view), GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   WebKitWebViewClass *webkit_webview_class = WEBKIT_WEB_VIEW_CLASS (klass);
 
   gobject_class->dispose = ephy_web_view_dispose;
@@ -4092,7 +4104,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   gobject_class->set_property = ephy_web_view_set_property;
   gobject_class->constructed = ephy_web_view_constructed;
 
-  widget_class->button_press_event = ephy_web_view_button_press_event;
 
   webkit_webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
 

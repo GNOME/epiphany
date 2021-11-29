@@ -2,143 +2,70 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <template class="EphyHistoryDialog" parent="HdyWindow">
-    <!--property name="search_description" translatable="yes">Search history</property-->
+  <template class="EphyHistoryDialog" parent="AdwWindow">
     <property name="modal">True</property>
-    <property name="window-position">center-on-parent</property>
     <property name="default-width">640</property>
     <property name="default-height">800</property>
     <property name="destroy-with_parent">True</property>
-    <property name="type-hint">dialog</property>
-    <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
-    <signal name="key-release-event" handler="on_key_release_event"/>
+    <property name="title" translatable="yes">History</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkStack" id="header_bars_stack">
-            <property name="visible">True</property>
-            <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
+            <property name="transition-type">crossfade</property>
             <child>
-              <object class="HdyHeaderBar" id="window_header_bar">
-                <property name="visible">True</property>
-                <property name="show_close_button">True</property>
-                <property name="title" translatable="yes">History</property>
-                <child>
+              <object class="GtkHeaderBar" id="window_header_bar">
+                <child type="end">
                   <object class="GtkButton" id="selection_button">
-                    <property name="visible">True</property>
-                    <property name="valign">center</property>
                     <property name="use-underline">True</property>
+                    <property name="icon-name">selection-mode-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Select Items</property>
                     <signal name="clicked" handler="on_selection_button_clicked"/>
-                    <style>
-                      <class name="image-button"/>
-                    </style>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="a11y-button3">
-                        <property name="accessible-name" translatable="yes">Select Items</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="icon-name">object-select-symbolic</property>
-                        <property name="icon-size">1</property>
-                      </object>
-                    </child>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
-                <child>
+                <child type="end">
                   <object class="GtkToggleButton" id="search_button">
-                    <property name="visible">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="always_show_image">True</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search</property>
                     <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-                    <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="icon_name">edit-find-symbolic</property>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Search</property>
-                      </object>
-                    </child>
                   </object>
-                  <packing>
-                    <property name="pack_type">end</property>
-                  </packing>
                 </child>
               </object>
             </child>
             <child>
-              <object class="HdyHeaderBar" id="selection_header_bar">
-                <property name="visible">True</property>
-                <property name="title" translatable="yes">History</property>
-                <style>
-                  <class name="selection-mode"/>
-                </style>
-                <child>
+              <object class="GtkHeaderBar" id="selection_header_bar">
+                <property name="show-title-buttons">False</property>
+                <child type="end">
                   <object class="GtkButton" id="selection_cancel_button">
-                    <property name="visible">True</property>
-                    <property name="valign">center</property>
                     <property name="use-underline">True</property>
                     <property name="label" translatable="yes">_Cancel</property>
                     <signal name="clicked" handler="on_selection_cancel_button_clicked"/>
-                    <style>
-                      <class name="text-button"/>
-                    </style>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
-                <child>
+                <child type="end">
                   <object class="GtkToggleButton" id="selection_search_button">
-                    <property name="visible">True</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search</property>
                     <property name="active" bind-source="search_bar" bind-property="search-mode-enabled" bind-flags="sync-create|bidirectional"/>
-                    <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="icon_name">edit-find-symbolic</property>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Search</property>
-                      </object>
-                    </child>
                   </object>
-                  <packing>
-                    <property name="pack_type">end</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdySearchBar" id="search_bar">
-            <property name="visible">True</property>
+          <object class="GtkSearchBar" id="search_bar">
             <property name="search_mode_enabled">False</property>
+            <property name="key-capture-widget">EphyHistoryDialog</property>
             <child>
-              <object class="HdyClamp">
-                <property name="visible">True</property>
+              <object class="AdwClamp">
+                <property name="hexpand">True</property>
                 <property name="maximum_size">400</property>
                 <property name="tightening_threshold">300</property>
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
-                    <property name="visible">True</property>
                     <property name="placeholder-text" translatable="yes">Search history</property>
-                    <property name="primary_icon_name">edit-find-symbolic</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">False</property>
                     <signal name="search-changed" handler="on_search_entry_changed"/>
                   </object>
                 </child>
@@ -148,31 +75,31 @@
         </child>
         <child>
           <object class="GtkStack" id="history_presentation_stack">
-            <property name="visible">True</property>
             <property name="vexpand">True</property>
             <child>
               <object class="GtkScrolledWindow" id="history_scrolled_window">
-                <property name="visible">True</property>
                 <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
                 <child>
-                  <object class="HdyClamp">
-                    <property name="visible">True</property>
-                    <property name="margin_start">6</property>
-                    <property name="margin_end">6</property>
-                    <property name="maximum_size">1024</property>
+                  <object class="GtkViewport">
+                    <property name="scroll-to-focus">True</property>
                     <child>
-                      <object class="GtkListBox" id="listbox">
-                        <property name="visible">True</property>
-                        <property name="margin_top">6</property>
-                        <property name="margin_bottom">6</property>
-                        <property name="valign">start</property>
-                        <property name="selection_mode">none</property>
-                        <property name="activate_on_single_click">True</property>
-                        <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
-                        <signal name="row-activated" handler="on_listbox_row_activated"/>
-                        <style>
-                          <class name="content"/>
-                        </style>
+                      <object class="AdwClamp">
+                        <property name="margin_start">6</property>
+                        <property name="margin_end">6</property>
+                        <property name="maximum_size">1024</property>
+                        <child>
+                          <object class="GtkListBox" id="listbox">
+                            <property name="margin_top">6</property>
+                            <property name="margin_bottom">6</property>
+                            <property name="valign">start</property>
+                            <property name="selection_mode">none</property>
+                            <property name="activate_on_single_click">True</property>
+                            <signal name="row-activated" handler="on_listbox_row_activated"/>
+                            <style>
+                              <class name="boxed-list"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -181,19 +108,20 @@
             </child>
             <child>
               <object class="GtkSpinner" id="loading_spinner">
-                <property name="visible">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="width-request">32</property>
+                <property name="height-request">32</property>
               </object>
             </child>
             <child>
-              <object class="HdyStatusPage" id="empty_history_message">
-                <property name="visible">True</property>
+              <object class="AdwStatusPage" id="empty_history_message">
                 <property name="title" translatable="yes">The History is Empty</property>
                 <property name="description" translatable="yes">Visited pages will be listed here</property>
               </object>
             </child>
             <child>
-              <object class="HdyStatusPage" id="no_search_results_message">
-                <property name="visible">True</property>
+              <object class="AdwStatusPage" id="no_search_results_message">
                 <property name="icon_name">edit-find-symbolic</property>
                 <property name="title" translatable="yes">No Results Found</property>
                 <property name="description" translatable="yes">Try a different search</property>
@@ -203,37 +131,25 @@
         </child>
         <child>
           <object class="GtkStack" id="action_bars_stack">
-            <property name="visible">True</property>
-            <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
+            <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkActionBar" id="regular_action_bar">
-                <property name="visible">True</property>
-                <child>
+                <child type="end">
                   <object class="GtkButton" id="clear_all_button">
-                    <property name="visible">True</property>
-                    <property name="receives_default">True</property>
                     <property name="use-underline">True</property>
                     <property name="label" translatable="yes">_Clear All</property>
                     <signal name="clicked" handler="on_clear_all_button_clicked"/>
-                    <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
                     <style>
                       <class name="destructive-action"/>
-                      <class name="image-button"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
               </object>
             </child>
             <child>
               <object class="GtkActionBar" id="selection_action_bar">
-                <property name="visible">True</property>
-                <child>
+                <child type="end">
                   <object class="GtkButton" id="selection_delete_button">
-                    <property name="visible">True</property>
-                    <property name="receives_default">True</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
                     <property name="label" translatable="yes">_Delete</property>
@@ -242,14 +158,9 @@
                       <class name="destructive-action"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="selection_open_button">
-                    <property name="visible">True</property>
-                    <property name="receives_default">True</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
                     <property name="label" translatable="yes">_Open</property>
@@ -260,6 +171,12 @@
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEventControllerKey">
+        <signal name="key-pressed" handler="key_pressed_cb" swapped="yes"/>
+        <signal name="key-released" handler="key_released_cb" swapped="yes"/>
       </object>
     </child>
   </template>

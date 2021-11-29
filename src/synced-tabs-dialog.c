@@ -153,7 +153,7 @@ synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
     const char *icon_name = ephy_get_fallback_favicon_name (data->url, EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
 
     if (!icon_name)
-      icon_name = "hdy-tab-icon-missing-symbolic";
+      icon_name = "adw-tab-icon-missing-symbolic";
 
     favicon = g_themed_icon_new (icon_name);
   }

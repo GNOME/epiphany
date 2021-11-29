@@ -26,11 +26,11 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_DATA_VIEW (ephy_data_view_get_type ())
 
-G_DECLARE_DERIVABLE_TYPE (EphyDataView, ephy_data_view, EPHY, DATA_VIEW, GtkBin)
+G_DECLARE_DERIVABLE_TYPE (EphyDataView, ephy_data_view, EPHY, DATA_VIEW, GtkWidget)
 
 struct _EphyDataViewClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 const gchar *ephy_data_view_get_clear_button_label (EphyDataView *self);
@@ -58,8 +58,5 @@ void     ephy_data_view_set_can_clear (EphyDataView *self,
                                        gboolean      can_clear);
 
 const gchar *ephy_data_view_get_search_text (EphyDataView *self);
-
-gboolean ephy_data_view_handle_event (EphyDataView *self,
-                                      GdkEvent     *event);
 
 G_END_DECLS

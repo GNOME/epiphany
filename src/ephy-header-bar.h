@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "ephy-action-bar-end.h"
 #include "ephy-action-bar-start.h"
@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_HEADER_BAR (ephy_header_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, GtkBin)
+G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, AdwBin)
 
 GtkWidget          *ephy_header_bar_new                            (EphyWindow    *window);
 EphyTitleWidget    *ephy_header_bar_get_title_widget               (EphyHeaderBar *header_bar);

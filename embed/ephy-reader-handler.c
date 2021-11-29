@@ -28,9 +28,9 @@
 #include "ephy-settings.h"
 #include "ephy-web-view.h"
 
+#include <adwaita.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
-#include <handy.h>
 #include <string.h>
 
 struct _EphyReaderHandler {
@@ -166,7 +166,7 @@ readability_js_finish_cb (GObject      *object,
   const gchar *title;
   const gchar *font_style;
   const gchar *color_scheme;
-  HdyStyleManager *style_manager;
+  AdwStyleManager *style_manager;
 
   js_result = webkit_web_view_run_javascript_finish (web_view, result, &error);
   if (!js_result) {
@@ -189,10 +189,10 @@ readability_js_finish_cb (GObject      *object,
                           g_settings_get_enum (EPHY_SETTINGS_READER,
                                                EPHY_PREFS_READER_FONT_STYLE));
 
-  style_manager = hdy_style_manager_get_default ();
+  style_manager = adw_style_manager_get_default ();
 
-  if (hdy_style_manager_get_system_supports_color_schemes (style_manager))
-    color_scheme = hdy_style_manager_get_dark (style_manager) ? "dark" : "light";
+  if (adw_style_manager_get_system_supports_color_schemes (style_manager))
+    color_scheme = adw_style_manager_get_dark (style_manager) ? "dark" : "light";
   else
     color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
                               g_settings_get_enum (EPHY_SETTINGS_READER,

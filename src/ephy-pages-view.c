@@ -44,7 +44,7 @@ row_activated_cb (EphyPagesView *self,
 {
   EphyWindow *window;
   GApplication *application;
-  HdyTabPage *page;
+  AdwTabPage *page;
 
   g_assert (EPHY_IS_PAGES_VIEW (self));
   g_assert (EPHY_IS_PAGE_ROW (row));
@@ -53,29 +53,27 @@ row_activated_cb (EphyPagesView *self,
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (application)));
   page = ephy_page_row_get_page (EPHY_PAGE_ROW (row));
 
-  hdy_tab_view_set_selected_page (ephy_tab_view_get_tab_view (self->tab_view), page);
+  adw_tab_view_set_selected_page (ephy_tab_view_get_tab_view (self->tab_view), page);
   ephy_window_close_pages_view (window);
 }
 
 static GtkWidget *
-create_row (HdyTabPage    *page,
+create_row (AdwTabPage    *page,
             EphyPagesView *self)
 {
   EphyPageRow *row = ephy_page_row_new (self->tab_view, page);
 
   ephy_page_row_set_adaptive_mode (row, EPHY_ADAPTIVE_MODE_NARROW);
 
-  gtk_widget_show (GTK_WIDGET (row));
-
   return GTK_WIDGET (row);
 }
 
 static void
-selected_page_changed_cb (HdyTabView    *tab_view,
+selected_page_changed_cb (AdwTabView    *tab_view,
                           GParamSpec    *pspec,
                           EphyPagesView *self)
 {
-  HdyTabPage *page = hdy_tab_view_get_selected_page (tab_view);
+  AdwTabPage *page = adw_tab_view_get_selected_page (tab_view);
   gint position;
   GtkListBoxRow *row;
 
@@ -85,7 +83,7 @@ selected_page_changed_cb (HdyTabView    *tab_view,
     return;
   }
 
-  position = hdy_tab_view_get_page_position (tab_view, page);
+  position = adw_tab_view_get_page_position (tab_view, page);
   row = gtk_list_box_get_row_at_index (self->list_box, position);
   gtk_list_box_select_row (self->list_box, row);
 }
@@ -147,7 +145,7 @@ ephy_pages_view_set_tab_view (EphyPagesView *self,
   g_object_add_weak_pointer (G_OBJECT (tab_view), (gpointer *)&self->tab_view);
   self->tab_view = tab_view;
 
-  self->model = hdy_tab_view_get_pages (ephy_tab_view_get_tab_view (tab_view));
+  self->model = G_LIST_MODEL (adw_tab_view_get_pages (ephy_tab_view_get_tab_view (tab_view)));
 
   gtk_list_box_bind_model (self->list_box,
                            self->model,

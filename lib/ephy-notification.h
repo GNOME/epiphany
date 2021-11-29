@@ -21,13 +21,13 @@
 #pragma once
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_NOTIFICATION (ephy_notification_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyNotification, ephy_notification, EPHY, NOTIFICATION, GtkBin)
+G_DECLARE_FINAL_TYPE (EphyNotification, ephy_notification, EPHY, NOTIFICATION, AdwBin)
 
 EphyNotification *ephy_notification_new  (const char *head,
                                           const char *body);

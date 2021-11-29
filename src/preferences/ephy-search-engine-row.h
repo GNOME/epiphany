@@ -21,20 +21,20 @@
 
 #pragma once
 
-#include <handy.h>
+#include <adwaita.h>
 #include "ephy-search-engine-manager.h"
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_ENGINE_ROW (ephy_search_engine_row_get_type())
 
-G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_ENGINE_ROW, HdyExpanderRow)
+G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_ENGINE_ROW, AdwExpanderRow)
 
 EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine,
                                                                     EphySearchEngineManager *manager);
 void                 ephy_search_engine_row_set_can_remove         (EphySearchEngineRow *self,
                                                                     gboolean             can_remove);
 void                 ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
-                                                                    GtkRadioButton      *radio_button_group);
+                                                                    GtkCheckButton      *radio_button_group);
 
 G_END_DECLS

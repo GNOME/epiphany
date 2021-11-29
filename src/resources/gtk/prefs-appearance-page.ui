@@ -1,60 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <template class="PrefsAppearancePage" parent="HdyPreferencesPage">
+  <template class="PrefsAppearancePage" parent="AdwPreferencesPage">
     <property name="icon_name">document-edit-symbolic</property>
     <property name="title" translatable="yes">Appearance</property>
-    <property name="visible">True</property>
     <child>
-      <object class="HdyPreferencesGroup">
+      <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Fonts</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyExpanderRow" id="use_gnome_fonts_row">
+          <object class="AdwExpanderRow" id="use_gnome_fonts_row">
             <property name="show_enable_switch">True</property>
             <property name="title" translatable="yes">Use Custom Fonts</property>
-            <property name="visible">True</property>
             <child>
-              <object class="HdyActionRow">
+              <object class="AdwActionRow">
                 <property name="activatable">False</property>
                 <property name="title" translatable="yes">Sans serif font</property>
-                <property name="visible">True</property>
                 <child>
                   <object class="GtkFontButton" id="sans_fontbutton">
                     <property name="font">Sans 12</property>
                     <property name="use-font">True</property>
                     <property name="valign">center</property>
-                    <property name="visible">True</property>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="HdyActionRow">
+              <object class="AdwActionRow">
                 <property name="activatable">False</property>
                 <property name="title" translatable="yes">Serif font</property>
-                <property name="visible">True</property>
                 <child>
                   <object class="GtkFontButton" id="serif_fontbutton">
                     <property name="font">Sans 12</property>
                     <property name="use-font">True</property>
                     <property name="valign">center</property>
-                    <property name="visible">True</property>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="HdyActionRow">
+              <object class="AdwActionRow">
                 <property name="activatable">False</property>
                 <property name="title" translatable="yes">Monospace font</property>
-                <property name="visible">True</property>
                 <child>
                   <object class="GtkFontButton" id="mono_fontbutton">
                     <property name="font">Sans 12</property>
                     <property name="use-font">True</property>
                     <property name="valign">center</property>
-                    <property name="visible">True</property>
                   </object>
                 </child>
               </object>
@@ -64,110 +55,106 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="reader_mode_box">
+      <object class="AdwPreferencesGroup" id="reader_mode_box">
         <property name="title" translatable="yes">Reader Mode</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyComboRow" id="reader_mode_font_style">
+          <object class="AdwComboRow" id="reader_mode_font_style">
             <property name="title" translatable="yes">Font Style</property>
-            <property name="visible">True</property>
+            <property name="expression">
+              <closure type="gchararray" function="reader_font_style_get_name">
+                <lookup name="value" type="AdwEnumListItem"/>
+              </closure>
+            </property>
+            <property name="model">
+              <object class="AdwEnumListModel">
+                <property name="enum-type">EphyPrefsReaderFontStyle</property>
+              </object>
+            </property>
           </object>
         </child>
         <child>
-          <object class="HdyComboRow" id="reader_mode_color_scheme">
+          <object class="AdwComboRow" id="reader_mode_color_scheme">
             <property name="title" translatable="yes">Color Scheme</property>
-            <property name="visible">True</property>
+            <property name="expression">
+              <closure type="gchararray" function="reader_color_scheme_get_name">
+                <lookup name="value" type="AdwEnumListItem"/>
+              </closure>
+            </property>
+            <property name="model">
+              <object class="AdwEnumListModel">
+                <property name="enum-type">EphyPrefsReaderColorScheme</property>
+              </object>
+            </property>
           </object>
         </child>
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
+      <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Style</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">css_switch</property>
             <property name="title" translatable="yes">Use Custom Stylesheet</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="css_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
             <child>
               <object class="GtkSeparator">
                 <property name="margin_bottom">8</property>
                 <property name="margin_top">8</property>
-                <property name="visible">True</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="css_edit_button">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">document-edit-symbolic</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
+                <property name="icon_name">document-edit-symbolic</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">js_switch</property>
             <property name="title" translatable="yes">Use Custom JavaScript</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="js_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
             <child>
               <object class="GtkSeparator">
                 <property name="margin_bottom">8</property>
                 <property name="margin_top">8</property>
-                <property name="visible">True</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="js_edit_button">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">document-edit-symbolic</property>
-                    <property name="visible">True</property>
-                  </object>
-                </child>
+                <property name="icon_name">document-edit-symbolic</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable">False</property>
             <property name="title" translatable="yes">Default Zoom Level</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSpinButton" id="default_zoom_spin_button">
-                <property name="adjustment">zoom_adjustment</property>
-                <property name="input_purpose">number</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="zoom_adjustment">
+                    <property name="lower">33</property>
+                    <property name="upper">300</property>
+                    <property name="step_increment">1</property>
+                    <property name="page_increment">10</property>
+                  </object>
+                </property>
                 <property name="max_width_chars">5</property>
                 <property name="valign">center</property>
                 <property name="value">100</property>
-                <property name="visible">True</property>
                 <signal name="output" handler="on_default_zoom_spin_button_output"/>
                 <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
               </object>
@@ -184,11 +171,5 @@
       <widget name="serif_fontbutton"/>
       <widget name="mono_fontbutton"/>
     </widgets>
-  </object>
-  <object class="GtkAdjustment" id="zoom_adjustment">
-    <property name="lower">33</property>
-    <property name="upper">300</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>

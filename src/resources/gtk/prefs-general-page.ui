@@ -1,46 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <template class="PrefsGeneralPage" parent="HdyPreferencesPage">
+  <template class="PrefsGeneralPage" parent="AdwPreferencesPage">
     <property name="icon_name">applications-system-symbolic</property>
     <property name="title" translatable="yes">General</property>
-    <property name="visible">True</property>
     <child>
-      <object class="HdyPreferencesGroup" id="webapp_box">
+      <object class="AdwPreferencesGroup" id="webapp_box">
         <property name="title" translatable="yes">Web Application</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow" id="webapp_icon_row">
+          <object class="AdwActionRow" id="webapp_icon_row">
             <property name="activatable">False</property>
             <property name="title" translatable="yes">_Icon</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkButton" id="webapp_icon_button">
-                <property name="visible">true</property>
                 <property name="valign">center</property>
                 <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
                 <style>
                   <class name="image-button"/>
                 </style>
                 <child>
-                  <object class="GtkImage" id="webapp_icon">
-                    <property name="visible">True</property>
-                  </object>
+                  <object class="GtkImage" id="webapp_icon"/>
                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow" id="webapp_url_row">
+          <object class="AdwActionRow" id="webapp_url_row">
             <property name="activatable">False</property>
             <property name="title" translatable="yes">_Homepage</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkEntry" id="webapp_url">
-                <property name="visible">True</property>
                 <property name="valign">center</property>
                 <signal name="changed" handler="on_webapp_entry_changed"/>
               </object>
@@ -48,14 +40,12 @@
           </object>
         </child>
         <child>
-          <object class="HdyActionRow" id="webapp_title_row">
+          <object class="AdwActionRow" id="webapp_title_row">
             <property name="activatable">False</property>
             <property name="title" translatable="yes">_Title</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkEntry" id="webapp_title">
-                <property name="visible">True</property>
                 <property name="valign">center</property>
                 <signal name="changed" handler="on_webapp_entry_changed"/>
               </object>
@@ -63,15 +53,13 @@
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable">False</property>
             <property name="title" translatable="yes">_Manage Additional URLs</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkButton" id="webapp_additional_urls_dialog_button">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
                 <signal name="clicked" handler="on_manage_webapp_additional_urls_button_clicked"/>
                 <style>
                   <class name="image-button"/>
@@ -79,7 +67,6 @@
                 <child>
                   <object class="GtkImage">
                     <property name="icon_name">emblem-system-symbolic</property>
-                    <property name="visible">True</property>
                   </object>
                 </child>
               </object>
@@ -89,33 +76,28 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
+      <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Web Content</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow" id="adblock_allow_row">
+          <object class="AdwActionRow" id="adblock_allow_row">
             <property name="activatable_widget">adblock_allow_switch</property>
             <property name="title" translatable="yes">Block _Advertisements</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="adblock_allow_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">popups_allow_switch</property>
             <property name="title" translatable="yes">Block _Popup Windows</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="popups_allow_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -123,49 +105,42 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="homepage_box">
+      <object class="AdwPreferencesGroup" id="homepage_box">
         <property name="title" translatable="yes">Homepage</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">new_tab_homepage_radiobutton</property>
             <property name="title" translatable="yes">Most _Visited Pages</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child type="prefix">
-              <object class="GtkRadioButton" id="new_tab_homepage_radiobutton">
+              <object class="GtkCheckButton" id="new_tab_homepage_radiobutton">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">blank_homepage_radiobutton</property>
             <property name="title" translatable="yes">_Blank Page</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child type="prefix">
-              <object class="GtkRadioButton" id="blank_homepage_radiobutton">
+              <object class="GtkCheckButton" id="blank_homepage_radiobutton">
                 <property name="valign">center</property>
                 <property name="group">new_tab_homepage_radiobutton</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">custom_homepage_radiobutton</property>
             <property name="title" translatable="yes">_Custom</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child type="prefix">
-              <object class="GtkRadioButton" id="custom_homepage_radiobutton">
+              <object class="GtkCheckButton" id="custom_homepage_radiobutton">
                 <property name="valign">center</property>
                 <property name="group">new_tab_homepage_radiobutton</property>
-                <property name="visible">True</property>
               </object>
             </child>
             <child>
@@ -173,7 +148,6 @@
                 <property name="hexpand">True</property>
                 <property name="secondary-icon-name">edit-clear-symbolic</property>
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -181,39 +155,33 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="download_box">
+      <object class="AdwPreferencesGroup" id="download_box">
         <property name="title" translatable="yes">Downloads</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">ask_on_download_switch</property>
             <property name="title" translatable="yes">Ask o_n Download</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="ask_on_download_switch">
                 <property name="margin-start">12</property>
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow" id="download_folder_row">
+          <object class="AdwActionRow" id="download_folder_row">
             <property name="sensitive" bind-source="ask_on_download_switch" bind-property="active" bind-flags="sync-create|invert-boolean"/>
             <property name="title" translatable="yes">_Download Folder</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <property name="activatable">True</property>
             <signal name="activated" handler="download_folder_row_activated_cb" swapped="yes"/>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="visible">True</property>
                     <property name="icon-name">folder-symbolic</property>
                     <style>
                       <class name="dim-label"/>
@@ -222,7 +190,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="download_folder_label">
-                    <property name="visible">True</property>
                     <property name="ellipsize">end</property>
                     <property name="xalign">1</property>
                     <style>
@@ -234,7 +201,6 @@
             </child>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
                 <property name="icon-name">go-next-symbolic</property>
                 <style>
                   <class name="dim-label"/>
@@ -246,44 +212,36 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="search_engine_group">
+      <object class="AdwPreferencesGroup" id="search_engine_group">
         <property name="title" translatable="yes">Search Engines</property>
-        <property name="visible">True</property>
         <child>
-          <object class="EphySearchEngineListBox">
-            <property name="visible">True</property>
-          </object>
+          <object class="EphySearchEngineListBox"/>
         </child>
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="session_box">
+      <object class="AdwPreferencesGroup" id="session_box">
         <property name="title" translatable="yes">Session</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">start_in_incognito_mode_switch</property>
             <property name="title" translatable="yes">Start in _Incognito Mode</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="start_in_incognito_mode_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow" id="restore_session_row">
+          <object class="AdwActionRow" id="restore_session_row">
             <property name="activatable_widget">restore_session_switch</property>
             <property name="title" translatable="yes">_Restore Tabs on Startup</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="restore_session_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -291,33 +249,28 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="browsing_box">
+      <object class="AdwPreferencesGroup" id="browsing_box">
         <property name="title" translatable="yes">Browsing</property>
-        <property name="visible">True</property>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">enable_mouse_gesture_switch</property>
             <property name="title" translatable="yes">Mouse _Gestures</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="enable_mouse_gesture_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">enable_switch_to_new_tab</property>
             <property name="title" translatable="yes">S_witch Immediately to New Tabs</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="enable_switch_to_new_tab">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -325,34 +278,28 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="lang_group">
+      <object class="AdwPreferencesGroup" id="lang_group">
         <property name="title" translatable="yes">Languages</property>
-        <property name="visible">True</property>
         <child>
           <object class="GtkListBox" id="lang_listbox">
             <property name="selection_mode">none</property>
-            <property name="visible">True</property>
             <style>
-              <class name="content"/>
+              <class name="boxed-list"/>
             </style>
           </object>
         </child>
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="title" translatable="yes"></property>
-        <property name="visible">True</property>
+      <object class="AdwPreferencesGroup">
         <child>
-          <object class="HdyActionRow">
+          <object class="AdwActionRow">
             <property name="activatable_widget">enable_spell_checking_switch</property>
             <property name="title" translatable="yes">_Spell Checking</property>
             <property name="use_underline">True</property>
-            <property name="visible">True</property>
             <child>
               <object class="GtkSwitch" id="enable_spell_checking_switch">
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>

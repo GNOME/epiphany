@@ -6,75 +6,57 @@
     <signal name="map" handler="update_spinner" swapped="true"/>
     <signal name="unmap" handler="update_spinner" swapped="true"/>
     <child>
-      <object class="GtkEventBox">
-        <property name="visible">True</property>
-        <signal name="button-release-event" handler="button_release_event" swapped="no"/>
+      <object class="GtkGestureClick">
+        <property name="button">2</property>
+        <signal name="released" handler="released_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="margin-start">3</property>
+        <property name="margin-end">1</property>
         <child>
-          <object class="GtkBox" id="box">
-            <property name="visible">True</property>
-            <property name="margin-start">3</property>
-            <property name="margin-end">1</property>
+          <object class="GtkStack" id="icon_stack">
+            <property name="margin_start">4</property>
+            <property name="margin_end">4</property>
             <child>
-              <object class="GtkStack" id="icon_stack">
-                <property name="visible">True</property>
-                <property name="margin_start">4</property>
-                <property name="margin_end">4</property>
-                <child>
-                  <object class="GtkImage" id="icon">
-                    <property name="visible">True</property>
-                    <property name="icon_size">1</property>
-                    <property name="pixel_size">16</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSpinner" id="spinner">
-                    <property name="visible">True</property>
-                  </object>
-                </child>
+              <object class="GtkImage" id="icon">
+                <property name="pixel_size">16</property>
+                <property name="margin_top">6</property>
+                <property name="margin_bottom">6</property>
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="title">
-                <property name="visible">True</property>
-                <property name="margin_start">4</property>
-                <property name="hexpand">True</property>
-                <property name="ellipsize">end</property>
-                <property name="single_line_mode">True</property>
-                <property name="xalign">0</property>
-              </object>
+              <object class="GtkSpinner" id="spinner"/>
             </child>
-            <child>
-              <object class="GtkImage" id="speaker_icon">
-                <property name="visible">True</property>
-                <property name="margin_start">8</property>
-                <property name="icon_name">audio-volume-high-symbolic</property>
-                <property name="icon_size">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="visible">True</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Close page</property>
-                <property name="valign">center</property>
-                <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="icon_name">window-close-symbolic</property>
-                    <property name="icon_size">1</property>
-                  </object>
-                </child>
-                <style>
-                  <class name="flat"/>
-                  <class name="image-button"/>
-                  <class name="close-button"/>
-                </style>
-              </object>
-            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="margin_start">4</property>
+            <property name="hexpand">True</property>
+            <property name="ellipsize">end</property>
+            <property name="single_line_mode">True</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="speaker_icon">
+            <property name="margin_start">8</property>
+            <property name="icon_name">audio-volume-high-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="focus_on_click">False</property>
+            <property name="tooltip_text" translatable="yes">Close page</property>
+            <property name="valign">center</property>
+            <property name="icon_name">window-close-symbolic</property>
+            <signal name="clicked" handler="close_clicked_cb" swapped="yes"/>
+            <style>
+              <class name="flat"/>
+              <class name="close-button"/>
+            </style>
           </object>
         </child>
       </object>

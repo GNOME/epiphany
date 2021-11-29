@@ -20,29 +20,21 @@
 
 #pragma once
 
-#include <handy.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_LANG_ROW (ephy_lang_row_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyLangRow, ephy_lang_row, EPHY, LANG_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (EphyLangRow, ephy_lang_row, EPHY, LANG_ROW, AdwActionRow)
 
 GtkWidget      *ephy_lang_row_new                     ();
-
-void            ephy_lang_row_set_title               (EphyLangRow *self,
-                                                       const char  *title);
 
 const char     *ephy_lang_row_get_code                (EphyLangRow *self);
 void            ephy_lang_row_set_code                (EphyLangRow *self,
                                                        const char  *code);
 
-GtkWidget      *ephy_lang_row_get_drag_event_box      (EphyLangRow *self);
-
 void            ephy_lang_row_set_delete_sensitive    (EphyLangRow *self,
                                                        gboolean     sensitive);
-
-GtkWidget      *ephy_lang_row_get_dnd_top_revealer    (EphyLangRow *self);
-GtkWidget      *ephy_lang_row_get_dnd_bottom_revealer (EphyLangRow *self);
 
 G_END_DECLS

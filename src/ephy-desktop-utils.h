@@ -33,8 +33,6 @@ typedef enum {
 gboolean is_desktop_pantheon (void);
 gboolean is_desktop_gnome (void);
 
-GtkIconSize get_icon_size (void);
-
 const char *ephy_get_fallback_favicon_name (const char *title, EphyFaviconType type);
 
 G_END_DECLS

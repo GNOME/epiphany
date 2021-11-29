@@ -26,10 +26,11 @@
 #include "ephy-web-extension-dialog.h"
 #include "ephy-web-extension-manager.h"
 
+#include <adwaita.h>
 #include <gtk/gtk.h>
 
 struct _EphyWebExtensionDialog {
-  HdyWindow parent_instance;
+  GtkWindow parent_instance;
 
   EphyWebExtensionManager *web_extension_manager;
 
@@ -37,7 +38,7 @@ struct _EphyWebExtensionDialog {
   GtkStack *stack;
 };
 
-G_DEFINE_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, HDY_TYPE_WINDOW)
+G_DEFINE_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, GTK_TYPE_WINDOW)
 
 static void
 clear_listbox (GtkWidget *listbox)
@@ -45,7 +46,7 @@ clear_listbox (GtkWidget *listbox)
   GtkListBoxRow *row;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
-    gtk_container_remove (GTK_CONTAINER (listbox), GTK_WIDGET (row));
+    gtk_list_box_remove (GTK_LIST_BOX (listbox), GTK_WIDGET (row));
 }
 
 static void
@@ -55,9 +56,9 @@ on_remove_confirmed (GtkDialog       *dialog,
 {
   GtkListBoxRow *row = user_data;
   EphyWebExtensionDialog *self =
-    EPHY_WEB_EXTENSION_DIALOG (gtk_widget_get_toplevel (GTK_WIDGET (row)));
+    EPHY_WEB_EXTENSION_DIALOG (gtk_widget_get_root (GTK_WIDGET (row)));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (response == GTK_RESPONSE_OK) {
     EphyWebExtension *web_extension = g_object_get_data (G_OBJECT (row), "web_extension");
@@ -93,7 +94,7 @@ on_remove_button_clicked (GtkButton *button,
                           NULL);
 
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "destructive-action");
+  gtk_widget_add_css_class (widget, "destructive-action");
 
   g_signal_connect (dialog, "response", G_CALLBACK (on_remove_confirmed), row);
   gtk_window_present (GTK_WINDOW (dialog));
@@ -121,20 +122,15 @@ toggle_state_set_cb (GtkSwitch *widget,
 }
 
 static void
-homepage_activated_cb (HdyActionRow *row,
+homepage_activated_cb (AdwActionRow *row,
                        gpointer      user_data)
 {
   EphyWebExtensionDialog *self = EPHY_WEB_EXTENSION_DIALOG (user_data);
   EphyWebExtension *web_extension = g_object_get_data (G_OBJECT (row), "web_extension");
-  g_autoptr (GError) error = NULL;
 
-  gtk_show_uri_on_window (GTK_WINDOW (self),
-                          ephy_web_extension_get_homepage_url (web_extension),
-                          GDK_CURRENT_TIME,
-                          &error);
-
-  if (error)
-    g_warning ("Couldn't to open homepage: %s", error->message);
+  gtk_show_uri (GTK_WINDOW (self),
+                ephy_web_extension_get_homepage_url (web_extension),
+                GDK_CURRENT_TIME);
 }
 
 static GtkWidget *
@@ -152,7 +148,7 @@ create_row (EphyWebExtensionDialog *self,
   g_autoptr (GdkPixbuf) icon = NULL;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
-  row = hdy_expander_row_new ();
+  row = adw_expander_row_new ();
   g_object_set_data (G_OBJECT (row), "web_extension", web_extension);
 
   /* Tooltip */
@@ -160,72 +156,70 @@ create_row (EphyWebExtensionDialog *self,
 
   /* Icon */
   icon = ephy_web_extension_get_icon (web_extension, 32);
-  image = icon ? gtk_image_new_from_pixbuf (icon) : gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_DND);
+  image = icon ? gtk_image_new_from_pixbuf (icon) : gtk_image_new_from_icon_name ("application-x-addon-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (image), 32);
-  hdy_expander_row_add_prefix (HDY_EXPANDER_ROW (row), image);
+  adw_expander_row_add_prefix (ADW_EXPANDER_ROW (row), image);
 
   /* Titles */
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), ephy_web_extension_get_name (web_extension));
-  hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), ephy_web_extension_get_description (web_extension));
-  hdy_expander_row_set_show_enable_switch (HDY_EXPANDER_ROW (row), FALSE);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), ephy_web_extension_get_name (web_extension));
+  adw_expander_row_set_subtitle (ADW_EXPANDER_ROW (row), ephy_web_extension_get_description (web_extension));
+  adw_expander_row_set_show_enable_switch (ADW_EXPANDER_ROW (row), FALSE);
 
   toggle = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (toggle), ephy_web_extension_manager_is_active (manager, web_extension));
   g_signal_connect (toggle, "state-set", G_CALLBACK (toggle_state_set_cb), web_extension);
   gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
-  hdy_expander_row_add_action (HDY_EXPANDER_ROW (row), toggle);
+  adw_expander_row_add_action (ADW_EXPANDER_ROW (row), toggle);
 
   /* Author */
   if (ephy_web_extension_get_author (web_extension)) {
-    sub_row = hdy_action_row_new ();
-    gtk_container_add (GTK_CONTAINER (row), sub_row);
-    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Author"));
+    sub_row = adw_action_row_new ();
+    adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Author"));
     author = gtk_label_new (ephy_web_extension_get_author (web_extension));
-    gtk_label_set_line_wrap (GTK_LABEL (author), TRUE);
-    gtk_container_add (GTK_CONTAINER (sub_row), author);
+    gtk_label_set_wrap (GTK_LABEL (author), TRUE);
+    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), author);
   }
 
   /* Version */
-  sub_row = hdy_action_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), sub_row);
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Version"));
+  sub_row = adw_action_row_new ();
+  adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Version"));
   version = gtk_label_new (ephy_web_extension_get_version (web_extension));
-  dzl_gtk_widget_add_style_class (version, "dim-label");
-  gtk_container_add (GTK_CONTAINER (sub_row), version);
+  gtk_widget_add_css_class (version, "dim-label");
+  adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), version);
 
   /* Homepage url */
   if (ephy_web_extension_get_homepage_url (web_extension)) {
-    sub_row = hdy_action_row_new ();
-    gtk_container_add (GTK_CONTAINER (row), sub_row);
-    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (sub_row), _("Homepage"));
+    sub_row = adw_action_row_new ();
+    adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Homepage"));
     gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (sub_row), TRUE);
     g_signal_connect (sub_row, "activated", G_CALLBACK (homepage_activated_cb), self);
-    homepage_icon = gtk_image_new_from_icon_name ("ephy-open-link-symbolic", GTK_ICON_SIZE_BUTTON);
-    dzl_gtk_widget_add_style_class (homepage_icon, "dim-label");
-    gtk_container_add (GTK_CONTAINER (sub_row), homepage_icon);
+    homepage_icon = gtk_image_new_from_icon_name ("ephy-open-link-symbolic");
+    gtk_widget_add_css_class (homepage_icon, "dim-label");
+    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), homepage_icon);
     g_object_set_data (G_OBJECT (sub_row), "web_extension", web_extension);
   }
 
   /* Action buttons */
-  sub_row = hdy_action_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), sub_row);
+  sub_row = adw_action_row_new ();
+  adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
 
   button = gtk_button_new_with_mnemonic (_("Open _Inspector"));
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
   gtk_widget_set_tooltip_text (button, _("Open Inspector for debugging Background Page"));
-  g_object_bind_property (toggle, "active", button, "sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+  g_object_bind_property (toggle, "active", button, "sensitive", G_BINDING_SYNC_CREATE);
   g_signal_connect (button, "clicked", G_CALLBACK (on_inspector_button_clicked), web_extension);
-  gtk_container_add (GTK_CONTAINER (sub_row), button);
+  adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), button);
 
   button = gtk_button_new_with_mnemonic (_("_Remove"));
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
-  dzl_gtk_widget_add_style_class (button, "destructive-action");
+  gtk_widget_add_css_class (button, "destructive-action");
   g_signal_connect (button, "clicked", G_CALLBACK (on_remove_button_clicked), self);
   gtk_widget_set_tooltip_text (button, _("Remove selected WebExtension"));
-  gtk_container_add (GTK_CONTAINER (sub_row), button);
+  adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), button);
   g_object_set_data (G_OBJECT (button), "row", row);
-
-  gtk_widget_show_all (GTK_WIDGET (row));
 
   return GTK_WIDGET (row);
 }

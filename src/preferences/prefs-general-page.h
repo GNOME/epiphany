@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <handy.h>
+#include <adwaita.h>
 
 #include "ephy-prefs-dialog.h"
 
@@ -29,8 +28,8 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_PREFS_GENERAL_PAGE (prefs_general_page_get_type ())
 
-G_DECLARE_FINAL_TYPE (PrefsGeneralPage, prefs_general_page, EPHY, PREFS_GENERAL_PAGE, HdyPreferencesPage)
+G_DECLARE_FINAL_TYPE (PrefsGeneralPage, prefs_general_page, EPHY, PREFS_GENERAL_PAGE, AdwPreferencesPage)
 
-void prefs_general_page_on_pd_delete_event (PrefsGeneralPage *general_page);
+void prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page);
 
 G_END_DECLS

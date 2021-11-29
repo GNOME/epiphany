@@ -98,27 +98,28 @@ ephy_create_file_chooser (const char            *title,
                           GtkFileChooserAction   action,
                           EphyFileFilterDefault  default_filter)
 {
-  GtkWidget *toplevel_window = gtk_widget_get_toplevel (parent);
+  GtkRoot *root = gtk_widget_get_root (parent);
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
-  g_autofree char *downloads_dir = NULL;
+  g_autofree char *downloads_dir_path = NULL;
+  g_autoptr (GFile) downloads_dir = NULL;
 
-  g_assert (GTK_IS_WINDOW (toplevel_window));
+  g_assert (GTK_IS_WINDOW (root));
   g_assert (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST);
 
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (title,
-                                                          GTK_WINDOW (toplevel_window),
+                                                          GTK_WINDOW (root),
                                                           action,
                                                           NULL,
                                                           _("_Cancel")));
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
 
-  downloads_dir = ephy_file_get_downloads_dir ();
+  downloads_dir_path = ephy_file_get_downloads_dir ();
+  downloads_dir = g_file_new_for_path (downloads_dir_path);
   gtk_file_chooser_add_shortcut_folder (dialog, downloads_dir, NULL);
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-      action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER) {
+      action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) {
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Open"));
   } else if (action == GTK_FILE_CHOOSER_ACTION_SAVE) {
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Save"));

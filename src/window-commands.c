@@ -63,7 +63,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
-#include <libportal-gtk3/portal-gtk3.h>
+#include <libportal-gtk4/portal-gtk4.h>
 
 #define DEFAULT_ICON_SIZE 192
 #define FAVICON_SIZE 16
@@ -262,10 +262,10 @@ show_import_export_result (GtkWindow  *parent,
 
   if (destroy_parent)
     g_signal_connect_swapped (info_dialog, "response",
-                              G_CALLBACK (gtk_widget_destroy), parent);
+                              G_CALLBACK (gtk_window_destroy), parent);
 
   g_signal_connect (info_dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+                    G_CALLBACK (gtk_window_destroy), NULL);
 
   gtk_window_present (GTK_WINDOW (info_dialog));
 }
@@ -285,11 +285,11 @@ show_firefox_profile_selector_cb (GtkDialog       *selector,
 
     list_box = g_object_get_data (G_OBJECT (selector), "list_box");
     row = gtk_list_box_get_selected_row (GTK_LIST_BOX (list_box));
-    row_widget = gtk_bin_get_child (GTK_BIN (row));
+    row_widget = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
     selected_profile = g_object_steal_data (G_OBJECT (row_widget), "profile_path");
   }
 
-  gtk_widget_destroy (GTK_WIDGET (selector));
+  gtk_window_destroy (GTK_WINDOW (selector));
 
   /* If there are multiple profiles, but the user didn't select one in
    * the profile (he pressed Cancel), don't display the import info dialog
@@ -342,10 +342,8 @@ show_firefox_profile_selector (GtkWindow *parent,
     gtk_widget_set_margin_bottom (label, 6);
     gtk_list_box_insert (GTK_LIST_BOX (list_box), label, -1);
   }
-  gtk_container_add (GTK_CONTAINER (content_area), list_box);
+  gtk_box_append (GTK_BOX (content_area), list_box);
   g_object_set_data (G_OBJECT (selector), "list_box", list_box);
-
-  gtk_widget_show_all (content_area);
 
   g_signal_connect (selector, "response",
                     G_CALLBACK (show_firefox_profile_selector_cb),
@@ -531,7 +529,7 @@ dialog_bookmarks_import_cb (GtkDialog       *dialog,
       g_assert_not_reached ();
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 void
@@ -571,9 +569,10 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_widget_set_margin_end (content_area, 30);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_widget_set_vexpand (hbox, TRUE);
 
   label = gtk_label_new (_("From:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   tree_model = create_tree_model (&id_column);
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
@@ -590,16 +589,16 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
                                   "text", 0, NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), combo_box);
 
-  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+  gtk_box_append (GTK_BOX (content_area), hbox);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_bookmarks_import_cb),
                     GTK_COMBO_BOX (combo_box));
 
-  gtk_widget_show_all (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -658,7 +657,6 @@ window_cmd_export_bookmarks (GSimpleAction *action,
                                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                                           _("_Save"),
                                                           _("_Cancel")));
-  gtk_file_chooser_set_show_hidden (dialog, TRUE);
 
   /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
   gtk_file_chooser_set_current_name (dialog, _("bookmarks.html"));
@@ -760,7 +758,7 @@ dialog_passwords_import_cb (GtkDialog   *dialog,
     else
       g_assert_not_reached ();
   } else {
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_window_destroy (GTK_WINDOW (dialog));
   }
 }
 
@@ -817,9 +815,10 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_widget_set_margin_end (content_area, 30);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_widget_set_vexpand (hbox, TRUE);
 
   label = gtk_label_new (_("From:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), label);
 
   tree_model = create_import_passwords_tree_model (&id_column);
 
@@ -843,18 +842,17 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
                                   "text", 0, NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), combo_box);
 
-  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+  gtk_box_append (GTK_BOX (content_area), hbox);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_passwords_import_cb),
                     GTK_COMBO_BOX (combo_box));
 
-  gtk_widget_show_all (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
-
 
 void
 window_cmd_show_history (GSimpleAction *action,
@@ -902,6 +900,14 @@ window_cmd_show_preferences (GSimpleAction *action,
   gtk_window_present (dialog);
 }
 
+static void
+window_destroyed (GtkWidget  *widget,
+                  GtkWidget **widget_pointer)
+{
+  if (widget_pointer)
+    *widget_pointer = NULL;
+}
+
 void
 window_cmd_show_shortcuts (GSimpleAction *action,
                            GVariant      *parameter,
@@ -936,7 +942,7 @@ window_cmd_show_shortcuts (GSimpleAction *action,
 
     g_signal_connect (shortcuts_window,
                       "destroy",
-                      G_CALLBACK (gtk_widget_destroyed),
+                      G_CALLBACK (window_destroyed),
                       &shortcuts_window);
 
     g_object_unref (builder);
@@ -1059,7 +1065,7 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
 
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+                    G_CALLBACK (gtk_window_destroy), NULL);
   gtk_window_present (GTK_WINDOW (dialog));
 
   g_free (comments);
@@ -1137,7 +1143,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
     back_uri = webkit_back_forward_list_item_get_original_uri (back_item);
 
     embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                                 NULL,
                                 0);
 
@@ -1157,7 +1163,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
     forward_uri = webkit_back_forward_list_item_get_original_uri (forward_item);
 
     embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                                 embed,
                                 0);
 
@@ -1190,7 +1196,7 @@ check_tab_has_modified_forms_confirm_cb (GtkDialog       *dialog,
 {
   WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (response == GTK_RESPONSE_ACCEPT) {
     gtk_widget_grab_focus (GTK_WIDGET (embed));
@@ -1205,7 +1211,7 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
                                             GAsyncResult *result,
                                             EphyEmbed    *embed)
 {
-  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view)));
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (view)));
   GtkWidget *dialog;
   GtkWidget *button;
   gboolean has_modified_forms;
@@ -1221,7 +1227,7 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", _("A form you modified has not been submitted."));
 
     button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Discard form"), GTK_RESPONSE_ACCEPT);
-    gtk_style_context_add_class (gtk_widget_get_style_context (button), "destructive-action");
+    gtk_widget_add_css_class (button, "destructive-action");
 
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
@@ -1286,7 +1292,7 @@ window_cmd_combined_stop_reload (GSimpleAction *action,
   GAction *gaction;
   GVariant *state;
 
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (user_data), "toolbar");
+  action_group = ephy_window_get_action_group (EPHY_WINDOW (user_data), "toolbar");
 
   state = g_action_get_state (G_ACTION (action));
   /* If loading */
@@ -1309,12 +1315,10 @@ window_cmd_page_menu (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyHeaderBar *header_bar;
   GtkMenuButton *button;
-  GtkPopover *popover;
 
   header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
   button = GTK_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
-  popover = gtk_menu_button_get_popover (button);
-  gtk_popover_popup (popover);
+  gtk_menu_button_popup (button);
 }
 
 void
@@ -1848,7 +1852,7 @@ dialog_save_as_application_confirmation_cb (GtkDialog                 *dialog,
                                             GtkResponseType            response,
                                             EphyApplicationDialogData *data)
 {
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (response == GTK_RESPONSE_OK) {
     ephy_web_application_delete (data->app_id, NULL);
@@ -2098,7 +2102,7 @@ save_response_cb (GtkNativeDialog *dialog,
       }
     }
 
-    current_file = gtk_file_chooser_get_current_folder_file (GTK_FILE_CHOOSER (dialog));
+    current_file = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
     current_path = g_file_get_path (current_file);
     g_settings_set_string (EPHY_SETTINGS_WEB,
                            EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
@@ -2128,8 +2132,6 @@ window_cmd_save_as (GSimpleAction *action,
                                      GTK_FILE_CHOOSER_ACTION_SAVE,
                                      EPHY_FILE_FILTER_NONE);
 
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   if (last_directory_path && last_directory_path[0]) {
@@ -2137,7 +2139,7 @@ window_cmd_save_as (GSimpleAction *action,
     g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
 
     if (error)
       g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
@@ -2184,8 +2186,6 @@ window_cmd_screenshot (GSimpleAction *action,
                                      GTK_FILE_CHOOSER_ACTION_SAVE,
                                      EPHY_FILE_FILTER_NONE);
 
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   if (last_directory_path && last_directory_path[0]) {
@@ -2193,7 +2193,7 @@ window_cmd_screenshot (GSimpleAction *action,
     g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
 
     if (error)
       g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
@@ -2261,6 +2261,7 @@ window_cmd_redo (GSimpleAction *action,
     }
   }
 }
+
 void
 window_cmd_cut (GSimpleAction *action,
                 GVariant      *parameter,
@@ -2270,7 +2271,7 @@ window_cmd_cut (GSimpleAction *action,
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
   if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
+    gtk_widget_activate_action (widget, "clipboard.cut", NULL);
   } else {
     EphyEmbed *embed;
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
@@ -2289,7 +2290,7 @@ window_cmd_copy (GSimpleAction *action,
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
   if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
+    gtk_widget_activate_action (widget, "clipboard.copy", NULL);
   } else {
     EphyEmbed *embed;
 
@@ -2309,7 +2310,7 @@ window_cmd_paste (GSimpleAction *action,
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
   if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+    gtk_widget_activate_action (widget, "clipboard.paste", NULL);
   } else {
     EphyEmbed *embed;
 
@@ -2329,7 +2330,7 @@ window_cmd_paste_as_plain_text (GSimpleAction *action,
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
   if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+    gtk_widget_activate_action (widget, "clipboard.paste", NULL);
   } else {
     EphyEmbed *embed;
 
@@ -2528,7 +2529,7 @@ window_cmd_page_source (GSimpleAction *action,
 
   new_embed = ephy_shell_new_tab
                 (ephy_shell_get_default (),
-                EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                 embed,
                 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_APPEND_AFTER);
 
@@ -2593,7 +2594,6 @@ window_cmd_send_to (GSimpleAction *action,
   EphyEmbed *embed;
   char *command, *subject, *body;
   const char *location, *title;
-  GError *error = NULL;
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -2612,10 +2612,7 @@ window_cmd_send_to (GSimpleAction *action,
   g_free (subject);
   g_free (body);
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (window), command, GDK_CURRENT_TIME, &error)) {
-    g_warning ("Unable to send link by email: %s\n", error->message);
-    g_error_free (error);
-  }
+  gtk_show_uri (GTK_WINDOW (window), command, GDK_CURRENT_TIME);
 
   g_free (command);
 }
@@ -2667,10 +2664,10 @@ enable_browse_with_caret_state_cb (GtkMessageDialog *dialog,
                                    GtkResponseType   response,
                                    EphyWindow       *window)
 {
-  GActionGroup *action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  GActionGroup *action_group = ephy_window_get_action_group (window, "win");
   GAction *action;
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "browse-with-caret");
@@ -2912,7 +2909,7 @@ window_cmd_homepage_new_tab (GSimpleAction *action,
   g_assert (embed != NULL);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                              EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                              EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                               NULL,
                               0);
 
@@ -2925,18 +2922,26 @@ window_cmd_homepage_new_tab (GSimpleAction *action,
 }
 
 static void
-clipboard_text_received_cb (GtkClipboard *clipboard,
-                            const gchar  *text,
+clipboard_text_received_cb (GdkClipboard *clipboard,
+                            GAsyncResult *res,
                             EphyWindow   *window)
 {
   EphyEmbed *embed;
   EphyWebView *web_view;
+  g_autoptr (GError) error = NULL;
+  g_autofree char *text = NULL;
+
+  text = gdk_clipboard_read_text_finish (clipboard, res, &error);
+  if (error) {
+    g_warning ("Failed to the URL from clipboard: %s", error->message);
+    return;
+  }
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                              EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                              EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                               NULL,
                               0);
 
@@ -2955,12 +2960,13 @@ window_cmd_new_tab_from_clipboard (GSimpleAction *action,
                                    gpointer       user_data)
 {
   EphyWindow *ephy_window = EPHY_WINDOW (user_data);
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
-  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
-  gtk_clipboard_request_text (clipboard,
-                              (GtkClipboardTextReceivedFunc)clipboard_text_received_cb,
-                              g_object_ref (ephy_window));
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (ephy_window));
+  gdk_clipboard_read_text_async (clipboard,
+                                 NULL,
+                                 (GAsyncReadyCallback)clipboard_text_received_cb,
+                                 g_object_ref (ephy_window));
 }
 
 void
@@ -3019,5 +3025,5 @@ window_cmd_extensions (GSimpleAction *action,
   dialog = ephy_web_extension_dialog_new ();
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
   gtk_window_set_modal (GTK_WINDOW (dialog), FALSE);
-  gtk_widget_show_all (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }

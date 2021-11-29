@@ -21,23 +21,10 @@
     ],
     "modules" : [
         {
-            "name" : "libdazzle",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dwith_vapi=false"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "buildsystem" : "meson",
             "config-opts" : [
-                "-Dbackends=gtk3",
+                "-Dbackends=gtk4",
                 "-Dintrospection=false",
                 "-Ddocs=false"
             ],
@@ -53,14 +40,17 @@
             "name": "gcr",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dintrospection=false",
+                "-Dvapi=false",
+                "-Dgtk3=false",
                 "-Dgtk_doc=false",
-                "-Dintrospection=false"
+                "-Dssh_agent=false",
+                "-Dsystemd=disabled"
             ],
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git",
-                    "branch": "gnome-40"
+                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git"
                 }
             ]
         },
@@ -75,19 +65,40 @@
             ]
         },
         {
-            "name": "libhandy",
+            "name" : "libsass",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/lazka/libsass.git",
+                    "branch" : "meson"
+                }
+            ]
+        },
+        {
+            "name" : "sassc",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/lazka/sassc.git",
+                    "branch" : "meson"
+                }
+            ]
+        },
+        {
+            "name": "libadwaita",
             "buildsystem" : "meson",
             "config-opts" : [
                 "-Dgtk_doc=false",
                 "-Dvapi=false",
                 "-Dtests=false",
-                "-Dexamples=false",
-                "-Dglade_catalog=disabled"
+                "-Dexamples=false"
             ],
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libhandy.git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libadwaita.git",
                     "branch" : "main"
                 }
             ]

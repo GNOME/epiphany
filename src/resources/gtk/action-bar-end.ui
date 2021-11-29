@@ -4,39 +4,18 @@
     <property name="spacing">6</property>
     <child>
       <object class="GtkRevealer" id="downloads_revealer">
-        <property name="visible">True</property>
         <property name="transition-type">crossfade</property>
         <child>
           <object class="GtkMenuButton" id="downloads_button">
             <!-- Translators: tooltip for the downloads button -->
             <property name="tooltip_text" translatable="yes">View downloads</property>
-            <property name="visible">True</property>
             <property name="receives_default">True</property>
+            <style>
+              <class name="image-button"/>
+            </style>
             <child>
-              <object class="GtkOverlay">
-                <property name="visible">True</property>
+              <object class="GtkImage" id="downloads_icon">
                 <property name="valign">center</property>
-                <child>
-                  <object class="GtkImage" id="downloads_icon">
-                    <property name="visible">True</property>
-                    <property name="icon_name">ephy-download-symbolic</property>
-                    <style>
-                      <class name="download_icon"/>
-                    </style>
-                  </object>
-                </child>
-                <child type="overlay">
-                  <object class="GtkProgressBar" id="downloads_progress">
-                    <property name="visible">True</property>
-                    <property name="valign">end</property>
-                    <style>
-                      <class name="download_progress"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="pass-through">True</property>
-                  </packing>
-                </child>
               </object>
             </child>
           </object>
@@ -49,123 +28,83 @@
         <property name="tooltip_text" translatable="yes">View extension actions</property>
         <property name="visible">False</property>
         <property name="receives_default">True</property>
-        <property name="popover">browser_actions_popover</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="icon-name">application-x-addon-symbolic</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="bookmark_button">
-        <property name="visible">True</property>
-        <!-- Translators: tooltip for the bookmark button -->
-        <property name="tooltip_text" translatable="yes">Bookmark page</property>
-        <child>
-          <object class="GtkImage" id="bookmark_image">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">ephy-non-starred-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="image-button"/>
-        </style>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="bookmarks_button">
-        <property name="visible">True</property>
-        <!-- Translators: tooltip for the bookmarks popover button -->
-        <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
-        <property name="popover">bookmarks_popover</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage" id="bookmarks_image">
-            <property name="visible">True</property>
-            <property name="icon-name">ephy-library-symbolic</property>
-            <property name="icon-size">1</property>
-          </object>
-        </child>
-      </object>
-    </child>
-  </template>
-  <object class="EphyBookmarksPopover" id="bookmarks_popover">
-    <property name="visible">True</property>
-  </object>
-  <object class="GtkPopover" id="browser_actions_popover">
-    <property name="width-request">250</property>
-    <child>
-      <object class="GtkStack" id="browser_actions_stack">
-        <property name="visible">True</property>
-        <property name="transition-type">slide-left-right</property>
-        <property name="interpolate-size">True</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <child>
-          <object class="GtkScrolledWindow" id="browser_actions_scrolled_window">
-            <property name="visible">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="max-content-height">360</property>
-            <property name="propagate-natural-height">True</property>
-            <child>
-              <object class="GtkListBox" id="browser_actions_listbox">
-                <property name="visible">True</property>
-                <property name="selection-mode">none</property>
-                <signal name="row-activated" handler="browser_actions_row_activated_cb"/>
-                <style>
-                  <class name="browser-actions-listbox"/>
-                  <class name="background"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="browser_actions_popup_view_box">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="spacing">6</property>
+        <property name="icon-name">application-x-addon-symbolic</property>
+        <property name="popover">
+          <object class="GtkPopover" id="browser_actions_popover">
+            <property name="width-request">250</property>
+            <style>
+              <class name="menu"/>
+            </style>
+            <property name="child">
+              <object class="GtkStack" id="browser_actions_stack">
+                <property name="transition-type">slide-left-right</property>
+                <property name="interpolate-size">True</property>
+                <property name="vhomogeneous">False</property>
+                <property name="hhomogeneous">False</property>
                 <child>
-                  <object class="GtkButton">
-                    <property name="visible">True</property>
-                    <signal name="clicked" handler="browser_actions_popup_view_back_clicked_cb"/>
-                    <style>
-                      <class name="flat"/>
-                    </style>
+                  <object class="GtkScrolledWindow" id="browser_actions_scrolled_window">
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="max-content-height">360</property>
+                    <property name="propagate-natural-height">True</property>
+                    <property name="child">
+                      <object class="GtkListBox" id="browser_actions_listbox">
+                        <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="browser_actions_row_activated_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="browser_actions_popup_view_box">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="icon-name">go-previous-symbolic</property>
+                      <object class="GtkCenterBox">
+                        <property name="orientation">horizontal</property>
+                        <child type="start">
+                          <object class="GtkButton">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="margin-end">6</property>
+                            <signal name="clicked" handler="browser_actions_popup_view_back_clicked_cb"/>
+"                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child type="center">
+                          <object class="GtkLabel" id="browser_actions_popup_view_label">
+                            <property name="hexpand">True</property>
+                            <style>
+                              <class name="heading"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkLabel" id="browser_actions_popup_view_label">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                    <style>
-                      <class name="heading"/>
-                    </style>
-                  </object>
-                </child>
               </object>
-            </child>
+            </property>
           </object>
-        </child>
+        </property>
       </object>
     </child>
-  </object>
+    <child>
+      <object class="GtkMenuButton" id="bookmark_button">
+        <!-- Translators: tooltip for the bookmark button -->
+        <property name="tooltip_text" translatable="yes">Bookmark page</property>
+        <property name="icon-name">ephy-non-starred-symbolic</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="bookmarks_button">
+        <!-- Translators: tooltip for the bookmarks popover button -->
+        <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
+        <property name="icon-name">ephy-library-symbolic</property>
+        <property name="popover">
+          <object class="EphyBookmarksPopover" id="bookmarks_popover"/>
+        </property>
+      </object>
+    </child>
+  </template>
 </interface>

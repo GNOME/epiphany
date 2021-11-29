@@ -173,7 +173,7 @@ windows_handler_get_current (EphyWebExtensionSender *sender,
   if (sender->view == ephy_web_extension_manager_get_background_web_view (manager, sender->extension))
     window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
   else
-    window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sender->view)));
+    window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (sender->view)));
 
   populate_tabs = get_info ? ephy_json_object_get_boolean (get_info, "populate", FALSE) : FALSE;
 
@@ -329,7 +329,7 @@ windows_handler_remove (EphyWebExtensionSender *sender,
   }
 
   /* We could use `ephy_window_close()` here but it will do a blocking prompt to the user which I don't believe is expected. */
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
   g_task_return_pointer (task, NULL, NULL);
 }
 

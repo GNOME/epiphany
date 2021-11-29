@@ -2,8 +2,8 @@
 
 html {
     /* Adwaita colors */
-    --bg-color: #f6f5f4;
-    --fg-color: #2e3436;
+    --bg-color: #fafafa;
+    --fg-color: rgba(0, 0, 0, 0.8);
     --base-color: #fff;
     --text-color: #000;
     --borders: #d3d7cf;
@@ -20,9 +20,9 @@ html {
 @media (prefers-color-scheme: dark) {
     html {
         /* Adwaita colors */
-        --bg-color: #353535;
-        --fg-color: #eeeeec;
-        --base-color: #2d2d2d;
+        --bg-color: #242424;
+        --fg-color: #fff;
+        --base-color: rgba(255, 255, 255, 0.08);
         --text-color: #fff;
         --borders: #1b1b1b;
         --icon-invert: 0.93; /* average(0xee, 0xee, 0xec) / 0xff */
@@ -47,8 +47,8 @@ html {
 }
 
 h1 {
-    font-size: 24pt;
-    font-weight: 300;
+    font-size: 20pt;
+    font-weight: 800;
     margin-bottom: 0;
 }
 
@@ -70,8 +70,10 @@ h1 {
     .dialog {
         padding: 36px 42px;
         background-color: var(--base-color);
-        border-radius: 1em;
-        border: 2px solid var(--borders);
+        border-radius: 12px;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
+                    0 1px 3px 1px rgba(0, 0, 0, 0.07),
+                    0 2px 6px 2px rgba(0, 0, 0, 0.03);
     }
 }
 
@@ -89,7 +91,6 @@ h1 {
 
 #about-subtitle {
     opacity: 0.55; /* Adwaita's dim-label */
-    text-shadow: 0 1px 0 var(--base-color);
 }
 
 #about-icon {
@@ -149,7 +150,6 @@ html.epiphany-html {
     font-size: 1rem;
     font-weight: bold;
     color: var(--fg-color);
-    text-shadow: 0 1px 0 var(--base-color);
 }
 
 @media (min-width: 600px) {
@@ -289,7 +289,6 @@ html.epiphany-html {
 
 .overview-item {
     position: relative;
-    overflow: hidden;
     outline: 0;
     transition: 0;
     text-align: center;
@@ -326,10 +325,13 @@ html.epiphany-html {
 .overview-thumbnail {
     height: 160px;
     display: block;
-    border: 1px solid rgba(0, 0, 0, .2);
     background: url(ephy-resource:///org/gnome/epiphany/page-icons/web-watermark.svg) center no-repeat, var(--base-color);
     background-repeat: no-repeat;
-    border-radius: 5px;
+    border-radius: 12px;
+    border-color: 1px solid transparent;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
+                0 1px 3px 1px rgba(0, 0, 0, 0.07);
+    transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
 /* In order to preserve a wide aspect ratio as the layout changes, we need to reduce the height */
@@ -348,13 +350,15 @@ html.epiphany-html {
 
 .overview-thumbnail:hover,
 :focus .overview-thumbnail {
-    border: 1px solid rgba(0, 0, 0, .4);
-    box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07),
+                0 1px 3px 1px rgba(0, 0, 0, 0.11),
+                0 2px 6px 2px rgba(0, 0, 0, 0.07);
 }
 
 .overview-thumbnail:active {
-    border: 1px solid rgba(0, 0, 0, .4);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 1px 0 rgba(0,0,0,0.07),
+                inset 0 1px 2px 1px rgba(0,0,0,0.11);
 }
 
 .overview-close-button {

@@ -21,17 +21,15 @@
 #include "config.h"
 #include "ephy-fullscreen-box.h"
 
-#include <handy.h>
+#include <adwaita.h>
 
 #define FULLSCREEN_HIDE_DELAY 300
 #define SHOW_HEADERBAR_DISTANCE_PX 5
 
 struct _EphyFullscreenBox {
-  GtkEventBox parent_instance;
+  GtkWidget parent_instance;
 
-  HdyFlap *flap;
-  GtkEventController *controller;
-  GtkGesture *gesture;
+  AdwFlap *flap;
 
   gboolean fullscreen;
   gboolean autohide;
@@ -45,7 +43,7 @@ struct _EphyFullscreenBox {
 
 static void ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_EVENT_BOX,
+G_DEFINE_TYPE_WITH_CODE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 ephy_fullscreen_box_buildable_init))
 
@@ -66,7 +64,7 @@ show_ui (EphyFullscreenBox *self)
 {
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
-  hdy_flap_set_reveal_flap (self->flap, TRUE);
+  adw_flap_set_reveal_flap (self->flap, TRUE);
 }
 
 static void
@@ -77,7 +75,7 @@ hide_ui (EphyFullscreenBox *self)
   if (!self->fullscreen)
     return;
 
-  hdy_flap_set_reveal_flap (self->flap, FALSE);
+  adw_flap_set_reveal_flap (self->flap, FALSE);
   gtk_widget_grab_focus (GTK_WIDGET (self->flap));
 }
 
@@ -94,7 +92,7 @@ hide_timeout_cb (EphyFullscreenBox *self)
 static void
 start_hide_timeout (EphyFullscreenBox *self)
 {
-  if (!hdy_flap_get_reveal_flap (self->flap))
+  if (!adw_flap_get_reveal_flap (self->flap))
     return;
 
   if (self->timeout_id)
@@ -119,11 +117,8 @@ is_descendant_of (GtkWidget *widget,
 
   parent = widget;
 
-  while (parent && parent != target && !GTK_IS_POPOVER (parent))
+  while (parent && parent != target)
     parent = gtk_widget_get_parent (parent);
-
-  if (GTK_IS_POPOVER (parent))
-    return is_descendant_of (gtk_popover_get_relative_to (GTK_POPOVER (parent)), target);
 
   return parent == target;
 }
@@ -133,8 +128,8 @@ get_titlebar_area_height (EphyFullscreenBox *self)
 {
   gdouble height;
 
-  height = gtk_widget_get_allocated_height (hdy_flap_get_flap (self->flap));
-  height *= hdy_flap_get_reveal_progress (self->flap);
+  height = gtk_widget_get_allocated_height (adw_flap_get_flap (self->flap));
+  height *= adw_flap_get_reveal_progress (self->flap);
   height = MAX (height, SHOW_HEADERBAR_DISTANCE_PX);
 
   return height;
@@ -154,7 +149,7 @@ update (EphyFullscreenBox *self,
   }
 
   if (self->last_focus && is_descendant_of (self->last_focus,
-                                            hdy_flap_get_flap (self->flap)))
+                                            adw_flap_get_flap (self->flap)))
     show_ui (self);
   else if (hide_immediately)
     hide_ui (self);
@@ -178,12 +173,6 @@ enter_cb (EphyFullscreenBox *self,
           double             x,
           double             y)
 {
-  g_autoptr (GdkEvent) event = gtk_get_current_event ();
-
-  if (event->crossing.window != gtk_widget_get_window (GTK_WIDGET (self)) ||
-      event->crossing.detail == GDK_NOTIFY_INFERIOR)
-    return;
-
   motion_cb (self, x, y);
 }
 
@@ -191,9 +180,10 @@ static void
 press_cb (EphyFullscreenBox *self,
           int                n_press,
           double             x,
-          double             y)
+          double             y,
+          GtkGesture        *gesture)
 {
-  gtk_gesture_set_state (self->gesture, GTK_EVENT_SEQUENCE_DENIED);
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 
   self->is_touch = TRUE;
 
@@ -202,12 +192,20 @@ press_cb (EphyFullscreenBox *self,
 }
 
 static void
-set_focus_cb (EphyFullscreenBox *self,
-              GtkWidget         *widget)
+set_focus (EphyFullscreenBox *self,
+           GtkWidget         *widget)
 {
   self->last_focus = widget;
 
   update (self, TRUE);
+}
+
+static void
+notify_focus_cb (EphyFullscreenBox *self,
+                 GParamSpec        *pspec,
+                 GtkRoot           *root)
+{
+  set_focus (self, gtk_root_get_focus (root));
 }
 
 static void
@@ -217,72 +215,38 @@ notify_reveal_cb (EphyFullscreenBox *self)
 }
 
 static void
-ephy_fullscreen_box_hierarchy_changed (GtkWidget *widget,
-                                       GtkWidget *previous_toplevel)
+ephy_fullscreen_box_root (GtkWidget *widget)
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (widget);
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
-  if (previous_toplevel && GTK_IS_WINDOW (previous_toplevel))
-    g_signal_handlers_disconnect_by_func (previous_toplevel, set_focus_cb, widget);
+  GTK_WIDGET_CLASS (ephy_fullscreen_box_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  root = gtk_widget_get_root (widget);
 
-  if (toplevel && GTK_IS_WINDOW (toplevel)) {
-    g_signal_connect_object (toplevel, "set-focus",
-                             G_CALLBACK (set_focus_cb), widget,
+  if (root && GTK_IS_WINDOW (root)) {
+    g_signal_connect_object (root, "notify::focus-widget",
+                             G_CALLBACK (notify_focus_cb), widget,
                              G_CONNECT_SWAPPED);
 
-    set_focus_cb (self, gtk_window_get_focus (GTK_WINDOW (toplevel)));
+    set_focus (self, gtk_window_get_focus (GTK_WINDOW (root)));
   } else {
-    set_focus_cb (self, NULL);
+    set_focus (self, NULL);
   }
 }
 
 static void
-ephy_fullscreen_box_add (GtkContainer *container,
-                         GtkWidget    *widget)
+ephy_fullscreen_box_unroot (GtkWidget *widget)
 {
-  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (container);
+  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (widget);
+  GtkRoot *root = gtk_widget_get_root (widget);
 
-  if (!self->flap)
-    GTK_CONTAINER_CLASS (ephy_fullscreen_box_parent_class)->add (container, widget);
-  else
-    gtk_container_add (GTK_CONTAINER (self->flap), widget);
-}
+  if (root && GTK_IS_WINDOW (root))
+    g_signal_handlers_disconnect_by_func (root, notify_focus_cb, widget);
 
-static void
-ephy_fullscreen_box_remove (GtkContainer *container,
-                            GtkWidget    *widget)
-{
-  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (container);
+  set_focus (self, NULL);
 
-  if (widget == GTK_WIDGET (self->flap)) {
-    GTK_CONTAINER_CLASS (ephy_fullscreen_box_parent_class)->remove (container, widget);
-    self->flap = NULL;
-  } else {
-    gtk_container_remove (GTK_CONTAINER (self->flap), widget);
-  }
-}
-
-static void
-ephy_fullscreen_box_forall (GtkContainer *container,
-                            gboolean      include_internals,
-                            GtkCallback   callback,
-                            gpointer      callback_data)
-{
-  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (container);
-
-  if (include_internals) {
-    GTK_CONTAINER_CLASS (ephy_fullscreen_box_parent_class)->forall (container,
-                                                                    include_internals,
-                                                                    callback,
-                                                                    callback_data);
-  } else {
-    gtk_container_foreach (GTK_CONTAINER (self->flap),
-                           callback,
-                           callback_data);
-  }
+  GTK_WIDGET_CLASS (ephy_fullscreen_box_parent_class)->unroot (widget);
 }
 
 static void
@@ -311,7 +275,7 @@ ephy_fullscreen_box_get_property (GObject    *object,
       break;
 
     case PROP_REVEALED:
-      g_value_set_boolean (value, hdy_flap_get_reveal_flap (self->flap));
+      g_value_set_boolean (value, adw_flap_get_reveal_flap (self->flap));
       break;
 
     default:
@@ -354,8 +318,10 @@ ephy_fullscreen_box_dispose (GObject *object)
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
 
-  g_clear_object (&self->controller);
-  g_clear_object (&self->gesture);
+  if (self->flap) {
+    gtk_widget_unparent (GTK_WIDGET (self->flap));
+    self->flap = NULL;
+  }
 
   G_OBJECT_CLASS (ephy_fullscreen_box_parent_class)->dispose (object);
 }
@@ -365,17 +331,13 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = ephy_fullscreen_box_get_property;
   object_class->set_property = ephy_fullscreen_box_set_property;
   object_class->dispose = ephy_fullscreen_box_dispose;
 
-  widget_class->hierarchy_changed = ephy_fullscreen_box_hierarchy_changed;
-
-  container_class->add = ephy_fullscreen_box_add;
-  container_class->remove = ephy_fullscreen_box_remove;
-  container_class->forall = ephy_fullscreen_box_forall;
+  widget_class->root = ephy_fullscreen_box_root;
+  widget_class->unroot = ephy_fullscreen_box_unroot;
 
   props[PROP_FULLSCREEN] =
     g_param_spec_boolean ("fullscreen",
@@ -415,47 +377,49 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_css_name (widget_class, "fullscreenbox");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
 ephy_fullscreen_box_init (EphyFullscreenBox *self)
 {
-  HdyFlap *flap;
+  AdwFlap *flap;
+  GtkEventController *controller;
+  GtkGesture *gesture;
 
   self->autohide = TRUE;
 
-  gtk_widget_add_events (GTK_WIDGET (self), GDK_ALL_EVENTS_MASK);
-
-  flap = HDY_FLAP (hdy_flap_new ());
+  flap = ADW_FLAP (adw_flap_new ());
   gtk_orientable_set_orientation (GTK_ORIENTABLE (flap), GTK_ORIENTATION_VERTICAL);
-  hdy_flap_set_flap_position (flap, GTK_PACK_START);
-  hdy_flap_set_fold_policy (flap, HDY_FLAP_FOLD_POLICY_NEVER);
-  hdy_flap_set_locked (flap, TRUE);
-  hdy_flap_set_modal (flap, FALSE);
-  hdy_flap_set_swipe_to_open (flap, FALSE);
-  hdy_flap_set_swipe_to_close (flap, FALSE);
-  hdy_flap_set_transition_type (flap, HDY_FLAP_TRANSITION_TYPE_OVER);
-  gtk_widget_show (GTK_WIDGET (flap));
+  adw_flap_set_flap_position (flap, GTK_PACK_START);
+  adw_flap_set_fold_policy (flap, ADW_FLAP_FOLD_POLICY_NEVER);
+  adw_flap_set_locked (flap, TRUE);
+  adw_flap_set_modal (flap, FALSE);
+  adw_flap_set_swipe_to_open (flap, FALSE);
+  adw_flap_set_swipe_to_close (flap, FALSE);
+  adw_flap_set_transition_type (flap, ADW_FLAP_TRANSITION_TYPE_OVER);
 
   g_signal_connect_object (flap, "notify::reveal-flap",
                            G_CALLBACK (notify_reveal_cb), self, G_CONNECT_SWAPPED);
 
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (flap));
+  gtk_widget_set_parent (GTK_WIDGET (flap), GTK_WIDGET (self));
   self->flap = flap;
 
-  self->controller = gtk_event_controller_motion_new (GTK_WIDGET (self));
-  gtk_event_controller_set_propagation_phase (self->controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_object (self->controller, "enter",
+  controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_object (controller, "enter",
                            G_CALLBACK (enter_cb), self, G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->controller, "motion",
+  g_signal_connect_object (controller, "motion",
                            G_CALLBACK (motion_cb), self, G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->gesture),
+  gesture = gtk_gesture_click_new ();
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), TRUE);
-  g_signal_connect_object (self->gesture, "pressed",
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
+  g_signal_connect_object (gesture, "pressed",
                            G_CALLBACK (press_cb), self, G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void
@@ -509,10 +473,10 @@ ephy_fullscreen_box_set_fullscreen (EphyFullscreenBox *self,
     return;
 
   if (fullscreen) {
-    hdy_flap_set_fold_policy (self->flap, HDY_FLAP_FOLD_POLICY_ALWAYS);
+    adw_flap_set_fold_policy (self->flap, ADW_FLAP_FOLD_POLICY_ALWAYS);
     update (self, FALSE);
   } else {
-    hdy_flap_set_fold_policy (self->flap, HDY_FLAP_FOLD_POLICY_NEVER);
+    adw_flap_set_fold_policy (self->flap, ADW_FLAP_FOLD_POLICY_NEVER);
     show_ui (self);
   }
 
@@ -556,7 +520,7 @@ ephy_fullscreen_box_get_titlebar (EphyFullscreenBox *self)
 {
   g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
 
-  return hdy_flap_get_flap (self->flap);
+  return adw_flap_get_flap (self->flap);
 }
 
 void
@@ -564,12 +528,12 @@ ephy_fullscreen_box_set_titlebar (EphyFullscreenBox *self,
                                   GtkWidget         *titlebar)
 {
   g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (GTK_IS_WIDGET (titlebar) || titlebar == NULL);
+  g_return_if_fail (titlebar == NULL || GTK_IS_WIDGET (titlebar));
 
-  if (hdy_flap_get_flap (self->flap) == titlebar)
+  if (adw_flap_get_flap (self->flap) == titlebar)
     return;
 
-  hdy_flap_set_flap (self->flap, titlebar);
+  adw_flap_set_flap (self->flap, titlebar);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TITLEBAR]);
 }
@@ -579,7 +543,7 @@ ephy_fullscreen_box_get_content (EphyFullscreenBox *self)
 {
   g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
 
-  return hdy_flap_get_content (self->flap);
+  return adw_flap_get_content (self->flap);
 }
 
 void
@@ -587,12 +551,12 @@ ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
                                  GtkWidget         *content)
 {
   g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (GTK_IS_WIDGET (content) || content == NULL);
+  g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
 
-  if (hdy_flap_get_content (self->flap) == content)
+  if (adw_flap_get_content (self->flap) == content)
     return;
 
-  hdy_flap_set_content (self->flap, content);
+  adw_flap_set_content (self->flap, content);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
 }

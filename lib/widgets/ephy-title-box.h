@@ -21,8 +21,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <webkit2/webkit2.h>
+#include <adwaita.h>
 
 #include "ephy-security-levels.h"
 
@@ -30,7 +29,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_TITLE_BOX (ephy_title_box_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkEventBox)
+G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, AdwBin)
 
 EphyTitleBox       *ephy_title_box_new                  (void);
 

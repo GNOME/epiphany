@@ -37,7 +37,7 @@ struct _EphyPageRow {
   GtkLabel *title;
   GtkButton *close_button;
 
-  HdyTabPage *page;
+  AdwTabPage *page;
   EphyTabView *tab_view;
 };
 
@@ -47,7 +47,7 @@ static void
 update_spinner (EphyPageRow *self)
 {
   if (gtk_widget_get_mapped (GTK_WIDGET (self)) &&
-      hdy_tab_page_get_loading (self->page))
+      adw_tab_page_get_loading (self->page))
     gtk_spinner_start (self->spinner);
   else
     gtk_spinner_stop (self->spinner);
@@ -56,23 +56,19 @@ update_spinner (EphyPageRow *self)
 static void
 close_clicked_cb (EphyPageRow *self)
 {
-  hdy_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
+  adw_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
 }
 
-static gboolean
-button_release_event (GtkWidget   *widget,
-                      GdkEvent    *event,
-                      EphyPageRow *self)
+static void
+released_cb (GtkGesture  *gesture,
+             int          n_press,
+             double       x,
+             double       y,
+             EphyPageRow *self)
 {
-  GdkEventButton *button_event = (GdkEventButton *)event;
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 
-  if (button_event->button == GDK_BUTTON_MIDDLE) {
-    hdy_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
-
-    return GDK_EVENT_STOP;
-  }
-
-  return GDK_EVENT_PROPAGATE;
+  adw_tab_view_close_page (ephy_tab_view_get_tab_view (self->tab_view), self->page);
 }
 
 static void
@@ -90,7 +86,7 @@ ephy_page_row_class_init (EphyPageRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPageRow, close_button);
   gtk_widget_class_bind_template_callback (widget_class, update_spinner);
   gtk_widget_class_bind_template_callback (widget_class, close_clicked_cb);
-  gtk_widget_class_bind_template_callback (widget_class, button_release_event);
+  gtk_widget_class_bind_template_callback (widget_class, released_cb);
 }
 
 static void
@@ -116,14 +112,14 @@ loading_to_visible_child (GBinding     *binding,
 static void
 update_icon_cb (EphyPageRow *self)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (self->page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (self->page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
   GIcon *icon = G_ICON (ephy_web_view_get_icon (view));
   const char *uri, *favicon_name;
-  HdyTabView *tab_view;
+  AdwTabView *tab_view;
 
   if (icon) {
-    gtk_image_set_from_gicon (self->icon, icon, GTK_ICON_SIZE_MENU);
+    gtk_image_set_from_gicon (self->icon, icon);
 
     return;
   }
@@ -134,25 +130,25 @@ update_icon_cb (EphyPageRow *self)
   if (favicon_name) {
     g_autoptr (GIcon) fallback_icon = g_themed_icon_new (favicon_name);
 
-    gtk_image_set_from_gicon (self->icon, fallback_icon, GTK_ICON_SIZE_MENU);
+    gtk_image_set_from_gicon (self->icon, fallback_icon);
 
     return;
   }
 
   tab_view = ephy_tab_view_get_tab_view (self->tab_view);
 
-  gtk_image_set_from_gicon (self->icon, hdy_tab_view_get_default_icon (tab_view), GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_gicon (self->icon, adw_tab_view_get_default_icon (tab_view));
 }
 
 EphyPageRow *
 ephy_page_row_new (EphyTabView *tab_view,
-                   HdyTabPage  *page)
+                   AdwTabPage  *page)
 {
   EphyPageRow *self;
-  GtkWidget *embed = hdy_tab_page_get_child (page);
+  GtkWidget *embed = adw_tab_page_get_child (page);
   EphyWebView *view;
 
-  g_assert (HDY_IS_TAB_PAGE (page));
+  g_assert (ADW_IS_TAB_PAGE (page));
   g_assert (EPHY_IS_EMBED (embed));
 
   view = ephy_embed_get_web_view (EPHY_EMBED (embed));
@@ -214,7 +210,7 @@ ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
   }
 }
 
-HdyTabPage *
+AdwTabPage *
 ephy_page_row_get_page (EphyPageRow *self)
 {
   g_assert (EPHY_IS_PAGE_ROW (self));

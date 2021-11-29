@@ -60,7 +60,7 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
                          "title", _("Bookmark Properties"),
-                         "transient-for", GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
+                         "transient-for", GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row))),
                          "use-header-bar", TRUE,
                          "modal", TRUE,
                          NULL);
@@ -70,12 +70,12 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   grid = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
                                        EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
                                        dialog);
-  gtk_window_set_default (GTK_WINDOW (dialog),
-                          ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
+  gtk_window_set_default_widget (GTK_WINDOW (dialog),
+                                 ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
 
-  gtk_container_add (GTK_CONTAINER (content_area), grid);
+  gtk_box_append (GTK_BOX (content_area), grid);
 
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -100,7 +100,7 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
 
   if (favicon) {
     if (self->favicon_image != NULL)
-      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), G_ICON (favicon), GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), G_ICON (favicon));
   }
 }
 

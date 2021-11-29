@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-#include <libportal-gtk3/portal-gtk3.h>
+#include <libportal-gtk4/portal-gtk4.h>
 #include <glib/gi18n.h>
 #include <gio/gunixoutputstream.h>
 

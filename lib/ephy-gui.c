@@ -53,7 +53,6 @@ void
 ephy_gui_help (GtkWidget  *parent,
                const char *page)
 {
-  GError *error = NULL;
   char *url;
 
   if (page)
@@ -61,61 +60,7 @@ ephy_gui_help (GtkWidget  *parent,
   else
     url = g_strdup ("help:epiphany");
 
-  gtk_show_uri_on_window (GTK_WINDOW (parent), url, GDK_CURRENT_TIME, &error);
-
-  if (error != NULL) {
-    GtkWidget *dialog;
-
-    dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_ERROR,
-                                     GTK_BUTTONS_OK,
-                                     _("Could not display help: %s"),
-                                     error->message);
-    g_error_free (error);
-
-    g_signal_connect (dialog, "response",
-                      G_CALLBACK (gtk_widget_destroy), NULL);
-    gtk_widget_show (dialog);
-  }
+  gtk_show_uri (GTK_WINDOW (parent), url, GDK_CURRENT_TIME);
 
   g_free (url);
-}
-
-void
-ephy_gui_get_current_event (GdkEventType *otype,
-                            guint        *ostate,
-                            guint        *obutton,
-                            guint        *keyval)
-{
-  GdkEvent *event;
-  GdkEventType type = GDK_NOTHING;
-  guint state = 0, button = (guint) - 1;
-
-  event = gtk_get_current_event ();
-  if (event != NULL) {
-    type = event->type;
-
-    if (type == GDK_KEY_PRESS ||
-        type == GDK_KEY_RELEASE) {
-      state = event->key.state;
-      if (keyval)
-        *keyval = event->key.keyval;
-    } else if (type == GDK_BUTTON_PRESS ||
-               type == GDK_BUTTON_RELEASE ||
-               type == GDK_2BUTTON_PRESS ||
-               type == GDK_3BUTTON_PRESS) {
-      button = event->button.button;
-      state = event->button.state;
-    }
-
-    gdk_event_free (event);
-  }
-
-  if (otype)
-    *otype = type;
-  if (ostate)
-    *ostate = state & gtk_accelerator_get_default_mod_mask ();
-  if (obutton)
-    *obutton = button;
 }

@@ -44,8 +44,8 @@ bookmark_removed_cb (EphyAddBookmarkPopover *self,
                      EphyBookmark           *bookmark,
                      EphyBookmarksManager   *manager)
 {
-  GtkWidget *relative_to;
-  GtkWidget *window;
+  GtkWidget *parent;
+  GtkRoot *window;
   EphyEmbed *embed;
   EphyWebView *view;
   const char *address;
@@ -54,12 +54,12 @@ bookmark_removed_cb (EphyAddBookmarkPopover *self,
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  relative_to = gtk_popover_get_relative_to (GTK_POPOVER (self));
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
 
-  if (!relative_to)
+  if (!parent)
     return;
 
-  window = gtk_widget_get_toplevel (relative_to);
+  window = gtk_widget_get_root (parent);
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   view = ephy_embed_get_web_view (embed);
 
@@ -79,19 +79,19 @@ bookmark_removed_cb (EphyAddBookmarkPopover *self,
 static void
 popover_shown (EphyAddBookmarkPopover *self)
 {
-  GtkWidget *relative_to;
-  GtkWidget *window;
+  GtkWidget *parent;
+  GtkRoot *window;
   EphyBookmarksManager *manager;
   EphyBookmark *bookmark;
   EphyEmbed *embed;
   const char *address;
 
-  relative_to = gtk_popover_get_relative_to (GTK_POPOVER (self));
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
 
-  if (!relative_to)
+  if (!parent)
     return;
 
-  window = gtk_widget_get_toplevel (relative_to);
+  window = gtk_widget_get_root (parent);
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
@@ -122,7 +122,7 @@ popover_shown (EphyAddBookmarkPopover *self)
   self->grid = ephy_bookmark_properties_new (bookmark,
                                              EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER,
                                              GTK_WIDGET (self));
-  gtk_container_add (GTK_CONTAINER (self), self->grid);
+  gtk_popover_set_child (GTK_POPOVER (self), self->grid);
   gtk_popover_set_default_widget (GTK_POPOVER (self),
                                   ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (self->grid)));
 
@@ -144,7 +144,7 @@ popover_hidden (EphyAddBookmarkPopover *self)
 
   if (self->grid) {
     gtk_popover_set_default_widget (GTK_POPOVER (self), NULL);
-    gtk_container_remove (GTK_CONTAINER (self), self->grid);
+    gtk_popover_set_child (GTK_POPOVER (self), NULL);
     self->grid = NULL;
   }
 }

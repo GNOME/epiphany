@@ -163,6 +163,7 @@ ephy_embed_set_statusbar_label (EphyEmbed  *embed,
   if (label == NULL || label[0] == '\0') {
     gtk_widget_hide (embed->floating_bar);
     gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
+    gtk_widget_remove_css_class (embed->floating_bar, "end");
   } else
     gtk_widget_show (embed->floating_bar);
 }
@@ -245,7 +246,7 @@ ephy_embed_destroy_top_widgets (EphyEmbed *embed)
 
   for (iter = embed->destroy_on_transition_list; iter; iter = iter->next) {
     g_signal_handlers_disconnect_by_func (iter->data, remove_from_destroy_list_cb, embed);
-    gtk_widget_destroy (GTK_WIDGET (iter->data));
+    gtk_box_remove (embed->top_widgets_vbox, GTK_WIDGET (iter->data));
   }
 
   embed->destroy_on_transition_list = NULL;
@@ -310,7 +311,7 @@ load_changed_cb (WebKitWebView   *web_view,
   }
 }
 
-static void
+static gboolean
 ephy_embed_grab_focus (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -318,7 +319,9 @@ ephy_embed_grab_focus (GtkWidget *widget)
   child = GTK_WIDGET (ephy_embed_get_web_view (EPHY_EMBED (widget)));
 
   if (child)
-    gtk_widget_grab_focus (child);
+    return gtk_widget_grab_focus (child);
+
+  return FALSE;
 }
 
 
@@ -686,24 +689,35 @@ ephy_embed_mapped_cb (GtkWidget *widget,
   ephy_embed_maybe_load_delayed_request ((EphyEmbed *)widget);
 }
 
-static gboolean
-on_enter_notify_event (GtkWidget        *widget,
-                       GdkEventCrossing *event,
-                       gpointer          user_data)
+static void
+floating_bar_motion_cb (GtkEventControllerMotion *self,
+                        double                    x,
+                        double                    y,
+                        EphyEmbed                *embed)
 {
-  EphyEmbed *embed = EPHY_EMBED (user_data);
+  graphene_rect_t bounds;
 
-  if (event->window != gtk_widget_get_window (embed->floating_bar))
-    return GDK_EVENT_PROPAGATE;
+  if (!gtk_widget_get_visible (embed->floating_bar))
+    return;
 
-  if (gtk_widget_get_halign (embed->floating_bar) == GTK_ALIGN_START)
+  g_assert (gtk_widget_compute_bounds (embed->floating_bar,
+                                       GTK_WIDGET (embed),
+                                       &bounds));
+
+  if (!gtk_widget_contains (embed->floating_bar,
+                            x - bounds.origin.x,
+                            y - bounds.origin.y)) {
+    return;
+  }
+
+  if (gtk_widget_get_halign (embed->floating_bar) == GTK_ALIGN_START) {
     gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_END);
-  else
+    gtk_widget_add_css_class (embed->floating_bar, "end");
+    gtk_widget_queue_allocate (GTK_WIDGET (embed->overlay));
+  } else {
     gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
-
-  gtk_widget_queue_allocate (embed->overlay);
-
-  return GDK_EVENT_PROPAGATE;
+    gtk_widget_remove_css_class (embed->floating_bar, "end");
+  }
 }
 
 static void
@@ -712,6 +726,7 @@ ephy_embed_constructed (GObject *object)
   EphyEmbed *embed = (EphyEmbed *)object;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitWebInspector *inspector;
+  GtkEventController *controller;
 
   g_signal_connect (shell, "window-restored",
                     G_CALLBACK (ephy_embed_restored_window_cb), embed);
@@ -722,18 +737,16 @@ ephy_embed_constructed (GObject *object)
   /* Skeleton */
   embed->overlay = gtk_overlay_new ();
 
-  gtk_widget_add_events (embed->overlay,
-                         GDK_ENTER_NOTIFY_MASK |
-                         GDK_LEAVE_NOTIFY_MASK);
   gtk_widget_set_vexpand (embed->overlay, TRUE);
-  gtk_container_add (GTK_CONTAINER (embed->overlay), GTK_WIDGET (embed->web_view));
+  gtk_overlay_set_child (GTK_OVERLAY (embed->overlay), GTK_WIDGET (embed->web_view));
 
   /* Floating message popup for fullscreen mode. */
   embed->fullscreen_message_label = gtk_label_new (NULL);
   gtk_widget_set_name (embed->fullscreen_message_label, "fullscreen-popup");
   gtk_widget_set_halign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
-  gtk_widget_set_no_show_all (embed->fullscreen_message_label, TRUE);
+  gtk_widget_set_can_target (embed->fullscreen_message_label, FALSE);
+  gtk_widget_hide (embed->fullscreen_message_label);
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->fullscreen_message_label);
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
@@ -741,14 +754,13 @@ ephy_embed_constructed (GObject *object)
   embed->floating_bar = nautilus_floating_bar_new ();
   gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
-  gtk_widget_set_no_show_all (embed->floating_bar, TRUE);
-  g_signal_connect_object (embed->overlay, "enter-notify-event", G_CALLBACK (on_enter_notify_event), embed, 0);
+  gtk_widget_hide (embed->floating_bar);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
 
   if (embed->progress_bar_enabled) {
     embed->progress = gtk_progress_bar_new ();
-    gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress), "osd");
+    gtk_widget_add_css_class (embed->progress, "osd");
     gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
     gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
     gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
@@ -759,22 +771,14 @@ ephy_embed_constructed (GObject *object)
                     G_CALLBACK (ephy_embed_find_toolbar_close_cb),
                     embed);
 
-  gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (embed->find_toolbar),
-                      FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->find_toolbar));
 
   if (embed->progress_bar_enabled)
     embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
                                                           G_CALLBACK (progress_update), object);
 
-  gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (embed->top_widgets_vbox),
-                      FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (embed), embed->overlay, FALSE, TRUE, 0);
-
-  gtk_widget_show (GTK_WIDGET (embed->top_widgets_vbox));
-  gtk_widget_show (GTK_WIDGET (embed->web_view));
-  gtk_widget_show_all (embed->overlay);
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->top_widgets_vbox));
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->overlay));
 
   g_object_connect (embed->web_view,
                     "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
@@ -805,12 +809,14 @@ ephy_embed_constructed (GObject *object)
     gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_INFO);
     /* Translators: this means WebDriver control. */
     label = gtk_label_new (_("Web is being controlled by automation."));
-    gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))), label, FALSE, TRUE, 0);
-    gtk_widget_show (label);
+    gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
 
     ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
-    gtk_widget_show (info_bar);
   }
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (floating_bar_motion_cb), embed);
+  gtk_widget_add_controller (GTK_WIDGET (embed), controller);
 }
 
 static void
@@ -883,8 +889,7 @@ ephy_embed_add_top_widget (EphyEmbed                *embed,
     g_signal_connect (widget, "destroy", G_CALLBACK (remove_from_destroy_list_cb), embed);
   }
 
-  gtk_box_pack_end (embed->top_widgets_vbox,
-                    GTK_WIDGET (widget), FALSE, TRUE, 0);
+  gtk_box_prepend (embed->top_widgets_vbox, widget);
 }
 
 /**
@@ -910,8 +915,7 @@ ephy_embed_remove_top_widget (EphyEmbed *embed,
     embed->destroy_on_transition_list = list;
   }
 
-  gtk_container_remove (GTK_CONTAINER (embed->top_widgets_vbox),
-                        GTK_WIDGET (widget));
+  gtk_box_remove (embed->top_widgets_vbox, widget);
 }
 
 /**
@@ -1005,7 +1009,7 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
      * notification widget, removing it from the container will destroy the
      * singleton. To prevent this, add a reference to it before removing it
      * from the container. */
-    gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
+    gtk_overlay_remove_overlay (GTK_OVERLAY (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }
 

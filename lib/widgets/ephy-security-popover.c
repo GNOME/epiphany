@@ -208,7 +208,7 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
   }
 
   icon = g_themed_icon_new_with_default_fallbacks (ephy_security_level_to_icon_name (security_level));
-  gtk_image_set_from_gicon (GTK_IMAGE (popover->lock_image), icon, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_gicon (GTK_IMAGE (popover->lock_image), icon);
 
   g_object_unref (icon);
 }
@@ -220,18 +220,18 @@ certificate_button_clicked_cb (GtkButton *button,
   EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (user_data);
   GtkWidget *dialog;
 
-  dialog = ephy_certificate_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (popover))),
+  dialog = ephy_certificate_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (popover))),
                                         popover->address,
                                         popover->certificate,
                                         popover->tls_errors,
                                         popover->security_level);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (gtk_window_destroy),
                     NULL);
 
   gtk_popover_popdown (GTK_POPOVER (popover));
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -305,30 +305,14 @@ ephy_security_popover_set_property (GObject      *object,
 }
 
 static void
-ephy_security_popover_get_preferred_width (GtkWidget *widget,
-                                           gint      *minimum_width,
-                                           gint      *natural_width)
-{
-  GTK_WIDGET_CLASS (ephy_security_popover_parent_class)->get_preferred_width (widget,
-                                                                              minimum_width,
-                                                                              natural_width);
-
-  if (*natural_width > 360)
-    *natural_width = MAX (360, *minimum_width);
-}
-
-static void
 ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_security_popover_constructed;
   object_class->dispose = ephy_security_popover_dispose;
   object_class->finalize = ephy_security_popover_finalize;
   object_class->set_property = ephy_security_popover_set_property;
-
-  widget_class->get_preferred_width = ephy_security_popover_get_preferred_width;
 
   /**
    * EphySecurityPopover:address:
@@ -505,7 +489,7 @@ add_permission_combobox (EphySecurityPopover *popover,
   tmp = gtk_label_new (name);
   gtk_label_set_xalign (GTK_LABEL (tmp), 0.0);
   gtk_widget_set_hexpand (tmp, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), tmp, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), tmp);
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Allow"));
@@ -516,7 +500,7 @@ add_permission_combobox (EphySecurityPopover *popover,
     gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _(name));
   }
 
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (hbox), widget);
   g_signal_connect (widget, "changed", G_CALLBACK (callback), popover);
   gtk_size_group_add_widget (size_group, widget);
 
@@ -543,16 +527,18 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
   popover->lock_image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (box), popover->lock_image, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), popover->lock_image);
 
   popover->host_label = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (popover->host_label), TRUE);
-  gtk_label_set_line_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
+  gtk_label_set_wrap (GTK_LABEL (popover->host_label), TRUE);
+  gtk_label_set_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
+  gtk_label_set_max_width_chars (GTK_LABEL (popover->host_label), 0);
   gtk_label_set_xalign (GTK_LABEL (popover->host_label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), popover->host_label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), popover->host_label);
 
   popover->security_label = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (popover->security_label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (popover->security_label), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (popover->security_label), 0);
   gtk_label_set_xalign (GTK_LABEL (popover->security_label), 0.0);
 
   gtk_grid_attach (GTK_GRID (popover->grid), box, 0, 0, 2, 1);
@@ -577,13 +563,11 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->autoplay_combobox = add_permission_combobox (popover, _("Media autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
 
-  gtk_container_add (GTK_CONTAINER (popover), popover->grid);
-  gtk_widget_show_all (popover->grid);
+  gtk_popover_set_child (GTK_POPOVER (popover), popover->grid);
 }
 
 GtkWidget *
-ephy_security_popover_new (GtkWidget            *relative_to,
-                           const char           *address,
+ephy_security_popover_new (const char           *address,
                            GTlsCertificate      *certificate,
                            GTlsCertificateFlags  tls_errors,
                            EphySecurityLevel     security_level)
@@ -593,7 +577,6 @@ ephy_security_popover_new (GtkWidget            *relative_to,
   return GTK_WIDGET (g_object_new (EPHY_TYPE_SECURITY_POPOVER,
                                    "address", address,
                                    "certificate", certificate,
-                                   "relative-to", relative_to,
                                    "security-level", security_level,
                                    "tls-errors", tls_errors,
                                    NULL));

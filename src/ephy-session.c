@@ -256,7 +256,7 @@ ephy_session_undo_close_tab (EphySession *session)
       flags |= EPHY_NEW_TAB_FIRST;
     }
 
-    window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab_view)));
+    window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (tab_view)));
     new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
                                   window, embed,
                                   flags);
@@ -326,24 +326,24 @@ ephy_session_get_can_undo_tab_closed (EphySession *session)
 }
 
 static void
-tab_view_page_attached_cb (HdyTabView  *tab_view,
-                           HdyTabPage  *page,
+tab_view_page_attached_cb (AdwTabView  *tab_view,
+                           AdwTabPage  *page,
                            guint        position,
                            EphySession *session)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
 
   g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
                     G_CALLBACK (load_changed_cb), session);
 }
 
 static void
-tab_view_page_detached_cb (HdyTabView  *tab_view,
-                           HdyTabPage  *page,
+tab_view_page_detached_cb (AdwTabView  *tab_view,
+                           AdwTabPage  *page,
                            gint         position,
                            EphySession *session)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
   EphyTabView *ephy_tab_view = EPHY_TAB_VIEW (g_object_get_data (G_OBJECT (tab_view), "ephy-tab-view"));
 
   ephy_session_save (session);
@@ -356,8 +356,8 @@ tab_view_page_detached_cb (HdyTabView  *tab_view,
 }
 
 static void
-tab_view_page_reordered_cb (HdyTabView  *tab_view,
-                            HdyTabPage  *page,
+tab_view_page_reordered_cb (AdwTabView  *tab_view,
+                            AdwTabPage  *page,
                             guint        position,
                             EphySession *session)
 {
@@ -365,7 +365,7 @@ tab_view_page_reordered_cb (HdyTabView  *tab_view,
 }
 
 static void
-tab_view_notify_selected_page_cb (HdyTabView  *tab_view,
+tab_view_notify_selected_page_cb (AdwTabView  *tab_view,
                                   GParamSpec  *pspec,
                                   EphySession *session)
 {
@@ -392,7 +392,7 @@ window_added_cb (GtkApplication *application,
                  EphySession    *session)
 {
   EphyWindow *ephy_window;
-  HdyTabView *tab_view;
+  AdwTabView *tab_view;
 
   ephy_session_save (session);
 
@@ -1134,6 +1134,14 @@ session_parser_context_free (SessionParserContext *context)
 }
 
 static void
+window_destroyed (GtkWidget  *widget,
+                  GtkWidget **widget_pointer)
+{
+  if (widget_pointer)
+    *widget_pointer = NULL;
+}
+
+static void
 session_parse_window (SessionParserContext  *context,
                       const gchar          **names,
                       const gchar          **values)
@@ -1149,7 +1157,7 @@ session_parse_window (SessionParserContext  *context,
   }
 
   context->window = ephy_window_new ();
-  context->destroy_id = g_signal_connect (context->window, "destroy", G_CALLBACK (gtk_widget_destroyed), &context->window);
+  context->destroy_id = g_signal_connect (context->window, "destroy", G_CALLBACK (window_destroyed), &context->window);
 
   for (i = 0; names[i]; i++) {
     gulong int_value;
@@ -1195,7 +1203,7 @@ session_parse_embed (SessionParserContext  *context,
                      const gchar          **names,
                      const gchar          **values)
 {
-  HdyTabView *tab_view;
+  AdwTabView *tab_view;
   const char *url = NULL;
   const char *title = NULL;
   const char *history = NULL;
@@ -1262,8 +1270,8 @@ session_parse_embed (SessionParserContext  *context,
                                      context->window, NULL, flags,
                                      0);
 
-    hdy_tab_view_set_page_pinned (tab_view,
-                                  hdy_tab_view_get_page (tab_view, GTK_WIDGET (embed)),
+    adw_tab_view_set_page_pinned (tab_view,
+                                  adw_tab_view_get_page (tab_view, GTK_WIDGET (embed)),
                                   is_pin);
 
     web_view = ephy_embed_get_web_view (embed);
@@ -1794,7 +1802,7 @@ ephy_session_clear (EphySession *session)
   shell = ephy_shell_get_default ();
   windows = g_list_copy (gtk_application_get_windows (GTK_APPLICATION (shell)));
   for (p = windows; p; p = p->next)
-    gtk_widget_destroy (GTK_WIDGET (p->data));
+    gtk_window_destroy (GTK_WINDOW (p->data));
   g_list_free (windows);
   g_queue_foreach (session->closed_tabs,
                    (GFunc)closed_tab_free, NULL);

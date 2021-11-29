@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_WEB_EXTENSION_DIALOG (ephy_web_extension_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, EPHY, WEB_EXTENSION_DIALOG, HdyWindow)
+G_DECLARE_FINAL_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, EPHY, WEB_EXTENSION_DIALOG, GtkWindow)
 
 GtkWidget *ephy_web_extension_dialog_new (void);
 

@@ -1,0 +1,217 @@
+/* floating status bar */
+.floating-bar {
+  background-color: @view_bg_color;
+  color: @view_fg_color;
+  box-shadow: 0 0 0 1px @borders;
+}
+
+.floating-bar:dir(ltr),
+.floating-bar.end:dir(rtl) {
+  border-radius: 0 6px 0 0;
+}
+
+.floating-bar:dir(rtl),
+.floating-bar.end:dir(ltr) {
+  border-radius: 6px 0 0 0;
+}
+
+#title-box-container {
+  transition: background 200ms ease-out;
+}
+
+/* incognito mode */
+.incognito-mode headerbar,
+.incognito-mode searchbar > revealer > box,
+.incognito-mode tabbar > revealer > box,
+.incognito-mode actionbar > revealer > box {
+  background-color: #d7e3f0;
+}
+
+.incognito-mode headerbar:backdrop,
+.incognito-mode searchbar:backdrop > revealer > box,
+.incognito-mode tabbar:backdrop > revealer > box,
+.incognito-mode actionbar:backdrop > revealer > box {
+  background-color: #eaf0f7;
+}
+
+.incognito-mode #title-box-container {
+  background: cross-fade(10% -gtk-icontheme('user-not-tracked-symbolic'), image(transparent)) 16px 0 / 64px 64px no-repeat;
+}
+
+/* automation mode */
+.automation-mode headerbar,
+.automation-mode searchbar > revealer > box,
+.automation-mode tabbar > revealer > box,
+.automation-mode actionbar > revealer > box {
+  background-color: #ffa348;
+}
+
+.automation-mode headerbar:backdrop,
+.automation-mode searchbar:backdrop > revealer > box,
+.automation-mode tabbar:backdrop > revealer > box,
+.automation-mode actionbar:backdrop > revealer > box {
+  background-color: #ffbe6f;
+}
+
+/* Fix awkward padding on the tabs dropdown arrow */
+tabbar .end-action {
+  padding: 0;
+}
+
+tabbar .end-action > revealer > menubutton {
+  margin: 5px;
+}
+
+tabbar .end-action > revealer > menubutton:dir(ltr) {
+  margin-left: 0;
+}
+
+tabbar .end-action > revealer > menubutton:dir(rtl) {
+  margin-right: 0;
+}
+
+/* location entry */
+.location-entry.narrow {
+  font-size: small;
+}
+
+.entry-icon,
+.entry-icon > button {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  background: none;
+}
+
+.entry-icon {
+  /* FIXME hc .85 */
+  opacity: .7;
+}
+
+.entry-icon:hover {
+  opacity: 1;
+}
+
+.entry-icon:active {
+  /* FIXME hc .9 */
+  opacity: .8;
+}
+
+.entry-icon.start:dir(ltr),
+.entry-icon.end:dir(rtl) {
+  margin-right: 6px;
+}
+
+.entry-icon.start:dir(rtl),
+.entry-icon.end:dir(ltr) {
+  margin-left: 6px;
+}
+
+.entry-icon:checked {
+  color: @accent_color;
+}
+
+.entry-icon.starred {
+  color: @yellow_5;
+}
+
+popover.suggestions {
+  padding-top: 6px;
+}
+
+popover.suggestions listview > row {
+  background: none;
+}
+
+popover.suggestions listview > row:selected {
+  background-color: alpha(currentColor, .07);
+}
+
+popover.suggestions listview > row:selected:active {
+  background-color: alpha(currentColor, .16);
+}
+
+/* bookmarks */
+.bookmarks-row button {
+  border-radius: 100%;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  margin: 2px;
+  opacity: 0.25;
+}
+
+.bookmarks-row:hover button {
+  opacity: 1;
+}
+
+.bookmark-tag-widget {
+  padding-left: 8px;
+  background-color: alpha(currentColor, .1);
+  border-radius: 6px;
+}
+
+.bookmark-tag-widget label {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.bookmark-tag-widget-selected {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+.bookmark-tag-widget button {
+  border-radius: 100%;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  margin: 2px;
+}
+
+
+/* "Press $KEY to exit fullscreen" overlay text */
+#fullscreen-popup {
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+}
+
+fullscreenbox > flap > dimming,
+fullscreenbox > flap > outline,
+fullscreenbox > flap > border {
+  min-height: 0;
+  min-width: 0;
+  background: none;
+}
+
+fullscreenbox > flap > shadow {
+  min-height: 9px;
+  min-width: 9px;
+  background: linear-gradient(to bottom, alpha(black, .1), alpha(black, .0));
+}
+
+.pages-list row {
+  min-height: 30px;
+  padding: 3px;
+}
+
+.pages-list .close-button {
+  border-radius: 100%;
+  padding: 0;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+#pages-view .close-button {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+dnd > .boxed-list {
+  margin: 6px;
+  background-color: @window_bg_color;
+  background-image: image(@card_bg_color);
+}

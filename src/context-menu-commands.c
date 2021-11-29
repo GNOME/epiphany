@@ -107,8 +107,9 @@ static void
 context_cmd_copy_to_clipboard (EphyWindow *window,
                                const char *text)
 {
-  gtk_clipboard_set_text (gtk_clipboard_get_default (gdk_display_get_default ()),
-                          text, -1);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window));
+
+  gdk_clipboard_set_text (clipboard, text);
 }
 
 void
@@ -174,7 +175,7 @@ filename_confirmed_cb (GtkFileChooser      *dialog,
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
 
-    current_folder = gtk_file_chooser_get_current_folder_file (dialog);
+    current_folder = gtk_file_chooser_get_current_folder (dialog);
     current_folder_path = g_file_get_path (current_folder);
     g_settings_set_string (EPHY_SETTINGS_WEB,
                            EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
@@ -208,7 +209,6 @@ filename_suggested_cb (EphyDownload        *download,
                                      GTK_WIDGET (data->window),
                                      GTK_FILE_CHOOSER_ACTION_SAVE,
                                      EPHY_FILE_FILTER_NONE);
-  gtk_file_chooser_set_do_overwrite_confirmation (dialog, TRUE);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
@@ -217,7 +217,7 @@ filename_suggested_cb (EphyDownload        *download,
     g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
 
     if (error)
       g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);

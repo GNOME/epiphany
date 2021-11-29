@@ -22,13 +22,13 @@
 
 #include "ephy-embed.h"
 
-#include <handy.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_TAB_VIEW (ephy_tab_view_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyTabView, ephy_tab_view, EPHY, TAB_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (EphyTabView, ephy_tab_view, EPHY, TAB_VIEW, AdwBin)
 
 typedef void (*EphyTabViewCallback) (GtkWidget *widget,
                                      gpointer   data);
@@ -66,7 +66,7 @@ gboolean     ephy_tab_view_select_page        (EphyTabView *self,
 
 GtkWidget   *ephy_tab_view_get_selected_page  (EphyTabView *self);
 
-HdyTabView  *ephy_tab_view_get_tab_view       (EphyTabView *self);
+AdwTabView  *ephy_tab_view_get_tab_view       (EphyTabView *self);
 
 GList        *ephy_tab_view_get_pages         (EphyTabView *self);
 
@@ -82,6 +82,6 @@ gint          ephy_tab_view_add_tab           (EphyTabView *self,
 GtkWidget    *ephy_tab_view_get_current_page  (EphyTabView *self);
 
 void          ephy_tab_view_set_tab_bar       (EphyTabView *self,
-                                               HdyTabBar   *tab_bar);
+                                               AdwTabBar   *tab_bar);
 
 G_END_DECLS

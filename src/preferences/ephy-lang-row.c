@@ -22,24 +22,22 @@
 
 enum {
   DELETE_BUTTON_CLICKED,
+  MOVE_ROW,
 
   LAST_SIGNAL
 };
 
 struct _EphyLangRow {
-  GtkListBoxRow parent_instance;
+  AdwActionRow parent_instance;
 
-  GtkWidget *dnd_top_revealer;
-  GtkWidget *action_row;
-  GtkWidget *drag_event_box;
+  GtkWidget *drag_handle;
   GtkWidget *delete_button;
-  GtkWidget *dnd_bottom_revealer;
   char *code;
 };
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyLangRow, ephy_lang_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_TYPE (EphyLangRow, ephy_lang_row, ADW_TYPE_ACTION_ROW)
 
 static void
 ephy_lang_row_dispose (GObject *object)
@@ -49,6 +47,61 @@ ephy_lang_row_dispose (GObject *object)
   g_clear_pointer (&self->code, g_free);
 
   G_OBJECT_CLASS (ephy_lang_row_parent_class)->dispose (object);
+}
+
+static GdkContentProvider *
+drag_prepare_cb (EphyLangRow *self,
+                 double       x,
+                 double       y)
+{
+  return gdk_content_provider_new_typed (EPHY_TYPE_LANG_ROW, self);
+}
+
+static void
+drag_begin_cb (EphyLangRow *self,
+               GdkDrag     *drag)
+{
+  GtkAllocation alloc;
+  GtkWidget *drag_list;
+  GtkWidget *drag_row;
+  GtkWidget *drag_icon;
+  const char *title;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  drag_list = gtk_list_box_new ();
+  gtk_widget_set_size_request (drag_list, alloc.width, alloc.height);
+  gtk_widget_add_css_class (drag_list, "boxed-list");
+
+  title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (self));
+
+  drag_row = ephy_lang_row_new ();
+  ephy_lang_row_set_code (EPHY_LANG_ROW (drag_row), self->code);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (drag_row), title);
+
+  gtk_list_box_append (GTK_LIST_BOX (drag_list), drag_row);
+
+  drag_icon = gtk_drag_icon_get_for_drag (drag);
+  gtk_widget_add_css_class (drag_icon, "boxed-list");
+  gtk_drag_icon_set_child (GTK_DRAG_ICON (drag_icon), drag_list);
+}
+
+static gboolean
+drop_cb (EphyLangRow  *self,
+         const GValue *value,
+         double        x,
+         double        y)
+{
+  EphyLangRow *source;
+
+  if (!G_VALUE_HOLDS (value, EPHY_TYPE_LANG_ROW))
+    return FALSE;
+
+  source = g_value_get_object (value);
+
+  g_signal_emit (source, signals[MOVE_ROW], 0, self);
+
+  return TRUE;
 }
 
 static void
@@ -76,32 +129,39 @@ ephy_lang_row_class_init (EphyLangRowClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
-  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, dnd_top_revealer);
-  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, action_row);
-  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, drag_event_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, delete_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, dnd_bottom_revealer);
+  signals[MOVE_ROW] =
+    g_signal_new ("move-row",
+                  EPHY_TYPE_LANG_ROW,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1, EPHY_TYPE_LANG_ROW);
 
+  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, drag_handle);
+  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, delete_button);
+
+  gtk_widget_class_bind_template_callback (widget_class, drag_prepare_cb);
+  gtk_widget_class_bind_template_callback (widget_class, drag_begin_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_button_clicked);
 }
 
 static void
 ephy_lang_row_init (EphyLangRow *self)
 {
+  GtkDropTarget *target;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  target = gtk_drop_target_new (EPHY_TYPE_LANG_ROW, GDK_ACTION_MOVE);
+  gtk_drop_target_set_preload (target, TRUE);
+  g_signal_connect_swapped (target, "drop", G_CALLBACK (drop_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
 }
 
 GtkWidget *
 ephy_lang_row_new ()
 {
   return g_object_new (EPHY_TYPE_LANG_ROW, NULL);
-}
-
-void
-ephy_lang_row_set_title (EphyLangRow *self,
-                         const char  *title)
-{
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (self->action_row), title);
 }
 
 void
@@ -120,27 +180,9 @@ ephy_lang_row_get_code (EphyLangRow *self)
   return self->code;
 }
 
-GtkWidget *
-ephy_lang_row_get_drag_event_box (EphyLangRow *self)
-{
-  return self->drag_event_box;
-}
-
 void
 ephy_lang_row_set_delete_sensitive (EphyLangRow *self,
                                     gboolean     sensitive)
 {
   gtk_widget_set_sensitive (self->delete_button, sensitive);
-}
-
-GtkWidget *
-ephy_lang_row_get_dnd_top_revealer (EphyLangRow *self)
-{
-  return self->dnd_top_revealer;
-}
-
-GtkWidget *
-ephy_lang_row_get_dnd_bottom_revealer (EphyLangRow *self)
-{
-  return self->dnd_bottom_revealer;
 }

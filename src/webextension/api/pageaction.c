@@ -53,7 +53,7 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
   JsonObject *details = ephy_json_array_get_object (args, 0);
   gint64 tab_id;
   const char *path;
-  GtkWidget *action;
+  GtkWidget *action, *child;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
 
   if (!details) {
@@ -79,7 +79,10 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
   if (path)
     pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path, -1);
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_bin_get_child (GTK_BIN (action))), pixbuf);
+  /* action can be a GtkButton or GtkMenuButton. They both have a "child" property */
+  g_object_get (action, "child", &child, NULL);
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (child), pixbuf);
   g_task_return_pointer (task, NULL, NULL);
 }
 
@@ -120,7 +123,7 @@ pageaction_handler_gettitle (EphyWebExtensionSender *sender,
 {
   gint64 tab_id = ephy_json_array_get_int (args, 0);
   GtkWidget *action;
-  g_autofree char *title = NULL;
+  const char *title = NULL;
 
   action = get_action_for_tab_id (sender->extension, tab_id);
   if (!action) {

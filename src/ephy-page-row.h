@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <handy.h>
+#include <adwaita.h>
 #include "ephy-adaptive-mode.h"
 #include "ephy-tab-view.h"
 
@@ -32,11 +32,11 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyPageRow, ephy_page_row, EPHY, PAGE_ROW, GtkListBoxRow)
 
 EphyPageRow *ephy_page_row_new (EphyTabView *view,
-                                HdyTabPage  *page);
+                                AdwTabPage  *page);
 
 void ephy_page_row_set_adaptive_mode (EphyPageRow      *self,
                                       EphyAdaptiveMode  adaptive_mode);
 
-HdyTabPage *ephy_page_row_get_page (EphyPageRow *self);
+AdwTabPage *ephy_page_row_get_page (EphyPageRow *self);
 
 G_END_DECLS

@@ -42,7 +42,7 @@ typedef enum {
 struct _EphyMouseGestureController {
   GObject parent_instance;
 
-  GtkEventController *controller;
+  GtkGesture *gesture;
   EphyWindow *window;
   WebKitWebView *web_view;
 
@@ -65,35 +65,69 @@ static GParamSpec *obj_properties[LAST_PROP];
 G_DEFINE_TYPE (EphyMouseGestureController, ephy_mouse_gesture_controller, G_TYPE_OBJECT)
 
 static void
-ephy_mouse_gesture_controller_motion_cb (GtkEventControllerMotion *controller,
-                                         gdouble                   x,
-                                         gdouble                   y,
-                                         gpointer                  user_data)
+ephy_mouse_gesture_controller_reset (EphyMouseGestureController *self)
 {
-  EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (user_data);
+  self->direction = MOUSE_DIRECTION_UNKNOWN;
+  self->sequence_pos = 0;
+  self->last_x = 0;
+  self->last_y = 0;
+  self->gesture_active = FALSE;
+}
+
+static void
+drag_begin_cb (GtkGestureDrag             *gesture,
+               double                      start_x,
+               double                      start_y,
+               EphyMouseGestureController *self)
+{
+  GtkWidget *picked_widget;
+
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES)) {
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  picked_widget = gtk_widget_pick (GTK_WIDGET (self->window),
+                                   start_x,
+                                   start_y,
+                                   GTK_PICK_DEFAULT);
+
+  if (picked_widget != GTK_WIDGET (self->web_view)) {
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+}
+
+static void
+drag_update_cb (GtkGestureDrag             *gesture,
+                double                      offset_x,
+                double                      offset_y,
+                EphyMouseGestureController *self)
+{
   MouseDirection direction;
-  gdouble offset_x, offset_y;
+  double delta_x = offset_x - self->last_x;
+  double delta_y = offset_y - self->last_y;
+
+  self->last_x = offset_x;
+  self->last_y = offset_y;
+
+  if (!self->gesture_active &&
+      gtk_drag_check_threshold (GTK_WIDGET (self->window),
+                                0, 0, offset_x, offset_y)) {
+    self->gesture_active = TRUE;
+  }
 
   if (!self->gesture_active || self->sequence_pos == NUM_SEQUENCES)
     return;
 
-  if (isnan (self->last_x) || isnan (self->last_y)) {
-    self->last_x = x;
-    self->last_y = y;
-    return;
-  }
-
-  offset_x = x - self->last_x;
-  offset_y = y - self->last_y;
-
   /* Try to guess direction */
-  if (fabs (offset_x) > fabs (offset_y) * 2) {
-    if (offset_x > 0)
+  if (fabs (delta_x) > fabs (delta_y) * 2) {
+    if (delta_x > 0)
       direction = MOUSE_DIRECTION_RIGHT;
     else
       direction = MOUSE_DIRECTION_LEFT;
-  } else if (fabs (offset_y) > fabs (offset_x) * 2) {
-    if (offset_y > 0)
+  } else if (fabs (delta_y) > fabs (delta_x) * 2) {
+    if (delta_y > 0)
       direction = MOUSE_DIRECTION_DOWN;
     else
       direction = MOUSE_DIRECTION_UP;
@@ -101,15 +135,70 @@ ephy_mouse_gesture_controller_motion_cb (GtkEventControllerMotion *controller,
     return;
   }
 
-  self->last_x = x;
-  self->last_y = y;
-
   if (self->direction == direction)
     return;
 
   self->sequence[self->sequence_pos++] = direction;
 
   self->direction = direction;
+}
+
+static void
+drag_end_cb (GtkGestureDrag             *gesture,
+             double                      offset_x,
+             double                      offset_y,
+             EphyMouseGestureController *self)
+{
+  GActionGroup *action_group_toolbar = ephy_window_get_action_group (self->window, "toolbar");
+  GActionGroup *action_group_win = ephy_window_get_action_group (self->window, "win");
+  GActionGroup *action_group_tab = ephy_window_get_action_group (self->window, "tab");
+  GAction *action;
+
+  if (!self->gesture_active)
+    return;
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+  switch (self->sequence_pos) {
+    case 1:
+      if (self->sequence[0] == MOUSE_DIRECTION_LEFT) {
+        /* Nav back */
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "navigation-back");
+        g_action_activate (action, NULL);
+      } else if (self->sequence[0] == MOUSE_DIRECTION_RIGHT) {
+        /* Nav forward */
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "navigation-forward");
+        g_action_activate (action, NULL);
+      } else if (self->sequence[0] == MOUSE_DIRECTION_DOWN) {
+        /* New tab */
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_win), "new-tab");
+        g_action_activate (action, NULL);
+      }
+      break;
+    case 2:
+      if (self->sequence[0] == MOUSE_DIRECTION_DOWN && self->sequence[1] == MOUSE_DIRECTION_RIGHT) {
+        /* Close tab */
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_tab), "close");
+        g_action_activate (action, NULL);
+      } else if (self->sequence[0] == MOUSE_DIRECTION_UP && self->sequence[1] == MOUSE_DIRECTION_DOWN) {
+        /* Reload tab */
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "reload");
+        g_action_activate (action, NULL);
+      }
+      break;
+    default:
+      break;
+  }
+
+  ephy_mouse_gesture_controller_reset (self);
+}
+
+static void
+cancel_cb (GtkGesture                 *gesture,
+           GdkEventSequence           *sequence,
+           EphyMouseGestureController *self)
+{
+  ephy_mouse_gesture_controller_reset (self);
 }
 
 static void
@@ -149,109 +238,8 @@ ephy_mouse_gesture_controller_get_property (GObject    *object,
 }
 
 static void
-ephy_mouse_gesture_controller_reset (EphyMouseGestureController *self)
-{
-  self->direction = MOUSE_DIRECTION_UNKNOWN;
-  self->sequence_pos = 0;
-  self->last_x = NAN;
-  self->last_y = NAN;
-  self->gesture_active = FALSE;
-}
-
-static gboolean
-ephy_mouse_gesture_controller_button_press_cb (GtkWidget *widget,
-                                               GdkEvent  *event,
-                                               gpointer   user_data)
-{
-  EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (user_data);
-  GdkEventButton *button_event = (GdkEventButton *)event;
-
-  if (button_event->button == GDK_BUTTON_MIDDLE)
-    self->gesture_active = TRUE;
-  else
-    self->gesture_active = FALSE;
-
-  return FALSE;
-}
-
-static void
-handle_gesture (gpointer user_data)
-{
-  EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (user_data);
-  GActionGroup *action_group_toolbar = gtk_widget_get_action_group (GTK_WIDGET (self->window), "toolbar");
-  GActionGroup *action_group_win = gtk_widget_get_action_group (GTK_WIDGET (self->window), "win");
-  GActionGroup *action_group_tab = gtk_widget_get_action_group (GTK_WIDGET (self->window), "tab");
-  GAction *action;
-
-  switch (self->sequence_pos) {
-    case 1:
-      if (self->sequence[0] == MOUSE_DIRECTION_LEFT) {
-        /* Nav back */
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "navigation-back");
-        g_action_activate (action, NULL);
-      } else if (self->sequence[0] == MOUSE_DIRECTION_RIGHT) {
-        /* Nav forward */
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "navigation-forward");
-        g_action_activate (action, NULL);
-      } else if (self->sequence[0] == MOUSE_DIRECTION_DOWN) {
-        /* New tab */
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_win), "new-tab");
-        g_action_activate (action, NULL);
-      }
-      break;
-    case 2:
-      if (self->sequence[0] == MOUSE_DIRECTION_DOWN && self->sequence[1] == MOUSE_DIRECTION_RIGHT) {
-        /* Close tab */
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_tab), "close");
-        g_action_activate (action, NULL);
-      } else if (self->sequence[0] == MOUSE_DIRECTION_UP && self->sequence[1] == MOUSE_DIRECTION_DOWN) {
-        /* Reload tab */
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group_toolbar), "reload");
-        g_action_activate (action, NULL);
-      }
-      break;
-    default:
-      break;
-  }
-
-  ephy_mouse_gesture_controller_reset (self);
-}
-
-static gboolean
-ephy_mouse_gesture_controller_button_release_cb (GtkWidget *widget,
-                                                 GdkEvent  *event,
-                                                 gpointer   user_data)
-{
-  EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (user_data);
-  GdkEventButton *button_event = (GdkEventButton *)event;
-
-  if (button_event->button == GDK_BUTTON_MIDDLE) {
-    if (self->gesture_active && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES))
-      handle_gesture (user_data);
-
-    self->gesture_active = FALSE;
-  }
-
-  return FALSE;
-}
-
-static void
 ephy_mouse_gesture_controller_init (EphyMouseGestureController *self)
 {
-}
-
-void
-ephy_mouse_gesture_controller_unset_web_view (EphyMouseGestureController *self)
-{
-  if (self->web_view) {
-    g_signal_handlers_disconnect_by_func (self->web_view,
-                                          G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb),
-                                          self);
-    g_signal_handlers_disconnect_by_func (self->web_view,
-                                          G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb),
-                                          self);
-    g_clear_object (&self->web_view);
-  }
 }
 
 static void
@@ -259,7 +247,12 @@ ephy_mouse_gesture_controller_dispose (GObject *object)
 {
   EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (object);
 
-  g_clear_object (&self->controller);
+  if (self->gesture) {
+    gtk_widget_remove_controller (GTK_WIDGET (self->window),
+                                  GTK_EVENT_CONTROLLER (self->gesture));
+    self->gesture = NULL;
+  }
+
   ephy_mouse_gesture_controller_unset_web_view (self);
 
   G_OBJECT_CLASS (ephy_mouse_gesture_controller_parent_class)->dispose (object);
@@ -272,8 +265,24 @@ ephy_mouse_gesture_controller_constructed (GObject *object)
 
   ephy_mouse_gesture_controller_reset (self);
 
-  self->controller = gtk_event_controller_motion_new (GTK_WIDGET (self->window));
-  g_signal_connect (self->controller, "motion", G_CALLBACK (ephy_mouse_gesture_controller_motion_cb), self);
+  self->gesture = gtk_gesture_drag_new ();
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (self->gesture),
+                                              GTK_PHASE_CAPTURE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture),
+                                 GDK_BUTTON_MIDDLE);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->gesture), TRUE);
+
+  g_signal_connect (self->gesture, "drag-begin",
+                    G_CALLBACK (drag_begin_cb), self);
+  g_signal_connect (self->gesture, "drag-update",
+                    G_CALLBACK (drag_update_cb), self);
+  g_signal_connect (self->gesture, "drag-end",
+                    G_CALLBACK (drag_end_cb), self);
+  g_signal_connect (self->gesture, "cancel",
+                    G_CALLBACK (cancel_cb), self);
+
+  gtk_widget_add_controller (GTK_WIDGET (self->window),
+                             GTK_EVENT_CONTROLLER (self->gesture));
 }
 
 static void
@@ -312,8 +321,11 @@ ephy_mouse_gesture_controller_set_web_view (EphyMouseGestureController *self,
 {
   ephy_mouse_gesture_controller_unset_web_view (self);
 
-  g_signal_connect_object (web_view, "button-press-event", G_CALLBACK (ephy_mouse_gesture_controller_button_press_cb), self, 0);
-  g_signal_connect_object (web_view, "button-release-event", G_CALLBACK (ephy_mouse_gesture_controller_button_release_cb), self, 0);
-
   self->web_view = g_object_ref (web_view);
+}
+
+void
+ephy_mouse_gesture_controller_unset_web_view (EphyMouseGestureController *self)
+{
+  g_clear_object (&self->web_view);
 }

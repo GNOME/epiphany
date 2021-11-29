@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyPagesPopover, ephy_pages_popover, EPHY, PAGES_POPOVER, GtkPopover)
 
-EphyPagesPopover *ephy_pages_popover_new (GtkWidget *relative_to);
+EphyPagesPopover *ephy_pages_popover_new (void);
 
 EphyTabView *ephy_pages_popover_get_tab_view (EphyPagesPopover *self);
 void         ephy_pages_popover_set_tab_view (EphyPagesPopover *self,

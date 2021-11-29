@@ -29,7 +29,7 @@
 #include <fcntl.h>
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
-#include <libportal-gtk3/portal-gtk3.h>
+#include <libportal-gtk4/portal-gtk4.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>

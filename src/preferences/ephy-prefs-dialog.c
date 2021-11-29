@@ -33,47 +33,33 @@
 #include "prefs-general-page.h"
 
 struct _EphyPrefsDialog {
-  HdyPreferencesWindow parent_instance;
+  AdwPreferencesWindow parent_instance;
 
   PrefsGeneralPage *general_page;
 
   GtkWidget *active_data_view;
 };
 
-G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, HDY_TYPE_PREFERENCES_WINDOW)
+G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_WINDOW)
 
 static gboolean
-on_key_press_event (EphyPrefsDialog *prefs_dialog,
-                    GdkEvent        *event,
-                    gpointer         user_data)
+on_close_request (EphyPrefsDialog *prefs_dialog)
 {
-  EphyDataView *active_data_view = EPHY_DATA_VIEW (prefs_dialog->active_data_view);
-
-  /* If the user is currently viewing one the data views,
-   * then we want to redirect any key events there */
-  if (active_data_view)
-    return ephy_data_view_handle_event (active_data_view, event);
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-on_delete_event (EphyPrefsDialog *prefs_dialog)
-{
-  prefs_general_page_on_pd_delete_event (prefs_dialog->general_page);
-  gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
+  prefs_general_page_on_pd_close_request (prefs_dialog->general_page);
 
   /* To avoid any unnecessary IO when typing changes in the search engine
    * list row's entries, only save when closing the prefs dialog.
    */
   ephy_search_engine_manager_save_to_settings (ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ()));
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
 on_any_data_view_back_button_clicked (GtkWidget       *data_view,
                                       EphyPrefsDialog *prefs_dialog)
 {
-  hdy_preferences_window_close_subpage (HDY_PREFERENCES_WINDOW (prefs_dialog));
+  adw_preferences_window_close_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog));
 
   prefs_dialog->active_data_view = NULL;
 }
@@ -86,7 +72,7 @@ present_data_view (EphyPrefsDialog *prefs_dialog,
                            G_CALLBACK (on_any_data_view_back_button_clicked),
                            prefs_dialog, 0);
 
-  hdy_preferences_window_present_subpage (HDY_PREFERENCES_WINDOW (prefs_dialog),
+  adw_preferences_window_present_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog),
                                           presented_view);
 
   prefs_dialog->active_data_view = presented_view;
@@ -96,9 +82,7 @@ static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
 {
-  GtkWidget *view = g_object_new (EPHY_TYPE_PASSWORDS_VIEW,
-                                  "visible", TRUE,
-                                  NULL);
+  GtkWidget *view = g_object_new (EPHY_TYPE_PASSWORDS_VIEW, NULL);
 
   present_data_view (prefs_dialog, view);
 }
@@ -107,9 +91,7 @@ static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
-  GtkWidget *view = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW,
-                                  "visible", TRUE,
-                                  NULL);
+  GtkWidget *view = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
 
   present_data_view (prefs_dialog, view);
 }
@@ -125,8 +107,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, general_page);
 
   /* Template file callbacks */
-  gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
-  gtk_widget_class_bind_template_callback (widget_class, on_delete_event);
+  gtk_widget_class_bind_template_callback (widget_class, on_close_request);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }

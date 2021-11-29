@@ -135,7 +135,7 @@ ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *extension,
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   add_web_view_to_json (extension,
                         builder,
-                        EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
+                        EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view))),
                         web_view);
   return json_builder_get_root (builder);
 }

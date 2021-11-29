@@ -69,7 +69,7 @@ char       *       ephy_sanitize_filename                   (char               
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
 gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
-                                                             GdkScreen             *screen);
+                                                             GdkDisplay            *display);
 gboolean           ephy_file_browse_to                      (GFile                 *file);
 void               ephy_copy_directory                      (const char            *source,
                                                              const char            *target);

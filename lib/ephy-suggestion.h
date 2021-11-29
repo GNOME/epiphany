@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include "dzl-suggestion.h"
 
 G_BEGIN_DECLS
 

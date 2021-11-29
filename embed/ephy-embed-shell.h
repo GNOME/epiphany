@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <adwaita.h>
 #include <webkit2/webkit2.h>
 
 #include "ephy-downloads-manager.h"
@@ -38,7 +38,7 @@ typedef struct _EphyFiltersManager EphyFiltersManager;
 
 #define EPHY_TYPE_EMBED_SHELL (ephy_embed_shell_get_type ())
 
-G_DECLARE_DERIVABLE_TYPE (EphyEmbedShell, ephy_embed_shell, EPHY, EMBED_SHELL, DzlApplication)
+G_DECLARE_DERIVABLE_TYPE (EphyEmbedShell, ephy_embed_shell, EPHY, EMBED_SHELL, AdwApplication)
 
 typedef enum
 {
@@ -54,7 +54,7 @@ typedef enum
 
 struct _EphyEmbedShellClass
 {
-  DzlApplicationClass parent_class;
+  AdwApplicationClass parent_class;
 
   void    (* restored_window)  (EphyEmbedShell *shell);
 };

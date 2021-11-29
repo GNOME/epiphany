@@ -73,7 +73,7 @@ libephymain_deps = [
   ephywidgets_dep,
   gvdb_dep,
   libarchive_dep,
-  libhandy_dep,
+  libadwaita_dep,
   portal_dep
 ]
 

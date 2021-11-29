@@ -647,7 +647,7 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
     data->result = FALSE;
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_main_loop_quit (data->nested_loop);
 }
 
@@ -691,9 +691,9 @@ filename_suggested_button_cb (GtkButton             *button,
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
 
-  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (chooser),
-                                            data->directory,
-                                            NULL);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser),
+                                       data->directory,
+                                       NULL);
 
   g_signal_connect (chooser, "response",
                     G_CALLBACK (filename_suggested_file_chooser_cb),
@@ -744,7 +744,7 @@ run_download_confirmation_dialog (EphyDownload *download,
   response = webkit_download_get_response (webkit_download);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (message_area), box, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (message_area), box);
 
   /* Type */
   content_length = g_format_size (webkit_uri_response_get_content_length (response));
@@ -752,36 +752,34 @@ run_download_confirmation_dialog (EphyDownload *download,
   type_text = g_strdup_printf (_("Type: %s (%s)"), g_content_type_get_description (content_type), content_length);
   type_label = gtk_label_new (type_text);
   gtk_widget_set_margin_top (type_label, 12);
-  gtk_box_pack_start (GTK_BOX (box), type_label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), type_label);
 
   /* From */
   from_text = g_strdup_printf (_("From: %s"), ephy_string_get_host_name (webkit_uri_response_get_uri (response)));
   from_label = gtk_label_new (from_text);
-  gtk_box_pack_start (GTK_BOX (box), from_label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), from_label);
 
   /* Question */
   question_label = gtk_label_new (_("Where do you want to save the file?"));
   gtk_widget_set_margin_top (question_label, 12);
-  gtk_box_pack_start (GTK_BOX (box), question_label, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), question_label);
 
   /* File Chooser Button */
   button = gtk_button_new ();
-  gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (box), button);
 
   button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_hexpand (button_box, FALSE);
-  gtk_container_add (GTK_CONTAINER (button), button_box);
+  gtk_button_set_child (GTK_BUTTON (button), button_box);
 
-  gtk_container_add (GTK_CONTAINER (button_box),
-                     gtk_image_new_from_icon_name ("folder-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_box_append (GTK_BOX (button_box),
+                  gtk_image_new_from_icon_name ("folder-symbolic"));
 
   button_label = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (button_label), PANGO_ELLIPSIZE_END);
   gtk_label_set_xalign (GTK_LABEL (button_label), 0);
   gtk_widget_set_hexpand (button_label, TRUE);
-  gtk_container_add (GTK_CONTAINER (button_box), button_label);
-
-  gtk_widget_show_all (box);
+  gtk_box_append (GTK_BOX (button_box), button_label);
 
   directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 

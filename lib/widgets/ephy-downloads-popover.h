@@ -30,6 +30,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyDownloadsPopover, ephy_downloads_popover, EPHY, DOWNLOADS_POPOVER, GtkPopover)
 
-GtkWidget *ephy_downloads_popover_new      (GtkWidget *relative_to);
+GtkWidget *ephy_downloads_popover_new      (void);
 
 G_END_DECLS

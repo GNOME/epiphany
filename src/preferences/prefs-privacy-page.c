@@ -34,7 +34,7 @@ enum {
 };
 
 struct _PrefsPrivacyPage {
-  HdyPreferencesPage parent_instance;
+  AdwPreferencesPage parent_instance;
 
   /* Web Safety */
   GtkWidget *safe_browsing_group;
@@ -54,7 +54,7 @@ struct _PrefsPrivacyPage {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, HDY_TYPE_PREFERENCES_PAGE)
+G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
 on_passwords_row_activated (GtkWidget        *row,

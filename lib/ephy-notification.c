@@ -24,7 +24,7 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotification {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   GtkWidget *grid;
 
@@ -49,7 +49,7 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyNotification, ephy_notification, GTK_TYPE_BIN);
+G_DEFINE_TYPE (EphyNotification, ephy_notification, ADW_TYPE_BIN);
 
 static void
 ephy_notification_constructed (GObject *object)
@@ -125,37 +125,31 @@ close_button_clicked_cb (GtkButton        *button,
 static void
 ephy_notification_init (EphyNotification *self)
 {
-  GtkWidget *image;
-  GtkStyleContext *context;
+  gtk_widget_add_css_class (GTK_WIDGET (self), "app-notification");
 
   self->grid = gtk_grid_new ();
-  context = gtk_widget_get_style_context (self->grid);
-  gtk_style_context_add_class (context, "app-notification");
-  gtk_container_add (GTK_CONTAINER (self), self->grid);
+  adw_bin_set_child (ADW_BIN (self), self->grid);
 
   self->head = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (self->head), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (self->head), TRUE);
   gtk_label_set_xalign (GTK_LABEL (self->head), 0);
   gtk_widget_set_hexpand (self->head, TRUE);
   gtk_grid_attach (GTK_GRID (self->grid), self->head, 0, 0, 1, 1);
 
   self->body = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (self->body), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (self->body), TRUE);
   gtk_label_set_xalign (GTK_LABEL (self->body), 0);
   gtk_widget_set_hexpand (self->body, TRUE);
   gtk_grid_attach (GTK_GRID (self->grid), self->body, 0, 1, 1, 1);
 
-  self->close_button = gtk_button_new ();
+  self->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
   gtk_widget_set_focus_on_click (self->close_button, FALSE);
   gtk_widget_set_margin_top (self->close_button, 6);
   gtk_widget_set_margin_bottom (self->close_button, 6);
   gtk_widget_set_margin_start (self->close_button, 6);
   gtk_widget_set_margin_end (self->close_button, 6);
-  gtk_style_context_add_class (gtk_widget_get_style_context (self->close_button), "flat");
+  gtk_widget_add_css_class (self->close_button, "flat");
   gtk_grid_attach (GTK_GRID (self->grid), self->close_button, 1, 0, 1, 2);
-
-  image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_image (GTK_BUTTON (self->close_button), image);
 
   g_signal_connect (self->close_button,
                     "clicked",

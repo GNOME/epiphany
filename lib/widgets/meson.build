@@ -1,5 +1,5 @@
 types_headers = [
-  'ephy-location-entry.h'
+  'ephy-search-entry.h'
 ]
 
 enums = gnome.mkenums_simple('ephy-widgets-type-builtins',
@@ -9,10 +9,12 @@ enums = gnome.mkenums_simple('ephy-widgets-type-builtins',
 libephywidgets_sources = [
   'contrib/nautilus-floating-bar.c',
   'ephy-certificate-dialog.c',
+  'ephy-downloads-paintable.c',
   'ephy-downloads-popover.c',
   'ephy-download-widget.c',
   'ephy-file-chooser.c',
   'ephy-location-entry.c',
+  'ephy-search-entry.c',
   'ephy-security-popover.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',
@@ -20,14 +22,12 @@ libephywidgets_sources = [
 ]
 
 libephywidgets_deps = [
-  libdazzle_dep,
   ephymisc_dep,
   gcr_dep,
   gdk_pixbuf_dep,
   gio_dep,
   glib_dep,
   gtk_dep,
-  libdazzle_dep,
   libsoup_dep,
   webkit2gtk_dep,
 ]

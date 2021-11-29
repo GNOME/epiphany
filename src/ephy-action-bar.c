@@ -21,7 +21,6 @@
 
 #include "ephy-action-bar.h"
 #include "ephy-add-bookmark-popover.h"
-#include "ephy-location-entry.h"
 #include "ephy-pages-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -37,7 +36,7 @@ enum {
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 struct _EphyActionBar {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   EphyWindow *window;
   GtkRevealer *revealer;
@@ -49,7 +48,7 @@ struct _EphyActionBar {
   gboolean can_reveal;
 };
 
-G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_BIN)
+G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
 
 static void
 sync_chromes_visibility (EphyActionBar *action_bar)

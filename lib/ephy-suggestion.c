@@ -22,7 +22,6 @@
 
 #include "ephy-uri-helpers.h"
 
-#include <dazzle.h>
 #include <glib.h>
 
 struct _EphySuggestion {

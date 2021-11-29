@@ -33,9 +33,9 @@ enum {
 };
 
 struct _EphyTitleBox {
-  GtkEventBox parent_instance;
+  AdwBin parent_instance;
 
-  GtkWidget *lock_image;
+  GtkWidget *security_button;
   GtkWidget *title;
   GtkWidget *subtitle;
 
@@ -44,38 +44,21 @@ struct _EphyTitleBox {
 
 static void ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, GTK_TYPE_EVENT_BOX,
+G_DEFINE_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, ADW_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_title_box_title_widget_interface_init))
 
-static gboolean
-ephy_title_box_button_press_event (GtkWidget      *widget,
-                                   GdkEventButton *event)
+static void
+create_security_popup_cb (GtkMenuButton *button,
+                          EphyTitleBox  *title_box)
 {
-  EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
-  GtkAllocation lock_allocation;
-
-  if (event->button != GDK_BUTTON_PRIMARY)
-    return GDK_EVENT_PROPAGATE;
-
-  gtk_widget_get_allocation (title_box->lock_image, &lock_allocation);
-
-  if (event->x >= lock_allocation.x &&
-      event->x < lock_allocation.x + lock_allocation.width &&
-      event->y >= lock_allocation.y &&
-      event->y < lock_allocation.y + lock_allocation.height) {
-    g_signal_emit_by_name (title_box, "lock-clicked", (GdkRectangle *)&lock_allocation);
-    return GDK_EVENT_STOP;
-  }
-
-  return GDK_EVENT_PROPAGATE;
+  g_signal_emit_by_name (title_box, "lock-clicked", button);
 }
 
 static void
 ephy_title_box_constructed (GObject *object)
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (object);
-  GtkStyleContext *context;
   GtkWidget *vbox;
   GtkWidget *hbox;
 
@@ -83,39 +66,36 @@ ephy_title_box_constructed (GObject *object)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (title_box), vbox);
+  adw_bin_set_child (ADW_BIN (title_box), vbox);
 
   title_box->title = gtk_label_new (NULL);
-  context = gtk_widget_get_style_context (title_box->title);
-  gtk_style_context_add_class (context, "title");
-  gtk_label_set_line_wrap (GTK_LABEL (title_box->title), FALSE);
+  gtk_widget_add_css_class (title_box->title, "title");
   gtk_label_set_single_line_mode (GTK_LABEL (title_box->title), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_box->title), PANGO_ELLIPSIZE_END);
   gtk_label_set_text (GTK_LABEL (title_box->title), g_get_application_name ());
-  gtk_box_pack_start (GTK_BOX (vbox), title_box->title, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (vbox), title_box->title);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  context = gtk_widget_get_style_context (hbox);
-  gtk_style_context_add_class (context, "subtitle");
+  gtk_widget_add_css_class (hbox, "subtitle");
   gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
-  title_box->lock_image = gtk_image_new ();
-  g_object_set (title_box->lock_image, "icon-size", GTK_ICON_SIZE_MENU, NULL);
-  gtk_widget_set_valign (title_box->lock_image, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (hbox), title_box->lock_image, FALSE, TRUE, 0);
+  title_box->security_button = gtk_menu_button_new ();
+  gtk_widget_set_valign (title_box->security_button, GTK_ALIGN_BASELINE);
+  gtk_box_append (GTK_BOX (hbox), title_box->security_button);
+  gtk_widget_add_css_class (title_box->security_button, "entry-icon");
+  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (title_box->security_button),
+                                         (GtkMenuButtonCreatePopupFunc)create_security_popup_cb,
+                                         title_box,
+                                         NULL);
 
   title_box->subtitle = gtk_label_new (NULL);
   gtk_widget_set_valign (title_box->subtitle, GTK_ALIGN_BASELINE);
-  gtk_label_set_line_wrap (GTK_LABEL (title_box->subtitle), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_box->subtitle), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_box->subtitle), PANGO_ELLIPSIZE_END);
   gtk_label_set_selectable (GTK_LABEL (title_box->subtitle), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), title_box->subtitle, FALSE, TRUE, 0);
-
-  gtk_widget_add_events (GTK_WIDGET (title_box), GDK_BUTTON_PRESS_MASK);
-  gtk_widget_show_all (GTK_WIDGET (title_box));
+  gtk_box_append (GTK_BOX (hbox), title_box->subtitle);
 }
 
 static const char *
@@ -161,11 +141,9 @@ ephy_title_box_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   icon_name = ephy_security_level_to_icon_name (security_level);
 
-  g_object_set (title_box->lock_image,
-                "icon-name", icon_name,
-                NULL);
-
-  gtk_widget_set_visible (title_box->lock_image, icon_name != NULL);
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (title_box->security_button),
+                                 icon_name);
+  gtk_widget_set_visible (title_box->security_button, icon_name != NULL);
 
   title_box->security_level = security_level;
 }
@@ -223,12 +201,10 @@ static void
 ephy_title_box_class_init (EphyTitleBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_title_box_constructed;
   object_class->get_property = ephy_title_box_get_property;
   object_class->set_property = ephy_title_box_set_property;
-  widget_class->button_press_event = ephy_title_box_button_press_event;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");

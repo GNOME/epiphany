@@ -46,15 +46,6 @@ is_desktop_gnome (void)
   return strstr (xdg_current_desktop, "GNOME") != NULL;
 }
 
-GtkIconSize
-get_icon_size (void)
-{
-  if (is_desktop_pantheon ())
-    return GTK_ICON_SIZE_LARGE_TOOLBAR;
-
-  return GTK_ICON_SIZE_BUTTON;
-}
-
 const char *
 ephy_get_fallback_favicon_name (const char      *uri,
                                 EphyFaviconType  type)

@@ -446,7 +446,7 @@ builder_add_modifier_array (JsonBuilder     *builder,
     json_builder_add_string_value (builder, "Ctrl");
   if (state & GDK_SHIFT_MASK)
     json_builder_add_string_value (builder, "Shift");
-  if (state & GDK_MOD1_MASK)
+  if (state & GDK_ALT_MASK)
     json_builder_add_string_value (builder, "Alt");
   json_builder_end_array (builder);
 }

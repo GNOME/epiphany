@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_FULLSCREEN_BOX (ephy_fullscreen_box_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, EPHY, FULLSCREEN_BOX, GtkEventBox)
+G_DECLARE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, EPHY, FULLSCREEN_BOX, GtkWidget)
 
 EphyFullscreenBox *ephy_fullscreen_box_new            (void);
 

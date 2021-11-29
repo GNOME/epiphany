@@ -31,27 +31,22 @@
     <signal name="notify::search-text" handler="search_text_changed_cb" swapped="yes"/>
     <child>
       <object class="GtkScrolledWindow" id="scrolled_window">
-        <property name="visible">True</property>
         <child>
-          <object class="HdyClamp">
-            <property name="visible">True</property>
+          <object class="AdwClamp">
             <property name="margin_start">6</property>
             <property name="margin_end">6</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="margin_top">6</property>
                 <property name="margin_bottom">6</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">True</property>
                         <property name="label" translatable="yes">Clear selected website data:</property>
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
@@ -61,7 +56,6 @@
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
                         <property name="vexpand">True</property>
                         <property name="min_content_height">100</property>
                         <style>
@@ -69,7 +63,6 @@
                         </style>
                         <child>
                           <object class="GtkTreeView" id="treeview">
-                            <property name="visible">True</property>
                             <property name="model">treemodelfilter</property>
                             <property name="headers-visible">False</property>
                             <child internal-child="selection">
@@ -109,7 +102,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="label" translatable="yes">You cannot undo this action. The data you are choosing to clear will be removed forever.</property>
                     <property name="justify">left</property>
                     <property name="xalign">0</property>

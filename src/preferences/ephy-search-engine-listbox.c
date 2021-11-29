@@ -168,7 +168,7 @@ ephy_add_engine_button_merged_model_init (EphyAddEngineButtonMergedModel *self)
 }
 
 struct _EphySearchEngineListBox {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   GtkWidget *list;
 
@@ -189,7 +189,7 @@ struct _EphySearchEngineListBox {
   gboolean is_model_initially_loaded;
 };
 
-G_DEFINE_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, GTK_TYPE_BIN)
+G_DEFINE_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, ADW_TYPE_BIN)
 
 GtkWidget *
 ephy_search_engine_list_box_new (void)
@@ -261,7 +261,7 @@ on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
   int i = 0;
 
   /* We only unexpand other rows if this is a notify signal for an expanded row. */
-  if (!hdy_expander_row_get_expanded (HDY_EXPANDER_ROW (expanded_row)))
+  if (!adw_expander_row_get_expanded (ADW_EXPANDER_ROW (expanded_row)))
     return;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->list), i++))) {
@@ -273,7 +273,7 @@ on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
     if (row == GTK_LIST_BOX_ROW (expanded_row))
       continue;
 
-    hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (row), FALSE);
+    adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), FALSE);
   }
 }
 
@@ -305,10 +305,8 @@ create_add_search_engine_row ()
 
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), true);
   gtk_widget_set_size_request (row, -1, 50);
-  gtk_widget_show (row);
 
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
 
   return row;
 }
@@ -322,7 +320,7 @@ create_search_engine_row (EphySearchEngine        *engine,
   g_signal_connect_object (engine, "notify::name", G_CALLBACK (on_search_engine_name_changed_cb), self, 0);
 
   ephy_search_engine_row_set_radio_button_group (row,
-                                                 GTK_RADIO_BUTTON (self->radio_buttons_group));
+                                                 GTK_CHECK_BUTTON (self->radio_buttons_group));
   g_signal_connect (row,
                     "notify::expanded",
                     G_CALLBACK (on_row_expand_state_changed_cb),
@@ -335,7 +333,7 @@ create_search_engine_row (EphySearchEngine        *engine,
     /* This will also unexpand all other rows, to make the new one stand out,
      * in on_row_expand_state_changed_cb().
      */
-    hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (row), TRUE);
+    adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), TRUE);
   }
 
   return GTK_WIDGET (row);
@@ -392,7 +390,7 @@ ephy_search_engine_list_box_init (EphySearchEngineListBox *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->radio_buttons_group = gtk_radio_button_new (NULL);
+  self->radio_buttons_group = gtk_check_button_new ();
   /* Ref the radio buttons group and remove the floating reference because we
    * don't hook this widget to any part of the UI (for example gtk_container_add
    * would remove the floating reference and ref it).

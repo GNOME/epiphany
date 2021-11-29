@@ -32,7 +32,7 @@
 #include <math.h>
 
 struct _PrefsAppearancePage {
-  HdyPreferencesPage parent_instance;
+  AdwPreferencesPage parent_instance;
 
   /* Fonts */
   GtkWidget *use_gnome_fonts_row;
@@ -53,56 +53,20 @@ struct _PrefsAppearancePage {
   GtkWidget *default_zoom_spin_button;
 };
 
-G_DEFINE_TYPE (PrefsAppearancePage, prefs_appearance_page, HDY_TYPE_PREFERENCES_PAGE)
+G_DEFINE_TYPE (PrefsAppearancePage, prefs_appearance_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static gchar *
-reader_font_style_get_name (HdyEnumValueObject *value,
-                            gpointer            user_data)
+reader_font_style_get_name (gpointer                 user_data,
+                            EphyPrefsReaderFontStyle style)
 {
-  g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
-
-  switch (hdy_enum_value_object_get_value (value)) {
+  switch (style) {
     case EPHY_PREFS_READER_FONT_STYLE_SANS:
-      return g_strdup_printf ("<span font-family=\"%s\">%s</span>", "sans", _("Sans"));
+      return g_strdup (_("Sans"));
     case EPHY_PREFS_READER_FONT_STYLE_SERIF:
-      return g_strdup_printf ("<span font-family=\"%s\">%s</span>", "serif", _("Serif"));
+      return g_strdup (_("Serif"));
     default:
-      return NULL;
+      g_assert_not_reached ();
   }
-}
-
-static GtkWidget *
-reader_font_style_create_list_widget (gpointer item,
-                                      gpointer user_data)
-{
-  g_autofree gchar *name = reader_font_style_get_name (item, NULL);
-
-  return g_object_new (GTK_TYPE_LABEL,
-                       "ellipsize", PANGO_ELLIPSIZE_END,
-                       "label", name,
-                       "use-markup", TRUE,
-                       "max-width-chars", 20,
-                       "valign", GTK_ALIGN_CENTER,
-                       "visible", TRUE,
-                       "xalign", 0.0,
-                       NULL);
-}
-
-static GtkWidget *
-reader_font_style_create_current_widget (gpointer item,
-                                         gpointer user_data)
-{
-  g_autofree gchar *name = reader_font_style_get_name (item, NULL);
-
-  return g_object_new (GTK_TYPE_LABEL,
-                       "ellipsize", PANGO_ELLIPSIZE_END,
-                       "halign", GTK_ALIGN_END,
-                       "label", name,
-                       "use-markup", TRUE,
-                       "valign", GTK_ALIGN_CENTER,
-                       "visible", TRUE,
-                       "xalign", 0.0,
-                       NULL);
 }
 
 static gboolean
@@ -113,9 +77,9 @@ reader_font_style_get_mapping (GValue   *value,
   const char *reader_colors = g_variant_get_string (variant, NULL);
 
   if (g_strcmp0 (reader_colors, "sans") == 0)
-    g_value_set_int (value, EPHY_PREFS_READER_FONT_STYLE_SANS);
+    g_value_set_uint (value, EPHY_PREFS_READER_FONT_STYLE_SANS);
   else if (g_strcmp0 (reader_colors, "serif") == 0)
-    g_value_set_int (value, EPHY_PREFS_READER_FONT_STYLE_SERIF);
+    g_value_set_uint (value, EPHY_PREFS_READER_FONT_STYLE_SERIF);
 
   return TRUE;
 }
@@ -125,7 +89,7 @@ reader_font_style_set_mapping (const GValue       *value,
                                const GVariantType *expected_type,
                                gpointer            user_data)
 {
-  switch (g_value_get_int (value)) {
+  switch (g_value_get_uint (value)) {
     case EPHY_PREFS_READER_FONT_STYLE_SANS:
       return g_variant_new_string ("sans");
     case EPHY_PREFS_READER_FONT_STYLE_SERIF:
@@ -136,18 +100,16 @@ reader_font_style_set_mapping (const GValue       *value,
 }
 
 static gchar *
-reader_color_scheme_get_name (HdyEnumValueObject *value,
-                              gpointer            user_data)
+reader_color_scheme_get_name (gpointer                   user_data,
+                              EphyPrefsReaderColorScheme scheme)
 {
-  g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
-
-  switch (hdy_enum_value_object_get_value (value)) {
+  switch (scheme) {
     case EPHY_PREFS_READER_COLORS_LIGHT:
       return g_strdup (_("Light"));
     case EPHY_PREFS_READER_COLORS_DARK:
       return g_strdup (_("Dark"));
     default:
-      return NULL;
+      g_assert_not_reached ();
   }
 }
 
@@ -159,9 +121,9 @@ reader_color_scheme_get_mapping (GValue   *value,
   const char *reader_colors = g_variant_get_string (variant, NULL);
 
   if (g_strcmp0 (reader_colors, "light") == 0)
-    g_value_set_int (value, EPHY_PREFS_READER_COLORS_LIGHT);
+    g_value_set_uint (value, EPHY_PREFS_READER_COLORS_LIGHT);
   else if (g_strcmp0 (reader_colors, "dark") == 0)
-    g_value_set_int (value, EPHY_PREFS_READER_COLORS_DARK);
+    g_value_set_uint (value, EPHY_PREFS_READER_COLORS_DARK);
 
   return TRUE;
 }
@@ -171,7 +133,7 @@ reader_color_scheme_set_mapping (const GValue       *value,
                                  const GVariantType *expected_type,
                                  gpointer            user_data)
 {
-  switch (g_value_get_int (value)) {
+  switch (g_value_get_uint (value)) {
     case EPHY_PREFS_READER_COLORS_LIGHT:
       return g_variant_new_string ("light");
     case EPHY_PREFS_READER_COLORS_DARK:
@@ -262,7 +224,7 @@ on_default_zoom_spin_button_output (GtkSpinButton *spin,
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = (int)gtk_adjustment_get_value (adjustment);
   text = g_strdup_printf ("%.f%%", value);
-  gtk_entry_set_text (GTK_ENTRY (spin), text);
+  gtk_editable_set_text (GTK_EDITABLE (spin), text);
 
   return TRUE;
 }
@@ -278,26 +240,6 @@ on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
   value = gtk_adjustment_get_value (adjustment);
   value = round (value) / 100;
   g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value);
-}
-
-static void
-setup_font_row (PrefsAppearancePage *appearance_page)
-{
-  g_autoptr (GListStore) store = g_list_store_new (HDY_TYPE_ENUM_VALUE_OBJECT);
-  g_autoptr (GEnumClass) enum_class = g_type_class_ref (EPHY_TYPE_PREFS_READER_FONT_STYLE);
-
-  for (guint i = 0; i < enum_class->n_values; i++) {
-    g_autoptr (HdyEnumValueObject) obj = hdy_enum_value_object_new (&enum_class->values[i]);
-
-    g_list_store_append (store, obj);
-  }
-
-  hdy_combo_row_bind_model (HDY_COMBO_ROW (appearance_page->reader_mode_font_style),
-                            G_LIST_MODEL (store),
-                            (GtkListBoxCreateWidgetFunc)reader_font_style_create_list_widget,
-                            (GtkListBoxCreateWidgetFunc)reader_font_style_create_current_widget,
-                            NULL,
-                            NULL);
 }
 
 static void
@@ -318,48 +260,41 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_SANS_SERIF_FONT,
                    appearance_page->sans_fontbutton,
-                   "font-name",
+                   "font",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_SERIF_FONT,
                    appearance_page->serif_fontbutton,
-                   "font-name",
+                   "font",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_MONOSPACE_FONT,
                    appearance_page->mono_fontbutton,
-                   "font-name",
+                   "font",
                    G_SETTINGS_BIND_DEFAULT);
 
   /* ======================================================================== */
   /* ========================== Reader Mode ================================= */
   /* ======================================================================== */
-
-  setup_font_row (appearance_page);
-
   g_settings_bind_with_mapping (reader_settings,
                                 EPHY_PREFS_READER_FONT_STYLE,
                                 appearance_page->reader_mode_font_style,
-                                "selected-index",
+                                "selected",
                                 G_SETTINGS_BIND_DEFAULT,
                                 reader_font_style_get_mapping,
                                 reader_font_style_set_mapping,
                                 NULL, NULL);
 
-  g_object_bind_property (hdy_style_manager_get_default (), "system-supports-color-schemes",
+  g_object_bind_property (adw_style_manager_get_default (), "system-supports-color-schemes",
                           appearance_page->reader_mode_color_scheme, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-
-  hdy_combo_row_set_for_enum (HDY_COMBO_ROW (appearance_page->reader_mode_color_scheme),
-                              EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
-                              reader_color_scheme_get_name, NULL, NULL);
 
   g_settings_bind_with_mapping (reader_settings,
                                 EPHY_PREFS_READER_COLOR_SCHEME,
                                 appearance_page->reader_mode_color_scheme,
-                                "selected-index",
+                                "selected",
                                 G_SETTINGS_BIND_DEFAULT,
                                 reader_color_scheme_get_mapping,
                                 reader_color_scheme_set_mapping,
@@ -433,6 +368,8 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, default_zoom_spin_button);
 
   /* Signals */
+  gtk_widget_class_bind_template_callback (widget_class, reader_font_style_get_name);
+  gtk_widget_class_bind_template_callback (widget_class, reader_color_scheme_get_name);
   gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_output);
   gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_value_changed);
 }

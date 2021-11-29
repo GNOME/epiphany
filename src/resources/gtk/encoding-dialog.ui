@@ -4,16 +4,11 @@
   <requires lib="gtk+" version="3.14"/>
   <template class="EphyEncodingDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Text Encoding</property>
-    <property name="role">epiphany-encoding-chooser</property>
     <property name="modal">True</property>
     <property name="default_width">500</property>
     <property name="default_height">420</property>
-    <property name="type_hint">dialog</property>
     <signal name="response" handler="ephy_encoding_dialog_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
@@ -23,11 +18,9 @@
         <property name="margin-end">6</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="margin-start">6</property>
                 <property name="hexpand">True</property>
@@ -37,7 +30,6 @@
             </child>
             <child>
               <object class="GtkSwitch" id="default_switch">
-                <property name="visible">True</property>
                 <property name="valign">start</property>
                 <signal name="state-set" handler="default_switch_toggled_cb" swapped="no"/>
               </object>
@@ -46,108 +38,100 @@
         </child>
         <child>
           <object class="GtkStack" id="type_stack">
-            <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="vexpand">True</property>
             <property name="interpolate_size">True</property>
             <child>
-              <object class="GtkBox" id="suggested_box">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">16</property>
-                <child>
-                  <object class="GtkBox" id="recent_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="margin_start">8</property>
-                        <property name="label" translatable="yes">Recent encodings</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkFrame">
-                        <property name="visible">True</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="GtkListBox" id="recent_list_box">
-                            <property name="visible">True</property>
-                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="related_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="margin_start">8</property>
-                        <property name="label" translatable="yes">Related encodings</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkFrame">
-                        <property name="visible">True</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <child>
-                          <object class="GtkListBox" id="related_list_box">
-                            <property name="visible">True</property>
-                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Show all…</property>
-                    <property name="visible">True</property>
-                    <property name="receives_default">False</property>
-                    <signal name="clicked" handler="show_all_button_clicked_cb" swapped="no"/>
-                  </object>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">suggested_box</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkBox" id="suggested_box">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">16</property>
+                    <child>
+                      <object class="GtkBox" id="recent_box">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="margin_start">8</property>
+                            <property name="label" translatable="yes">Recent encodings</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkFrame">
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkListBox" id="recent_list_box">
+                                <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="related_box">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="margin_start">8</property>
+                            <property name="label" translatable="yes">Related encodings</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkFrame">
+                            <property name="margin-top">6</property>
+                            <property name="margin-bottom">6</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
+                            <child>
+                              <object class="GtkListBox" id="related_list_box">
+                                <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">Show all…</property>
+                        <property name="receives_default">False</property>
+                        <signal name="clicked" handler="show_all_button_clicked_cb" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <style>
-                  <class name="frame"/>
-                </style>
-                <child>
-                  <object class="GtkListBox" id="list_box">
-                    <property name="visible">True</property>
-                    <signal name="row-activated" handler="row_activated_cb"/>
-                  </object>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">scrolled-window</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkFrame">
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="hscrollbar_policy">never</property>
+                        <child>
+                          <object class="GtkListBox" id="list_box">
+                            <signal name="row-activated" handler="row_activated_cb"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
           </object>
         </child>

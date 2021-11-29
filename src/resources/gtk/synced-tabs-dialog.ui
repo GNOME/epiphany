@@ -14,18 +14,13 @@
   <template class="SyncedTabsDialog" parent="GtkDialog">
     <property name="height_request">500</property>
     <property name="modal">True</property>
-    <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="title" translatable="yes">Synced Tabs</property>
     <child internal-child="headerbar">
-      <object class="GtkHeaderBar">
-        <property name="title" translatable="yes">Synced Tabs</property>
-        <property name="show-close-button">True</property>
-      </object>
+      <object class="GtkHeaderBar"/>
     </child>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="margin-top">15</property>
         <property name="margin-bottom">15</property>
@@ -34,7 +29,6 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
             <property name="xalign">0</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">50</property>
@@ -43,16 +37,13 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkTreeView" id="treeview">
-                    <property name="visible">True</property>
                     <property name="model">treestore</property>
                     <property name="headers-visible">False</property>
                     <signal name="row-activated" handler="treeview_row_activated_cb"/>

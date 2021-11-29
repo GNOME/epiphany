@@ -22,7 +22,6 @@
 #include "ephy-tab-view.h"
 
 #include "ephy-desktop-utils.h"
-#include "ephy-dnd.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
 #include "ephy-settings.h"
@@ -31,14 +30,14 @@
 #define MAX_NUMBER_OF_URLS 20
 
 struct _EphyTabView {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
-  HdyTabView *tab_view;
-  HdyTabBar *tab_bar;
-  HdyTabPage *current_page;
+  AdwTabView *tab_view;
+  AdwTabBar *tab_bar;
+  AdwTabPage *current_page;
 };
 
-G_DEFINE_TYPE (EphyTabView, ephy_tab_view, GTK_TYPE_BIN)
+G_DEFINE_TYPE (EphyTabView, ephy_tab_view, ADW_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -58,19 +57,19 @@ notify_n_pages_cb (EphyTabView *self)
 static void
 notify_selected_page_cb (EphyTabView *self)
 {
-  HdyTabPage *page = hdy_tab_view_get_selected_page (self->tab_view);
+  AdwTabPage *page = adw_tab_view_get_selected_page (self->tab_view);
 
   if (page)
-    hdy_tab_page_set_needs_attention (page, FALSE);
+    adw_tab_page_set_needs_attention (page, FALSE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_INDEX]);
 }
 
 static void
 indicator_activated_cb (EphyTabView *self,
-                        HdyTabPage  *page)
+                        AdwTabPage  *page)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
   gboolean muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
 
@@ -79,18 +78,18 @@ indicator_activated_cb (EphyTabView *self,
 
 static void
 setup_menu_cb (EphyTabView *self,
-               HdyTabPage  *page)
+               AdwTabPage  *page)
 {
   self->current_page = page;
 }
 
-static HdyTabPage *
+static AdwTabPage *
 get_current_page (EphyTabView *self)
 {
   if (self->current_page)
     return self->current_page;
 
-  return hdy_tab_view_get_selected_page (self->tab_view);
+  return adw_tab_view_get_selected_page (self->tab_view);
 }
 
 static void
@@ -150,13 +149,12 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
 static void
 ephy_tab_view_init (EphyTabView *self)
 {
-  self->tab_view = HDY_TAB_VIEW (hdy_tab_view_new ());
-  gtk_widget_show (GTK_WIDGET (self->tab_view));
+  self->tab_view = ADW_TAB_VIEW (adw_tab_view_new ());
 
   g_object_set_data_full (G_OBJECT (self->tab_view), "ephy-tab-view",
                           g_object_ref (self), g_object_unref);
 
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->tab_view));
+  adw_bin_set_child (ADW_BIN (self), GTK_WIDGET (self->tab_view));
 
   g_signal_connect_object (self->tab_view,
                            "notify::n-pages",
@@ -192,52 +190,52 @@ ephy_tab_view_new (void)
 void
 ephy_tab_view_next (EphyTabView *self)
 {
-  hdy_tab_view_select_next_page (self->tab_view);
+  adw_tab_view_select_next_page (self->tab_view);
 }
 
 void
 ephy_tab_view_pin (EphyTabView *self)
 {
-  hdy_tab_view_set_page_pinned (self->tab_view, get_current_page (self), TRUE);
+  adw_tab_view_set_page_pinned (self->tab_view, get_current_page (self), TRUE);
 }
 
 void
 ephy_tab_view_unpin (EphyTabView *self)
 {
-  hdy_tab_view_set_page_pinned (self->tab_view, get_current_page (self), FALSE);
+  adw_tab_view_set_page_pinned (self->tab_view, get_current_page (self), FALSE);
 }
 
 void
 ephy_tab_view_close (EphyTabView *self,
                      GtkWidget   *widget)
 {
-  HdyTabPage *page = hdy_tab_view_get_page (self->tab_view, widget);
+  AdwTabPage *page = adw_tab_view_get_page (self->tab_view, widget);
 
-  hdy_tab_view_close_page (self->tab_view, page);
+  adw_tab_view_close_page (self->tab_view, page);
 }
 
 void
 ephy_tab_view_close_selected (EphyTabView *self)
 {
-  hdy_tab_view_close_page (self->tab_view, get_current_page (self));
+  adw_tab_view_close_page (self->tab_view, get_current_page (self));
 }
 
 void
 ephy_tab_view_close_left (EphyTabView *self)
 {
-  hdy_tab_view_close_pages_before (self->tab_view, get_current_page (self));
+  adw_tab_view_close_pages_before (self->tab_view, get_current_page (self));
 }
 
 void
 ephy_tab_view_close_right (EphyTabView *self)
 {
-  hdy_tab_view_close_pages_after (self->tab_view, get_current_page (self));
+  adw_tab_view_close_pages_after (self->tab_view, get_current_page (self));
 }
 
 void
 ephy_tab_view_close_other (EphyTabView *self)
 {
-  hdy_tab_view_close_other_pages (self->tab_view, get_current_page (self));
+  adw_tab_view_close_other_pages (self->tab_view, get_current_page (self));
 }
 
 void
@@ -247,67 +245,67 @@ ephy_tab_view_foreach (EphyTabView         *self,
 {
   int i, n;
 
-  n = hdy_tab_view_get_n_pages (self->tab_view);
+  n = adw_tab_view_get_n_pages (self->tab_view);
 
   for (i = 0; i < n; i++) {
-    HdyTabPage *page = hdy_tab_view_get_nth_page (self->tab_view, i);
+    AdwTabPage *page = adw_tab_view_get_nth_page (self->tab_view, i);
 
-    callback (hdy_tab_page_get_child (page), user_data);
+    callback (adw_tab_page_get_child (page), user_data);
   }
 }
 
 int
 ephy_tab_view_get_n_pages (EphyTabView *self)
 {
-  return hdy_tab_view_get_n_pages (self->tab_view);
+  return adw_tab_view_get_n_pages (self->tab_view);
 }
 
 int
 ephy_tab_view_get_selected_index (EphyTabView *self)
 {
-  HdyTabPage *page = hdy_tab_view_get_selected_page (self->tab_view);
+  AdwTabPage *page = adw_tab_view_get_selected_page (self->tab_view);
 
   if (!page)
     return -1;
 
-  return hdy_tab_view_get_page_position (self->tab_view, page);
+  return adw_tab_view_get_page_position (self->tab_view, page);
 }
 
 int
 ephy_tab_view_get_page_index (EphyTabView *self,
                               GtkWidget   *widget)
 {
-  HdyTabPage *page = hdy_tab_view_get_page (self->tab_view, widget);
+  AdwTabPage *page = adw_tab_view_get_page (self->tab_view, widget);
 
-  return hdy_tab_view_get_page_position (self->tab_view, page);
+  return adw_tab_view_get_page_position (self->tab_view, page);
 }
 
 GtkWidget *
 ephy_tab_view_get_nth_page (EphyTabView *self,
                             int          index)
 {
-  HdyTabPage *page = hdy_tab_view_get_nth_page (self->tab_view, index);
+  AdwTabPage *page = adw_tab_view_get_nth_page (self->tab_view, index);
 
-  return hdy_tab_page_get_child (page);
+  return adw_tab_page_get_child (page);
 }
 
 void
 ephy_tab_view_select_nth_page (EphyTabView *self,
                                int          index)
 {
-  HdyTabPage *page = hdy_tab_view_get_nth_page (self->tab_view, index);
+  AdwTabPage *page = adw_tab_view_get_nth_page (self->tab_view, index);
 
-  hdy_tab_view_set_selected_page (self->tab_view, page);
+  adw_tab_view_set_selected_page (self->tab_view, page);
 }
 
 gboolean
 ephy_tab_view_select_page (EphyTabView *self,
                            GtkWidget   *widget)
 {
-  HdyTabPage *page = hdy_tab_view_get_page (self->tab_view, widget);
+  AdwTabPage *page = adw_tab_view_get_page (self->tab_view, widget);
 
   if (page)
-    hdy_tab_view_set_selected_page (self->tab_view, page);
+    adw_tab_view_set_selected_page (self->tab_view, page);
 
   return !!page;
 }
@@ -315,15 +313,15 @@ ephy_tab_view_select_page (EphyTabView *self,
 GtkWidget *
 ephy_tab_view_get_selected_page (EphyTabView *self)
 {
-  HdyTabPage *page = hdy_tab_view_get_selected_page (self->tab_view);
+  AdwTabPage *page = adw_tab_view_get_selected_page (self->tab_view);
 
   if (!page)
     return NULL;
 
-  return hdy_tab_page_get_child (page);
+  return adw_tab_page_get_child (page);
 }
 
-HdyTabView *
+AdwTabView *
 ephy_tab_view_get_tab_view (EphyTabView *self)
 {
   return self->tab_view;
@@ -335,11 +333,11 @@ ephy_tab_view_get_pages (EphyTabView *self)
   GList *list = NULL;
   int i, n;
 
-  n = hdy_tab_view_get_n_pages (self->tab_view);
+  n = adw_tab_view_get_n_pages (self->tab_view);
 
   for (i = 0; i < n; i++) {
-    HdyTabPage *page = hdy_tab_view_get_nth_page (self->tab_view, i);
-    GtkWidget *content = hdy_tab_page_get_child (page);
+    AdwTabPage *page = adw_tab_view_get_nth_page (self->tab_view, i);
+    GtkWidget *content = adw_tab_page_get_child (page);
 
     list = g_list_prepend (list, content);
   }
@@ -351,26 +349,26 @@ gboolean
 ephy_tab_view_get_is_pinned (EphyTabView *self,
                              GtkWidget   *widget)
 {
-  HdyTabPage *page = hdy_tab_view_get_page (self->tab_view, widget);
+  AdwTabPage *page = adw_tab_view_get_page (self->tab_view, widget);
 
-  return hdy_tab_page_get_pinned (page);
+  return adw_tab_page_get_pinned (page);
 }
 
 static void
-update_title_cb (HdyTabPage *page)
+update_title_cb (AdwTabPage *page)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
   const char *title = ephy_embed_get_title (embed);
   const char *address;
 
   if (!ephy_embed_has_load_pending (embed) &&
-      !hdy_tab_page_get_selected (page) &&
-      hdy_tab_page_get_pinned (page))
-    hdy_tab_page_set_needs_attention (page, TRUE);
+      !adw_tab_page_get_selected (page) &&
+      adw_tab_page_get_pinned (page))
+    adw_tab_page_set_needs_attention (page, TRUE);
 
   if (title && strlen (title)) {
-    hdy_tab_page_set_title (page, title);
+    adw_tab_page_set_title (page, title);
     return;
   }
 
@@ -378,20 +376,20 @@ update_title_cb (HdyTabPage *page)
 
   if (ephy_web_view_is_loading (view) &&
       !ephy_embed_utils_is_no_show_address (address))
-    hdy_tab_page_set_title (page, address);
+    adw_tab_page_set_title (page, address);
 }
 
 static void
-update_icon_cb (HdyTabPage *page)
+update_icon_cb (AdwTabPage *page)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
   GIcon *icon = G_ICON (ephy_web_view_get_icon (view));
   g_autoptr (GIcon) placeholder_icon = NULL;
   const char *uri, *favicon_name;
 
   if (icon) {
-    hdy_tab_page_set_icon (page, icon);
+    adw_tab_page_set_icon (page, icon);
     return;
   }
 
@@ -401,13 +399,13 @@ update_icon_cb (HdyTabPage *page)
   if (favicon_name)
     placeholder_icon = g_themed_icon_new (favicon_name);
 
-  hdy_tab_page_set_icon (page, placeholder_icon);
+  adw_tab_page_set_icon (page, placeholder_icon);
 }
 
 static void
-update_indicator_cb (HdyTabPage *page)
+update_indicator_cb (AdwTabPage *page)
 {
-  EphyEmbed *embed = EPHY_EMBED (hdy_tab_page_get_child (page));
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
   g_autoptr (GIcon) icon = NULL;
 
@@ -418,7 +416,7 @@ update_indicator_cb (HdyTabPage *page)
       icon = G_ICON (g_themed_icon_new ("ephy-audio-playing-symbolic"));
   }
 
-  hdy_tab_page_set_indicator_icon (page, icon);
+  adw_tab_page_set_indicator_icon (page, icon);
 }
 
 int
@@ -428,26 +426,26 @@ ephy_tab_view_add_tab (EphyTabView *self,
                        int          position,
                        gboolean     jump_to)
 {
-  HdyTabPage *page;
+  AdwTabPage *page;
   EphyWebView *view;
 
   if (parent) {
-    HdyTabPage *parent_page;
+    AdwTabPage *parent_page;
 
-    parent_page = hdy_tab_view_get_page (self->tab_view, GTK_WIDGET (parent));
-    page = hdy_tab_view_add_page (self->tab_view, GTK_WIDGET (embed), parent_page);
+    parent_page = adw_tab_view_get_page (self->tab_view, GTK_WIDGET (parent));
+    page = adw_tab_view_add_page (self->tab_view, GTK_WIDGET (embed), parent_page);
   } else if (position < 0) {
-    page = hdy_tab_view_append (self->tab_view, GTK_WIDGET (embed));
+    page = adw_tab_view_append (self->tab_view, GTK_WIDGET (embed));
   } else {
-    page = hdy_tab_view_insert (self->tab_view, GTK_WIDGET (embed), position);
+    page = adw_tab_view_insert (self->tab_view, GTK_WIDGET (embed), position);
   }
 
   if (jump_to)
-    hdy_tab_view_set_selected_page (self->tab_view, page);
+    adw_tab_view_set_selected_page (self->tab_view, page);
 
   view = ephy_embed_get_web_view (embed);
 
-  hdy_tab_page_set_indicator_activatable (page, TRUE);
+  adw_tab_page_set_indicator_activatable (page, TRUE);
 
   g_object_bind_property (view, "is-loading", page, "loading", G_BINDING_SYNC_CREATE);
 
@@ -474,77 +472,67 @@ ephy_tab_view_add_tab (EphyTabView *self,
   update_icon_cb (page);
   update_indicator_cb (page);
 
-  return hdy_tab_view_get_page_position (self->tab_view, page);
+  return adw_tab_view_get_page_position (self->tab_view, page);
 }
 
 GtkWidget *
 ephy_tab_view_get_current_page (EphyTabView *self)
 {
-  HdyTabPage *page = get_current_page (self);
+  AdwTabPage *page = get_current_page (self);
 
   if (!page)
     return NULL;
 
-  return hdy_tab_page_get_child (page);
+  return adw_tab_page_get_child (page);
 }
 
 static void
-drag_data_received_cb (EphyTabView      *self,
-                       HdyTabPage       *page,
-                       GdkDragContext   *context,
-                       GtkSelectionData *selection_data,
-                       guint             info,
-                       guint             time)
+drag_drop_cb (EphyTabView  *self,
+              AdwTabPage   *page,
+              const GValue *value)
 {
-  GtkWidget *window;
+  EphyLink *window;
   EphyEmbed *embed;
-  GdkAtom target;
-  const guchar *data;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_ARBITRARY_URL))
     return;
 
-  data = gtk_selection_data_get_data (selection_data);
-  if (gtk_selection_data_get_length (selection_data) <= 0 || data)
-    return;
+  embed = EPHY_EMBED (adw_tab_page_get_child (page));
+  window = EPHY_LINK (gtk_widget_get_root (GTK_WIDGET (self)));
 
-  embed = EPHY_EMBED (hdy_tab_page_get_child (page));
-  target = gtk_selection_data_get_target (selection_data);
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE)) {
+    GFile *file = g_value_get_object (value);
+    g_autofree char *uri = g_file_get_uri (file);
 
-  window = gtk_widget_get_toplevel (GTK_WIDGET (self));
+    ephy_link_open (window, uri, embed, embed ? 0 : EPHY_LINK_NEW_TAB);
+  } else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST)) {
+    GdkFileList *file_list = g_value_get_object (value);
+    g_autoptr (GSList) files = gdk_file_list_get_files (file_list);
+    GSList *l;
+    int i = 0;
 
-  if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE)) {
-    /* URL_TYPE has format: url \n title */
-    g_auto (GStrv) split = g_strsplit ((const char *)data, "\n", 2);
+    for (l = files; l && i < MAX_NUMBER_OF_URLS; l = l->next) {
+      GFile *file = l->data;
+      g_autofree char *uri = g_file_get_uri (file);
 
-    if (split && split[0] && split[0][0] != '\0') {
-      ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_NEW_TAB);
-      ephy_link_open (EPHY_LINK (window), split[0], embed,
-                      embed ? 0 : EPHY_LINK_NEW_TAB);
+      ephy_link_open (window, uri, embed, (embed && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
+      i++;
     }
-  } else if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE)) {
-    g_auto (GStrv) uris = gtk_selection_data_get_uris (selection_data);
+  } else if (G_VALUE_HOLDS (value, G_TYPE_STRING)) {
+    const char *text = g_value_get_string (value);
+    g_auto (GStrv) split = g_strsplit (text, "\n", MAX_NUMBER_OF_URLS);
     int i;
 
-    if (!uris)
-      return;
+    for (i = 0; *split[i]; i++) {
+      const char *uri = split[i];
+      g_autofree char *normalized =
+        ephy_embed_utils_normalize_or_autosearch_address (uri);
 
-    for (i = 0; i < MAX_NUMBER_OF_URLS && uris[i]; i++) {
-      embed = ephy_link_open (EPHY_LINK (window), uris[i], embed,
-                              (embed && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
+      ephy_link_open (window, normalized, embed, (embed && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
     }
   } else {
-    g_autofree char *text =
-      (char *)gtk_selection_data_get_text (selection_data);
-
-    if (text) {
-      g_autofree char *address =
-        ephy_embed_utils_normalize_or_autosearch_address (text);
-
-      ephy_link_open (EPHY_LINK (window), address, embed,
-                      embed ? 0 : EPHY_LINK_NEW_TAB);
-    }
+    g_assert_not_reached ();
   }
 }
 
@@ -562,7 +550,7 @@ visibility_policy_changed_cb (EphyTabView *self)
     policy = g_settings_get_enum (EPHY_SETTINGS_UI,
                                   EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
-  hdy_tab_bar_set_autohide (self->tab_bar,
+  adw_tab_bar_set_autohide (self->tab_bar,
                             policy != EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS);
   gtk_widget_set_visible (GTK_WIDGET (self->tab_bar),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
@@ -575,7 +563,7 @@ expand_changed_cb (EphyTabView *self)
   gboolean expand = g_settings_get_boolean (EPHY_SETTINGS_UI,
                                             EPHY_PREFS_UI_EXPAND_TABS_BAR);
 
-  hdy_tab_bar_set_expand_tabs (self->tab_bar, expand);
+  adw_tab_bar_set_expand_tabs (self->tab_bar, expand);
 }
 
 static gboolean
@@ -600,46 +588,40 @@ is_layout_reversed (void)
 static void
 notify_decoration_layout_cb (EphyTabView *self)
 {
-  hdy_tab_bar_set_inverted (self->tab_bar, is_layout_reversed ());
+  adw_tab_bar_set_inverted (self->tab_bar, is_layout_reversed ());
 }
 
 void
 ephy_tab_view_set_tab_bar (EphyTabView *self,
-                           HdyTabBar   *tab_bar)
+                           AdwTabBar   *tab_bar)
 {
-  g_autoptr (GtkTargetList) target_list = NULL;
   GtkSettings *settings;
-  static const GtkTargetEntry url_drag_types [] = {
-    { (char *)EPHY_DND_URI_LIST_TYPE, 0, 0 },
-    { (char *)EPHY_DND_URL_TYPE, 0, 1 },
-  };
 
   self->tab_bar = tab_bar;
 
-  target_list = gtk_target_list_new (url_drag_types,
-                                     G_N_ELEMENTS (url_drag_types));
-  gtk_target_list_add_text_targets (target_list, 0);
+  adw_tab_bar_setup_extra_drop_target (tab_bar, GDK_ACTION_COPY, (GType[3]) {
+    G_TYPE_STRING,
+    G_TYPE_FILE,
+    GDK_TYPE_FILE_LIST,
+  }, 3);
 
-  hdy_tab_bar_set_extra_drag_dest_targets (self->tab_bar, target_list);
-
-  g_signal_connect_object (tab_bar, "extra-drag-data-received",
-                           G_CALLBACK (drag_data_received_cb), self,
+  g_signal_connect_object (tab_bar, "extra-drag-drop",
+                           G_CALLBACK (drag_drop_cb), self,
                            G_CONNECT_SWAPPED);
 
   if (is_desktop_pantheon ()) {
     GtkWidget *button;
 
-    hdy_tab_bar_set_autohide (tab_bar, FALSE);
-    hdy_tab_bar_set_expand_tabs (tab_bar, FALSE);
+    adw_tab_bar_set_autohide (tab_bar, FALSE);
+    adw_tab_bar_set_expand_tabs (tab_bar, FALSE);
 
-    button = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_MENU);
+    button = gtk_button_new_from_icon_name ("list-add-symbolic");
     /* Translators: tooltip for the new tab button */
     gtk_widget_set_tooltip_text (button, _("Open a new tab"));
     gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-    gtk_style_context_add_class (gtk_widget_get_style_context (button), "flat");
-    gtk_widget_show (button);
+    gtk_widget_add_css_class (button, "flat");
 
-    hdy_tab_bar_set_start_action_widget (tab_bar, button);
+    adw_tab_bar_set_start_action_widget (tab_bar, button);
   } else {
     g_signal_connect_object (EPHY_SETTINGS_UI,
                              "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,

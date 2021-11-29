@@ -20,14 +20,13 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_ENGINE_LIST_BOX (ephy_search_engine_list_box_get_type())
 
-G_DECLARE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, EPHY, SEARCH_ENGINE_LIST_BOX, GtkBin)
+G_DECLARE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, EPHY, SEARCH_ENGINE_LIST_BOX, AdwBin)
 
 GtkWidget *ephy_search_engine_list_box_new                (void);
 

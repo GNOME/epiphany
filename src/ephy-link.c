@@ -105,10 +105,10 @@ ephy_link_flags_from_modifiers (GdkModifierType modifiers,
       return EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
     }
   } else {
-    if ((modifiers == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) ||
+    if ((modifiers == (GDK_ALT_MASK | GDK_SHIFT_MASK)) ||
         (modifiers == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
       return EPHY_LINK_NEW_WINDOW;
-    } else if ((modifiers == GDK_MOD1_MASK) || (modifiers == GDK_CONTROL_MASK)) {
+    } else if ((modifiers == GDK_ALT_MASK) || (modifiers == GDK_CONTROL_MASK)) {
       return EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER | EPHY_LINK_JUMP_TO;
     }
   }

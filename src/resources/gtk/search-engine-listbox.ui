@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <template class="EphySearchEngineListBox" parent="GtkBin">
-    <property name="visible">True</property>
-    <child>
+  <template class="EphySearchEngineListBox" parent="AdwBin">
+    <property name="child">
       <object class="GtkListBox" id="list">
-        <property name="visible">True</property>
         <property name="selection-mode">none</property>
         <signal name="row-activated" handler="on_add_search_engine_row_clicked_cb" swapped="yes"/>
         <style>
-          <class name="content"/>
+          <class name="boxed-list"/>
         </style>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

@@ -45,7 +45,7 @@ download_box_row_activated_cb (EphyDownloadsPopover *popover,
   EphyDownloadWidget *widget;
   EphyDownload *download;
 
-  widget = EPHY_DOWNLOAD_WIDGET (gtk_bin_get_child (GTK_BIN (row)));
+  widget = EPHY_DOWNLOAD_WIDGET (gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row)));
   download = ephy_download_widget_get_download (widget);
   if (!ephy_download_succeeded (download))
     return;
@@ -77,7 +77,6 @@ download_added_cb (EphyDownloadsPopover *popover,
 
   row = gtk_list_box_row_new ();
   gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
-  gtk_widget_show (row);
 
   widget = ephy_download_widget_new (download);
   g_signal_connect_object (download, "completed",
@@ -86,8 +85,7 @@ download_added_cb (EphyDownloadsPopover *popover,
   g_signal_connect_object (download, "error",
                            G_CALLBACK (download_failed_cb),
                            popover, G_CONNECT_SWAPPED);
-  gtk_container_add (GTK_CONTAINER (row), widget);
-  gtk_widget_show (widget);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), widget);
 }
 
 static void
@@ -104,12 +102,12 @@ download_removed_cb (EphyDownloadsPopover *popover,
     gtk_widget_hide (GTK_WIDGET (popover));
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (popover->downloads_box), i++))) {
-    GtkWidget *widget = gtk_bin_get_child (GTK_BIN (row));
+    GtkWidget *widget = gtk_list_box_row_get_child (row);
     if (!EPHY_IS_DOWNLOAD_WIDGET (widget))
       continue;
 
     if (ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (widget)) == download) {
-      gtk_container_remove (GTK_CONTAINER (popover->downloads_box), GTK_WIDGET (row));
+      gtk_list_box_remove (GTK_LIST_BOX (popover->downloads_box), GTK_WIDGET (row));
       break;
     }
   }
@@ -134,14 +132,14 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
     GtkWidget *widget;
     EphyDownload *download;
 
-    widget = gtk_bin_get_child (GTK_BIN (row));
+    widget = gtk_list_box_row_get_child (row);
     download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (widget));
 
     if (ephy_download_is_active (download)) {
       i++;
     } else {
       ephy_downloads_manager_remove_download (manager, download);
-      gtk_container_remove (GTK_CONTAINER (popover->downloads_box), GTK_WIDGET (row));
+      gtk_list_box_remove (GTK_LIST_BOX (popover->downloads_box), GTK_WIDGET (row));
     }
   }
   gtk_widget_set_sensitive (popover->clear_button, FALSE);
@@ -162,9 +160,11 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   GList *downloads, *l;
   EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
+  gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
+
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -176,10 +176,8 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                             popover);
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (popover->downloads_box), TRUE);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (popover->downloads_box), GTK_SELECTION_NONE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (popover->downloads_box),
-                               "background");
-  gtk_container_add (GTK_CONTAINER (scrolled_window), popover->downloads_box);
-  gtk_widget_show (popover->downloads_box);
+  gtk_widget_add_css_class (popover->downloads_box, "background");
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), popover->downloads_box);
 
   downloads = ephy_downloads_manager_get_downloads (manager);
   for (l = downloads; l != NULL; l = g_list_next (l)) {
@@ -196,11 +194,9 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
 
     row = gtk_list_box_row_new ();
     gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
-    gtk_widget_show (row);
 
     widget = ephy_download_widget_new (download);
-    gtk_container_add (GTK_CONTAINER (row), widget);
-    gtk_widget_show (widget);
+    gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), widget);
   }
 
   g_signal_connect_object (manager, "download-added",
@@ -210,8 +206,7 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                            G_CALLBACK (download_removed_cb),
                            popover, G_CONNECT_SWAPPED);
 
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, FALSE, TRUE, 0);
-  gtk_widget_show (scrolled_window);
+  gtk_box_append (GTK_BOX (vbox), scrolled_window);
 
   popover->clear_button = gtk_button_new_with_mnemonic (_("_Clear All"));
   gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
@@ -219,19 +214,17 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                             G_CALLBACK (clear_button_clicked_cb),
                             popover);
   gtk_widget_set_halign (popover->clear_button, GTK_ALIGN_END);
-  gtk_widget_set_margin_start (popover->clear_button, 12);
-  gtk_widget_set_margin_end (popover->clear_button, 12);
-  gtk_widget_set_margin_top (popover->clear_button, 12);
-  gtk_widget_set_margin_bottom (popover->clear_button, 12);
-  gtk_box_pack_start (GTK_BOX (vbox), popover->clear_button, FALSE, TRUE, 0);
-  gtk_widget_show (popover->clear_button);
+  gtk_widget_set_margin_start (popover->clear_button, 6);
+  gtk_widget_set_margin_end (popover->clear_button, 6);
+  gtk_widget_set_margin_top (popover->clear_button, 6);
+  gtk_widget_set_margin_bottom (popover->clear_button, 6);
+  gtk_box_append (GTK_BOX (vbox), popover->clear_button);
 
-  gtk_container_add (GTK_CONTAINER (popover), vbox);
-  gtk_widget_show (vbox);
+  gtk_popover_set_child (GTK_POPOVER (popover), vbox);
 }
 
 GtkWidget *
-ephy_downloads_popover_new (GtkWidget *relative_to)
+ephy_downloads_popover_new (void)
 {
-  return GTK_WIDGET (g_object_new (EPHY_TYPE_DOWNLOADS_POPOVER, "relative-to", relative_to, NULL));
+  return GTK_WIDGET (g_object_new (EPHY_TYPE_DOWNLOADS_POPOVER, NULL));
 }

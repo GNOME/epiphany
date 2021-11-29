@@ -21,12 +21,12 @@
 
 #pragma once
 
-#include <handy.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_PREFS_DIALOG (ephy_prefs_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, EPHY, PREFS_DIALOG, HdyPreferencesWindow)
+G_DECLARE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, EPHY, PREFS_DIALOG, AdwPreferencesWindow)
 
 G_END_DECLS

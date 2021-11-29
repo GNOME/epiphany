@@ -168,10 +168,10 @@ test_ephy_web_view_load_url (void)
     URLTest test;
     GMainLoop *loop;
     EphyWebView *view;
-    GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    GtkWidget *window = gtk_window_new ();
 
     view = EPHY_WEB_VIEW (ephy_web_view_new ());
-    gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (view));
+    gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (view));
     test = test_load_url[i];
     loop = g_main_loop_new (NULL, FALSE);
 
@@ -187,7 +187,7 @@ test_ephy_web_view_load_url (void)
 
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
-    g_object_unref (g_object_ref_sink (view));
+    g_object_unref (window);
   }
 }
 

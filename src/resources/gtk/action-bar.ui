@@ -1,42 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="EphyActionBar" parent="GtkBin">
+  <template class="EphyActionBar" parent="AdwBin">
     <child>
       <object class="GtkRevealer" id="revealer">
-        <property name="visible">True</property>
         <property name="transition-type">slide-up</property>
         <child>
           <object class="GtkActionBar" id="action_bar">
-            <property name="visible">True</property>
-            <child>
-              <object class="EphyActionBarStart" id="action_bar_start">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="pack-type">start</property>
-              </packing>
+            <child type="start">
+              <object class="EphyActionBarStart" id="action_bar_start"/>
             </child>
-            <child>
+            <child type="end">
               <object class="EphyPagesButton" id="pages_button">
-                <property name="visible">True</property>
                 <!-- Translators: tooltip for the page switcher button -->
                 <property name="tooltip_text" translatable="yes">View open pages</property>
                 <property name="action_name">win.tabs-view</property>
-                <style>
-                  <class name="image-button"/>
-                </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
-            <child>
-              <object class="EphyActionBarEnd" id="action_bar_end">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
+            <child type="end">
+              <object class="EphyActionBarEnd" id="action_bar_end"/>
             </child>
           </object>
         </child>

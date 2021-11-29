@@ -27,7 +27,7 @@
 #include "ephy-user-agent.h"
 #include "ephy-window.h"
 
-#include <dazzle.h>
+#include "dzl-fuzzy-mutable-index.h"
 #include <glib/gi18n.h>
 
 #define MAX_URL_ENTRIES             25

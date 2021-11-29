@@ -164,14 +164,26 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
 {
   char *data;
   char *version;
-  GtkIconInfo *icon_info;
+  g_autofree char *path = NULL;
+  GtkIconTheme *icon_theme;
+  g_autoptr (GtkIconPaintable) paintable = NULL;
 
   version = g_strdup_printf (_("Version %s"), VERSION);
 
-  icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  paintable = gtk_icon_theme_lookup_icon (icon_theme,
                                           APPLICATION_ID,
+                                          NULL,
                                           256,
-                                          GTK_ICON_LOOKUP_FORCE_SVG);
+                                          1,
+                                          GTK_TEXT_DIR_LTR,
+                                          GTK_ICON_LOOKUP_FORCE_REGULAR);
+
+  if (paintable) {
+    g_autoptr (GFile) file = gtk_icon_paintable_get_file (paintable);
+
+    path = g_file_get_path (file);
+  }
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
@@ -188,7 +200,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "</table>"
                           "</div></div></body></html>",
                           _("About Web"),
-                          icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                          path ? path : "",
 #if !TECH_PREVIEW
                           _("Web"),
 #else
@@ -198,8 +210,6 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           _("A simple, clean, beautiful view of the web"),
                           "WebKitGTK", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
   g_free (version);
-  if (icon_info)
-    g_object_unref (icon_info);
 
   ephy_about_handler_finish_request (request, data, -1);
 
@@ -314,8 +324,9 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
     g_string_append (data_str, "</table></div></body></html>");
   } else {
-    g_autoptr (GtkIconInfo) icon_info = NULL;
-    g_autofree gchar *icon = g_strconcat ("application-x-addon-symbolic", NULL);
+    GtkIconTheme *icon_theme;
+    g_autoptr (GtkIconPaintable) paintable = NULL;
+    g_autofree char *path = NULL;
 
     g_string_append_printf (data_str, "<html><head><title>%s</title>"
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
@@ -323,10 +334,21 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "</head><body class=\"applications-body\">",
                             _("Applications"));
 
-    icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                            icon,
+    icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+    paintable = gtk_icon_theme_lookup_icon (icon_theme,
+                                            "application-x-addon-symbolic",
+                                            NULL,
                                             128,
+                                            1,
+                                            GTK_TEXT_DIR_LTR,
                                             0);
+
+    if (paintable) {
+      g_autoptr (GFile) file = gtk_icon_paintable_get_file (paintable);
+
+      path = g_file_get_path (file);
+    }
+
     g_string_append_printf (data_str,
                             "  <div id=\"overview\" class=\"overview-empty\">\n"
                             "    <img src=\"file://%s\"/>\n"
@@ -334,7 +356,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "    <div><p>%s</p></div>\n"
                             "  </div>\n"
                             "</body></html>\n",
-                            icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                            path ? path : "",
                             /* Displayed when opening applications without any installed web apps. */
                             _("Applications"), _("You can add your favorite website by clicking <b>Install Site as Web Application…</b> within the page menu."));
   }
@@ -412,13 +434,26 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   list_length = g_list_length (urls);
 
   if (list_length == 0 || !success) {
-    GtkIconInfo *icon_info;
-    g_autofree gchar *icon = g_strconcat (APPLICATION_ID, "-symbolic", NULL);
+    GtkIconTheme *icon_theme;
+    g_autoptr (GtkIconPaintable) paintable = NULL;
+    g_autofree char *path = NULL;
+    g_autofree char *icon = g_strconcat (APPLICATION_ID, "-symbolic", NULL);
 
-    icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+    icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+    paintable = gtk_icon_theme_lookup_icon (icon_theme,
                                             icon,
+                                            NULL,
                                             128,
+                                            1,
+                                            GTK_TEXT_DIR_LTR,
                                             0);
+
+    if (paintable) {
+      g_autoptr (GFile) file = gtk_icon_paintable_get_file (paintable);
+
+      path = g_file_get_path (file);
+    }
+
     g_string_append_printf (data_str,
                             "  <div id=\"overview\" class=\"overview-empty\">\n"
                             "    <img src=\"file://%s\"/>\n"
@@ -426,11 +461,9 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                             "    <div><p>%s</p></div>\n"
                             "  </div>\n"
                             "</body></html>\n",
-                            icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                            path ? path : "",
                             /* Displayed when opening the browser for the first time. */
                             _("Welcome to Web"), _("Start browsing and your most-visited sites will appear here."));
-    if (icon_info)
-      g_object_unref (icon_info);
     goto out;
   }
 

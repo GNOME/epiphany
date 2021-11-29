@@ -92,7 +92,7 @@ update_icon (EphyPagesButton *self)
 
   gtk_widget_set_visible (GTK_WIDGET (self->pages_label), !is_overflow);
   gtk_label_set_text (self->pages_label, label_text);
-  gtk_image_set_from_icon_name (self->pages_icon, icon_name, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_icon_name (self->pages_icon, icon_name);
 }
 
 EphyPagesButton *
