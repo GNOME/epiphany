@@ -26,7 +26,7 @@ struct _EphyNotificationContainer {
   GtkBin parent_instance;
 
   GtkWidget *revealer;
-  GtkWidget *grid;
+  GtkWidget *box;
 };
 
 G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GTK_TYPE_BIN);
@@ -48,10 +48,8 @@ ephy_notification_container_init (EphyNotificationContainer *self)
   self->revealer = gtk_revealer_new ();
   gtk_container_add (GTK_CONTAINER (self), self->revealer);
 
-  self->grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self->grid), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (self->grid), 6);
-  gtk_container_add (GTK_CONTAINER (self->revealer), self->grid);
+  self->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_container_add (GTK_CONTAINER (self->revealer), self->box);
 }
 
 static void
@@ -77,7 +75,7 @@ get_num_children (EphyNotificationContainer *self)
 
   g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
+  children = gtk_container_get_children (GTK_CONTAINER (self->box));
   retval = g_list_length (children);
   g_list_free (children);
 
@@ -88,7 +86,7 @@ static void
 notification_close_cb (EphyNotification          *notification,
                        EphyNotificationContainer *self)
 {
-  gtk_container_remove (GTK_CONTAINER (self->grid), GTK_WIDGET (notification));
+  gtk_container_remove (GTK_CONTAINER (self->box), GTK_WIDGET (notification));
 
   if (get_num_children (self) == 0) {
     gtk_widget_hide (GTK_WIDGET (self));
@@ -106,7 +104,7 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
   g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
   g_assert (GTK_IS_WIDGET (notification));
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
+  children = gtk_container_get_children (GTK_CONTAINER (self->box));
   for (list = children; list && list->data; list = list->next) {
     EphyNotification *child_notification = EPHY_NOTIFICATION (children->data);
 
@@ -116,7 +114,7 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
     }
   }
 
-  gtk_container_add (GTK_CONTAINER (self->grid), notification);
+  gtk_container_add (GTK_CONTAINER (self->box), notification);
   gtk_widget_show_all (GTK_WIDGET (self));
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 
