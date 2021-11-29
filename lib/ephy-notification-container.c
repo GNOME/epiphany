@@ -23,16 +23,13 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotificationContainer {
-  GtkRevealer parent_instance;
+  GtkBin parent_instance;
 
+  GtkWidget *revealer;
   GtkWidget *grid;
 };
 
-struct _EphyNotificationContainerClass {
-  GtkRevealerClass parent_class;
-};
-
-G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GTK_TYPE_REVEALER);
+G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GTK_TYPE_BIN);
 
 static EphyNotificationContainer *notification_container = NULL;
 
@@ -48,10 +45,13 @@ ephy_notification_container_init (EphyNotificationContainer *self)
   gtk_widget_set_halign (GTK_WIDGET (self), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (self), GTK_ALIGN_START);
 
+  self->revealer = gtk_revealer_new ();
+  gtk_container_add (GTK_CONTAINER (self), self->revealer);
+
   self->grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self->grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_row_spacing (GTK_GRID (self->grid), 6);
-  gtk_container_add (GTK_CONTAINER (self), self->grid);
+  gtk_container_add (GTK_CONTAINER (self->revealer), self->grid);
 }
 
 static void
@@ -92,7 +92,7 @@ notification_close_cb (EphyNotification          *notification,
 
   if (get_num_children (self) == 0) {
     gtk_widget_hide (GTK_WIDGET (self));
-    gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), FALSE);
   }
 }
 
@@ -118,7 +118,7 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
 
   gtk_container_add (GTK_CONTAINER (self->grid), notification);
   gtk_widget_show_all (GTK_WIDGET (self));
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 
   g_signal_connect (notification, "close", G_CALLBACK (notification_close_cb), self);
 }

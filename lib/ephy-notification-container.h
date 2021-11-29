@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_NOTIFICATION_CONTAINER (ephy_notification_container_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyNotificationContainer, ephy_notification_container, EPHY, NOTIFICATION_CONTAINER, GtkRevealer)
+G_DECLARE_FINAL_TYPE (EphyNotificationContainer, ephy_notification_container, EPHY, NOTIFICATION_CONTAINER, GtkBin)
 
 EphyNotificationContainer *ephy_notification_container_get_default      (void);
 
