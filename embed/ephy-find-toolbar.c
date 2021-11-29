@@ -403,7 +403,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_widget_set_tooltip_text (toolbar->prev,
                                _("Find previous occurrence of the search string"));
   gtk_container_add (GTK_CONTAINER (box), toolbar->prev);
-  gtk_widget_show_all (toolbar->prev);
   gtk_widget_set_sensitive (toolbar->prev, FALSE);
 
   /* Next */
