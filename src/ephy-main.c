@@ -260,8 +260,6 @@ main (int   argc,
 
   g_option_context_set_main_group (option_context, option_group);
 
-  g_option_context_add_group (option_context, gtk_get_option_group (TRUE));
-
   if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
     g_print ("Failed to parse arguments: %s\n", error->message);
     g_error_free (error);
