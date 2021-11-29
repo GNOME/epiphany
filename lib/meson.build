@@ -10,7 +10,6 @@ enums = gnome.mkenums_simple('ephy-lib-type-builtins',
 )
 
 libephymisc_sources = [
-  'contrib/eggtreemultidnd.c',
   'contrib/gnome-languages.c',
   'ephy-debug.c',
   'ephy-dnd.c',
