@@ -17,7 +17,6 @@ libephyembed_sources = [
   'ephy-download.c',
   'ephy-embed.c',
   'ephy-embed-container.c',
-  'ephy-embed-event.c',
   'ephy-embed-prefs.c',
   'ephy-embed-shell.c',
   'ephy-embed-utils.c',

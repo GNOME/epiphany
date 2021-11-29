@@ -165,7 +165,7 @@ struct _EphyWindow {
   GtkWidget *action_bar;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
-  EphyEmbedEvent *context_event;
+  WebKitHitTestResult *context_event;
   WebKitHitTestResult *hit_test_result;
   guint idle_worker;
   EphyLocationController *location_controller;
@@ -1318,23 +1318,19 @@ idle_unref_context_event (EphyWindow *window)
 {
   LOG ("Idle unreffing context event %p", window->context_event);
 
-  if (window->context_event != NULL) {
-    g_object_unref (window->context_event);
-    window->context_event = NULL;
-  }
+  g_clear_object (&window->context_event);
 
   window->idle_worker = 0;
   return FALSE;
 }
 
 static void
-_ephy_window_set_context_event (EphyWindow     *window,
-                                EphyEmbedEvent *event)
+_ephy_window_set_context_event (EphyWindow          *window,
+                                WebKitHitTestResult *hit_test_result)
 {
   g_clear_handle_id (&window->idle_worker, g_source_remove);
 
-  g_clear_object (&window->context_event);
-  window->context_event = event != NULL ? g_object_ref (event) : NULL;
+  g_set_object (&window->context_event, hit_test_result);
 }
 
 static void
@@ -1544,7 +1540,6 @@ populate_context_menu (WebKitWebView       *web_view,
   GActionGroup *toolbar_action_group;
   GActionGroup *popup_action_group;
   GList *spelling_guess_items = NULL;
-  EphyEmbedEvent *embed_event;
   gboolean app_mode, incognito_mode;
   gboolean is_document = FALSE;
   gboolean is_image = FALSE;
@@ -1629,9 +1624,7 @@ populate_context_menu (WebKitWebView       *web_view,
 
   webkit_context_menu_remove_all (context_menu);
 
-  embed_event = ephy_embed_event_new (event, hit_test_result);
-  _ephy_window_set_context_event (window, embed_event);
-  g_object_unref (embed_event);
+  _ephy_window_set_context_event (window, hit_test_result);
 
   app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION;
   incognito_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO;
@@ -4098,7 +4091,7 @@ ephy_window_set_zoom (EphyWindow *window,
  *
  * Return value: (transfer none): an #EphyEmbedEvent, or %NULL
  **/
-EphyEmbedEvent *
+WebKitHitTestResult *
 ephy_window_get_context_event (EphyWindow *window)
 {
   g_assert (EPHY_IS_WINDOW (window));

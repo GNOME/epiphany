@@ -48,8 +48,8 @@ view_in_destination (EphyWindow      *window,
                      const char      *property_name,
                      LinkDestination  destination)
 {
-  EphyEmbedEvent *event;
-  GValue value = { 0, };
+  WebKitHitTestResult *hit_test_result;
+  g_autofree char *value = NULL;
   EphyEmbed *embed;
   EphyEmbed *new_embed;
   EphyWebView *new_view;
@@ -57,13 +57,13 @@ view_in_destination (EphyWindow      *window,
   EphyWindow *dest_window = window;
   EphyNewTabFlags flags = 0;
 
-  event = ephy_window_get_context_event (window);
-  g_assert (event != NULL);
+  hit_test_result = ephy_window_get_context_event (window);
+  g_assert (hit_test_result != NULL);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
-  ephy_embed_event_get_property (event, property_name, &value);
+  g_object_get (hit_test_result, property_name, &value, NULL);
   switch (destination) {
     case NEW_WINDOW:
       dest_window = ephy_window_new ();
@@ -84,8 +84,7 @@ view_in_destination (EphyWindow      *window,
   session_state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)));
   webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
   webkit_web_view_session_state_unref (session_state);
-  ephy_web_view_load_url (new_view, g_value_get_string (&value));
-  g_value_unset (&value);
+  ephy_web_view_load_url (new_view, value);
 }
 
 void
@@ -117,25 +116,22 @@ popup_cmd_copy_link_address (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
-  EphyEmbedEvent *event;
+  WebKitHitTestResult *hit_test_result;
   guint context;
   const char *address;
-  GValue value = { 0, };
 
-  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (event != NULL);
+  hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
+  g_assert (hit_test_result != NULL);
 
-  context = ephy_embed_event_get_context (event);
+  context = webkit_hit_test_result_get_context (hit_test_result);
 
   if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) {
-    ephy_embed_event_get_property (event, "link-uri", &value);
-    address = g_value_get_string (&value);
+    address = webkit_hit_test_result_get_link_uri (hit_test_result);
 
     if (g_str_has_prefix (address, "mailto:"))
       address = address + 7;
 
     popup_cmd_copy_to_clipboard (EPHY_WINDOW (user_data), address);
-    g_value_unset (&value);
   }
 }
 
@@ -205,17 +201,15 @@ save_property_url (const char *title,
                    EphyWindow *window,
                    const char *property)
 {
-  EphyEmbedEvent *event;
-  const char *location;
+  WebKitHitTestResult *hit_test_result;
+  g_autofree char *location = NULL;
   EphyDownload *download;
   SavePropertyURLData *data;
-  GValue value = G_VALUE_INIT;
 
-  event = ephy_window_get_context_event (window);
-  g_assert (event != NULL);
+  hit_test_result = ephy_window_get_context_event (window);
+  g_assert (hit_test_result != NULL);
 
-  ephy_embed_event_get_property (event, property, &value);
-  location = g_value_get_string (&value);
+  g_object_get (hit_test_result, property, &location, NULL);
   download = ephy_download_new_for_uri (location);
   data = g_new (SavePropertyURLData, 1);
   data->title = g_strdup (title);
@@ -223,8 +217,6 @@ save_property_url (const char *title,
   g_signal_connect (download, "filename-suggested",
                     G_CALLBACK (filename_suggested_cb),
                     data);
-
-  g_value_unset (&value);
 }
 
 void
@@ -268,20 +260,18 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
                                    GVariant      *parameter,
                                    gpointer       user_data)
 {
-  EphyEmbedEvent *event;
+  WebKitHitTestResult *hit_test_result;
   const char *location;
   char *dest_uri, *dest, *base, *base_converted;
-  GValue value = { 0, };
   EphyDownload *download;
 
   if (ephy_is_running_inside_flatpak ())
     return;
 
-  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (event != NULL);
+  hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
+  g_assert (hit_test_result != NULL);
 
-  ephy_embed_event_get_property (event, "image-uri", &value);
-  location = g_value_get_string (&value);
+  location = webkit_hit_test_result_get_image_uri (hit_test_result);
 
   download = ephy_download_new_for_uri (location);
 
@@ -298,7 +288,6 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   g_signal_connect (download, "completed",
                     G_CALLBACK (background_download_completed), user_data);
 
-  g_value_unset (&value);
   g_free (base);
   g_free (base_converted);
   g_free (dest);
@@ -309,15 +298,12 @@ static void
 popup_cmd_copy_location (EphyWindow *window,
                          const char *property_name)
 {
-  EphyEmbedEvent *event;
-  const char *location;
-  GValue value = { 0, };
+  WebKitHitTestResult *hit_test_result;
+  g_autofree char *location = NULL;
 
-  event = ephy_window_get_context_event (window);
-  ephy_embed_event_get_property (event, property_name, &value);
-  location = g_value_get_string (&value);
+  hit_test_result = ephy_window_get_context_event (window);
+  g_object_get (hit_test_result, property_name, &location, NULL);
   popup_cmd_copy_to_clipboard (window, location);
-  g_value_unset (&value);
 }
 
 void
@@ -365,15 +351,15 @@ popup_cmd_link_in_incognito_window (GSimpleAction *action,
                                     GVariant      *parameter,
                                     gpointer       user_data)
 {
-  EphyEmbedEvent *event;
-  GValue value = { 0, };
+  WebKitHitTestResult *hit_test_result;
+  const char *link_uri;
 
-  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (event != NULL);
+  hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
+  g_assert (hit_test_result != NULL);
 
-  ephy_embed_event_get_property (event, "link-uri", &value);
-  ephy_open_incognito_window (g_value_get_string (&value));
-  g_value_unset (&value);
+  link_uri = webkit_hit_test_result_get_link_uri (hit_test_result);
+
+  ephy_open_incognito_window (link_uri);
 }
 
 void

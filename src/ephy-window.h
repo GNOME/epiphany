@@ -23,7 +23,6 @@
 #include "ephy-bookmark-states.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed.h"
-#include "ephy-embed-event.h"
 #include "ephy-location-controller.h"
 #include "ephy-tab-view.h"
 #include "ephy-web-view.h"
@@ -71,7 +70,7 @@ EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
 
 EphyLocationController  *ephy_window_get_location_controller (EphyWindow *window);
 
-EphyEmbedEvent   *ephy_window_get_context_event        (EphyWindow *window);
+WebKitHitTestResult *ephy_window_get_context_event     (EphyWindow *window);
 
 GtkWidget        *ephy_window_get_current_find_toolbar (EphyWindow *window);
 
