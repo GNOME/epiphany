@@ -37,9 +37,10 @@ enum {
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 struct _EphyActionBar {
-  GtkRevealer parent_instance;
+  GtkBin parent_instance;
 
   EphyWindow *window;
+  GtkRevealer *revealer;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   EphyPagesButton *pages_button;
@@ -48,7 +49,7 @@ struct _EphyActionBar {
   gboolean can_reveal;
 };
 
-G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
+G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_BIN)
 
 static void
 sync_chromes_visibility (EphyActionBar *action_bar)
@@ -72,7 +73,7 @@ update_revealer (EphyActionBar *action_bar)
   if (reveal)
     gtk_widget_show (GTK_WIDGET (action_bar));
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar), reveal);
+  gtk_revealer_set_reveal_child (action_bar->revealer, reveal);
 }
 
 static void
@@ -169,6 +170,9 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
+                                        revealer);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBar,
                                         action_bar_start);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
@@ -197,7 +201,7 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
                                            EPHY_ADAPTIVE_MODE_NARROW);
 
-  g_object_bind_property (action_bar, "child-revealed",
+  g_object_bind_property (action_bar->revealer, "child-revealed",
                           action_bar, "visible",
                           G_BINDING_DEFAULT);
 

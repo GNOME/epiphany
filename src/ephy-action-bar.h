@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_ACTION_BAR (ephy_action_bar_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, GtkRevealer);
+G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, GtkBin);
 
 EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
 EphyActionBarStart *ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar);
