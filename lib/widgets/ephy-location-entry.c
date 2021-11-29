@@ -53,8 +53,9 @@
  */
 
 struct _EphyLocationEntry {
-  GtkOverlay parent_instance;
+  GtkBin parent_instance;
 
+  GtkWidget *overlay;
   GtkWidget *url_entry;
   GtkWidget *page_action_box;
   GtkWidget *bookmark_icon;
@@ -114,7 +115,7 @@ static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInte
 static void schedule_dns_prefetch (EphyLocationEntry *entry,
                                    const gchar       *url);
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
+G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
 static gboolean
@@ -1062,6 +1063,11 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   LOG ("EphyLocationEntry constructing contents %p", entry);
 
+  /* Overlay */
+  entry->overlay = gtk_overlay_new ();
+  gtk_widget_show (GTK_WIDGET (entry->overlay));
+  gtk_container_add (GTK_CONTAINER (entry), entry->overlay);
+
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
   dzl_suggestion_entry_set_compact (DZL_SUGGESTION_ENTRY (entry->url_entry), TRUE);
@@ -1081,7 +1087,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   g_signal_connect (G_OBJECT (entry->url_entry), "changed", G_CALLBACK (editable_changed_cb), entry);
   g_signal_connect (G_OBJECT (entry->url_entry), "suggestion-selected", G_CALLBACK (suggestion_selected), entry);
   gtk_widget_show (GTK_WIDGET (entry->url_entry));
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), GTK_WIDGET (entry->url_entry));
+  gtk_container_add (GTK_CONTAINER (entry->overlay), GTK_WIDGET (entry->url_entry));
 
   /* Custom hover state. FIXME: Remove this for GTK4 */
   gtk_widget_add_events (GTK_WIDGET (entry->url_entry), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
@@ -1093,7 +1099,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_set_halign (event, GTK_ALIGN_END);
   gtk_widget_show (event);
   g_signal_connect (G_OBJECT (event), "button-press-event", G_CALLBACK (event_button_press_event_cb), entry);
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), event);
+  gtk_overlay_add_overlay (GTK_OVERLAY (entry->overlay), event);
 
   /* Button Box */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
