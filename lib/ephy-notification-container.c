@@ -69,6 +69,18 @@ ephy_notification_container_get_default (void)
                        NULL);
 }
 
+static void
+notification_close_cb (EphyNotification          *notification,
+                       EphyNotificationContainer *self)
+{
+  gtk_container_remove (GTK_CONTAINER (self->grid), GTK_WIDGET (notification));
+
+  if (ephy_notification_container_get_num_children (self) == 0) {
+    gtk_widget_hide (GTK_WIDGET (self));
+    gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
+  }
+}
+
 void
 ephy_notification_container_add_notification (EphyNotificationContainer *self,
                                               GtkWidget                 *notification)
@@ -92,6 +104,8 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
   gtk_container_add (GTK_CONTAINER (self->grid), notification);
   gtk_widget_show_all (GTK_WIDGET (self));
   gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
+
+  g_signal_connect (notification, "close", G_CALLBACK (notification_close_cb), self);
 }
 
 guint

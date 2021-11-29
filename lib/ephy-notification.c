@@ -42,6 +42,13 @@ enum {
   PROP_BODY
 };
 
+enum {
+  CLOSE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 G_DEFINE_TYPE (EphyNotification, ephy_notification, GTK_TYPE_BIN);
 
 static void
@@ -112,15 +119,7 @@ static void
 close_button_clicked_cb (GtkButton        *button,
                          EphyNotification *self)
 {
-  EphyNotificationContainer *container = ephy_notification_container_get_default ();
-
-  /* gtk_widget_destroy() removes the widget from its parent container. */
-  gtk_widget_destroy (GTK_WIDGET (self));
-
-  if (ephy_notification_container_get_num_children (container) == 0) {
-    gtk_widget_hide (GTK_WIDGET (container));
-    gtk_revealer_set_reveal_child (GTK_REVEALER (container), FALSE);
-  }
+  g_signal_emit (self, signals[CLOSE], 0);
 }
 
 static void
@@ -187,6 +186,13 @@ ephy_notification_class_init (EphyNotificationClass *klass)
                                                         "The notification body",
                                                         "",
                                                         G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+
+  signals[CLOSE] =
+    g_signal_new ("close",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 EphyNotification *
