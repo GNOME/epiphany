@@ -29,6 +29,7 @@
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
+#include <handy.h>
 #include <string.h>
 
 struct _EphyReaderHandler {

@@ -54,6 +54,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <handy.h>
 
 /**
  * SECTION:ephy-web-view

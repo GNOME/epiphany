@@ -22,7 +22,6 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include <handy.h>
 
 #include "ephy-web-view.h"
 
@@ -30,7 +29,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_FIND_TOOLBAR (ephy_find_toolbar_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, EPHY, FIND_TOOLBAR, HdySearchBar)
+G_DECLARE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, EPHY, FIND_TOOLBAR, GtkBin)
 
 EphyFindToolbar *ephy_find_toolbar_new           (WebKitWebView *web_view);
 

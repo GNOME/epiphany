@@ -29,16 +29,17 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <gtk/gtk.h>
+#include <handy.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
 struct _EphyFindToolbar {
-  HdySearchBar parent_instance;
+  GtkBin parent_instance;
 
   GCancellable *cancellable;
   WebKitWebView *web_view;
   WebKitFindController *controller;
+  GtkWidget *search_bar;
   GdTaggedEntry *entry;
   GdTaggedEntryTag *entry_tag;
   GtkWidget *next;
@@ -52,7 +53,7 @@ struct _EphyFindToolbar {
   gboolean typing_ahead;
 };
 
-G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, HDY_TYPE_SEARCH_BAR)
+G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -362,7 +363,7 @@ ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
                                    EphyFindToolbar *toolbar)
 {
   if (load_event == WEBKIT_LOAD_STARTED &&
-      hdy_search_bar_get_search_mode (HDY_SEARCH_BAR (toolbar))) {
+      hdy_search_bar_get_search_mode (HDY_SEARCH_BAR (toolbar->search_bar))) {
     ephy_find_toolbar_close (toolbar);
   }
 }
@@ -374,12 +375,15 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   GtkWidget *box;
   GtkSizeGroup *size_group;
 
+  toolbar->search_bar = hdy_search_bar_new ();
+  gtk_container_add (GTK_CONTAINER (toolbar), toolbar->search_bar);
+
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   clamp = GTK_WIDGET (hdy_clamp_new ());
   hdy_clamp_set_maximum_size (HDY_CLAMP (clamp), 400);
   hdy_clamp_set_tightening_threshold (HDY_CLAMP (clamp), 300);
-  gtk_container_add (GTK_CONTAINER (toolbar), clamp);
+  gtk_container_add (GTK_CONTAINER (toolbar->search_bar), clamp);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
@@ -431,7 +435,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
                             G_CALLBACK (ephy_find_toolbar_find_next), toolbar);
   g_signal_connect_swapped (toolbar->prev, "clicked",
                             G_CALLBACK (ephy_find_toolbar_find_previous), toolbar);
-  hdy_search_bar_connect_entry (HDY_SEARCH_BAR (toolbar),
+  hdy_search_bar_connect_entry (HDY_SEARCH_BAR (toolbar->search_bar),
                                 GTK_ENTRY (toolbar->entry));
 
   search_entry_changed_cb (GTK_ENTRY (toolbar->entry), toolbar);
@@ -668,15 +672,15 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
 
   gtk_editable_select_region (GTK_EDITABLE (toolbar->entry), 0, -1);
 
-  hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar), TRUE);
-  hdy_search_bar_set_show_close_button (HDY_SEARCH_BAR (toolbar), TRUE);
+  hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar->search_bar), TRUE);
+  hdy_search_bar_set_show_close_button (HDY_SEARCH_BAR (toolbar->search_bar), TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (toolbar->entry));
 }
 
 void
 ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
-  hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar), FALSE);
+  hdy_search_bar_set_search_mode (HDY_SEARCH_BAR (toolbar->search_bar), FALSE);
 
   if (toolbar->web_view == NULL) return;
 
@@ -686,7 +690,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 void
 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar)
 {
-  if (hdy_search_bar_get_search_mode (HDY_SEARCH_BAR (toolbar))) {
+  if (hdy_search_bar_get_search_mode (HDY_SEARCH_BAR (toolbar->search_bar))) {
     g_signal_emit (toolbar, signals[CLOSE], 0);
   }
 }
