@@ -383,8 +383,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_container_add (GTK_CONTAINER (toolbar->search_bar), clamp);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box),
-                               GTK_STYLE_CLASS_LINKED);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "linked");
   gtk_container_add (GTK_CONTAINER (clamp), box);
 
   toolbar->entry = gd_tagged_entry_new ();

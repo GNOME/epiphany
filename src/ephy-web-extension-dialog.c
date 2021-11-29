@@ -79,7 +79,7 @@ on_remove_button_clicked (GtkButton *button,
                           NULL);
 
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "destructive-action");
 
   res = gtk_dialog_run (GTK_DIALOG (dialog));
   if (res == GTK_RESPONSE_OK) {
@@ -195,7 +195,7 @@ create_row (EphyWebExtensionDialog *self,
 
   button = gtk_button_new_with_mnemonic (_("_Remove"));
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
-  dzl_gtk_widget_add_style_class (button, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
+  dzl_gtk_widget_add_style_class (button, "destructive-action");
   g_signal_connect (button, "clicked", G_CALLBACK (on_remove_button_clicked), self);
   gtk_widget_set_tooltip_text (button, _("Remove selected WebExtension"));
   gtk_container_add (GTK_CONTAINER (sub_row), button);

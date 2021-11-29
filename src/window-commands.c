@@ -258,7 +258,7 @@ show_profile_selector (GtkWidget *parent,
 
   suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
   gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+                               "suggested-action");
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (selector));
   gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);

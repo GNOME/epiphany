@@ -747,8 +747,7 @@ ephy_embed_constructed (GObject *object)
 
   if (embed->progress_bar_enabled) {
     embed->progress = gtk_progress_bar_new ();
-    gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
-                                 GTK_STYLE_CLASS_OSD);
+    gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress), "osd");
     gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
     gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
     gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);

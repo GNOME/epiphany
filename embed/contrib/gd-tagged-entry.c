@@ -491,7 +491,7 @@ gd_tagged_entry_tag_draw (GdTaggedEntryTag *tag,
   if (!entry->priv->button_visible || !tag->priv->has_close_button)
     goto done;
 
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+  gtk_style_context_add_class (context, "button");
   state = gd_tagged_entry_tag_get_button_state (tag, entry);
   gtk_style_context_set_state (context, state);
 

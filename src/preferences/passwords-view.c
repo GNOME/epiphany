@@ -331,7 +331,7 @@ populate_model_cb (GList    *records,
 
     button = gtk_button_new_with_label (_("Remove Password"));
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-    dzl_gtk_widget_add_style_class (button, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
+    dzl_gtk_widget_add_style_class (button, "destructive-action");
     g_signal_connect (button, "clicked", G_CALLBACK (forget_clicked), record);
     gtk_container_add (GTK_CONTAINER (sub_row), button);
 
