@@ -183,14 +183,14 @@ ephy_notification_class_init (EphyNotificationClass *klass)
                                                         "Head",
                                                         "The notification head",
                                                         "",
-                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_BODY,
                                    g_param_spec_string ("body",
                                                         "Body",
                                                         "The notification body",
                                                         "",
-                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 }
 
 EphyNotification *
