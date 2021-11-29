@@ -395,7 +395,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gd_tagged_entry_tag_set_has_close_button (toolbar->entry_tag, FALSE);
 
   gtk_widget_set_hexpand (GTK_WIDGET (toolbar->entry), TRUE);
-  gtk_entry_set_max_length (GTK_ENTRY (toolbar->entry), 512);
   gtk_entry_set_placeholder_text (GTK_ENTRY (toolbar->entry), _("Type to search…"));
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toolbar->entry));
 
