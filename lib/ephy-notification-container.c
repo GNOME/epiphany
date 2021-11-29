@@ -69,13 +69,28 @@ ephy_notification_container_get_default (void)
                        NULL);
 }
 
+static guint
+get_num_children (EphyNotificationContainer *self)
+{
+  GList *children;
+  guint retval;
+
+  g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
+  retval = g_list_length (children);
+  g_list_free (children);
+
+  return retval;
+}
+
 static void
 notification_close_cb (EphyNotification          *notification,
                        EphyNotificationContainer *self)
 {
   gtk_container_remove (GTK_CONTAINER (self->grid), GTK_WIDGET (notification));
 
-  if (ephy_notification_container_get_num_children (self) == 0) {
+  if (get_num_children (self) == 0) {
     gtk_widget_hide (GTK_WIDGET (self));
     gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
   }
@@ -106,19 +121,4 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
   gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
 
   g_signal_connect (notification, "close", G_CALLBACK (notification_close_cb), self);
-}
-
-guint
-ephy_notification_container_get_num_children (EphyNotificationContainer *self)
-{
-  GList *children;
-  guint retval;
-
-  g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
-  retval = g_list_length (children);
-  g_list_free (children);
-
-  return retval;
 }
