@@ -384,8 +384,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
-                               GTK_STYLE_CLASS_RAISED);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                GTK_STYLE_CLASS_LINKED);
   gtk_container_add (GTK_CONTAINER (clamp), box);
 
