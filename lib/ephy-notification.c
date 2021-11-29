@@ -198,8 +198,6 @@ ephy_notification_new (const char *head,
                        const char *body)
 {
   return g_object_new (EPHY_TYPE_NOTIFICATION,
-                       "column-spacing", 12,
-                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                        "head", head,
                        "body", body,
                        NULL);
