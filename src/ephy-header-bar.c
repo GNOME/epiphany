@@ -52,8 +52,9 @@ static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
 
 struct _EphyHeaderBar {
-  GtkHeaderBar parent_instance;
+  GtkBin parent_instance;
 
+  GtkWidget *header_bar;
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   GtkRevealer *start_revealer;
@@ -70,7 +71,7 @@ struct _EphyHeaderBar {
   guint popover_hide_timeout_id;
 };
 
-G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
+G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_BIN)
 
 static void
 ephy_header_bar_set_property (GObject      *object,
@@ -138,7 +139,7 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
 
   g_object_get (header_bar->window, "fullscreen", &fullscreen, NULL);
 
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar), !fullscreen);
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar->header_bar), !fullscreen);
   gtk_widget_set_visible (header_bar->restore_button, fullscreen);
 
   if (fullscreen) {
@@ -203,6 +204,12 @@ ephy_header_bar_constructed (GObject *object)
                            G_CALLBACK (fullscreen_changed_cb), header_bar,
                            G_CONNECT_SWAPPED);
 
+  /* Header bar */
+  header_bar->header_bar = gtk_header_bar_new ();
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar->header_bar), TRUE);
+  gtk_widget_show (header_bar->header_bar);
+  gtk_container_add (GTK_CONTAINER (header_bar), header_bar->header_bar);
+
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
   gtk_widget_show (GTK_WIDGET (header_bar->action_bar_start));
@@ -214,7 +221,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->start_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   gtk_container_add (GTK_CONTAINER (header_bar->start_revealer), GTK_WIDGET (header_bar->action_bar_start));
 
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar),
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar->header_bar),
                              GTK_WIDGET (header_bar->start_revealer));
 
   embed_shell = ephy_embed_shell_get_default ();
@@ -229,7 +236,7 @@ ephy_header_bar_constructed (GObject *object)
   event_box = gtk_event_box_new ();
   gtk_widget_add_events (event_box, GDK_ALL_EVENTS_MASK);
   gtk_widget_show (event_box);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), event_box);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar->header_bar), event_box);
   gtk_widget_set_name (event_box, "title-box-container");
 
   if (is_desktop_pantheon ()) {
@@ -275,7 +282,7 @@ ephy_header_bar_constructed (GObject *object)
   g_signal_connect_object (header_bar->restore_button, "clicked",
                            G_CALLBACK (restore_button_clicked_cb),
                            header_bar, 0);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
                            GTK_WIDGET (header_bar->restore_button));
 
   /* Page Menu */
@@ -333,7 +340,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->page_menu_popover);
   g_object_unref (builder);
 
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar), button);
 
   /* End action elements */
   header_bar->action_bar_end = ephy_action_bar_end_new ();
@@ -346,7 +353,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->end_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
   gtk_container_add (GTK_CONTAINER (header_bar->end_revealer), GTK_WIDGET (header_bar->action_bar_end));
 
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
                            GTK_WIDGET (header_bar->end_revealer));
 
   /* Sync the size of placeholder in EphyActionBarStart with downloads button */
@@ -407,7 +414,6 @@ ephy_header_bar_new (EphyWindow *window)
   g_assert (EPHY_IS_WINDOW (window));
 
   return GTK_WIDGET (g_object_new (EPHY_TYPE_HEADER_BAR,
-                                   "show-close-button", TRUE,
                                    "window", window,
                                    NULL));
 }
