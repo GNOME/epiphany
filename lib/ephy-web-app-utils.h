@@ -33,6 +33,7 @@ typedef struct {
   char *url;
   char *desktop_file;
   char install_date[128];
+  guint64 install_date_uint64;
 } EphyWebApplication;
 
 /**
@@ -51,23 +52,40 @@ typedef enum {
   EPHY_WEB_APPLICATION_SYSTEM,
 } EphyWebApplicationOptions;
 
+typedef enum {
+  EPHY_WEB_APP_FOUND,
+  EPHY_WEB_APP_NOT_FOUND,
+} EphyWebAppFound;
+
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
 char               *ephy_web_application_get_app_id_from_name (const char *name);
 
 const char         *ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir);
 
-char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon, EphyWebApplicationOptions options);
+char               *ephy_web_application_create (const char                *id,
+                                                 const char                *address,
+                                                 const char                *name,
+                                                 GdkPixbuf                 *icon_pixbuf,
+                                                 const char                *icon_path,
+                                                 const char                *install_token,
+                                                 EphyWebApplicationOptions  options);
 
 char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 
-gboolean            ephy_web_application_delete (const char *id);
+gboolean            ephy_web_application_delete (const char      *id,
+                                                 EphyWebAppFound *out_app_found);
+
+gboolean            ephy_web_application_delete_by_desktop_file_id (const char      *desktop_file_id,
+                                                                    EphyWebAppFound *out_app_found);
 
 void                ephy_web_application_setup_from_profile_directory (const char *profile_directory);
 
 void                ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info);
 
 char               *ephy_web_application_get_profile_directory (const char *id);
+
+char               *ephy_web_application_get_desktop_path (EphyWebApplication *app);
 
 EphyWebApplication *ephy_web_application_for_profile_directory (const char *profile_dir);
 
@@ -78,6 +96,8 @@ gboolean            ephy_web_application_exists (const char *id);
 GList              *ephy_web_application_get_application_list (void);
 
 GList              *ephy_web_application_get_legacy_application_list (void);
+
+char              **ephy_web_application_get_desktop_id_list (void);
 
 void                ephy_web_application_free_application_list (GList *list);
 

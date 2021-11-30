@@ -1793,6 +1793,7 @@ save_as_application_proceed (EphyApplicationDialogData *data)
                                               webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
                                               app_name,
                                               gtk_image_get_pixbuf (GTK_IMAGE (data->image)),
+                                              NULL, NULL, /* icon_path, install_token */
                                               data->webapp_options);
 
   if (desktop_file)
@@ -1842,7 +1843,7 @@ dialog_save_as_application_confirmation_cb (GtkDialog                 *dialog,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
   if (response == GTK_RESPONSE_OK) {
-    ephy_web_application_delete (app_id);
+    ephy_web_application_delete (app_id, NULL);
     save_as_application_proceed (data);
   }
 }

@@ -242,6 +242,21 @@ ephy_web_application_get_profile_directory (const char *id)
   return ephy_web_application_get_directory_under (id, g_get_user_data_dir ());
 }
 
+/**
+ * ephy_web_application_get_desktop_path:
+ * @app: the #EphyWebApplication
+ *
+ * Gets the path to the .desktop file for @app
+ *
+ * Returns: (transfer full): A newly allocated string.
+ **/
+char *
+ephy_web_application_get_desktop_path (EphyWebApplication *app)
+{
+  g_autofree char *profile_dir = ephy_web_application_get_profile_directory (app->id);
+  return g_build_filename (profile_dir, app->desktop_file, NULL);
+}
+
 static char *
 ephy_web_application_get_cache_directory (const char *id)
 {
@@ -256,7 +271,10 @@ ephy_web_application_get_config_directory (const char *id)
 
 /**
  * ephy_web_application_delete:
- * @id: the identifier of the web application do delete
+ * @id: the identifier of the web application to delete
+ * @out_app_found: return location for a #EphyWebAppFound. This will be set to
+ *   %EPHY_WEB_APP_NOT_FOUND if deleting the app failed due to it not being
+ *   installed, and %EPHY_WEB_APP_FOUND otherwise.
  *
  * Deletes all the data associated with a Web Application created by
  * Epiphany.
@@ -264,7 +282,8 @@ ephy_web_application_get_config_directory (const char *id)
  * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
  **/
 gboolean
-ephy_web_application_delete (const char *id)
+ephy_web_application_delete (const char      *id,
+                             EphyWebAppFound *out_app_found)
 {
   g_autofree char *profile_dir = NULL;
   g_autofree char *cache_dir = NULL;
@@ -276,6 +295,9 @@ ephy_web_application_delete (const char *id)
 
   g_assert (id);
 
+  if (out_app_found)
+    *out_app_found = EPHY_WEB_APP_FOUND;
+
   profile_dir = ephy_web_application_get_profile_directory (id);
   if (!profile_dir)
     return FALSE;
@@ -284,6 +306,8 @@ ephy_web_application_delete (const char *id)
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
     g_warning ("No application with id '%s' is installed.\n", id);
+    if (out_app_found)
+      *out_app_found = EPHY_WEB_APP_NOT_FOUND;
     return FALSE;
   }
 
@@ -330,12 +354,43 @@ ephy_web_application_delete (const char *id)
   return TRUE;
 }
 
+/**
+ * ephy_web_application_delete_by_desktop_file_id:
+ * @desktop_file_id: the .desktop file name for the web app to be deleted, with
+ *   the extension
+ * @out_app_found: return location for a #EphyWebAppFound. This will be set to
+ *   %EPHY_WEB_APP_NOT_FOUND if deleting the app failed due to it not being
+ *   installed, and %EPHY_WEB_APP_FOUND otherwise.
+ *
+ * Deletes all the data associated with a Web Application created by
+ * Epiphany.
+ *
+ * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
+ **/
+gboolean
+ephy_web_application_delete_by_desktop_file_id (const char      *desktop_file_id,
+                                                EphyWebAppFound *out_app_found)
+{
+  const char *id;
+  g_autofree char *gapp_id = NULL;
+
+  g_assert (desktop_file_id);
+
+  gapp_id = g_strdup (desktop_file_id);
+  if (g_str_has_suffix (desktop_file_id, ".desktop"))
+    gapp_id[strlen (desktop_file_id) - strlen (".desktop")] = '\0';
+
+  id = get_app_id_from_gapplication_id (gapp_id);
+
+  return ephy_web_application_delete (id, out_app_found);
+}
+
 static char *
 create_desktop_file (const char *id,
                      const char *name,
                      const char *address,
                      const char *profile_dir,
-                     GdkPixbuf  *icon)
+                     const char *icon_path)
 {
   g_autofree char *filename = NULL;
   g_autoptr (GKeyFile) file = NULL;
@@ -365,18 +420,8 @@ create_desktop_file (const char *id,
   g_key_file_set_value (file, "Desktop Entry", "Type", "Application");
   g_key_file_set_value (file, "Desktop Entry", "Categories", "GNOME;GTK;");
 
-  if (icon) {
-    g_autoptr (GOutputStream) stream = NULL;
-    g_autofree char *path = NULL;
-    g_autoptr (GFile) image = NULL;
-
-    path = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
-    image = g_file_new_for_path (path);
-
-    stream = (GOutputStream *)g_file_create (image, 0, NULL, NULL);
-    gdk_pixbuf_save_to_stream (icon, stream, "png", NULL, NULL, NULL);
-    g_key_file_set_value (file, "Desktop Entry", "Icon", path);
-  }
+  if (icon_path)
+    g_key_file_set_value (file, "Desktop Entry", "Icon", icon_path);
 
   wm_class = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, id, NULL);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
@@ -409,7 +454,10 @@ create_desktop_file (const char *id,
  * @id: the identifier for the new web application
  * @address: the address of the new web application
  * @name: the name for the new web application
- * @icon: the icon for the new web application
+ * @icon_pixbuf: the icon for the new web application as a #GdkPixbuf
+ * @icon_path: the path to the icon, used instead of @icon_pixbuf
+ * @install_token: the install token acquired via portal, used for
+ *   non-interactive sandboxed installation
  * @options: the options for the new web application
  *
  * Creates a new Web Application for @address.
@@ -420,13 +468,18 @@ char *
 ephy_web_application_create (const char                *id,
                              const char                *address,
                              const char                *name,
-                             GdkPixbuf                 *icon,
+                             GdkPixbuf                 *icon_pixbuf,
+                             const char                *icon_path,
+                             const char                *install_token,
                              EphyWebApplicationOptions  options)
 {
   g_autofree char *app_file = NULL;
   g_autofree char *profile_dir = NULL;
   g_autofree char *desktop_file_path = NULL;
+  g_autofree char *icon_path_owned = NULL;
   int fd;
+
+  g_return_val_if_fail (!icon_pixbuf || !icon_path, NULL);
 
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
@@ -454,8 +507,22 @@ ephy_web_application_create (const char                *id,
   }
   close (fd);
 
+  /* Write the icon to a file */
+  if (icon_pixbuf) {
+    g_autoptr (GOutputStream) stream = NULL;
+    g_autoptr (GFile) image = NULL;
+
+    icon_path_owned = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
+    image = g_file_new_for_path (icon_path_owned);
+
+    stream = (GOutputStream *)g_file_create (image, 0, NULL, NULL);
+    gdk_pixbuf_save_to_stream (icon_pixbuf, stream, "png", NULL, NULL, NULL);
+  } else {
+    icon_path_owned = g_strdup (icon_path);
+  }
+
   /* Create the deskop file. */
-  desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon);
+  desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon_path_owned);
   if (desktop_file_path)
     ephy_web_application_initialize_settings (profile_dir, options);
 
@@ -586,7 +653,6 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
   g_auto (GStrv) argv = NULL;
   g_autoptr (GFile) file = NULL;
   g_autoptr (GFileInfo) file_info = NULL;
-  guint64 created;
   g_autoptr (GDate) date = NULL;
 
   id = get_app_id_from_profile_directory (profile_dir);
@@ -614,10 +680,10 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
 
   /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
   file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-  created = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+  app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
 
   date = g_date_new ();
-  g_date_set_time_t (date, (time_t)created);
+  g_date_set_time_t (date, (time_t)app->install_date_uint64);
   g_date_strftime (app->install_date, 127, "%x", date);
 
   return g_steal_pointer (&app);
@@ -705,7 +771,6 @@ ephy_web_application_get_legacy_application_list (void)
   return ephy_web_application_get_application_list_internal (TRUE);
 }
 
-
 /**
  * ephy_web_application_free_application_list:
  * @list: an #EphyWebApplication GList
@@ -716,6 +781,51 @@ void
 ephy_web_application_free_application_list (GList *list)
 {
   g_list_free_full (list, (GDestroyNotify)ephy_web_application_free);
+}
+
+/**
+ * ephy_web_application_get_desktop_id_list:
+ *
+ * Gets a list of the currently installed web applications' .desktop filenames.
+ * This is useful even though we don't have access to the actual .desktop files
+ * when running under Flatpak, because we return it over D-Bus in the
+ * WebAppProvider service.
+ *
+ * Returns: (transfer-full): a %NULL-terminated array of strings
+ **/
+char **
+ephy_web_application_get_desktop_id_list (void)
+{
+  g_autoptr (GFileEnumerator) children = NULL;
+  g_autoptr (GFile) parent_directory = NULL;
+  GPtrArray *desktop_file_ids;
+
+  parent_directory = g_file_new_for_path (g_get_user_data_dir ());
+  children = g_file_enumerate_children (parent_directory,
+                                        "standard::name",
+                                        0, NULL, NULL);
+  if (!children)
+    return NULL;
+
+  desktop_file_ids = g_ptr_array_new_with_free_func (g_free);
+  for (;;) {
+    g_autoptr (GFileInfo) info = g_file_enumerator_next_file (children, NULL, NULL);
+    const char *name;
+
+    if (!info)
+      break;
+
+    name = g_file_info_get_name (info);
+    if (g_str_has_prefix (name, get_gapplication_id_prefix ())) {
+      g_autofree char *desktop_file_id = NULL;
+      desktop_file_id = g_strconcat (name, ".desktop", NULL);
+      g_ptr_array_add (desktop_file_ids, g_steal_pointer (&desktop_file_id));
+    }
+  }
+
+  g_ptr_array_add (desktop_file_ids, NULL);
+
+  return (char **)g_ptr_array_free (desktop_file_ids, FALSE);
 }
 
 /**

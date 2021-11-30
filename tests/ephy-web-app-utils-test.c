@@ -68,7 +68,7 @@ test_web_app_lifetime (void)
 
     /* Test creation */
     id = ephy_web_application_get_app_id_from_name (test.name);
-    desktop_file = ephy_web_application_create (id, test.url, test.name, NULL, EPHY_WEB_APPLICATION_NONE);
+    desktop_file = ephy_web_application_create (id, test.url, test.name, NULL, NULL, NULL, EPHY_WEB_APPLICATION_NONE);
     g_assert_true (g_str_has_prefix (desktop_file, ephy_profile_dir ()));
     g_assert_true (g_file_test (desktop_file, G_FILE_TEST_EXISTS));
 
@@ -119,7 +119,7 @@ test_web_app_lifetime (void)
 
     /* Test delete API */
     g_test_message ("DELETE: %s", test.name);
-    g_assert_true (ephy_web_application_delete (id));
+    g_assert_true (ephy_web_application_delete (id, NULL));
 
     g_assert_false (g_file_test (desktop_link, G_FILE_TEST_EXISTS));
     g_assert_false (g_file_test (desktop_link, G_FILE_TEST_IS_SYMLINK));
