@@ -210,7 +210,7 @@ firefox_exists (void)
 
   firefox_profiles = get_firefox_profiles ();
   has_firefox_profile = g_slist_length (firefox_profiles) > 0;
-  g_slist_free (firefox_profiles);
+  g_slist_free_full (firefox_profiles, g_free);
 
   return has_firefox_profile;
 }
