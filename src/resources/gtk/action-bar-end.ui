@@ -10,52 +10,6 @@
         <property name="homogeneous">False</property>
         <property name="layout-style">expand</property>
       </object>
-      <packing>
-        <property name="pack-type">start</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="bookmarks_button">
-        <property name="visible">True</property>
-        <property name="valign">center</property>
-        <!-- Translators: tooltip for the bookmarks popover button -->
-        <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
-        <property name="popover">bookmarks_popover</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage" id="bookmarks_image">
-            <property name="visible">True</property>
-            <property name="icon-name">ephy-library-symbolic</property>
-            <property name="icon-size">1</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack-type">end</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="bookmark_button">
-        <property name="visible">True</property>
-        <property name="valign">center</property>
-        <!-- Translators: tooltip for the bookmark button -->
-        <property name="tooltip_text" translatable="yes">Bookmark page</property>
-        <child>
-          <object class="GtkImage" id="bookmark_image">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">non-starred-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="image-button"/>
-        </style>
-      </object>
-      <packing>
-        <property name="pack-type">end</property>
-      </packing>
     </child>
     <child>
       <object class="GtkRevealer" id="downloads_revealer">
@@ -98,9 +52,43 @@
           </object>
         </child>
       </object>
-      <packing>
-        <property name="pack-type">end</property>
-      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="bookmark_button">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <!-- Translators: tooltip for the bookmark button -->
+        <property name="tooltip_text" translatable="yes">Bookmark page</property>
+        <child>
+          <object class="GtkImage" id="bookmark_image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">non-starred-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="image-button"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="bookmarks_button">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <!-- Translators: tooltip for the bookmarks popover button -->
+        <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
+        <property name="popover">bookmarks_popover</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="bookmarks_image">
+            <property name="visible">True</property>
+            <property name="icon-name">ephy-library-symbolic</property>
+            <property name="icon-size">1</property>
+          </object>
+        </child>
+      </object>
     </child>
   </template>
   <object class="EphyBookmarksPopover" id="bookmarks_popover">
