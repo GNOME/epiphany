@@ -35,6 +35,16 @@ typedef struct {
   char install_date[128];
 } EphyWebApplication;
 
+/**
+ * EphyWebApplicationOptions:
+ * @EPHY_WEB_APPLICATION_NONE: A default web application installed in the
+ *    user's home directory.
+ * @EPHY_WEB_APPLICATION_MOBILE_CAPABLE: Set when the meta tag
+ *    "apple-mobile-web-app-capable" is set. Causes back/forward navigation
+ *    buttons to be hidden.
+ * @EPHY_WEB_APPLICATION_SYSTEM: Set when the web application was installed
+ *    under /usr via deb/rpm rather than in the user's home directory.
+ */
 typedef enum {
   EPHY_WEB_APPLICATION_NONE,
   EPHY_WEB_APPLICATION_MOBILE_CAPABLE,
