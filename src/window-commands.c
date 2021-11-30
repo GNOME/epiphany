@@ -2416,7 +2416,7 @@ window_cmd_encoding (GSimpleAction *action,
 
   dialog = ephy_encoding_dialog_new (window);
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 void
