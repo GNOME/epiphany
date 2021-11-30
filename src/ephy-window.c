@@ -4178,30 +4178,62 @@ window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
 }
 
 static void
-continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
+finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
   gboolean should_close;
-
-  data->window->checking_modified_forms = FALSE;
-  g_clear_handle_id (&data->window->modified_forms_timeout_id, g_source_remove);
-
-  if (data->modified_embed) {
-    /* jump to the first tab with modified forms */
-    impl_set_active_child (EPHY_EMBED_CONTAINER (data->window),
-                           data->modified_embed);
-    if (!confirm_close_with_modified_forms (data->window))
-      return;
-  }
-
-  /* FIXME: We only checked the first tab with modified forms. If more tabs
-   * have modified forms, they will be lost and the user will not be warned.
-   */
 
   data->window->force_close = TRUE;
   should_close = ephy_window_close (data->window);
   data->window->force_close = FALSE;
   if (should_close)
     gtk_widget_destroy (GTK_WIDGET (data->window));
+
+  window_has_modified_forms_data_free (data);
+}
+
+static void
+confirm_close_window_with_modified_forms_cb (GtkDialog                  *dialog,
+                                             GtkResponseType             response,
+                                             WindowHasModifiedFormsData *data)
+{
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    finish_window_close_after_modified_forms_check (data);
+  else
+    window_has_modified_forms_data_free (data);
+}
+
+static void
+continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
+{
+  data->window->checking_modified_forms = FALSE;
+  g_clear_handle_id (&data->window->modified_forms_timeout_id, g_source_remove);
+
+  if (data->modified_embed) {
+    GtkWidget *dialog;
+
+    /* jump to the first tab with modified forms */
+    impl_set_active_child (EPHY_EMBED_CONTAINER (data->window),
+                           data->modified_embed);
+
+    dialog = construct_confirm_close_dialog (data->window,
+                                             _("Do you want to leave this website?"),
+                                             _("A form you modified has not been submitted."),
+                                             _("_Discard form"));
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (confirm_close_window_with_modified_forms_cb),
+                      data);
+    gtk_window_present (GTK_WINDOW (dialog));
+
+    return;
+  }
+
+  /* FIXME: We only checked the first tab with modified forms. If more tabs
+   * have modified forms, they will be lost and the user will not be warned.
+   */
+
+  finish_window_close_after_modified_forms_check (data);
 }
 
 static void
@@ -4227,7 +4259,6 @@ window_has_modified_forms_cb (EphyWebView                *view,
     return;
 
   continue_window_close_after_modified_forms_check (data);
-  window_has_modified_forms_data_free (data);
 }
 
 /* This function checks an entire EphyWindow to see if it contains any tab with
