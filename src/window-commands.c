@@ -2597,6 +2597,32 @@ window_cmd_go_tabs_view (GSimpleAction *action,
   ephy_window_open_pages_view (EPHY_WINDOW (user_data));
 }
 
+static void
+enable_browse_with_caret_state_cb (GtkMessageDialog *dialog,
+                                   GtkResponseType   response,
+                                   EphyWindow       *window)
+{
+  GActionGroup *action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  GAction *action;
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "browse-with-caret");
+
+  if (response == GTK_RESPONSE_CANCEL) {
+    g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                               g_variant_new_boolean (FALSE));
+
+    return;
+  }
+
+  g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                             g_variant_new_boolean (TRUE));
+  g_settings_set_boolean (EPHY_SETTINGS_MAIN,
+                          EPHY_PREFS_ENABLE_CARET_BROWSING, TRUE);
+}
+
 void
 window_cmd_change_browse_with_caret_state (GSimpleAction *action,
                                            GVariant      *state,
@@ -2609,7 +2635,6 @@ window_cmd_change_browse_with_caret_state (GSimpleAction *action,
 
   if (active) {
     GtkWidget *dialog;
-    int response;
 
     dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2623,14 +2648,12 @@ window_cmd_change_browse_with_caret_state (GSimpleAction *action,
     gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Enable"), GTK_RESPONSE_ACCEPT);
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (enable_browse_with_caret_state_cb), window);
 
-    gtk_widget_destroy (dialog);
+    gtk_window_present (GTK_WINDOW (dialog));
 
-    if (response == GTK_RESPONSE_CANCEL) {
-      g_simple_action_set_state (action, g_variant_new_boolean (FALSE));
-      return;
-    }
+    return;
   }
 
   g_simple_action_set_state (action, g_variant_new_boolean (active));
