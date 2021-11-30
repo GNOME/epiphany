@@ -979,8 +979,10 @@ window_cmd_show_about (GSimpleAction *action,
 
   dialog = GTK_ABOUT_DIALOG (gtk_about_dialog_new ());
 
-  if (window)
+  if (window) {
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  }
 
   if (g_str_equal (PROFILE, "Canary"))
     gtk_about_dialog_set_program_name (dialog, _("Epiphany Canary"));
@@ -1034,8 +1036,9 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_documenters (dialog, (const char **)documenters);
   gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+  gtk_window_present (GTK_WINDOW (dialog));
 
   g_free (comments);
   g_strfreev (artists);
