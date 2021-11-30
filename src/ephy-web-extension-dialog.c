@@ -53,6 +53,25 @@ clear_listbox (GtkWidget *listbox)
 }
 
 static void
+on_remove_confirmed (GtkDialog       *dialog,
+                     GtkResponseType  response,
+                     gpointer         user_data)
+{
+  GtkListBoxRow *row = user_data;
+  EphyWebExtensionDialog *self =
+    EPHY_WEB_EXTENSION_DIALOG (gtk_widget_get_toplevel (GTK_WIDGET (row)));
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_OK) {
+    EphyWebExtension *web_extension = g_object_get_data (G_OBJECT (row), "web_extension");
+
+    g_assert (web_extension);
+    ephy_web_extension_manager_uninstall (self->web_extension_manager, web_extension);
+  }
+}
+
+static void
 on_remove_button_clicked (GtkButton *button,
                           gpointer   user_data)
 {
@@ -60,7 +79,6 @@ on_remove_button_clicked (GtkButton *button,
   GtkWidget *dialog = NULL;
   GtkListBoxRow *row;
   GtkWidget *widget;
-  gint res;
 
   row = g_object_get_data (G_OBJECT (button), "row");
   if (!row)
@@ -81,15 +99,8 @@ on_remove_button_clicked (GtkButton *button,
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), "destructive-action");
 
-  res = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (res == GTK_RESPONSE_OK) {
-    EphyWebExtension *web_extension = g_object_get_data (G_OBJECT (row), "web_extension");
-
-    g_assert (web_extension);
-    ephy_web_extension_manager_uninstall (self->web_extension_manager, web_extension);
-  }
-
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (on_remove_confirmed), row);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -227,13 +238,28 @@ ephy_web_extension_dialog_refresh_listbox (EphyWebExtensionDialog *self)
 }
 
 static void
+on_add_file_selected (GtkNativeDialog *dialog,
+                      GtkResponseType  response,
+                      gpointer         user_data)
+{
+  EphyWebExtensionDialog *self = user_data;
+
+  gtk_native_dialog_destroy (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    g_autoptr (GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+
+    ephy_web_extension_manager_install (self->web_extension_manager, file);
+  }
+}
+
+static void
 on_add_button_clicked (GtkButton *button,
                        gpointer   user_data)
 {
   EphyWebExtensionDialog *self = EPHY_WEB_EXTENSION_DIALOG (user_data);
   GtkFileChooserNative *dialog = NULL;
   GtkFileFilter *filter;
-  gint res;
 
   /* Translators: this is the title of a file chooser dialog. */
   dialog = gtk_file_chooser_native_new (_("Open File (manifest.json/xpi)"),
@@ -248,14 +274,8 @@ on_add_button_clicked (GtkButton *button,
   gtk_file_filter_add_mime_type (GTK_FILE_FILTER (filter), "application/x-xpinstall");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), g_steal_pointer (&filter));
 
-  res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
-  if (res == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-
-    ephy_web_extension_manager_install (self->web_extension_manager, file);
-  }
-
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
+  g_signal_connect (dialog, "response", G_CALLBACK (on_add_file_selected), self);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
 static void
