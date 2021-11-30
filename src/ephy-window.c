@@ -193,6 +193,7 @@ struct _EphyWindow {
   guint updating_address : 1;
   guint force_close : 1;
   guint checking_modified_forms : 1;
+  guint confirmed_close_with_multiple_tabs : 1;
   guint present_on_insert : 1;
 
   guint32 present_on_insert_user_time;
@@ -273,23 +274,6 @@ construct_confirm_close_dialog (EphyWindow *window,
                                GTK_WINDOW (dialog));
 
   return dialog;
-}
-
-static gboolean
-confirm_close_with_multiple_tabs (EphyWindow *window)
-{
-  GtkWidget *dialog;
-  int response;
-
-  dialog = construct_confirm_close_dialog (window,
-                                           _("There are multiple tabs open."),
-                                           _("If you close this window, all open tabs will be lost"),
-                                           _("C_lose tabs"));
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
-  return response == GTK_RESPONSE_ACCEPT;
 }
 
 static void
@@ -4310,6 +4294,19 @@ ephy_window_check_modified_forms (EphyWindow *window)
   g_list_free (tabs);
 }
 
+static void
+window_close_with_multiple_tabs_cb (GtkDialog       *dialog,
+                                    GtkResponseType  response,
+                                    EphyWindow      *window)
+{
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    window->confirmed_close_with_multiple_tabs = TRUE;
+    gtk_window_close (GTK_WINDOW (window));
+  }
+}
+
 /**
  * ephy_window_close:
  * @window: an #EphyWindow
@@ -4349,7 +4346,19 @@ ephy_window_close (EphyWindow *window)
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) > 1 &&
       ephy_tab_view_get_n_pages (window->tab_view) > 1 &&
       !ephy_session_is_closing (session) &&
-      !confirm_close_with_multiple_tabs (window)) {
+      !window->confirmed_close_with_multiple_tabs) {
+    GtkWidget *dialog;
+
+    dialog = construct_confirm_close_dialog (window,
+                                             _("There are multiple tabs open."),
+                                             _("If you close this window, all open tabs will be lost"),
+                                             _("C_lose tabs"));
+
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (window_close_with_multiple_tabs_cb),
+                      window);
+    gtk_window_present (GTK_WINDOW (dialog));
+
     /* stop window close */
     return FALSE;
   }
