@@ -133,70 +133,45 @@ combo_box_changed_cb (GtkComboBox *combo_box,
     gtk_button_set_label (button, _("I_mport"));
 }
 
-static gchar *
-get_path (GIOChannel *channel)
-{
-  gchar *line;
-  const gchar *path;
-  gchar *result;
-  gsize length;
-
-  do {
-    g_io_channel_read_line (channel, &line, &length, NULL, NULL);
-
-    if (g_str_has_prefix (line, "Path")) {
-      path = line;
-
-      /* Extract value (e.g. Path=Value\n -> Value) */
-      path = strchr (path, '=');
-      path++;
-      ((gchar *)path)[strcspn (path, "\n")] = '\0';
-      result = g_strdup (path);
-
-      g_free (line);
-      return result;
-    }
-
-    g_free (line);
-    /* Until '\n' */
-  } while (length != 1);
-
-  return NULL;
-}
-
 static GSList *
 get_firefox_profiles (void)
 {
-  GIOChannel *channel;
+  GKeyFile *keyfile;
   GSList *profiles = NULL;
-  gchar *filename;
-  gchar *line;
-  gchar *profile;
-  int count = 0;
-  gsize length;
+  g_autofree gchar *filename = NULL;
+  g_autoptr (GError) error = NULL;
+  g_auto (GStrv) groups = NULL;
+  int i = 0;
 
   filename = g_build_filename (g_get_home_dir (),
                                FIREFOX_PROFILES_DIR,
                                FIREFOX_PROFILES_FILE,
                                NULL);
-  channel = g_io_channel_new_file (filename, "r", NULL);
-  g_free (filename);
+  keyfile = g_key_file_new ();
+  g_key_file_load_from_file (keyfile, filename, G_KEY_FILE_NONE, &error);
+  if (error) {
+    g_warning ("Failed to load %s: %s", filename, error->message);
 
-  if (channel) {
-    do {
-      g_io_channel_read_line (channel, &line, &length, NULL, NULL);
+    return NULL;
+  }
 
-      profile = g_strdup_printf ("[Profile%d]\n", count);
-      if (g_strcmp0 (line, profile) == 0) {
-        profiles = g_slist_append (profiles, get_path (channel));
+  groups = g_key_file_get_groups (keyfile, NULL);
+  while (groups[i]) {
+    const char *group = groups[i++];
+    char *path;
 
-        count++;
-      }
-      g_free (profile);
-      g_free (line);
-    } while (length != 0);
+    if (!g_str_has_prefix (group, "Profile"))
+      continue;
 
-    g_io_channel_unref (channel);
+    path = g_key_file_get_string (keyfile, group, "Path", &error);
+    if (error) {
+      g_warning ("Failed to parse profile %s in %s: %s",
+                 groups[i], filename, error->message);
+
+      continue;
+    }
+
+    profiles = g_slist_append (profiles, path);
   }
 
   return profiles;
