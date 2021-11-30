@@ -276,23 +276,6 @@ construct_confirm_close_dialog (EphyWindow *window,
 }
 
 static gboolean
-confirm_close_with_modified_forms (EphyWindow *window)
-{
-  GtkWidget *dialog;
-  int response;
-
-  dialog = construct_confirm_close_dialog (window,
-                                           _("Do you want to leave this website?"),
-                                           _("A form you modified has not been submitted."),
-                                           _("_Discard form"));
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
-  return response == GTK_RESPONSE_ACCEPT;
-}
-
-static gboolean
 confirm_close_with_multiple_tabs (EphyWindow *window)
 {
   GtkWidget *dialog;
@@ -2852,6 +2835,29 @@ tab_has_modified_forms_data_free (TabHasModifiedFormsData *data)
 }
 
 static void
+tab_has_modified_forms_dialog_cb (GtkDialog               *dialog,
+                                  GtkResponseType          response,
+                                  TabHasModifiedFormsData *data)
+{
+  HdyTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    /* It's safe to close the tab immediately because we are only checking a
+     * single tab for modified forms here. There is an entirely separate
+     * codepath for checking modified forms when closing the whole window,
+     * see ephy_window_check_modified_forms().
+     */
+    hdy_tab_view_close_page_finish (tab_view, data->page, TRUE);
+    ephy_window_close_tab (data->window, data->embed);
+  } else
+    hdy_tab_view_close_page_finish (tab_view, data->page, FALSE);
+
+  tab_has_modified_forms_data_free (data);
+}
+
+static void
 tab_has_modified_forms_cb (EphyWebView             *view,
                            GAsyncResult            *result,
                            TabHasModifiedFormsData *data)
@@ -2865,16 +2871,24 @@ tab_has_modified_forms_cb (EphyWebView             *view,
       data->page != NULL) {
     HdyTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
-    if (!has_modified_forms || confirm_close_with_modified_forms (data->window)) {
-      /* It's safe to close the tab immediately because we are only checking a
-       * single tab for modified forms here. There is an entirely separate
-       * codepath for checking modified forms when closing the whole window,
-       * see ephy_window_check_modified_forms().
-       */
+    if (!has_modified_forms) {
       hdy_tab_view_close_page_finish (tab_view, data->page, TRUE);
       ephy_window_close_tab (data->window, data->embed);
-    } else
-      hdy_tab_view_close_page_finish (tab_view, data->page, FALSE);
+    } else {
+      GtkWidget *dialog;
+
+      dialog = construct_confirm_close_dialog (data->window,
+                                               _("Do you want to leave this website?"),
+                                               _("A form you modified has not been submitted."),
+                                               _("_Discard form"));
+
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (tab_has_modified_forms_dialog_cb),
+                        data);
+      gtk_window_present (GTK_WINDOW (dialog));
+
+      return;
+    }
   }
 
   tab_has_modified_forms_data_free (data);
