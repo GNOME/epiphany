@@ -1358,6 +1358,7 @@ window_cmd_open (GSimpleAction *action,
 
 typedef struct {
   EphyWebView *view;
+  GtkWidget *dialog;
   GtkWidget *image;
   GtkWidget *entry;
   GtkWidget *spinner;
@@ -1707,36 +1708,6 @@ fill_mobile_capable (EphyApplicationDialogData *data)
   ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
 }
 
-static gboolean
-confirm_web_application_overwrite (GtkWindow  *parent,
-                                   const char *title)
-{
-  GtkResponseType response;
-  GtkWidget *dialog;
-
-  dialog = gtk_message_dialog_new (parent,
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   _("A web application named “%s” already exists. Do you want to replace it?"),
-                                   title);
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("Cancel"),
-                          GTK_RESPONSE_CANCEL,
-                          _("Replace"),
-                          GTK_RESPONSE_OK,
-                          NULL);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            _("An application with the same name already exists. Replacing it will "
-                                              "overwrite it."));
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
-  return response == GTK_RESPONSE_OK;
-}
-
 static void
 session_bus_ready_cb (GObject      *source,
                       GAsyncResult *res,
@@ -1790,66 +1761,120 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
 }
 
 static void
-dialog_save_as_application_response_cb (GtkDialog                 *dialog,
-                                        gint                       response,
-                                        EphyApplicationDialogData *data)
+save_as_application_proceed (EphyApplicationDialogData *data)
 {
-  if (response == GTK_RESPONSE_OK) {
-    const char *app_name;
-    g_autofree gchar *app_id = NULL;
-    g_autofree gchar *desktop_file = NULL;
-    g_autofree char *message = NULL;
-    GNotification *notification;
+  const char *app_name;
+  g_autofree gchar *app_id = NULL;
+  g_autofree gchar *desktop_file = NULL;
+  g_autofree char *message = NULL;
+  GNotification *notification;
 
-    app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
-    app_id = ephy_web_application_get_app_id_from_name (app_name);
+  app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+  app_id = ephy_web_application_get_app_id_from_name (app_name);
 
-    if (ephy_web_application_exists (app_id)) {
-      if (confirm_web_application_overwrite (GTK_WINDOW (dialog), app_name))
-        ephy_web_application_delete (app_id);
-      else
-        return;
-    }
+  /* Create Web Application, including a new profile and .desktop file. */
+  desktop_file = ephy_web_application_create (app_id,
+                                              webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
+                                              app_name,
+                                              gtk_image_get_pixbuf (GTK_IMAGE (data->image)),
+                                              data->webapp_options);
 
-    /* Create Web Application, including a new profile and .desktop file. */
-    desktop_file = ephy_web_application_create (app_id,
-                                                webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
-                                                app_name,
-                                                gtk_image_get_pixbuf (GTK_IMAGE (data->image)),
-                                                data->webapp_options);
+  if (desktop_file)
+    message = g_strdup_printf (_("The application “%s” is ready to be used"),
+                               app_name);
+  else
+    message = g_strdup_printf (_("The application “%s” could not be created"),
+                               app_name);
 
-    if (desktop_file)
-      message = g_strdup_printf (_("The application “%s” is ready to be used"),
-                                 app_name);
-    else
-      message = g_strdup_printf (_("The application “%s” could not be created"),
-                                 app_name);
+  notification = g_notification_new (message);
 
-    notification = g_notification_new (message);
+  if (data->image) {
+    GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (data->image));
 
-    if (data->image) {
-      GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (data->image));
-
-      g_notification_set_icon (notification, G_ICON (pixbuf));
-    }
-
-    if (desktop_file) {
-      g_autofree char *basename = g_path_get_basename (desktop_file);
-
-      /* Translators: Desktop notification when a new web app is created. */
-      g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", basename);
-      g_notification_set_default_action_and_target (notification, "app.launch-app", "s", basename);
-
-      ephy_focus_desktop_app (desktop_file);
-    }
-
-    g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_LOW);
-
-    g_application_send_notification (G_APPLICATION (g_application_get_default ()), app_name, notification);
+    g_notification_set_icon (notification, G_ICON (pixbuf));
   }
 
+  if (desktop_file) {
+    g_autofree char *basename = g_path_get_basename (desktop_file);
+
+    /* Translators: Desktop notification when a new web app is created. */
+    g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", basename);
+    g_notification_set_default_action_and_target (notification, "app.launch-app", "s", basename);
+
+    ephy_focus_desktop_app (desktop_file);
+  }
+
+  g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_LOW);
+
+  g_application_send_notification (G_APPLICATION (g_application_get_default ()), app_name, notification);
+
+  gtk_widget_destroy (GTK_WIDGET (data->dialog));
   ephy_application_dialog_data_free (data);
+}
+
+static void
+dialog_save_as_application_confirmation_cb (GtkDialog                 *dialog,
+                                            GtkResponseType            response,
+                                            EphyApplicationDialogData *data)
+{
+  const char *app_name;
+  g_autofree gchar *app_id = NULL;
+
+  app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+  app_id = ephy_web_application_get_app_id_from_name (app_name);
+
   gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_OK) {
+    ephy_web_application_delete (app_id);
+    save_as_application_proceed (data);
+  }
+}
+
+static void
+dialog_save_as_application_response_cb (GtkDialog                 *dialog,
+                                        GtkResponseType            response,
+                                        EphyApplicationDialogData *data)
+{
+  const char *app_name;
+  g_autofree gchar *app_id = NULL;
+  GtkWidget *confirmation_dialog;
+
+  if (response != GTK_RESPONSE_OK) {
+    ephy_application_dialog_data_free (data);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    return;
+  }
+
+  app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+  app_id = ephy_web_application_get_app_id_from_name (app_name);
+
+  if (!ephy_web_application_exists (app_id)) {
+    save_as_application_proceed (data);
+    return;
+  }
+
+  confirmation_dialog =
+    gtk_message_dialog_new (GTK_WINDOW (dialog),
+                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                            GTK_MESSAGE_QUESTION,
+                            GTK_BUTTONS_NONE,
+                            _("A web application named “%s” already exists. Do you want to replace it?"),
+                            app_name);
+  gtk_dialog_add_buttons (GTK_DIALOG (confirmation_dialog),
+                          _("Cancel"),
+                          GTK_RESPONSE_CANCEL,
+                          _("Replace"),
+                          GTK_RESPONSE_OK,
+                          NULL);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (confirmation_dialog),
+                                            _("An application with the same name already exists. Replacing it will "
+                                              "overwrite it."));
+  gtk_dialog_set_default_response (GTK_DIALOG (confirmation_dialog), GTK_RESPONSE_CANCEL);
+
+  g_signal_connect (confirmation_dialog, "response",
+                    G_CALLBACK (dialog_save_as_application_confirmation_cb), data);
+  gtk_window_present (GTK_WINDOW (confirmation_dialog));
 }
 
 void
@@ -1927,6 +1952,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   gtk_style_context_add_class (context, "dim-label");
 
   data = g_new0 (EphyApplicationDialogData, 1);
+  data->dialog = dialog;
   data->view = view;
   data->image = image;
   data->entry = entry;
