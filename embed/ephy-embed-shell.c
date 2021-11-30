@@ -340,7 +340,7 @@ web_process_extension_about_apps_message_received_cb (WebKitUserContentManager *
   g_autofree char *app_id = NULL;
 
   app_id = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
-  ephy_web_application_delete (app_id);
+  ephy_web_application_delete (app_id, NULL);
 }
 
 static char *

@@ -1,0 +1,85 @@
+<!DOCTYPE node PUBLIC
+'-//freedesktop//DTD D-BUS Object Introspection 1.0//EN'
+'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
+<node>
+
+  <!--
+      org.gnome.Epiphany.WebAppProvider:
+      @short_description: Webapp provider interface
+
+      The interface used for handling Epiphany Webapps in GNOME Software, or other
+      clients (version 1).
+  -->
+  <interface name="org.gnome.Epiphany.WebAppProvider">
+    <!--
+        GetInstalledApps:
+        @desktop_file_ids: An array of .desktop file names, one for each
+          installed web app, with the .desktop suffix included
+
+        Returns the set of installed Epiphany web applications. The caller can
+        use them with g_desktop_app_info_new() if outside the sandbox.
+    -->
+    <method name="GetInstalledApps">
+      <arg type="as" name="webapps" direction="out" />
+    </method>
+
+    <!--
+        Install:
+        @url: the URL of the web app
+        @name: the human readable name of the web app
+        @install_token: the token acquired via org.freedesktop.portal.InstallDynamicLauncher
+        @desktop_file_id: the desktop file id of the installed app, with a
+          ".desktop" suffix
+
+        Installs a web app. This interface is expected to be used by trusted
+        system components such as GNOME Software, which can acquire an
+        @install_token using the portal method
+        org.freedesktop.portal.DynamicLauncher.RequestInstallToken(). This allows Epiphany
+        to install the web app without user interaction and despite being sandboxed.
+        This is desirable because the user would've already clicked "Install" in
+        Software; they should not have to confirm the operation again in a different
+        app (Epiphany).
+
+        The @install_token must be provided so that Epiphany can complete the
+        installation without a user-facing dialog. The icon given to
+        org.freedesktop.portal.InstallDynamicLauncher.RequestInstallToken() will
+        be used, and the name given to that method should match the @name given here.
+
+        If the arguments passed are invalid this method returns the error
+        `org.gnome.Epiphany.WebAppProvider.Error.InvalidArgs`, and otherwise
+        `org.gnome.Epiphany.WebAppProvider.Error.Failed`.
+    -->
+    <method name="Install">
+      <arg type="s" name="url" direction="in" />
+      <arg type="s" name="name" direction="in" />
+      <arg type="s" name="install_token" direction="in" />
+      <arg type="s" name="desktop_file_id" direction="out" />
+    </method>
+
+    <!--
+        Uninstall:
+        @desktop_file_id: the filename of the .desktop file for an installed web
+          app, with the .desktop suffix
+
+        Uninstalls a web app. Note that the @desktop_file_id is just a filename
+        not a full path, and it's the same one returned by the
+        GetInstalledWebApps() method.
+
+        The error `org.gnome.Epiphany.WebAppProvider.Error.NotInstalled` will be
+        returned if the specified web app is not installed. The other possible
+        error values are `org.gnome.Epiphany.WebAppProvider.Error.InvalidArgs`
+        and `org.gnome.Epiphany.WebAppProvider.Error.Failed`.
+    -->
+    <method name="Uninstall">
+      <arg type="s" name="desktop_file_id" direction="in" />
+    </method>
+    <!--
+        Version:
+
+        The API version number, to be incremented for backwards compatible
+        changes so clients can determine which features are available. For
+        backwards incompatible changes, the interface name will change.
+    -->
+    <property name="Version" type="u" access="read"/>
+  </interface>
+</node>

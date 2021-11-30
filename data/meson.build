@@ -96,6 +96,13 @@ configure_file(
   install_dir: servicedir
 )
 
+configure_file(
+  input: 'org.gnome.Epiphany.WebAppProvider.service.in',
+  output: 'org.gnome.Epiphany.WebAppProvider.service',
+  configuration: service_conf,
+  install_dir: servicedir
+)
+
 search_provider_conf = configuration_data()
 search_provider_conf.set('appid', application_id)
 search_provider_conf.set('profile', profile != '' ? '/' + profile : '')

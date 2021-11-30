@@ -111,7 +111,7 @@ ephy_profile_migrator = executable('ephy-profile-migrator',
 )
 
 
-codegen = gnome.gdbus_codegen('ephy-shell-search-provider-generated',
+search_provider_codegen = gnome.gdbus_codegen('ephy-shell-search-provider-generated',
   'search-provider/org.gnome.ShellSearchProvider2.xml',
   interface_prefix: 'org.gnome',
   namespace: 'Ephy'
@@ -120,7 +120,7 @@ codegen = gnome.gdbus_codegen('ephy-shell-search-provider-generated',
 search_provider_sources = [
   'search-provider/ephy-search-provider.c',
   'search-provider/ephy-search-provider-main.c',
-  codegen
+  search_provider_codegen
 ]
 
 executable('epiphany-search-provider',
@@ -131,6 +131,25 @@ executable('epiphany-search-provider',
   install_rpath: pkglibdir
 )
 
+webapp_codegen = gnome.gdbus_codegen('ephy-webapp-provider-generated',
+  'webapp-provider/org.gnome.Epiphany.WebAppProvider.xml',
+  interface_prefix: 'org.gnome.Epiphany',
+  namespace: 'Ephy'
+)
+
+webapp_provider_sources = [
+  'webapp-provider/ephy-webapp-provider.c',
+  'webapp-provider/ephy-webapp-provider-main.c',
+  webapp_codegen
+]
+
+executable('epiphany-webapp-provider',
+  webapp_provider_sources,
+  dependencies: ephymain_dep,
+  install: true,
+  install_dir: libexecdir,
+  install_rpath: pkglibdir
+)
 
 resource_files = files('resources/epiphany.gresource.xml')
 resources = gnome.compile_resources('epiphany-resources',
