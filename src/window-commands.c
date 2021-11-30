@@ -240,7 +240,6 @@ show_profile_selector (GtkWidget *parent,
 {
   GtkWidget *selector;
   GtkWidget *list_box;
-  GtkWidget *suggested;
   GtkWidget *content_area;
   GSList *l;
   int response;
@@ -255,10 +254,6 @@ show_profile_selector (GtkWidget *parent,
                                           GTK_RESPONSE_OK,
                                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
-
-  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               "suggested-action");
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (selector));
   gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
