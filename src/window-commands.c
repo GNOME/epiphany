@@ -295,7 +295,7 @@ show_profile_selector (GtkWidget *parent,
     GtkWidget *label;
 
     label = gtk_label_new (strchr (profile, '.') + 1);
-    g_object_set_data (G_OBJECT (label), "profile_path", g_strdup (profile));
+    g_object_set_data_full (G_OBJECT (label), "profile_path", g_strdup (profile), g_free);
     gtk_widget_set_margin_top (label, 6);
     gtk_widget_set_margin_bottom (label, 6);
     gtk_list_box_insert (GTK_LIST_BOX (list_box), label, -1);
@@ -311,7 +311,7 @@ show_profile_selector (GtkWidget *parent,
 
     row = gtk_list_box_get_selected_row (GTK_LIST_BOX (list_box));
     row_widget = gtk_bin_get_child (GTK_BIN (row));
-    selected_profile = g_object_get_data (G_OBJECT (row_widget), "profile_path");
+    selected_profile = g_object_steal_data (G_OBJECT (row_widget), "profile_path");
   }
   gtk_widget_destroy (selector);
 
