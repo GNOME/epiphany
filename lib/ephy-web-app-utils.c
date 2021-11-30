@@ -568,7 +568,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   /* We need to re-set this because we have already parsed the
    * options, which inits GTK+ and sets this as a side effect.
    */
-  gdk_set_program_class (program_name);
+  gdk_set_program_class (gapplication_id);
 
   g_free (app_icon);
   g_free (desktop_basename);
