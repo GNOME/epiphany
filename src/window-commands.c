@@ -1159,6 +1159,23 @@ window_cmd_stop (GSimpleAction *action,
 }
 
 static void
+check_tab_has_modified_forms_confirm_cb (GtkDialog       *dialog,
+                                         GtkResponseType  response,
+                                         EphyEmbed       *embed)
+{
+  WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_ACCEPT) {
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+    webkit_web_view_reload (view);
+  }
+
+  g_object_unref (embed);
+}
+
+static void
 check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
                                             GAsyncResult *result,
                                             EphyEmbed    *embed)
@@ -1167,7 +1184,6 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
   GtkWidget *dialog;
   GtkWidget *button;
   gboolean has_modified_forms;
-  int response = GTK_RESPONSE_ACCEPT;
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
   if (has_modified_forms) {
@@ -1186,17 +1202,17 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
 
     gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
                                  GTK_WINDOW (dialog));
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-    gtk_widget_destroy (dialog);
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (check_tab_has_modified_forms_confirm_cb), embed);
+
+    gtk_window_present (GTK_WINDOW (dialog));
+
+    return;
   }
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-
-    gtk_widget_grab_focus (GTK_WIDGET (embed));
-    webkit_web_view_reload (view);
-  }
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
 
   g_object_unref (embed);
 }
