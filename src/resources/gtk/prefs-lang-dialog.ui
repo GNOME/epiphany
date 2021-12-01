@@ -58,8 +58,10 @@
               <object class="GtkScrolledWindow" id="scrolledwindow3">
                 <property name="visible">True</property>
                 <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
                 <property name="vexpand">True</property>
+                <style>
+                  <class name="frame"/>
+                </style>
                 <child>
                   <object class="GtkTreeView" id="languages_treeview">
                     <property name="visible">True</property>
