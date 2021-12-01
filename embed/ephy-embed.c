@@ -738,7 +738,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
-  embed->floating_bar = nautilus_floating_bar_new (NULL, NULL, FALSE);
+  embed->floating_bar = nautilus_floating_bar_new ();
   gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
   gtk_widget_set_no_show_all (embed->floating_bar, TRUE);

@@ -24,33 +24,15 @@
 
 #include <gtk/gtk.h>
 
-#define NAUTILUS_FLOATING_BAR_ACTION_ID_STOP 1
+G_BEGIN_DECLS
 
 #define NAUTILUS_TYPE_FLOATING_BAR nautilus_floating_bar_get_type ()
 
 G_DECLARE_FINAL_TYPE (NautilusFloatingBar, nautilus_floating_bar, NAUTILUS, FLOATING_BAR, GtkBox)
 
-G_BEGIN_DECLS
-
-GtkWidget * nautilus_floating_bar_new              (const gchar *primary_label,
-						    const gchar *details_label,
-						    gboolean show_spinner);
+GtkWidget *nautilus_floating_bar_new               (void);
 
 void       nautilus_floating_bar_set_primary_label (NautilusFloatingBar *self,
-						    const gchar *label);
-void       nautilus_floating_bar_set_details_label (NautilusFloatingBar *self,
-						    const gchar *label);
-void        nautilus_floating_bar_set_labels        (NautilusFloatingBar *self,
-						     const gchar *primary,
-						     const gchar *detail);
-void        nautilus_floating_bar_set_show_spinner (NautilusFloatingBar *self,
-						    gboolean show_spinner);
-
-void        nautilus_floating_bar_add_action       (NautilusFloatingBar *self,
-						    const gchar *icon_name,
-						    gint action_id);
-void        nautilus_floating_bar_cleanup_actions  (NautilusFloatingBar *self);
-
-void        nautilus_floating_bar_remove_hover_timeout (NautilusFloatingBar *self);
+                                                    const char          *label);
 
 G_END_DECLS
