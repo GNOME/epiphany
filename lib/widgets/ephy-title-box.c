@@ -82,6 +82,7 @@ ephy_title_box_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_title_box_parent_class)->constructed (object);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (title_box), vbox);
 
   title_box->title = gtk_label_new (NULL);
@@ -248,7 +249,5 @@ ephy_title_box_init (EphyTitleBox *title_box)
 EphyTitleBox *
 ephy_title_box_new (void)
 {
-  return g_object_new (EPHY_TYPE_TITLE_BOX,
-                       "valign", GTK_ALIGN_CENTER,
-                       NULL);
+  return g_object_new (EPHY_TYPE_TITLE_BOX, NULL);
 }

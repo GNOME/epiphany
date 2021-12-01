@@ -387,14 +387,12 @@ ephy_download_widget_constructed (GObject *object)
 
   widget->icon = gtk_image_new ();
   gtk_widget_set_margin_end (widget->icon, 4);
-  gtk_widget_set_halign (widget->icon, GTK_ALIGN_START);
   update_download_icon (widget);
   gtk_grid_attach (GTK_GRID (grid), widget->icon, 0, 0, 1, 1);
   gtk_widget_show (widget->icon);
 
   widget->filename = gtk_label_new (NULL);
   gtk_widget_set_hexpand (widget->filename, true);
-  gtk_widget_set_valign (widget->filename, GTK_ALIGN_CENTER);
   gtk_label_set_xalign (GTK_LABEL (widget->filename), 0);
   gtk_label_set_max_width_chars (GTK_LABEL (widget->filename), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->filename), PANGO_ELLIPSIZE_END);
@@ -403,7 +401,6 @@ ephy_download_widget_constructed (GObject *object)
   gtk_widget_show (widget->filename);
 
   widget->progress = gtk_progress_bar_new ();
-  gtk_widget_set_valign (widget->progress, GTK_ALIGN_CENTER);
   gtk_widget_set_margin_top (widget->progress, 6);
   gtk_widget_set_margin_bottom (widget->progress, 6);
   gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
@@ -412,7 +409,6 @@ ephy_download_widget_constructed (GObject *object)
     gtk_widget_show (widget->progress);
 
   widget->status = gtk_label_new (NULL);
-  gtk_widget_set_valign (widget->status, GTK_ALIGN_CENTER);
   gtk_label_set_xalign (GTK_LABEL (widget->status), 0);
   g_object_set (widget->status, "width-request", 260, NULL);
   gtk_label_set_max_width_chars (GTK_LABEL (widget->status), 30);

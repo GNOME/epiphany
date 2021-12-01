@@ -278,7 +278,6 @@ ephy_header_bar_constructed (GObject *object)
   /* Fullscreen restore button */
   header_bar->restore_button = gtk_button_new_from_icon_name ("view-restore-symbolic",
                                                               GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_valign (header_bar->restore_button, GTK_ALIGN_CENTER);
   g_signal_connect_object (header_bar->restore_button, "clicked",
                            G_CALLBACK (restore_button_clicked_cb),
                            header_bar, 0);
@@ -290,7 +289,6 @@ ephy_header_bar_constructed (GObject *object)
   header_bar->page_menu_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_type_ensure (G_TYPE_THEMED_ICON);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   header_bar->page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));

@@ -235,7 +235,6 @@ create_tag_row (const char *tag)
   g_object_set (G_OBJECT (row), "height-request", 40, NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_halign (box, GTK_ALIGN_START);
 
   if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0) {
     image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic", GTK_ICON_SIZE_MENU);

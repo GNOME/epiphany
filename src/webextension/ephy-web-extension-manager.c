@@ -675,9 +675,6 @@ create_browser_popup (EphyWebExtension *web_extension)
 
   web_view = create_web_extensions_webview (web_extension, TRUE);
 
-  gtk_widget_set_hexpand (web_view, TRUE);
-  gtk_widget_set_vexpand (web_view, TRUE);
-
   popup = ephy_web_extension_get_browser_popup (web_extension);
   dir_name = g_path_get_dirname (popup);
   base_uri = g_strdup_printf ("ephy-webextension:///%s/", dir_name);

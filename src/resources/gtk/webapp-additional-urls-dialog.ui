@@ -20,7 +20,7 @@
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="halign">start</property>
+            <property name="xalign">0</property>
             <property name="margin">12</property>
             <property name="label" translatable="yes">A URL that starts with any of the additional URLs will be opened by the web application. If you omit the URL scheme, the one from the currently loaded URL will be used.</property>
             <property name="wrap">True</property>
@@ -101,7 +101,6 @@
                 <property name="label" translatable="yes">C_lear All</property>
                 <property name="visible">True</property>
                 <property name="use_underline">True</property>
-                <property name="valign">center</property>
                 <property name="action-name">webapp-additional-urls.forget-all</property>
                 <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
                 <style>

@@ -5,8 +5,6 @@
     <child>
       <object class="GtkButtonBox" id="browser_action_box">
         <property name="visible">True</property>
-        <property name="valign">center</property>
-        <property name="halign">end</property>
         <property name="homogeneous">False</property>
         <property name="layout-style">expand</property>
       </object>
@@ -21,7 +19,6 @@
             <property name="tooltip_text" translatable="yes">View downloads</property>
             <property name="visible">True</property>
             <property name="receives_default">True</property>
-            <property name="valign">center</property>
             <child>
               <object class="GtkOverlay">
                 <property name="visible">True</property>
@@ -56,7 +53,6 @@
     <child>
       <object class="GtkButton" id="bookmark_button">
         <property name="visible">True</property>
-        <property name="valign">center</property>
         <!-- Translators: tooltip for the bookmark button -->
         <property name="tooltip_text" translatable="yes">Bookmark page</property>
         <child>
@@ -74,7 +70,6 @@
     <child>
       <object class="GtkMenuButton" id="bookmarks_button">
         <property name="visible">True</property>
-        <property name="valign">center</property>
         <!-- Translators: tooltip for the bookmarks popover button -->
         <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
         <property name="popover">bookmarks_popover</property>

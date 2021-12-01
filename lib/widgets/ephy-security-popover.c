@@ -247,7 +247,6 @@ ephy_security_popover_constructed (GObject *object)
 
   certificate_button = gtk_button_new_with_mnemonic (_("_View Certificate…"));
   gtk_widget_set_halign (certificate_button, GTK_ALIGN_END);
-  gtk_widget_set_valign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_margin_top (certificate_button, 5);
   gtk_widget_set_receives_default (certificate_button, FALSE);
   gtk_widget_show (certificate_button);
@@ -539,7 +538,6 @@ ephy_security_popover_init (EphySecurityPopover *popover)
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
-  gtk_widget_set_hexpand (box, TRUE);
 
   popover->lock_image = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (box), popover->lock_image, FALSE, TRUE, 0);

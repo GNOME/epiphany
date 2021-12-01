@@ -84,8 +84,6 @@ static void
 ephy_downloads_progress_icon_init (EphyDownloadsProgressIcon *icon)
 {
   g_object_set (icon, "width-request", 16, "height-request", 16, NULL);
-  gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
-  gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
 }
 
 GtkWidget *

@@ -135,13 +135,13 @@ ephy_notification_init (EphyNotification *self)
 
   self->head = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (self->head), TRUE);
-  gtk_widget_set_halign (self->head, GTK_ALIGN_CENTER);
+  gtk_label_set_xalign (GTK_LABEL (self->head), 0);
   gtk_widget_set_hexpand (self->head, TRUE);
   gtk_grid_attach (GTK_GRID (self->grid), self->head, 0, 0, 1, 1);
 
   self->body = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (self->body), TRUE);
-  gtk_widget_set_halign (self->body, GTK_ALIGN_CENTER);
+  gtk_label_set_xalign (GTK_LABEL (self->body), 0);
   gtk_widget_set_hexpand (self->body, TRUE);
   gtk_grid_attach (GTK_GRID (self->grid), self->body, 0, 1, 1, 1);
 
