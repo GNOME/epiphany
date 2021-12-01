@@ -26,7 +26,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_ENCODING_ROW (ephy_encoding_row_get_type ())
-G_DECLARE_FINAL_TYPE (EphyEncodingRow, ephy_encoding_row, EPHY, ENCODING_ROW, GtkGrid);
+G_DECLARE_FINAL_TYPE (EphyEncodingRow, ephy_encoding_row, EPHY, ENCODING_ROW, GtkBox);
 
 EphyEncodingRow *ephy_encoding_row_new          (EphyEncoding    *encoding);
 
