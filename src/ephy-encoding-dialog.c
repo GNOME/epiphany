@@ -52,8 +52,8 @@ struct _EphyEncodingDialog {
   GtkListBox *list_box;
   GtkListBox *recent_list_box;
   GtkListBox *related_list_box;
-  GtkGrid *recent_grid;
-  GtkGrid *related_grid;
+  GtkWidget *recent_box;
+  GtkWidget *related_box;
 };
 
 enum {
@@ -398,7 +398,7 @@ ephy_encoding_dialog_constructed (GObject *object)
     recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
     g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
   } else
-    gtk_widget_hide (GTK_WIDGET (dialog->recent_grid));
+    gtk_widget_hide (dialog->recent_box);
 
   /* related */
   if (dialog->selected_encoding != NULL) {
@@ -412,7 +412,7 @@ ephy_encoding_dialog_constructed (GObject *object)
     related = g_list_sort (related, (GCompareFunc)sort_encodings);
     g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
   } else
-    gtk_widget_hide (GTK_WIDGET (dialog->related_grid));
+    gtk_widget_hide (dialog->related_box);
 
   /* update list_boxes */
   sync_encoding_against_embed (dialog);
@@ -512,8 +512,8 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_list_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_grid);
-  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_grid);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_box);
 
   gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);

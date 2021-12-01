@@ -23,10 +23,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="hexpand">True</property>
-            <property name="column_spacing">6</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
@@ -36,10 +35,6 @@
                 <property name="label" translatable="yes">Use the encoding specified by the document</property>
                 <property name="wrap">True</property>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSwitch" id="default_switch">
@@ -47,10 +42,6 @@
                 <property name="valign">start</property>
                 <signal name="state-set" handler="default_switch_toggled_cb" swapped="no"/>
               </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -61,16 +52,15 @@
             <property name="vexpand">True</property>
             <property name="interpolate_size">True</property>
             <child>
-              <object class="GtkGrid" id="suggested_grid">
+              <object class="GtkBox" id="suggested_box">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
-                <property name="row_spacing">16</property>
+                <property name="spacing">16</property>
                 <child>
-                  <object class="GtkGrid" id="recent_grid">
+                  <object class="GtkBox" id="recent_box">
                     <property name="visible">True</property>
-                    <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
-                    <property name="row_spacing">8</property>
+                    <property name="spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -81,16 +71,11 @@
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkFrame">
                         <property name="visible">True</property>
                         <property name="vexpand">True</property>
-                        <property name="hexpand">True</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">in</property>
                         <child>
@@ -99,26 +84,15 @@
                             <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
                           </object>
                         </child>
-                        <child type="label_item">
-                          <placeholder/>
-                        </child>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkGrid" id="related_grid">
+                  <object class="GtkBox" id="related_box">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
-                    <property name="row_spacing">8</property>
+                    <property name="spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -129,15 +103,10 @@
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkFrame">
                         <property name="visible">True</property>
-                        <property name="hexpand">True</property>
                         <property name="border_width">6</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>
@@ -147,37 +116,21 @@
                             <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
                           </object>
                         </child>
-                        <child type="label_item">
-                          <placeholder/>
-                        </child>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">Show all…</property>
                     <property name="visible">True</property>
                     <property name="receives_default">False</property>
-                    <property name="hexpand">True</property>
                     <signal name="clicked" handler="show_all_button_clicked_cb" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="name">suggested_grid</property>
+                <property name="name">suggested_box</property>
               </packing>
             </child>
             <child>
