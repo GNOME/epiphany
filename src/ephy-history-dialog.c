@@ -457,7 +457,6 @@ create_row (EphyHistoryDialog *self,
   g_object_set_data (G_OBJECT (row), "check-button", check_button);
   gtk_widget_set_valign (check_button, GTK_ALIGN_CENTER);
   gtk_widget_set_tooltip_text (check_button, _("Remove the selected pages from history"));
-  gtk_button_set_relief (GTK_BUTTON (check_button), GTK_RELIEF_NONE);
   g_signal_connect (check_button, "toggled", G_CALLBACK (row_check_button_toggled), self);
 
   /* Copy URL button */

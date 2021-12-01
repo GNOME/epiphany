@@ -147,10 +147,10 @@ ephy_notification_init (EphyNotification *self)
 
   self->close_button = gtk_button_new ();
   g_object_set (self->close_button,
-                "relief", GTK_RELIEF_NONE,
                 "focus-on-click", FALSE,
                 "margin", 6,
                 NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (self->close_button), "flat");
   gtk_grid_attach (GTK_GRID (self->grid), self->close_button, 1, 0, 1, 2);
 
   image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);

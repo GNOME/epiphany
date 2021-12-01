@@ -200,7 +200,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
                           gtk_image_new_from_icon_name ("window-close-symbolic",
                                                         GTK_ICON_SIZE_MENU));
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-    gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+    gtk_style_context_add_class (gtk_widget_get_style_context (button), "flat");
     gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
     g_signal_connect_object (button, "clicked",
                              G_CALLBACK (ephy_bookmark_properties_tag_widget_button_clicked_cb),

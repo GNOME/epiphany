@@ -27,13 +27,15 @@
           <object class="GtkButton" id="properties_button">
             <property name="visible">True</property>
             <property name="receives_default">False</property>
-            <property name="relief">none</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="icon_name">emblem-system-symbolic</property>
               </object>
             </child>
+            <style>
+              <class name="flat"/>
+            </style>
           </object>
         </child>
       </object>
