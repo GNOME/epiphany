@@ -314,10 +314,14 @@ show_firefox_profile_selector (GtkWindow *parent,
   gtk_dialog_set_default_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (selector));
-  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
   gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
 
   list_box = gtk_list_box_new ();
+  gtk_widget_set_margin_top (list_box, 5);
+  gtk_widget_set_margin_bottom (list_box, 5);
+  gtk_widget_set_margin_start (list_box, 5);
+  gtk_widget_set_margin_end (list_box, 5);
+
   for (l = profiles; l != NULL; l = l->next) {
     const gchar *profile = l->data;
     GtkWidget *label;
@@ -552,9 +556,10 @@ window_cmd_import_bookmarks (GSimpleAction *action,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (content_area, 25);
-  gtk_widget_set_margin_end (content_area, 25);
-  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+  gtk_widget_set_margin_top (content_area, 5);
+  gtk_widget_set_margin_bottom (content_area, 5);
+  gtk_widget_set_margin_start (content_area, 30);
+  gtk_widget_set_margin_end (content_area, 30);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
@@ -793,9 +798,10 @@ window_cmd_import_passwords (GSimpleAction *action,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (content_area, 25);
-  gtk_widget_set_margin_end (content_area, 25);
-  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+  gtk_widget_set_margin_top (content_area, 5);
+  gtk_widget_set_margin_bottom (content_area, 5);
+  gtk_widget_set_margin_start (content_area, 30);
+  gtk_widget_set_margin_end (content_area, 30);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
@@ -1918,11 +1924,13 @@ window_cmd_save_as_application (GSimpleAction *action,
                                         NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+  gtk_widget_set_margin_top (box, 15);
+  gtk_widget_set_margin_bottom (box, 15);
+  gtk_widget_set_margin_start (box, 15);
+  gtk_widget_set_margin_end (box, 15);
   gtk_container_add (GTK_CONTAINER (content_area), box);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 5);
 
   image = gtk_image_new ();
   gtk_widget_set_vexpand (image, TRUE);

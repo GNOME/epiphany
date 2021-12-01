@@ -283,7 +283,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
 
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
   grid = gtk_grid_new ();
@@ -316,6 +315,10 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_set_spacing (GTK_BOX (content_area), 14);
+  gtk_widget_set_margin_top (content_area, 10);
+  gtk_widget_set_margin_bottom (content_area, 10);
+  gtk_widget_set_margin_start (content_area, 10);
+  gtk_widget_set_margin_end (content_area, 10);
   gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, TRUE, 0);
   gtk_widget_show (grid);
 }

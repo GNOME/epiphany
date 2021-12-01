@@ -2,7 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="add_language_dialog">
-    <property name="border_width">5</property>
     <property name="role">epiphany-preferences-add-language</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
@@ -42,8 +41,11 @@
         <child>
           <object class="GtkBox" id="vbox198">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
             <property name="orientation">vertical</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1309">
