@@ -486,9 +486,6 @@ main (int   argc,
   int ret;
   SoupServer *server;
 
-  /* FIXME: disable AC mode for now for WebView tests because CI doesn't support it. */
-  g_setenv ("WEBKIT_DISABLE_COMPOSITING_MODE", "1", FALSE);
-
   gtk_test_init (&argc, &argv);
 
   ephy_debug_init ();
