@@ -83,10 +83,11 @@ ephy_certificate_dialog_set_certificate (EphyCertificateDialog *dialog,
   g_byte_array_unref (certificate_data);
 
   certificate_widget = GTK_WIDGET (gcr_certificate_widget_new (simple_certificate));
+  gtk_widget_set_vexpand (certificate_widget, TRUE);
   g_object_unref (simple_certificate);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_pack_start (GTK_BOX (content_area), certificate_widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), certificate_widget, FALSE, TRUE, 0);
   gtk_widget_show (certificate_widget);
 }
 
@@ -321,7 +322,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_set_spacing (GTK_BOX (content_area), 14);
-  gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), grid, FALSE, TRUE, 0);
   gtk_widget_show (grid);
 }
 

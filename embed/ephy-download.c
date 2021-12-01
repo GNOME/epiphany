@@ -860,7 +860,7 @@ filename_suggested_cb (EphyDownload *download,
   response = webkit_download_get_response (webkit_download);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (message_area), box, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (message_area), box, FALSE, TRUE, 0);
 
   /* Type */
   content_length = g_format_size (webkit_uri_response_get_content_length (response));
@@ -868,22 +868,22 @@ filename_suggested_cb (EphyDownload *download,
   type_text = g_strdup_printf (_("Type: %s (%s)"), g_content_type_get_description (content_type), content_length);
   type_label = gtk_label_new (type_text);
   gtk_widget_set_margin_top (type_label, 12);
-  gtk_box_pack_start (GTK_BOX (box), type_label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), type_label, FALSE, TRUE, 0);
 
   /* From */
   from_text = g_strdup_printf (_("From: %s"), ephy_string_get_host_name (webkit_uri_response_get_uri (response)));
   from_label = gtk_label_new (from_text);
-  gtk_box_pack_start (GTK_BOX (box), from_label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), from_label, FALSE, TRUE, 0);
 
   /* Question */
   question_label = gtk_label_new (_("Where do you want to save the file?"));
   gtk_widget_set_margin_top (question_label, 12);
-  gtk_box_pack_start (GTK_BOX (box), question_label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), question_label, FALSE, TRUE, 0);
 
   /* File Chooser Button */
   filechooser = gtk_file_chooser_button_new (_("Save file"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (filechooser), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
-  gtk_box_pack_start (GTK_BOX (box), filechooser, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), filechooser, FALSE, TRUE, 0);
 
   gtk_widget_show_all (box);
 

@@ -170,7 +170,7 @@ static void
 ephy_downloads_popover_init (EphyDownloadsPopover *popover)
 {
   GtkWidget *scrolled_window;
-  GtkWidget *vbox, *hbox;
+  GtkWidget *vbox;
   GList *downloads, *l;
   EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
@@ -222,26 +222,21 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                            G_CALLBACK (download_removed_cb),
                            popover, G_CONNECT_SWAPPED);
 
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, FALSE, TRUE, 0);
   gtk_widget_show (scrolled_window);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (hbox, 12);
-  gtk_widget_set_margin_end (hbox, 12);
-  gtk_widget_set_margin_top (hbox, 12);
-  gtk_widget_set_margin_bottom (hbox, 12);
 
   popover->clear_button = gtk_button_new_with_mnemonic (_("_Clear All"));
   gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
   g_signal_connect_swapped (popover->clear_button, "clicked",
                             G_CALLBACK (clear_button_clicked_cb),
                             popover);
-  gtk_box_pack_end (GTK_BOX (hbox), popover->clear_button, FALSE, FALSE, 0);
+  gtk_widget_set_halign (popover->clear_button, GTK_ALIGN_END);
+  gtk_widget_set_margin_start (popover->clear_button, 12);
+  gtk_widget_set_margin_end (popover->clear_button, 12);
+  gtk_widget_set_margin_top (popover->clear_button, 12);
+  gtk_widget_set_margin_bottom (popover->clear_button, 12);
+  gtk_box_pack_start (GTK_BOX (vbox), popover->clear_button, FALSE, TRUE, 0);
   gtk_widget_show (popover->clear_button);
-
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  gtk_widget_show (hbox);
 
   gtk_container_add (GTK_CONTAINER (popover), vbox);
   gtk_widget_show (vbox);

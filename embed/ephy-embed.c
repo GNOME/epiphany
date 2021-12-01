@@ -725,6 +725,7 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_add_events (embed->overlay,
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
+  gtk_widget_set_vexpand (embed->overlay, TRUE);
   gtk_container_add (GTK_CONTAINER (embed->overlay), GTK_WIDGET (embed->web_view));
 
   /* Floating message popup for fullscreen mode. */
@@ -760,7 +761,7 @@ ephy_embed_constructed (GObject *object)
 
   gtk_box_pack_start (GTK_BOX (embed),
                       GTK_WIDGET (embed->find_toolbar),
-                      FALSE, FALSE, 0);
+                      FALSE, TRUE, 0);
 
   if (embed->progress_bar_enabled)
     embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
@@ -768,8 +769,8 @@ ephy_embed_constructed (GObject *object)
 
   gtk_box_pack_start (GTK_BOX (embed),
                       GTK_WIDGET (embed->top_widgets_vbox),
-                      FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (embed), embed->overlay, TRUE, TRUE, 0);
+                      FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (embed), embed->overlay, FALSE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (embed->top_widgets_vbox));
   gtk_widget_show (GTK_WIDGET (embed->web_view));
@@ -804,7 +805,7 @@ ephy_embed_constructed (GObject *object)
     gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_INFO);
     /* Translators: this means WebDriver control. */
     label = gtk_label_new (_("Web is being controlled by automation."));
-    gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))), label, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))), label, FALSE, TRUE, 0);
     gtk_widget_show (label);
 
     ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
@@ -883,7 +884,7 @@ ephy_embed_add_top_widget (EphyEmbed                *embed,
   }
 
   gtk_box_pack_end (embed->top_widgets_vbox,
-                    GTK_WIDGET (widget), FALSE, FALSE, 0);
+                    GTK_WIDGET (widget), FALSE, TRUE, 0);
 }
 
 /**

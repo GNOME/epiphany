@@ -244,10 +244,11 @@ create_tag_row (const char *tag)
   }
   label = gtk_label_new (tag);
 
+  gtk_widget_set_hexpand (label, TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 
-  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_widget_show_all (row);

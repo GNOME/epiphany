@@ -3033,6 +3033,8 @@ setup_tab_view (EphyWindow *window)
   HdyTabView *view = ephy_tab_view_get_tab_view (tab_view);
   g_autoptr (GtkBuilder) builder = NULL;
 
+  gtk_widget_set_vexpand (GTK_WIDGET (tab_view), TRUE);
+
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/notebook-context-menu.ui");
 
   hdy_tab_view_set_menu_model (view, G_MENU_MODEL (gtk_builder_get_object (builder, "notebook-menu")));
@@ -3558,7 +3560,7 @@ add_default_browser_question (GtkBox *box)
 
   g_signal_connect (info_bar, "response", G_CALLBACK (on_default_browser_question_response), NULL);
 
-  gtk_box_pack_start (box, info_bar, FALSE, FALSE, 0);
+  gtk_box_pack_start (box, info_bar, FALSE, TRUE, 0);
 
   gtk_widget_show (info_bar);
 }
@@ -3750,7 +3752,7 @@ ephy_window_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (window->tab_bar_revealer), GTK_WIDGET (window->tab_bar));
   gtk_box_pack_start (window->titlebar_box, GTK_WIDGET (window->window_handle), FALSE, TRUE, 0);
   gtk_box_pack_start (window->titlebar_box, GTK_WIDGET (window->tab_bar_revealer), FALSE, TRUE, 0);
-  gtk_box_pack_start (box, GTK_WIDGET (window->tab_view), TRUE, TRUE, 0);
+  gtk_box_pack_start (box, GTK_WIDGET (window->tab_view), FALSE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (window->fullscreen_box), GTK_WIDGET (box));
   ephy_fullscreen_box_set_titlebar (window->fullscreen_box, GTK_WIDGET (window->titlebar_box));

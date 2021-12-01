@@ -500,12 +500,13 @@ add_permission_combobox (EphySecurityPopover *popover,
   GtkWidget *hbox;
   GtkWidget *tmp;
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_grid_attach (GTK_GRID (popover->grid), hbox, 0, popover->permission_pos++, 2, 1);
 
   tmp = gtk_label_new (name);
   gtk_label_set_xalign (GTK_LABEL (tmp), 0.0);
-  gtk_box_pack_start (GTK_BOX (hbox), tmp, TRUE, TRUE, 6);
+  gtk_widget_set_hexpand (tmp, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), tmp, FALSE, TRUE, 0);
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Allow"));
@@ -516,7 +517,7 @@ add_permission_combobox (EphySecurityPopover *popover,
     gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _(name));
   }
 
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, TRUE, 0);
   g_signal_connect (widget, "changed", G_CALLBACK (callback), popover);
   gtk_size_group_add_widget (size_group, widget);
 
@@ -541,13 +542,13 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_widget_set_hexpand (box, TRUE);
 
   popover->lock_image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (box), popover->lock_image, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), popover->lock_image, FALSE, TRUE, 0);
 
   popover->host_label = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (popover->host_label), TRUE);
   gtk_label_set_line_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
   gtk_label_set_xalign (GTK_LABEL (popover->host_label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), popover->host_label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), popover->host_label, FALSE, TRUE, 0);
 
   popover->security_label = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (popover->security_label), TRUE);

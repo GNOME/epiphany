@@ -492,7 +492,7 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
                        GTK_WIDGET (sync_dialog->fxa_web_view));
     gtk_box_pack_start (GTK_BOX (sync_dialog->sync_firefox_iframe_box),
                         frame,
-                        TRUE, TRUE, 0);
+                        FALSE, TRUE, 0);
 
     g_object_unref (sync_context);
   }

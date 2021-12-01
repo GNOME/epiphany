@@ -182,13 +182,15 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
                                           GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_margin_bottom (image, 8);
     gtk_widget_set_margin_top (image, 8);
-    gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (box), image, FALSE, TRUE, 0);
   }
 
   label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
   label = gtk_label_new (label_text);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
   if (!default_tag) {
     GtkWidget *button;
@@ -199,7 +201,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
                                                         GTK_ICON_SIZE_MENU));
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-    gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
     g_signal_connect_object (button, "clicked",
                              G_CALLBACK (ephy_bookmark_properties_tag_widget_button_clicked_cb),
                              self,

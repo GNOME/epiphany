@@ -559,10 +559,11 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
   label = gtk_label_new (_("From:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
   tree_model = create_tree_model ();
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
+  gtk_widget_set_hexpand (combo_box, TRUE);
   g_object_unref (tree_model);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
@@ -574,7 +575,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
                                   "text", 0, NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_box, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
@@ -799,7 +800,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
   label = gtk_label_new (_("From:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
   tree_model = create_import_passwords_tree_model ();
 
@@ -809,6 +810,7 @@ window_cmd_import_passwords (GSimpleAction *action,
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
+  gtk_widget_set_hexpand (combo_box, TRUE);
   g_object_unref (tree_model);
 
   g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
@@ -821,7 +823,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
                                   "text", 0, NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_box, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
@@ -1923,6 +1925,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   gtk_container_set_border_width (GTK_CONTAINER (box), 5);
 
   image = gtk_image_new ();
+  gtk_widget_set_vexpand (image, TRUE);
   gtk_widget_set_no_show_all (image, TRUE);
   gtk_widget_set_size_request (image, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
   gtk_widget_set_margin_bottom (image, 10);
@@ -1933,13 +1936,14 @@ window_cmd_save_as_application (GSimpleAction *action,
 
   spinner = gtk_spinner_new ();
   gtk_widget_set_size_request (spinner, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+  gtk_widget_set_vexpand (spinner, TRUE);
   gtk_spinner_start (GTK_SPINNER (spinner));
   gtk_container_add (GTK_CONTAINER (box), spinner);
   gtk_widget_show (spinner);
 
   entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), entry, FALSE, TRUE, 0);
 
   escaped_address = g_markup_escape_text (ephy_web_view_get_display_address (view), -1);
   markup = g_strdup_printf ("<small>%s</small>", escaped_address);
@@ -1950,7 +1954,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   g_free (markup);
   g_free (escaped_address);
 
-  gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, "dim-label");
 

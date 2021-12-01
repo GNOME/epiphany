@@ -131,16 +131,17 @@ new_history_menu_item (EphyWebView *view,
 
   g_assert (address != NULL && origtext != NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, TRUE, 0);
 
   label = gtk_label_new (origtext);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (GTK_LABEL (label), MAX_LABEL_LENGTH);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 6);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
 
   menu_item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu_item), box);
