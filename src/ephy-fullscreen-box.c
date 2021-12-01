@@ -54,6 +54,7 @@ enum {
   PROP_FULLSCREEN,
   PROP_AUTOHIDE,
   PROP_TITLEBAR,
+  PROP_CONTENT,
   PROP_REVEALED,
   LAST_PROP
 };
@@ -305,6 +306,10 @@ ephy_fullscreen_box_get_property (GObject    *object,
       g_value_set_object (value, ephy_fullscreen_box_get_titlebar (self));
       break;
 
+    case PROP_CONTENT:
+      g_value_set_object (value, ephy_fullscreen_box_get_content (self));
+      break;
+
     case PROP_REVEALED:
       g_value_set_boolean (value, hdy_flap_get_reveal_flap (self->flap));
       break;
@@ -333,6 +338,10 @@ ephy_fullscreen_box_set_property (GObject      *object,
 
     case PROP_TITLEBAR:
       ephy_fullscreen_box_set_titlebar (self, g_value_get_object (value));
+      break;
+
+    case PROP_CONTENT:
+      ephy_fullscreen_box_set_content (self, g_value_get_object (value));
       break;
 
     default:
@@ -386,6 +395,13 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
     g_param_spec_object ("titlebar",
                          "Titlebar",
                          "Titlebar",
+                         GTK_TYPE_WIDGET,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  props[PROP_CONTENT] =
+    g_param_spec_object ("content",
+                         "Content",
+                         "Content",
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -458,7 +474,7 @@ ephy_fullscreen_box_buildable_add_child (GtkBuildable *buildable,
   if (!g_strcmp0 (type, "titlebar"))
     ephy_fullscreen_box_set_titlebar (self, GTK_WIDGET (child));
   else
-    gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (child));
+    ephy_fullscreen_box_set_content (self, GTK_WIDGET (child));
 }
 
 static void
@@ -561,4 +577,27 @@ ephy_fullscreen_box_set_titlebar (EphyFullscreenBox *self,
   hdy_flap_set_flap (self->flap, titlebar);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TITLEBAR]);
+}
+
+GtkWidget *
+ephy_fullscreen_box_get_content (EphyFullscreenBox *self)
+{
+  g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
+
+  return hdy_flap_get_content (self->flap);
+}
+
+void
+ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
+                                 GtkWidget         *content)
+{
+  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
+  g_return_if_fail (GTK_IS_WIDGET (content) || content == NULL);
+
+  if (hdy_flap_get_content (self->flap) == content)
+    return;
+
+  hdy_flap_set_content (self->flap, content);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
 }

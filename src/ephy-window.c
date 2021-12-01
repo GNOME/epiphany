@@ -3754,7 +3754,7 @@ ephy_window_constructed (GObject *object)
   gtk_box_pack_start (window->titlebar_box, GTK_WIDGET (window->tab_bar_revealer), FALSE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->tab_view), FALSE, TRUE, 0);
   gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (window->fullscreen_box), GTK_WIDGET (box));
+  ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (box));
   ephy_fullscreen_box_set_titlebar (window->fullscreen_box, GTK_WIDGET (window->titlebar_box));
 
   gtk_container_add (GTK_CONTAINER (window->main_deck), GTK_WIDGET (window->fullscreen_box));

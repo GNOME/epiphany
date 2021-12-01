@@ -32,14 +32,18 @@ EphyFullscreenBox *ephy_fullscreen_box_new            (void);
 
 gboolean           ephy_fullscreen_box_get_fullscreen (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_fullscreen (EphyFullscreenBox *self,
-                                                       gboolean          fullscreen);
+                                                       gboolean           fullscreen);
 
 gboolean           ephy_fullscreen_box_get_autohide   (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_autohide   (EphyFullscreenBox *self,
-                                                       gboolean          autohide);
+                                                       gboolean           autohide);
 
 GtkWidget         *ephy_fullscreen_box_get_titlebar   (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_titlebar   (EphyFullscreenBox *self,
-                                                       GtkWidget        *titlebar);
+                                                       GtkWidget         *titlebar);
+
+GtkWidget         *ephy_fullscreen_box_get_content    (EphyFullscreenBox *self);
+void               ephy_fullscreen_box_set_content    (EphyFullscreenBox *self,
+                                                       GtkWidget         *content);
 
 G_END_DECLS
