@@ -170,7 +170,7 @@ open_response_cb (GtkFileChooser           *dialog,
     g_ptr_array_add (file_array, NULL);
     webkit_file_chooser_request_select_files (request, (const char * const *)file_array->pdata);
     g_slist_free_full (file_list, g_free);
-    g_ptr_array_free (file_array, FALSE);
+    g_ptr_array_free (file_array, TRUE);
     g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
   } else {
     webkit_file_chooser_request_cancel (request);
