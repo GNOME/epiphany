@@ -534,7 +534,10 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (popover->grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (popover->grid), 6);
-  g_object_set (popover->grid, "margin", 10, NULL);
+  gtk_widget_set_margin_top (popover->grid, 10);
+  gtk_widget_set_margin_bottom (popover->grid, 10);
+  gtk_widget_set_margin_start (popover->grid, 10);
+  gtk_widget_set_margin_end (popover->grid, 10);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);

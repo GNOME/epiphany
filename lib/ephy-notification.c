@@ -146,10 +146,11 @@ ephy_notification_init (EphyNotification *self)
   gtk_grid_attach (GTK_GRID (self->grid), self->body, 0, 1, 1, 1);
 
   self->close_button = gtk_button_new ();
-  g_object_set (self->close_button,
-                "focus-on-click", FALSE,
-                "margin", 6,
-                NULL);
+  gtk_widget_set_focus_on_click (self->close_button, FALSE);
+  gtk_widget_set_margin_top (self->close_button, 6);
+  gtk_widget_set_margin_bottom (self->close_button, 6);
+  gtk_widget_set_margin_start (self->close_button, 6);
+  gtk_widget_set_margin_end (self->close_button, 6);
   gtk_style_context_add_class (gtk_widget_get_style_context (self->close_button), "flat");
   gtk_grid_attach (GTK_GRID (self->grid), self->close_button, 1, 0, 1, 2);
 
