@@ -466,11 +466,6 @@ ephy_fullscreen_box_buildable_add_child (GtkBuildable *buildable,
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (buildable);
 
-  if (!self->flap) {
-    gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (child));
-    return;
-  }
-
   if (!g_strcmp0 (type, "titlebar"))
     ephy_fullscreen_box_set_titlebar (self, GTK_WIDGET (child));
   else
