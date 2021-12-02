@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2021-10-03 17:57+0000\n"
-"PO-Revision-Date: 2021-12-01 10:38+0100\n"
+"POT-Creation-Date: 2021-12-01 09:40+0000\n"
+"PO-Revision-Date: 2021-12-02 21:23+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -55,7 +55,7 @@ msgstr "Lo projècte GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:1013
+#: src/ephy-main.c:406 src/window-commands.c:988
 msgid "Web"
 msgstr "Web"
 
@@ -1033,7 +1033,7 @@ msgstr "Version %s"
 msgid "About Web"
 msgstr "A prepaus del Web"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:1015
+#: embed/ephy-about-handler.c:194 src/window-commands.c:990
 msgid "Epiphany Technology Preview"
 msgstr ""
 
@@ -1130,12 +1130,12 @@ msgstr "Telecargament demandat"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
 #: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:243
-#: src/resources/gtk/firefox-sync-dialog.ui:167
+#: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
-#: src/resources/gtk/prefs-lang-dialog.ui:15 src/window-commands.c:277
-#: src/window-commands.c:335 src/window-commands.c:379
-#: src/window-commands.c:563 src/window-commands.c:648
-#: src/window-commands.c:810 src/window-commands.c:1892
+#: src/resources/gtk/prefs-lang-dialog.ui:15 src/window-commands.c:252
+#: src/window-commands.c:310 src/window-commands.c:354
+#: src/window-commands.c:538 src/window-commands.c:623
+#: src/window-commands.c:785 src/window-commands.c:1867
 msgid "_Cancel"
 msgstr "_Anullar"
 
@@ -1150,10 +1150,9 @@ msgstr "Tipe : %s (%s)"
 
 #. From
 #: embed/ephy-download.c:838
-#, fuzzy, c-format
-#| msgid "From:"
+#, c-format
 msgid "From: %s"
-msgstr "Dempuèi :"
+msgstr "De : %s"
 
 #. Question
 #: embed/ephy-download.c:843
@@ -1553,7 +1552,7 @@ msgstr "Recèrca l'ocurréncia seguenta de la cadena"
 msgid "%s is not a valid URI"
 msgstr "« %s » es pas una URI valida"
 
-#: embed/ephy-web-view.c:191 src/window-commands.c:1356
+#: embed/ephy-web-view.c:191 src/window-commands.c:1331
 msgid "Open"
 msgstr "Dobrir"
 
@@ -1566,7 +1565,7 @@ msgid "_Never Save"
 msgstr "Los acceptar pas _jamai"
 
 #: embed/ephy-web-view.c:372 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/firefox-sync-dialog.ui:176 src/window-commands.c:647
+#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:622
 msgid "_Save"
 msgstr "Enregi_strar"
 
@@ -1826,7 +1825,7 @@ msgstr "Recargatz la pagina o visitatz una pagina diferenta per contunhar."
 #: embed/ephy-web-view.c:2007
 #, c-format
 msgid "Unresponsive Page"
-msgstr ""
+msgstr "Pagina adaptativa"
 
 #. Message title when web content has become unresponsive.
 #: embed/ephy-web-view.c:2010
@@ -1953,10 +1952,9 @@ msgid "File not found"
 msgstr "Impossible de trobar lo fichièr"
 
 #: embed/ephy-web-view.c:2195
-#, fuzzy, c-format
-#| msgid "Password not found"
+#, c-format
 msgid "%s could not be found."
-msgstr "Senhal introbable"
+msgstr "Impossible de trobar %s"
 
 #: embed/ephy-web-view.c:2197
 #, c-format
@@ -1978,10 +1976,8 @@ msgid "_OK"
 msgstr "_D'acòrdi"
 
 #: lib/contrib/gnome-languages.c:719
-#, fuzzy
-#| msgid "None specified"
 msgid "Unspecified"
-msgstr "Pas cap d'indicacion"
+msgstr "Pas especificat"
 
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:185
@@ -2382,11 +2378,8 @@ msgid "Search for websites, bookmarks, and open tabs"
 msgstr ""
 
 #: lib/widgets/ephy-location-entry.c:1115
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Bookmark current page"
 msgid "Bookmark this page"
-msgstr "Crear un marcapagina per la pagina actuala"
+msgstr "Marcar aquesta pagina d'un signet"
 
 #: lib/widgets/ephy-location-entry.c:1132
 msgid "Toggle reader mode"
@@ -2499,30 +2492,18 @@ msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Impossible de recuperar los marcapaginas de Firefox !"
 
 #: src/bookmarks/ephy-bookmarks-import.c:459
-#, fuzzy, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
+#, c-format
 msgid "HTML bookmarks database could not be opened: %s"
-msgstr ""
-"La basa de donadas dels marcapaginas de Firefox a pas pogut èsser dobèrta. "
-"Tampatz Firefox e ensajar tornamai."
+msgstr "La basa de donadas HTML de marcapaginas se pòt dobrir : %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:470
-#, fuzzy
-#| msgid "Firefox bookmarks could not be retrieved!"
 msgid "HTML bookmarks database could not be read."
-msgstr "Impossible de recuperar los marcapaginas de Firefox !"
+msgstr "La basa de donadas HTML de marcapaginas se pòt pas legir."
 
 #: src/bookmarks/ephy-bookmarks-import.c:491
-#, fuzzy, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
+#, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
-msgstr ""
-"La basa de donadas dels marcapaginas de Firefox a pas pogut èsser dobèrta. "
-"Tampatz Firefox e ensajar tornamai."
+msgstr "La basa de donadas HTML de marcapaginas se pòt pas percórrer : %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:644
 #, fuzzy, c-format
@@ -2651,10 +2632,8 @@ msgid "Open a new tab"
 msgstr "Dobrir un onglet novèl"
 
 #: src/ephy-web-extension-dialog.c:73
-#, fuzzy
-#| msgid "Do you really want to remove the contact '%s'?"
 msgid "Do you really want to remove this extension?"
-msgstr "Sètz segur que volètz suprimir lo contacte « %s » ?"
+msgstr "Volètz vertadièrament suprimir aquesta extension ?"
 
 #: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
 #: src/resources/gtk/bookmark-properties.ui:127
@@ -2689,11 +2668,11 @@ msgstr ""
 msgid "Do you want to leave this website?"
 msgstr "Volètz quitar aqueste site Web ?"
 
-#: src/ephy-window.c:286 src/window-commands.c:1204
+#: src/ephy-window.c:286 src/window-commands.c:1179
 msgid "A form you modified has not been submitted."
 msgstr "Un formulari qu'avètz documentat es pas estat somés."
 
-#: src/ephy-window.c:287 src/window-commands.c:1206
+#: src/ephy-window.c:287 src/window-commands.c:1181
 msgid "_Discard form"
 msgstr "A_bandonar lo formulari"
 
@@ -2857,16 +2836,12 @@ msgid "Open Link In New Tab"
 msgstr "Dobrir lo ligam dins un _onglet novèl"
 
 #: src/ephy-window.c:1444
-#, fuzzy
-#| msgid "Open Link in New _Window"
 msgid "Open Link In New Window"
-msgstr "Dobrir lo ligam dins una _fenèstra novèla"
+msgstr "Dobrir lo ligam dins una fenèstra novèla"
 
 #: src/ephy-window.c:1446
-#, fuzzy
-#| msgid "Open Link in I_ncognito Window"
 msgid "Open Link In Incognito Window"
-msgstr "Dobrir lo ligam dins una fenèstra I_ncognito"
+msgstr "Dobrir lo ligam dins una fenèstra Incognito"
 
 #: src/ephy-window.c:2895
 msgid "Download operation"
@@ -3064,10 +3039,8 @@ msgid "Select a directory"
 msgstr "Seleccionar un repertòri"
 
 #: src/preferences/prefs-general-page.c:859
-#, fuzzy
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
-msgstr "Crear una aplicacion web"
+msgstr "Icòna d’aplicacion web"
 
 #: src/preferences/prefs-general-page.c:864
 msgid "Supported Image Files"
@@ -3100,11 +3073,8 @@ msgstr "Percórrer e organizar vòstres marcapaginas"
 
 #. Translators: tooltip for the bookmark button
 #: src/resources/gtk/action-bar-end.ui:44
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Bookmark current page"
 msgid "Bookmark page"
-msgstr "Crear un marcapagina per la pagina actuala"
+msgstr "Marcar"
 
 #. Translators: tooltip for the downloads button
 #: src/resources/gtk/action-bar-end.ui:67
@@ -3249,11 +3219,11 @@ msgstr "Encodatges aparentats"
 msgid "Show all…"
 msgstr "Afichar tot…"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:21
+#: src/resources/gtk/firefox-sync-dialog.ui:20
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:29
+#: src/resources/gtk/firefox-sync-dialog.ui:28
 #, fuzzy
 #| msgid ""
 #| "Sign in with your Firefox account to sync your data with Web and Firefox "
@@ -3267,65 +3237,63 @@ msgstr ""
 "Web e Firefox sus d’autres ordenadors. Web es pas ni produit, ni pres en "
 "carga per Mozilla."
 
-#: src/resources/gtk/firefox-sync-dialog.ui:48
+#: src/resources/gtk/firefox-sync-dialog.ui:47
 msgid "Firefox Account"
 msgstr "Compte Firefox"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:52
-#, fuzzy
-#| msgid "Logged in as %s"
+#: src/resources/gtk/firefox-sync-dialog.ui:51
 msgid "Logged in"
-msgstr "Connectat en tant que %s"
+msgstr "Connectat"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:57
+#: src/resources/gtk/firefox-sync-dialog.ui:56
 msgid "Sign _out"
 msgstr "Se _desconnectar"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:70
+#: src/resources/gtk/firefox-sync-dialog.ui:69
 msgid "Sync Options"
 msgstr "Opcions de sincronizacion"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:75
+#: src/resources/gtk/firefox-sync-dialog.ui:74
 #, fuzzy
 #| msgid "_Bookmarks"
 msgid "Sync _Bookmarks"
 msgstr "_Favorits"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:89
+#: src/resources/gtk/firefox-sync-dialog.ui:88
 #, fuzzy
 #| msgid "_Passwords"
 msgid "Sync _Passwords"
 msgstr "Sen_hals"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:103
+#: src/resources/gtk/firefox-sync-dialog.ui:102
 #, fuzzy
 #| msgid "_History"
 msgid "Sync _History"
 msgstr "_Istoric"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:117
+#: src/resources/gtk/firefox-sync-dialog.ui:116
 #, fuzzy
 #| msgid "Open _Tabs"
 msgid "Sync Open _Tabs"
 msgstr "Ongle_ts dobèrts"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:128
+#: src/resources/gtk/firefox-sync-dialog.ui:127
 msgid "S_ynced tabs"
 msgstr "_Onglets sincronizats"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:139
+#: src/resources/gtk/firefox-sync-dialog.ui:138
 msgid "Frequency"
 msgstr "Frequéncia"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:150
+#: src/resources/gtk/firefox-sync-dialog.ui:149
 msgid "Sync _now"
 msgstr "Sincronizar a_ra"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:162
+#: src/resources/gtk/firefox-sync-dialog.ui:161
 msgid "Device name"
 msgstr "Nom del periferic"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:185
+#: src/resources/gtk/firefox-sync-dialog.ui:184
 msgid "_Change"
 msgstr "_Cambiar"
 
@@ -3391,10 +3359,8 @@ msgid "Close Tabs to the _Right"
 msgstr "Desplaçar l'onglet cap a _dreita"
 
 #: src/resources/gtk/notebook-context-menu.ui:46
-#, fuzzy
-#| msgid "Close tab"
 msgid "Close _Other Tabs"
-msgstr "Tampar l'onglet"
+msgstr "Tampar los _autres onglets"
 
 #: src/resources/gtk/notebook-context-menu.ui:50
 msgid "_Close"
@@ -3467,10 +3433,8 @@ msgid "E_xtensions"
 msgstr "E_xtensions"
 
 #: src/resources/gtk/page-menu-popover.ui:290
-#, fuzzy
-#| msgid "Text Encoding"
 msgid "_Override Text Encoding…"
-msgstr "Encodatge del tèxte"
+msgstr "_Subrecargar encodatge del tèxte…"
 
 #: src/resources/gtk/page-menu-popover.ui:305
 msgid "Pr_eferences"
@@ -3530,10 +3494,8 @@ msgid "Search passwords"
 msgstr "Recèrca de senhals"
 
 #: src/resources/gtk/passwords-view.ui:30
-#, fuzzy
-#| msgid "There are ongoing downloads"
 msgid "There are no Passwords"
-msgstr "De telecargaments son en cors"
+msgstr "I a pas cap de senhal"
 
 #: src/resources/gtk/passwords-view.ui:31
 #, fuzzy
@@ -3596,10 +3558,8 @@ msgid "Use Custom Stylesheet"
 msgstr "Utilizar un fuèlh d'e_stil personalizat"
 
 #: src/resources/gtk/prefs-appearance-page.ui:131
-#, fuzzy
-#| msgid "Enable JavaScript"
 msgid "Use Custom JavaScript"
-msgstr "Activar Javascript"
+msgstr "Utilizar un Javascript personalizat"
 
 #: src/resources/gtk/prefs-appearance-page.ui:166
 msgid "Default Zoom Level"
@@ -3660,16 +3620,12 @@ msgid "_Custom"
 msgstr "_Personalizat"
 
 #: src/resources/gtk/prefs-general-page.ui:190
-#, fuzzy
-#| msgid "_Download"
 msgid "Ask o_n Download"
-msgstr "_Telecargar"
+msgstr "Demandar _al telecargar"
 
 #: src/resources/gtk/prefs-general-page.ui:205
-#, fuzzy
-#| msgid "_Download folder"
 msgid "_Download Folder"
-msgstr "Dossièr del telecargaments"
+msgstr "_Dossièr del telecargaments"
 
 #: src/resources/gtk/prefs-general-page.ui:214
 msgid "Search Engines"
@@ -3684,10 +3640,8 @@ msgid "Start in _Incognito Mode"
 msgstr "Aviar en mòde _incognito"
 
 #: src/resources/gtk/prefs-general-page.ui:244
-#, fuzzy
-#| msgid "_Remember previous tabs on startup"
 msgid "_Restore Tabs on Startup"
-msgstr "Se _remembrar dels onglets dobèrts a l'aviada"
+msgstr "_Restablir los onglets a l'aviada"
 
 #: src/resources/gtk/prefs-general-page.ui:259
 msgid "Browsing"
@@ -3975,11 +3929,9 @@ msgid "Import bookmarks"
 msgstr "Importar de marcapaginas"
 
 #: src/resources/gtk/shortcuts-dialog.ui:260
-#, fuzzy
-#| msgid "E_xport Bookmarks"
 msgctxt "shortcut window"
 msgid "Export bookmarks"
-msgstr "E_xportar los marcapaginas"
+msgstr "Exportar los marcapaginas"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
@@ -4043,7 +3995,7 @@ msgstr "Bascular l’inspector"
 #: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
-msgstr ""
+msgstr "Bascular mòde lectura"
 
 #: src/resources/gtk/shortcuts-dialog.ui:357
 msgctxt "shortcut window"
@@ -4171,8 +4123,7 @@ msgid "Add some extensions to display them here."
 msgstr "Apondètz un marcapagina a qualques paginas Web per las afichar aicí."
 
 #: src/search-provider/ephy-search-provider.c:214
-#, fuzzy, c-format
-#| msgid "Search the Web for “%s”"
+#, c-format
 msgid "Search the web for “%s”"
 msgstr "Recercar « %s » sul Web"
 
@@ -4197,72 +4148,72 @@ msgstr "Fichièr HTML"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:698
+#: src/window-commands.c:116 src/window-commands.c:673
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:699
+#: src/window-commands.c:117 src/window-commands.c:674
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:565
-#: src/window-commands.c:784
+#: src/window-commands.c:131 src/window-commands.c:540
+#: src/window-commands.c:759
 msgid "Ch_oose File"
 msgstr "Ca_usir un fichièr"
 
-#: src/window-commands.c:133 src/window-commands.c:334
-#: src/window-commands.c:378 src/window-commands.c:786
-#: src/window-commands.c:812
+#: src/window-commands.c:133 src/window-commands.c:309
+#: src/window-commands.c:353 src/window-commands.c:761
+#: src/window-commands.c:787
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: src/window-commands.c:274
+#: src/window-commands.c:249
 msgid "Select Profile"
 msgstr "Seleccionar lo perfil"
 
-#: src/window-commands.c:279
+#: src/window-commands.c:254
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: src/window-commands.c:331 src/window-commands.c:375
-#: src/window-commands.c:644
+#: src/window-commands.c:306 src/window-commands.c:350
+#: src/window-commands.c:619
 msgid "Choose File"
 msgstr "Causir un fichièr"
 
-#: src/window-commands.c:356 src/window-commands.c:400
-#: src/window-commands.c:447 src/window-commands.c:472
-#: src/window-commands.c:497
+#: src/window-commands.c:331 src/window-commands.c:375
+#: src/window-commands.c:422 src/window-commands.c:447
+#: src/window-commands.c:472
 msgid "Bookmarks successfully imported!"
 msgstr "Los marcapaginas son estats importats !"
 
-#: src/window-commands.c:560
+#: src/window-commands.c:535
 msgid "Import Bookmarks"
 msgstr "Importar de favorits"
 
-#: src/window-commands.c:578 src/window-commands.c:825
+#: src/window-commands.c:553 src/window-commands.c:800
 msgid "From:"
 msgstr "Dempuèi :"
 
-#: src/window-commands.c:624
+#: src/window-commands.c:599
 msgid "Bookmarks successfully exported!"
 msgstr "Los marcapaginas son estats exportats !"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:652
+#: src/window-commands.c:627
 msgid "bookmarks.html"
 msgstr "marcapaginas.html"
 
-#: src/window-commands.c:740
+#: src/window-commands.c:715
 #, fuzzy
 #| msgid "Bookmarks successfully imported!"
 msgid "Passwords successfully imported!"
 msgstr "Los marcapaginas son estats importats !"
 
-#: src/window-commands.c:807
+#: src/window-commands.c:782
 msgid "Import Passwords"
 msgstr "Importar los senhals"
 
-#: src/window-commands.c:998
+#: src/window-commands.c:973
 #, fuzzy, c-format
 #| msgid ""
 #| "A simple, clean, beautiful view of the web.\n"
@@ -4274,17 +4225,17 @@ msgstr ""
 "Una vista simpla, neta e bèla del Web.\n"
 "Propulsat per WebKitGTK+ %d.%d.%d"
 
-#: src/window-commands.c:1010
+#: src/window-commands.c:985
 #, fuzzy
 #| msgid "Epiphany cannot quit"
 msgid "Epiphany Canary"
 msgstr "Epiphany pòt pas èsser tampat"
 
-#: src/window-commands.c:1026
+#: src/window-commands.c:1001
 msgid "Website"
 msgstr "Site Web"
 
-#: src/window-commands.c:1059
+#: src/window-commands.c:1034
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -4292,25 +4243,25 @@ msgstr ""
 "  Vincent L. https://launchpad.net/~vincent-laporte\n"
 "  Yannig MARCHEGAY (Kokoyaya) https://launchpad.net/~yannick-marchegay"
 
-#: src/window-commands.c:1202
+#: src/window-commands.c:1177
 msgid "Do you want to reload this website?"
 msgstr "Volètz enregistrar lo site web ?"
 
-#: src/window-commands.c:1729
+#: src/window-commands.c:1704
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Una aplicacion Web nomenada « %s » es ja presenta. La volètz remplaçar ?"
 
-#: src/window-commands.c:1732
+#: src/window-commands.c:1707
 msgid "Cancel"
 msgstr "Anullar"
 
-#: src/window-commands.c:1734
+#: src/window-commands.c:1709
 msgid "Replace"
 msgstr "Remplaçar"
 
-#: src/window-commands.c:1738
+#: src/window-commands.c:1713
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -4318,52 +4269,52 @@ msgstr ""
 "Una aplicacion amb aqueste nom existís ja. Serà espotida perque la que "
 "volètz crear."
 
-#: src/window-commands.c:1830
+#: src/window-commands.c:1805
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "L’aplicacion « %s » es prèsta a èsser utilizada"
 
-#: src/window-commands.c:1833
+#: src/window-commands.c:1808
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "L’aplicacion « %s » a pas pogut èsser creada"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1848
+#: src/window-commands.c:1823
 msgid "Launch"
 msgstr "Aviar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1889
+#: src/window-commands.c:1864
 msgid "Create Web Application"
 msgstr "Crear una aplicacion web"
 
-#: src/window-commands.c:1894
+#: src/window-commands.c:1869
 msgid "C_reate"
 msgstr "C_rear"
 
 # Titre de fenèstra
-#: src/window-commands.c:2108
+#: src/window-commands.c:2083
 msgid "Save"
 msgstr "Enregistrar"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2092
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2122
+#: src/window-commands.c:2097
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2127
+#: src/window-commands.c:2102
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2641
+#: src/window-commands.c:2616
 msgid "Enable caret browsing mode?"
 msgstr "Activar lo mòde de navigacion amb lo cursor ?"
 
-#: src/window-commands.c:2644
+#: src/window-commands.c:2619
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4374,7 +4325,7 @@ msgstr ""
 "vos permet de vos desplaçar amb vòstre clavièr. Volètz activar lo mòde de "
 "navigacion al cursor ?"
 
-#: src/window-commands.c:2647
+#: src/window-commands.c:2622
 msgid "_Enable"
 msgstr "A_ctivar"
 
