@@ -443,7 +443,7 @@ ephy_download_do_download_action (EphyDownload           *download,
   switch ((action ? action : download->action)) {
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
-      /* Must not use this action type under flatpak! */
+      /* Must not use this action type under sandbox! */
       ret = ephy_file_browse_to (destination, user_time);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
@@ -945,7 +945,7 @@ ephy_download_new (WebKitDownload *download)
                            G_CALLBACK (download_decide_destination_cb),
                            ephy_download, 0);
 
-  if (!ephy_is_running_inside_flatpak () && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
+  if (!ephy_is_running_inside_sandbox () && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
     g_signal_connect (ephy_download, "filename-suggested",
                       G_CALLBACK (filename_suggested_cb),
                       NULL);

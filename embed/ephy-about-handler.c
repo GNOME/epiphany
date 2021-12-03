@@ -558,7 +558,7 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
     handled = ephy_about_handler_handle_memory (handler, request);
   else if (!g_strcmp0 (path, "epiphany"))
     handled = ephy_about_handler_handle_epiphany (handler, request);
-  else if (!g_strcmp0 (path, "applications") && !ephy_is_running_inside_flatpak ())
+  else if (!g_strcmp0 (path, "applications") && !ephy_is_running_inside_sandbox ())
     handled = ephy_about_handler_handle_applications (handler, request);
   else if (!g_strcmp0 (path, "newtab"))
     handled = ephy_about_handler_handle_newtab (handler, request);

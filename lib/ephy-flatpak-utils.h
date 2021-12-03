@@ -24,7 +24,7 @@
 
 void     ephy_flatpak_utils_set_is_web_process_extension (void);
 
-gboolean ephy_is_running_inside_flatpak                  (void);
+gboolean ephy_is_running_inside_sandbox                  (void);
 
 void     ephy_open_uri_via_flatpak_portal                (const char *uri);
 

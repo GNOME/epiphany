@@ -124,7 +124,7 @@ ephy_file_download_dir (void)
  * Returns a proper downloads destination by checking the
  * EPHY_PREFS_STATE_DOWNLOAD_DIR GSettings key and following this logic:
  *
- *  - Under flatpak, always use the XDG downloads directory
+ *  - Under sandbox, always use the XDG downloads directory
  *
  *  - An absolute path: considered user-set, use this value directly.
  *
@@ -142,7 +142,7 @@ ephy_file_get_downloads_dir (void)
   g_autofree char *download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
                                                          EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-  if (ephy_is_running_inside_flatpak ())
+  if (ephy_is_running_inside_sandbox ())
     return ephy_file_download_dir ();
 
   if (g_strcmp0 (download_dir, "Desktop") == 0)
@@ -551,10 +551,10 @@ launch_application (GAppInfo *app,
   GdkScreen *screen;
   gboolean res;
 
-  /* This is impossible to implement inside flatpak. Higher layers must
+  /* This is impossible to implement inside sandbox. Higher layers must
    * ensure we don't get here.
    */
-  g_assert (!ephy_is_running_inside_flatpak ());
+  g_assert (!ephy_is_running_inside_sandbox ());
 
   display = gdk_display_get_default ();
   screen = gdk_screen_get_default ();
@@ -587,11 +587,11 @@ ephy_file_launch_desktop_file (const char                   *filename,
 {
   g_autoptr (GDesktopAppInfo) app = NULL;
 
-  /* This is impossible to implement inside flatpak. Higher layers must
+  /* This is impossible to implement inside sandbox. Higher layers must
    * ensure we don't get here.
    */
   g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
-  g_assert (!ephy_is_running_inside_flatpak ());
+  g_assert (!ephy_is_running_inside_sandbox ());
 
   app = g_desktop_app_info_new (filename);
 
@@ -641,11 +641,11 @@ ephy_file_launch_handler (GFile   *file,
 
   g_assert (file != NULL);
 
-  /* Launch via URI handler only under flatpak, because this way loses
+  /* Launch via URI handler only under sandbox, because this way loses
    * focus stealing prevention. There's no other way to open a file
-   * under flatpak, and focus stealing prevention becomes the
+   * under sandbox, and focus stealing prevention becomes the
    * responsibility of the portal in this case anyway. */
-  if (ephy_is_running_inside_flatpak ())
+  if (ephy_is_running_inside_sandbox ())
     return launch_via_uri_handler (file);
 
   app = g_file_query_default_handler (file, NULL, &error);
@@ -673,11 +673,11 @@ open_in_default_handler (const char                   *uri,
   g_autoptr (GError) error = NULL;
   GList uris;
 
-  /* This is impossible to implement inside flatpak. Higher layers must
+  /* This is impossible to implement inside sandbox. Higher layers must
    * ensure we don't get here.
    */
   g_assert (tag == EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
-  g_assert (!ephy_is_running_inside_flatpak ());
+  g_assert (!ephy_is_running_inside_sandbox ());
 
   context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
   gdk_app_launch_context_set_screen (context, screen);
@@ -726,7 +726,7 @@ ephy_file_browse_to (GFile   *file,
 {
   g_autofree char *uri = g_file_get_uri (file);
 
-  if (ephy_is_running_inside_flatpak ()) {
+  if (ephy_is_running_inside_sandbox ()) {
     ephy_open_directory_via_flatpak_portal (uri);
     return TRUE;
   }

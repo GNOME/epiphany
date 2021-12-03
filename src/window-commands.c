@@ -901,7 +901,7 @@ window_cmd_show_shortcuts (GSimpleAction *action,
     builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/shortcuts-dialog.ui");
     shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
 
-    if (ephy_is_running_inside_flatpak ())
+    if (ephy_is_running_inside_sandbox ())
       gtk_widget_hide (GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-web-apps-group")));
 
     if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) {
@@ -1905,7 +1905,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   char *markup;
   char *escaped_address;
 
-  if (ephy_is_running_inside_flatpak ())
+  if (ephy_is_running_inside_sandbox ())
     return;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));

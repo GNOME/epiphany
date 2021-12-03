@@ -194,7 +194,7 @@ css_file_created_cb (GObject      *source,
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
-    if (ephy_is_running_inside_flatpak ()) {
+    if (ephy_is_running_inside_sandbox ()) {
       g_autofree char *uri = g_file_get_uri (file);
       ephy_open_uri_via_flatpak_portal (uri);
     } else {
@@ -229,7 +229,7 @@ js_file_created_cb (GObject      *source,
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else {
-    if (ephy_is_running_inside_flatpak ()) {
+    if (ephy_is_running_inside_sandbox ()) {
       g_autofree char *uri = g_file_get_uri (file);
       ephy_open_uri_via_flatpak_portal (uri);
     } else {

@@ -1211,7 +1211,7 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   /* ========================== Downloads =================================== */
   /* ======================================================================== */
-  if (ephy_is_running_inside_flatpak ())
+  if (ephy_is_running_inside_sandbox ())
     gtk_widget_hide (general_page->download_box);
   else
     create_download_path_button (general_page);

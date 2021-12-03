@@ -45,24 +45,41 @@ ephy_flatpak_utils_set_is_web_process_extension (void)
   is_web_process = TRUE;
 }
 
-gboolean
+static gboolean
 ephy_is_running_inside_flatpak (void)
 {
-  static _Thread_local gboolean decided = FALSE;
-  static _Thread_local gboolean under_flatpak = FALSE;
-
-  if (decided)
-    return under_flatpak;
-
   /* This function cannot be used in the web process extension, because WebKit
    * creates a .flatpak-info in its web process sandbox even when we are not
    * running under flatpak. It would always return TRUE.
    */
   g_assert (!is_web_process);
 
-  under_flatpak = g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
-  decided = TRUE;
-  return under_flatpak;
+  return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
+}
+
+static gboolean
+ephy_is_running_inside_snap (void)
+{
+  /* The "SNAP" environment variable is not unlikely to be set for/by something other
+   * than Snap, so check a couple of additional variables to avoid false positives.
+   * See: https://snapcraft.io/docs/environment-variables
+   */
+  return g_getenv ("SNAP") && g_getenv ("SNAP_NAME") && g_getenv ("SNAP_REVISION");
+}
+
+static gpointer
+get_inside_sandbox (gpointer user_data)
+{
+  return GINT_TO_POINTER (ephy_is_running_inside_flatpak () || ephy_is_running_inside_snap ());
+}
+
+/* FIXME: Use https://github.com/flatpak/libportal/pull/63 */
+gboolean
+ephy_is_running_inside_sandbox (void)
+{
+  static GOnce inside_sandbox = G_ONCE_INIT;
+
+  return GPOINTER_TO_INT (g_once (&inside_sandbox, get_inside_sandbox, NULL));
 }
 
 #if USE_LIBPORTAL

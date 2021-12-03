@@ -1742,7 +1742,7 @@ populate_context_menu (WebKitWebView       *web_view,
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "view-image", window);
 
-    if (!ephy_is_running_inside_flatpak ())
+    if (!ephy_is_running_inside_sandbox ())
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "set-image-as-background", window);
   }
@@ -2126,7 +2126,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (ephy_web_application_is_uri_allowed (uri)) {
         gtk_widget_show (GTK_WIDGET (window));
       } else {
-        /* We can't get here under flatpak because this code only
+        /* We can't get here under sandbox because this code only
          * executes in web app mode.
          */
         ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
@@ -2145,7 +2145,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (ephy_web_application_is_uri_allowed (uri))
         return accept_navigation_policy_decision (window, decision, uri);
 
-      /* We can't get here under flatpak because this code only
+      /* We can't get here under sandbox because this code only
        * executes in web app mode.
        */
       ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,

@@ -278,7 +278,7 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   char *dest_uri, *dest, *base, *base_converted;
   EphyDownload *download;
 
-  if (ephy_is_running_inside_flatpak ())
+  if (ephy_is_running_inside_sandbox ())
     return;
 
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));

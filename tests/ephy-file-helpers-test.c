@@ -102,7 +102,7 @@ typedef struct {
   const char *key_value;
   const char *expected;
   GUserDirectory user_dir;
-  gboolean in_flatpak;
+  gboolean in_sandbox;
 } DownloadsDirTest;
 
 static const DownloadsDirTest downloads_tests[] = {
@@ -118,7 +118,7 @@ static void
 test_ephy_file_get_downloads_dir (void)
 {
   guint i;
-  gboolean in_flatpak = ephy_is_running_inside_flatpak ();
+  gboolean in_sandbox = ephy_is_running_inside_sandbox ();
 
   ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
 
@@ -129,7 +129,7 @@ test_ephy_file_get_downloads_dir (void)
 
     test = downloads_tests[i];
 
-    if (in_flatpak && !test.in_flatpak)
+    if (in_sandbox && !test.in_sandbox)
       continue;
 
     if (test.expected != NULL)
@@ -348,7 +348,7 @@ main (int   argc,
   g_test_add_func ("/lib/ephy-file-helpers/get_downloads_dir",
                    test_ephy_file_get_downloads_dir);
 
-  if (!ephy_is_running_inside_flatpak ())
+  if (!ephy_is_running_inside_sandbox ())
     g_test_add_func ("/lib/ephy-file-helpers/create_delete_dir",
                      test_ephy_file_create_delete_dir);
 

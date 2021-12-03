@@ -308,7 +308,7 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "firefox-sync-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "firefox-sync-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-export-menu")));
-  } else if (ephy_is_running_inside_flatpak ()) {
+  } else if (ephy_is_running_inside_sandbox ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
