@@ -290,7 +290,8 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<tbody><tr id =\"%s\">"
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
                               "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
-                              "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\"></td>"
+                              "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\" "
+                              "class=\"destructive-action\"></td>"
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
                               html_encoded_id, encoded_icon_url, encoded_name, encoded_url, _("Delete"), js_encoded_id,
                               /* Note for translators: this refers to the installation date. */
