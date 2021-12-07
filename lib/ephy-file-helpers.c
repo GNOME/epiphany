@@ -868,7 +868,6 @@ ephy_copy_directory (const char *source,
 
   if (type == G_FILE_TYPE_DIRECTORY) {
     g_autoptr (GFileEnumerator) enumerator = NULL;
-    g_autoptr (GFileInfo) info = NULL;
 
     if (!g_file_make_directory_with_parents (dest_file, NULL, &error)) {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
@@ -890,7 +889,10 @@ ephy_copy_directory (const char *source,
       return;
     }
 
-    for (info = g_file_enumerator_next_file (enumerator, NULL, NULL); info != NULL; info = g_file_enumerator_next_file (enumerator, NULL, NULL)) {
+    for (;;) {
+      g_autoptr (GFileInfo) info = g_file_enumerator_next_file (enumerator, NULL, NULL);
+      if (!info)
+        break;
       ephy_copy_directory (
         g_build_filename (source, g_file_info_get_name (info), NULL),
         g_build_filename (target, g_file_info_get_name (info), NULL));
