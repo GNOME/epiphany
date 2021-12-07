@@ -89,4 +89,6 @@ gboolean            ephy_web_application_save (EphyWebApplication *app);
 
 gboolean            ephy_web_application_is_system (EphyWebApplication *app);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (EphyWebApplication, ephy_web_application_free)
+
 G_END_DECLS

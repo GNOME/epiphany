@@ -62,37 +62,30 @@
 char *
 ephy_web_application_get_app_id_from_name (const char *name)
 {
-  char *normal_id;
-  char *checksum;
-  char *id;
+  g_autofree char *normal_id = NULL;
+  g_autofree char *checksum = NULL;
 
   normal_id = g_utf8_strdown (name, -1);
   g_strdelimit (normal_id, " ", '-');
   g_strdelimit (normal_id, G_DIR_SEPARATOR_S, '-');
 
   checksum = g_compute_checksum_for_string (G_CHECKSUM_SHA1, name, -1);
-  id = g_strdup_printf ("%s-%s", normal_id, checksum);
-
-  g_free (normal_id);
-  g_free (checksum);
-
-  return id;
+  return g_strdup_printf ("%s-%s", normal_id, checksum);
 }
 
 static char *
 get_encoded_path (const char *path)
 {
-  char *encoded;
-  GError *error = NULL;
+  g_autofree char *encoded = NULL;
+  g_autoptr (GError) error = NULL;
 
   encoded = g_filename_from_utf8 (path, -1, NULL, NULL, &error);
   if (error) {
     g_warning ("%s", error->message);
-    g_error_free (error);
     return NULL;
   }
 
-  return encoded;
+  return g_steal_pointer (&encoded);
 }
 
 static const char *
@@ -334,14 +327,16 @@ create_desktop_file (const char *id,
                      const char *profile_dir,
                      GdkPixbuf  *icon)
 {
-  GKeyFile *file = NULL;
-  char *exec_string;
-  char *data = NULL;
-  char *filename, *apps_path, *desktop_file_path = NULL;
-  char *link_path;
-  char *wm_class;
-  GFile *link;
-  GError *error = NULL;
+  g_autofree char *filename = NULL;
+  g_autoptr (GKeyFile) file = NULL;
+  g_autofree char *exec_string = NULL;
+  g_autofree char *wm_class = NULL;
+  g_autofree char *data = NULL;
+  g_autofree char *desktop_file_path = NULL;
+  g_autofree char *apps_path = NULL;
+  g_autofree char *link_path = NULL;
+  g_autoptr (GFile) link = NULL;
+  g_autoptr (GError) error = NULL;
 
   g_assert (profile_dir);
 
@@ -355,16 +350,15 @@ create_desktop_file (const char *id,
                                  profile_dir,
                                  address);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
-  g_free (exec_string);
   g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
   g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
   g_key_file_set_value (file, "Desktop Entry", "Type", "Application");
   g_key_file_set_value (file, "Desktop Entry", "Categories", "GNOME;GTK;");
 
   if (icon) {
-    GOutputStream *stream;
-    char *path;
-    GFile *image;
+    g_autoptr (GOutputStream) stream = NULL;
+    g_autofree char *path = NULL;
+    g_autoptr (GFile) image = NULL;
 
     path = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
     image = g_file_new_for_path (path);
@@ -372,15 +366,10 @@ create_desktop_file (const char *id,
     stream = (GOutputStream *)g_file_create (image, 0, NULL, NULL);
     gdk_pixbuf_save_to_stream (icon, stream, "png", NULL, NULL, NULL);
     g_key_file_set_value (file, "Desktop Entry", "Icon", path);
-
-    g_object_unref (stream);
-    g_object_unref (image);
-    g_free (path);
   }
 
   wm_class = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, id, NULL);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
-  g_free (wm_class);
 
   g_key_file_set_value (file, "Desktop Entry", "X-Purism-FormFactor", "Workstation;Mobile;");
 
@@ -388,10 +377,8 @@ create_desktop_file (const char *id,
 
   desktop_file_path = g_build_filename (profile_dir, filename, NULL);
 
-  if (!g_file_set_contents (desktop_file_path, data, -1, NULL)) {
-    g_free (desktop_file_path);
-    desktop_file_path = NULL;
-  }
+  if (!g_file_set_contents (desktop_file_path, data, -1, NULL))
+    g_clear_pointer (&desktop_file_path, g_free);
 
   /* Create a symlink in XDG_DATA_DIR/applications for the Shell to
    * pick up this application. */
@@ -399,20 +386,12 @@ create_desktop_file (const char *id,
   if (ephy_ensure_dir_exists (apps_path, &error)) {
     link_path = g_build_filename (apps_path, filename, NULL);
     link = g_file_new_for_path (link_path);
-    g_free (link_path);
     g_file_make_symbolic_link (link, desktop_file_path, NULL, NULL);
-    g_object_unref (link);
   } else {
     g_warning ("Error creating application symlink: %s", error->message);
-    g_error_free (error);
   }
 
-  g_free (apps_path);
-  g_free (filename);
-  g_free (data);
-  g_key_file_free (file);
-
-  return desktop_file_path;
+  return g_steal_pointer (&desktop_file_path);
 }
 
 /**
@@ -536,9 +515,9 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 {
   const char *gapplication_id;
   const char *id;
-  char *desktop_basename;
-  char *desktop_filename;
-  GDesktopAppInfo *desktop_info;
+  g_autofree char *desktop_basename = NULL;
+  g_autofree char *desktop_filename = NULL;
+  g_autoptr (GDesktopAppInfo) desktop_info = NULL;
 
   g_assert (profile_directory != NULL);
 
@@ -560,10 +539,6 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   if (!desktop_info)
     g_error ("Required desktop file not present at %s", desktop_filename);
   g_set_application_name (g_app_info_get_name (G_APP_INFO (desktop_info)));
-
-  g_free (desktop_basename);
-  g_free (desktop_filename);
-  g_object_unref (desktop_info);
 }
 
 void
@@ -589,21 +564,20 @@ ephy_web_application_free (EphyWebApplication *app)
   g_free (app);
 }
 
-
 EphyWebApplication *
 ephy_web_application_for_profile_directory (const char *profile_dir)
 {
-  EphyWebApplication *app;
-  char *desktop_file_path;
+  g_autoptr (EphyWebApplication) app = NULL;
+  g_autofree char *desktop_file_path = NULL;
   const char *id;
-  GDesktopAppInfo *desktop_info;
+  g_autoptr (GDesktopAppInfo) desktop_info = NULL;
   const char *exec;
   int argc;
-  char **argv;
-  GFile *file;
-  GFileInfo *file_info;
+  g_auto (GStrv) argv = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autoptr (GFileInfo) file_info = NULL;
   guint64 created;
-  GDate *date;
+  g_autoptr (GDate) date = NULL;
 
   id = get_app_id_from_profile_directory (profile_dir);
   if (!id)
@@ -616,20 +590,15 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
   desktop_file_path = g_build_filename (profile_dir, app->desktop_file, NULL);
   desktop_info = g_desktop_app_info_new_from_filename (desktop_file_path);
   if (!desktop_info) {
-    ephy_web_application_free (app);
-    g_free (desktop_file_path);
+    g_clear_pointer (&app, ephy_web_application_free); /* avoid a scan-build warning */
     return NULL;
   }
 
   app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
   app->icon_url = g_desktop_app_info_get_string (desktop_info, "Icon");
   exec = g_app_info_get_commandline (G_APP_INFO (desktop_info));
-  if (g_shell_parse_argv (exec, &argc, &argv, NULL)) {
+  if (g_shell_parse_argv (exec, &argc, &argv, NULL))
     app->url = g_strdup (argv[argc - 1]);
-    g_strfreev (argv);
-  }
-
-  g_object_unref (desktop_info);
 
   file = g_file_new_for_path (desktop_file_path);
 
@@ -641,19 +610,13 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
   g_date_set_time_t (date, (time_t)created);
   g_date_strftime (app->install_date, 127, "%x", date);
 
-  g_date_free (date);
-  g_object_unref (file);
-  g_object_unref (file_info);
-  g_free (desktop_file_path);
-
-  return app;
+  return g_steal_pointer (&app);
 }
 
 static GList *
 ephy_web_application_get_application_list_internal (gboolean only_legacy)
 {
-  GFileEnumerator *children = NULL;
-  GFileInfo *info;
+  g_autoptr (GFileEnumerator) children = NULL;
   GList *applications = NULL;
   g_autofree char *parent_directory_path = NULL;
   g_autoptr (GFile) parent_directory = NULL;
@@ -670,15 +633,18 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
   if (!children)
     return NULL;
 
-  info = g_file_enumerator_next_file (children, NULL, NULL);
-  while (info) {
+  for (;;) {
+    g_autoptr (GFileInfo) info = g_file_enumerator_next_file (children, NULL, NULL);
     const char *name;
+
+    if (!info)
+      break;
 
     name = g_file_info_get_name (info);
     if ((only_legacy && g_str_has_prefix (name, "app-")) ||
         (!only_legacy && g_str_has_prefix (name, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX))) {
-      EphyWebApplication *app;
-      char *profile_dir;
+      g_autoptr (EphyWebApplication) app = NULL;
+      g_autofree char *profile_dir = NULL;
 
       profile_dir = g_build_filename (parent_directory_path, name, NULL);
       app = ephy_web_application_for_profile_directory (profile_dir);
@@ -686,22 +652,12 @@ ephy_web_application_get_application_list_internal (gboolean only_legacy)
         if (!only_legacy) {
           g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
           if (g_file_test (app_file, G_FILE_TEST_EXISTS))
-            applications = g_list_prepend (applications, app);
-          else
-            g_free (app);
+            applications = g_list_prepend (applications, g_steal_pointer (&app));
         } else
-          applications = g_list_prepend (applications, app);
+          applications = g_list_prepend (applications, g_steal_pointer (&app));
       }
-
-      g_free (profile_dir);
     }
-
-    g_object_unref (info);
-
-    info = g_file_enumerator_next_file (children, NULL, NULL);
   }
-
-  g_object_unref (children);
 
   return g_list_reverse (applications);
 }
@@ -761,75 +717,61 @@ ephy_web_application_free_application_list (GList *list)
 gboolean
 ephy_web_application_exists (const char *id)
 {
-  char *profile_dir;
-  gboolean profile_exists;
+  g_autofree char *profile_dir = NULL;
 
   profile_dir = ephy_web_application_get_profile_directory (id);
-  profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
-  g_free (profile_dir);
-
-  return profile_exists;
+  return g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
 }
 
 void
 ephy_web_application_initialize_settings (const char                *profile_directory,
                                           EphyWebApplicationOptions  options)
 {
-  GSettings *settings;
-  GSettings *web_app_settings;
-  char *name;
-  char *path;
+  g_autoptr (GSettings) settings = NULL;
+  g_autoptr (GSettings) web_app_settings = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *path = NULL;
 
   name = g_path_get_basename (profile_directory);
   settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/org/gnome/epiphany/web/");
 
   path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "web/", NULL);
   web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, path);
-  g_free (path);
 
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_web_schema); i++) {
-    GVariant *value;
+    g_autoptr (GVariant) value = NULL;
 
     value = g_settings_get_value (settings, ephy_prefs_web_schema[i]);
     g_settings_set_value (web_app_settings, ephy_prefs_web_schema[i], value);
-    g_variant_unref (value);
   }
 
-  g_object_unref (settings);
-  g_object_unref (web_app_settings);
-
+  g_clear_object (&settings);
   settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
 
+  g_clear_pointer (&path, g_free);
   path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "state/", NULL);
+  g_clear_object (&web_app_settings);
   web_app_settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, path);
-  g_free (path);
 
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_state_schema); i++) {
-    GVariant *value;
+    g_autoptr (GVariant) value = NULL;
 
     value = g_settings_get_value (settings, ephy_prefs_state_schema[i]);
     g_settings_set_value (web_app_settings, ephy_prefs_state_schema[i], value);
-    g_variant_unref (value);
   }
 
-  g_object_unref (settings);
-  g_object_unref (web_app_settings);
-
   if (options) {
+    g_clear_pointer (&path, g_free);
     path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "webapp/", NULL);
+    g_clear_object (&web_app_settings);
     web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_APP_SCHEMA, path);
-    g_free (path);
 
     if (options & EPHY_WEB_APPLICATION_MOBILE_CAPABLE)
       g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SHOW_NAVIGATION_BUTTONS, TRUE);
 
     if (options & EPHY_WEB_APPLICATION_SYSTEM)
       g_settings_set_boolean (web_app_settings, EPHY_PREFS_WEB_APP_SYSTEM, TRUE);
-
-    g_object_unref (web_app_settings);
   }
-
-  g_free (name);
 }
 
 static gboolean
@@ -859,9 +801,9 @@ urls_have_same_origin (const char *a_url,
 gboolean
 ephy_web_application_is_uri_allowed (const char *uri)
 {
-  EphyWebApplication *webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
+  g_autoptr (EphyWebApplication) webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
   const char *scheme;
-  char **urls;
+  g_auto (GStrv) urls = NULL;
   guint i;
   gboolean matched = FALSE;
 
@@ -892,7 +834,6 @@ ephy_web_application_is_uri_allowed (const char *uri)
       matched = g_str_has_prefix (uri, urls[i]);
     }
   }
-  g_strfreev (urls);
 
   return matched;
 }
@@ -902,30 +843,28 @@ ephy_web_icon_copy_cb (GFile        *file,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  GError *error = NULL;
-  if (!g_file_copy_finish (file, result, &error)) {
+  g_autoptr (GError) error = NULL;
+  if (!g_file_copy_finish (file, result, &error))
     g_warning ("Failed to update web app icon: %s", error->message);
-    g_error_free (error);
-  }
 }
 
 gboolean
 ephy_web_application_save (EphyWebApplication *app)
 {
-  char *profile_dir;
-  char *desktop_file_path;
-  char *contents;
+  g_autofree char *profile_dir = NULL;
+  g_autofree char *desktop_file_path = NULL;
+  g_autofree char *contents = NULL;
   gboolean saved = FALSE;
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
 
   profile_dir = ephy_web_application_get_profile_directory (app->id);
   desktop_file_path = g_build_filename (profile_dir, app->desktop_file, NULL);
   if (g_file_get_contents (desktop_file_path, &contents, NULL, &error)) {
-    GKeyFile *key;
-    char *name;
-    char *icon;
-    char *exec;
-    char **strings;
+    g_autoptr (GKeyFile) key = NULL;
+    g_autofree char *name = NULL;
+    g_autofree char *icon = NULL;
+    g_autofree char *exec = NULL;
+    g_auto (GStrv) strings = NULL;
     guint exec_length;
     gboolean changed = FALSE;
 
@@ -937,12 +876,11 @@ ephy_web_application_save (EphyWebApplication *app)
       changed = TRUE;
       g_key_file_set_string (key, "Desktop Entry", "Name", app->name);
     }
-    g_free (name);
 
     icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
     if (g_strcmp0 (icon, app->icon_url) != 0) {
-      GFile *new_icon;
-      GFile *old_icon;
+      g_autoptr (GFile) new_icon = NULL;
+      g_autoptr (GFile) old_icon = NULL;
       changed = TRUE;
       new_icon = g_file_new_for_path (app->icon_url);
       old_icon = g_file_new_for_path (icon);
@@ -950,39 +888,28 @@ ephy_web_application_save (EphyWebApplication *app)
                          G_PRIORITY_DEFAULT, NULL, NULL, NULL,
                          (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
     }
-    g_free (icon);
 
     exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
     strings = g_strsplit (exec, " ", -1);
-    g_free (exec);
 
     exec_length = g_strv_length (strings);
     if (g_strcmp0 (strings[exec_length - 1], app->url) != 0) {
       changed = TRUE;
       g_free (strings[exec_length - 1]);
       strings[exec_length - 1] = g_strdup (app->url);
+      g_free (exec);
       exec = g_strjoinv (" ", strings);
       g_key_file_set_string (key, "Desktop Entry", "Exec", exec);
-      g_free (exec);
     }
-    g_strfreev (strings);
 
     if (changed) {
       saved = g_key_file_save_to_file (key, desktop_file_path, &error);
-      if (!saved) {
+      if (!saved)
         g_warning ("Failed to save desktop file of web application: %s\n", error->message);
-        g_error_free (error);
-      }
     }
-    g_free (contents);
-    g_key_file_free (key);
   } else {
     g_warning ("Failed to load desktop file of web application: %s\n", error->message);
-    g_error_free (error);
   }
-
-  g_free (desktop_file_path);
-  g_free (profile_dir);
 
   return saved;
 }
