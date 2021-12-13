@@ -465,9 +465,12 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 
   /* Create the profile directory, populate it. */
   if (g_mkdir (profile_dir, 488) == -1) {
-    if (errno == EEXIST)
+    int err = errno;
+    if (err == EEXIST)
       return g_steal_pointer (&profile_dir);
 
+    g_debug ("Failed to create directory '%s' for app id '%s': %s (%d)",
+             profile_dir, id, g_strerror (err), err);
     return NULL;
   }
 
@@ -478,7 +481,9 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
   app_file = g_build_filename (profile_dir, ".app", NULL);
   fd = g_open (app_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd < 0) {
-    g_warning ("Failed to create .app file: %s", g_strerror (errno));
+    int err = errno;
+    g_warning ("Failed to create .app file in '%s': %s (%d)",
+               profile_dir, g_strerror (err), err);
     return NULL;
   }
   close (fd);

@@ -296,6 +296,8 @@ main (int   argc,
 
       if (desktop_info)
         profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
+      else
+        g_debug ("Could not instantiate GDesktopAppInfo for '%s'", desktop_file_basename);
 
       if (!profile_directory) {
         g_print ("Invalid desktop file passed to --application-mode\n");
