@@ -23,6 +23,7 @@
 
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-output-encoding.h"
 #include "ephy-web-view.h"
 
 #include <gio/gio.h>
@@ -109,7 +110,9 @@ web_resource_data_cb (WebKitWebResource     *resource,
                       EphyViewSourceRequest *request)
 {
   g_autofree guchar *data = NULL;
-  g_autofree char *escaped_str = NULL;
+  g_autofree char *data_str = NULL;
+  g_autofree char *encoded_str = NULL;
+  g_autofree char *encoded_uri = NULL;
   g_autoptr (GError) error = NULL;
   g_autofree char *html = NULL;
   gsize length;
@@ -120,8 +123,13 @@ web_resource_data_cb (WebKitWebResource     *resource,
     return;
   }
 
-  /* Warning: data is not a string, so we pass length here because it's not NUL-terminated. */
-  escaped_str = g_markup_escape_text ((const char *)data, length);
+  /* Convert data to a string */
+  data_str = g_malloc (length + 1);
+  memcpy (data_str, data, length);
+  data_str[length] = '\0';
+
+  encoded_str = ephy_encode_for_html_entity (data_str);
+  encoded_uri = ephy_encode_for_html_entity (webkit_web_resource_get_uri (resource));
 
   html = g_strdup_printf ("<head>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx-light.css' media='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)'>"
@@ -136,8 +144,8 @@ web_resource_data_cb (WebKitWebResource     *resource,
                           "          hljs.initLineNumbersOnLoad();</script>"
                           "  <pre><code class='html'>%s</code></pre>"
                           "</body>",
-                          webkit_web_resource_get_uri (resource),
-                          escaped_str);
+                          encoded_uri,
+                          encoded_str);
 
   finish_uri_scheme_request (request, g_steal_pointer (&html), NULL);
 }
