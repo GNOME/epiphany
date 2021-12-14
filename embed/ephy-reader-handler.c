@@ -123,8 +123,7 @@ enum_nick (GType enum_type,
   return nick;
 }
 
-static
-char *
+static char *
 readability_get_property_string (WebKitJavascriptResult *js_result,
                                  char                   *property)
 {
