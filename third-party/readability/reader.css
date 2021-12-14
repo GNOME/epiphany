@@ -19,11 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  *
- * Changes
+ * Changes: 
  * - replace Firefox specific css extensions with WebKit css extensions
  * - append FeedView css selectors
  *
  * - Adjusted for Epiphany (Removing footer)
+ *
+ * - updated all the colours to use css variables
+ * - include missing styling for tables
+ * - updates font-families to use common fonts
+ * - switch to using em units where it makes sense
+ * - fixed lack of link styling
  *
  * Notes:
  *
@@ -37,29 +43,56 @@
  *   https://www.w3.org/TR/css-fonts-3/#font-face-rule
  */
 
+/* Text and Color Styles */
 
-body.sans {
-  font-family: sans-serif;
+.light {
+  /* Contrast ratio: 10.99 */
+  --bg-color: #efefef;
+  --fg-color: #333333;
+
+  --base-color: #fff;
+  --text-color: #000;
+  --link-color: #0095dd;
+  --visited-link-color: #b700dd;
+  --borders-color: #d3d7cf;
 }
 
-body.serif {
-  font-family: serif;
+.dark {
+  /* Contrast ratio: 15.44 */
+  --bg-color: #181818;
+  --fg-color: #efefef;
+
+  --base-color: #2d2d2d;
+  --text-color: #fff;
+  --link-color: #4cc4ff;
+  --visited-link-color: #e14cff;
+  --borders-color: #1b1b1b;
+}
+
+/* Use known common fonts */
+.sans {
+  font-family: Cantarell, Helvetica, Arial, sans-serif;
+}
+
+.serif {
+  font-family: "DejaVu Serif", Georgia, "Times New Roman", serif;
+}
+
+
+html {
+  width: 95%;
+  margin: 0 2.5%;
 }
 
 body {
-  line-height: 1.45;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+
+  line-height: 1.4;
   text-rendering: optimizeLegibility;
-}
-
-body.light {
-  /* Contrast ratio: 10.49 */
-  color: #333333;
-  background: #efefee;
-}
-
-body.dark {
-  color: #efefef;
-  background: #181818;
+  
+  /* To allow for scroll overflow and let the content move to center of screen */
+  margin-bottom: 16em;
 }
 
 h1,
@@ -68,31 +101,9 @@ h3,
 h4,
 h5,
 h6 {
-  /* Contrast ratio: 4.77 */
   font-weight: bold;
-  color: #555555;
-  font-family: serif;
+  color: var(--text-color);
 }
-
-body.serif h1,
-body.serif h2,
-body.serif h3,
-body.serif h4,
-body.serif h5,
-body.serif h6 {
-  font-family: sans-serif;
-}
-
-
-body.dark h1,
-body.dark h2,
-body.dark h3,
-body.dark h4,
-body.dark h5,
-body.dark h6 {
-  color: #999999;
-}
-
 
 tt,
 code,
@@ -101,7 +112,8 @@ pre {
 }
 
 hr {
-  border: 1px solid #efefef;
+  border: none;
+  border-top: 1px solid var(--borders-color);
 }
 
 picture img {
@@ -109,15 +121,15 @@ picture img {
 }
 
 h1 {
-  font-size: 1.6em;
+  font-size: 1.8em;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 h3 {
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 a {
@@ -126,10 +138,17 @@ a {
 }
 
 a,
-a:visited,
-a:hover,
 a:active {
-  color: #0095dd;
+  color: var(--link-color);
+  font-weight: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--visited-link-color);
 }
 
 * {
@@ -143,11 +162,11 @@ pre,
 blockquote,
 ul,
 ol,
-li,
 figure,
 .wp-caption {
-  margin: 0 0 30px 0;
+  margin: 0 0 2em 0;
 }
+
 
 p > img:only-child,
 p > a:only-child > img:only-child,
@@ -158,6 +177,7 @@ figure img {
 
 .caption,
 .wp-caption-text,
+caption,
 figcaption {
   font-size: 0.9em;
   font-style: italic;
@@ -168,9 +188,20 @@ pre {
   white-space: pre-wrap;
 }
 
+/* Fix sub- and superscript from altering line-height */
+sup, sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+
+sub { 
+  top: 0.4em; 
+}
+
 blockquote {
   padding: 0;
-  -webkit-padding-start: 16px;
+  -webkit-padding-start: 1em;
 }
 
 ul,
@@ -179,13 +210,35 @@ ol {
 }
 
 ul {
-  -webkit-padding-start: 30px;
+  -webkit-padding-start: 2em;
   list-style: disc;
 }
 
 ol {
-  -webkit-padding-start: 30px;
+  -webkit-padding-start: 2em;
   list-style: decimal;
+}
+
+li {
+  margin: 0 0 0.5em 0;
+}
+
+table,
+th,
+td {
+  border: 1px solid var(--borders-color);
+  border-collapse: collapse;
+  padding: 6px;
+  vertical-align: top;
+}
+
+tr {
+  vertical-align: top;
+}
+
+table {
+  background-color: var(--base-color);
+  margin: 1.5em 0;
 }
 
 /* Hide elements with common "hidden" class names */
@@ -199,9 +252,9 @@ ol {
 
 article {
   overflow-y: hidden;
-  margin: 20px auto;
+  margin: 1.5em auto;
   width: 640px;
-  font-size: 18px;
+  font-size: 1em;
   word-wrap: break-word;
 }
 
@@ -209,10 +262,15 @@ mark {
   padding: 2px;
   margin: -2px;
   border-radius: 3px;
-  background: #d7d7d8;
+  background: var(--borders-color);
 }
 
-body.dark mark {
-  background: #282828;
-  color: #efefef;
+body mark {
+  background: var(--bg-color);
+  color: var(--fg-color);
+}
+
+/* Force hiding elements with navigation role */
+[role=navigation] {
+  display: none;
 }
