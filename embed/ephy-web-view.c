@@ -1857,9 +1857,9 @@ format_network_error_page (const char  *uri,
                            const char **icon_name,
                            const char **style)
 {
-  char *formatted_origin;
-  char *formatted_reason;
-  char *first_paragraph;
+  g_autofree char *formatted_origin = NULL;
+  g_autofree char *formatted_reason = NULL;
+  g_autofree char *first_paragraph = NULL;
   const char *second_paragraph;
 
   /* Page title when a site cannot be loaded due to a network error. */
@@ -1896,10 +1896,6 @@ format_network_error_page (const char  *uri,
 
   *icon_name = "network-error-symbolic.svg";
   *style = "default";
-
-  g_free (formatted_origin);
-  g_free (formatted_reason);
-  g_free (first_paragraph);
 }
 
 static void
@@ -1913,10 +1909,10 @@ format_crash_error_page (const char  *uri,
                          const char **icon_name,
                          const char **style)
 {
-  char *formatted_uri;
-  char *formatted_distributor;
-  char *first_paragraph;
-  char *second_paragraph;
+  g_autofree char *formatted_uri = NULL;
+  g_autofree char *formatted_distributor = NULL;
+  g_autofree char *first_paragraph = NULL;
+  g_autofree char *second_paragraph = NULL;
 
   /* Page title when a site cannot be loaded due to a page crash error. */
   *page_title = g_strdup_printf (_("Problem Loading Page"));
@@ -1949,11 +1945,6 @@ format_crash_error_page (const char  *uri,
 
   *icon_name = "computer-fail-symbolic.svg";
   *style = "default";
-
-  g_free (formatted_uri);
-  g_free (formatted_distributor);
-  g_free (first_paragraph);
-  g_free (second_paragraph);
 }
 
 static void
@@ -2040,8 +2031,8 @@ format_tls_error_page (EphyWebView  *view,
                        const char  **icon_name,
                        const char  **style)
 {
-  char *formatted_origin;
-  char *first_paragraph;
+  g_autofree char *formatted_origin = NULL;
+  g_autofree char *first_paragraph = NULL;
 
   /* Page title when a site is not loaded due to an invalid TLS certificate. */
   *page_title = g_strdup_printf (_("Security Violation"));
@@ -2075,9 +2066,6 @@ format_tls_error_page (EphyWebView  *view,
 
   *icon_name = "channel-insecure-symbolic.svg";
   *style = "danger";
-
-  g_free (formatted_origin);
-  g_free (first_paragraph);
 }
 
 static void
@@ -2097,8 +2085,8 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
                                    const char  **icon_name,
                                    const char  **style)
 {
-  char *formatted_origin;
-  char *first_paragraph;
+  g_autofree char *formatted_origin = NULL;
+  g_autofree char *first_paragraph = NULL;
 
   /* Page title when a site is flagged by Google Safe Browsing verification. */
   *page_title = g_strdup_printf (_("Security Warning"));
@@ -2164,9 +2152,6 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
 
   *icon_name = "security-high-symbolic.svg";
   *style = "danger";
-
-  g_free (formatted_origin);
-  g_free (first_paragraph);
 }
 
 static void
@@ -2228,19 +2213,19 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                GError               *error,
                                gpointer              user_data)
 {
-  GBytes *html_file;
-  GString *html = g_string_new ("");
-  char *origin = NULL;
-  char *lang = NULL;
-  char *page_title = NULL;
-  char *msg_title = NULL;
-  char *msg_body = NULL;
-  char *msg_details = NULL;
-  char *button_label = NULL;
-  char *hidden_button_label = NULL;
-  char *button_action = NULL;
-  char *hidden_button_action = NULL;
-  char *style_sheet = NULL;
+  g_autoptr (GBytes) html_file = NULL;
+  g_autoptr (GString) html = g_string_new (NULL);
+  g_autofree char *origin = NULL;
+  g_autofree char *lang = NULL;
+  g_autofree char *page_title = NULL;
+  g_autofree char *msg_title = NULL;
+  g_autofree char *msg_body = NULL;
+  g_autofree char *msg_details = NULL;
+  g_autofree char *button_label = NULL;
+  g_autofree char *hidden_button_label = NULL;
+  g_autofree char *button_action = NULL;
+  g_autofree char *hidden_button_action = NULL;
+  g_autofree char *style_sheet = NULL;
   const char *button_accesskey = NULL;
   const char *hidden_button_accesskey = NULL;
   const char *icon_name = NULL;
@@ -2391,23 +2376,9 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                    button_accesskey, button_label);
 #pragma GCC diagnostic pop
 
-  g_bytes_unref (html_file);
-  g_free (origin);
-  g_free (lang);
-  g_free (page_title);
-  g_free (msg_title);
-  g_free (msg_body);
-  g_free (msg_details);
-  g_free (button_label);
-  g_free (button_action);
-  g_free (hidden_button_label);
-  g_free (hidden_button_action);
-  g_free (style_sheet);
-
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
   webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
-  g_string_free (html, TRUE);
 }
 
 static gboolean
