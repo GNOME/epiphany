@@ -23,6 +23,7 @@
 
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-output-encoding.h"
 #include "ephy-web-view.h"
 
 #include <gio/gio.h>
@@ -124,8 +125,9 @@ pdf_file_loaded (GObject      *source,
   GBytes *html_file;
   g_autoptr (GError) error = NULL;
   g_autoptr (GString) html = NULL;
-  g_autofree gchar *b64 = NULL;
   g_autofree char *file_data = NULL;
+  g_autofree char *encoded_file_data = NULL;
+  g_autofree char *encoded_filename = NULL;
   gsize len = 0;
 
   if (!g_file_load_contents_finish (G_FILE (source), res, &file_data, &len, NULL, &error)) {
@@ -134,13 +136,13 @@ pdf_file_loaded (GObject      *source,
     return;
   }
 
-  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
-
-  b64 = g_base64_encode ((const guchar *)file_data, len);
   g_file_delete_async (G_FILE (source), G_PRIORITY_DEFAULT, NULL, pdf_file_deleted, NULL);
 
-  html = g_string_new ("");
-  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, self->file_name ? self->file_name : "");
+  html = g_string_new (NULL);
+  html_file = g_resources_lookup_data ("/org/gnome/epiphany/pdfjs/web/viewer.html", 0, NULL);
+  encoded_file_data = g_base64_encode ((const guchar *)file_data, len);
+  encoded_filename = self->file_name ? ephy_encode_for_html_attribute (self->file_name) : g_strdup ("");
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), encoded_file_data, encoded_filename);
 
   finish_uri_scheme_request (self, g_strdup (html->str), NULL);
 }
