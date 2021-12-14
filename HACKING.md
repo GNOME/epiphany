@@ -167,6 +167,19 @@ more `WebKitWebExtension`s (web process extensions). Meanwhile, each
 `WebKitWebView` will have one or more `WebKitWebPage`s. Only one page will be
 active in a view at a given time: the other pages are for process swaps.
 
+# Security
+
+When injecting untrusted data into web content, you need to properly encode the
+data for the relevant context in order to prevent XSS vulnerabilities. For
+example: page titles could be malicious, URLs could be malicious, web app IDs
+could be malicious, etc. You must carefully read and understand the [OWASP
+XSS Prevention rules](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+or you will mess up. `lib/ephy-output-encoding.h` contains functions to help
+with this.
+
+When working with JavaScript, pay particular attention to Rule #8 "Prevent DOM-
+based XSS" as it is tricky and requires care throughout your JavaScript.
+
 # Debugging
 
 To enable debugging use the configure option `-Ddeveloper_mode=true`.
