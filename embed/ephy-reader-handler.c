@@ -24,6 +24,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-output-encoding.h"
 #include "ephy-settings.h"
 #include "ephy-web-view.h"
 
@@ -156,7 +157,10 @@ readability_js_finish_cb (GObject      *object,
   g_autoptr (WebKitJavascriptResult) js_result = NULL;
   g_autoptr (GError) error = NULL;
   g_autofree gchar *byline = NULL;
+  g_autofree gchar *encoded_byline = NULL;
   g_autofree gchar *content = NULL;
+  g_autofree gchar *encoded_content = NULL;
+  g_autofree gchar *encoded_title = NULL;
   g_autoptr (GString) html = NULL;
   g_autoptr (GBytes) style_css = NULL;
   const gchar *title;
@@ -173,10 +177,15 @@ readability_js_finish_cb (GObject      *object,
 
   byline = readability_get_property_string (js_result, "byline");
   content = readability_get_property_string (js_result, "content");
-
-  html = g_string_new ("");
-  style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   title = webkit_web_view_get_title (web_view);
+
+  encoded_byline = byline ? ephy_encode_for_html_entity (byline) : g_strdup ("");
+  encoded_content = ephy_encode_for_html_entity (content);
+  encoded_title = ephy_encode_for_html_entity (title);
+
+  html = g_string_new (NULL);
+  style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+
   font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
                           g_settings_get_enum (EPHY_SETTINGS_READER,
                                                EPHY_PREFS_READER_FONT_STYLE));
@@ -197,12 +206,12 @@ readability_js_finish_cb (GObject      *object,
                           "</i>"
                           "<hr>",
                           (gchar *)g_bytes_get_data (style_css, NULL),
-                          title,
+                          encoded_title,
                           font_style,
                           color_scheme,
-                          title,
-                          byline != NULL ? byline : "");
-  g_string_append (html, content);
+                          encoded_title,
+                          encoded_byline);
+  g_string_append (html, encoded_content);
   g_string_append (html, "</article>");
 
   finish_uri_scheme_request (request, g_strdup (html->str), NULL);
