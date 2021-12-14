@@ -38,6 +38,7 @@
 #include "ephy-gsb-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-output-encoding.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-reader-handler.h"
@@ -1786,6 +1787,8 @@ format_network_error_page (const char  *uri,
                            const char **icon_name,
                            const char **style)
 {
+  g_autofree char *encoded_uri = NULL;
+  g_autofree char *encoded_origin = NULL;
   g_autofree char *formatted_origin = NULL;
   g_autofree char *formatted_reason = NULL;
   g_autofree char *first_paragraph = NULL;
@@ -1797,7 +1800,8 @@ format_network_error_page (const char  *uri,
   /* Message title when a site cannot be loaded due to a network error. */
   *message_title = g_strdup (_("Unable to display this website"));
 
-  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
+  encoded_origin = ephy_encode_for_html_entity (origin);
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", encoded_origin);
   /* Error details when a site cannot be loaded due to a network error. */
   first_paragraph = g_strdup_printf (_("The site at %s seems to be "
                                        "unavailable."),
@@ -1819,7 +1823,8 @@ format_network_error_page (const char  *uri,
 
   /* The button on the network error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  encoded_uri = ephy_encode_for_javascript (uri);
+  *button_action = g_strdup_printf ("window.location = '%s';", encoded_uri);
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1838,6 +1843,8 @@ format_crash_error_page (const char  *uri,
                          const char **icon_name,
                          const char **style)
 {
+  g_autofree char *html_encoded_uri = NULL;
+  g_autofree char *js_encoded_uri = NULL;
   g_autofree char *formatted_uri = NULL;
   g_autofree char *formatted_distributor = NULL;
   g_autofree char *first_paragraph = NULL;
@@ -1849,7 +1856,8 @@ format_crash_error_page (const char  *uri,
   /* Message title when a site cannot be loaded due to a page crash error. */
   *message_title = g_strdup (_("Oops! There may be a problem"));
 
-  formatted_uri = g_strdup_printf ("<strong>%s</strong>", uri);
+  html_encoded_uri = ephy_encode_for_html_entity (uri);
+  formatted_uri = g_strdup_printf ("<strong>%s</strong>", html_encoded_uri);
   /* Error details when a site cannot be loaded due to a page crash error. */
   first_paragraph = g_strdup_printf (_("The page %s may have caused Web to "
                                        "close unexpectedly."),
@@ -1868,7 +1876,8 @@ format_crash_error_page (const char  *uri,
 
   /* The button on the page crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  js_encoded_uri = ephy_encode_for_javascript (uri);
+  *button_action = g_strdup_printf ("window.location = '%s';", js_encoded_uri);
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1887,6 +1896,7 @@ format_process_crash_error_page (const char  *uri,
                                  const char **icon_name,
                                  const char **style)
 {
+  g_autofree char *encoded_uri = NULL;
   const char *first_paragraph;
 
   /* Page title when a site cannot be loaded due to a process crash error. */
@@ -1902,7 +1912,8 @@ format_process_crash_error_page (const char  *uri,
 
   /* The button on the process crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  encoded_uri = ephy_encode_for_javascript (uri);
+  *button_action = g_strdup_printf ("window.location = '%s';", encoded_uri);
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1926,6 +1937,7 @@ format_tls_error_page (EphyWebView  *view,
                        const char  **icon_name,
                        const char  **style)
 {
+  g_autofree char *encoded_origin = NULL;
   g_autofree char *formatted_origin = NULL;
   g_autofree char *first_paragraph = NULL;
 
@@ -1935,7 +1947,8 @@ format_tls_error_page (EphyWebView  *view,
   /* Message title when a site is not loaded due to an invalid TLS certificate. */
   *message_title = g_strdup (_("This Connection is Not Secure"));
 
-  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
+  encoded_origin = ephy_encode_for_html_entity (origin);
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", encoded_origin);
   /* Error details when a site is not loaded due to an invalid TLS certificate. */
   first_paragraph = g_strdup_printf (_("This does not look like the real %s. "
                                        "Attackers might be trying to steal or "
@@ -1980,6 +1993,7 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
                                    const char  **icon_name,
                                    const char  **style)
 {
+  g_autofree char *encoded_origin = NULL;
   g_autofree char *formatted_origin = NULL;
   g_autofree char *first_paragraph = NULL;
 
@@ -1989,7 +2003,8 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
   /* Message title on the unsafe browsing error page. */
   *message_title = g_strdup (_("Unsafe website detected!"));
 
-  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
+  encoded_origin = ephy_encode_for_html_entity (origin);
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", encoded_origin);
   /* Error details on the unsafe browsing error page.
    * https://developers.google.com/safe-browsing/v4/usage-limits#UserWarnings
    */
@@ -2060,7 +2075,8 @@ format_no_such_file_error_page (EphyWebView  *view,
                                 const char  **icon_name,
                                 const char  **style)
 {
-  g_autofree gchar *formatted_origin = NULL;
+  g_autofree gchar *encoded_address = NULL;
+  g_autofree gchar *formatted_address = NULL;
   g_autofree gchar *first_paragraph = NULL;
   g_autofree gchar *second_paragraph = NULL;
 
@@ -2070,10 +2086,11 @@ format_no_such_file_error_page (EphyWebView  *view,
   /* Message title on the no such file error page. */
   *message_title = g_strdup (_("File not found"));
 
-  formatted_origin = g_strdup_printf ("<strong>%s</strong>", view->address);
+  encoded_address = ephy_encode_for_html_entity (view->address);
+  formatted_address = g_strdup_printf ("<strong>%s</strong>", encoded_address);
 
   first_paragraph = g_strdup_printf (_("%s could not be found."),
-                                     formatted_origin);
+                                     formatted_address);
   second_paragraph = g_strdup_printf (_("Please check the file name for "
                                         "capitalization or other typing errors. Also check if "
                                         "it has been moved, renamed, or deleted."));
