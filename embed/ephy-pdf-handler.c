@@ -121,7 +121,7 @@ pdf_file_loaded (GObject      *source,
                  gpointer      user_data)
 {
   EphyPdfRequest *self = user_data;
-  GBytes *html_file;
+  g_autoptr (GBytes) html_file = NULL;
   g_autoptr (GError) error = NULL;
   g_autoptr (GString) html = NULL;
   g_autofree gchar *b64 = NULL;
