@@ -20,6 +20,7 @@ libephymisc_sources = [
   'ephy-langs.c',
   'ephy-notification.c',
   'ephy-notification-container.c',
+  'ephy-output-encoding.c',
   'ephy-permissions-manager.c',
   'ephy-profile-utils.c',
   'ephy-search-engine-manager.c',
