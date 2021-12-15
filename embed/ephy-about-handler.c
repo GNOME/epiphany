@@ -429,7 +429,8 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
     const char *snapshot;
     g_autofree char *thumbnail_style = NULL;
-    g_autofree char *encoded_title = NULL;
+    g_autofree char *entity_encoded_title = NULL;
+    g_autofree char *attribute_encoded_title = NULL;
     g_autofree char *encoded_url = NULL;
 
     snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (snapshot_service, url->url);
@@ -439,7 +440,8 @@ history_service_query_urls_cb (EphyHistoryService     *history,
       ephy_embed_shell_schedule_thumbnail_update (shell, url);
 
     /* Title and URL are controlled by web content and could be malicious. */
-    encoded_title = ephy_encode_for_html_attribute (url->title);
+    entity_encoded_title = ephy_encode_for_html_entity (url->title);
+    attribute_encoded_title = ephy_encode_for_html_attribute (url->title);
     encoded_url = ephy_encode_for_html_attribute (url->url);
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
@@ -447,8 +449,9 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",
-                            encoded_title, encoded_url, _("Remove from overview"),
-                            thumbnail_style ? thumbnail_style : "", encoded_title);
+                            attribute_encoded_title, encoded_url, _("Remove from overview"),
+                            thumbnail_style ? thumbnail_style : "",
+                            entity_encoded_title);
   }
 
   data_str = g_string_append (data_str,
