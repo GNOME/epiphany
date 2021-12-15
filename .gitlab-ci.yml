@@ -47,7 +47,7 @@ scanbuild:
   script:
     - mkdir _build
     - meson ${CONFIG_OPTS} _build
-    - ninja -C _build scan-build
+    - SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build
     - bash -c 'if [[ -n "$(ls -A _build/meson-logs/scanbuild/)" ]]; then echo "Scan build log found, assuming defects exist"; exit 1; fi'
   artifacts:
     when: on_failure
