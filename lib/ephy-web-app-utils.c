@@ -65,6 +65,9 @@ ephy_web_application_get_app_id_from_name (const char *name)
   g_autofree char *normal_id = NULL;
   g_autofree char *checksum = NULL;
 
+  /* FIXME: We should not use hyphens in app IDs. Sadly, changing this requires
+   * a new migration.
+   */
   normal_id = g_utf8_strdown (name, -1);
   g_strdelimit (normal_id, " ", '-');
   g_strdelimit (normal_id, G_DIR_SEPARATOR_S, '-');
@@ -105,7 +108,7 @@ get_gapplication_id_from_id (const char *id)
   g_auto (GStrv) split = NULL;
   g_autofree char *gapplication_id = NULL;
 
-  /* Ideally we would convert hyphens to underscores here, because
+  /* FIXME: Ideally we would convert hyphens to underscores here, because
    * hyphens are not very friendly to D-Bus. However, changing this
    * would require a new profile migration, because the GApplication ID
    * must exactly match the desktop file basename.
