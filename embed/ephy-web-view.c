@@ -3390,6 +3390,8 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
                                                  EPHY_PREFS_READER_COLOR_SCHEME));
   g_string_append_printf (html, "<style>%s</style>"
                           "<title>%s</title>"
+                          "<meta http-equiv='Content-Type' content='text/html;' charset='UTF-8'>" \
+                          "<meta http-equiv='Content-Security-Policy' content=\"script-src 'none'\">" \
                           "<body class='%s %s'>"
                           "<article>"
                           "<h2>"
