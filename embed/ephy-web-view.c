@@ -3362,6 +3362,8 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
   const gchar *title;
   const gchar *font_style;
   const gchar *color_scheme;
+  g_autofree gchar *encoded_byline = NULL;
+  g_autofree gchar *encoded_title = NULL;
 
   if (view->reader_active == active)
     return;
@@ -3388,6 +3390,10 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
   color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
                             g_settings_get_enum (EPHY_SETTINGS_READER,
                                                  EPHY_PREFS_READER_COLOR_SCHEME));
+
+  encoded_byline = view->reader_byline ? ephy_encode_for_html_entity (view->reader_byline) : g_strdup ("");
+  encoded_title = ephy_encode_for_html_entity (title);
+
   g_string_append_printf (html, "<style>%s</style>"
                           "<title>%s</title>"
                           "<meta http-equiv='Content-Type' content='text/html;' charset='UTF-8'>" \
@@ -3402,11 +3408,11 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
                           "</i>"
                           "<hr>",
                           (gchar *)g_bytes_get_data (style_css, NULL),
-                          title,
+                          encoded_title,
                           font_style,
                           color_scheme,
-                          title,
-                          view->reader_byline != NULL ? view->reader_byline : "");
+                          encoded_title,
+                          encoded_byline);
   g_string_append (html, view->reader_content);
   g_string_append (html, "</article>");
 
