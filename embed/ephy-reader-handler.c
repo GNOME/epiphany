@@ -159,7 +159,6 @@ readability_js_finish_cb (GObject      *object,
   g_autofree gchar *byline = NULL;
   g_autofree gchar *encoded_byline = NULL;
   g_autofree gchar *content = NULL;
-  g_autofree gchar *encoded_content = NULL;
   g_autofree gchar *encoded_title = NULL;
   g_autoptr (GString) html = NULL;
   g_autoptr (GBytes) style_css = NULL;
@@ -180,7 +179,6 @@ readability_js_finish_cb (GObject      *object,
   title = webkit_web_view_get_title (web_view);
 
   encoded_byline = byline ? ephy_encode_for_html_entity (byline) : g_strdup ("");
-  encoded_content = ephy_encode_for_html_entity (content);
   encoded_title = ephy_encode_for_html_entity (title);
 
   html = g_string_new (NULL);
@@ -195,7 +193,8 @@ readability_js_finish_cb (GObject      *object,
 
   g_string_append_printf (html, "<style>%s</style>"
                           "<title>%s</title>"
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html;\" charset=\"UTF-8\">" \
+                          "<meta http-equiv='Content-Type' content='text/html;' charset='UTF-8'>" \
+                          "<meta http-equiv='Content-Security-Policy' content=\"script-src 'none'\">" \
                           "<body class='%s %s'>"
                           "<article>"
                           "<h2>"
@@ -211,8 +210,22 @@ readability_js_finish_cb (GObject      *object,
                           color_scheme,
                           encoded_title,
                           encoded_byline);
-  g_string_append (html, encoded_content);
+
+  /* We cannot encode the page content because it contains HTML tags inserted by
+   * Readability.js. Upstream recommends that we use an XSS sanitizer like
+   * DOMPurify plus Content-Security-Policy, but I'm not keen on adding more
+   * bundled JS dependencies, and we have an advantage over Firefox in that we
+   * don't need scripts to work at this point. So instead the above CSP
+   * completely blocks all scripts, which should hopefully obviate the need for
+   * a DOM purifier.
+   *
+   * Note the encoding for page title and byline is still required, as they're
+   * not supposed to contain markup, and Readability.js unescapes them before
+   * returning them to us.
+   */
+  g_string_append (html, content);
   g_string_append (html, "</article>");
+  g_string_append (html, "</body>");
 
   finish_uri_scheme_request (request, g_strdup (html->str), NULL);
 }
