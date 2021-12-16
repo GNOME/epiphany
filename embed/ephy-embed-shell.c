@@ -932,11 +932,13 @@ ephy_embed_shell_startup (GApplication *application)
                                           (WebKitURISchemeRequestCallback)pdf_request_cb,
                                           shell, NULL);
 
+#if 0
   /* reader mode handler */
   priv->reader_handler = ephy_reader_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_READER_SCHEME,
                                           (WebKitURISchemeRequestCallback)reader_request_cb,
                                           shell, NULL);
+#endif
 
   /* ephy-resource handler */
   webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",
