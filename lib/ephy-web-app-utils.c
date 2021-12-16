@@ -110,8 +110,9 @@ get_app_id_from_gapplication_id (const char *name)
 static char *
 get_gapplication_id_from_id (const char *id)
 {
-  g_auto (GStrv) split = NULL;
   g_autofree char *gapplication_id = NULL;
+  const char *final_hyphen;
+  const char *checksum;
 
   /* Ideally we would convert hyphens to underscores here, because
    * hyphens are not very friendly to D-Bus. However, changing this
@@ -127,9 +128,15 @@ get_gapplication_id_from_id (const char *id)
     return g_steal_pointer (&gapplication_id);
 
   /* Split ID into: <normalized-name>-<checksum> */
-  split = g_strsplit (id, "-", -1);
-  if (g_strv_length (split) != 2) {
-    g_warning ("Web app ID %s is broken: must have two hyphens", id);
+  final_hyphen = strrchr (id, '-');
+  if (!final_hyphen) {
+    g_warning ("Web app ID %s is broken: must contain a hyphen", id);
+    return NULL;
+  }
+  checksum = final_hyphen + 1;
+
+  if (*checksum == '\0') {
+    g_warning ("Web app ID %s is broken: should end with checksum, not hyphen", id);
     return NULL;
   }
 
@@ -139,7 +146,7 @@ get_gapplication_id_from_id (const char *id)
    * existing web apps.
    */
   g_clear_pointer (&gapplication_id, g_free);
-  gapplication_id = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, split[1], NULL);
+  gapplication_id = g_strconcat (EPHY_WEB_APP_GAPPLICATION_ID_PREFIX, checksum, NULL);
 
   if (!g_application_id_is_valid (gapplication_id)) {
     g_warning ("Web app ID %s is broken: derived GApplication ID %s is not a valid app ID (is the final component alphanumeric?)", id, gapplication_id);
