@@ -31,6 +31,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-notification-container.h"
+#include "ephy-output-encoding.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -1056,6 +1057,8 @@ pdf_file_loaded (GObject      *source,
   g_autofree gchar *b64 = NULL;
   g_autofree gchar *requested_uri = NULL;
   g_autofree char *file_data = NULL;
+  g_autofree char *basename = NULL;
+  g_autofree char *encoded_filename = NULL;
   gsize len = 0;
 
   if (!g_file_load_contents_finish (G_FILE (source), res, &file_data, &len, NULL, &error)) {
@@ -1070,7 +1073,9 @@ pdf_file_loaded (GObject      *source,
   g_file_delete_async (G_FILE (source), G_PRIORITY_DEFAULT, NULL, pdf_file_deleted, NULL);
 
   html = g_string_new ("");
-  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, g_path_get_basename (data->remote_uri));
+  basename = g_path_get_basename (data->remote_uri);
+  encoded_filename = ephy_encode_for_html_attribute (basename);
+  g_string_printf (html, g_bytes_get_data (html_file, NULL), b64, encoded_filename);
 
   webkit_web_view_load_alternate_html (web_view, html->str, data->remote_uri, "ephy-resource:///org/gnome/epiphany/pdfjs/web/");
 
