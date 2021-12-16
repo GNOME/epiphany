@@ -670,6 +670,7 @@ _ephy_web_view_set_is_blank (EphyWebView *view,
   }
 }
 
+#if 0
 static
 char *readability_get_property_string (WebKitJavascriptResult *js_result,
                                        char                   *property)
@@ -740,6 +741,7 @@ run_readability_js_if_needed (gpointer data)
   web_view->reader_js_timeout = 0;
   return G_SOURCE_REMOVE;
 }
+#endif
 
 static void
 title_changed_cb (WebKitWebView *web_view,
@@ -1493,8 +1495,11 @@ load_changed_cb (WebKitWebView   *web_view,
       g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
 
       view->reader_loading = FALSE;
+
+#if 0
       if (!view->reader_active)
         view->reader_js_timeout = g_idle_add (run_readability_js_if_needed, web_view);
+#endif
 
       break;
 
