@@ -298,6 +298,7 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   char *dest_uri, *dest, *base, *base_converted;
   EphyDownload *download;
 
+  /* FIXME: Use wallpaper portal */
   if (ephy_is_running_inside_sandbox ())
     return;
 
