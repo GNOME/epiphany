@@ -41,11 +41,6 @@ typedef enum
   EPHY_FILE_HELPERS_TESTING_MODE     = 1 << 5
 } EphyFileHelpersFlags;
 
-typedef enum
-{
-  EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK
-} EphyFileHelpersNotFlatpakTag;
-
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
                                                              EphyFileHelpersFlags   flags,
                                                              GError               **error);
@@ -73,22 +68,14 @@ gboolean           ephy_file_delete_dir_recursively         (const char         
 char       *       ephy_sanitize_filename                   (char                  *filename);
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
-
-/* These functions attempt to launch a particular application chosen by
- * Epiphany, which is not possible to do when running inside flatpak. Be
- * careful!
- */
-gboolean           ephy_file_launch_desktop_file            (const char                   *filename,
-                                                             guint32                       user_time,
-                                                             EphyFileHelpersNotFlatpakTag  tag);
-gboolean           ephy_file_open_uri_in_default_browser    (const char                   *uri,
-                                                             guint32                       user_time,
-                                                             GdkScreen                    *screen,
-                                                             EphyFileHelpersNotFlatpakTag  tag);
-gboolean           ephy_file_browse_to                      (GFile                        *file,
-                                                             guint32                       user_time);
-
-void               ephy_copy_directory                      (const char                   *source,
-                                                             const char                   *target);
+gboolean           ephy_file_launch_webapp_desktop_file     (const char            *filepath,
+                                                             guint32                user_time);
+gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
+                                                             guint32                user_time,
+                                                             GdkScreen             *screen);
+gboolean           ephy_file_browse_to                      (GFile                 *file,
+                                                             guint32                user_time);
+void               ephy_copy_directory                      (const char            *source,
+                                                             const char            *target);
 
 G_END_DECLS

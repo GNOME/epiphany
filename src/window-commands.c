@@ -1812,11 +1812,9 @@ save_as_application_proceed (EphyApplicationDialogData *data)
   }
 
   if (desktop_file) {
-    g_autofree char *basename = g_path_get_basename (desktop_file);
-
     /* Translators: Desktop notification when a new web app is created. */
-    g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", basename);
-    g_notification_set_default_action_and_target (notification, "app.launch-app", "s", basename);
+    g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", desktop_file);
+    g_notification_set_default_action_and_target (notification, "app.launch-app", "s", desktop_file);
 
     ephy_focus_desktop_app (desktop_file);
   }

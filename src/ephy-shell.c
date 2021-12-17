@@ -335,12 +335,8 @@ launch_app (GSimpleAction *action,
 {
   const gchar *desktop_file = g_variant_get_string (parameter, NULL);
 
-  /* We can't get here under flatpak because all web app functionality
-   * is disabled when running under flatpak.
-   */
-  ephy_file_launch_desktop_file (desktop_file,
-                                 gtk_get_current_event_time (),
-                                 EPHY_FILE_HELPERS_I_UNDERSTAND_I_MUST_NOT_USE_THIS_FUNCTION_UNDER_FLATPAK);
+  ephy_file_launch_webapp_desktop_file (desktop_file,
+                                        gtk_get_current_event_time ());
 }
 
 static void
