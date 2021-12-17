@@ -95,7 +95,7 @@ libhandy_dep = dependency('libhandy-1', version: '>= 1.5.0')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 nettle_dep = dependency('nettle', version: nettle_requirement)
-portal_dep = dependency('libportal-gtk3', version: '>= 0.5', required: get_option('libportal'))
+portal_dep = dependency('libportal-gtk3', version: '>= 0.5')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 
 if get_option('soup2').enabled()
@@ -107,8 +107,6 @@ else
   webkit2gtk_dep = dependency('webkit2gtk-4.1', version: webkitgtk_requirement)
   webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.1', version: webkitgtk_requirement)
 endif
-
-conf.set10('USE_LIBPORTAL', portal_dep.found())
 
 webkit_revision = webkit2gtk_dep.get_variable(pkgconfig : 'revision', default_value : '')
 if webkit_revision == 'tarball'

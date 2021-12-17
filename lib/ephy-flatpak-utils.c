@@ -28,9 +28,7 @@
 #include <fcntl.h>
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
-#if USE_LIBPORTAL
 #include <libportal-gtk3/portal-gtk3.h>
-#endif
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -82,7 +80,6 @@ ephy_is_running_inside_sandbox (void)
   return GPOINTER_TO_INT (g_once (&inside_sandbox, get_inside_sandbox, NULL));
 }
 
-#if USE_LIBPORTAL
 static void
 opened_uri (GObject      *object,
             GAsyncResult *result,
@@ -101,13 +98,11 @@ opened_uri (GObject      *object,
   if (!res)
     g_warning ("%s", error->message);
 }
-#endif
 
 static void
 ephy_open_uri (const char *uri,
                gboolean    is_dir)
 {
-#if USE_LIBPORTAL
   GApplication *application;
   GtkWindow *window;
   XdpParent *parent;
@@ -123,10 +118,6 @@ ephy_open_uri (const char *uri,
     xdp_portal_open_uri (g_steal_pointer (&portal), parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (FALSE));
 
   xdp_parent_free (parent);
-#else
-  g_warning ("Flatpak portal support disabled at compile time, cannot open %s",
-             uri);
-#endif
 }
 
 void
