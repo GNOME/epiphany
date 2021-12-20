@@ -38,9 +38,8 @@ ephy_encode_for_html_entity (const char *input)
   return g_string_free (str, FALSE);
 }
 
-static char *
-encode_all_except_alnum (const char *input,
-                         const char *format)
+char *
+ephy_encode_for_html_attribute (const char *input)
 {
   GString *str;
   const char *c = input;
@@ -54,21 +53,9 @@ encode_all_except_alnum (const char *input,
     if (g_unichar_isalnum (u))
       g_string_append_unichar (str, u);
     else
-      g_string_append_printf (str, format, u);
+      g_string_append_printf (str, "&#x%02x;", u);
     c = g_utf8_next_char (c);
   } while (*c);
 
   return g_string_free (str, FALSE);
-}
-
-char *
-ephy_encode_for_html_attribute (const char *input)
-{
-  return encode_all_except_alnum (input, "&#x%02x;");
-}
-
-char *
-ephy_encode_for_javascript (const char *input)
-{
-  return encode_all_except_alnum (input, "\\u%04u;");
 }
