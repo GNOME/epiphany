@@ -670,6 +670,17 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
 }
 
 static void
+reload_page_cb (EphyEmbedShell *shell,
+                guint64         page_id,
+                EphyWebView    *view)
+{
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
+    return;
+
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
+}
+
+static void
 _ephy_web_view_set_is_blank (EphyWebView *view,
                              gboolean     is_blank)
 {
@@ -1845,20 +1856,20 @@ ephy_web_view_get_error_page (EphyWebView *view)
  * strings. Everywhere, but also here on the error pages in particular. */
 
 static void
-format_network_error_page (const char  *uri,
-                           const char  *origin,
-                           const char  *reason,
-                           char       **page_title,
-                           char       **message_title,
-                           char       **message_body,
-                           char       **message_details,
-                           char       **button_label,
-                           char       **button_action,
-                           const char **button_accesskey,
-                           const char **icon_name,
-                           const char **style)
+format_network_error_page (EphyWebView  *view,
+                           const char   *uri,
+                           const char   *origin,
+                           const char   *reason,
+                           char        **page_title,
+                           char        **message_title,
+                           char        **message_body,
+                           char        **message_details,
+                           char        **button_label,
+                           char        **button_action,
+                           const char  **button_accesskey,
+                           const char  **icon_name,
+                           const char  **style)
 {
-  g_autofree char *encoded_uri = NULL;
   g_autofree char *encoded_origin = NULL;
   g_autofree char *formatted_origin = NULL;
   g_autofree char *formatted_reason = NULL;
@@ -1894,8 +1905,8 @@ format_network_error_page (const char  *uri,
 
   /* The button on the network error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  encoded_uri = ephy_encode_for_javascript (uri);
-  *button_action = g_strdup_printf ("window.location = '%s';", encoded_uri);
+  *button_action = g_strdup_printf ("window.webkit.messageHandlers.reloadPage.postMessage(%" G_GUINT64_FORMAT ");",
+                                    webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1904,18 +1915,18 @@ format_network_error_page (const char  *uri,
 }
 
 static void
-format_crash_error_page (const char  *uri,
-                         char       **page_title,
-                         char       **message_title,
-                         char       **message_body,
-                         char       **button_label,
-                         char       **button_action,
-                         const char **button_accesskey,
-                         const char **icon_name,
-                         const char **style)
+format_crash_error_page (EphyWebView  *view,
+                         const char   *uri,
+                         char        **page_title,
+                         char        **message_title,
+                         char        **message_body,
+                         char        **button_label,
+                         char        **button_action,
+                         const char  **button_accesskey,
+                         const char  **icon_name,
+                         const char  **style)
 {
-  g_autofree char *html_encoded_uri = NULL;
-  g_autofree char *js_encoded_uri = NULL;
+  g_autofree char *encoded_uri = NULL;
   g_autofree char *formatted_uri = NULL;
   g_autofree char *formatted_distributor = NULL;
   g_autofree char *first_paragraph = NULL;
@@ -1927,8 +1938,8 @@ format_crash_error_page (const char  *uri,
   /* Message title when a site cannot be loaded due to a page crash error. */
   *message_title = g_strdup (_("Oops! There may be a problem"));
 
-  html_encoded_uri = ephy_encode_for_html_entity (uri);
-  formatted_uri = g_strdup_printf ("<strong>%s</strong>", html_encoded_uri);
+  encoded_uri = ephy_encode_for_html_entity (uri);
+  formatted_uri = g_strdup_printf ("<strong>%s</strong>", encoded_uri);
   /* Error details when a site cannot be loaded due to a page crash error. */
   first_paragraph = g_strdup_printf (_("The page %s may have caused Web to "
                                        "close unexpectedly."),
@@ -1947,8 +1958,8 @@ format_crash_error_page (const char  *uri,
 
   /* The button on the page crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  js_encoded_uri = ephy_encode_for_javascript (uri);
-  *button_action = g_strdup_printf ("window.location = '%s';", js_encoded_uri);
+  *button_action = g_strdup_printf ("window.webkit.messageHandlers.reloadPage.postMessage(%" G_GUINT64_FORMAT ");",
+                                    webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1957,17 +1968,17 @@ format_crash_error_page (const char  *uri,
 }
 
 static void
-format_process_crash_error_page (const char  *uri,
-                                 char       **page_title,
-                                 char       **message_title,
-                                 char       **message_body,
-                                 char       **button_label,
-                                 char       **button_action,
-                                 const char **button_accesskey,
-                                 const char **icon_name,
-                                 const char **style)
+format_process_crash_error_page (EphyWebView  *view,
+                                 const char   *uri,
+                                 char        **page_title,
+                                 char        **message_title,
+                                 char        **message_body,
+                                 char        **button_label,
+                                 char        **button_action,
+                                 const char  **button_accesskey,
+                                 const char  **icon_name,
+                                 const char  **style)
 {
-  g_autofree char *encoded_uri = NULL;
   const char *first_paragraph;
 
   /* Page title when a site cannot be loaded due to a process crash error. */
@@ -1983,8 +1994,8 @@ format_process_crash_error_page (const char  *uri,
 
   /* The button on the process crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  encoded_uri = ephy_encode_for_javascript (uri);
-  *button_action = g_strdup_printf ("window.location = '%s';", encoded_uri);
+  *button_action = g_strdup_printf ("window.webkit.messageHandlers.reloadPage.postMessage(%" G_GUINT64_FORMAT ");",
+                                    webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -1993,17 +2004,17 @@ format_process_crash_error_page (const char  *uri,
 }
 
 static void
-format_unresponsive_process_error_page (const char  *uri,
-                                        char       **page_title,
-                                        char       **message_title,
-                                        char       **message_body,
-                                        char       **button_label,
-                                        char       **button_action,
-                                        const char **button_accesskey,
-                                        const char **icon_name,
-                                        const char **style)
+format_unresponsive_process_error_page (EphyWebView  *view,
+                                        const char   *uri,
+                                        char        **page_title,
+                                        char        **message_title,
+                                        char        **message_body,
+                                        char        **button_label,
+                                        char        **button_action,
+                                        const char  **button_accesskey,
+                                        const char  **icon_name,
+                                        const char  **style)
 {
-  g_autofree char *encoded_uri = NULL;
   const char *first_paragraph;
 
   /* Page title when web content has become unresponsive. */
@@ -2019,8 +2030,8 @@ format_unresponsive_process_error_page (const char  *uri,
 
   /* The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
-  encoded_uri = ephy_encode_for_javascript (uri);
-  *button_action = g_strdup_printf ("window.location = '%s';", encoded_uri);
+  *button_action = g_strdup_printf ("window.webkit.messageHandlers.reloadPage.postMessage(%" G_GUINT64_FORMAT ");",
+                                    webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
@@ -2274,7 +2285,8 @@ ephy_web_view_load_error_page (EphyWebView          *view,
 
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
-      format_network_error_page (uri,
+      format_network_error_page (view,
+                                 uri,
                                  origin,
                                  reason,
                                  &page_title,
@@ -2288,7 +2300,8 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                  &style);
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
-      format_crash_error_page (uri,
+      format_crash_error_page (view,
+                               uri,
                                &page_title,
                                &msg_title,
                                &msg_body,
@@ -2299,7 +2312,8 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                &style);
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
-      format_process_crash_error_page (uri,
+      format_process_crash_error_page (view,
+                                       uri,
                                        &page_title,
                                        &msg_title,
                                        &msg_body,
@@ -2310,7 +2324,8 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                        &style);
       break;
     case EPHY_WEB_VIEW_ERROR_UNRESPONSIVE_PROCESS:
-      format_unresponsive_process_error_page (uri,
+      format_unresponsive_process_error_page (view,
+                                              uri,
                                               &page_title,
                                               &msg_title,
                                               &msg_body,
@@ -4052,6 +4067,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect_object (shell, "allow-unsafe-browsing",
                            G_CALLBACK (allow_unsafe_browsing_cb),
+                           web_view, 0);
+
+  g_signal_connect_object (shell, "reload-page",
+                           G_CALLBACK (reload_page_cb),
                            web_view, 0);
 }
 
