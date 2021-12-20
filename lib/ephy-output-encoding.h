@@ -29,10 +29,13 @@ G_BEGIN_DECLS
  *
  * You must *carefully* read that document to safely inject untrusted data into
  * web content. Here be dragons.
+ *
+ * If tempted to inject untrusted content into JavaScript, then also review:
+ * https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html
+ * and consider not doing that.
  */
 
 char *ephy_encode_for_html_entity    (const char *input);
 char *ephy_encode_for_html_attribute (const char *input);
-char *ephy_encode_for_javascript     (const char *input);
 
 G_END_DECLS
