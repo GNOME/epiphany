@@ -78,6 +78,7 @@ enum {
   WEB_VIEW_CREATED,
   ALLOW_TLS_CERTIFICATE,
   ALLOW_UNSAFE_BROWSING,
+  RELOAD_PAGE,
   PASSWORD_FORM_FOCUSED,
 
   LAST_SIGNAL
@@ -306,6 +307,17 @@ web_process_extension_tls_error_page_message_received_cb (WebKitUserContentManag
 
   page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
   g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
+}
+
+static void
+web_process_extension_reload_page_message_received_cb (WebKitUserContentManager *manager,
+                                                       WebKitJavascriptResult   *message,
+                                                       EphyEmbedShell           *shell)
+{
+  guint64 page_id;
+
+  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
+  g_signal_emit (shell, signals[RELOAD_PAGE], 0, page_id);
 }
 
 static void
@@ -1124,6 +1136,23 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_UINT64);
 
   /**
+   * EphyEmbedShell::reload-page:
+   * @shell: the #EphyEmbedShell
+   * @page_id: the identifier of the web page
+   *
+   * Emitted when the web process extension requests a view be reloaded.
+   * This is needed when window.location.reload() doesn't work properly,
+   * specifically after loading alternate HTML.
+   */
+  signals[RELOAD_PAGE] =
+    g_signal_new ("reload-page",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_UINT64);
+
+  /**
    * EphyEmbedShell::password-form-focused
    * @shell: the #EphyEmbedShell
    * @page_id: the identifier of the web page
@@ -1361,6 +1390,7 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   /* User content manager */
+  /* FIXME: See https://gitlab.gnome.org/GNOME/epiphany/-/issues/1664 */
   webkit_user_content_manager_register_script_message_handler_in_world (ucm,
                                                                         "overview",
                                                                         priv->guid);
@@ -1372,6 +1402,12 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
                                                                "tlsErrorPage");
   g_signal_connect_object (ucm, "script-message-received::tlsErrorPage",
                            G_CALLBACK (web_process_extension_tls_error_page_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "reloadPage");
+  g_signal_connect_object (ucm, "script-message-received::reloadPage",
+                           G_CALLBACK (web_process_extension_reload_page_message_received_cb),
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
