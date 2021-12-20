@@ -264,28 +264,27 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
     for (p = applications; p; p = p->next) {
       EphyWebApplication *app = (EphyWebApplication *)p->data;
-      g_autofree char *html_encoded_id = NULL;
       g_autofree char *encoded_icon_url = NULL;
       g_autofree char *encoded_name = NULL;
       g_autofree char *encoded_url = NULL;
       g_autofree char *js_encoded_id = NULL;
-      g_autofree char *encoded_install_date = NULL;
 
       if (ephy_web_application_is_system (app))
         continue;
 
-      /* Most of these fields are untrusted. The web app suggests its own title,
-       * which gets used in the app ID and icon URL. The main URL could contain
-       * anything. Install date is the only trusted field here in that it's
-       * constructed by Epiphany, but it's a freeform string and we're encoding
-       * everything else here anyway, so might as well encode this too.
+      /* Most of these fields are at least semi-trusted. The web app suggests
+       * its own title, which gets used in the app ID and icon URL, but it ought
+       * to be safe because we validate that it is a valid component of a
+       * GApplication ID, which should not permit anything nasty. The icon URL
+       * could be changed by the user to something else after web app creation,
+       * though, so better not fully trust it. Then the app name and the main
+       * URL could contain contain anything at all, so those need to be encoded
+       * for sure. Install date should be fine because it's constructed by
+       * Epiphany.
        */
-      html_encoded_id = ephy_encode_for_html_attribute (app->id);
       encoded_icon_url = ephy_encode_for_html_attribute (app->icon_url);
       encoded_name = ephy_encode_for_html_entity (app->name);
       encoded_url = ephy_encode_for_html_entity (app->url);
-      js_encoded_id = ephy_encode_for_javascript (app->id);
-      encoded_install_date = ephy_encode_for_html_entity (app->install_date);
       g_string_append_printf (data_str,
                               "<tbody><tr id =\"%s\">"
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
@@ -293,9 +292,9 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\" "
                               "class=\"destructive-action\"></td>"
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                              html_encoded_id, encoded_icon_url, encoded_name, encoded_url, _("Delete"), js_encoded_id,
+                              app->id, encoded_icon_url, encoded_name, encoded_url, _("Delete"), app->id,
                               /* Note for translators: this refers to the installation date. */
-                              _("Installed on:"), encoded_install_date);
+                              _("Installed on:"), app->install_date);
     }
 
     g_string_append (data_str, "</table></div></body></html>");
