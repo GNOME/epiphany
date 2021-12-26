@@ -330,21 +330,21 @@ filter_str_with_functor (const char           *utf8_str,
   gunichar *filtered_unicode_str = g_new0 (gunichar, strlen (utf8_str) + 1);
   g_autofree gunichar *unicode_str = NULL;
   char *final_utf8_str = NULL;
-  g_autoptr (GError) error = NULL;
   int i = 0, j = 0;
 
-  unicode_str = g_utf8_to_ucs4 (utf8_str, -1, NULL, NULL, &error);
-  if (!unicode_str)
-    g_error ("%s", error->message);
+  unicode_str = g_utf8_to_ucs4_fast (utf8_str, -1, NULL);
 
   for (; unicode_str[i] != 0; ++i) {
     /* If this characters matches, we add it to the final string. */
     if (filter_func (unicode_str[i]))
       filtered_unicode_str[j++] = unicode_str[i];
   }
-  final_utf8_str = g_ucs4_to_utf8 (filtered_unicode_str, -1, NULL, NULL, &error);
-  if (!final_utf8_str)
-    g_error ("%s", error->message);
+  final_utf8_str = g_ucs4_to_utf8 (filtered_unicode_str, -1, NULL, NULL, NULL);
+  /* We already assume it's UTF-8 when using g_utf8_to_ucs4_fast() above, and
+   * our processing can't create invalid UTF-8 characters as we are only
+   * copying existing and already valid UTF-8 characters. So it's safe to assert.
+   */
+  g_assert (final_utf8_str);
   /* Would be better to use g_autofree but scan-build complains as it doesn't properly handle the cleanup attribute. */
   g_free (filtered_unicode_str);
 
