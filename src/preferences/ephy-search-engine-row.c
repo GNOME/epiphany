@@ -367,7 +367,6 @@ update_bang_for_name (EphySearchEngineRow *row,
   g_autofree char *lowercase_acronym = NULL;
   g_autofree char *final_bang = NULL;
   int i = 0;
-  /* Fit the largest possible size for an UTF-8 character (4 bytes) and one byte for the NUL string terminator */
 
   /* There's nothing to do if the string is empty. */
   if (g_strcmp0 (search_engine_name, "") == 0)
@@ -381,6 +380,7 @@ update_bang_for_name (EphySearchEngineRow *row,
   for (; words[i] != NULL; ++i) {
     g_autofree char *uppercase_chars = NULL;
     char *tmp_acronym = NULL;
+    /* Fit the largest possible size for an UTF-8 character (4 bytes) and one byte for the NUL string terminator */
     char first_word_char[5] = {0};
     word = words[i];
 
