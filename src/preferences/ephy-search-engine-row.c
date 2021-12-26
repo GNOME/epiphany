@@ -373,7 +373,10 @@ update_bang_for_name (EphySearchEngineRow *row,
   if (g_strcmp0 (search_engine_name, "") == 0)
     return;
 
-  words = g_strsplit (search_engine_name, " ", 0);
+  /* We ignore both the space character and opening parenthesis, as that
+   * allows us to get !we as bang with "Wikipedia (en)" as name.
+   */
+  words = g_strsplit_set (search_engine_name, " (", 0);
 
   for (; words[i] != NULL; ++i) {
     g_autofree char *uppercase_chars = NULL;
