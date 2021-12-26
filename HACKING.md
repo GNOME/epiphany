@@ -155,6 +155,13 @@ functions webkit_web_context_send_message_to_all_extensions(),
 webkit_web_view_send_message_to_page(), webkit_web_extension_send_message_to_context(),
 and webkit_web_page_send_message_to_view().
 
+If you are making changes to the web process extension, you'll need to enable
+developer mode as described below so that Epiphany will look for the shared
+library in your build directory, instead of using the one from the installed location,
+which would correspond to your installed Epiphany's web process extension. So if
+changes you make to the web process extension (or its javascript files) aren't
+picked up, it means you didn't enable developer mode.
+
 Epiphany uses script message handlers as an additional form of IPC. This allows
 the web extension to send a `WebKitJavascriptResult` to the UI process, which
 is received in `EphyEmbedShell`.
