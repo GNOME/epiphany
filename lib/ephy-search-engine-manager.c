@@ -81,23 +81,33 @@ search_engines_changed_cb (GSettings *settings,
 static void
 ephy_search_engine_manager_init (EphySearchEngineManager *manager)
 {
-  const char *address;
-  const char *bang;
-  char *name;
   g_autoptr (GVariantIter) iter = NULL;
+  GVariant *search_engine;
 
   manager->search_engines = g_hash_table_new_full (g_str_hash,
                                                    g_str_equal,
                                                    g_free,
                                                    (GDestroyNotify)ephy_search_engine_info_free);
 
-  g_settings_get (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, "a(sss)", &iter);
+  g_settings_get (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, "aa{sv}", &iter);
 
-  while (g_variant_iter_next (iter, "(s&s&s)", &name, &address, &bang)) {
-    g_hash_table_insert (manager->search_engines,
-                         name,
-                         ephy_search_engine_info_new (address,
-                                                      bang));
+  while ((search_engine = g_variant_iter_next_value (iter))) {
+    const char *address;
+    const char *bang;
+    char *name = NULL;
+    GVariantDict dict;
+    EphySearchEngineInfo *info;
+
+    g_variant_dict_init (&dict, search_engine);
+    g_variant_dict_lookup (&dict, "url", "&s", &address);
+    g_variant_dict_lookup (&dict, "bang", "&s", &bang);
+    g_variant_dict_lookup (&dict, "name", "s", &name);
+
+    info = ephy_search_engine_info_new (address, bang);
+
+    g_hash_table_insert (manager->search_engines, name, info);
+
+    g_variant_unref (search_engine);
   }
 
   g_signal_connect (EPHY_SETTINGS_MAIN,
@@ -260,12 +270,24 @@ ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
   GVariantBuilder builder;
   GVariant *variant;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sss)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, &key, &value)) {
+    GVariantDict dict;
+
     info = (EphySearchEngineInfo *)value;
-    g_variant_builder_add (&builder, "(sss)", key, info->address, info->bang);
+    g_assert (key != NULL);
+    g_assert (info != NULL);
+    g_assert (info->address != NULL);
+    g_assert (info->bang != NULL);
+
+    g_variant_dict_init (&dict, NULL);
+    g_variant_dict_insert (&dict, "url", "s", info->address);
+    g_variant_dict_insert (&dict, "bang", "s", info->bang);
+    g_variant_dict_insert (&dict, "name", "s", key);
+
+    g_variant_builder_add_value (&builder, g_variant_dict_end (&dict));
   }
   variant = g_variant_builder_end (&builder);
   g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, variant);

@@ -147,7 +147,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_RESTORE_SESSION_POLICY             "restore-session-policy"
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS     "restore-session-delaying-loads"
 #define EPHY_PREFS_CONTENT_FILTERS                    "content-filters"
-#define EPHY_PREFS_SEARCH_ENGINES                     "search-engines"
+#define EPHY_PREFS_SEARCH_ENGINES                     "search-engine-providers"
 #define EPHY_PREFS_DEFAULT_SEARCH_ENGINE              "default-search-engine"
 #define EPHY_PREFS_ASK_FOR_DEFAULT                    "ask-for-default"
 #define EPHY_PREFS_START_IN_INCOGNITO_MODE            "start-in-incognito-mode"

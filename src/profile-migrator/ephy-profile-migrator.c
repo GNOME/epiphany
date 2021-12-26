@@ -1422,6 +1422,57 @@ next:
 }
 
 static void
+migrate_search_engines_to_vardict (void)
+{
+  g_autoptr (GVariant) search_engines =
+    g_settings_get_value (EPHY_SETTINGS_MAIN, "search-engines");
+  GVariantBuilder search_engines_builder;
+  GVariantIter iter;
+  const char *name, *url, *bang;
+
+  /* Very unlikely to happen unless someone badly modified the gsettings manually. */
+  if (!g_variant_check_format_string (search_engines, "a(sss)", FALSE)) {
+    /* Let's not reset the deprecated search engines key though, to give a chance
+     * to migrate it by manually copy-pasting them in the prefs from the gsettings.
+     */
+    g_warning ("Couldn't migrate search engines to new GVariant type because the old key isn't using the proper GVariant type!");
+    return;
+  }
+
+  /* Here it would mean the value is unchanged _and_ that it's the empty array.
+   * This case arises if you try running the newer Epiphany with
+   * the migration (e.g. from this branch), then the older one using
+   * the deprecated key. The older Epiphany will downgrade the
+   * .migrated file's version, and when running the new Epiphany it
+   * will think you have no search engines at all, and replace all
+   * your already migrated search engines with the empty array.
+   * Now of course if you reach step 2 you'll have no search engines
+   * in the older Epiphany as they'll have been reset when migrating,
+   * but at least when you use back the newer Epiphany it won't try
+   * migrating (and hence erasing) all your search engines.
+   */
+  if (!g_settings_get_user_value (EPHY_SETTINGS_MAIN, "search-engines"))
+    return;
+
+  g_variant_builder_init (&search_engines_builder, G_VARIANT_TYPE ("aa{sv}"));
+  g_variant_iter_init (&iter, search_engines);
+  while (g_variant_iter_next (&iter, "(&s&s&s)", &name, &url, &bang)) {
+    GVariantDict vardict;
+
+    g_variant_dict_init (&vardict, NULL);
+    g_variant_dict_insert (&vardict, "name", "s", name);
+    g_variant_dict_insert (&vardict, "url", "s", url);
+    g_variant_dict_insert (&vardict, "bang", "s", bang);
+
+    g_variant_builder_add_value (&search_engines_builder, g_variant_dict_end (&vardict));
+  }
+
+  /* Erase the deprecated key's value, and set the new key's value to the migrated format. */
+  g_settings_reset (EPHY_SETTINGS_MAIN, "search-engines");
+  g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, g_variant_builder_end (&search_engines_builder));
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1471,6 +1522,8 @@ const EphyProfileMigrator migrators[] = {
   /* 33 */ migrate_adblock_to_content_filters,
   /* 34 */ migrate_adblock_to_shared_cache_dir,
   /* 35 */ migrate_webapp_names,
+  /* FIXME: Please also remove the "search-engines" deprecated gschema key when dropping this migrator in the future. */
+  /* 36 */ migrate_search_engines_to_vardict,
 };
 
 static gboolean
