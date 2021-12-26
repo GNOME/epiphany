@@ -1487,7 +1487,7 @@ ephy_migrator (void)
     return TRUE;
 
   if (do_step_n != -1) {
-    if (do_step_n >= EPHY_PROFILE_MIGRATION_VERSION)
+    if (do_step_n > EPHY_PROFILE_MIGRATION_VERSION)
       return FALSE;
 
     if (do_step_n < 1) {
