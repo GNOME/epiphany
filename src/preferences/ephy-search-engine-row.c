@@ -273,6 +273,16 @@ on_bang_entry_text_changed_cb (EphySearchEngineRow *row,
   /* Checks if the bang already exists */
   if (engine_from_bang && g_strcmp0 (engine_from_bang, row->saved_name) != 0) {
     set_entry_as_invalid (bang_entry, _("This shortcut is already used."));
+  } else if (strchr (bang, ' ') != NULL) {
+    set_entry_as_invalid (bang_entry, _("Search shortcuts must not contain any space."));
+  } else if (bang[0] != '\0' && /* Empty bangs are allowed if none is wanted. */
+             (!g_unichar_ispunct (g_utf8_get_char (bang)) ||
+              /* "Punctuation" covers a wide range of symbols, with some
+               * of them that obviously don't make sense at all. So make
+               * sure those aren't allowed.
+               */
+              g_utf8_strchr ("(){}[].,", -1, g_utf8_get_char (bang)))) {
+    set_entry_as_invalid (bang_entry, _("Search shortcuts should start with a symbol such as !, # or @."));
   } else {
     set_entry_as_valid (bang_entry);
     ephy_search_engine_manager_modify_engine (row->manager,
