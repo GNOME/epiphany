@@ -444,7 +444,14 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
         g_strcmp0 (new_name, EMPTY_NEW_SEARCH_ENGINE_NAME) != 0)
       ephy_search_engine_list_box_set_can_add_engine (search_engine_list_box, TRUE);
 
-    update_bang_for_name (row, new_name);
+    /* Let's not overwrite any existing bang, as that's likely not what is wanted.
+     * For example when I wanted to rename my "wiktionary en" search engine that
+     * had the !wte bang, it replaced the bang with !we, which is the one for
+     * "Wikipedia (en)". That's just annoying, so only do it when there hasn't
+     * been any bang added yet.
+     */
+    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (row->bang_entry)), "") == 0)
+      update_bang_for_name (row, new_name);
 
     ephy_search_engine_manager_rename (row->manager,
                                        row->saved_name,
