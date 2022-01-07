@@ -1,5 +1,5 @@
 diff --git a/third-party/pdfjs/web/viewer.css b/third-party/pdfjs/web/viewer.css
-index 0d87d30df..81a09f7f5 100644
+index c5f0bcb1e..f8fc94ad1 100644
 --- a/third-party/pdfjs/web/viewer.css
 +++ b/third-party/pdfjs/web/viewer.css
 @@ -1,4 +1,5 @@
@@ -8,7 +8,7 @@ index 0d87d30df..81a09f7f5 100644
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -1694,6 +1695,7 @@ html[dir="rtl"] .dropdownToolbarButton::after {
+@@ -1720,6 +1721,7 @@ html[dir="rtl"] .dropdownToolbarButton::after {
  }
  
  .dropdownToolbarButton > select {
@@ -16,7 +16,7 @@ index 0d87d30df..81a09f7f5 100644
    width: calc(var(--scale-select-container-width) + var(--scale-select-overflow));
    height: 28px;
    font-size: 12px;
-@@ -2067,6 +2069,7 @@ html[dir="rtl"] .toolbarField[type="checkbox"] {
+@@ -2098,6 +2100,7 @@ html[dir="rtl"] .toolbarField[type="checkbox"] {
  }
  
  .toolbarField.pageNumber {
@@ -25,7 +25,7 @@ index 0d87d30df..81a09f7f5 100644
    min-width: 16px;
    text-align: right;
 diff --git a/third-party/pdfjs/web/viewer.html b/third-party/pdfjs/web/viewer.html
-index 503b810ba..db9b7427a 100644
+index efbd58391..bb2068cd1 100644
 --- a/third-party/pdfjs/web/viewer.html
 +++ b/third-party/pdfjs/web/viewer.html
 @@ -1,6 +1,7 @@
@@ -61,7 +61,7 @@ index 503b810ba..db9b7427a 100644
                <span data-l10n-id="bookmark_label">Current View</span>
              </a>
  
-@@ -237,7 +238,7 @@ See https://github.com/adobe-type-tools/cmap-resources
+@@ -240,7 +241,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                  <button id="download" class="toolbarButton download hiddenMediumView" title="Download" tabindex="34" data-l10n-id="download">
                    <span data-l10n-id="download_label">Download</span>
                  </button>
@@ -71,7 +71,7 @@ index 503b810ba..db9b7427a 100644
                  </a>
  
 diff --git a/third-party/pdfjs/web/viewer.js b/third-party/pdfjs/web/viewer.js
-index c7fd413a0..cad44eeb1 100644
+index 74f538450..c11421eaf 100644
 --- a/third-party/pdfjs/web/viewer.js
 +++ b/third-party/pdfjs/web/viewer.js
 @@ -3,6 +3,7 @@
@@ -82,7 +82,7 @@ index c7fd413a0..cad44eeb1 100644
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
-@@ -2236,8 +2237,7 @@ function webViewerInitialized() {
+@@ -2242,8 +2243,7 @@ function webViewerInitialized() {
    let file;
    const queryString = document.location.search.substring(1);
    const params = (0, _ui_utils.parseQueryString)(queryString);
@@ -92,7 +92,7 @@ index c7fd413a0..cad44eeb1 100644
    const fileInput = document.createElement("input");
    fileInput.id = appConfig.openFileInputName;
    fileInput.className = "fileInput";
-@@ -2245,12 +2245,8 @@ function webViewerInitialized() {
+@@ -2251,12 +2251,8 @@ function webViewerInitialized() {
    fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
    document.body.appendChild(fileInput);
  
@@ -107,11 +107,10 @@ index c7fd413a0..cad44eeb1 100644
  
    fileInput.addEventListener("change", function (evt) {
      const files = evt.target.files;
-@@ -2311,9 +2307,19 @@ function webViewerInitialized() {
-       });
+@@ -2318,8 +2314,18 @@ function webViewerInitialized() {
      }
    }, true);
-+  
+ 
 +  var file_name = document.head.getAttribute('pdf_name')
 +  var raw = atob(document.head.getAttribute('pdf_data'));
 +  var raw_length = raw.length;
@@ -120,7 +119,7 @@ index c7fd413a0..cad44eeb1 100644
 +  for(var i = 0; i < raw_length; i++) {
 +    array[i] = raw.charCodeAt(i);
 +  }
- 
++
    try {
 -    webViewerOpenFileViaURL(file);
 +    PDFViewerApplication.open(array);
@@ -128,7 +127,7 @@ index c7fd413a0..cad44eeb1 100644
    } catch (reason) {
      PDFViewerApplication.l10n.get("loading_error").then(msg => {
        PDFViewerApplication._documentError(msg, reason);
-@@ -6376,6 +6382,8 @@ class PDFHistory {
+@@ -6209,6 +6215,8 @@ class PDFHistory {
        }
      }
  
@@ -137,7 +136,7 @@ index c7fd413a0..cad44eeb1 100644
      if (shouldReplace) {
        window.history.replaceState(newState, "", newUrl);
      } else {
-@@ -15620,4 +15628,4 @@ if (document.readyState === "interactive" || document.readyState === "complete")
+@@ -15661,4 +15669,4 @@ if (document.readyState === "interactive" || document.readyState === "complete")
  
  /******/ })()
  ;
