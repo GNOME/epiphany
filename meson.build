@@ -130,7 +130,21 @@ config_h = declare_dependency(
 )
 
 cc = meson.get_compiler('c')
-gmp_dep = cc.find_library('gmp')
+
+mini_gmp_test = '''
+#include <nettle/bignum.h>
+
+#if !NETTLE_USE_MINI_GMP
+# error "gmp is needed"
+#endif
+'''
+
+if cc.compiles(mini_gmp_test, dependencies: hogweed_dep)
+  gmp_dep = dependency('', required: false)
+else
+  gmp_dep = cc.find_library('gmp')
+endif
+
 m_dep = cc.find_library('m', required: false)
 
 cflags = cc.get_supported_arguments(['-Werror=declaration-after-statement',

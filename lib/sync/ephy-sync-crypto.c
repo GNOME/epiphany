@@ -32,7 +32,12 @@
 #include <nettle/cbc.h>
 #include <nettle/hkdf.h>
 #include <nettle/hmac.h>
+#include <nettle/bignum.h>
 #include <string.h>
+
+#if !NETTLE_USE_MINI_GMP
+#include <gmp.h>
+#endif
 
 #define HAWK_VERSION  1
 #define NONCE_LEN     6
