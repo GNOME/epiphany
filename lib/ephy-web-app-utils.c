@@ -129,11 +129,10 @@ get_gapplication_id_from_id (const char *id)
   /* Split ID into: <normalized-name>-<checksum> */
   final_hyphen = strrchr (id, '-');
   if (!final_hyphen) {
-    /* The id was derived from the profile dir and it's only the checksum part */
-    checksum = id;
-  } else {
-    checksum = final_hyphen + 1;
+    g_warning ("Web app ID %s is broken: must contain a hyphen", id);
+    return NULL;
   }
+  checksum = final_hyphen + 1;
 
   if (*checksum == '\0') {
     g_warning ("Web app ID %s is broken: should end with checksum, not hyphen", id);
