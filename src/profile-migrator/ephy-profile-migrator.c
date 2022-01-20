@@ -24,6 +24,7 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-filters-manager.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-password-manager.h"
 #include "ephy-prefs.h"
@@ -1475,6 +1476,212 @@ migrate_search_engines_to_vardict (void)
 }
 
 static void
+migrate_pre_flatpak_webapps (void)
+{
+  /* Rename webapp folder, desktop file name and content from
+   *  org.gnome.Epiphany.WebApp-${id}
+   * to
+   *  ${APP_ID}.WebApp_${hash}
+   *
+   * The app id sometimes has a Devel or Canary suffix, and we need the
+   * GApplication ID to have the app id as a prefix for the dynamic launcher
+   * portal to work. Also change the hyphen to an underscore for friendliness
+   * with D-Bus. The ${id} sometimes has the app name so that is what
+   * differentiates it from ${hash}. Finally, we also move the .desktop file
+   * and the icon to the locations used by xdg-desktop-portal, which is what we
+   * will use for creating the desktop files going forward.
+   */
+  g_autoptr (GFile) parent_directory = NULL;
+  g_autoptr (GFileEnumerator) children = NULL;
+  g_autoptr (GFileInfo) info = NULL;
+  g_autoptr (GError) error = NULL;
+  const char *parent_directory_path = g_get_user_data_dir ();
+  g_autofree char *portal_desktop_dir = NULL;
+  g_autofree char *portal_icon_dir = NULL;
+
+  /* This migration is both not needed and not possible from within Flatpak. */
+  if (ephy_is_running_inside_sandbox ())
+    return;
+
+  portal_desktop_dir = g_build_filename (g_get_user_data_dir (), "xdg-desktop-portal", "applications", NULL);
+  portal_icon_dir = g_build_filename (g_get_user_data_dir (), "xdg-desktop-portal", "icons", "192x192", NULL);
+  if (g_mkdir_with_parents (portal_desktop_dir, 0700) == -1)
+    g_warning ("Failed to create portal desktop file dir: %s", g_strerror (errno));
+  if (g_mkdir_with_parents (portal_icon_dir, 0700) == -1)
+    g_warning ("Failed to create portal icon dir: %s", g_strerror (errno));
+
+  parent_directory = g_file_new_for_path (parent_directory_path);
+  children = g_file_enumerate_children (parent_directory,
+                                        "standard::name",
+                                        0, NULL, &error);
+  if (!children) {
+    g_warning ("Cannot enumerate profile directory: %s", error->message);
+    return;
+  }
+
+  info = g_file_enumerator_next_file (children, NULL, &error);
+  if (!info) {
+    g_warning ("Cannot enumerate profile directory: %s", error->message);
+    return;
+  }
+
+  while (info) {
+    const char *name;
+
+    name = g_file_info_get_name (info);
+    if (!g_str_has_prefix (name, "org.gnome.Epiphany.WebApp-"))
+      goto next;
+
+    /* the directory is either org.gnome.Epiphany.WebApp-name-checksum or
+     * org.gnome.Epiphany.WebApp-checksum but unfortunately name can include a
+     * hyphen
+     */
+    {
+      g_autofree char *old_desktop_file_name = NULL;
+      g_autofree char *new_desktop_file_name = NULL;
+      g_autofree char *old_desktop_path_name = NULL;
+      g_autofree char *new_desktop_path_name = NULL;
+      g_autofree char *app_desktop_file_name = NULL;
+      g_autofree char *old_cache_path = NULL;
+      g_autofree char *new_cache_path = NULL;
+      g_autofree char *old_config_path = NULL;
+      g_autofree char *new_config_path = NULL;
+      g_autofree char *old_data = NULL;
+      g_autofree char *new_data = NULL;
+      g_autofree char *icon = NULL;
+      g_autofree char *new_icon = NULL;
+      g_autofree char *tryexec = NULL;
+      g_autofree char *relative_path = NULL;
+      g_autoptr (GKeyFile) keyfile = NULL;
+      g_autoptr (GFile) app_link_file = NULL;
+      g_autoptr (GFile) old_desktop_file = NULL;
+      g_autoptr (GFileInfo) file_info = NULL;
+      const char *final_hyphen, *checksum;
+      g_autofree char *new_name = NULL;
+
+      final_hyphen = strrchr (name, '-');
+      g_assert (final_hyphen);
+      checksum = final_hyphen + 1;
+      if (*checksum == '\0') {
+        g_warning ("Web app ID %s is broken: should end with checksum, not hyphen", name);
+        goto next;
+      }
+      new_name = g_strconcat (APPLICATION_ID, ".WebApp_", checksum, NULL);
+
+      /* Rename profile directory */
+      old_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, name, NULL);
+      new_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, NULL);
+      LOG ("migrate_profile_directories: moving '%s' to '%s'", old_desktop_path_name, new_desktop_path_name);
+      if (g_rename (old_desktop_path_name, new_desktop_path_name) == -1) {
+        g_warning ("Cannot rename web application directory from '%s' to '%s'", old_desktop_path_name, new_desktop_path_name);
+        goto next;
+      }
+
+      /* Rename cache directory */
+      old_cache_path = g_strconcat (g_get_user_cache_dir (), G_DIR_SEPARATOR_S, name, NULL);
+      new_cache_path = g_strconcat (g_get_user_cache_dir (), G_DIR_SEPARATOR_S, new_name, NULL);
+      if (g_file_test (old_cache_path, G_FILE_TEST_IS_DIR) &&
+          g_rename (old_cache_path, new_cache_path) == -1) {
+        g_warning ("Cannot rename web application cache directory from '%s' to '%s'", old_cache_path, new_cache_path);
+      }
+
+      /* Rename config directory */
+      old_config_path = g_strconcat (g_get_user_config_dir (), G_DIR_SEPARATOR_S, name, NULL);
+      new_config_path = g_strconcat (g_get_user_config_dir (), G_DIR_SEPARATOR_S, new_name, NULL);
+      if (g_file_test (old_config_path, G_FILE_TEST_IS_DIR) &&
+          g_rename (old_config_path, new_config_path) == -1) {
+        g_warning ("Cannot rename web application config directory from '%s' to '%s'", old_config_path, new_config_path);
+      }
+
+      /* Create new desktop file */
+      old_desktop_file_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+      new_desktop_file_name = g_strconcat (portal_desktop_dir, G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+
+      /* Fix paths in desktop file */
+      if (!g_file_get_contents (old_desktop_file_name, &old_data, NULL, &error)) {
+        g_warning ("Cannot read contents of '%s': %s", old_desktop_file_name, error->message);
+        goto next;
+      }
+      new_data = ephy_string_find_and_replace ((const char *)old_data, name, new_name);
+      keyfile = g_key_file_new ();
+      if (!g_key_file_load_from_data (keyfile, new_data, -1,
+                                      G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
+                                      &error)) {
+        g_warning ("Cannot load old desktop file %s as key file: %s", old_desktop_file_name, error->message);
+        g_warning ("Key file contents:\n%s\n", (const char *)new_data);
+        goto next;
+      }
+      /* The StartupWMClass will not always have been corrected by the
+       * find-and-replace above, since it has the form
+       * org.gnome.Epiphany.WebApp-<normalized_name>-<checksum> whereas the
+       * gapplication id sometimes omits the <normalized_name> part
+       */
+      g_key_file_set_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_STARTUP_WM_CLASS, new_name);
+
+      /* Correct the Icon= key */
+      icon = g_key_file_get_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
+      if (icon == NULL) {
+        g_warning ("Failed to get Icon key from %s: %s", old_desktop_file_name, error->message);
+        g_clear_error (&error);
+      } else if (g_str_has_suffix (icon, EPHY_WEB_APP_ICON_NAME)) {
+        new_icon = g_strconcat (portal_icon_dir, G_DIR_SEPARATOR_S, new_name, ".png", NULL);
+        if (g_rename (icon, new_icon) == -1) {
+          g_warning ("Cannot rename icon from '%s' to '%s'", icon, new_icon);
+          goto next;
+        }
+        LOG ("migrate_profile_directories: setting Icon to %s", new_icon);
+        g_key_file_set_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, new_icon);
+      }
+
+      tryexec = g_key_file_get_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_TRY_EXEC, NULL);
+      if (tryexec == NULL) {
+        g_key_file_set_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_TRY_EXEC, "epiphany");
+      }
+
+      if (!g_key_file_save_to_file (keyfile, new_desktop_file_name, &error)) {
+        g_warning ("Failed to save desktop file %s", error->message);
+        goto next;
+      }
+
+      old_desktop_file = g_file_new_for_path (old_desktop_file_name);
+      if (!g_file_delete (old_desktop_file, NULL, &error)) {
+        g_warning ("Cannot delete old desktop file: %s", error->message);
+        goto next;
+      }
+
+      /* Remove old symlink */
+      app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications",
+                                           G_DIR_SEPARATOR_S, name, ".desktop", NULL);
+      if (g_remove (app_desktop_file_name) == -1) {
+        g_warning ("Cannot remove old desktop file symlink '%s'", app_desktop_file_name);
+        goto next;
+      }
+
+      /* Create new symlink */
+      g_free (app_desktop_file_name);
+      app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications",
+                                           G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+      app_link_file = g_file_new_for_path (app_desktop_file_name);
+      relative_path = g_strconcat ("..", G_DIR_SEPARATOR_S, "xdg-desktop-portal", G_DIR_SEPARATOR_S,
+                                   "applications", G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
+
+      if (!g_file_make_symbolic_link (app_link_file, relative_path, NULL, &error)) {
+        g_warning ("Cannot create symlink to new desktop file %s: %s", new_desktop_file_name, error->message);
+        goto next;
+      }
+    }
+
+next:
+    g_clear_error (&error);
+    info = g_file_enumerator_next_file (children, NULL, &error);
+    if (!info && error) {
+      g_warning ("Cannot enumerate next file: %s", error->message);
+      return;
+    }
+  }
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1526,6 +1733,7 @@ const EphyProfileMigrator migrators[] = {
   /* 35 */ migrate_webapp_names,
   /* FIXME: Please also remove the "search-engines" deprecated gschema key when dropping this migrator in the future. */
   /* 36 */ migrate_search_engines_to_vardict,
+  /* 37 */ migrate_pre_flatpak_webapps,
 };
 
 static gboolean

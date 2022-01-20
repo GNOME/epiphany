@@ -272,15 +272,12 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
       if (ephy_web_application_is_system (app))
         continue;
 
-      /* Most of these fields are at least semi-trusted. The web app suggests
-       * its own title, which gets used in the app ID and icon URL, but it ought
-       * to be safe because we validate that it is a valid component of a
-       * GApplication ID, which should not permit anything nasty. The icon URL
-       * could be changed by the user to something else after web app creation,
-       * though, so better not fully trust it. Then the app name and the main
-       * URL could contain contain anything at all, so those need to be encoded
-       * for sure. Install date should be fine because it's constructed by
-       * Epiphany.
+      /* Most of these fields are at least semi-trusted. The app ID was chosen
+       * by ephy so it's safe. The icon URL could be changed by the user to
+       * something else after web app creation, though, so better not fully
+       * trust it. Then the app name and the main URL could contain contain
+       * anything at all, so those need to be encoded for sure. Install date
+       * should be fine because it's constructed by Epiphany.
        */
       encoded_icon_url = ephy_encode_for_html_attribute (app->icon_url);
       encoded_name = ephy_encode_for_html_entity (app->name);
