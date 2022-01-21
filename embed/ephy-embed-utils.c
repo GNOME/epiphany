@@ -69,7 +69,15 @@ ephy_embed_utils_link_message_parse (const char *message)
                                        (splitted_message[0] + 7)));
 
   while (splitted_message [i] != NULL) {
-    g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
+    /* TRANSLATORS: This string is part of the previous translatable string.
+     * It is appended for each extraneous mailto: URI email address. For
+     * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
+     * it will show
+     * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
+     * when you hover such link, at the same place as regular URLs when you hover
+     * a link in a web page.
+     */
+    g_string_append_printf (tmp, _(", “%s”"), splitted_message[i]);
     i++;
   }
 
