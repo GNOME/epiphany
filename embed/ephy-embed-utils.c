@@ -61,8 +61,10 @@ ephy_embed_utils_link_message_parse (const char *message)
 
   /* Then we also want to check if there is more than an email address
    * in the mailto: list.
+   * Splitting is done as defined in the "to" component at
+   * https://datatracker.ietf.org/doc/html/rfc6068#section-2 (so with a comma).
    */
-  splitted_message = g_strsplit_set (status_message, ";", -1);
+  splitted_message = g_strsplit_set (status_message, ",", -1);
   tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
                                        (splitted_message[0] + 7)));
 
