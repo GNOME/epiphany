@@ -40,6 +40,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <libportal/portal-helpers.h>
 #include <libxml/xmlreader.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,6 +74,8 @@ static char *cache_dir;
 static char *config_dir;
 static char *tmp_dir;
 static EphyProfileDirType profile_dir_type;
+
+static XdpPortal *global_portal;
 
 GQuark ephy_file_helpers_error_quark;
 
@@ -489,6 +492,8 @@ ephy_file_helpers_init (const char            *profile_dir,
     }
   }
 
+  global_portal = xdp_portal_new ();
+
   return ret;
 }
 
@@ -523,6 +528,8 @@ ephy_file_helpers_shutdown (void)
     g_free (tmp_dir);
     tmp_dir = NULL;
   }
+
+  g_clear_object (&global_portal);
 }
 
 /**
@@ -922,4 +929,10 @@ ephy_copy_directory (const char *source,
       }
     }
   }
+}
+
+XdpPortal *
+ephy_get_portal (void)
+{
+  return global_portal;
 }
