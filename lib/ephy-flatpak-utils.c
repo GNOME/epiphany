@@ -22,6 +22,7 @@
 #define _GNU_SOURCE
 
 #include <config.h>
+#include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 
 #include <errno.h>
@@ -85,7 +86,7 @@ opened_uri (GObject      *object,
             GAsyncResult *result,
             gpointer      data)
 {
-  g_autoptr (XdpPortal) portal = XDP_PORTAL (object);
+  XdpPortal *portal = XDP_PORTAL (object);
   g_autoptr (GError) error = NULL;
   gboolean open_dir = GPOINTER_TO_INT (data);
   gboolean res;
@@ -106,16 +107,16 @@ ephy_open_uri (const char *uri,
   GApplication *application;
   GtkWindow *window;
   XdpParent *parent;
-  g_autoptr (XdpPortal) portal = xdp_portal_new ();
+  XdpPortal *portal = ephy_get_portal ();
 
   application = g_application_get_default ();
   window = gtk_application_get_active_window (GTK_APPLICATION (application));
   parent = xdp_parent_new_gtk (window);
 
   if (is_dir)
-    xdp_portal_open_directory (g_steal_pointer (&portal), parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (TRUE));
+    xdp_portal_open_directory (portal, parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (TRUE));
   else
-    xdp_portal_open_uri (g_steal_pointer (&portal), parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (FALSE));
+    xdp_portal_open_uri (portal, parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (FALSE));
 
   xdp_parent_free (parent);
 }

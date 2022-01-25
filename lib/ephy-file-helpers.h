@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include <libportal/portal-helpers.h>
 
 extern GQuark ephy_file_helpers_error_quark;
 #define EPHY_FILE_HELPERS_ERROR_QUARK        (ephy_file_helpers_error_quark)
@@ -77,5 +78,6 @@ gboolean           ephy_file_browse_to                      (GFile              
                                                              guint32                user_time);
 void               ephy_copy_directory                      (const char            *source,
                                                              const char            *target);
+XdpPortal  *       ephy_get_portal                          (void);
 
 G_END_DECLS
