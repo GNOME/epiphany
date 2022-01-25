@@ -1199,7 +1199,7 @@ migrate_profile_directories (void)
     g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
 
     icon = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
-    if (exec == NULL) {
+    if (icon == NULL) {
       g_warning ("Failed to get Icon key from %s: %s", desktop_file_path, error->message);
       continue;
     }
@@ -1333,7 +1333,7 @@ migrate_webapp_names (void)
         old_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, name, NULL);
         new_desktop_path_name = g_strconcat (parent_directory_path, G_DIR_SEPARATOR_S, new_name, NULL);
         if (g_rename (old_desktop_path_name, new_desktop_path_name) == -1) {
-          g_warning ("Cannot rename web application directroy from '%s' to '%s'", old_desktop_path_name, new_desktop_path_name);
+          g_warning ("Cannot rename web application directory from '%s' to '%s'", old_desktop_path_name, new_desktop_path_name);
           goto next;
         }
 
@@ -1402,6 +1402,7 @@ migrate_webapp_names (void)
         }
 
         /* Create new symlink */
+        g_free (app_desktop_file_name);
         app_desktop_file_name = g_strconcat (g_get_user_data_dir (), G_DIR_SEPARATOR_S, "applications", G_DIR_SEPARATOR_S, new_name, ".desktop", NULL);
         app_link_file = g_file_new_for_path (app_desktop_file_name);
 
@@ -1413,6 +1414,7 @@ migrate_webapp_names (void)
     }
 
 next:
+    g_clear_error (&error);
     info = g_file_enumerator_next_file (children, NULL, &error);
     if (!info && error) {
       g_warning ("Cannot enumerate next file: %s", error->message);
