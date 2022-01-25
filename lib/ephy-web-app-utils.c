@@ -63,21 +63,6 @@ ephy_web_application_get_app_id_from_name (const char *name)
   return g_compute_checksum_for_string (G_CHECKSUM_SHA1, name, -1);
 }
 
-static char *
-get_encoded_path (const char *path)
-{
-  g_autofree char *encoded = NULL;
-  g_autoptr (GError) error = NULL;
-
-  encoded = g_filename_from_utf8 (path, -1, NULL, NULL, &error);
-  if (error) {
-    g_warning ("%s", error->message);
-    return NULL;
-  }
-
-  return g_steal_pointer (&encoded);
-}
-
 static const char *
 get_app_id_from_gapplication_id (const char *name)
 {
@@ -105,25 +90,20 @@ get_gapplication_id_from_id (const char *id)
 static char *
 get_app_profile_directory_name (const char *id)
 {
-  g_autofree char *gapplication_id = NULL;
-
-  gapplication_id = get_gapplication_id_from_id (id);
-  return get_encoded_path (gapplication_id);
+  return get_gapplication_id_from_id (id);
 }
 
 static char *
 get_app_desktop_filename (const char *id)
 {
   g_autofree char *gapplication_id = NULL;
-  g_autofree char *filename = NULL;
 
   /* Warning: the GApplication ID must exactly match the desktop file's
    * basename. Don't overthink this or stuff will break, e.g. GNotification.
    */
   gapplication_id = get_gapplication_id_from_id (id);
 
-  filename = g_strconcat (gapplication_id, ".desktop", NULL);
-  return get_encoded_path (filename);
+  return g_strconcat (gapplication_id, ".desktop", NULL);
 }
 
 const char *
