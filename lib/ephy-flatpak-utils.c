@@ -132,3 +132,41 @@ ephy_open_uri_via_flatpak_portal (const char *uri)
 {
   ephy_open_uri (uri, FALSE);
 }
+
+gboolean
+ephy_can_install_web_apps (void)
+{
+  static gsize portal_available = 0;
+  enum {
+    LAUNCHER_PORTAL_MISSING = 1,
+    LAUNCHER_PORTAL_FOUND = 2
+  };
+
+  if (g_once_init_enter (&portal_available)) {
+    g_autoptr (GDBusProxy) proxy = NULL;
+    g_autoptr (GVariant) version = NULL;
+    g_autoptr (GVariant) version_child = NULL;
+    g_autoptr (GVariant) version_grandchild = NULL;
+
+    proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, NULL,
+                                           "org.freedesktop.portal.Desktop",
+                                           "/org/freedesktop/portal/desktop",
+                                           "org.freedesktop.DBus.Properties",
+                                           NULL, NULL);
+    if (proxy)
+      version = g_dbus_proxy_call_sync (proxy, "Get",
+                                        g_variant_new ("(ss)", "org.freedesktop.portal.DynamicLauncher", "version"),
+                                        G_DBUS_CALL_FLAGS_NONE,
+                                        -1, NULL, NULL);
+    if (version) {
+      version_child = g_variant_get_child_value (version, 0);
+      version_grandchild = g_variant_get_child_value (version_child, 0);
+      g_debug ("Found version %d of the dynamic launcher portal", g_variant_get_uint32 (version_grandchild));
+      g_once_init_leave (&portal_available, LAUNCHER_PORTAL_FOUND);
+    } else {
+      g_once_init_leave (&portal_available, LAUNCHER_PORTAL_MISSING);
+    }
+  }
+
+  return portal_available == LAUNCHER_PORTAL_FOUND;
+}

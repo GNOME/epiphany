@@ -134,11 +134,9 @@ handle_install (EphyWebAppProvider        *skeleton,
 
   id = ephy_web_application_get_app_id_from_name (name);
 
-  desktop_path = ephy_web_application_create (id, url, name,
-                                              NULL, NULL, /* icon_pixbuf, icon_path */
-                                              install_token,
-                                              EPHY_WEB_APPLICATION_NONE);
-  if (!desktop_path) {
+  if (!ephy_web_application_create (id, url,
+                                    install_token,
+                                    EPHY_WEB_APPLICATION_NONE)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,
                                            EPHY_WEBAPP_PROVIDER_ERROR_FAILED,
                                            _("Installing the web application ‘%s’ (%s) failed"),
@@ -146,6 +144,7 @@ handle_install (EphyWebAppProvider        *skeleton,
     goto out;
   }
 
+  desktop_path = ephy_web_application_get_desktop_path (id);
   desktop_file_id = g_path_get_basename (desktop_path);
   ephy_web_app_provider_complete_install (skeleton, invocation, desktop_file_id);
 

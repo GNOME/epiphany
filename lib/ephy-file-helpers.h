@@ -69,8 +69,6 @@ gboolean           ephy_file_delete_dir_recursively         (const char         
 char       *       ephy_sanitize_filename                   (char                  *filename);
 void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
-gboolean           ephy_file_launch_webapp_desktop_file     (const char            *filepath,
-                                                             guint32                user_time);
 gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
                                                              guint32                user_time,
                                                              GdkScreen             *screen);

@@ -333,10 +333,9 @@ launch_app (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  const gchar *desktop_file = g_variant_get_string (parameter, NULL);
+  const gchar *webapp_id = g_variant_get_string (parameter, NULL);
 
-  ephy_file_launch_webapp_desktop_file (desktop_file,
-                                        gtk_get_current_event_time ());
+  ephy_web_application_launch (webapp_id);
 }
 
 static void

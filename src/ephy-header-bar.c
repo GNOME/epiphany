@@ -276,8 +276,6 @@ ephy_header_bar_constructed (GObject *object)
   } else if (ephy_is_running_inside_sandbox ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
 
     if (is_desktop_pantheon ())
@@ -285,6 +283,12 @@ ephy_header_bar_constructed (GObject *object)
   } else {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
+  }
+
+  if (!ephy_can_install_web_apps ()) {
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
   }
 
   header_bar->combined_stop_reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "combined_stop_reload_button"));

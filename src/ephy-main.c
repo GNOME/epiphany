@@ -25,6 +25,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -292,14 +293,19 @@ main (int   argc,
 
   if (application_mode && !profile_directory) {
     if (desktop_file_basename) {
-      desktop_info = g_desktop_app_info_new (desktop_file_basename);
-
-      if (desktop_info)
-        profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
-
-      if (!profile_directory) {
-        g_print ("Invalid desktop file passed to --application-mode\n");
+      if (ephy_is_running_inside_sandbox ()) {
+        g_print ("In sandbox, no desktop file can be passed to --application-mode\n");
         exit (1);
+      } else {
+        desktop_info = g_desktop_app_info_new (desktop_file_basename);
+
+        if (desktop_info)
+          profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
+
+        if (!profile_directory) {
+          g_print ("Invalid desktop file passed to --application-mode\n");
+          exit (1);
+        }
       }
     }
   }
