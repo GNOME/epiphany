@@ -100,7 +100,6 @@ handle_install (EphyWebAppProvider        *skeleton,
                 EphyWebAppProviderService *self)
 {
   g_autofree char *id = NULL;
-  g_autofree char *desktop_path = NULL;
 
   g_debug ("%s", G_STRFUNC);
 
@@ -133,11 +132,9 @@ handle_install (EphyWebAppProvider        *skeleton,
 
   id = ephy_web_application_get_app_id_from_name (name);
 
-  desktop_path = ephy_web_application_create (id, url, name,
-                                              NULL, NULL, /* icon_pixbuf, icon_path */
-                                              install_token,
-                                              EPHY_WEB_APPLICATION_NONE);
-  if (!desktop_path) {
+  if (!ephy_web_application_create (id, url,
+                                    install_token,
+                                    EPHY_WEB_APPLICATION_NONE)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,
                                            EPHY_WEBAPP_PROVIDER_ERROR_FAILED,
                                            _("Installing the web application ‘%s’ (%s) failed"),

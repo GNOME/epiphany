@@ -1160,7 +1160,7 @@ migrate_profile_directories (void)
     g_autoptr (GFile) desktop_symlink = NULL;
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
     g_autofree char *old_path = g_build_filename (legacy_default_profile_dir (), old_name, NULL);
-    g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
+    g_autofree char *app_path = ephy_legacy_web_application_get_profile_directory (app->id);
     g_autofree char *app_file = NULL;
     g_autofree char *old_profile_prefix = NULL;
     g_autofree char *new_profile_prefix = NULL;

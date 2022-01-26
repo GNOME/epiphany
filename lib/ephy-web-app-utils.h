@@ -31,7 +31,8 @@ typedef struct {
   char *name;
   char *icon_url;
   char *url;
-  char *desktop_file;
+  char *desktop_file; /* only used for legacy apps */
+  char *desktop_path;
   char install_date[128];
   guint64 install_date_uint64;
 } EphyWebApplication;
@@ -63,15 +64,14 @@ char               *ephy_web_application_get_app_id_from_name (const char *name)
 
 const char         *ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir);
 
-char               *ephy_web_application_create (const char                *id,
+gboolean            ephy_web_application_create (const char                *id,
                                                  const char                *address,
-                                                 const char                *name,
-                                                 GdkPixbuf                 *icon_pixbuf,
-                                                 const char                *icon_path,
                                                  const char                *install_token,
                                                  EphyWebApplicationOptions  options);
 
 char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
+
+void                ephy_web_application_launch (const char *id);
 
 gboolean            ephy_web_application_delete (const char      *id,
                                                  EphyWebAppFound *out_app_found);
@@ -85,7 +85,13 @@ void                ephy_web_application_setup_from_desktop_file (GDesktopAppInf
 
 char               *ephy_web_application_get_profile_directory (const char *id);
 
-char               *ephy_web_application_get_desktop_path (EphyWebApplication *app);
+/* legacy variant for profile migration */
+char               *ephy_legacy_web_application_get_profile_directory (const char *id);
+
+GKeyFile           *ephy_web_application_get_desktop_keyfile (const char  *id,
+                                                              GError     **error);
+
+char               *ephy_web_application_get_desktop_path (const char *id);
 
 EphyWebApplication *ephy_web_application_for_profile_directory (const char *profile_dir);
 
@@ -95,6 +101,7 @@ gboolean            ephy_web_application_exists (const char *id);
 
 GList              *ephy_web_application_get_application_list (void);
 
+/* legacy variant for profile migration */
 GList              *ephy_web_application_get_legacy_application_list (void);
 
 char              **ephy_web_application_get_desktop_id_list (void);

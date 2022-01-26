@@ -49,8 +49,11 @@ struct _PrefsGeneralPage {
   guint webapp_save_id;
   GtkWidget *webapp_box;
   GtkWidget *webapp_icon;
+  GtkWidget *webapp_icon_row;
   GtkWidget *webapp_url;
+  GtkWidget *webapp_url_row;
   GtkWidget *webapp_title;
+  GtkWidget *webapp_title_row;
 
   /* Web Content */
   GtkWidget *adblock_allow_switch;
@@ -1081,8 +1084,11 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   /* Web Application */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_icon);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_icon_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_url);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_url_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title_row);
 
   /* Web Content */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, adblock_allow_switch);
@@ -1168,7 +1174,8 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   /* ========================== Web Application ============================= */
   /* ======================================================================== */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      !ephy_is_running_inside_sandbox ()) {
     general_page->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
     g_assert (general_page->webapp);
 
@@ -1331,6 +1338,9 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION &&
                           !g_settings_get_boolean (EPHY_SETTINGS_WEB_APP,
                                                    EPHY_PREFS_WEB_APP_SYSTEM));
+  gtk_widget_set_visible (general_page->webapp_icon_row, !ephy_is_running_inside_sandbox ());
+  gtk_widget_set_visible (general_page->webapp_url_row, !ephy_is_running_inside_sandbox ());
+  gtk_widget_set_visible (general_page->webapp_title_row, !ephy_is_running_inside_sandbox ());
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->search_engine_group,

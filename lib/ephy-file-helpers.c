@@ -607,25 +607,6 @@ launch_application (GAppInfo *app,
   return res;
 }
 
-/**
- * ephy_file_launch_webapp_desktop_file:
- * @filename: the path to the .desktop file of a web app
- *
- * Launches the application described by the desktop file @filename.
- *
- * Returns: %TRUE if the application launch was successful
- **/
-gboolean
-ephy_file_launch_webapp_desktop_file (const char *filename,
-                                      guint32     user_time)
-{
-  g_autoptr (GDesktopAppInfo) app = NULL;
-
-  app = g_desktop_app_info_new_from_filename (filename);
-
-  return launch_application (G_APP_INFO (app), NULL, user_time);
-}
-
 static gboolean
 launch_via_uri_handler (GFile *file)
 {

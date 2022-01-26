@@ -30,3 +30,4 @@ void     ephy_open_uri_via_flatpak_portal                (const char *uri);
 
 void     ephy_open_directory_via_flatpak_portal          (const char *uri);
 
+gboolean ephy_can_install_web_apps                       (void);

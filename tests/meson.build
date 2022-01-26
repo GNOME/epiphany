@@ -168,17 +168,6 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
-  web_app_utils_test = executable('test-ephy-web-app-utils',
-    'ephy-web-app-utils-test.c',
-    dependencies: ephymain_dep,
-    c_args: test_cargs,
-  )
-  test('Web app utils test',
-     web_app_utils_test,
-     env: envs,
-     depends: epiphany
-  )
-
   web_view_test = executable('test-ephy-web-view',
     'ephy-web-view-test.c',
     resources,
