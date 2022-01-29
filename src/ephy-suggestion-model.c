@@ -320,24 +320,25 @@ add_search_engines (EphySuggestionModel *self,
 {
   EphyEmbedShell *shell;
   EphySearchEngineManager *manager;
-  char **engines;
-  guint added = 0;
+  guint added;
 
   shell = ephy_embed_shell_get_default ();
   manager = ephy_embed_shell_get_search_engine_manager (shell);
-  engines = ephy_search_engine_manager_get_names (manager);
 
-  for (guint i = 0; engines[i] != NULL; i++) {
+  for (added = 0; added < g_list_model_get_n_items (G_LIST_MODEL (manager)); added++) {
+    g_autoptr (EphySearchEngine) engine = g_list_model_get_item (G_LIST_MODEL (manager), added);
     EphySuggestion *suggestion;
+    const char *engine_name;
     g_autofree char *address = NULL;
     g_autofree char *escaped_title = NULL;
     g_autofree char *markup = NULL;
     g_autoptr (GUri) uri = NULL;
 
-    address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
-    escaped_title = g_markup_escape_text (engines[i], -1);
+    engine_name = ephy_search_engine_get_name (engine);
+    address = ephy_search_engine_build_search_address (engine, query);
+    escaped_title = g_markup_escape_text (engine_name, -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new (markup, engines[i], address);
+    suggestion = ephy_suggestion_new (markup, engine_name, address);
 
     uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
     if (uri) {
@@ -348,13 +349,11 @@ add_search_engines (EphySuggestionModel *self,
     load_favicon (self, suggestion, address);
 
     g_sequence_append (self->items, suggestion);
-    added++;
   }
-
-  g_strfreev (engines);
 
   return added;
 }
+
 typedef struct {
   char *query;
   char scope;
@@ -656,7 +655,7 @@ google_search_suggestions_cb (SoupSession *session,
   JsonNode *node;
   JsonArray *array;
   JsonArray *suggestions;
-  char *engine;
+  EphySearchEngine *engine;
   int added = 0;
   g_autoptr (GBytes) body = NULL;
 #if SOUP_CHECK_VERSION (2, 99, 4)
@@ -698,11 +697,13 @@ google_search_suggestions_cb (SoupSession *session,
     g_autofree char *address = NULL;
     g_autofree char *escaped_title = NULL;
     g_autofree char *markup = NULL;
+    const char *engine_name;
 
-    address = ephy_search_engine_manager_build_search_address (manager, engine, str);
+    address = ephy_search_engine_build_search_address (engine, str);
     escaped_title = g_markup_escape_text (str, -1);
     markup = dzl_fuzzy_highlight (escaped_title, str, FALSE);
-    suggestion = ephy_suggestion_new (markup, engine, address);
+    engine_name = ephy_search_engine_get_name (engine);
+    suggestion = ephy_suggestion_new (markup, engine_name, address);
 
     g_sequence_append (data->google_suggestions, g_steal_pointer (&suggestion));
     added++;

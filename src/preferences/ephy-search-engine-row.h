@@ -22,6 +22,7 @@
 #pragma once
 
 #include <handy.h>
+#include "ephy-search-engine-manager.h"
 
 G_BEGIN_DECLS
 
@@ -29,12 +30,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_ENGINE_ROW, HdyExpanderRow)
 
-EphySearchEngineRow *ephy_search_engine_row_new                    (const char *search_engine_name);
-GtkListBoxSortFunc   ephy_search_engine_row_get_sort_func          (void);
+EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine,
+                                                                    EphySearchEngineManager *manager);
 void                 ephy_search_engine_row_set_can_remove         (EphySearchEngineRow *self,
                                                                     gboolean can_remove);
 void                 ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
                                                                     GtkRadioButton      *radio_button_group);
-void                 ephy_search_engine_row_set_as_default         (EphySearchEngineRow *self);
 
 G_END_DECLS

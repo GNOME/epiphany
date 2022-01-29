@@ -23,6 +23,7 @@ libephymisc_sources = [
   'ephy-output-encoding.c',
   'ephy-permissions-manager.c',
   'ephy-profile-utils.c',
+  'ephy-search-engine.c',
   'ephy-search-engine-manager.c',
   'ephy-security-levels.c',
   'ephy-settings.c',

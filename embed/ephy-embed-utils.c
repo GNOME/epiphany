@@ -25,8 +25,10 @@
 #include "ephy-embed-utils.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-embed-shell.h"
 #include "ephy-prefs.h"
 #include "ephy-reader-handler.h"
+#include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-view-source-handler.h"
@@ -198,34 +200,6 @@ is_public_domain (const char *address)
 }
 
 static gboolean
-is_bang_search (const char *address)
-{
-  EphyEmbedShell *shell;
-  EphySearchEngineManager *search_engine_manager;
-  char **bangs;
-  GString *buffer;
-
-  shell = ephy_embed_shell_get_default ();
-  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  bangs = ephy_search_engine_manager_get_bangs (search_engine_manager);
-
-  for (uint i = 0; bangs[i] != NULL; i++) {
-    buffer = g_string_new (bangs[i]);
-    g_string_append (buffer, " ");
-
-    if (strstr (address, buffer->str) == address) {
-      g_string_free (buffer, TRUE);
-      g_free (bangs);
-      return TRUE;
-    }
-    g_string_free (buffer, TRUE);
-  }
-  g_free (bangs);
-
-  return FALSE;
-}
-
-static gboolean
 is_host_with_port (const char *address)
 {
   g_auto (GStrv) split = NULL;
@@ -241,6 +215,13 @@ is_host_with_port (const char *address)
   return port != 0;
 }
 
+/* This function checks whether @address can point to a web page.
+ * It accepts as potential sources for web page not only full URI/URLs, but also:
+ * - local absolute file path
+ * - IP address
+ * - host:port
+ * - localhost
+ */
 gboolean
 ephy_embed_utils_address_is_valid (const char *address)
 {
@@ -262,7 +243,6 @@ ephy_embed_utils_address_is_valid (const char *address)
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
            is_public_domain (address) ||
-           is_bang_search (address) ||
            is_host_with_port (address);
 
   g_clear_object (&info);
@@ -287,6 +267,11 @@ ensure_host_name_is_lowercase (const char *address)
     return g_strdup (address);
 }
 
+/* Does various normalization rules to make sure @input_address ends up
+ * with a URI scheme (e.g. absolute filenames or "localhost"), changes
+ * the URI scheme to something more appropriate when needed and lowercases
+ * the hostname.
+ */
 char *
 ephy_embed_utils_normalize_address (const char *input_address)
 {
@@ -294,19 +279,6 @@ ephy_embed_utils_normalize_address (const char *input_address)
   g_autofree gchar *address = NULL;
 
   g_assert (input_address);
-  /* We don't want to lowercase the host name if it's a bang search, as it's not a URI.
-   * It would otherwise lowercase the entire search string, bang included, which is not
-   * what we want. So use input_address directly.
-   */
-  if (is_bang_search (input_address)) {
-    EphyEmbedShell *shell;
-    EphySearchEngineManager *search_engine_manager;
-
-    shell = ephy_embed_shell_get_default ();
-    search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-    return ephy_search_engine_manager_parse_bang_search (search_engine_manager,
-                                                         input_address);
-  }
 
   address = ensure_host_name_is_lowercase (input_address);
 
@@ -342,38 +314,34 @@ ephy_embed_utils_normalize_address (const char *input_address)
   return effective_address ? effective_address : g_strdup (address);
 }
 
+/* Searches @search_key with the default search engine. */
 char *
 ephy_embed_utils_autosearch_address (const char *search_key)
 {
-  char *query_param;
-  const char *address_search;
-  char *effective_address;
   EphyEmbedShell *shell;
-  EphySearchEngineManager *search_engine_manager;
+  EphySearchEngineManager *manager;
+  EphySearchEngine *engine;
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_AUTOSEARCH))
     return g_strdup (search_key);
 
   shell = ephy_embed_shell_get_default ();
-  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  address_search = ephy_search_engine_manager_get_default_search_address (search_engine_manager);
+  manager = ephy_embed_shell_get_search_engine_manager (shell);
+  engine = ephy_search_engine_manager_get_default_engine (manager);
+  g_assert (engine != NULL);
 
-  query_param = soup_form_encode ("q", search_key, NULL);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-  /* Format string under control of user input... but gsettings is trusted input. */
-  /* + 2 here is getting rid of 'q=' */
-  effective_address = g_strdup_printf (address_search, query_param + 2);
-#pragma GCC diagnostic pop
-  g_free (query_param);
-
-  return effective_address;
+  return ephy_search_engine_build_search_address (engine, search_key);
 }
 
 char *
 ephy_embed_utils_normalize_or_autosearch_address (const char *address)
 {
-  if (ephy_embed_utils_address_is_valid (address))
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  char *bang_search = ephy_search_engine_manager_parse_bang_search (manager, address);
+
+  if (bang_search)
+    return bang_search;
+  else if (ephy_embed_utils_address_is_valid (address))
     return ephy_embed_utils_normalize_address (address);
   else
     return ephy_embed_utils_autosearch_address (address);

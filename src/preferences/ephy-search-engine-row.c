@@ -39,13 +39,7 @@ struct _EphySearchEngineRow {
   GtkWidget *remove_button;
   GtkWidget *radio_button;
 
-  /* This is only used to be able to rename the old search engine with a new name,
-   * and to access the search engine's informations stored in the @manager.
-   * It is always a valid name.
-   */
-  char *saved_name;
-  /* This is the name that was previously in the entry. Use this only from on_name_entry_text_changed_cb() */
-  char *previous_name;
+  EphySearchEngine *engine;
   EphySearchEngineManager *manager;
 };
 
@@ -53,7 +47,8 @@ G_DEFINE_TYPE (EphySearchEngineRow, ephy_search_engine_row, HDY_TYPE_EXPANDER_RO
 
 enum {
   PROP_0,
-  PROP_SEARCH_ENGINE_NAME,
+  PROP_SEARCH_ENGINE,
+  PROP_MANAGER,
   N_PROPS
 };
 
@@ -63,63 +58,23 @@ static GParamSpec *properties[N_PROPS];
 
 /**
  * ephy_search_engine_row_new:
+ * @search_engine: the search engine to show. This search engine must already
+ *   exist in @manager.
+ * @manager: The search engine manager to which @search_engine belongs.
  *
- * Creates a new #EphySearchEngineRow showing @search_engine_name engine informations.
- *
- * @search_engine_name: the name of the search engine to show.
- * This search engine must already exist in the default search engine manager.
+ * Creates a new #EphySearchEngineRow showing @search_engine informations and
+ * allowing to edit them.
  *
  * Returns: a newly created #EphySearchEngineRow
  */
 EphySearchEngineRow *
-ephy_search_engine_row_new (const char *search_engine_name)
+ephy_search_engine_row_new (EphySearchEngine        *engine,
+                            EphySearchEngineManager *manager)
 {
   return g_object_new (EPHY_TYPE_SEARCH_ENGINE_ROW,
-                       "search-engine-name", search_engine_name,
+                       "search-engine", engine,
+                       "manager", manager,
                        NULL);
-}
-
-static int
-sort_search_engine_list_box_cb (EphySearchEngineRow *first_row,
-                                EphySearchEngineRow *second_row,
-                                gpointer             user_data)
-{
-  g_autofree char *first_row_name = NULL;
-  g_autofree char *second_row_name = NULL;
-
-  /* Place the "add search engine" row at the end.
-   * This row isn't an expander row, only a regular row.
-   */
-  if (!EPHY_IS_SEARCH_ENGINE_ROW (first_row))
-    return 1;
-  if (!EPHY_IS_SEARCH_ENGINE_ROW (second_row))
-    return -1;
-
-  first_row_name = g_utf8_casefold (first_row->saved_name, -1);
-  second_row_name = g_utf8_casefold (second_row->saved_name, -1);
-
-  return g_strcmp0 (first_row_name, second_row_name);
-}
-
-GtkListBoxSortFunc
-ephy_search_engine_row_get_sort_func (void)
-{
-  return (GtkListBoxSortFunc)sort_search_engine_list_box_cb;
-}
-
-/**
- * ephy_search_engine_row_set_can_remove:
- *
- * Sets whether the Remove button of @self is sensitive.
- *
- * @self: an #EphySearchEngineRow
- * @can_remove: whether the user can click the @self's Remove button
- */
-void
-ephy_search_engine_row_set_can_remove (EphySearchEngineRow *self,
-                                       gboolean             can_remove)
-{
-  gtk_widget_set_sensitive (self->remove_button, can_remove);
 }
 
 /**
@@ -138,46 +93,7 @@ ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
                               gtk_radio_button_get_group (radio_button_group));
 }
 
-/**
- * ephy_search_engine_row_set_as_default:
- *
- * Sets this search engine represented by @self as the default engine for
- * the default search engine manager. In practice, it toggles the default engine radio button.
- *
- * @self: an #EphySearchEngineRow
- */
-void
-ephy_search_engine_row_set_as_default (EphySearchEngineRow *self)
-{
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->radio_button), TRUE);
-}
-
 /***** Private implementation *****/
-
-static gboolean
-search_engine_already_exists (EphySearchEngineRow *searched_row,
-                              const char          *engine_name)
-{
-  GList *children = gtk_container_get_children (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (searched_row))));
-
-  for (; children->next != NULL; children = children->next) {
-    EphySearchEngineRow *iterated_row;
-
-    /* As it iterates on the whole list box, this function will run on the "add search engine" row, which isn't an EphySearchEngineRow. */
-    if (!EPHY_IS_SEARCH_ENGINE_ROW (children->data))
-      continue;
-
-    iterated_row = EPHY_SEARCH_ENGINE_ROW (children->data);
-
-    if (iterated_row == searched_row)
-      continue;
-
-    if (g_strcmp0 (iterated_row->saved_name, engine_name) == 0)
-      return TRUE;
-  }
-
-  return FALSE;
-}
 
 /**
  * validate_search_engine_address:
@@ -268,10 +184,10 @@ on_bang_entry_text_changed_cb (EphySearchEngineRow *row,
                                GtkEntry            *bang_entry)
 {
   const char *bang = gtk_entry_get_text (bang_entry);
-  const char *engine_from_bang = ephy_search_engine_manager_engine_from_bang (row->manager, bang);
 
   /* Checks if the bang already exists */
-  if (engine_from_bang && g_strcmp0 (engine_from_bang, row->saved_name) != 0) {
+  if (g_strcmp0 (bang, ephy_search_engine_get_bang (row->engine)) != 0 &&
+      ephy_search_engine_manager_has_bang (row->manager, bang)) {
     set_entry_as_invalid (bang_entry, _("This shortcut is already used."));
   } else if (strchr (bang, ' ') != NULL) {
     set_entry_as_invalid (bang_entry, _("Search shortcuts must not contain any space."));
@@ -285,10 +201,7 @@ on_bang_entry_text_changed_cb (EphySearchEngineRow *row,
     set_entry_as_invalid (bang_entry, _("Search shortcuts should start with a symbol such as !, # or @."));
   } else {
     set_entry_as_valid (bang_entry);
-    ephy_search_engine_manager_modify_engine (row->manager,
-                                              row->saved_name,
-                                              ephy_search_engine_manager_get_address (row->manager, row->saved_name),
-                                              gtk_entry_get_text (bang_entry));
+    ephy_search_engine_set_bang (row->engine, bang);
   }
 }
 
@@ -298,17 +211,14 @@ on_address_entry_text_changed_cb (EphySearchEngineRow *row,
                                   GtkEntry            *address_entry)
 {
   const char *validation_message = NULL;
+  const char *url = gtk_entry_get_text (address_entry);
 
   /* Address in invalid. */
-  if (!validate_search_engine_address (gtk_entry_get_text (address_entry), &validation_message)) {
+  if (!validate_search_engine_address (url, &validation_message)) {
     set_entry_as_invalid (address_entry, validation_message);
   } else { /* Address in valid. */
     set_entry_as_valid (address_entry);
-    ephy_search_engine_manager_modify_engine (row->manager,
-                                              row->saved_name,
-                                              gtk_entry_get_text (address_entry),
-                                              ephy_search_engine_manager_get_bang (row->manager,
-                                                                                   row->saved_name));
+    ephy_search_engine_set_url (row->engine, url);
   }
 }
 
@@ -401,10 +311,7 @@ update_bang_for_name (EphySearchEngineRow *row,
   lowercase_acronym = g_utf8_strdown (acronym, -1); /* Bangs are usually lowercase */
   final_bang = g_strconcat ("!", lowercase_acronym, NULL); /* "!" is the prefix for the bang */
   gtk_entry_set_text (GTK_ENTRY (row->bang_entry), final_bang);
-  ephy_search_engine_manager_modify_engine (row->manager,
-                                            row->saved_name,
-                                            ephy_search_engine_manager_get_address (row->manager, row->saved_name),
-                                            gtk_entry_get_text (GTK_ENTRY (row->bang_entry)));
+  ephy_search_engine_set_bang (row->engine, final_bang);
 }
 
 static void
@@ -412,7 +319,6 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
                                GParamSpec          *pspec,
                                GtkEntry            *name_entry)
 {
-  EphySearchEngineListBox *search_engine_list_box = EPHY_SEARCH_ENGINE_LIST_BOX (gtk_widget_get_parent (GTK_WIDGET (row)));
   const char *new_name = gtk_entry_get_text (name_entry);
 
   /* This is an edge case when you copy the whole name then paste it again in
@@ -420,29 +326,16 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
    * if the name didn't actually change. This could toggle the entry as invalid
    * because the engine would already exist, so don't go any further in this case.
    */
-  if (g_strcmp0 (row->previous_name, new_name) == 0)
+  if (g_strcmp0 (ephy_search_engine_get_name (row->engine), new_name) == 0)
     return;
-
-  g_free (row->previous_name);
-  row->previous_name = g_strdup (new_name);
-
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), new_name);
-
-  if (g_strcmp0 (new_name, EMPTY_NEW_SEARCH_ENGINE_NAME) == 0)
-    ephy_search_engine_list_box_set_can_add_engine (search_engine_list_box, FALSE);
 
   /* Name validation. */
   if (g_strcmp0 (new_name, "") == 0) {
     set_entry_as_invalid (name_entry, _("A name is required"));
-  } else if (search_engine_already_exists (row, new_name)) {
+  } else if (ephy_search_engine_manager_find_engine_by_name (row->manager, new_name)) {
     set_entry_as_invalid (name_entry, _("This search engine already exists"));
   } else {
     set_entry_as_valid (name_entry);
-
-    /* This allows the user to add new search engine again once it is renamed. */
-    if (g_strcmp0 (row->saved_name, EMPTY_NEW_SEARCH_ENGINE_NAME) == 0 &&
-        g_strcmp0 (new_name, EMPTY_NEW_SEARCH_ENGINE_NAME) != 0)
-      ephy_search_engine_list_box_set_can_add_engine (search_engine_list_box, TRUE);
 
     /* Let's not overwrite any existing bang, as that's likely not what is wanted.
      * For example when I wanted to rename my "wiktionary en" search engine that
@@ -453,73 +346,47 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
     if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (row->bang_entry)), "") == 0)
       update_bang_for_name (row, new_name);
 
-    ephy_search_engine_manager_rename (row->manager,
-                                       row->saved_name,
-                                       new_name);
-    g_free (row->saved_name);
-    row->saved_name = g_strdup (new_name);
+    ephy_search_engine_set_name (row->engine, new_name);
   }
 }
 
 static void
-on_radio_button_clicked_cb (EphySearchEngineRow *row,
-                            GtkButton           *button)
+on_radio_button_active_changed_cb (EphySearchEngineRow *self,
+                                   GParamSpec          *pspec,
+                                   GtkButton           *button)
 {
-  /* This avoids having some random engines being set as default when adding a new row,
-   * since when it default initialize the "active" property to %FALSE on object construction,
-   * it records a "clicked" signal
-   */
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    ephy_search_engine_manager_set_default_engine (row->manager, row->saved_name);
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) &&
+      /* Avoid infinite loop between this callback and on_default_engine_changed_cb() */
+      ephy_search_engine_manager_get_default_engine (self->manager) != self->engine)
+    ephy_search_engine_manager_set_default_engine (self->manager, self->engine);
+}
+
+static void
+on_default_engine_changed_cb (EphySearchEngineManager *manager,
+                              GParamSpec              *pspec,
+                              EphySearchEngineRow     *self)
+{
+  if (ephy_search_engine_manager_get_default_engine (manager) == self->engine)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->radio_button), TRUE);
 }
 
 static void
 on_remove_button_clicked_cb (EphySearchEngineRow *row,
                              GtkButton           *button)
 {
-  EphySearchEngineRow *top_row;
-  g_autofree char *default_engine = ephy_search_engine_manager_get_default_engine (row->manager);
-  GtkListBox *parent_list_box = GTK_LIST_BOX (gtk_widget_get_parent (GTK_WIDGET (row)));
-
-  /* Temporarly ref the row, as we'll remove it from its parent container
-   * but will still use some struct members of it.
-   */
-  g_object_ref (row);
-
-  ephy_search_engine_manager_delete_engine (row->manager,
-                                            row->saved_name);
-
   /* FIXME: this should be fixed in libhandy
    * Unexpand the row before removing it so the styling isn't broken.
    * See the checked-expander-row-previous-sibling style class in HdyExpanderRow documentation.
    */
   hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (row), FALSE);
-  if (!search_engine_already_exists (row, row->saved_name))
-    ephy_search_engine_list_box_set_can_add_engine (EPHY_SEARCH_ENGINE_LIST_BOX (parent_list_box),
-                                                    TRUE);
 
-  gtk_container_remove (GTK_CONTAINER (parent_list_box), GTK_WIDGET (row));
-
-  top_row = EPHY_SEARCH_ENGINE_ROW (gtk_list_box_get_row_at_index (parent_list_box, 0));
-  /* Set an other row (the first one) as default search engine to replace this one (if it was the default one). */
-  if (g_strcmp0 (default_engine,
-                 row->saved_name) == 0)
-    ephy_search_engine_row_set_as_default (top_row);
-
-  if (gtk_list_box_get_row_at_index (parent_list_box, 2) == NULL)
-    gtk_widget_set_sensitive (top_row->remove_button, FALSE);
-
-  /* Drop the temporary reference */
-  g_object_unref (row);
+  ephy_search_engine_manager_delete_engine (row->manager, row->engine);
 }
 
 static void
 ephy_search_engine_row_finalize (GObject *object)
 {
-  EphySearchEngineRow *self = (EphySearchEngineRow *)object;
-
-  g_free (self->saved_name);
-  g_free (self->previous_name);
+  /* EphySearchEngineRow *self = (EphySearchEngineRow *)object; */
 
   G_OBJECT_CLASS (ephy_search_engine_row_parent_class)->finalize (object);
 }
@@ -533,11 +400,11 @@ ephy_search_engine_row_set_property (GObject      *object,
   EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (object);
 
   switch (prop_id) {
-    case PROP_SEARCH_ENGINE_NAME:
-      g_free (self->saved_name);
-      self->saved_name = g_value_dup_string (value);
-      g_free (self->previous_name);
-      self->previous_name = g_value_dup_string (value);
+    case PROP_SEARCH_ENGINE:
+      self->engine = g_value_get_object (value);
+      break;
+    case PROP_MANAGER:
+      self->manager = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -545,29 +412,52 @@ ephy_search_engine_row_set_property (GObject      *object,
 }
 
 static void
+on_manager_items_changed_cb (EphySearchEngineManager *manager,
+                             guint                    position,
+                             guint                    removed,
+                             guint                    added,
+                             EphySearchEngineRow     *self)
+{
+  guint n_items = g_list_model_get_n_items (G_LIST_MODEL (manager));
+
+  /* We don't allow removing the engine if it's the last one, as it
+   * doesn't make sense at all and just too much relies on having a
+   * search engine available.
+   */
+  gtk_widget_set_sensitive (self->remove_button, n_items > 1);
+}
+
+static void
 on_ephy_search_engine_row_constructed (GObject *object)
 {
   EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (object);
-  g_autofree char *default_search_engine_name = ephy_search_engine_manager_get_default_engine (self->manager);
 
-  g_assert (self->saved_name != NULL);
-  g_assert (g_strcmp0 (self->previous_name, self->saved_name) == 0);
+  g_assert (self->engine != NULL);
+  g_assert (self->manager != NULL);
 
-  gtk_entry_set_text (GTK_ENTRY (self->name_entry), self->saved_name);
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (self), self->saved_name);
+  gtk_entry_set_text (GTK_ENTRY (self->name_entry), ephy_search_engine_get_name (self->engine));
+
+  /* We can't directly bind that in the UI file because there's issues with
+   * properties bindings that involve the root widget (the <template> root one).
+   */
+  g_object_bind_property (self->name_entry, "text",
+                          HDY_PREFERENCES_ROW (self), "title",
+                          G_BINDING_SYNC_CREATE | G_BINDING_DEFAULT);
 
   gtk_entry_set_text (GTK_ENTRY (self->address_entry),
-                      ephy_search_engine_manager_get_address (self->manager, self->saved_name));
+                      ephy_search_engine_get_url (self->engine));
   gtk_entry_set_text (GTK_ENTRY (self->bang_entry),
-                      ephy_search_engine_manager_get_bang (self->manager, self->saved_name));
-
-  /* Tick the radio button if it's the default search engine. */
-  if (g_strcmp0 (self->saved_name, default_search_engine_name) == 0)
-    ephy_search_engine_row_set_as_default (self);
+                      ephy_search_engine_get_bang (self->engine));
 
   g_signal_connect_object (self->name_entry, "notify::text", G_CALLBACK (on_name_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->address_entry, "notify::text", G_CALLBACK (on_address_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->bang_entry, "notify::text", G_CALLBACK (on_bang_entry_text_changed_cb), self, G_CONNECT_SWAPPED);
+
+  on_manager_items_changed_cb (self->manager, 0, 0, g_list_model_get_n_items (G_LIST_MODEL (self->manager)), self);
+  g_signal_connect_object (self->manager, "items-changed", G_CALLBACK (on_manager_items_changed_cb), self, 0);
+
+  on_default_engine_changed_cb (self->manager, NULL, self);
+  g_signal_connect_object (self->manager, "notify::default-engine", G_CALLBACK (on_default_engine_changed_cb), self, 0);
 
   G_OBJECT_CLASS (ephy_search_engine_row_parent_class)->constructed (object);
 }
@@ -582,11 +472,16 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
   object_class->set_property = ephy_search_engine_row_set_property;
   object_class->constructed = on_ephy_search_engine_row_constructed;
 
-  properties[PROP_SEARCH_ENGINE_NAME] = g_param_spec_string ("search-engine-name",
-                                                             "search-engine-name",
-                                                             "The name of the search engine",
-                                                             NULL,
-                                                             G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+  properties[PROP_SEARCH_ENGINE] = g_param_spec_object ("search-engine",
+                                                        "search-engine",
+                                                        "The search engine that this row should show and allow to edit.",
+                                                        EPHY_TYPE_SEARCH_ENGINE,
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+  properties[PROP_MANAGER] = g_param_spec_object ("manager",
+                                                  "manager",
+                                                  "The search engine manager that manages @search-engine.",
+                                                  EPHY_TYPE_SEARCH_ENGINE_MANAGER,
+                                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-row.ui");
@@ -597,14 +492,12 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, bang_entry);
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, remove_button);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_radio_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_radio_button_active_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked_cb);
 }
 
 static void
 ephy_search_engine_row_init (EphySearchEngineRow *self)
 {
-  self->manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

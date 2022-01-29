@@ -8,7 +8,7 @@
         <property name="visible">True</property>
         <property name="valign">center</property>
         <property name="tooltip-text" translatable="yes">Selects the default search engine</property>
-        <signal name="clicked" handler="on_radio_button_clicked_cb" object="EphySearchEngineRow" swapped="yes"/>
+        <signal name="notify::active" handler="on_radio_button_active_changed_cb" object="EphySearchEngineRow" swapped="yes"/>
       </object>
     </child>
     <child>

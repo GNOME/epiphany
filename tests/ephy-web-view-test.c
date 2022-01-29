@@ -320,37 +320,35 @@ verify_normalize_or_autosearch_urls (EphyWebView               *view,
 static void
 test_ephy_web_view_normalize_or_autosearch (void)
 {
-  char *default_engine;
   EphyWebView *view;
   EphySearchEngineManager *manager;
   EphyEmbedShell *shell;
-
+  EphySearchEngine *default_engine;
+  g_autoptr (EphySearchEngine) test_engine = NULL;
 
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
 
   shell = ephy_embed_shell_get_default ();
   manager = ephy_embed_shell_get_search_engine_manager (shell);
 
-
   default_engine = ephy_search_engine_manager_get_default_engine (manager);
-  ephy_search_engine_manager_add_engine (manager,
-                                         "org.gnome.Epiphany.EphyWebViewTest",
-                                         "http://duckduckgo.com/?q=%s&t=epiphany",
-                                         "");
-  g_assert_true (ephy_search_engine_manager_set_default_engine (manager, "org.gnome.Epiphany.EphyWebViewTest"));
+  test_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
+                              "name", "org.gnome.Epiphany.EphyWebViewTest",
+                              "url", "http://duckduckgo.com/?q=%s&t=epiphany",
+                              NULL);
+  ephy_search_engine_manager_add_engine (manager, test_engine);
+  ephy_search_engine_manager_set_default_engine (manager, test_engine);
+  g_assert_true (ephy_search_engine_manager_get_default_engine (manager) == test_engine);
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg, G_N_ELEMENTS (normalize_or_autosearch_test_ddg));
 
-  ephy_search_engine_manager_modify_engine (manager,
-                                            "org.gnome.Epiphany.EphyWebViewTest",
-                                            "http://www.google.com/?q=%s",
-                                            "");
+  ephy_search_engine_set_url (test_engine, "http://www.google.com/?q=%s");
 
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
-  ephy_search_engine_manager_delete_engine (manager, "org.gnome.Epiphany.EphyWebViewTest");
+  ephy_search_engine_manager_delete_engine (manager, test_engine);
 
-  g_assert_true (ephy_search_engine_manager_set_default_engine (manager, default_engine));
-  g_free (default_engine);
+  ephy_search_engine_manager_set_default_engine (manager, default_engine);
+  g_assert_true (ephy_search_engine_manager_get_default_engine (manager) == default_engine);
   g_object_unref (g_object_ref_sink (view));
 }
 

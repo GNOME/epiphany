@@ -4031,16 +4031,15 @@ ephy_window_location_search (EphyWindow *window)
   GtkApplication *gtk_application = gtk_window_get_application (GTK_WINDOW (window));
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (gtk_application);
   EphySearchEngineManager *search_engine_manager = ephy_embed_shell_get_search_engine_manager (embed_shell);
-  char *search_engine_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
-  const char *search_engine_bang = ephy_search_engine_manager_get_bang (search_engine_manager, search_engine_name);
-  char *entry_text = g_strconcat (search_engine_bang, " ", NULL);
+  EphySearchEngine *default_engine = ephy_search_engine_manager_get_default_engine (search_engine_manager);
+  const char *bang = ephy_search_engine_get_bang (default_engine);
+  char *entry_text = g_strconcat (bang, " ", NULL);
 
   gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (location_gtk_entry));
   gtk_entry_set_text (location_gtk_entry, entry_text);
   gtk_editable_set_position (GTK_EDITABLE (location_gtk_entry), strlen (entry_text));
 
   g_free (entry_text);
-  g_free (search_engine_name);
 }
 
 /**

@@ -277,25 +277,10 @@ launch_search (EphySearchProvider  *self,
                guint                timestamp)
 {
   g_autofree char *search_string = NULL;
-  g_autofree char *query_param = NULL;
   g_autofree char *effective_url = NULL;
-  const char *address_search;
-  EphyEmbedShell *shell;
-  EphySearchEngineManager *search_engine_manager;
-
-  shell = ephy_embed_shell_get_default ();
-  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  address_search = ephy_search_engine_manager_get_default_search_address (search_engine_manager);
 
   search_string = g_strjoinv (" ", terms);
-  query_param = soup_form_encode ("q", search_string, NULL);
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-  /* Format string under control of user input... but gsettings is trusted input. */
-  /* + 2 here is getting rid of 'q=' */
-  effective_url = g_strdup_printf (address_search, query_param + 2);
-#pragma GCC diagnostic pop
+  effective_url = ephy_embed_utils_autosearch_address (search_string);
 
   launch_uri (effective_url, timestamp);
 }

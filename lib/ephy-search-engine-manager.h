@@ -24,6 +24,8 @@
 #include <glib-object.h>
 #include <glib/gi18n.h>
 
+#include "ephy-search-engine.h"
+
 G_BEGIN_DECLS
 
 /* TRANSLATORS: Please modify the main address of duckduckgo in order to match
@@ -36,39 +38,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySearchEngineManager, ephy_search_engine_manager, EPHY, SEARCH_ENGINE_MANAGER, GObject)
 
-EphySearchEngineManager     *ephy_search_engine_manager_new                      (void);
-const char                  *ephy_search_engine_manager_get_address              (EphySearchEngineManager *manager,
-                                                                                  const char              *name);
-const char                  *ephy_search_engine_manager_get_default_search_address
-                                                                                 (EphySearchEngineManager *manager);
-const char                  *ephy_search_engine_manager_get_bang                 (EphySearchEngineManager *manager,
-                                                                                  const char              *name);
-char                        *ephy_search_engine_manager_get_default_engine       (EphySearchEngineManager *manager);
-gboolean                     ephy_search_engine_manager_set_default_engine       (EphySearchEngineManager *manager,
-                                                                                  const char              *name);
-char                       **ephy_search_engine_manager_get_names                (EphySearchEngineManager *manager);
-gboolean                     ephy_search_engine_manager_engine_exists            (EphySearchEngineManager *manager,
-                                                                                  const char              *name);
-char                       **ephy_search_engine_manager_get_bangs                (EphySearchEngineManager *manager);
-void                         ephy_search_engine_manager_add_engine               (EphySearchEngineManager *manager,
-                                                                                  const char              *name,
-                                                                                  const char              *address,
-                                                                                  const char              *bang);
-void                         ephy_search_engine_manager_delete_engine            (EphySearchEngineManager *manager,
-                                                                                  const char              *name);
-gboolean                     ephy_search_engine_manager_rename                   (EphySearchEngineManager *manager,
-                                                                                  const char              *old_name,
-                                                                                  const char              *new_name);
-void                         ephy_search_engine_manager_modify_engine            (EphySearchEngineManager *manager,
-                                                                                  const char              *name,
-                                                                                  const char              *address,
-                                                                                  const char              *bang);
-const char                  *ephy_search_engine_manager_engine_from_bang         (EphySearchEngineManager *manager,
-                                                                                  const char              *bang);
-char                        *ephy_search_engine_manager_build_search_address     (EphySearchEngineManager *manager,
-                                                                                  const char              *name,
-                                                                                  const char              *search);
-char                        *ephy_search_engine_manager_parse_bang_search        (EphySearchEngineManager *manager,
-                                                                                  const char              *search);
+EphySearchEngineManager *ephy_search_engine_manager_new                 (void);
+EphySearchEngine        *ephy_search_engine_manager_get_default_engine  (EphySearchEngineManager *manager);
+void                     ephy_search_engine_manager_set_default_engine  (EphySearchEngineManager *manager,
+                                                                         EphySearchEngine        *engine);
+void                     ephy_search_engine_manager_add_engine          (EphySearchEngineManager *manager,
+                                                                         EphySearchEngine        *engine);
+void                     ephy_search_engine_manager_delete_engine       (EphySearchEngineManager *manager,
+                                                                         EphySearchEngine        *engine);
+EphySearchEngine        *ephy_search_engine_manager_find_engine_by_name (EphySearchEngineManager *manager,
+                                                                         const char              *engine_name);
+gboolean                 ephy_search_engine_manager_has_bang            (EphySearchEngineManager *manager,
+                                                                         const char              *bang);
+char                    *ephy_search_engine_manager_parse_bang_search   (EphySearchEngineManager *manager,
+                                                                         const char              *search);
+void                     ephy_search_engine_manager_save_to_settings    (EphySearchEngineManager *manager);
 
 G_END_DECLS

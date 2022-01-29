@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2017 Cedric Le Moigne <cedlemo@gmx.com>
+ *  Copyright 2021 vanadiae <vanadiae35@gmail.com>
  *
  *  This file is part of Epiphany.
  *
@@ -19,6 +20,7 @@
  */
 
 #include "config.h"
+
 #include "ephy-search-engine-manager.h"
 
 #include "ephy-file-helpers.h"
@@ -27,102 +29,201 @@
 #include "ephy-settings.h"
 #include "ephy-prefs.h"
 
-#include <libsoup/soup.h>
-
-#define FALLBACK_ADDRESS "https://duckduckgo.com/?q=%s&t=epiphany"
-
-enum {
-  SEARCH_ENGINES_CHANGED,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 struct _EphySearchEngineManager {
   GObject parent_instance;
-  GHashTable *search_engines;
+
+  GPtrArray *engines;
+
+  EphySearchEngine *default_engine; /* unowned */
+
+  /* This is just to speed things up. It updates based on each search engine's
+   * notify::bang signal, so it is never out of sync because signal callbacks
+   * are called synchronously. The key is the bang, and the value is the
+   * corresponding EphySearchEngine.
+   */
+  GHashTable *bangs;
 };
 
-typedef struct {
-  char *address;
-  char *bang;
-} EphySearchEngineInfo;
+static void list_model_iface_init (GListModelInterface *iface,
+                                   gpointer             iface_data);
 
-G_DEFINE_TYPE (EphySearchEngineManager, ephy_search_engine_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_CODE (EphySearchEngineManager, ephy_search_engine_manager,
+                         G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
-static void
-ephy_search_engine_info_free (EphySearchEngineInfo *info)
+enum {
+  PROP_0,
+  PROP_DEFAULT_ENGINE,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
+
+static int
+search_engine_compare_func (EphySearchEngine **a,
+                            EphySearchEngine **b)
 {
-  g_free (info->address);
-  g_free (info->bang);
-  g_free (info);
-}
-
-static EphySearchEngineInfo *
-ephy_search_engine_info_new (const char *address,
-                             const char *bang)
-{
-  EphySearchEngineInfo *info;
-  info = g_malloc (sizeof (EphySearchEngineInfo));
-  info->address = g_strdup (address);
-  info->bang = g_strdup (bang);
-  return info;
+  return g_strcmp0 (ephy_search_engine_get_name (*a),
+                    ephy_search_engine_get_name (*b));
 }
 
 static void
-search_engines_changed_cb (GSettings *settings,
-                           char      *key,
-                           gpointer   user_data)
+on_search_engine_bang_changed_cb (EphySearchEngine        *engine,
+                                  GParamSpec              *pspec,
+                                  EphySearchEngineManager *manager)
 {
-  g_signal_emit (EPHY_SEARCH_ENGINE_MANAGER (user_data),
-                 signals[SEARCH_ENGINES_CHANGED], 0);
+  GHashTableIter iter;
+  const char *bang;
+  EphySearchEngine *old_bang_engine;
+
+  g_hash_table_iter_init (&iter, manager->bangs);
+
+  /* We have no way of knowing what bang @engine was previously using, so
+   * we must iterate the whole bangs hash table to find @engine, remove its
+   * bang-engine pair and finally insert it back with its new bang.
+   */
+  while (g_hash_table_iter_next (&iter, (gpointer *)&bang, (gpointer *)&old_bang_engine)) {
+    if (old_bang_engine == engine) {
+      /* We found the engine by its pointer (not bang), so we remove it from the hash table. */
+      g_hash_table_iter_remove (&iter);
+    }
+  }
+
+  bang = ephy_search_engine_get_bang (engine);
+
+  /* Now that we've removed the engine from the hash table (with its old bang),
+   * we can add it back with its new value, in case its bang isn't empty.
+   */
+  if (*bang != '\0')
+    g_hash_table_insert (manager->bangs, (gpointer)bang, engine);
+}
+
+static void
+load_search_engines_from_settings (EphySearchEngineManager *manager)
+{
+  g_autoptr (GVariantIter) iter = NULL;
+  GVariant *variant;
+  g_autofree char *default_engine_name = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+
+  g_settings_get (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, "aa{sv}", &iter);
+
+  while ((variant = g_variant_iter_next_value (iter))) {
+    GVariantDict dict;
+    const char *name, *url, *bang;
+    g_autoptr (EphySearchEngine) search_engine = NULL;
+
+    g_variant_dict_init (&dict, variant);
+
+    /* All of those checks are just to make sure we keep our state clean and
+     * respect the non-NULL expectations.
+     */
+    if (!g_variant_dict_lookup (&dict, "name", "&s", &name))
+      name = "";
+    if (!g_variant_dict_lookup (&dict, "url", "&s", &url))
+      url = "";
+    if (!g_variant_dict_lookup (&dict, "bang", "&s", &bang))
+      bang = "";
+
+    search_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
+                                  "name", name,
+                                  "url", url,
+                                  "bang", bang,
+                                  NULL);
+    g_assert (EPHY_IS_SEARCH_ENGINE (search_engine));
+
+    /* Bangs are assumed to be unique, so this shouldn't happen unless GSettings
+     * are wrongly modified or we messed up input validation in the UI.
+     */
+    if (g_hash_table_lookup (manager->bangs, bang)) {
+      g_warning ("Found bang %s assigned to several search engines in GSettings."
+                 "The bang for %s is hence reset to avoid collision.",
+                 bang, name);
+      ephy_search_engine_set_bang (search_engine, "");
+    }
+
+    ephy_search_engine_manager_add_engine (manager, search_engine);
+    if (g_strcmp0 (ephy_search_engine_get_name (search_engine), default_engine_name) == 0)
+      ephy_search_engine_manager_set_default_engine (manager, search_engine);
+
+    g_variant_unref (variant);
+  }
+
+  /* Both of these conditions should never actually be encountered, unless someone
+   * messed up with GSettings manually or we did something wrong in the UI
+   * (i.e. validation code has an issue in the prefs).
+   */
+  if (G_UNLIKELY (manager->engines->len == 0)) {
+    g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
+    g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+    load_search_engines_from_settings (manager);
+
+    g_warning ("Having no search engine is forbidden. Resetting to default ones instead.");
+  }
+  g_assert (manager->engines->len > 0);
+
+  if (G_UNLIKELY (!manager->default_engine)) {
+    g_warning ("Could not find default search engine set in the gsettings within all available search engines! Setting the first one as fallback.");
+    ephy_search_engine_manager_set_default_engine (manager, manager->engines->pdata[0]);
+  }
 }
 
 static void
 ephy_search_engine_manager_init (EphySearchEngineManager *manager)
 {
-  g_autoptr (GVariantIter) iter = NULL;
-  GVariant *search_engine;
+  /* We don't use _new_full(), as we'll directly insert unowned bangs from
+   * ephy_search_engine_get_bang(), and the value belongs to us anyway (as part
+   * of the list store), so both don't need to be freed.
+   */
+  manager->bangs = g_hash_table_new (g_str_hash, g_str_equal);
 
-  manager->search_engines = g_hash_table_new_full (g_str_hash,
-                                                   g_str_equal,
-                                                   g_free,
-                                                   (GDestroyNotify)ephy_search_engine_info_free);
+  manager->engines = g_ptr_array_new_with_free_func (g_object_unref);
 
-  g_settings_get (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, "aa{sv}", &iter);
-
-  while ((search_engine = g_variant_iter_next_value (iter))) {
-    const char *address;
-    const char *bang;
-    char *name = NULL;
-    GVariantDict dict;
-    EphySearchEngineInfo *info;
-
-    g_variant_dict_init (&dict, search_engine);
-    g_variant_dict_lookup (&dict, "url", "&s", &address);
-    g_variant_dict_lookup (&dict, "bang", "&s", &bang);
-    g_variant_dict_lookup (&dict, "name", "s", &name);
-
-    info = ephy_search_engine_info_new (address, bang);
-
-    g_hash_table_insert (manager->search_engines, name, info);
-
-    g_variant_unref (search_engine);
-  }
-
-  g_signal_connect (EPHY_SETTINGS_MAIN,
-                    "changed::search-engines",
-                    G_CALLBACK (search_engines_changed_cb), manager);
+  load_search_engines_from_settings (manager);
 }
 
 static void
-ephy_search_engine_manager_dispose (GObject *object)
+ephy_search_engine_manager_get_property (GObject    *object,
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
+{
+  EphySearchEngineManager *self = EPHY_SEARCH_ENGINE_MANAGER (object);
+
+  switch (prop_id) {
+    case PROP_DEFAULT_ENGINE:
+      g_value_take_object (value, ephy_search_engine_manager_get_default_engine (self));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_search_engine_manager_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  EphySearchEngineManager *self = EPHY_SEARCH_ENGINE_MANAGER (object);
+
+  switch (prop_id) {
+    case PROP_DEFAULT_ENGINE:
+      ephy_search_engine_manager_set_default_engine (self, g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_search_engine_manager_finalize (GObject *object)
 {
   EphySearchEngineManager *manager = EPHY_SEARCH_ENGINE_MANAGER (object);
 
-  g_clear_pointer (&manager->search_engines, g_hash_table_destroy);
+  g_clear_pointer (&manager->bangs, g_hash_table_destroy);
+  g_clear_pointer (&manager->engines, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (ephy_search_engine_manager_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_search_engine_manager_parent_class)->finalize (object);
 }
 
 static void
@@ -130,14 +231,54 @@ ephy_search_engine_manager_class_init (EphySearchEngineManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = ephy_search_engine_manager_dispose;
+  object_class->finalize = ephy_search_engine_manager_finalize;
+  object_class->get_property = ephy_search_engine_manager_get_property;
+  object_class->set_property = ephy_search_engine_manager_set_property;
 
-  signals[SEARCH_ENGINES_CHANGED] = g_signal_new ("changed",
-                                                  EPHY_TYPE_SEARCH_ENGINE_MANAGER,
-                                                  G_SIGNAL_RUN_LAST,
-                                                  0,
-                                                  NULL, NULL, NULL,
-                                                  G_TYPE_NONE, 0);
+  properties [PROP_DEFAULT_ENGINE] =
+    g_param_spec_object ("default-engine",
+                         "Default search engine",
+                         "The default search engine for this manager.",
+                         EPHY_TYPE_SEARCH_ENGINE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY));
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+}
+
+static GType
+list_model_get_item_type (GListModel *list)
+{
+  return EPHY_TYPE_SEARCH_ENGINE;
+}
+
+static guint
+list_model_get_n_items (GListModel *list)
+{
+  EphySearchEngineManager *manager = EPHY_SEARCH_ENGINE_MANAGER (list);
+
+  return manager->engines->len;
+}
+
+static gpointer
+list_model_get_item (GListModel *list,
+                     guint       position)
+{
+  EphySearchEngineManager *manager = EPHY_SEARCH_ENGINE_MANAGER (list);
+
+  if (position >= manager->engines->len)
+    return NULL;
+  else
+    return g_object_ref (manager->engines->pdata[position]);
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface,
+                       gpointer             iface_data)
+{
+  iface->get_item_type = list_model_get_item_type;
+  iface->get_n_items = list_model_get_n_items;
+  iface->get_item = list_model_get_item;
 }
 
 EphySearchEngineManager *
@@ -146,318 +287,354 @@ ephy_search_engine_manager_new (void)
   return EPHY_SEARCH_ENGINE_MANAGER (g_object_new (EPHY_TYPE_SEARCH_ENGINE_MANAGER, NULL));
 }
 
-const char *
-ephy_search_engine_manager_get_address (EphySearchEngineManager *manager,
-                                        const char              *name)
-{
-  EphySearchEngineInfo *info;
-
-  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
-
-  if (info)
-    return info->address;
-
-  return NULL;
-}
-
-const char *
-ephy_search_engine_manager_get_default_search_address (EphySearchEngineManager *manager)
-{
-  char *name;
-  const char *address;
-
-  name = ephy_search_engine_manager_get_default_engine (manager);
-  address = ephy_search_engine_manager_get_address (manager, name);
-  g_free (name);
-
-  return address ? address : FALLBACK_ADDRESS;
-}
-
-const char *
-ephy_search_engine_manager_get_bang (EphySearchEngineManager *manager,
-                                     const char              *name)
-{
-  EphySearchEngineInfo *info;
-
-  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
-
-  if (info)
-    return info->bang;
-
-  return NULL;
-}
-
-char *
+/**
+ * ephy_search_engine_manager_get_default_engine:
+ *
+ * Returns: (transfer none): the default search engine for @manager.
+ */
+EphySearchEngine *
 ephy_search_engine_manager_get_default_engine (EphySearchEngineManager *manager)
 {
-  return g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
-}
+  g_assert (EPHY_IS_SEARCH_ENGINE (manager->default_engine));
 
-gboolean
-ephy_search_engine_manager_set_default_engine (EphySearchEngineManager *manager,
-                                               const char              *name)
-{
-  if (!g_hash_table_contains (manager->search_engines, name))
-    return FALSE;
-
-  return g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE, name);
-}
-
-char **
-ephy_search_engine_manager_get_names (EphySearchEngineManager *manager)
-{
-  GHashTableIter iter;
-  gpointer key;
-  char **search_engine_names;
-  guint size;
-  guint i = 0;
-
-  size = g_hash_table_size (manager->search_engines);
-  search_engine_names = g_new0 (char *, size + 1);
-
-  g_hash_table_iter_init (&iter, manager->search_engines);
-
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    search_engine_names[i++] = g_strdup ((char *)key);
-
-  return search_engine_names;
+  return manager->default_engine;
 }
 
 /**
- * ephy_search_engine_manager_engine_exists:
+ * ephy_search_engine_manager_set_default_engine:
+ * @engine: (transfer none): the search engine to set as default for @manager.
+ *   This search engine must already be added to the search engine manager.
  *
- * Checks if search engine @name exists in @manager.
+ * Note that you must call ephy_search_engine_manager_save_to_settings() when
+ * appropriate to save it. It isn't done automatically because we don't save
+ * the search engines themselves on every change, as that would be pretty expensive
+ * when typing the information, so it's better if the default search engine and
+ * the search engines themselves are always kept in sync, in case there's an issue
+ * somewhere in the code where it doesn't save one part or another.
+ */
+void
+ephy_search_engine_manager_set_default_engine (EphySearchEngineManager *manager,
+                                               EphySearchEngine        *engine)
+{
+  g_assert (EPHY_IS_SEARCH_ENGINE (engine));
+  /* Improper input validation if that happens in our code. */
+  g_assert (g_ptr_array_find (manager->engines, engine, NULL));
+
+  manager->default_engine = engine;
+  g_object_notify_by_pspec (G_OBJECT (manager), properties[PROP_DEFAULT_ENGINE]);
+}
+
+/**
+ * ephy_search_engine_manager_add_engine:
+ * @engine: The search engine to add to @manager. @manager will take a reference
+ *   on it.
  *
- * @manager: the #EphySearchEngineManager
- * @name:    the name of the search engine
+ * Adds search engine @engine to @manager.
+ */
+void
+ephy_search_engine_manager_add_engine (EphySearchEngineManager *manager,
+                                       EphySearchEngine        *engine)
+{
+  gboolean bang_existed = FALSE;
+  guint new_sorted_position;
+
+  if (*ephy_search_engine_get_bang (engine) != '\0') {
+    bang_existed = !g_hash_table_insert (manager->bangs,
+                                         (gpointer)ephy_search_engine_get_bang (engine),
+                                         engine);
+  }
+  /* Programmer/validation error that doesn't properly use ephy_search_engine_manager_has_bang(). */
+  g_assert (!bang_existed);
+  g_signal_connect (engine, "notify::bang", G_CALLBACK (on_search_engine_bang_changed_cb), manager);
+
+  g_ptr_array_add (manager->engines, g_object_ref (engine));
+
+  /* It's a pity there isn't a more efficient g_ptr_array_add_sorted() function.
+   * Comparison should be fast anyway, but still.
+   */
+  g_ptr_array_sort (manager->engines, (GCompareFunc)search_engine_compare_func);
+
+  /* The engine likely will have moved in the array so we need to make sure
+   * to report the items-changed signal at the proper position.
+   */
+  g_assert (g_ptr_array_find (manager->engines, engine, &new_sorted_position));
+  g_list_model_items_changed (G_LIST_MODEL (manager),
+                              new_sorted_position,
+                              0,
+                              1);
+}
+
+void
+ephy_search_engine_manager_delete_engine (EphySearchEngineManager *manager,
+                                          EphySearchEngine        *engine)
+{
+  guint pos;
+  const char *bang;
+
+  /* Never allow not having a search engine, as too much relies on having one
+   * and it just doesn't make sense at all to not have one. We assert as the
+   * validation should prevent this from happening, so if it crashes then it's
+   * for a good reason and the code should be fixed.
+   */
+  g_assert (manager->engines->len > 1);
+
+  /* Removing an engine not in the manager is a programmer error. */
+  g_assert (g_ptr_array_find (manager->engines, engine, &pos));
+
+  bang = ephy_search_engine_get_bang (engine);
+  if (*bang != '\0')
+    g_hash_table_remove (manager->bangs, bang);
+
+  /* Temporary ref so that we can remove the engine, and be sure that
+   * the engine at index 0 isn't already the same as this one when
+   * setting back another engine as default one.
+   */
+  g_object_ref (engine);
+
+  g_ptr_array_remove_index (manager->engines, pos);
+
+  if (engine == manager->default_engine) {
+    g_assert (manager->engines->len != 0);
+
+    /* Just set the first search engine in the sorted array as new search engine
+     * so we're sure we'll still have a valid default search engine at any time.
+     */
+    ephy_search_engine_manager_set_default_engine (manager, manager->engines->pdata[0]);
+  }
+
+  /* Drop temporary ref. */
+  g_object_unref (engine);
+
+  g_list_model_items_changed (G_LIST_MODEL (manager), pos, 1, 0);
+}
+
+/**
+ * ephy_search_engine_manager_find_engine_by_name:
+ * @engine_name: The name of the search engine to look for.
  *
- * Returns: %TRUE if the search engine was found, %FALSE otherwise.
+ * Iterates @manager and finds the first search engine with its name set to @engine_name.
+ * This is just a helper function, it isn't more efficient than iterating @manager
+ * yourself and making string comparison with the engine's name.
+ *
+ * Returns: (transfer none): The #EphySearchEngine with name @engine_name if found in @manager, or %NULL if not found.
+ */
+EphySearchEngine *
+ephy_search_engine_manager_find_engine_by_name (EphySearchEngineManager *manager,
+                                                const char              *engine_name)
+{
+  for (guint i = 0; i < manager->engines->len; i++) {
+    EphySearchEngine *engine = manager->engines->pdata[i];
+
+    if (g_strcmp0 (ephy_search_engine_get_name (engine), engine_name) == 0)
+      return engine;
+  }
+
+  return NULL;
+}
+
+/**
+ * ephy_search_engine_manager_has_bang:
+ * @bang: the bang to look for
+ *
+ * Checks whether @manager has a search engine that uses @bang as shortcut bang.
+ * This is easier and more efficient than iterating manually on @manager yourself
+ * and check for the bang for each search engine, as @manager internally keeps
+ * a hash table with all used bangs.
+ *
+ * Returns: Whether @manager already has a search engine with its bang set to @bang.
  */
 gboolean
-ephy_search_engine_manager_engine_exists (EphySearchEngineManager *manager,
-                                          const char              *name)
+ephy_search_engine_manager_has_bang (EphySearchEngineManager *manager,
+                                     const char              *bang)
 {
-  return !!g_hash_table_lookup (manager->search_engines, name);
+  return g_hash_table_lookup (manager->bangs, bang) != NULL;
 }
 
-char **
-ephy_search_engine_manager_get_bangs (EphySearchEngineManager *manager)
+/**
+ * parse_bang_query:
+ * @search: the search with bangs to perform
+ * @choosen_bang_engine: (out): if this function returns a non %NULL value, this
+ *   argument will be set to the search engine from @manager that should be used
+ *   to perform the search using the search query this function returns.
+ *
+ * This is the implementation for ephy_search_engine_manager_parse_bang_search()
+ * and ephy_search_engine_manager_parse_bang_suggestions(). See the doc of the
+ * former for details on this function's behaviours.
+ *
+ * Returns: (transfer full): the search query without the bangs.
+ */
+static char *
+parse_bang_query (EphySearchEngineManager  *manager,
+                  const char               *search,
+                  EphySearchEngine        **choosen_bang_engine)
 {
-  GHashTableIter iter;
-  gpointer value;
-  char **search_engine_bangs;
-  guint size;
-  guint i = 0;
+  g_autofree char *first_word = NULL;
+  g_autofree char *last_word = NULL;
+  g_autofree char *query_without_bangs = NULL;
 
-  size = g_hash_table_size (manager->search_engines);
-  search_engine_bangs = g_new0 (char *, size + 1);
+  /* i.e. the end of @last_word */
+  const char *last_non_space_p;
 
-  g_hash_table_iter_init (&iter, manager->search_engines);
+  /* i.e. the start of @first_word */
+  const char *first_non_space_p;
 
-  while (g_hash_table_iter_next (&iter, NULL, &value))
-    search_engine_bangs[i++] = ((EphySearchEngineInfo *)value)->bang;
+  /* Both of these are set appropriately when we discover each bang within @search. */
+  const char *query_start, *query_end;
 
-  return search_engine_bangs;
+  /* This one is separate from query_{start,end} because e.g. if the last word isn't
+   * a bang, then we'll want to include it so query_end will be last_non_space_p.
+   * Otherwise query_end will be space_p. */
+  const char *space_p;
+  EphySearchEngine *final_bang_engine = NULL, *bang_engine = NULL;
+
+  g_assert (search != NULL);
+  if (*search == '\0')
+    return NULL;
+
+  last_non_space_p = search + strlen (search) - 1;
+  while (last_non_space_p != search && *last_non_space_p == ' ')
+    last_non_space_p = g_utf8_find_prev_char (search, last_non_space_p);
+
+  first_non_space_p = search;
+  while (*first_non_space_p == ' ')
+    first_non_space_p = g_utf8_find_next_char (first_non_space_p, NULL);
+
+  /* Means the search query is empty or is full of spaces. So not a bang search. */
+  if (last_non_space_p <= first_non_space_p)
+    return NULL;
+
+  /* There's no strrnchr() available, so must backwards iterate ourselves to
+   * find the space character between @last_non_space_p and @search's beginning
+   */
+  space_p = last_non_space_p;
+  while (space_p != search && *space_p != ' ')
+    space_p = g_utf8_find_prev_char (search, space_p);
+
+  /* This is necessary here because @last_non_space_p will point _at_ the
+   * last non space character, not _just after_ it, which is not how substring
+   * lengths are usually calculated like (since g_strndup (first_p, last_p - first_p)
+   * should work without having to use +1 all around).
+   */
+  last_non_space_p++;
+
+  /* There is a word, but only one, so it can't be a proper bang search */
+  if (space_p <= first_non_space_p)
+    return NULL;
+
+  /* +1 to skip the space. */
+  last_word = g_strndup (space_p + 1, last_non_space_p - (space_p + 1));
+  bang_engine = g_hash_table_lookup (manager->bangs, last_word);
+
+  /* Don't include the last word in the query as it's a proper bang. */
+  if (bang_engine) {
+    query_end = space_p;
+    final_bang_engine = bang_engine;
+  }
+  /* The last word isn't a bang, so include it in the query. */
+  else {
+    query_end = last_non_space_p;
+  }
+
+  space_p = strchr (first_non_space_p, ' ');
+  first_word = g_strndup (first_non_space_p, space_p - first_non_space_p);
+  bang_engine = g_hash_table_lookup (manager->bangs, first_word);
+  if (bang_engine) {
+    /* +1 to skip the space. */
+    query_start = space_p + 1;
+
+    /* We prefer using the last typed bang (the one at the end), so that's
+     * what we'll prefer using here.
+     */
+    if (!final_bang_engine)
+      final_bang_engine = bang_engine;
+  } else {
+    /* It's not a proper bang, so we need to include it in the search query. */
+    query_start = first_non_space_p;
+  }
+
+  /* No valid bang was found for this search query, so it's not a bang search. */
+  if (!final_bang_engine)
+    return NULL;
+
+  /* Now that we've placed query_start and query_end properly depending on
+   * whether the first/last word is a valid bang, we can copy the part that
+   * doesn't include all the bangs to search this query using the search engine
+   * we found for the bang.
+   */
+  query_without_bangs = g_strndup (query_start, query_end - query_start);
+
+  *choosen_bang_engine = final_bang_engine;
+
+  return g_steal_pointer (&query_without_bangs);
 }
 
-static void
-ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
+/**
+ * ephy_search_engine_manager_parse_bang_search:
+ *
+ * This function looks at the first and last word of @search, checks if
+ * one of them is the bang of one of the search engines in @manager, and
+ * returns the corresponding search URL as returned by ephy_search_engine_build_search_address().
+ * The last word will be looked at first, so that when someone changes their
+ * mind at the end of the line they can just type the new bang and it will
+ * be used instead of the first one.
+ *
+ * What is called a "bang search" is a search of the form "!bang this is the
+ * search query", or with the bang at the end or at both ends (in which case
+ * the end bang will be preferred).
+ *
+ * Returns: (transfer full) (nullable): The search URL corresponding to @search, with
+ *   the search engine picked using the bang available in @search, or %NULL if
+ *   there wasn't any recognized bang engine in @search. As such this function can
+ *   also be used as a way of detecting whether @search is a "bang search", to
+ *   process the search using the default search engine in that case.
+ */
+char *
+ephy_search_engine_manager_parse_bang_search (EphySearchEngineManager *manager,
+                                              const char              *search)
 {
-  GHashTableIter iter;
-  EphySearchEngineInfo *info;
-  gpointer key;
-  gpointer value;
+  EphySearchEngine *engine = NULL;
+  g_autofree char *no_bangs_query = parse_bang_query (manager, search, &engine);
+
+  if (no_bangs_query)
+    return ephy_search_engine_build_search_address (engine, no_bangs_query);
+  else
+    return NULL;
+}
+
+/**
+ * ephy_search_engine_manager_save_to_settings:
+ *
+ * Saves the search engines and the default search engine to the GSettings.
+ *
+ * You must call this function after having done the changes (e.g. when closing
+ * the preferences window).
+ */
+void
+ephy_search_engine_manager_save_to_settings (EphySearchEngineManager *manager)
+{
   GVariantBuilder builder;
   GVariant *variant;
+  gpointer item;
+  guint i = 0;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
-  g_hash_table_iter_init (&iter, manager->search_engines);
 
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
+  while ((item = g_list_model_get_item (G_LIST_MODEL (manager), i++))) {
+    g_autoptr (EphySearchEngine) engine = EPHY_SEARCH_ENGINE (item);
     GVariantDict dict;
 
-    info = (EphySearchEngineInfo *)value;
-    g_assert (key != NULL);
-    g_assert (info != NULL);
-    g_assert (info->address != NULL);
-    g_assert (info->bang != NULL);
+    g_assert (EPHY_IS_SEARCH_ENGINE (engine));
 
     g_variant_dict_init (&dict, NULL);
-    g_variant_dict_insert (&dict, "url", "s", info->address);
-    g_variant_dict_insert (&dict, "bang", "s", info->bang);
-    g_variant_dict_insert (&dict, "name", "s", key);
+    g_variant_dict_insert (&dict, "name", "s", ephy_search_engine_get_name (engine));
+    g_variant_dict_insert (&dict, "url", "s", ephy_search_engine_get_url (engine));
+    g_variant_dict_insert (&dict, "bang", "s", ephy_search_engine_get_bang (engine));
 
     g_variant_builder_add_value (&builder, g_variant_dict_end (&dict));
   }
   variant = g_variant_builder_end (&builder);
   g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, variant);
-}
 
-void
-ephy_search_engine_manager_add_engine (EphySearchEngineManager *manager,
-                                       const char              *name,
-                                       const char              *address,
-                                       const char              *bang)
-{
-  EphySearchEngineInfo *info;
-
-  info = ephy_search_engine_info_new (address, bang);
-  g_hash_table_insert (manager->search_engines, g_strdup (name), info);
-  ephy_search_engine_manager_apply_settings (manager);
-}
-
-void
-ephy_search_engine_manager_delete_engine (EphySearchEngineManager *manager,
-                                          const char              *name)
-{
-  g_hash_table_remove (manager->search_engines, name);
-  ephy_search_engine_manager_apply_settings (manager);
-}
-
-/**
- * ephy_search_engine_manager_rename:
- *
- * Renames search engine @old_name to @new_name, taking care of setting it back
- * as default search engine if needed.
- *
- * @manager: a #EphySearchEngineManager
- * @old_name: the current name of the search engine
- * @new_name: the new name for search engine @old_name
- *
- * Returns: %FALSE if there wasn't any renaming to do (if both old and new names
- * were the same), %TRUE if the search engine was renamed.
- */
-gboolean
-ephy_search_engine_manager_rename (EphySearchEngineManager *manager,
-                                   const char              *old_name,
-                                   const char              *new_name)
-{
-  EphySearchEngineInfo *info, *info_copy;
-
-  if (g_strcmp0 (old_name, new_name) == 0)
-    return FALSE;
-
-  info = g_hash_table_lookup (manager->search_engines, old_name);
-  g_assert_nonnull (info);
-
-  info_copy = ephy_search_engine_info_new (info->address, info->bang);
-  g_hash_table_remove (manager->search_engines, old_name);
-  g_hash_table_insert (manager->search_engines, g_strdup (new_name), info_copy);
-  /* Set the search engine back as default engine if it was the default one. */
-  if (g_strcmp0 (ephy_search_engine_manager_get_default_engine (manager), old_name) == 0)
-    ephy_search_engine_manager_set_default_engine (manager, new_name);
-  ephy_search_engine_manager_apply_settings (manager);
-
-  return TRUE;
-}
-
-void
-ephy_search_engine_manager_modify_engine (EphySearchEngineManager *manager,
-                                          const char              *name,
-                                          const char              *address,
-                                          const char              *bang)
-{
-  EphySearchEngineInfo *info;
-
-  /* You can't modify a non-existant search engine. */
-  g_assert (g_hash_table_contains (manager->search_engines, name));
-
-  info = ephy_search_engine_info_new (address, bang);
-  g_hash_table_replace (manager->search_engines,
-                        g_strdup (name),
-                        info);
-  ephy_search_engine_manager_apply_settings (manager);
-}
-
-const char *
-ephy_search_engine_manager_engine_from_bang (EphySearchEngineManager *manager,
-                                             const char              *bang)
-{
-  GHashTableIter iter;
-  EphySearchEngineInfo *info;
-  gpointer key;
-  gpointer value;
-
-  g_hash_table_iter_init (&iter, manager->search_engines);
-
-  while (g_hash_table_iter_next (&iter, &key, &value)) {
-    info = (EphySearchEngineInfo *)value;
-    if (g_strcmp0 (bang, info->bang) == 0)
-      return (const char *)key;
-  }
-
-  return NULL;
-}
-
-static char *
-ephy_search_engine_manager_replace_pattern (const char *string,
-                                            const char *pattern,
-                                            const char *replace)
-{
-  gchar **strings;
-  gchar *query_param;
-  const gchar *escaped_replace;
-  GString *buffer;
-
-  strings = g_strsplit (string, pattern, -1);
-  query_param = soup_form_encode ("q", replace, NULL);
-  escaped_replace = query_param + 2;
-
-  buffer = g_string_new (NULL);
-
-  for (guint i = 0; strings[i] != NULL; i++) {
-    if (i > 0)
-      g_string_append (buffer, escaped_replace);
-
-    g_string_append (buffer, strings[i]);
-  }
-
-  g_strfreev (strings);
-  g_free (query_param);
-
-  return g_string_free (buffer, FALSE);
-}
-
-char *
-ephy_search_engine_manager_build_search_address (EphySearchEngineManager *manager,
-                                                 const char              *name,
-                                                 const char              *search)
-{
-  EphySearchEngineInfo *info;
-
-  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
-
-  if (info == NULL)
-    return NULL;
-
-  return ephy_search_engine_manager_replace_pattern (info->address, "%s", search);
-}
-
-char *
-ephy_search_engine_manager_parse_bang_search (EphySearchEngineManager *manager,
-                                              const char              *search)
-{
-  GHashTableIter iter;
-  EphySearchEngineInfo *info;
-  gpointer value;
-  GString *buffer;
-  char *search_address = NULL;
-
-  g_hash_table_iter_init (&iter, manager->search_engines);
-
-  while (g_hash_table_iter_next (&iter, NULL, &value)) {
-    info = (EphySearchEngineInfo *)value;
-    buffer = g_string_new (info->bang);
-    g_string_append (buffer, " ");
-    if (strstr (search, buffer->str) == search) {
-      search_address = ephy_search_engine_manager_replace_pattern (info->address,
-                                                                   "%s",
-                                                                   (search + buffer->len));
-      g_string_free (buffer, TRUE);
-      return search_address;
-    }
-    g_string_free (buffer, TRUE);
-  }
-
-  return search_address;
+  g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE,
+                        g_variant_new_string (ephy_search_engine_get_name (manager->default_engine)));
 }
