@@ -95,7 +95,7 @@ libhandy_dep = dependency('libhandy-1', version: '>= 1.5.0')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 nettle_dep = dependency('nettle', version: nettle_requirement)
-portal_dep = dependency('libportal-gtk3', version: '>= 0.5')
+portal_dep = dependency('libportal-gtk3', version: '>= 0.6')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 
 if get_option('soup2').enabled()
