@@ -1354,7 +1354,8 @@ session_end_element (GMarkupParseContext  *ctx,
     }
 
     tab_view = ephy_window_get_tab_view (context->window);
-    ephy_tab_view_select_nth_page (tab_view, context->active_tab);
+    if (context->active_tab < ephy_tab_view_get_n_pages (tab_view))
+      ephy_tab_view_select_nth_page (tab_view, context->active_tab);
 
     if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST) {
       EphyEmbed *active_child;
