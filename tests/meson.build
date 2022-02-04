@@ -103,6 +103,16 @@ if get_option('unit_tests').enabled()
     depends: ephy_profile_migrator
   )
 
+  search_engine_manager_test = executable('test-ephy-search-engine-manager',
+    'ephy-search-engine-manager-test.c',
+    dependencies: ephymisc_dep,
+    c_args: test_cargs,
+  )
+  test('Search engine manager test',
+    search_engine_manager_test,
+    env: envs,
+  )
+
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=707220
   # session_test = executable('test-ephy-session',
   #   'ephy-session-test.c',
