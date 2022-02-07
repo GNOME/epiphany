@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-01-27 19:49+0000\n"
-"PO-Revision-Date: 2022-01-28 10:57+0100\n"
+"POT-Creation-Date: 2022-01-29 19:14+0000\n"
+"PO-Revision-Date: 2022-02-07 13:29+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -1203,10 +1203,24 @@ msgstr "Web lo está controlado un proceso automático."
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "El URI %s no tiene acceso autorizado al recurso %s de Epiphany"
 
-#: embed/ephy-embed-utils.c:66
+#: embed/ephy-embed-utils.c:68
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
+
+#. TRANSLATORS: This string is part of the previous translatable string.
+#. * It is appended for each extraneous mailto: URI email address. For
+#. * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
+#. * it will show
+#. * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
+#. * when you hover such link, at the same place as regular URLs when you hover
+#. * a link in a web page.
+#.
+#: embed/ephy-embed-utils.c:80
+#, c-format
+#| msgid "Load “%s”"
+msgid ", “%s”"
+msgstr ", “%s”"
 
 #: embed/ephy-embed-utils.h:31
 msgid "Blank page"
@@ -3779,7 +3793,6 @@ msgid "Shortcuts"
 msgstr "Atajos"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
-#| msgid "_Show Downloads"
 msgctxt "shortcut window"
 msgid "Show downloads list"
 msgstr "Mostrar lista de descargas"
