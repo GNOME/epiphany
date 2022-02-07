@@ -135,7 +135,7 @@ ephy_suggestion_new (const char *title_markup,
   char *escaped_uri = g_markup_escape_text (decoded_uri, -1);
 
   suggestion = g_object_new (EPHY_TYPE_SUGGESTION,
-                             "icon-name", "web-browser-symbolic",
+                             "icon-name", "ephy-webpage-symbolic",
                              "id", uri,
                              "subtitle", escaped_uri,
                              "title", title_markup,
@@ -159,7 +159,7 @@ ephy_suggestion_new_with_custom_subtitle (const char *title_markup,
   char *escaped_uri = g_markup_escape_text (decoded_uri, -1);
 
   suggestion = g_object_new (EPHY_TYPE_SUGGESTION,
-                             "icon-name", "web-browser-symbolic",
+                             "icon-name", "ephy-webpage-symbolic",
                              "id", uri,
                              "subtitle", subtitle,
                              "title", title_markup,
@@ -180,7 +180,7 @@ ephy_suggestion_new_without_subtitle (const char *title_markup,
   EphySuggestion *suggestion;
 
   suggestion = g_object_new (EPHY_TYPE_SUGGESTION,
-                             "icon-name", "web-browser-symbolic",
+                             "icon-name", "ephy-webpage-symbolic",
                              "id", uri,
                              "title", title_markup,
                              "unescaped-title", unescaped_title,

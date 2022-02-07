@@ -65,7 +65,7 @@ ephy_get_fallback_favicon_name (const char      *uri,
     else if (g_str_has_prefix (uri, "ephy-about:newtab") || g_str_has_prefix (uri, "about:newtab"))
       return NULL;
     else if (g_str_has_prefix (uri, "ephy-about:") || g_str_has_prefix (uri, "about:"))
-      return "web-browser-symbolic";
+      return "ephy-webpage-symbolic";
   }
 
   return NULL;
