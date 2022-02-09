@@ -6,6 +6,7 @@ TAG="registry.gitlab.gnome.org/gnome/epiphany/master:v4"
 
 cd "$(dirname "$0")"
 
+podman pull docker.io/library/alpine:latest
 podman build --build-arg HOST_USER_ID="$UID" --tag "${TAG}" --file "Dockerfile" --format=docker .
 
 if [ "$1" = "--push" ]; then
