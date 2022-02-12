@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation for epiphany.
-# Copyright (C) 2021 Free Software Foundation, Inc.
+# Copyright (C) 2022 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 # Juan Carlos Castro y Castro <jcastro@vialink.com.br>, 2000.
 # Evandro Fernandes Giovanini <evandrofg@ig.com.br>, 2003, 2004, 2006.
@@ -23,24 +23,24 @@
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018, 2020.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021.
 # Enrico Nicoletto <liverig@gmail.com>, 2013-2016, 2021.
 # Matheus Barbosa <mdpb.matheus@gmail.com>, 2022.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2013-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-01-29 19:14+0000\n"
-"PO-Revision-Date: 2022-01-29 19:49-0300\n"
-"Last-Translator: Matheus Barbosa <mdpb.matheus@gmail.com>\n"
+"POT-Creation-Date: 2022-02-11 22:03+0000\n"
+"PO-Revision-Date: 2022-02-11 21:23-0300\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -1214,7 +1214,7 @@ msgstr "Web está sendo controlado por automação."
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI %s não autorizado para acessar recurso %s do Epiphany"
 
-#: embed/ephy-embed-utils.c:68
+#: embed/ephy-embed-utils.c:70
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Enviar um e-mail para “%s”"
@@ -1227,9 +1227,8 @@ msgstr "Enviar um e-mail para “%s”"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:80
+#: embed/ephy-embed-utils.c:82
 #, c-format
-#| msgid "Load “%s”"
 msgid ", “%s”"
 msgstr ", “%s”"
 
@@ -2064,7 +2063,7 @@ msgstr "Não foi possível exibir ajuda: %s"
 #. * the version used in your country. For example for the french version :
 #. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
 #.
-#: lib/ephy-search-engine-manager.h:33
+#: lib/ephy-search-engine-manager.h:35
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=br-pt"
@@ -2845,15 +2844,15 @@ msgstr "Abrir link em nova janela"
 msgid "Open Link In Incognito Window"
 msgstr "Abrir link em janela anônima"
 
-#: src/ephy-window.c:2865 src/ephy-window.c:4221
+#: src/ephy-window.c:2865 src/ephy-window.c:4220
 msgid "Do you want to leave this website?"
 msgstr "Você deseja sair deste site?"
 
-#: src/ephy-window.c:2866 src/ephy-window.c:4222 src/window-commands.c:1207
+#: src/ephy-window.c:2866 src/ephy-window.c:4221 src/window-commands.c:1207
 msgid "A form you modified has not been submitted."
 msgstr "Uma formulário que você modificou não foi enviado."
 
-#: src/ephy-window.c:2867 src/ephy-window.c:4223 src/window-commands.c:1209
+#: src/ephy-window.c:2867 src/ephy-window.c:4222 src/window-commands.c:1209
 msgid "_Discard form"
 msgstr "_Descartar formulário"
 
@@ -2893,15 +2892,15 @@ msgstr "_Sim"
 msgid "_No"
 msgstr "_Não"
 
-#: src/ephy-window.c:4355
+#: src/ephy-window.c:4354
 msgid "There are multiple tabs open."
 msgstr "Há várias abas abertas."
 
-#: src/ephy-window.c:4356
+#: src/ephy-window.c:4355
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se você fechar essa janela, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:4357
+#: src/ephy-window.c:4356
 msgid "C_lose tabs"
 msgstr "_Fechar abas"
 
@@ -2953,28 +2952,36 @@ msgstr "Cache de políticas HSTS"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Dados de Prevenção Inteligente de Rastreamento"
 
-#: src/preferences/ephy-search-engine-row.c:199
+#: src/preferences/ephy-search-engine-listbox.c:29
+msgid "New search engine"
+msgstr "Novo mecanismo de pesquisa"
+
+#: src/preferences/ephy-search-engine-listbox.c:304
+msgid "A_dd Search Engine…"
+msgstr "A_dicionar mecanismo de pesquisa…"
+
+#: src/preferences/ephy-search-engine-row.c:115
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:204
+#: src/preferences/ephy-search-engine-row.c:120
 msgid "Address must start with either http:// or https://"
 msgstr "O endereço deve iniciar com http:// ou https://"
 
-#: src/preferences/ephy-search-engine-row.c:216
+#: src/preferences/ephy-search-engine-row.c:132
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "O endereço deve conter o termo de pesquisa representado por %s"
 
-#: src/preferences/ephy-search-engine-row.c:219
+#: src/preferences/ephy-search-engine-row.c:135
 msgid "Address should not contain the search term several times"
 msgstr "O endereço não deve conter o termo de pesquisa várias vezes"
 
-#: src/preferences/ephy-search-engine-row.c:225
+#: src/preferences/ephy-search-engine-row.c:141
 msgid "Address is not a valid URI"
 msgstr "O endereço não é uma URI válida"
 
-#: src/preferences/ephy-search-engine-row.c:230
+#: src/preferences/ephy-search-engine-row.c:146
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2983,23 +2990,23 @@ msgstr ""
 "O endereço não é uma URI válida. O endereço deve parecer com https://www."
 "example.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:275
+#: src/preferences/ephy-search-engine-row.c:191
 msgid "This shortcut is already used."
 msgstr "Este atalho já está sendo usado."
 
-#: src/preferences/ephy-search-engine-row.c:277
+#: src/preferences/ephy-search-engine-row.c:193
 msgid "Search shortcuts must not contain any space."
 msgstr "Atalhos de pesquisa não devem conter espaço."
 
-#: src/preferences/ephy-search-engine-row.c:285
+#: src/preferences/ephy-search-engine-row.c:201
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "Atalhos de pesquisa devem começar com um símbolo, tal como !, # ou @."
 
-#: src/preferences/ephy-search-engine-row.c:436
+#: src/preferences/ephy-search-engine-row.c:334
 msgid "A name is required"
 msgstr "Um nome é obrigatório"
 
-#: src/preferences/ephy-search-engine-row.c:438
+#: src/preferences/ephy-search-engine-row.c:336
 msgid "This search engine already exists"
 msgstr "Este mecanismo de pesquisa já existe"
 
@@ -3720,10 +3727,6 @@ msgstr "_Senhas"
 msgid "_Remember Passwords"
 msgstr "_Lembrar senhas"
 
-#: src/resources/gtk/search-engine-listbox.ui:16
-msgid "A_dd Search Engine…"
-msgstr "A_dicionar mecanismo de pesquisa…"
-
 #: src/resources/gtk/search-engine-row.ui:10
 msgid "Selects the default search engine"
 msgstr "Seleciona o mecanismo de pesquisa padrão"
@@ -3806,8 +3809,6 @@ msgid "Shortcuts"
 msgstr "Atalhos"
 
 #: src/resources/gtk/shortcuts-dialog.ui:82
-#| msgctxt "shortcut window"
-#| msgid "Show bookmarks list"
 msgctxt "shortcut window"
 msgid "Show downloads list"
 msgstr "Mostra a lista de downloads"
