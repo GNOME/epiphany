@@ -10,7 +10,7 @@
 msgid ""
 msgstr "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-01-29 19:14+0000\n"
+"POT-Creation-Date: 2022-02-11 22:03+0000\n"
 "PO-Revision-Date: 2022-02-05 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -1011,7 +1011,7 @@ msgstr "Weba automatizazioaren bidez kontrolatua da."
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "%s URIak ez du baimenik Epiphanyren %s baliabidea atzitzeko"
 
-#: embed/ephy-embed-utils.c:68
+#: embed/ephy-embed-utils.c:70
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Bidali posta '%s' helbidera"
@@ -1024,7 +1024,7 @@ msgstr "Bidali posta '%s' helbidera"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:80
+#: embed/ephy-embed-utils.c:82
 #, c-format
 msgid ", “%s”"
 msgstr ", “%s”"
@@ -1820,7 +1820,7 @@ msgstr "Ezin izan da laguntza erakutsi: %s"
 #. * the version used in your country. For example for the french version :
 #. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
 #.
-#: lib/ephy-search-engine-manager.h:33
+#: lib/ephy-search-engine-manager.h:35
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=eu-es&amp;kad=eu_ES"
@@ -2572,15 +2572,15 @@ msgstr "Ireki esteka leiho berrian"
 msgid "Open Link In Incognito Window"
 msgstr "Ireki esteka isilpeko leihoan"
 
-#: src/ephy-window.c:2865 src/ephy-window.c:4221
+#: src/ephy-window.c:2865 src/ephy-window.c:4220
 msgid "Do you want to leave this website?"
 msgstr "Webgune hau utzi nahi duzu?"
 
-#: src/ephy-window.c:2866 src/ephy-window.c:4222 src/window-commands.c:1207
+#: src/ephy-window.c:2866 src/ephy-window.c:4221 src/window-commands.c:1207
 msgid "A form you modified has not been submitted."
 msgstr "Zuk aldatutako inprimakia ez da bidali."
 
-#: src/ephy-window.c:2867 src/ephy-window.c:4223 src/window-commands.c:1209
+#: src/ephy-window.c:2867 src/ephy-window.c:4222 src/window-commands.c:1209
 msgid "_Discard form"
 msgstr "_Baztertu inprimakia"
 
@@ -2620,15 +2620,15 @@ msgstr "_Bai"
 msgid "_No"
 msgstr "_Ez"
 
-#: src/ephy-window.c:4355
+#: src/ephy-window.c:4354
 msgid "There are multiple tabs open."
 msgstr "Fitxa anitz daude irekita."
 
-#: src/ephy-window.c:4356
+#: src/ephy-window.c:4355
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Leiho hau ixten baduzu, irekitako fitxa guztiak galduko dira"
 
-#: src/ephy-window.c:4357
+#: src/ephy-window.c:4356
 msgid "C_lose tabs"
 msgstr "I_txi fitxak"
 
@@ -2680,51 +2680,59 @@ msgstr "HSTS politiken cachea"
 msgid "Intelligent Tracking Prevention data"
 msgstr "Jarraipenaren prebentzio adimentsuaren datuak"
 
-#: src/preferences/ephy-search-engine-row.c:199
+#: src/preferences/ephy-search-engine-listbox.c:29
+msgid "New search engine"
+msgstr "Bilaketa-motor berria"
+
+#: src/preferences/ephy-search-engine-listbox.c:304
+msgid "A_dd Search Engine…"
+msgstr "_Gehitu bilaketa-motorra…"
+
+#: src/preferences/ephy-search-engine-row.c:115
 msgid "This field is required"
 msgstr "Eremu hau derrigorrezkoa da"
 
-#: src/preferences/ephy-search-engine-row.c:204
+#: src/preferences/ephy-search-engine-row.c:120
 msgid "Address must start with either http:// or https://"
 msgstr "Helbidearen hasierak http:// edo https:// izan behar du"
 
-#: src/preferences/ephy-search-engine-row.c:216
+#: src/preferences/ephy-search-engine-row.c:132
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Helbideak %s katearekin ordezkatutako bilaketa-terminoa eduki behar du"
 
-#: src/preferences/ephy-search-engine-row.c:219
+#: src/preferences/ephy-search-engine-row.c:135
 msgid "Address should not contain the search term several times"
 msgstr "Helbideal ez du bilaketa-terminoa behin baino gehiagotan eduki behar"
 
-#: src/preferences/ephy-search-engine-row.c:225
+#: src/preferences/ephy-search-engine-row.c:141
 msgid "Address is not a valid URI"
 msgstr "çHelbidea ez da baliozko URIa"
 
-#: src/preferences/ephy-search-engine-row.c:230
+#: src/preferences/ephy-search-engine-row.c:146
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
 "com/search?q=%s"
 msgstr "Helbidea ez da baliozko URLa. Helbidearen itxurak honelakoa izan behar du: https://www.adibidea.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:275
+#: src/preferences/ephy-search-engine-row.c:191
 msgid "This shortcut is already used."
 msgstr "Lasterbide hori jadanik erabilia dago."
 
-#: src/preferences/ephy-search-engine-row.c:277
+#: src/preferences/ephy-search-engine-row.c:193
 msgid "Search shortcuts must not contain any space."
 msgstr "Bilakerako lasterbideek ez dute zuriunerik izan behar."
 
-#: src/preferences/ephy-search-engine-row.c:285
+#: src/preferences/ephy-search-engine-row.c:201
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "Bilaketarako lasterbideek !, # edo @ bezalako ikur batekin hasi behar dute."
 
-#: src/preferences/ephy-search-engine-row.c:436
+#: src/preferences/ephy-search-engine-row.c:334
 msgid "A name is required"
 msgstr "Izen bat behar da"
 
-#: src/preferences/ephy-search-engine-row.c:438
+#: src/preferences/ephy-search-engine-row.c:336
 msgid "This search engine already exists"
 msgstr "Bilaketa-motor hori badago lehendik"
 
@@ -3433,10 +3441,6 @@ msgstr "_Pasahitzak"
 msgid "_Remember Passwords"
 msgstr "_Gogoratu pasahitzak"
 
-#: src/resources/gtk/search-engine-listbox.ui:16
-msgid "A_dd Search Engine…"
-msgstr "_Gehitu bilaketa-motorra…"
-
 #: src/resources/gtk/search-engine-row.ui:10
 msgid "Selects the default search engine"
 msgstr "Bilaketa-motor lehenetsia hautatzen du"
@@ -4029,9 +4033,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Whether to enable smooth scrolling."
 #~ msgstr "Korritze leuna gaituko den edo ez."
-
-#~ msgid "New search engine"
-#~ msgstr "Bilaketa-motor berria"
 
 #~ msgid "Sm_ooth Scrolling"
 #~ msgstr "Korritze _leuna"
