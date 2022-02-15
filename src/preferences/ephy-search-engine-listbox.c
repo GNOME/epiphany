@@ -255,7 +255,7 @@ on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
                                 GParamSpec              *pspec,
                                 EphySearchEngineListBox *parent_list_box)
 {
-  GList *children = gtk_container_get_children (GTK_CONTAINER (parent_list_box));
+  g_autoptr (GList) children = gtk_container_get_children (GTK_CONTAINER (parent_list_box));
 
   /* We only unexpand other rows if this is a notify signal for an expanded row. */
   if (!hdy_expander_row_get_expanded (HDY_EXPANDER_ROW (expanded_row)))

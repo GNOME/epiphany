@@ -623,8 +623,8 @@ on_key_press_event (EphyHistoryDialog *self,
     return GDK_EVENT_STOP;
 
   if (key->keyval == GDK_KEY_Down || key->keyval == GDK_KEY_Page_Down) {
-    GList *childrens = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-    GtkWidget *last = g_list_last (childrens)->data;
+    g_autoptr (GList) children = gtk_container_get_children (GTK_CONTAINER (self->listbox));
+    GtkWidget *last = g_list_last (children)->data;
     GtkWidget *focus = gtk_container_get_focus_child (GTK_CONTAINER (self->listbox));
 
     if (focus == last) {
