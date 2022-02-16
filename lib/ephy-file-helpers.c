@@ -175,6 +175,40 @@ ephy_file_desktop_dir (void)
   return g_build_filename (g_get_home_dir (), _("Desktop"), NULL);
 }
 
+char *
+ephy_file_get_display_name (GFile *file)
+{
+  g_autofree char *path = NULL;
+  g_autoptr (GFileInfo) info = NULL;
+  g_autoptr (GError) error = NULL;
+
+  path = g_file_get_path (file);
+
+  if (!g_strcmp0 (path, g_get_home_dir ()))
+    return g_strdup (_("Home"));
+
+  if (!g_strcmp0 (path, ephy_file_desktop_dir ()))
+    return g_strdup (_("Desktop"));
+
+  if (!g_strcmp0 (path, ephy_file_download_dir ()))
+    return g_strdup (_("Downloads"));
+
+  info =
+    g_file_query_info (file,
+                       G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                       G_FILE_QUERY_INFO_NONE,
+                       NULL,
+                       &error);
+
+  if (error) {
+    g_warning ("Failed to query display name for %s: %s", path, error->message);
+
+    return g_file_get_basename (file);
+  }
+
+  return g_strdup (g_file_info_get_display_name (info));
+}
+
 /**
  * ephy_file_tmp_filename:
  * @base: the base name of the temp file to create, containing "XXXXXX"

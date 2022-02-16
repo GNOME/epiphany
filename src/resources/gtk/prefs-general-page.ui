@@ -205,6 +205,42 @@
             <property name="title" translatable="yes">_Download Folder</property>
             <property name="use_underline">True</property>
             <property name="visible">True</property>
+            <property name="activatable">True</property>
+            <signal name="activated" handler="download_folder_row_activated_cb" swapped="yes"/>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">folder-symbolic</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="download_folder_label">
+                    <property name="visible">True</property>
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">go-next-symbolic</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>

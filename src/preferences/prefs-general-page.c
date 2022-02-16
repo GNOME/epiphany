@@ -36,8 +36,6 @@
 #include "gnome-languages.h"
 #include <glib/gi18n.h>
 
-#define DOWNLOAD_BUTTON_WIDTH   8
-
 enum {
   COL_LANG_NAME,
   COL_LANG_CODE
@@ -69,6 +67,7 @@ struct _PrefsGeneralPage {
   GtkWidget *download_box;
   GtkWidget *ask_on_download_switch;
   GtkWidget *download_folder_row;
+  GtkWidget *download_folder_label;
 
   /* Search Engines */
   GtkWidget *search_engine_group;
@@ -691,43 +690,57 @@ add_system_language_entry (PrefsGeneralPage *general_page)
 }
 
 static void
-download_path_changed_cb (GtkFileChooser *button)
+download_folder_file_chooser_cb (GtkNativeDialog  *chooser,
+                                 GtkResponseType   response,
+                                 PrefsGeneralPage *general_page)
 {
-  char *dir;
+  if (response == GTK_RESPONSE_ACCEPT) {
+    g_autofree char *dir = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
 
-  dir = gtk_file_chooser_get_filename (button);
-  if (dir == NULL)
-    return;
+    if (dir)
+      g_settings_set_string (EPHY_SETTINGS_STATE,
+                             EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
+  }
 
-  g_settings_set_string (EPHY_SETTINGS_STATE,
-                         EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
-  g_free (dir);
+  gtk_native_dialog_destroy (chooser);
 }
 
 static void
-create_download_path_button (PrefsGeneralPage *general_page)
+download_folder_row_activated_cb (PrefsGeneralPage *general_page)
 {
-  GtkWidget *button;
-  char *dir;
+  GtkWidget *parent;
+  g_autofree char *dir = NULL;
+  GtkFileChooserNative *chooser;
+
+  parent = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
+  chooser = gtk_file_chooser_native_new (_("Select a Directory"),
+                                         GTK_WINDOW (parent),
+                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                         _("_Select"),
+                                         _("_Cancel"));
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
 
   dir = ephy_file_get_downloads_dir ();
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), dir);
 
-  button = gtk_file_chooser_button_new (_("Select a directory"),
-                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  g_signal_connect (chooser, "response",
+                    G_CALLBACK (download_folder_file_chooser_cb),
+                    general_page);
 
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), dir);
-  gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (button),
-                                           DOWNLOAD_BUTTON_WIDTH);
-  g_signal_connect (button, "selection-changed",
-                    G_CALLBACK (download_path_changed_cb), general_page);
-  gtk_container_add (GTK_CONTAINER (general_page->download_folder_row), button);
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_widget_show (button);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+}
 
-  g_settings_bind_writable (EPHY_SETTINGS_STATE,
-                            EPHY_PREFS_STATE_DOWNLOAD_DIR,
-                            button, "sensitive", FALSE);
-  g_free (dir);
+static gboolean
+download_folder_get_mapping (GValue   *value,
+                             GVariant *variant,
+                             gpointer  user_data)
+{
+  g_autofree char *path = ephy_file_get_downloads_dir ();
+  g_autoptr (GFile) dir = g_file_new_for_path (path);
+
+  g_value_take_string (value, ephy_file_get_display_name (dir));
+
+  return TRUE;
 }
 
 static gboolean
@@ -1068,6 +1081,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, ask_on_download_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_label);
 
   /* Search Engines */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
@@ -1092,6 +1106,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, download_folder_row_activated_cb);
 }
 
 static void
@@ -1216,7 +1231,15 @@ setup_general_page (PrefsGeneralPage *general_page)
   if (ephy_is_running_inside_sandbox ())
     gtk_widget_hide (general_page->download_box);
   else
-    create_download_path_button (general_page);
+    g_settings_bind_with_mapping (EPHY_SETTINGS_STATE,
+                                  EPHY_PREFS_STATE_DOWNLOAD_DIR,
+                                  general_page->download_folder_label,
+                                  "label",
+                                  G_SETTINGS_BIND_GET,
+                                  download_folder_get_mapping,
+                                  NULL,
+                                  general_page,
+                                  NULL);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,

@@ -60,6 +60,7 @@ char       *       ephy_default_config_dir                  (void);
 void               ephy_file_helpers_shutdown               (void);
 char       *       ephy_file_get_downloads_dir              (void);
 char       *       ephy_file_desktop_dir                    (void);
+char       *       ephy_file_get_display_name               (GFile                 *file);
 const char *       ephy_file_tmp_dir                        (void);
 char       *       ephy_file_tmp_filename                   (const char            *base,
                                                              const char            *extension);
