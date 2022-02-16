@@ -168,7 +168,9 @@ ephy_add_engine_button_merged_model_init (EphyAddEngineButtonMergedModel *self)
 }
 
 struct _EphySearchEngineListBox {
-  GtkListBox parent_instance;
+  GtkBin parent_instance;
+
+  GtkWidget *list;
 
   /* This widget isn't actually showed anywhere. It is just a stable place where we can add more radio buttons without having to bother if the primary radio button gets removed. */
   GtkWidget *radio_buttons_group;
@@ -187,7 +189,7 @@ struct _EphySearchEngineListBox {
   gboolean is_model_initially_loaded;
 };
 
-G_DEFINE_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, GTK_TYPE_BIN)
 
 GtkWidget *
 ephy_search_engine_list_box_new (void)
@@ -262,7 +264,7 @@ on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
   if (!hdy_expander_row_get_expanded (HDY_EXPANDER_ROW (expanded_row)))
     return;
 
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self), i++))) {
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->list), i++))) {
     /* Ignore this row if not a search engine row ("add search engine" row). */
     if (!EPHY_IS_SEARCH_ENGINE_ROW (row))
       continue;
@@ -277,8 +279,7 @@ on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
 
 static void
 on_add_search_engine_row_clicked_cb (EphySearchEngineListBox *self,
-                                     GtkListBoxRow           *clicked_row,
-                                     gpointer                 user_data)
+                                     GtkListBoxRow           *clicked_row)
 {
   g_autoptr (EphySearchEngine) empty_engine = NULL;
 
@@ -380,6 +381,7 @@ ephy_search_engine_list_box_class_init (EphySearchEngineListBoxClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-listbox.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, EphySearchEngineListBox, list);
   gtk_widget_class_bind_template_callback (widget_class, on_add_search_engine_row_clicked_cb);
 }
 
@@ -399,7 +401,7 @@ ephy_search_engine_list_box_init (EphySearchEngineListBox *self)
 
   self->wrapper_model = g_object_new (EPHY_TYPE_ADD_ENGINE_BUTTON_MERGED_MODEL, NULL);
   self->is_model_initially_loaded = FALSE;
-  gtk_list_box_bind_model (GTK_LIST_BOX (self),
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->list),
                            G_LIST_MODEL (self->wrapper_model),
                            (GtkListBoxCreateWidgetFunc)list_box_create_row_func,
                            self, NULL);
