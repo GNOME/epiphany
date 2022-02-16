@@ -67,15 +67,10 @@ ephy_passwords_view_dispose (GObject *object)
 static void
 clear_listbox (GtkWidget *listbox)
 {
-  GList *children, *iter;
+  GtkListBoxRow *row;
 
-  children = gtk_container_get_children (GTK_CONTAINER (listbox));
-
-  for (iter = children; iter; iter = g_list_next (iter)) {
-    gtk_widget_destroy (GTK_WIDGET (iter->data));
-  }
-
-  g_list_free (children);
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
+    gtk_container_remove (GTK_CONTAINER (listbox), GTK_WIDGET (row));
 }
 
 static void

@@ -115,9 +115,11 @@ prefs_general_page_finalize (GObject *object)
 static int
 get_list_box_length (GtkListBox *list_box)
 {
-  g_autoptr (GList) children = gtk_container_get_children (GTK_CONTAINER (list_box));
+  int i = -1;
 
-  return g_list_length (children);
+  while (gtk_list_box_get_row_at_index (list_box, ++i));
+
+  return i;
 }
 
 static void

@@ -95,15 +95,14 @@ flow_box_sort_func (GtkFlowBoxChild *child1,
 static void
 update_tags_scrollbar (EphyBookmarkProperties *self)
 {
-  g_autoptr (GList) children = NULL;
-  gint n_tags;
+  gboolean show_scrollbar;
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->tags_box));
-  n_tags = g_list_length (children);
+  /* We only allow showing scrollbar if we have 4 or more tags. */
+  show_scrollbar = !!gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->tags_box), 3);
 
   g_object_set (self->tags_scrolled_window,
                 "vscrollbar-policy",
-                (n_tags > 3) ? GTK_POLICY_AUTOMATIC : GTK_POLICY_NEVER,
+                show_scrollbar ? GTK_POLICY_AUTOMATIC : GTK_POLICY_NEVER,
                 NULL);
 }
 

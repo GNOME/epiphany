@@ -253,26 +253,25 @@ on_list_box_manager_items_changed_cb (GListModel *list,
 static void
 on_row_expand_state_changed_cb (EphySearchEngineRow     *expanded_row,
                                 GParamSpec              *pspec,
-                                EphySearchEngineListBox *parent_list_box)
+                                EphySearchEngineListBox *self)
 {
-  g_autoptr (GList) children = gtk_container_get_children (GTK_CONTAINER (parent_list_box));
+  GtkListBoxRow *row;
+  int i = 0;
 
   /* We only unexpand other rows if this is a notify signal for an expanded row. */
   if (!hdy_expander_row_get_expanded (HDY_EXPANDER_ROW (expanded_row)))
     return;
 
-  for (; children->next != NULL; children = children->next) {
-    EphySearchEngineRow *iterated_row = children->data;
-
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self), i++))) {
     /* Ignore this row if not a search engine row ("add search engine" row). */
-    if (!EPHY_IS_SEARCH_ENGINE_ROW (iterated_row))
+    if (!EPHY_IS_SEARCH_ENGINE_ROW (row))
       continue;
 
     /* Ignore the row that was just expanded. */
-    if (iterated_row == expanded_row)
+    if (row == GTK_LIST_BOX_ROW (expanded_row))
       continue;
 
-    hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (iterated_row), FALSE);
+    hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (row), FALSE);
   }
 }
 

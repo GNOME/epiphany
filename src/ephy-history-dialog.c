@@ -195,15 +195,14 @@ static void
 set_selection_active (EphyHistoryDialog *self,
                       gboolean           selection_active)
 {
-  g_autoptr (GList) rows = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-  GList *iter = NULL;
+  GtkListBoxRow *row;
+  int i = 0;
 
   self->selection_active = selection_active;
 
-  for (iter = rows; iter != NULL; iter = g_list_next (iter)) {
-    GObject *row = iter->data;
-    GtkWidget *check_button = GTK_WIDGET (g_object_get_data (row, "check-button"));
-    GtkWidget *separator = GTK_WIDGET (g_object_get_data (row, "separator"));
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
+    GtkWidget *check_button = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "check-button"));
+    GtkWidget *separator = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "separator"));
 
     /* Uncheck all rows when toggling selection mode */
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), FALSE);
@@ -254,15 +253,10 @@ get_url_from_row (GtkListBoxRow *row)
 static void
 clear_listbox (GtkWidget *listbox)
 {
-  GList *children, *iter;
+  GtkListBoxRow *row;
 
-  children = gtk_container_get_children (GTK_CONTAINER (listbox));
-
-  for (iter = children; iter; iter = g_list_next (iter)) {
-    gtk_widget_destroy (GTK_WIDGET (iter->data));
-  }
-
-  g_list_free (children);
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
+    gtk_container_remove (GTK_CONTAINER (listbox), GTK_WIDGET (row));
 }
 
 static void
@@ -345,13 +339,13 @@ filter_now (EphyHistoryDialog *self)
 static GList *
 get_checked_rows (EphyHistoryDialog *self)
 {
-  g_autoptr (GList) rows_list = gtk_container_get_children (GTK_CONTAINER (self->listbox));
   GList *checked_rows = NULL;
-  GList *iter = NULL;
+  GtkListBoxRow *row;
+  int i = 0;
 
-  for (iter = rows_list; iter != NULL; iter = g_list_next (iter)) {
-    GObject *row = iter->data;
-    GtkCheckButton *check_button = GTK_CHECK_BUTTON (g_object_get_data (row, "check-button"));
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
+    GtkCheckButton *check_button =
+      GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button)))
       checked_rows = g_list_prepend (checked_rows, row);
@@ -489,15 +483,14 @@ add_urls_source (EphyHistoryDialog *self)
   EphyHistoryURL *url;
   GList *element;
   GtkWidget *row;
-  GList *children;
+  gboolean has_results;
 
   set_is_loading (self, FALSE);
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-  set_has_search_results (self, !!children);
-  if (!children)
+  has_results = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0);
+  set_has_search_results (self, has_results);
+  if (!has_results)
     set_has_data (self, FALSE);
-  g_list_free (children);
 
   if (!self->urls || !self->num_fetch) {
     self->sorter_source = 0;
@@ -630,7 +623,7 @@ on_key_press_event (EphyHistoryDialog *self,
     if (focus == last) {
       load_further_data (self);
 
-      return GDK_EVENT_STOP;
+      return GDK_EVENT_PROPAGATE;
     }
   }
 
@@ -729,12 +722,12 @@ handle_selection_row_activated_event (EphyHistoryDialog *self,
   } else {
     /* If there are zero or more than one other rows checked,
      * then we check the clicked row and uncheck all the others */
-    g_autoptr (GList) rows = gtk_container_get_children (GTK_CONTAINER (self->listbox));
-    GList *iter = NULL;
+    GtkListBoxRow *row;
+    int i = 0;
 
-    for (iter = rows; iter != NULL; iter = g_list_next (iter)) {
-      GObject *row = iter->data;
-      GtkCheckButton *row_check_btn = GTK_CHECK_BUTTON (g_object_get_data (row, "check-button"));
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
+      GtkCheckButton *row_check_btn =
+        GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (row_check_btn), FALSE);
     }
