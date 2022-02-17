@@ -790,7 +790,9 @@ typedef struct {
   EphyDownload *download;
   WebKitDownload *webkit_download;
   char *suggested_filename;
-  GtkFileChooser *file_chooser;
+  GtkWindow *dialog;
+  GFile *directory;
+  GtkLabel *directory_label;
 } SuggestedFilenameData;
 
 static void
@@ -799,8 +801,8 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
                               SuggestedFilenameData *data)
 {
   if (response == GTK_RESPONSE_OK) {
-    g_autofree gchar *uri = gtk_file_chooser_get_uri (data->file_chooser);
-    g_autofree gchar *folder = g_filename_from_uri (uri, NULL, NULL);
+    g_autofree gchar *uri = g_file_get_path (data->directory);
+    g_autofree gchar *folder = g_file_get_uri (data->directory);
     g_autofree gchar *path = g_build_filename (uri, data->suggested_filename, NULL);
 
     ephy_download_set_destination_uri (data->download, path);
@@ -817,8 +819,50 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
+  g_object_unref (data->directory);
   g_free (data->suggested_filename);
   g_free (data);
+}
+
+static void
+filename_suggested_file_chooser_cb (GtkNativeDialog       *chooser,
+                                    GtkResponseType        response,
+                                    SuggestedFilenameData *data)
+{
+  if (response == GTK_RESPONSE_ACCEPT) {
+    g_autofree char *display_name = NULL;
+
+    g_set_object (&data->directory, gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser)));
+
+    display_name = ephy_file_get_display_name (data->directory);
+    gtk_label_set_label (data->directory_label, display_name);
+  }
+
+  gtk_native_dialog_destroy (chooser);
+}
+
+static void
+filename_suggested_button_cb (GtkButton             *button,
+                              SuggestedFilenameData *data)
+{
+  GtkFileChooserNative *chooser;
+
+  chooser = gtk_file_chooser_native_new (_("Select a Directory"),
+                                         data->dialog,
+                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                         _("_Select"),
+                                         _("_Cancel"));
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
+
+  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (chooser),
+                                            data->directory,
+                                            NULL);
+
+  g_signal_connect (chooser, "response",
+                    G_CALLBACK (filename_suggested_file_chooser_cb),
+                    data);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
 }
 
 static void
@@ -834,13 +878,17 @@ filename_suggested_cb (EphyDownload *download,
   GtkWidget *type_label;
   GtkWidget *from_label;
   GtkWidget *question_label;
-  GtkWidget *filechooser;
+  GtkWidget *button;
+  GtkWidget *button_box;
+  GtkWidget *button_label;
   WebKitDownload *webkit_download;
   WebKitURIResponse *response;
   g_autofree gchar *type_text = NULL;
   g_autofree gchar *from_text = NULL;
   g_autofree gchar *content_length = NULL;
+  g_autofree gchar *display_name = NULL;
   const gchar *content_type;
+  const char *directory_path;
   SuggestedFilenameData *data;
 
   application = G_APPLICATION (ephy_embed_shell_get_default ());
@@ -881,20 +929,45 @@ filename_suggested_cb (EphyDownload *download,
   gtk_box_pack_start (GTK_BOX (box), question_label, FALSE, TRUE, 0);
 
   /* File Chooser Button */
-  filechooser = gtk_file_chooser_button_new (_("Save file"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (filechooser), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
-  gtk_box_pack_start (GTK_BOX (box), filechooser, FALSE, TRUE, 0);
+  button = gtk_button_new ();
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
+
+  button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_hexpand (button_box, FALSE);
+  gtk_container_add (GTK_CONTAINER (button), button_box);
+
+  gtk_container_add (GTK_CONTAINER (button_box),
+                     gtk_image_new_from_icon_name ("folder-symbolic", GTK_ICON_SIZE_BUTTON));
+
+  button_label = gtk_label_new (NULL);
+  gtk_label_set_ellipsize (GTK_LABEL (button_label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_xalign (GTK_LABEL (button_label), 0);
+  gtk_widget_set_hexpand (button_label, TRUE);
+  gtk_container_add (GTK_CONTAINER (button_box), button_label);
 
   gtk_widget_show_all (box);
+
+  directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   data = g_new0 (SuggestedFilenameData, 1);
   data->download = download;
   data->webkit_download = webkit_download;
   data->suggested_filename = g_strdup (suggested_filename);
-  data->file_chooser = GTK_FILE_CHOOSER (filechooser);
+  data->dialog = GTK_WINDOW (dialog);
+  if (!directory_path || !directory_path[0])
+    data->directory = g_file_new_for_path (ephy_file_get_downloads_dir ());
+  else
+    data->directory = g_file_new_for_path (directory_path);
+  data->directory_label = GTK_LABEL (button_label);
 
+  display_name = ephy_file_get_display_name (data->directory);
+  gtk_label_set_label (data->directory_label, display_name);
+
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (filename_suggested_button_cb), data);
   g_signal_connect (dialog, "response",
                     G_CALLBACK (filename_suggested_dialog_cb), data);
+
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
