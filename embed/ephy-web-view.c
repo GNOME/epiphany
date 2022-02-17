@@ -164,6 +164,8 @@ open_response_cb (GtkFileChooser           *dialog,
   if (response == GTK_RESPONSE_ACCEPT) {
     GSList *file_list = gtk_file_chooser_get_filenames (dialog);
     GPtrArray *file_array = g_ptr_array_new ();
+    g_autoptr (GFile) current_folder = NULL;
+    g_autofree char *current_folder_path = NULL;
 
     for (GSList *file = file_list; file; file = g_slist_next (file))
       g_ptr_array_add (file_array, file->data);
@@ -172,7 +174,12 @@ open_response_cb (GtkFileChooser           *dialog,
     webkit_file_chooser_request_select_files (request, (const char * const *)file_array->pdata);
     g_slist_free_full (file_list, g_free);
     g_ptr_array_free (file_array, TRUE);
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
+
+    current_folder = gtk_file_chooser_get_current_folder_file (dialog);
+    current_folder_path = g_file_get_path (current_folder);
+    g_settings_set_string (EPHY_SETTINGS_WEB,
+                           EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY,
+                           current_folder_path);
   } else {
     webkit_file_chooser_request_cancel (request);
   }
@@ -189,6 +196,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   GtkFileChooser *dialog;
   gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
   GtkFileFilter *filter = webkit_file_chooser_request_get_mime_types_filter (request);
+  g_autofree char *last_directory_path = NULL;
 
   dialog = ephy_create_file_chooser (_("Open"),
                                      GTK_WIDGET (toplevel),
@@ -196,12 +204,24 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                      EPHY_FILE_FILTER_ALL);
 
   if (filter) {
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+    gtk_file_chooser_add_filter (dialog, filter);
+    gtk_file_chooser_set_filter (dialog, filter);
   }
 
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY));
-  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allows_multiple_selection);
+  last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY);
+
+  if (last_directory_path && last_directory_path[0]) {
+    g_autoptr (GFile) last_directory = NULL;
+    g_autoptr (GError) error = NULL;
+
+    last_directory = g_file_new_for_path (last_directory_path);
+    gtk_file_chooser_set_current_folder_file (dialog, last_directory, &error);
+
+    if (error)
+      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+  }
+
+  gtk_file_chooser_set_select_multiple (dialog, allows_multiple_selection);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (open_response_cb),

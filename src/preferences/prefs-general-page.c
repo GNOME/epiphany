@@ -695,11 +695,15 @@ download_folder_file_chooser_cb (GtkNativeDialog  *chooser,
                                  PrefsGeneralPage *general_page)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    g_autofree char *dir = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
+    g_autoptr (GFile) file = NULL;
+    g_autofree char *path = NULL;
 
-    if (dir)
+    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
+    path = g_file_get_path (file);
+
+    if (path)
       g_settings_set_string (EPHY_SETTINGS_STATE,
-                             EPHY_PREFS_STATE_DOWNLOAD_DIR, dir);
+                             EPHY_PREFS_STATE_DOWNLOAD_DIR, path);
   }
 
   gtk_native_dialog_destroy (chooser);
@@ -709,7 +713,7 @@ static void
 download_folder_row_activated_cb (PrefsGeneralPage *general_page)
 {
   GtkWidget *parent;
-  g_autofree char *dir = NULL;
+  g_autofree char *downloads_path = NULL;
   GtkFileChooserNative *chooser;
 
   parent = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
@@ -720,8 +724,21 @@ download_folder_row_activated_cb (PrefsGeneralPage *general_page)
                                          _("_Cancel"));
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
 
-  dir = ephy_file_get_downloads_dir ();
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), dir);
+  downloads_path = ephy_file_get_downloads_dir ();
+
+  if (downloads_path && downloads_path[0]) {
+    g_autoptr (GFile) downloads_dir = NULL;
+    g_autoptr (GError) error = NULL;
+
+    downloads_dir = g_file_new_for_path (downloads_path);
+
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (chooser),
+                                              downloads_dir,
+                                              &error);
+
+    if (error)
+      g_warning ("Failed to set current folder %s: %s", downloads_path, error->message);
+  }
 
   g_signal_connect (chooser, "response",
                     G_CALLBACK (download_folder_file_chooser_cb),
@@ -835,11 +852,12 @@ webapp_icon_chooser_response_cb (GtkNativeDialog  *file_chooser,
                                  PrefsGeneralPage *general_page)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    char *icon_url;
+    g_autoptr (GFile) icon_file = NULL;
+    g_autofree char *icon_url = NULL;
 
-    icon_url = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_chooser));
+    icon_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser));
+    icon_url = g_file_get_uri (icon_file);
     prefs_general_page_update_webapp_icon (general_page, icon_url);
-    g_free (icon_url);
     prefs_general_page_save_web_application (general_page);
   }
 

@@ -157,20 +157,27 @@ filename_confirmed_cb (GtkFileChooser      *dialog,
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
 
   if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri;
+    g_autoptr (GFile) file = NULL;
+    g_autoptr (GFile) current_folder = NULL;
+    g_autofree char *uri = NULL;
+    g_autofree char *current_folder_path = NULL;
     WebKitDownload *webkit_download;
 
-    uri = gtk_file_chooser_get_uri (dialog);
+    file = gtk_file_chooser_get_file (dialog);
+    uri = g_file_get_uri (file);
     ephy_download_set_destination_uri (data->download, uri);
-    g_free (uri);
 
     webkit_download = ephy_download_get_webkit_download (data->download);
     webkit_download_set_allow_overwrite (webkit_download, TRUE);
 
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
-                           gtk_file_chooser_get_current_folder (dialog));
+
+    current_folder = gtk_file_chooser_get_current_folder_file (dialog);
+    current_folder_path = g_file_get_path (current_folder);
+    g_settings_set_string (EPHY_SETTINGS_WEB,
+                           EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
+                           current_folder_path);
   } else {
     g_idle_add_full (G_PRIORITY_DEFAULT,
                      (GSourceFunc)cancel_download_idle_cb,
@@ -190,6 +197,7 @@ filename_suggested_cb (EphyDownload        *download,
                        SavePropertyURLData *data)
 {
   GtkFileChooser *dialog;
+  const char *last_directory_path;
   char *sanitized_filename;
 
   dialog = ephy_create_file_chooser (data->title,
@@ -197,7 +205,19 @@ filename_suggested_cb (EphyDownload        *download,
                                      GTK_FILE_CHOOSER_ACTION_SAVE,
                                      EPHY_FILE_FILTER_NONE);
   gtk_file_chooser_set_do_overwrite_confirmation (dialog, TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
+
+  last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
+
+  if (last_directory_path && last_directory_path[0]) {
+    g_autoptr (GFile) last_directory = NULL;
+    g_autoptr (GError) error = NULL;
+
+    last_directory = g_file_new_for_path (last_directory_path);
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+
+    if (error)
+      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+  }
 
   sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
   gtk_file_chooser_set_current_name (dialog, sanitized_filename);

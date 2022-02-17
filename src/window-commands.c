@@ -351,6 +351,7 @@ dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = NULL;
   g_autofree char *filename = NULL;
   gboolean imported;
 
@@ -359,7 +360,8 @@ dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
   if (response != GTK_RESPONSE_ACCEPT)
     return;
 
-  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_chooser_dialog));
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser_dialog));
+  filename = g_file_get_path (file);
   imported = ephy_bookmarks_import (manager, filename, &error);
 
   show_import_export_result (parent, imported, imported, error,
@@ -396,6 +398,7 @@ dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = NULL;
   g_autofree char *filename = NULL;
   gboolean imported;
 
@@ -404,7 +407,8 @@ dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser
   if (response != GTK_RESPONSE_ACCEPT)
     return;
 
-  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_chooser_dialog));
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser_dialog));
+  filename = g_file_get_path (file);
   imported = ephy_bookmarks_import_from_html (manager, filename, &error);
 
   show_import_export_result (parent, imported, imported, error,
@@ -617,6 +621,7 @@ export_bookmarks_file_chooser_cb (GtkNativeDialog *dialog,
                                   GtkWindow       *parent)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  g_autoptr (GFile) file = NULL;
   g_autofree char *filename = NULL;
 
   gtk_native_dialog_destroy (dialog);
@@ -624,7 +629,8 @@ export_bookmarks_file_chooser_cb (GtkNativeDialog *dialog,
   if (response != GTK_RESPONSE_ACCEPT)
     return;
 
-  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+  filename = g_file_get_path (file);
   ephy_bookmarks_export (g_object_ref (manager),
                          filename,
                          NULL,
@@ -1330,18 +1336,18 @@ open_response_cb (GtkNativeDialog *dialog,
                   EphyWindow      *window)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri, *converted;
+    g_autoptr (GFile) file = NULL;
+    g_autofree char *uri = NULL;
+    g_autofree char *converted = NULL;
 
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+    uri = g_file_get_uri (file);
     if (uri != NULL) {
       converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
       if (converted != NULL) {
         ephy_window_load_url (window, converted);
       }
-
-      g_free (converted);
-      g_free (uri);
     }
   }
 
@@ -2099,9 +2105,14 @@ save_response_cb (GtkNativeDialog *dialog,
                   EphyEmbed       *embed)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri, *converted;
+    g_autoptr (GFile) file = NULL;
+    g_autoptr (GFile) current_file = NULL;
+    g_autofree char *uri = NULL;
+    g_autofree char *converted = NULL;
+    g_autofree char *current_path = NULL;
 
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+    uri = g_file_get_uri (file);
     if (uri != NULL) {
       converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
@@ -2113,12 +2124,13 @@ save_response_cb (GtkNativeDialog *dialog,
           ephy_web_view_save (web_view, converted);
         }
       }
-
-      g_free (converted);
-      g_free (uri);
     }
 
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
+    current_file = gtk_file_chooser_get_current_folder_file (GTK_FILE_CHOOSER (dialog));
+    current_path = g_file_get_path (current_file);
+    g_settings_set_string (EPHY_SETTINGS_WEB,
+                           EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
+                           current_path);
   }
 
   g_object_unref (dialog);
@@ -2134,6 +2146,7 @@ window_cmd_save_as (GSimpleAction *action,
   GtkFileChooser *dialog;
   GtkFileFilter *filter;
   char *suggested_filename;
+  const char *last_directory_path;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
@@ -2144,7 +2157,19 @@ window_cmd_save_as (GSimpleAction *action,
                                      EPHY_FILE_FILTER_NONE);
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY));
+
+  last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
+
+  if (last_directory_path && last_directory_path[0]) {
+    g_autoptr (GFile) last_directory = NULL;
+    g_autoptr (GError) error = NULL;
+
+    last_directory = g_file_new_for_path (last_directory_path);
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+
+    if (error)
+      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+  }
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("HTML"));
