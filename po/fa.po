@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-02-17 17:08+0000\n"
-"PO-Revision-Date: 2022-02-20 14:31+0330\n"
+"POT-Creation-Date: 2022-02-18 16:07+0000\n"
+"PO-Revision-Date: 2022-02-20 14:32+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
 #: embed/ephy-about-handler.c:227 src/ephy-main.c:101 src/ephy-main.c:253
-#: src/ephy-main.c:403 src/window-commands.c:999
+#: src/ephy-main.c:403 src/window-commands.c:1005
 msgid "Web"
 msgstr "وب"
 
@@ -277,7 +277,7 @@ msgid "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "رمزگذاری پیش‌گزیده. مقدارهای مجاز، آن‌هاییند که WebKitGTK می‌تواند بفهمد."
 
 #: data/org.gnome.epiphany.gschema.xml:188
-#: src/resources/gtk/prefs-general-page.ui:293
+#: src/resources/gtk/prefs-general-page.ui:329
 msgid "Languages"
 msgstr "زبان‌ها"
 
@@ -488,7 +488,7 @@ msgstr "نسخه %s"
 msgid "About Web"
 msgstr "دربارهٔ وب"
 
-#: embed/ephy-about-handler.c:195 src/window-commands.c:1001
+#: embed/ephy-about-handler.c:195 src/window-commands.c:1007
 msgid "Epiphany Technology Preview"
 msgstr "پیش‌نمایش فنی اپیفنی"
 
@@ -580,44 +580,49 @@ msgstr "پایان بارگیری %s"
 msgid "Download finished"
 msgstr "بارگیری تمام شد"
 
-#: embed/ephy-download.c:854
-msgid "Download requested"
-msgstr "بارگیری درخواست شد"
+#: embed/ephy-download.c:850 src/preferences/prefs-general-page.c:720
+msgid "Select a Directory"
+msgstr "گزینش یک شاخه"
 
-#: embed/ephy-download.c:855 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:93 src/ephy-web-extension-dialog.c:269
+#: embed/ephy-download.c:853 src/preferences/prefs-general-page.c:723
+#: src/window-commands.c:311
+msgid "_Select"
+msgstr "_گزینش"
+
+#: embed/ephy-download.c:854 embed/ephy-download.c:903
+#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
+#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:724
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91 src/resources/gtk/prefs-lang-dialog.ui:14
-#: src/window-commands.c:309 src/window-commands.c:379 src/window-commands.c:424
-#: src/window-commands.c:550 src/window-commands.c:648 src/window-commands.c:792
-#: src/window-commands.c:1920
+#: src/window-commands.c:309 src/window-commands.c:381 src/window-commands.c:428
+#: src/window-commands.c:554 src/window-commands.c:654 src/window-commands.c:798
+#: src/window-commands.c:1926
 msgid "_Cancel"
 msgstr "_لغو"
 
-#: embed/ephy-download.c:855
+#: embed/ephy-download.c:902
+msgid "Download requested"
+msgstr "بارگیری درخواست شد"
+
+#: embed/ephy-download.c:903
 msgid "_Download"
 msgstr "_بارگیری"
 
-#: embed/ephy-download.c:868
+#: embed/ephy-download.c:916
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "گونه: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:874
+#: embed/ephy-download.c:922
 #, c-format
 msgid "From: %s"
 msgstr "از: %s"
 
 #. Question
-#: embed/ephy-download.c:879
+#: embed/ephy-download.c:927
 msgid "Where do you want to save the file?"
 msgstr "می‌خواهید پرونده را کجا ذخیره کنید؟"
-
-#. File Chooser Button
-#: embed/ephy-download.c:884
-msgid "Save file"
-msgstr "ذخیرهٔ پرونده"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
 #: embed/ephy-embed.c:533
@@ -1019,130 +1024,130 @@ msgstr "پیدا کردن مورد بعدی رشتهٔ جست‌وجو"
 msgid "%s is not a valid URI"
 msgstr "%s یک نشانی معتبر نیست"
 
-#: embed/ephy-web-view.c:193 src/window-commands.c:1359
+#: embed/ephy-web-view.c:201 src/window-commands.c:1365
 msgid "Open"
 msgstr "گشودن"
 
-#: embed/ephy-web-view.c:372
+#: embed/ephy-web-view.c:392
 msgid "Not No_w"
 msgstr "_اکنون نه"
 
-#: embed/ephy-web-view.c:373
+#: embed/ephy-web-view.c:393
 msgid "_Never Save"
 msgstr "_هرگز ذخیره نشود"
 
-#: embed/ephy-web-view.c:374 lib/widgets/ephy-file-chooser.c:124
-#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:647
+#: embed/ephy-web-view.c:394 lib/widgets/ephy-file-chooser.c:124
+#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:653
 msgid "_Save"
 msgstr "_ذخیره"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:381
+#: embed/ephy-web-view.c:401
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "آیا می‌خواهید گذرواژه‌تان را برای «%s» ذخیره کنید؟"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:620
+#: embed/ephy-web-view.c:640
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
 msgstr "توجّه: این فرم امن نیست. اگر گذرواژه‌تان را بنویسید، خصوصی نگهش نخواهد داشت."
 
-#: embed/ephy-web-view.c:844
+#: embed/ephy-web-view.c:864
 msgid "Web process crashed"
 msgstr "فرایند وب فروپاشید"
 
-#: embed/ephy-web-view.c:847
+#: embed/ephy-web-view.c:867
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "فرایند وب به دلیل گذر از کران حافظه بسته شد"
 
-#: embed/ephy-web-view.c:850
+#: embed/ephy-web-view.c:870
 msgid "Web process terminated by API request"
 msgstr "فرایند وب به دلیل درخواست API بسته شد"
 
-#: embed/ephy-web-view.c:894
+#: embed/ephy-web-view.c:914
 #, c-format
 msgid "The current page '%s' is unresponsive"
 msgstr "صفحهٔ کنونی «%s» پاسخگو نیست"
 
-#: embed/ephy-web-view.c:897
+#: embed/ephy-web-view.c:917
 msgid "_Wait"
 msgstr "_شکیبایی"
 
-#: embed/ephy-web-view.c:898
+#: embed/ephy-web-view.c:918
 msgid "_Kill"
 msgstr "_کشتن"
 
-#: embed/ephy-web-view.c:1123 embed/ephy-web-view.c:1244
+#: embed/ephy-web-view.c:1143 embed/ephy-web-view.c:1264
 #: lib/widgets/ephy-security-popover.c:512
 msgid "Deny"
 msgstr "رد شود"
 
-#: embed/ephy-web-view.c:1124 embed/ephy-web-view.c:1245
+#: embed/ephy-web-view.c:1144 embed/ephy-web-view.c:1265
 #: lib/widgets/ephy-security-popover.c:511
 msgid "Allow"
 msgstr "اجازه داده شود"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1137
+#: embed/ephy-web-view.c:1157
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "صفحهٔ %s می‌خواهد آگاهی‌های میزکار نمایش دهد."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1162
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "صفحهٔ %s می‌خواهد موقعیتتان را بداند."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1147
+#: embed/ephy-web-view.c:1167
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "صفحهٔ %s می‌خواهد از میکروفونتان استفاده کند."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1152
+#: embed/ephy-web-view.c:1172
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "صفحهٔ %s می‌خواهد از دروبینتان استفاده کند."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1157
+#: embed/ephy-web-view.c:1177
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "صفحهٔ %s می‌خواهد از وب‌کم و میکروفونتان استفاده کند."
 
-#: embed/ephy-web-view.c:1252
+#: embed/ephy-web-view.c:1272
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr "می‌خواهید بگذارید %s هنگام مرور %s از کوکی‌ها استفاده کند؟"
 
-#: embed/ephy-web-view.c:1261
+#: embed/ephy-web-view.c:1281
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "می‌گذارد %s فعّالیت‌هایتان را ردیابی کند."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1439
+#: embed/ephy-web-view.c:1459
 #, c-format
 msgid "Loading “%s”…"
 msgstr "در حال بار کردن «%s»…"
 
-#: embed/ephy-web-view.c:1441 embed/ephy-web-view.c:1447
+#: embed/ephy-web-view.c:1461 embed/ephy-web-view.c:1467
 msgid "Loading…"
 msgstr "در حال بار کردن…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1786
+#: embed/ephy-web-view.c:1806
 msgid "This website presented identification that belongs to a different website."
 msgstr "این وب‌گاه هویتی را ارائه داده است که متعلق به وب‌گاه دیگری است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1811
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1151,17 +1156,17 @@ msgstr ""
 "بررسی کنید."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1816
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "هویت این وب‌گاه توسط سازمان مورد اعتمادی صادر نشده است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1821
 msgid "This website’s identification could not be processed. It may be corrupted."
 msgstr "هویت این وب‌گاه قابل پردازش نیست. ممکن است مخدوش شده باشد."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1826
 msgid ""
 "This website’s identification has been revoked by the trusted organization that "
 "issued it."
@@ -1169,7 +1174,7 @@ msgstr ""
 "هویت این وب‌گاه توسط سازمان مورد اعتمادی که آن را صادر کرده بود باطل شده است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1811
+#: embed/ephy-web-view.c:1831
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1177,7 +1182,7 @@ msgstr ""
 "هویت این وب‌گاه قابل اعتماد نیست زیرا از رمزنگاری بسیار ضعیفی استفاده می‌کند."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1816
+#: embed/ephy-web-view.c:1836
 msgid ""
 "This website’s identification is only valid for future dates. Check the date on "
 "your computer’s calendar."
@@ -1187,24 +1192,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1881 embed/ephy-web-view.c:1937
+#: embed/ephy-web-view.c:1901 embed/ephy-web-view.c:1957
 #, c-format
 msgid "Problem Loading Page"
 msgstr "مشکل در هنگام بارگیری صفحه"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1904
 msgid "Unable to display this website"
 msgstr "ناتوانی در نمایش این پایگاه وب"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1889
+#: embed/ephy-web-view.c:1909
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "به نظر پایگاه روی %s ناموجود است."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1893
+#: embed/ephy-web-view.c:1913
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish to "
 "verify that your internet connection is working correctly."
@@ -1213,7 +1218,7 @@ msgstr ""
 "صحت عملکرد اتّصال اینترنتیتان مطمين شوید."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1903
+#: embed/ephy-web-view.c:1923
 #, c-format
 msgid "The precise error was: %s"
 msgstr "خطای دقیق این بود: %s"
@@ -1222,48 +1227,48 @@ msgstr "خطای دقیق این بود: %s"
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1908 embed/ephy-web-view.c:1961 embed/ephy-web-view.c:1997
-#: embed/ephy-web-view.c:2033 src/resources/gtk/page-menu-popover.ui:102
+#: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981 embed/ephy-web-view.c:2017
+#: embed/ephy-web-view.c:2053 src/resources/gtk/page-menu-popover.ui:102
 msgid "Reload"
 msgstr "بازخوانی"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1912 embed/ephy-web-view.c:1965 embed/ephy-web-view.c:2001
-#: embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1985 embed/ephy-web-view.c:2021
+#: embed/ephy-web-view.c:2057
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "ب"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1960
 msgid "Oops! There may be a problem"
 msgstr "اُخ! ممکن است مشکلی وجود داشته باشد"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1945
+#: embed/ephy-web-view.c:1965
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "ممکن است صفحهٔ %s موجب بسته‌شدن غیرمنتظرهٔ وب شده باشد."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1972
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "اگر باز هم رخ داد، لطفاً مشکل را به توسعه‌دهندگان %s گزارش کنید."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1986
+#: embed/ephy-web-view.c:2006
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "مشکل در نمایش صفحه"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1989
+#: embed/ephy-web-view.c:2009
 msgid "Oops!"
 msgstr "اُخ!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1992
+#: embed/ephy-web-view.c:2012
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1272,18 +1277,18 @@ msgstr ""
 "صفحه‌ای دیگر را ببینید."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2022
+#: embed/ephy-web-view.c:2042
 #, c-format
 msgid "Unresponsive Page"
 msgstr "صفحهٔ ناپاسخگو"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2025
+#: embed/ephy-web-view.c:2045
 msgid "Uh-oh!"
 msgstr "ای وای!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2028
+#: embed/ephy-web-view.c:2048
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a different "
 "page to continue."
@@ -1292,18 +1297,18 @@ msgstr ""
 "دیگر را ببینید."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2064
+#: embed/ephy-web-view.c:2084
 #, c-format
 msgid "Security Violation"
 msgstr "نقض امنیت"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2087
 msgid "This Connection is Not Secure"
 msgstr "این اتصال امن نیست"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2072
+#: embed/ephy-web-view.c:2092
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or alter "
@@ -1315,43 +1320,43 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2082 embed/ephy-web-view.c:2170 embed/ephy-web-view.c:2220
+#: embed/ephy-web-view.c:2102 embed/ephy-web-view.c:2190 embed/ephy-web-view.c:2240
 msgid "Go Back"
 msgstr "بازگشت"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2085 embed/ephy-web-view.c:2173 embed/ephy-web-view.c:2223
+#: embed/ephy-web-view.c:2105 embed/ephy-web-view.c:2193 embed/ephy-web-view.c:2243
 msgctxt "back-access-key"
 msgid "B"
 msgstr "ب"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2088 embed/ephy-web-view.c:2176
+#: embed/ephy-web-view.c:2108 embed/ephy-web-view.c:2196
 msgid "Accept Risk and Proceed"
 msgstr "پذیرش ریسک و ادامه دادن"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2092 embed/ephy-web-view.c:2180
+#: embed/ephy-web-view.c:2112 embed/ephy-web-view.c:2200
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "پ"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2120
+#: embed/ephy-web-view.c:2140
 #, c-format
 msgid "Security Warning"
 msgstr "هشدار امنیتی"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2123
+#: embed/ephy-web-view.c:2143
 msgid "Unsafe website detected!"
 msgstr "پایگاه وب ناامن کشف شد!"
 
-#: embed/ephy-web-view.c:2131
+#: embed/ephy-web-view.c:2151
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious code "
@@ -1360,7 +1365,7 @@ msgstr ""
 "مشاهدهٔ %s می‌تواند به رایانه‌تان آسیب بزند. به نظر می‌رسد این صفحه شامل کدهای "
 "مخرّبیست که می‌توانند بدون رضایتتان، روی رایانه‌تان بارگیری شوند."
 
-#: embed/ephy-web-view.c:2135
+#: embed/ephy-web-view.c:2155
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1369,7 +1374,7 @@ msgstr ""
 "می‌توانید در %s بیش‌تر در مورد محتوای وب مخرّب شامل ویروس‌ها و دیگر بدافزارها و روش "
 "محافظت از رایانه‌تان بیاموزید."
 
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2162
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1379,12 +1384,12 @@ msgstr ""
 "ممکن است نفوذگران روی %s شما را به انجام کاری خطرناک مانند نصب نصب‌افزارها یا "
 "افشای اطّلاعات شخصیتان (مثلاً گذرواژه‌ها، شماره‌تلفن‌ها یا کارت‌های اعتباری) وادارند."
 
-#: embed/ephy-web-view.c:2147
+#: embed/ephy-web-view.c:2167
 #, c-format
 msgid "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "می‌توانید در %s یا از %s بیش‌تر دربارهٔ مهندسی اجتماعی (فیشینگ) بیاموزید."
 
-#: embed/ephy-web-view.c:2156
+#: embed/ephy-web-view.c:2176
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1395,24 +1400,24 @@ msgstr ""
 "برنامه‌هایی که تجربهٔ مرورتان را خراب می‌کنند (مثلاً با تعویض صفحهٔ خانگی یا نمایش "
 "تبلیغات اضافی روی پایگاه‌هایی که می‌بینید) وادارند."
 
-#: embed/ephy-web-view.c:2161
+#: embed/ephy-web-view.c:2181
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "می‌توانید در %s درباره نرم‌افزارهای ناخواسته بیش‌تر بیاموزید."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2203 embed/ephy-web-view.c:2206
+#: embed/ephy-web-view.c:2223 embed/ephy-web-view.c:2226
 #, c-format
 msgid "File not found"
 msgstr "پرونده پیدا نشد"
 
-#: embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2231
 #, c-format
 msgid "%s could not be found."
 msgstr "%s نتوانست پیدا شود."
 
-#: embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:2233
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also check "
@@ -1421,15 +1426,15 @@ msgstr ""
 "لطفاً نام پرونده را برای حروف بزرگ یا دیگر خطاهای نگارشی بررسی کنید. هم‌چنین "
 "جابه‌جایی، تغییرنام یا حذفش را بررسی کنید."
 
-#: embed/ephy-web-view.c:2276
+#: embed/ephy-web-view.c:2296
 msgid "None specified"
 msgstr "هیچکدام مشخص نشده"
 
-#: embed/ephy-web-view.c:2407
+#: embed/ephy-web-view.c:2427
 msgid "Technical information"
 msgstr "اطلاعات فنی"
 
-#: embed/ephy-web-view.c:3602
+#: embed/ephy-web-view.c:3622
 msgid "_OK"
 msgstr "_قبول"
 
@@ -1438,26 +1443,31 @@ msgid "Unspecified"
 msgstr "نامشخص"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:185
+#: lib/ephy-file-helpers.c:118 lib/ephy-file-helpers.c:194
+#: src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "بارگیری‌ها"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:175
+#: lib/ephy-file-helpers.c:175 lib/ephy-file-helpers.c:191
 msgid "Desktop"
 msgstr "میزکار"
 
-#: lib/ephy-file-helpers.c:392
+#: lib/ephy-file-helpers.c:188
+msgid "Home"
+msgstr "خانه"
+
+#: lib/ephy-file-helpers.c:426
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "ایجاد شاخهٔ موقت در «%s» شکست خورد."
 
-#: lib/ephy-file-helpers.c:514
+#: lib/ephy-file-helpers.c:548
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "پروندهٔ «%s» وجود دارد. لطفاً آن را از سر راه کنار ببرید."
 
-#: lib/ephy-file-helpers.c:533
+#: lib/ephy-file-helpers.c:567
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ایجاد شاخهٔ «%s» شکست خورد."
@@ -1695,7 +1705,7 @@ msgid ""
 "This certificate is valid. However, resources on this page were sent insecurely."
 msgstr "این گواهی معتبر است. هرچند، منابع روی این صفحه به صورت امن ارسال نشده‌اند."
 
-#: lib/widgets/ephy-downloads-popover.c:228 src/resources/gtk/history-dialog.ui:216
+#: lib/widgets/ephy-downloads-popover.c:214 src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_‌پاک کردن همه"
@@ -1763,7 +1773,7 @@ msgstr "در حال لغو…"
 msgid "Starting…"
 msgstr "در حال شروع…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:268
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_گشودن"
@@ -1788,7 +1798,7 @@ msgstr "همهٔ پرونده‌ها"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:743 src/ephy-history-dialog.c:565
+#: lib/widgets/ephy-location-entry.c:743 src/ephy-history-dialog.c:558
 msgid "Cl_ear"
 msgstr "_پاک کردن"
 
@@ -1971,30 +1981,30 @@ msgstr "آخرین همگام‌سازی: %s"
 msgid "Something went wrong, please try again later."
 msgstr "چیزی اشتباه پیش رفت. لطفاً بعداً دوباره تلاش کنید."
 
-#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:977
+#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:970
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "در حالت ناشناس نمی‌توان تاریخچه را دستکاری کرد."
 
-#: src/ephy-history-dialog.c:459
+#: src/ephy-history-dialog.c:453
 msgid "Remove the selected pages from history"
 msgstr "حذف صفحه‌های انتخاب شده از تاریخچه"
 
-#: src/ephy-history-dialog.c:465
+#: src/ephy-history-dialog.c:459
 msgid "Copy URL"
 msgstr "رونوشت از نشانی"
 
-#: src/ephy-history-dialog.c:555
+#: src/ephy-history-dialog.c:548
 msgid "Clear browsing history?"
 msgstr "تاریخچهٔ مرور پاک شود؟"
 
-#: src/ephy-history-dialog.c:559
+#: src/ephy-history-dialog.c:552
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 "پاک کردن تاریخچهٔ مرور سبب خواهد شد همهٔ پیوندهای تاریخچه برای همیشه حذف شوند."
 
-#: src/ephy-history-dialog.c:980
+#: src/ephy-history-dialog.c:973
 msgid "Remove all history"
 msgstr "برداشتن تمام تاریخچه"
 
@@ -2047,33 +2057,33 @@ msgstr "گزینه‌های وب"
 msgid "Open a new tab"
 msgstr "گشودن زبانه‌ای جدید"
 
-#: src/ephy-web-extension-dialog.c:91
+#: src/ephy-web-extension-dialog.c:87
 msgid "Do you really want to remove this extension?"
 msgstr "واقعاً می‌خواهید این افزونه را بردارید؟"
 
-#: src/ephy-web-extension-dialog.c:95 src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "_‌حذف"
 
-#: src/ephy-web-extension-dialog.c:176
+#: src/ephy-web-extension-dialog.c:172
 msgid "Author"
 msgstr "نگارنده"
 
-#: src/ephy-web-extension-dialog.c:185
+#: src/ephy-web-extension-dialog.c:181
 msgid "Version"
 msgstr "نگارش"
 
-#: src/ephy-web-extension-dialog.c:194 src/resources/gtk/prefs-general-page.ui:127
+#: src/ephy-web-extension-dialog.c:190 src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "صفحهٔ خانگی"
 
-#: src/ephy-web-extension-dialog.c:211
+#: src/ephy-web-extension-dialog.c:207
 msgid "Remove selected WebExtension"
 msgstr "برداشتن افزونهٔ وب گزیده"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:265
+#: src/ephy-web-extension-dialog.c:261
 msgid "Open File (manifest.json/xpi)"
 msgstr "گشودن پرونده (manifest.json/xpi)"
 
@@ -2232,11 +2242,11 @@ msgstr "گشودن پیوند در پنجرهٔ ناشناس"
 msgid "Do you want to leave this website?"
 msgstr "می‌خواهید از این پایگاه وب خارج شوید؟"
 
-#: src/ephy-window.c:2866 src/ephy-window.c:4221 src/window-commands.c:1207
+#: src/ephy-window.c:2866 src/ephy-window.c:4221 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "فرمی که تغییر دادید، ثبت نشده است."
 
-#: src/ephy-window.c:2867 src/ephy-window.c:4222 src/window-commands.c:1209
+#: src/ephy-window.c:2867 src/ephy-window.c:4222 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_دور انداختن فرم"
 
@@ -2288,15 +2298,15 @@ msgstr "اگر این پنجره را ببندید، همهٔ زبانه‌ها�
 msgid "C_lose tabs"
 msgstr "بستن _زبانه‌ها"
 
-#: src/popup-commands.c:240
+#: src/popup-commands.c:260
 msgid "Save Link As"
 msgstr "ذخیرهٔ پیوند به نام"
 
-#: src/popup-commands.c:248
+#: src/popup-commands.c:268
 msgid "Save Image As"
 msgstr "ذخیرهٔ تصویر به نام"
 
-#: src/popup-commands.c:256
+#: src/popup-commands.c:276
 msgid "Save Media As"
 msgstr "ذخیرهٔ رسانه به عنوان"
 
@@ -2392,41 +2402,41 @@ msgstr "نامی لازم است"
 msgid "This search engine already exists"
 msgstr "این موتور جست‌وجو از پیش موجود است"
 
-#: src/preferences/passwords-view.c:196
+#: src/preferences/passwords-view.c:191
 msgid "Delete All Passwords?"
 msgstr "حذف همهٔ گذرواژه‌ها؟"
 
-#: src/preferences/passwords-view.c:199
+#: src/preferences/passwords-view.c:194
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "این کار همهٔ گذرواژه‌های ذخیره‌شده به صورت محلّی را پاک‌سازی کرده و قابل بازگردانی "
 "نیست."
 
-#: src/preferences/passwords-view.c:204 src/resources/gtk/history-dialog.ui:239
+#: src/preferences/passwords-view.c:199 src/resources/gtk/history-dialog.ui:239
 msgid "_Delete"
 msgstr "_حذف"
 
-#: src/preferences/passwords-view.c:262
+#: src/preferences/passwords-view.c:257
 msgid "Copy password"
 msgstr "رونوشت از گذرواژه‌"
 
-#: src/preferences/passwords-view.c:268
+#: src/preferences/passwords-view.c:263
 msgid "Username"
 msgstr "نام کاربری"
 
-#: src/preferences/passwords-view.c:291
+#: src/preferences/passwords-view.c:286
 msgid "Copy username"
 msgstr "رونوشت از نام کاربری"
 
-#: src/preferences/passwords-view.c:297
+#: src/preferences/passwords-view.c:292
 msgid "Password"
 msgstr "گذرواژه‌"
 
-#: src/preferences/passwords-view.c:322
+#: src/preferences/passwords-view.c:317
 msgid "Reveal password"
 msgstr "رونمایی گذرواژه"
 
-#: src/preferences/passwords-view.c:332
+#: src/preferences/passwords-view.c:327
 msgid "Remove Password"
 msgstr "برداشتن گذرواژه"
 
@@ -2446,28 +2456,24 @@ msgstr "روشن"
 msgid "Dark"
 msgstr "تاریک"
 
-#: src/preferences/prefs-general-page.c:297
+#: src/preferences/prefs-general-page.c:298
 #: src/resources/gtk/prefs-lang-dialog.ui:11
 msgid "Add Language"
 msgstr "اضافه کردن زبان"
 
-#: src/preferences/prefs-general-page.c:526
-#: src/preferences/prefs-general-page.c:685
+#: src/preferences/prefs-general-page.c:527
+#: src/preferences/prefs-general-page.c:686
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "زبان سیستم (%s)"
 msgstr[1] "زبان‌های سیستم (%s)"
 
-#: src/preferences/prefs-general-page.c:713
-msgid "Select a directory"
-msgstr "گزینش یک شاخه"
-
-#: src/preferences/prefs-general-page.c:859
+#: src/preferences/prefs-general-page.c:892
 msgid "Web Application Icon"
 msgstr "نقشک برنامهٔ وب"
 
-#: src/preferences/prefs-general-page.c:864
+#: src/preferences/prefs-general-page.c:897
 msgid "Supported Image Files"
 msgstr "پرونده‌های تصویری پشتیبانی‌شده"
 
@@ -3010,35 +3016,35 @@ msgstr "_پرسش هنگام بارگیری"
 msgid "_Download Folder"
 msgstr "شاخهٔ _بارگیری"
 
-#: src/resources/gtk/prefs-general-page.ui:214
+#: src/resources/gtk/prefs-general-page.ui:250
 msgid "Search Engines"
 msgstr "موتورهای جست‌وجو"
 
-#: src/resources/gtk/prefs-general-page.ui:225
+#: src/resources/gtk/prefs-general-page.ui:261
 msgid "Session"
 msgstr "نشست"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:266
 msgid "Start in _Incognito Mode"
 msgstr "شروع در حالت _ناشناس"
 
-#: src/resources/gtk/prefs-general-page.ui:244
+#: src/resources/gtk/prefs-general-page.ui:280
 msgid "_Restore Tabs on Startup"
 msgstr "_بارگردانی زبانه‌ها هنگام شروع"
 
-#: src/resources/gtk/prefs-general-page.ui:259
+#: src/resources/gtk/prefs-general-page.ui:295
 msgid "Browsing"
 msgstr "مرور"
 
-#: src/resources/gtk/prefs-general-page.ui:264
+#: src/resources/gtk/prefs-general-page.ui:300
 msgid "Mouse _Gestures"
 msgstr "_حرکت‌های موشی"
 
-#: src/resources/gtk/prefs-general-page.ui:278
+#: src/resources/gtk/prefs-general-page.ui:314
 msgid "S_witch Immediately to New Tabs"
 msgstr "_تعویض فوری به زبانه‌های جدید"
 
-#: src/resources/gtk/prefs-general-page.ui:313
+#: src/resources/gtk/prefs-general-page.ui:349
 msgid "_Spell Checking"
 msgstr "_خطایاب املایی"
 
@@ -3511,25 +3517,25 @@ msgstr "پروندهٔ HTML"
 msgid "Firefox"
 msgstr "فایرفاکس"
 
-#: src/window-commands.c:116 src/window-commands.c:687
+#: src/window-commands.c:116 src/window-commands.c:693
 msgid "Chrome"
 msgstr "کروم"
 
-#: src/window-commands.c:117 src/window-commands.c:688
+#: src/window-commands.c:117 src/window-commands.c:694
 msgid "Chromium"
 msgstr "کرومیوم"
 
-#: src/window-commands.c:131 src/window-commands.c:552 src/window-commands.c:766
+#: src/window-commands.c:131 src/window-commands.c:556 src/window-commands.c:772
 msgid "Ch_oose File"
 msgstr "_گزینش پرونده"
 
-#: src/window-commands.c:133 src/window-commands.c:378 src/window-commands.c:423
-#: src/window-commands.c:768 src/window-commands.c:794
+#: src/window-commands.c:133 src/window-commands.c:380 src/window-commands.c:427
+#: src/window-commands.c:774 src/window-commands.c:800
 msgid "I_mport"
 msgstr "_وارد کردن"
 
-#: src/window-commands.c:293 src/window-commands.c:366 src/window-commands.c:411
-#: src/window-commands.c:454 src/window-commands.c:477 src/window-commands.c:493
+#: src/window-commands.c:293 src/window-commands.c:368 src/window-commands.c:415
+#: src/window-commands.c:458 src/window-commands.c:481 src/window-commands.c:497
 msgid "Bookmarks successfully imported!"
 msgstr "نشانک‌ها با موفّقیت درون‌ریزی شدند!"
 
@@ -3537,40 +3543,36 @@ msgstr "نشانک‌ها با موفّقیت درون‌ریزی شدند!"
 msgid "Select Profile"
 msgstr "گزینش نمایه"
 
-#: src/window-commands.c:311
-msgid "_Select"
-msgstr "_گزینش"
-
-#: src/window-commands.c:375 src/window-commands.c:420 src/window-commands.c:644
+#: src/window-commands.c:377 src/window-commands.c:424 src/window-commands.c:650
 msgid "Choose File"
 msgstr "گزینش پرونده"
 
-#: src/window-commands.c:547
+#: src/window-commands.c:551
 msgid "Import Bookmarks"
 msgstr "وارد کردن نشانک‌ها"
 
-#: src/window-commands.c:566 src/window-commands.c:808
+#: src/window-commands.c:570 src/window-commands.c:814
 msgid "From:"
 msgstr "از:"
 
-#: src/window-commands.c:608
+#: src/window-commands.c:612
 msgid "Bookmarks successfully exported!"
 msgstr "نشانک‌ها با موفّقیت برون‌ریزی شدند!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:652
+#: src/window-commands.c:658
 msgid "bookmarks.html"
 msgstr "نشانک‌ها.html"
 
-#: src/window-commands.c:725
+#: src/window-commands.c:731
 msgid "Passwords successfully imported!"
 msgstr "گذرواژه‌ها با موفّقیت درون‌ریزی شدند!"
 
-#: src/window-commands.c:789
+#: src/window-commands.c:795
 msgid "Import Passwords"
 msgstr "درون‌ریزی گذرواژه‌ها"
 
-#: src/window-commands.c:982
+#: src/window-commands.c:988
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3579,15 +3581,15 @@ msgstr ""
 "نمایی ساده، تمیز و زببا از وب.\n"
 "قدرت‌گرفته از وب‌کیت %Id.%Id.%Id"
 
-#: src/window-commands.c:996
+#: src/window-commands.c:1002
 msgid "Epiphany Canary"
 msgstr "اپیفنی قناری"
 
-#: src/window-commands.c:1012
+#: src/window-commands.c:1018
 msgid "Website"
 msgstr "پایگاه وب"
 
-#: src/window-commands.c:1045
+#: src/window-commands.c:1051
 msgid "translator-credits"
 msgstr ""
 "آرش موسوی <mousavi.arash@gmail.com>\n"
@@ -3597,74 +3599,74 @@ msgstr ""
 "مهیار مقیمی <mahyar.moqimi@gmail.com>\n"
 "هادی زاهدیان <zahedianhadi@gmail.com>"
 
-#: src/window-commands.c:1205
+#: src/window-commands.c:1211
 msgid "Do you want to reload this website?"
 msgstr "می‌خواهید این پایگاه وب را دوباره بار کنید؟"
 
-#: src/window-commands.c:1794
+#: src/window-commands.c:1800
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "برنامهٔ «%s» آمادهٔ استفاده است"
 
-#: src/window-commands.c:1797
+#: src/window-commands.c:1803
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "نمی‌توان برنامهٔ «%s» را ایجاد کرد"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1812
+#: src/window-commands.c:1818
 msgid "Launch"
 msgstr "راه‌اندازی"
 
-#: src/window-commands.c:1873
+#: src/window-commands.c:1879
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "برنامهٔ وبی با نام «%s» از پیش موجود است. می‌خواهید جایگزینش کنید؟"
 
-#: src/window-commands.c:1876
+#: src/window-commands.c:1882
 msgid "Cancel"
 msgstr "لغو"
 
-#: src/window-commands.c:1878
+#: src/window-commands.c:1884
 msgid "Replace"
 msgstr "جای‌گزینی"
 
-#: src/window-commands.c:1882
+#: src/window-commands.c:1888
 msgid ""
 "An application with the same name already exists. Replacing it will overwrite it."
 msgstr ""
 "برنامه‌ای با این نام از قبل موجود است. جای‌گزینی آن باعث رونویسی اطلاعات خواهد شد."
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1917
+#: src/window-commands.c:1923
 msgid "Create Web Application"
 msgstr "ایجاد برنامهٔ وب"
 
-#: src/window-commands.c:1922
+#: src/window-commands.c:1928
 msgid "C_reate"
 msgstr "_ایجاد"
 
-#: src/window-commands.c:2141
+#: src/window-commands.c:2154
 msgid "Save"
 msgstr "ذخیره"
 
-#: src/window-commands.c:2150
+#: src/window-commands.c:2175
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2155
+#: src/window-commands.c:2180
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2160
+#: src/window-commands.c:2185
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2699
+#: src/window-commands.c:2724
 msgid "Enable caret browsing mode?"
 msgstr "به‌کار انداختن حالت مرور با هشتک؟"
 
-#: src/window-commands.c:2702
+#: src/window-commands.c:2727
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you want "
@@ -3674,9 +3676,12 @@ msgstr ""
 "شونده را در صفحهٔ وب می‌گذارد، تا به شما اجازه دهد بوسیلهٔ صفحهٔ کلید خود در صفحه "
 "جابجا شوید. آیا مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: src/window-commands.c:2705
+#: src/window-commands.c:2730
 msgid "_Enable"
 msgstr "_به کار انداختن"
+
+#~ msgid "Save file"
+#~ msgstr "ذخیرهٔ پرونده"
 
 #~ msgid "GNOME Web"
 #~ msgstr "وبِ گنوم"
