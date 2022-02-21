@@ -25,7 +25,6 @@
 
 #include "window-commands.h"
 
-#include "ephy-add-bookmark-popover.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-manager.h"
@@ -2421,14 +2420,12 @@ window_cmd_bookmark_page (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyHeaderBar *header_bar;
   EphyTitleWidget *title_widget;
-  GtkPopover *popover;
 
   header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
   title_widget = ephy_header_bar_get_title_widget (header_bar);
   g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
-  popover = ephy_location_entry_get_add_bookmark_popover (EPHY_LOCATION_ENTRY (title_widget));
 
-  ephy_add_bookmark_popover_show (EPHY_ADD_BOOKMARK_POPOVER (popover));
+  ephy_location_entry_show_add_bookmark_popover (EPHY_LOCATION_ENTRY (title_widget));
 }
 
 void

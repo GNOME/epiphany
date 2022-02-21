@@ -57,11 +57,9 @@ void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntr
 void            ephy_location_entry_set_add_bookmark_popover   (EphyLocationEntry *entry,
                                                                 GtkPopover        *popover);
 
-GtkPopover     *ephy_location_entry_get_add_bookmark_popover   (EphyLocationEntry *entry);
+void            ephy_location_entry_show_add_bookmark_popover  (EphyLocationEntry *entry);
 
 GtkWidget      *ephy_location_entry_get_entry                  (EphyLocationEntry *entry);
-
-GtkWidget      *ephy_location_entry_get_bookmark_widget        (EphyLocationEntry *entry);
 
 GtkWidget      *ephy_location_entry_get_reader_mode_widget     (EphyLocationEntry *entry);
 

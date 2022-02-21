@@ -95,7 +95,7 @@ gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
 void              ephy_window_get_geometry               (EphyWindow   *window,
                                                           GdkRectangle *rectangle);
 
-void ephy_window_sync_bookmark_state (GtkWidget             *widget,
-                                      EphyBookmarkIconState  state);
+void              ephy_window_sync_bookmark_state        (EphyWindow            *window,
+                                                          EphyBookmarkIconState  state);
 
 G_END_DECLS

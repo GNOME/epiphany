@@ -259,21 +259,11 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 }
 
 static void
-add_bookmark_button_clicked_cb (EphyActionBarEnd *action_bar_end)
-{
-  GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (action_bar_end->bookmark_button));
-  GtkWidget *popover = ephy_add_bookmark_popover_new (GTK_WIDGET (action_bar_end->bookmark_button), window);
-
-  g_signal_connect_object (popover, "update-state", G_CALLBACK (ephy_window_sync_bookmark_state), action_bar_end, G_CONNECT_SWAPPED);
-
-  ephy_add_bookmark_popover_show (EPHY_ADD_BOOKMARK_POPOVER (popover));
-}
-
-static void
 ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
 {
   GObject *object = G_OBJECT (action_bar_end);
   EphyDownloadsManager *downloads_manager;
+  GtkWidget *popover;
 
   /* Ensure the types used by the template have been initialized. */
   EPHY_TYPE_DOWNLOADS_PROGRESS_ICON;
@@ -318,9 +308,9 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                            G_CALLBACK (show_downloads_cb),
                            object, 0);
 
-  g_signal_connect_object (action_bar_end->bookmark_button, "clicked",
-                           G_CALLBACK (add_bookmark_button_clicked_cb), action_bar_end,
-                           G_CONNECT_SWAPPED);
+  popover = ephy_add_bookmark_popover_new ();
+
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar_end->bookmark_button), popover);
 }
 
 EphyActionBarEnd *

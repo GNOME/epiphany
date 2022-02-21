@@ -1195,11 +1195,9 @@ sync_tab_is_blank (EphyWebView *view,
 }
 
 void
-ephy_window_sync_bookmark_state (GtkWidget             *widget,
+ephy_window_sync_bookmark_state (EphyWindow            *window,
                                  EphyBookmarkIconState  state)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (widget));
-  EphyWindow *window = EPHY_WINDOW (toplevel);
   EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
   GtkWidget *lentry;
 

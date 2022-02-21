@@ -104,7 +104,6 @@ enum {
 
 enum signalsEnum {
   USER_CHANGED,
-  BOOKMARK_CLICKED,
   GET_LOCATION,
   GET_TITLE,
   LAST_SIGNAL
@@ -528,20 +527,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                         G_TYPE_NONE);
 
   /**
-   * EphyLocationEntry::bookmark-clicked:
-   * @entry: the object on which the signal is emitted
-   *
-   * Emitted when the user clicks the bookmark icon inside the
-   * #EphyLocationEntry.
-   *
-   */
-  signals[BOOKMARK_CLICKED] = g_signal_new ("bookmark-clicked", G_OBJECT_CLASS_TYPE (klass),
-                                            G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                            0, NULL, NULL, NULL,
-                                            G_TYPE_NONE,
-                                            0);
-
-  /**
    * EphyLocationEntry::get-location:
    * @entry: the object on which the signal is emitted
    * Returns: the current page address as a string
@@ -813,20 +798,11 @@ icon_button_icon_press_event_cb (GtkWidget            *widget,
       GdkRectangle lock_position;
       gtk_entry_get_icon_area (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, &lock_position);
       g_signal_emit_by_name (entry, "lock-clicked", &lock_position);
-    } else {
-      g_signal_emit (entry, signals[BOOKMARK_CLICKED], 0);
     }
     return TRUE;
   }
 
   return FALSE;
-}
-
-static void
-bookmark_icon_button_clicked_cb (GtkButton         *button,
-                                 EphyLocationEntry *lentry)
-{
-  g_signal_emit (lentry, signals[BOOKMARK_CLICKED], 0);
 }
 
 static GtkBorder
@@ -1130,14 +1106,18 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                            G_CALLBACK (update_reader_icon), entry, G_CONNECT_SWAPPED);
 
   /* Bookmark */
-  entry->bookmark_button = gtk_button_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_widget_set_tooltip_text (entry->bookmark_button, _("Bookmark this page"));
-  entry->bookmark_icon = gtk_button_get_image (GTK_BUTTON (entry->bookmark_button));
-  g_signal_connect (G_OBJECT (entry->bookmark_button), "clicked", G_CALLBACK (bookmark_icon_button_clicked_cb), entry);
-  gtk_box_pack_start (GTK_BOX (box), entry->bookmark_button, FALSE, TRUE, 0);
-
+  entry->bookmark_icon = gtk_image_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
   context = gtk_widget_get_style_context (entry->bookmark_icon);
   gtk_style_context_add_class (context, "entry_icon");
+  gtk_widget_show (entry->bookmark_icon);
+
+  entry->bookmark_button = gtk_menu_button_new ();
+  gtk_container_add (GTK_CONTAINER (entry->bookmark_button), entry->bookmark_icon);
+  context = gtk_widget_get_style_context (entry->bookmark_button);
+  gtk_style_context_add_class (context, "image-button");
+
+  gtk_widget_set_tooltip_text (entry->bookmark_button, _("Bookmark this page"));
+  gtk_box_pack_start (GTK_BOX (box), entry->bookmark_button, FALSE, TRUE, 0);
 
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
@@ -1454,25 +1434,22 @@ ephy_location_entry_set_add_bookmark_popover (EphyLocationEntry *entry,
   g_assert (EPHY_IS_LOCATION_ENTRY (entry));
   g_assert (GTK_IS_POPOVER (popover));
 
-  entry->add_bookmark_popover = popover;
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (entry->bookmark_button),
+                               GTK_WIDGET (popover));
 }
 
-GtkPopover *
-ephy_location_entry_get_add_bookmark_popover (EphyLocationEntry *entry)
+void
+ephy_location_entry_show_add_bookmark_popover (EphyLocationEntry *entry)
 {
-  return entry->add_bookmark_popover;
+  GtkPopover *popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (entry->bookmark_button));
+
+  gtk_popover_popup (popover);
 }
 
 GtkWidget *
 ephy_location_entry_get_entry (EphyLocationEntry *entry)
 {
   return GTK_WIDGET (entry->url_entry);
-}
-
-GtkWidget *
-ephy_location_entry_get_bookmark_widget (EphyLocationEntry *entry)
-{
-  return entry->bookmark_button;
 }
 
 GtkWidget *

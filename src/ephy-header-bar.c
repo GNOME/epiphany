@@ -151,20 +151,6 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
 }
 
 static void
-add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
-                                gpointer          *user_data)
-{
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
-  GActionGroup *action_group;
-  GAction *action;
-
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "win");
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark-page");
-
-  g_action_activate (action, NULL);
-}
-
-static void
 update_revealer_visibility (GtkRevealer *revealer)
 {
   gtk_widget_set_visible (GTK_WIDGET (revealer),
@@ -250,16 +236,9 @@ ephy_header_bar_constructed (GObject *object)
 
   if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
     EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (header_bar->title_widget);
-    GtkWidget *popover = ephy_add_bookmark_popover_new (ephy_location_entry_get_bookmark_widget (lentry), GTK_WIDGET (header_bar->window));
+    GtkWidget *popover = ephy_add_bookmark_popover_new ();
 
-    g_signal_connect_object (popover, "update-state", G_CALLBACK (ephy_window_sync_bookmark_state), header_bar, G_CONNECT_SWAPPED);
     ephy_location_entry_set_add_bookmark_popover (lentry, GTK_POPOVER (popover));
-
-    g_signal_connect_object (header_bar->title_widget,
-                             "bookmark-clicked",
-                             G_CALLBACK (add_bookmark_button_clicked_cb),
-                             header_bar,
-                             0);
   }
 
   /* Fullscreen restore button */

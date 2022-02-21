@@ -30,9 +30,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyAddBookmarkPopover, ephy_add_bookmark_popover, EPHY, ADD_BOOKMARK_POPOVER, GtkPopover)
 
-GtkWidget       *ephy_add_bookmark_popover_new      (GtkWidget *relative_to,
-                                                     GtkWidget *window);
-
-void             ephy_add_bookmark_popover_show     (EphyAddBookmarkPopover *self);
+GtkWidget       *ephy_add_bookmark_popover_new      (void);
 
 G_END_DECLS
