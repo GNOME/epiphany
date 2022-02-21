@@ -80,6 +80,6 @@ void            ephy_location_entry_page_action_add            (EphyLocationEntr
 void            ephy_location_entry_page_action_clear          (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_adaptive_mode          (EphyLocationEntry *entry,
-                                                                EphyAdaptiveMode   adpative_mode);
+                                                                EphyAdaptiveMode   adaptive_mode);
 
 G_END_DECLS
