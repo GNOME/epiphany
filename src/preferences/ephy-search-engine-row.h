@@ -33,7 +33,7 @@ G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_
 EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine,
                                                                     EphySearchEngineManager *manager);
 void                 ephy_search_engine_row_set_can_remove         (EphySearchEngineRow *self,
-                                                                    gboolean can_remove);
+                                                                    gboolean             can_remove);
 void                 ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
                                                                     GtkRadioButton      *radio_button_group);
 
