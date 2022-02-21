@@ -24,7 +24,6 @@
 #include <glib/gi18n.h>
 #include <gmodule.h>
 
-#include "ephy-search-engine-listbox.h"
 #include "ephy-search-engine-manager.h"
 
 #include "ephy-embed-shell.h"
