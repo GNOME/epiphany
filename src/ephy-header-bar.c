@@ -165,19 +165,6 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
 }
 
 static void
-restore_button_clicked_cb (GtkButton     *button,
-                           EphyHeaderBar *header_bar)
-{
-  GActionGroup *action_group;
-  GAction *action;
-
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "win");
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
-
-  g_action_activate (action, NULL);
-}
-
-static void
 update_revealer_visibility (GtkRevealer *revealer)
 {
   gtk_widget_set_visible (GTK_WIDGET (revealer),
@@ -278,9 +265,8 @@ ephy_header_bar_constructed (GObject *object)
   /* Fullscreen restore button */
   header_bar->restore_button = gtk_button_new_from_icon_name ("view-restore-symbolic",
                                                               GTK_ICON_SIZE_BUTTON);
-  g_signal_connect_object (header_bar->restore_button, "clicked",
-                           G_CALLBACK (restore_button_clicked_cb),
-                           header_bar, 0);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (header_bar->restore_button),
+                                  "win.fullscreen");
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
                            GTK_WIDGET (header_bar->restore_button));
 
