@@ -433,7 +433,7 @@ on_ephy_search_engine_row_constructed (GObject *object)
    */
   g_object_bind_property (self->name_entry, "text",
                           self, "title",
-                          G_BINDING_SYNC_CREATE | G_BINDING_DEFAULT);
+                          G_BINDING_SYNC_CREATE);
 
   gtk_entry_set_text (GTK_ENTRY (self->address_entry),
                       ephy_search_engine_get_url (self->engine));
