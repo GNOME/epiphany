@@ -384,14 +384,6 @@ on_remove_button_clicked_cb (EphySearchEngineRow *row,
 }
 
 static void
-ephy_search_engine_row_finalize (GObject *object)
-{
-  /* EphySearchEngineRow *self = (EphySearchEngineRow *)object; */
-
-  G_OBJECT_CLASS (ephy_search_engine_row_parent_class)->finalize (object);
-}
-
-static void
 ephy_search_engine_row_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
@@ -468,7 +460,6 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ephy_search_engine_row_finalize;
   object_class->set_property = ephy_search_engine_row_set_property;
   object_class->constructed = on_ephy_search_engine_row_constructed;
 
