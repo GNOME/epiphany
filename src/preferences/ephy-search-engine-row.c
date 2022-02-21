@@ -433,7 +433,7 @@ on_ephy_search_engine_row_constructed (GObject *object)
    * properties bindings that involve the root widget (the <template> root one).
    */
   g_object_bind_property (self->name_entry, "text",
-                          HDY_PREFERENCES_ROW (self), "title",
+                          self, "title",
                           G_BINDING_SYNC_CREATE | G_BINDING_DEFAULT);
 
   gtk_entry_set_text (GTK_ENTRY (self->address_entry),
