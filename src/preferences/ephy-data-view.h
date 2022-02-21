@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <handy.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

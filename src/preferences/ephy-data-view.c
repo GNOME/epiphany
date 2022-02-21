@@ -22,6 +22,7 @@
 #include "ephy-data-view.h"
 
 #include <ctype.h>
+#include <handy.h>
 
 typedef struct {
   GtkWidget *box;
