@@ -310,7 +310,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
-                         "The title used for the top HdyHeaderBar",
+                         "The title used for the header bar",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
