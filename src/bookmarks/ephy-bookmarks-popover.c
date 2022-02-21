@@ -238,6 +238,7 @@ create_tag_row (const char *tag)
   label = gtk_label_new (tag);
 
   gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, TRUE, 0);
