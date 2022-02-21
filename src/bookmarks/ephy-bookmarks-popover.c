@@ -53,6 +53,20 @@ static GtkWidget * create_bookmark_row (gpointer item, gpointer user_data);
 static GtkWidget *create_tag_row (const char *tag);
 
 static void
+tag_detail_back (EphyBookmarksPopover *self)
+{
+  GtkListBoxRow *row;
+
+  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+
+  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
+                                    "default");
+
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
+    gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (row));
+}
+
+static void
 remove_bookmark_row (GtkListBox *list_box,
                      const char *url)
 {
@@ -169,14 +183,8 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
                          ephy_bookmark_get_url (bookmark));
 
     /* If we removed the tag's last bookmark, switch back to the tags list. */
-    if (ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
-      GActionGroup *group;
-      GAction *action;
-
-      group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
-      action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
-      g_action_activate (action, NULL);
-    }
+    if (ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag))
+      tag_detail_back (self);
   }
 
   /* If the tag no longer contains bookmarks, remove it from the tags list */
@@ -289,12 +297,7 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
   } else if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
              ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, self->tag_detail_tag)) {
     /* If we removed the tag's last bookmark, switch back to the tags list. */
-    GActionGroup *group;
-    GAction *action;
-
-    group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
-    action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
-    g_action_activate (action, NULL);
+    tag_detail_back (self);
   }
 }
 
@@ -330,12 +333,7 @@ ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
 
   if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
       g_strcmp0 (self->tag_detail_tag, tag) == 0) {
-    GActionGroup *group;
-    GAction *action;
-
-    group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
-    action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
-    g_action_activate (action, NULL);
+    tag_detail_back (self);
   }
 }
 
@@ -375,15 +373,8 @@ ephy_bookmarks_popover_actions_tag_detail_back (GSimpleAction *action,
                                                 gpointer       user_data)
 {
   EphyBookmarksPopover *self = user_data;
-  GtkListBoxRow *row;
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
-
-  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
-                                    "default");
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
-    gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (row));
+  tag_detail_back (self);
 }
 
 static void
