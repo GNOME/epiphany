@@ -44,7 +44,14 @@ typedef struct {
   char *search_text;
 } EphyDataViewPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (EphyDataView, ephy_data_view, GTK_TYPE_BIN)
+static void ephy_data_view_buildable_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (EphyDataView, ephy_data_view, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (EphyDataView)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                ephy_data_view_buildable_init))
+
+static GtkBuildableIface *parent_buildable_iface;
 
 enum {
   PROP_0,
@@ -291,37 +298,14 @@ ephy_data_view_finalize (GObject *object)
 }
 
 static void
-ephy_data_view_add (GtkContainer *container,
-                    GtkWidget    *child)
-{
-  EphyDataView *self = EPHY_DATA_VIEW (container);
-  EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
-
-  if (!priv->box) {
-    GTK_CONTAINER_CLASS (ephy_data_view_parent_class)->add (container, child);
-    return;
-  }
-
-  g_assert (!priv->child);
-
-  priv->child = child;
-  gtk_container_add (GTK_CONTAINER (priv->stack), child);
-
-  update (self);
-}
-
-static void
 ephy_data_view_class_init (EphyDataViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->set_property = ephy_data_view_set_property;
   object_class->get_property = ephy_data_view_get_property;
   object_class->finalize = ephy_data_view_finalize;
-
-  container_class->add = ephy_data_view_add;
 
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
@@ -471,6 +455,35 @@ ephy_data_view_init (EphyDataView *self)
                                  APPLICATION_ID "-symbolic");
 
   update (self);
+}
+
+static void
+ephy_data_view_add_child (GtkBuildable *buildable,
+                          GtkBuilder   *builder,
+                          GObject      *child,
+                          const char   *type)
+{
+  EphyDataView *self = EPHY_DATA_VIEW (buildable);
+  EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
+
+  if (!priv->box || !GTK_IS_WIDGET (child)) {
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+    return;
+  }
+
+  g_assert (!priv->child);
+
+  priv->child = GTK_WIDGET (child);
+  gtk_container_add (GTK_CONTAINER (priv->stack), priv->child);
+
+  update (self);
+}
+
+static void
+ephy_data_view_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = ephy_data_view_add_child;
 }
 
 const gchar *
