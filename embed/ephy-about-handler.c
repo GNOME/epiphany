@@ -268,9 +268,15 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
       g_autofree char *encoded_name = NULL;
       g_autofree char *encoded_url = NULL;
       g_autofree char *js_encoded_id = NULL;
+      g_autoptr (GDate) date = NULL;
+      char install_date[128];
 
       if (ephy_web_application_is_system (app))
         continue;
+
+      date = g_date_new ();
+      g_date_set_time_t (date, (time_t)app->install_date_uint64);
+      g_date_strftime (install_date, 127, "%x", date);
 
       /* Most of these fields are at least semi-trusted. The app ID was chosen
        * by ephy so it's safe. The icon URL could be changed by the user to
@@ -291,7 +297,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
                               app->id, encoded_icon_url, encoded_name, encoded_url, _("Delete"), app->id,
                               /* Note for translators: this refers to the installation date. */
-                              _("Installed on:"), app->install_date);
+                              _("Installed on:"), install_date);
     }
 
     g_string_append (data_str, "</table></div></body></html>");

@@ -33,7 +33,6 @@ typedef struct {
   char *url;
   char *desktop_file; /* only used for legacy apps */
   char *desktop_path;
-  char install_date[128];
   guint64 install_date_uint64;
 } EphyWebApplication;
 
