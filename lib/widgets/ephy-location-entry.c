@@ -104,6 +104,7 @@ enum {
 
 enum signalsEnum {
   USER_CHANGED,
+  READER_MODE_CHANGED,
   GET_LOCATION,
   GET_TITLE,
   LAST_SIGNAL
@@ -525,6 +526,22 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                         G_TYPE_NONE,
                                         0,
                                         G_TYPE_NONE);
+
+  /**
+   * EphyLocationEntry::reader-mode-changed:
+   * @entry: the object on which the signal is emitted
+   * @active: whether reader mode is active
+   *
+   * Emitted when the user clicks the reader mode icon inside the
+   * #EphyLocationEntry.
+   *
+   */
+  signals[READER_MODE_CHANGED] = g_signal_new ("reader-mode-changed", G_OBJECT_CLASS_TYPE (klass),
+                                               G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                               0, NULL, NULL, NULL,
+                                               G_TYPE_NONE,
+                                               1,
+                                               G_TYPE_BOOLEAN);
 
   /**
    * EphyLocationEntry::get-location:
@@ -1030,6 +1047,15 @@ update_reader_icon (EphyLocationEntry *entry)
 }
 
 static void
+reader_mode_clicked_cb (EphyLocationEntry *self)
+{
+  self->reader_mode_active = !self->reader_mode_active;
+
+  g_signal_emit (G_OBJECT (self), signals[READER_MODE_CHANGED], 0,
+                 self->reader_mode_active);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
@@ -1097,6 +1123,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_set_tooltip_text (entry->reader_mode_button, _("Toggle reader mode"));
   entry->reader_mode_icon = gtk_button_get_image (GTK_BUTTON (entry->reader_mode_button));
   gtk_box_pack_start (GTK_BOX (box), entry->reader_mode_button, FALSE, TRUE, 0);
+  g_signal_connect_swapped (entry->reader_mode_button, "clicked",
+                            G_CALLBACK (reader_mode_clicked_cb), entry);
 
   context = gtk_widget_get_style_context (entry->reader_mode_icon);
   gtk_style_context_add_class (context, "entry_icon");
@@ -1450,12 +1478,6 @@ GtkWidget *
 ephy_location_entry_get_entry (EphyLocationEntry *entry)
 {
   return GTK_WIDGET (entry->url_entry);
-}
-
-GtkWidget *
-ephy_location_entry_get_reader_mode_widget (EphyLocationEntry *entry)
-{
-  return entry->reader_mode_button;
 }
 
 void

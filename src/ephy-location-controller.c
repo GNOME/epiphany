@@ -314,21 +314,16 @@ longpress_gesture_cb (GtkGestureLongPress *gesture,
 }
 
 static void
-reader_mode_button_clicked_cb (GtkButton *button,
-                               gpointer   user_data)
+reader_mode_changed_cb (EphyLocationEntry *lentry,
+                        gboolean           active,
+                        gpointer           user_data)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
   EphyWindow *window = controller->window;
   EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   EphyWebView *view = ephy_embed_get_web_view (embed);
-  EphyLocationEntry *lentry;
 
-  g_assert (EPHY_IS_LOCATION_ENTRY (controller->title_widget));
-
-  lentry = EPHY_LOCATION_ENTRY (controller->title_widget);
-
-  ephy_location_entry_set_reader_mode_state (lentry, !ephy_location_entry_get_reader_mode_state (lentry));
-  ephy_web_view_toggle_reader_mode (view, ephy_location_entry_get_reader_mode_state (lentry));
+  ephy_web_view_toggle_reader_mode (view, active);
 }
 
 static void
@@ -339,7 +334,7 @@ ephy_location_controller_constructed (GObject *object)
   EphyBookmarksManager *bookmarks_manager;
   EphySuggestionModel *model;
   EphyTabView *tab_view;
-  GtkWidget *widget, *reader_mode, *entry;
+  GtkWidget *widget, *entry;
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->constructed (object);
 
@@ -370,8 +365,8 @@ ephy_location_controller_constructed (GObject *object)
   dzl_suggestion_entry_set_model (DZL_SUGGESTION_ENTRY (entry), G_LIST_MODEL (model));
   g_object_unref (model);
 
-  reader_mode = ephy_location_entry_get_reader_mode_widget (EPHY_LOCATION_ENTRY (controller->title_widget));
-  g_signal_connect (G_OBJECT (reader_mode), "clicked", G_CALLBACK (reader_mode_button_clicked_cb), controller);
+  g_signal_connect (controller->title_widget, "reader-mode-changed",
+                    G_CALLBACK (reader_mode_changed_cb), controller);
 
   g_object_bind_property (controller, "editable",
                           entry, "editable",

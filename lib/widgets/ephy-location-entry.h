@@ -61,8 +61,6 @@ void            ephy_location_entry_show_add_bookmark_popover  (EphyLocationEntr
 
 GtkWidget      *ephy_location_entry_get_entry                  (EphyLocationEntry *entry);
 
-GtkWidget      *ephy_location_entry_get_reader_mode_widget     (EphyLocationEntry *entry);
-
 void            ephy_location_entry_set_reader_mode_visible    (EphyLocationEntry *entry,
                                                                 gboolean           visible);
 
