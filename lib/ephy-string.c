@@ -244,23 +244,13 @@ ephy_string_find_and_replace (const char *haystack,
                               const char *to_repl)
 {
   GString *str;
-  const char *tmp;
-  gsize to_find_len;
-  gsize pos;
 
   g_assert (haystack);
   g_assert (to_find);
   g_assert (to_repl);
 
   str = g_string_new (haystack);
-  to_find_len = strlen (to_find);
-
-  while ((tmp = strstr (str->str, to_find)) != NULL) {
-    pos = tmp - str->str;
-    g_string_erase (str, pos, to_find_len);
-    g_string_insert (str, pos, to_repl);
-  }
-
+  g_string_replace (str, to_find, to_repl, 0);
   return g_string_free (str, FALSE);
 }
 
