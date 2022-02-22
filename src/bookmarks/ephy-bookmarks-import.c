@@ -30,7 +30,7 @@
 #include <glib/gi18n.h>
 
 GQuark bookmarks_import_error_quark (void);
-G_DEFINE_QUARK (bookmarks - import - error - quark, bookmarks_import_error)
+G_DEFINE_QUARK (BookmarksImportErrorQuark, bookmarks_import_error)
 #define BOOKMARKS_IMPORT_ERROR bookmarks_import_error_quark ()
 
 typedef enum {

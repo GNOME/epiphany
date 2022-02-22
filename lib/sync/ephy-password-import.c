@@ -35,7 +35,7 @@
 #define SECRET_SCHEMA  libsecret_get_schema ()
 
 GQuark passwords_import_error_quark (void);
-G_DEFINE_QUARK (ephy - passwords - import - error - quark, passwords_import_error)
+G_DEFINE_QUARK (EphyPasswordsImportErrorQuark, passwords_import_error)
 
 typedef enum {
   PASSWORDS_IMPORT_ERROR_PASSWORDS = 1001
