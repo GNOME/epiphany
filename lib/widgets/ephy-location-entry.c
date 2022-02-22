@@ -89,9 +89,6 @@ struct _EphyLocationEntry {
   EphyBookmarkIconState icon_state;
 };
 
-static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *,
-                                                    gboolean);
-
 enum {
   PROP_0,
   PROP_ADDRESS,
@@ -585,7 +582,7 @@ entry_key_press_cb (GtkEntry          *entry,
 
 
   if (event->keyval == GDK_KEY_Escape && state == 0) {
-    ephy_location_entry_reset_internal (location_entry, FALSE);
+    ephy_location_entry_reset (location_entry);
   }
 
   if (event->keyval == GDK_KEY_l && state == GDK_CONTROL_MASK) {
@@ -691,7 +688,7 @@ static void
 entry_undo_activate_cb (GtkMenuItem       *item,
                         EphyLocationEntry *entry)
 {
-  ephy_location_entry_reset_internal (entry, FALSE);
+  ephy_location_entry_reset (entry);
 }
 
 /* The build should fail here each time when upgrading to a new major version
@@ -1296,36 +1293,6 @@ ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
   return entry->can_redo;
 }
 
-static gboolean
-ephy_location_entry_reset_internal (EphyLocationEntry *entry,
-                                    gboolean           notify)
-{
-  const char *text, *old_text;
-  g_autofree char *url = NULL;
-  gboolean retval;
-
-  g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
-  text = url != NULL ? url : "";
-  old_text = gtk_entry_get_text (GTK_ENTRY (entry->url_entry));
-  old_text = old_text != NULL ? old_text : "";
-
-  g_free (entry->saved_text);
-  entry->saved_text = g_strdup (old_text);
-  entry->can_redo = TRUE;
-
-  retval = g_str_hash (text) != g_str_hash (old_text);
-
-  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
-
-  if (notify) {
-    g_signal_emit (entry, signals[USER_CHANGED], 0);
-  }
-
-  entry->user_changed = FALSE;
-
-  return retval;
-}
-
 /**
  * ephy_location_entry_undo_reset:
  * @entry: an #EphyLocationEntry widget
@@ -1357,7 +1324,23 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
-  return ephy_location_entry_reset_internal (entry, FALSE);
+  const char *text, *old_text;
+  g_autofree char *url = NULL;
+
+  g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
+  text = url != NULL ? url : "";
+  old_text = gtk_entry_get_text (GTK_ENTRY (entry->url_entry));
+  old_text = old_text != NULL ? old_text : "";
+
+  g_free (entry->saved_text);
+  entry->saved_text = g_strdup (old_text);
+  entry->can_redo = TRUE;
+
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
+
+  entry->user_changed = FALSE;
+
+  return g_strcmp0 (text, old_text);
 }
 
 /**
