@@ -1800,19 +1800,21 @@ save_as_application_proceed (EphyApplicationDialogData *data)
   g_autofree char *message = NULL;
   GNotification *notification;
   gboolean success;
+  g_autoptr (GError) error = NULL;
 
   /* Create Web Application, including a new profile and .desktop file. */
   success = ephy_web_application_create (data->app_id,
                                          data->url,
                                          data->token,
-                                         data->webapp_options);
+                                         data->webapp_options,
+                                         &error);
 
   if (success)
     message = g_strdup_printf (_("The application “%s” is ready to be used"),
                                data->chosen_name);
   else
-    message = g_strdup_printf (_("The application “%s” could not be created"),
-                               data->chosen_name);
+    message = g_strdup_printf (_("The application “%s” could not be created: %s"),
+                               data->chosen_name, error->message);
 
   notification = g_notification_new (message);
 
