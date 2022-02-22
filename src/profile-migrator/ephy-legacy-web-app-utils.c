@@ -237,8 +237,6 @@ ephy_legacy_web_application_for_profile_directory (const char *profile_dir)
   g_auto (GStrv) argv = NULL;
   g_autoptr (GFile) file = NULL;
   g_autoptr (GFileInfo) file_info = NULL;
-  guint64 created;
-  g_autoptr (GDate) date = NULL;
 
   id = get_app_id_from_profile_directory (profile_dir);
   if (!id)
@@ -265,11 +263,7 @@ ephy_legacy_web_application_for_profile_directory (const char *profile_dir)
 
   /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
   file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-  created = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
-
-  date = g_date_new ();
-  g_date_set_time_t (date, (time_t)created);
-  g_date_strftime (app->install_date, 127, "%x", date);
+  app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
 
   return g_steal_pointer (&app);
 }
