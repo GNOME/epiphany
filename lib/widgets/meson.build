@@ -10,7 +10,6 @@ libephywidgets_sources = [
   'contrib/nautilus-floating-bar.c',
   'ephy-certificate-dialog.c',
   'ephy-downloads-popover.c',
-  'ephy-downloads-progress-icon.c',
   'ephy-download-widget.c',
   'ephy-file-chooser.c',
   'ephy-location-entry.c',

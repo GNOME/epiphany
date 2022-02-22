@@ -23,7 +23,6 @@
 #include "ephy-add-bookmark-popover.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-downloads-popover.h"
-#include "ephy-downloads-progress-icon.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
@@ -264,9 +263,6 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   GObject *object = G_OBJECT (action_bar_end);
   EphyDownloadsManager *downloads_manager;
   GtkWidget *popover;
-
-  /* Ensure the types used by the template have been initialized. */
-  EPHY_TYPE_DOWNLOADS_PROGRESS_ICON;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar_end));
 
