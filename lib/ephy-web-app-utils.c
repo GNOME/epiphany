@@ -35,6 +35,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <libportal-gtk3/portal-gtk3.h>
+#include <glib/gi18n.h>
 
 /* Web apps are installed in the default data dir of the user. Every
  * app has its own profile directory. To create a web app, an ID needs
@@ -58,6 +59,15 @@
 
 /* The GApplication ID must begin with the app ID for the dynamic launcher portal to work */
 static const char *EPHY_WEB_APP_GAPPLICATION_ID_PREFIX = APPLICATION_ID ".WebApp_";
+
+GQuark webapp_error_quark (void);
+G_DEFINE_QUARK (webapp - error - quark, webapp_error)
+#define WEBAPP_ERROR webapp_error_quark ()
+
+typedef enum {
+  WEBAPP_ERROR_FAILED = 1001,
+  WEBAPP_ERROR_EXISTS = 1002
+} WebappErrorCode;
 
 char *
 ephy_web_application_get_app_id_from_name (const char *name)
@@ -296,24 +306,27 @@ ephy_web_application_delete_by_desktop_file_id (const char      *desktop_file_id
 }
 
 static gboolean
-create_desktop_file (const char *id,
-                     const char *address,
-                     const char *profile_dir,
-                     const char *install_token)
+create_desktop_file (const char  *id,
+                     const char  *address,
+                     const char  *profile_dir,
+                     const char  *install_token,
+                     GError     **error)
 {
   g_autofree char *filename = NULL;
   g_autoptr (GKeyFile) file = NULL;
   g_autofree char *exec_string = NULL;
   g_autofree char *wm_class = NULL;
   g_autofree char *desktop_entry = NULL;
-  g_autoptr (GError) error = NULL;
   XdpPortal *portal = ephy_get_portal ();
 
   g_assert (profile_dir);
 
   filename = get_app_desktop_filename (id);
-  if (!filename)
+  if (!filename) {
+    g_set_error (error, WEBAPP_ERROR, WEBAPP_ERROR_FAILED,
+                 _("Failed to get desktop filename for webapp id %s"), id);
     return FALSE;
+  }
 
   file = g_key_file_new ();
   exec_string = g_strdup_printf ("epiphany --application-mode \"--profile=%s\" %s",
@@ -333,8 +346,8 @@ create_desktop_file (const char *id,
   desktop_entry = g_key_file_to_data (file, NULL, NULL);
 
   if (!xdp_portal_dynamic_launcher_install (portal, install_token, filename,
-                                            desktop_entry, &error)) {
-    g_warning ("Failed to install desktop file %s: %s", filename, error->message);
+                                            desktop_entry, error)) {
+    g_prefix_error (error, _("Failed to install desktop file %s: "), filename);
     ephy_file_delete_dir_recursively (profile_dir, NULL);
     return FALSE;
   }
@@ -351,16 +364,18 @@ create_desktop_file (const char *id,
  * @name: the name for the new web application
  * @install_token: the install token acquired via portal methods
  * @options: the options for the new web application
+ * @error: return location for a GError pointer
  *
  * Creates a new Web Application for @address.
  *
- * Returns: %TRUE on success, %FALSE on failure
+ * Returns: %TRUE on success, %FALSE on failure with @error set
  **/
 gboolean
-ephy_web_application_create (const char                *id,
-                             const char                *address,
-                             const char                *install_token,
-                             EphyWebApplicationOptions  options)
+ephy_web_application_create (const char                 *id,
+                             const char                 *address,
+                             const char                 *install_token,
+                             EphyWebApplicationOptions   options,
+                             GError                    **error)
 {
   g_autofree char *app_file = NULL;
   g_autofree char *profile_dir = NULL;
@@ -370,13 +385,15 @@ ephy_web_application_create (const char                *id,
    * view, do nothing. */
   profile_dir = ephy_web_application_get_profile_directory (id);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
-    g_warning ("Profile directory %s already exists", profile_dir);
+    g_set_error (error, WEBAPP_ERROR, WEBAPP_ERROR_EXISTS,
+                 _("Profile directory %s already exists"), profile_dir);
     return FALSE;
   }
 
   /* Create the profile directory, populate it. */
   if (g_mkdir_with_parents (profile_dir, 488) == -1) {
-    g_warning ("Failed to create directory %s", profile_dir);
+    g_set_error (error, WEBAPP_ERROR, WEBAPP_ERROR_FAILED,
+                 _("Failed to create directory %s"), profile_dir);
     return FALSE;
   }
 
@@ -387,13 +404,14 @@ ephy_web_application_create (const char                *id,
   app_file = g_build_filename (profile_dir, ".app", NULL);
   fd = g_open (app_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd < 0) {
-    g_warning ("Failed to create .app file: %s", g_strerror (errno));
+    g_set_error (error, WEBAPP_ERROR, WEBAPP_ERROR_FAILED,
+                 _("Failed to create .app file: %s"), g_strerror (errno));
     return FALSE;
   }
   close (fd);
 
   /* Create the deskop file. */
-  if (!create_desktop_file (id, address, profile_dir, install_token))
+  if (!create_desktop_file (id, address, profile_dir, install_token, error))
     return FALSE;
 
   ephy_web_application_initialize_settings (profile_dir, options);

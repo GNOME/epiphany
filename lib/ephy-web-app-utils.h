@@ -63,10 +63,11 @@ char               *ephy_web_application_get_app_id_from_name (const char *name)
 
 const char         *ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir);
 
-gboolean            ephy_web_application_create (const char                *id,
-                                                 const char                *address,
-                                                 const char                *install_token,
-                                                 EphyWebApplicationOptions  options);
+gboolean            ephy_web_application_create (const char                 *id,
+                                                 const char                 *address,
+                                                 const char                 *install_token,
+                                                 EphyWebApplicationOptions   options,
+                                                 GError                    **error);
 
 char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 

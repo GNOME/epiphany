@@ -100,6 +100,7 @@ handle_install (EphyWebAppProvider        *skeleton,
                 EphyWebAppProviderService *self)
 {
   g_autofree char *id = NULL;
+  g_autoptr (GError) local_error = NULL;
 
   g_debug ("%s", G_STRFUNC);
 
@@ -134,11 +135,13 @@ handle_install (EphyWebAppProvider        *skeleton,
 
   if (!ephy_web_application_create (id, url,
                                     install_token,
-                                    EPHY_WEB_APPLICATION_NONE)) {
+                                    EPHY_WEB_APPLICATION_NONE,
+                                    &local_error)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,
                                            EPHY_WEBAPP_PROVIDER_ERROR_FAILED,
-                                           _("Installing the web application ‘%s’ (%s) failed"),
-                                           name, url);
+                                           _("Installing the web application ‘%s’ (%s) failed: %s"),
+                                           name, url, local_error->message);
+    g_clear_error (&local_error);
     goto out;
   }
 
