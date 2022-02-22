@@ -74,8 +74,6 @@ struct _EphyLocationEntry {
   char *saved_text;
   char *jump_tab;
 
-  guint hash;
-
   guint allocation_width;
   guint progress_timeout;
   gdouble progress_fraction;
@@ -85,7 +83,6 @@ struct _EphyLocationEntry {
   guint user_changed : 1;
   guint can_redo : 1;
   guint block_update : 1;
-  guint original_address : 1;
 
   EphySecurityLevel security_level;
   EphyAdaptiveMode adaptive_mode;
@@ -234,16 +231,6 @@ ephy_location_entry_activate (EphyLocationEntry *entry)
   g_signal_emit_by_name (entry->url_entry, "activate");
 }
 
-static void
-update_address_state (EphyLocationEntry *entry)
-{
-  const char *text;
-
-  text = gtk_entry_get_text (GTK_ENTRY (entry->url_entry));
-  entry->original_address = text != NULL &&
-                            g_str_hash (text) == entry->hash;
-}
-
 static const char *
 ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
 {
@@ -297,9 +284,6 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
 
   final_text = effective_text ? effective_text : text;
 
-  /* First record the new hash, then update the entry text */
-  entry->hash = g_str_hash (final_text);
-
   entry->block_update = TRUE;
   g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   gtk_entry_set_text (GTK_ENTRY (entry->url_entry), final_text);
@@ -308,10 +292,6 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
 
   dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
   entry->block_update = FALSE;
-
-  /* We need to call update_address_state() here, as the 'changed' signal
-   * may not get called if the user has typed in the exact correct url */
-  update_address_state (entry);
 
   /* Now restore the selection.
    * Note that it's not owned by the entry anymore!
@@ -584,8 +564,6 @@ static void
 editable_changed_cb (GtkEditable       *editable,
                      EphyLocationEntry *entry)
 {
-  update_address_state (entry);
-
   if (entry->block_update == TRUE)
     return;
   else {
