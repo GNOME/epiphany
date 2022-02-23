@@ -21,6 +21,7 @@
 #include "config.h"
 #include "synced-tabs-dialog.h"
 
+#include "ephy-desktop-utils.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
@@ -28,16 +29,12 @@
 
 #include <json-glib/json-glib.h>
 
-#define PIXBUF_MISSING_PATH "/org/gnome/epiphany/web-watermark.svg"
-
 struct _SyncedTabsDialog {
   GtkDialog parent_instance;
 
   EphyOpenTabsManager *manager;
 
   WebKitFaviconDatabase *database;
-  GdkPixbuf *pixbuf_root;
-  GdkPixbuf *pixbuf_missing;
 
   GtkTreeModel *treestore;
   GtkWidget *treeview;
@@ -138,13 +135,13 @@ synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   PopulateRowAsyncData *data = (PopulateRowAsyncData *)user_data;
   cairo_surface_t *surface;
-  GdkPixbuf *favicon = NULL;
+  g_autoptr (GIcon) favicon = NULL;
   GtkTreeIter parent_iter;
   char *escaped_url;
 
   surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
   if (surface) {
-    favicon = ephy_pixbuf_get_from_surface_scaled (surface, FAVICON_SIZE, FAVICON_SIZE);
+    favicon = G_ICON (ephy_pixbuf_get_from_surface_scaled (surface, FAVICON_SIZE, FAVICON_SIZE));
     cairo_surface_destroy (surface);
   }
 
@@ -152,7 +149,15 @@ synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
   for (guint i = 0; i < data->parent_index; i++)
     gtk_tree_model_iter_next (data->dialog->treestore, &parent_iter);
 
-  favicon = favicon ? favicon : data->dialog->pixbuf_missing;
+  if (!favicon) {
+    const char *icon_name = ephy_get_fallback_favicon_name (data->url, EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
+
+    if (!icon_name)
+      icon_name = "hdy-tab-icon-missing-symbolic";
+
+    favicon = g_themed_icon_new (icon_name);
+  }
+
   escaped_url = g_markup_escape_text (data->url, -1);
   gtk_tree_store_insert_with_values (GTK_TREE_STORE (data->dialog->treestore),
                                      NULL, &parent_iter, -1,
@@ -176,6 +181,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
   GList *tabs;
   const char *title;
   const char *url;
+  g_autoptr (GIcon) icon = NULL;
 
   g_assert (EPHY_IS_SYNCED_TABS_DIALOG (dialog));
   g_assert (EPHY_IS_OPEN_TABS_RECORD (record));
@@ -185,10 +191,12 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
   else
     title = ephy_open_tabs_record_get_client_name (record);
 
+  icon = g_themed_icon_new ("computer-symbolic");
+
   /* Insert top-level row. */
   gtk_tree_store_insert_with_values (GTK_TREE_STORE (dialog->treestore),
                                      NULL, NULL, -1,
-                                     ICON_COLUMN, dialog->pixbuf_root,
+                                     ICON_COLUMN, icon,
                                      TITLE_COLUMN, title,
                                      URL_COLUMN, NULL,
                                      -1);
@@ -277,8 +285,6 @@ synced_tabs_dialog_dispose (GObject *object)
   SyncedTabsDialog *dialog = EPHY_SYNCED_TABS_DIALOG (object);
 
   g_clear_object (&dialog->manager);
-  g_clear_object (&dialog->pixbuf_root);
-  g_clear_object (&dialog->pixbuf_missing);
 
   G_OBJECT_CLASS (synced_tabs_dialog_parent_class)->dispose (object);
 }
@@ -315,8 +321,6 @@ static void
 synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 {
   WebKitWebContext *context;
-  GdkPixbuf *pixbuf;
-  GError *error = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
@@ -324,26 +328,6 @@ synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 
   context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
   dialog->database = webkit_web_context_get_favicon_database (context);
-
-  dialog->pixbuf_root = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                                  "computer-symbolic",
-                                                  FAVICON_SIZE, 0, &error);
-  if (error) {
-    g_warning ("Failed to build pixbuf from theme icon: %s", error->message);
-    g_error_free (error);
-    error = NULL;
-  }
-
-  pixbuf = gdk_pixbuf_new_from_resource (PIXBUF_MISSING_PATH, &error);
-  if (pixbuf) {
-    dialog->pixbuf_missing = gdk_pixbuf_scale_simple (pixbuf,
-                                                      FAVICON_SIZE, FAVICON_SIZE,
-                                                      GDK_INTERP_BILINEAR);
-    g_object_unref (pixbuf);
-  } else {
-    g_warning ("Failed to build pixbuf from resource: %s", error->message);
-    g_error_free (error);
-  }
 }
 
 SyncedTabsDialog *

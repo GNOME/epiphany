@@ -4,7 +4,7 @@
   <object class="GtkTreeStore" id="treestore">
     <columns>
       <!-- column-name ICON -->
-      <column type="GdkPixbuf"/>
+      <column type="GIcon"/>
       <!-- column-name TITLE -->
       <column type="gchararray"/>
       <!-- column-name URL -->
@@ -66,7 +66,7 @@
                         <child>
                           <object class="GtkCellRendererPixbuf"/>
                           <attributes>
-                            <attribute name="pixbuf">0</attribute>
+                            <attribute name="gicon">0</attribute>
                           </attributes>
                         </child>
                       </object>
