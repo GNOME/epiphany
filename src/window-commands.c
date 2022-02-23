@@ -907,11 +907,10 @@ window_cmd_show_shortcuts (GSimpleAction *action,
     builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/shortcuts-dialog.ui");
     shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
 
-    if (!ephy_can_install_web_apps ())
+    if (!ephy_can_install_web_apps ()) {
       gtk_widget_hide (GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-web-apps-group")));
-
-    if (!ephy_can_install_web_apps () || ephy_is_running_inside_sandbox ())
       gtk_widget_hide (GTK_WIDGET (gtk_builder_get_object (builder, "app-manager-shortcut")));
+    }
 
     if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) {
       GtkShortcutsShortcut *shortcut;

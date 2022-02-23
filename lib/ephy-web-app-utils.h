@@ -30,6 +30,7 @@ typedef struct {
   char *id;
   char *name;
   char *icon_url;
+  char *tmp_icon_url;
   char *url;
   char *desktop_file; /* only used for legacy apps */
   char *desktop_path;
@@ -56,6 +57,11 @@ typedef enum {
   EPHY_WEB_APP_FOUND,
   EPHY_WEB_APP_NOT_FOUND,
 } EphyWebAppFound;
+
+typedef enum {
+  EPHY_WEB_APP_NEED_TMP_ICON,
+  EPHY_WEB_APP_NO_TMP_ICON, /* avoid sync I/O, don't initialize app->tmp_icon_path */
+} EphyWebAppNeedTmpIcon;
 
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
@@ -93,7 +99,8 @@ GKeyFile           *ephy_web_application_get_desktop_keyfile (const char  *id,
 
 char               *ephy_web_application_get_desktop_path (const char *id);
 
-EphyWebApplication *ephy_web_application_for_profile_directory (const char *profile_dir);
+EphyWebApplication *ephy_web_application_for_profile_directory (const char            *profile_dir,
+                                                                EphyWebAppNeedTmpIcon  need_tmp_icon);
 
 void                ephy_web_application_free (EphyWebApplication *app);
 

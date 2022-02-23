@@ -276,7 +276,6 @@ ephy_header_bar_constructed (GObject *object)
   } else if (ephy_is_running_inside_sandbox ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "run-in-background-button")));
-    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
 
     if (is_desktop_pantheon ())
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
