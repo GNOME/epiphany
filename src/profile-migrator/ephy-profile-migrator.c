@@ -1305,7 +1305,7 @@ migrate_webapp_names (void)
     return;
 
   info = g_file_enumerator_next_file (children, NULL, &error);
-  if (!info) {
+  if (error) {
     g_warning ("Cannot enumerate profile directory: %s", error->message);
     return;
   }
@@ -1520,7 +1520,7 @@ migrate_pre_flatpak_webapps (void)
   }
 
   info = g_file_enumerator_next_file (children, NULL, &error);
-  if (!info) {
+  if (error) {
     g_warning ("Cannot enumerate profile directory: %s", error->message);
     return;
   }
