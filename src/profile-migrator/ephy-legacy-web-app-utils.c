@@ -254,7 +254,7 @@ ephy_legacy_web_application_for_profile_directory (const char *profile_dir)
   }
 
   app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
-  app->icon_url = g_desktop_app_info_get_string (desktop_info, "Icon");
+  app->icon_path = g_desktop_app_info_get_string (desktop_info, "Icon");
   exec = g_app_info_get_commandline (G_APP_INFO (desktop_info));
   if (g_shell_parse_argv (exec, &argc, &argv, NULL))
     app->url = g_strdup (argv[argc - 1]);

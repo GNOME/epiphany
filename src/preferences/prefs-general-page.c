@@ -808,10 +808,10 @@ save_web_application (PrefsGeneralPage *general_page)
     changed = TRUE;
   }
 
-  text = (const char *)g_object_get_data (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-url");
-  if (g_strcmp0 (general_page->webapp->icon_url, text) != 0) {
-    g_free (general_page->webapp->icon_url);
-    general_page->webapp->icon_url = g_strdup (text);
+  text = (const char *)g_object_get_data (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-path");
+  if (g_strcmp0 (general_page->webapp->icon_path, text) != 0) {
+    g_free (general_page->webapp->icon_path);
+    general_page->webapp->icon_path = g_strdup (text);
     changed = TRUE;
   }
 
@@ -833,9 +833,9 @@ prefs_general_page_save_web_application (PrefsGeneralPage *general_page)
 
 static void
 prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
-                                       const char       *icon_url)
+                                       const char       *icon_path)
 {
-  g_autoptr (GdkPixbuf) icon = gdk_pixbuf_new_from_file (icon_url, NULL);
+  g_autoptr (GdkPixbuf) icon = gdk_pixbuf_new_from_file (icon_path, NULL);
 
   if (!icon)
     return;
@@ -845,8 +845,8 @@ prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
                             GTK_ICON_SIZE_DND);
   gtk_image_set_pixel_size (GTK_IMAGE (general_page->webapp_icon), 32);
 
-  g_object_set_data_full (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-url",
-                          g_strdup (icon_url), g_free);
+  g_object_set_data_full (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-path",
+                          g_strdup (icon_path), g_free);
 }
 
 static void
@@ -856,11 +856,11 @@ webapp_icon_chooser_response_cb (GtkNativeDialog  *file_chooser,
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     g_autoptr (GFile) icon_file = NULL;
-    g_autofree char *icon_url = NULL;
+    g_autofree char *icon_path = NULL;
 
     icon_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser));
-    icon_url = g_file_get_uri (icon_file);
-    prefs_general_page_update_webapp_icon (general_page, icon_url);
+    icon_path = g_file_get_path (icon_file);
+    prefs_general_page_update_webapp_icon (general_page, icon_path);
     prefs_general_page_save_web_application (general_page);
   }
 
@@ -1181,7 +1181,7 @@ setup_general_page (PrefsGeneralPage *general_page)
     g_assert (general_page->webapp);
 
     if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
-      prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_url);
+      prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_path);
       gtk_entry_set_text (GTK_ENTRY (general_page->webapp_url), general_page->webapp->url);
       gtk_entry_set_text (GTK_ENTRY (general_page->webapp_title), general_page->webapp->name);
     }

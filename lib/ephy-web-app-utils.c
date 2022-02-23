@@ -564,8 +564,8 @@ ephy_web_application_free (EphyWebApplication *app)
 {
   g_free (app->id);
   g_free (app->name);
-  g_free (app->icon_url);
-  g_free (app->tmp_icon_url);
+  g_free (app->icon_path);
+  g_free (app->tmp_icon_path);
   g_free (app->url);
   g_free (app->desktop_file);
   g_free (app->desktop_path);
@@ -672,11 +672,11 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
     }
 
     app->name = g_key_file_get_string (key_file, "Desktop Entry", "Name", NULL);
-    app->icon_url = g_key_file_get_string (key_file, "Desktop Entry", "Icon", NULL);
+    app->icon_path = g_key_file_get_string (key_file, "Desktop Entry", "Icon", NULL);
 
     if (ephy_is_running_inside_sandbox () && need_tmp_icon == EPHY_WEB_APP_NEED_TMP_ICON) {
-      app->tmp_icon_url = ephy_web_application_get_tmp_icon_path (app->desktop_path, &error);
-      if (!app->tmp_icon_url)
+      app->tmp_icon_path = ephy_web_application_get_tmp_icon_path (app->desktop_path, &error);
+      if (!app->tmp_icon_path)
         g_warning ("Failed to get tmp icon path for app %s: %s", app->id, error->message);
     }
 
@@ -706,7 +706,7 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
   }
 
   app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
-  app->icon_url = g_desktop_app_info_get_string (desktop_info, "Icon");
+  app->icon_path = g_desktop_app_info_get_string (desktop_info, "Icon");
   exec = g_app_info_get_commandline (G_APP_INFO (desktop_info));
   if (g_shell_parse_argv (exec, &argc, &argv, NULL))
     app->url = g_strdup (argv[argc - 1]);
@@ -997,11 +997,11 @@ ephy_web_application_save (EphyWebApplication *app)
     }
 
     icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
-    if (g_strcmp0 (icon, app->icon_url) != 0) {
+    if (g_strcmp0 (icon, app->icon_path) != 0) {
       g_autoptr (GFile) new_icon = NULL;
       g_autoptr (GFile) old_icon = NULL;
       changed = TRUE;
-      new_icon = g_file_new_for_path (app->icon_url);
+      new_icon = g_file_new_for_path (app->icon_path);
       old_icon = g_file_new_for_path (icon);
       g_file_copy_async (new_icon, old_icon, G_FILE_COPY_OVERWRITE,
                          G_PRIORITY_DEFAULT, NULL, NULL, NULL,
