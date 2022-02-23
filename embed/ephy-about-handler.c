@@ -264,8 +264,8 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
     for (p = applications; p; p = p->next) {
       EphyWebApplication *app = (EphyWebApplication *)p->data;
-      const char *icon_url;
-      g_autofree char *encoded_icon_url = NULL;
+      const char *icon_path = NULL;
+      g_autofree char *encoded_icon_path = NULL;
       g_autofree char *encoded_name = NULL;
       g_autofree char *encoded_url = NULL;
       g_autofree char *js_encoded_id = NULL;
@@ -281,12 +281,12 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
       /* In the sandbox we don't have access to the host side icon file */
       if (ephy_is_running_inside_sandbox ())
-        icon_url = app->tmp_icon_url;
+        icon_path = app->tmp_icon_path;
       else
-        icon_url = app->icon_url;
+        icon_path = app->icon_path;
 
-      if (!icon_url) {
-        g_warning ("Failed to get icon url for app %s", app->id);
+      if (!icon_path) {
+        g_warning ("Failed to get icon path for app %s", app->id);
         continue;
       }
 
@@ -297,7 +297,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
        * anything at all, so those need to be encoded for sure. Install date
        * should be fine because it's constructed by Epiphany.
        */
-      encoded_icon_url = ephy_encode_for_html_attribute (icon_url);
+      encoded_icon_path = ephy_encode_for_html_attribute (icon_path);
       encoded_name = ephy_encode_for_html_entity (app->name);
       encoded_url = ephy_encode_for_html_entity (app->url);
       g_string_append_printf (data_str,
@@ -307,7 +307,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\" "
                               "class=\"destructive-action\"></td>"
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                              app->id, encoded_icon_url, encoded_name, encoded_url, _("Delete"), app->id,
+                              app->id, encoded_icon_path, encoded_name, encoded_url, _("Delete"), app->id,
                               /* Note for translators: this refers to the installation date. */
                               _("Installed on:"), install_date);
     }

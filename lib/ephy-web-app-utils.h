@@ -29,8 +29,8 @@ G_BEGIN_DECLS
 typedef struct {
   char *id;
   char *name;
-  char *icon_url;
-  char *tmp_icon_url;
+  char *icon_path;
+  char *tmp_icon_path;
   char *url;
   char *desktop_file; /* only used for legacy apps */
   char *desktop_path;
