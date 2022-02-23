@@ -699,7 +699,10 @@ create_sync_frequency_minutes_model ()
 static gchar *
 get_sync_frequency_minutes_name (HdyValueObject *value)
 {
-  return g_strdup_printf ("%u min", g_value_get_uint (hdy_value_object_get_value (value)));
+  guint n_minutes = g_value_get_uint (hdy_value_object_get_value (value));
+  const char *minutes_text = ngettext ("%u min", "%u mins", n_minutes);
+
+  return g_strdup_printf (minutes_text, n_minutes);
 }
 
 void
