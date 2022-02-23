@@ -1176,7 +1176,8 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
       !ephy_is_running_inside_sandbox ()) {
-    general_page->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
+    general_page->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (),
+                                                                       EPHY_WEB_APP_NO_TMP_ICON);
     g_assert (general_page->webapp);
 
     if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {

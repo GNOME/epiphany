@@ -36,6 +36,7 @@
 #include <fcntl.h>
 #include <libportal-gtk3/portal-gtk3.h>
 #include <glib/gi18n.h>
+#include <gio/gunixoutputstream.h>
 
 /* Web apps are installed in the default data dir of the user. Every
  * app has its own profile directory. To create a web app, an ID needs
@@ -564,14 +565,84 @@ ephy_web_application_free (EphyWebApplication *app)
   g_free (app->id);
   g_free (app->name);
   g_free (app->icon_url);
+  g_free (app->tmp_icon_url);
   g_free (app->url);
   g_free (app->desktop_file);
   g_free (app->desktop_path);
   g_free (app);
 }
 
+static char *
+ephy_web_application_get_tmp_icon_path (const char  *desktop_path,
+                                        GError     **error)
+{
+  XdpPortal *portal = ephy_get_portal ();
+  g_autoptr (GVariant) icon_v = NULL;
+  g_autofree char *icon_format = NULL;
+  g_autofree char *desktop_basename = NULL;
+  g_autofree char *tmp_file_name = NULL;
+  g_autofree char *tmp_file_path = NULL;
+  g_autoptr (GIcon) icon = NULL;
+  g_autoptr (GOutputStream) stream = NULL;
+  GBytes *bytes;
+  gconstpointer bytes_data;
+  gsize bytes_len;
+  int fd;
+
+  g_return_val_if_fail (desktop_path != NULL, NULL);
+
+  /* This function is only useful inside the sandbox since the icon file on the
+   * host is inaccessible in that case.
+   */
+  g_assert (ephy_is_running_inside_sandbox ());
+
+  desktop_basename = g_path_get_basename (desktop_path);
+  icon_v = xdp_portal_dynamic_launcher_get_icon (portal, desktop_basename, &icon_format, NULL, error);
+  if (!icon_v)
+    return NULL;
+
+  tmp_file_name = ephy_file_tmp_filename (".ephy-webapp-icon-XXXXXX", icon_format);
+  tmp_file_path = g_build_filename (ephy_file_tmp_dir (), tmp_file_name, NULL);
+
+  icon = g_icon_deserialize (icon_v);
+  if (!icon) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA,
+                         "Icon deserialization failed");
+    return NULL;
+  }
+
+  if (!G_IS_BYTES_ICON (icon)) {
+    g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA,
+                 "Unexpected icon type: %s", G_OBJECT_TYPE_NAME (icon));
+    return NULL;
+  }
+
+  bytes = g_bytes_icon_get_bytes (G_BYTES_ICON (icon));
+  fd = g_open (tmp_file_path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+  if (fd == -1) {
+    g_set_error (error, G_IO_ERROR, g_io_error_from_errno (errno),
+                 "Failed to create tmpfile ‘%s’: %s",
+                 tmp_file_path, g_strerror (errno));
+    return NULL;
+  }
+
+  stream = g_unix_output_stream_new (fd, TRUE);
+  /* Use write_all() instead of write_bytes() so we don't have to worry about
+   * partial writes (https://gitlab.gnome.org/GNOME/glib/-/issues/570).
+   */
+  bytes_data = g_bytes_get_data (bytes, &bytes_len);
+  if (!g_output_stream_write_all (stream, bytes_data, bytes_len, NULL, NULL, error))
+    return NULL;
+
+  if (!g_output_stream_close (stream, NULL, error))
+    return NULL;
+
+  return g_steal_pointer (&tmp_file_path);
+}
+
 EphyWebApplication *
-ephy_web_application_for_profile_directory (const char *profile_dir)
+ephy_web_application_for_profile_directory (const char            *profile_dir,
+                                            EphyWebAppNeedTmpIcon  need_tmp_icon)
 {
   g_autoptr (EphyWebApplication) app = NULL;
   const char *id;
@@ -602,6 +673,12 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
 
     app->name = g_key_file_get_string (key_file, "Desktop Entry", "Name", NULL);
     app->icon_url = g_key_file_get_string (key_file, "Desktop Entry", "Icon", NULL);
+
+    if (ephy_is_running_inside_sandbox () && need_tmp_icon == EPHY_WEB_APP_NEED_TMP_ICON) {
+      app->tmp_icon_url = ephy_web_application_get_tmp_icon_path (app->desktop_path, &error);
+      if (!app->tmp_icon_url)
+        g_warning ("Failed to get tmp icon path for app %s: %s", app->id, error->message);
+    }
 
     exec = g_key_file_get_string (key_file, "Desktop Entry", "Exec", NULL);
     if (g_shell_parse_argv (exec, &argc, &argv, NULL))
@@ -682,7 +759,7 @@ ephy_web_application_get_application_list (void)
       g_autofree char *profile_dir = NULL;
 
       profile_dir = g_build_filename (parent_directory_path, name, NULL);
-      app = ephy_web_application_for_profile_directory (profile_dir);
+      app = ephy_web_application_for_profile_directory (profile_dir, EPHY_WEB_APP_NEED_TMP_ICON);
       if (app) {
         g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
         if (g_file_test (app_file, G_FILE_TEST_EXISTS))
@@ -844,7 +921,8 @@ urls_have_same_origin (const char *a_url,
 gboolean
 ephy_web_application_is_uri_allowed (const char *uri)
 {
-  g_autoptr (EphyWebApplication) webapp = ephy_web_application_for_profile_directory (ephy_profile_dir ());
+  g_autoptr (EphyWebApplication) webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (),
+                                                                                      EPHY_WEB_APP_NO_TMP_ICON);
   const char *scheme;
   g_auto (GStrv) urls = NULL;
   guint i;

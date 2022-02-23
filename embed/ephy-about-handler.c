@@ -264,6 +264,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
 
     for (p = applications; p; p = p->next) {
       EphyWebApplication *app = (EphyWebApplication *)p->data;
+      const char *icon_url;
       g_autofree char *encoded_icon_url = NULL;
       g_autofree char *encoded_name = NULL;
       g_autofree char *encoded_url = NULL;
@@ -278,6 +279,17 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
       g_date_set_time_t (date, (time_t)app->install_date_uint64);
       g_date_strftime (install_date, 127, "%x", date);
 
+      /* In the sandbox we don't have access to the host side icon file */
+      if (ephy_is_running_inside_sandbox ())
+        icon_url = app->tmp_icon_url;
+      else
+        icon_url = app->icon_url;
+
+      if (!icon_url) {
+        g_warning ("Failed to get icon url for app %s", app->id);
+        continue;
+      }
+
       /* Most of these fields are at least semi-trusted. The app ID was chosen
        * by ephy so it's safe. The icon URL could be changed by the user to
        * something else after web app creation, though, so better not fully
@@ -285,7 +297,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
        * anything at all, so those need to be encoded for sure. Install date
        * should be fine because it's constructed by Epiphany.
        */
-      encoded_icon_url = ephy_encode_for_html_attribute (app->icon_url);
+      encoded_icon_url = ephy_encode_for_html_attribute (icon_url);
       encoded_name = ephy_encode_for_html_entity (app->name);
       encoded_url = ephy_encode_for_html_entity (app->url);
       g_string_append_printf (data_str,
@@ -586,7 +598,7 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
     handled = ephy_about_handler_handle_memory (handler, request);
   else if (!g_strcmp0 (path, "epiphany"))
     handled = ephy_about_handler_handle_epiphany (handler, request);
-  else if (!g_strcmp0 (path, "applications") && !ephy_is_running_inside_sandbox ())
+  else if (!g_strcmp0 (path, "applications"))
     handled = ephy_about_handler_handle_applications (handler, request);
   else if (!g_strcmp0 (path, "newtab"))
     handled = ephy_about_handler_handle_newtab (handler, request);
