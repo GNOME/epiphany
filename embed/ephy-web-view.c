@@ -311,23 +311,6 @@ ephy_web_view_set_property (GObject      *object,
 }
 
 static gboolean
-ephy_web_view_key_press_event (GtkWidget   *widget,
-                               GdkEventKey *event)
-{
-  EphyWebView *web_view = EPHY_WEB_VIEW (widget);
-  gboolean key_handled = FALSE;
-
-  key_handled = GTK_WIDGET_CLASS (ephy_web_view_parent_class)->key_press_event (widget, event);
-
-  if (key_handled)
-    return TRUE;
-
-  g_signal_emit_by_name (web_view, "search-key-press", event, &key_handled);
-
-  return key_handled;
-}
-
-static gboolean
 ephy_web_view_button_press_event (GtkWidget      *widget,
                                   GdkEventButton *event)
 {
@@ -4134,7 +4117,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   gobject_class->constructed = ephy_web_view_constructed;
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
-  widget_class->key_press_event = ephy_web_view_key_press_event;
 
   webkit_webview_class->run_file_chooser = ephy_web_view_run_file_chooser;
 
@@ -4302,22 +4284,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                 G_TYPE_NONE,
                 1,
                 GTK_TYPE_WIDGET);
-
-/**
- * EphyWebView::search-key-press:
- * @view: the #EphyWebView that received the signal
- * @event: the #GdkEventKey which triggered this signal
- *
- * The ::search-key-press signal is emitted for keypresses which
- * should be used for find implementations.
- **/
-  g_signal_new ("search-key-press",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_LAST,
-                0, g_signal_accumulator_true_handled, NULL, NULL,
-                G_TYPE_BOOLEAN,
-                1,
-                GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyWebView::download-only-load:
