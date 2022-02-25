@@ -97,6 +97,7 @@ enum {
 };
 
 enum signalsEnum {
+  ACTIVATE,
   USER_CHANGED,
   READER_MODE_CHANGED,
   GET_LOCATION,
@@ -489,6 +490,20 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
+
+  /**
+   * EphyLocationEntry::activate:
+   * @flags: the #GdkModifierType from the activation event
+   *
+   * Emitted when the entry is activated.
+   *
+   */
+  signals[ACTIVATE] = g_signal_new ("activate", G_OBJECT_CLASS_TYPE (klass),
+                                    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                    0, NULL, NULL, NULL,
+                                    G_TYPE_NONE,
+                                    1,
+                                    GDK_TYPE_MODIFIER_TYPE);
 
   /**
    * EphyLocationEntry::user-changed:
@@ -1031,6 +1046,16 @@ reader_mode_clicked_cb (EphyLocationEntry *self)
 }
 
 static void
+activate_cb (EphyLocationEntry *self)
+{
+  GdkModifierType modifiers;
+
+  ephy_gui_get_current_event (NULL, &modifiers, NULL, NULL);
+
+  g_signal_emit (G_OBJECT (self), signals[ACTIVATE], 0, modifiers);
+}
+
+static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *event;
@@ -1052,6 +1077,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry->url_entry), GTK_ENTRY_ICON_PRIMARY, _("Show website security status and permissions"));
   gtk_entry_set_width_chars (GTK_ENTRY (entry->url_entry), 0);
   gtk_entry_set_placeholder_text (GTK_ENTRY (entry->url_entry), _("Search for websites, bookmarks, and open tabs"));
+  g_signal_connect_swapped (entry->url_entry, "activate", G_CALLBACK (activate_cb), entry);
 
   /* Add special widget css provider */
   context = gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry));

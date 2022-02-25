@@ -95,30 +95,36 @@ ephy_link_open (EphyLink      *link,
 }
 
 EphyLinkFlags
-ephy_link_flags_from_current_event (void)
+ephy_link_flags_from_modifiers (GdkModifierType modifiers,
+                                gboolean        middle_click)
 {
-  GdkEventType type = GDK_NOTHING;
-  guint state = 0, button = (guint) - 1, keyval = (guint) - 1;
-  EphyLinkFlags flags = 0;
-
-  ephy_gui_get_current_event (&type, &state, &button, &keyval);
-
-  if (button == GDK_BUTTON_MIDDLE && (type == GDK_BUTTON_PRESS || type == GDK_BUTTON_RELEASE)) {
-    if (state == GDK_SHIFT_MASK) {
-      flags = EPHY_LINK_NEW_WINDOW;
-    } else if (state == 0 || state == GDK_CONTROL_MASK) {
-      flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
+  if (middle_click) {
+    if (modifiers == GDK_SHIFT_MASK) {
+      return EPHY_LINK_NEW_WINDOW;
+    } else if (modifiers == 0 || modifiers == GDK_CONTROL_MASK) {
+      return EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER;
     }
   } else {
-    gboolean navigation_keys = (keyval == GDK_KEY_Left) || (keyval == GDK_KEY_Right);
-
-    if (((state == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) && !navigation_keys) ||
-        (state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
-      flags = EPHY_LINK_NEW_WINDOW;
-    } else if (((state == GDK_MOD1_MASK) && !navigation_keys) || (state == GDK_CONTROL_MASK)) {
-      flags = EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER | EPHY_LINK_JUMP_TO;
+    if ((modifiers == (GDK_MOD1_MASK | GDK_SHIFT_MASK)) ||
+        (modifiers == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
+      return EPHY_LINK_NEW_WINDOW;
+    } else if ((modifiers == GDK_MOD1_MASK) || (modifiers == GDK_CONTROL_MASK)) {
+      return EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_TAB_APPEND_AFTER | EPHY_LINK_JUMP_TO;
     }
   }
 
-  return flags;
+  return 0;
+}
+
+EphyLinkFlags
+ephy_link_flags_from_current_event (void)
+{
+  GdkEventType type = GDK_NOTHING;
+  guint state = 0, button = (guint) - 1;
+
+  ephy_gui_get_current_event (&type, &state, &button, NULL);
+
+  return ephy_link_flags_from_modifiers (state, button == GDK_BUTTON_MIDDLE &&
+                                                (type == GDK_BUTTON_PRESS ||
+                                                 type == GDK_BUTTON_RELEASE));
 }

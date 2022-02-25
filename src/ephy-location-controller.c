@@ -79,19 +79,22 @@ G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYP
                                                 NULL))
 
 static void
-entry_activate_cb (GtkEntry               *entry,
+entry_activate_cb (EphyLocationEntry      *entry,
+                   GdkModifierType         modifiers,
                    EphyLocationController *controller)
 {
   const char *content;
   char *address;
   char *effective_address;
+  GtkEntry *inner_entry;
 
   if (controller->sync_address_is_blocked) {
     controller->sync_address_is_blocked = FALSE;
     g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
   }
 
-  content = gtk_entry_get_text (entry);
+  inner_entry = ephy_location_entry_get_entry (entry);
+  content = gtk_entry_get_text (inner_entry);
   if (content == NULL || content[0] == '\0')
     return;
 
@@ -151,7 +154,7 @@ entry_activate_cb (GtkEntry               *entry,
 #endif
 
   ephy_link_open (EPHY_LINK (controller), effective_address, NULL,
-                  ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
+                  ephy_link_flags_from_modifiers (modifiers, FALSE) | EPHY_LINK_TYPED);
 
   g_free (effective_address);
 }
@@ -321,7 +324,7 @@ ephy_location_controller_constructed (GObject *object)
                           entry, "editable",
                           G_BINDING_SYNC_CREATE);
 
-  g_signal_connect_object (entry, "activate",
+  g_signal_connect_object (widget, "activate",
                            G_CALLBACK (entry_activate_cb),
                            controller, 0);
   g_signal_connect_object (widget, "get-location",
