@@ -23,7 +23,6 @@
 #include "ephy-location-controller.h"
 
 #include "ephy-debug.h"
-#include "ephy-dnd.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
@@ -78,56 +77,6 @@ static GParamSpec *obj_properties[LAST_PROP];
 G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
                                                 NULL))
-
-static void
-entry_drag_data_received_cb (GtkWidget              *widget,
-                             GdkDragContext         *context,
-                             gint                    x,
-                             gint                    y,
-                             GtkSelectionData       *selection_data,
-                             guint                   info,
-                             guint                   time,
-                             EphyLocationController *controller)
-{
-  GtkEntry *entry;
-  GdkAtom url_type;
-  GdkAtom text_type;
-  const guchar *sel_data;
-
-  sel_data = gtk_selection_data_get_data (selection_data);
-
-  url_type = gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE);
-  text_type = gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE);
-
-  if (gtk_selection_data_get_length (selection_data) <= 0 || sel_data == NULL)
-    return;
-
-  entry = GTK_ENTRY (widget);
-
-  if (gtk_selection_data_get_target (selection_data) == url_type) {
-    char **uris;
-
-    uris = g_uri_list_extract_uris ((char *)sel_data);
-    if (uris != NULL && uris[0] != NULL && *uris[0] != '\0') {
-      gtk_entry_set_text (entry, (char *)uris[0]);
-      ephy_link_open (EPHY_LINK (controller),
-                      uris[0],
-                      NULL,
-                      ephy_link_flags_from_current_event ());
-    }
-    g_strfreev (uris);
-  } else if (gtk_selection_data_get_target (selection_data) == text_type) {
-    char *address;
-
-    gtk_entry_set_text (entry, (const gchar *)sel_data);
-    address = ephy_embed_utils_normalize_or_autosearch_address ((const gchar *)sel_data);
-    ephy_link_open (EPHY_LINK (controller),
-                    address,
-                    NULL,
-                    ephy_link_flags_from_current_event ());
-    g_free (address);
-  }
-}
 
 static void
 entry_activate_cb (GtkEntry               *entry,
@@ -372,9 +321,6 @@ ephy_location_controller_constructed (GObject *object)
                           entry, "editable",
                           G_BINDING_SYNC_CREATE);
 
-  g_signal_connect_object (widget, "drag-data-received",
-                           G_CALLBACK (entry_drag_data_received_cb),
-                           controller, 0);
   g_signal_connect_object (entry, "activate",
                            G_CALLBACK (entry_activate_cb),
                            controller, 0);
