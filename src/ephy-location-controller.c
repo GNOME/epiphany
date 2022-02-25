@@ -86,7 +86,7 @@ entry_activate_cb (EphyLocationEntry      *entry,
   const char *content;
   char *address;
   char *effective_address;
-  GtkEntry *inner_entry;
+  GtkWidget *inner_entry;
 
   if (controller->sync_address_is_blocked) {
     controller->sync_address_is_blocked = FALSE;
@@ -94,7 +94,7 @@ entry_activate_cb (EphyLocationEntry      *entry,
   }
 
   inner_entry = ephy_location_entry_get_entry (entry);
-  content = gtk_entry_get_text (inner_entry);
+  content = gtk_entry_get_text (GTK_ENTRY (inner_entry));
   if (content == NULL || content[0] == '\0')
     return;
 

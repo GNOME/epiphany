@@ -61,6 +61,4 @@ EphyEmbed *ephy_link_open (EphyLink *link,
 EphyLinkFlags ephy_link_flags_from_modifiers (GdkModifierType modifiers,
                                               gboolean        middle_click);
 
-EphyLinkFlags ephy_link_flags_from_current_event (void);
-
 G_END_DECLS

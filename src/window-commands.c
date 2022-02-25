@@ -2399,20 +2399,6 @@ window_cmd_find_next (GSimpleAction *action,
 }
 
 void
-window_cmd_open_bookmark (GSimpleAction *action,
-                          GVariant      *parameter,
-                          gpointer       user_data)
-{
-  const gchar *address;
-  EphyLinkFlags flags;
-
-  address = g_variant_get_string (parameter, NULL);
-  flags = ephy_link_flags_from_current_event () | EPHY_LINK_BOOKMARK;
-
-  ephy_link_open (EPHY_LINK (user_data), address, NULL, flags);
-}
-
-void
 window_cmd_bookmark_page (GSimpleAction *action,
                           GVariant      *parameter,
                           gpointer       user_data)

@@ -835,7 +835,6 @@ static const GActionEntry window_entries [] = {
   { "find", window_cmd_find },
   { "find-prev", window_cmd_find_prev },
   { "find-next", window_cmd_find_next },
-  { "open-bookmark", window_cmd_open_bookmark, "s" },
   { "bookmark-page", window_cmd_bookmark_page },
   { "bookmarks", window_cmd_bookmarks },
   { "show-downloads", window_cmd_show_downloads },

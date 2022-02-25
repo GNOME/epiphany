@@ -26,6 +26,8 @@
 #include "ephy-bookmark-row.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-gui.h"
+#include "ephy-link.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
@@ -411,19 +413,21 @@ ephy_bookmarks_popover_open_bookmark (EphyBookmarksPopover *self,
                                       GtkListBoxRow        *row)
 {
   GtkWidget *window;
-  GActionGroup *action_group;
-  GAction *action;
   const char *url;
+  GdkEventType type = GDK_NOTHING;
+  guint state = 0, button = (guint) - 1;
+  EphyLinkFlags flags;
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
   g_assert (EPHY_IS_WINDOW (window));
-  action_group = gtk_widget_get_action_group (window, "win");
-  g_assert (action_group != NULL);
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-bookmark");
-  g_assert (action != NULL);
   url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
 
-  g_action_activate (action, g_variant_new_string (url));
+  ephy_gui_get_current_event (&type, &state, &button, NULL);
+  flags = ephy_link_flags_from_modifiers (state, button == GDK_BUTTON_MIDDLE &&
+                                          (type == GDK_BUTTON_PRESS ||
+                                           type == GDK_BUTTON_RELEASE));
+
+  ephy_link_open (EPHY_LINK (window), url, NULL, flags | EPHY_LINK_BOOKMARK);
 }
 
 static void

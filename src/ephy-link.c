@@ -115,16 +115,3 @@ ephy_link_flags_from_modifiers (GdkModifierType modifiers,
 
   return 0;
 }
-
-EphyLinkFlags
-ephy_link_flags_from_current_event (void)
-{
-  GdkEventType type = GDK_NOTHING;
-  guint state = 0, button = (guint) - 1;
-
-  ephy_gui_get_current_event (&type, &state, &button, NULL);
-
-  return ephy_link_flags_from_modifiers (state, button == GDK_BUTTON_MIDDLE &&
-                                                (type == GDK_BUTTON_PRESS ||
-                                                 type == GDK_BUTTON_RELEASE));
-}
