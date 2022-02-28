@@ -172,7 +172,6 @@ readability_js_finish_cb (GObject      *object,
   if (!js_result) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error running javascript: %s", error->message);
-    g_error_free (error);
     return;
   }
 
