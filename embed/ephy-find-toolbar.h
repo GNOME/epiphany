@@ -39,9 +39,7 @@ void             ephy_find_toolbar_find_next     (EphyFindToolbar *toolbar);
 
 void             ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);
 
-void             ephy_find_toolbar_open          (EphyFindToolbar *toolbar,
-                                                  gboolean links_only,
-                                                  gboolean clear_search);
+void             ephy_find_toolbar_open          (EphyFindToolbar *toolbar);
 
 void             ephy_find_toolbar_close         (EphyFindToolbar *toolbar);
 

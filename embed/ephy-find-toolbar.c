@@ -49,8 +49,6 @@ struct _EphyFindToolbar {
   guint find_again_source_id;
   guint find_source_id;
   char *find_string;
-  gboolean links_only;
-  gboolean typing_ahead;
 };
 
 G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_BIN)
@@ -227,13 +225,6 @@ update_find_string (EphyFindToolbar *toolbar)
 }
 
 static gboolean
-ephy_find_toolbar_activate_link (EphyFindToolbar *toolbar,
-                                 GdkModifierType  mask)
-{
-  return FALSE;
-}
-
-static gboolean
 entry_key_press_event_cb (GtkEntry        *entry,
                           GdkEventKey     *event,
                           EphyFindToolbar *toolbar)
@@ -253,11 +244,6 @@ entry_key_press_event_cb (GtkEntry        *entry,
         break;
     }
   } else if ((event->state & mask) == GDK_CONTROL_MASK &&
-             (event->keyval == GDK_KEY_Return ||
-              event->keyval == GDK_KEY_KP_Enter ||
-              event->keyval == GDK_KEY_ISO_Enter)) {
-    handled = ephy_find_toolbar_activate_link (toolbar, event->state);
-  } else if ((event->state & mask) == GDK_CONTROL_MASK &&
              (gdk_keyval_to_lower (event->keyval) == GDK_KEY_g)) {
     handled = TRUE;
     ephy_find_toolbar_find_next (toolbar);
@@ -274,17 +260,6 @@ entry_key_press_event_cb (GtkEntry        *entry,
   }
 
   return handled;
-}
-
-static void
-entry_activate_cb (GtkWidget       *entry,
-                   EphyFindToolbar *toolbar)
-{
-  if (toolbar->typing_ahead) {
-    ephy_find_toolbar_activate_link (toolbar, 0);
-  } else {
-    ephy_find_toolbar_find_next (toolbar);
-  }
 }
 
 static void
@@ -416,8 +391,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
                     G_CALLBACK (entry_key_press_event_cb), toolbar);
   g_signal_connect_after (toolbar->entry, "changed",
                           G_CALLBACK (search_entry_changed_cb), toolbar);
-  g_signal_connect (toolbar->entry, "activate",
-                    G_CALLBACK (entry_activate_cb), toolbar);
+  g_signal_connect_swapped (toolbar->entry, "activate",
+                            G_CALLBACK (ephy_find_toolbar_find_next), toolbar);
   g_signal_connect_swapped (toolbar->next, "clicked",
                             G_CALLBACK (ephy_find_toolbar_find_next), toolbar);
   g_signal_connect_swapped (toolbar->prev, "clicked",
@@ -646,14 +621,9 @@ ephy_find_toolbar_selection_async (GObject      *source_object,
 }
 
 void
-ephy_find_toolbar_open (EphyFindToolbar *toolbar,
-                        gboolean         links_only,
-                        gboolean         typing_ahead)
+ephy_find_toolbar_open (EphyFindToolbar *toolbar)
 {
   g_assert (toolbar->web_view != NULL);
-
-  toolbar->typing_ahead = typing_ahead;
-  toolbar->links_only = links_only;
 
   webkit_web_view_run_javascript (toolbar->web_view, "window.getSelection().toString();", toolbar->cancellable, ephy_find_toolbar_selection_async, toolbar);
 
