@@ -123,7 +123,7 @@ free software.
 
 ## Human Interface
 
-Epiphany follows the [GNOME Human Interface Guidelines](https://developer.gnome.org/hig/stable/).
+Epiphany follows the [GNOME Human Interface Guidelines](https://developer.gnome.org/hig).
 Unless there are serious reasons to make an exception, not following the
 guidelines will be considered a bug.
 
