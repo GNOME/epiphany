@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.4.0 (git: 2d0e7c1094)
+  Highlight.js v11.5.0 (git: 7a62552656)
   (c) 2006-2022 Ivan Sagalaev and other contributors
   License: BSD-3-Clause
  */
@@ -1558,7 +1558,7 @@ var hljs = (function () {
       return mode;
     }
 
-    var version = "11.4.0";
+    var version = "11.5.0";
 
     class HTMLInjectionError extends Error {
       constructor(reason, html) {
@@ -1835,8 +1835,8 @@ var hljs = (function () {
          */
         function emitMultiClass(scope, match) {
           let i = 1;
-          // eslint-disable-next-line no-undefined
-          while (match[i] !== undefined) {
+          const max = match.length - 1;
+          while (i <= max) {
             if (!scope._emit[i]) { i++; continue; }
             const klass = language.classNameAliases[scope[i]] || scope[i];
             const text = match[i];
@@ -2816,6 +2816,7 @@ var hljs = (function () {
       'backface-visibility',
       'background',
       'background-attachment',
+      'background-blend-mode',
       'background-clip',
       'background-color',
       'background-image',
@@ -2823,7 +2824,20 @@ var hljs = (function () {
       'background-position',
       'background-repeat',
       'background-size',
+      'block-size',
       'border',
+      'border-block',
+      'border-block-color',
+      'border-block-end',
+      'border-block-end-color',
+      'border-block-end-style',
+      'border-block-end-width',
+      'border-block-start',
+      'border-block-start-color',
+      'border-block-start-style',
+      'border-block-start-width',
+      'border-block-style',
+      'border-block-width',
       'border-bottom',
       'border-bottom-color',
       'border-bottom-left-radius',
@@ -2838,6 +2852,18 @@ var hljs = (function () {
       'border-image-slice',
       'border-image-source',
       'border-image-width',
+      'border-inline',
+      'border-inline-color',
+      'border-inline-end',
+      'border-inline-end-color',
+      'border-inline-end-style',
+      'border-inline-end-width',
+      'border-inline-start',
+      'border-inline-start-color',
+      'border-inline-start-style',
+      'border-inline-start-width',
+      'border-inline-style',
+      'border-inline-width',
       'border-left',
       'border-left-color',
       'border-left-style',
@@ -2948,6 +2974,7 @@ var hljs = (function () {
       'image-rendering',
       'image-resolution',
       'ime-mode',
+      'inline-size',
       'isolation',
       'justify-content',
       'left',
@@ -2959,7 +2986,13 @@ var hljs = (function () {
       'list-style-position',
       'list-style-type',
       'margin',
+      'margin-block',
+      'margin-block-end',
+      'margin-block-start',
       'margin-bottom',
+      'margin-inline',
+      'margin-inline-end',
+      'margin-inline-start',
       'margin-left',
       'margin-right',
       'margin-top',
@@ -2981,9 +3014,13 @@ var hljs = (function () {
       'mask-repeat',
       'mask-size',
       'mask-type',
+      'max-block-size',
       'max-height',
+      'max-inline-size',
       'max-width',
+      'min-block-size',
       'min-height',
+      'min-inline-size',
       'min-width',
       'mix-blend-mode',
       'nav-down',
@@ -3008,7 +3045,13 @@ var hljs = (function () {
       'overflow-x',
       'overflow-y',
       'padding',
+      'padding-block',
+      'padding-block-end',
+      'padding-block-start',
       'padding-bottom',
+      'padding-inline',
+      'padding-inline-end',
+      'padding-inline-start',
       'padding-left',
       'padding-right',
       'padding-top',
@@ -3054,6 +3097,9 @@ var hljs = (function () {
       'scroll-snap-align',
       'scroll-snap-stop',
       'scroll-snap-type',
+      'scrollbar-color',
+      'scrollbar-gutter',
+      'scrollbar-width',
       'shape-image-threshold',
       'shape-margin',
       'shape-outside',
@@ -3126,9 +3172,7 @@ var hljs = (function () {
     function css(hljs) {
       const regex = hljs.regex;
       const modes = MODES(hljs);
-      const VENDOR_PREFIX = {
-        begin: /-(webkit|moz|ms|o)-(?=[a-z])/
-      };
+      const VENDOR_PREFIX = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ };
       const AT_MODIFIERS = "and or not only";
       const AT_PROPERTY_RE = /@-?\w[\w]*(-\w+)*/; // @-webkit-keyframes
       const IDENT_RE = '[a-zA-Z-][a-zA-Z0-9_-]*';
@@ -3141,14 +3185,11 @@ var hljs = (function () {
         name: 'CSS',
         case_insensitive: true,
         illegal: /[=|'\$]/,
-        keywords: {
-          keyframePosition: "from to"
-        },
+        keywords: { keyframePosition: "from to" },
         classNameAliases: {
           // for visual continuity with `tag {}` and because we
           // don't have a great class for this?
-          keyframePosition: "selector-tag"
-        },
+          keyframePosition: "selector-tag" },
         contains: [
           modes.BLOCK_COMMENT,
           VENDOR_PREFIX,
@@ -3169,12 +3210,8 @@ var hljs = (function () {
           {
             className: 'selector-pseudo',
             variants: [
-              {
-                begin: ':(' + PSEUDO_CLASSES.join('|') + ')'
-              },
-              {
-                begin: ':(:)?(' + PSEUDO_ELEMENTS.join('|') + ')'
-              }
+              { begin: ':(' + PSEUDO_CLASSES.join('|') + ')' },
+              { begin: ':(:)?(' + PSEUDO_ELEMENTS.join('|') + ')' }
             ]
           },
           // we may actually need this (12/2020)
@@ -3205,9 +3242,7 @@ var hljs = (function () {
                 begin: /(url|data-uri)\(/,
                 end: /\)/,
                 relevance: 0, // from keywords
-                keywords: {
-                  built_in: "url data-uri"
-                },
+                keywords: { built_in: "url data-uri" },
                 contains: [
                   {
                     className: "string",
@@ -4026,12 +4061,8 @@ var hljs = (function () {
         begin: /\(/,
         end: /\)/
       });
-      const APOS_META_STRING_MODE = hljs.inherit(hljs.APOS_STRING_MODE, {
-        className: 'string'
-      });
-      const QUOTE_META_STRING_MODE = hljs.inherit(hljs.QUOTE_STRING_MODE, {
-        className: 'string'
-      });
+      const APOS_META_STRING_MODE = hljs.inherit(hljs.APOS_STRING_MODE, { className: 'string' });
+      const QUOTE_META_STRING_MODE = hljs.inherit(hljs.QUOTE_STRING_MODE, { className: 'string' });
       const TAG_INTERNALS = {
         endsWithParent: true,
         illegal: /</,
@@ -4060,9 +4091,7 @@ var hljs = (function () {
                     end: /'/,
                     contains: [ XML_ENTITIES ]
                   },
-                  {
-                    begin: /[^\s"'=<>`]+/
-                  }
+                  { begin: /[^\s"'=<>`]+/ }
                 ]
               }
             ]
@@ -4117,9 +4146,7 @@ var hljs = (function () {
           hljs.COMMENT(
             /<!--/,
             /-->/,
-            {
-              relevance: 10
-            }
+            { relevance: 10 }
           ),
           {
             begin: /<!\[CDATA\[/,
@@ -4127,11 +4154,23 @@ var hljs = (function () {
             relevance: 10
           },
           XML_ENTITIES,
+          // xml processing instructions
           {
             className: 'meta',
-            begin: /<\?xml/,
             end: /\?>/,
-            relevance: 10
+            variants: [
+              {
+                begin: /<\?xml/,
+                relevance: 10,
+                contains: [
+                  QUOTE_META_STRING_MODE
+                ]
+              },
+              {
+                begin: /<\?[a-z][a-z0-9]+/,
+              }
+            ]
+
           },
           {
             className: 'tag',
@@ -4142,9 +4181,7 @@ var hljs = (function () {
             */
             begin: /<style(?=\s|>)/,
             end: />/,
-            keywords: {
-              name: 'style'
-            },
+            keywords: { name: 'style' },
             contains: [ TAG_INTERNALS ],
             starts: {
               end: /<\/style>/,
@@ -4160,9 +4197,7 @@ var hljs = (function () {
             // See the comment in the <style tag about the lookahead pattern
             begin: /<script(?=\s|>)/,
             end: />/,
-            keywords: {
-              name: 'script'
-            },
+            keywords: { name: 'script' },
             contains: [ TAG_INTERNALS ],
             starts: {
               end: /<\/script>/,
