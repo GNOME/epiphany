@@ -185,7 +185,6 @@ struct _EphyWindow {
   gint current_y;
 
   guint has_default_size : 1;
-  guint has_default_position : 1;
   guint is_maximized : 1;
   guint is_fullscreen : 1;
   guint closing : 1;
@@ -1892,8 +1891,6 @@ window_properties_geometry_changed (WebKitWindowProperties *properties,
   GdkRectangle geometry;
 
   webkit_window_properties_get_geometry (properties, &geometry);
-  if (geometry.x >= 0 && geometry.y >= 0)
-    gtk_window_move (GTK_WINDOW (window), geometry.x, geometry.y);
 
   if (geometry.width > 0 && geometry.height > 0)
     gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
@@ -3202,15 +3199,6 @@ ephy_window_set_default_size (EphyWindow *window,
   window->has_default_size = TRUE;
 }
 
-void
-ephy_window_set_default_position (EphyWindow *window,
-                                  gint        x,
-                                  gint        y)
-{
-  gtk_window_move (GTK_WINDOW (window), x, y);
-  window->has_default_position = TRUE;
-}
-
 static void
 ephy_window_show (GtkWidget *widget)
 {
@@ -3225,20 +3213,6 @@ ephy_window_show (GtkWidget *widget)
   if (window->is_maximized)
     gtk_window_maximize (GTK_WINDOW (window));
   else {
-    if (!window->has_default_position) {
-      g_settings_get (EPHY_SETTINGS_STATE,
-                      "window-position", "(ii)",
-                      &window->current_x,
-                      &window->current_y);
-      if (window->current_x >= 0 && window->current_y >= 0) {
-        gtk_window_move (GTK_WINDOW (window),
-                         window->current_x,
-                         window->current_y);
-      }
-
-      window->has_default_position = TRUE;
-    }
-
     if (!window->has_default_size) {
       g_settings_get (EPHY_SETTINGS_STATE,
                       "window-size", "(ii)",
@@ -3282,10 +3256,6 @@ ephy_window_destroy (GtkWidget *widget)
                     "window-size", "(ii)",
                     window->current_width,
                     window->current_height);
-    g_settings_set (EPHY_SETTINGS_STATE,
-                    "window-position", "(ii)",
-                    window->current_x,
-                    window->current_y);
     g_settings_set_boolean (EPHY_SETTINGS_STATE, "is-maximized", window->is_maximized);
   }
 
