@@ -2577,7 +2577,7 @@ window_cmd_send_to (GSimpleAction *action,
   g_free (subject);
   g_free (body);
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (window), command, gtk_get_current_event_time (), &error)) {
+  if (!gtk_show_uri_on_window (GTK_WINDOW (window), command, GDK_CURRENT_TIME, &error)) {
     g_warning ("Unable to send link by email: %s\n", error->message);
     g_error_free (error);
   }
