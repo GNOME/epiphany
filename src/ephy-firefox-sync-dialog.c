@@ -538,7 +538,7 @@ on_sync_synced_tabs_button_clicked (GtkWidget             *button,
   synced_tabs_dialog = synced_tabs_dialog_new (manager);
   gtk_window_set_transient_for (GTK_WINDOW (synced_tabs_dialog), GTK_WINDOW (sync_dialog));
   gtk_window_set_modal (GTK_WINDOW (synced_tabs_dialog), TRUE);
-  gtk_window_present_with_time (GTK_WINDOW (synced_tabs_dialog), gtk_get_current_event_time ());
+  gtk_window_present (GTK_WINDOW (synced_tabs_dialog));
 }
 
 static void

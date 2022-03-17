@@ -288,7 +288,7 @@ language_editor_add_button_release_event (GtkWidget        *button,
       (gpointer *)add_lang_dialog);
   }
 
-  gtk_window_present_with_time (GTK_WINDOW (general_page->add_lang_dialog), gtk_get_current_event_time ());
+  gtk_window_present (GTK_WINDOW (general_page->add_lang_dialog));
 }
 
 static void
@@ -1067,7 +1067,7 @@ on_manage_webapp_additional_urls_button_clicked (GtkWidget        *button,
 
   gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), prefs_dialog);
   gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
-  gtk_window_present_with_time (GTK_WINDOW (urls_dialog), gtk_get_current_event_time ());
+  gtk_window_present (GTK_WINDOW (urls_dialog));
 }
 
 static void
