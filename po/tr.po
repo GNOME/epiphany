@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-02-17 17:08+0000\n"
-"PO-Revision-Date: 2022-02-21 13:27+0300\n"
+"POT-Creation-Date: 2022-03-17 19:47+0000\n"
+"PO-Revision-Date: 2022-03-18 11:18+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnometurk@gnome.org>\n"
 "Language: tr\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.4.3\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -52,20 +52,16 @@ msgid ""
 "pages. If you’re looking for a simple, clean, beautiful view of the web, "
 "this is the browser for you."
 msgstr ""
-"GNOME için web tarayıcısı; masaüstüyle sıkı tümleşime sahip, basit ve "
-"sezgisel kullanıcı arayüzüyle web sayfalarınıza odaklanmanıza olanak tanır. "
-"Eğer web ortamının yalın, temiz ve güzel görünümünü arıyorsanız aradığınız "
-"tarayıcı budur."
+"GNOME için web tarayıcısı; masaüstüyle sıkı tümleşen, basit ve sezgisel "
+"kullanıcı arayüzüyle web sayfalarınıza odaklanmanızı sağlar. Eğer web "
+"ortamının yalın, temiz ve güzel görünümünü arıyorsanız aradığınız tarayıcı "
+"budur."
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:15
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Web sıklıkla kod adıyla, yani Epiphany olarak anılır."
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:22
-msgid "The GNOME web site displayed in GNOME Web"
-msgstr "GNOME web sitesinin GNOME Web’de görüntülenmesi"
-
-#: data/org.gnome.Epiphany.appdata.xml.in.in:36
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35
 msgid "The GNOME Project"
 msgstr "GNOME Projesi"
 
@@ -80,7 +76,7 @@ msgstr "Web’e göz at"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
 msgid "web;browser;internet;"
-msgstr "web;tarayıcı;internet;"
+msgstr "web;ağ;tarayıcı;internet;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -146,12 +142,11 @@ msgstr ""
 "%s&t=epiphany&kl=tr-tr&kad=tr_TR'>, 'bang': <'!ddg'>},\n"
 "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com.tr/search?q="
 "%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s&cc=tr'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t\t{'name': <'Yandex'>, 'url': <'https://yandex.com.tr/search/?text=%s'>, "
-"'bang': <'!ya'>}\n"
+"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q="
+"%s&cc=tr'>, 'bang': <'!b'>}\n"
+"\t\t\t\t\t{'name': <'Yandex'>, 'url': <'https://yandex.com.tr/search/?text="
+"%s'>, 'bang': <'!ya'>}\n"
 "\t\t\t\t]"
-
 
 #: data/org.gnome.epiphany.gschema.xml:61
 msgid "List of the search engines."
@@ -166,9 +161,10 @@ msgid ""
 "engine"
 msgstr ""
 "Arama motorlarının listesi. Bu, \"VarDict\"lerin bulunduğu bir dizgedir. Her "
-"\"VarDict\" bir arama motoruna denk gelir ve desteklenen şu anahtarları içerir: -"
-"name: Arama motorunun adı - url: Arama terimine karşılık gelen %s ile birlikte "
-"arama motorunun adresi - bang: Arama motorunun \"bang\"i (kısayol sözcüğü)"
+"\"VarDict\" bir arama motoruna denk gelir ve desteklenen şu anahtarları "
+"içerir: -name: Arama motorunun adı - url: Arama terimine karşılık gelen %s "
+"ile birlikte arama motorunun adresi - bang: Arama motorunun \"bang\"i "
+"(kısayol sözcüğü)"
 
 #: data/org.gnome.epiphany.gschema.xml:70
 msgid "Enable Google Search Suggestions"
@@ -1557,7 +1553,7 @@ msgstr "Arama dizgisinin bir önceki göründüğü yeri bul"
 msgid "Find next occurrence of the search string"
 msgstr "Arama dizgisinin bir sonraki göründüğü yeri bul"
 
-#: embed/ephy-reader-handler.c:297 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s geçerli bir URI değil"
@@ -4069,7 +4065,7 @@ msgstr "“%s” için ağda ara"
 msgid "Load “%s”"
 msgstr "“%s” yükle…"
 
-#: src/synced-tabs-dialog.c:184
+#: src/synced-tabs-dialog.c:190
 msgid "Local Tabs"
 msgstr "Yerel Sekmeler"
 
@@ -4258,6 +4254,9 @@ msgstr ""
 #: src/window-commands.c:2705
 msgid "_Enable"
 msgstr "_Etkinleştir"
+
+#~ msgid "The GNOME web site displayed in GNOME Web"
+#~ msgstr "GNOME web sitesinin GNOME Web’de görüntülenmesi"
 
 #~ msgid "GNOME Web"
 #~ msgstr "GNOME Web"
