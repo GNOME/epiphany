@@ -3,7 +3,7 @@
  *  Copyright © 2003, 2004 Marco Pesenti Gritti <mpeseng@tin.it>
  *  Copyright © 2003, 2004 Christian Persch
  *  Copyright © 2012 Igalia S.L
- *  Copyright © 2018 Jan-Michael Brummer
+ *  Copyright © 2018-2022 Jan-Michael Brummer
  *  Copyright © 2019 Purism SPC
  *
  *  This file is part of Epiphany.
@@ -26,6 +26,8 @@
 #include "ephy-history-dialog.h"
 
 #include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -417,11 +419,37 @@ row_check_button_toggled (GtkCheckButton    *check_button,
   set_is_selection_empty (self, n_rows == 0);
 }
 
+static void
+ephy_history_dialog_row_favicon_loaded_cb (GObject      *source,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  g_autoptr (GtkWidget) icon = user_data;
+  WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+  cairo_surface_t *icon_surface;
+  g_autoptr (GdkPixbuf) favicon = NULL;
+  g_autoptr (GError) error = NULL;
+
+  icon_surface = webkit_favicon_database_get_favicon_finish (database, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
+  if (icon_surface) {
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    cairo_surface_destroy (icon_surface);
+  }
+
+  if (favicon && icon)
+    gtk_image_set_from_pixbuf (GTK_IMAGE (icon), favicon);
+}
+
 static GtkWidget *
 create_row (EphyHistoryDialog *self,
             EphyHistoryURL    *url)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitFaviconDatabase *database;
+  GtkWidget *icon;
   GtkWidget *date;
   GtkWidget *row;
   GtkWidget *separator;
@@ -434,6 +462,17 @@ create_row (EphyHistoryDialog *self,
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (row), url->url);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   gtk_widget_set_tooltip_text (row, url->url);
+
+  /* Fav Icon */
+  icon = gtk_image_new ();
+  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), icon);
+
+  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
+  webkit_favicon_database_get_favicon (database,
+                                       url->url,
+                                       self->cancellable,
+                                       (GAsyncReadyCallback)ephy_history_dialog_row_favicon_loaded_cb,
+                                       g_object_ref (icon));
 
   /* Date */
   date = gtk_label_new (ephy_time_helpers_utf_friendly_time (url->last_visit_time / 1000000));
