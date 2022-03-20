@@ -182,6 +182,8 @@ main (int   argc,
   g_setenv ("GSETTINGS_SCHEMA_DIR", BUILD_ROOT "/data", FALSE);
 #endif
 
+  g_setenv ("PULSE_PROP_application.icon_name", APPLICATION_ID, TRUE);
+
   /* Initialize the i18n stuff */
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
