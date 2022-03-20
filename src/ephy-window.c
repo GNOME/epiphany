@@ -90,7 +90,6 @@ const struct {
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
-  { "win.open-application-manager", { "<shift><Primary>C", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
   { "win.redo", { "<shift><Primary>Z", NULL } },
   { "win.copy", { "<Primary>C", NULL } },
