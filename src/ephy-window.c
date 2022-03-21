@@ -193,8 +193,6 @@ struct _EphyWindow {
   guint checking_modified_forms : 1;
   guint confirmed_close_with_multiple_tabs : 1;
   guint present_on_insert : 1;
-
-  guint32 present_on_insert_user_time;
 };
 
 enum {
@@ -2610,10 +2608,7 @@ tab_view_setup_menu_cb (HdyTabView *tab_view,
 static gboolean
 present_on_idle_cb (GtkWindow *window)
 {
-  EphyWindow *ephy_window = EPHY_WINDOW (window);
-
-  gtk_window_present_with_time (window, ephy_window->present_on_insert_user_time);
-  ephy_window->present_on_insert_user_time = 0;
+  gtk_window_present (window);
 
   return FALSE;
 }
@@ -2951,7 +2946,6 @@ tab_view_create_window_cb (HdyTabView *tab_view,
   new_window = ephy_window_new ();
 
   new_window->present_on_insert = TRUE;
-  new_window->present_on_insert_user_time = gtk_get_current_event_time ();
 
   return ephy_tab_view_get_tab_view (new_window->tab_view);
 }
