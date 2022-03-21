@@ -46,7 +46,6 @@ struct _EphyDownload {
   gboolean show_notification;
 
   EphyDownloadActionType action;
-  guint32 start_time;
   gboolean finished;
   GError *error;
   GFileMonitor *file_monitor;
@@ -59,7 +58,6 @@ enum {
   PROP_DOWNLOAD,
   PROP_DESTINATION,
   PROP_ACTION,
-  PROP_START_TIME,
   PROP_CONTENT_TYPE,
   LAST_PROP
 };
@@ -94,9 +92,6 @@ ephy_download_get_property (GObject    *object,
     case PROP_ACTION:
       g_value_set_enum (value, ephy_download_get_action (download));
       break;
-    case PROP_START_TIME:
-      g_value_set_uint (value, ephy_download_get_start_time (download));
-      break;
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, ephy_download_get_content_type (download));
       break;
@@ -123,7 +118,6 @@ ephy_download_set_property (GObject      *object,
       ephy_download_set_action (download, g_value_get_enum (value));
       break;
     case PROP_DOWNLOAD:
-    case PROP_START_TIME:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -355,23 +349,6 @@ ephy_download_get_action (EphyDownload *download)
 }
 
 /**
- * ephy_download_get_start_time:
- * @download: an #EphyDownload
- *
- * Gets the time (returned by gtk_get_current_event_time ()) when @download was
- * started. Defaults to 0.
- *
- * Returns: the time when @download was started.
- **/
-guint32
-ephy_download_get_start_time (EphyDownload *download)
-{
-  g_assert (EPHY_IS_DOWNLOAD (download));
-
-  return download->start_time;
-}
-
-/**
  * ephy_download_cancel:
  * @download: an #EphyDownload
  *
@@ -534,20 +511,6 @@ ephy_download_class_init (EphyDownloadClass *klass)
                        G_PARAM_READABLE |
                        G_PARAM_STATIC_STRINGS);
 
-  /**
-   * EphyDownload::start-time:
-   *
-   * User time when the download started, useful for launching applications
-   * aware of focus stealing.
-   */
-  obj_properties[PROP_START_TIME] =
-    g_param_spec_uint ("start-time",
-                       "Event start time",
-                       "Time for focus-stealing prevention.",
-                       0, G_MAXUINT32, 0,
-                       G_PARAM_READABLE |
-                       G_PARAM_STATIC_STRINGS);
-
   obj_properties[PROP_CONTENT_TYPE] =
     g_param_spec_string ("content-type",
                          "Content Type",
@@ -620,8 +583,6 @@ ephy_download_init (EphyDownload *download)
   download->download = NULL;
 
   download->action = EPHY_DOWNLOAD_ACTION_NONE;
-
-  download->start_time = gtk_get_current_event_time ();
 
   download->show_notification = TRUE;
 }
@@ -758,7 +719,7 @@ download_finished_cb (WebKitDownload *wk_download,
 
   download->finished = TRUE;
 
-  ephy_download_do_download_action (download, download->action, download->start_time);
+  ephy_download_do_download_action (download, download->action, GDK_CURRENT_TIME);
 
   if (download->show_notification)
     display_download_finished_notification (wk_download);
