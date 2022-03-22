@@ -51,8 +51,7 @@ download_box_row_activated_cb (EphyDownloadsPopover *popover,
     return;
 
   ephy_download_do_download_action (download,
-                                    EPHY_DOWNLOAD_ACTION_OPEN,
-                                    GDK_CURRENT_TIME);
+                                    EPHY_DOWNLOAD_ACTION_OPEN);
 }
 
 static void

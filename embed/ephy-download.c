@@ -397,7 +397,6 @@ ephy_download_failed (EphyDownload  *download,
  * ephy_download_do_download_action:
  * @download: an #EphyDownload
  * @action: one of #EphyDownloadActionType
- * @user_time: GDK timestamp, for focus-stealing prevention
  *
  * Executes the given @action for @download, this can be any of
  * #EphyDownloadActionType.
@@ -407,8 +406,7 @@ ephy_download_failed (EphyDownload  *download,
  **/
 gboolean
 ephy_download_do_download_action (EphyDownload           *download,
-                                  EphyDownloadActionType  action,
-                                  guint32                 user_time)
+                                  EphyDownloadActionType  action)
 {
   GFile *destination;
   const char *destination_uri;
@@ -421,13 +419,13 @@ ephy_download_do_download_action (EphyDownload           *download,
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
       /* Must not use this action type under sandbox! */
-      ret = ephy_file_browse_to (destination, user_time);
+      ret = ephy_file_browse_to (destination, GDK_CURRENT_TIME);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
-      ret = ephy_file_launch_handler (destination, user_time);
+      ret = ephy_file_launch_handler (destination, GDK_CURRENT_TIME);
       if (!ret)
-        ret = ephy_file_browse_to (destination, user_time);
+        ret = ephy_file_browse_to (destination, GDK_CURRENT_TIME);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");
@@ -719,7 +717,7 @@ download_finished_cb (WebKitDownload *wk_download,
 
   download->finished = TRUE;
 
-  ephy_download_do_download_action (download, download->action, GDK_CURRENT_TIME);
+  ephy_download_do_download_action (download, download->action);
 
   if (download->show_notification)
     display_download_finished_notification (wk_download);

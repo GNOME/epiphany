@@ -58,8 +58,7 @@ EphyDownloadActionType ephy_download_get_action   (EphyDownload *download);
 void          ephy_download_set_action            (EphyDownload *download,
                                                    EphyDownloadActionType action);
 gboolean      ephy_download_do_download_action    (EphyDownload          *download,
-                                                   EphyDownloadActionType action,
-                                                   guint32                user_time);
+                                                   EphyDownloadActionType action);
 void          ephy_download_disable_desktop_notification
                                                   (EphyDownload *download);
 
