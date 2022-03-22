@@ -20,6 +20,8 @@
 
 #pragma once
 
+#if ENABLE_GSB
+
 #include <gio/gio.h>
 #include <glib-object.h>
 
@@ -39,3 +41,5 @@ GList          *ephy_gsb_service_verify_url_finish  (EphyGSBService  *self,
                                                      GAsyncResult    *result);
 
 G_END_DECLS
+
+#endif /* ENABLE_GSB */

@@ -2224,6 +2224,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
   return accept_navigation_policy_decision (window, decision, uri);
 }
 
+#if ENABLE_GSB
 static void
 verify_url_cb (EphyGSBService     *service,
                GAsyncResult       *result,
@@ -2250,6 +2251,7 @@ verify_url_cb (EphyGSBService     *service,
 
   verify_url_async_data_free (data);
 }
+#endif
 
 static gboolean
 decide_navigation (EphyWindow               *window,
@@ -2258,6 +2260,7 @@ decide_navigation (EphyWindow               *window,
                    WebKitPolicyDecisionType  decision_type,
                    const char               *request_uri)
 {
+#if ENABLE_GSB
   EphyGSBService *service;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING)) {
@@ -2278,6 +2281,7 @@ decide_navigation (EphyWindow               *window,
       return TRUE;
     }
   }
+#endif
 
   return decide_navigation_policy (web_view, decision, decision_type, window);
 }

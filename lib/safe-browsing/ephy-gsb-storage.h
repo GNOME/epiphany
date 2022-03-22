@@ -20,6 +20,8 @@
 
 #pragma once
 
+#if ENABLE_GSB
+
 #include "ephy-gsb-utils.h"
 
 #include <glib-object.h>
@@ -66,3 +68,5 @@ void            ephy_gsb_storage_update_hash_prefix_expiration  (EphyGSBStorage 
                                                                  gint64          duration);
 
 G_END_DECLS
+
+#endif /* ENABLE_GSB */

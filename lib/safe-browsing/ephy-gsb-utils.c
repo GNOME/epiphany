@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-gsb-utils.h"
 
+#if ENABLE_GSB
+
 #include "ephy-debug.h"
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
@@ -917,3 +919,5 @@ ephy_gsb_utils_hash_has_prefix (GBytes *hash,
 
   return TRUE;
 }
+
+#endif /* ENABLE_GSB */

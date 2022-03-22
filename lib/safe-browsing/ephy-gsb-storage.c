@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-gsb-storage.h"
 
+#if ENABLE_GSB
+
 #include "ephy-debug.h"
 #include "ephy-sqlite-connection.h"
 
@@ -1712,3 +1714,5 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
 
   g_object_unref (statement);
 }
+
+#endif /* ENABLE_GSB */

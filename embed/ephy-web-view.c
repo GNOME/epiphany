@@ -2098,6 +2098,7 @@ format_tls_error_page (EphyWebView  *view,
   *style = "danger";
 }
 
+#if ENABLE_GSB
 static void
 format_unsafe_browsing_error_page (EphyWebView  *view,
                                    const char   *origin,
@@ -2185,6 +2186,7 @@ format_unsafe_browsing_error_page (EphyWebView  *view,
   *icon_name = "security-high-symbolic.svg";
   *style = "danger";
 }
+#endif
 
 static void
 format_no_such_file_error_page (EphyWebView  *view,
@@ -2355,6 +2357,7 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                              &icon_name,
                              &style);
       break;
+#if ENABLE_GSB
     case EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING:
       format_unsafe_browsing_error_page (view,
                                          origin,
@@ -2372,6 +2375,7 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                                          &icon_name,
                                          &style);
       break;
+#endif
     case EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE:
       format_no_such_file_error_page (view,
                                       &page_title,

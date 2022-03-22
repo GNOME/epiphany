@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-gsb-service.h"
 
+#if ENABLE_GSB
+
 #include "ephy-debug.h"
 #include "ephy-gsb-storage.h"
 #include "ephy-user-agent.h"
@@ -536,7 +538,6 @@ EphyGSBService *
 ephy_gsb_service_new (const char *api_key,
                       const char *db_path)
 {
-#if ENABLE_GSB
   EphyGSBService *service;
   EphyGSBStorage *storage;
 
@@ -548,9 +549,6 @@ ephy_gsb_service_new (const char *api_key,
   g_object_unref (storage);
 
   return service;
-#else
-  return NULL;
-#endif
 }
 
 typedef struct {
@@ -888,3 +886,5 @@ ephy_gsb_service_verify_url_finish (EphyGSBService *self,
 
   return g_task_propagate_pointer (G_TASK (result), NULL);
 }
+
+#endif /* ENABLE_GSB */

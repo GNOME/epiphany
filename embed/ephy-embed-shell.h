@@ -64,7 +64,9 @@ const char        *ephy_embed_shell_get_guid                   (EphyEmbedShell  
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
+#if ENABLE_GSB
 EphyGSBService    *ephy_embed_shell_get_global_gsb_service     (EphyEmbedShell   *shell);
+#endif
 EphyEncodings     *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,

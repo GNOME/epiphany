@@ -55,7 +55,9 @@
 typedef struct {
   WebKitWebContext *web_context;
   EphyHistoryService *global_history_service;
+#if ENABLE_GSB
   EphyGSBService *global_gsb_service;
+#endif
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
@@ -192,7 +194,9 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->page_setup);
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->global_history_service);
+#if ENABLE_GSB
   g_clear_object (&priv->global_gsb_service);
+#endif
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->reader_handler);
   g_clear_object (&priv->source_handler);
@@ -637,6 +641,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   return priv->global_history_service;
 }
 
+#if ENABLE_GSB
 /**
  * ephy_embed_shell_get_global_gsb_service:
  * @shell: the #EphyEmbedShell
@@ -660,6 +665,7 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 
   return priv->global_gsb_service;
 }
+#endif
 
 /**
  * ephy_embed_shell_get_encodings:

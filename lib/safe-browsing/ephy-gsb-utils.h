@@ -20,6 +20,8 @@
 
 #pragma once
 
+#if ENABLE_GSB
+
 #include <glib.h>
 #include <json-glib/json-glib.h>
 
@@ -96,3 +98,5 @@ gboolean                 ephy_gsb_utils_hash_has_prefix           (GBytes *hash,
                                                                    GBytes *prefix);
 
 G_END_DECLS
+
+#endif /* ENABLE_GSB */
