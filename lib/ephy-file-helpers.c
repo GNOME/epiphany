@@ -583,8 +583,7 @@ ephy_ensure_dir_exists (const char  *dir,
 
 static gboolean
 launch_application (GAppInfo *app,
-                    GList    *files,
-                    guint32   user_time)
+                    GList    *files)
 {
   g_autoptr (GdkAppLaunchContext) context = NULL;
   g_autoptr (GError) error = NULL;
@@ -597,7 +596,6 @@ launch_application (GAppInfo *app,
 
   context = gdk_display_get_app_launch_context (display);
   gdk_app_launch_context_set_screen (context, screen);
-  gdk_app_launch_context_set_timestamp (context, user_time);
 
   res = g_app_info_launch (app, files,
                            G_APP_LAUNCH_CONTEXT (context), &error);
@@ -632,7 +630,6 @@ launch_via_uri_handler (GFile *file)
 /**
  * ephy_file_launch_handler:
  * @file: a #GFile to pass as argument
- * @user_time: user time to prevent focus stealing
  *
  * Launches @file with its default handler application, if @mime_type is %NULL
  * then @file will be queried for its type.
@@ -640,8 +637,7 @@ launch_via_uri_handler (GFile *file)
  * Returns: %TRUE on success
  **/
 gboolean
-ephy_file_launch_handler (GFile   *file,
-                          guint32  user_time)
+ephy_file_launch_handler (GFile *file)
 {
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
@@ -665,7 +661,7 @@ ephy_file_launch_handler (GFile   *file,
   }
 
   list = g_list_append (list, file);
-  ret = launch_application (app, list, user_time);
+  ret = launch_application (app, list);
 
   return ret;
 }
@@ -673,7 +669,6 @@ ephy_file_launch_handler (GFile   *file,
 static gboolean
 open_in_default_handler (const char *uri,
                          const char *mime_type,
-                         guint32     timestamp,
                          GdkScreen  *screen)
 {
   g_autoptr (GdkAppLaunchContext) context = NULL;
@@ -683,7 +678,6 @@ open_in_default_handler (const char *uri,
 
   context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
   gdk_app_launch_context_set_screen (context, screen);
-  gdk_app_launch_context_set_timestamp (context, timestamp);
 
   appinfo = g_app_info_get_default_for_type (mime_type, TRUE);
   if (!appinfo) {
@@ -704,20 +698,18 @@ open_in_default_handler (const char *uri,
 
 gboolean
 ephy_file_open_uri_in_default_browser (const char *uri,
-                                       guint32     user_time,
                                        GdkScreen  *screen)
 {
   if (ephy_is_running_inside_sandbox ()) {
     ephy_open_uri_via_flatpak_portal (uri);
     return TRUE;
   }
-  return open_in_default_handler (uri, "x-scheme-handler/http", user_time, screen);
+  return open_in_default_handler (uri, "x-scheme-handler/http", screen);
 }
 
 /**
  * ephy_file_browse_to:
  * @file: a #GFile
- * @user_time: user_time to prevent focus stealing
  *
  * Launches the default application for browsing directories to point to
  * @file. E.g. nautilus will jump to @file within its directory and
@@ -726,8 +718,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile   *file,
-                     guint32  user_time)
+ephy_file_browse_to (GFile *file)
 {
   g_autofree char *uri = g_file_get_uri (file);
 
@@ -736,7 +727,7 @@ ephy_file_browse_to (GFile   *file,
     return TRUE;
   }
 
-  return open_in_default_handler (uri, "inode/directory", user_time, NULL);
+  return open_in_default_handler (uri, "inode/directory", NULL);
 }
 
 /**

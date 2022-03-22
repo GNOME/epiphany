@@ -419,13 +419,13 @@ ephy_download_do_download_action (EphyDownload           *download,
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
       /* Must not use this action type under sandbox! */
-      ret = ephy_file_browse_to (destination, GDK_CURRENT_TIME);
+      ret = ephy_file_browse_to (destination);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
-      ret = ephy_file_launch_handler (destination, GDK_CURRENT_TIME);
+      ret = ephy_file_launch_handler (destination);
       if (!ret)
-        ret = ephy_file_browse_to (destination, GDK_CURRENT_TIME);
+        ret = ephy_file_browse_to (destination);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");
