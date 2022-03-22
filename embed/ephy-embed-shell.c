@@ -641,6 +641,18 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   return priv->global_history_service;
 }
 
+static char *
+gsb_file_path (void)
+{
+  /* The Safe Browsing database is huge, so it goes in the *default* cache
+   * dir, so it can be shared by all Epiphany instances. This may be different
+   * from *this* Epiphany's cache dir.
+   */
+  g_autofree char *default_cache_dir = ephy_default_cache_dir ();
+
+  return g_build_filename (default_cache_dir, EPHY_GSB_FILE, NULL);
+}
+
 #if ENABLE_GSB
 /**
  * ephy_embed_shell_get_global_gsb_service:
@@ -656,14 +668,48 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (!priv->global_gsb_service) {
-    g_autofree char *db_path = NULL;
-    g_autofree char *default_cache_dir = ephy_default_cache_dir ();
-
-    db_path = g_build_filename (default_cache_dir, EPHY_GSB_FILE, NULL);
+    g_autofree char *db_path = gsb_file_path ();
     priv->global_gsb_service = ephy_gsb_service_new (GSB_API_KEY, db_path);
   }
 
   return priv->global_gsb_service;
+}
+#else
+static void
+gsb_file_deleted_cb (GObject      *source,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  GFile *file = G_FILE (source);
+
+  if (!g_file_delete_finish (file, result, &error) &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND) &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    g_warning ("Failed to delete %s: %s", g_file_peek_path (file), error->message);
+  }
+}
+
+static void
+delete_gsb_file (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  /* The Safe Browsing database is huge, so we should delete it when starting
+   * Epiphany if the feature is disabled at build time. Note we don't do this
+   * if it's disabled only at runtime, because the database is shared between
+   * all profiles (since it's huge, it uses the *default* cache dir, not *this*
+   * Epiphany's cache dir!), but each profile could have its own value
+   * for the runtime setting. E.g. *this* Epiphany might have Safe Browsing
+   * disabled, but another Epiphany profile might have it enabled.
+   */
+  g_autofree char *db_path = gsb_file_path ();
+  g_autoptr (GFile) db_file = g_file_new_for_path (db_path);
+
+  g_file_delete_async (db_file, G_PRIORITY_DEFAULT,
+                       priv->cancellable,
+                       gsb_file_deleted_cb,
+                       shell);
 }
 #endif
 
@@ -947,6 +993,10 @@ ephy_embed_shell_startup (GApplication *application)
 
 #if DEVELOPER_MODE
   webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
+#endif
+
+#if !ENABLE_GSB
+  delete_gsb_file (shell);
 #endif
 
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
