@@ -107,12 +107,180 @@ enum signalsEnum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
-static void schedule_dns_prefetch (EphyLocationEntry *entry,
-                                   const gchar       *url);
 
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
+
+typedef struct {
+  GUri *uri;
+  EphyLocationEntry *entry;
+} PrefetchHelper;
+
+static void
+free_prefetch_helper (PrefetchHelper *helper)
+{
+  g_uri_unref (helper->uri);
+  g_object_unref (helper->entry);
+  g_free (helper);
+}
+
+static gboolean
+do_dns_prefetch (PrefetchHelper *helper)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  if (helper->uri)
+    webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), g_uri_get_host (helper->uri));
+
+  helper->entry->dns_prefetch_handle_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+/*
+ * Note: As we do not have access to WebKitNetworkProxyMode, and because
+ * Epiphany does not ever change it, we are just checking system default proxy.
+ */
+static void
+proxy_resolver_ready_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  PrefetchHelper *helper = user_data;
+  GProxyResolver *resolver = G_PROXY_RESOLVER (object);
+  g_autoptr (GError) error = NULL;
+  g_auto (GStrv) proxies = NULL;
+
+  proxies = g_proxy_resolver_lookup_finish (resolver, result, &error);
+  if (error != NULL) {
+    free_prefetch_helper (helper);
+    return;
+  }
+
+  if (proxies != NULL && (g_strv_length (proxies) > 1 || g_strcmp0 (proxies[0], "direct://") != 0)) {
+    free_prefetch_helper (helper);
+    return;
+  }
+
+  g_clear_handle_id (&helper->entry->dns_prefetch_handle_id, g_source_remove);
+  helper->entry->dns_prefetch_handle_id =
+    g_timeout_add_full (G_PRIORITY_DEFAULT,
+                        250,
+                        (GSourceFunc)do_dns_prefetch,
+                        helper,
+                        (GDestroyNotify)free_prefetch_helper);
+  g_source_set_name_by_id (helper->entry->dns_prefetch_handle_id, "[epiphany] do_dns_prefetch");
+}
+
+static void
+schedule_dns_prefetch (EphyLocationEntry *entry,
+                       const gchar       *url)
+{
+  GProxyResolver *resolver = g_proxy_resolver_get_default ();
+  PrefetchHelper *helper;
+  g_autoptr (GUri) uri = NULL;
+
+  if (resolver == NULL)
+    return;
+
+  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+  if (!uri || !g_uri_get_host (uri))
+    return;
+
+  helper = g_new0 (PrefetchHelper, 1);
+  helper->entry = g_object_ref (entry);
+  helper->uri = g_steal_pointer (&uri);
+
+  g_proxy_resolver_lookup_async (resolver, url, NULL, proxy_resolver_ready_cb, helper);
+}
+
+static void
+editable_changed_cb (GtkEditable       *editable,
+                     EphyLocationEntry *entry);
+
+static void
+suggestion_selected (DzlSuggestionEntry *entry,
+                     DzlSuggestion      *suggestion,
+                     gpointer            user_data)
+{
+  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
+  const gchar *uri = dzl_suggestion_get_id (suggestion);
+
+  g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+  g_clear_pointer (&lentry->jump_tab, g_free);
+
+  if (g_str_has_prefix (uri, "ephy-tab://")) {
+    lentry->jump_tab = g_strdup (uri);
+    gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_subtitle (suggestion));
+  } else {
+    gtk_entry_set_text (GTK_ENTRY (entry), uri);
+  }
+  gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+  g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+
+  schedule_dns_prefetch (lentry, uri);
+}
+
+static void
+ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
+{
+  g_autofree char *text = NULL;
+  gint start;
+  gint end;
+
+  if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
+    return;
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+
+  if (start == 0) {
+    g_autofree char *tmp = text;
+    text = ephy_uri_normalize (tmp);
+  }
+
+  gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+                                                    GDK_SELECTION_CLIPBOARD),
+                          text, -1);
+}
+
+static void
+ephy_location_entry_copy_clipboard (GtkEntry *entry,
+                                    gpointer  user_data)
+{
+  ephy_location_entry_do_copy_clipboard (entry);
+
+  g_signal_stop_emission_by_name (entry, "copy-clipboard");
+}
+
+static void
+ephy_location_entry_cut_clipboard (GtkEntry *entry)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (entry))) {
+    gtk_widget_error_bell (GTK_WIDGET (entry));
+    return;
+  }
+
+  ephy_location_entry_do_copy_clipboard (entry);
+  gtk_editable_delete_selection (GTK_EDITABLE (entry));
+
+  g_signal_stop_emission_by_name (entry, "cut-clipboard");
+}
+
+static void
+entry_redo_activate_cb (GtkMenuItem       *item,
+                        EphyLocationEntry *entry)
+{
+  ephy_location_entry_undo_reset (entry);
+}
+
+static void
+entry_undo_activate_cb (GtkMenuItem       *item,
+                        EphyLocationEntry *entry)
+{
+  ephy_location_entry_reset (entry);
+}
+
 static gboolean
 entry_button_release (GtkWidget *widget,
                       GdkEvent  *event,
@@ -129,6 +297,109 @@ entry_button_release (GtkWidget *widget,
   entry->button_release_is_blocked = TRUE;
 
   return GDK_EVENT_STOP;
+}
+
+static void
+ephy_location_entry_activate (EphyLocationEntry *entry)
+{
+  g_signal_emit_by_name (entry->url_entry, "activate");
+}
+
+static gboolean
+entry_key_press_cb (GtkEntry          *entry,
+                    GdkEventKey       *event,
+                    EphyLocationEntry *location_entry)
+{
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
+
+  if (event->keyval == GDK_KEY_Escape && state == 0) {
+    ephy_location_entry_reset (location_entry);
+  }
+
+  if (event->keyval == GDK_KEY_l && state == GDK_CONTROL_MASK) {
+    /* Make sure the location is activated on CTRL+l even when the
+     * completion popup is shown and have an active keyboard grab.
+     */
+    ephy_location_entry_focus (location_entry);
+  }
+
+  if (event->keyval == GDK_KEY_Return ||
+      event->keyval == GDK_KEY_KP_Enter ||
+      event->keyval == GDK_KEY_ISO_Enter) {
+    if (location_entry->jump_tab) {
+      g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+      gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), location_entry->jump_tab);
+      g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+      g_clear_pointer (&location_entry->jump_tab, g_free);
+    } else {
+      g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
+      gchar *url = g_strstrip (text);
+      g_autofree gchar *new_url = NULL;
+
+      gtk_entry_set_text (GTK_ENTRY (entry), location_entry->jump_tab ? location_entry->jump_tab : text);
+
+      if (strlen (url) > 5 && g_str_has_prefix (url, "http:") && url[5] != '/')
+        new_url = g_strdup_printf ("http://%s", url + 5);
+      else if (strlen (url) > 6 && g_str_has_prefix (url, "https:") && url[6] != '/')
+        new_url = g_strdup_printf ("https://%s", url + 6);
+
+      if (new_url) {
+        g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+        gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
+        g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+      }
+
+      if (state == GDK_CONTROL_MASK) {
+        /* Remove control mask to prevent opening address in a new window */
+        event->state &= ~GDK_CONTROL_MASK;
+
+        if (!g_utf8_strchr (url, -1, ' ') && !g_utf8_strchr (url, -1, '.')) {
+          g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
+
+          g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+          gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
+          g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
+        }
+      }
+    }
+
+    ephy_location_entry_activate (location_entry);
+
+    return GDK_EVENT_STOP;
+  }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+handle_forward_tab_key (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  GtkWidget *popover;
+
+  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
+  if (gtk_widget_is_visible (popover)) {
+    g_signal_emit_by_name (entry->url_entry, "move-suggestion", 1, G_TYPE_INT, 1, G_TYPE_NONE);
+  } else {
+    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_FORWARD);
+  }
+}
+
+static void
+handle_backward_tab_key (GtkWidget *widget,
+                         gpointer   user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  GtkWidget *popover;
+
+  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
+  if (gtk_widget_is_visible (popover)) {
+    g_signal_emit_by_name (entry->url_entry, "move-suggestion", -1, G_TYPE_INT, 1, G_TYPE_NONE);
+  } else {
+    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_BACKWARD);
+  }
 }
 
 static void
@@ -217,579 +488,6 @@ entry_focus_out_event (GtkWidget *widget,
   }
 
   return GDK_EVENT_PROPAGATE;
-}
-
-static void
-editable_changed_cb (GtkEditable       *editable,
-                     EphyLocationEntry *entry);
-
-static void
-ephy_location_entry_activate (EphyLocationEntry *entry)
-{
-  g_signal_emit_by_name (entry->url_entry, "activate");
-}
-
-static const char *
-ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-  g_assert (entry);
-
-  return gtk_entry_get_text (GTK_ENTRY (entry->url_entry));
-}
-
-static void
-ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
-                                              const char      *address)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-  GtkClipboard *clipboard;
-  const char *text;
-  g_autofree char *effective_text = NULL;
-  g_autofree char *selection = NULL;
-  int start, end;
-  const char *final_text;
-
-  g_assert (widget);
-
-  /* Setting a new text will clear the clipboard. This makes it impossible
-   * to copy&paste from the location entry of one tab into another tab, see
-   * bug #155824. So we save the selection iff the clipboard was owned by
-   * the location entry.
-   */
-  if (gtk_widget_get_realized (GTK_WIDGET (entry))) {
-    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry->url_entry),
-                                          GDK_SELECTION_PRIMARY);
-    g_assert (clipboard != NULL);
-
-    if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry->url_entry) &&
-        gtk_editable_get_selection_bounds (GTK_EDITABLE (entry->url_entry),
-                                           &start, &end)) {
-      selection = gtk_editable_get_chars (GTK_EDITABLE (entry->url_entry),
-                                          start, end);
-    }
-  }
-
-  if (address != NULL) {
-    if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
-      effective_text = g_strdup_printf ("about:%s",
-                                        address + strlen (EPHY_ABOUT_SCHEME) + 1);
-    text = address;
-  } else {
-    text = "";
-  }
-
-  final_text = effective_text ? effective_text : text;
-
-  entry->block_update = TRUE;
-  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), final_text);
-  update_entry_style (entry);
-  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-
-  dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
-  entry->block_update = FALSE;
-
-  /* Now restore the selection.
-   * Note that it's not owned by the entry anymore!
-   */
-  if (selection != NULL) {
-    gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
-                            selection, strlen (selection));
-  }
-}
-
-static EphySecurityLevel
-ephy_location_entry_title_widget_get_security_level (EphyTitleWidget *widget)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-  g_assert (entry);
-
-  return entry->security_level;
-}
-
-static void
-ephy_location_entry_title_widget_set_security_level (EphyTitleWidget  *widget,
-                                                     EphySecurityLevel security_level)
-
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-  const char *icon_name;
-
-  g_assert (entry);
-
-  if (!entry->reader_mode_active) {
-    icon_name = ephy_security_level_to_icon_name (security_level);
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       icon_name);
-  } else {
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       NULL);
-  }
-
-  entry->security_level = security_level;
-}
-
-static void
-ephy_location_entry_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
-  switch (prop_id) {
-    case PROP_ADDRESS:
-      ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry),
-                                     g_value_get_string (value));
-      break;
-    case PROP_SECURITY_LEVEL:
-      ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (entry),
-                                            g_value_get_enum (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
-ephy_location_entry_get_property (GObject    *object,
-                                  guint       prop_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
-  switch (prop_id) {
-    case PROP_ADDRESS:
-      g_value_set_string (value, ephy_title_widget_get_address (EPHY_TITLE_WIDGET (entry)));
-      break;
-    case PROP_SECURITY_LEVEL:
-      g_value_set_enum (value, ephy_title_widget_get_security_level (EPHY_TITLE_WIDGET (entry)));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
-ephy_location_entry_constructed (GObject *object)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
-  G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
-
-  gtk_entry_set_input_hints (GTK_ENTRY (entry->url_entry), GTK_INPUT_HINT_NO_EMOJI);
-}
-
-static void
-ephy_location_entry_finalize (GObject *object)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
-  g_free (entry->saved_text);
-  g_clear_pointer (&entry->jump_tab, g_free);
-
-  G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
-}
-
-static void
-ephy_location_entry_get_preferred_height (GtkWidget *widget,
-                                          gint      *minimum_height,
-                                          gint      *natural_height)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-  gtk_widget_get_preferred_height (entry->url_entry, minimum_height, natural_height);
-}
-
-static void
-ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
-{
-  g_autofree char *text = NULL;
-  gint start;
-  gint end;
-
-  if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
-    return;
-
-  text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
-
-  if (start == 0) {
-    g_autofree char *tmp = text;
-    text = ephy_uri_normalize (tmp);
-  }
-
-  gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
-                                                    GDK_SELECTION_CLIPBOARD),
-                          text, -1);
-}
-
-static void
-ephy_location_entry_copy_clipboard (GtkEntry *entry,
-                                    gpointer  user_data)
-{
-  ephy_location_entry_do_copy_clipboard (entry);
-
-  g_signal_stop_emission_by_name (entry, "copy-clipboard");
-}
-
-static void
-ephy_location_entry_cut_clipboard (GtkEntry *entry)
-{
-  if (!gtk_editable_get_editable (GTK_EDITABLE (entry))) {
-    gtk_widget_error_bell (GTK_WIDGET (entry));
-    return;
-  }
-
-  ephy_location_entry_do_copy_clipboard (entry);
-  gtk_editable_delete_selection (GTK_EDITABLE (entry));
-
-  g_signal_stop_emission_by_name (entry, "cut-clipboard");
-}
-
-static void
-ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
-{
-  iface->get_address = ephy_location_entry_title_widget_get_address;
-  iface->set_address = ephy_location_entry_title_widget_set_address;
-  iface->get_security_level = ephy_location_entry_title_widget_get_security_level;
-  iface->set_security_level = ephy_location_entry_title_widget_set_security_level;
-}
-
-static void
-ephy_location_entry_dispose (GObject *object)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
-  g_clear_handle_id (&entry->progress_timeout, g_source_remove);
-
-  g_clear_object (&entry->css_provider);
-
-  G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
-}
-
-
-static void
-ephy_location_entry_class_init (EphyLocationEntryClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->get_property = ephy_location_entry_get_property;
-  object_class->set_property = ephy_location_entry_set_property;
-  object_class->constructed = ephy_location_entry_constructed;
-  object_class->finalize = ephy_location_entry_finalize;
-  object_class->dispose = ephy_location_entry_dispose;
-
-  widget_class->get_preferred_height = ephy_location_entry_get_preferred_height;
-
-  g_object_class_override_property (object_class, PROP_ADDRESS, "address");
-  g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
-
-  /**
-   * EphyLocationEntry::activate:
-   * @flags: the #GdkModifierType from the activation event
-   *
-   * Emitted when the entry is activated.
-   *
-   */
-  signals[ACTIVATE] = g_signal_new ("activate", G_OBJECT_CLASS_TYPE (klass),
-                                    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                    0, NULL, NULL, NULL,
-                                    G_TYPE_NONE,
-                                    1,
-                                    GDK_TYPE_MODIFIER_TYPE);
-
-  /**
-   * EphyLocationEntry::user-changed:
-   * @entry: the object on which the signal is emitted
-   *
-   * Emitted when the user changes the contents of the internal #GtkEntry
-   *
-   */
-  signals[USER_CHANGED] = g_signal_new ("user_changed", G_OBJECT_CLASS_TYPE (klass),
-                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, NULL, NULL, NULL,
-                                        G_TYPE_NONE,
-                                        0,
-                                        G_TYPE_NONE);
-
-  /**
-   * EphyLocationEntry::reader-mode-changed:
-   * @entry: the object on which the signal is emitted
-   * @active: whether reader mode is active
-   *
-   * Emitted when the user clicks the reader mode icon inside the
-   * #EphyLocationEntry.
-   *
-   */
-  signals[READER_MODE_CHANGED] = g_signal_new ("reader-mode-changed", G_OBJECT_CLASS_TYPE (klass),
-                                               G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                               0, NULL, NULL, NULL,
-                                               G_TYPE_NONE,
-                                               1,
-                                               G_TYPE_BOOLEAN);
-
-  /**
-   * EphyLocationEntry::get-location:
-   * @entry: the object on which the signal is emitted
-   * Returns: the current page address as a string
-   *
-   * For drag and drop purposes, the location bar will request you the
-   * real address of where it is pointing to. The signal handler for this
-   * function should return the address of the currently loaded site.
-   *
-   */
-  signals[GET_LOCATION] = g_signal_new ("get-location", G_OBJECT_CLASS_TYPE (klass),
-                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, ephy_signal_accumulator_string,
-                                        NULL, NULL,
-                                        G_TYPE_STRING,
-                                        0,
-                                        G_TYPE_NONE);
-
-  /**
-   * EphyLocationEntry::get-title:
-   * @entry: the object on which the signal is emitted
-   * Returns: the current page title as a string
-   *
-   * For drag and drop purposes, the location bar will request you the
-   * title of where it is pointing to. The signal handler for this
-   * function should return the title of the currently loaded site.
-   *
-   */
-  signals[GET_TITLE] = g_signal_new ("get-title", G_OBJECT_CLASS_TYPE (klass),
-                                     G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                     0, ephy_signal_accumulator_string,
-                                     NULL, NULL,
-                                     G_TYPE_STRING,
-                                     0,
-                                     G_TYPE_NONE);
-}
-
-static void
-editable_changed_cb (GtkEditable       *editable,
-                     EphyLocationEntry *entry)
-{
-  if (entry->block_update == TRUE)
-    return;
-  else {
-    entry->user_changed = TRUE;
-    entry->can_redo = FALSE;
-  }
-
-  g_clear_pointer (&entry->jump_tab, g_free);
-
-  g_signal_emit (entry, signals[USER_CHANGED], 0);
-}
-
-static gboolean
-entry_key_press_cb (GtkEntry          *entry,
-                    GdkEventKey       *event,
-                    EphyLocationEntry *location_entry)
-{
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-
-
-  if (event->keyval == GDK_KEY_Escape && state == 0) {
-    ephy_location_entry_reset (location_entry);
-  }
-
-  if (event->keyval == GDK_KEY_l && state == GDK_CONTROL_MASK) {
-    /* Make sure the location is activated on CTRL+l even when the
-     * completion popup is shown and have an active keyboard grab.
-     */
-    ephy_location_entry_focus (location_entry);
-  }
-
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter) {
-    if (location_entry->jump_tab) {
-      g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-      gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), location_entry->jump_tab);
-      g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-      g_clear_pointer (&location_entry->jump_tab, g_free);
-    } else {
-      g_autofree gchar *text = g_strdup (gtk_entry_get_text (GTK_ENTRY (location_entry->url_entry)));
-      gchar *url = g_strstrip (text);
-      g_autofree gchar *new_url = NULL;
-
-      gtk_entry_set_text (GTK_ENTRY (entry), location_entry->jump_tab ? location_entry->jump_tab : text);
-
-      if (strlen (url) > 5 && g_str_has_prefix (url, "http:") && url[5] != '/')
-        new_url = g_strdup_printf ("http://%s", url + 5);
-      else if (strlen (url) > 6 && g_str_has_prefix (url, "https:") && url[6] != '/')
-        new_url = g_strdup_printf ("https://%s", url + 6);
-
-      if (new_url) {
-        g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-        gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
-        g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-      }
-
-      if (state == GDK_CONTROL_MASK) {
-        /* Remove control mask to prevent opening address in a new window */
-        event->state &= ~GDK_CONTROL_MASK;
-
-        if (!g_utf8_strchr (url, -1, ' ') && !g_utf8_strchr (url, -1, '.')) {
-          g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
-
-          g_signal_handlers_block_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-          gtk_entry_set_text (GTK_ENTRY (location_entry->url_entry), new_url);
-          g_signal_handlers_unblock_by_func (location_entry->url_entry, G_CALLBACK (editable_changed_cb), location_entry);
-        }
-      }
-    }
-
-    ephy_location_entry_activate (location_entry);
-
-    return GDK_EVENT_STOP;
-  }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-entry_clear_activate_cb (GtkMenuItem       *item,
-                         EphyLocationEntry *entry)
-{
-  entry->block_update = TRUE;
-  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), "");
-  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-  entry->block_update = FALSE;
-  entry->user_changed = TRUE;
-}
-
-static void
-paste_received (GtkClipboard      *clipboard,
-                const gchar       *text,
-                EphyLocationEntry *entry)
-{
-  if (text) {
-    g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-    gtk_entry_set_text (GTK_ENTRY (entry->url_entry), text);
-    ephy_location_entry_activate (entry);
-    g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
-  }
-}
-
-static void
-entry_paste_and_go_activate_cb (GtkMenuItem       *item,
-                                EphyLocationEntry *entry)
-{
-  GtkClipboard *clipboard;
-
-  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
-  gtk_clipboard_request_text (clipboard,
-                              (GtkClipboardTextReceivedFunc)paste_received,
-                              entry);
-}
-
-static void
-entry_redo_activate_cb (GtkMenuItem       *item,
-                        EphyLocationEntry *entry)
-{
-  ephy_location_entry_undo_reset (entry);
-}
-
-static void
-entry_undo_activate_cb (GtkMenuItem       *item,
-                        EphyLocationEntry *entry)
-{
-  ephy_location_entry_reset (entry);
-}
-
-/* The build should fail here each time when upgrading to a new major version
- * of GTK+, so that we don't forget to update this domain.
- */
-#if GTK_MAJOR_VERSION == 3
-#define GTK_GETTEXT_DOMAIN "gtk30"
-#endif
-
-static void
-entry_populate_popup_cb (GtkEntry          *entry,
-                         GtkMenu           *menu,
-                         EphyLocationEntry *lentry)
-{
-  GtkWidget *clear_menuitem;
-  GtkWidget *undo_menuitem;
-  GtkWidget *redo_menuitem;
-  GtkWidget *paste_and_go_menuitem;
-  GtkWidget *separator;
-  GtkWidget *paste_menuitem = NULL;
-  GList *children, *item;
-  int pos = 0, sep = 0;
-  gboolean is_editable;
-
-  /* Translators: the mnemonic shouldn't conflict with any of the
-   * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-   * Select All, Input Methods and Insert Unicode control character.)
-   */
-  clear_menuitem = gtk_menu_item_new_with_mnemonic (_("Cl_ear"));
-  g_signal_connect (clear_menuitem, "activate",
-                    G_CALLBACK (entry_clear_activate_cb), lentry);
-  is_editable = gtk_editable_get_editable (GTK_EDITABLE (entry));
-  gtk_widget_set_sensitive (clear_menuitem, is_editable);
-  gtk_widget_show (clear_menuitem);
-
-  /* search for the 2nd separator (the one after Select All) in the context
-   * menu, and insert this menu item before it.
-   * It's a bit of a hack, but there seems to be no better way to do it :/
-   */
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-  for (item = children; item != NULL && sep < 2; item = item->next, pos++) {
-    if (GTK_IS_SEPARATOR_MENU_ITEM (item->data))
-      sep++;
-  }
-  g_list_free (children);
-
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
-
-  paste_and_go_menuitem = gtk_menu_item_new_with_mnemonic (_("Paste and _Go"));
-
-  /* Search for the Paste menu item and insert right after it. */
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-  for (item = children, pos = 0; item != NULL; item = item->next, pos++) {
-    if (g_strcmp0 (gtk_menu_item_get_label (item->data), g_dgettext (GTK_GETTEXT_DOMAIN, "_Paste")) == 0) {
-      paste_menuitem = item->data;
-      break;
-    }
-  }
-  g_assert (paste_menuitem != NULL);
-  g_list_free (children);
-
-  g_signal_connect (paste_and_go_menuitem, "activate",
-                    G_CALLBACK (entry_paste_and_go_activate_cb), lentry);
-  lentry->paste_binding = g_object_bind_property (paste_menuitem, "sensitive",
-                                                  paste_and_go_menuitem, "sensitive",
-                                                  G_BINDING_SYNC_CREATE);
-  gtk_widget_show (paste_and_go_menuitem);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), paste_and_go_menuitem, pos + 1);
-
-  undo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Undo"));
-  gtk_widget_set_sensitive (undo_menuitem, lentry->user_changed);
-  g_signal_connect (undo_menuitem, "activate",
-                    G_CALLBACK (entry_undo_activate_cb), lentry);
-  gtk_widget_show (undo_menuitem);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), undo_menuitem, 0);
-
-  redo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Redo"));
-  gtk_widget_set_sensitive (redo_menuitem, lentry->can_redo);
-  g_signal_connect (redo_menuitem, "activate",
-                    G_CALLBACK (entry_redo_activate_cb), lentry);
-  gtk_widget_show (redo_menuitem);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), redo_menuitem, 1);
-
-  separator = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), separator, 2);
 }
 
 static gboolean
@@ -896,6 +594,47 @@ event_button_press_event_cb (GtkWidget *widget,
 }
 
 static void
+enter_notify_cb (GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer   user_data)
+{
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+}
+
+static void
+leave_notify_cb (GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer   user_data)
+{
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+}
+
+static void
+editable_changed_cb (GtkEditable       *editable,
+                     EphyLocationEntry *entry)
+{
+  if (entry->block_update == TRUE)
+    return;
+  else {
+    entry->user_changed = TRUE;
+    entry->can_redo = FALSE;
+  }
+
+  g_clear_pointer (&entry->jump_tab, g_free);
+
+  g_signal_emit (entry, signals[USER_CHANGED], 0);
+}
+
+static void
+reader_mode_clicked_cb (EphyLocationEntry *self)
+{
+  self->reader_mode_active = !self->reader_mode_active;
+
+  g_signal_emit (G_OBJECT (self), signals[READER_MODE_CHANGED], 0,
+                 self->reader_mode_active);
+}
+
+static void
 ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
                                           DzlSuggestion      *arg1,
                                           gpointer            user_data)
@@ -918,72 +657,153 @@ ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
 }
 
 static void
-suggestion_selected (DzlSuggestionEntry *entry,
-                     DzlSuggestion      *suggestion,
-                     gpointer            user_data)
+activate_cb (EphyLocationEntry *self)
 {
-  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
-  const gchar *uri = dzl_suggestion_get_id (suggestion);
+  GdkModifierType modifiers;
 
-  g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
-  g_clear_pointer (&lentry->jump_tab, g_free);
+  ephy_gui_get_current_event (NULL, &modifiers, NULL, NULL);
 
-  if (g_str_has_prefix (uri, "ephy-tab://")) {
-    lentry->jump_tab = g_strdup (uri);
-    gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_subtitle (suggestion));
-  } else {
-    gtk_entry_set_text (GTK_ENTRY (entry), uri);
-  }
-  gtk_editable_set_position (GTK_EDITABLE (entry), -1);
-  g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
-
-  schedule_dns_prefetch (lentry, uri);
+  g_signal_emit (G_OBJECT (self), signals[ACTIVATE], 0, modifiers);
 }
 
 static void
-enter_notify_cb (GtkWidget *widget,
-                 GdkEvent  *event,
-                 gpointer   user_data)
+update_reader_icon (EphyLocationEntry *entry)
 {
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+  GtkIconTheme *theme;
+  const gchar *name;
+
+  theme = gtk_icon_theme_get_default ();
+
+  if (gtk_icon_theme_has_icon (theme, "view-reader-symbolic"))
+    name = "view-reader-symbolic";
+  else
+    name = "ephy-reader-mode-symbolic";
+
+  gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode_icon),
+                                name, GTK_ICON_SIZE_MENU);
 }
 
 static void
-leave_notify_cb (GtkWidget *widget,
-                 GdkEvent  *event,
-                 gpointer   user_data)
+paste_received (GtkClipboard      *clipboard,
+                const gchar       *text,
+                EphyLocationEntry *entry)
 {
-  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
-}
-
-static void
-handle_forward_tab_key (GtkWidget *widget,
-                        gpointer   user_data)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
-  GtkWidget *popover;
-
-  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
-  if (gtk_widget_is_visible (popover)) {
-    g_signal_emit_by_name (entry->url_entry, "move-suggestion", 1, G_TYPE_INT, 1, G_TYPE_NONE);
-  } else {
-    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_FORWARD);
+  if (text) {
+    g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+    gtk_entry_set_text (GTK_ENTRY (entry->url_entry), text);
+    ephy_location_entry_activate (entry);
+    g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   }
 }
 
 static void
-handle_backward_tab_key (GtkWidget *widget,
-                         gpointer   user_data)
+entry_paste_and_go_activate_cb (GtkMenuItem       *item,
+                                EphyLocationEntry *entry)
 {
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
-  GtkWidget *popover;
+  GtkClipboard *clipboard;
 
-  popover = dzl_suggestion_entry_get_popover (DZL_SUGGESTION_ENTRY (entry->url_entry));
-  if (gtk_widget_is_visible (popover)) {
-    g_signal_emit_by_name (entry->url_entry, "move-suggestion", -1, G_TYPE_INT, 1, G_TYPE_NONE);
-  } else {
-    gtk_widget_child_focus (gtk_widget_get_toplevel (GTK_WIDGET (entry)), GTK_DIR_TAB_BACKWARD);
+  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
+  gtk_clipboard_request_text (clipboard,
+                              (GtkClipboardTextReceivedFunc)paste_received,
+                              entry);
+}
+
+static void
+entry_clear_activate_cb (GtkMenuItem       *item,
+                         EphyLocationEntry *entry)
+{
+  entry->block_update = TRUE;
+  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), "");
+  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+  entry->block_update = FALSE;
+  entry->user_changed = TRUE;
+}
+
+/* The build should fail here each time when upgrading to a new major version
+ * of GTK+, so that we don't forget to update this domain.
+ */
+#if GTK_MAJOR_VERSION == 3
+#define GTK_GETTEXT_DOMAIN "gtk30"
+#endif
+
+static void
+entry_populate_popup_cb (GtkEntry          *entry,
+                         GtkMenu           *menu,
+                         EphyLocationEntry *lentry)
+{
+  GtkWidget *clear_menuitem;
+  GtkWidget *undo_menuitem;
+  GtkWidget *redo_menuitem;
+  GtkWidget *paste_and_go_menuitem;
+  GtkWidget *separator;
+  GtkWidget *paste_menuitem = NULL;
+  GList *children, *item;
+  int pos = 0, sep = 0;
+  gboolean is_editable;
+
+  /* Translators: the mnemonic shouldn't conflict with any of the
+   * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+   * Select All, Input Methods and Insert Unicode control character.)
+   */
+  clear_menuitem = gtk_menu_item_new_with_mnemonic (_("Cl_ear"));
+  g_signal_connect (clear_menuitem, "activate",
+                    G_CALLBACK (entry_clear_activate_cb), lentry);
+  is_editable = gtk_editable_get_editable (GTK_EDITABLE (entry));
+  gtk_widget_set_sensitive (clear_menuitem, is_editable);
+  gtk_widget_show (clear_menuitem);
+
+  /* search for the 2nd separator (the one after Select All) in the context
+   * menu, and insert this menu item before it.
+   * It's a bit of a hack, but there seems to be no better way to do it :/
+   */
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  for (item = children; item != NULL && sep < 2; item = item->next, pos++) {
+    if (GTK_IS_SEPARATOR_MENU_ITEM (item->data))
+      sep++;
   }
+  g_list_free (children);
+
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
+
+  paste_and_go_menuitem = gtk_menu_item_new_with_mnemonic (_("Paste and _Go"));
+
+  /* Search for the Paste menu item and insert right after it. */
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  for (item = children, pos = 0; item != NULL; item = item->next, pos++) {
+    if (g_strcmp0 (gtk_menu_item_get_label (item->data), g_dgettext (GTK_GETTEXT_DOMAIN, "_Paste")) == 0) {
+      paste_menuitem = item->data;
+      break;
+    }
+  }
+  g_assert (paste_menuitem != NULL);
+  g_list_free (children);
+
+  g_signal_connect (paste_and_go_menuitem, "activate",
+                    G_CALLBACK (entry_paste_and_go_activate_cb), lentry);
+  lentry->paste_binding = g_object_bind_property (paste_menuitem, "sensitive",
+                                                  paste_and_go_menuitem, "sensitive",
+                                                  G_BINDING_SYNC_CREATE);
+  gtk_widget_show (paste_and_go_menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), paste_and_go_menuitem, pos + 1);
+
+  undo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Undo"));
+  gtk_widget_set_sensitive (undo_menuitem, lentry->user_changed);
+  g_signal_connect (undo_menuitem, "activate",
+                    G_CALLBACK (entry_undo_activate_cb), lentry);
+  gtk_widget_show (undo_menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), undo_menuitem, 0);
+
+  redo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Redo"));
+  gtk_widget_set_sensitive (redo_menuitem, lentry->can_redo);
+  g_signal_connect (redo_menuitem, "activate",
+                    G_CALLBACK (entry_redo_activate_cb), lentry);
+  gtk_widget_show (redo_menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), redo_menuitem, 1);
+
+  separator = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), separator, 2);
 }
 
 static void
@@ -1020,39 +840,186 @@ position_func (DzlSuggestionEntry *self,
 }
 
 static void
-update_reader_icon (EphyLocationEntry *entry)
+ephy_location_entry_get_preferred_height (GtkWidget *widget,
+                                          gint      *minimum_height,
+                                          gint      *natural_height)
 {
-  GtkIconTheme *theme;
-  const gchar *name;
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
 
-  theme = gtk_icon_theme_get_default ();
-
-  if (gtk_icon_theme_has_icon (theme, "view-reader-symbolic"))
-    name = "view-reader-symbolic";
-  else
-    name = "ephy-reader-mode-symbolic";
-
-  gtk_image_set_from_icon_name (GTK_IMAGE (entry->reader_mode_icon),
-                                name, GTK_ICON_SIZE_MENU);
+  gtk_widget_get_preferred_height (entry->url_entry, minimum_height, natural_height);
 }
 
 static void
-reader_mode_clicked_cb (EphyLocationEntry *self)
+ephy_location_entry_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
-  self->reader_mode_active = !self->reader_mode_active;
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
-  g_signal_emit (G_OBJECT (self), signals[READER_MODE_CHANGED], 0,
-                 self->reader_mode_active);
+  switch (prop_id) {
+    case PROP_ADDRESS:
+      ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry),
+                                     g_value_get_string (value));
+      break;
+    case PROP_SECURITY_LEVEL:
+      ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (entry),
+                                            g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
 }
 
 static void
-activate_cb (EphyLocationEntry *self)
+ephy_location_entry_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
-  GdkModifierType modifiers;
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
-  ephy_gui_get_current_event (NULL, &modifiers, NULL, NULL);
+  switch (prop_id) {
+    case PROP_ADDRESS:
+      g_value_set_string (value, ephy_title_widget_get_address (EPHY_TITLE_WIDGET (entry)));
+      break;
+    case PROP_SECURITY_LEVEL:
+      g_value_set_enum (value, ephy_title_widget_get_security_level (EPHY_TITLE_WIDGET (entry)));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
 
-  g_signal_emit (G_OBJECT (self), signals[ACTIVATE], 0, modifiers);
+static void
+ephy_location_entry_constructed (GObject *object)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
+  G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
+
+  gtk_entry_set_input_hints (GTK_ENTRY (entry->url_entry), GTK_INPUT_HINT_NO_EMOJI);
+}
+
+static void
+ephy_location_entry_dispose (GObject *object)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
+  g_clear_handle_id (&entry->progress_timeout, g_source_remove);
+
+  g_clear_object (&entry->css_provider);
+
+  G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
+}
+
+static void
+ephy_location_entry_finalize (GObject *object)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
+  g_free (entry->saved_text);
+  g_clear_pointer (&entry->jump_tab, g_free);
+
+  G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
+}
+
+static void
+ephy_location_entry_class_init (EphyLocationEntryClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->get_property = ephy_location_entry_get_property;
+  object_class->set_property = ephy_location_entry_set_property;
+  object_class->constructed = ephy_location_entry_constructed;
+  object_class->finalize = ephy_location_entry_finalize;
+  object_class->dispose = ephy_location_entry_dispose;
+
+  widget_class->get_preferred_height = ephy_location_entry_get_preferred_height;
+
+  g_object_class_override_property (object_class, PROP_ADDRESS, "address");
+  g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
+
+  /**
+   * EphyLocationEntry::activate:
+   * @flags: the #GdkModifierType from the activation event
+   *
+   * Emitted when the entry is activated.
+   *
+   */
+  signals[ACTIVATE] = g_signal_new ("activate", G_OBJECT_CLASS_TYPE (klass),
+                                    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                    0, NULL, NULL, NULL,
+                                    G_TYPE_NONE,
+                                    1,
+                                    GDK_TYPE_MODIFIER_TYPE);
+
+  /**
+   * EphyLocationEntry::user-changed:
+   * @entry: the object on which the signal is emitted
+   *
+   * Emitted when the user changes the contents of the internal #GtkEntry
+   *
+   */
+  signals[USER_CHANGED] = g_signal_new ("user_changed", G_OBJECT_CLASS_TYPE (klass),
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, NULL, NULL, NULL,
+                                        G_TYPE_NONE,
+                                        0,
+                                        G_TYPE_NONE);
+
+  /**
+   * EphyLocationEntry::reader-mode-changed:
+   * @entry: the object on which the signal is emitted
+   * @active: whether reader mode is active
+   *
+   * Emitted when the user clicks the reader mode icon inside the
+   * #EphyLocationEntry.
+   *
+   */
+  signals[READER_MODE_CHANGED] = g_signal_new ("reader-mode-changed", G_OBJECT_CLASS_TYPE (klass),
+                                               G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                               0, NULL, NULL, NULL,
+                                               G_TYPE_NONE,
+                                               1,
+                                               G_TYPE_BOOLEAN);
+
+  /**
+   * EphyLocationEntry::get-location:
+   * @entry: the object on which the signal is emitted
+   * Returns: the current page address as a string
+   *
+   * For drag and drop purposes, the location bar will request you the
+   * real address of where it is pointing to. The signal handler for this
+   * function should return the address of the currently loaded site.
+   *
+   */
+  signals[GET_LOCATION] = g_signal_new ("get-location", G_OBJECT_CLASS_TYPE (klass),
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, ephy_signal_accumulator_string,
+                                        NULL, NULL,
+                                        G_TYPE_STRING,
+                                        0,
+                                        G_TYPE_NONE);
+
+  /**
+   * EphyLocationEntry::get-title:
+   * @entry: the object on which the signal is emitted
+   * Returns: the current page title as a string
+   *
+   * For drag and drop purposes, the location bar will request you the
+   * title of where it is pointing to. The signal handler for this
+   * function should return the title of the currently loaded site.
+   *
+   */
+  signals[GET_TITLE] = g_signal_new ("get-title", G_OBJECT_CLASS_TYPE (klass),
+                                     G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                     0, ephy_signal_accumulator_string,
+                                     NULL, NULL,
+                                     G_TYPE_STRING,
+                                     0,
+                                     G_TYPE_NONE);
 }
 
 static void
@@ -1198,93 +1165,124 @@ ephy_location_entry_init (EphyLocationEntry *le)
   ephy_location_entry_construct_contents (le);
 }
 
+static const char *
+ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  g_assert (entry);
+
+  return gtk_entry_get_text (GTK_ENTRY (entry->url_entry));
+}
+
+static void
+ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
+                                              const char      *address)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+  GtkClipboard *clipboard;
+  const char *text;
+  g_autofree char *effective_text = NULL;
+  g_autofree char *selection = NULL;
+  int start, end;
+  const char *final_text;
+
+  g_assert (widget);
+
+  /* Setting a new text will clear the clipboard. This makes it impossible
+   * to copy&paste from the location entry of one tab into another tab, see
+   * bug #155824. So we save the selection iff the clipboard was owned by
+   * the location entry.
+   */
+  if (gtk_widget_get_realized (GTK_WIDGET (entry))) {
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry->url_entry),
+                                          GDK_SELECTION_PRIMARY);
+    g_assert (clipboard != NULL);
+
+    if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry->url_entry) &&
+        gtk_editable_get_selection_bounds (GTK_EDITABLE (entry->url_entry),
+                                           &start, &end)) {
+      selection = gtk_editable_get_chars (GTK_EDITABLE (entry->url_entry),
+                                          start, end);
+    }
+  }
+
+  if (address != NULL) {
+    if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
+      effective_text = g_strdup_printf ("about:%s",
+                                        address + strlen (EPHY_ABOUT_SCHEME) + 1);
+    text = address;
+  } else {
+    text = "";
+  }
+
+  final_text = effective_text ? effective_text : text;
+
+  entry->block_update = TRUE;
+  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+  gtk_entry_set_text (GTK_ENTRY (entry->url_entry), final_text);
+  update_entry_style (entry);
+  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+
+  dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
+  entry->block_update = FALSE;
+
+  /* Now restore the selection.
+   * Note that it's not owned by the entry anymore!
+   */
+  if (selection != NULL) {
+    gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
+                            selection, strlen (selection));
+  }
+}
+
+static EphySecurityLevel
+ephy_location_entry_title_widget_get_security_level (EphyTitleWidget *widget)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  g_assert (entry);
+
+  return entry->security_level;
+}
+
+static void
+ephy_location_entry_title_widget_set_security_level (EphyTitleWidget  *widget,
+                                                     EphySecurityLevel security_level)
+
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+  const char *icon_name;
+
+  g_assert (entry);
+
+  if (!entry->reader_mode_active) {
+    icon_name = ephy_security_level_to_icon_name (security_level);
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       icon_name);
+  } else {
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       NULL);
+  }
+
+  entry->security_level = security_level;
+}
+
+static void
+ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
+{
+  iface->get_address = ephy_location_entry_title_widget_get_address;
+  iface->set_address = ephy_location_entry_title_widget_set_address;
+  iface->get_security_level = ephy_location_entry_title_widget_get_security_level;
+  iface->set_security_level = ephy_location_entry_title_widget_set_security_level;
+}
+
 GtkWidget *
 ephy_location_entry_new (void)
 {
   return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
-}
-
-typedef struct {
-  GUri *uri;
-  EphyLocationEntry *entry;
-} PrefetchHelper;
-
-static void
-free_prefetch_helper (PrefetchHelper *helper)
-{
-  g_uri_unref (helper->uri);
-  g_object_unref (helper->entry);
-  g_free (helper);
-}
-
-static gboolean
-do_dns_prefetch (PrefetchHelper *helper)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
-  if (helper->uri)
-    webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), g_uri_get_host (helper->uri));
-
-  helper->entry->dns_prefetch_handle_id = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
-/*
- * Note: As we do not have access to WebKitNetworkProxyMode, and because
- * Epiphany does not ever change it, we are just checking system default proxy.
- */
-static void
-proxy_resolver_ready_cb (GObject      *object,
-                         GAsyncResult *result,
-                         gpointer      user_data)
-{
-  PrefetchHelper *helper = user_data;
-  GProxyResolver *resolver = G_PROXY_RESOLVER (object);
-  g_autoptr (GError) error = NULL;
-  g_auto (GStrv) proxies = NULL;
-
-  proxies = g_proxy_resolver_lookup_finish (resolver, result, &error);
-  if (error != NULL) {
-    free_prefetch_helper (helper);
-    return;
-  }
-
-  if (proxies != NULL && (g_strv_length (proxies) > 1 || g_strcmp0 (proxies[0], "direct://") != 0)) {
-    free_prefetch_helper (helper);
-    return;
-  }
-
-  g_clear_handle_id (&helper->entry->dns_prefetch_handle_id, g_source_remove);
-  helper->entry->dns_prefetch_handle_id =
-    g_timeout_add_full (G_PRIORITY_DEFAULT,
-                        250,
-                        (GSourceFunc)do_dns_prefetch,
-                        helper,
-                        (GDestroyNotify)free_prefetch_helper);
-  g_source_set_name_by_id (helper->entry->dns_prefetch_handle_id, "[epiphany] do_dns_prefetch");
-}
-
-static void
-schedule_dns_prefetch (EphyLocationEntry *entry,
-                       const gchar       *url)
-{
-  GProxyResolver *resolver = g_proxy_resolver_get_default ();
-  PrefetchHelper *helper;
-  g_autoptr (GUri) uri = NULL;
-
-  if (resolver == NULL)
-    return;
-
-  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
-  if (!uri || !g_uri_get_host (uri))
-    return;
-
-  helper = g_new0 (PrefetchHelper, 1);
-  helper->entry = g_object_ref (entry);
-  helper->uri = g_steal_pointer (&uri);
-
-  g_proxy_resolver_lookup_async (resolver, url, NULL, proxy_resolver_ready_cb, helper);
 }
 
 /**
