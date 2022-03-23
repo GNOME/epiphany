@@ -18,8 +18,7 @@
         "--socket=pulseaudio",
         "--socket=wayland",
         "--system-talk-name=org.freedesktop.GeoClue2",
-        "--own-name=org.gnome.Epiphany.WebAppProvider",
-        "--env=WEBKIT_NICOSIA_PAINTING_THREADS=0"
+        "--own-name=org.gnome.Epiphany.WebAppProvider"
     ],
     "modules" : [
          {
@@ -46,6 +45,52 @@
             ]
         },
         {
+            "name": "elementary-stylesheet",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/elementary/stylesheet.git"
+                }
+            ],
+            "modules": [
+                {
+                    "name": "sassc",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "git",
+                            "url": "https://github.com/sass/sassc.git",
+                            "tag": "3.6.1"
+                        },
+                        {
+                            "type": "script",
+                            "dest-filename": "autogen.sh",
+                            "commands": [ "autoreconf -si" ]
+                        }
+                    ],
+                    "modules": [
+                        {
+                            "name": "libsass",
+                            "cleanup": [ "*" ],
+                            "sources": [
+                                {
+                                    "type": "git",
+                                    "url": "https://github.com/sass/libsass.git",
+                                    "tag": "3.6.4"
+                                },
+                                {
+                                    "type": "script",
+                                    "dest-filename": "autogen.sh",
+                                    "commands": [ "autoreconf -si" ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name" : "libdazzle",
             "buildsystem" : "meson",
             "sources" : [
@@ -59,7 +104,7 @@
             "name" : "libportal",
             "buildsystem" : "meson",
             "config-opts" : [
-                "-Dbackends=gtk3,gtk4",
+                "-Dbackends=gtk3",
                 "-Dintrospection=false",
                 "-Ddocs=false"
             ],
@@ -83,7 +128,6 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
-                    "branch" : "wip/exalm/gtk4",
                     "disable-shallow-clone" : true
                 }
             ]
