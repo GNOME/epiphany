@@ -65,6 +65,9 @@ typedef enum {
 
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
+/* The GApplication ID must begin with the app ID for the dynamic launcher portal to work */
+#define EPHY_WEB_APP_GAPPLICATION_ID_PREFIX APPLICATION_ID ".WebApp_"
+
 char               *ephy_web_application_get_app_id_from_name (const char *name);
 
 const char         *ephy_web_application_get_gapplication_id_from_profile_directory (const char *profile_dir);

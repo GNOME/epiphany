@@ -58,9 +58,6 @@
  * System web applications have a profile dir without a desktop file.
  */
 
-/* The GApplication ID must begin with the app ID for the dynamic launcher portal to work */
-static const char *EPHY_WEB_APP_GAPPLICATION_ID_PREFIX = APPLICATION_ID ".WebApp_";
-
 GQuark webapp_error_quark (void);
 G_DEFINE_QUARK (webapp - error - quark, webapp_error)
 #define WEBAPP_ERROR webapp_error_quark ()

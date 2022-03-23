@@ -169,7 +169,8 @@ handle_uninstall (EphyWebAppProvider        *skeleton,
 
   g_application_hold (G_APPLICATION (self));
 
-  if (!desktop_file_id || !g_str_has_suffix (desktop_file_id, ".desktop")) {
+  if (!desktop_file_id || !g_str_has_suffix (desktop_file_id, ".desktop") ||
+      !g_str_has_prefix (desktop_file_id, EPHY_WEB_APP_GAPPLICATION_ID_PREFIX)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,
                                            EPHY_WEBAPP_PROVIDER_ERROR_INVALID_ARGS,
                                            _("The desktop file ID passed ‘%s’ was not valid"),
