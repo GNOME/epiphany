@@ -96,7 +96,7 @@ enum {
   LAST_PROP
 };
 
-enum signalsEnum {
+enum {
   ACTIVATE,
   USER_CHANGED,
   READER_MODE_CHANGED,
