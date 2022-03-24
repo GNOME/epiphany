@@ -760,18 +760,18 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
                               SuggestedFilenameData *data)
 {
   if (response == GTK_RESPONSE_OK) {
-    g_autofree gchar *uri = g_file_get_path (data->directory);
-    g_autofree gchar *folder = g_file_get_uri (data->directory);
-    g_autofree gchar *path = g_build_filename (uri, data->suggested_filename, NULL);
+    g_autofree gchar *folder_path = g_file_get_path (data->directory);
+    g_autofree gchar *folder_uri = g_file_get_uri (data->directory);
+    g_autofree gchar *download_uri = g_build_filename (folder_uri, data->suggested_filename, NULL);
 
-    ephy_download_set_destination_uri (data->download, path);
+    ephy_download_set_destination_uri (data->download, download_uri);
 
     webkit_download_set_allow_overwrite (data->webkit_download, TRUE);
 
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
 
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, folder);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, folder_path);
   } else {
     ephy_download_cancel (data->download);
   }
