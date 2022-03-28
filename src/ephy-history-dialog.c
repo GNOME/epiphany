@@ -435,12 +435,14 @@ ephy_history_dialog_row_favicon_loaded_cb (GObject      *source,
     return;
 
   if (icon_surface) {
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    int scale = gtk_widget_get_scale_factor (icon);
+
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
     cairo_surface_destroy (icon_surface);
   }
 
   if (favicon && icon)
-    gtk_image_set_from_pixbuf (GTK_IMAGE (icon), favicon);
+    gtk_image_set_from_gicon (GTK_IMAGE (icon), G_ICON (favicon), GTK_ICON_SIZE_BUTTON);
 }
 
 static GtkWidget *
@@ -465,6 +467,7 @@ create_row (EphyHistoryDialog *self,
 
   /* Fav Icon */
   icon = gtk_image_new ();
+  gtk_image_set_pixel_size (GTK_IMAGE (icon), 16);
   hdy_action_row_add_prefix (HDY_ACTION_ROW (row), icon);
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
