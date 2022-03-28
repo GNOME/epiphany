@@ -92,13 +92,15 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
 
   icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
   if (icon_surface) {
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    int scale = gtk_widget_get_scale_factor (self->favicon_image);
+
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
     cairo_surface_destroy (icon_surface);
   }
 
   if (favicon) {
     if (self->favicon_image != NULL)
-      gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
+      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), G_ICON (favicon), GTK_ICON_SIZE_BUTTON);
   }
 }
 
