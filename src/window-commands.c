@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include "ephy-web-view.h"
 #include "window-commands.h"
 
 #include "ephy-bookmarks-export.h"
@@ -1389,6 +1390,8 @@ typedef struct {
   EphyWebApplicationOptions webapp_options;
   gboolean webapp_options_set;
   WebKitDownload *download;
+  char *manifest_url;
+  WebKitDownload *download_manifest;
   EphyWindow *window;
 } EphyApplicationDialogData;
 
@@ -1450,6 +1453,13 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
     data->download = NULL;
   }
 
+  if (data->download_manifest) {
+    g_signal_handlers_disconnect_by_func (data->download_manifest, download_manifest_finished_cb, data);
+    g_signal_handlers_disconnect_by_func (data->download_manifest, download_manifest_failed_cb, data);
+
+    data->download = NULL;
+  }
+
   g_cancellable_cancel (data->cancellable);
   g_object_unref (data->cancellable);
   g_object_unref (data->window);
@@ -1458,6 +1468,7 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
   if (data->icon_v)
     g_variant_unref (data->icon_v);
   g_free (data->icon_href);
+  g_free (data->manifest_url);
   g_free (data->title);
   g_free (data->chosen_name);
   g_free (data->token);
@@ -1774,6 +1785,122 @@ fill_default_application_title_cb (GObject      *source,
     ephy_application_dialog_data_free (data);
 }
 
+
+static void
+download_manifest_finished_cb (WebKitDownload            *download,
+                      EphyApplicationDialogData *data)
+{
+  char *filename;
+  GError *error = NULL;
+  JsonParser *parser = json_parser_new();
+  JsonNode *root;
+  JsonObject *manifest_object;
+  char *name;
+  char *short_name;
+
+  filename = g_filename_from_uri (webkit_download_get_destination (download), NULL, NULL);
+  json_parser_load_from_file(parser, filename, &error);
+  g_free (filename);
+  if (error) {
+    g_warning ("Unable to parse manifest");
+    g_error_free (error);
+    g_object_unref (parser);
+    return;
+  }
+
+  root = json_parser_get_root (parser);
+  manifest_object = json_node_get_object(root);
+
+  name = json_object_get_string_member(manifest_object, "name");
+  short_name = json_object_get_string_member(manifest_object, "short_name");
+
+  if (short_name) {
+    g_message (short_name);
+    // data->name = short_name;
+  } else if (name) {
+    g_message (name);
+    // data->name = name;
+  }
+
+  g_free (name);
+  g_free (short_name);
+
+  g_object_unref (parser);
+}
+
+static void
+download_manifest_failed_cb (WebKitDownload            *download,
+                    GError                    *error,
+                    EphyApplicationDialogData *data)
+{
+  g_warning("failed");
+
+  g_signal_handlers_disconnect_by_func (download, download_manifest_finished_cb, data);
+
+  // TODO fallback to ephy.js stuff
+}
+
+static void
+download_and_use_manifest (EphyApplicationDialogData *data)
+{
+  char *destination, *destination_uri, *tmp_filename;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  data->download_manifest = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell),
+                                                    data->manifest_url);
+  /* We do not want this download to show up in the UI, so let's
+   * set 'ephy-download-set' to make Epiphany think this is
+   * already there. */
+  /* FIXME: it's probably better to just do this in a clean way
+   * instead of using this workaround. */
+  g_object_set_data (G_OBJECT (data->download_manifest), "ephy-download-set", GINT_TO_POINTER (TRUE));
+  tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
+  destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
+  destination_uri = g_filename_to_uri (destination, NULL, NULL);
+  g_message("%s", destination_uri);
+  webkit_download_set_destination (data->download_manifest, destination_uri);
+  g_free (destination);
+  g_free (destination_uri);
+  g_free (tmp_filename);
+
+  g_message("foobar!");
+
+
+  g_signal_connect (data->download_manifest, "finished",
+                    G_CALLBACK (download_manifest_finished_cb), data);
+  g_signal_connect (data->download_manifest, "failed",
+                    G_CALLBACK (download_manifest_failed_cb), data);
+}
+
+static void
+got_manifest_url_cb (GObject      *source,
+                     GAsyncResult *async_result,
+                     gpointer     user_data)
+{
+  EphyApplicationDialogData *data = user_data;
+  char *manifest_url;
+  GError *error = NULL;
+
+  manifest_url = ephy_web_view_get_web_app_manifest_url_finish (EPHY_WEB_VIEW (source), async_result, &error);
+  g_message("%s", manifest_url);
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
+  data->manifest_url = manifest_url;
+  g_message("%s", manifest_url);
+  if (data->manifest_url != NULL)
+    download_and_use_manifest (data);
+
+  // TODO: fallback to ephy.js stuff
+}
+
+static void
+do_something_with_manifest (EphyApplicationDialogData *data)
+{
+  ephy_web_view_get_web_app_manifest_url (data->view, data->cancellable, got_manifest_url_cb, data);
+}
+
 static void
 fill_mobile_capable_cb (GObject      *source,
                         GAsyncResult *async_result,
@@ -1957,6 +2084,9 @@ window_cmd_save_as_application (GSimpleAction *action,
   ephy_web_view_get_best_web_app_icon (data->view, data->cancellable, fill_default_application_image_cb, data);
   ephy_web_view_get_web_app_title (data->view, data->cancellable, fill_default_application_title_cb, data);
   ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
+  //TODO is this right
+  do_something_with_manifest (data);
+
 }
 
 static char *

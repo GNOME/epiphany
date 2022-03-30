@@ -147,6 +147,14 @@ void                       ephy_web_view_get_web_app_title        (EphyWebView  
 char                      *ephy_web_view_get_web_app_title_finish (EphyWebView               *view,
                                                                    GAsyncResult              *result,
                                                                    GError                   **error);
+
+void                       ephy_web_view_get_web_app_manifest_url (EphyWebView               *view,
+                                                                   GCancellable              *cancellable,
+                                                                   GAsyncReadyCallback        callback,
+                                                                   gpointer                   user_data);
+char                      *ephy_web_view_get_web_app_manifest_url_finish (EphyWebView               *view,
+                                                                   GAsyncResult              *result,
+                                                                   GError                   **error);
 void                       ephy_web_view_get_web_app_mobile_capable        (EphyWebView         *view,
                                                                             GCancellable        *cancellable,
                                                                             GAsyncReadyCallback  callback,

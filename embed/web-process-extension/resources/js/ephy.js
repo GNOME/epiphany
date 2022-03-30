@@ -18,6 +18,11 @@ Ephy.getAppleMobileWebAppCapable = function()
     return false;
 };
 
+Ephy.getWebAppManifestURL = function () {
+    const manifest = document.head.querySelector("link[rel=manifest]");
+    return manifest ? manifest.href : null;
+}
+
 Ephy.getWebAppTitle = function()
 {
     const metas = document.getElementsByTagName('meta');
