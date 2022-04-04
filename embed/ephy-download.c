@@ -752,6 +752,7 @@ typedef struct {
   GtkWindow *dialog;
   GFile *directory;
   GtkLabel *directory_label;
+  GMainLoop *nested_loop;
 } SuggestedFilenameData;
 
 static void
@@ -777,10 +778,7 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
-
-  g_object_unref (data->directory);
-  g_free (data->suggested_filename);
-  g_free (data);
+  g_main_loop_quit (data->nested_loop);
 }
 
 static void
@@ -848,7 +846,7 @@ filename_suggested_cb (EphyDownload *download,
   g_autofree gchar *display_name = NULL;
   const gchar *content_type;
   const char *directory_path;
-  SuggestedFilenameData *data;
+  SuggestedFilenameData data;
 
   application = G_APPLICATION (ephy_embed_shell_get_default ());
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
@@ -908,26 +906,41 @@ filename_suggested_cb (EphyDownload *download,
 
   directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
-  data = g_new0 (SuggestedFilenameData, 1);
-  data->download = download;
-  data->webkit_download = webkit_download;
-  data->suggested_filename = g_strdup (suggested_filename);
-  data->dialog = GTK_WINDOW (dialog);
+  data.download = download;
+  data.webkit_download = webkit_download;
+  data.suggested_filename = g_strdup (suggested_filename);
+  data.dialog = GTK_WINDOW (dialog);
   if (!directory_path || !directory_path[0])
-    data->directory = g_file_new_for_path (ephy_file_get_downloads_dir ());
+    data.directory = g_file_new_for_path (ephy_file_get_downloads_dir ());
   else
-    data->directory = g_file_new_for_path (directory_path);
-  data->directory_label = GTK_LABEL (button_label);
+    data.directory = g_file_new_for_path (directory_path);
+  data.directory_label = GTK_LABEL (button_label);
+  data.nested_loop = g_main_loop_new (NULL, FALSE);
 
-  display_name = ephy_file_get_display_name (data->directory);
-  gtk_label_set_label (data->directory_label, display_name);
+  display_name = ephy_file_get_display_name (data.directory);
+  gtk_label_set_label (data.directory_label, display_name);
 
   g_signal_connect (button, "clicked",
-                    G_CALLBACK (filename_suggested_button_cb), data);
+                    G_CALLBACK (filename_suggested_button_cb), &data);
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (filename_suggested_dialog_cb), data);
+                    G_CALLBACK (filename_suggested_dialog_cb), &data);
 
   gtk_window_present (GTK_WINDOW (dialog));
+
+  /* Here we need to wait for the final filename from the file chooser. Sadly,
+   * there is no safe way to do this. Ideally, we would indicate to WebKit that
+   * we wish to handle this asynchronously, but there is no way to do that:
+   * https://bugs.webkit.org/show_bug.cgi?id=238748
+   *
+   * So instead let's run a nested main loop here. This is not particularly safe
+   * or good, but allows emulating gtk_dialog_run() and doesn't require new
+   * WebKit API.
+   */
+  g_main_loop_run (data.nested_loop);
+
+  g_main_loop_unref (data.nested_loop);
+  g_object_unref (data.directory);
+  g_free (data.suggested_filename);
 }
 
 EphyDownload *
