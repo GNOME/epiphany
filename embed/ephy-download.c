@@ -204,8 +204,8 @@ set_destination_uri_for_suggested_filename (EphyDownload *download,
 
   /* Make sure the download directory exists */
   if (g_mkdir_with_parents (dest_dir, 0700) == -1) {
-    g_critical ("Could not create downloads directory \"%s\": %s",
-                dest_dir, strerror (errno));
+    g_warning ("Could not create downloads directory \"%s\": %s",
+               dest_dir, strerror (errno));
     g_free (dest_dir);
     return FALSE;
   }
