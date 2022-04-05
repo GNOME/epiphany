@@ -193,6 +193,7 @@ parse_extension (const char *filename)
 
 static gboolean
 set_destination_uri_for_suggested_filename (EphyDownload *download,
+                                            const char   *directory,
                                             const char   *suggested_filename)
 {
   char *dest_dir;
@@ -200,7 +201,10 @@ set_destination_uri_for_suggested_filename (EphyDownload *download,
   char *destination_filename;
   char *destination_uri;
 
-  dest_dir = ephy_file_get_downloads_dir ();
+  if (directory)
+    dest_dir = g_strdup (directory);
+  else
+    dest_dir = ephy_file_get_downloads_dir ();
 
   /* Make sure the download directory exists */
   if (g_mkdir_with_parents (dest_dir, 0700) == -1) {
@@ -602,18 +606,16 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
                               SuggestedFilenameData *data)
 {
   if (response == GTK_RESPONSE_OK) {
-    g_autofree gchar *folder_path = g_file_get_path (data->directory);
-    g_autofree gchar *folder_uri = g_file_get_uri (data->directory);
-    g_autofree gchar *download_uri = g_build_filename (folder_uri, data->suggested_filename, NULL);
+    g_autofree gchar *directory = g_file_get_path (data->directory);
 
-    ephy_download_set_destination_uri (data->download, download_uri);
+    set_destination_uri_for_suggested_filename (data->download, directory, data->suggested_filename);
 
     webkit_download_set_allow_overwrite (data->webkit_download, TRUE);
 
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
 
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, folder_path);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, directory);
     data->result = TRUE;
   } else {
     ephy_download_cancel (data->download);
@@ -826,7 +828,7 @@ download_decide_destination_cb (WebKitDownload *wk_download,
       g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD))
     return run_download_confirmation_dialog (download, suggested_filename);
 
-  return set_destination_uri_for_suggested_filename (download, suggested_filename);
+  return set_destination_uri_for_suggested_filename (download, NULL, suggested_filename);
 }
 
 static void
