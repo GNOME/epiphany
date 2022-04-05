@@ -74,6 +74,8 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
+static gboolean run_download_confirmation_dialog (EphyDownload *download, const char *suggested_filename);
+
 static void
 ephy_download_get_property (GObject    *object,
                             guint       property_id,
@@ -613,8 +615,15 @@ download_decide_destination_cb (WebKitDownload *wk_download,
 
   g_signal_emit (download, signals[FILENAME_SUGGESTED], 0, suggested_filename);
 
+  /* If the signal handler provided a destination, then don't show the
+   * confirmation dialog.
+   */
   if (webkit_download_get_destination (wk_download))
     return TRUE;
+
+  if (!ephy_is_running_inside_sandbox () &&
+      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD))
+    return run_download_confirmation_dialog (download, suggested_filename);
 
   return set_destination_uri_for_suggested_filename (download, suggested_filename);
 }
@@ -753,6 +762,7 @@ typedef struct {
   GFile *directory;
   GtkLabel *directory_label;
   GMainLoop *nested_loop;
+  gboolean result;
 } SuggestedFilenameData;
 
 static void
@@ -773,8 +783,10 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
                                          data->download);
 
     g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, folder_path);
+    data->result = TRUE;
   } else {
     ephy_download_cancel (data->download);
+    data->result = FALSE;
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -822,10 +834,9 @@ filename_suggested_button_cb (GtkButton             *button,
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
 }
 
-static void
-filename_suggested_cb (EphyDownload *download,
-                       const char   *suggested_filename,
-                       gpointer      user_data)
+static gboolean
+run_download_confirmation_dialog (EphyDownload *download,
+                                  const char   *suggested_filename)
 {
   GApplication *application;
   GtkWidget *dialog = NULL;
@@ -916,6 +927,7 @@ filename_suggested_cb (EphyDownload *download,
     data.directory = g_file_new_for_path (directory_path);
   data.directory_label = GTK_LABEL (button_label);
   data.nested_loop = g_main_loop_new (NULL, FALSE);
+  data.result = FALSE;
 
   display_name = ephy_file_get_display_name (data.directory);
   gtk_label_set_label (data.directory_label, display_name);
@@ -941,6 +953,8 @@ filename_suggested_cb (EphyDownload *download,
   g_main_loop_unref (data.nested_loop);
   g_object_unref (data.directory);
   g_free (data.suggested_filename);
+
+  return data.result;
 }
 
 EphyDownload *
@@ -989,12 +1003,6 @@ ephy_download_new (WebKitDownload *download)
   g_signal_connect_object (download, "decide-destination",
                            G_CALLBACK (download_decide_destination_cb),
                            ephy_download, 0);
-
-  if (!ephy_is_running_inside_sandbox () && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD)) {
-    g_signal_connect (ephy_download, "filename-suggested",
-                      G_CALLBACK (filename_suggested_cb),
-                      NULL);
-  }
 
   return ephy_download;
 }

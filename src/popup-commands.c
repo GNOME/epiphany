@@ -147,6 +147,7 @@ typedef struct {
   char *title;
   EphyWindow *window;
   EphyDownload *download;
+  GMainLoop *nested_loop;
 } SavePropertyURLData;
 
 static void
@@ -185,9 +186,12 @@ filename_confirmed_cb (GtkFileChooser      *dialog,
                      g_object_unref);
   }
 
+  g_main_loop_quit (data->nested_loop);
+
   g_free (data->title);
   g_object_unref (data->window);
   g_object_unref (data->download);
+  g_main_loop_unref (data->nested_loop);
   g_free (data);
 }
 
@@ -226,6 +230,12 @@ filename_suggested_cb (EphyDownload        *download,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (filename_confirmed_cb), data);
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+
+  /* We have to set a download destination before this signal handler completes,
+   * so we'll spin the default main context until the dialog is finished.
+   * https://bugs.webkit.org/show_bug.cgi?id=238748
+   */
+  g_main_loop_run (data->nested_loop);
 }
 
 static void
@@ -247,6 +257,7 @@ save_property_url (const char *title,
   data->title = g_strdup (title);
   data->window = g_object_ref (window);
   data->download = download;
+  data->nested_loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (download, "filename-suggested",
                     G_CALLBACK (filename_suggested_cb),
                     data);
