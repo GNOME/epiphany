@@ -74,8 +74,6 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-static gboolean run_download_confirmation_dialog (EphyDownload *download, const char *suggested_filename);
-
 static void
 ephy_download_get_property (GObject    *object,
                             guint       property_id,
@@ -587,173 +585,6 @@ ephy_download_init (EphyDownload *download)
   download->show_notification = TRUE;
 }
 
-static void
-download_response_changed_cb (WebKitDownload *wk_download,
-                              GParamSpec     *spec,
-                              EphyDownload   *download)
-{
-  WebKitURIResponse *response;
-  const char *mime_type;
-
-  response = webkit_download_get_response (download->download);
-  mime_type = webkit_uri_response_get_mime_type (response);
-  if (!mime_type)
-    return;
-
-  download->content_type = g_content_type_from_mime_type (mime_type);
-  if (download->content_type)
-    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
-}
-
-static gboolean
-download_decide_destination_cb (WebKitDownload *wk_download,
-                                const gchar    *suggested_filename,
-                                EphyDownload   *download)
-{
-  if (webkit_download_get_destination (wk_download))
-    return TRUE;
-
-  g_signal_emit (download, signals[FILENAME_SUGGESTED], 0, suggested_filename);
-
-  /* If the signal handler provided a destination, then don't show the
-   * confirmation dialog.
-   */
-  if (webkit_download_get_destination (wk_download))
-    return TRUE;
-
-  if (!ephy_is_running_inside_sandbox () &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD))
-    return run_download_confirmation_dialog (download, suggested_filename);
-
-  return set_destination_uri_for_suggested_filename (download, suggested_filename);
-}
-
-static void
-download_created_destination_cb (WebKitDownload *wk_download,
-                                 const char     *destination,
-                                 EphyDownload   *download)
-{
-  char *filename;
-  char *content_type;
-
-  if (download->content_type && !g_content_type_is_unknown (download->content_type))
-    return;
-
-  /* The server didn't provide a valid content type, let's try to guess it from the
-   * destination filename. We use g_content_type_guess() here instead of g_file_query_info(),
-   * because we are only using the filename to guess the content type, since it doesn't make
-   * sense to sniff the destination URI that will be empty until the download is completed.
-   * We can't use g_file_query_info() with the partial download file either, because it will
-   * always return application/x-partial-download based on the .wkdownload extension.
-   */
-  filename = g_filename_from_uri (destination, NULL, NULL);
-  if (!filename)
-    return;
-
-  content_type = g_content_type_guess (filename, NULL, 0, NULL);
-  g_free (filename);
-
-  if (g_content_type_is_unknown (content_type)) {
-    /* We could try to connect to received-data signal and sniff the contents when we have
-     * enough data written in the file, but I don't think it's worth it.
-     */
-    g_free (content_type);
-    return;
-  }
-
-  if (!download->content_type ||
-      !g_content_type_equals (download->content_type, content_type)) {
-    g_free (download->content_type);
-    download->content_type = content_type;
-    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
-    return;
-  }
-
-  g_free (content_type);
-}
-
-static void
-display_download_finished_notification (WebKitDownload *download)
-{
-  GApplication *application;
-  GtkWindow *toplevel;
-  const char *dest;
-
-  application = G_APPLICATION (ephy_embed_shell_get_default ());
-  toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
-  dest = webkit_download_get_destination (download);
-
-  if (!gtk_window_is_active (toplevel) && dest != NULL) {
-    char *filename;
-    char *message;
-    GNotification *notification;
-
-    filename = g_filename_display_basename (dest);
-    /* Translators: a desktop notification when a download finishes. */
-    message = g_strdup_printf (_("Finished downloading %s"), filename);
-    /* Translators: the title of the notification. */
-    notification = g_notification_new (_("Download finished"));
-    g_notification_set_body (notification, message);
-    g_application_send_notification (application, "download-finished", notification);
-
-    g_free (filename);
-    g_free (message);
-    g_object_unref (notification);
-  }
-}
-
-static void
-download_file_monitor_changed (GFileMonitor      *monitor,
-                               GFile             *file,
-                               GFile             *other_file,
-                               GFileMonitorEvent  event_type,
-                               EphyDownload      *download)
-{
-  /* Skip messages for <file>.wkdownload */
-  if (strcmp (g_file_get_uri (file), webkit_download_get_destination (download->download)) != 0)
-    return;
-
-  if (event_type == G_FILE_MONITOR_EVENT_DELETED || event_type == G_FILE_MONITOR_EVENT_MOVED)
-    g_signal_emit (download, signals[MOVED], 0);
-}
-
-static void
-download_finished_cb (WebKitDownload *wk_download,
-                      EphyDownload   *download)
-{
-  g_autoptr (GError) error = NULL;
-  g_autoptr (GFile) file = NULL;
-
-  download->finished = TRUE;
-
-  ephy_download_do_download_action (download, download->action);
-
-  if (download->show_notification)
-    display_download_finished_notification (wk_download);
-
-  g_signal_emit (download, signals[COMPLETED], 0);
-
-  file = g_file_new_for_uri (webkit_download_get_destination (wk_download));
-  download->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, &error);
-  if (!download->file_monitor)
-    g_warning ("Could not add a file monitor for %s, error: %s\n", g_file_get_uri (file), error->message);
-  else
-    g_signal_connect_object (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download, 0);
-}
-
-static void
-download_failed_cb (WebKitDownload *wk_download,
-                    GError         *error,
-                    EphyDownload   *download)
-{
-  g_signal_handlers_disconnect_by_func (wk_download, download_finished_cb, download);
-
-  LOG ("error (%d - %d)! %s", error->code, 0, error->message);
-  download->finished = TRUE;
-  download->error = g_error_copy (error);
-  g_signal_emit (download, signals[ERROR], 0, download->error);
-}
-
 typedef struct {
   EphyDownload *download;
   WebKitDownload *webkit_download;
@@ -955,6 +786,173 @@ run_download_confirmation_dialog (EphyDownload *download,
   g_free (data.suggested_filename);
 
   return data.result;
+}
+
+static void
+download_response_changed_cb (WebKitDownload *wk_download,
+                              GParamSpec     *spec,
+                              EphyDownload   *download)
+{
+  WebKitURIResponse *response;
+  const char *mime_type;
+
+  response = webkit_download_get_response (download->download);
+  mime_type = webkit_uri_response_get_mime_type (response);
+  if (!mime_type)
+    return;
+
+  download->content_type = g_content_type_from_mime_type (mime_type);
+  if (download->content_type)
+    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
+}
+
+static gboolean
+download_decide_destination_cb (WebKitDownload *wk_download,
+                                const gchar    *suggested_filename,
+                                EphyDownload   *download)
+{
+  if (webkit_download_get_destination (wk_download))
+    return TRUE;
+
+  g_signal_emit (download, signals[FILENAME_SUGGESTED], 0, suggested_filename);
+
+  /* If the signal handler provided a destination, then don't show the
+   * confirmation dialog.
+   */
+  if (webkit_download_get_destination (wk_download))
+    return TRUE;
+
+  if (!ephy_is_running_inside_sandbox () &&
+      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD))
+    return run_download_confirmation_dialog (download, suggested_filename);
+
+  return set_destination_uri_for_suggested_filename (download, suggested_filename);
+}
+
+static void
+download_created_destination_cb (WebKitDownload *wk_download,
+                                 const char     *destination,
+                                 EphyDownload   *download)
+{
+  char *filename;
+  char *content_type;
+
+  if (download->content_type && !g_content_type_is_unknown (download->content_type))
+    return;
+
+  /* The server didn't provide a valid content type, let's try to guess it from the
+   * destination filename. We use g_content_type_guess() here instead of g_file_query_info(),
+   * because we are only using the filename to guess the content type, since it doesn't make
+   * sense to sniff the destination URI that will be empty until the download is completed.
+   * We can't use g_file_query_info() with the partial download file either, because it will
+   * always return application/x-partial-download based on the .wkdownload extension.
+   */
+  filename = g_filename_from_uri (destination, NULL, NULL);
+  if (!filename)
+    return;
+
+  content_type = g_content_type_guess (filename, NULL, 0, NULL);
+  g_free (filename);
+
+  if (g_content_type_is_unknown (content_type)) {
+    /* We could try to connect to received-data signal and sniff the contents when we have
+     * enough data written in the file, but I don't think it's worth it.
+     */
+    g_free (content_type);
+    return;
+  }
+
+  if (!download->content_type ||
+      !g_content_type_equals (download->content_type, content_type)) {
+    g_free (download->content_type);
+    download->content_type = content_type;
+    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
+    return;
+  }
+
+  g_free (content_type);
+}
+
+static void
+display_download_finished_notification (WebKitDownload *download)
+{
+  GApplication *application;
+  GtkWindow *toplevel;
+  const char *dest;
+
+  application = G_APPLICATION (ephy_embed_shell_get_default ());
+  toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
+  dest = webkit_download_get_destination (download);
+
+  if (!gtk_window_is_active (toplevel) && dest != NULL) {
+    char *filename;
+    char *message;
+    GNotification *notification;
+
+    filename = g_filename_display_basename (dest);
+    /* Translators: a desktop notification when a download finishes. */
+    message = g_strdup_printf (_("Finished downloading %s"), filename);
+    /* Translators: the title of the notification. */
+    notification = g_notification_new (_("Download finished"));
+    g_notification_set_body (notification, message);
+    g_application_send_notification (application, "download-finished", notification);
+
+    g_free (filename);
+    g_free (message);
+    g_object_unref (notification);
+  }
+}
+
+static void
+download_file_monitor_changed (GFileMonitor      *monitor,
+                               GFile             *file,
+                               GFile             *other_file,
+                               GFileMonitorEvent  event_type,
+                               EphyDownload      *download)
+{
+  /* Skip messages for <file>.wkdownload */
+  if (strcmp (g_file_get_uri (file), webkit_download_get_destination (download->download)) != 0)
+    return;
+
+  if (event_type == G_FILE_MONITOR_EVENT_DELETED || event_type == G_FILE_MONITOR_EVENT_MOVED)
+    g_signal_emit (download, signals[MOVED], 0);
+}
+
+static void
+download_finished_cb (WebKitDownload *wk_download,
+                      EphyDownload   *download)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = NULL;
+
+  download->finished = TRUE;
+
+  ephy_download_do_download_action (download, download->action);
+
+  if (download->show_notification)
+    display_download_finished_notification (wk_download);
+
+  g_signal_emit (download, signals[COMPLETED], 0);
+
+  file = g_file_new_for_uri (webkit_download_get_destination (wk_download));
+  download->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, &error);
+  if (!download->file_monitor)
+    g_warning ("Could not add a file monitor for %s, error: %s\n", g_file_get_uri (file), error->message);
+  else
+    g_signal_connect_object (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download, 0);
+}
+
+static void
+download_failed_cb (WebKitDownload *wk_download,
+                    GError         *error,
+                    EphyDownload   *download)
+{
+  g_signal_handlers_disconnect_by_func (wk_download, download_finished_cb, download);
+
+  LOG ("error (%d - %d)! %s", error->code, 0, error->message);
+  download->finished = TRUE;
+  download->error = g_error_copy (error);
+  g_signal_emit (download, signals[ERROR], 0, download->error);
 }
 
 EphyDownload *
