@@ -176,10 +176,12 @@ open_response_cb (GtkFileChooser           *dialog,
     g_ptr_array_free (file_array, TRUE);
 
     current_folder = gtk_file_chooser_get_current_folder_file (dialog);
-    current_folder_path = g_file_get_path (current_folder);
-    g_settings_set_string (EPHY_SETTINGS_WEB,
-                           EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY,
-                           current_folder_path);
+    if (current_folder) {
+      current_folder_path = g_file_get_path (current_folder);
+      g_settings_set_string (EPHY_SETTINGS_WEB,
+                             EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY,
+                             current_folder_path);
+    }
   } else {
     webkit_file_chooser_request_cancel (request);
   }
