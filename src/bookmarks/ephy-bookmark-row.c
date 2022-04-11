@@ -51,6 +51,7 @@ static void
 ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                                      GtkButton       *button)
 {
+  GtkWidget *popover;
   GtkWidget *dialog;
   GtkWidget *content_area;
   GtkWidget *grid;
@@ -64,6 +65,11 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                          "use-header-bar", TRUE,
                          "modal", TRUE,
                          NULL);
+
+  popover = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_POPOVER);
+
+  if (popover)
+    gtk_popover_popdown (GTK_POPOVER (popover));
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
