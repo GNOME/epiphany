@@ -37,7 +37,7 @@ class MyHTMLParser(HTMLParser):
             if name == "href" and (value.startswith("release") or value.startswith("debug")):
                 self.builds.append(value)
 
-def download_zipped_build(build_type):
+def download_zipped_build(build_type, verbose):
     url = f"https://webkitgtk-{build_type}.igalia.com/built-products/"
     with urllib.request.urlopen(url) as page_fd:
         parser = MyHTMLParser()
@@ -56,7 +56,11 @@ def download_zipped_build(build_type):
         sys.stdout.write('\r[{}{}]'.format('█' * done, '.' * (50 - done)))
         sys.stdout.flush()
 
-    urllib.request.urlretrieve(f"{url}/{latest}", ZIP_FILE, update)
+    args = []
+    if verbose:
+        args.append(update)
+
+    urllib.request.urlretrieve(f"{url}/{latest}", ZIP_FILE, *args)
     h = hashlib.new('sha256')
     with open(ZIP_FILE, "rb") as f:
         h.update(f.read())
@@ -71,13 +75,14 @@ def main(args):
                             dest='build_type', action="store_const", const="Debug")
     type_group.add_argument("--release", help="Download a release build.",
                             dest='build_type', action="store_const", const="Release")
+    parser.add_argument("--verbose", help="Show progress bar.", action=argparse.BooleanOptionalAction, default=False)
 
     if len(args) == 0:
         parser.print_help(sys.stderr)
         return 1
 
     parsed, _ = parser.parse_known_args(args=args)
-    zip_filename, checksum = download_zipped_build(parsed.build_type.lower())
+    zip_filename, checksum = download_zipped_build(parsed.build_type.lower(), parsed.verbose)
     if not zip_filename:
         return 2
 
