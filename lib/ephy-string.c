@@ -192,7 +192,8 @@ ephy_string_get_host_name (const char *url)
     g_free (effective_url);
   }
 
-  if (uri == NULL) return NULL;
+  if (uri == NULL)
+    return NULL;
 
   return g_strdup (g_uri_get_host (uri));
 }
