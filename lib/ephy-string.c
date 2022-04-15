@@ -114,11 +114,10 @@ ephy_string_shorten (char  *str,
   /* create string */
   bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
 
-  /* +1 for ellipsis, +1 for trailing NUL */
-  new_str = g_new (gchar, bytes + 1 + 1);
+  new_str = g_new (gchar, bytes + strlen ("…") + 1);
 
   strncpy (new_str, str, bytes);
-  strcat (new_str, "…");
+  strncpy (new_str + bytes, "…", strlen ("…") + 1);
 
   g_free (str);
 
