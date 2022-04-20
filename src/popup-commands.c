@@ -146,43 +146,7 @@ cancel_download_idle_cb (EphyDownload *download)
 typedef struct {
   char *title;
   EphyWindow *window;
-  EphyDownload *download;
 } SavePropertyURLData;
-
-static void
-filename_confirmed_cb (GtkFileChooser      *dialog,
-                       GtkResponseType      response,
-                       SavePropertyURLData *data)
-{
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri;
-    WebKitDownload *webkit_download;
-
-    uri = gtk_file_chooser_get_uri (dialog);
-    ephy_download_set_destination_uri (data->download, uri);
-    g_free (uri);
-
-    webkit_download = ephy_download_get_webkit_download (data->download);
-    webkit_download_set_allow_overwrite (webkit_download, TRUE);
-
-    ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
-                                         data->download);
-    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
-                           gtk_file_chooser_get_current_folder (dialog));
-  } else {
-    g_idle_add_full (G_PRIORITY_DEFAULT,
-                     (GSourceFunc)cancel_download_idle_cb,
-                     g_object_ref (data->download),
-                     g_object_unref);
-  }
-
-  g_free (data->title);
-  g_object_unref (data->window);
-  g_object_unref (data->download);
-  g_free (data);
-}
 
 static void
 filename_suggested_cb (EphyDownload        *download,
@@ -203,9 +167,33 @@ filename_suggested_cb (EphyDownload        *download,
   gtk_file_chooser_set_current_name (dialog, sanitized_filename);
   g_free (sanitized_filename);
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (filename_confirmed_cb), data);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  if (gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+    char *uri;
+    WebKitDownload *webkit_download;
+
+    uri = gtk_file_chooser_get_uri (dialog);
+    ephy_download_set_destination_uri (download, uri);
+    g_free (uri);
+
+    webkit_download = ephy_download_get_webkit_download (download);
+    webkit_download_set_allow_overwrite (webkit_download, TRUE);
+
+    ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
+                                         download);
+    g_settings_set_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY, gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog)));
+  } else {
+    g_idle_add_full (G_PRIORITY_DEFAULT,
+                     (GSourceFunc)cancel_download_idle_cb,
+                     g_object_ref (download),
+                     g_object_unref);
+  }
+
+  g_object_unref (dialog);
+  g_free (data->title);
+  g_object_unref (data->window);
+  g_free (data);
+
+  g_object_unref (download);
 }
 
 static void
@@ -226,7 +214,6 @@ save_property_url (const char *title,
   data = g_new (SavePropertyURLData, 1);
   data->title = g_strdup (title);
   data->window = g_object_ref (window);
-  data->download = download;
   g_signal_connect (download, "filename-suggested",
                     G_CALLBACK (filename_suggested_cb),
                     data);
