@@ -1855,8 +1855,7 @@ main (int   argc,
   ephy_debug_init ();
 
   if (profile_dir != NULL)
-    file_helpers_flags = EPHY_FILE_HELPERS_PRIVATE_PROFILE |
-                         EPHY_FILE_HELPERS_KEEP_DIR;
+    file_helpers_flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
 
   if (!ephy_file_helpers_init (profile_dir, file_helpers_flags, NULL)) {
     LOG ("Something wrong happened with ephy_file_helpers_init()");

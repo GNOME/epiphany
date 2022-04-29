@@ -27,75 +27,33 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-typedef struct {
-  const char *dir;
-  EphyFileHelpersFlags flags;
-} FileInitTest;
-
-static const FileInitTest private_tests[] = {
-  { "private", EPHY_FILE_HELPERS_PRIVATE_PROFILE },
-  { "private, keep-dir", EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_KEEP_DIR }
-};
-
 static void
 test_ephy_file_helpers_init (void)
 {
-  guint i;
+  char *tmp_dir = NULL;
+  char *profile_dir = NULL;
 
-  for (i = 0; i < G_N_ELEMENTS (private_tests); i++) {
-    FileInitTest test;
+  g_assert_null (ephy_profile_dir ());
+  g_assert_true (ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL));
 
-    char *tmp_dir = NULL;
-    char *profile_dir = NULL;
+  tmp_dir = g_strdup (ephy_file_tmp_dir ());
+  profile_dir = g_strdup (ephy_profile_dir ());
 
-    gboolean private_profile = FALSE;
-    gboolean keep_dir = FALSE;
-    gboolean ensure_exists = FALSE;
+  g_assert_nonnull (tmp_dir);
+  g_assert_nonnull (profile_dir);
 
-    test = private_tests[i];
+  /* Should always exist after ephy_file_tmp_dir(). */
+  g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
+  g_assert_false (g_file_test (profile_dir, G_FILE_TEST_EXISTS));
 
-    if (test.flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE) private_profile = TRUE;
-    if (test.flags & EPHY_FILE_HELPERS_KEEP_DIR) keep_dir = TRUE;
-    if (test.flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) ensure_exists = TRUE;
+  ephy_file_helpers_shutdown ();
 
-    g_test_message ("INIT: dir: %s; private: %s; keep_dir: %s; ensure_exists: %s",
-                    test.dir,
-                    private_profile ? "TRUE" : "FALSE",
-                    keep_dir ? "TRUE" : "FALSE",
-                    ensure_exists ? "TRUE" : "FALSE");
+  /* Private profiles have their profile_dir inside tmp_dir. */
+  g_assert_false (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
+  g_assert_false (g_file_test (profile_dir, G_FILE_TEST_EXISTS));
 
-    g_assert_null (ephy_profile_dir ());
-    g_assert_true (ephy_file_helpers_init (NULL, test.flags, NULL));
-
-    tmp_dir = g_strdup (ephy_file_tmp_dir ());
-    profile_dir = g_strdup (ephy_profile_dir ());
-
-    g_assert_nonnull (tmp_dir);
-    g_assert_nonnull (profile_dir);
-
-    /* Should always exist after ephy_file_tmp_dir(). */
-    g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS));
-    g_assert_true (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == ensure_exists);
-
-    ephy_file_helpers_shutdown ();
-
-    /* Private profiles have their profile_dir inside tmp_dir. */
-    g_assert_true (g_file_test (tmp_dir, G_FILE_TEST_EXISTS) == keep_dir);
-    g_assert_true (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == (keep_dir && ensure_exists));
-
-    /* Cleanup dir left behind. */
-    if (keep_dir) {
-      /* As a safety measure, only try recursive delete on paths
-       * prefixed with /tmp. */
-      if (g_str_has_prefix (tmp_dir, "/tmp"))
-        g_assert_true (ephy_file_delete_dir_recursively (tmp_dir, NULL));
-      else
-        g_warning ("INIT: dangerous path returned as tmp_dir: %s", tmp_dir);
-    }
-
-    g_free (tmp_dir);
-    g_free (profile_dir);
-  }
+  g_free (tmp_dir);
+  g_free (profile_dir);
 }
 
 typedef struct {

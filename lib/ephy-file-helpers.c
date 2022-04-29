@@ -68,7 +68,6 @@ typedef enum {
 static GHashTable *files;
 static GHashTable *mime_table;
 
-static gboolean keep_directory;
 static char *profile_dir_global;
 static char *cache_dir;
 static char *config_dir;
@@ -398,7 +397,6 @@ ephy_file_helpers_init (const char            *profile_dir,
                                  (GDestroyNotify)g_free,
                                  (GDestroyNotify)g_free);
 
-  keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
   private_profile = (flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE || flags & EPHY_FILE_HELPERS_TESTING_MODE);
   steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
@@ -518,15 +516,9 @@ ephy_file_helpers_shutdown (void)
   g_clear_pointer (&config_dir, g_free);
 
   if (tmp_dir != NULL) {
-    if (!keep_directory) {
-      /* recursively delete the contents and the
-       * directory */
-      LOG ("shutdown: delete tmp_dir %s", tmp_dir);
-      ephy_file_delete_dir_recursively (tmp_dir, NULL);
-    }
-
-    g_free (tmp_dir);
-    tmp_dir = NULL;
+    LOG ("shutdown: delete tmp_dir %s", tmp_dir);
+    ephy_file_delete_dir_recursively (tmp_dir, NULL);
+    g_clear_pointer (&tmp_dir, g_free);
   }
 
   g_clear_object (&global_portal);

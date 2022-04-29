@@ -327,8 +327,6 @@ main (int   argc,
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
   if (incognito_mode)
     flags |= EPHY_FILE_HELPERS_STEAL_DATA;
-  if (profile_directory && !incognito_mode)
-    flags |= EPHY_FILE_HELPERS_KEEP_DIR;
 
   if (!ephy_file_helpers_init (profile_directory, flags, &error)) {
     g_error ("Fatal initialization error: %s", error->message);
