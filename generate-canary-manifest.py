@@ -34,7 +34,7 @@ class MyHTMLParser(HTMLParser):
         if tag != "a":
             return
         for (name, value) in attrs:
-            if name == "href" and (value.startswith("release") or value.startswith("debug")):
+            if name == "href" and (value.startswith("release") or value.startswith("debug")) and '@main' in value:
                 self.builds.append(value)
 
 def download_zipped_build(build_type, verbose):
