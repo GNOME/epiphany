@@ -383,13 +383,15 @@ secret_password_store_cb (GObject               *source_object,
 
   secret_password_store_finish (result, &error);
   if (error) {
-    g_warning ("Failed to store password record for (%s, %s, %s, %s, %s): %s",
-               origin,
-               ephy_password_record_get_target_origin (data->record),
-               username,
-               ephy_password_record_get_username_field (data->record),
-               ephy_password_record_get_password_field (data->record),
-               error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+      g_warning ("Failed to store password record for (%s, %s, %s, %s, %s): %s",
+                 origin,
+                 ephy_password_record_get_target_origin (data->record),
+                 username,
+                 ephy_password_record_get_username_field (data->record),
+                 ephy_password_record_get_password_field (data->record),
+                 error->message);
+    }
     g_error_free (error);
   } else {
     ephy_password_manager_cache_add (data->manager, origin, username);
@@ -578,7 +580,8 @@ retrieve_secret_cb (GObject        *source_object,
 
   value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
   if (!value) {
-    g_warning ("Failed to retrieve password: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to retrieve password: %s", error->message);
     g_error_free (error);
     goto out;
   }
@@ -639,7 +642,8 @@ secret_password_search_cb (GObject        *source_object,
   matches = secret_password_search_finish (result, &error);
   if (!matches) {
     if (error) {
-      g_warning ("Failed to search secrets in password schema: %s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Failed to search secrets in password schema: %s", error->message);
       g_error_free (error);
     }
     if (data->callback)
