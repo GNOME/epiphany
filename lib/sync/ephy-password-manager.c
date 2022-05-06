@@ -735,22 +735,22 @@ secret_password_clear_cb (GObject      *source_object,
 
   secret_password_clear_finish (result, &error);
   if (error) {
-    if (data->task)
+    if (data && data->task)
       g_task_return_error (data->task, error);
-    else
+    else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Failed to clear secrets from password schema: %s", error->message);
-
-    manage_record_async_data_free (data);
+    g_clear_pointer (&data, manage_record_async_data_free);
     return;
   }
 
-  if (data->record)
-    ephy_password_manager_store_record (data->manager, data->record);
+  if (data) {
+    if (data->record)
+      ephy_password_manager_store_record (data->manager, data->record);
+    if (data->task)
+      g_task_return_boolean (data->task, TRUE);
+  }
 
-  if (data->task)
-    g_task_return_boolean (data->task, TRUE);
-
-  manage_record_async_data_free (data);
+  g_clear_pointer (&data, manage_record_async_data_free);
 }
 
 static void
