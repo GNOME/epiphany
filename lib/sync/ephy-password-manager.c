@@ -804,14 +804,11 @@ forget_cb (GList    *records,
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (g_task_get_source_object (task));
   EphyPasswordRecord *record;
 
-  /* We expect only one matching record here. */
-  if (g_list_length (records) == 1) {
-    record = EPHY_PASSWORD_RECORD (records->data);
-    g_signal_emit_by_name (self, "synchronizable-deleted", record);
-    ephy_password_manager_forget_record (self, record, NULL, task);
-  } else {
-    g_warn_if_reached ();
-  }
+  g_assert (g_list_length (records) == 1);
+
+  record = EPHY_PASSWORD_RECORD (records->data);
+  g_signal_emit_by_name (self, "synchronizable-deleted", record);
+  ephy_password_manager_forget_record (self, record, NULL, task);
 }
 
 gboolean
@@ -941,12 +938,9 @@ replace_existing_cb (GList    *records,
 {
   ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
 
-  /* We expect only one matching record here. */
-  if (g_list_length (records) == 1)
-    ephy_password_manager_forget_record (data->manager, records->data, data->record, NULL);
-  else
-    g_warn_if_reached ();
+  g_assert (g_list_length (records) == 1);
 
+  ephy_password_manager_forget_record (data->manager, records->data, data->record, NULL);
   manage_record_async_data_free (data);
 }
 
