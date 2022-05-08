@@ -22,16 +22,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-03-17 19:47+0000\n"
-"PO-Revision-Date: 2022-03-18 11:18+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2022-04-23 14:06+0000\n"
+"PO-Revision-Date: 2022-05-02 22:01+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnometurk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -129,23 +129,23 @@ msgstr "Terk edilmiştir. Lütfen yerine search-engine-providers kullanın."
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany&kl=tr-tr&kad=tr_TR'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com.tr/search?q="
-"%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q="
-"%s&cc=tr'>, 'bang': <'!b'>}\n"
-"\t\t\t\t\t{'name': <'Yandex'>, 'url': <'https://yandex.com.tr/search/?text="
-"%s'>, 'bang': <'!ya'>}\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany&kl=tr-tr&kad=tr_TR'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com.tr/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?"
+"q=%s&cc=tr'>, 'bang': <'!b'>}\n"
+"\t\t\t\t\t{'name': <'Yandex'>, 'url': <'https://yandex.com.tr/search/?"
+"text=%s'>, 'bang': <'!ya'>}\n"
 "\t\t\t\t]"
 
 #: data/org.gnome.epiphany.gschema.xml:61
@@ -614,7 +614,7 @@ msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
-"WebExtensions’ın etkinleştirilmesi. WebExtensions, eklentiler için çapraz "
+"WebExtensions’ın etkinleştirilmesi. WebExtensions, uzantılar için çapraz "
 "tarayıcı sistemidir."
 
 #: data/org.gnome.epiphany.gschema.xml:277
@@ -1118,11 +1118,11 @@ msgstr "%s indirmesi bitti"
 msgid "Download finished"
 msgstr "İndirme bitti"
 
-#: embed/ephy-download.c:854
+#: embed/ephy-download.c:818
 msgid "Download requested"
 msgstr "İndirme istendi"
 
-#: embed/ephy-download.c:855 lib/widgets/ephy-file-chooser.c:113
+#: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:113
 #: src/ephy-web-extension-dialog.c:93 src/ephy-web-extension-dialog.c:269
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
@@ -1133,28 +1133,28 @@ msgstr "İndirme istendi"
 msgid "_Cancel"
 msgstr "_İptal"
 
-#: embed/ephy-download.c:855
+#: embed/ephy-download.c:819
 msgid "_Download"
 msgstr "İ_ndir"
 
-#: embed/ephy-download.c:868
+#: embed/ephy-download.c:832
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tür: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:874
+#: embed/ephy-download.c:838
 #, c-format
 msgid "From: %s"
 msgstr "Nereden: %s"
 
 #. Question
-#: embed/ephy-download.c:879
+#: embed/ephy-download.c:843
 msgid "Where do you want to save the file?"
 msgstr "Dosyayı nereye kaydetmek istersiniz?"
 
 #. File Chooser Button
-#: embed/ephy-download.c:884
+#: embed/ephy-download.c:848
 msgid "Save file"
 msgstr "Dosyayı kaydet"
 
@@ -2615,7 +2615,7 @@ msgstr "Yeni sekme aç"
 
 #: src/ephy-web-extension-dialog.c:91
 msgid "Do you really want to remove this extension?"
-msgstr "Bu eklentiyi kaldırmak istediğinize emin misiniz?"
+msgstr "Bu uzantıyı kaldırmak istediğinize emin misiniz?"
 
 #: src/ephy-web-extension-dialog.c:95 src/ephy-web-extension-dialog.c:207
 #: src/resources/gtk/bookmark-properties.ui:120
@@ -2854,15 +2854,15 @@ msgstr "Bu pencereyi kapatırsanız tüm açık sekmeler kaybedilecektir"
 msgid "C_lose tabs"
 msgstr "Sek_meleri kapat"
 
-#: src/popup-commands.c:240
+#: src/popup-commands.c:227
 msgid "Save Link As"
 msgstr "Bağlantıyı Farklı Kaydet"
 
-#: src/popup-commands.c:248
+#: src/popup-commands.c:235
 msgid "Save Image As"
 msgstr "Resmi Farklı Kaydet"
 
-#: src/popup-commands.c:256
+#: src/popup-commands.c:243
 msgid "Save Media As"
 msgstr "Ortamı Farklı Kaydet"
 
@@ -3395,7 +3395,7 @@ msgstr "_Uygulama Yöneticisini Aç"
 
 #: src/resources/gtk/page-menu-popover.ui:238
 msgid "E_xtensions"
-msgstr "_Eklentiler"
+msgstr "_Uzantılar"
 
 #: src/resources/gtk/page-menu-popover.ui:254
 msgid "_Override Text Encoding…"
@@ -4041,7 +4041,7 @@ msgstr "Tümünü Temiz_le"
 #: src/resources/gtk/web-extensions-dialog.ui:12
 #: src/resources/gtk/web-extensions-dialog.ui:21
 msgid "Extensions"
-msgstr "Eklentiler"
+msgstr "Uzantılar"
 
 #: src/resources/gtk/web-extensions-dialog.ui:26
 msgid "_Add…"
@@ -4049,11 +4049,11 @@ msgstr "_Ekle…"
 
 #: src/resources/gtk/web-extensions-dialog.ui:40
 msgid "No Extensions Installed"
-msgstr "Kurulu Eklenti Yok"
+msgstr "Kurulu Uzantı Yok"
 
 #: src/resources/gtk/web-extensions-dialog.ui:41
 msgid "Add some extensions to display them here."
-msgstr "Burada görüntülemek için bazı eklentileri ekle."
+msgstr "Burada görüntülemek için bazı uzantıları ekle."
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -5456,9 +5456,9 @@ msgstr "_Etkinleştir"
 #~ msgstr "Araç çubuğu biçemi"
 
 #~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
+#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), "
+#~ "\"both\" (text and icons), \"both-horiz\" (text besides icons), "
+#~ "\"icons\", and \"text\"."
 #~ msgstr ""
 #~ "Araç çubuğu biçemi. İzin verilen değerler \"\" (GNOME öntanımlı biçemini "
 #~ "kullan), \"both\" (yazı ve simgeler), \"both-horiz\" (simge yanında "
