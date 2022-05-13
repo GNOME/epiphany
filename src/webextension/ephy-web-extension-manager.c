@@ -658,6 +658,7 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
                            "web-context", web_context,
                            "user-content-manager", ucm,
                            "settings", ephy_embed_prefs_get_settings (),
+                           "expand", TRUE,
                            NULL);
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
@@ -689,27 +690,41 @@ create_base_uri_for_resource_path (EphyWebExtension *web_extension,
   return g_strdup_printf ("ephy-webextension://%s/", ephy_web_extension_get_guid (web_extension));
 }
 
+static void
+on_popup_load_changed (WebKitWebView   *web_view,
+                       WebKitLoadEvent  load_event,
+                       gpointer         user_data)
+{
+  /* Delay showing so the popover grows to the proper size. */
+  /* TODO: Other browsers resize on DOM changes.
+   *       We also need to limit this to a max size of 800x600 like Firefox. */
+  if (load_event == WEBKIT_LOAD_FINISHED)
+    gtk_widget_show (GTK_WIDGET (web_view));
+}
+
 static GtkWidget *
 create_browser_popup (EphyWebExtension *web_extension)
 {
   GtkWidget *web_view;
-  GtkWidget *popover;
   g_autofree char *data = NULL;
   g_autofree char *base_uri = NULL;
   const char *popup;
 
-  popover = gtk_popover_new (NULL);
-
+  popup = ephy_web_extension_get_browser_popup (web_extension);
+  data = ephy_web_extension_get_resource_as_string (web_extension, popup);
+  if (!data)
+    return NULL;
   web_view = create_web_extensions_webview (web_extension);
+  gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
 
   popup = ephy_web_extension_get_browser_popup (web_extension);
   base_uri = create_base_uri_for_resource_path (web_extension, popup);
   data = ephy_web_extension_get_resource_as_string (web_extension, popup);
   webkit_web_view_load_html (WEBKIT_WEB_VIEW (web_view), (char *)data, base_uri);
-  gtk_container_add (GTK_CONTAINER (popover), web_view);
-  gtk_widget_show_all (web_view);
+  g_signal_connect (web_view, "load-changed", G_CALLBACK (on_popup_load_changed), NULL);
 
-  return popover;
+
+  return web_view;
 }
 
 static gboolean
@@ -732,6 +747,22 @@ on_browser_action_clicked (GtkWidget *event_box,
   return GDK_EVENT_STOP;
 }
 
+static void
+on_browser_action_visible_changed (GtkWidget  *popover,
+                                   GParamSpec *pspec,
+                                   gpointer    user_data)
+{
+  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
+  GtkWidget *child;
+
+  if (gtk_widget_get_visible (popover)) {
+    child = create_browser_popup (web_extension);
+    gtk_container_add (GTK_CONTAINER (popover), child);
+  } else {
+    child = gtk_bin_get_child (GTK_BIN (popover));
+    gtk_container_remove (GTK_CONTAINER (popover), child);
+  }
+}
 
 GtkWidget *
 create_browser_action (EphyWebExtension *web_extension)
@@ -743,7 +774,8 @@ create_browser_action (EphyWebExtension *web_extension)
   if (ephy_web_extension_get_browser_popup (web_extension)) {
     button = gtk_menu_button_new ();
     image = gtk_image_new_from_pixbuf (ephy_web_extension_browser_action_get_icon (web_extension, 16));
-    popover = create_browser_popup (web_extension);
+    popover = gtk_popover_new (NULL);
+    g_signal_connect (popover, "notify::visible", G_CALLBACK (on_browser_action_visible_changed), web_extension);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
 
     gtk_button_set_image (GTK_BUTTON (button), image);
