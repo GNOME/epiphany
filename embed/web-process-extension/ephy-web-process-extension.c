@@ -781,11 +781,9 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
 
   extension->initialized = TRUE;
 
-  /* Note: An empty guid is used ONLY for WebExtensions which do have an own initialization function */
-  if (strlen (guid) > 0)
-    extension->script_world = webkit_script_world_new_with_name (guid);
-  else
-    extension->script_world = webkit_script_world_get_default ();
+  g_assert (guid && *guid);
+
+  extension->script_world = webkit_script_world_new_with_name (guid);
 
   g_signal_connect (extension->script_world,
                     "window-object-cleared",

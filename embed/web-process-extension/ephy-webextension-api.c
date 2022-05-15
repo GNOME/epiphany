@@ -300,10 +300,9 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
 
   extension->initialized = TRUE;
 
-  if (!guid || strlen (guid) == 0)
-    extension->script_world = webkit_script_world_get_default ();
-  else
-    extension->script_world = webkit_script_world_new_with_name (guid);
+  g_assert (guid && *guid);
+
+  extension->script_world = webkit_script_world_new_with_name (guid);
 
   g_signal_connect (extension->script_world,
                     "window-object-cleared",
