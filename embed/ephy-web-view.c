@@ -46,7 +46,6 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-pdf-handler.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
@@ -773,12 +772,8 @@ ephy_web_view_set_display_address (EphyWebView *view)
 {
   g_clear_pointer (&view->display_address, g_free);
 
-  if (view->address) {
-    if (g_str_has_prefix (view->address, EPHY_PDF_SCHEME))
-      view->display_address = ephy_uri_decode (view->address + strlen (EPHY_PDF_SCHEME) + 1);
-    else
-      view->display_address = ephy_uri_decode (view->address);
-  }
+  if (view->address)
+    view->display_address = ephy_uri_decode (view->address);
 }
 
 /*
@@ -818,9 +813,7 @@ uri_changed_cb (WebKitWebView *web_view,
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-  if (view->document_type != EPHY_WEB_VIEW_DOCUMENT_PDF)
-    ephy_web_view_set_address (view,
-                               webkit_web_view_get_uri (web_view));
+  ephy_web_view_set_address (view, webkit_web_view_get_uri (web_view));
 }
 
 static void
@@ -968,8 +961,6 @@ decide_policy_cb (WebKitWebView            *web_view,
 
   /* If it's not the main resource, we don't need to set the document type. */
   if (is_main_resource) {
-    const char *method = webkit_uri_request_get_http_method (request);
-
     type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
     if (strcmp (mime_type, "text/html") == 0 || strcmp (mime_type, "text/plain") == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_HTML;
@@ -977,18 +968,6 @@ decide_policy_cb (WebKitWebView            *web_view,
       type = EPHY_WEB_VIEW_DOCUMENT_XML;
     } else if (strncmp (mime_type, "image/", 6) == 0) {
       type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-    } else if (strcmp (mime_type, "application/pdf") == 0 && (!method || strcmp (method, "GET") == 0)) {
-      g_autofree char *pdf_uri = NULL;
-
-      /* FIXME: figure out how to make PDFs work in iframes. */
-      type = EPHY_WEB_VIEW_DOCUMENT_PDF;
-      EPHY_WEB_VIEW (web_view)->document_type = type;
-
-      pdf_uri = g_strconcat (EPHY_PDF_SCHEME, ":", request_uri, NULL);
-
-      webkit_web_view_load_uri (web_view, pdf_uri);
-
-      return FALSE;
     }
 
     /* FIXME: maybe it makes more sense to have an API to query the mime
@@ -1550,7 +1529,6 @@ update_security_status_for_committed_load (EphyWebView *view,
   if (!guri ||
       strcmp (g_uri_get_scheme (guri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
       strcmp (g_uri_get_scheme (guri), EPHY_READER_SCHEME) == 0 ||
-      strcmp (g_uri_get_scheme (guri), EPHY_PDF_SCHEME) == 0 ||
       g_strcmp0 (tld, "127.0.0.1") == 0 ||
       g_strcmp0 (tld, "::1") == 0 ||
       g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
@@ -1655,8 +1633,6 @@ load_changed_cb (WebKitWebView   *web_view,
         /* TODO: move the normalization down to the history service? */
         if (g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
           history_uri = g_strdup_printf ("about:%s", uri + EPHY_ABOUT_SCHEME_LEN + 1);
-        else if (g_str_has_prefix (uri, EPHY_PDF_SCHEME))
-          history_uri = g_strdup (uri + strlen (EPHY_PDF_SCHEME) + 1);
         else
           history_uri = g_strdup (uri);
 
@@ -1691,9 +1667,6 @@ load_changed_cb (WebKitWebView   *web_view,
 
       /* Ensure we load the icon for this web view, if available. */
       _ephy_web_view_update_icon (view);
-
-      if (g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-pdf"))
-        ephy_embed_shell_pdf_handler_stop (ephy_embed_shell_get_default (), web_view);
 
       /* Reset visit type. */
       view->visit_type = EPHY_PAGE_VISIT_NONE;

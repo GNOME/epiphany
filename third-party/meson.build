@@ -5,13 +5,6 @@ adguard_resources = gnome.compile_resources('adguard-resources',
     source_dir: 'adguard'
 )
 
-pdfjs_resource_files = files('pdfjs/pdfjs.gresource.xml')
-pdfjs_resources = gnome.compile_resources('pdfjs-resources',
-    pdfjs_resource_files,
-    c_name: 'pdfjs',
-    source_dir: 'pdfjs'
-)
-
 highlightjs_resource_files = files('highlightjs/highlightjs.gresource.xml')
 highlightjs_resources = gnome.compile_resources('highlightjs-resources',
     highlightjs_resource_files,

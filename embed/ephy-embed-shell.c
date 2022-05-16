@@ -35,7 +35,6 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-password-manager.h"
-#include "ephy-pdf-handler.h"
 #include "ephy-profile-utils.h"
 #include "ephy-reader-handler.h"
 #include "ephy-settings.h"
@@ -66,7 +65,6 @@ typedef struct {
   EphyAboutHandler *about_handler;
   EphyViewSourceHandler *source_handler;
   EphyReaderHandler *reader_handler;
-  EphyPDFHandler *pdf_handler;
   char *guid;
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
@@ -196,7 +194,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->reader_handler);
   g_clear_object (&priv->source_handler);
-  g_clear_object (&priv->pdf_handler);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->password_manager);
   g_clear_object (&priv->permissions_manager);
@@ -714,15 +711,6 @@ reader_request_cb (WebKitURISchemeRequest *request,
 }
 
 static void
-pdf_request_cb (WebKitURISchemeRequest *request,
-                EphyEmbedShell         *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  ephy_pdf_handler_handle_request (priv->pdf_handler, request);
-}
-
-static void
 ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
@@ -741,7 +729,7 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
   request_view = webkit_uri_scheme_request_get_web_view (request);
   uri = webkit_web_view_get_uri (request_view);
 
-  /* ephy-resource:// requests bypass CORS in order to allow ephy-pdf:// to
+  /* ephy-resource:// requests bypass CORS in order to allow custom schemes to
    * access ephy-resource://. Accordingly, we need some custom security to
    * prevent websites from directly accessing ephy-resource://.
    *
@@ -751,7 +739,6 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
   if (g_str_has_prefix (uri, "ephy-resource:") ||
       g_str_has_prefix (path, "/org/gnome/epiphany/page-icons/") ||
       g_str_has_prefix (path, "/org/gnome/epiphany/page-templates/") ||
-      (g_str_has_prefix (uri, "ephy-pdf:") && g_str_has_prefix (path, "/org/gnome/epiphany/pdfjs/")) ||
       (g_str_has_prefix (uri, "ephy-reader:") && g_str_has_prefix (path, "/org/gnome/epiphany/readability/")) ||
       (g_str_has_prefix (uri, EPHY_VIEW_SOURCE_SCHEME ":") && g_str_has_prefix (path, "/org/gnome/epiphany/highlightjs/"))) {
     stream = g_resources_open_stream (path, 0, &error);
@@ -844,7 +831,6 @@ download_started_cb (WebKitWebContext *web_context,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (EphyDownload) ephy_download = NULL;
   gboolean ephy_download_set;
-  WebKitWebView *web_view;
 
   /* Is download locked down? */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -863,14 +849,7 @@ download_started_cb (WebKitWebContext *web_context,
     return;
 
   ephy_download = ephy_download_new (download);
-
-  web_view = webkit_download_get_web_view (download);
-  if (EPHY_IS_WEB_VIEW (web_view)) {
-    if (ephy_web_view_get_document_type (EPHY_WEB_VIEW (web_view)) != EPHY_WEB_VIEW_DOCUMENT_PDF)
-      ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
-  } else {
-    ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
-  }
+  ephy_downloads_manager_add_download (priv->downloads_manager, ephy_download);
 }
 
 static void
@@ -979,11 +958,6 @@ ephy_embed_shell_startup (GApplication *application)
   priv->source_handler = ephy_view_source_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_SOURCE_SCHEME,
                                           (WebKitURISchemeRequestCallback)source_request_cb,
-                                          shell, NULL);
-  /* pdf handler */
-  priv->pdf_handler = ephy_pdf_handler_new ();
-  webkit_web_context_register_uri_scheme (priv->web_context, EPHY_PDF_SCHEME,
-                                          (WebKitURISchemeRequestCallback)pdf_request_cb,
                                           shell, NULL);
 
   /* reader mode handler */
@@ -1534,13 +1508,4 @@ ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
   webkit_user_content_manager_unregister_script_message_handler_in_world (ucm,
                                                                           "passwordManagerSave",
                                                                           priv->guid);
-}
-
-void
-ephy_embed_shell_pdf_handler_stop (EphyEmbedShell *shell,
-                                   WebKitWebView  *web_view)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  ephy_pdf_handler_stop (priv->pdf_handler, web_view);
 }

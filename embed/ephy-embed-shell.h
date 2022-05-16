@@ -91,7 +91,4 @@ void                     ephy_embed_shell_register_ucm_handler (EphyEmbedShell  
 void                     ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
                                                                   WebKitUserContentManager *ucm);
 
-void                     ephy_embed_shell_pdf_handler_stop (EphyEmbedShell *shell,
-                                                            WebKitWebView  *web_view);
-
 G_END_DECLS
