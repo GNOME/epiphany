@@ -75,6 +75,7 @@ window.browser.notifications = {
 };
 
 window.browser.runtime = {
+    getURL: function (args, cb) { return window.browser.extension.getURL(args, cb); },
     getManifest: function (args, cb) { return '[]'; },
     getBrowserInfo: function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); },
     onInstalled: {
