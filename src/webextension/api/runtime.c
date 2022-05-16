@@ -56,7 +56,7 @@ runtime_handler_send_message (EphyWebExtension *self,
   g_autofree char *script = NULL;
 
   script = g_strdup_printf ("runtimeSendMessage(%s);", jsc_value_to_json (args, 2));
-  webkit_web_view_run_javascript_in_world (view, script, ephy_embed_shell_get_guid (EPHY_EMBED_SHELL (shell)), NULL, NULL, NULL);
+  webkit_web_view_run_javascript (view, script, NULL, NULL, NULL);
 
   return NULL;
 }

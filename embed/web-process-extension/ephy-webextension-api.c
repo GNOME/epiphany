@@ -30,6 +30,7 @@ struct _EphyWebExtensionExtension {
   GObject parent_instance;
 
   WebKitWebExtension *extension;
+  char *guid;
   gboolean initialized;
 
   WebKitScriptWorld *script_world;
@@ -90,14 +91,9 @@ static char *
 js_geturl (const char *path,
            gpointer    user_data)
 {
-  JSCContext *context = jsc_context_get_current ();
-  JSCValue *value;
-  char *ret;
+  EphyWebExtensionExtension *extension = EPHY_WEB_EXTENSION_EXTENSION (user_data);
 
-  value = jsc_context_evaluate (context, "window.location.host", -1);
-  ret = g_strdup_printf ("ephy-webextension://%s/%s", jsc_value_to_string (value), path);
-
-  return ret;
+  return g_strdup_printf ("ephy-webextension://%s/%s", extension->guid, path);
 }
 
 static void
@@ -192,6 +188,7 @@ ephy_web_extension_dispose (GObject *object)
 
   g_clear_object (&extension->script_world);
   g_clear_object (&extension->extension);
+  g_clear_pointer (&extension->guid, g_free);
 
   g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
 
@@ -298,11 +295,11 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
   if (extension->initialized)
     return;
 
-  extension->initialized = TRUE;
-
   g_assert (guid && *guid);
 
-  extension->script_world = webkit_script_world_new_with_name (guid);
+  extension->initialized = TRUE;
+  extension->guid = g_strdup (guid);
+  extension->script_world = webkit_script_world_get_default ();
 
   g_signal_connect (extension->script_world,
                     "window-object-cleared",
@@ -326,8 +323,13 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   const char *profile_dir;
   gboolean private_profile;
   gboolean should_remember_passwords;
+  gboolean is_webextension;
 
-  g_variant_get (user_data, "(&sm&sbb)", &guid, &profile_dir, &should_remember_passwords, &private_profile);
+  g_variant_get (user_data, "(&sm&sbbb)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension);
+
+  if (!is_webextension)
+    return;
+
   extension = ephy_web_extension_extension_get ();
 
   ephy_web_extension_extension_initialize (extension,

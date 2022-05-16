@@ -190,50 +190,8 @@ ephy_web_extension_manager_class_init (EphyWebExtensionManagerClass *klass)
 }
 
 static void
-web_extension_cb (WebKitURISchemeRequest *request,
-                  gpointer                user_data)
-{
-  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
-  EphyWebExtension *web_extension = NULL;
-  const char *path;
-  const unsigned char *data;
-  gsize length;
-  g_autoptr (GInputStream) stream = NULL;
-  g_auto (GStrv) split = NULL;
-
-  path = webkit_uri_scheme_request_get_uri (request) + strlen ("ephy-webextension://");
-
-  split = g_strsplit (path, "/", -1);
-  /* FIND WEB EXTENSION */
-  for (GList *list = self->web_extensions; list && list->data; list = list->next) {
-    EphyWebExtension *ext = EPHY_WEB_EXTENSION (list->data);
-
-    if (strcmp (ephy_web_extension_get_guid (ext), split[0]) == 0) {
-      web_extension = EPHY_WEB_EXTENSION (list->data);
-      break;
-    }
-  }
-
-  if (!web_extension)
-    return;
-
-  data = ephy_web_extension_get_resource (web_extension, path + strlen (split[0]) + 1, &length);
-  if (!data)
-    return;
-
-  stream = g_memory_input_stream_new_from_data (data, length, NULL);
-  webkit_uri_scheme_request_finish (request, stream, length, NULL);
-}
-
-static void
 ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 {
-  WebKitWebContext *web_context;
-
-  web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
-  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, self, NULL);
-  webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
-                                                         "ephy-webextension");
 }
 
 EphyWebExtensionManager *
@@ -398,12 +356,11 @@ page_action_clicked (GtkWidget      *event_box,
   json = json_to_string (root, FALSE);
 
   script = g_strdup_printf ("pageActionOnClicked(%s);", json);
-  webkit_web_view_run_javascript_in_world (web_view,
-                                           script,
-                                           ephy_embed_shell_get_guid (EPHY_EMBED_SHELL (shell)),
-                                           NULL,
-                                           NULL,
-                                           NULL);
+  webkit_web_view_run_javascript (web_view,
+                                  script,
+                                  NULL,
+                                  NULL,
+                                  NULL);
 
   return GDK_EVENT_STOP;
 }
@@ -484,7 +441,7 @@ ephy_web_extension_handle_background_script_message (WebKitUserContentManager *u
 
       ret = handler.execute (web_extension, split[1], args);
       script = g_strdup_printf ("promises[%.f].resolve(%s);", jsc_value_to_double (promise), ret ? ret : "");
-      webkit_web_view_run_javascript_in_world (web_view, script, ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()), NULL, NULL, NULL);
+      webkit_web_view_run_javascript (web_view, script, NULL, NULL, NULL);
 
       return;
     }
@@ -505,7 +462,7 @@ add_content_scripts (EphyWebExtension *web_extension,
 
   ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (web_view));
   g_signal_connect_object (ucm, "script-message-received", G_CALLBACK (ephy_web_extension_handle_background_script_message), web_extension, 0);
-  webkit_user_content_manager_register_script_message_handler_in_world (ucm, "epiphany", ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()));
+  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
 
   for (GList *list = content_scripts; list && list->data; list = list->next) {
     GList *js_list = ephy_web_extension_get_content_script_js (web_extension, list->data);
@@ -618,22 +575,76 @@ page_attached_cb (HdyTabView *tab_view,
   ephy_web_extension_manager_update_location_entry (self, window);
 }
 
+static void
+web_extension_cb (WebKitURISchemeRequest *request,
+                  gpointer                user_data)
+{
+  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
+  const char *path;
+  const unsigned char *data;
+  gsize length;
+  g_autoptr (GInputStream) stream = NULL;
+  g_autoptr (GError) error = NULL;
+
+  path = webkit_uri_scheme_request_get_path (request);
+
+  data = ephy_web_extension_get_resource (web_extension, path + 1, &length);
+  if (!data) {
+    error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "Resource not found: %s", path);
+    webkit_uri_scheme_request_finish_error (request, error);
+    return;
+  }
+
+  stream = g_memory_input_stream_new_from_data (data, length, NULL);
+  webkit_uri_scheme_request_finish (request, stream, length, NULL);
+}
+
+static void
+init_web_extension_api (WebKitWebContext *web_context,
+                        EphyWebExtension *web_extension)
+{
+  g_autoptr (GVariant) user_data = NULL;
+
+#if DEVELOPER_MODE
+  webkit_web_context_set_web_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
+#else
+  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
+#endif
+
+  user_data = g_variant_new ("(smsbbb)",
+                             ephy_web_extension_get_guid (web_extension),
+                             ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
+                             FALSE,
+                             FALSE,
+                             TRUE);
+  webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
+}
+
 static GtkWidget *
 create_web_extensions_webview (EphyWebExtension *web_extension)
 {
   g_autoptr (WebKitUserContentManager) ucm = NULL;
   WebKitSettings *settings;
+  WebKitWebContext *web_context;
   GtkWidget *web_view;
 
   /* Create an own ucm so new scripts/css are only applied to this web_view */
   ucm = webkit_user_content_manager_new ();
-  web_view = ephy_web_view_new_with_user_content_manager (ucm);
   g_signal_connect_object (ucm, "script-message-received::epiphany", G_CALLBACK (ephy_web_extension_handle_background_script_message), web_extension, 0);
+  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
 
-  /* Get webcontext and register web_extension scheme */
-  webkit_user_content_manager_register_script_message_handler_in_world (ucm,
-                                                                        "epiphany",
-                                                                        ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()));
+  web_context = webkit_web_context_new ();
+  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, web_extension, NULL);
+  webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
+                                                         "ephy-webextension");
+
+  g_signal_connect_object (web_context, "initialize-web-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+
+  web_view = g_object_new (EPHY_TYPE_WEB_VIEW,
+                           "web-context", web_context,
+                           "user-content-manager", ucm,
+                           "settings", ephy_embed_prefs_get_settings (),
+                           NULL);
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
@@ -643,6 +654,22 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
   return web_view;
 }
 
+static char *
+create_base_uri_for_resource_path (EphyWebExtension *web_extension,
+                                   const char       *resource_path)
+{
+  g_autofree char *dir_name = NULL;
+
+  if (resource_path) {
+    dir_name = g_path_get_dirname (resource_path);
+
+    if (g_strcmp0 (dir_name, ".") != 0)
+      return g_strdup_printf ("ephy-webextension://%s/%s/", ephy_web_extension_get_guid (web_extension), dir_name);
+  }
+
+  return g_strdup_printf ("ephy-webextension://%s/", ephy_web_extension_get_guid (web_extension));
+}
+
 static GtkWidget *
 create_browser_popup (EphyWebExtension *web_extension)
 {
@@ -650,7 +677,6 @@ create_browser_popup (EphyWebExtension *web_extension)
   GtkWidget *popover;
   g_autofree char *data = NULL;
   g_autofree char *base_uri = NULL;
-  g_autofree char *dir_name = NULL;
   const char *popup;
 
   popover = gtk_popover_new (NULL);
@@ -658,8 +684,7 @@ create_browser_popup (EphyWebExtension *web_extension)
   web_view = create_web_extensions_webview (web_extension);
 
   popup = ephy_web_extension_get_browser_popup (web_extension);
-  dir_name = g_path_get_dirname (popup);
-  base_uri = g_strdup_printf ("ephy-webextension://%s/%s/", ephy_web_extension_get_guid (web_extension), dir_name);
+  base_uri = create_base_uri_for_resource_path (web_extension, popup);
   data = ephy_web_extension_get_resource_as_string (web_extension, popup);
   webkit_web_view_load_html (WEBKIT_WEB_VIEW (web_view), (char *)data, base_uri);
   gtk_container_add (GTK_CONTAINER (popover), web_view);
@@ -672,26 +697,18 @@ static gboolean
 on_browser_action_clicked (GtkWidget *event_box,
                            gpointer   user_data)
 {
-  EphyShell *shell = ephy_shell_get_default ();
   EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
   EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
   g_autofree char *script = NULL;
-  WebKitWebView *web_view = NULL;
-  gboolean own_web_view = !!ephy_web_extension_background_web_view_get_page (web_extension);
-
-  if (!own_web_view)
-    web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
-  else
-    web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
 
   script = g_strdup_printf ("browserActionClicked();");
 
-  webkit_web_view_run_javascript_in_world (web_view,
-                                           script,
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           NULL,
-                                           NULL,
-                                           NULL);
+  webkit_web_view_run_javascript (web_view,
+                                  script,
+                                  NULL,
+                                  NULL,
+                                  NULL);
 
   return GDK_EVENT_STOP;
 }
@@ -853,17 +870,17 @@ run_background_script (EphyWebExtensionManager *self,
   background = create_web_extensions_webview (web_extension);
   ephy_web_extension_manager_set_background_web_view (self, web_extension, EPHY_WEB_VIEW (background));
 
+  base_uri = create_base_uri_for_resource_path (web_extension, page);
+
   if (page) {
     g_autofree char *data = ephy_web_extension_get_resource_as_string (web_extension, page);
-
-    base_uri = g_strdup_printf ("ephy-webextension://%s/%s/", ephy_web_extension_get_guid (web_extension), g_path_get_dirname (page));
-    webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), (char *)data, base_uri);
+    if (data)
+      webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), (char *)data, base_uri);
   } else {
     GPtrArray *scripts = ephy_web_extension_background_web_view_get_scripts (web_extension);
 
     ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (background));
 
-    base_uri = g_strdup_printf ("ephy-webextension://%s/", ephy_web_extension_get_guid (web_extension));
     for (unsigned int i = 0; i < scripts->len; i++) {
       const char *script_file = g_ptr_array_index (scripts, i);
       g_autofree char *data = NULL;
@@ -873,14 +890,15 @@ run_background_script (EphyWebExtensionManager *self,
         continue;
 
       data = ephy_web_extension_get_resource_as_string (web_extension, script_file);
-      user_script = webkit_user_script_new_for_world (data,
-                                                      WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
-                                                      WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-                                                      ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                                      NULL,
-                                                      NULL);
+      if (data) {
+        user_script = webkit_user_script_new (data,
+                                              WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
+                                              WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                              NULL,
+                                              NULL);
 
-      webkit_user_content_manager_add_script (ucm, user_script);
+        webkit_user_content_manager_add_script (ucm, user_script);
+      }
     }
     webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), "<body></body>", base_uri);
   }

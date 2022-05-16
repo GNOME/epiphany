@@ -163,12 +163,11 @@ tabs_handler_execute_script (EphyWebExtension *self,
   code_value = jsc_value_object_get_property (obj, "code");
   if (code_value) {
     g_autofree char *code = jsc_value_to_string (code_value);
-    webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
-                                             code,
-                                             ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                             NULL,
-                                             NULL,
-                                             NULL);
+    webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
+                                    code,
+                                    NULL,
+                                    NULL,
+                                    NULL);
   }
 
   return NULL;

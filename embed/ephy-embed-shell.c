@@ -783,11 +783,12 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
 #endif
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
-  user_data = g_variant_new ("(smsbb)",
+  user_data = g_variant_new ("(smsbbb)",
                              priv->guid,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS),
-                             private_profile);
+                             private_profile,
+                             FALSE);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
