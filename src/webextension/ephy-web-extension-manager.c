@@ -461,8 +461,7 @@ add_content_scripts (EphyWebExtension *web_extension,
     return;
 
   ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (web_view));
-  g_signal_connect_object (ucm, "script-message-received", G_CALLBACK (ephy_web_extension_handle_background_script_message), web_extension, 0);
-  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
+  /* NOTE: This will have to connect/disconnect script-message-recieved once we implement content-script APIs using this. */
 
   for (GList *list = content_scripts; list && list->data; list = list->next) {
     GList *js_list = ephy_web_extension_get_content_script_js (web_extension, list->data);
@@ -491,8 +490,6 @@ remove_content_scripts (EphyWebExtension *self,
     for (GList *tmp_list = js_list; tmp_list && tmp_list->data; tmp_list = tmp_list->next)
       webkit_user_content_manager_remove_script (WEBKIT_USER_CONTENT_MANAGER (ucm), tmp_list->data);
   }
-
-  g_signal_handlers_disconnect_by_func (ucm, G_CALLBACK (ephy_web_extension_handle_background_script_message), self);
 }
 
 static void
@@ -554,6 +551,10 @@ ephy_web_extension_manager_add_web_extension_to_webview (EphyWebExtensionManager
       g_hash_table_insert (table, web_view, g_steal_pointer (&page_action));
     }
   }
+
+  webkit_web_view_send_message_to_page (WEBKIT_WEB_VIEW (web_view),
+                                        webkit_user_message_new ("WebExtension.Initialize", g_variant_new_string (ephy_web_extension_get_guid (web_extension))),
+                                        NULL, NULL, NULL);
 
   update_translations (web_extension);
   add_content_scripts (web_extension, web_view);

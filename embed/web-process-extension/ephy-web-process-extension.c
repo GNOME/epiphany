@@ -29,6 +29,7 @@
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-web-overview-model.h"
+#include "ephy-webextension-common.h"
 
 #include <gio/gio.h>
 #include <glib/gi18n.h>
@@ -52,6 +53,7 @@ struct _EphyWebProcessExtension {
   EphyPermissionsManager *permissions_manager;
 
   WebKitScriptWorld *script_world;
+  GHashTable *content_script_worlds;
 
   gboolean should_remember_passwords;
   gboolean is_private_profile;
@@ -226,6 +228,58 @@ web_page_context_menu (WebKitWebPage          *web_page,
 }
 
 static void
+content_script_window_object_cleared_cb (WebKitScriptWorld *world,
+                                         WebKitWebPage     *page,
+                                         WebKitFrame       *frame,
+                                         gpointer           user_data)
+{
+  g_autoptr (JSCContext) js_context = NULL;
+
+  js_context = webkit_frame_get_js_context_for_script_world (frame, world);
+  ephy_webextension_install_common_apis (js_context, webkit_script_world_get_name (world));
+}
+
+static void
+create_content_script_world (EphyWebProcessExtension *extension,
+                             const char              *guid)
+{
+  WebKitScriptWorld *world = webkit_script_world_new_with_name (guid);
+
+  g_hash_table_insert (extension->content_script_worlds, g_strdup (guid), world);
+
+  g_signal_connect (world,
+                    "window-object-cleared",
+                    G_CALLBACK (content_script_window_object_cleared_cb),
+                    NULL);
+}
+
+static gboolean
+web_page_received_message (WebKitWebPage     *web_page,
+                           WebKitUserMessage *message,
+                           gpointer           user_data)
+{
+  EphyWebProcessExtension *extension = user_data;
+  const char *name = webkit_user_message_get_name (message);
+
+  if (g_strcmp0 (name, "WebExtension.Initialize") == 0) {
+    GVariant *parameters;
+    const char *guid;
+
+    parameters = webkit_user_message_get_parameters (message);
+    if (!parameters)
+      return FALSE;
+
+    g_variant_get (parameters, "&s", &guid);
+    create_content_script_world (extension, guid);
+  } else {
+    g_warning ("Unhandled page message: %s", name);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+static void
 ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                                             WebKitWebPage           *web_page)
 {
@@ -239,6 +293,9 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                     extension);
   g_signal_connect (web_page, "form-controls-associated-for-frame",
                     G_CALLBACK (web_page_form_controls_associated),
+                    extension);
+  g_signal_connect (web_page, "user-message-received",
+                    G_CALLBACK (web_page_received_message),
                     extension);
 }
 
@@ -330,6 +387,8 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       return;
 
     g_variant_get (parameters, "b", &extension->should_remember_passwords);
+  } else {
+    g_warning ("Unhandled user-message: %s", name);
   }
 }
 
@@ -381,6 +440,7 @@ ephy_web_process_extension_dispose (GObject *object)
   }
 
   g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
+  g_clear_pointer (&extension->content_script_worlds, g_hash_table_destroy);
 
   G_OBJECT_CLASS (ephy_web_process_extension_parent_class)->dispose (object);
 }
@@ -808,4 +868,7 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                                  g_free, NULL);
 
   extension->translation_table = g_hash_table_new (g_str_hash, NULL);
+
+  extension->content_script_worlds = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                            g_free, g_object_unref);
 }

@@ -74,27 +74,20 @@ window.browser.notifications = {
     create: function (args, cb) { return ephy_message ('notifications.create', args, cb); },
 };
 
-window.browser.runtime = {
-    getURL: function (args, cb) { return window.browser.extension.getURL(args, cb); },
-    getManifest: function (args, cb) { return '[]'; },
-    getBrowserInfo: function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); },
-    onInstalled: {
-      addListener: function (cb) { runtime_listeners.push({callback: cb}); }
-    },
-    onMessage: {
-      addListener: function (cb) { runtime_onmessage_listeners.push({callback: cb}); }
-    },
-    onMessageExternal: {
-      addListener: function (cb) { runtime_onmessageexternal_listeners.push({callback: cb}); }
-    },
-    onConnect: {
-      addListener: function (cb) { runtime_onconnect_listeners.push({callback: cb}); }
-    },
-    connectNative: function (args, cb) { return ephy_message ('runtime.connectNative', args, cb); },
-    sendMessage: function (args, cb) { return ephy_message ('runtime.sendMessage', args, cb); },
-    openOptionsPage: function (args, cb) { return ephy_message ('runtime.openOptionsPage', args, cb); },
-    setUninstallURL: function (args, cb) { return ephy_message ('runtime.setUninstallURL', args, cb); },
+window.browser.extension = {
+  getURL: function (args, cb) { return window.browser.runtime.getURL(args, cb); },
 };
+
+window.browser.runtime.getManifest = function (args, cb) { return '[]'; };
+window.browser.runtime.getBrowserInfo = function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); },
+window.browser.runtime.onInstalled = { addListener: function (cb) { runtime_listeners.push({callback: cb}); } };
+window.browser.runtime.onMessage = { addListener: function (cb) { runtime_onmessage_listeners.push({callback: cb}); } };
+window.browser.runtime.onMessageExternal = { addListener: function (cb) { runtime_onmessageexternal_listeners.push({callback: cb}); } };
+window.browser.runtime.onConnect = { addListener: function (cb) { runtime_onconnect_listeners.push({callback: cb}); } };
+window.browser.runtime.connectNative = function (args, cb) { return ephy_message ('runtime.connectNative', args, cb); },
+window.browser.runtime.sendMessage = function (args, cb) { return ephy_message ('runtime.sendMessage', args, cb); },
+window.browser.runtime.openOptionsPage = function (args, cb) { return ephy_message ('runtime.openOptionsPage', args, cb); },
+window.browser.runtime.setUninstallURL = function (args, cb) { return ephy_message ('runtime.setUninstallURL', args, cb); },
 
 window.browser.pageAction = {
     setIcon: function (args, cb) { return ephy_message ('pageAction.setIcon', args, cb); },

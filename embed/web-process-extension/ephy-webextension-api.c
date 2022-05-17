@@ -20,8 +20,8 @@
 
 #include "config.h"
 #include "ephy-webextension-api.h"
+#include "ephy-webextension-common.h"
 
-#include <locale.h>
 #include <json-glib/json-glib.h>
 #include <webkit2/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
@@ -50,53 +50,6 @@ ephy_web_extension_extension_get_translations (EphyWebExtensionExtension *extens
 }
 
 static void
-js_exception_handler (JSCContext   *context,
-                      JSCException *exception)
-{
-  g_autoptr (JSCValue) js_console = NULL;
-  g_autoptr (JSCValue) js_result = NULL;
-  g_autofree char *report = NULL;
-
-  js_console = jsc_context_get_value (context, "console");
-  js_result = jsc_value_object_invoke_method (js_console, "error", JSC_TYPE_EXCEPTION, exception, G_TYPE_NONE);
-  (void)js_result;
-  report = jsc_exception_report (exception);
-  g_warning ("%s", report);
-
-  jsc_context_throw_exception (context, exception);
-}
-
-static char *
-js_getmessage (const char *message,
-               gpointer    user_data)
-{
-  return g_strdup (message);
-}
-
-static char *
-js_getuilanguage (void)
-{
-  char *locale = setlocale (LC_MESSAGES, NULL);
-
-  if (locale) {
-    locale[2] = '\0';
-
-    return g_strdup (locale);
-  }
-
-  return g_strdup ("en");
-}
-
-static char *
-js_geturl (const char *path,
-           gpointer    user_data)
-{
-  EphyWebExtensionExtension *extension = EPHY_WEB_EXTENSION_EXTENSION (user_data);
-
-  return g_strdup_printf ("ephy-webextension://%s/%s", extension->guid, path);
-}
-
-static void
 ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
                                                   WebKitUserMessage *message)
 {
@@ -110,6 +63,7 @@ ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
     const char *path;
     const char *code;
     g_autofree char *uri = NULL;
+    /* FIXME: This should run in content-script world of the target tab. */
     JSCContext *context = webkit_frame_get_js_context (frame);
 
     parameters = webkit_user_message_get_parameters (message);
@@ -133,36 +87,6 @@ ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
     g_variant_get (parameters, "(&s)", &script);
     value = jsc_context_evaluate (context, script, -1);
     g_clear_object (&value);
-  }
-}
-
-void
-webextensions_add_translation (EphyWebExtensionExtension *extension,
-                               const char                *name,
-                               const char                *data,
-                               guint64                    length)
-{
-  GHashTable *translations = ephy_web_extension_extension_get_translations (extension);
-  JsonParser *parser = NULL;
-  JsonNode *root;
-  JsonObject *root_object;
-  g_autoptr (GError) error = NULL;
-
-  g_hash_table_remove (translations, name);
-
-  if (!data || strlen (data) == 0)
-    return;
-
-  parser = json_parser_new ();
-  if (json_parser_load_from_data (parser, data, length, &error)) {
-    root = json_parser_get_root (parser);
-    g_assert (root);
-    root_object = json_node_get_object (root);
-    g_assert (root_object);
-
-    g_hash_table_insert (translations, (char *)name, json_object_ref (root_object));
-  } else {
-    g_warning ("Could not read translation json data: %s. '%s'", error->message, data);
   }
 }
 
@@ -238,46 +162,11 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   gsize data_size;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
-  jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
 
-  result = jsc_context_get_value (js_context, "browser");
-  g_assert (jsc_value_is_undefined (result));
+  ephy_webextension_install_common_apis (js_context, extension->guid);
 
-  js_browser = jsc_value_new_object (js_context, NULL, NULL);
-  jsc_context_set_value (js_context, "browser", js_browser);
-
-  /* i18n */
-  js_i18n = jsc_value_new_object (js_context, NULL, NULL);
-  jsc_value_object_set_property (js_browser, "i18n", js_i18n);
-
-  js_function = jsc_value_new_function (js_context,
-                                        "getUILanguage",
-                                        G_CALLBACK (js_getuilanguage), extension, NULL,
-                                        G_TYPE_STRING,
-                                        0);
-  jsc_value_object_set_property (js_i18n, "getUILanguage", js_function);
-  g_clear_object (&js_function);
-
-  js_function = jsc_value_new_function (js_context,
-                                        "getMessage",
-                                        G_CALLBACK (js_getmessage), extension, NULL,
-                                        G_TYPE_STRING, 1,
-                                        G_TYPE_STRING);
-  jsc_value_object_set_property (js_i18n, "getMessage", js_function);
-  g_clear_object (&js_function);
-
-  /* extension */
-  js_extension = jsc_value_new_object (js_context, NULL, NULL);
-  jsc_value_object_set_property (js_browser, "extension", js_extension);
-
-  js_function = jsc_value_new_function (js_context,
-                                        "getURL",
-                                        G_CALLBACK (js_geturl), extension, NULL,
-                                        G_TYPE_STRING,
-                                        1,
-                                        G_TYPE_STRING);
-  jsc_value_object_set_property (js_extension, "getURL", js_function);
-  g_clear_object (&js_function);
+  js_browser = jsc_context_get_value (js_context, "browser");
+  g_assert (jsc_value_is_object (js_browser));
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);

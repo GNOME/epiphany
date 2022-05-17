@@ -9,11 +9,16 @@ web_process_extension_resources = gnome.compile_resources('epiphany-web-process-
     source_dir: 'resources'
 )
 
+web_extension_common_sources = [
+  'ephy-webextension-common.c'
+]
+
 web_process_extension_sources = [
   'ephy-web-process-extension.c',
   'ephy-web-process-extension-main.c',
   'ephy-web-overview-model.c',
-  web_process_extension_resources
+  web_process_extension_resources,
+  web_extension_common_sources,
 ]
 
 web_process_extension_deps = [
@@ -44,7 +49,8 @@ web_extension_resources = gnome.compile_resources('epiphany-web-extension-resour
 
 web_extension_sources = [
   'ephy-webextension-api.c',
-  web_extension_resources
+  web_extension_resources,
+  web_extension_common_sources,
 ]
 
 web_extension_deps = [

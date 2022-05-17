@@ -427,7 +427,7 @@ web_extension_content_script_build (EphyWebExtension          *self,
     user_script = webkit_user_script_new_for_world (js_data,
                                                     content_script->injected_frames,
                                                     content_script->injection_time,
-                                                    ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                                    ephy_web_extension_get_guid (self),
                                                     (const char * const *)content_script->allow_list->pdata,
                                                     (const char * const *)content_script->block_list->pdata);
 
