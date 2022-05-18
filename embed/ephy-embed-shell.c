@@ -788,8 +788,8 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS),
                              private_profile,
-                             FALSE,
-                             "");
+                             FALSE /* is_webextension */,
+                             "" /* webextension_translations */);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 

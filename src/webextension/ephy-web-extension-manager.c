@@ -623,9 +623,9 @@ init_web_extension_api (WebKitWebContext *web_context,
   user_data = g_variant_new ("(smsbbbs)",
                              ephy_web_extension_get_guid (web_extension),
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
-                             FALSE,
-                             FALSE,
-                             TRUE,
+                             FALSE /* should_remember_passwords */,
+                             FALSE /* private_profile */,
+                             TRUE /* is_webextension */,
                              translations);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
