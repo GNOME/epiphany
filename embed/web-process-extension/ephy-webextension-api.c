@@ -33,8 +33,6 @@ struct _EphyWebExtensionExtension {
   char *guid;
   gboolean initialized;
 
-  WebKitScriptWorld *script_world;
-
   JsonObject *translations;
   int counter;
 };
@@ -91,7 +89,7 @@ ephy_web_extension_extension_page_created_cb (EphyWebExtensionExtension *extensi
   g_autoptr (JSCContext) js_context = NULL;
 
   /* Enforce the creation of the script world global context in the main frame */
-  js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), extension->script_world);
+  js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), webkit_script_world_get_default ());
   (void)js_context;
 
   g_signal_connect_swapped (web_page, "user-message-received",
@@ -104,7 +102,6 @@ ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtensionExtension *extension = EPHY_WEB_EXTENSION_EXTENSION (object);
 
-  g_clear_object (&extension->script_world);
   g_clear_object (&extension->extension);
   g_clear_pointer (&extension->guid, g_free);
 
@@ -210,9 +207,8 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
 
   extension->initialized = TRUE;
   extension->guid = g_strdup (guid);
-  extension->script_world = webkit_script_world_get_default ();
 
-  g_signal_connect (extension->script_world,
+  g_signal_connect (webkit_script_world_get_default (),
                     "window-object-cleared",
                     G_CALLBACK (window_object_cleared_cb),
                     extension);
