@@ -915,6 +915,7 @@ ephy_web_extension_load (GFile *target)
     return NULL;
   }
 
+  /* FIXME: Implement i18n: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization#retrieving_localized_strings_in_manifests */
   self->manifest = g_strndup ((char *)manifest, length);
   self->base_location = parent ? g_file_get_path (parent) : g_file_get_path (target);
   self->description = ephy_web_extension_manifest_get_key (self, root_object, "description");

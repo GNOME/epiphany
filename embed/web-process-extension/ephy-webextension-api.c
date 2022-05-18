@@ -35,19 +35,13 @@ struct _EphyWebExtensionExtension {
 
   WebKitScriptWorld *script_world;
 
-  GHashTable *translation_table;
+  JsonObject *translations;
   int counter;
 };
 
 G_DEFINE_TYPE (EphyWebExtensionExtension, ephy_web_extension_extension, G_TYPE_OBJECT)
 
 static EphyWebExtensionExtension *extension = NULL;
-
-static GHashTable *
-ephy_web_extension_extension_get_translations (EphyWebExtensionExtension *extension)
-{
-  return extension->translation_table;
-}
 
 static void
 ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
@@ -114,7 +108,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_object (&extension->extension);
   g_clear_pointer (&extension->guid, g_free);
 
-  g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
+  g_clear_pointer (&extension->translations, json_object_unref);
 
   G_OBJECT_CLASS (ephy_web_extension_extension_parent_class)->dispose (object);
 }
@@ -163,7 +157,7 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
 
-  ephy_webextension_install_common_apis (js_context, extension->guid);
+  ephy_webextension_install_common_apis (js_context, extension->guid, extension->translations);
 
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (jsc_value_is_object (js_browser));
@@ -174,10 +168,38 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   g_clear_object (&result);
 }
 
+static void
+ephy_web_extension_extension_update_translations (EphyWebExtensionExtension *extension,
+                                                  const char                *data)
+{
+  g_autoptr (JsonParser) parser = NULL;
+  JsonNode *root;
+  JsonObject *root_object;
+  g_autoptr (GError) error = NULL;
+
+  g_clear_pointer (&extension->translations, json_object_unref);
+
+  if (!data || !*data)
+    return;
+
+  parser = json_parser_new ();
+  if (json_parser_load_from_data (parser, data, -1, &error)) {
+    root = json_parser_get_root (parser);
+    g_assert (root);
+    root_object = json_node_get_object (root);
+    g_assert (root_object);
+
+    extension->translations = json_object_ref (root_object);
+  } else {
+    g_warning ("Could not read translation json data: %s. '%s'", error->message, data);
+  }
+}
+
 void
 ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
                                          WebKitWebExtension        *wk_extension,
-                                         const char                *guid)
+                                         const char                *guid,
+                                         const char                *translations)
 {
   g_assert (EPHY_IS_WEB_EXTENSION_EXTENSION (extension));
 
@@ -197,11 +219,11 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
 
   extension->extension = g_object_ref (wk_extension);
 
+  ephy_web_extension_extension_update_translations (extension, translations);
+
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_extension_extension_page_created_cb),
                             extension);
-
-  extension->translation_table = g_hash_table_new (g_str_hash, NULL);
 }
 
 G_MODULE_EXPORT void
@@ -210,11 +232,12 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 {
   const char *guid;
   const char *profile_dir;
+  const char *webextension_translations;
   gboolean private_profile;
   gboolean should_remember_passwords;
   gboolean is_webextension;
 
-  g_variant_get (user_data, "(&sm&sbbb)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension);
+  g_variant_get (user_data, "(&sm&sbbb&s)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension, &webextension_translations);
 
   if (!is_webextension)
     return;
@@ -223,7 +246,8 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 
   ephy_web_extension_extension_initialize (extension,
                                            webkit_extension,
-                                           guid);
+                                           guid,
+                                           webextension_translations);
 }
 
 static void __attribute__((destructor))

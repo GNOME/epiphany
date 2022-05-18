@@ -509,21 +509,24 @@ remove_custom_css (EphyWebExtension *self,
     webkit_user_content_manager_remove_style_sheet (WEBKIT_USER_CONTENT_MANAGER (ucm), ephy_web_extension_custom_css_style (self, list->data));
 }
 
+static char *
+get_translation_contents (EphyWebExtension *web_extension)
+{
+  /* FIXME: Use current locale and fallback to default web_extension locale if necessary. */
+  g_autofree char *path = g_strdup_printf ("_locales/%s/messages.json", "en");
+  g_autofree char *data = ephy_web_extension_get_resource_as_string (web_extension, path);
+
+  return data ? g_steal_pointer (&data) : g_strdup ("");
+}
+
 static void
 update_translations (EphyWebExtension *web_extension)
 {
-  /* TODO: Use current locale and fallback to default web_extension locale if necessary */
-  g_autofree char *path = g_strdup_printf ("_locales/%s/messages.json", "en");
-  g_autofree char *data = NULL;
-  gint length = 0;
-
-  data = ephy_web_extension_get_resource_as_string (web_extension, path);
-  if (data)
-    length = strlen (data);
+  g_autofree char *data = get_translation_contents (web_extension);
 
   webkit_web_context_send_message_to_all_extensions (ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ()),
-                                                     webkit_user_message_new ("WebExtension.Add",
-                                                                              g_variant_new ("(sst)", ephy_web_extension_get_name (web_extension), data ? (char *)data : "", length)));
+                                                     webkit_user_message_new ("WebExtension.UpdateTranslations",
+                                                                              g_variant_new ("(ss)", ephy_web_extension_get_guid (web_extension), data)));
 }
 
 static void
@@ -589,6 +592,10 @@ web_extension_cb (WebKitURISchemeRequest *request,
 
   path = webkit_uri_scheme_request_get_path (request);
 
+  /* FIXME: This may be the place to handle predefined messages and localized CSS:
+   * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization#predefined_messages
+   */
+
   data = ephy_web_extension_get_resource (web_extension, path + 1, &length);
   if (!data) {
     error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "Resource not found: %s", path);
@@ -605,6 +612,7 @@ init_web_extension_api (WebKitWebContext *web_context,
                         EphyWebExtension *web_extension)
 {
   g_autoptr (GVariant) user_data = NULL;
+  g_autofree char *translations = get_translation_contents (web_extension);
 
 #if DEVELOPER_MODE
   webkit_web_context_set_web_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
@@ -612,12 +620,13 @@ init_web_extension_api (WebKitWebContext *web_context,
   webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
-  user_data = g_variant_new ("(smsbbb)",
+  user_data = g_variant_new ("(smsbbbs)",
                              ephy_web_extension_get_guid (web_extension),
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              FALSE,
                              FALSE,
-                             TRUE);
+                             TRUE,
+                             translations);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
@@ -649,8 +658,6 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
-
-  update_translations (web_extension);
 
   return web_view;
 }

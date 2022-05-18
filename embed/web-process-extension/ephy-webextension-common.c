@@ -26,6 +26,19 @@ static char *
 js_getmessage (const char *message,
                gpointer    user_data)
 {
+  JsonObject *translations = user_data;
+  g_autoptr (JsonObject) translation = NULL;
+
+  if (!translations)
+    return g_strdup (message);
+
+  translation = json_object_get_object_member (translations, message);
+  if (translation) {
+    /* FIXME: Implement placeholders: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization */
+    const char *translated_message = json_object_get_string_member (translation, "message");
+    return g_strdup (translated_message);
+  }
+
   return g_strdup (message);
 }
 
@@ -71,7 +84,8 @@ js_exception_handler (JSCContext   *context,
 
 void
 ephy_webextension_install_common_apis (JSCContext *js_context,
-                                       const char *guid)
+                                       const char *guid,
+                                       JsonObject *translations)
 {
   g_autoptr (JSCValue) result = NULL;
   g_autoptr (JSCValue) js_browser = NULL;
@@ -103,7 +117,9 @@ ephy_webextension_install_common_apis (JSCContext *js_context,
 
   js_function = jsc_value_new_function (js_context,
                                         "getMessage",
-                                        G_CALLBACK (js_getmessage), NULL, NULL,
+                                        G_CALLBACK (js_getmessage),
+                                        translations ? json_object_ref (translations) : NULL,
+                                        translations ? (GDestroyNotify)json_object_unref : NULL,
                                         G_TYPE_STRING, 1,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_i18n, "getMessage", js_function);

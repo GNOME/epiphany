@@ -37,12 +37,13 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 {
   const char *guid;
   const char *profile_dir;
+  const char *webextension_translations;
   gboolean private_profile;
   gboolean should_remember_passwords;
   gboolean is_webextension;
   g_autoptr (GError) error = NULL;
 
-  g_variant_get (user_data, "(&sm&sbbb)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension);
+  g_variant_get (user_data, "(&sm&sbbb&s)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension, &webextension_translations);
 
   if (!ephy_file_helpers_init (profile_dir, 0, &error))
     g_warning ("Failed to initialize file helpers: %s", error->message);

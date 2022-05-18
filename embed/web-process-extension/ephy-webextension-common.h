@@ -22,9 +22,12 @@
 
 #include <glib-object.h>
 #include <jsc/jsc.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
-void ephy_webextension_install_common_apis (JSCContext *js_context, const char *guid);
+void ephy_webextension_install_common_apis (JSCContext *js_context,
+                                            const char *guid,
+                                            JsonObject *translations);
 
 G_END_DECLS

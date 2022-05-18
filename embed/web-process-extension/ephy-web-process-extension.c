@@ -64,12 +64,6 @@ struct _EphyWebProcessExtension {
 
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
-GHashTable *
-ephy_web_process_extension_get_translations (EphyWebProcessExtension *extension)
-{
-  return extension->translation_table;
-}
-
 static void
 web_page_will_submit_form (WebKitWebPage            *web_page,
                            WebKitDOMHTMLFormElement *dom_form,
@@ -233,10 +227,15 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
                                          WebKitFrame       *frame,
                                          gpointer           user_data)
 {
+  EphyWebProcessExtension *extension = user_data;
   g_autoptr (JSCContext) js_context = NULL;
+  JsonObject *translations;
+  const char *guid;
 
+  guid = webkit_script_world_get_name (world);
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
-  ephy_webextension_install_common_apis (js_context, webkit_script_world_get_name (world));
+  translations = g_hash_table_lookup (extension->translation_table, guid);
+  ephy_webextension_install_common_apis (js_context, guid, translations);
 }
 
 static void
@@ -250,7 +249,7 @@ create_content_script_world (EphyWebProcessExtension *extension,
   g_signal_connect (world,
                     "window-object-cleared",
                     G_CALLBACK (content_script_window_object_cleared_cb),
-                    NULL);
+                    extension);
 }
 
 static gboolean
@@ -297,6 +296,34 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
   g_signal_connect (web_page, "user-message-received",
                     G_CALLBACK (web_page_received_message),
                     extension);
+}
+
+static void
+ephy_web_process_extension_add_translations (GHashTable *translation_table,
+                                             const char *guid,
+                                             const char *data)
+{
+  g_autoptr (JsonParser) parser = NULL;
+  JsonNode *root;
+  JsonObject *root_object;
+  g_autoptr (GError) error = NULL;
+
+  g_hash_table_remove (translation_table, guid);
+
+  if (!data || !*data)
+    return;
+
+  parser = json_parser_new ();
+  if (json_parser_load_from_data (parser, data, -1, &error)) {
+    root = json_parser_get_root (parser);
+    g_assert (root);
+    root_object = json_node_get_object (root);
+    g_assert (root_object);
+
+    g_hash_table_insert (translation_table, g_strdup (guid), json_object_ref (root_object));
+  } else {
+    g_warning ("Could not read translation json data: %s. '%s'", error->message, data);
+  }
 }
 
 static void
@@ -387,8 +414,17 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       return;
 
     g_variant_get (parameters, "b", &extension->should_remember_passwords);
-  } else {
-    g_warning ("Unhandled user-message: %s", name);
+  } else if (g_strcmp0 (name, "WebExtension.UpdateTranslations") == 0) {
+    GVariant *parameters;
+    const char *guid;
+    const char *data;
+
+    parameters = webkit_user_message_get_parameters (message);
+    if (!parameters)
+      return;
+
+    g_variant_get (parameters, "(&s&s)", &guid, &data);
+    ephy_web_process_extension_add_translations (extension->translation_table, guid, data);
   }
 }
 
@@ -867,7 +903,8 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
   extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
                                                  g_free, NULL);
 
-  extension->translation_table = g_hash_table_new (g_str_hash, NULL);
+  extension->translation_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                        g_free, (GDestroyNotify)json_object_unref);
 
   extension->content_script_worlds = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                             g_free, g_object_unref);
