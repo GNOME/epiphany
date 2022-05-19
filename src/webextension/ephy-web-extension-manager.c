@@ -386,15 +386,20 @@ create_page_action_widget (EphyWebExtensionManager *self,
   return g_object_ref (event_box);
 }
 
+typedef struct {
+  EphyWebExtension *web_extension;
+  WebKitWebView *web_view;
+} ScriptMessageData;
+
 static void
-ephy_web_extension_handle_background_script_message (WebKitUserContentManager *ucm,
-                                                     WebKitJavascriptResult   *js_result,
-                                                     gpointer                  user_data)
+ephy_web_extension_handle_script_message (WebKitUserContentManager *ucm,
+                                          WebKitJavascriptResult   *js_result,
+                                          gpointer                  user_data)
 {
-  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
+  ScriptMessageData *data = user_data;
+  EphyWebExtension *web_extension = data->web_extension;
+  WebKitWebView *web_view = data->web_view;
   JSCValue *value = webkit_javascript_result_get_js_value (js_result);
-  EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
   g_autofree char *name_str = NULL;
   g_autoptr (JSCValue) name = NULL;
   g_autoptr (JSCValue) promise = NULL;
@@ -637,11 +642,10 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
   WebKitSettings *settings;
   WebKitWebContext *web_context;
   GtkWidget *web_view;
+  ScriptMessageData *data;
 
   /* Create an own ucm so new scripts/css are only applied to this web_view */
   ucm = webkit_user_content_manager_new ();
-  g_signal_connect_object (ucm, "script-message-received::epiphany", G_CALLBACK (ephy_web_extension_handle_background_script_message), web_extension, 0);
-  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
 
   web_context = webkit_web_context_new ();
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, web_extension, NULL);
@@ -658,6 +662,13 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
+
+  data = g_new0 (ScriptMessageData, 1);
+  data->web_extension = web_extension;
+  data->web_view = WEBKIT_WEB_VIEW (web_view);
+
+  g_signal_connect_data (ucm, "script-message-received::epiphany", G_CALLBACK (ephy_web_extension_handle_script_message), data, (GClosureNotify)g_free, 0);
+  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
 
   return web_view;
 }
