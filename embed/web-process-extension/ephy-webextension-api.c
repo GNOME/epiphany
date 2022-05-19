@@ -154,15 +154,21 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
 
-  ephy_webextension_install_common_apis (js_context, extension->guid, extension->translations);
-
   js_browser = jsc_context_get_value (js_context, "browser");
-  g_assert (jsc_value_is_object (js_browser));
+  g_assert (!jsc_value_is_object (js_browser));
+
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  data = g_bytes_get_data (bytes, &data_size);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions-common.js", 1);
+  g_bytes_unref (bytes);
+  g_clear_object (&result);
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions.js", 1);
   g_clear_object (&result);
+
+  ephy_webextension_install_common_apis (js_context, extension->guid, extension->translations);
 }
 
 static void

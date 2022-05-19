@@ -1,26 +1,14 @@
 'use strict';
 
-/* exported pageActionOnClicked, browserActionClicked, browserActionClicked, tabsOnUpdated, runtimeSendMessage, runtimeOnConnect */
-
-const promises = [];
-let last_promise = 0;
+/* exported pageActionOnClicked, browserActionClicked, browserActionClicked, tabsOnUpdated */
+/* global ephy_message */
 
 const tabs_listeners = [];
 const page_listeners = [];
 const browser_listeners = [];
 const runtime_listeners = [];
-const runtime_onmessage_listeners = [];
 const runtime_onmessageexternal_listeners = [];
-const runtime_onconnect_listeners = [];
 const windows_onremoved_listeners = [];
-
-const ephy_message = function (fn, args, cb) {
-    const promise = new Promise (function (resolve, reject) {
-        window.webkit.messageHandlers.epiphany.postMessage ({fn: fn, args: args, promise: last_promise});
-        last_promise = promises.push({resolve: resolve, reject: reject});
-    });
-    return promise;
-};
 
 const pageActionOnClicked = function(x) {
   for (const listener of page_listeners)
@@ -34,16 +22,6 @@ const browserActionClicked = function(x) {
 
 const tabsOnUpdated = function(x) {
   for (const listener of tabs_listeners)
-    listener.callback(x);
-};
-
-const runtimeSendMessage = function(x) {
-  for (const listener of runtime_onmessage_listeners)
-    listener.callback(x);
-};
-
-const runtimeOnConnect = function(x) {
-  for (const listener of runtime_onconnect_listeners)
     listener.callback(x);
 };
 
@@ -74,20 +52,17 @@ window.browser.notifications = {
     create: function (args, cb) { return ephy_message ('notifications.create', args, cb); },
 };
 
-window.browser.extension = {
-  getURL: function (args, cb) { return window.browser.runtime.getURL(args, cb); },
+// browser.runtime is defined in webextensions-common.js
+window.browser.runtime.getBrowserInfo = function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); };
+window.browser.runtime.connectNative = function (args, cb) { return ephy_message ('runtime.connectNative', args, cb); };
+window.browser.runtime.openOptionsPage = function (args, cb) { return ephy_message ('runtime.openOptionsPage', args, cb); };
+window.browser.runtime.setUninstallURL = function (args, cb) { return ephy_message ('runtime.setUninstallURL', args, cb); };
+window.browser.runtime.onInstalled = {
+    addListener: function (cb) { runtime_listeners.push({callback: cb}); }
 };
-
-window.browser.runtime.getManifest = function (args, cb) { return '[]'; };
-window.browser.runtime.getBrowserInfo = function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); },
-window.browser.runtime.onInstalled = { addListener: function (cb) { runtime_listeners.push({callback: cb}); } };
-window.browser.runtime.onMessage = { addListener: function (cb) { runtime_onmessage_listeners.push({callback: cb}); } };
-window.browser.runtime.onMessageExternal = { addListener: function (cb) { runtime_onmessageexternal_listeners.push({callback: cb}); } };
-window.browser.runtime.onConnect = { addListener: function (cb) { runtime_onconnect_listeners.push({callback: cb}); } };
-window.browser.runtime.connectNative = function (args, cb) { return ephy_message ('runtime.connectNative', args, cb); },
-window.browser.runtime.sendMessage = function (args, cb) { return ephy_message ('runtime.sendMessage', args, cb); },
-window.browser.runtime.openOptionsPage = function (args, cb) { return ephy_message ('runtime.openOptionsPage', args, cb); },
-window.browser.runtime.setUninstallURL = function (args, cb) { return ephy_message ('runtime.setUninstallURL', args, cb); },
+window.browser.runtime.onMessageExternal = {
+    addListener: function (cb) { runtime_onmessageexternal_listeners.push({callback: cb}); }
+};
 
 window.browser.pageAction = {
     setIcon: function (args, cb) { return ephy_message ('pageAction.setIcon', args, cb); },
@@ -105,7 +80,3 @@ window.browser.browserAction = {
       addListener: function (cb) { browser_listeners.push({callback: cb}); }
     }
 };
-
-// Compatibility with Chrome
-window.chrome = window.browser;
-

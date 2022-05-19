@@ -156,8 +156,6 @@ tabs_handler_execute_script (EphyWebExtension *self,
   g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
 
-  g_message ("tabs_handler_execute_script");
-
   if (jsc_value_is_array (args)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
   } else {

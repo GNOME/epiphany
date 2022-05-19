@@ -229,12 +229,26 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
 {
   EphyWebProcessExtension *extension = user_data;
   g_autoptr (JSCContext) js_context = NULL;
+  g_autoptr (JSCValue) js_browser = NULL;
+  g_autoptr (JSCValue) result = NULL;
+  g_autoptr (GBytes) bytes = NULL;
   JsonObject *translations;
   const char *guid;
+  const char *data;
+  gsize data_size;
 
   guid = webkit_script_world_get_name (world);
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   translations = g_hash_table_lookup (extension->translation_table, guid);
+
+  js_browser = jsc_context_get_value (js_context, "browser");
+  g_assert (!jsc_value_is_object (js_browser));
+
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  data = g_bytes_get_data (bytes, &data_size);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions-common.js", 1);
+  g_clear_object (&result);
+
   ephy_webextension_install_common_apis (js_context, guid, translations);
 }
 

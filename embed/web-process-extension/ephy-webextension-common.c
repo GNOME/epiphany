@@ -90,18 +90,16 @@ ephy_webextension_install_common_apis (JSCContext *js_context,
   g_autoptr (JSCValue) result = NULL;
   g_autoptr (JSCValue) js_browser = NULL;
   g_autoptr (JSCValue) js_i18n = NULL;
-  g_autoptr (JSCValue) js_runtime = NULL;
+  g_autoptr (JSCValue) js_extension = NULL;
   g_autoptr (JSCValue) js_function = NULL;
+  g_autoptr (JSCValue) js_object = NULL;
 
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
 
   /* APIs available in content scripts: https://developer.chrome.com/docs/extensions/mv3/content_scripts/ */
 
-  result = jsc_context_get_value (js_context, "browser");
-  g_assert (jsc_value_is_undefined (result));
-
-  js_browser = jsc_value_new_object (js_context, NULL, NULL);
-  jsc_context_set_value (js_context, "browser", js_browser);
+  js_browser = jsc_context_get_value (js_context, "browser");
+  g_assert (jsc_value_is_object (js_browser));
 
   /* i18n */
   js_i18n = jsc_value_new_object (js_context, NULL, NULL);
@@ -125,9 +123,9 @@ ephy_webextension_install_common_apis (JSCContext *js_context,
   jsc_value_object_set_property (js_i18n, "getMessage", js_function);
   g_clear_object (&js_function);
 
-  /* runtime */
-  js_runtime = jsc_value_new_object (js_context, NULL, NULL);
-  jsc_value_object_set_property (js_browser, "runtime", js_runtime);
+  /* extension */
+  js_extension = jsc_value_new_object (js_context, NULL, NULL);
+  jsc_value_object_set_property (js_browser, "extension", js_extension);
 
   js_function = jsc_value_new_function (js_context,
                                         "getURL",
@@ -135,6 +133,6 @@ ephy_webextension_install_common_apis (JSCContext *js_context,
                                         G_TYPE_STRING,
                                         1,
                                         G_TYPE_STRING);
-  jsc_value_object_set_property (js_runtime, "getURL", js_function);
+  jsc_value_object_set_property (js_extension, "getURL", js_function);
   g_clear_object (&js_function);
 }
