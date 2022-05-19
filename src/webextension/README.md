@@ -1,59 +1,69 @@
-https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API
+# Epiphany WebExtensions
 
-https://github.com/mdn/webextensions-examples
+This is an experimental implementation of [WebExtensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API).
+
+Some examples to run can be found here: https://github.com/mdn/webextensions-examples
 
 
-# Working extensions
+It is a work in progress and should be assumed insecure, incomplete, and full of issues for now.
 
-- Borderify
-- Apply CSS
-- Page to extension messaging
+You can track issues here: https://gitlab.gnome.org/GNOME/epiphany/-/issues?label_name[]=5.+WebExtensions
 
-# QUESTIONS
- - Should we use **self** as current module parameter name for consistency or name it like module?
- - Clear definition if get/set functions should be used instead of direct struct access
- - Enfore g_auto free functions implementation?
- - Alignment in header files
- - Should every function of a file has a certain prefix or only non static functions?
- - EphyWebExtensionManager as a singleton?
- 
-# PLAN
+## Feature Set
 
-## First release
-Feature set:
- - Un/Load/Enable/Disable xpi and extracted extensions
- - Works for existing and new views
- - Manifest file:
+- Un/Load/Enable/Disable xpi and extracted extensions
+- Works for existing and new views
+- Manifest file:
     - initial content_scripts
     - initial background page
     - initial background scripts
- - API:
-    - notifications:
-        - create
-    - pageaction:
-        - setIcon
-        - setTitle
-        - show
-        - getTitle
-    - tabs:
-        - insertCSS
-        - removeCSS
-        - initial query
-
- - Test extensions:
-    - apply-css
-    - borderify
-    
-## Second release
-Feature set:
- - API:
+- WebExtension API:
     - i18n:
         - getMessage
         - getUILanguage
     - runtime:
         - sendMessage
         - onMessage.addListener
+    - notifications:
+        - create
+    - pageAction:
+        - setIcon
+        - setTitle
+        - show
+    - getTitle
+    - tabs:
+        - insertCSS
+        - removeCSS
+        - initial query
 
- - Test extensions:
-    - notify-link-clicks-i18n
+### Tested extensions
 
+- apply-css
+- borderify
+- notify-link-clicks-i18n
+
+## Overview
+
+### Contexts
+
+There are roughly 3 contexts in which WebExtension code executes in that need to be handled properly:
+
+#### Content Scripts
+
+The full details can be found here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts
+
+These run inside of the main web views context and have access to the DOM however they are in
+a private ScriptWorld and cannot directly interact with other extensions or the websites JavaScript.
+
+They also only have access to a small subset of the WebExtensions API.
+
+#### Action Views
+
+These are WebExtension views created when the user triggers an action. They are short lived and limited in presentation but have
+full access to the WebExtension APIs.
+
+Since they are isolated from the website they run their scripts in its default context.
+
+#### Background Page
+
+This is similar to an Action view except that is a long-lived view, Action Views can't get direct access with it, and Content Scripts can communicate with it.
