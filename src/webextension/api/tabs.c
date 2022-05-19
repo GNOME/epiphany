@@ -151,8 +151,12 @@ tabs_handler_execute_script (EphyWebExtension *self,
                              JSCValue         *args)
 {
   g_autoptr (JSCValue) code_value = NULL;
+  g_autoptr (JSCValue) file_value = NULL;
   g_autoptr (JSCValue) obj = NULL;
+  g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
+
+  g_message ("tabs_handler_execute_script");
 
   if (jsc_value_is_array (args)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
@@ -160,14 +164,23 @@ tabs_handler_execute_script (EphyWebExtension *self,
     obj = args;
   }
 
+  file_value = jsc_value_object_get_property (obj, "file");
   code_value = jsc_value_object_get_property (obj, "code");
-  if (code_value) {
-    g_autofree char *code = jsc_value_to_string (code_value);
-    webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
-                                    code,
-                                    NULL,
-                                    NULL,
-                                    NULL);
+
+  if (code_value)
+    code = jsc_value_to_string (code_value);
+  else if (file_value) {
+    g_autofree char *resource_path = jsc_value_to_string (code_value);
+    code = g_strdup (ephy_web_extension_get_resource_as_string (self, resource_path));
+  }
+
+  if (code) {
+    webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
+                                             code,
+                                             ephy_web_extension_get_guid (self),
+                                             NULL,
+                                             NULL,
+                                             NULL);
   }
 
   return NULL;
