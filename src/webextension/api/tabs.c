@@ -156,20 +156,29 @@ tabs_handler_execute_script (EphyWebExtension *self,
   g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
 
-  if (jsc_value_is_array (args)) {
+  /* This takes an optional first argument so it's either:
+   * [tabId:str, details:obj], or [details:obj] */
+  if (!jsc_value_is_array (args))
+    return NULL;
+
+  obj = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_object (obj)) {
+    g_warning ("tabs.executeScript doesn't currently support tabId and will run in the activeTab!");
+    g_object_unref (obj);
     obj = jsc_value_object_get_property_at_index (args, 1);
-  } else {
-    obj = g_object_ref (args);
   }
 
   file_value = jsc_value_object_get_property (obj, "file");
   code_value = jsc_value_object_get_property (obj, "code");
 
-  if (code_value)
+  if (jsc_value_is_string (code_value))
     code = jsc_value_to_string (code_value);
-  else if (file_value) {
-    g_autofree char *resource_path = jsc_value_to_string (code_value);
-    code = g_strdup (ephy_web_extension_get_resource_as_string (self, resource_path));
+  else if (jsc_value_is_string (file_value)) {
+    g_autofree char *resource_path = jsc_value_to_string (file_value);
+    code = ephy_web_extension_get_resource_as_string (self, resource_path[0] == '/' ? resource_path + 1 : resource_path);
+  } else {
+    g_warning ("tabs.executeScript called without usable code");
+    return NULL;
   }
 
   if (code) {
