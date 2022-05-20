@@ -184,12 +184,46 @@ tabs_handler_execute_script (EphyWebExtension *self,
   return NULL;
 }
 
+static char *
+tabs_handler_send_message (EphyWebExtension *self,
+                           char             *name,
+                           JSCValue         *args)
+{
+  g_autoptr (JSCValue) message_value = NULL;
+  g_autofree char *serialized_message = NULL;
+  g_autofree char *code = NULL;
+  EphyShell *shell = ephy_shell_get_default ();
+
+  if (!jsc_value_is_array (args))
+    return NULL;
+
+  message_value = jsc_value_object_get_property_at_index (args, 1);
+  if (!message_value)
+    return NULL;
+
+  serialized_message = jsc_value_to_json (message_value, 0);
+  code = g_strdup_printf ("runtimeSendMessage(JSON.parse('%s'));", serialized_message);
+
+  g_warning ("tabs.sendMessage doesn't currently support tabId and will run in the activeTab!");
+
+  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
+                                           code,
+                                           ephy_web_extension_get_guid (self),
+                                           NULL,
+                                           NULL,
+                                           NULL);
+
+  /* FIXME: Return message response. */
+  return NULL;
+}
+
 static EphyWebExtensionApiHandler tabs_handlers[] = {
   {"query", tabs_handler_query},
   {"insertCSS", tabs_handler_insert_css},
   {"removeCSS", tabs_handler_remove_css},
   {"get", tabs_handler_get},
   {"executeScript", tabs_handler_execute_script},
+  {"sendMessage", tabs_handler_send_message},
   {NULL, NULL},
 };
 

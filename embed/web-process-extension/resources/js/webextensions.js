@@ -45,7 +45,8 @@ window.browser.tabs = {
     removeCSS: function (args, cb) { return ephy_message ('tabs.removeCSS', args, cb); },
     onUpdated: {
       addListener: function (cb) { tabs_listeners.push({callback: cb}); }
-    }
+    },
+    sendMessage: function (...args) { return ephy_message ('tabs.sendMessage', args, null); },
 };
 
 window.browser.notifications = {
