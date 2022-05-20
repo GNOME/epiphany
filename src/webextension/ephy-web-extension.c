@@ -1129,7 +1129,11 @@ web_extension_custom_css_new (EphyWebExtension *self,
   WebExtensionCustomCSS *css = g_malloc0 (sizeof (WebExtensionCustomCSS));
 
   css->code = g_strdup (code);
-  css->style = webkit_user_style_sheet_new (css->code, WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES, WEBKIT_USER_STYLE_LEVEL_USER, NULL, NULL);
+  css->style = webkit_user_style_sheet_new_for_world (css->code,
+                                                      WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+                                                      WEBKIT_USER_STYLE_LEVEL_USER,
+                                                      ephy_web_extension_get_guid (self),
+                                                      NULL, NULL);
 
   self->custom_css = g_list_append (self->custom_css, css);
 
