@@ -150,6 +150,44 @@ ephy_web_extension_manager_scan_directory (EphyWebExtensionManager *self,
 }
 
 static void
+main_context_web_extension_scheme_cb (WebKitURISchemeRequest *request,
+                                      gpointer                user_data)
+{
+  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
+  EphyWebExtension *web_extension = NULL;
+  const char *path;
+  const unsigned char *data;
+  gsize length;
+  g_autoptr (GInputStream) stream = NULL;
+  g_auto (GStrv) split = NULL;
+
+  path = webkit_uri_scheme_request_get_uri (request) + strlen ("ephy-webextension://");
+
+  split = g_strsplit (path, "/", -1);
+  for (GList *list = self->web_extensions; list && list->data; list = list->next) {
+    EphyWebExtension *ext = EPHY_WEB_EXTENSION (list->data);
+
+    if (strcmp (ephy_web_extension_get_guid (ext), split[0]) == 0) {
+      web_extension = EPHY_WEB_EXTENSION (list->data);
+      break;
+    }
+  }
+
+  if (!web_extension)
+    return;
+
+  /* FIXME: This needs to be filtered by the extension manifest's "web_accessible_resources"
+   * property which involves some pattern matching. */
+
+  data = ephy_web_extension_get_resource (web_extension, path + strlen (split[0]) + 1, &length);
+  if (!data)
+    return;
+
+  stream = g_memory_input_stream_new_from_data (data, length, NULL);
+  webkit_uri_scheme_request_finish (request, stream, length, NULL);
+}
+
+static void
 ephy_web_extension_manager_constructed (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
@@ -192,6 +230,12 @@ ephy_web_extension_manager_class_init (EphyWebExtensionManagerClass *klass)
 static void
 ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 {
+  WebKitWebContext *web_context;
+
+  web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
+  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", main_context_web_extension_scheme_cb, self, NULL);
+  webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
+                                                         "ephy-webextension");
 }
 
 EphyWebExtensionManager *
@@ -595,6 +639,7 @@ web_extension_cb (WebKitURISchemeRequest *request,
   g_autoptr (GInputStream) stream = NULL;
   g_autoptr (GError) error = NULL;
 
+  /* FIXME: For paths on different hosts we should support web_accessible_resources. */
   path = webkit_uri_scheme_request_get_path (request);
 
   /* FIXME: This may be the place to handle predefined messages and localized CSS:
