@@ -159,7 +159,7 @@ tabs_handler_execute_script (EphyWebExtension *self,
   if (jsc_value_is_array (args)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
   } else {
-    obj = args;
+    obj = g_object_ref (args);
   }
 
   file_value = jsc_value_object_get_property (obj, "file");
