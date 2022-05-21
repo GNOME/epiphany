@@ -699,7 +699,7 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
 
   g_signal_connect_object (web_context, "initialize-web-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
 
-  web_view = g_object_new (EPHY_TYPE_WEB_VIEW,
+  web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                            "web-context", web_context,
                            "user-content-manager", ucm,
                            "settings", ephy_embed_prefs_get_settings (),
