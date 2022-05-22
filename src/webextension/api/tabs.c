@@ -28,6 +28,33 @@
 /* Matches Firefox. */
 static const int WINDOW_ID_CURRENT = -2;
 
+static WebKitWebView *
+get_web_view_for_tab_id (EphyShell *shell,
+                         gint32     tab_id)
+{
+  GList *windows;
+
+  if (tab_id < 0)
+    return NULL;
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+
+  for (GList *win_list = windows; win_list; win_list = g_list_next (win_list)) {
+    EphyWindow *window = EPHY_WINDOW (win_list->data);
+    EphyTabView *tab_view = ephy_window_get_tab_view (window);
+
+    for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+      EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i)));
+
+      if (ephy_web_view_get_uid (web_view) == (guint64)tab_id)
+        return WEBKIT_WEB_VIEW (web_view);
+    }
+  }
+
+  g_debug ("Failed to find tab with id %d", tab_id);
+  return NULL;
+}
+
 static void
 add_web_view_to_json (JsonBuilder *builder,
                       EphyWebView *web_view)
@@ -202,18 +229,20 @@ tabs_handler_execute_script (EphyWebExtension *self,
   g_autoptr (JSCValue) code_value = NULL;
   g_autoptr (JSCValue) file_value = NULL;
   g_autoptr (JSCValue) obj = NULL;
+  g_autoptr (JSCValue) tab_id_value = NULL;
   g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
+  WebKitWebView *target_web_view;
 
   /* This takes an optional first argument so it's either:
-   * [tabId:str, details:obj], or [details:obj] */
+   * [tabId:int, details:obj], or [details:obj] */
   if (!jsc_value_is_array (args))
     return NULL;
 
   obj = jsc_value_object_get_property_at_index (args, 0);
   if (!jsc_value_is_object (obj)) {
-    g_warning ("tabs.executeScript doesn't currently support tabId and will run in the activeTab!");
     g_object_unref (obj);
+    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
     obj = jsc_value_object_get_property_at_index (args, 1);
   }
 
@@ -230,8 +259,13 @@ tabs_handler_execute_script (EphyWebExtension *self,
     return NULL;
   }
 
-  if (code) {
-    webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
+  if (!tab_id_value)
+    target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  else
+    target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value));
+
+  if (code && target_web_view) {
+    webkit_web_view_run_javascript_in_world (target_web_view,
                                              code,
                                              ephy_web_extension_get_guid (self),
                                              NULL,
@@ -247,12 +281,18 @@ tabs_handler_send_message (EphyWebExtension *self,
                            char             *name,
                            JSCValue         *args)
 {
+  g_autoptr (JSCValue) tab_id_value = NULL;
   g_autoptr (JSCValue) message_value = NULL;
   g_autofree char *serialized_message = NULL;
   g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
+  WebKitWebView *target_web_view;
 
   if (!jsc_value_is_array (args))
+    return NULL;
+
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (!tab_id_value)
     return NULL;
 
   message_value = jsc_value_object_get_property_at_index (args, 1);
@@ -262,14 +302,16 @@ tabs_handler_send_message (EphyWebExtension *self,
   serialized_message = jsc_value_to_json (message_value, 0);
   code = g_strdup_printf ("runtimeSendMessage(JSON.parse('%s'));", serialized_message);
 
-  g_warning ("tabs.sendMessage doesn't currently support tabId and will run in the activeTab!");
+  target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value));
 
-  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)),
-                                           code,
-                                           ephy_web_extension_get_guid (self),
-                                           NULL,
-                                           NULL,
-                                           NULL);
+  if (target_web_view) {
+    webkit_web_view_run_javascript_in_world (target_web_view,
+                                             code,
+                                             ephy_web_extension_get_guid (self),
+                                             NULL,
+                                             NULL,
+                                             NULL);
+  }
 
   /* FIXME: Return message response. */
   return NULL;
