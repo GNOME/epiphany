@@ -185,11 +185,36 @@ tabs_handler_insert_css (EphyWebExtension *self,
                          JSCValue         *args)
 {
   EphyShell *shell = ephy_shell_get_default ();
-  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)));
+  WebKitUserContentManager *ucm;
   WebKitUserStyleSheet *css = NULL;
   g_autoptr (JSCValue) code = NULL;
+  g_autoptr (JSCValue) obj = NULL;
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  WebKitWebView *target_web_view;
 
-  code = jsc_value_object_get_property (args, "code");
+  /* This takes an optional first argument so it's either:
+   * [tabId:int, details:obj], or [details:obj] */
+  if (!jsc_value_is_array (args))
+    return NULL;
+
+  obj = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_object (obj)) {
+    g_object_unref (obj);
+    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+    obj = jsc_value_object_get_property_at_index (args, 1);
+  }
+
+  if (!tab_id_value)
+    target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  else
+    target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
+
+  if (!target_web_view)
+    return NULL;
+
+  ucm = webkit_web_view_get_user_content_manager (target_web_view);
+
+  code = jsc_value_object_get_property (obj, "code");
   css = ephy_web_extension_add_custom_css (self, jsc_value_to_string (code));
 
   if (css)
@@ -206,9 +231,34 @@ tabs_handler_remove_css (EphyWebExtension *self,
   EphyShell *shell = ephy_shell_get_default ();
   JSCValue *code;
   WebKitUserStyleSheet *css = NULL;
-  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell)));
+  WebKitUserContentManager *ucm;
+  g_autoptr (JSCValue) obj = NULL;
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  WebKitWebView *target_web_view;
 
-  code = jsc_value_object_get_property (args, "code");
+  /* This takes an optional first argument so it's either:
+   * [tabId:int, details:obj], or [details:obj] */
+  if (!jsc_value_is_array (args))
+    return NULL;
+
+  obj = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_object (obj)) {
+    g_object_unref (obj);
+    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+    obj = jsc_value_object_get_property_at_index (args, 1);
+  }
+
+  if (!tab_id_value)
+    target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  else
+    target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
+
+  if (!target_web_view)
+    return NULL;
+
+  ucm = webkit_web_view_get_user_content_manager (target_web_view);
+
+  code = jsc_value_object_get_property (obj, "code");
   css = ephy_web_extension_get_custom_css (self, jsc_value_to_string (code));
   if (css)
     webkit_user_content_manager_remove_style_sheet (ucm, css);

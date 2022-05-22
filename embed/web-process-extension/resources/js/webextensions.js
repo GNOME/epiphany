@@ -41,8 +41,8 @@ window.browser.tabs = {
     executeScript: function (...args) { return ephy_message ('tabs.executeScript', args, null); },
     query: function (args, cb) { return ephy_message ('tabs.query', args, cb); },
     get: function (args, cb) { return ephy_message ('tabs.get', args, cb); },
-    insertCSS: function (args, cb) { return ephy_message ('tabs.insertCSS', args, cb); },
-    removeCSS: function (args, cb) { return ephy_message ('tabs.removeCSS', args, cb); },
+    insertCSS: function (...args) { return ephy_message ('tabs.insertCSS', args, null); },
+    removeCSS: function (...args) { return ephy_message ('tabs.removeCSS', args, null); },
     onUpdated: {
       addListener: function (cb) { tabs_listeners.push({callback: cb}); }
     },
