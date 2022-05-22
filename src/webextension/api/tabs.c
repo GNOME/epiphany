@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
@@ -29,10 +30,14 @@
 static const int WINDOW_ID_CURRENT = -2;
 
 static WebKitWebView *
-get_web_view_for_tab_id (EphyShell *shell,
-                         gint32     tab_id)
+get_web_view_for_tab_id (EphyShell   *shell,
+                         gint32       tab_id,
+                         EphyWindow **window_out)
 {
   GList *windows;
+
+  if (window_out)
+    *window_out = NULL;
 
   if (tab_id < 0)
     return NULL;
@@ -46,8 +51,11 @@ get_web_view_for_tab_id (EphyShell *shell,
     for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
       EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i)));
 
-      if (ephy_web_view_get_uid (web_view) == (guint64)tab_id)
+      if (ephy_web_view_get_uid (web_view) == (guint64)tab_id) {
+        if (window_out)
+          *window_out = window;
         return WEBKIT_WEB_VIEW (web_view);
+      }
     }
   }
 
@@ -57,6 +65,7 @@ get_web_view_for_tab_id (EphyShell *shell,
 
 static void
 add_web_view_to_json (JsonBuilder *builder,
+                      EphyWindow  *window,
                       EphyWebView *web_view)
 {
   json_builder_begin_object (builder);
@@ -64,6 +73,8 @@ add_web_view_to_json (JsonBuilder *builder,
   json_builder_add_string_value (builder, ephy_web_view_get_address (web_view));
   json_builder_set_member_name (builder, "id");
   json_builder_add_int_value (builder, ephy_web_view_get_uid (web_view));
+  json_builder_set_member_name (builder, "windowId");
+  json_builder_add_int_value (builder, ephy_window_get_uid (window));
   json_builder_end_object (builder);
 }
 
@@ -158,7 +169,7 @@ tabs_handler_query (EphyWebExtension *self,
       else if (active == TAB_QUERY_DONT_MATCH && web_view == active_web_view)
         continue;
 
-      add_web_view_to_json (builder, web_view);
+      add_web_view_to_json (builder, window, web_view);
     }
   }
 
@@ -213,9 +224,19 @@ tabs_handler_get (EphyWebExtension *self,
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
-  EphyWebView *tmp_webview = ephy_shell_get_active_web_view (shell);
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  EphyWebView *target_web_view;
+  EphyWindow *parent_window;
 
-  add_web_view_to_json (builder, tmp_webview);
+  /* FIXME: These should raise error on failure. */
+  if (!jsc_value_is_number (args))
+    return NULL;
+
+  target_web_view = EPHY_WEB_VIEW (get_web_view_for_tab_id (shell, jsc_value_to_int32 (args), &parent_window));
+  if (!target_web_view)
+    return NULL;
+
+  add_web_view_to_json (builder, parent_window, target_web_view);
   root = json_builder_get_root (builder);
 
   return json_to_string (root, FALSE);
@@ -262,7 +283,7 @@ tabs_handler_execute_script (EphyWebExtension *self,
   if (!tab_id_value)
     target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
   else
-    target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value));
+    target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (code && target_web_view) {
     webkit_web_view_run_javascript_in_world (target_web_view,
@@ -302,7 +323,7 @@ tabs_handler_send_message (EphyWebExtension *self,
   serialized_message = jsc_value_to_json (message_value, 0);
   code = g_strdup_printf ("runtimeSendMessage(JSON.parse('%s'));", serialized_message);
 
-  target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value));
+  target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (target_web_view) {
     webkit_web_view_run_javascript_in_world (target_web_view,
