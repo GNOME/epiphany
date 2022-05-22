@@ -188,6 +188,12 @@ main_context_web_extension_scheme_cb (WebKitURISchemeRequest *request,
 }
 
 static void
+destroy_widget_list (GSList *widget_list)
+{
+  g_slist_free_full (widget_list, (GDestroyNotify)gtk_widget_destroy);
+}
+
+static void
 ephy_web_extension_manager_constructed (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
@@ -195,7 +201,7 @@ ephy_web_extension_manager_constructed (GObject *object)
 
   self->background_web_views = g_hash_table_new (NULL, NULL);
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
-  self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)gtk_widget_destroy);
+  self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
   self->web_extensions = NULL;
 
   ephy_web_extension_manager_scan_directory (self, dir);
@@ -864,8 +870,12 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
 
   if (ephy_web_extension_has_browser_action (web_extension)) {
     GtkWidget *browser_action_widget = create_browser_action (web_extension);
+    GSList *widget_list = g_hash_table_lookup (self->browser_action_map, web_extension);
+
     ephy_header_bar_add_browser_action (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)), browser_action_widget);
-    g_hash_table_insert (self->browser_action_map, web_extension, browser_action_widget);
+
+    g_hash_table_steal (self->browser_action_map, web_extension); /* Avoid freeing list. */
+    g_hash_table_insert (self->browser_action_map, web_extension, g_slist_append (widget_list, browser_action_widget));
   }
 
   ephy_web_extension_manager_update_location_entry (self, window);
@@ -917,7 +927,6 @@ ephy_web_extension_manager_remove_web_extension_from_window (EphyWebExtensionMan
 {
   EphyTabView *tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
   HdyTabView *view = ephy_tab_view_get_tab_view (tab_view);
-  GtkWidget *browser_action_widget;
 
   if (ephy_web_extension_manager_is_active (self, web_extension))
     return;
@@ -927,11 +936,6 @@ ephy_web_extension_manager_remove_web_extension_from_window (EphyWebExtensionMan
     EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
 
     ephy_web_extension_manager_remove_web_extension_from_webview (self, web_extension, window, web_view);
-  }
-
-  browser_action_widget = g_hash_table_lookup (self->browser_action_map, web_extension);
-  if (browser_action_widget) {
-    g_hash_table_remove (self->browser_action_map, web_extension);
   }
 
   ephy_web_extension_manager_update_location_entry (self, window);
@@ -1060,6 +1064,8 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
   if (active) {
     if (ephy_web_extension_has_background_web_view (web_extension))
       run_background_script (self, web_extension);
+  } else {
+    g_hash_table_remove (self->browser_action_map, web_extension);
   }
 }
 
