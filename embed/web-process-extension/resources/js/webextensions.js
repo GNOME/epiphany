@@ -47,6 +47,7 @@ window.browser.tabs = {
       addListener: function (cb) { tabs_listeners.push({callback: cb}); }
     },
     sendMessage: function (...args) { return ephy_message ('tabs.sendMessage', args, null); },
+    TAB_ID_NONE: -1,
 };
 
 window.browser.notifications = {
