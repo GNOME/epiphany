@@ -25,6 +25,9 @@
 
 #include "tabs.h"
 
+/* Matches Firefox. */
+static const int WINDOW_ID_CURRENT = -2;
+
 static void
 add_web_view_to_json (JsonBuilder *builder,
                       EphyWebView *web_view)
@@ -37,6 +40,36 @@ add_web_view_to_json (JsonBuilder *builder,
   json_builder_end_object (builder);
 }
 
+typedef enum {
+  TAB_QUERY_UNSET = -1,
+  TAB_QUERY_DONT_MATCH = 0,
+  TAB_QUERY_MATCH = 1,
+} TabQuery;
+
+static TabQuery
+get_tab_query_property (JSCValue   *args,
+                        const char *name)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property (args, name);
+
+  if (!value || jsc_value_is_undefined (value))
+    return TAB_QUERY_UNSET;
+
+  return jsc_value_to_boolean (value);
+}
+
+static gint32
+get_number_property (JSCValue   *args,
+                     const char *name)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property (args, name);
+
+  if (!value || jsc_value_is_undefined (value))
+    return -1;
+
+  return jsc_value_to_int32 (value);
+}
+
 static char *
 tabs_handler_query (EphyWebExtension *self,
                     char             *name,
@@ -45,48 +78,64 @@ tabs_handler_query (EphyWebExtension *self,
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   EphyShell *shell = ephy_shell_get_default ();
-  GtkWindow *window;
-  EphyTabView *tab_view;
-  gboolean current_window = TRUE;
-  gboolean active = TRUE;
+  GList *windows;
+  EphyWindow *active_window;
+  TabQuery current_window;
+  TabQuery active;
+  gint32 window_id;
+  gint32 tab_index;
 
-  if (jsc_value_object_has_property (args, "active")) {
-    g_autoptr (JSCValue) value = NULL;
+  active = get_tab_query_property (args, "active");
+  current_window = get_tab_query_property (args, "currentWindow");
+  window_id = get_number_property (args, "windowId");
+  tab_index = get_number_property (args, "index");
 
-    value = jsc_value_object_get_property (args, "active");
-    active = jsc_value_to_boolean (value);
+  if (window_id == WINDOW_ID_CURRENT) {
+    current_window = TRUE;
+    window_id = -1;
   }
 
-  if (jsc_value_object_has_property (args, "currentWindow")) {
-    g_autoptr (JSCValue) value = NULL;
+  active_window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
-    value = jsc_value_object_get_property (args, "currentWindow");
-    current_window = jsc_value_to_boolean (value);
-  }
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
 
-  if (current_window) {
-    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-    tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+  json_builder_begin_array (builder);
 
-    json_builder_begin_array (builder);
+  for (GList *win_list = windows; win_list; win_list = g_list_next (win_list)) {
+    EphyWindow *window;
+    EphyTabView *tab_view;
+    EphyWebView *active_web_view;
 
-    if (active) {
-      GtkWidget *page = ephy_tab_view_get_selected_page (tab_view);
-      EphyWebView *tmp_webview = ephy_embed_get_web_view (EPHY_EMBED (page));
+    g_assert (EPHY_IS_WINDOW (win_list->data));
 
-      add_web_view_to_json (builder, tmp_webview);
-    } else {
-      for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
-        GtkWidget *page = ephy_tab_view_get_nth_page (tab_view, i);
-        EphyWebView *tmp_webview = ephy_embed_get_web_view (EPHY_EMBED (page));
+    window = EPHY_WINDOW (win_list->data);
+    if (window_id != -1 && (guint64)window_id != ephy_window_get_uid (window))
+      continue;
 
-        add_web_view_to_json (builder, tmp_webview);
-      }
+    if (current_window == TAB_QUERY_MATCH && window != active_window)
+      continue;
+    else if (current_window == TAB_QUERY_DONT_MATCH && window == active_window)
+      continue;
+
+    tab_view = ephy_window_get_tab_view (window);
+    active_web_view = ephy_embed_get_web_view (EPHY_EMBED (ephy_tab_view_get_selected_page (tab_view)));
+    for (int i = 0; i < ephy_tab_view_get_n_pages (tab_view); i++) {
+      EphyWebView *web_view;
+
+      if (tab_index != -1 && tab_index != i)
+        continue;
+
+      web_view = ephy_embed_get_web_view (EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i)));
+      if (active == TAB_QUERY_MATCH && web_view != active_web_view)
+        continue;
+      else if (active == TAB_QUERY_DONT_MATCH && web_view == active_web_view)
+        continue;
+
+      add_web_view_to_json (builder, web_view);
     }
-
-    json_builder_end_array (builder);
   }
 
+  json_builder_end_array (builder);
   root = json_builder_get_root (builder);
 
   return json_to_string (root, FALSE);

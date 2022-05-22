@@ -81,3 +81,7 @@ window.browser.browserAction = {
       addListener: function (cb) { browser_listeners.push({callback: cb}); }
     }
 };
+
+window.browser.windows = {
+  WINDOW_ID_CURRENT: -2, /* Matches Firefox, used in tabs.c. */
+};

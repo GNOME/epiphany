@@ -145,6 +145,8 @@ const struct {
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
+static guint64 window_uid = 1;
+
 struct _EphyWindow {
   HdyApplicationWindow parent_instance;
 
@@ -174,6 +176,7 @@ struct _EphyWindow {
   EphyAdaptiveMode adaptive_mode;
   int last_opened_pos;
   gboolean show_fullscreen_header_bar;
+  guint64 uid;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -3845,6 +3848,8 @@ static void
 ephy_window_init (EphyWindow *window)
 {
   LOG ("EphyWindow initialising %p", window);
+
+  window->uid = window_uid++;
 }
 
 /**
@@ -4372,4 +4377,10 @@ ephy_window_get_geometry (EphyWindow   *window,
   rectangle->y = window->current_y;
   rectangle->width = window->current_width;
   rectangle->height = window->current_height;
+}
+
+guint64
+ephy_window_get_uid (EphyWindow *window)
+{
+  return window->uid;
 }

@@ -95,4 +95,6 @@ void              ephy_window_get_geometry               (EphyWindow   *window,
 void              ephy_window_sync_bookmark_state        (EphyWindow            *window,
                                                           EphyBookmarkIconState  state);
 
+guint64           ephy_window_get_uid                    (EphyWindow *window);
+
 G_END_DECLS
