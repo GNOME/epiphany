@@ -2704,7 +2704,7 @@ verify_storage_version_cb (SoupSession *session,
   goto out_no_error;
 
 out_error:
-  message = message ? message : _("Failed to verify storage version.");
+  message = message ? message : g_strdup (_("Failed to verify storage version."));
   ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
 out_no_error:
   if (parser)
