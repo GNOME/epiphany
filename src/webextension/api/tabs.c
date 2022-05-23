@@ -69,15 +69,50 @@ add_web_view_to_json (JsonBuilder *builder,
                       EphyWebView *web_view,
                       gboolean     has_tab_permission)
 {
+  EphyTabView *tab_view = ephy_window_get_tab_view (window);
+  GtkWidget *page = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (web_view)));
+  gboolean is_active = ephy_tab_view_get_current_page (tab_view) == page;
+  WebKitFaviconDatabase *favicon_db = webkit_web_context_get_favicon_database (webkit_web_view_get_context (WEBKIT_WEB_VIEW (web_view)));
+  const char *favicon_uri = webkit_favicon_database_get_favicon_uri (favicon_db, ephy_web_view_get_address (web_view));
+
   json_builder_begin_object (builder);
   if (has_tab_permission) {
     json_builder_set_member_name (builder, "url");
     json_builder_add_string_value (builder, ephy_web_view_get_address (web_view));
+    json_builder_set_member_name (builder, "title");
+    json_builder_add_string_value (builder, webkit_web_view_get_title (WEBKIT_WEB_VIEW (web_view)));
+    if (favicon_uri) {
+      json_builder_set_member_name (builder, "favIconUrl");
+      json_builder_add_string_value (builder, favicon_uri);
+    }
   }
   json_builder_set_member_name (builder, "id");
   json_builder_add_int_value (builder, ephy_web_view_get_uid (web_view));
   json_builder_set_member_name (builder, "windowId");
   json_builder_add_int_value (builder, ephy_window_get_uid (window));
+  json_builder_set_member_name (builder, "active");
+  json_builder_add_boolean_value (builder, is_active);
+  json_builder_set_member_name (builder, "highlighted");
+  json_builder_add_boolean_value (builder, is_active);
+  json_builder_set_member_name (builder, "hidden");
+  json_builder_add_boolean_value (builder, FALSE);
+  json_builder_set_member_name (builder, "incognito");
+  json_builder_add_boolean_value (builder, ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO);
+  json_builder_set_member_name (builder, "isInReaderMode");
+  json_builder_add_boolean_value (builder, ephy_web_view_get_reader_mode_state (web_view));
+  json_builder_set_member_name (builder, "isArticle");
+  json_builder_add_boolean_value (builder, ephy_web_view_is_reader_mode_available (web_view));
+  json_builder_set_member_name (builder, "pinned");
+  json_builder_add_boolean_value (builder, ephy_tab_view_get_is_pinned (tab_view, page));
+  json_builder_set_member_name (builder, "index");
+  json_builder_add_int_value (builder, ephy_tab_view_get_page_index (tab_view, page));
+  json_builder_set_member_name (builder, "status");
+  json_builder_add_string_value (builder, ephy_web_view_is_loading (web_view) ? "loading" : "complete");
+  json_builder_set_member_name (builder, "mutedInfo");
+  json_builder_begin_object (builder);
+  json_builder_set_member_name (builder, "muted");
+  json_builder_add_boolean_value (builder, webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (web_view)));
+  json_builder_end_object (builder);
   json_builder_end_object (builder);
 }
 
