@@ -760,6 +760,8 @@ ephy_web_extension_init (EphyWebExtension *self)
   self->permissions = g_ptr_array_new_full (1, g_free);
 
   self->guid = g_uuid_string_random ();
+
+  g_ptr_array_add (self->permissions, g_strdup_printf ("ephy-webextension://%s/*", self->guid));
 }
 
 static EphyWebExtension *
