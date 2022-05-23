@@ -86,3 +86,6 @@ window.browser.browserAction = {
 window.browser.windows = {
   WINDOW_ID_CURRENT: -2, /* Matches Firefox, used in tabs.c. */
 };
+
+/* Firefox returns null in private mode. So extensions sometimes handle this. */
+window.browser.extension.getBackgroundPage = function () { return null; };
