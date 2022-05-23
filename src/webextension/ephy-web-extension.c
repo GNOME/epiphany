@@ -970,8 +970,6 @@ ephy_web_extension_load (GFile *target)
 
     json_array_foreach_element (array, web_extension_add_permission, self);
   }
-  if (self->permissions)
-    g_ptr_array_add (self->permissions, NULL);
 
   return self;
 }
