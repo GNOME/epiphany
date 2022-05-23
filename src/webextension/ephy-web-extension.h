@@ -125,5 +125,13 @@ const char            *ephy_web_extension_get_guid                        (EphyW
 
 GPtrArray             *ephy_web_extension_get_permissions                 (EphyWebExtension *self);
 
+gboolean               ephy_web_extension_has_tab_or_host_permission      (EphyWebExtension *self,
+                                                                           EphyWebView      *web_view,
+                                                                           gboolean          is_user_interaction);
+
+gboolean               ephy_web_extension_has_host_permission             (EphyWebExtension *self,
+                                                                           EphyWebView      *web_view,
+                                                                           gboolean          is_user_interaction);
+
 G_END_DECLS
 

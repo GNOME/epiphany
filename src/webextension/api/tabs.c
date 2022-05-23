@@ -66,11 +66,14 @@ get_web_view_for_tab_id (EphyShell   *shell,
 static void
 add_web_view_to_json (JsonBuilder *builder,
                       EphyWindow  *window,
-                      EphyWebView *web_view)
+                      EphyWebView *web_view,
+                      gboolean     has_tab_permission)
 {
   json_builder_begin_object (builder);
-  json_builder_set_member_name (builder, "url");
-  json_builder_add_string_value (builder, ephy_web_view_get_address (web_view));
+  if (has_tab_permission) {
+    json_builder_set_member_name (builder, "url");
+    json_builder_add_string_value (builder, ephy_web_view_get_address (web_view));
+  }
   json_builder_set_member_name (builder, "id");
   json_builder_add_int_value (builder, ephy_web_view_get_uid (web_view));
   json_builder_set_member_name (builder, "windowId");
@@ -169,7 +172,8 @@ tabs_handler_query (EphyWebExtension *self,
       else if (active == TAB_QUERY_DONT_MATCH && web_view == active_web_view)
         continue;
 
-      add_web_view_to_json (builder, window, web_view);
+      add_web_view_to_json (builder, window, web_view,
+                            ephy_web_extension_has_tab_or_host_permission (self, web_view, TRUE));
     }
   }
 
@@ -210,6 +214,9 @@ tabs_handler_insert_css (EphyWebExtension *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (!target_web_view)
+    return NULL;
+
+  if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE))
     return NULL;
 
   ucm = webkit_web_view_get_user_content_manager (target_web_view);
@@ -256,6 +263,9 @@ tabs_handler_remove_css (EphyWebExtension *self,
   if (!target_web_view)
     return NULL;
 
+  if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE))
+    return NULL;
+
   ucm = webkit_web_view_get_user_content_manager (target_web_view);
 
   code = jsc_value_object_get_property (obj, "code");
@@ -286,7 +296,8 @@ tabs_handler_get (EphyWebExtension *self,
   if (!target_web_view)
     return NULL;
 
-  add_web_view_to_json (builder, parent_window, target_web_view);
+  add_web_view_to_json (builder, parent_window, target_web_view,
+                        ephy_web_extension_has_tab_or_host_permission (self, target_web_view, TRUE));
   root = json_builder_get_root (builder);
 
   return json_to_string (root, FALSE);
@@ -336,6 +347,9 @@ tabs_handler_execute_script (EphyWebExtension *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (code && target_web_view) {
+    if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE))
+      return NULL;
+
     webkit_web_view_run_javascript_in_world (target_web_view,
                                              code,
                                              ephy_web_extension_get_guid (self),
@@ -376,6 +390,9 @@ tabs_handler_send_message (EphyWebExtension *self,
   target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (target_web_view) {
+    if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE))
+      return NULL;
+
     webkit_web_view_run_javascript_in_world (target_web_view,
                                              code,
                                              ephy_web_extension_get_guid (self),

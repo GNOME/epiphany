@@ -1207,3 +1207,173 @@ ephy_web_extension_get_permissions (EphyWebExtension *self)
 {
   return self->permissions;
 }
+
+static gboolean
+is_supported_scheme (const char *scheme)
+{
+  static const char * const supported_schemes[] = {
+    "https", "http", "wss", "ws", "data", "file", "ephy-webextension"
+  };
+
+  for (guint i = 0; i < G_N_ELEMENTS (supported_schemes); i++) {
+    if (strcmp (supported_schemes[i], scheme) == 0)
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+static gboolean
+scheme_matches (const char *permission_scheme,
+                const char *uri_scheme)
+{
+  /* NOTE: Firefox matches "wss" and "ws" here, Safari and Chrome do not. */
+  static const char * const wildcard_allowed_schemes[] = {
+    "https", "http", "wss", "ws"
+  };
+
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#scheme */
+  if (strcmp (permission_scheme, "*") == 0) {
+    for (guint i = 0; i < G_N_ELEMENTS (wildcard_allowed_schemes); i++) {
+      if (strcmp (wildcard_allowed_schemes[i], uri_scheme) == 0)
+        return TRUE;
+    }
+
+    return FALSE;
+  }
+
+  return is_supported_scheme (permission_scheme) && strcmp (permission_scheme, uri_scheme) == 0;
+}
+
+static gboolean
+host_matches (const char *permission_host,
+              const char *uri_host)
+{
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#host */
+  if (strcmp (permission_host, "*") == 0)
+    return TRUE;
+
+  if (g_str_has_prefix (permission_host, "*."))
+    return g_str_has_suffix (uri_host, permission_host + 1); /* Skip '*' but NOT '.'. */
+
+  return strcmp (permission_host, uri_host) == 0;
+}
+
+static gboolean
+path_matches (const char *permission_path,
+              const char *uri_path)
+{
+  g_autofree char *permission_path_escaped = NULL;
+  g_autoptr (GString) permission_path_regex = NULL;
+
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#path */
+  if (strcmp (permission_path, "*") == 0)
+    return TRUE;
+
+  /* We need to do more complicated pattern matching so convert it to regex replacing '*' with '.*'
+   * and making sure to match the entire string. */
+  permission_path_escaped = g_regex_escape_string (permission_path, -1);
+  permission_path_regex = g_string_new (permission_path_escaped);
+  g_string_replace (permission_path_regex, "\\*", ".*", -1);
+
+  return g_regex_match_simple (permission_path_regex->str, uri_path, G_REGEX_ANCHORED, G_REGEX_MATCH_ANCHORED | G_REGEX_MATCH_NOTEMPTY);
+}
+
+static char *
+join_path_and_query (GUri *uri)
+{
+  const char *path = g_uri_get_path (uri);
+  const char *query = g_uri_get_query (uri);
+  if (!query)
+    return g_strdup (path);
+
+  return g_strjoin ("?", path, query, NULL);
+}
+
+static gboolean
+permission_matches_uri (const char *permission,
+                        GUri       *uri)
+{
+  g_autoptr (GUri) permission_uri = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autofree char *permission_path_and_query = NULL;
+  g_autofree char *uri_path_and_query = NULL;
+
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#all_urls */
+  if (strcmp (permission, "<all_urls>") == 0)
+    return is_supported_scheme (g_uri_get_scheme (uri));
+
+  permission_uri = g_uri_parse (permission, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, &error);
+  if (error) {
+    g_message ("Failed to parse permission '%s' as URI: %s", permission, error->message);
+    return FALSE;
+  }
+
+  /* Ports are forbidden. */
+  if (g_uri_get_port (permission_uri) != -1)
+    return FALSE;
+
+  /* Empty paths are forbidden. */
+  if (strcmp (g_uri_get_path (permission_uri), "") == 0)
+    return FALSE;
+
+  if (!scheme_matches (g_uri_get_scheme (permission_uri), g_uri_get_scheme (uri)))
+    return FALSE;
+
+  if (!host_matches (g_uri_get_host (permission_uri), g_uri_get_host (uri)))
+    return FALSE;
+
+  permission_path_and_query = join_path_and_query (permission_uri);
+  uri_path_and_query = join_path_and_query (uri);
+
+  if (!path_matches (permission_path_and_query, uri_path_and_query))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+ephy_web_extension_has_permission_internal (EphyWebExtension *self,
+                                            EphyWebView      *web_view,
+                                            gboolean          is_user_interaction,
+                                            gboolean          allow_tabs)
+{
+  EphyWebView *active_web_view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
+  gboolean is_active_tab = active_web_view == web_view;
+  GUri *host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+
+  g_assert (host);
+
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
+
+  for (uint i = 0; i < self->permissions->len; i++) {
+    const char *permission = g_ptr_array_index (self->permissions, i);
+
+    if (is_user_interaction && is_active_tab && strcmp (permission, "activeTab") == 0)
+      return TRUE;
+
+    if (allow_tabs && strcmp (permission, "tabs") == 0)
+      return TRUE;
+
+    if (permission_matches_uri (permission, host))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+gboolean
+ephy_web_extension_has_host_permission (EphyWebExtension *self,
+                                        EphyWebView      *web_view,
+                                        gboolean          is_user_interaction)
+{
+  return ephy_web_extension_has_permission_internal (self, web_view, is_user_interaction, FALSE);
+}
+
+gboolean
+ephy_web_extension_has_tab_or_host_permission (EphyWebExtension *self,
+                                               EphyWebView      *web_view,
+                                               gboolean          is_user_interaction)
+{
+  return ephy_web_extension_has_permission_internal (self, web_view, is_user_interaction, TRUE);
+}
