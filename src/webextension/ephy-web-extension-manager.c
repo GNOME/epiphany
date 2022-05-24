@@ -456,7 +456,6 @@ ephy_web_extension_handle_script_message (WebKitUserContentManager *ucm,
   g_autoptr (JSCValue) name = NULL;
   g_autoptr (JSCValue) promise = NULL;
   g_auto (GStrv) split = NULL;
-  GPtrArray *permissions = ephy_web_extension_get_permissions (web_extension);
   unsigned int idx;
 
   if (!jsc_value_is_object (value))
@@ -484,12 +483,6 @@ ephy_web_extension_handle_script_message (WebKitUserContentManager *ucm,
 
   for (idx = 0; idx < G_N_ELEMENTS (api_handlers); idx++) {
     EphyWebExtensionApiHandler handler = api_handlers[idx];
-
-    if (!g_ptr_array_find (permissions, split[0], NULL)) {
-      LOG ("%s(): Requested api is not part of the permissions, aborting\n", __FUNCTION__);
-      /* TODO: Permissions are not working yet */
-      /*return; */
-    }
 
     if (g_strcmp0 (handler.name, split[0]) == 0) {
       g_autofree char *ret = NULL;
