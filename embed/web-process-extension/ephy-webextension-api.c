@@ -136,6 +136,101 @@ ephy_web_extension_extension_get (void)
   return EPHY_WEB_EXTENSION_EXTENSION (g_once (&once_init, ephy_web_extension_extension_create_instance, NULL));
 }
 
+typedef struct {
+  JSCValue *resolve_callback;
+  JSCValue *reject_callback;
+} EphyMessageData;
+
+static void
+ephy_message_data_free (EphyMessageData *data)
+{
+  g_object_unref (data->reject_callback);
+  g_object_unref (data->resolve_callback);
+  g_free (data);
+}
+
+static EphyMessageData *
+ephy_message_data_new (JSCValue *resolve_callback,
+                       JSCValue *reject_callback)
+{
+  EphyMessageData *data = g_new (EphyMessageData, 1);
+  data->resolve_callback = g_object_ref (resolve_callback);
+  data->reject_callback = g_object_ref (reject_callback);
+  return data;
+}
+
+static void
+on_send_message_finish (WebKitWebExtension *extension,
+                        GAsyncResult       *result,
+                        gpointer            user_data)
+{
+  GTask *task = user_data;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (WebKitUserMessage) response = NULL;
+  GVariant *params;
+
+  response = webkit_web_extension_send_message_to_context_finish (extension, result, &error);
+
+  if (error) {
+    g_task_return_error (task, g_steal_pointer (&error));
+  } else if (strcmp (webkit_user_message_get_name (response), "error") == 0) {
+    params = webkit_user_message_get_parameters (response);
+    g_assert (params);
+    error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "%s", g_variant_get_string (params, NULL));
+    g_task_return_error (task, g_steal_pointer (&error));
+  } else {
+    params = webkit_user_message_get_parameters (response);
+    g_assert (params);
+    g_task_return_pointer (task, g_variant_dup_string (params, NULL), g_free);
+  }
+
+  g_object_unref (task);
+}
+
+static void
+on_ephy_message_finish (EphyWebExtensionExtension *extension,
+                        GAsyncResult              *result,
+                        gpointer                   user_data)
+{
+  g_autoptr (GError) error = NULL;
+  EphyMessageData *message_data = g_task_get_task_data (G_TASK (result));
+  g_autofree char *json = g_task_propagate_pointer (G_TASK (result), &error);
+  g_autoptr (JSCValue) value = jsc_value_new_from_json (jsc_value_get_context (message_data->resolve_callback), json);
+  g_autoptr (JSCValue) ret = NULL;
+
+  if (error) {
+    ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, error->message, G_TYPE_NONE);
+  } else {
+    ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
+  }
+}
+
+static void
+ephy_send_message (const char *function_name,
+                   JSCValue   *function_args,
+                   JSCValue   *resolve_callback,
+                   JSCValue   *reject_callback,
+                   gpointer    user_data)
+{
+  EphyWebExtensionExtension *extension = user_data;
+  WebKitUserMessage *message;
+  EphyMessageData *data;
+  GTask *task;
+  char *args_json;
+
+  /* TODO: If function_args is list and last arg is callable, treat it as `chrome` API. */
+  /* TODO: Check for valid types for args, resolve, reject. */
+
+  task = g_task_new (extension, NULL, (GAsyncReadyCallback)on_ephy_message_finish, NULL);
+  data = ephy_message_data_new (resolve_callback, reject_callback);
+  g_task_set_task_data (task, g_steal_pointer (&data), (GDestroyNotify)ephy_message_data_free);
+
+  args_json = jsc_value_to_json (function_args, 0);
+  message = webkit_user_message_new (function_name, g_variant_new_take_string (args_json));
+
+  webkit_web_extension_send_message_to_context (extension->extension, message, NULL, (GAsyncReadyCallback)on_send_message_finish, task);
+}
+
 static void
 window_object_cleared_cb (WebKitScriptWorld         *world,
                           WebKitWebPage             *page,
@@ -156,6 +251,19 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
 
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (!jsc_value_is_object (js_browser));
+
+  js_function = jsc_value_new_function (js_context,
+                                        "ephy_send_message",
+                                        G_CALLBACK (ephy_send_message),
+                                        extension, NULL,
+                                        G_TYPE_NONE,
+                                        4,
+                                        G_TYPE_STRING,
+                                        JSC_TYPE_VALUE,
+                                        JSC_TYPE_VALUE,
+                                        JSC_TYPE_VALUE);
+  jsc_context_set_value (js_context, "ephy_send_message", js_function);
+  g_clear_object (&js_function);
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
@@ -213,13 +321,12 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
 
   extension->initialized = TRUE;
   extension->guid = g_strdup (guid);
+  extension->extension = g_object_ref (wk_extension);
 
   g_signal_connect (webkit_script_world_get_default (),
                     "window-object-cleared",
                     G_CALLBACK (window_object_cleared_cb),
                     extension);
-
-  extension->extension = g_object_ref (wk_extension);
 
   ephy_web_extension_extension_update_translations (extension, translations);
 

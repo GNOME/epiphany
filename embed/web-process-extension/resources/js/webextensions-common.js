@@ -1,11 +1,9 @@
 'use strict';
 
-/* exported runtimeSendMessage, runtimeOnConnect, ephy_message */
+/* exported ephy_message */
+/* global ephy_send_message */
 
 window.browser = {};
-
-const promises = [];
-let last_promise = 0;
 
 class EphyEventListener {
     constructor () {
@@ -30,12 +28,10 @@ class EphyEventListener {
     }
 }
 
-const ephy_message = function (fn, args, cb) {
-    const promise = new Promise (function (resolve, reject) {
-        window.webkit.messageHandlers.epiphany.postMessage ({fn: fn, args: args, promise: last_promise});
-        last_promise = promises.push({resolve: resolve, reject: reject});
+const ephy_message = function (fn, ...args) {
+    return new Promise (function (resolve, reject) {
+        ephy_send_message (fn, args, resolve, reject);
     });
-    return promise;
 };
 
 window.browser.runtime = {

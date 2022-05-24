@@ -438,66 +438,61 @@ create_page_action_widget (EphyWebExtensionManager *self,
   return g_object_ref (event_box);
 }
 
-typedef struct {
-  EphyWebExtension *web_extension;
-  WebKitWebView *web_view;
-} ScriptMessageData;
-
 static void
-ephy_web_extension_handle_script_message (WebKitUserContentManager *ucm,
-                                          WebKitJavascriptResult   *js_result,
-                                          gpointer                  user_data)
+respond_with_error (WebKitUserMessage *message,
+                    const char        *error)
 {
-  ScriptMessageData *data = user_data;
-  EphyWebExtension *web_extension = data->web_extension;
-  WebKitWebView *web_view = data->web_view;
-  JSCValue *value = webkit_javascript_result_get_js_value (js_result);
-  g_autofree char *name_str = NULL;
-  g_autoptr (JSCValue) name = NULL;
-  g_autoptr (JSCValue) promise = NULL;
+  WebKitUserMessage *reply = webkit_user_message_new ("error", g_variant_new_string (error));
+  webkit_user_message_send_reply (message, reply);
+}
+
+static gboolean
+ephy_web_extension_handle_user_message (WebKitWebContext  *context,
+                                        WebKitUserMessage *message,
+                                        gpointer           user_data)
+{
+  EphyWebExtension *web_extension = user_data;
+  g_autoptr (JSCContext) js_context = NULL;
+  g_autoptr (JSCValue) args = NULL;
+  const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
-  unsigned int idx;
 
-  if (!jsc_value_is_object (value))
-    return;
 
-  if (!jsc_value_object_has_property (value, "promise"))
-    return;
 
-  promise = jsc_value_object_get_property (value, "promise");
-  if (!jsc_value_is_number (promise))
-    return;
+  js_context = jsc_context_new ();
+  args = jsc_value_new_from_json (js_context, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
 
-  name = jsc_value_object_get_property (value, "fn");
-  if (!name)
-    return;
+  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
 
-  name_str = jsc_value_to_string (name);
-  LOG ("%s(): Called for %s, function %s\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name_str);
-
-  split = g_strsplit (name_str, ".", 2);
+  split = g_strsplit (name, ".", 2);
   if (g_strv_length (split) != 2) {
-    g_warning ("Invalid function call, aborting: %s", name_str);
-    return;
+    respond_with_error (message, "Invalid function name");
+    return TRUE;
   }
 
-  for (idx = 0; idx < G_N_ELEMENTS (api_handlers); idx++) {
+  for (guint idx = 0; idx < G_N_ELEMENTS (api_handlers); idx++) {
     EphyWebExtensionApiHandler handler = api_handlers[idx];
 
     if (g_strcmp0 (handler.name, split[0]) == 0) {
       g_autofree char *ret = NULL;
       g_autofree char *script = NULL;
-      g_autoptr (JSCValue) args = jsc_value_object_get_property (value, "args");
+      WebKitUserMessage *reply;
 
       ret = handler.execute (web_extension, split[1], args);
-      script = g_strdup_printf ("promises[%.f].resolve(%s);", jsc_value_to_double (promise), ret ? ret : "");
-      webkit_web_view_run_javascript (web_view, script, NULL, NULL, NULL);
+      if (ret) {
+        reply = webkit_user_message_new ("", g_variant_new_take_string (g_steal_pointer (&ret)));
+      } else {
+        reply = webkit_user_message_new ("", g_variant_new_string ("{}"));
+      }
 
-      return;
+      webkit_user_message_send_reply (message, reply);
+      return TRUE;
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name_str);
+  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
+  respond_with_error (message, "Not implemented");
+  return TRUE;
 }
 
 static void
@@ -688,7 +683,6 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
   WebKitSettings *settings;
   WebKitWebContext *web_context;
   GtkWidget *web_view;
-  ScriptMessageData *data;
 
   /* Create an own ucm so new scripts/css are only applied to this web_view */
   ucm = webkit_user_content_manager_new ();
@@ -699,6 +693,7 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
                                                          "ephy-webextension");
 
   g_signal_connect_object (web_context, "initialize-web-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+  g_signal_connect (web_context, "user-message-received", G_CALLBACK (ephy_web_extension_handle_user_message), web_extension);
 
   web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                            "web-context", web_context,
@@ -709,13 +704,6 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
-
-  data = g_new0 (ScriptMessageData, 1);
-  data->web_extension = web_extension;
-  data->web_view = WEBKIT_WEB_VIEW (web_view);
-
-  g_signal_connect_data (ucm, "script-message-received::epiphany", G_CALLBACK (ephy_web_extension_handle_script_message), data, (GClosureNotify)g_free, 0);
-  webkit_user_content_manager_register_script_message_handler (ucm, "epiphany");
 
   return web_view;
 }
