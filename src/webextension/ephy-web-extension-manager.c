@@ -405,7 +405,7 @@ page_action_clicked (GtkWidget      *event_box,
 
   json = json_to_string (root, FALSE);
 
-  script = g_strdup_printf ("pageActionOnClicked(%s);", json);
+  script = g_strdup_printf ("window.browser.pageAction.onClicked._emit(%s);", json);
   webkit_web_view_run_javascript (web_view,
                                   script,
                                   NULL,
@@ -787,7 +787,7 @@ on_browser_action_clicked (GtkWidget *event_box,
   g_autofree char *script = NULL;
   WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
 
-  script = g_strdup_printf ("browserActionClicked();");
+  script = g_strdup_printf ("window.browser.browserAction.onClicked._emit();");
 
   webkit_web_view_run_javascript (web_view,
                                   script,

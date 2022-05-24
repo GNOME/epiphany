@@ -420,7 +420,7 @@ tabs_handler_send_message (EphyWebExtension *self,
     return NULL;
 
   serialized_message = jsc_value_to_json (message_value, 0);
-  code = g_strdup_printf ("runtimeSendMessage(JSON.parse('%s'));", serialized_message);
+  code = g_strdup_printf ("window.browser.runtime.onMessage._emit(JSON.parse('%s'));", serialized_message);
 
   target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 

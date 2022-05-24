@@ -7,8 +7,28 @@ window.browser = {};
 const promises = [];
 let last_promise = 0;
 
-let runtime_onmessage_listeners = [];
-let runtime_onconnect_listeners = [];
+class EphyEventListener {
+    constructor () {
+        this._listeners = [];
+    }
+
+    addListener (cb) {
+        this._listeners.push({callback: cb});
+    }
+
+    removeListener (cb) {
+        this._listeners = this._listeners.filter(l => l.callback !== cb);
+    }
+
+    hasListener (cb) {
+        return !!this._listeners.find(l => l.callback === cb);
+    }
+
+    _emit (data) {
+        for (const listener of this._listeners)
+            listener.callback (data);
+    }
+}
 
 const ephy_message = function (fn, args, cb) {
     const promise = new Promise (function (resolve, reject) {
@@ -18,25 +38,16 @@ const ephy_message = function (fn, args, cb) {
     return promise;
 };
 
-const runtimeSendMessage = function(x) {
-  for (const listener of runtime_onmessage_listeners)
-    listener.callback(x);
-};
-
-const runtimeOnConnect = function(x) {
-  for (const listener of runtime_onconnect_listeners)
-    listener.callback(x);
-};
-
 window.browser.runtime = {
     getURL: function (args, cb) { return window.browser.extension.getURL(args, cb); },
     getManifest: function (args, cb) { return '[]'; },
-    onMessage: {
-        addListener: function (cb) {
-            runtime_onmessage_listeners.push({callback: cb});
-        },
-        removeListener: function (cb) {
-            runtime_onmessage_listeners = runtime_onmessage_listeners.filter(l => l.callback !== cb);
+    onMessage: new EphyEventListener (),
+    onConnect: new EphyEventListener (),
+    sendMessage: function (args, cb) {
+        return ephy_message ('runtime.sendMessage', args, cb);
+    },
+};
+
         },
         hasListener: function (cb) {
             return !!runtime_onmessage_listeners.find(l => l.callback === cb);
