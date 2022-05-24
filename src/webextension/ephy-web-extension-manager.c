@@ -376,7 +376,7 @@ ephy_web_extension_manager_get_background_web_view (EphyWebExtensionManager *sel
 static void
 ephy_web_extension_manager_set_background_web_view (EphyWebExtensionManager *self,
                                                     EphyWebExtension        *web_extension,
-                                                    EphyWebView             *web_view)
+                                                    WebKitWebView           *web_view)
 {
   g_hash_table_insert (self->background_web_views, web_extension, web_view);
 }
@@ -970,7 +970,7 @@ run_background_script (EphyWebExtensionManager *self,
 
   /* Create new background web_view */
   background = create_web_extensions_webview (web_extension);
-  ephy_web_extension_manager_set_background_web_view (self, web_extension, EPHY_WEB_VIEW (background));
+  ephy_web_extension_manager_set_background_web_view (self, web_extension, WEBKIT_WEB_VIEW (background));
 
   base_uri = create_base_uri_for_resource_path (web_extension, page);
 
