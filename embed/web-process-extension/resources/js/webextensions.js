@@ -28,6 +28,9 @@ window.browser.notifications = {
     create: function (args, cb) { return ephy_message ('notifications.create', args, cb); },
 };
 
+// browser.extension is defined in ephy-webextension-common.c
+window.browser.extension.getViews = function (...args) { return []; };
+
 // browser.runtime is defined in webextensions-common.js
 window.browser.runtime.getBrowserInfo = function (args, cb) { return ephy_message ('runtime.getBrowserInfo', args, cb); };
 window.browser.runtime.connectNative = function (args, cb) { return ephy_message ('runtime.connectNative', args, cb); };
@@ -35,6 +38,9 @@ window.browser.runtime.openOptionsPage = function (args, cb) { return ephy_messa
 window.browser.runtime.setUninstallURL = function (args, cb) { return ephy_message ('runtime.setUninstallURL', args, cb); };
 window.browser.runtime.onInstalled = new EphyEventListener ();
 window.browser.runtime.onMessageExternal = new EphyEventListener ();
+window.browser.runtime.sendNativeMessage = function (args) {
+  return new Promise ((resolve, reject) => { reject ('Unsupported API'); });
+};
 
 window.browser.pageAction = {
     setIcon: function (args, cb) { return ephy_message ('pageAction.setIcon', args, cb); },
