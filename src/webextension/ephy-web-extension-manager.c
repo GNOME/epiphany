@@ -201,7 +201,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
   g_autofree char *dir = g_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
 
-  self->background_web_views = g_hash_table_new (NULL, NULL);
+  self->background_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)gtk_widget_destroy);
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
   self->web_extensions = NULL;
@@ -1068,6 +1068,7 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
       run_background_script (self, web_extension);
   } else {
     g_hash_table_remove (self->browser_action_map, web_extension);
+    g_hash_table_remove (self->background_web_views, web_extension);
   }
 }
 
