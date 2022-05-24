@@ -823,30 +823,27 @@ create_browser_action (EphyWebExtension *web_extension)
   GtkWidget *button;
   GtkWidget *image;
   GtkWidget *popover;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = ephy_web_extension_browser_action_get_icon (web_extension, 16);
+  if (pixbuf)
+    image = gtk_image_new_from_pixbuf (pixbuf);
+  else
+    image = gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_BUTTON);
 
   if (ephy_web_extension_get_browser_popup (web_extension)) {
     button = gtk_menu_button_new ();
-    image = gtk_image_new_from_pixbuf (ephy_web_extension_browser_action_get_icon (web_extension, 16));
     popover = gtk_popover_new (NULL);
     g_signal_connect (popover, "notify::visible", G_CALLBACK (on_browser_action_visible_changed), web_extension);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
-
     gtk_button_set_image (GTK_BUTTON (button), image);
-    gtk_widget_set_visible (button, TRUE);
   } else {
-    GdkPixbuf *pixbuf = ephy_web_extension_browser_action_get_icon (web_extension, 16);
-
     button = gtk_button_new ();
-
-    if (pixbuf)
-      image = gtk_image_new_from_pixbuf (pixbuf);
-    else
-      image = gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_BUTTON);
-
     g_signal_connect_object (button, "clicked", G_CALLBACK (on_browser_action_clicked), web_extension, 0);
     gtk_button_set_image (GTK_BUTTON (button), image);
-    gtk_widget_set_visible (button, TRUE);
   }
+
+  gtk_widget_set_visible (button, TRUE);
 
   return button;
 }
