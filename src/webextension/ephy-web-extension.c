@@ -108,6 +108,8 @@ struct _EphyWebExtension {
   GList *custom_css;
   GPtrArray *permissions;
   GCancellable *cancellable;
+  char *local_storage_path;
+  JsonNode *local_storage;
 };
 
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
@@ -728,6 +730,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->version, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
+  g_clear_pointer (&self->local_storage_path, g_free);
 
   g_clear_list (&self->icons, (GDestroyNotify)web_extension_icon_free);
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
@@ -735,6 +738,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->background, web_extension_background_free);
   g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
   g_clear_pointer (&self->permissions, g_ptr_array_unref);
+  g_clear_pointer (&self->local_storage, json_node_unref);
 
   g_clear_pointer (&self->page_action, web_extension_page_action_free);
   g_clear_pointer (&self->browser_action, web_extension_browser_action_free);
@@ -884,6 +888,7 @@ ephy_web_extension_load (GFile *target)
   GFileType type;
   gsize length = 0;
   const unsigned char *manifest;
+  g_autofree char *local_storage_contents = NULL;
 
   type = g_file_query_file_type (source, G_FILE_QUERY_INFO_NONE, NULL);
   if (type == G_FILE_TYPE_DIRECTORY) {
@@ -926,6 +931,20 @@ ephy_web_extension_load (GFile *target)
   self->version = ephy_web_extension_manifest_get_key (self, root_object, "version");
   self->homepage_url = ephy_web_extension_manifest_get_key (self, root_object, "homepage_url");
   self->author = ephy_web_extension_manifest_get_key (self, root_object, "author");
+
+  self->local_storage_path = g_build_filename (ephy_config_dir (), "web_extensions",
+                                               g_path_get_basename (self->base_location), "local-storage.json", NULL);
+
+  if (g_file_get_contents (self->local_storage_path, &local_storage_contents, NULL, NULL)) {
+    self->local_storage = json_from_string (local_storage_contents, &error);
+    if (error) {
+      g_warning ("Failed to load extension's local storage JSON: %s", error->message);
+      g_clear_error (&error);
+    }
+  }
+
+  if (!self->local_storage)
+    self->local_storage = json_node_init_object (json_node_alloc (), json_object_new ());
 
   if (json_object_has_member (root_object, "icons")) {
     icons_object = json_object_get_object_member (root_object, "icons");
@@ -1346,7 +1365,7 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
 
-  for (uint i = 0; i < self->permissions->len; i++) {
+  for (guint i = 0; i < self->permissions->len; i++) {
     const char *permission = g_ptr_array_index (self->permissions, i);
 
     if (is_user_interaction && is_active_tab && strcmp (permission, "activeTab") == 0)
@@ -1376,4 +1395,43 @@ ephy_web_extension_has_tab_or_host_permission (EphyWebExtension *self,
                                                gboolean          is_user_interaction)
 {
   return ephy_web_extension_has_permission_internal (self, web_view, is_user_interaction, TRUE);
+}
+
+gboolean
+ephy_web_extension_has_permission (EphyWebExtension *self,
+                                   const char       *permission)
+{
+  for (guint i = 0; i < self->permissions->len; i++) {
+    if (strcmp (g_ptr_array_index (self->permissions, i), permission) == 0)
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+JsonNode *
+ephy_web_extension_get_local_storage (EphyWebExtension *self)
+{
+  return self->local_storage;
+}
+
+void
+ephy_web_extension_save_local_storage (EphyWebExtension *self)
+{
+  g_autoptr (GError) error = NULL;
+  g_autofree char *json = NULL;
+  g_autofree char *parent_dir = NULL;
+
+  parent_dir = g_path_get_dirname (self->local_storage_path);
+  g_mkdir_with_parents (parent_dir, 0755);
+
+  json = json_to_string (self->local_storage, TRUE);
+  if (!g_file_set_contents (self->local_storage_path, json, -1, &error))
+    g_warning ("Failed to write %s: %s", self->local_storage_path, error->message);
+}
+
+void
+ephy_web_extension_clear_local_storage (EphyWebExtension *self)
+{
+  self->local_storage = json_node_init_object (self->local_storage, json_object_new ());
 }

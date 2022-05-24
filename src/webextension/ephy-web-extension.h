@@ -133,5 +133,14 @@ gboolean               ephy_web_extension_has_host_permission             (EphyW
                                                                            EphyWebView      *web_view,
                                                                            gboolean          is_user_interaction);
 
+gboolean               ephy_web_extension_has_permission                  (EphyWebExtension *self,
+                                                                           const char       *permission);
+
+JsonNode              *ephy_web_extension_get_local_storage               (EphyWebExtension *self);
+
+void                   ephy_web_extension_save_local_storage              (EphyWebExtension *self);
+
+void                   ephy_web_extension_clear_local_storage             (EphyWebExtension *self);
+
 G_END_DECLS
 

@@ -48,25 +48,22 @@ window.browser.runtime = {
     },
 };
 
+
+window.browser.storage = {
+    local: {
+        get: function (keys) {
+            return ephy_message ('storage.local.get', keys);
         },
-        hasListener: function (cb) {
-            return !!runtime_onmessage_listeners.find(l => l.callback === cb);
+        set: function (keys) {
+            return ephy_message ('storage.local.set', keys);
+        },
+        remove: function (keys) {
+            return ephy_message ('storage.local.remove', keys);
+        },
+        clear: function () {
+            return ephy_message ('storage.local.clear');
         }
-    },
-    onConnect: {
-        addListener: function (cb) {
-            runtime_onconnect_listeners.push({callback: cb});
-        },
-        removeListener: function (cb) {
-            runtime_onconnect_listeners = runtime_onconnect_listeners.filter(l => l.callback !== cb);
-        },
-        hasListener: function (cb) {
-            return !!runtime_onconnect_listeners.find(l => l.callback === cb);
-        }
-    },
-    sendMessage: function (args, cb) {
-        return ephy_message ('runtime.sendMessage', args, cb);
-    },
+    }
 };
 
 // Compatibility with Chrome

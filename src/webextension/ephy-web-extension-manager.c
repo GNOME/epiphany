@@ -38,6 +38,7 @@
 #include "api/notifications.h"
 #include "api/pageaction.h"
 #include "api/runtime.h"
+#include "api/storage.h"
 #include "api/tabs.h"
 
 #include <json-glib/json-glib.h>
@@ -58,6 +59,7 @@ EphyWebExtensionApiHandler api_handlers[] = {
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},
+  {"storage", ephy_web_extension_api_storage_handler},
   {"tabs", ephy_web_extension_api_tabs_handler},
   {NULL, NULL},
 };
