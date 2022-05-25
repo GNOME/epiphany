@@ -53,9 +53,10 @@ runtime_handler_send_message (EphyWebExtension *self,
   EphyShell *shell = ephy_shell_get_default ();
   EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (shell);
   WebKitWebView *view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (manager, self));
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *script = NULL;
 
-  script = g_strdup_printf ("window.browser.runtime.onMessage._emit(%s);", jsc_value_to_json (args, 2));
+  script = g_strdup_printf ("window.browser.runtime.onMessage._emit(%s);", jsc_value_to_json (value, 0));
   webkit_web_view_run_javascript (view, script, NULL, NULL, NULL);
 
   return NULL;

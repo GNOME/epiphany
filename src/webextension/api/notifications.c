@@ -30,16 +30,20 @@ notifications_handler_create (EphyWebExtension *self,
                               char             *name,
                               JSCValue         *args)
 {
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *title_str = NULL;
   g_autofree char *message_str = NULL;
   g_autoptr (JSCValue) title = NULL;
   g_autoptr (JSCValue) message = NULL;
   EphyNotification *notify;
 
-  title = jsc_value_object_get_property (args, "title");
+  if (!jsc_value_is_object (value))
+    return NULL;
+
+  title = jsc_value_object_get_property (value, "title");
   title_str = jsc_value_to_string (title);
 
-  message = jsc_value_object_get_property (args, "message");
+  message = jsc_value_object_get_property (value, "message");
   message_str = jsc_value_to_string (message);
 
   notify = ephy_notification_new (g_strdup (title_str), g_strdup (message_str));

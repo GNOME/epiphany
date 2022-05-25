@@ -28,7 +28,7 @@
 
 static GtkWidget *
 pageaction_get_action (EphyWebExtension *self,
-                       JSCValue         *args)
+                       JSCValue         *value)
 {
   EphyWebView *web_view = NULL;
   EphyShell *shell = ephy_shell_get_default ();
@@ -36,14 +36,18 @@ pageaction_get_action (EphyWebExtension *self,
   g_autoptr (JSCValue) tab_id = NULL;
   gint32 nr;
 
-  if (jsc_value_object_has_property (args, "tabId")) {
-    tab_id = jsc_value_object_get_property (args, "tabId");
-    nr = jsc_value_to_int32 (tab_id);
-    web_view = ephy_shell_get_web_view (shell, nr);
-    if (!web_view) {
-      LOG ("%s(): Invalid tabId '%d', abort\n", __FUNCTION__, nr);
-      return NULL;
-    }
+  if (!jsc_value_is_object (value))
+    return NULL;
+
+  tab_id = jsc_value_object_get_property (value, "tabId");
+  if (!jsc_value_is_number (tab_id))
+    return NULL;
+
+  nr = jsc_value_to_int32 (tab_id);
+  web_view = ephy_shell_get_web_view (shell, nr);
+  if (!web_view) {
+    LOG ("%s(): Invalid tabId '%d', abort\n", __FUNCTION__, nr);
+    return NULL;
   }
 
   return ephy_web_extension_manager_get_page_action (manager, self, web_view);
@@ -57,12 +61,13 @@ pageaction_handler_seticon (EphyWebExtension *self,
   GtkWidget *action;
   g_autoptr (JSCValue) path = NULL;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (self, args);
+  action = pageaction_get_action (self, value);
   if (!action)
     return NULL;
 
-  path = jsc_value_object_get_property (args, "path");
+  path = jsc_value_object_get_property (value, "path");
   pixbuf = ephy_web_extension_load_pixbuf (self, jsc_value_to_string (path));
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_bin_get_child (GTK_BIN (action))), pixbuf);
@@ -77,12 +82,13 @@ pageaction_handler_settitle (EphyWebExtension *self,
 {
   GtkWidget *action;
   g_autoptr (JSCValue) title = NULL;
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (self, args);
+  action = pageaction_get_action (self, value);
   if (!action)
     return NULL;
 
-  title = jsc_value_object_get_property (args, "title");
+  title = jsc_value_object_get_property (value, "title");
   gtk_widget_set_tooltip_text (action, jsc_value_to_string (title));
 
   return NULL;
@@ -93,10 +99,11 @@ pageaction_handler_gettitle (EphyWebExtension *self,
                              char             *name,
                              JSCValue         *args)
 {
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
   g_autofree char *title = NULL;
 
-  action = pageaction_get_action (self, args);
+  action = pageaction_get_action (self, value);
   if (!action)
     return NULL;
 
@@ -110,9 +117,10 @@ pageaction_handler_show (EphyWebExtension *self,
                          char             *name,
                          JSCValue         *args)
 {
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (self, args);
+  action = pageaction_get_action (self, value);
   if (!action)
     return NULL;
 
@@ -126,9 +134,10 @@ pageaction_handler_hide (EphyWebExtension *self,
                          char             *name,
                          JSCValue         *args)
 {
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (self, args);
+  action = pageaction_get_action (self, value);
   if (!action)
     return NULL;
 

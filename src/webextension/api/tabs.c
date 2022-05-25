@@ -154,6 +154,7 @@ tabs_handler_query (EphyWebExtension *self,
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GList *windows;
   EphyWindow *active_window;
   TabQuery current_window;
@@ -161,10 +162,13 @@ tabs_handler_query (EphyWebExtension *self,
   gint32 window_id;
   gint32 tab_index;
 
-  active = get_tab_query_property (args, "active");
-  current_window = get_tab_query_property (args, "currentWindow");
-  window_id = get_number_property (args, "windowId");
-  tab_index = get_number_property (args, "index");
+  if (!jsc_value_is_object (value))
+    return NULL;
+
+  active = get_tab_query_property (value, "active");
+  current_window = get_tab_query_property (value, "currentWindow");
+  window_id = get_number_property (value, "windowId");
+  tab_index = get_number_property (value, "index");
 
   if (window_id == WINDOW_ID_CURRENT) {
     current_window = TRUE;
@@ -233,15 +237,15 @@ tabs_handler_insert_css (EphyWebExtension *self,
 
   /* This takes an optional first argument so it's either:
    * [tabId:int, details:obj], or [details:obj] */
-  if (!jsc_value_is_array (args))
-    return NULL;
-
-  obj = jsc_value_object_get_property_at_index (args, 0);
-  if (!jsc_value_is_object (obj)) {
-    g_object_unref (obj);
-    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (jsc_value_is_number (tab_id_value)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
+  } else {
+    obj = g_steal_pointer (&tab_id_value);
   }
+
+  if (!jsc_value_is_object (obj))
+    return NULL;
 
   if (!tab_id_value)
     target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
@@ -280,15 +284,15 @@ tabs_handler_remove_css (EphyWebExtension *self,
 
   /* This takes an optional first argument so it's either:
    * [tabId:int, details:obj], or [details:obj] */
-  if (!jsc_value_is_array (args))
-    return NULL;
-
-  obj = jsc_value_object_get_property_at_index (args, 0);
-  if (!jsc_value_is_object (obj)) {
-    g_object_unref (obj);
-    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (jsc_value_is_number (tab_id_value)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
+  } else {
+    obj = g_steal_pointer (&tab_id_value);
   }
+
+  if (!jsc_value_is_object (obj))
+    return NULL;
 
   if (!tab_id_value)
     target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
@@ -323,8 +327,8 @@ tabs_handler_get (EphyWebExtension *self,
   EphyWebView *target_web_view;
   EphyWindow *parent_window;
 
-  /* FIXME: These should raise error on failure. */
-  if (!jsc_value_is_number (args))
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_number (tab_id_value))
     return NULL;
 
   target_web_view = EPHY_WEB_VIEW (get_web_view_for_tab_id (shell, jsc_value_to_int32 (args), &parent_window));
@@ -353,15 +357,15 @@ tabs_handler_execute_script (EphyWebExtension *self,
 
   /* This takes an optional first argument so it's either:
    * [tabId:int, details:obj], or [details:obj] */
-  if (!jsc_value_is_array (args))
-    return NULL;
-
-  obj = jsc_value_object_get_property_at_index (args, 0);
-  if (!jsc_value_is_object (obj)) {
-    g_object_unref (obj);
-    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (jsc_value_is_number (tab_id_value)) {
     obj = jsc_value_object_get_property_at_index (args, 1);
+  } else {
+    obj = g_steal_pointer (&tab_id_value);
   }
+
+  if (!jsc_value_is_object (obj))
+    return NULL;
 
   file_value = jsc_value_object_get_property (obj, "file");
   code_value = jsc_value_object_get_property (obj, "code");
@@ -408,15 +412,12 @@ tabs_handler_send_message (EphyWebExtension *self,
   EphyShell *shell = ephy_shell_get_default ();
   WebKitWebView *target_web_view;
 
-  if (!jsc_value_is_array (args))
-    return NULL;
-
   tab_id_value = jsc_value_object_get_property_at_index (args, 0);
-  if (!tab_id_value)
+  if (!jsc_value_is_number (tab_id_value))
     return NULL;
 
   message_value = jsc_value_object_get_property_at_index (args, 1);
-  if (!message_value)
+  if (jsc_value_is_undefined (message_value))
     return NULL;
 
   serialized_message = jsc_value_to_json (message_value, 0);

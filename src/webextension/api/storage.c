@@ -65,14 +65,15 @@ storage_handler_local_set (EphyWebExtension *self,
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
   g_auto (GStrv) keys = NULL;
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  if (!jsc_value_is_object (args))
+  if (!jsc_value_is_object (value))
     return NULL;
 
-  keys = jsc_value_object_enumerate_properties (args);
+  keys = jsc_value_object_enumerate_properties (value);
 
   for (guint i = 0; keys[i]; i++)
-    json_object_set_member (local_storage_obj, keys[i], node_from_value_property (args, keys[i]));
+    json_object_set_member (local_storage_obj, keys[i], node_from_value_property (value, keys[i]));
 
   /* FIXME: Implement storage.onChanged */
   /* FIXME: Async IO */
@@ -91,15 +92,16 @@ storage_handler_local_get (EphyWebExtension *self,
   g_autoptr (JsonBuilder) builder = NULL;
   g_autoptr (JsonNode) root = NULL;
   g_auto (GStrv) keys = NULL;
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  if (jsc_value_is_null (args))
+  if (jsc_value_is_null (value))
     return json_to_string (local_storage, FALSE);
 
   builder = json_builder_new ();
   json_builder_begin_object (builder);
 
-  if (jsc_value_is_string (args)) {
-    g_autofree char *key = jsc_value_to_string (args);
+  if (jsc_value_is_string (value)) {
+    g_autofree char *key = jsc_value_to_string (value);
     JsonNode *member = json_object_get_member (local_storage_obj, key);
     if (member) {
       json_builder_set_member_name (builder, key);
@@ -108,8 +110,8 @@ storage_handler_local_get (EphyWebExtension *self,
     goto end_get;
   }
 
-  if (jsc_value_is_array (args)) {
-    keys = strv_from_value (args);
+  if (jsc_value_is_array (value)) {
+    keys = strv_from_value (value);
     for (guint i = 0; keys[i]; i++) {
       const char *key = keys[i];
       JsonNode *member = json_object_get_member (local_storage_obj, key);
@@ -121,14 +123,14 @@ storage_handler_local_get (EphyWebExtension *self,
     goto end_get;
   }
 
-  if (jsc_value_is_object (args)) {
-    keys = jsc_value_object_enumerate_properties (args);
+  if (jsc_value_is_object (value)) {
+    keys = jsc_value_object_enumerate_properties (value);
     for (guint i = 0; keys[i]; i++) {
       const char *key = keys[i];
       JsonNode *member = json_object_get_member (local_storage_obj, key);
       json_builder_set_member_name (builder, key);
       if (!member)
-        member = node_from_value_property (args, key);
+        member = node_from_value_property (value, key);
       json_builder_add_value (builder, member);
     }
     goto end_get;
@@ -147,15 +149,16 @@ storage_handler_local_remove (EphyWebExtension *self,
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  if (jsc_value_is_string (args)) {
-    g_autofree char *key = jsc_value_to_string (args);
+  if (jsc_value_is_string (value)) {
+    g_autofree char *key = jsc_value_to_string (value);
     json_object_remove_member (local_storage_obj, key);
     goto end_remove;
   }
 
-  if (jsc_value_is_array (args)) {
-    g_auto (GStrv) keys = strv_from_value (args);
+  if (jsc_value_is_array (value)) {
+    g_auto (GStrv) keys = strv_from_value (value);
     for (guint i = 0; keys[i]; i++) {
       json_object_remove_member (local_storage_obj, keys[i]);
     }
