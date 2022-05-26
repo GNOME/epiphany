@@ -122,6 +122,6 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Not Implemented");
+  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
   g_task_return_error (task, g_steal_pointer (&error));
 }

@@ -526,7 +526,7 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  respond_with_error (message, "Not implemented");
+  respond_with_error (message, "Not Implemented");
   return TRUE;
 }
 

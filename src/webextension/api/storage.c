@@ -69,7 +69,7 @@ storage_handler_local_set (EphyWebExtension  *self,
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
   if (!jsc_value_is_object (value)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -204,7 +204,7 @@ ephy_web_extension_api_storage_handler (EphyWebExtension *self,
 
   if (!ephy_web_extension_has_permission (self, "storage")) {
     g_warning ("Extension %s tried to use storage without permission.", ephy_web_extension_get_name (self));
-    error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "Permission Denied");
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
@@ -226,6 +226,6 @@ ephy_web_extension_api_storage_handler (EphyWebExtension *self,
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Not Implemented");
+  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
   g_task_return_error (task, g_steal_pointer (&error));
 }

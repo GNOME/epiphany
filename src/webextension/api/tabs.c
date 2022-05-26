@@ -247,7 +247,7 @@ tabs_handler_insert_css (EphyWebExtension  *self,
   }
 
   if (!jsc_value_is_object (obj)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -257,12 +257,12 @@ tabs_handler_insert_css (EphyWebExtension  *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (!target_web_view) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
   if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "Permission Denied");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
 
@@ -301,7 +301,7 @@ tabs_handler_remove_css (EphyWebExtension  *self,
   }
 
   if (!jsc_value_is_object (obj)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -311,12 +311,12 @@ tabs_handler_remove_css (EphyWebExtension  *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (!target_web_view) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
   if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "Permission Denied");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
 
@@ -345,13 +345,13 @@ tabs_handler_get (EphyWebExtension  *self,
 
   tab_id_value = jsc_value_object_get_property_at_index (args, 0);
   if (!jsc_value_is_number (tab_id_value)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
   target_web_view = EPHY_WEB_VIEW (get_web_view_for_tab_id (shell, jsc_value_to_int32 (args), &parent_window));
   if (!target_web_view) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -386,7 +386,7 @@ tabs_handler_execute_script (EphyWebExtension  *self,
   }
 
   if (!jsc_value_is_object (obj)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -399,7 +399,7 @@ tabs_handler_execute_script (EphyWebExtension  *self,
     g_autofree char *resource_path = jsc_value_to_string (file_value);
     code = ephy_web_extension_get_resource_as_string (self, resource_path[0] == '/' ? resource_path + 1 : resource_path);
   } else {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -410,7 +410,7 @@ tabs_handler_execute_script (EphyWebExtension  *self,
 
   if (code && target_web_view) {
     if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
-      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "Permission Denied");
+      g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
       return NULL;
     }
 
@@ -440,13 +440,13 @@ tabs_handler_send_message (EphyWebExtension  *self,
 
   tab_id_value = jsc_value_object_get_property_at_index (args, 0);
   if (!jsc_value_is_number (tab_id_value)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
   message_value = jsc_value_object_get_property_at_index (args, 1);
   if (jsc_value_is_undefined (message_value)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
   }
 
@@ -457,7 +457,7 @@ tabs_handler_send_message (EphyWebExtension  *self,
 
   if (target_web_view) {
     if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
-      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "Permission Denied");
+      g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
       return NULL;
     }
 
@@ -508,6 +508,6 @@ ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Not Implemented");
+  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
   g_task_return_error (task, g_steal_pointer (&error));
 }

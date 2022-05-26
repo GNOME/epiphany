@@ -112,6 +112,8 @@ struct _EphyWebExtension {
   JsonNode *local_storage;
 };
 
+G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
+
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 gboolean

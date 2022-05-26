@@ -45,6 +45,16 @@ typedef char *(*executeHandler)(EphyWebExtension  *web_extension,
                                 JSCValue          *args,
                                 GError           **error);
 
+
+extern GQuark web_extension_error_quark (void);
+#define WEB_EXTENSION_ERROR web_extension_error_quark ()
+
+typedef enum {
+  WEB_EXTENSION_ERROR_INVALID_ARGUMENT = 1001,
+  WEB_EXTENSION_ERROR_PERMISSION_DENIED = 1002,
+  WEB_EXTENSION_ERROR_NOT_IMPLEMENTED = 1003,
+} WebExtensionErrorCode;
+
 typedef struct {
   char *name;
   executeTaskHandler execute;
