@@ -224,7 +224,14 @@ ephy_send_message (const char *function_name,
   char *args_json;
 
   /* TODO: If function_args is list and last arg is callable, treat it as `chrome` API. */
-  /* TODO: Check for valid types for args, resolve, reject. */
+
+  if (!jsc_value_is_function (reject_callback))
+    return; /* Can't reject in this case. */
+
+  if (!jsc_value_is_array (function_args) || !jsc_value_is_function (resolve_callback)) {
+    g_autoptr (JSCValue) ret = jsc_value_function_call (reject_callback, G_TYPE_STRING, "Invalid Arguments", G_TYPE_NONE);
+    return;
+  }
 
   task = g_task_new (extension, NULL, (GAsyncReadyCallback)on_ephy_message_finish, NULL);
   data = ephy_message_data_new (resolve_callback, reject_callback);
