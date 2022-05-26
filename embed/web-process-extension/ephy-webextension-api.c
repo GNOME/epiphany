@@ -164,51 +164,32 @@ on_send_message_finish (WebKitWebExtension *extension,
                         GAsyncResult       *result,
                         gpointer            user_data)
 {
-  GTask *task = user_data;
+  EphyMessageData *message_data = user_data;
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitUserMessage) response = NULL;
-  GVariant *params;
+  g_autoptr (JSCValue) ret = NULL;
 
   response = webkit_web_extension_send_message_to_context_finish (extension, result, &error);
 
   if (error) {
-    g_task_return_error (task, g_steal_pointer (&error));
-  } else if (strcmp (webkit_user_message_get_name (response), "error") == 0) {
-    params = webkit_user_message_get_parameters (response);
-    g_assert (params);
-    error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "%s", g_variant_get_string (params, NULL));
-    g_task_return_error (task, g_steal_pointer (&error));
-  } else {
-    params = webkit_user_message_get_parameters (response);
-    g_assert (params);
-    g_task_return_pointer (task, g_variant_dup_string (params, NULL), g_free);
-  }
-
-  g_object_unref (task);
-}
-
-static void
-on_ephy_message_finish (EphyWebExtensionExtension *extension,
-                        GAsyncResult              *result,
-                        gpointer                   user_data)
-{
-  g_autoptr (GError) error = NULL;
-  EphyMessageData *message_data = g_task_get_task_data (G_TASK (result));
-  g_autofree char *json = g_task_propagate_pointer (G_TASK (result), &error);
-  JSCContext *context = jsc_value_get_context (message_data->resolve_callback);
-  g_autoptr (JSCValue) value = NULL;
-  g_autoptr (JSCValue) ret = NULL;
-
-  if (error) {
     ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, error->message, G_TYPE_NONE);
-  } else if (strcmp (json, "") == 0) {
-    value = jsc_value_new_undefined (context);
-    ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
   } else {
-    value = jsc_value_new_from_json (context, json);
-    ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
+    const char *json = g_variant_get_string (webkit_user_message_get_parameters (response), NULL);
+    g_autoptr (JSCValue) value = NULL;
+    JSCContext *context = jsc_value_get_context (message_data->resolve_callback);
+
+    if (strcmp (json, "") == 0) {
+      value = jsc_value_new_undefined (context);
+      ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
+    } else if (strcmp (webkit_user_message_get_name (response), "error") == 0) {
+      ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, json, G_TYPE_NONE);
+    } else {
+      value = jsc_value_new_from_json (context, json);
+      ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
+    }
   }
 
+  ephy_message_data_free (message_data);
   (void)ret;
 }
 
@@ -221,8 +202,6 @@ ephy_send_message (const char *function_name,
 {
   EphyWebExtensionExtension *extension = user_data;
   WebKitUserMessage *message;
-  EphyMessageData *data;
-  GTask *task;
   char *args_json;
 
   /* TODO: If function_args is list and last arg is callable, treat it as `chrome` API. */
@@ -235,14 +214,12 @@ ephy_send_message (const char *function_name,
     return;
   }
 
-  task = g_task_new (extension, NULL, (GAsyncReadyCallback)on_ephy_message_finish, NULL);
-  data = ephy_message_data_new (resolve_callback, reject_callback);
-  g_task_set_task_data (task, g_steal_pointer (&data), (GDestroyNotify)ephy_message_data_free);
-
   args_json = jsc_value_to_json (function_args, 0);
   message = webkit_user_message_new (function_name, g_variant_new_take_string (args_json));
 
-  webkit_web_extension_send_message_to_context (extension->extension, message, NULL, (GAsyncReadyCallback)on_send_message_finish, task);
+  webkit_web_extension_send_message_to_context (extension->extension, message, NULL,
+                                                (GAsyncReadyCallback)on_send_message_finish,
+                                                ephy_message_data_new (resolve_callback, reject_callback));
 }
 
 static void
