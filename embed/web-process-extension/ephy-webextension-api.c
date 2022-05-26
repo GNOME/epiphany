@@ -195,12 +195,17 @@ on_ephy_message_finish (EphyWebExtensionExtension *extension,
   g_autoptr (GError) error = NULL;
   EphyMessageData *message_data = g_task_get_task_data (G_TASK (result));
   g_autofree char *json = g_task_propagate_pointer (G_TASK (result), &error);
-  g_autoptr (JSCValue) value = jsc_value_new_from_json (jsc_value_get_context (message_data->resolve_callback), json);
+  JSCContext *context = jsc_value_get_context (message_data->resolve_callback);
+  g_autoptr (JSCValue) value = NULL;
   g_autoptr (JSCValue) ret = NULL;
 
   if (error) {
     ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, error->message, G_TYPE_NONE);
+  } else if (strcmp (json, "") == 0) {
+    value = jsc_value_new_undefined (context);
+    ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
   } else {
+    value = jsc_value_new_from_json (context, json);
     ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
   }
 }

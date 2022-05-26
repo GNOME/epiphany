@@ -482,7 +482,7 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
       if (ret) {
         reply = webkit_user_message_new ("", g_variant_new_take_string (g_steal_pointer (&ret)));
       } else {
-        reply = webkit_user_message_new ("", g_variant_new_string ("{}"));
+        reply = webkit_user_message_new ("", g_variant_new_string (""));
       }
 
       webkit_user_message_send_reply (message, reply);
