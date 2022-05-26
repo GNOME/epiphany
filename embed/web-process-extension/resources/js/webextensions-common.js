@@ -28,33 +28,44 @@ class EphyEventListener {
     }
 }
 
-const ephy_message = function (fn, ...args) {
+const ephy_message = function (fn, args) {
+    let callback;
+
+    // This is a `chrome` callback based API.
+    if (args.length > 0 && typeof args[args.length - 1] === 'function')
+        callback = args.pop ();
+
     return new Promise (function (resolve, reject) {
-        ephy_send_message (fn, args, resolve, reject);
+        const resolve_wrapper = function (x) {
+            if (callback !== undefined)
+                callback (x);
+            resolve (x);
+        };
+        ephy_send_message (fn, args, resolve_wrapper, reject);
     });
 };
 
 window.browser.runtime = {
-    getURL: function (args, cb) { return window.browser.extension.getURL(args, cb); },
-    getManifest: function (args, cb) { return '[]'; },
+    getURL: function (args) { return window.browser.extension.getURL(args); },
+    getManifest: function () { return {}; },
     onMessage: new EphyEventListener (),
     onConnect: new EphyEventListener (),
-    sendMessage: function (args, cb) {
-        return ephy_message ('runtime.sendMessage', args, cb);
+    sendMessage: function (...args) {
+        return ephy_message ('runtime.sendMessage', args);
     },
 };
 
 
 window.browser.storage = {
     local: {
-        get: function (keys) {
-            return ephy_message ('storage.local.get', keys);
+        get: function (...args) {
+            return ephy_message ('storage.local.get', args);
         },
-        set: function (keys) {
-            return ephy_message ('storage.local.set', keys);
+        set: function (...args) {
+            return ephy_message ('storage.local.set', args);
         },
-        remove: function (keys) {
-            return ephy_message ('storage.local.remove', keys);
+        remove: function (...args) {
+            return ephy_message ('storage.local.remove', args);
         },
         clear: function () {
             return ephy_message ('storage.local.clear');
