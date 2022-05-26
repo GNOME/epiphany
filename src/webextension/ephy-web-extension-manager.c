@@ -55,7 +55,7 @@ struct _EphyWebExtensionManager {
 
 G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
 
-EphyWebExtensionApiHandler api_handlers[] = {
+EphyWebExtensionAsyncApiHandler api_handlers[] = {
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},
@@ -446,6 +446,50 @@ respond_with_error (WebKitUserMessage *message,
   webkit_user_message_send_reply (message, reply);
 }
 
+typedef struct {
+  WebKitUserMessage *message;
+  JSCValue *args;
+} ApiHandlerData;
+
+static void
+api_handler_data_free (ApiHandlerData *data)
+{
+  g_object_unref (data->message);
+  g_object_unref (data->args);
+  g_free (data);
+}
+
+static ApiHandlerData *
+api_handler_data_new (WebKitUserMessage *message,
+                      JSCValue          *args)
+{
+  ApiHandlerData *data = g_new (ApiHandlerData, 1);
+  data->message = g_object_ref (message);
+  data->args = g_object_ref (args);
+  return data;
+}
+
+static void
+on_web_extension_api_handler_finish (EphyWebExtension *web_extension,
+                                     GAsyncResult     *result,
+                                     gpointer          user_data)
+{
+  g_autoptr (GError) error = NULL;
+  GTask *task = G_TASK (result);
+  ApiHandlerData *data = g_task_get_task_data (task);
+  g_autofree char *json = g_task_propagate_pointer (task, &error);
+  WebKitUserMessage *reply;
+
+  if (error) {
+    respond_with_error (data->message, error->message);
+  } else {
+    reply = webkit_user_message_new ("", g_variant_new_string (json ? json : ""));
+    webkit_user_message_send_reply (data->message, reply);
+  }
+
+  g_object_unref (task);
+}
+
 static gboolean
 ephy_web_extension_handle_user_message (WebKitWebContext  *context,
                                         WebKitUserMessage *message,
@@ -456,8 +500,6 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   g_autoptr (JSCValue) args = NULL;
   const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
-
-
 
   js_context = jsc_context_new ();
   args = jsc_value_new_from_json (js_context, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
@@ -471,21 +513,14 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (api_handlers); idx++) {
-    EphyWebExtensionApiHandler handler = api_handlers[idx];
+    EphyWebExtensionAsyncApiHandler handler = api_handlers[idx];
 
     if (g_strcmp0 (handler.name, split[0]) == 0) {
-      g_autofree char *ret = NULL;
-      g_autofree char *script = NULL;
-      WebKitUserMessage *reply;
+      /* TODO: Cancellable */
+      GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
+      g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
 
-      ret = handler.execute (web_extension, split[1], args);
-      if (ret) {
-        reply = webkit_user_message_new ("", g_variant_new_take_string (g_steal_pointer (&ret)));
-      } else {
-        reply = webkit_user_message_new ("", g_variant_new_string (""));
-      }
-
-      webkit_user_message_send_reply (message, reply);
+      handler.execute (web_extension, split[1], args, task);
       return TRUE;
     }
   }

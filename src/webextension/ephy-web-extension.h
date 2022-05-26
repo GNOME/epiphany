@@ -35,14 +35,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, EPHY, WEB_EXTENSION, GObject)
 
-typedef char *(*executeHandler)(EphyWebExtension *web_extension,
-                                char             *name,
-                                JSCValue         *args);
+typedef void (*executeTaskHandler)(EphyWebExtension *web_extension,
+                                   char             *name,
+                                   JSCValue         *args,
+                                   GTask            *task);
+
+typedef char *(*executeHandler)(EphyWebExtension  *web_extension,
+                                char              *name,
+                                JSCValue          *args,
+                                GError           **error);
+
+typedef struct {
+  char *name;
+  executeTaskHandler execute;
+} EphyWebExtensionAsyncApiHandler;
 
 typedef struct {
   char *name;
   executeHandler execute;
-} EphyWebExtensionApiHandler;
+} EphyWebExtensionSyncApiHandler;
 
 GdkPixbuf             *ephy_web_extension_get_icon                        (EphyWebExtension *self,
                                                                            gint64            size);

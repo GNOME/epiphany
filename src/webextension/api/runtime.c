@@ -28,9 +28,10 @@
 #include "ephy-shell.h"
 
 static char *
-runtime_handler_get_browser_info (EphyWebExtension *self,
-                                  char             *name,
-                                  JSCValue         *args)
+runtime_handler_get_browser_info (EphyWebExtension  *self,
+                                  char              *name,
+                                  JSCValue          *args,
+                                  GError           **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -46,9 +47,10 @@ runtime_handler_get_browser_info (EphyWebExtension *self,
 }
 
 static char *
-runtime_handler_send_message (EphyWebExtension *self,
-                              char             *name,
-                              JSCValue         *args)
+runtime_handler_send_message (EphyWebExtension  *self,
+                              char              *name,
+                              JSCValue          *args,
+                              GError           **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (shell);
@@ -63,9 +65,10 @@ runtime_handler_send_message (EphyWebExtension *self,
 }
 
 static char *
-runtime_handler_open_options_page (EphyWebExtension *self,
-                                   char             *name,
-                                   JSCValue         *args)
+runtime_handler_open_options_page (EphyWebExtension  *self,
+                                   char              *name,
+                                   JSCValue          *args,
+                                   GError           **error)
 {
   const char *data = ephy_web_extension_get_option_ui_page (self);
 
@@ -87,37 +90,38 @@ runtime_handler_open_options_page (EphyWebExtension *self,
   return NULL;
 }
 
-static char *
-runtime_handler_set_uninstall_url (EphyWebExtension *self,
-                                   char             *name,
-                                   JSCValue         *args)
-{
-  return NULL;
-}
-
-static EphyWebExtensionApiHandler runtime_handlers[] = {
+static EphyWebExtensionSyncApiHandler runtime_handlers[] = {
   {"getBrowserInfo", runtime_handler_get_browser_info},
   {"sendMessage", runtime_handler_send_message},
   {"openOptionsPage", runtime_handler_open_options_page},
-  {"setUninstallURL", runtime_handler_set_uninstall_url},
-  {NULL, NULL},
 };
 
-char *
+void
 ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
                                         char             *name,
-                                        JSCValue         *args)
+                                        JSCValue         *args,
+                                        GTask            *task)
 {
+  g_autoptr (GError) error = NULL;
   guint idx;
 
   for (idx = 0; idx < G_N_ELEMENTS (runtime_handlers); idx++) {
-    EphyWebExtensionApiHandler handler = runtime_handlers[idx];
+    EphyWebExtensionSyncApiHandler handler = runtime_handlers[idx];
+    char *ret;
 
-    if (g_strcmp0 (handler.name, name) == 0)
-      return handler.execute (self, name, args);
+    if (g_strcmp0 (handler.name, name) == 0) {
+      ret = handler.execute (self, name, args, &error);
+
+      if (error)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_pointer (task, ret, g_free);
+
+      return;
+    }
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-
-  return NULL;
+  error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Not Implemented");
+  g_task_return_error (task, g_steal_pointer (&error));
 }

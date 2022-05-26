@@ -26,9 +26,10 @@
 #include "notifications.h"
 
 static char *
-notifications_handler_create (EphyWebExtension *self,
-                              char             *name,
-                              JSCValue         *args)
+notifications_handler_create (EphyWebExtension  *self,
+                              char              *name,
+                              JSCValue          *args,
+                              GError           **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *title_str = NULL;
@@ -37,8 +38,10 @@ notifications_handler_create (EphyWebExtension *self,
   g_autoptr (JSCValue) message = NULL;
   EphyNotification *notify;
 
-  if (!jsc_value_is_object (value))
+  if (!jsc_value_is_object (value)) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
+  }
 
   title = jsc_value_object_get_property (value, "title");
   title_str = jsc_value_to_string (title);
@@ -52,26 +55,36 @@ notifications_handler_create (EphyWebExtension *self,
   return NULL;
 }
 
-static EphyWebExtensionApiHandler notifications_handlers[] = {
+static EphyWebExtensionSyncApiHandler notifications_handlers[] = {
   {"create", notifications_handler_create},
-  {NULL, NULL},
 };
 
-char *
+void
 ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
                                               char             *name,
-                                              JSCValue         *args)
+                                              JSCValue         *args,
+                                              GTask            *task)
 {
+  g_autoptr (GError) error = NULL;
   guint idx;
 
   for (idx = 0; idx < G_N_ELEMENTS (notifications_handlers); idx++) {
-    EphyWebExtensionApiHandler handler = notifications_handlers[idx];
+    EphyWebExtensionSyncApiHandler handler = notifications_handlers[idx];
+    char *ret;
 
-    if (g_strcmp0 (handler.name, name) == 0)
-      return handler.execute (self, name, args);
+    if (g_strcmp0 (handler.name, name) == 0) {
+      ret = handler.execute (self, name, args, &error);
+
+      if (error)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_pointer (task, ret, g_free);
+
+      return;
+    }
   }
 
   g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-
-  return NULL;
+  error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Not Implemented");
+  g_task_return_error (task, g_steal_pointer (&error));
 }
