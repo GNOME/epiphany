@@ -208,6 +208,8 @@ on_ephy_message_finish (EphyWebExtensionExtension *extension,
     value = jsc_value_new_from_json (context, json);
     ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
   }
+
+  (void)ret;
 }
 
 static void
