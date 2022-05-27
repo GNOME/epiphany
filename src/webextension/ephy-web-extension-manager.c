@@ -366,7 +366,7 @@ ephy_web_extension_manager_update_location_entry (EphyWebExtensionManager *self,
   }
 }
 
-EphyWebView *
+WebKitWebView *
 ephy_web_extension_manager_get_background_web_view (EphyWebExtensionManager *self,
                                                     EphyWebExtension        *web_extension)
 {
@@ -394,7 +394,7 @@ page_action_clicked (GtkWidget      *event_box,
   g_autofree char *json = NULL;
   g_autofree char *script = NULL;
   EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (shell);
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
+  WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "url");
@@ -803,7 +803,7 @@ on_browser_action_clicked (GtkWidget *event_box,
   EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
   EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
   g_autofree char *script = NULL;
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_web_extension_manager_get_background_web_view (self, web_extension));
+  WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
 
   script = g_strdup_printf ("window.browser.browserAction.onClicked._emit();");
 

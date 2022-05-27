@@ -66,7 +66,7 @@ GtkWidget               *ephy_web_extension_manager_get_page_action             
                                                                                      EphyWebExtension        *web_extension,
                                                                                      EphyWebView             *web_view);
 
-EphyWebView             *ephy_web_extension_manager_get_background_web_view         (EphyWebExtensionManager *self,
+WebKitWebView           *ephy_web_extension_manager_get_background_web_view         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension);
 
 G_END_DECLS
