@@ -247,9 +247,14 @@ ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 }
 
 EphyWebExtensionManager *
-ephy_web_extension_manager_new (void)
+ephy_web_extension_manager_get_default (void)
 {
-  return g_object_new (EPHY_TYPE_WEB_EXTENSION_MANAGER, NULL);
+  static EphyWebExtensionManager *manager = NULL;
+
+  if (!manager)
+    manager = g_object_new (EPHY_TYPE_WEB_EXTENSION_MANAGER, NULL);
+
+  return manager;
 }
 
 GList *

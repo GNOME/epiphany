@@ -1543,7 +1543,7 @@ ephy_shell_get_web_extension_manager (EphyShell *shell)
   g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->web_extension_manager == NULL)
-    shell->web_extension_manager = ephy_web_extension_manager_new ();
+    shell->web_extension_manager = ephy_web_extension_manager_get_default ();
 
   return shell->web_extension_manager;
 }

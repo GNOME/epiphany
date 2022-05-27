@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, EPHY, WEB_EXTENSION_MANAGER, GObject)
 
-EphyWebExtensionManager *ephy_web_extension_manager_new                             (void);
+EphyWebExtensionManager *ephy_web_extension_manager_get_default                     (void);
 
 GList                  *ephy_web_extension_manager_get_web_extensions               (EphyWebExtensionManager *self);
 
@@ -68,5 +68,10 @@ GtkWidget               *ephy_web_extension_manager_get_page_action             
 
 WebKitWebView           *ephy_web_extension_manager_get_background_web_view         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension);
+
+void                     ephy_web_extension_manager_emit_in_extension_views         (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *name,
+                                                                                     const char              *json);
 
 G_END_DECLS
