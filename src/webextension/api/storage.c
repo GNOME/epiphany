@@ -94,7 +94,6 @@ storage_handler_local_get (EphyWebExtension  *self,
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
   g_autoptr (JsonBuilder) builder = NULL;
-  g_autoptr (JsonNode) root = NULL;
   g_auto (GStrv) keys = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
@@ -142,8 +141,7 @@ storage_handler_local_get (EphyWebExtension  *self,
 
 end_get:
   json_builder_end_object (builder);
-  root = json_builder_get_root (builder);
-  return json_to_string (root, FALSE);
+  return json_to_string (json_builder_get_root (builder), FALSE);
 }
 
 static char *
