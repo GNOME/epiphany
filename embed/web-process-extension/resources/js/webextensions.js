@@ -5,7 +5,12 @@
 
 // Browser async API
 window.browser.alarms = {
+    clear: function (...args) { return ephy_message ('alarms.clear', args); },
     clearAll: function (...args) { return ephy_message ('alarms.clearAll', args); },
+    create: function (...args) { return ephy_message ('alarms.create', args); },
+    get: function (...args) { return ephy_message ('alarms.get', args); },
+    getAll: function (...args) { return ephy_message ('alarms.getAll', args); },
+    onAlarm: new EphyEventListener (),
 };
 
 window.browser.windows = {

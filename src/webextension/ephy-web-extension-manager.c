@@ -35,6 +35,7 @@
 #include "ephy-web-extension-manager.h"
 #include "ephy-web-view.h"
 
+#include "api/alarms.h"
 #include "api/notifications.h"
 #include "api/pageaction.h"
 #include "api/runtime.h"
@@ -50,12 +51,15 @@ struct _EphyWebExtensionManager {
   GList *web_extensions;
   GHashTable *page_action_map;
   GHashTable *browser_action_map;
+
   GHashTable *background_web_views;
+  GHashTable *popup_web_views;
 };
 
 G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
 
 EphyWebExtensionAsyncApiHandler api_handlers[] = {
+  {"alarms", ephy_web_extension_api_alarms_handler},
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},
@@ -202,6 +206,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   g_autofree char *dir = g_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
 
   self->background_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)gtk_widget_destroy);
+  self->popup_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_ptr_array_free);
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
   self->web_extensions = NULL;
@@ -215,6 +220,7 @@ ephy_web_extension_manager_dispose (GObject *object)
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
 
   g_clear_pointer (&self->background_web_views, g_hash_table_destroy);
+  g_clear_pointer (&self->popup_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->page_action_map, g_hash_table_destroy);
   g_list_free_full (g_steal_pointer (&self->web_extensions), g_object_unref);
 }
@@ -776,9 +782,37 @@ on_popup_load_changed (WebKitWebView   *web_view,
     gtk_widget_show (GTK_WIDGET (web_view));
 }
 
+static void
+on_popup_view_destroyed (GtkWidget *widget,
+                         gpointer   user_data)
+{
+  EphyWebExtension *web_extension = user_data;
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  GPtrArray *popup_views = g_hash_table_lookup (manager->popup_web_views, web_extension);
+
+  g_assert (g_ptr_array_remove_fast (popup_views, widget));
+}
+
+static void
+ephy_web_extension_manager_register_popup_view (EphyWebExtensionManager *manager,
+                                                EphyWebExtension        *web_extension,
+                                                GtkWidget               *web_view)
+{
+  GPtrArray *popup_views = g_hash_table_lookup (manager->popup_web_views, web_extension);
+
+  if (!popup_views) {
+    popup_views = g_ptr_array_new ();
+    g_hash_table_insert (manager->popup_web_views, web_extension, popup_views);
+  }
+
+  g_ptr_array_add (popup_views, web_view);
+  g_signal_connect (web_view, "destroy", G_CALLBACK (on_popup_view_destroyed), web_extension);
+}
+
 static GtkWidget *
 create_browser_popup (EphyWebExtension *web_extension)
 {
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   GtkWidget *web_view;
   g_autofree char *data = NULL;
   g_autofree char *base_uri = NULL;
@@ -790,6 +824,8 @@ create_browser_popup (EphyWebExtension *web_extension)
     return NULL;
   web_view = create_web_extensions_webview (web_extension);
   gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
+
+  ephy_web_extension_manager_register_popup_view (manager, web_extension, web_view);
 
   popup = ephy_web_extension_get_browser_popup (web_extension);
   base_uri = create_base_uri_for_resource_path (web_extension, popup);
@@ -1087,6 +1123,7 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
   } else {
     g_hash_table_remove (self->browser_action_map, web_extension);
     g_hash_table_remove (self->background_web_views, web_extension);
+    g_object_set_data (G_OBJECT (web_extension), "alarms", NULL); /* Set in alarms.c */
   }
 }
 
@@ -1103,4 +1140,34 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
     ret = g_hash_table_lookup (table, web_view);
 
   return ret;
+}
+
+void
+ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *self,
+                                                    EphyWebExtension        *web_extension,
+                                                    const char              *name,
+                                                    const char              *json)
+{
+  WebKitWebView *background_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
+  GPtrArray *popup_views = g_hash_table_lookup (self->popup_web_views, web_extension);
+  g_autofree char *script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
+
+  if (background_view) {
+    webkit_web_view_run_javascript (background_view,
+                                    script,
+                                    NULL,
+                                    NULL,
+                                    NULL);
+  }
+
+  if (popup_views) {
+    for (guint i = 0; i < popup_views->len; i++) {
+      WebKitWebView *popup_view = g_ptr_array_index (popup_views, i);
+      webkit_web_view_run_javascript (popup_view,
+                                      script,
+                                      NULL,
+                                      NULL,
+                                      NULL);
+    }
+  }
 }
