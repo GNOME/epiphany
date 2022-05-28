@@ -47,6 +47,17 @@ runtime_handler_get_browser_info (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static gboolean
+is_empty_object (JSCValue *value)
+{
+  if (jsc_value_is_object (value)) {
+    g_auto (GStrv) keys = jsc_value_object_enumerate_properties (value);
+    return keys == NULL;
+  }
+
+  return FALSE;
+}
+
 static char *
 runtime_handler_send_message (EphyWebExtension  *self,
                               char              *name,
@@ -55,10 +66,28 @@ runtime_handler_send_message (EphyWebExtension  *self,
                               GError           **error)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *script = NULL;
-  g_autofree char *json = jsc_value_to_json (value, 0);
+  g_autoptr (JSCValue) last_value = NULL;
+  g_autoptr (JSCValue) message = NULL;
+  g_autofree char *json = NULL;
 
+  /* The arguments of this are so terrible Mozilla dedicates this to describing how to parse it:
+   * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#parameters */
+  last_value = jsc_value_object_get_property_at_index (args, 2);
+  if (!jsc_value_is_undefined (last_value)) {
+    /* We don't actually support sending to external extensions yet. */
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
+    return NULL;
+  }
+
+  last_value = jsc_value_object_get_property_at_index (args, 1);
+  if (jsc_value_is_undefined (last_value) || jsc_value_is_null (last_value) || is_empty_object (last_value)) {
+    message = jsc_value_object_get_property_at_index (args, 0);
+  } else {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
+    return NULL;
+  }
+
+  json = jsc_value_to_json (message, 0);
   ephy_web_extension_manager_emit_in_extension_views_except_self (manager, self, "runtime.onMessage", json, context_guid);
 
   return NULL;
