@@ -55,12 +55,11 @@ runtime_handler_send_message (EphyWebExtension  *self,
                               GError           **error)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  WebKitWebView *view = ephy_web_extension_manager_get_background_web_view (manager, self);
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *script = NULL;
+  g_autofree char *json = jsc_value_to_json (value, 0);
 
-  script = g_strdup_printf ("window.browser.runtime.onMessage._emit(%s);", jsc_value_to_json (value, 0));
-  webkit_web_view_run_javascript (view, script, NULL, NULL, NULL);
+  ephy_web_extension_manager_emit_in_extension_views_except_self (manager, self, "runtime.onMessage", json, context_guid);
 
   return NULL;
 }

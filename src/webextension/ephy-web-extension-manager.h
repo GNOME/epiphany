@@ -74,4 +74,11 @@ void                     ephy_web_extension_manager_emit_in_extension_views     
                                                                                      const char              *name,
                                                                                      const char              *json);
 
+void                     ephy_web_extension_manager_emit_in_extension_views_except_self
+                                                                                    (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *name,
+                                                                                     const char              *json,
+                                                                                     const char              *context_guid);
+
 G_END_DECLS

@@ -1146,27 +1146,39 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
   return ret;
 }
 
-void
-ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *self,
-                                                    EphyWebExtension        *web_extension,
-                                                    const char              *name,
-                                                    const char              *json)
+static const char *
+get_guid_for_view (WebKitWebView *view)
+{
+  WebKitWebContext *context = webkit_web_view_get_context (view);
+  return g_object_get_data (G_OBJECT (context), "guid");
+}
+
+static void
+ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionManager *self,
+                                                             EphyWebExtension        *web_extension,
+                                                             const char              *name,
+                                                             const char              *json,
+                                                             const char              *exception_guid)
 {
   WebKitWebView *background_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
   GPtrArray *popup_views = g_hash_table_lookup (self->popup_web_views, web_extension);
   g_autofree char *script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
 
   if (background_view) {
-    webkit_web_view_run_javascript (background_view,
-                                    script,
-                                    NULL,
-                                    NULL,
-                                    NULL);
+    if (g_strcmp0 (get_guid_for_view (background_view), exception_guid) != 0)
+      webkit_web_view_run_javascript (background_view,
+                                      script,
+                                      NULL,
+                                      NULL,
+                                      NULL);
   }
 
   if (popup_views) {
     for (guint i = 0; i < popup_views->len; i++) {
       WebKitWebView *popup_view = g_ptr_array_index (popup_views, i);
+      if (g_strcmp0 (get_guid_for_view (popup_view), exception_guid) == 0)
+        continue;
+
       webkit_web_view_run_javascript (popup_view,
                                       script,
                                       NULL,
@@ -1174,4 +1186,24 @@ ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *sel
                                       NULL);
     }
   }
+}
+
+void
+ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *self,
+                                                    EphyWebExtension        *web_extension,
+                                                    const char              *name,
+                                                    const char              *json)
+{
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, NULL);
+}
+
+void
+ephy_web_extension_manager_emit_in_extension_views_except_self (EphyWebExtensionManager *self,
+                                                                EphyWebExtension        *web_extension,
+                                                                const char              *name,
+                                                                const char              *json,
+                                                                const char              *context_guid)
+{
+  g_assert (context_guid);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, context_guid);
 }
