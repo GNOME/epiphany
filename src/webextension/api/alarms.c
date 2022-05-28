@@ -107,6 +107,8 @@ alarm_to_node (Alarm *alarm)
   json_object_set_double_member (obj, "scheduledTime", alarm->scheduled_time);
   if (alarm->repeat_interval_ms)
     json_object_set_double_member (obj, "periodInMinutes", alarm->repeat_interval_minutes);
+  else
+    json_object_set_null_member (obj, "periodInMinutes");
 
   return node;
 }
