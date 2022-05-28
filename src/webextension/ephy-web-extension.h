@@ -38,11 +38,13 @@ G_DECLARE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, EPHY, WEB_EXTENSION,
 typedef void (*executeTaskHandler)(EphyWebExtension *web_extension,
                                    char             *name,
                                    JSCValue         *args,
+                                   const char       *context_guid,
                                    GTask            *task);
 
 typedef char *(*executeHandler)(EphyWebExtension  *web_extension,
                                 char              *name,
                                 JSCValue          *args,
+                                const char        *context_guid,
                                 GError           **error);
 
 

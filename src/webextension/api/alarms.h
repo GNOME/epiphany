@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 void ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
                                             char            *name,
                                             JSCValue        *value,
+                                            const char      *context_guid,
                                             GTask           *task);
 
 G_END_DECLS

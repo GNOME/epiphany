@@ -150,6 +150,7 @@ static char *
 tabs_handler_query (EphyWebExtension  *self,
                     char              *name,
                     JSCValue          *args,
+                    const char        *context_guid,
                     GError           **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -227,6 +228,7 @@ static char *
 tabs_handler_insert_css (EphyWebExtension  *self,
                          char              *name,
                          JSCValue          *args,
+                         const char        *context_guid,
                          GError           **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
@@ -281,6 +283,7 @@ static char *
 tabs_handler_remove_css (EphyWebExtension  *self,
                          char              *name,
                          JSCValue          *args,
+                         const char        *context_guid,
                          GError           **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
@@ -334,6 +337,7 @@ static char *
 tabs_handler_get (EphyWebExtension  *self,
                   char              *name,
                   JSCValue          *args,
+                  const char        *context_guid,
                   GError           **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
@@ -366,6 +370,7 @@ static char *
 tabs_handler_execute_script (EphyWebExtension  *self,
                              char              *name,
                              JSCValue          *args,
+                             const char        *context_guid,
                              GError           **error)
 {
   g_autoptr (JSCValue) code_value = NULL;
@@ -429,6 +434,7 @@ static char *
 tabs_handler_send_message (EphyWebExtension  *self,
                            char              *name,
                            JSCValue          *args,
+                           const char        *context_guid,
                            GError           **error)
 {
   g_autoptr (JSCValue) tab_id_value = NULL;
@@ -486,6 +492,7 @@ void
 ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
                                      char             *name,
                                      JSCValue         *args,
+                                     const char       *context_guid,
                                      GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -496,7 +503,7 @@ ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, &error);
+      ret = handler.execute (self, name, args, context_guid, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

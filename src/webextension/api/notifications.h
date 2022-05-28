@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 void ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
                                                     char            *name,
                                                     JSCValue        *args,
+                                                    const char      *context_guid,
                                                     GTask           *task);
 
 G_END_DECLS

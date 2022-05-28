@@ -166,6 +166,7 @@ static char *
 alarms_handler_create (EphyWebExtension  *self,
                        char              *name,
                        JSCValue          *args,
+                       const char        *context_guid,
                        GError           **error)
 {
   g_autoptr (JSCValue) alarm_name = NULL;
@@ -223,6 +224,7 @@ static char *
 alarms_handler_clear (EphyWebExtension  *self,
                       char              *name,
                       JSCValue          *args,
+                      const char        *context_guid,
                       GError           **error)
 {
   GHashTable *alarms = get_alarms (self);
@@ -244,6 +246,7 @@ static char *
 alarms_handler_clear_all (EphyWebExtension  *self,
                           char              *name,
                           JSCValue          *args,
+                          const char        *context_guid,
                           GError           **error)
 {
   GHashTable *alarms = get_alarms (self);
@@ -259,6 +262,7 @@ static char *
 alarms_handler_get (EphyWebExtension  *self,
                     char              *name,
                     JSCValue          *args,
+                    const char        *context_guid,
                     GError           **error)
 {
   GHashTable *alarms = get_alarms (self);
@@ -279,6 +283,7 @@ static char *
 alarms_handler_get_all (EphyWebExtension  *self,
                         char              *name,
                         JSCValue          *args,
+                        const char        *context_guid,
                         GError           **error)
 {
   GHashTable *alarms = get_alarms (self);
@@ -306,6 +311,7 @@ void
 ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
                                        char             *name,
                                        JSCValue         *args,
+                                       const char       *context_guid,
                                        GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -322,7 +328,7 @@ ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, &error);
+      ret = handler.execute (self, name, args, context_guid, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

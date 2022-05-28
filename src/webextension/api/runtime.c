@@ -31,6 +31,7 @@ static char *
 runtime_handler_get_browser_info (EphyWebExtension  *self,
                                   char              *name,
                                   JSCValue          *args,
+                                  const char        *context_guid,
                                   GError           **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -50,6 +51,7 @@ static char *
 runtime_handler_send_message (EphyWebExtension  *self,
                               char              *name,
                               JSCValue          *args,
+                              const char        *context_guid,
                               GError           **error)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
@@ -67,6 +69,7 @@ static char *
 runtime_handler_open_options_page (EphyWebExtension  *self,
                                    char              *name,
                                    JSCValue          *args,
+                                   const char        *context_guid,
                                    GError           **error)
 {
   const char *data = ephy_web_extension_get_option_ui_page (self);
@@ -99,6 +102,7 @@ void
 ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
                                         char             *name,
                                         JSCValue         *args,
+                                        const char       *context_guid,
                                         GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -109,7 +113,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, &error);
+      ret = handler.execute (self, name, args, context_guid, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

@@ -511,6 +511,7 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   g_autoptr (JSCValue) args = NULL;
   const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
+  const char *context_guid = g_object_get_data (G_OBJECT (context), "guid");
 
   js_context = jsc_context_new ();
   args = jsc_value_new_from_json (js_context, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
@@ -531,7 +532,7 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
       GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
       g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
 
-      handler.execute (web_extension, split[1], args, task);
+      handler.execute (web_extension, split[1], args, context_guid, task);
       return TRUE;
     }
   }
@@ -735,6 +736,10 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
   ucm = webkit_user_content_manager_new ();
 
   web_context = webkit_web_context_new ();
+
+  /* Assign a temporary GUID that is used to distinguish WebContexts on received messages. */
+  g_object_set_data_full (G_OBJECT (web_context), "guid", g_dbus_generate_guid (), g_free);
+
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
