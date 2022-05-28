@@ -1272,7 +1272,7 @@ sync_tab_page_action (EphyWebView *view,
 {
   EphyWebExtensionManager *manager;
 
-  manager = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  manager = ephy_web_extension_manager_get_default ();
   ephy_web_extension_manager_update_location_entry (manager, window);
 }
 
@@ -3790,7 +3790,7 @@ ephy_window_constructed (GObject *object)
 
   ephy_window_set_chrome (window, chrome);
 
-  ephy_web_extension_manager_install_actions (ephy_shell_get_web_extension_manager (ephy_shell_get_default ()), window);
+  ephy_web_extension_manager_install_actions (ephy_web_extension_manager_get_default (), window);
 }
 
 static void

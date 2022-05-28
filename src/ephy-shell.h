@@ -131,8 +131,6 @@ void                     ephy_shell_send_notification       (EphyShell        *s
 
 gboolean                 ephy_shell_startup_finished        (EphyShell *shell);
 
-EphyWebExtensionManager  *ephy_shell_get_web_extension_manager (EphyShell        *shell);
-
 EphyWebView              *ephy_shell_get_web_view              (EphyShell        *shell,
                                                                 guint64           id);
 

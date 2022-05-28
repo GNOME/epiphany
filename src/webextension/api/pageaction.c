@@ -32,7 +32,7 @@ pageaction_get_action (EphyWebExtension *self,
 {
   EphyWebView *web_view = NULL;
   EphyShell *shell = ephy_shell_get_default ();
-  EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (shell);
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (JSCValue) tab_id = NULL;
   gint32 nr;
 

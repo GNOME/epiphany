@@ -52,8 +52,7 @@ runtime_handler_send_message (EphyWebExtension  *self,
                               JSCValue          *args,
                               GError           **error)
 {
-  EphyShell *shell = ephy_shell_get_default ();
-  EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (shell);
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   WebKitWebView *view = ephy_web_extension_manager_get_background_web_view (manager, self);
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *script = NULL;

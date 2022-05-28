@@ -404,7 +404,7 @@ page_action_clicked (GtkWidget      *event_box,
   g_autoptr (JsonNode) root = NULL;
   g_autofree char *json = NULL;
   g_autofree char *script = NULL;
-  EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (shell);
+  EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
   WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
 
   json_builder_begin_object (builder);
@@ -664,7 +664,7 @@ page_attached_cb (HdyTabView *tab_view,
   GtkWidget *child = hdy_tab_page_get_child (page);
   EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (child));
   EphyWindow *window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (tab_view)));
-  EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
 
   ephy_web_extension_manager_add_web_extension_to_webview (self, web_extension, window, web_view);
   ephy_web_extension_manager_update_location_entry (self, window);
@@ -842,7 +842,7 @@ on_browser_action_clicked (GtkWidget *event_box,
                            gpointer   user_data)
 {
   EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
-  EphyWebExtensionManager *self = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
   g_autofree char *script = NULL;
   WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
 

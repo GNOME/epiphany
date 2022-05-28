@@ -104,7 +104,7 @@ toggle_state_set_cb (GtkSwitch *widget,
                      gboolean   state,
                      gpointer   user_data)
 {
-  EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
 
   ephy_web_extension_manager_set_active (manager, web_extension, state);
@@ -140,7 +140,7 @@ create_row (EphyWebExtensionDialog *self,
   GtkWidget *author;
   GtkWidget *version;
   g_autoptr (GdkPixbuf) icon = NULL;
-  EphyWebExtensionManager *manager = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   row = hdy_expander_row_new ();
   g_object_set_data (G_OBJECT (row), "web_extension", web_extension);
@@ -317,8 +317,7 @@ ephy_web_extension_dialog_init (EphyWebExtensionDialog *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  manager = ephy_shell_get_web_extension_manager (ephy_shell_get_default ());
-  g_assert (manager != NULL);
+  manager = ephy_web_extension_manager_get_default ();
 
   g_set_weak_pointer (&self->web_extension_manager, manager);
   g_signal_connect_object (self->web_extension_manager, "changed", G_CALLBACK (on_web_extension_manager_changed), self, 0);
