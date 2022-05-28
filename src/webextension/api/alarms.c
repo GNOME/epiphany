@@ -308,6 +308,13 @@ ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
 {
   g_autoptr (GError) error = NULL;
 
+  if (!ephy_web_extension_has_permission (self, "alarms")) {
+    g_warning ("Extension %s tried to use alarms without permission.", ephy_web_extension_get_name (self));
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
+    g_task_return_error (task, g_steal_pointer (&error));
+    return;
+  }
+
   for (guint idx = 0; idx < G_N_ELEMENTS (alarms_handlers); idx++) {
     EphyWebExtensionSyncApiHandler handler = alarms_handlers[idx];
     char *ret;
