@@ -203,20 +203,22 @@ ephy_send_message (const char *function_name,
                    JSCValue   *reject_callback,
                    gpointer    user_data)
 {
-  EphyWebExtensionExtension *extension = user_data;
+  EphyWebExtensionExtension *extension = ephy_web_extension_extension_get ();
+  guint page_id = GPOINTER_TO_UINT (user_data);
   WebKitUserMessage *message;
-  char *args_json;
+  g_autofree char *args_json;
 
   if (!jsc_value_is_function (reject_callback))
     return; /* Can't reject in this case. */
 
   if (!jsc_value_is_array (function_args) || !jsc_value_is_function (resolve_callback)) {
-    g_autoptr (JSCValue) ret = jsc_value_function_call (reject_callback, G_TYPE_STRING, "Invalid Arguments", G_TYPE_NONE);
+    g_autoptr (JSCValue) ret = jsc_value_function_call (reject_callback, G_TYPE_STRING, "ephy_send_message(): Invalid Arguments", G_TYPE_NONE);
     return;
   }
 
   args_json = jsc_value_to_json (function_args, 0);
-  message = webkit_user_message_new (function_name, g_variant_new_take_string (args_json));
+  message = webkit_user_message_new (function_name,
+                                     g_variant_new ("(us)", page_id, args_json));
 
   webkit_web_extension_send_message_to_context (extension->extension, message, NULL,
                                                 (GAsyncReadyCallback)on_send_message_finish,
@@ -282,7 +284,7 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   js_function = jsc_value_new_function (js_context,
                                         "ephy_send_message",
                                         G_CALLBACK (ephy_send_message),
-                                        extension, NULL,
+                                        GUINT_TO_POINTER (webkit_web_page_get_id (page)), NULL,
                                         G_TYPE_NONE,
                                         4,
                                         G_TYPE_STRING,

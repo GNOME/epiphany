@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 void ephy_web_extension_api_pageaction_handler (EphyWebExtension *self,
                                                  char            *name,
                                                  JSCValue        *args,
-                                                 const char      *context_guid,
+                                                 gint64           extension_page_id,
                                                  GTask           *task);
 
 G_END_DECLS

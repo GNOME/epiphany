@@ -79,6 +79,15 @@ void                     ephy_web_extension_manager_emit_in_extension_views_exce
                                                                                      EphyWebExtension        *web_extension,
                                                                                      const char              *name,
                                                                                      const char              *json,
-                                                                                     const char              *context_guid);
+                                                                                     gint64                   extension_page_id);
+
+void                     ephy_web_extension_manager_emit_in_extension_views_with_reply
+                                                                                    (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *name,
+                                                                                     const char              *json,
+                                                                                     gint64                   extension_page_id,
+                                                                                     const char              *sender_json,
+                                                                                     GTask                   *reply_task);
 
 G_END_DECLS

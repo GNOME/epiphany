@@ -26,6 +26,26 @@ class EphyEventListener {
         for (const listener of this._listeners)
             listener.callback (data);
     }
+
+    _emit_with_reply (message, sender, message_guid) {
+        let handled = false;
+        const reply_callback = function (reply_message) {
+            ephy_message ('runtime._sendMessageReply', [message_guid, reply_message]);
+        };
+
+        for (const listener of this._listeners) {
+            const ret = listener.callback (message, sender, reply_callback);
+            if (typeof ret === 'object' && typeof ret.then === 'function') {
+                ret.then(x => { reply_callback(x); }).catch(x => { reply_callback(); })
+                handled = true;
+            } else if (ret === true) {
+                // We expect listener.callback to call `reply_callback`.
+                handled = true;
+            }
+        }
+
+        return handled;
+    }
 }
 
 const ephy_message = function (fn, args) {

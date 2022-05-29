@@ -31,7 +31,7 @@ static char *
 runtime_handler_get_browser_info (EphyWebExtension  *self,
                                   char              *name,
                                   JSCValue          *args,
-                                  const char        *context_guid,
+                                  gint64             extension_page_id,
                                   GError           **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -58,14 +58,15 @@ is_empty_object (JSCValue *value)
   return FALSE;
 }
 
-static char *
-runtime_handler_send_message (EphyWebExtension  *self,
-                              char              *name,
-                              JSCValue          *args,
-                              const char        *context_guid,
-                              GError           **error)
+static void
+runtime_handler_send_message (EphyWebExtension *self,
+                              char             *name,
+                              JSCValue         *args,
+                              gint64            extension_page_id,
+                              GTask            *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  g_autoptr (GError) error = NULL;
   g_autoptr (JSCValue) last_value = NULL;
   g_autoptr (JSCValue) message = NULL;
   g_autofree char *json = NULL;
@@ -75,29 +76,32 @@ runtime_handler_send_message (EphyWebExtension  *self,
   last_value = jsc_value_object_get_property_at_index (args, 2);
   if (!jsc_value_is_undefined (last_value)) {
     /* We don't actually support sending to external extensions yet. */
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
-    return NULL;
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
+    g_task_return_error (task, g_steal_pointer (&error));
+    return;
   }
 
   last_value = jsc_value_object_get_property_at_index (args, 1);
   if (jsc_value_is_undefined (last_value) || jsc_value_is_null (last_value) || is_empty_object (last_value)) {
     message = jsc_value_object_get_property_at_index (args, 0);
   } else {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
-    return NULL;
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
+    g_task_return_error (task, g_steal_pointer (&error));
+    return;
   }
 
   json = jsc_value_to_json (message, 0);
-  ephy_web_extension_manager_emit_in_extension_views_except_self (manager, self, "runtime.onMessage", json, context_guid);
+  g_message ("Sending message with %s", json);
+  ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage", json, extension_page_id, "{}", task);
 
-  return NULL;
+  return;
 }
 
 static char *
 runtime_handler_open_options_page (EphyWebExtension  *self,
                                    char              *name,
                                    JSCValue          *args,
-                                   const char        *context_guid,
+                                   gint64             extension_page_id,
                                    GError           **error)
 {
   const char *data = ephy_web_extension_get_option_ui_page (self);
@@ -120,34 +124,46 @@ runtime_handler_open_options_page (EphyWebExtension  *self,
   return NULL;
 }
 
-static EphyWebExtensionSyncApiHandler runtime_handlers[] = {
+static EphyWebExtensionSyncApiHandler runtime_sync_handlers[] = {
   {"getBrowserInfo", runtime_handler_get_browser_info},
-  {"sendMessage", runtime_handler_send_message},
   {"openOptionsPage", runtime_handler_open_options_page},
+};
+
+static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
+  {"sendMessage", runtime_handler_send_message},
 };
 
 void
 ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
                                         char             *name,
                                         JSCValue         *args,
-                                        const char       *context_guid,
+                                        gint64            extension_page_id,
                                         GTask            *task)
 {
   g_autoptr (GError) error = NULL;
   guint idx;
 
-  for (idx = 0; idx < G_N_ELEMENTS (runtime_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = runtime_handlers[idx];
+  for (idx = 0; idx < G_N_ELEMENTS (runtime_sync_handlers); idx++) {
+    EphyWebExtensionSyncApiHandler handler = runtime_sync_handlers[idx];
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, context_guid, &error);
+      ret = handler.execute (self, name, args, extension_page_id, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));
       else
         g_task_return_pointer (task, ret, g_free);
 
+      return;
+    }
+  }
+
+  for (idx = 0; idx < G_N_ELEMENTS (runtime_async_handlers); idx++) {
+    EphyWebExtensionAsyncApiHandler handler = runtime_async_handlers[idx];
+
+    if (g_strcmp0 (handler.name, name) == 0) {
+      handler.execute (self, name, args, extension_page_id, task);
       return;
     }
   }

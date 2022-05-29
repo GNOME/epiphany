@@ -61,7 +61,7 @@ static char *
 storage_handler_local_set (EphyWebExtension  *self,
                            char              *name,
                            JSCValue          *args,
-                           const char        *context_guid,
+                           gint64             extension_page_id,
                            GError           **error)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
@@ -90,7 +90,7 @@ static char *
 storage_handler_local_get (EphyWebExtension  *self,
                            char              *name,
                            JSCValue          *args,
-                           const char        *context_guid,
+                           gint64             extension_page_id,
                            GError           **error)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
@@ -150,7 +150,7 @@ static char *
 storage_handler_local_remove (EphyWebExtension  *self,
                               char              *name,
                               JSCValue          *args,
-                              const char        *context_guid,
+                              gint64             extension_page_id,
                               GError           **error)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
@@ -180,7 +180,7 @@ static char *
 storage_handler_local_clear (EphyWebExtension  *self,
                              char              *name,
                              JSCValue          *args,
-                             const char        *context_guid,
+                             gint64             extension_page_id,
                              GError           **error)
 {
   ephy_web_extension_clear_local_storage (self);
@@ -199,7 +199,7 @@ void
 ephy_web_extension_api_storage_handler (EphyWebExtension *self,
                                         char             *name,
                                         JSCValue         *args,
-                                        const char       *context_guid,
+                                        gint64            extension_page_id,
                                         GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -217,7 +217,7 @@ ephy_web_extension_api_storage_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, context_guid, &error);
+      ret = handler.execute (self, name, args, extension_page_id, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

@@ -44,6 +44,9 @@
 
 #include <json-glib/json-glib.h>
 
+static void handle_message_reply (EphyWebExtension *web_extension,
+                                  JSCValue         *args);
+
 struct _EphyWebExtensionManager {
   GObject parent_instance;
 
@@ -54,6 +57,8 @@ struct _EphyWebExtensionManager {
 
   GHashTable *background_web_views;
   GHashTable *popup_web_views;
+
+  GHashTable *pending_messages;
 };
 
 G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
@@ -209,6 +214,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->popup_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_ptr_array_free);
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
+  self->pending_messages = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->web_extensions = NULL;
 
   ephy_web_extension_manager_scan_directory (self, dir);
@@ -222,6 +228,7 @@ ephy_web_extension_manager_dispose (GObject *object)
   g_clear_pointer (&self->background_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->popup_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->page_action_map, g_hash_table_destroy);
+  g_clear_pointer (&self->pending_messages, g_hash_table_destroy);
   g_list_free_full (g_steal_pointer (&self->web_extensions), g_object_unref);
 }
 
@@ -511,12 +518,21 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   g_autoptr (JSCValue) args = NULL;
   const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
-  const char *context_guid = g_object_get_data (G_OBJECT (context), "guid");
+  guint page_id;
+  const char *json_args;
+
+  g_variant_get (webkit_user_message_get_parameters (message), "(u&s)", &page_id, &json_args);
 
   js_context = jsc_context_new ();
-  args = jsc_value_new_from_json (js_context, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
+  args = jsc_value_new_from_json (js_context, json_args);
 
-  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, g_variant_get_string (webkit_user_message_get_parameters (message), NULL));
+  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, json_args);
+
+  /* Private API for message replies handled by the manager. */
+  if (strcmp (name, "runtime._sendMessageReply") == 0) {
+    handle_message_reply (web_extension, args);
+    return TRUE;
+  }
 
   split = g_strsplit (name, ".", 2);
   if (g_strv_length (split) != 2) {
@@ -532,7 +548,7 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
       GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
       g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
 
-      handler.execute (web_extension, split[1], args, context_guid, task);
+      handler.execute (web_extension, split[1], args, page_id, task);
       return TRUE;
     }
   }
@@ -736,9 +752,6 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
   ucm = webkit_user_content_manager_new ();
 
   web_context = webkit_web_context_new ();
-
-  /* Assign a temporary GUID that is used to distinguish WebContexts on received messages. */
-  g_object_set_data_full (G_OBJECT (web_context), "guid", g_dbus_generate_guid (), g_free);
 
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
@@ -1146,46 +1159,167 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
   return ret;
 }
 
-static const char *
-get_guid_for_view (WebKitWebView *view)
+static void
+handle_message_reply (EphyWebExtension *web_extension,
+                      JSCValue         *args)
 {
-  WebKitWebContext *context = webkit_web_view_get_context (view);
-  return g_object_get_data (G_OBJECT (context), "guid");
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  GHashTable *pending_messages = g_hash_table_lookup (manager->pending_messages, web_extension);
+  GTask *pending_task;
+  g_autofree char *message_guid = NULL;
+  g_autoptr (JSCValue) message_guid_value = NULL;
+  g_autoptr (JSCValue) reply_value = NULL;
+
+  g_message ("handle_message_reply");
+
+  message_guid_value = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_string (message_guid_value)) {
+    g_debug ("Received invalid message reply");
+    return;
+  }
+
+  message_guid = jsc_value_to_string (message_guid_value);
+  pending_task = g_hash_table_lookup (pending_messages, message_guid);
+  if (!pending_task) {
+    g_debug ("Received message not found in pending replies");
+    return;
+  }
+
+  reply_value = jsc_value_object_get_property_at_index (args, 1);
+  g_hash_table_steal (pending_messages, message_guid);
+  g_task_return_pointer (pending_task, jsc_value_to_json (reply_value, 0), g_free);
+}
+
+typedef struct {
+  EphyWebExtension *web_extension;
+  char *message_guid; /* Owned by manager->pending_messages. */
+  guint pending_view_responses;
+  gboolean handled;
+} PendingMessageReplyTracker;
+
+static void
+on_extension_emit_ready (GObject      *source,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  PendingMessageReplyTracker *tracker = user_data;
+  GHashTable *pending_messages;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+
+  js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                     result,
+                                                     &error);
+
+  if (error) {
+    g_warning ("%s", error->message);
+    return;
+  }
+
+  if (jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result)))
+    tracker->handled = TRUE;
+
+  /* Once all views have been notified it will either be handled by one of them, in which case
+   * handle_message_reply() finishes the task, or we finish it here with an empty response. */
+  /* FIXME: A race condition is possible where a view is destroyed before it responds. */
+  tracker->pending_view_responses--;
+  if (tracker->pending_view_responses == 0) {
+    if (!tracker->handled) {
+      GTask *pending_task;
+
+      pending_messages = g_hash_table_lookup (manager->pending_messages, tracker->web_extension);
+      pending_task = g_hash_table_lookup (pending_messages, tracker->message_guid);
+      g_assert (pending_task);
+      g_assert (g_hash_table_steal (pending_messages, tracker->message_guid));
+      g_clear_pointer (&tracker->message_guid, g_free);
+
+      g_task_return_pointer (pending_task, NULL, NULL);
+    }
+    g_free (tracker);
+  }
 }
 
 static void
 ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionManager *self,
                                                              EphyWebExtension        *web_extension,
                                                              const char              *name,
-                                                             const char              *json,
-                                                             const char              *exception_guid)
+                                                             const char              *message_json,
+                                                             gint64                   page_id_exception,
+                                                             const char              *sender_json,
+                                                             GTask                   *reply_task)
 {
   WebKitWebView *background_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
   GPtrArray *popup_views = g_hash_table_lookup (self->popup_web_views, web_extension);
-  g_autofree char *script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
+  g_autofree char *script = NULL;
+  PendingMessageReplyTracker *tracker = NULL;
+  guint pending_views = 0;
+  GHashTable *pending_messages;
+  g_autofree char *message_guid = NULL;
+
+  /* The `runtime.sendMessage()` API emits `runtime.onMessage` and waits for a reply.
+   * The way this is implemented is:
+   *  - All API handlers can be async: Returning a Promise backed by GTask (@reply_task).
+   *  - Instead of completing the GTask we store it for each message waiting on replies.
+   *  - We then call every extension view and track if any of them handled it (see webextensions-common.js).
+   *  - If none handled it we complete with an empty message.
+   *  - Otherwise we wait for our private `runtime._sendMessageReply` API call.
+   *  - The first `runtime._sendMessageReply` call wins and completes the GTask with its data.
+   */
+  if (reply_task) {
+    message_guid = g_dbus_generate_guid ();
+    tracker = g_new0 (PendingMessageReplyTracker, 1);
+    script = g_strdup_printf ("window.browser.%s._emit_with_reply(%s, %s, '%s');", name, message_json, sender_json, message_guid);
+  } else
+    script = g_strdup_printf ("window.browser.%s._emit(%s);", name, message_json);
 
   if (background_view) {
-    if (g_strcmp0 (get_guid_for_view (background_view), exception_guid) != 0)
+    if ((gint64)webkit_web_view_get_page_id (background_view) != page_id_exception) {
       webkit_web_view_run_javascript (background_view,
                                       script,
                                       NULL,
-                                      NULL,
-                                      NULL);
+                                      reply_task ? on_extension_emit_ready : NULL,
+                                      tracker);
+      pending_views++;
+    }
   }
 
   if (popup_views) {
     for (guint i = 0; i < popup_views->len; i++) {
       WebKitWebView *popup_view = g_ptr_array_index (popup_views, i);
-      if (g_strcmp0 (get_guid_for_view (popup_view), exception_guid) == 0)
+      if ((gint64)webkit_web_view_get_page_id (popup_view) == page_id_exception)
         continue;
 
       webkit_web_view_run_javascript (popup_view,
                                       script,
                                       NULL,
-                                      NULL,
-                                      NULL);
+                                      reply_task ? on_extension_emit_ready : NULL,
+                                      tracker);
+      pending_views++;
     }
   }
+
+  if (!reply_task)
+    return;
+
+  if (!pending_views) {
+    g_task_return_pointer (reply_task, NULL, NULL);
+    g_free (tracker);
+    return;
+  }
+
+  tracker->web_extension = web_extension;
+  tracker->pending_view_responses = pending_views;
+  tracker->message_guid = message_guid;
+
+  pending_messages = g_hash_table_lookup (self->pending_messages, web_extension);
+  if (!pending_messages) {
+    pending_messages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_object_unref);
+    g_hash_table_insert (self->pending_messages, web_extension, pending_messages);
+  }
+
+  if (!g_hash_table_replace (pending_messages, g_steal_pointer (&message_guid), reply_task))
+    g_warning ("Duplicate message GUID");
 }
 
 void
@@ -1194,7 +1328,7 @@ ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *sel
                                                     const char              *name,
                                                     const char              *json)
 {
-  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, NULL);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, -1, NULL, NULL);
 }
 
 void
@@ -1202,8 +1336,25 @@ ephy_web_extension_manager_emit_in_extension_views_except_self (EphyWebExtension
                                                                 EphyWebExtension        *web_extension,
                                                                 const char              *name,
                                                                 const char              *json,
-                                                                const char              *context_guid)
+                                                                gint64                   extension_page_id)
 {
-  g_assert (context_guid);
-  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, context_guid);
+  g_assert (extension_page_id > 0);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, extension_page_id, NULL, NULL);
+}
+
+void
+ephy_web_extension_manager_emit_in_extension_views_with_reply (EphyWebExtensionManager *self,
+                                                               EphyWebExtension        *web_extension,
+                                                               const char              *name,
+                                                               const char              *json,
+                                                               gint64                   extension_page_id,
+                                                               const char              *sender_json,
+                                                               GTask                   *reply_task)
+{
+  g_assert (sender_json);
+  g_assert (reply_task);
+  g_assert (extension_page_id > 0);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, extension_page_id, sender_json, reply_task);
+}
+
 }
