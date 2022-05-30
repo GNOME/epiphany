@@ -725,6 +725,7 @@ init_web_extension_api (WebKitWebContext *web_context,
 static GtkWidget *
 create_web_extensions_webview (EphyWebExtension *web_extension)
 {
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (WebKitUserContentManager) ucm = NULL;
   WebKitSettings *settings;
   WebKitWebContext *web_context;
@@ -745,7 +746,7 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
                            "web-context", web_context,
                            "user-content-manager", ucm,
                            "settings", ephy_embed_prefs_get_settings (),
-                           "expand", TRUE,
+                           "related-view", ephy_web_extension_manager_get_background_web_view (manager, web_extension),
                            NULL);
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));

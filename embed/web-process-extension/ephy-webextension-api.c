@@ -41,6 +41,9 @@ G_DEFINE_TYPE (EphyWebExtensionExtension, ephy_web_extension_extension, G_TYPE_O
 
 static EphyWebExtensionExtension *extension = NULL;
 
+static GHashTable *view_contexts;
+static JSCContext *background_context;
+
 static void
 ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
                                                   WebKitUserMessage *message)
@@ -220,6 +223,31 @@ ephy_send_message (const char *function_name,
                                                 ephy_message_data_new (resolve_callback, reject_callback));
 }
 
+static JSCValue *
+ephy_get_view_objects (gpointer user_data)
+{
+  g_autoptr (GPtrArray) window_objects = g_ptr_array_new ();
+  GHashTableIter iter;
+  JSCContext *context;
+
+  g_hash_table_iter_init (&iter, view_contexts);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&context)) {
+    if (context == background_context)
+      g_ptr_array_insert (window_objects, 0, jsc_context_get_global_object (context));
+    else
+      g_ptr_array_add (window_objects, jsc_context_get_global_object (context));
+  }
+
+  return jsc_value_new_array_from_garray (jsc_context_get_current (), window_objects);
+}
+
+static void
+on_frame_destroyed (gpointer  user_data,
+                    GObject  *object_location)
+{
+  g_hash_table_remove (view_contexts, user_data);
+}
+
 static void
 window_object_cleared_cb (WebKitScriptWorld         *world,
                           WebKitWebPage             *page,
@@ -237,6 +265,16 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   gsize data_size;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
+
+  /* FIXME: This is a herustic that the first view is the background view.
+   * instead we should indicate this at extension creation time. */
+  if (!background_context)
+    background_context = js_context;
+
+  if (!g_hash_table_contains (view_contexts, GUINT_TO_POINTER (webkit_frame_get_id (frame)))) {
+    g_hash_table_insert (view_contexts, GUINT_TO_POINTER (webkit_frame_get_id (frame)), g_object_ref (js_context));
+    g_object_weak_ref (G_OBJECT (frame), on_frame_destroyed, GUINT_TO_POINTER (webkit_frame_get_id (frame)));
+  }
 
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (!jsc_value_is_object (js_browser));
@@ -261,6 +299,18 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   g_clear_object (&result);
 
   ephy_webextension_install_common_apis (js_context, extension->guid, extension->translations);
+
+  js_browser = jsc_context_get_value (js_context, "browser");
+  js_extension = jsc_value_object_get_property (js_browser, "extension");
+
+  js_function = jsc_value_new_function (js_context,
+                                        "ephy_get_view_objects",
+                                        G_CALLBACK (ephy_get_view_objects),
+                                        NULL,
+                                        NULL,
+                                        JSC_TYPE_VALUE, 0);
+  jsc_value_object_set_property (js_extension, "_ephy_get_view_objects", js_function);
+  g_clear_object (&js_function);
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
@@ -311,6 +361,8 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
   extension->initialized = TRUE;
   extension->guid = g_strdup (guid);
   extension->extension = g_object_ref (wk_extension);
+
+  view_contexts = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
 
   g_signal_connect (webkit_script_world_get_default (),
                     "window-object-cleared",

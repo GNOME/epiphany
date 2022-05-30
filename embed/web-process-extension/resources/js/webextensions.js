@@ -34,9 +34,27 @@ window.browser.notifications = {
 };
 
 // browser.extension is defined in ephy-webextension-common.c
-window.browser.extension.getViews = function (...args) { return []; };
-// Firefox returns null in private mode. So extensions sometimes handle this.
-window.browser.extension.getBackgroundPage = function () { return null; };
+window.browser.extension.getViews = function (fetchProperties) {
+    const window_objects = window.browser.extension._ephy_get_view_objects();
+    if (!window_objects || !fetchProperties)
+        return window_objects;
+
+    // TODO: Implement actual filtering.
+    if (fetchProperties.type === 'background')
+        return [window_objects[0]];
+    else if (fetchProperties.type === 'popup')
+        return window_objects.slice(1);
+    else if (fetchProperties.type !== undefined)
+        return [];
+
+    return window_objects;
+};
+window.browser.extension.getBackgroundPage = function () {
+    const views = window.browser.extension.getViews({type: 'background'});
+    if (!views)
+        return null;
+    return views[0];
+};
 
 // browser.runtime is defined in webextensions-common.js
 window.browser.runtime.getBrowserInfo = function (...args) { return ephy_message ('runtime.getBrowserInfo', args); };
@@ -46,6 +64,7 @@ window.browser.runtime.setUninstallURL = function (...args) { return ephy_messag
 window.browser.runtime.onInstalled = new EphyEventListener ();
 window.browser.runtime.onMessageExternal = new EphyEventListener ();
 window.browser.runtime.sendNativeMessage = function (...args) { return ephy_message ('runtime.sendNativeMessage', args); };
+window.browser.runtime.getBackgroundPage = window.browser.extension.getBackgroundPage;
 
 
 window.browser.pageAction = {
