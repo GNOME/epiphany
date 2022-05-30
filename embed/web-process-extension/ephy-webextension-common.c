@@ -27,7 +27,7 @@ js_getmessage (const char *message,
                gpointer    user_data)
 {
   JsonObject *translations = user_data;
-  g_autoptr (JsonObject) translation = NULL;
+  JsonObject *translation = NULL;
 
   if (!translations)
     return g_strdup (message);
