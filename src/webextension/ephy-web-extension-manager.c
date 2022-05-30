@@ -827,9 +827,7 @@ create_browser_popup (EphyWebExtension *web_extension)
 
   ephy_web_extension_manager_register_popup_view (manager, web_extension, web_view);
 
-  popup = ephy_web_extension_get_browser_popup (web_extension);
   base_uri = create_base_uri_for_resource_path (web_extension, popup);
-  data = ephy_web_extension_get_resource_as_string (web_extension, popup);
   webkit_web_view_load_html (WEBKIT_WEB_VIEW (web_view), (char *)data, base_uri);
   g_signal_connect (web_view, "load-changed", G_CALLBACK (on_popup_load_changed), NULL);
 
