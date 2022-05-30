@@ -194,7 +194,7 @@ alarms_handler_create (EphyWebExtension  *self,
   }
 
   if (delay_in_minutes && when) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Both 'when' and 'delayInMinutes' cannot be set");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "alarms.create(): Both 'when' and 'delayInMinutes' cannot be set");
     return NULL;
   }
 
@@ -312,7 +312,7 @@ ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
 
   if (!ephy_web_extension_has_permission (self, "alarms")) {
     g_warning ("Extension %s tried to use alarms without permission.", ephy_web_extension_get_name (self));
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "alarms: Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
@@ -333,6 +333,6 @@ ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
     }
   }
 
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
+  error = g_error_new (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "alarms.%s(): Not Implemented", name);
   g_task_return_error (task, g_steal_pointer (&error));
 }
