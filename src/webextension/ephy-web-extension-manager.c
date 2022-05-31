@@ -833,23 +833,17 @@ create_browser_popup (EphyWebExtension *web_extension)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   GtkWidget *web_view;
-  g_autofree char *data = NULL;
-  g_autofree char *base_uri = NULL;
+  g_autofree char *popup_uri = NULL;
   const char *popup;
 
-  popup = ephy_web_extension_get_browser_popup (web_extension);
-  data = ephy_web_extension_get_resource_as_string (web_extension, popup);
-  if (!data)
-    return NULL;
   web_view = create_web_extensions_webview (web_extension);
   gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
-
   ephy_web_extension_manager_register_popup_view (manager, web_extension, web_view);
 
-  base_uri = create_base_uri_for_resource_path (web_extension, popup);
-  webkit_web_view_load_html (WEBKIT_WEB_VIEW (web_view), (char *)data, base_uri);
+  popup = ephy_web_extension_get_browser_popup (web_extension);
+  popup_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (web_extension), popup);
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), popup_uri);
   g_signal_connect (web_view, "load-changed", G_CALLBACK (on_popup_load_changed), NULL);
-
 
   return web_view;
 }
