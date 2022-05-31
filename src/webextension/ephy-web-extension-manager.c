@@ -1025,8 +1025,9 @@ run_background_script (EphyWebExtensionManager *self,
 {
   WebKitUserContentManager *ucm;
   GtkWidget *background;
-  g_autofree char *base_uri = NULL;
+  GPtrArray *scripts;
   const char *page;
+  g_autofree char *base_uri = NULL;
 
   if (!ephy_web_extension_has_background_web_view (web_extension) || ephy_web_extension_manager_get_background_web_view (self, web_extension))
     return;
@@ -1037,38 +1038,38 @@ run_background_script (EphyWebExtensionManager *self,
   background = create_web_extensions_webview (web_extension);
   ephy_web_extension_manager_set_background_web_view (self, web_extension, WEBKIT_WEB_VIEW (background));
 
+  if (page) {
+    g_autofree char *page_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (web_extension), page);
+    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (background), page_uri);
+    return;
+  }
+
+  scripts = ephy_web_extension_background_web_view_get_scripts (web_extension);
   base_uri = create_base_uri_for_resource_path (web_extension, page);
 
-  if (page) {
-    g_autofree char *data = ephy_web_extension_get_resource_as_string (web_extension, page);
-    if (data)
-      webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), (char *)data, base_uri);
-  } else {
-    GPtrArray *scripts = ephy_web_extension_background_web_view_get_scripts (web_extension);
+  ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (background));
 
-    ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (background));
+  for (unsigned int i = 0; i < scripts->len; i++) {
+    const char *script_file = g_ptr_array_index (scripts, i);
+    g_autofree char *data = NULL;
+    WebKitUserScript *user_script;
 
-    for (unsigned int i = 0; i < scripts->len; i++) {
-      const char *script_file = g_ptr_array_index (scripts, i);
-      g_autofree char *data = NULL;
-      WebKitUserScript *user_script;
+    if (!script_file)
+      continue;
 
-      if (!script_file)
-        continue;
+    data = ephy_web_extension_get_resource_as_string (web_extension, script_file);
+    if (data) {
+      user_script = webkit_user_script_new (data,
+                                            WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
+                                            WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                            NULL,
+                                            NULL);
 
-      data = ephy_web_extension_get_resource_as_string (web_extension, script_file);
-      if (data) {
-        user_script = webkit_user_script_new (data,
-                                              WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
-                                              WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-                                              NULL,
-                                              NULL);
-
-        webkit_user_content_manager_add_script (ucm, user_script);
-      }
+      webkit_user_content_manager_add_script (ucm, user_script);
     }
-    webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), "<body></body>", base_uri);
   }
+
+  webkit_web_view_load_html (WEBKIT_WEB_VIEW (background), "<body></body>", base_uri);
 }
 
 static GPtrArray *
