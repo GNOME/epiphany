@@ -530,7 +530,9 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
 
   /* Private API for message replies handled by the manager. */
   if (strcmp (name, "runtime._sendMessageReply") == 0) {
+    WebKitUserMessage *reply = webkit_user_message_new ("", g_variant_new_string (""));
     handle_message_reply (web_extension, args);
+    webkit_user_message_send_reply (message, reply);
     return TRUE;
   }
 
@@ -1164,8 +1166,6 @@ handle_message_reply (EphyWebExtension *web_extension,
   g_autofree char *message_guid = NULL;
   g_autoptr (JSCValue) message_guid_value = NULL;
   g_autoptr (JSCValue) reply_value = NULL;
-
-  g_message ("handle_message_reply");
 
   message_guid_value = jsc_value_object_get_property_at_index (args, 0);
   if (!jsc_value_is_string (message_guid_value)) {

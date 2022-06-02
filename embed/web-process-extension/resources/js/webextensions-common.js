@@ -30,7 +30,9 @@ class EphyEventListener {
     _emit_with_reply (message, sender, message_guid) {
         let handled = false;
         const reply_callback = function (reply_message) {
-            ephy_message ('runtime._sendMessageReply', [message_guid, reply_message]);
+            ephy_message ('runtime._sendMessageReply', [message_guid, reply_message]).catch(error_message => {
+                console.error(error_message);
+            });
         };
 
         for (const listener of this._listeners) {
