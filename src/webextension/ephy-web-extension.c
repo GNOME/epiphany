@@ -387,8 +387,15 @@ web_extension_add_allow_list (JsonArray *array,
                               gpointer   user_data)
 {
   WebExtensionContentScript *content_script = user_data;
+  const char *match = json_node_get_string (element_node);
 
-  g_ptr_array_add (content_script->allow_list, g_strdup (json_node_get_string (element_node)));
+  if (g_strcmp0 (match, "<all_urls>") == 0) {
+    g_ptr_array_add (content_script->allow_list, g_strdup ("https://*/*"));
+    g_ptr_array_add (content_script->allow_list, g_strdup ("http://*/*"));
+    return;
+  }
+
+  g_ptr_array_add (content_script->allow_list, g_strdup (match));
 }
 
 static void
