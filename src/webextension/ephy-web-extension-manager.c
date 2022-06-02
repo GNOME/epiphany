@@ -1352,4 +1352,25 @@ ephy_web_extension_manager_emit_in_extension_views_with_reply (EphyWebExtensionM
   ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, extension_page_id, sender_json, reply_task);
 }
 
+WebKitWebView *
+ephy_web_extension_manager_get_web_view_for_page_id (EphyWebExtensionManager *self,
+                                                     EphyWebExtension        *web_extension,
+                                                     gint64                   page_id)
+{
+  WebKitWebView *background_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
+  GPtrArray *popup_views = g_hash_table_lookup (self->popup_web_views, web_extension);
+
+  if (background_view && (gint64)webkit_web_view_get_page_id (background_view) == page_id)
+    return background_view;
+
+  if (popup_views) {
+    for (guint i = 0; i < popup_views->len; i++) {
+      WebKitWebView *popup_view = g_ptr_array_index (popup_views, i);
+      if ((gint64)webkit_web_view_get_page_id (popup_view) == page_id)
+        return popup_view;
+    }
+  }
+
+  g_warn_if_reached ();
+  return NULL;
 }

@@ -90,4 +90,8 @@ void                     ephy_web_extension_manager_emit_in_extension_views_with
                                                                                      const char              *sender_json,
                                                                                      GTask                   *reply_task);
 
+WebKitWebView           *ephy_web_extension_manager_get_web_view_for_page_id        (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     gint64                   page_id);
+
 G_END_DECLS

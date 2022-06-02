@@ -58,6 +58,22 @@ is_empty_object (JSCValue *value)
   return FALSE;
 }
 
+static char *
+create_sender_object (EphyWebExtension *web_extension,
+                      gint64            page_id)
+{
+  g_autoptr (JsonNode) node = json_node_init_object (json_node_alloc (), json_object_new ());
+  JsonObject *obj = json_node_get_object (node);
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  WebKitWebView *web_view = ephy_web_extension_manager_get_web_view_for_page_id (manager, web_extension, page_id);
+
+  json_object_set_string_member (obj, "id", ephy_web_extension_get_guid (web_extension));
+  if (web_view)
+    json_object_set_string_member (obj, "url", webkit_web_view_get_uri (web_view));
+
+  return json_to_string (node, FALSE);
+}
+
 static void
 runtime_handler_send_message (EphyWebExtension *self,
                               char             *name,
@@ -92,7 +108,11 @@ runtime_handler_send_message (EphyWebExtension *self,
 
   json = jsc_value_to_json (message, 0);
   g_message ("Sending message with %s", json);
-  ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage", json, extension_page_id, "{}", task);
+  ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage",
+                                                                 json,
+                                                                 extension_page_id,
+                                                                 create_sender_object (self, extension_page_id),
+                                                                 task);
 
   return;
 }
