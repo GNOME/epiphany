@@ -23,6 +23,7 @@ window.browser.tabs = {
     query: function (...args) { return ephy_message ('tabs.query', args); },
     get: function (...args) { return ephy_message ('tabs.get', args); },
     insertCSS: function (...args) { return ephy_message ('tabs.insertCSS', args); },
+    remove: function (...args) { return ephy_message ('tabs.remove', args); },
     removeCSS: function (...args) { return ephy_message ('tabs.removeCSS', args); },
     sendMessage: function (...args) { return ephy_message ('tabs.sendMessage', args); },
     onActivated: new EphyEventListener (),

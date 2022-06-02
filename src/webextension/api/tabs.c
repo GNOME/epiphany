@@ -613,10 +613,66 @@ tabs_handler_create (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static void
+close_tab_id (EphyShell *shell,
+              int        tab_id)
+{
+  EphyWindow *parent;
+  EphyTabView *tab_view;
+  GtkWidget *web_view;
+
+  web_view = GTK_WIDGET (get_web_view_for_tab_id (shell, tab_id, &parent));
+  if (!web_view)
+    return;
+
+  tab_view = ephy_window_get_tab_view (parent);
+  ephy_tab_view_close (tab_view, gtk_widget_get_parent (gtk_widget_get_parent (web_view)));
+}
+
+static char *
+tabs_handler_remove (EphyWebExtension  *self,
+                     char              *name,
+                     JSCValue          *args,
+                     gint64             extension_page_id,
+                     GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) tab_ids = NULL;
+
+  /* FIXME: Epiphany should use webkit_web_view_try_close() and this should wait until after that. */
+
+  tab_ids = jsc_value_object_get_property_at_index (args, 0);
+
+  if (jsc_value_is_number (tab_ids)) {
+    close_tab_id (shell, jsc_value_to_int32 (tab_ids));
+    return NULL;
+  }
+
+  if (jsc_value_is_array (tab_ids)) {
+    g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (tab_ids, 0);
+    for (guint i = 1; !jsc_value_is_undefined (value); i++) {
+      if (jsc_value_is_number (value))
+        close_tab_id (shell, jsc_value_to_int32 (value));
+
+      g_object_unref (value);
+      value = jsc_value_object_get_property_at_index (tab_ids, i);
+    }
+
+    return NULL;
+  }
+
+  g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.remove(): First argument is not a number or array.");
+  return NULL;
+}
+  g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.close(): First argument is not a number or array.");
+  return NULL;
+}
+
 static EphyWebExtensionSyncApiHandler tabs_handlers[] = {
   {"create", tabs_handler_create},
   {"query", tabs_handler_query},
   {"insertCSS", tabs_handler_insert_css},
+  {"remove", tabs_handler_remove},
   {"removeCSS", tabs_handler_remove_css},
   {"get", tabs_handler_get},
   {"executeScript", tabs_handler_execute_script},
