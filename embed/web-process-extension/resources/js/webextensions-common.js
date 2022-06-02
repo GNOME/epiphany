@@ -90,6 +90,20 @@ window.browser.storage = {
         clear: function () {
             return ephy_message ('storage.local.clear');
         }
+    },
+    sync: {
+        get: function (...args) {
+            return ephy_message ('storage.sync.get', args);
+        },
+        set: function (...args) {
+            return ephy_message ('storage.sync.set', args);
+        },
+        remove: function (...args) {
+            return ephy_message ('storage.sync.remove', args);
+        },
+        clear: function () {
+            return ephy_message ('storage.sync.clear');
+        }
     }
 };
 
