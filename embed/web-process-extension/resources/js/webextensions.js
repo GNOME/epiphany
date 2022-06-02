@@ -27,6 +27,7 @@ window.browser.tabs = {
     remove: function (...args) { return ephy_message ('tabs.remove', args); },
     removeCSS: function (...args) { return ephy_message ('tabs.removeCSS', args); },
     sendMessage: function (...args) { return ephy_message ('tabs.sendMessage', args); },
+    update: function (...args) { return ephy_message ('tabs.update', args); },
     getZoom: function (...args) { return ephy_message ('tabs.getZoom', args); },
     setZoom: function (...args) { return ephy_message ('tabs.setZoom', args); },
     onActivated: new EphyEventListener (),

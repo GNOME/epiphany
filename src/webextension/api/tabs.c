@@ -30,6 +30,8 @@
 /* Matches Firefox. */
 static const int WINDOW_ID_CURRENT = -2;
 
+static const int VALUE_UNSET = -1;
+
 static WebKitWebView *
 get_web_view_for_tab_id (EphyShell   *shell,
                          gint32       tab_id,
@@ -613,6 +615,71 @@ tabs_handler_create (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static char *
+tabs_handler_update (EphyWebExtension  *self,
+                     char              *name,
+                     JSCValue          *args,
+                     gint64             extension_page_id,
+                     GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) update_properties = NULL;
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  g_autofree char *new_url = NULL;
+  g_autoptr (JsonBuilder) builder = NULL;
+  g_autoptr (JsonNode) root = NULL;
+  WebKitWebView *web_view;
+  EphyWindow *parent_window;
+  int tab_id = -1;
+  int muted;
+
+  /* First arg is optional tabId, second updateProperties. */
+  update_properties = jsc_value_object_get_property_at_index (args, 1);
+  if (jsc_value_is_undefined (update_properties)) {
+    g_object_unref (update_properties);
+    update_properties = jsc_value_object_get_property_at_index (args, 0);
+  } else {
+    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+    tab_id = jsc_value_to_int32 (tab_id_value);
+  }
+
+  if (!jsc_value_is_object (update_properties)) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): Missing updateProperties.");
+    return NULL;
+  }
+
+  if (tab_id >= 0)
+    web_view = get_web_view_for_tab_id (shell, tab_id, &parent_window);
+  else {
+    web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+    parent_window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  }
+
+  if (!web_view) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): Failed to find tabId %d.", tab_id);
+    return NULL;
+  }
+
+  new_url = resolve_to_absolute_url (self, get_string_property (update_properties, "url", NULL));
+  if (!url_is_unprivileged (self, new_url)) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): URL '%s' is not allowed", new_url);
+    return NULL;
+  }
+
+  muted = get_boolean_property (update_properties, "muted", VALUE_UNSET);
+  if (muted != VALUE_UNSET)
+    webkit_web_view_set_is_muted (web_view, muted);
+
+  if (new_url)
+    webkit_web_view_load_uri (web_view, new_url);
+
+  builder = json_builder_new ();
+  add_web_view_to_json (builder, parent_window, EPHY_WEB_VIEW (web_view),
+                        ephy_web_extension_has_tab_or_host_permission (self, EPHY_WEB_VIEW (web_view), TRUE));
+  root = json_builder_get_root (builder);
+  return json_to_string (root, FALSE);
+}
+
 static void
 close_tab_id (EphyShell *shell,
               int        tab_id)
@@ -754,6 +821,7 @@ static EphyWebExtensionSyncApiHandler tabs_handlers[] = {
   {"sendMessage", tabs_handler_send_message},
   {"getZoom", tabs_handler_get_zoom},
   {"setZoom", tabs_handler_set_zoom},
+  {"update", tabs_handler_update},
 };
 
 void
