@@ -36,7 +36,7 @@ class EphyEventListener {
         for (const listener of this._listeners) {
             const ret = listener.callback (message, sender, reply_callback);
             if (typeof ret === 'object' && typeof ret.then === 'function') {
-                ret.then(x => { reply_callback(x); }).catch(x => { reply_callback(); })
+                ret.then(x => { reply_callback(x); }).catch(x => { reply_callback(); });
                 handled = true;
             } else if (ret === true) {
                 // We expect listener.callback to call `reply_callback`.
@@ -57,11 +57,21 @@ const ephy_message = function (fn, args) {
 
     return new Promise (function (resolve, reject) {
         const resolve_wrapper = function (x) {
+            window.browser.extension.lastError = null;
             if (callback !== undefined)
                 callback (x);
             resolve (x);
         };
-        ephy_send_message (fn, args, resolve_wrapper, reject);
+        const reject_wrapper = function (x) {
+            if (callback !== undefined) {
+                window.browser.extension.lastError = new Error(x);
+                callback ();
+                return;
+            }
+            reject(x);
+        };
+
+        ephy_send_message (fn, args, resolve_wrapper, reject_wrapper);
     });
 };
 
@@ -73,6 +83,7 @@ window.browser.runtime = {
     sendMessage: function (...args) {
         return ephy_message ('runtime.sendMessage', args);
     },
+    lastError: null,
 };
 
 
