@@ -84,3 +84,12 @@ window.browser.browserAction = {
 window.browser.windows = {
   WINDOW_ID_CURRENT: -2, /* Matches Firefox, used in tabs.c. */
 };
+
+window.browser.permissions = {
+    contains: function (...args) { return ephy_message ('permissions.contains', args); },
+    getAll: function (...args) { return ephy_message ('permissions.getAll', args); },
+    remove: function (...args) { return ephy_message ('permissions.remove', args); },
+    request: function (...args) { return ephy_message ('permissions.request', args); },
+    onAdded: new EphyEventListener (),
+    onRemoved: new EphyEventListener (),
+};
