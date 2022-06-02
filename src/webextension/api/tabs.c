@@ -23,6 +23,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
+#include "ephy-reader-handler.h"
 
 #include "tabs.h"
 
@@ -144,6 +145,49 @@ get_number_property (JSCValue   *args,
     return -1;
 
   return jsc_value_to_int32 (value);
+}
+
+static gboolean
+get_boolean_property (JSCValue   *obj,
+                      const char *name,
+                      gboolean    default_value)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
+
+  if (jsc_value_is_undefined (value))
+    return default_value;
+
+  return jsc_value_to_boolean (value);
+}
+
+static char *
+get_string_property (JSCValue   *obj,
+                     const char *name,
+                     const char *default_value)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
+
+  if (!jsc_value_is_string (value))
+    return g_strdup (default_value);
+
+  return jsc_value_to_string (value);
+}
+
+static EphyWindow *
+get_window_by_id (EphyShell *shell,
+                  gint64     window_id)
+{
+  if (window_id >= 0) {
+    GList *windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+    for (GList *win_list = windows; win_list; win_list = g_list_next (win_list)) {
+      EphyWindow *window = EPHY_WINDOW (win_list->data);
+
+      if ((guint64)window_id == ephy_window_get_uid (window))
+        return window;
+    }
+  }
+
+  return EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 }
 
 static char *
@@ -479,7 +523,98 @@ tabs_handler_send_message (EphyWebExtension  *self,
   return NULL;
 }
 
+static char *
+resolve_to_absolute_url (EphyWebExtension *web_extension,
+                         char             *url)
+{
+  char *absolute_url;
+
+  if (!url || *url != '/')
+    return url;
+
+  absolute_url = g_strconcat ("ephy-webextension://", ephy_web_extension_get_guid (web_extension), url, NULL);
+  g_free (url);
+  return absolute_url;
+}
+
+static gboolean
+url_is_unprivileged (EphyWebExtension *web_extension,
+                     const char       *url)
+{
+  const char *scheme;
+
+  if (!url)
+    return TRUE;
+
+  if (ephy_embed_utils_url_is_empty (url))
+    return TRUE;
+
+  scheme = g_uri_peek_scheme (url);
+
+  if (g_strcmp0 (scheme, "ephy-webextension") == 0) {
+    g_autofree char *web_extension_prefix = g_strconcat ("ephy-webextension://", ephy_web_extension_get_guid (web_extension), "/", NULL);
+    return g_str_has_prefix (url, web_extension_prefix);
+  }
+
+  return g_strcmp0 (scheme, "https") == 0 || g_strcmp0 (scheme, "http") == 0;
+}
+
+static char *
+tabs_handler_create (EphyWebExtension  *self,
+                     char              *name,
+                     JSCValue          *args,
+                     gint64             extension_page_id,
+                     GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyEmbed *embed;
+  EphyWindow *parent_window;
+  EphyWebView *web_view;
+  g_autoptr (JSCValue) create_properties = NULL;
+  g_autofree char *url = NULL;
+  EphyNewTabFlags new_tab_flags = 0;
+  g_autoptr (JsonBuilder) builder = NULL;
+  g_autoptr (JsonNode) root = NULL;
+
+  create_properties = jsc_value_object_get_property_at_index (args, 0);
+  if (!jsc_value_is_object (create_properties)) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.create(): First argument is not an object");
+    return NULL;
+  }
+
+  url = resolve_to_absolute_url (self, get_string_property (create_properties, "url", NULL));
+  if (!url_is_unprivileged (self, url)) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.create(): URL '%s' is not allowed", url);
+    return NULL;
+  }
+
+  if (get_boolean_property (create_properties, "active", FALSE))
+    new_tab_flags |= EPHY_NEW_TAB_JUMP;
+
+  parent_window = get_window_by_id (shell, get_number_property (create_properties, "windowId"));
+  embed = ephy_shell_new_tab (shell, parent_window, NULL, new_tab_flags);
+  web_view = ephy_embed_get_web_view (embed);
+
+  if (url && get_boolean_property (create_properties, "openInReaderMode", FALSE)) {
+    char *reader_url = g_strconcat (EPHY_READER_SCHEME, ":", url, NULL);
+    g_free (url);
+    url = reader_url;
+  }
+
+  if (url)
+    ephy_web_view_load_url (web_view, url);
+  else
+    ephy_web_view_load_new_tab_page (web_view);
+
+  builder = json_builder_new ();
+  add_web_view_to_json (builder, parent_window, web_view,
+                        ephy_web_extension_has_tab_or_host_permission (self, web_view, TRUE));
+  root = json_builder_get_root (builder);
+  return json_to_string (root, FALSE);
+}
+
 static EphyWebExtensionSyncApiHandler tabs_handlers[] = {
+  {"create", tabs_handler_create},
   {"query", tabs_handler_query},
   {"insertCSS", tabs_handler_insert_css},
   {"removeCSS", tabs_handler_remove_css},
