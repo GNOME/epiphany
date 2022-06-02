@@ -62,7 +62,7 @@ js_geturl (const char *path,
 {
   const char *guid = user_data;
 
-  return g_strdup_printf ("ephy-webextension://%s/%s", guid, path);
+  return g_strdup_printf ("ephy-webextension://%s/%s", guid, path[0] == '/' ? path + 1 : path);
 }
 
 static void
