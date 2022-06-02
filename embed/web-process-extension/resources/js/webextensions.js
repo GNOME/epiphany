@@ -22,6 +22,7 @@ window.browser.tabs = {
     executeScript: function (...args) { return ephy_message ('tabs.executeScript', args); },
     query: function (...args) { return ephy_message ('tabs.query', args); },
     get: function (...args) { return ephy_message ('tabs.get', args); },
+    getCurrent: function (...args) { return undefined; /* Until we support Option Pages this is correct. */ },
     insertCSS: function (...args) { return ephy_message ('tabs.insertCSS', args); },
     remove: function (...args) { return ephy_message ('tabs.remove', args); },
     removeCSS: function (...args) { return ephy_message ('tabs.removeCSS', args); },
