@@ -1026,13 +1026,16 @@ ephy_shell_new_tab_full (EphyShell       *shell,
   EphyEmbed *parent = NULL;
 
   g_assert (EPHY_IS_SHELL (shell));
-  g_assert (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WINDOW (window) || !window);
   g_assert (EPHY_IS_EMBED (previous_embed) || !previous_embed);
 
   embed_shell = EPHY_EMBED_SHELL (shell);
 
   if (flags & EPHY_NEW_TAB_JUMP)
     jump_to = TRUE;
+
+  if (!window)
+    window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
   LOG ("Opening new tab window %p parent-embed %p jump-to:%s",
        window, previous_embed, jump_to ? "t" : "f");
