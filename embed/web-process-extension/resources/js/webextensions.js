@@ -24,8 +24,16 @@ window.browser.tabs = {
     get: function (...args) { return ephy_message ('tabs.get', args); },
     insertCSS: function (...args) { return ephy_message ('tabs.insertCSS', args); },
     removeCSS: function (...args) { return ephy_message ('tabs.removeCSS', args); },
-    onUpdated: new EphyEventListener (),
     sendMessage: function (...args) { return ephy_message ('tabs.sendMessage', args); },
+    onActivated: new EphyEventListener (),
+    onAttached: new EphyEventListener (),
+    onCreated: new EphyEventListener (),
+    onDetached: new EphyEventListener (),
+    onHighlighted: new EphyEventListener (),
+    onMoved: new EphyEventListener (),
+    onRemoved: new EphyEventListener (),
+    onUpdated: new EphyEventListener (),
+    onZoomChange: new EphyEventListener (),
     TAB_ID_NONE: -1,
 };
 
