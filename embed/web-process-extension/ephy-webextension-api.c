@@ -206,7 +206,7 @@ ephy_send_message (const char *function_name,
   EphyWebExtensionExtension *extension = ephy_web_extension_extension_get ();
   guint page_id = GPOINTER_TO_UINT (user_data);
   WebKitUserMessage *message;
-  g_autofree char *args_json;
+  g_autofree char *args_json = NULL;
 
   if (!jsc_value_is_function (reject_callback))
     return; /* Can't reject in this case. */
