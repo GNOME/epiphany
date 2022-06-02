@@ -664,8 +664,83 @@ tabs_handler_remove (EphyWebExtension  *self,
   g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.remove(): First argument is not a number or array.");
   return NULL;
 }
-  g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.close(): First argument is not a number or array.");
+
+static char *
+tabs_handler_set_zoom (EphyWebExtension  *self,
+                       char              *name,
+                       JSCValue          *args,
+                       gint64             extension_page_id,
+                       GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) zoom_level_value = NULL;
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  WebKitWebView *web_view;
+  int tab_id = -1;
+  double zoom_level;
+
+  /* First arg is optional tabId, second zoomFactor. */
+  zoom_level_value = jsc_value_object_get_property_at_index (args, 1);
+  if (jsc_value_is_undefined (zoom_level_value)) {
+    g_object_unref (zoom_level_value);
+    zoom_level_value = jsc_value_object_get_property_at_index (args, 0);
+  } else {
+    tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+    tab_id = jsc_value_to_int32 (tab_id_value);
+  }
+
+  if (!jsc_value_is_number (zoom_level_value)) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.setZoom(): Missing zoomFactor.");
+    return NULL;
+  }
+
+  zoom_level = jsc_value_to_double (zoom_level_value);
+  if (zoom_level < 0.3 || zoom_level > 5) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.setZoom(): zoomFactor must be between 0.3 and 5.0.");
+    return NULL;
+  }
+
+  if (tab_id >= 0)
+    web_view = get_web_view_for_tab_id (shell, tab_id, NULL);
+  else
+    web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+
+  if (!web_view) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.setZoom(): Failed to find tabId %d.", tab_id);
+    return NULL;
+  }
+
+  webkit_web_view_set_zoom_level (web_view, jsc_value_to_double (zoom_level_value));
   return NULL;
+}
+
+static char *
+tabs_handler_get_zoom (EphyWebExtension  *self,
+                       char              *name,
+                       JSCValue          *args,
+                       gint64             extension_page_id,
+                       GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  WebKitWebView *web_view;
+  int tab_id = -1;
+
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (jsc_value_is_number (tab_id_value))
+    tab_id = jsc_value_to_int32 (tab_id_value);
+
+  if (tab_id >= 0)
+    web_view = get_web_view_for_tab_id (shell, tab_id, NULL);
+  else
+    web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+
+  if (!web_view) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.getZoom(): Failed to find tabId %d.", tab_id);
+    return NULL;
+  }
+
+  return g_strdup_printf ("%f", webkit_web_view_get_zoom_level (web_view));
 }
 
 static EphyWebExtensionSyncApiHandler tabs_handlers[] = {
@@ -677,6 +752,8 @@ static EphyWebExtensionSyncApiHandler tabs_handlers[] = {
   {"get", tabs_handler_get},
   {"executeScript", tabs_handler_execute_script},
   {"sendMessage", tabs_handler_send_message},
+  {"getZoom", tabs_handler_get_zoom},
+  {"setZoom", tabs_handler_set_zoom},
 };
 
 void
