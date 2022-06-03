@@ -769,6 +769,8 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
                            "related-view", ephy_web_extension_manager_get_background_web_view (manager, web_extension),
                            NULL);
 
+  webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), ephy_web_extension_get_host_permissions (web_extension));
+
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
 

@@ -152,12 +152,14 @@ gboolean               ephy_web_extension_has_tab_or_host_permission      (EphyW
                                                                            EphyWebView      *web_view,
                                                                            gboolean          is_user_interaction);
 
-gboolean               ephy_web_extension_has_host_permission             (EphyWebExtension *self,
+gboolean               ephy_web_extension_has_host_or_active_permission   (EphyWebExtension *self,
                                                                            EphyWebView      *web_view,
                                                                            gboolean          is_user_interaction);
 
 gboolean               ephy_web_extension_has_permission                  (EphyWebExtension *self,
                                                                            const char       *permission);
+
+const char * const    *ephy_web_extension_get_host_permissions            (EphyWebExtension *self);
 
 JsonNode              *ephy_web_extension_get_local_storage               (EphyWebExtension *self);
 

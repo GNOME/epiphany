@@ -309,7 +309,7 @@ tabs_handler_insert_css (EphyWebExtension  *self,
     return NULL;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
@@ -364,7 +364,7 @@ tabs_handler_remove_css (EphyWebExtension  *self,
     return NULL;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
@@ -482,7 +482,7 @@ tabs_handler_execute_script (EphyWebExtension *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (code && target_web_view) {
-    if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+    if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
       g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
       return;
     }
@@ -528,7 +528,7 @@ tabs_handler_send_message (EphyWebExtension  *self,
   target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (target_web_view) {
-    if (!ephy_web_extension_has_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+    if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
       g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
       return NULL;
     }

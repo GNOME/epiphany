@@ -107,6 +107,7 @@ struct _EphyWebExtension {
   GList *resources;
   GList *custom_css;
   GPtrArray *permissions;
+  GPtrArray *host_permissions;
   GCancellable *cancellable;
   char *local_storage_path;
   JsonNode *local_storage;
@@ -115,6 +116,8 @@ struct _EphyWebExtension {
 G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
 
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
+
+static gboolean is_supported_scheme (const char *scheme);
 
 gboolean
 ephy_web_extension_has_resource (EphyWebExtension *self,
@@ -714,8 +717,24 @@ web_extension_add_permission (JsonArray *array,
                               gpointer   user_data)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
+  const char *permission = json_node_get_string (element_node);
 
-  g_ptr_array_add (self->permissions, g_strdup (json_node_get_string (element_node)));
+  if (strstr (permission, "://") != NULL) {
+    if (!is_supported_scheme (g_uri_peek_scheme (permission))) {
+      g_warning ("Unsupported host permission: %s", permission);
+      return;
+    }
+    g_ptr_array_insert (self->host_permissions, 0, g_strdup (permission));
+    return;
+  }
+
+  if (strcmp (permission, "<all_urls>") == 0) {
+    g_ptr_array_insert (self->host_permissions, 0, g_strdup ("http://*/*"));
+    g_ptr_array_insert (self->host_permissions, 0, g_strdup ("https://*/*"));
+    return;
+  }
+
+  g_ptr_array_add (self->permissions, g_strdup (permission));
 }
 
 static void
@@ -747,6 +766,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->background, web_extension_background_free);
   g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
   g_clear_pointer (&self->permissions, g_ptr_array_unref);
+  g_clear_pointer (&self->host_permissions, g_ptr_array_unref);
   g_clear_pointer (&self->local_storage, json_node_unref);
 
   g_clear_pointer (&self->page_action, web_extension_page_action_free);
@@ -771,10 +791,13 @@ ephy_web_extension_init (EphyWebExtension *self)
 {
   self->page_action_map = g_hash_table_new (NULL, NULL);
   self->permissions = g_ptr_array_new_full (1, g_free);
+  self->host_permissions = g_ptr_array_new_full (2, g_free);
 
   self->guid = g_uuid_string_random ();
 
-  g_ptr_array_add (self->permissions, g_strdup_printf ("ephy-webextension://%s/*", self->guid));
+  g_ptr_array_add (self->host_permissions, g_strdup_printf ("ephy-webextension://%s/*", self->guid));
+  /* This has to be NULL terminated as we pass it to webkit_web_view_set_cors_allowlist() directly. */
+  g_ptr_array_add (self->host_permissions, NULL);
 }
 
 static EphyWebExtension *
@@ -1236,6 +1259,13 @@ ephy_web_extension_get_permissions (EphyWebExtension *self)
   return self->permissions;
 }
 
+const char * const *
+ephy_web_extension_get_host_permissions (EphyWebExtension *self)
+{
+  g_assert (self->host_permissions->pdata[self->host_permissions->len - 1] == NULL);
+  return (const char * const *)self->host_permissions->pdata;
+}
+
 static gboolean
 is_supported_scheme (const char *scheme)
 {
@@ -1368,9 +1398,6 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 {
   EphyWebView *active_web_view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
   gboolean is_active_tab = active_web_view == web_view;
-  GUri *host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
-
-  g_assert (host);
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
 
@@ -1382,6 +1409,14 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 
     if (allow_tabs && strcmp (permission, "tabs") == 0)
       return TRUE;
+  }
+
+  /* Note this one is NULL terminated. */
+  for (guint i = 0; i < self->host_permissions->len - 1; i++) {
+    GUri *host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+    const char *permission = g_ptr_array_index (self->permissions, i);
+
+    g_assert (host);
 
     if (permission_matches_uri (permission, host))
       return TRUE;
@@ -1391,9 +1426,9 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 }
 
 gboolean
-ephy_web_extension_has_host_permission (EphyWebExtension *self,
-                                        EphyWebView      *web_view,
-                                        gboolean          is_user_interaction)
+ephy_web_extension_has_host_or_active_permission (EphyWebExtension *self,
+                                                  EphyWebView      *web_view,
+                                                  gboolean          is_user_interaction)
 {
   return ephy_web_extension_has_permission_internal (self, web_view, is_user_interaction, FALSE);
 }
