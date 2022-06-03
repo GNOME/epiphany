@@ -31,7 +31,6 @@ ephy_user_agent_get (void)
 {
   static char *user_agent = NULL;
   WebKitSettings *settings;
-  gboolean web_app;
 
   if (user_agent)
     return user_agent;
@@ -43,12 +42,8 @@ ephy_user_agent_get (void)
     g_free (user_agent);
   }
 
-  web_app = ephy_profile_dir_is_web_application ();
-
   settings = webkit_settings_new ();
-  user_agent = g_strdup_printf ("%s%s",
-                                webkit_settings_get_user_agent (settings),
-                                web_app ? " (Web App)" : "");
+  user_agent = g_strdup (webkit_settings_get_user_agent (settings));
   g_object_unref (settings);
 
   return user_agent;
