@@ -24,6 +24,7 @@
 #include "config.h"
 #include "ephy-window.h"
 
+#include "context-menu-commands.h"
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
 #include "ephy-bookmark-states.h"
@@ -62,7 +63,6 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
-#include "popup-commands.h"
 #include "window-commands.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -888,40 +888,40 @@ static const GActionEntry popup_entries [] = {
   { "context-bookmark-page", window_cmd_bookmark_page },
   /* Links. */
 
-  { "open-link-in-new-window", popup_cmd_link_in_new_window },
-  { "open-link-in-new-tab", popup_cmd_link_in_new_tab },
-  { "open-link-in-incognito-window", popup_cmd_link_in_incognito_window },
-  { "download-link-as", popup_cmd_download_link_as },
-  { "copy-link-address", popup_cmd_copy_link_address },
-  { "copy-email-address", popup_cmd_copy_link_address },
+  { "open-link-in-new-window", context_cmd_link_in_new_window },
+  { "open-link-in-new-tab", context_cmd_link_in_new_tab },
+  { "open-link-in-incognito-window", context_cmd_link_in_incognito_window },
+  { "download-link-as", context_cmd_download_link_as },
+  { "copy-link-address", context_cmd_copy_link_address },
+  { "copy-email-address", context_cmd_copy_link_address },
 
   /* Images. */
 
-  { "view-image", popup_cmd_view_image_in_new_tab },
-  { "copy-image-location", popup_cmd_copy_image_location },
-  { "save-image-as", popup_cmd_save_image_as },
-  { "set-image-as-background", popup_cmd_set_image_as_background },
+  { "view-image", context_cmd_view_image_in_new_tab },
+  { "copy-image-location", context_cmd_copy_image_location },
+  { "save-image-as", context_cmd_save_image_as },
+  { "set-image-as-background", context_cmd_set_image_as_background },
 
   /* Video. */
 
-  { "open-video-in-new-window", popup_cmd_media_in_new_window },
-  { "open-video-in-new-tab", popup_cmd_media_in_new_tab },
-  { "save-video-as", popup_cmd_save_media_as },
-  { "copy-video-location", popup_cmd_copy_media_location },
+  { "open-video-in-new-window", context_cmd_media_in_new_window },
+  { "open-video-in-new-tab", context_cmd_media_in_new_tab },
+  { "save-video-as", context_cmd_save_media_as },
+  { "copy-video-location", context_cmd_copy_media_location },
 
   /* Audio. */
 
-  { "open-audio-in-new-window", popup_cmd_media_in_new_window },
-  { "open-audio-in-new-tab", popup_cmd_media_in_new_tab },
-  { "save-audios-as", popup_cmd_save_media_as },
-  { "copy-audio-location", popup_cmd_copy_media_location },
+  { "open-audio-in-new-window", context_cmd_media_in_new_window },
+  { "open-audio-in-new-tab", context_cmd_media_in_new_tab },
+  { "save-audios-as", context_cmd_save_media_as },
+  { "copy-audio-location", context_cmd_copy_media_location },
 
   /* Selection */
-  { "search-selection", popup_cmd_search_selection, "s" },
-  { "open-selection", popup_cmd_open_selection, "s" },
-  { "open-selection-in-new-tab", popup_cmd_open_selection_in_new_tab, "s" },
-  { "open-selection-in-new-window", popup_cmd_open_selection_in_new_window, "s" },
-  { "open-selection-in-incognito-window", popup_cmd_open_selection_in_incognito_window, "s" },
+  { "search-selection", context_cmd_search_selection, "s" },
+  { "open-selection", context_cmd_open_selection, "s" },
+  { "open-selection-in-new-tab", context_cmd_open_selection_in_new_tab, "s" },
+  { "open-selection-in-new-window", context_cmd_open_selection_in_new_window, "s" },
+  { "open-selection-in-incognito-window", context_cmd_open_selection_in_incognito_window, "s" },
 };
 
 const struct {

@@ -46,7 +46,7 @@ libephymain_sources = [
   'ephy-tab-view.c',
   'ephy-web-extension-dialog.c',
   'ephy-window.c',
-  'popup-commands.c',
+  'context-menu-commands.c',
   'preferences/clear-data-view.c',
   'preferences/ephy-data-view.c',
   'preferences/ephy-lang-row.c',
