@@ -149,7 +149,7 @@ get_firefox_profiles (void)
                                NULL);
   keyfile = g_key_file_new ();
   g_key_file_load_from_file (keyfile, filename, G_KEY_FILE_NONE, &error);
-  if (error) {
+  if (error && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT)) {
     g_warning ("Failed to load %s: %s", filename, error->message);
 
     return NULL;
