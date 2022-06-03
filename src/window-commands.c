@@ -93,15 +93,21 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
+#define IMPORT_FROM_GVDB_ID "gvdb"
+#define IMPORT_FROM_HTML_ID "html"
+#define IMPORT_FROM_FIREFOX_ID "firefox"
+#define IMPORT_FROM_CHROME_ID "chrome"
+#define IMPORT_FROM_CHROMIUM_ID "chromium"
+
 typedef enum {
   IMPORT_TYPE_CHOOSE,
   IMPORT_TYPE_IMPORT
 } ImportTypes;
 
-
 struct import_option {
   const char *name;
   ImportTypes type;
+  const char *id;
   gboolean (*exists)(void);
 };
 
@@ -110,11 +116,11 @@ static gboolean chrome_exists (void);
 static gboolean chromium_exists (void);
 
 static struct import_option import_options[] = {
-  { N_("GVDB File"), IMPORT_TYPE_CHOOSE, NULL },
-  { N_("HTML File"), IMPORT_TYPE_CHOOSE, NULL },
-  { N_("Firefox"), IMPORT_TYPE_IMPORT, firefox_exists },
-  { N_("Chrome"), IMPORT_TYPE_IMPORT, chrome_exists },
-  { N_("Chromium"), IMPORT_TYPE_IMPORT, chromium_exists }
+  { N_("GVDB File"), IMPORT_TYPE_CHOOSE, IMPORT_FROM_GVDB_ID, NULL },
+  { N_("HTML File"), IMPORT_TYPE_CHOOSE, IMPORT_FROM_HTML_ID, NULL },
+  { N_("Firefox"), IMPORT_TYPE_IMPORT, IMPORT_FROM_FIREFOX_ID, firefox_exists },
+  { N_("Chrome"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROME_ID, chrome_exists },
+  { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_exists }
 };
 
 static void
@@ -211,16 +217,19 @@ chromium_exists (void)
 }
 
 static GtkTreeModel *
-create_tree_model (void)
+create_tree_model (int *out_id_column)
 {
   enum {
-    TEXT_COL
+    TEXT_COL,
+    ID_COL
   };
   GtkListStore *list_store;
   GtkTreeIter iter;
   int i;
 
-  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  *out_id_column = ID_COL;
+
+  list_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   for (i = G_N_ELEMENTS (import_options) - 1; i >= 0; i--) {
     if (import_options[i].exists && !import_options[i].exists ())
       continue;
@@ -228,6 +237,7 @@ create_tree_model (void)
     gtk_list_store_prepend (list_store, &iter);
     gtk_list_store_set (list_store, &iter,
                         TEXT_COL, _(import_options[i].name),
+                        ID_COL, import_options[i].id,
                         -1);
   }
 
@@ -502,29 +512,22 @@ dialog_bookmarks_import_cb (GtkWindow       *parent,
                             GtkResponseType  response,
                             GtkComboBox     *combo_box)
 {
-  int active;
+  const char *active;
 
   if (response == GTK_RESPONSE_OK) {
-    active = gtk_combo_box_get_active (combo_box);
-    switch (active) {
-      case 0:
-        dialog_bookmarks_import (parent);
-        break;
-      case 1:
-        dialog_bookmarks_import_from_html (parent);
-        break;
-      case 2:
-        dialog_bookmarks_import_from_firefox (parent);
-        break;
-      case 3:
-        dialog_bookmarks_import_from_chrome (parent);
-        break;
-      case 4:
-        dialog_bookmarks_import_from_chromium (parent);
-        break;
-      default:
-        g_assert_not_reached ();
-    }
+    active = gtk_combo_box_get_active_id (combo_box);
+    if (strcmp (active, IMPORT_FROM_GVDB_ID) == 0)
+      dialog_bookmarks_import (parent);
+    else if (strcmp (active, IMPORT_FROM_HTML_ID) == 0)
+      dialog_bookmarks_import_from_html (parent);
+    else if (strcmp (active, IMPORT_FROM_FIREFOX_ID) == 0)
+      dialog_bookmarks_import_from_firefox (parent);
+    else if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
+      dialog_bookmarks_import_from_chrome (parent);
+    else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
+      dialog_bookmarks_import_from_chromium (parent);
+    else
+      g_assert_not_reached ();
   } else if (response == GTK_RESPONSE_CANCEL) {
     gtk_widget_destroy (GTK_WIDGET (parent));
   }
@@ -543,6 +546,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkWidget *combo_box;
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
+  int id_column = 0;
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
                          "use-header-bar", TRUE,
@@ -570,10 +574,11 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   label = gtk_label_new (_("From:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-  tree_model = create_tree_model ();
+  tree_model = create_tree_model (&id_column);
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
   gtk_widget_set_hexpand (combo_box, TRUE);
   g_object_unref (tree_model);
+  gtk_combo_box_set_id_column (GTK_COMBO_BOX (combo_box), id_column);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
@@ -690,21 +695,24 @@ chromium_passwords_exists (void)
 }
 
 static struct import_option import_passwords_options[] = {
-  { N_("Chrome"), IMPORT_TYPE_IMPORT, chrome_passwords_exists },
-  { N_("Chromium"), IMPORT_TYPE_IMPORT, chromium_passwords_exists }
+  { N_("Chrome"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROME_ID, chrome_passwords_exists },
+  { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_passwords_exists }
 };
 
 static GtkTreeModel *
-create_import_passwords_tree_model (void)
+create_import_passwords_tree_model (int *out_id_column)
 {
   enum {
-    TEXT_COL
+    TEXT_COL,
+    ID_COL
   };
   GtkListStore *list_store;
   GtkTreeIter iter;
   int i;
 
-  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  *out_id_column = ID_COL;
+
+  list_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   for (i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--) {
     if (import_passwords_options[i].exists && !import_passwords_options[i].exists ())
       continue;
@@ -712,6 +720,7 @@ create_import_passwords_tree_model (void)
     gtk_list_store_prepend (list_store, &iter);
     gtk_list_store_set (list_store, &iter,
                         TEXT_COL, _(import_passwords_options[i].name),
+                        ID_COL, import_passwords_options[i].id,
                         -1);
   }
 
@@ -738,21 +747,17 @@ dialog_passwords_import_cb (GtkDialog   *dialog,
 {
   if (response == GTK_RESPONSE_OK) {
     EphyPasswordManager *manager;
-    int active;
+    const char *active;
 
     manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-    active = gtk_combo_box_get_active (combo_box);
+    active = gtk_combo_box_get_active_id (combo_box);
 
-    switch (active) {
-      case 0:
-        ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
-        break;
-      case 1:
-        ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
-        break;
-      default:
-        g_assert_not_reached ();
-    }
+    if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
+      ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
+    else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
+      ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
+    else
+      g_assert_not_reached ();
   } else {
     gtk_widget_destroy (GTK_WIDGET (dialog));
   }
@@ -787,6 +792,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   GtkWidget *combo_box;
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
+  int id_column = 0;
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
                          "use-header-bar", TRUE,
@@ -814,7 +820,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   label = gtk_label_new (_("From:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-  tree_model = create_import_passwords_tree_model ();
+  tree_model = create_import_passwords_tree_model (&id_column);
 
   if (gtk_tree_model_iter_n_children (tree_model, NULL))
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
@@ -829,6 +835,7 @@ window_cmd_import_passwords (GSimpleAction *action,
                     G_CALLBACK (passwords_combo_box_changed_cb),
                     gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK));
 
+  gtk_combo_box_set_id_column (GTK_COMBO_BOX (combo_box), id_column);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   cell_renderer = gtk_cell_renderer_text_new ();
