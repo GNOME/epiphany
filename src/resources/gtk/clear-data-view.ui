@@ -19,12 +19,12 @@
     <property name="child_model">treestore</property>
   </object>
   <template class="ClearDataView" parent="EphyDataView">
-    <property name="title" translatable="yes">Personal Data</property>
+    <property name="title" translatable="yes">Website Data</property>
     <property name="clear_button_label" translatable="yes">_Clear Data</property>
-    <property name="clear_button_tooltip" translatable="yes">Remove selected personal data</property>
-    <property name="search_description" translatable="yes">Search personal data</property>
-    <property name="empty_title" translatable="yes">There is no Personal Data</property>
-    <property name="empty_description" translatable="yes">Personal data will be listed here</property>
+    <property name="clear_button_tooltip" translatable="yes">Remove selected website data</property>
+    <property name="search_description" translatable="yes">Search website data</property>
+    <property name="empty_title" translatable="yes">There is no Website Data</property>
+    <property name="empty_description" translatable="yes">Website data will be listed here</property>
     <property name="has_search_results">True</property>
     <property name="can_clear">True</property>
     <signal name="clear-button-clicked" handler="on_clear_button_clicked"/>
@@ -52,7 +52,7 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Clear selected personal data:</property>
+                        <property name="label" translatable="yes">Clear selected website data:</property>
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <property name="wrap">True</property>
