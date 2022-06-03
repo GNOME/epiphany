@@ -741,6 +741,51 @@ init_web_extension_api (WebKitWebContext *web_context,
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
+static gboolean
+decide_policy_cb (WebKitWebView            *web_view,
+                  WebKitPolicyDecision     *decision,
+                  WebKitPolicyDecisionType  decision_type,
+                  EphyWebExtension         *web_extension)
+{
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *navigation_action;
+  WebKitURIRequest *request;
+  const char *request_uri;
+  const char *request_scheme;
+  EphyEmbed *embed;
+  EphyWebView *new_view;
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
+      decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
+    return FALSE;
+
+  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+  request = webkit_navigation_action_get_request (navigation_action);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION) {
+    g_autofree char *allowed_prefix = g_strdup_printf ("ephy-webextension://%s/", ephy_web_extension_get_guid (web_extension));
+    if (g_str_has_prefix (request_uri, allowed_prefix))
+      webkit_policy_decision_use (decision);
+    else {
+      g_warning ("Extension '%s' tried to navigate to %s", ephy_web_extension_get_name (web_extension), request_uri);
+      webkit_policy_decision_ignore (decision);
+    }
+    return TRUE;
+  }
+
+  request_scheme = g_uri_peek_scheme (request_uri);
+  if (g_strcmp0 (request_scheme, "https") == 0 || g_strcmp0 (request_scheme, "http") == 0) {
+    embed = ephy_shell_new_tab (ephy_shell_get_default (), NULL, NULL, 0);
+    new_view = ephy_embed_get_web_view (embed);
+    ephy_web_view_load_url (new_view, request_uri);
+  }
+
+  webkit_policy_decision_ignore (decision);
+  return TRUE;
+}
+
 static GtkWidget *
 create_web_extensions_webview (EphyWebExtension *web_extension)
 {
@@ -773,6 +818,8 @@ create_web_extensions_webview (EphyWebExtension *web_extension)
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
+
+  g_signal_connect (web_view, "decide-policy", G_CALLBACK (decide_policy_cb), web_extension);
 
   return web_view;
 }
