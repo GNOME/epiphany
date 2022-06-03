@@ -123,20 +123,23 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
 {
   EphyDownloadsManager *manager;
   GtkListBoxRow *row;
+  int i = 0;
 
   gtk_widget_hide (GTK_WIDGET (popover));
 
   manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   g_signal_handlers_block_by_func (manager, download_removed_cb, popover);
 
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (popover->downloads_box), 0))) {
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (popover->downloads_box), i))) {
     GtkWidget *widget;
     EphyDownload *download;
 
     widget = gtk_bin_get_child (GTK_BIN (row));
     download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (widget));
 
-    if (!ephy_download_is_active (download)) {
+    if (ephy_download_is_active (download)) {
+      i++;
+    } else {
       ephy_downloads_manager_remove_download (manager, download);
       gtk_container_remove (GTK_CONTAINER (popover->downloads_box), GTK_WIDGET (row));
     }
