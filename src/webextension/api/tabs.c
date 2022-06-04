@@ -564,6 +564,14 @@ url_is_unprivileged (EphyWebExtension *web_extension,
                      const char       *url)
 {
   const char *scheme;
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/create */
+  const char * const forbidden_schemes[] = {
+    "data",
+    "javascript",
+    "chrome",
+    "file",
+    "about", /* ephy_embed_utils_url_is_empty() allows safe about URIs. */
+  };
 
   if (!url)
     return TRUE;
@@ -573,12 +581,12 @@ url_is_unprivileged (EphyWebExtension *web_extension,
 
   scheme = g_uri_peek_scheme (url);
 
-  if (g_strcmp0 (scheme, "ephy-webextension") == 0) {
-    g_autofree char *web_extension_prefix = g_strconcat ("ephy-webextension://", ephy_web_extension_get_guid (web_extension), "/", NULL);
-    return g_str_has_prefix (url, web_extension_prefix);
+  for (guint i = 0; i < G_N_ELEMENTS (forbidden_schemes); i++) {
+    if (g_strcmp0 (scheme, forbidden_schemes[i]) == 0)
+      return FALSE;
   }
 
-  return g_strcmp0 (scheme, "https") == 0 || g_strcmp0 (scheme, "http") == 0;
+  return TRUE;
 }
 
 static char *
