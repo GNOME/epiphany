@@ -518,10 +518,10 @@ ephy_web_extension_handle_user_message (WebKitWebContext  *context,
   g_autoptr (JSCValue) args = NULL;
   const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
-  guint page_id;
+  guint64 page_id;
   const char *json_args;
 
-  g_variant_get (webkit_user_message_get_parameters (message), "(u&s)", &page_id, &json_args);
+  g_variant_get (webkit_user_message_get_parameters (message), "(t&s)", &page_id, &json_args);
 
   js_context = jsc_context_new ();
   args = jsc_value_new_from_json (js_context, json_args);

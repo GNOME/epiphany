@@ -139,92 +139,6 @@ ephy_web_extension_extension_get (void)
   return EPHY_WEB_EXTENSION_EXTENSION (g_once (&once_init, ephy_web_extension_extension_create_instance, NULL));
 }
 
-typedef struct {
-  JSCValue *resolve_callback;
-  JSCValue *reject_callback;
-} EphyMessageData;
-
-static void
-ephy_message_data_free (EphyMessageData *data)
-{
-  g_object_unref (data->reject_callback);
-  g_object_unref (data->resolve_callback);
-  g_free (data);
-}
-
-static EphyMessageData *
-ephy_message_data_new (JSCValue *resolve_callback,
-                       JSCValue *reject_callback)
-{
-  EphyMessageData *data = g_new (EphyMessageData, 1);
-  data->resolve_callback = g_object_ref (resolve_callback);
-  data->reject_callback = g_object_ref (reject_callback);
-  return data;
-}
-
-static void
-on_send_message_finish (WebKitWebExtension *extension,
-                        GAsyncResult       *result,
-                        gpointer            user_data)
-{
-  EphyMessageData *message_data = user_data;
-  g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitUserMessage) response = NULL;
-  g_autoptr (JSCValue) ret = NULL;
-
-  response = webkit_web_extension_send_message_to_context_finish (extension, result, &error);
-
-  if (error) {
-    ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, error->message, G_TYPE_NONE);
-  } else {
-    const char *json = g_variant_get_string (webkit_user_message_get_parameters (response), NULL);
-    g_autoptr (JSCValue) value = NULL;
-    JSCContext *context = jsc_value_get_context (message_data->resolve_callback);
-
-    if (strcmp (json, "") == 0) {
-      value = jsc_value_new_undefined (context);
-      ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
-    } else if (strcmp (webkit_user_message_get_name (response), "error") == 0) {
-      ret = jsc_value_function_call (message_data->reject_callback, G_TYPE_STRING, json, G_TYPE_NONE);
-    } else {
-      value = jsc_value_new_from_json (context, json);
-      ret = jsc_value_function_call (message_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
-    }
-  }
-
-  ephy_message_data_free (message_data);
-  (void)ret;
-}
-
-static void
-ephy_send_message (const char *function_name,
-                   JSCValue   *function_args,
-                   JSCValue   *resolve_callback,
-                   JSCValue   *reject_callback,
-                   gpointer    user_data)
-{
-  EphyWebExtensionExtension *extension = ephy_web_extension_extension_get ();
-  guint page_id = GPOINTER_TO_UINT (user_data);
-  WebKitUserMessage *message;
-  g_autofree char *args_json = NULL;
-
-  if (!jsc_value_is_function (reject_callback))
-    return; /* Can't reject in this case. */
-
-  if (!jsc_value_is_array (function_args) || !jsc_value_is_function (resolve_callback)) {
-    g_autoptr (JSCValue) ret = jsc_value_function_call (reject_callback, G_TYPE_STRING, "ephy_send_message(): Invalid Arguments", G_TYPE_NONE);
-    return;
-  }
-
-  args_json = jsc_value_to_json (function_args, 0);
-  message = webkit_user_message_new (function_name,
-                                     g_variant_new ("(us)", page_id, args_json));
-
-  webkit_web_extension_send_message_to_context (extension->extension, message, NULL,
-                                                (GAsyncReadyCallback)on_send_message_finish,
-                                                ephy_message_data_new (resolve_callback, reject_callback));
-}
-
 static JSCValue *
 ephy_get_view_objects (gpointer user_data)
 {
@@ -281,26 +195,17 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   js_browser = jsc_context_get_value (js_context, "browser");
   g_assert (!jsc_value_is_object (js_browser));
 
-  js_function = jsc_value_new_function (js_context,
-                                        "ephy_send_message",
-                                        G_CALLBACK (ephy_send_message),
-                                        GUINT_TO_POINTER (webkit_web_page_get_id (page)), NULL,
-                                        G_TYPE_NONE,
-                                        4,
-                                        G_TYPE_STRING,
-                                        JSC_TYPE_VALUE,
-                                        JSC_TYPE_VALUE,
-                                        JSC_TYPE_VALUE);
-  jsc_context_set_value (js_context, "ephy_send_message", js_function);
-  g_clear_object (&js_function);
-
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions-common.js", 1);
   g_bytes_unref (bytes);
   g_clear_object (&result);
 
-  ephy_webextension_install_common_apis (js_context, extension->guid, extension->translations);
+  ephy_webextension_install_common_apis (extension->extension,
+                                         js_context,
+                                         extension->guid,
+                                         webkit_web_page_get_id (page),
+                                         extension->translations);
 
   js_browser = jsc_context_get_value (js_context, "browser");
   js_extension = jsc_value_object_get_property (js_browser, "extension");
