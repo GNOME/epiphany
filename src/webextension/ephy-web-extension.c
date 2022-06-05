@@ -720,7 +720,8 @@ web_extension_add_permission (JsonArray *array,
   const char *permission = json_node_get_string (element_node);
 
   if (strstr (permission, "://") != NULL) {
-    if (!is_supported_scheme (g_uri_peek_scheme (permission))) {
+    if (!g_str_has_prefix (permission, "*://") &&
+        !is_supported_scheme (g_uri_peek_scheme (permission))) {
       g_warning ("Unsupported host permission: %s", permission);
       return;
     }
@@ -1273,6 +1274,8 @@ is_supported_scheme (const char *scheme)
     "https", "http", "wss", "ws", "data", "file", "ephy-webextension"
   };
 
+  g_assert (scheme);
+
   for (guint i = 0; i < G_N_ELEMENTS (supported_schemes); i++) {
     if (strcmp (supported_schemes[i], scheme) == 0)
       return TRUE;
@@ -1291,7 +1294,8 @@ scheme_matches (const char *permission_scheme,
   };
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#scheme */
-  if (strcmp (permission_scheme, "*") == 0) {
+  /* wildcard is a GUri workaround, see parse_uri_with_wildcard_scheme(). */
+  if (strcmp (permission_scheme, "wildcard") == 0) {
     for (guint i = 0; i < G_N_ELEMENTS (wildcard_allowed_schemes); i++) {
       if (strcmp (wildcard_allowed_schemes[i], uri_scheme) == 0)
         return TRUE;
@@ -1348,6 +1352,22 @@ join_path_and_query (GUri *uri)
   return g_strjoin ("?", path, query, NULL);
 }
 
+static GUri *
+parse_uri_with_wildcard_scheme (const char  *uri,
+                                GError     **error)
+{
+  g_autofree char *modified_uri = NULL;
+  const char *uri_to_check = uri;
+
+  /* GUri considers the scheme `*` invalid so we have to hackily work around that. */
+  if (g_str_has_prefix (uri, "*://")) {
+    modified_uri = g_strconcat ("wildcard", uri + 1, NULL);
+    uri_to_check = modified_uri;
+  }
+
+  return g_uri_parse (uri_to_check, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, error);
+}
+
 static gboolean
 permission_matches_uri (const char *permission,
                         GUri       *uri)
@@ -1361,7 +1381,7 @@ permission_matches_uri (const char *permission,
   if (strcmp (permission, "<all_urls>") == 0)
     return is_supported_scheme (g_uri_get_scheme (uri));
 
-  permission_uri = g_uri_parse (permission, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, &error);
+  permission_uri = parse_uri_with_wildcard_scheme (permission, &error);
   if (error) {
     g_message ("Failed to parse permission '%s' as URI: %s", permission, error->message);
     return FALSE;
