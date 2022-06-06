@@ -1434,7 +1434,7 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
   /* Note this one is NULL terminated. */
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
     GUri *host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
-    const char *permission = g_ptr_array_index (self->permissions, i);
+    const char *permission = g_ptr_array_index (self->host_permissions, i);
 
     g_assert (host);
 
