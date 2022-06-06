@@ -79,19 +79,15 @@ void                     ephy_web_extension_manager_emit_in_extension_views_exce
                                                                                      EphyWebExtension        *web_extension,
                                                                                      const char              *name,
                                                                                      const char              *json,
-                                                                                     gint64                   extension_page_id);
+                                                                                     WebKitWebView           *own_web_view);
 
 void                     ephy_web_extension_manager_emit_in_extension_views_with_reply
                                                                                     (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
                                                                                      const char              *name,
                                                                                      const char              *json,
-                                                                                     gint64                   extension_page_id,
+                                                                                     WebKitWebView           *own_web_view,
                                                                                      const char              *sender_json,
                                                                                      GTask                   *reply_task);
-
-WebKitWebView           *ephy_web_extension_manager_get_web_view_for_page_id        (EphyWebExtensionManager *self,
-                                                                                     EphyWebExtension        *web_extension,
-                                                                                     gint64                   page_id);
 
 G_END_DECLS

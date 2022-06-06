@@ -27,10 +27,9 @@
 
 G_BEGIN_DECLS
 
-void ephy_webextension_install_common_apis (WebKitWebExtension *extension,
-                                            JSCContext         *js_context,
-                                            const char         *guid,
-                                            guint64             page_id,
-                                            JsonObject         *translations);
+void ephy_webextension_install_common_apis (WebKitWebPage *page,
+                                            JSCContext    *js_context,
+                                            const char    *guid,
+                                            JsonObject    *translations);
 
 G_END_DECLS

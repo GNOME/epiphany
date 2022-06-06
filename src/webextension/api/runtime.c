@@ -31,7 +31,7 @@ static char *
 runtime_handler_get_browser_info (EphyWebExtension  *self,
                                   char              *name,
                                   JSCValue          *args,
-                                  gint64             extension_page_id,
+                                  WebKitWebView     *web_view,
                                   GError           **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -60,12 +60,10 @@ is_empty_object (JSCValue *value)
 
 static char *
 create_sender_object (EphyWebExtension *web_extension,
-                      gint64            page_id)
+                      WebKitWebView    *web_view)
 {
   g_autoptr (JsonNode) node = json_node_init_object (json_node_alloc (), json_object_new ());
   JsonObject *obj = json_node_get_object (node);
-  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  WebKitWebView *web_view = ephy_web_extension_manager_get_web_view_for_page_id (manager, web_extension, page_id);
 
   json_object_set_string_member (obj, "id", ephy_web_extension_get_guid (web_extension));
   if (web_view)
@@ -78,7 +76,7 @@ static void
 runtime_handler_send_message (EphyWebExtension *self,
                               char             *name,
                               JSCValue         *args,
-                              gint64            extension_page_id,
+                              WebKitWebView    *web_view,
                               GTask            *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
@@ -110,8 +108,8 @@ runtime_handler_send_message (EphyWebExtension *self,
   g_message ("Sending message with %s", json);
   ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage",
                                                                  json,
-                                                                 extension_page_id,
-                                                                 create_sender_object (self, extension_page_id),
+                                                                 web_view,
+                                                                 create_sender_object (self, web_view),
                                                                  task);
 
   return;
@@ -121,7 +119,7 @@ static char *
 runtime_handler_open_options_page (EphyWebExtension  *self,
                                    char              *name,
                                    JSCValue          *args,
-                                   gint64             extension_page_id,
+                                   WebKitWebView     *web_view,
                                    GError           **error)
 {
   const char *data = ephy_web_extension_get_option_ui_page (self);
@@ -157,7 +155,7 @@ void
 ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
                                         char             *name,
                                         JSCValue         *args,
-                                        gint64            extension_page_id,
+                                        WebKitWebView    *web_view,
                                         GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -168,7 +166,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, extension_page_id, &error);
+      ret = handler.execute (self, name, args, web_view, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));
@@ -183,7 +181,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
     EphyWebExtensionAsyncApiHandler handler = runtime_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, args, extension_page_id, task);
+      handler.execute (self, name, args, web_view, task);
       return;
     }
   }

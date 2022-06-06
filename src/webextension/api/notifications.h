@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 void ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
                                                     char            *name,
                                                     JSCValue        *args,
-                                                    gint64           extension_page_id,
+                                                    WebKitWebView   *web_view,
                                                     GTask           *task);
 
 G_END_DECLS

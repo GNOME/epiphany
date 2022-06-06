@@ -57,7 +57,7 @@ static char *
 pageaction_handler_seticon (EphyWebExtension  *self,
                             char              *name,
                             JSCValue          *args,
-                            gint64             extension_page_id,
+                            WebKitWebView     *web_view,
                             GError           **error)
 {
   GtkWidget *action;
@@ -83,7 +83,7 @@ static char *
 pageaction_handler_settitle (EphyWebExtension  *self,
                              char              *name,
                              JSCValue          *args,
-                             gint64             extension_page_id,
+                             WebKitWebView     *web_view,
                              GError           **error)
 {
   GtkWidget *action;
@@ -106,7 +106,7 @@ static char *
 pageaction_handler_gettitle (EphyWebExtension  *self,
                              char              *name,
                              JSCValue          *args,
-                             gint64             extension_page_id,
+                             WebKitWebView     *web_view,
                              GError           **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
@@ -128,7 +128,7 @@ static char *
 pageaction_handler_show (EphyWebExtension  *self,
                          char              *name,
                          JSCValue          *args,
-                         gint64             extension_page_id,
+                         WebKitWebView     *web_view,
                          GError           **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
@@ -149,7 +149,7 @@ static char *
 pageaction_handler_hide (EphyWebExtension  *self,
                          char              *name,
                          JSCValue          *args,
-                         gint64             extension_page_id,
+                         WebKitWebView     *web_view,
                          GError           **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
@@ -178,7 +178,7 @@ void
 ephy_web_extension_api_pageaction_handler (EphyWebExtension *self,
                                            char             *name,
                                            JSCValue         *args,
-                                           gint64            extension_page_id,
+                                           WebKitWebView    *web_view,
                                            GTask            *task)
 {
   g_autoptr (GError) error = NULL;
@@ -189,7 +189,7 @@ ephy_web_extension_api_pageaction_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, extension_page_id, &error);
+      ret = handler.execute (self, name, args, web_view, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

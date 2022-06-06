@@ -249,10 +249,9 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions-common.js", 1);
   g_clear_object (&result);
 
-  ephy_webextension_install_common_apis (extension->extension,
+  ephy_webextension_install_common_apis (page,
                                          js_context,
                                          guid,
-                                         webkit_web_page_get_id (page),
                                          translations);
 }
 

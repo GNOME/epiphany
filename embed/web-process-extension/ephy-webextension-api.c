@@ -201,10 +201,9 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   g_bytes_unref (bytes);
   g_clear_object (&result);
 
-  ephy_webextension_install_common_apis (extension->extension,
+  ephy_webextension_install_common_apis (page,
                                          js_context,
                                          extension->guid,
-                                         webkit_web_page_get_id (page),
                                          extension->translations);
 
   js_browser = jsc_context_get_value (js_context, "browser");

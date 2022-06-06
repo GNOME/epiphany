@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 void ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
                                           char             *name,
                                           JSCValue         *value,
-                                          gint64            extension_page_id,
+                                          WebKitWebView    *web_view,
                                           GTask            *task);
 
 G_END_DECLS

@@ -23,8 +23,8 @@
 #include <locale.h>
 
 typedef struct {
-  WebKitWebExtension *extension;
-  guint64 page_id;
+  WebKitWebPage *page;
+  const char *guid;
 } EphySendMessageData;
 
 typedef struct {
@@ -42,7 +42,7 @@ ephy_callback_data_free (EphyCallbackData *data)
 
 static EphyCallbackData *
 ephy_callback_data_new (JSCValue *resolve_callback,
-                       JSCValue *reject_callback)
+                        JSCValue *reject_callback)
 {
   EphyCallbackData *data = g_new (EphyCallbackData, 1);
   data->resolve_callback = g_object_ref (resolve_callback);
@@ -51,16 +51,16 @@ ephy_callback_data_new (JSCValue *resolve_callback,
 }
 
 static void
-on_send_message_finish (WebKitWebExtension *extension,
-                        GAsyncResult       *result,
-                        gpointer            user_data)
+on_send_message_finish (WebKitWebPage *page,
+                        GAsyncResult  *result,
+                        gpointer       user_data)
 {
   EphyCallbackData *callback_data = user_data;
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitUserMessage) response = NULL;
   g_autoptr (JSCValue) ret = NULL;
 
-  response = webkit_web_extension_send_message_to_context_finish (extension, result, &error);
+  response = webkit_web_page_send_message_to_view_finish (page, result, &error);
 
   if (error) {
     ret = jsc_value_function_call (callback_data->reject_callback, G_TYPE_STRING, error->message, G_TYPE_NONE);
@@ -92,8 +92,6 @@ ephy_send_message (const char *function_name,
                    gpointer    user_data)
 {
   EphySendMessageData *send_message_data = user_data;
-  WebKitWebExtension *extension = send_message_data->extension;
-  guint64 page_id = send_message_data->page_id;
   WebKitUserMessage *message;
   g_autofree char *args_json = NULL;
 
@@ -107,11 +105,11 @@ ephy_send_message (const char *function_name,
 
   args_json = jsc_value_to_json (function_args, 0);
   message = webkit_user_message_new (function_name,
-                                     g_variant_new ("(ts)", page_id, args_json));
+                                     g_variant_new ("(ss)", send_message_data->guid, args_json));
 
-  webkit_web_extension_send_message_to_context (extension, message, NULL,
-                                                (GAsyncReadyCallback)on_send_message_finish,
-                                                ephy_callback_data_new (resolve_callback, reject_callback));
+  webkit_web_page_send_message_to_view (send_message_data->page, message, NULL,
+                                        (GAsyncReadyCallback)on_send_message_finish,
+                                        ephy_callback_data_new (resolve_callback, reject_callback));
 }
 
 static char *
@@ -175,11 +173,10 @@ js_exception_handler (JSCContext   *context,
 }
 
 void
-ephy_webextension_install_common_apis (WebKitWebExtension *extension,
-                                       JSCContext         *js_context,
-                                       const char         *guid,
-                                       guint64             page_id,
-                                       JsonObject         *translations)
+ephy_webextension_install_common_apis (WebKitWebPage *page,
+                                       JSCContext    *js_context,
+                                       const char    *guid,
+                                       JsonObject    *translations)
 {
   g_autoptr (JSCValue) result = NULL;
   g_autoptr (JSCValue) js_browser = NULL;
@@ -233,8 +230,8 @@ ephy_webextension_install_common_apis (WebKitWebExtension *extension,
 
   /* global functions */
   send_message_data = g_new (EphySendMessageData, 1);
-  send_message_data->extension = extension;
-  send_message_data->page_id = page_id;
+  send_message_data->page = page;
+  send_message_data->guid = guid;
   js_function = jsc_value_new_function (js_context,
                                         NULL,
                                         G_CALLBACK (ephy_send_message),
@@ -247,5 +244,4 @@ ephy_webextension_install_common_apis (WebKitWebExtension *extension,
                                         JSC_TYPE_VALUE);
   jsc_context_set_value (js_context, "ephy_send_message", js_function);
   g_clear_object (&js_function);
-
 }
