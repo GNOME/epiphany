@@ -32,6 +32,8 @@
 #include "ephy-web-extension.h"
 #include "ephy-window.h"
 
+#include "tabs.h"
+
 #include <archive.h>
 #include <archive_entry.h>
 #include <glib/gstdio.h>
@@ -1510,6 +1512,11 @@ ephy_web_extension_create_sender_object (EphyWebExtension *self,
   json_object_set_string_member (obj, "id", ephy_web_extension_get_guid (self));
   if (web_view) {
     json_object_set_string_member (obj, "url", webkit_web_view_get_uri (web_view));
+
+    /* For now these are always regular views and not extension views. */
+    if (EPHY_IS_WEB_VIEW (web_view)) {
+      json_object_set_member (obj, "tab", ephy_web_extension_api_tabs_create_tab_object (EPHY_WEB_VIEW (web_view)));
+    }
   }
 
   return json_to_string (node, FALSE);

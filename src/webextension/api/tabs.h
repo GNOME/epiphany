@@ -33,4 +33,6 @@ void ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
                                           WebKitWebView    *web_view,
                                           GTask            *task);
 
+JsonNode *ephy_web_extension_api_tabs_create_tab_object (EphyWebView *web_view);
+
 G_END_DECLS

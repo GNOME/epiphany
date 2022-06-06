@@ -119,6 +119,17 @@ add_web_view_to_json (JsonBuilder *builder,
   json_builder_end_object (builder);
 }
 
+JsonNode *
+ephy_web_extension_api_tabs_create_tab_object (EphyWebView *web_view)
+{
+  g_autoptr (JsonBuilder) builder = json_builder_new ();
+  add_web_view_to_json (builder,
+                        EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
+                        web_view,
+                        FALSE);
+  return json_builder_get_root (builder);
+}
+
 typedef enum {
   TAB_QUERY_UNSET = -1,
   TAB_QUERY_DONT_MATCH = 0,
