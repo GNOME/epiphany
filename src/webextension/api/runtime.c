@@ -91,7 +91,6 @@ runtime_handler_send_message (EphyWebExtension *self,
   }
 
   json = jsc_value_to_json (message, 0);
-  g_message ("Sending message with %s", json);
   ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage",
                                                                  json,
                                                                  web_view,
