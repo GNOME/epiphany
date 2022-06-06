@@ -87,6 +87,13 @@ void                     ephy_web_extension_manager_emit_in_extension_views_with
                                                                                      const char              *name,
                                                                                      const char              *json,
                                                                                      WebKitWebView           *own_web_view,
+                                                                                     GTask                   *reply_task);
+
+void                     ephy_web_extension_manager_emit_in_tab_with_reply          (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *name,
+                                                                                     const char              *message_json,
+                                                                                     WebKitWebView           *target_web_view,
                                                                                      const char              *sender_json,
                                                                                      GTask                   *reply_task);
 

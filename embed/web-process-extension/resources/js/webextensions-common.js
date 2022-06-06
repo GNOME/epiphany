@@ -38,6 +38,11 @@ class EphyEventListener {
         for (const listener of this._listeners) {
             const ret = listener.callback (message, sender, reply_callback);
             if (typeof ret === 'object' && typeof ret.then === 'function') {
+                /* FIXME: I'm very unsure about this behavior. Extensions such as Dark Reader
+                 * will have multiple handlers and by listening to extra promises they will
+                 * complete the response early. */
+                if (handled)
+                    continue;
                 ret.then(x => { reply_callback(x); }).catch(x => { reply_callback(); });
                 handled = true;
             } else if (ret === true) {

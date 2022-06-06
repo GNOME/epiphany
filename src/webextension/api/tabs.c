@@ -496,53 +496,52 @@ tabs_handler_execute_script (EphyWebExtension *self,
   }
 }
 
-static char *
-tabs_handler_send_message (EphyWebExtension  *self,
-                           char              *name,
-                           JSCValue          *args,
-                           WebKitWebView     *web_view,
-                           GError           **error)
+static void
+tabs_handler_send_message (EphyWebExtension *self,
+                           char             *name,
+                           JSCValue         *args,
+                           WebKitWebView    *web_view,
+                           GTask            *task)
 {
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (JSCValue) tab_id_value = NULL;
   g_autoptr (JSCValue) message_value = NULL;
   g_autofree char *serialized_message = NULL;
-  g_autofree char *code = NULL;
   EphyShell *shell = ephy_shell_get_default ();
   WebKitWebView *target_web_view;
 
   tab_id_value = jsc_value_object_get_property_at_index (args, 0);
   if (!jsc_value_is_number (tab_id_value)) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.sendMessage(): Invalid tabId");
+    return;
   }
 
   message_value = jsc_value_object_get_property_at_index (args, 1);
   if (jsc_value_is_undefined (message_value)) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.sendMessage(): Message argument missing");
+    return;
+  }
+
+  target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
+  if (!target_web_view) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.sendMessage(): Failed to find tabId");
+    return;
+  }
+
+
+  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "tabs.sendMessage(): Permission Denied");
+    return;
   }
 
   serialized_message = jsc_value_to_json (message_value, 0);
-  code = g_strdup_printf ("window.browser.runtime.onMessage._emit(JSON.parse('%s'));", serialized_message);
-
-  target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
-
-  if (target_web_view) {
-    if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
-      g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
-      return NULL;
-    }
-
-    webkit_web_view_run_javascript_in_world (target_web_view,
-                                             code,
-                                             ephy_web_extension_get_guid (self),
-                                             NULL,
-                                             NULL,
-                                             NULL);
-  }
-
-  /* FIXME: Return message response. */
-  return NULL;
+  ephy_web_extension_manager_emit_in_tab_with_reply (manager,
+                                                     self,
+                                                     "runtime.onMessage",
+                                                     serialized_message,
+                                                     target_web_view,
+                                                     ephy_web_extension_create_sender_object (self, web_view),
+                                                     task);
 }
 
 static char *
@@ -845,7 +844,6 @@ static EphyWebExtensionSyncApiHandler tabs_sync_handlers[] = {
   {"remove", tabs_handler_remove},
   {"removeCSS", tabs_handler_remove_css},
   {"get", tabs_handler_get},
-  {"sendMessage", tabs_handler_send_message},
   {"getZoom", tabs_handler_get_zoom},
   {"setZoom", tabs_handler_set_zoom},
   {"update", tabs_handler_update},
@@ -853,6 +851,7 @@ static EphyWebExtensionSyncApiHandler tabs_sync_handlers[] = {
 
 static EphyWebExtensionAsyncApiHandler tab_async_handlers[] = {
   {"executeScript", tabs_handler_execute_script},
+  {"sendMessage", tabs_handler_send_message},
 };
 
 void

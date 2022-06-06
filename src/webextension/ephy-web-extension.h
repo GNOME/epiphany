@@ -167,5 +167,8 @@ void                   ephy_web_extension_save_local_storage              (EphyW
 
 void                   ephy_web_extension_clear_local_storage             (EphyWebExtension *self);
 
+char                  *ephy_web_extension_create_sender_object            (EphyWebExtension *self,
+                                                                          WebKitWebView     *web_view);
+
 G_END_DECLS
 
