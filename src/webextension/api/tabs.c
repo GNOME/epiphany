@@ -67,16 +67,17 @@ get_web_view_for_tab_id (EphyShell   *shell,
 }
 
 static void
-add_web_view_to_json (JsonBuilder *builder,
-                      EphyWindow  *window,
-                      EphyWebView *web_view,
-                      gboolean     has_tab_permission)
+add_web_view_to_json (EphyWebExtension *self,
+                      JsonBuilder      *builder,
+                      EphyWindow       *window,
+                      EphyWebView      *web_view)
 {
   EphyTabView *tab_view = ephy_window_get_tab_view (window);
   GtkWidget *page = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (web_view)));
   gboolean is_active = ephy_tab_view_get_current_page (tab_view) == page;
   WebKitFaviconDatabase *favicon_db = webkit_web_context_get_favicon_database (webkit_web_view_get_context (WEBKIT_WEB_VIEW (web_view)));
   const char *favicon_uri = webkit_favicon_database_get_favicon_uri (favicon_db, ephy_web_view_get_address (web_view));
+  gboolean has_tab_permission = ephy_web_extension_has_tab_or_host_permission (self, web_view, TRUE);
 
   json_builder_begin_object (builder);
   if (has_tab_permission) {
@@ -119,14 +120,24 @@ add_web_view_to_json (JsonBuilder *builder,
   json_builder_end_object (builder);
 }
 
+void
+ephy_web_extension_api_tabs_add_tab_to_json (EphyWebExtension *self,
+                                             JsonBuilder      *builder,
+                                             EphyWindow       *window,
+                                             EphyWebView      *web_view)
+{
+  add_web_view_to_json (self, builder, window, web_view);
+}
+
 JsonNode *
-ephy_web_extension_api_tabs_create_tab_object (EphyWebView *web_view)
+ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *self,
+                                               EphyWebView      *web_view)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
-  add_web_view_to_json (builder,
+  add_web_view_to_json (self,
+                        builder,
                         EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
-                        web_view,
-                        FALSE);
+                        web_view);
   return json_builder_get_root (builder);
 }
 
@@ -270,8 +281,7 @@ tabs_handler_query (EphyWebExtension  *self,
       else if (active == TAB_QUERY_DONT_MATCH && web_view == active_web_view)
         continue;
 
-      add_web_view_to_json (builder, window, web_view,
-                            ephy_web_extension_has_tab_or_host_permission (self, web_view, TRUE));
+      add_web_view_to_json (self, builder, window, web_view);
     }
   }
 
@@ -416,8 +426,7 @@ tabs_handler_get (EphyWebExtension  *self,
     return NULL;
   }
 
-  add_web_view_to_json (builder, parent_window, target_web_view,
-                        ephy_web_extension_has_tab_or_host_permission (self, target_web_view, TRUE));
+  add_web_view_to_json (self, builder, parent_window, target_web_view);
   root = json_builder_get_root (builder);
 
   return json_to_string (root, FALSE);
@@ -647,8 +656,7 @@ tabs_handler_create (EphyWebExtension  *self,
     ephy_web_view_load_new_tab_page (new_web_view);
 
   builder = json_builder_new ();
-  add_web_view_to_json (builder, parent_window, new_web_view,
-                        ephy_web_extension_has_tab_or_host_permission (self, new_web_view, TRUE));
+  add_web_view_to_json (self, builder, parent_window, new_web_view);
   root = json_builder_get_root (builder);
   return json_to_string (root, FALSE);
 }
@@ -712,8 +720,7 @@ tabs_handler_update (EphyWebExtension  *self,
     webkit_web_view_load_uri (target_web_view, new_url);
 
   builder = json_builder_new ();
-  add_web_view_to_json (builder, parent_window, EPHY_WEB_VIEW (target_web_view),
-                        ephy_web_extension_has_tab_or_host_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE));
+  add_web_view_to_json (self, builder, parent_window, EPHY_WEB_VIEW (target_web_view));
   root = json_builder_get_root (builder);
   return json_to_string (root, FALSE);
 }

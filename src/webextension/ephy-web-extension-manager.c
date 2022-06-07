@@ -41,6 +41,7 @@
 #include "api/runtime.h"
 #include "api/storage.h"
 #include "api/tabs.h"
+#include "api/windows.h"
 
 #include <json-glib/json-glib.h>
 
@@ -70,6 +71,7 @@ EphyWebExtensionAsyncApiHandler api_handlers[] = {
   {"runtime", ephy_web_extension_api_runtime_handler},
   {"storage", ephy_web_extension_api_storage_handler},
   {"tabs", ephy_web_extension_api_tabs_handler},
+  {"windows", ephy_web_extension_api_windows_handler},
   {NULL, NULL},
 };
 

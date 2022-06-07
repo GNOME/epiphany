@@ -1515,7 +1515,7 @@ ephy_web_extension_create_sender_object (EphyWebExtension *self,
 
     /* For now these are always regular views and not extension views. */
     if (EPHY_IS_WEB_VIEW (web_view)) {
-      json_object_set_member (obj, "tab", ephy_web_extension_api_tabs_create_tab_object (EPHY_WEB_VIEW (web_view)));
+      json_object_set_member (obj, "tab", ephy_web_extension_api_tabs_create_tab_object (self, EPHY_WEB_VIEW (web_view)));
     }
   }
 
