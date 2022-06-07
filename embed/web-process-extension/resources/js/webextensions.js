@@ -106,3 +106,16 @@ window.browser.permissions = {
     onAdded: new EphyEventListener (),
     onRemoved: new EphyEventListener (),
 };
+
+window.browser.windows = {
+    get: function (...args) { return ephy_message ('windows.get', args); },
+    getCurrent: function (...args) { return ephy_message ('windows.getCurrent', args); },
+    getLastFocused: function (...args) { return ephy_message ('windows.getLastFocused', args); },
+    getAll: function (...args) { return ephy_message ('windows.getAll', args); },
+    create: function (...args) { return ephy_message ('windows.create', args); },
+    update: function (...args) { return ephy_message ('windows.update', args); },
+    remove: function (...args) { return ephy_message ('windows.remove', args); },
+    onCreated: new EphyEventListener (),
+    onRemoved: new EphyEventListener (),
+    onFocusChanged: new EphyEventListener (),
+};
