@@ -202,10 +202,43 @@ windows_handler_get_last_focused (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static char *
+windows_handler_get_all (EphyWebExtension  *self,
+                         char              *name,
+                         JSCValue          *args,
+                         WebKitWebView     *web_view,
+                         GError           **error)
+{
+  g_autoptr (JSCValue) get_info_value = jsc_value_object_get_property_at_index (args, 0);
+  g_autoptr (JsonBuilder) builder = json_builder_new ();
+  g_autoptr (JsonNode) root = NULL;
+  gboolean populate_tabs = FALSE;
+  GList *windows;
+
+  if (jsc_value_is_object (get_info_value)) {
+    g_autoptr (JSCValue) populate = jsc_value_object_get_property (get_info_value, "populate");
+    populate_tabs = jsc_value_to_boolean (populate);
+  }
+
+  json_builder_begin_array (builder);
+  windows = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
+
+  for (GList *win_list = windows; win_list; win_list = g_list_next (win_list)) {
+    EphyWindow *window = EPHY_WINDOW (win_list->data);
+    add_window_to_json (self, builder, window, populate_tabs);
+  }
+
+  json_builder_end_array (builder);
+
+  root = json_builder_get_root (builder);
+  return json_to_string (root, FALSE);
+}
+
 static EphyWebExtensionSyncApiHandler windows_handlers[] = {
   {"get", windows_handler_get},
   {"getCurrent", windows_handler_get_current},
   {"getLastFocused", windows_handler_get_last_focused},
+  {"getAll", windows_handler_get_all},
 };
 
 void
