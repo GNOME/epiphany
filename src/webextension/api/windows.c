@@ -234,11 +234,41 @@ windows_handler_get_all (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static char *
+windows_handler_remove (EphyWebExtension  *self,
+                        char              *name,
+                        JSCValue          *args,
+                        WebKitWebView     *web_view,
+                        GError           **error)
+{
+  g_autoptr (JSCValue) window_id_value = jsc_value_object_get_property_at_index (args, 0);
+  EphyWindow *window;
+  int window_id;
+
+  if (!jsc_value_is_number (window_id_value)) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): First argument is not a windowId");
+    return NULL;
+  }
+
+  window_id = jsc_value_to_int32 (window_id_value);
+  window = get_window_for_id (window_id);
+
+  if (!window) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): Failed to find window by id");
+    return NULL;
+  }
+
+  /* We could use `ephy_window_close()` here but it will do a blocking prompt to the user which I don't believe is expected. */
+  gtk_widget_destroy (GTK_WIDGET (window));
+  return NULL;
+}
+
 static EphyWebExtensionSyncApiHandler windows_handlers[] = {
   {"get", windows_handler_get},
   {"getCurrent", windows_handler_get_current},
   {"getLastFocused", windows_handler_get_last_focused},
   {"getAll", windows_handler_get_all},
+  {"remove", windows_handler_remove},
 };
 
 void
