@@ -24,8 +24,8 @@
 #include "tabs.h"
 #include "windows.h"
 
-static EphyWindow *
-get_window_for_id (int window_id)
+EphyWindow *
+ephy_web_extension_api_windows_get_window_for_id (gint64 window_id)
 {
   GList *windows;
 
@@ -41,7 +41,7 @@ get_window_for_id (int window_id)
       return window;
   }
 
-  g_debug ("Failed to find window with id %d", window_id);
+  g_debug ("Failed to find window with id %ld", window_id);
   return NULL;
 }
 
@@ -111,6 +111,21 @@ add_window_to_json (EphyWebExtension *self,
   json_builder_end_object (builder);
 }
 
+char *
+ephy_web_extension_api_windows_create_window_json (EphyWebExtension *self,
+                                                   EphyWindow       *window)
+{
+  g_autoptr (JsonBuilder) builder = json_builder_new ();
+  g_autoptr (JsonNode) root = NULL;
+  add_window_to_json (self,
+                      builder,
+                      window,
+                      TRUE);
+  root = json_builder_get_root (builder);
+  return json_to_string (root, FALSE);
+}
+
+
 static char *
 windows_handler_get (EphyWebExtension  *self,
                      char              *name,
@@ -123,7 +138,6 @@ windows_handler_get (EphyWebExtension  *self,
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   EphyWindow *window;
-  int window_id;
   gboolean populate_tabs = FALSE;
 
   if (!jsc_value_is_number (window_id_value)) {
@@ -131,8 +145,7 @@ windows_handler_get (EphyWebExtension  *self,
     return NULL;
   }
 
-  window_id = jsc_value_to_int32 (window_id_value);
-  window = get_window_for_id (window_id);
+  window = ephy_web_extension_api_windows_get_window_for_id (jsc_value_to_int32 (window_id_value));
 
   if (!window) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.get(): Failed to find window by id");
@@ -311,15 +324,13 @@ windows_handler_remove (EphyWebExtension  *self,
 {
   g_autoptr (JSCValue) window_id_value = jsc_value_object_get_property_at_index (args, 0);
   EphyWindow *window;
-  int window_id;
 
   if (!jsc_value_is_number (window_id_value)) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): First argument is not a windowId");
     return NULL;
   }
 
-  window_id = jsc_value_to_int32 (window_id_value);
-  window = get_window_for_id (window_id);
+  window = ephy_web_extension_api_windows_get_window_for_id (jsc_value_to_int32 (window_id_value));
 
   if (!window) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): Failed to find window by id");

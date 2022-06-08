@@ -1209,6 +1209,52 @@ extension_equal (gconstpointer a,
   return g_strcmp0 (a, b) == 0;
 }
 
+typedef struct {
+  EphyWebExtension *web_extension;
+  guint64 window_id;
+} WindowAddedCallbackData;
+
+static gboolean
+application_window_added_timeout_cb (gpointer user_data)
+{
+  WindowAddedCallbackData *data = user_data;
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyWindow *window = ephy_web_extension_api_windows_get_window_for_id (data->window_id);
+  g_autofree char *window_json = NULL;
+
+  /* It is possible the window was removed before this timeout. */
+  if (!window)
+    return G_SOURCE_REMOVE;
+
+  window_json = ephy_web_extension_api_windows_create_window_json (data->web_extension, window);
+  ephy_web_extension_manager_emit_in_extension_views (manager, data->web_extension, "windows.onCreated", window_json);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+application_window_added_cb (EphyShell        *shell,
+                             EphyWindow       *window,
+                             EphyWebExtension *web_extension)
+{
+  /* At this point the EphyWindow has no EphyEmbed child so we can't get information from it.
+   * We also can't really know ahead of time if multiple tabs are opening so simply adding a delay
+   * tends to give accurate results. */
+  WindowAddedCallbackData *data = g_new (WindowAddedCallbackData, 1);
+  data->window_id = ephy_window_get_uid (window);
+  data->web_extension = web_extension;
+  g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1, application_window_added_timeout_cb, data, g_free);
+}
+
+static void
+application_window_removed_cb (EphyShell        *shell,
+                               EphyWindow       *window,
+                               EphyWebExtension *web_extension)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  g_autofree char *window_json = g_strdup_printf ("%ld", ephy_window_get_uid (window));
+  ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, "windows.onRemoved", window_json);
+}
+
 void
 ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
                                        EphyWebExtension        *web_extension,
@@ -1248,9 +1294,14 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
   }
 
   if (active) {
+    g_signal_connect (shell, "window-added", G_CALLBACK (application_window_added_cb), web_extension);
+    g_signal_connect (shell, "window-removed", G_CALLBACK (application_window_removed_cb), web_extension);
+
     if (ephy_web_extension_has_background_web_view (web_extension))
       run_background_script (self, web_extension);
   } else {
+    g_signal_handlers_disconnect_by_data (shell, web_extension);
+
     g_hash_table_remove (self->browser_action_map, web_extension);
     g_hash_table_remove (self->background_web_views, web_extension);
     g_object_set_data (G_OBJECT (web_extension), "alarms", NULL); /* Set in alarms.c */

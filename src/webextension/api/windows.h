@@ -26,10 +26,15 @@
 
 G_BEGIN_DECLS
 
-void ephy_web_extension_api_windows_handler (EphyWebExtension *self,
-                                             char             *name,
-                                             JSCValue         *value,
-                                             WebKitWebView    *web_view,
-                                             GTask            *task);
+void         ephy_web_extension_api_windows_handler                    (EphyWebExtension *self,
+                                                                        char             *name,
+                                                                        JSCValue         *value,
+                                                                        WebKitWebView    *web_view,
+                                                                        GTask            *task);
+
+char        *ephy_web_extension_api_windows_create_window_json          (EphyWebExtension *self,
+                                                                         EphyWindow       *window);
+
+EphyWindow  *ephy_web_extension_api_windows_get_window_for_id           (gint64            window_id);
 
 G_END_DECLS
