@@ -578,9 +578,8 @@ resolve_to_absolute_url (EphyWebExtension *web_extension,
   return absolute_url;
 }
 
-static gboolean
-url_is_unprivileged (EphyWebExtension *web_extension,
-                     const char       *url)
+gboolean
+ephy_web_extension_api_tabs_url_is_unprivileged (const char *url)
 {
   const char *scheme;
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/create */
@@ -632,7 +631,7 @@ tabs_handler_create (EphyWebExtension  *self,
   }
 
   url = resolve_to_absolute_url (self, get_string_property (create_properties, "url", NULL));
-  if (!url_is_unprivileged (self, url)) {
+  if (!ephy_web_extension_api_tabs_url_is_unprivileged (url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.create(): URL '%s' is not allowed", url);
     return NULL;
   }
@@ -707,7 +706,7 @@ tabs_handler_update (EphyWebExtension  *self,
   }
 
   new_url = resolve_to_absolute_url (self, get_string_property (update_properties, "url", NULL));
-  if (!url_is_unprivileged (self, new_url)) {
+  if (!ephy_web_extension_api_tabs_url_is_unprivileged (new_url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): URL '%s' is not allowed", new_url);
     return NULL;
   }

@@ -245,16 +245,21 @@ get_url_property (JSCValue *object)
     return urls;
 
   if (jsc_value_is_string (url_value)) {
-    g_ptr_array_add (urls, jsc_value_to_string (url_value));
+    g_autofree char *url = jsc_value_to_string (url_value);
+    if (ephy_web_extension_api_tabs_url_is_unprivileged (url))
+      g_ptr_array_add (urls, g_steal_pointer (&url));
     return urls;
   }
 
   if (jsc_value_is_array (url_value)) {
     for (guint i = 0; ; i++) {
       g_autoptr (JSCValue) indexed_value = jsc_value_object_get_property_at_index (url_value, i);
+      g_autofree char *url = NULL;
       if (!jsc_value_is_string (indexed_value))
         break;
-      g_ptr_array_add (urls, jsc_value_to_string (indexed_value));
+      url = jsc_value_to_string (indexed_value);
+      if (ephy_web_extension_api_tabs_url_is_unprivileged (url))
+        g_ptr_array_add (urls, g_steal_pointer (&url));
     }
 
     return urls;

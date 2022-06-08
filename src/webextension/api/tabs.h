@@ -41,4 +41,7 @@ void      ephy_web_extension_api_tabs_add_tab_to_json   (EphyWebExtension *self,
                                                          EphyWindow       *window,
                                                          EphyWebView      *web_view);
 
+gboolean  ephy_web_extension_api_tabs_url_is_unprivileged
+                                                        (const char       *url);
+
 G_END_DECLS
