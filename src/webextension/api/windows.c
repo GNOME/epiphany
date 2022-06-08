@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "ephy-link.h"
 #include "ephy-shell.h"
 #include "tabs.h"
 #include "windows.h"
@@ -234,6 +235,68 @@ windows_handler_get_all (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static GPtrArray *
+get_url_property (JSCValue *object)
+{
+  g_autoptr (JSCValue) url_value = jsc_value_object_get_property (object, "url");
+  GPtrArray *urls = g_ptr_array_new_full (2, g_free);
+
+  if (jsc_value_is_undefined (url_value))
+    return urls;
+
+  if (jsc_value_is_string (url_value)) {
+    g_ptr_array_add (urls, jsc_value_to_string (url_value));
+    return urls;
+  }
+
+  if (jsc_value_is_array (url_value)) {
+    for (guint i = 0; ; i++) {
+      g_autoptr (JSCValue) indexed_value = jsc_value_object_get_property_at_index (url_value, i);
+      if (!jsc_value_is_string (indexed_value))
+        break;
+      g_ptr_array_add (urls, jsc_value_to_string (indexed_value));
+    }
+
+    return urls;
+  }
+
+  g_debug ("Received invalid urls property");
+  return urls;
+}
+
+static char *
+windows_handler_create (EphyWebExtension  *self,
+                        char              *name,
+                        JSCValue          *args,
+                        WebKitWebView     *web_view,
+                        GError           **error)
+{
+  g_autoptr (JSCValue) create_data_value = jsc_value_object_get_property_at_index (args, 0);
+  g_autoptr (GPtrArray) urls = NULL;
+  g_autoptr (JsonBuilder) builder = json_builder_new ();
+  g_autoptr (JsonNode) root = NULL;
+  EphyWindow *window;
+
+  if (jsc_value_is_object (create_data_value)) {
+    urls = get_url_property (create_data_value);
+  }
+
+  window = ephy_window_new ();
+
+  if (!urls || urls->len == 0)
+    ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
+  else {
+    for (guint i = 0; i < urls->len; i++)
+      ephy_link_open (EPHY_LINK (window), g_ptr_array_index (urls, i), NULL, EPHY_LINK_NEW_TAB);
+  }
+
+  gtk_window_present (GTK_WINDOW (window));
+
+  add_window_to_json (self, builder, window, TRUE);
+  root = json_builder_get_root (builder);
+  return json_to_string (root, FALSE);
+}
+
 static char *
 windows_handler_remove (EphyWebExtension  *self,
                         char              *name,
@@ -268,6 +331,7 @@ static EphyWebExtensionSyncApiHandler windows_handlers[] = {
   {"getCurrent", windows_handler_get_current},
   {"getLastFocused", windows_handler_get_last_focused},
   {"getAll", windows_handler_get_all},
+  {"create", windows_handler_create},
   {"remove", windows_handler_remove},
 };
 
