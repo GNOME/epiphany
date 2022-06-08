@@ -39,7 +39,11 @@ runtime_handler_get_browser_info (EphyWebExtension  *self,
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "name");
-  json_builder_add_string_value (builder, "GNOME Web (Epiphany)");
+  json_builder_add_string_value (builder, "Epiphany");
+  json_builder_set_member_name (builder, "version");
+  json_builder_add_string_value (builder, EPHY_VERSION);
+  json_builder_set_member_name (builder, "vendor");
+  json_builder_add_string_value (builder, "GNOME");
   json_builder_end_object (builder);
 
   root = json_builder_get_root (builder);

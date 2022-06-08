@@ -66,6 +66,7 @@ else
 endif
 conf.set('EPHY_MICRO_VERSION', 0)
 
+conf.set_quoted('EPHY_VERSION', meson.project_version())
 conf.set_quoted('VERSION', '@VCS_TAG@')
 
 gsb_api_key = get_option('gsb_api_key')
