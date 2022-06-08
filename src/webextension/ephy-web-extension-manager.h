@@ -97,4 +97,6 @@ void                     ephy_web_extension_manager_emit_in_tab_with_reply      
                                                                                      const char              *sender_json,
                                                                                      GTask                   *reply_task);
 
+GtkWidget                *ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension        *web_extension);
+
 G_END_DECLS

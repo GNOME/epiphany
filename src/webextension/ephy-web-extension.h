@@ -142,7 +142,7 @@ GList                 *ephy_web_extension_get_custom_css_list             (EphyW
 WebKitUserStyleSheet  *ephy_web_extension_custom_css_style                (EphyWebExtension *self,
                                                                            gpointer          custom_css);
 
-char                  *ephy_web_extension_get_option_ui_page              (EphyWebExtension *self);
+const char            *ephy_web_extension_get_option_ui_page              (EphyWebExtension *self);
 
 const char            *ephy_web_extension_get_guid                        (EphyWebExtension *self);
 

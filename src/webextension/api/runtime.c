@@ -106,22 +106,34 @@ runtime_handler_open_options_page (EphyWebExtension  *self,
                                    WebKitWebView     *web_view,
                                    GError           **error)
 {
-  const char *data = ephy_web_extension_get_option_ui_page (self);
+  const char *options_ui = ephy_web_extension_get_option_ui_page (self);
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autofree char *title = NULL;
+  g_autofree char *options_uri = NULL;
+  GtkWidget *new_web_view;
+  GtkWindow *new_window;
 
-  if (data) {
-    EphyEmbed *embed;
-    EphyShell *shell = ephy_shell_get_default ();
-    WebKitWebView *web_view;
-    GtkWindow *window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-    embed = ephy_shell_new_tab (shell,
-                                EPHY_WINDOW (window),
-                                NULL,
-                                EPHY_NEW_TAB_JUMP);
-
-    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-    webkit_web_view_load_html (web_view, data, NULL);
+  if (!options_ui) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Extension does not have an options page");
+    return NULL;
   }
+
+  title = g_strdup_printf (_("Options for %s"), ephy_web_extension_get_name (self));
+  options_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (self), options_ui);
+
+  new_window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+  gtk_window_set_transient_for (new_window, gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  gtk_window_set_destroy_with_parent (new_window, TRUE);
+  gtk_window_set_title (new_window, title);
+  gtk_window_set_position (new_window, GTK_WIN_POS_CENTER_ON_PARENT);
+
+  new_web_view = ephy_web_extensions_manager_create_web_extensions_webview (self);
+  gtk_container_add (GTK_CONTAINER (new_window), new_web_view);
+
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (new_web_view), options_uri);
+
+  gtk_widget_show (new_web_view);
+  gtk_window_present (new_window);
 
   return NULL;
 }

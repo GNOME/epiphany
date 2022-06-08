@@ -1241,13 +1241,13 @@ ephy_web_extension_custom_css_style (EphyWebExtension *self,
   return css->style;
 }
 
-char *
+const char *
 ephy_web_extension_get_option_ui_page (EphyWebExtension *self)
 {
   if (!self->options_ui)
     return NULL;
 
-  return ephy_web_extension_get_resource_as_string (self, self->options_ui->page);
+  return self->options_ui->page;
 }
 
 const char *

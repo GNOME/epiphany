@@ -852,8 +852,8 @@ decide_policy_cb (WebKitWebView            *web_view,
   return TRUE;
 }
 
-static GtkWidget *
-create_web_extensions_webview (EphyWebExtension *web_extension)
+GtkWidget *
+ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web_extension)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (WebKitUserContentManager) ucm = NULL;
@@ -952,7 +952,7 @@ create_browser_popup (EphyWebExtension *web_extension)
   g_autofree char *popup_uri = NULL;
   const char *popup;
 
-  web_view = create_web_extensions_webview (web_extension);
+  web_view = ephy_web_extensions_manager_create_web_extensions_webview (web_extension);
   gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
   ephy_web_extension_manager_register_popup_view (manager, web_extension, web_view);
 
@@ -1153,7 +1153,7 @@ run_background_script (EphyWebExtensionManager *self,
   page = ephy_web_extension_background_web_view_get_page (web_extension);
 
   /* Create new background web_view */
-  background = create_web_extensions_webview (web_extension);
+  background = ephy_web_extensions_manager_create_web_extensions_webview (web_extension);
   ephy_web_extension_manager_set_background_web_view (self, web_extension, WEBKIT_WEB_VIEW (background));
 
   if (page) {
