@@ -85,9 +85,8 @@ window.browser.runtime.setUninstallURL = function (...args) { return ephy_messag
 window.browser.runtime.onInstalled = new EphyEventListener ();
 window.browser.runtime.onMessageExternal = new EphyEventListener ();
 window.browser.runtime.sendNativeMessage = function (...args) { return ephy_message ('runtime.sendNativeMessage', args); };
-window.browser.runtime.getBackgroundPage = window.browser.extension.getBackgroundPage;
 Object.defineProperty(window.browser.runtime, 'lastError', { get: function() { return window.browser.extension.lastError; } });
-
+window.browser.runtime.getBackgroundPage = function () { return Promise.resolve (window.browser.extension.getBackgroundPage ()); };
 
 window.browser.pageAction = {
     setIcon: function (...args) { return ephy_message ('pageAction.setIcon', args); },
