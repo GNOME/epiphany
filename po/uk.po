@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-05-05 13:04+0000\n"
-"PO-Revision-Date: 2022-05-16 09:35+0300\n"
+"POT-Creation-Date: 2022-06-08 21:35+0000\n"
+"PO-Revision-Date: 2022-06-09 09:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
 #: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:411 src/window-commands.c:1005
+#: src/ephy-main.c:409 src/window-commands.c:1005
 msgid "Web"
 msgstr "Тенет"
 
@@ -141,12 +141,6 @@ msgid "List of the search engines."
 msgstr "Список рушіїв для пошуку."
 
 #: data/org.gnome.epiphany.gschema.xml:62
-#| msgid ""
-#| "List of the search engines. It is an array of vardicts with each vardict "
-#| "corresponding to a search engine, and with the following supported keys: "
-#| "- name: The name of the search engine - url: The search URL with the "
-#| "search term replaced with %s. - bang: The \"bang\" (shortcut word) of the "
-#| "search engine"
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -155,10 +149,9 @@ msgid ""
 "the search engine."
 msgstr ""
 "Список рушіїв для пошуку. Є масивом зі словників змінних, де кожен словник "
-"змінних відповідає рушієві пошуку із такими підтримуваними ключами: - «name»"
-" — назва рушія пошуку - «url» — адреса пошуку, у якій ключ пошуку замінено на"
-" %s. "
-"- «bang» — слово-скорочення для рушія пошуку"
+"змінних відповідає рушієві пошуку із такими підтримуваними ключами: - «name» "
+"— назва рушія пошуку - «url» — адреса пошуку, у якій ключ пошуку замінено на "
+"%s. - «bang» — слово-скорочення для рушія пошуку"
 
 #: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
@@ -1083,7 +1076,6 @@ msgstr ""
 "можуть слідкувати за вами."
 
 #: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
-#| msgid "Select a directory"
 msgid "Select a Directory"
 msgstr "Виберіть каталог"
 
@@ -1978,32 +1970,31 @@ msgid "Unspecified"
 msgstr "Не визначено"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197
+#: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "Завантажене"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
+#: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: lib/ephy-file-helpers.c:191
-#| msgid "Homepage"
+#: lib/ephy-file-helpers.c:190
 msgid "Home"
 msgstr "Домівка"
 
-#: lib/ephy-file-helpers.c:429
+#: lib/ephy-file-helpers.c:427
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Не вдалося створити тимчасовий каталог у «%s»."
 
-#: lib/ephy-file-helpers.c:555
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Файл «%s» вже існує. Приберіть його в інше місце."
 
-#: lib/ephy-file-helpers.c:574
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Не вдалося створити каталог «%s»."
@@ -2102,25 +2093,21 @@ msgstr ""
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
-#| msgid "Failed to obtain storage credentials."
 msgid "Failed to install desktop file %s: "
 msgstr "Не вдалося встановити файл desktop %s: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
-#| msgid "Custom profile directory for private instance"
 msgid "Profile directory %s already exists"
 msgstr "Каталог профілю %s вже існує"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create directory %s"
 msgstr "Не вдалося створити каталог %s"
 
 #: lib/ephy-web-app-utils.c:406
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create .app file: %s"
 msgstr "Не вдалося створити файл .app: %s"
 
@@ -2142,14 +2129,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:433
+#: lib/sync/ephy-password-manager.c:435
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s у формі на %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:437
+#: lib/sync/ephy-password-manager.c:439
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Пароль у формі на %s"
@@ -2393,7 +2380,7 @@ msgid "Paste and _Go"
 msgstr "Вставити та пере_йти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:929
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:932
 msgid "_Undo"
 msgstr "Повер_нути"
 
@@ -2684,178 +2671,178 @@ msgstr "Вилучити вибране веброзширення"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Відкрити файл (manifest.json/xpi)"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:933
 msgid "Re_do"
 msgstr "Повт_орити"
 
 #. Edit.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:936
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:937
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:938
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:939
 msgid "_Paste Text Only"
 msgstr "Лише _вставити текст"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:940
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:942
 msgid "S_end Link by Email…"
 msgstr "_Надіслати посилання листом…"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:944
 msgid "_Reload"
 msgstr "Перезаванта_жити"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:945
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:946
 msgid "_Forward"
 msgstr "_Далі"
 
 #. Bookmarks
-#: src/ephy-window.c:946
+#: src/ephy-window.c:949
 msgid "Add Boo_kmark…"
 msgstr "Додати _закладку…"
 
 #. Links.
-#: src/ephy-window.c:950
+#: src/ephy-window.c:953
 msgid "Open Link in New _Window"
 msgstr "Відкрити посилання у _новому вікні"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:954
 msgid "Open Link in New _Tab"
 msgstr "Відкрити посилання у новій вк_ладці"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:955
 msgid "Open Link in I_ncognito Window"
 msgstr "Відкрити посилання у _конфіденційному вікні"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:956
 msgid "_Save Link As…"
 msgstr "З_берегти посилання як…"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:957
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:958
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати поштову адресу"
 
 #. Images.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:962
 msgid "View _Image in New Tab"
 msgstr "Переглянути _зображення в новій вкладці"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:963
 msgid "Copy I_mage Address"
 msgstr "Копіювати адресу _зображення"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:964
 msgid "_Save Image As…"
 msgstr "З_берегти зображення як…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:965
 msgid "Set as _Wallpaper"
 msgstr "Встановити як _шпалери"
 
 #. Video.
-#: src/ephy-window.c:966
+#: src/ephy-window.c:969
 msgid "Open Video in New _Window"
 msgstr "Відкрити відеозапис у новому _вікні"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:970
 msgid "Open Video in New _Tab"
 msgstr "Відкрити відеозапис у новій в_кладці"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:971
 msgid "_Save Video As…"
 msgstr "З_берегти відеозапис як…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:972
 msgid "_Copy Video Address"
 msgstr "_Копіювати адресу відеозапису"
 
 #. Audio.
-#: src/ephy-window.c:973
+#: src/ephy-window.c:976
 msgid "Open Audio in New _Window"
 msgstr "Відкрити аудіозапис у новому _вікні"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:977
 msgid "Open Audio in New _Tab"
 msgstr "Відкрити аудіозапис у новій в_кладці"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:978
 msgid "_Save Audio As…"
 msgstr "З_берегти аудіозапис як…"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:979
 msgid "_Copy Audio Address"
 msgstr "_Копіювати адресу аудіозапису"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:985
 msgid "Save Pa_ge As…"
 msgstr "Зберегти _сторінку як…"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:986
 msgid "_Page Source"
 msgstr "Вихідний текст с_торінки"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Шукати «%s» в Тенет"
 
-#: src/ephy-window.c:1396
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Відкрити посилання"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Відкрити посилання у новій вкладці"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Відкрити посилання у новому вікні"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Відкрити посилання у конфіденційному вікні"
 
-#: src/ephy-window.c:2843 src/ephy-window.c:4170
+#: src/ephy-window.c:2846 src/ephy-window.c:4175
 msgid "Do you want to leave this website?"
 msgstr "Бажаєте покинути цей сайт?"
 
-#: src/ephy-window.c:2844 src/ephy-window.c:4171 src/window-commands.c:1213
+#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "Змінену форму не було надіслано."
 
-#: src/ephy-window.c:2845 src/ephy-window.c:4172 src/window-commands.c:1215
+#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Відхилити форму"
 
-#: src/ephy-window.c:2866
+#: src/ephy-window.c:2869
 msgid "Download operation"
 msgstr "Завантаження"
 
-#: src/ephy-window.c:2868
+#: src/ephy-window.c:2871
 msgid "Show details"
 msgstr "Показати подробиці"
 
-#: src/ephy-window.c:2870
+#: src/ephy-window.c:2873
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2864,36 +2851,36 @@ msgstr[1] "%d файли завантажуються"
 msgstr[2] "%d файлів завантажуються"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3364
+#: src/ephy-window.c:3367
 msgid "View open tabs"
 msgstr "Переглянути відкриті вкладки"
 
-#: src/ephy-window.c:3494
+#: src/ephy-window.c:3497
 msgid "Set Web as your default browser?"
 msgstr "Бажаєте встановити Тенет своїм типовим браузером?"
 
-#: src/ephy-window.c:3496
+#: src/ephy-window.c:3499
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Бажаєте встановити Epiphany Technology Preview своїм типовим браузером?"
 
-#: src/ephy-window.c:3508
+#: src/ephy-window.c:3511
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3512
 msgid "_No"
 msgstr "_Ні"
 
-#: src/ephy-window.c:4304
+#: src/ephy-window.c:4309
 msgid "There are multiple tabs open."
 msgstr "Відкрито декілька вкладок."
 
-#: src/ephy-window.c:4305
+#: src/ephy-window.c:4310
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Якщо закриєте вікно, всі відкриті вкладки будуть втрачені"
 
-#: src/ephy-window.c:4306
+#: src/ephy-window.c:4311
 msgid "C_lose tabs"
 msgstr "_Закрити вкладки"
 
@@ -4120,8 +4107,6 @@ msgstr "Передана назва є некоректною"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
-#| msgctxt "shortcut window"
-#| msgid "Install site as web application"
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
 msgstr "Не вдалося встановити вебпрограму «%s» (%s): %s"
 
@@ -4132,15 +4117,18 @@ msgstr "Переданий ідентифікатор файла desktop «%s» 
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ does not exist"
 msgstr "Вебпрограми «%s» не існує"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Не вдалося вилучити вебпрограму «%s»"
+
+#: src/webextension/api/runtime.c:121
+#, c-format
+msgid "Options for %s"
+msgstr "Параметри для %s"
 
 #: src/window-commands.c:113
 msgid "GVDB File"
@@ -4249,7 +4237,6 @@ msgstr "Програма «%s» готова до використання"
 
 #: src/window-commands.c:1816
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The application “%s” could not be created: %s"
 msgstr "Не вдалося створити програму «%s»: %s"
 
