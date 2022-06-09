@@ -22,9 +22,9 @@ class EphyEventListener {
         return !!this._listeners.find(l => l.callback === cb);
     }
 
-    _emit (data) {
+    _emit (...data) {
         for (const listener of this._listeners)
-            listener.callback (data);
+            listener.callback (...data);
     }
 
     _emit_with_reply (message, sender, message_guid) {

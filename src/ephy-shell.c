@@ -352,6 +352,15 @@ notification_clicked (GSimpleAction *action,
     webkit_notification_clicked (notification);
 }
 
+static void
+webextension_action (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  ephy_web_extension_manager_handle_notifications_action (manager, parameter);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -367,7 +376,8 @@ static GActionEntry app_entries[] = {
   { "quit", quit_application, NULL, NULL, NULL },
   { "show-downloads", show_downloads, NULL, NULL, NULL },
   { "launch-app", launch_app, "s", NULL, NULL },
-  { "notification-clicked", notification_clicked, "t", NULL, NULL},
+  { "notification-clicked", notification_clicked, "t", NULL, NULL },
+  { "webextension-notification", webextension_action, "(ssi)", NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {

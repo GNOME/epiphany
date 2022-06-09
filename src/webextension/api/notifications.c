@@ -20,10 +20,28 @@
 
 #include "config.h"
 
-#include "ephy-notification.h"
+#include "ephy-shell.h"
 #include "ephy-web-extension.h"
 
 #include "notifications.h"
+
+static char *
+get_string_property (JSCValue   *obj,
+                     const char *name)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
+  if (!jsc_value_is_string (value))
+    return NULL;
+  return jsc_value_to_string (value);
+}
+
+static char *
+create_extension_notification_id (EphyWebExtension *web_extension,
+                                  const char       *id)
+{
+  /* We need to namespace notification ids. */
+  return g_strconcat (ephy_web_extension_get_guid (web_extension), ".", id, NULL);
+}
 
 static char *
 notifications_handler_create (EphyWebExtension  *self,
@@ -33,31 +51,103 @@ notifications_handler_create (EphyWebExtension  *self,
                               GError           **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *title_str = NULL;
-  g_autofree char *message_str = NULL;
-  g_autoptr (JSCValue) title = NULL;
-  g_autoptr (JSCValue) message = NULL;
-  EphyNotification *notify;
+  g_autoptr (JSCValue) button_array = NULL;
+  g_autofree char *id = NULL;
+  g_autofree char *namespaced_id = NULL;
+  g_autofree char *title = NULL;
+  g_autofree char *message = NULL;
+  g_autoptr (GNotification) notification = NULL;
+  const char *extension_guid = ephy_web_extension_get_guid (self);
+
+  /* We share the same "create" and "update" function here because our
+   * implementation would be the same. The only difference is we require
+   * an id if its for an update. */
+  if (jsc_value_is_string (value)) {
+    id = jsc_value_to_string (value);
+    g_object_unref (value);
+    value = jsc_value_object_get_property_at_index (args, 1);
+  } else {
+    if (strcmp (name, "update") == 0) {
+      g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.update(): id not given");
+      return NULL;
+    }
+    id = g_dbus_generate_guid ();
+  }
 
   if (!jsc_value_is_object (value)) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): notificationOptions not given", name);
     return NULL;
   }
 
-  title = jsc_value_object_get_property (value, "title");
-  title_str = jsc_value_to_string (title);
+  title = get_string_property (value, "title");
+  message = get_string_property (value, "message");
 
-  message = jsc_value_object_get_property (value, "message");
-  message_str = jsc_value_to_string (message);
+  if (!title || !message) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): title and message are required", name);
+    return NULL;
+  }
 
-  notify = ephy_notification_new (g_strdup (title_str), g_strdup (message_str));
-  ephy_notification_show (notify);
+  notification = g_notification_new (title);
+  g_notification_set_body (notification, message);
+  g_notification_set_default_action_and_target (notification, "app.webextension-notification", "(ssi)", extension_guid, id, -1);
 
-  return NULL;
+  button_array = jsc_value_object_get_property (value, "buttons");
+  if (jsc_value_is_array (button_array)) {
+    for (guint i = 0; i < 2; i++) {
+      g_autoptr (JSCValue) button = jsc_value_object_get_property_at_index (button_array, i);
+      g_autofree char *button_title = get_string_property (button, "title");
+      if (button_title)
+        g_notification_add_button_with_target (notification, button_title, "app.webextension-notification", "(ssi)", extension_guid, id, i);
+    }
+  }
+
+  namespaced_id = create_extension_notification_id (self, id);
+  g_application_send_notification (G_APPLICATION (ephy_shell_get_default ()), namespaced_id, notification);
+
+  return g_strdup_printf ("\"%s\"", id);
+}
+
+static char *
+notifications_handler_clear (EphyWebExtension  *self,
+                             char              *name,
+                             JSCValue          *args,
+                             WebKitWebView     *web_view,
+                             GError           **error)
+{
+  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  g_autofree char *id = NULL;
+  g_autofree char *namespaced_id = NULL;
+
+  if (!jsc_value_is_string (value)) {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.clear(): id not given");
+    return NULL;
+  }
+
+  id = jsc_value_to_string (value);
+  namespaced_id = create_extension_notification_id (self, id);
+
+  g_application_withdraw_notification (G_APPLICATION (ephy_shell_get_default ()), namespaced_id);
+
+  /* We don't actually know if a notification was withdrawn but lets assume it was. */
+  return g_strdup ("true");
+}
+
+static char *
+notifications_handler_get_all (EphyWebExtension  *self,
+                               char              *name,
+                               JSCValue          *args,
+                               WebKitWebView     *web_view,
+                               GError           **error)
+{
+  /* GNotification does not provide information on the state of notifications. */
+  return g_strdup ("[]");
 }
 
 static EphyWebExtensionSyncApiHandler notifications_handlers[] = {
   {"create", notifications_handler_create},
+  {"clear", notifications_handler_clear},
+  {"getAll", notifications_handler_get_all},
+  {"update", notifications_handler_create},
 };
 
 void

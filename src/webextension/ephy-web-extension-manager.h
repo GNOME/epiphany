@@ -69,6 +69,9 @@ GtkWidget               *ephy_web_extension_manager_get_page_action             
 WebKitWebView           *ephy_web_extension_manager_get_background_web_view         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension);
 
+void                     ephy_web_extension_manager_handle_notifications_action     (EphyWebExtensionManager *self,
+                                                                                     GVariant                *params);
+
 void                     ephy_web_extension_manager_emit_in_extension_views         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
                                                                                      const char              *name,

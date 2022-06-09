@@ -1323,6 +1323,43 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
   return ret;
 }
 
+static EphyWebExtension *
+ephy_web_extension_manager_get_extension_by_guid (EphyWebExtensionManager *self,
+                                                  const char              *guid)
+{
+  for (GList *l = self->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtension *web_extension = l->data;
+    if (strcmp (guid, ephy_web_extension_get_guid (web_extension)) == 0)
+      return web_extension;
+  }
+
+  return NULL;
+}
+
+void
+ephy_web_extension_manager_handle_notifications_action (EphyWebExtensionManager *self,
+                                                        GVariant                *params)
+{
+  EphyWebExtension *web_extension;
+  g_autofree char *json = NULL;
+  const char *extension_guid;
+  const char *notification_id;
+  int index;
+
+  g_variant_get (params, "(&s&si)", &extension_guid, &notification_id, &index);
+  web_extension = ephy_web_extension_manager_get_extension_by_guid (self, extension_guid);
+  if (!web_extension)
+    return;
+
+  if (index == -1) {
+    json = g_strdup_printf ("\"%s\"", notification_id);
+    ephy_web_extension_manager_emit_in_extension_views (self, web_extension, "notifications.onClicked", json);
+  } else {
+    json = g_strdup_printf ("\"%s\", %d", notification_id, index);
+    ephy_web_extension_manager_emit_in_extension_views (self, web_extension, "notifications.onButtonClicked", json);
+  }
+}
+
 static void
 handle_message_reply (EphyWebExtension *web_extension,
                       JSCValue         *args)

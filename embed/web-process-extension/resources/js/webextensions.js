@@ -43,7 +43,15 @@ window.browser.tabs = {
 };
 
 window.browser.notifications = {
+    clear: function (...args) { return ephy_message ('notifications.clear', args); },
     create: function (...args) { return ephy_message ('notifications.create', args); },
+    update: function (...args) { return ephy_message ('notifications.update', args); },
+    onClicked: new EphyEventListener (),
+    onButtonClicked: new EphyEventListener (),
+    // The remaining APIs here are stubs as long as we use GNotification since we don't have this information.
+    getAll: function (...args) { return ephy_message ('notifications.getAll', args); },
+    onClosed: new EphyEventListener (),
+    onShown: new EphyEventListener (),
 };
 
 // browser.extension is defined in ephy-webextension-common.c
