@@ -68,9 +68,15 @@ ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
                                               GTask            *task)
 {
   g_autoptr (GError) error = NULL;
-  guint idx;
 
-  for (idx = 0; idx < G_N_ELEMENTS (notifications_handlers); idx++) {
+  if (!ephy_web_extension_has_permission (self, "notifications")) {
+    g_warning ("Extension %s tried to use notifications without permission.", ephy_web_extension_get_name (self));
+    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
+    g_task_return_error (task, g_steal_pointer (&error));
+    return;
+  }
+
+  for (guint idx = 0; idx < G_N_ELEMENTS (notifications_handlers); idx++) {
     EphyWebExtensionSyncApiHandler handler = notifications_handlers[idx];
     char *ret;
 
