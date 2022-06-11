@@ -126,3 +126,13 @@ window.browser.windows = {
     onRemoved: new EphyEventListener (),
     onFocusChanged: new EphyEventListener (),
 };
+
+window.browser.cookies = {
+    get: function (...args) { return ephy_message ('cookies.get', args); },
+    getAll: function (...args) { return ephy_message ('cookies.getAll', args); },
+    getAllCookieStores: function (...args) { return ephy_message ('cookies.getAllCookieStores', args); },
+    remove: function (...args) { return ephy_message ('cookies.remove', args); },
+    set: function (...args) { return ephy_message ('cookies.set', args); },
+    // This is a stub as WebKitCookieManager::changed doesn't tell us enough information.
+    onChanged: new EphyEventListener (),
+};

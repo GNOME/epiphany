@@ -1371,6 +1371,22 @@ parse_uri_with_wildcard_scheme (const char  *uri,
 }
 
 static gboolean
+is_default_port (const char *scheme,
+                 int         port)
+{
+  static const char * const default_port_80[] = { "http", "ws", NULL };
+  static const char * const default_port_443[] = { "https", "wss", NULL };
+
+  switch (port) {
+    case 80:
+      return g_strv_contains (default_port_80, scheme);
+    case 443:
+      return g_strv_contains (default_port_443, scheme);
+  }
+  return FALSE;
+}
+
+static gboolean
 permission_matches_uri (const char *permission,
                         GUri       *uri)
 {
@@ -1378,10 +1394,8 @@ permission_matches_uri (const char *permission,
   g_autoptr (GError) error = NULL;
   g_autofree char *permission_path_and_query = NULL;
   g_autofree char *uri_path_and_query = NULL;
-
-  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#all_urls */
-  if (strcmp (permission, "<all_urls>") == 0)
-    return is_supported_scheme (g_uri_get_scheme (uri));
+  const char *permission_scheme;
+  int permission_port;
 
   permission_uri = parse_uri_with_wildcard_scheme (permission, &error);
   if (error) {
@@ -1389,15 +1403,18 @@ permission_matches_uri (const char *permission,
     return FALSE;
   }
 
-  /* Ports are forbidden. */
-  if (g_uri_get_port (permission_uri) != -1)
+  permission_scheme = g_uri_get_scheme (permission_uri);
+  permission_port = g_uri_get_port (permission_uri);
+
+  /* Ports are forbidden, however GUri normalizes these to the default. */
+  if (permission_port != -1 && !is_default_port (permission_scheme, permission_port))
     return FALSE;
 
   /* Empty paths are forbidden. */
   if (strcmp (g_uri_get_path (permission_uri), "") == 0)
     return FALSE;
 
-  if (!scheme_matches (g_uri_get_scheme (permission_uri), g_uri_get_scheme (uri)))
+  if (!scheme_matches (permission_scheme, g_uri_get_scheme (uri)))
     return FALSE;
 
   if (!host_matches (g_uri_get_host (permission_uri), g_uri_get_host (uri)))
@@ -1420,6 +1437,7 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 {
   EphyWebView *active_web_view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
   gboolean is_active_tab = active_web_view == web_view;
+  GUri *host;
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
 
@@ -1434,12 +1452,10 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
   }
 
   /* Note this one is NULL terminated. */
+  host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  g_assert (host); /* WebKitGTK shouldn't ever expose an invalid URI. */
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
-    GUri *host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
     const char *permission = g_ptr_array_index (self->host_permissions, i);
-
-    g_assert (host);
-
     if (permission_matches_uri (permission, host))
       return TRUE;
   }
@@ -1462,6 +1478,24 @@ ephy_web_extension_has_tab_or_host_permission (EphyWebExtension *self,
 {
   return ephy_web_extension_has_permission_internal (self, web_view, is_user_interaction, TRUE);
 }
+
+gboolean
+ephy_web_extension_has_host_permission (EphyWebExtension *self,
+                                        const char       *host)
+{
+  GUri *uri = g_uri_parse (host, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  if (!uri)
+    return FALSE;
+
+  for (guint i = 0; i < self->host_permissions->len - 1; i++) {
+    const char *permission = g_ptr_array_index (self->host_permissions, i);
+    if (permission_matches_uri (permission, uri))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 
 gboolean
 ephy_web_extension_has_permission (EphyWebExtension *self,

@@ -36,6 +36,7 @@
 #include "ephy-web-view.h"
 
 #include "api/alarms.h"
+#include "api/cookies.h"
 #include "api/notifications.h"
 #include "api/pageaction.h"
 #include "api/runtime.h"
@@ -66,6 +67,7 @@ G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJEC
 
 EphyWebExtensionAsyncApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},
+  {"cookies", ephy_web_extension_api_cookies_handler},
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},

@@ -159,6 +159,9 @@ gboolean               ephy_web_extension_has_host_or_active_permission   (EphyW
 gboolean               ephy_web_extension_has_permission                  (EphyWebExtension *self,
                                                                            const char       *permission);
 
+gboolean               ephy_web_extension_has_host_permission             (EphyWebExtension *self,
+                                                                           const char       *host);
+
 const char * const    *ephy_web_extension_get_host_permissions            (EphyWebExtension *self);
 
 JsonNode              *ephy_web_extension_get_local_storage               (EphyWebExtension *self);
