@@ -101,10 +101,6 @@ window.browser.browserAction = {
     onClicked: new EphyEventListener (),
 };
 
-window.browser.windows = {
-  WINDOW_ID_CURRENT: -2, /* Matches Firefox, used in tabs.c. */
-};
-
 window.browser.permissions = {
     contains: function (...args) { return ephy_message ('permissions.contains', args); },
     getAll: function (...args) { return ephy_message ('permissions.getAll', args); },
@@ -125,6 +121,7 @@ window.browser.windows = {
     onCreated: new EphyEventListener (),
     onRemoved: new EphyEventListener (),
     onFocusChanged: new EphyEventListener (),
+    WINDOW_ID_CURRENT: -2, /* Matches Firefox, used in tabs.c. */
 };
 
 window.browser.cookies = {
