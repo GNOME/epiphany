@@ -196,3 +196,33 @@ ephy_json_node_to_string (JsonNode *node)
 
   return json_node_get_string (node);
 }
+
+/**
+ * ephy_json_array_get_string:
+ * @array: A #JsonArray
+ *
+ * This safely gets a string from an array.
+ *
+ * Returns: (transfer none): A string or %NULL if not a string.
+ */
+const char *
+ephy_json_array_get_string (JsonArray *array,
+                            guint      index)
+{
+  return ephy_json_node_to_string (json_array_get_element (array, index));
+}
+
+/**
+ * ephy_json_array_get_object:
+ * @array: A #JsonArray
+ *
+ * This safely gets an object from an array.
+ *
+ * Returns: (transfer none): An object or %NULL if not a object.
+ */
+JsonObject *
+ephy_json_array_get_object (JsonArray *array,
+                            guint      index)
+{
+  return ephy_json_node_get_object (json_array_get_element (array, index));
+}

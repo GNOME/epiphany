@@ -47,6 +47,12 @@ typedef char *(*executeHandler)(EphyWebExtension  *web_extension,
                                 WebKitWebView     *web_view,
                                 GError           **error);
 
+typedef void (*EphyApiExecuteFunc)(EphyWebExtension *web_extension,
+                                   char             *name,
+                                   JsonArray        *args,
+                                   WebKitWebView    *web_view,
+                                   GTask            *task);
+
 
 extern GQuark web_extension_error_quark (void);
 #define WEB_EXTENSION_ERROR web_extension_error_quark ()
@@ -62,6 +68,11 @@ typedef enum {
 
 typedef struct {
   char *name;
+  EphyApiExecuteFunc execute;
+} EphyWebExtensionApiHandler;
+
+typedef struct {
+  char *name;
   executeTaskHandler execute;
 } EphyWebExtensionAsyncApiHandler;
 
@@ -74,6 +85,8 @@ GdkPixbuf             *ephy_web_extension_get_icon                        (EphyW
                                                                            gint64            size);
 
 const char            *ephy_web_extension_get_name                        (EphyWebExtension *self);
+
+const char            *ephy_web_extension_get_short_name                  (EphyWebExtension *self);
 
 const char            *ephy_web_extension_get_version                     (EphyWebExtension *self);
 
@@ -168,7 +181,9 @@ void                   ephy_web_extension_save_local_storage              (EphyW
 void                   ephy_web_extension_clear_local_storage             (EphyWebExtension *self);
 
 char                  *ephy_web_extension_create_sender_object            (EphyWebExtension *self,
-                                                                          WebKitWebView     *web_view);
+                                                                           WebKitWebView     *web_view);
+gboolean               ephy_web_extension_rule_matches_uri                (const char       *rule,
+                                                                           GUri             *uri);
 
 gboolean               ephy_web_extension_has_web_accessible_resource     (EphyWebExtension *self,
                                                                            const char       *path);

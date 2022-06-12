@@ -1,5 +1,7 @@
 'use strict';
 
+/* exported contextMenuElementIsPassword, contextMenuElementIsEditable */
+
 // eslint-disable-next-line no-var
 var Ephy = {};
 
@@ -766,3 +768,12 @@ Ephy.FormManager = class FormManager
         return formAuth;
     }
 };
+
+let contextMenuElementIsEditable = false;
+let contextMenuElementIsPassword = false;
+
+window.document.addEventListener('contextmenu', (event) => {
+    // isContentEditable is always false, in practice this seems functional enough.
+    contextMenuElementIsEditable = event.target.tagName.toLowerCase() === 'input';
+    contextMenuElementIsPassword = event.target.type === 'password';
+});

@@ -38,6 +38,7 @@
 #include "api/alarms.h"
 #include "api/cookies.h"
 #include "api/downloads.h"
+#include "api/menus.h"
 #include "api/notifications.h"
 #include "api/pageaction.h"
 #include "api/runtime.h"
@@ -72,6 +73,7 @@ EphyWebExtensionAsyncApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},
   {"cookies", ephy_web_extension_api_cookies_handler},
   {"downloads", ephy_web_extension_api_downloads_handler},
+  {"menus", ephy_web_extension_api_menus_handler},
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},
@@ -466,6 +468,33 @@ ephy_web_extension_manager_set_background_web_view (EphyWebExtensionManager *sel
                                                     WebKitWebView           *web_view)
 {
   g_hash_table_insert (self->background_web_views, web_extension, web_view);
+}
+
+void
+ephy_web_extension_manager_append_context_menu (EphyWebExtensionManager *self,
+                                                WebKitWebView           *web_view,
+                                                WebKitContextMenu       *context_menu,
+                                                WebKitHitTestResult     *hit_test_result,
+                                                GdkModifierType          modifiers,
+                                                gboolean                 is_audio,
+                                                gboolean                 is_video)
+{
+  gboolean inserted_separator = FALSE;
+
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *extension = g_ptr_array_index (self->web_extensions, i);
+    WebKitContextMenuItem *item;
+
+    item = ephy_web_extension_api_menus_create_context_menu (extension, web_view, context_menu,
+                                                             hit_test_result, modifiers, is_audio, is_video);
+    if (item) {
+      if (!inserted_separator) {
+        webkit_context_menu_append (context_menu, webkit_context_menu_item_new_separator ());
+        inserted_separator = TRUE;
+      }
+      webkit_context_menu_append (context_menu, item);
+    }
+  }
 }
 
 static gboolean
@@ -1357,6 +1386,26 @@ ephy_web_extension_manager_handle_notifications_action (EphyWebExtensionManager 
     json = g_strdup_printf ("\"%s\", %d", notification_id, index);
     ephy_web_extension_manager_emit_in_extension_views (self, web_extension, "notifications.onButtonClicked", json);
   }
+}
+
+void
+ephy_web_extension_manager_handle_context_menu_action (EphyWebExtensionManager *self,
+                                                       GVariant                *params)
+{
+  EphyWebExtension *web_extension;
+  const char *extension_guid;
+  const char *onclickdata;
+  const char *tabdata;
+  g_autofree char *json = NULL;
+
+  g_variant_get (params, "(&s&s&s)", &extension_guid, &onclickdata, &tabdata);
+
+  web_extension = ephy_web_extension_manager_get_extension_by_guid (self, extension_guid);
+  if (!web_extension)
+    return;
+
+  json = g_strconcat (onclickdata, ", ", tabdata, NULL);
+  ephy_web_extension_manager_emit_in_extension_views (self, web_extension, "menus.onClicked", json);
 }
 
 static void

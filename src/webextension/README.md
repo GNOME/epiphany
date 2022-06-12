@@ -105,6 +105,28 @@ This is partially implemented. Message passing including replies works including
 - onMessage
 - lastError
 
+#### menus
+
+Notes:
+
+- `contextMenus` is aliased to this API and the same permissions work for both.
+
+Limitations:
+
+- Menus are only shown on web pages and not extension views, tabs, etc. (TODO)
+- Radio and Checkbox menus aren't properly supported yet. (TODO)
+- Commands are not yet supported. (TODO)
+- update() isn't supported yet. (TODO)
+- Frames are not properly handled.
+- Icons are not supported.
+
+APIs:
+
+- create()
+- remove()
+- removeAll()
+- onClicked
+
 #### notifications
 
 Limitations:

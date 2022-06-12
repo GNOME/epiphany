@@ -361,6 +361,15 @@ webextension_action (GSimpleAction *action,
   ephy_web_extension_manager_handle_notifications_action (manager, parameter);
 }
 
+static void
+webextension_context_menu_action (GSimpleAction *action,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  ephy_web_extension_manager_handle_context_menu_action (manager, parameter);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -378,6 +387,7 @@ static GActionEntry app_entries[] = {
   { "launch-app", launch_app, "s", NULL, NULL },
   { "notification-clicked", notification_clicked, "t", NULL, NULL },
   { "webextension-notification", webextension_action, "(ssi)", NULL, NULL },
+  { "webextension-context-menu", webextension_context_menu_action, "(sss)", NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {

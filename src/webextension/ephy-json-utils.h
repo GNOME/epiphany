@@ -44,3 +44,9 @@ JsonObject   *ephy_json_object_get_object           (JsonObject          *object
 JsonObject   *ephy_json_node_get_object             (JsonNode            *node);
 
 const char   *ephy_json_node_to_string              (JsonNode            *node);
+
+const char   *ephy_json_array_get_string            (JsonArray           *array,
+                                                     guint                index);
+
+JsonObject   *ephy_json_array_get_object            (JsonArray           *array,
+                                                     guint                index);

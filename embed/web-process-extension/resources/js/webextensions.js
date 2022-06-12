@@ -155,3 +155,13 @@ window.browser.downloads = {
     onChanged: new EphyEventListener (),
 };
 
+window.browser.menus = {
+    create: function (...args) { return ephy_message ('menus.create', args); },
+    remove: function (...args) { return ephy_message ('menus.remove', args); },
+    removeAll: function (...args) { return ephy_message ('menus.removeAll', args); },
+    update: function (...args) { return ephy_message ('menus.update', args); },
+    onClicked: new EphyEventListener (),
+};
+
+// Chrome compat.
+window.browser.contextMenus = window.browser.menus;

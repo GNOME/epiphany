@@ -74,6 +74,9 @@ WebKitWebView           *ephy_web_extension_manager_get_background_web_view     
 void                     ephy_web_extension_manager_handle_notifications_action     (EphyWebExtensionManager *self,
                                                                                      GVariant                *params);
 
+void                     ephy_web_extension_manager_handle_context_menu_action      (EphyWebExtensionManager *self,
+                                                                                     GVariant                *params);
+
 void                     ephy_web_extension_manager_emit_in_extension_views         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
                                                                                      const char              *name,
@@ -107,5 +110,13 @@ GtkWidget                *ephy_web_extensions_manager_create_web_extensions_webv
 void                      ephy_web_extension_manager_foreach_extension              (EphyWebExtensionManager     *self,
                                                                                      EphyWebExtensionForeachFunc  func,
                                                                                      gpointer                     user_data);
+
+void                      ephy_web_extension_manager_append_context_menu            (EphyWebExtensionManager *self,
+                                                                                     WebKitWebView           *web_view,
+                                                                                     WebKitContextMenu       *context_menu,
+                                                                                     WebKitHitTestResult     *hit_test_result,
+                                                                                     GdkModifierType          modifiers,
+                                                                                     gboolean                 is_audio,
+                                                                                     gboolean                 is_video);
 
 G_END_DECLS

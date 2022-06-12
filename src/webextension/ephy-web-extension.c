@@ -87,6 +87,7 @@ struct _EphyWebExtension {
   char *guid;
   char *author;
   char *name;
+  char *short_name;
   char *version;
   char *homepage_url;
   GList *icons;
@@ -304,6 +305,12 @@ const char *
 ephy_web_extension_get_name (EphyWebExtension *self)
 {
   return self->name;
+}
+
+const char *
+ephy_web_extension_get_short_name (EphyWebExtension *self)
+{
+  return self->short_name ? self->short_name : self->name;
 }
 
 const char *
@@ -756,6 +763,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->short_name, g_free);
   g_clear_pointer (&self->version, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
   g_clear_pointer (&self->local_storage_path, g_free);
@@ -849,6 +857,7 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 
   self->description = ephy_web_extension_manifest_get_localized_string (self, root_object, "description");
   self->name = ephy_web_extension_manifest_get_localized_string (self, root_object, "name");
+  self->short_name = ephy_web_extension_manifest_get_localized_string (self, root_object, "short_name");
   self->version = ephy_web_extension_manifest_get_localized_string (self, root_object, "version");
   self->homepage_url = ephy_web_extension_manifest_get_localized_string (self, root_object, "homepage_url");
   self->author = ephy_web_extension_manifest_get_localized_string (self, root_object, "author");
@@ -1421,44 +1430,44 @@ is_default_port (const char *scheme,
   return FALSE;
 }
 
-static gboolean
-permission_matches_uri (const char *permission,
-                        GUri       *uri)
+gboolean
+ephy_web_extension_rule_matches_uri (const char *rule,
+                                     GUri       *uri)
 {
-  g_autoptr (GUri) permission_uri = NULL;
+  g_autoptr (GUri) rule_uri = NULL;
   g_autoptr (GError) error = NULL;
-  g_autofree char *permission_path_and_query = NULL;
+  g_autofree char *rule_path_and_query = NULL;
   g_autofree char *uri_path_and_query = NULL;
-  const char *permission_scheme;
-  int permission_port;
+  const char *rule_scheme;
+  int rule_port;
 
-  permission_uri = parse_uri_with_wildcard_scheme (permission, &error);
+  rule_uri = parse_uri_with_wildcard_scheme (rule, &error);
   if (error) {
-    g_message ("Failed to parse permission '%s' as URI: %s", permission, error->message);
+    g_warning ("Failed to parse rule '%s' as URI: %s", rule, error->message);
     return FALSE;
   }
 
-  permission_scheme = g_uri_get_scheme (permission_uri);
-  permission_port = g_uri_get_port (permission_uri);
+  rule_scheme = g_uri_get_scheme (rule_uri);
+  rule_port = g_uri_get_port (rule_uri);
 
   /* Ports are forbidden, however GUri normalizes these to the default. */
-  if (permission_port != -1 && !is_default_port (permission_scheme, permission_port))
+  if (rule_port != -1 && !is_default_port (rule_scheme, rule_port))
     return FALSE;
 
   /* Empty paths are forbidden. */
-  if (strcmp (g_uri_get_path (permission_uri), "") == 0)
+  if (strcmp (g_uri_get_path (rule_uri), "") == 0)
     return FALSE;
 
-  if (!scheme_matches (permission_scheme, g_uri_get_scheme (uri)))
+  if (!scheme_matches (rule_scheme, g_uri_get_scheme (uri)))
     return FALSE;
 
-  if (!host_matches (g_uri_get_host (permission_uri), g_uri_get_host (uri)))
+  if (!host_matches (g_uri_get_host (rule_uri), g_uri_get_host (uri)))
     return FALSE;
 
-  permission_path_and_query = join_path_and_query (permission_uri);
+  rule_path_and_query = join_path_and_query (rule_uri);
   uri_path_and_query = join_path_and_query (uri);
 
-  if (!path_matches (permission_path_and_query, uri_path_and_query))
+  if (!path_matches (rule_path_and_query, uri_path_and_query))
     return FALSE;
 
   return TRUE;
@@ -1487,7 +1496,7 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
   g_assert (host); /* WebKitGTK shouldn't ever expose an invalid URI. */
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
     const char *permission = g_ptr_array_index (self->host_permissions, i);
-    if (permission_matches_uri (permission, host))
+    if (ephy_web_extension_rule_matches_uri (permission, host))
       return TRUE;
   }
 
@@ -1520,7 +1529,7 @@ ephy_web_extension_has_host_permission (EphyWebExtension *self,
 
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
     const char *permission = g_ptr_array_index (self->host_permissions, i);
-    if (permission_matches_uri (permission, uri))
+    if (ephy_web_extension_rule_matches_uri (permission, uri))
       return TRUE;
   }
 

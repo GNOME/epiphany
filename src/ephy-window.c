@@ -1490,6 +1490,7 @@ populate_context_menu (WebKitWebView       *web_view,
                        WebKitHitTestResult *hit_test_result,
                        EphyWindow          *window)
 {
+  EphyWebExtensionManager *extension_manager = ephy_web_extension_manager_get_default ();
   WebKitContextMenuItem *input_methods_item = NULL;
   WebKitContextMenuItem *insert_emoji_item = NULL;
   WebKitContextMenuItem *copy_image_item = NULL;
@@ -1565,7 +1566,7 @@ populate_context_menu (WebKitWebView       *web_view,
   }
 
   parse_context_menu_user_data (context_menu, &selected_text);
-  if (selected_text) {
+  if (selected_text && *selected_text) {
     if (g_uri_is_valid (selected_text, G_URI_FLAGS_NONE, NULL)) {
       GVariant *value;
 
@@ -1806,6 +1807,11 @@ populate_context_menu (WebKitWebView       *web_view,
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
   }
+
+  ephy_web_extension_manager_append_context_menu (extension_manager, web_view,
+                                                  context_menu, hit_test_result,
+                                                  event->type == GDK_BUTTON_PRESS ? ((GdkEventButton *)event)->state : 0,
+                                                  is_downloadable_audio, is_downloadable_video);
 
   return GDK_EVENT_PROPAGATE;
 }
