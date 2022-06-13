@@ -15,22 +15,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-04-23 14:06+0000\n"
-"PO-Revision-Date: 2022-04-26 17:29+0300\n"
+"POT-Creation-Date: 2022-06-12 15:26+0000\n"
+"PO-Revision-Date: 2022-06-12 22:01+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.0.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
 #: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:411 src/window-commands.c:1005
+#: src/ephy-main.c:409 src/window-commands.c:1005
 msgid "Web"
 msgstr "Веб-браузер"
 
@@ -122,19 +122,19 @@ msgstr "Утратило силу. Вместо этого используйт�
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
@@ -284,9 +284,9 @@ msgid ""
 msgstr ""
 "Служит для управления отображением панели вкладок. Возможные значения: "
 "\"всегда\" (панель вкладок отображается всегда), \"больше одного\" (панель "
-"вкладок отображается только при наличии двух или более вкладок) и \"никогда"
-"\" (панель вкладок никогда не отображается). В рабочем столе Pantheon этот "
-"параметр игнорируется, и используется значение \"всегда\"."
+"вкладок отображается только при наличии двух или более вкладок) и "
+"\"никогда\" (панель вкладок никогда не отображается). В рабочем столе "
+"Pantheon этот параметр игнорируется, и используется значение \"всегда\"."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Keep window open when closing last tab"
@@ -2001,31 +2001,31 @@ msgid "Unspecified"
 msgstr "Неопределённый"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197
+#: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "Загрузки"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
+#: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
 msgstr "Рабочий стол"
 
-#: lib/ephy-file-helpers.c:191
+#: lib/ephy-file-helpers.c:190
 msgid "Home"
 msgstr "Домашняя папка"
 
-#: lib/ephy-file-helpers.c:429
+#: lib/ephy-file-helpers.c:427
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Не удалось создать временный каталог в «%s»."
 
-#: lib/ephy-file-helpers.c:555
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Файл «%s» существует, перенесите его в другое место."
 
-#: lib/ephy-file-helpers.c:574
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Не удалось создать каталог «%s»."
@@ -2158,14 +2158,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:433
+#: lib/sync/ephy-password-manager.c:435
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s в форме в %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:437
+#: lib/sync/ephy-password-manager.c:439
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Пароль в форме в %s"
@@ -2301,7 +2301,7 @@ msgstr ""
 "Этот сертификат действителен, но ресурсы этой страницы были отправлены "
 "небезопасно."
 
-#: lib/widgets/ephy-downloads-popover.c:213
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2412,7 +2412,7 @@ msgid "Paste and _Go"
 msgstr "Вставить и _перейти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:929
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:932
 msgid "_Undo"
 msgstr "_Отменить"
 
@@ -2700,178 +2700,178 @@ msgstr "Удалить выбранное веб-расширение"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Открытый файл (manifest.json/xpi)"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:933
 msgid "Re_do"
 msgstr "От_менить"
 
 #. Edit.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:936
 msgid "Cu_t"
 msgstr "_Вырезать"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:937
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:938
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:939
 msgid "_Paste Text Only"
 msgstr "_Вставить только текст"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:940
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:942
 msgid "S_end Link by Email…"
 msgstr "_Отправить ссылку по почте…"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:944
 msgid "_Reload"
 msgstr "_Обновить"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:945
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:946
 msgid "_Forward"
 msgstr "_Вперёд"
 
 #. Bookmarks
-#: src/ephy-window.c:946
+#: src/ephy-window.c:949
 msgid "Add Boo_kmark…"
 msgstr "Добавить _закладку…"
 
 #. Links.
-#: src/ephy-window.c:950
+#: src/ephy-window.c:953
 msgid "Open Link in New _Window"
 msgstr "Открыть ссылку в _новом окне"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:954
 msgid "Open Link in New _Tab"
 msgstr "Открыть ссылку в новой _вкладке"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:955
 msgid "Open Link in I_ncognito Window"
 msgstr "Открыть ссылку в _новом приватном окне"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:956
 msgid "_Save Link As…"
 msgstr "Сохранить сс_ылку как…"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:957
 msgid "_Copy Link Address"
 msgstr "_Копировать адрес ссылки"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:958
 msgid "_Copy E-mail Address"
 msgstr "_Копировать адрес e-mail"
 
 #. Images.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:962
 msgid "View _Image in New Tab"
 msgstr "_Открыть изображение в новой вкладке"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:963
 msgid "Copy I_mage Address"
 msgstr "_Копировать адрес изображения"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:964
 msgid "_Save Image As…"
 msgstr "Сохранить _изображение как…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:965
 msgid "Set as _Wallpaper"
 msgstr "Использовать как _фон рабочего стола"
 
 #. Video.
-#: src/ephy-window.c:966
+#: src/ephy-window.c:969
 msgid "Open Video in New _Window"
 msgstr "Открыть видео в _новом окне"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:970
 msgid "Open Video in New _Tab"
 msgstr "Открыть видео в новой _вкладке"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:971
 msgid "_Save Video As…"
 msgstr "_Сохранить видео как…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:972
 msgid "_Copy Video Address"
 msgstr "_Копировать адрес видео"
 
 #. Audio.
-#: src/ephy-window.c:973
+#: src/ephy-window.c:976
 msgid "Open Audio in New _Window"
 msgstr "Открыть аудио в _новом окне"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:977
 msgid "Open Audio in New _Tab"
 msgstr "Открыть аудио в новой _вкладке"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:978
 msgid "_Save Audio As…"
 msgstr "_Сохранить аудио как…"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:979
 msgid "_Copy Audio Address"
 msgstr "_Копировать адрес аудио"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:985
 msgid "Save Pa_ge As…"
 msgstr "Сохранить _страницу как…"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:986
 msgid "_Page Source"
 msgstr "_Исходный код страницы"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Поиск «%s» в интернете"
 
-#: src/ephy-window.c:1396
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Открыть ссылку"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Открыть ссылку в новой вкладке"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Открыть ссылку в новом окне"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Открыть ссылку в окне инкогнито"
 
-#: src/ephy-window.c:2843 src/ephy-window.c:4170
+#: src/ephy-window.c:2846 src/ephy-window.c:4175
 msgid "Do you want to leave this website?"
 msgstr "Покинуть этот веб-сайт?"
 
-#: src/ephy-window.c:2844 src/ephy-window.c:4171 src/window-commands.c:1213
+#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "Изменённая вами форма не может быть отправлена."
 
-#: src/ephy-window.c:2845 src/ephy-window.c:4172 src/window-commands.c:1215
+#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Отменить изменения"
 
-#: src/ephy-window.c:2866
+#: src/ephy-window.c:2869
 msgid "Download operation"
 msgstr "Операция загрузки"
 
-#: src/ephy-window.c:2868
+#: src/ephy-window.c:2871
 msgid "Show details"
 msgstr "Показать детали"
 
-#: src/ephy-window.c:2870
+#: src/ephy-window.c:2873
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2880,36 +2880,36 @@ msgstr[1] "Активны %d операции загрузки"
 msgstr[2] "Активно %d операций загрузки"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3364
+#: src/ephy-window.c:3367
 msgid "View open tabs"
 msgstr "Просмотреть открытые вкладки"
 
-#: src/ephy-window.c:3494
+#: src/ephy-window.c:3497
 msgid "Set Web as your default browser?"
 msgstr "Установить Web в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3496
+#: src/ephy-window.c:3499
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Установить Epiphany Technology Preview в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3508
+#: src/ephy-window.c:3511
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3512
 msgid "_No"
 msgstr "_Нет"
 
-#: src/ephy-window.c:4304
+#: src/ephy-window.c:4309
 msgid "There are multiple tabs open."
 msgstr "Открыто несколько вкладок."
 
-#: src/ephy-window.c:4305
+#: src/ephy-window.c:4310
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Если вы закроете это окно, все открытые вкладки будут потеряны"
 
-#: src/ephy-window.c:4306
+#: src/ephy-window.c:4311
 msgid "C_lose tabs"
 msgstr "_Закрыть вкладки"
 
@@ -3187,33 +3187,32 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Добавьте в закладки несколько страниц, чтобы увидеть их здесь."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "Персональные данные"
+msgid "Website Data"
+msgstr "Данные веб-сайта"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "_Очистить данные"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "Удалить выбранные персональные данные"
+msgid "Remove selected website data"
+msgstr "Удалить выбранные данные веб-сайта"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "Поиск персональных данных"
+msgid "Search website data"
+msgstr "Поиск данных веб-сайта"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "Персональные данные отсутствуют"
+msgid "There is no Website Data"
+msgstr "Данные веб-сайта отсутствуют"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "Персональные данные будут перечислены здесь"
+msgid "Website data will be listed here"
+msgstr "Данные веб-сайта будут перечислены здесь"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "Очистить выбранные личные данные:"
+msgid "Clear selected website data:"
+msgstr "Очистить выбранные данные веб-сайта:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3498,7 +3497,7 @@ msgid "Tabs"
 msgstr "Вкладки"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "Пароли"
 
@@ -3712,19 +3711,19 @@ msgstr "Включить поисковые предложения в запис
 msgid "_Google Search Suggestions"
 msgstr "Включить поисковые предложения _Google"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "Персональные данные"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "Вы можете удалить сохранённые личные данные."
+msgid "Clear Website _Data"
+msgstr "Очистить _данные веб-сайта"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "Очистить личные _данные"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "_Пароли"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "_Запомнить пароли"
 
@@ -4155,6 +4154,11 @@ msgstr "Веб-приложение '%s' не существует"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Веб-приложение '%s' не может быть удалено"
 
+#: src/webextension/api/runtime.c:121
+#, c-format
+msgid "Options for %s"
+msgstr "Параметры для %s"
+
 #: src/window-commands.c:113
 msgid "GVDB File"
 msgstr "Файл GVDB"
@@ -4328,6 +4332,9 @@ msgstr ""
 #: src/window-commands.c:2678
 msgid "_Enable"
 msgstr "_Включить"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "Вы можете удалить сохранённые личные данные."
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "Веб-сайт GNOME, отображаемый в веб-браузере GNOME"
