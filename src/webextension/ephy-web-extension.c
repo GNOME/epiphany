@@ -505,9 +505,6 @@ web_extension_add_content_script (JsonArray *array,
   }
   g_ptr_array_add (content_script->js, NULL);
 
-  /* Create user scripts so that we can unload them if necessary */
-  web_extension_content_script_build (self, content_script);
-
   self->content_scripts = g_list_append (self->content_scripts, content_script);
 }
 
@@ -1134,6 +1131,14 @@ ephy_web_extension_get_content_script_js (EphyWebExtension *self,
                                           gpointer          content_script)
 {
   WebExtensionContentScript *script = content_script;
+
+  if (script->js && script->js->len && !script->user_scripts) {
+    /* Create user scripts so that we can unload them if necessary.
+     * They are lazily created here to ensure they happen on the main-thread
+     * since parsing happens on a thread. */
+    web_extension_content_script_build (self, script);
+  }
+
   return script->user_scripts;
 }
 
