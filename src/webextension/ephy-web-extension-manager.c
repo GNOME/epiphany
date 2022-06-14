@@ -58,6 +58,8 @@ struct _EphyWebExtensionManager {
   GHashTable *page_action_map;
   GHashTable *browser_action_map;
 
+  GHashTable *user_agent_overrides;
+
   GHashTable *background_web_views;
   GHashTable *popup_web_views;
 
@@ -85,6 +87,22 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
+
+static GHashTable *
+create_user_agent_overrides (void)
+{
+  GHashTable *overrides = g_hash_table_new (g_str_hash, g_str_equal);
+
+/* We add Epiphany to the UA so proactive extensions can rely on it always. */
+#define FIREFOX_OVERRIDE "Mozilla/5.0 (X11; Linux x86_64; rv:101.0) Gecko/20100101 Firefox/101.0 Epiphany/" EPHY_VERSION
+
+  /* FIXME: These names are post translation. */
+
+  /* Bitwarden has Safari specific hacks that cannot work on Epiphany such as calling out to their host mac app. */
+  g_hash_table_insert (overrides, "Bitwarden - Free Password Manager", FIREFOX_OVERRIDE);
+
+  return overrides;
+}
 
 static void
 ephy_web_extension_manager_add_to_list (EphyWebExtensionManager *self,
@@ -219,6 +237,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
   self->pending_messages = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->web_extensions = g_ptr_array_new_full (0, g_object_unref);
+  self->user_agent_overrides = create_user_agent_overrides ();
 
   ephy_web_extension_manager_scan_directory (self, dir);
 }
@@ -235,6 +254,7 @@ ephy_web_extension_manager_dispose (GObject *object)
   g_clear_pointer (&self->page_action_map, g_hash_table_destroy);
   g_clear_pointer (&self->pending_messages, g_hash_table_destroy);
   g_clear_pointer (&self->web_extensions, g_ptr_array_unref);
+  g_clear_pointer (&self->user_agent_overrides, g_hash_table_destroy);
 }
 
 static void
@@ -865,6 +885,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   WebKitSettings *settings;
   WebKitWebContext *web_context;
   GtkWidget *web_view;
+  const char *custom_user_agent;
 
   /* Create an own ucm so new scripts/css are only applied to this web_view */
   ucm = webkit_user_content_manager_new ();
@@ -891,6 +912,13 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
 
   if (ephy_web_extension_has_permission (web_extension, "clipboardWrite"))
     webkit_settings_set_javascript_can_access_clipboard (settings, TRUE);
+
+  custom_user_agent = g_hash_table_lookup (manager->user_agent_overrides,
+                                           ephy_web_extension_get_name (web_extension));
+  if (custom_user_agent)
+    webkit_settings_set_user_agent (settings, custom_user_agent);
+  else
+    webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
 
   g_signal_connect (web_view, "decide-policy", G_CALLBACK (decide_policy_cb), web_extension);
 
