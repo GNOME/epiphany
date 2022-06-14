@@ -1433,12 +1433,12 @@ tab_emit_ready_cb (GObject      *source,
   if (error || !jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result))) {
     pending_messages = g_hash_table_lookup (manager->pending_messages, tracker->web_extension);
     pending_task = g_hash_table_lookup (pending_messages, tracker->message_guid);
-    g_assert (pending_task);
+    if (pending_task) {
+      g_assert (g_hash_table_steal (pending_messages, tracker->message_guid));
+      g_clear_pointer (&tracker->message_guid, g_free);
 
-    g_assert (g_hash_table_steal (pending_messages, tracker->message_guid));
-    g_clear_pointer (&tracker->message_guid, g_free);
-
-    g_task_return_pointer (pending_task, NULL, NULL);
+      g_task_return_pointer (pending_task, NULL, NULL);
+    }
   }
 
   if (error)
