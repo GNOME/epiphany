@@ -889,6 +889,9 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
   webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
 
+  if (ephy_web_extension_has_permission (web_extension, "clipboardWrite"))
+    webkit_settings_set_javascript_can_access_clipboard (settings, TRUE);
+
   g_signal_connect (web_view, "decide-policy", G_CALLBACK (decide_policy_cb), web_extension);
 
   return web_view;
