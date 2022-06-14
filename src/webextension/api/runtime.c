@@ -51,6 +51,64 @@ runtime_handler_get_browser_info (EphyWebExtension  *self,
   return json_to_string (root, FALSE);
 }
 
+static const char *
+get_os (void)
+{
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformOs */
+#if defined(__linux__)
+  return "linux";
+#elif defined(_WIN32)
+  return "win";
+#elif defined(__OpenBSD__) || defined(__FreeBSD__)
+  return "openbsd"; /* MDN documents same for both. */
+#elif defined(__APPLE__)
+  return "mac";
+#else
+  #warning "Unknown OS"
+  return "unknown";
+#endif
+}
+
+static const char *
+get_arch (void)
+{
+  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformArch */
+#if defined (__x86_64__) || defined(_M_X64)
+  return "x86-64";
+#elif defined(__i386__) || defined(_M_IX86)
+  return "x86-32";
+#elif defined(__aarch64__) || defined(__arm__) || defined(_M_ARM64) || defined(_M_ARM)
+  return "arm";
+#else
+  #warning "Unknown architecture"
+  return "unknown";
+#endif
+}
+
+static char *
+runtime_handler_get_platform_info (EphyWebExtension  *self,
+                                   char              *name,
+                                   JSCValue          *args,
+                                   WebKitWebView     *web_view,
+                                   GError           **error)
+{
+  g_autoptr (JsonBuilder) builder = json_builder_new ();
+  g_autoptr (JsonNode) root = NULL;
+
+  json_builder_begin_object (builder);
+  json_builder_set_member_name (builder, "os");
+  json_builder_add_string_value (builder, get_os ());
+  json_builder_set_member_name (builder, "arch");
+  json_builder_add_string_value (builder, get_arch ());
+  json_builder_set_member_name (builder, "nacl_arch");
+  json_builder_add_string_value (builder, get_arch ());
+  json_builder_end_object (builder);
+
+  root = json_builder_get_root (builder);
+
+  return json_to_string (root, FALSE);
+}
+
 static gboolean
 is_empty_object (JSCValue *value)
 {
@@ -144,6 +202,7 @@ runtime_handler_open_options_page (EphyWebExtension  *self,
 
 static EphyWebExtensionSyncApiHandler runtime_sync_handlers[] = {
   {"getBrowserInfo", runtime_handler_get_browser_info},
+  {"getPlatformInfo", runtime_handler_get_platform_info},
   {"openOptionsPage", runtime_handler_open_options_page},
 };
 

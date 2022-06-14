@@ -80,6 +80,7 @@ window.browser.extension.getBackgroundPage = function () {
 
 // browser.runtime is defined in webextensions-common.js
 window.browser.runtime.getBrowserInfo = function (...args) { return ephy_message ('runtime.getBrowserInfo', args); };
+window.browser.runtime.getPlatformInfo = function (...args) { return ephy_message ('runtime.getPlatformInfo', args); };
 window.browser.runtime.connectNative = function (...args) { return ephy_message ('runtime.connectNative', args); };
 window.browser.runtime.openOptionsPage = function (...args) { return ephy_message ('runtime.openOptionsPage', args); };
 window.browser.runtime.setUninstallURL = function (...args) { return ephy_message ('runtime.setUninstallURL', args); };
