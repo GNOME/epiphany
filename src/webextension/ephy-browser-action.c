@@ -26,6 +26,8 @@
 struct _EphyBrowserAction {
   GObject parent_instance;
   EphyWebExtension *web_extension;
+  char *badge_text;
+  GdkRGBA *badge_color;
 };
 
 G_DEFINE_FINAL_TYPE (EphyBrowserAction, ephy_browser_action, G_TYPE_OBJECT)
@@ -33,6 +35,8 @@ G_DEFINE_FINAL_TYPE (EphyBrowserAction, ephy_browser_action, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_WEB_EXTENSION,
+  PROP_BADGE_TEXT,
+  PROP_BADGE_COLOR,
   N_PROPS
 };
 
@@ -86,6 +90,8 @@ ephy_browser_action_finalize (GObject *object)
 {
   EphyBrowserAction *self = (EphyBrowserAction *)object;
 
+  g_clear_object (&self->badge_text);
+  g_clear_object (&self->badge_color);
   g_clear_object (&self->web_extension);
 
   G_OBJECT_CLASS (ephy_browser_action_parent_class)->finalize (object);
@@ -139,6 +145,18 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
                          NULL, NULL,
                          EPHY_TYPE_WEB_EXTENSION,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_BADGE_TEXT] =
+    g_param_spec_string ("badge-text",
+                         "Badge Text",
+                         "The badge text of the browser action",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  properties[PROP_BADGE_COLOR] =
+    g_param_spec_string ("badge-color",
+                         "Badge Color",
+                         "The badge color of the browser action",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -146,4 +164,39 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
 static void
 ephy_browser_action_init (EphyBrowserAction *self)
 {
+}
+
+void
+ephy_browser_action_set_badge_text (EphyBrowserAction *self,
+                                    const char        *text)
+{
+  g_clear_pointer (&self->badge_text, g_free);
+
+  if (text) {
+    /* According to spec: Limit it to four chars max. */
+    self->badge_text = g_strdup_printf ("%.4s", text);
+  }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BADGE_TEXT]);
+}
+
+const char *
+ephy_browser_action_get_badge_text (EphyBrowserAction *self)
+{
+  return self->badge_text;
+}
+
+void
+ephy_browser_action_set_badge_background_color (EphyBrowserAction *self,
+                                                GdkRGBA           *color)
+{
+  g_clear_pointer (&self->badge_color, gdk_rgba_free);
+  self->badge_color = gdk_rgba_copy (color);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BADGE_COLOR]);
+}
+
+GdkRGBA *
+ephy_browser_action_get_badge_background_color (EphyBrowserAction *self)
+{
+  return self->badge_color;
 }

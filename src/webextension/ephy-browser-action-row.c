@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "ephy-browser-action-row.h"
+#include "ephy-indicator-bin-private.h"
 
 struct _EphyBrowserActionRow {
   GtkListBoxRow parent_instance;
@@ -30,6 +31,7 @@ struct _EphyBrowserActionRow {
 
   GtkWidget *browser_action_image;
   GtkWidget *title_label;
+  GtkWidget *badge;
 };
 
 G_DEFINE_FINAL_TYPE (EphyBrowserActionRow, ephy_browser_action_row, GTK_TYPE_LIST_BOX_ROW)
@@ -77,6 +79,28 @@ ephy_browser_action_row_get_property (GObject    *object,
 }
 
 static void
+on_badge_text (EphyBrowserAction *action,
+               GParamSpec        *spec,
+               gpointer           user_data)
+{
+  EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (user_data);
+  const char *text = ephy_browser_action_get_badge_text (EPHY_BROWSER_ACTION (self->browser_action));
+
+  ephy_indicator_bin_set_badge (EPHY_INDICATOR_BIN (self->badge), text);
+}
+
+static void
+on_badge_color (EphyBrowserAction *action,
+                GParamSpec        *spec,
+                gpointer           user_data)
+{
+  EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (user_data);
+  GdkRGBA *color = ephy_browser_action_get_badge_background_color (EPHY_BROWSER_ACTION (self->browser_action));
+
+  ephy_indicator_bin_set_badge_color (EPHY_INDICATOR_BIN (self->badge), color);
+}
+
+static void
 ephy_browser_action_row_constructed (GObject *object)
 {
   EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (object);
@@ -85,6 +109,10 @@ ephy_browser_action_row_constructed (GObject *object)
                        ephy_browser_action_get_title (self->browser_action));
   gtk_image_set_from_pixbuf (GTK_IMAGE (self->browser_action_image),
                              ephy_browser_action_get_pixbuf (self->browser_action, 16));
+
+  ephy_indicator_bin_set_badge (EPHY_INDICATOR_BIN (self->badge), ephy_browser_action_get_badge_text (EPHY_BROWSER_ACTION (self->browser_action)));
+  g_signal_connect (EPHY_BROWSER_ACTION (self->browser_action), "notify::badge-text", G_CALLBACK (on_badge_text), self);
+  g_signal_connect (EPHY_BROWSER_ACTION (self->browser_action), "notify::badge-color", G_CALLBACK (on_badge_color), self);
 
   G_OBJECT_CLASS (ephy_browser_action_row_parent_class)->constructed (object);
 }
@@ -121,6 +149,7 @@ ephy_browser_action_row_class_init (EphyBrowserActionRowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/browser-action-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, browser_action_image);
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, title_label);
+  gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, badge);
 }
 
 static void

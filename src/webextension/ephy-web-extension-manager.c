@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2020 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2019-2022 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -37,6 +37,7 @@
 #include "ephy-web-view.h"
 
 #include "api/alarms.h"
+#include "api/browseraction.h"
 #include "api/commands.h"
 #include "api/cookies.h"
 #include "api/downloads.h"
@@ -76,6 +77,7 @@ G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJEC
 
 EphyWebExtensionApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},
+  {"browserAction", ephy_web_extension_api_browseraction_handler},
   {"commands", ephy_web_extension_api_commands_handler},
   {"cookies", ephy_web_extension_api_cookies_handler},
   {"downloads", ephy_web_extension_api_downloads_handler},
@@ -1111,6 +1113,32 @@ ephy_web_extension_manager_create_browser_popup (EphyWebExtensionManager *self,
 }
 
 void
+ephy_web_extension_manager_browseraction_set_badge_text (EphyWebExtensionManager *self,
+                                                         EphyWebExtension        *web_extension,
+                                                         const char              *text)
+{
+  EphyBrowserAction *action = EPHY_BROWSER_ACTION (g_hash_table_lookup (self->browser_action_map, web_extension));
+
+  if (!action)
+    return;
+
+  ephy_browser_action_set_badge_text (action, text);
+}
+
+void
+ephy_web_extension_manager_browseraction_set_badge_background_color (EphyWebExtensionManager *self,
+                                                                     EphyWebExtension        *web_extension,
+                                                                     GdkRGBA                 *color)
+{
+  EphyBrowserAction *action = EPHY_BROWSER_ACTION (g_hash_table_lookup (self->browser_action_map, web_extension));
+
+  if (!action)
+    return;
+
+  ephy_browser_action_set_badge_background_color (action, color);
+}
+
+void
 ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager *self,
                                                         EphyWebExtension        *web_extension,
                                                         EphyWindow              *window)
@@ -1252,12 +1280,48 @@ typedef struct {
   guint64 window_id;
 } WindowAddedCallbackData;
 
+static void
+on_page_attached (AdwTabView *self,
+                  AdwTabPage *page,
+                  gint        position,
+                  gpointer    user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyWebExtension *web_extension = user_data;
+  g_autoptr (JsonNode) json = NULL;
+  GtkWidget *embed = adw_tab_page_get_child (page);
+  EphyWebView *view;
+
+  view = ephy_embed_get_web_view (EPHY_EMBED (embed));
+  json = ephy_web_extension_api_tabs_create_tab_object (web_extension, view);
+  ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, "tabs.onCreated", json_to_string (json, FALSE));
+}
+
+static void
+on_page_detached (AdwTabView *self,
+                  AdwTabPage *page,
+                  gint        position,
+                  gpointer    user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyWebExtension *web_extension = user_data;
+  g_autofree char *tab_json = NULL;
+  GtkWidget *embed = adw_tab_page_get_child (page);
+  EphyWebView *view;
+
+  view = ephy_embed_get_web_view (EPHY_EMBED (embed));
+  tab_json = g_strdup_printf ("%ld", ephy_web_view_get_uid (view));
+  ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, "tabs.onRemoved", tab_json);
+}
+
 static gboolean
 application_window_added_timeout_cb (gpointer user_data)
 {
   WindowAddedCallbackData *data = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   EphyWindow *window = ephy_web_extension_api_windows_get_window_for_id (data->window_id);
+  EphyTabView *tab_view;
+  AdwTabView *adw_tab_view;
   g_autofree char *window_json = NULL;
 
   /* It is possible the window was removed before this timeout. */
@@ -1266,6 +1330,12 @@ application_window_added_timeout_cb (gpointer user_data)
 
   window_json = ephy_web_extension_api_windows_create_window_json (data->web_extension, window);
   ephy_web_extension_manager_emit_in_extension_views (manager, data->web_extension, "windows.onCreated", window_json);
+
+  tab_view = ephy_window_get_tab_view (window);
+  adw_tab_view = ephy_tab_view_get_tab_view (tab_view);
+  g_signal_connect (G_OBJECT (adw_tab_view), "page-attached", G_CALLBACK (on_page_attached), data->web_extension);
+  g_signal_connect (G_OBJECT (adw_tab_view), "page-detached", G_CALLBACK (on_page_detached), data->web_extension);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -1298,7 +1368,15 @@ application_window_removed_cb (EphyShell        *shell,
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autofree char *window_json = g_strdup_printf ("%ld", ephy_window_get_uid (window));
+  EphyTabView *tab_view;
+  AdwTabView *adw_tab_view;
+
   ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, "windows.onRemoved", window_json);
+
+  tab_view = ephy_window_get_tab_view (window);
+  adw_tab_view = ephy_tab_view_get_tab_view (tab_view);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (adw_tab_view), G_CALLBACK (on_page_attached), web_extension);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (adw_tab_view), G_CALLBACK (on_page_detached), web_extension);
 }
 
 static void
@@ -1350,9 +1428,10 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
   for (list = windows; list && list->data; list = list->next) {
     EphyWindow *window = EPHY_WINDOW (list->data);
 
-    if (active)
+    if (active) {
       ephy_web_extension_manager_add_web_extension_to_window (self, web_extension, window);
-    else
+      application_window_added_cb (shell, window, web_extension);
+    } else
       ephy_web_extension_manager_remove_web_extension_from_window (self, web_extension, window);
   }
 

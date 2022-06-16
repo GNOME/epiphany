@@ -1,5 +1,6 @@
 ephywebextension_src = [
   'webextension/api/alarms.c',
+  'webextension/api/browseraction.c',
   'webextension/api/commands.c',
   'webextension/api/cookies.c',
   'webextension/api/downloads.c',
@@ -10,6 +11,9 @@ ephywebextension_src = [
   'webextension/api/storage.c',
   'webextension/api/tabs.c',
   'webextension/api/windows.c',
+  'webextension/ephy-gizmo.c',
+  'webextension/ephy-indicator-bin.c',
+  'webextension/adw-widget-utils.c',
   'webextension/ephy-browser-action.c',
   'webextension/ephy-browser-action-row.c',
   'webextension/ephy-json-utils.c',

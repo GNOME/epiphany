@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2020 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2019-2022 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -113,6 +113,12 @@ GtkWidget                *ephy_web_extensions_manager_create_web_extensions_webv
 void                      ephy_web_extension_manager_foreach_extension              (EphyWebExtensionManager     *self,
                                                                                      EphyWebExtensionForeachFunc  func,
                                                                                      gpointer                     user_data);
+void                      ephy_web_extension_manager_browseraction_set_badge_text   (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *text);
+void                      ephy_web_extension_manager_browseraction_set_badge_background_color (EphyWebExtensionManager *self,
+                                                                                               EphyWebExtension        *web_extension,
+                                                                                               GdkRGBA                 *text);
 
 void                      ephy_web_extension_manager_append_context_menu            (EphyWebExtensionManager *self,
                                                                                      WebKitWebView           *web_view,

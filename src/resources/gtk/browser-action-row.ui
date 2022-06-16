@@ -5,8 +5,12 @@
     <property name="child">
       <object class="GtkBox">
         <child>
-          <object class="GtkImage" id="browser_action_image">
-            <property name="pixel-size">16</property>
+          <object class="EphyIndicatorBin" id="badge">
+            <child>
+              <object class="GtkImage" id="browser_action_image">
+                <property name="pixel-size">16</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

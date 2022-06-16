@@ -109,6 +109,8 @@ window.browser.pageAction = {
 
 window.browser.browserAction = {
     onClicked: new EphyEventListener (),
+    setBadgeText: function (...args) { return ephy_message ('browserAction.setBadgeText', args); },
+    setBadgeBackgroundColor: function (...args) { return ephy_message ('browserAction.setBadgeBackgroundColor', args); },
 };
 
 window.browser.permissions = {
