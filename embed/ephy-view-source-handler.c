@@ -194,12 +194,9 @@ ephy_view_source_request_begin_get_source_from_uri (EphyViewSourceRequest *reque
 
 static gint
 embed_is_displaying_matching_uri (EphyEmbed *embed,
-                                  GUri      *uri)
+                                  char      *uri)
 {
   EphyWebView *web_view;
-  g_autoptr (GUri) view_uri = NULL;
-  g_autofree char *modified_uri = NULL;
-  g_autofree char *uri_string = NULL;
 
   if (ephy_embed_has_load_pending (embed))
     return -1;
@@ -208,18 +205,11 @@ embed_is_displaying_matching_uri (EphyEmbed *embed,
   if (ephy_web_view_is_loading (web_view))
     return -1;
 
-  view_uri = g_uri_parse (ephy_web_view_get_address (web_view),
-                          G_URI_FLAGS_NONE, NULL);
-  if (!view_uri)
-    return -1;
-
-  modified_uri = g_uri_to_string_partial (view_uri, G_URI_HIDE_FRAGMENT);
-  uri_string = g_uri_to_string (uri);
-  return strcmp (modified_uri, uri_string);
+  return g_strcmp0 (ephy_web_view_get_address (web_view), uri);
 }
 
 static WebKitWebView *
-get_web_view_matching_uri (GUri *uri)
+get_web_view_matching_uri (const char *uri)
 {
   EphyEmbedShell *shell;
   GtkWindow *window;
@@ -248,8 +238,7 @@ out:
 static void
 ephy_view_source_request_start (EphyViewSourceRequest *request)
 {
-  g_autoptr (GUri) uri = NULL;
-  g_autoptr (GUri) converted_uri = NULL;
+  const char *converted_uri;
   const char *original_uri;
   WebKitWebView *web_view;
 
@@ -257,38 +246,15 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
     g_list_prepend (request->source_handler->outstanding_requests, request);
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
-  uri = g_uri_parse (original_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
 
-  if (!uri || !g_uri_get_fragment (uri)) {
-    /* Can't assert because user could theoretically input something weird */
-    GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
-                                 WEBKIT_NETWORK_ERROR_FAILED,
-                                 _("%s is not a valid URI"),
-                                 original_uri);
-    finish_uri_scheme_request (request, NULL, error);
-    g_error_free (error);
-    return;
-  }
-
-  /* Convert e.g. ephy-source://gnome.org#https to https://gnome.org */
-  converted_uri = g_uri_build (g_uri_get_flags (uri),
-                               g_uri_get_fragment (uri),
-                               g_uri_get_userinfo (uri),
-                               g_uri_get_host (uri),
-                               g_uri_get_port (uri),
-                               g_uri_get_path (uri),
-                               g_uri_get_query (uri),
-                               NULL);
-  g_assert (converted_uri);
+  /* Convert e.g. view-source:https://gnome.org to https://gnome.org */
+  converted_uri = original_uri + strlen (EPHY_VIEW_SOURCE_SCHEME) + 1;
 
   web_view = get_web_view_matching_uri (converted_uri);
   if (web_view)
     ephy_view_source_request_begin_get_source_from_web_view (request, WEBKIT_WEB_VIEW (web_view));
   else {
-    g_autofree char *modified_uri = NULL;
-
-    modified_uri = g_uri_to_string (converted_uri);
-    ephy_view_source_request_begin_get_source_from_uri (request, modified_uri);
+    ephy_view_source_request_begin_get_source_from_uri (request, converted_uri);
   }
 }
 

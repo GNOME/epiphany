@@ -38,6 +38,7 @@
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-tab-view.h"
+#include "ephy-view-source-handler.h"
 #include "ephy-window.h"
 
 #include <glib/gi18n.h>
@@ -894,7 +895,8 @@ session_seems_reasonable (GList *windows)
             strcmp (g_uri_get_scheme (uri), "data") == 0 ||
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
             strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
-            strcmp (g_uri_get_scheme (uri), "ephy-pdf") == 0)
+            strcmp (g_uri_get_scheme (uri), "ephy-pdf") == 0 ||
+            strcmp (g_uri_get_scheme (uri), EPHY_VIEW_SOURCE_SCHEME) == 0)
           sane = TRUE;
       }
 

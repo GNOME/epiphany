@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyViewSourceHandler, ephy_view_source_handler, EPHY, VIEW_SOURCE_HANDLER, GObject)
 
-#define EPHY_VIEW_SOURCE_SCHEME "ephy-source"
+#define EPHY_VIEW_SOURCE_SCHEME "view-source"
 
 EphyViewSourceHandler *ephy_view_source_handler_new            (void);
 

@@ -144,7 +144,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
                      g_ascii_strncasecmp (address, "about", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-about", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-resource", colonpos) &&
-                     g_ascii_strncasecmp (address, "ephy-source", colonpos) &&
+                     g_ascii_strncasecmp (address, EPHY_VIEW_SOURCE_SCHEME, colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-reader", colonpos) &&
                      g_ascii_strncasecmp (address, "ephy-pdf", colonpos) &&
                      g_ascii_strncasecmp (address, "gopher", colonpos) &&
@@ -379,9 +379,6 @@ ephy_embed_utils_is_no_show_address (const char *address)
   for (i = 0; do_not_show_address[i]; i++)
     if (!strcmp (address, do_not_show_address[i]))
       return TRUE;
-
-  if (g_str_has_prefix (address, EPHY_VIEW_SOURCE_SCHEME))
-    return TRUE;
 
   return FALSE;
 }

@@ -2457,9 +2457,7 @@ window_cmd_page_source (GSimpleAction *action,
   EphyWindow *window = user_data;
   EphyEmbed *embed;
   EphyEmbed *new_embed;
-  g_autoptr (GUri) uri = NULL;
-  g_autoptr (GUri) converted_uri = NULL;
-  char *source_uri;
+  g_autofree char *source_uri = NULL;
   const char *address;
 
   embed = ephy_embed_container_get_active_child
@@ -2472,22 +2470,7 @@ window_cmd_page_source (GSimpleAction *action,
   if (strstr (address, EPHY_VIEW_SOURCE_SCHEME) == address)
     return;
 
-  uri = g_uri_parse (address, G_URI_FLAGS_ENCODED | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
-  if (!uri) {
-    g_critical ("Failed to construct GUri for %s", address);
-    return;
-  }
-
-  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https */
-  converted_uri = g_uri_build (g_uri_get_flags (uri),
-                               EPHY_VIEW_SOURCE_SCHEME,
-                               g_uri_get_userinfo (uri),
-                               g_uri_get_host (uri),
-                               g_uri_get_port (uri),
-                               g_uri_get_path (uri),
-                               g_uri_get_query (uri),
-                               g_uri_get_scheme (uri));
-  source_uri = g_uri_to_string (converted_uri);
+  source_uri = g_strdup_printf ("%s:%s", EPHY_VIEW_SOURCE_SCHEME, address);
 
   new_embed = ephy_shell_new_tab
                 (ephy_shell_get_default (),
@@ -2497,8 +2480,6 @@ window_cmd_page_source (GSimpleAction *action,
 
   webkit_web_view_load_uri (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), source_uri);
   gtk_widget_grab_focus (GTK_WIDGET (new_embed));
-
-  g_free (source_uri);
 }
 
 void
