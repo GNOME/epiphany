@@ -30,6 +30,7 @@ window.browser.tabs = {
     update: function (...args) { return ephy_message ('tabs.update', args); },
     getZoom: function (...args) { return ephy_message ('tabs.getZoom', args); },
     setZoom: function (...args) { return ephy_message ('tabs.setZoom', args); },
+    reload: function (...args) { return ephy_message ('tabs.reload', args); },
     onActivated: new EphyEventListener (),
     onAttached: new EphyEventListener (),
     onCreated: new EphyEventListener (),
@@ -151,3 +152,4 @@ window.browser.downloads = {
     onErased: new EphyEventListener (),
     onChanged: new EphyEventListener (),
 };
+

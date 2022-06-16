@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2020 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2019-2022 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -797,6 +797,37 @@ tabs_handler_get_zoom (EphyWebExtension  *self,
   return g_strdup_printf ("%f", webkit_web_view_get_zoom_level (target_web_view));
 }
 
+static char *
+tabs_handler_reload (EphyWebExtension  *self,
+                     char              *name,
+                     JSCValue          *args,
+                     WebKitWebView     *web_view,
+                     GError           **error)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (JSCValue) tab_id_value = NULL;
+  WebKitWebView *target_web_view;
+  int tab_id = -1;
+
+  tab_id_value = jsc_value_object_get_property_at_index (args, 0);
+  if (jsc_value_is_number (tab_id_value))
+    tab_id = jsc_value_to_int32 (tab_id_value);
+
+  if (tab_id >= 0)
+    target_web_view = get_web_view_for_tab_id (shell, tab_id, NULL);
+  else
+    target_web_view = WEBKIT_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+
+  if (!target_web_view) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.reload(): Failed to find tabId %d.", tab_id);
+    return NULL;
+  }
+
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (target_web_view));
+
+  return NULL;
+}
+
 static EphyWebExtensionSyncApiHandler tabs_sync_handlers[] = {
   {"create", tabs_handler_create},
   {"query", tabs_handler_query},
@@ -807,6 +838,7 @@ static EphyWebExtensionSyncApiHandler tabs_sync_handlers[] = {
   {"getZoom", tabs_handler_get_zoom},
   {"setZoom", tabs_handler_set_zoom},
   {"update", tabs_handler_update},
+  {"reload", tabs_handler_reload},
 };
 
 static EphyWebExtensionAsyncApiHandler tab_async_handlers[] = {
