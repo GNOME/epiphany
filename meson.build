@@ -94,20 +94,13 @@ libarchive_dep = dependency('libarchive')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.1')
 libhandy_dep = dependency('libhandy-1', version: '>= 1.5.0')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
+libsoup_dep = dependency('libsoup-3.0', version: '>= 2.99.4')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 nettle_dep = dependency('nettle', version: nettle_requirement)
 portal_dep = dependency('libportal-gtk3', version: '>= 0.6')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
-
-if get_option('soup2').enabled()
-  libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
-  webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
-  webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
-else
-  libsoup_dep = dependency('libsoup-3.0', version: '>= 2.99.4')
-  webkit2gtk_dep = dependency('webkit2gtk-4.1', version: webkitgtk_requirement)
-  webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.1', version: webkitgtk_requirement)
-endif
+webkit2gtk_dep = dependency('webkit2gtk-4.1', version: webkitgtk_requirement)
+webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.1', version: webkitgtk_requirement)
 
 webkit_revision = webkit2gtk_dep.get_variable(pkgconfig : 'revision', default_value : '')
 if webkit_revision == 'tarball'
