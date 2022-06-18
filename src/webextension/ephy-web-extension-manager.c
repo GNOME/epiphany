@@ -120,7 +120,7 @@ ephy_web_extension_manager_remove_from_list (EphyWebExtensionManager *self,
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
-void
+static void
 on_web_extension_loaded (GObject      *source_object,
                          GAsyncResult *result,
                          gpointer      user_data)
@@ -129,9 +129,9 @@ on_web_extension_loaded (GObject      *source_object,
   EphyWebExtension *web_extension;
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
 
-
   web_extension = ephy_web_extension_load_finished (source_object, result, &error);
   if (!web_extension) {
+    g_warning ("Failed to load extension: %s", error->message);
     return;
   }
 
@@ -143,42 +143,49 @@ on_web_extension_loaded (GObject      *source_object,
 }
 
 static void
-ephy_web_extension_manager_scan_directory (EphyWebExtensionManager *self,
-                                           const char              *extension_dir)
+scan_directory_ready_cb (GFile        *file,
+                         GAsyncResult *result,
+                         gpointer      user_data)
 {
-  g_autoptr (GDir) dir = NULL;
+  EphyWebExtensionManager *self = user_data;
   g_autoptr (GError) error = NULL;
-  const char *directory;
+  g_autoptr (GFileEnumerator) enumerator = NULL;
 
-  if (g_mkdir_with_parents (extension_dir, 0700) != 0)
-    g_warning ("Failed to create %s: %s", extension_dir, g_strerror (errno));
+  enumerator = g_file_enumerate_children_finish (file, result, &error);
 
-  if (!g_file_test (extension_dir, G_FILE_TEST_EXISTS))
-    g_mkdir_with_parents (extension_dir, 0700);
-
-  dir = g_dir_open (extension_dir, 0, &error);
-  if (!dir) {
-    g_warning ("Could not open %s: %s", extension_dir, error->message);
+  if (error) {
+    g_warning ("Failed to scan extensions directory: %s", error->message);
     return;
   }
 
-  errno = 0;
-  while ((directory = g_dir_read_name (dir))) {
-    g_autofree char *filename = NULL;
-    g_autoptr (GFile) file = NULL;
+  while (TRUE) {
+    GFileInfo *info;
+    GFile *child;
 
-    if (errno != 0) {
-      g_warning ("Problem reading %s: %s", extension_dir, g_strerror (errno));
+    if (!g_file_enumerator_iterate (enumerator, &info, &child, NULL, &error)) {
+      g_warning ("Error enumerating extension directory: %s", error->message);
       break;
     }
+    if (!info)
+      break;
 
-    filename = g_build_filename (extension_dir, directory, NULL);
-    file = g_file_new_for_path (filename);
-
-    ephy_web_extension_load_async (file, self->cancellable, on_web_extension_loaded, self);
-
-    errno = 0;
+    ephy_web_extension_load_async (child, info, self->cancellable, on_web_extension_loaded, self);
   }
+}
+
+static void
+ephy_web_extension_manager_scan_directory_async (EphyWebExtensionManager *self,
+                                                 const char              *extension_dir_path)
+{
+  g_autoptr (GFile) extension_dir = g_file_new_for_path (extension_dir_path);
+
+  g_file_enumerate_children_async (extension_dir,
+                                   G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                   G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                   G_PRIORITY_DEFAULT,
+                                   self->cancellable,
+                                   (GAsyncReadyCallback)scan_directory_ready_cb,
+                                   self);
 }
 
 static void
@@ -239,7 +246,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->web_extensions = g_ptr_array_new_full (0, g_object_unref);
   self->user_agent_overrides = create_user_agent_overrides ();
 
-  ephy_web_extension_manager_scan_directory (self, dir);
+  ephy_web_extension_manager_scan_directory_async (self, dir);
 }
 
 static void
@@ -330,6 +337,7 @@ on_new_web_extension_loaded (GObject      *source_object,
 
   ephy_web_extension_manager_add_to_list (self, web_extension);
 }
+
 /**
  * Install a new web web_extension into the local web_extension directory.
  * File should only point to a manifest.json or a .xpi file
@@ -340,10 +348,14 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
 {
   g_autoptr (GFile) target = NULL;
   g_autofree char *basename = NULL;
+  g_autoptr (GFileInfo) file_info = NULL;
   gboolean is_xpi = FALSE;
+  g_autoptr (GError) error = NULL;
 
   basename = g_file_get_basename (file);
   is_xpi = g_str_has_suffix (basename, ".xpi");
+
+  /* FIXME: Make this async. */
 
   if (!is_xpi) {
     g_autoptr (GFile) source = NULL;
@@ -354,7 +366,6 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
 
     ephy_copy_directory (g_file_get_path (source), g_file_get_path (target));
   } else {
-    g_autoptr (GError) error = NULL;
     target = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", g_file_get_basename (file), NULL);
 
     if (!g_file_copy (file, target, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
@@ -365,8 +376,15 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
     }
   }
 
-  if (target)
-    ephy_web_extension_load_async (g_steal_pointer (&target), self->cancellable, on_new_web_extension_loaded, self);
+  if (target) {
+    file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, self->cancellable, &error);
+    if (!file_info) {
+      g_warning ("Failed to query file info: %s", error->message);
+      return;
+    }
+
+    ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
+  }
 }
 
 void

@@ -75,11 +75,6 @@ typedef struct {
 } WebExtensionOptionsUI;
 
 typedef struct {
-  char *name;
-  GBytes *bytes;
-} WebExtensionResource;
-
-typedef struct {
   char *code;
   WebKitUserStyleSheet *style;
 } WebExtensionCustomCSS;
@@ -105,7 +100,7 @@ struct _EphyWebExtension {
   WebExtensionPageAction *page_action;
   WebExtensionBrowserAction *browser_action;
   WebExtensionOptionsUI *options_ui;
-  GList *resources;
+  GHashTable *resources;
   GList *custom_css;
   GHashTable *permissions;
   GPtrArray *host_permissions;
@@ -119,10 +114,6 @@ G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean is_supported_scheme (const char *scheme);
-static void web_extension_add_resource (EphyWebExtension *self,
-                                        const char       *name,
-                                        gpointer          data,
-                                        guint             len);
 
 static const char *
 get_string_member (JsonObject *object,
@@ -138,14 +129,7 @@ gboolean
 ephy_web_extension_has_resource (EphyWebExtension *self,
                                  const char       *name)
 {
-  for (GList *list = self->resources; list && list->data; list = list->next) {
-    WebExtensionResource *resource = list->data;
-
-    if (g_strcmp0 (resource->name, name) == 0)
-      return TRUE;
-  }
-
-  return FALSE;
+  return g_hash_table_contains (self->resources, name);
 }
 
 gconstpointer
@@ -153,18 +137,17 @@ ephy_web_extension_get_resource (EphyWebExtension *self,
                                  const char       *name,
                                  gsize            *length)
 {
+  GBytes *resource;
   if (length)
     *length = 0;
 
-  for (GList *list = self->resources; list && list->data; list = list->next) {
-    WebExtensionResource *resource = list->data;
-
-    if (g_strcmp0 (resource->name, name) == 0)
-      return g_bytes_get_data (resource->bytes, length);
+  resource = g_hash_table_lookup (self->resources, name);
+  if (!resource) {
+    g_debug ("Could not find web_extension resource: %s\n", name);
+    return NULL;
   }
 
-  g_debug ("Could not find web_extension resource: %s\n", name);
-  return NULL;
+  return g_bytes_get_data (resource, length);
 }
 
 char *
@@ -513,7 +496,6 @@ web_extension_add_content_script (JsonArray *array,
     if (child_array)
       json_array_foreach_element (child_array, web_extension_add_js, content_script);
   }
-  g_ptr_array_add (content_script->js, NULL);
 
   /* Create user scripts so that we can unload them if necessary */
   web_extension_content_script_build (self, content_script);
@@ -527,8 +509,9 @@ generate_background_page (EphyWebExtension *self,
 {
   /* The entry point is always an HTML file, if they list scripts we just generate one.
    * This behavior exactly matches Firefox. */
-  g_autoptr (GString) background_page = g_string_new ("<html><head><meta charset=\"utf-8\"></head><body>");
-  char *path = g_strdup ("_generated_background_page.html");
+  GString *background_page = g_string_new ("<html><head><meta charset=\"utf-8\"></head><body>");
+  const char *path = "_generated_background_page.html";
+  GBytes *bytes;
 
   for (unsigned int i = 0; i < json_array_get_length (scripts); i++) {
     const char *script_file = json_array_get_string_element (scripts, i);
@@ -541,9 +524,12 @@ generate_background_page (EphyWebExtension *self,
   }
   g_string_append (background_page, "</body>");
 
-  web_extension_add_resource (self, path, background_page->str, background_page->len);
+  bytes = g_bytes_new_take (background_page->str, background_page->len);
+  g_string_free (background_page, FALSE);
 
-  return path;
+  g_hash_table_insert (self->resources, g_strdup (path), bytes);
+
+  return g_strdup (path);
 }
 
 static void
@@ -767,14 +753,6 @@ web_extension_add_permission (JsonArray *array,
 }
 
 static void
-web_extension_resource_free (WebExtensionResource *resource)
-{
-  g_clear_pointer (&resource->bytes, g_bytes_unref);
-  g_clear_pointer (&resource->name, g_free);
-  g_free (resource);
-}
-
-static void
 ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (object);
@@ -791,7 +769,7 @@ ephy_web_extension_dispose (GObject *object)
 
   g_clear_list (&self->icons, (GDestroyNotify)web_extension_icon_free);
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
-  g_clear_list (&self->resources, (GDestroyNotify)web_extension_resource_free);
+  g_clear_pointer (&self->resources, g_hash_table_unref);
   g_clear_pointer (&self->background, web_extension_background_free);
   g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
   g_clear_pointer (&self->permissions, g_hash_table_unref);
@@ -829,163 +807,47 @@ ephy_web_extension_init (EphyWebExtension *self)
   g_ptr_array_add (self->host_permissions, NULL);
 }
 
-static EphyWebExtension *
-ephy_web_extension_new (void)
-{
-  return g_object_new (EPHY_TYPE_WEB_EXTENSION, NULL);
-}
-
-static void
-web_extension_add_resource (EphyWebExtension *self,
-                            const char       *name,
-                            gpointer          data,
-                            guint             len)
-{
-  WebExtensionResource *resource = g_malloc0 (sizeof (WebExtensionResource));
-
-  resource->name = g_strdup (name);
-  resource->bytes = g_bytes_new (data, len);
-
-  self->resources = g_list_append (self->resources, resource);
-}
-
 static gboolean
-web_extension_read_directory (EphyWebExtension *self,
-                              char             *base,
-                              char             *path)
+ephy_web_extension_parse_manifest (EphyWebExtension  *self,
+                                   GError           **error)
 {
-  g_autoptr (GError) error = NULL;
-  g_autoptr (GDir) dir = NULL;
-  const char *dirent;
-  gboolean ret = TRUE;
+  g_autoptr (GError) local_error = NULL;
+  g_autoptr (JsonParser) parser = NULL;
+  JsonObject *icons_object = NULL;
+  JsonArray *content_scripts_array = NULL;
+  JsonObject *background_object = NULL;
+  JsonNode *root = NULL;
+  JsonObject *root_object = NULL;
+  gsize length = 0;
+  const guchar *manifest;
+  g_autofree char *local_storage_contents = NULL;
 
-  dir = g_dir_open (path, 0, &error);
-  if (!dir) {
-    g_warning ("Could not open web_extension directory: %s", error->message);
+  manifest = ephy_web_extension_get_resource (self, "manifest.json", &length);
+  if (!manifest) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json not found");
     return FALSE;
   }
 
-  while ((dirent = g_dir_read_name (dir))) {
-    GFileType type;
-    g_autofree gchar *filename = g_build_filename (path, dirent, NULL);
-    g_autoptr (GFile) file = g_file_new_for_path (filename);
-
-    type = g_file_query_file_type (file, G_FILE_QUERY_INFO_NONE, NULL);
-    if (type == G_FILE_TYPE_DIRECTORY) {
-      web_extension_read_directory (self, base, filename);
-    } else {
-      g_autofree char *data = NULL;
-      gsize len;
-
-      if (g_file_get_contents (filename, &data, &len, NULL))
-        web_extension_add_resource (self, filename + strlen (base) + 1, data, len);
-    }
-  }
-
-  return ret;
-}
-
-static EphyWebExtension *
-ephy_web_extension_load_directory (char *filename)
-{
-  EphyWebExtension *self = ephy_web_extension_new ();
-
-  web_extension_read_directory (self, filename, filename);
-
-  return self;
-}
-
-static EphyWebExtension *
-ephy_web_extension_load_xpi (GFile *target)
-{
-  EphyWebExtension *self = NULL;
-  struct archive *pkg;
-  struct archive_entry *entry;
-  int res;
-
-  pkg = archive_read_new ();
-  archive_read_support_format_zip (pkg);
-
-  res = archive_read_open_filename (pkg, g_file_get_path (target), 10240);
-  if (res == ARCHIVE_OK) {
-    self = ephy_web_extension_new ();
-    self->xpi = TRUE;
-
-    while (archive_read_next_header (pkg, &entry) == ARCHIVE_OK) {
-      int64_t size = archive_entry_size (entry);
-      gsize total_len = 0;
-      g_autofree char *data = NULL;
-
-      data = g_malloc0 (size);
-      total_len = archive_read_data (pkg, data, size);
-
-      if (total_len > 0)
-        web_extension_add_resource (self, archive_entry_pathname (entry), data, total_len);
-    }
-
-    res = archive_read_free (pkg);
-    if (res != ARCHIVE_OK)
-      g_warning ("Error freeing archive: %s", archive_error_string (pkg));
-  } else {
-    g_warning ("Could not open archive %s", archive_error_string (pkg));
-  }
-
-  return self;
-}
-
-EphyWebExtension *
-ephy_web_extension_load (GFile *target)
-{
-  g_autoptr (GError) error = NULL;
-  g_autoptr (GFile) source = g_file_dup (target);
-  g_autoptr (GFile) parent = NULL;
-  g_autoptr (JsonObject) icons_object = NULL;
-  g_autoptr (JsonArray) content_scripts_array = NULL;
-  g_autoptr (JsonObject) background_object = NULL;
-  JsonParser *parser = NULL;
-  JsonNode *root = NULL;
-  JsonObject *root_object = NULL;
-  EphyWebExtension *self = NULL;
-  GFileType type;
-  gsize length = 0;
-  const unsigned char *manifest;
-  g_autofree char *local_storage_contents = NULL;
-
-  type = g_file_query_file_type (source, G_FILE_QUERY_INFO_NONE, NULL);
-  if (type == G_FILE_TYPE_DIRECTORY) {
-    g_autofree char *path = g_file_get_path (source);
-    self = ephy_web_extension_load_directory (path);
-  } else
-    self = ephy_web_extension_load_xpi (source);
-
-  if (!self)
-    return NULL;
-
-  manifest = ephy_web_extension_get_resource (self, "manifest.json", &length);
-  if (!manifest)
-    return NULL;
-
   parser = json_parser_new ();
-  if (!json_parser_load_from_data (parser, (char *)manifest, length, &error)) {
-    g_warning ("Could not load web extension manifest: %s", error->message);
-    return NULL;
+  if (!json_parser_load_from_data (parser, (const char *)manifest, length, &local_error)) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Failed to parse manifest.json: %s", local_error->message);
+    return FALSE;
   }
 
   root = json_parser_get_root (parser);
-  if (!root) {
-    g_warning ("WebExtension manifest json root is NULL, return NULL.");
-    return NULL;
+  if (!root || json_node_get_node_type (root) != JSON_NODE_OBJECT) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json invalid");
+    return FALSE;
   }
 
   root_object = json_node_get_object (root);
   if (!root_object) {
-    g_warning ("WebExtension manifest json root is NULL, return NULL.");
-    return NULL;
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json invalid");
+    return FALSE;
   }
 
   /* FIXME: Implement i18n: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization#retrieving_localized_strings_in_manifests */
   self->manifest = g_strndup ((char *)manifest, length);
-  self->base_location = parent ? g_file_get_path (parent) : g_file_get_path (target);
   self->description = ephy_web_extension_manifest_get_key (self, root_object, "description");
   self->manifest_version = json_object_get_int_member (root_object, "manifest_version");
   self->name = ephy_web_extension_manifest_get_key (self, root_object, "name");
@@ -997,10 +859,10 @@ ephy_web_extension_load (GFile *target)
                                                g_path_get_basename (self->base_location), "local-storage.json", NULL);
 
   if (g_file_get_contents (self->local_storage_path, &local_storage_contents, NULL, NULL)) {
-    self->local_storage = json_from_string (local_storage_contents, &error);
-    if (error) {
-      g_warning ("Failed to load extension's local storage JSON: %s", error->message);
-      g_clear_error (&error);
+    self->local_storage = json_from_string (local_storage_contents, &local_error);
+    if (local_error) {
+      g_warning ("Failed to load extension's local storage JSON: %s", local_error->message);
+      g_clear_error (&local_error);
     }
   }
 
@@ -1026,55 +888,211 @@ ephy_web_extension_load (GFile *target)
   }
 
   if (json_object_has_member (root_object, "page_action")) {
-    g_autoptr (JsonObject) page_action_object = json_object_get_object_member (root_object, "page_action");
+    JsonObject *page_action_object = json_object_get_object_member (root_object, "page_action");
 
     web_extension_add_page_action (page_action_object, self);
   }
 
   if (json_object_has_member (root_object, "browser_action")) {
-    g_autoptr (JsonObject) browser_action_object = json_object_get_object_member (root_object, "browser_action");
+    JsonObject *browser_action_object = json_object_get_object_member (root_object, "browser_action");
 
     web_extension_add_browser_action (browser_action_object, self);
   }
 
   if (json_object_has_member (root_object, "options_ui")) {
-    g_autoptr (JsonObject) browser_action_object = json_object_get_object_member (root_object, "options_ui");
+    JsonObject *browser_action_object = json_object_get_object_member (root_object, "options_ui");
 
     web_extension_add_options_ui (browser_action_object, self);
   }
 
   if (json_object_has_member (root_object, "permissions")) {
-    g_autoptr (JsonArray) array = json_object_get_array_member (root_object, "permissions");
+    JsonArray *array = json_object_get_array_member (root_object, "permissions");
 
     json_array_foreach_element (array, web_extension_add_permission, self);
   }
 
-  return self;
+  return TRUE;
 }
 
 EphyWebExtension *
-ephy_web_extension_load_finished (GObject       *unused,
+ephy_web_extension_load_finished (GObject       *source_object,
                                   GAsyncResult  *result,
                                   GError       **error)
 {
-  g_assert (g_task_is_valid (result, unused));
-
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
-load_web_extension_thread (GTask        *task,
-                           gpointer     *unused,
-                           GFile        *target,
-                           GCancellable *cancellable)
+load_directory_or_xpi_ready_cb (GFile        *target,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
-  EphyWebExtension *self = ephy_web_extension_load (target);
+  g_autoptr (EphyWebExtension) web_extension = NULL;
+  GTask *load_task = user_data;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GHashTable) resources = NULL;
+  g_autoptr (GFile) parent = NULL;
+  gboolean was_xpi = GPOINTER_TO_UINT (g_task_get_task_data (G_TASK (result)));
 
-  g_task_return_pointer (task, self, NULL);
+  resources = g_task_propagate_pointer (G_TASK (result), &error);
+  if (error) {
+    g_task_return_error (load_task, g_steal_pointer (&error));
+    return;
+  }
+
+  parent = g_file_get_parent (target);
+
+  web_extension = g_object_new (EPHY_TYPE_WEB_EXTENSION, NULL);
+  web_extension->xpi = was_xpi;
+  web_extension->base_location = g_file_get_path (parent);
+  web_extension->resources = g_steal_pointer (&resources);
+
+  if (!ephy_web_extension_parse_manifest (web_extension, &error)) {
+    g_task_return_error (load_task, g_steal_pointer (&error));
+    return;
+  }
+
+  g_task_return_pointer (load_task, g_steal_pointer (&web_extension), g_object_unref);
+}
+
+static gboolean
+load_directory_resources_thread (GFile         *directory,
+                                 GFile         *base_directory,
+                                 GHashTable    *resources,
+                                 GCancellable  *cancellable,
+                                 GError       **error)
+{
+  g_autoptr (GFileEnumerator) enumerator = NULL;
+
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                          cancellable,
+                                          error);
+  if (!enumerator)
+    return FALSE;
+
+  while (TRUE) {
+    GFileInfo *info;
+    GFile *child;
+
+    if (!g_file_enumerator_iterate (enumerator, &info, &child, cancellable, error))
+      return FALSE;
+
+    if (!info)
+      break;
+
+    if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY) {
+      if (!load_directory_resources_thread (child, base_directory, resources, cancellable, error))
+        return FALSE;
+    } else {
+      char *contents;
+      gsize size;
+
+      if (!g_file_get_contents (g_file_peek_path (child), &contents, &size, error))
+        return FALSE;
+
+      g_hash_table_insert (resources,
+                           g_file_get_relative_path (base_directory, child),
+                           g_bytes_new_take (contents, size));
+    }
+  }
+
+  return TRUE;
+}
+
+static void
+load_directory_thread (GTask        *task,
+                       gpointer      source_object,
+                       gpointer      task_data,
+                       GCancellable *cancellable)
+{
+  GFile *target = source_object;
+  g_autoptr (GHashTable) resources = NULL;
+  g_autoptr (GError) error = NULL;
+
+  resources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_bytes_unref);
+
+  if (!load_directory_resources_thread (target, target, resources, g_task_get_cancellable (task), &error)) {
+    g_task_return_error (task, g_steal_pointer (&error));
+    return;
+  }
+
+  g_task_return_pointer (task, g_steal_pointer (&resources), (GDestroyNotify)g_hash_table_unref);
+}
+
+static void
+ephy_web_extension_load_directory_async (GFile *target,
+                                         GTask *load_task)
+{
+  GTask *directory_task = g_task_new (target, g_task_get_cancellable (load_task), (GAsyncReadyCallback)load_directory_or_xpi_ready_cb, load_task);
+  g_task_set_task_data (directory_task, GUINT_TO_POINTER (FALSE), NULL);
+  g_task_set_return_on_cancel (directory_task, TRUE);
+  g_task_run_in_thread (directory_task, load_directory_thread);
+}
+
+static void
+load_xpi_thread (GTask        *task,
+                 gpointer      source_object,
+                 gpointer      task_data,
+                 GCancellable *cancellable)
+{
+  GFile *target = source_object;
+  GHashTable *resources;
+  struct archive *pkg;
+  struct archive_entry *entry;
+  int res;
+
+  pkg = archive_read_new ();
+  archive_read_support_format_zip (pkg);
+
+  res = archive_read_open_filename (pkg, g_file_peek_path (target), 10240);
+  if (res != ARCHIVE_OK) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_XPI, "Invalid XPI archive: %s", archive_error_string (pkg));
+
+    res = archive_read_free (pkg);
+    if (res != ARCHIVE_OK)
+      g_warning ("Error freeing archive: %s", archive_error_string (pkg));
+    return;
+  }
+
+  resources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_bytes_unref);
+
+  while (archive_read_next_header (pkg, &entry) == ARCHIVE_OK) {
+    int64_t size = archive_entry_size (entry);
+    gsize total_len = 0;
+    g_autofree char *data = NULL;
+
+    data = g_malloc0 (size);
+    total_len = archive_read_data (pkg, data, size);
+
+    if (total_len > 0) {
+      g_hash_table_insert (resources,
+                           g_strdup (archive_entry_pathname (entry)),
+                           g_bytes_new_take (g_steal_pointer (&data), total_len));
+    }
+  }
+
+  res = archive_read_free (pkg);
+  if (res != ARCHIVE_OK)
+    g_warning ("Error freeing archive: %s", archive_error_string (pkg));
+
+  g_task_return_pointer (task, resources, (GDestroyNotify)g_hash_table_unref);
+}
+
+static void
+ephy_web_extension_load_xpi_async (GFile *target,
+                                   GTask *load_task)
+{
+  GTask *xpi_task = g_task_new (target, g_task_get_cancellable (load_task), (GAsyncReadyCallback)load_directory_or_xpi_ready_cb, load_task);
+  g_task_set_task_data (xpi_task, GUINT_TO_POINTER (TRUE), NULL);
+  g_task_set_return_on_cancel (xpi_task, TRUE);
+  g_task_run_in_thread (xpi_task, load_xpi_thread);
 }
 
 void
 ephy_web_extension_load_async (GFile               *target,
+                               GFileInfo           *info,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -1082,16 +1100,16 @@ ephy_web_extension_load_async (GFile               *target,
   GTask *task;
 
   g_assert (target);
+  g_assert (info);
 
-  task = g_task_new (NULL, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_DEFAULT);
-  g_task_set_task_data (task,
-                        g_file_dup (target),
-                        (GDestroyNotify)g_object_unref);
-  g_task_run_in_thread (task, (GTaskThreadFunc)load_web_extension_thread);
-  g_object_unref (task);
+  task = g_task_new (target, cancellable, callback, user_data);
+  g_task_set_return_on_cancel (task, TRUE);
+
+  if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+    ephy_web_extension_load_directory_async (target, task);
+  else
+    ephy_web_extension_load_xpi_async (target, task);
 }
-
 
 GdkPixbuf *
 ephy_web_extension_load_pixbuf (EphyWebExtension *self,

@@ -55,6 +55,8 @@ typedef enum {
   WEB_EXTENSION_ERROR_INVALID_ARGUMENT = 1001,
   WEB_EXTENSION_ERROR_PERMISSION_DENIED = 1002,
   WEB_EXTENSION_ERROR_NOT_IMPLEMENTED = 1003,
+  WEB_EXTENSION_ERROR_INVALID_MANIFEST = 1004,
+  WEB_EXTENSION_ERROR_INVALID_XPI = 1005,
 } WebExtensionErrorCode;
 
 typedef struct {
@@ -80,16 +82,13 @@ const char            *ephy_web_extension_get_homepage_url                (EphyW
 
 const char            *ephy_web_extension_get_author                      (EphyWebExtension *self);
 
-GList                 *ephy_web_extensions_get                            (void);
-
-EphyWebExtension      *ephy_web_extension_load                            (GFile *file);
-
 void                   ephy_web_extension_load_async                      (GFile               *target,
+                                                                           GFileInfo           *info,
                                                                            GCancellable        *cancellable,
                                                                            GAsyncReadyCallback  callback,
                                                                            gpointer             user_data);
 
-EphyWebExtension      *ephy_web_extension_load_finished                   (GObject       *unused,
+EphyWebExtension      *ephy_web_extension_load_finished                   (GObject       *source_object,
                                                                            GAsyncResult  *result,
                                                                            GError       **error);
 
