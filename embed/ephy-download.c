@@ -42,13 +42,26 @@ struct _EphyDownload {
   WebKitDownload *download;
 
   char *content_type;
+  char *suggested_directory;
+  char *suggested_filename;
 
   gboolean show_notification;
+  gboolean always_ask_destination;
+  gboolean choose_filename;
 
   EphyDownloadActionType action;
   gboolean finished;
   GError *error;
   GFileMonitor *file_monitor;
+
+  guint64 uid;
+
+  char *initiated_by_extension_id;
+  char *initiated_by_extension_name;
+
+  GDateTime *start_time;
+  GDateTime *end_time;
+  gboolean was_moved;
 };
 
 G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
@@ -73,6 +86,8 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
+
+static guint64 download_uid = 1;
 
 static void
 ephy_download_get_property (GObject    *object,
@@ -225,7 +240,7 @@ set_destination_uri_for_suggested_filename (EphyDownload *download,
   g_free (dest_name);
 
   /* Append (n) as needed. */
-  if (g_file_test (destination_filename, G_FILE_TEST_EXISTS)) {
+  if (!webkit_download_get_allow_overwrite (download->download) && g_file_test (destination_filename, G_FILE_TEST_EXISTS)) {
     int i = 1;
     const char *dot_pos;
     gssize position;
@@ -459,6 +474,12 @@ ephy_download_dispose (GObject *object)
   g_clear_object (&download->file_monitor);
   g_clear_error (&download->error);
   g_clear_pointer (&download->content_type, g_free);
+  g_clear_pointer (&download->suggested_filename, g_free);
+  g_clear_pointer (&download->suggested_directory, g_free);
+  g_clear_pointer (&download->start_time, g_date_time_unref);
+  g_clear_pointer (&download->end_time, g_date_time_unref);
+  g_clear_pointer (&download->initiated_by_extension_id, g_free);
+  g_clear_pointer (&download->initiated_by_extension_name, g_free);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -587,17 +608,21 @@ ephy_download_init (EphyDownload *download)
   download->action = EPHY_DOWNLOAD_ACTION_NONE;
 
   download->show_notification = TRUE;
+
+  download->uid = download_uid++;
 }
 
 typedef struct {
   EphyDownload *download;
   WebKitDownload *webkit_download;
+  char *suggested_directory;
   char *suggested_filename;
   GtkWindow *dialog;
   GFile *directory;
   GtkLabel *directory_label;
   GMainLoop *nested_loop;
   gboolean result;
+  gboolean choose_filename;
 } SuggestedFilenameData;
 
 static void
@@ -649,11 +674,21 @@ filename_suggested_button_cb (GtkButton             *button,
 {
   GtkFileChooserNative *chooser;
 
-  chooser = gtk_file_chooser_native_new (_("Select a Directory"),
-                                         data->dialog,
-                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                         _("_Select"),
-                                         _("_Cancel"));
+  if (!data->choose_filename) {
+    chooser = gtk_file_chooser_native_new (_("Select a Directory"),
+                                           data->dialog,
+                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                           _("_Select"),
+                                           _("_Cancel"));
+  } else {
+    chooser = gtk_file_chooser_native_new (_("Select the Destination"),
+                                           data->dialog,
+                                           GTK_FILE_CHOOSER_ACTION_SAVE,
+                                           _("_Select"),
+                                           _("_Cancel"));
+    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), data->suggested_filename);
+  }
+
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
 
   gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (chooser),
@@ -754,12 +789,15 @@ run_download_confirmation_dialog (EphyDownload *download,
   data.webkit_download = webkit_download;
   data.suggested_filename = g_strdup (suggested_filename);
   data.dialog = GTK_WINDOW (dialog);
-  if (!directory_path || !directory_path[0])
+  if (download->suggested_directory)
+    data.directory = g_file_new_for_path (download->suggested_directory);
+  else if (!directory_path || !directory_path[0])
     data.directory = g_file_new_for_path (ephy_file_get_downloads_dir ());
   else
     data.directory = g_file_new_for_path (directory_path);
   data.directory_label = GTK_LABEL (button_label);
   data.nested_loop = g_main_loop_new (NULL, FALSE);
+  data.choose_filename = download->choose_filename;
   data.result = FALSE;
 
   display_name = ephy_file_get_display_name (data.directory);
@@ -810,9 +848,14 @@ download_response_changed_cb (WebKitDownload *wk_download,
 
 static gboolean
 download_decide_destination_cb (WebKitDownload *wk_download,
-                                const gchar    *suggested_filename,
+                                const gchar    *wk_suggestion,
                                 EphyDownload   *download)
 {
+  const char *suggested_filename = wk_suggestion;
+
+  if (download->suggested_filename)
+    suggested_filename = download->suggested_filename;
+
   if (webkit_download_get_destination (wk_download))
     return TRUE;
 
@@ -825,10 +868,11 @@ download_decide_destination_cb (WebKitDownload *wk_download,
     return TRUE;
 
   if (!ephy_is_running_inside_sandbox () &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD))
+      (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD) ||
+       download->always_ask_destination))
     return run_download_confirmation_dialog (download, suggested_filename);
 
-  return set_destination_uri_for_suggested_filename (download, NULL, suggested_filename);
+  return set_destination_uri_for_suggested_filename (download, download->suggested_directory, suggested_filename);
 }
 
 static void
@@ -838,6 +882,8 @@ download_created_destination_cb (WebKitDownload *wk_download,
 {
   char *filename;
   char *content_type;
+
+  download->start_time = g_date_time_new_now_local ();
 
   if (download->content_type && !g_content_type_is_unknown (download->content_type))
     return;
@@ -916,6 +962,8 @@ download_file_monitor_changed (GFileMonitor      *monitor,
   if (strcmp (g_file_get_uri (file), webkit_download_get_destination (download->download)) != 0)
     return;
 
+  download->was_moved = TRUE;
+
   if (event_type == G_FILE_MONITOR_EVENT_DELETED || event_type == G_FILE_MONITOR_EVENT_MOVED)
     g_signal_emit (download, signals[MOVED], 0);
 }
@@ -928,6 +976,7 @@ download_finished_cb (WebKitDownload *wk_download,
   g_autoptr (GFile) file = NULL;
 
   download->finished = TRUE;
+  download->end_time = g_date_time_new_now_local ();
 
   ephy_download_do_download_action (download, download->action);
 
@@ -953,6 +1002,7 @@ download_failed_cb (WebKitDownload *wk_download,
 
   LOG ("error (%d - %d)! %s", error->code, 0, error->message);
   download->finished = TRUE;
+  download->end_time = g_date_time_new_now_local ();
   download->error = g_error_copy (error);
   g_signal_emit (download, signals[ERROR], 0, download->error);
 }
@@ -1052,4 +1102,179 @@ ephy_download_disable_desktop_notification (EphyDownload *download)
   g_assert (EPHY_IS_DOWNLOAD (download));
 
   download->show_notification = FALSE;
+}
+
+guint64
+ephy_download_get_uid (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  return download->uid;
+}
+
+/**
+ * ephy_download_set_always_ask_destination:
+ *
+ * Bypasses the global user preference for prompting for
+ * a save location. This does not bypass EphyDownload:destination
+ * being set.
+ */
+void
+ephy_download_set_always_ask_destination (EphyDownload *download,
+                                          gboolean      always_ask)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  download->always_ask_destination = always_ask;
+}
+
+/**
+ * ephy_download_set_choose_filename:
+ *
+ * Changes the download prompt to select the destination
+ * filename rather than only the directory.
+ */
+void
+ephy_download_set_choose_filename (EphyDownload *download,
+                                   gboolean      choose_filename)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  download->choose_filename = choose_filename;
+}
+
+/**
+ * ephy_download_set_suggested_destination:
+ * @suggested_directory: (nullable): Default download directory
+ * @suggested_filename: (nullable): Default filename
+ *
+ * This sets recommendations for the directory and filename of
+ * the download. If the directory does not exist it will be created.
+ * The filename will be sanitized and possibly renamed if needed.
+ *
+ * If @suggested_directory is %NULL the globally configured download
+ * directory is used.
+ *
+ * If @suggested_filename is %NULL the WebKit recommended filename
+ * is used.
+ *
+ * Note that this does not override EphyDownload:destination and only
+ * provides default suggestions.
+ */
+void
+ephy_download_set_suggested_destination (EphyDownload *download,
+                                         const char   *suggested_directory,
+                                         const char   *suggested_filename)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  g_free (download->suggested_directory);
+  download->suggested_directory = g_strdup (suggested_directory);
+
+  g_free (download->suggested_filename);
+  download->suggested_filename = g_strdup (suggested_filename);
+}
+
+/**
+ * ephy_download_set_allow_overwrite:
+ *
+ * This allows the downloaded file to overwrite files on disk and
+ * also disables the automatic renaming (appending "(1)") when the file
+ * already exists.
+ */
+void
+ephy_download_set_allow_overwrite (EphyDownload *download,
+                                   gboolean      allow_overwrite)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  webkit_download_set_allow_overwrite (download->download, allow_overwrite);
+}
+
+/**
+ * ephy_download_get_was_moved:
+ *
+ * Returns: %TRUE if Epiphany detected the file being moved or deleted
+ */
+gboolean
+ephy_download_get_was_moved (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  return download->was_moved;
+}
+
+/**
+ * ephy_download_get_start_time:
+ *
+ * Returns: (nullable): The time the download was started or %NULL
+ */
+GDateTime *
+ephy_download_get_start_time (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  return download->start_time;
+}
+
+/**
+ * ephy_download_get_end_time:
+ *
+ * Returns: (nullable): The time the download was completed/failed or %NULL if active
+ */
+GDateTime *
+ephy_download_get_end_time (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  return download->end_time;
+}
+
+/**
+ * ephy_download_get_initiating_web_extension_info:
+ * @download: The #EphyDownload
+ * @extension_id_out: (nullable): Place to store the extension ID
+ * @extension_name_out: (nullable): Place to store the extension name
+ *
+ * This returns information on which, if any, WebExtension created the download.
+ *
+ * Returns: %TRUE if web extension info exists
+ */
+gboolean
+ephy_download_get_initiating_web_extension_info (EphyDownload  *download,
+                                                 const char   **extension_id_out,
+                                                 const char   **extension_name_out)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  if (extension_name_out)
+    *extension_name_out = download->initiated_by_extension_name ? download->initiated_by_extension_name : NULL;
+
+  if (extension_id_out)
+    *extension_id_out = download->initiated_by_extension_id ? download->initiated_by_extension_id : NULL;
+
+  return download->initiated_by_extension_name || download->initiated_by_extension_id;
+}
+
+/**
+ * ephy_download_set_initiating_web_extension_info:
+ * @download: The #EphyDownload
+ * @extension_id: (nullable): Extension ID
+ * @extension_name: (nullable): Extension name
+ *
+ * This sets that @download was created by a WebExtension. This information is exposed to
+ * other WebExtensions.
+ */
+void
+ephy_download_set_initiating_web_extension_info (EphyDownload *download,
+                                                 const char   *extension_id,
+                                                 const char   *extension_name)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  g_free (download->initiated_by_extension_name);
+  download->initiated_by_extension_name = g_strdup (extension_name);
+
+  g_free (download->initiated_by_extension_id);
+  download->initiated_by_extension_id = g_strdup (extension_id);
 }

@@ -36,4 +36,7 @@ gboolean ephy_downloads_manager_has_active_downloads   (EphyDownloadsManager *ma
 GList   *ephy_downloads_manager_get_downloads          (EphyDownloadsManager *manager);
 gdouble  ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager);
 
+EphyDownload *ephy_downloads_manager_find_download_by_id (EphyDownloadsManager *manager,
+                                                          guint64               id);
+
 G_END_DECLS

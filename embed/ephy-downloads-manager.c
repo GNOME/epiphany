@@ -261,3 +261,19 @@ ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager)
 
   return n_active > 0 ? progress / n_active : 1;
 }
+
+EphyDownload *
+ephy_downloads_manager_find_download_by_id (EphyDownloadsManager *manager,
+                                            guint64               id)
+{
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
+
+  for (GList *l = manager->downloads; l; l = g_list_next (l)) {
+    EphyDownload *download = EPHY_DOWNLOAD (l->data);
+
+    if (ephy_download_get_uid (download) == id)
+      return download;
+  }
+
+  return NULL;
+}

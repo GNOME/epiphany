@@ -37,6 +37,7 @@
 
 #include "api/alarms.h"
 #include "api/cookies.h"
+#include "api/downloads.h"
 #include "api/notifications.h"
 #include "api/pageaction.h"
 #include "api/runtime.h"
@@ -68,6 +69,7 @@ G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJEC
 EphyWebExtensionAsyncApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},
   {"cookies", ephy_web_extension_api_cookies_handler},
+  {"downloads", ephy_web_extension_api_downloads_handler},
   {"notifications", ephy_web_extension_api_notifications_handler},
   {"pageAction", ephy_web_extension_api_pageaction_handler},
   {"runtime", ephy_web_extension_api_runtime_handler},
@@ -209,6 +211,57 @@ destroy_widget_list (GSList *widget_list)
 }
 
 static void
+download_added_cb (EphyDownloadsManager    *downloads_manager,
+                   EphyDownload            *download,
+                   EphyWebExtensionManager *manager)
+{
+  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtension *extension = l->data;
+    g_autofree char *json = NULL;
+
+    if (!ephy_web_extension_has_permission (extension, "downloads"))
+      continue;
+
+    json = ephy_web_extension_api_downloads_download_to_json (download);
+    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onCreated", json);
+  }
+}
+
+static void
+download_completed_cb (EphyDownloadsManager    *downloads_manager,
+                       EphyDownload            *download,
+                       EphyWebExtensionManager *manager)
+{
+  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtension *extension = l->data;
+    g_autofree char *json = NULL;
+
+    if (!ephy_web_extension_has_permission (extension, "downloads"))
+      continue;
+
+    json = ephy_web_extension_api_downloads_download_to_json (download);
+    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onChanged", json);
+  }
+}
+
+static void
+download_removed_cb (EphyDownloadsManager    *downloads_manager,
+                     EphyDownload            *download,
+                     EphyWebExtensionManager *manager)
+{
+  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
+    EphyWebExtension *extension = l->data;
+    g_autofree char *json = NULL;
+
+    if (!ephy_web_extension_has_permission (extension, "downloads"))
+      continue;
+
+    json = g_strdup_printf ("%" G_GUINT64_FORMAT, ephy_download_get_uid (download));
+    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onErased", json);
+  }
+}
+
+static void
 ephy_web_extension_manager_constructed (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
@@ -255,12 +308,17 @@ ephy_web_extension_manager_class_init (EphyWebExtensionManagerClass *klass)
 static void
 ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 {
+  EphyDownloadsManager *downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   WebKitWebContext *web_context;
 
   web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", main_context_web_extension_scheme_cb, self, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
+
+  g_signal_connect (downloads_manager, "download-added", G_CALLBACK (download_added_cb), self);
+  g_signal_connect (downloads_manager, "download-completed", G_CALLBACK (download_completed_cb), self);
+  g_signal_connect (downloads_manager, "download-removed", G_CALLBACK (download_removed_cb), self);
 }
 
 EphyWebExtensionManager *

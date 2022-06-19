@@ -133,3 +133,21 @@ window.browser.cookies = {
     // This is a stub as WebKitCookieManager::changed doesn't tell us enough information.
     onChanged: new EphyEventListener (),
 };
+
+window.browser.downloads = {
+    download: function (...args) { return ephy_message ('downloads.download', args); },
+    // FIXME: In the query object for search and erase, convert JavaScript Date objects to timestamps.
+    search: function (...args) { return ephy_message ('downloads.search', args); },
+    erase: function (...args) { return ephy_message ('downloads.erase', args); },
+    pause: function (...args) { return ephy_message ('downloads.pause', args); },
+    resume: function (...args) { return ephy_message ('downloads.resume', args); },
+    cancel: function (...args) { return ephy_message ('downloads.cancel', args); },
+    getFileIcon: function (...args) { return ephy_message ('downloads.getFileIcon', args); },
+    open: function (...args) { return ephy_message ('downloads.open', args); },
+    show: function (...args) { return ephy_message ('downloads.show', args); },
+    showDefaultFolder: function (...args) { return ephy_message ('downloads.showDefaultFolder', args); },
+    removeFile: function (...args) { return ephy_message ('downloads.removeFile', args); },
+    onCreated: new EphyEventListener (),
+    onErased: new EphyEventListener (),
+    onChanged: new EphyEventListener (),
+};

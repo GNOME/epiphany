@@ -61,5 +61,28 @@ gboolean      ephy_download_do_download_action    (EphyDownload          *downlo
                                                    EphyDownloadActionType action);
 void          ephy_download_disable_desktop_notification
                                                   (EphyDownload *download);
+guint64       ephy_download_get_uid               (EphyDownload *download);
 
+void          ephy_download_set_always_ask_destination
+                                                  (EphyDownload *download,
+                                                   gboolean      always_ask);
+void          ephy_download_set_choose_filename   (EphyDownload *download,
+                                                   gboolean      choose_filename);
+void          ephy_download_set_suggested_destination
+                                                  (EphyDownload *download,
+                                                   const char   *suggested_directory,
+                                                   const char   *suggested_filename);
+void          ephy_download_set_allow_overwrite   (EphyDownload *download,
+                                                   gboolean      allow_overwrite);
+gboolean      ephy_download_get_was_moved         (EphyDownload *download);
+GDateTime    *ephy_download_get_start_time        (EphyDownload *download);
+GDateTime    *ephy_download_get_end_time          (EphyDownload *download);
+gboolean      ephy_download_get_initiating_web_extension_info
+                                                  (EphyDownload  *download,
+                                                   const char   **extension_id_out,
+                                                   const char   **extension_name_out);
+void          ephy_download_set_initiating_web_extension_info
+                                                  (EphyDownload *download,
+                                                   const char   *extension_id,
+                                                   const char   *extension_name);
 G_END_DECLS
