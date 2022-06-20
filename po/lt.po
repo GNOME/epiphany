@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-05-27 21:42+0000\n"
-"PO-Revision-Date: 2022-06-02 22:50+0300\n"
+"POT-Creation-Date: 2022-06-14 15:21+0000\n"
+"PO-Revision-Date: 2022-06-20 22:01+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -139,12 +139,6 @@ msgid "List of the search engines."
 msgstr "Paieškos variklių sąrašas."
 
 #: data/org.gnome.epiphany.gschema.xml:62
-#| msgid ""
-#| "List of the search engines. It is an array of vardicts with each vardict "
-#| "corresponding to a search engine, and with the following supported keys: "
-#| "- name: The name of the search engine - url: The search URL with the "
-#| "search term replaced with %s. - bang: The \"bang\" (shortcut word) of the "
-#| "search engine"
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -1086,7 +1080,6 @@ msgstr ""
 "tinklalapiai, kuriuos aplankysite bei reklamos juose vis dar gali jus sekti."
 
 #: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
-#| msgid "Select a directory"
 msgid "Select a Directory"
 msgstr "Pasirinkite žodyną"
 
@@ -1986,7 +1979,6 @@ msgid "Desktop"
 msgstr "Darbastalis"
 
 #: lib/ephy-file-helpers.c:190
-#| msgid "Homepage"
 msgid "Home"
 msgstr "Namai"
 
@@ -2098,25 +2090,21 @@ msgstr "Nepavyko gauti desktop failo pavadinimo internetinės programos id %s"
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
-#| msgid "Failed to obtain storage credentials."
 msgid "Failed to install desktop file %s: "
 msgstr "Nepavyko įdiegti desktop failo %s: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
-#| msgid "Custom profile directory for private instance"
 msgid "Profile directory %s already exists"
 msgstr "Profilio aplankas %s jau yra"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create directory %s"
 msgstr "Nepavyko sukurti aplanko %s"
 
 #: lib/ephy-web-app-utils.c:406
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create .app file: %s"
 msgstr "Nepavyko sukurti .app failo: %s"
 
@@ -2278,7 +2266,7 @@ msgstr ""
 "Liudijimas yra tinkamas, tačiau šio puslapio ištekliai buvo siunčiami "
 "nesaugiai."
 
-#: lib/widgets/ephy-downloads-popover.c:213
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2565,7 +2553,6 @@ msgstr "Atsitiko kažkas negero, bandykite dar kartą."
 
 #: src/ephy-firefox-sync-dialog.c:703
 #, c-format
-#| msgid "_5 min"
 msgid "%u min"
 msgid_plural "%u mins"
 msgstr[0] "%u min"
@@ -3166,33 +3153,38 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Pažymėkite puslapius ir matysite juos čia."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "Asmeniniai duomenys"
+#| msgid "Website"
+msgid "Website Data"
+msgstr "Tinklalapio duomenys"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "Iš_valyti duomenis"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "Išvalyti pažymėtus asmeninius duomenis"
+#| msgid "Remove selected personal data"
+msgid "Remove selected website data"
+msgstr "Išvalyti pažymėto tiklalapio duomenis"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "Ieškoti asmeniniuose duomenyse"
+#| msgid "Search personal data"
+msgid "Search website data"
+msgstr "Ieškoti tinklalapio duomenyse"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "Nėra asmeninių duomenų"
+#| msgid "There is no Personal Data"
+msgid "There is no Website Data"
+msgstr "Nėra tinklalapio duomenų"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "Čia bus matomi asmeniniai duomenys"
+#| msgid "Personal data will be listed here"
+msgid "Website data will be listed here"
+msgstr "Čia bus matomi tinklalapio duomenys"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "Išvalyti pasirinktus asmeninius duomenis:"
+#| msgid "Clear selected personal data:"
+msgid "Clear selected website data:"
+msgstr "Išvalyti pasirinktus tinklalapio duomenis:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3477,7 +3469,7 @@ msgid "Tabs"
 msgstr "Kortelės"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "Slaptažodžiai"
 
@@ -3690,19 +3682,20 @@ msgstr "Įjungti paieškos pasiūlymus URL lauke."
 msgid "_Google Search Suggestions"
 msgstr "_Google paieškos pasiūlymai"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "Asmeniniai duomenys"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "Galite išvalyti savo įrašytus asmeninius duomenis."
+#| msgid "Clear Personal _Data"
+msgid "Clear Website _Data"
+msgstr "Išvalyti tinklalapio _duomenis"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "Išvalyti asmeninius _duomenis"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "Sla_ptažodžiai"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "Įsi_minti slaptažodžius"
 
@@ -4113,8 +4106,6 @@ msgstr "Pateiktas pavadinimas yra nekorektiškas"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
-#| msgctxt "shortcut window"
-#| msgid "Install site as web application"
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
 msgstr "Nepavyko įdiegti internetinės programos „%s“ (%s): %s"
 
@@ -4125,15 +4116,18 @@ msgstr "Pateiktas desktop failo ID „%s“ buvo nekorektiškas"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ does not exist"
 msgstr "Nėra internetinės programos „%s“"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Nepavyko ištrinti internetinės programos „%s“"
+
+#: src/webextension/api/runtime.c:121
+#, c-format
+msgid "Options for %s"
+msgstr "%s pasirinkimai"
 
 #: src/window-commands.c:113
 msgid "GVDB File"
@@ -4242,7 +4236,6 @@ msgstr "Programa „%s“ pasiruošusi naudojimui"
 
 #: src/window-commands.c:1816
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The application “%s” could not be created: %s"
 msgstr "Nepavyko sukurti programos „%s“: %s"
 
@@ -4303,6 +4296,9 @@ msgstr ""
 #: src/window-commands.c:2678
 msgid "_Enable"
 msgstr "_Įjungti"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "Galite išvalyti savo įrašytus asmeninius duomenis."
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "GNOME internetinė svetainė rodoma GNOME žiniatinklyje"
