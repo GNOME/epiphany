@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "api-utils.h"
 #include "ephy-shell.h"
 #include "cookies.h"
 
@@ -29,37 +30,6 @@ get_cookie_manager (void)
   WebKitWebsiteDataManager *data_manager = webkit_web_context_get_website_data_manager (web_context);
   return webkit_website_data_manager_get_cookie_manager (data_manager);
 }
-
-static char *
-get_string_property (JSCValue   *obj,
-                     const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
-  if (!jsc_value_is_string (value))
-    return NULL;
-  return jsc_value_to_string (value);
-}
-
-static gint32
-get_int_property (JSCValue   *args,
-                  const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (args, name);
-
-  if (jsc_value_is_undefined (value))
-    return -1;
-
-  return jsc_value_to_int32 (value);
-}
-
-static gboolean
-get_boolean_property (JSCValue   *obj,
-                      const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
-  return jsc_value_to_boolean (value);
-}
-
 
 static const char *
 samesite_to_string (SoupSameSitePolicy policy)
@@ -253,8 +223,8 @@ cookies_handler_get (EphyWebExtension *self,
     return;
   }
 
-  cookie_name = get_string_property (details, "name");
-  url = get_string_property (details, "url");
+  cookie_name = api_utils_get_string_property (details, "name", NULL);
+  url = api_utils_get_string_property (details, "url", NULL);
 
   if (!url || !cookie_name) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.get(): details missing url or name");
@@ -321,15 +291,15 @@ cookies_handler_set (EphyWebExtension *self,
     return;
   }
 
-  url = get_string_property (details, "url");
-  domain = get_string_property (details, "domain");
-  cookie_name = get_string_property (details, "name");
-  value = get_string_property (details, "value");
-  path = get_string_property (details, "path");
-  same_site_str = get_string_property (details, "sameSite");
-  expiration = get_int_property (details, "expirationDate");
-  secure = get_boolean_property (details, "secure");
-  http_only = get_boolean_property (details, "httpOnline");
+  url = api_utils_get_string_property (details, "url", NULL);
+  domain = api_utils_get_string_property (details, "domain", NULL);
+  cookie_name = api_utils_get_string_property (details, "name", NULL);
+  value = api_utils_get_string_property (details, "value", NULL);
+  path = api_utils_get_string_property (details, "path", NULL);
+  same_site_str = api_utils_get_string_property (details, "sameSite", NULL);
+  expiration = api_utils_get_int32_property (details, "expirationDate", -1);
+  secure = api_utils_get_boolean_property (details, "secure", FALSE);
+  http_only = api_utils_get_boolean_property (details, "httpOnline", FALSE);
 
   if (!url) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.set(): Missing url property");
@@ -381,8 +351,8 @@ cookies_handler_remove (EphyWebExtension *self,
     return;
   }
 
-  url = get_string_property (details, "url");
-  cookie_name = get_string_property (details, "name");
+  url = api_utils_get_string_property (details, "url", NULL);
+  cookie_name = api_utils_get_string_property (details, "name", NULL);
 
   if (!url || !name) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.remove(): Missing url or name property");
@@ -407,8 +377,8 @@ typedef struct {
   char *domain;
   char *name;
   char *path;
-  int secure;
-  int session;
+  ApiTriStateValue secure;
+  ApiTriStateValue session;
 } GetAllCookiesCallbackData;
 
 static void
@@ -430,9 +400,9 @@ cookie_matches_filter (SoupCookie                *cookie,
     return FALSE;
   if (data->path && strcmp (soup_cookie_get_path (cookie), data->path) != 0)
     return FALSE;
-  if (data->secure != -1 && soup_cookie_get_secure (cookie) != data->secure)
+  if (data->secure != API_VALUE_UNSET && soup_cookie_get_secure (cookie) != data->secure)
     return FALSE;
-  if (data->session != -1) {
+  if (data->session != API_VALUE_UNSET) {
     gpointer expires = soup_cookie_get_expires (cookie);
     if (data->session && expires)
       return FALSE;
@@ -505,7 +475,7 @@ cookies_handler_get_all (EphyWebExtension *self,
     return;
   }
 
-  url = get_string_property (details, "url");
+  url = api_utils_get_string_property (details, "url", NULL);
 
   /* TODO: We can handle the case of no url by using webkit_website_data_manager_fetch() to list all domains and then get all cookies
    * for all domains, but this is rather an ugly amount of work compared to libsoup directly. */
@@ -521,11 +491,11 @@ cookies_handler_get_all (EphyWebExtension *self,
 
   callback_data = g_new0 (GetAllCookiesCallbackData, 1);
   callback_data->task = task;
-  callback_data->name = get_string_property (details, "name");
-  callback_data->domain = get_string_property (details, "domain");
-  callback_data->path = get_string_property (details, "path");
-  callback_data->secure = get_int_property (details, "secure");
-  callback_data->session = get_int_property (details, "session");
+  callback_data->name = api_utils_get_string_property (details, "name", NULL);
+  callback_data->domain = api_utils_get_string_property (details, "domain", NULL);
+  callback_data->path = api_utils_get_string_property (details, "path", NULL);
+  callback_data->secure = api_utils_get_tri_state_value_property (details, "secure");
+  callback_data->session = api_utils_get_tri_state_value_property (details, "session");
 
   /* FIXME: The WebKit API doesn't expose details like first-party URLs to better filter this. The underlying libsoup API does so
    * this just requires additions to WebKitGTK. */

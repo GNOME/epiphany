@@ -25,12 +25,11 @@
 #include "ephy-window.h"
 #include "ephy-reader-handler.h"
 
+#include "api-utils.h"
 #include "tabs.h"
 
 /* Matches Firefox. */
 static const int WINDOW_ID_CURRENT = -2;
-
-static const int VALUE_UNSET = -1;
 
 static WebKitWebView *
 get_web_view_for_tab_id (EphyShell   *shell,
@@ -141,62 +140,6 @@ ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *self,
   return json_builder_get_root (builder);
 }
 
-typedef enum {
-  TAB_QUERY_UNSET = -1,
-  TAB_QUERY_DONT_MATCH = 0,
-  TAB_QUERY_MATCH = 1,
-} TabQuery;
-
-static TabQuery
-get_tab_query_property (JSCValue   *args,
-                        const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (args, name);
-
-  if (!value || jsc_value_is_undefined (value))
-    return TAB_QUERY_UNSET;
-
-  return jsc_value_to_boolean (value);
-}
-
-static gint32
-get_number_property (JSCValue   *args,
-                     const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (args, name);
-
-  if (!value || jsc_value_is_undefined (value))
-    return -1;
-
-  return jsc_value_to_int32 (value);
-}
-
-static gboolean
-get_boolean_property (JSCValue   *obj,
-                      const char *name,
-                      gboolean    default_value)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
-
-  if (jsc_value_is_undefined (value))
-    return default_value;
-
-  return jsc_value_to_boolean (value);
-}
-
-static char *
-get_string_property (JSCValue   *obj,
-                     const char *name,
-                     const char *default_value)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
-
-  if (!jsc_value_is_string (value))
-    return g_strdup (default_value);
-
-  return jsc_value_to_string (value);
-}
-
 static EphyWindow *
 get_window_by_id (EphyShell *shell,
                   gint64     window_id)
@@ -227,18 +170,18 @@ tabs_handler_query (EphyWebExtension  *self,
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GList *windows;
   EphyWindow *active_window;
-  TabQuery current_window;
-  TabQuery active;
+  ApiTriStateValue current_window;
+  ApiTriStateValue active;
   gint32 window_id;
   gint32 tab_index;
 
   if (!jsc_value_is_object (value))
     return NULL;
 
-  active = get_tab_query_property (value, "active");
-  current_window = get_tab_query_property (value, "currentWindow");
-  window_id = get_number_property (value, "windowId");
-  tab_index = get_number_property (value, "index");
+  active = api_utils_get_tri_state_value_property (value, "active");
+  current_window = api_utils_get_tri_state_value_property (value, "currentWindow");
+  window_id = api_utils_get_int32_property (value, "windowId", -1);
+  tab_index = api_utils_get_int32_property (value, "index", -1);
 
   if (window_id == WINDOW_ID_CURRENT) {
     current_window = TRUE;
@@ -262,9 +205,9 @@ tabs_handler_query (EphyWebExtension  *self,
     if (window_id != -1 && (guint64)window_id != ephy_window_get_uid (window))
       continue;
 
-    if (current_window == TAB_QUERY_MATCH && window != active_window)
+    if (current_window == API_VALUE_TRUE && window != active_window)
       continue;
-    else if (current_window == TAB_QUERY_DONT_MATCH && window == active_window)
+    else if (current_window == API_VALUE_FALSE && window == active_window)
       continue;
 
     tab_view = ephy_window_get_tab_view (window);
@@ -276,9 +219,9 @@ tabs_handler_query (EphyWebExtension  *self,
         continue;
 
       web_view = ephy_embed_get_web_view (EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view, i)));
-      if (active == TAB_QUERY_MATCH && web_view != active_web_view)
+      if (active == API_VALUE_TRUE && web_view != active_web_view)
         continue;
-      else if (active == TAB_QUERY_DONT_MATCH && web_view == active_web_view)
+      else if (active == API_VALUE_FALSE && web_view == active_web_view)
         continue;
 
       add_web_view_to_json (self, builder, window, web_view);
@@ -630,20 +573,20 @@ tabs_handler_create (EphyWebExtension  *self,
     return NULL;
   }
 
-  url = resolve_to_absolute_url (self, get_string_property (create_properties, "url", NULL));
+  url = resolve_to_absolute_url (self, api_utils_get_string_property (create_properties, "url", NULL));
   if (!ephy_web_extension_api_tabs_url_is_unprivileged (url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.create(): URL '%s' is not allowed", url);
     return NULL;
   }
 
-  if (get_boolean_property (create_properties, "active", FALSE))
+  if (api_utils_get_boolean_property (create_properties, "active", FALSE))
     new_tab_flags |= EPHY_NEW_TAB_JUMP;
 
-  parent_window = get_window_by_id (shell, get_number_property (create_properties, "windowId"));
+  parent_window = get_window_by_id (shell, api_utils_get_int32_property (create_properties, "windowId", -1));
   embed = ephy_shell_new_tab (shell, parent_window, NULL, new_tab_flags);
   new_web_view = ephy_embed_get_web_view (embed);
 
-  if (url && get_boolean_property (create_properties, "openInReaderMode", FALSE)) {
+  if (url && api_utils_get_boolean_property (create_properties, "openInReaderMode", FALSE)) {
     char *reader_url = g_strconcat (EPHY_READER_SCHEME, ":", url, NULL);
     g_free (url);
     url = reader_url;
@@ -705,14 +648,14 @@ tabs_handler_update (EphyWebExtension  *self,
     return NULL;
   }
 
-  new_url = resolve_to_absolute_url (self, get_string_property (update_properties, "url", NULL));
+  new_url = resolve_to_absolute_url (self, api_utils_get_string_property (update_properties, "url", NULL));
   if (!ephy_web_extension_api_tabs_url_is_unprivileged (new_url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): URL '%s' is not allowed", new_url);
     return NULL;
   }
 
-  muted = get_boolean_property (update_properties, "muted", VALUE_UNSET);
-  if (muted != VALUE_UNSET)
+  muted = api_utils_get_tri_state_value_property (update_properties, "muted");
+  if (muted != API_VALUE_UNSET)
     webkit_web_view_set_is_muted (target_web_view, muted);
 
   if (new_url)

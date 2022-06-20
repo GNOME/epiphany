@@ -23,17 +23,8 @@
 #include "ephy-shell.h"
 #include "ephy-web-extension.h"
 
+#include "api-utils.h"
 #include "notifications.h"
-
-static char *
-get_string_property (JSCValue   *obj,
-                     const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
-  if (!jsc_value_is_string (value))
-    return NULL;
-  return jsc_value_to_string (value);
-}
 
 static char *
 create_extension_notification_id (EphyWebExtension *web_extension,
@@ -79,8 +70,8 @@ notifications_handler_create (EphyWebExtension  *self,
     return NULL;
   }
 
-  title = get_string_property (value, "title");
-  message = get_string_property (value, "message");
+  title = api_utils_get_string_property (value, "title", NULL);
+  message = api_utils_get_string_property (value, "message", NULL);
 
   if (!title || !message) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): title and message are required", name);
@@ -95,7 +86,7 @@ notifications_handler_create (EphyWebExtension  *self,
   if (jsc_value_is_array (button_array)) {
     for (guint i = 0; i < 2; i++) {
       g_autoptr (JSCValue) button = jsc_value_object_get_property_at_index (button_array, i);
-      g_autofree char *button_title = get_string_property (button, "title");
+      g_autofree char *button_title = api_utils_get_string_property (button, "title", NULL);
       if (button_title)
         g_notification_add_button_with_target (notification, button_title, "app.webextension-notification", "(ssi)", extension_guid, id, i);
     }
