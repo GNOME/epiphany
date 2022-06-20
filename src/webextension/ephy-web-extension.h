@@ -146,8 +146,6 @@ const char            *ephy_web_extension_get_option_ui_page              (EphyW
 
 const char            *ephy_web_extension_get_guid                        (EphyWebExtension *self);
 
-GPtrArray             *ephy_web_extension_get_permissions                 (EphyWebExtension *self);
-
 gboolean               ephy_web_extension_has_tab_or_host_permission      (EphyWebExtension *self,
                                                                            EphyWebView      *web_view,
                                                                            gboolean          is_user_interaction);

@@ -108,7 +108,7 @@ struct _EphyWebExtension {
   WebExtensionOptionsUI *options_ui;
   GList *resources;
   GList *custom_css;
-  GPtrArray *permissions;
+  GHashTable *permissions;
   GPtrArray *host_permissions;
   GCancellable *cancellable;
   char *local_storage_path;
@@ -737,7 +737,7 @@ web_extension_add_permission (JsonArray *array,
     return;
   }
 
-  g_ptr_array_add (self->permissions, g_strdup (permission));
+  g_hash_table_add (self->permissions, g_strdup (permission));
 }
 
 static void
@@ -768,7 +768,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_list (&self->resources, (GDestroyNotify)web_extension_resource_free);
   g_clear_pointer (&self->background, web_extension_background_free);
   g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
-  g_clear_pointer (&self->permissions, g_ptr_array_unref);
+  g_clear_pointer (&self->permissions, g_hash_table_unref);
   g_clear_pointer (&self->host_permissions, g_ptr_array_unref);
   g_clear_pointer (&self->local_storage, json_node_unref);
 
@@ -793,7 +793,7 @@ static void
 ephy_web_extension_init (EphyWebExtension *self)
 {
   self->page_action_map = g_hash_table_new (NULL, NULL);
-  self->permissions = g_ptr_array_new_full (1, g_free);
+  self->permissions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   self->host_permissions = g_ptr_array_new_full (2, g_free);
 
   self->guid = g_uuid_string_random ();
@@ -1256,12 +1256,6 @@ ephy_web_extension_get_guid (EphyWebExtension *self)
   return self->guid;
 }
 
-GPtrArray *
-ephy_web_extension_get_permissions (EphyWebExtension *self)
-{
-  return self->permissions;
-}
-
 const char * const *
 ephy_web_extension_get_host_permissions (EphyWebExtension *self)
 {
@@ -1441,15 +1435,11 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
 
-  for (guint i = 0; i < self->permissions->len; i++) {
-    const char *permission = g_ptr_array_index (self->permissions, i);
+  if (is_user_interaction && is_active_tab && g_hash_table_contains (self->permissions, "activeTab"))
+    return TRUE;
 
-    if (is_user_interaction && is_active_tab && strcmp (permission, "activeTab") == 0)
-      return TRUE;
-
-    if (allow_tabs && strcmp (permission, "tabs") == 0)
-      return TRUE;
-  }
+  if (allow_tabs && g_hash_table_contains (self->permissions, "tabs"))
+    return TRUE;
 
   /* Note this one is NULL terminated. */
   host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
@@ -1501,12 +1491,7 @@ gboolean
 ephy_web_extension_has_permission (EphyWebExtension *self,
                                    const char       *permission)
 {
-  for (guint i = 0; i < self->permissions->len; i++) {
-    if (strcmp (g_ptr_array_index (self->permissions, i), permission) == 0)
-      return TRUE;
-  }
-
-  return FALSE;
+  return g_hash_table_contains (self->permissions, permission);
 }
 
 JsonNode *
