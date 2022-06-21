@@ -211,57 +211,6 @@ destroy_widget_list (GSList *widget_list)
 }
 
 static void
-download_added_cb (EphyDownloadsManager    *downloads_manager,
-                   EphyDownload            *download,
-                   EphyWebExtensionManager *manager)
-{
-  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
-    EphyWebExtension *extension = l->data;
-    g_autofree char *json = NULL;
-
-    if (!ephy_web_extension_has_permission (extension, "downloads"))
-      continue;
-
-    json = ephy_web_extension_api_downloads_download_to_json (download);
-    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onCreated", json);
-  }
-}
-
-static void
-download_completed_cb (EphyDownloadsManager    *downloads_manager,
-                       EphyDownload            *download,
-                       EphyWebExtensionManager *manager)
-{
-  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
-    EphyWebExtension *extension = l->data;
-    g_autofree char *json = NULL;
-
-    if (!ephy_web_extension_has_permission (extension, "downloads"))
-      continue;
-
-    json = ephy_web_extension_api_downloads_download_to_json (download);
-    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onChanged", json);
-  }
-}
-
-static void
-download_removed_cb (EphyDownloadsManager    *downloads_manager,
-                     EphyDownload            *download,
-                     EphyWebExtensionManager *manager)
-{
-  for (GList *l = manager->web_extensions; l; l = g_list_next (l)) {
-    EphyWebExtension *extension = l->data;
-    g_autofree char *json = NULL;
-
-    if (!ephy_web_extension_has_permission (extension, "downloads"))
-      continue;
-
-    json = g_strdup_printf ("%" G_GUINT64_FORMAT, ephy_download_get_uid (download));
-    ephy_web_extension_manager_emit_in_extension_views (manager, extension, "downloads.onErased", json);
-  }
-}
-
-static void
 ephy_web_extension_manager_constructed (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
@@ -281,6 +230,8 @@ static void
 ephy_web_extension_manager_dispose (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
+
+  ephy_web_extension_api_downloads_dispose (self);
 
   g_clear_pointer (&self->background_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->popup_web_views, g_hash_table_destroy);
@@ -308,7 +259,6 @@ ephy_web_extension_manager_class_init (EphyWebExtensionManagerClass *klass)
 static void
 ephy_web_extension_manager_init (EphyWebExtensionManager *self)
 {
-  EphyDownloadsManager *downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   WebKitWebContext *web_context;
 
   web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
@@ -316,9 +266,7 @@ ephy_web_extension_manager_init (EphyWebExtensionManager *self)
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
 
-  g_signal_connect (downloads_manager, "download-added", G_CALLBACK (download_added_cb), self);
-  g_signal_connect (downloads_manager, "download-completed", G_CALLBACK (download_completed_cb), self);
-  g_signal_connect (downloads_manager, "download-removed", G_CALLBACK (download_removed_cb), self);
+  ephy_web_extension_api_downloads_init (self);
 }
 
 EphyWebExtensionManager *
@@ -1289,6 +1237,14 @@ application_window_added_timeout_cb (gpointer user_data)
   window_json = ephy_web_extension_api_windows_create_window_json (data->web_extension, window);
   ephy_web_extension_manager_emit_in_extension_views (manager, data->web_extension, "windows.onCreated", window_json);
   return G_SOURCE_REMOVE;
+}
+
+void
+ephy_web_extension_manager_foreach_extension (EphyWebExtensionManager     *self,
+                                              EphyWebExtensionForeachFunc  func,
+                                              gpointer                     user_data)
+{
+  g_list_foreach (self->web_extensions, (GFunc)func, user_data);
 }
 
 static void

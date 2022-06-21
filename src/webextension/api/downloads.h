@@ -28,12 +28,14 @@
 
 G_BEGIN_DECLS
 
+void ephy_web_extension_api_downloads_init (EphyWebExtensionManager *manager);
+
+void ephy_web_extension_api_downloads_dispose (EphyWebExtensionManager *manager);
+
 void ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
                                                char             *name,
                                                JSCValue         *value,
                                                WebKitWebView    *web_view,
                                                GTask            *task);
-
-char  *ephy_web_extension_api_downloads_download_to_json (EphyDownload *download);
 
 G_END_DECLS

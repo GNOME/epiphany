@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ephy-file-helpers.h"
+#include "ephy-web-extension-manager.h"
 
 #include "api-utils.h"
 #include "downloads.h"
@@ -603,8 +604,8 @@ add_download_to_json (JsonBuilder  *builder,
   json_builder_end_object (builder);
 }
 
-char *
-ephy_web_extension_api_downloads_download_to_json (EphyDownload *download)
+static char *
+download_to_json (EphyDownload *download)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -806,4 +807,70 @@ ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
   }
 
   g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "downloads.%s(): Not Implemented", name);
+}
+
+typedef struct {
+  const char *event_name;
+  char *json;
+} DownloadEventData;
+
+static void
+foreach_extension_cb (EphyWebExtension *web_extension,
+                      gpointer          user_data)
+{
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  DownloadEventData *data = user_data;
+
+  if (!ephy_web_extension_has_permission (web_extension, "downloads"))
+    return;
+
+  ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, data->event_name, data->json);
+}
+
+static void
+download_added_cb (EphyDownloadsManager    *downloads_manager,
+                   EphyDownload            *download,
+                   EphyWebExtensionManager *manager)
+{
+  g_autofree char *json = download_to_json (download);
+  DownloadEventData data = { "downloads.onCreated", json };
+  ephy_web_extension_manager_foreach_extension (manager, foreach_extension_cb, &data);
+}
+
+static void
+download_completed_cb (EphyDownloadsManager    *downloads_manager,
+                       EphyDownload            *download,
+                       EphyWebExtensionManager *manager)
+{
+  g_autofree char *json = download_to_json (download);
+  DownloadEventData data = { "downloads.onChanged", json };
+  ephy_web_extension_manager_foreach_extension (manager, foreach_extension_cb, &data);
+}
+
+static void
+download_removed_cb (EphyDownloadsManager    *downloads_manager,
+                     EphyDownload            *download,
+                     EphyWebExtensionManager *manager)
+{
+  g_autofree char *json = g_strdup_printf ("%" G_GUINT64_FORMAT, ephy_download_get_uid (download));
+  DownloadEventData data = { "downloads.onErased", json };
+  ephy_web_extension_manager_foreach_extension (manager, foreach_extension_cb, &data);
+}
+
+void
+ephy_web_extension_api_downloads_init (EphyWebExtensionManager *manager)
+{
+  EphyDownloadsManager *downloads_manager = get_downloads_manager ();
+
+  g_signal_connect (downloads_manager, "download-added", G_CALLBACK (download_added_cb), manager);
+  g_signal_connect (downloads_manager, "download-completed", G_CALLBACK (download_completed_cb), manager);
+  g_signal_connect (downloads_manager, "download-removed", G_CALLBACK (download_removed_cb), manager);
+}
+
+void
+ephy_web_extension_api_downloads_dispose (EphyWebExtensionManager *manager)
+{
+  EphyDownloadsManager *downloads_manager = get_downloads_manager ();
+
+  g_signal_handlers_disconnect_by_data (downloads_manager, manager);
 }

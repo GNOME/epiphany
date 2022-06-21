@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, EPHY, WEB_EXTENSION_MANAGER, GObject)
 
+typedef void (*EphyWebExtensionForeachFunc) (EphyWebExtension *extension, gpointer user_data);
+
 EphyWebExtensionManager *ephy_web_extension_manager_get_default                     (void);
 
 GList                  *ephy_web_extension_manager_get_web_extensions               (EphyWebExtensionManager *self);
@@ -101,5 +103,9 @@ void                     ephy_web_extension_manager_emit_in_tab_with_reply      
                                                                                      GTask                   *reply_task);
 
 GtkWidget                *ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension        *web_extension);
+
+void                      ephy_web_extension_manager_foreach_extension              (EphyWebExtensionManager     *self,
+                                                                                     EphyWebExtensionForeachFunc  func,
+                                                                                     gpointer                     user_data);
 
 G_END_DECLS
