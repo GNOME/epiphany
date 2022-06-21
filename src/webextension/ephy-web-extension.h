@@ -96,6 +96,8 @@ const char            *ephy_web_extension_get_homepage_url                (EphyW
 
 const char            *ephy_web_extension_get_author                      (EphyWebExtension *self);
 
+const char            *ephy_web_extension_get_content_security_policy     (EphyWebExtension *self);
+
 void                   ephy_web_extension_load_async                      (GFile               *target,
                                                                            GFileInfo           *info,
                                                                            GCancellable        *cancellable,

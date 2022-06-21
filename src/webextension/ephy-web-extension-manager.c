@@ -1016,6 +1016,8 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
                            "web-context", web_context,
                            "settings", settings,
                            "related-view", ephy_web_extension_manager_get_background_web_view (manager, web_extension),
+                           "default-content-security-policy", ephy_web_extension_get_content_security_policy (web_extension),
+                           "web-extension-mode", WEBKIT_WEB_EXTENSION_MODE_MANIFESTV2,
                            NULL);
 
   webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), ephy_web_extension_get_host_permissions (web_extension));

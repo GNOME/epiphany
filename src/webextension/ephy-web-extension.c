@@ -90,6 +90,7 @@ struct _EphyWebExtension {
   char *short_name;
   char *version;
   char *homepage_url;
+  char *content_security_policy;
   GList *icons;
   GList *content_scripts;
   char *background_page;
@@ -336,6 +337,12 @@ const char *
 ephy_web_extension_get_author (EphyWebExtension *self)
 {
   return self->author;
+}
+
+const char *
+ephy_web_extension_get_content_security_policy (EphyWebExtension *self)
+{
+  return self->content_security_policy;
 }
 
 const char *
@@ -922,6 +929,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->version, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
   g_clear_pointer (&self->local_storage_path, g_free);
+  g_clear_pointer (&self->content_security_policy, g_free);
 
   g_clear_list (&self->icons, (GDestroyNotify)web_extension_icon_free);
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
@@ -1018,6 +1026,11 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   self->version = ephy_web_extension_manifest_get_localized_string (self, root_object, "version");
   self->homepage_url = ephy_web_extension_manifest_get_localized_string (self, root_object, "homepage_url");
   self->author = ephy_web_extension_manifest_get_localized_string (self, root_object, "author");
+
+  /* Default matches Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_Security_Policy#default_content_security_policy */
+  self->content_security_policy = g_strdup (ephy_json_object_get_string (root_object, "content_security_policy"));
+  if (!self->content_security_policy)
+    self->content_security_policy = g_strdup ("script-src 'self'; object-src 'self';");
 
   if (!*self->version || !*self->name) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Missing name or version");
