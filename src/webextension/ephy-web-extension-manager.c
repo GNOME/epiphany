@@ -54,7 +54,7 @@ struct _EphyWebExtensionManager {
   GObject parent_instance;
 
   GCancellable *cancellable;
-  GList *web_extensions;
+  GPtrArray *web_extensions;
   GHashTable *page_action_map;
   GHashTable *browser_action_map;
 
@@ -90,8 +90,7 @@ static void
 ephy_web_extension_manager_add_to_list (EphyWebExtensionManager *self,
                                         EphyWebExtension        *web_extension)
 {
-  self->web_extensions = g_list_append (self->web_extensions, g_object_ref (web_extension));
-
+  g_ptr_array_add (self->web_extensions, g_object_ref (web_extension));
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
@@ -99,9 +98,7 @@ static void
 ephy_web_extension_manager_remove_from_list (EphyWebExtensionManager *self,
                                              EphyWebExtension        *web_extension)
 {
-  self->web_extensions = g_list_remove (self->web_extensions, web_extension);
-  g_object_unref (web_extension);
-
+  g_ptr_array_remove (self->web_extensions, web_extension);
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
@@ -181,11 +178,11 @@ main_context_web_extension_scheme_cb (WebKitURISchemeRequest *request,
   path = webkit_uri_scheme_request_get_uri (request) + strlen ("ephy-webextension://");
 
   split = g_strsplit (path, "/", -1);
-  for (GList *list = self->web_extensions; list && list->data; list = list->next) {
-    EphyWebExtension *ext = EPHY_WEB_EXTENSION (list->data);
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *ext = g_ptr_array_index (self->web_extensions, i);
 
     if (strcmp (ephy_web_extension_get_guid (ext), split[0]) == 0) {
-      web_extension = EPHY_WEB_EXTENSION (list->data);
+      web_extension = ext;
       break;
     }
   }
@@ -221,7 +218,7 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
   self->pending_messages = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
-  self->web_extensions = NULL;
+  self->web_extensions = g_ptr_array_new_full (0, g_object_unref);
 
   ephy_web_extension_manager_scan_directory (self, dir);
 }
@@ -237,7 +234,7 @@ ephy_web_extension_manager_dispose (GObject *object)
   g_clear_pointer (&self->popup_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->page_action_map, g_hash_table_destroy);
   g_clear_pointer (&self->pending_messages, g_hash_table_destroy);
-  g_list_free_full (g_steal_pointer (&self->web_extensions), g_object_unref);
+  g_clear_pointer (&self->web_extensions, g_ptr_array_unref);
 }
 
 static void
@@ -280,7 +277,7 @@ ephy_web_extension_manager_get_default (void)
   return manager;
 }
 
-GList *
+GPtrArray *
 ephy_web_extension_manager_get_web_extensions (EphyWebExtensionManager *self)
 {
   return self->web_extensions;
@@ -293,8 +290,8 @@ void
 ephy_web_extension_manager_install_actions (EphyWebExtensionManager *self,
                                             EphyWindow              *window)
 {
-  for (GList *list = self->web_extensions; list && list->data; list = list->next)
-    ephy_web_extension_manager_add_web_extension_to_window (self, list->data, window);
+  for (guint i = 0; i < self->web_extensions->len; i++)
+    ephy_web_extension_manager_add_web_extension_to_window (self, g_ptr_array_index (self->web_extensions, i), window);
 }
 
 void
@@ -385,8 +382,8 @@ ephy_web_extension_manager_update_location_entry (EphyWebExtensionManager *self,
 
   ephy_location_entry_page_action_clear (lentry);
 
-  for (GList *list = ephy_web_extension_manager_get_web_extensions (self); list && list->data; list = list->next) {
-    EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (list->data);
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *web_extension = g_ptr_array_index (self->web_extensions, i);
     GtkWidget *action = ephy_web_extension_manager_get_page_action (self, web_extension, web_view);
 
     if (action)
@@ -1244,7 +1241,7 @@ ephy_web_extension_manager_foreach_extension (EphyWebExtensionManager     *self,
                                               EphyWebExtensionForeachFunc  func,
                                               gpointer                     user_data)
 {
-  g_list_foreach (self->web_extensions, (GFunc)func, user_data);
+  g_ptr_array_foreach (self->web_extensions, (GFunc)func, user_data);
 }
 
 static void
@@ -1343,8 +1340,8 @@ static EphyWebExtension *
 ephy_web_extension_manager_get_extension_by_guid (EphyWebExtensionManager *self,
                                                   const char              *guid)
 {
-  for (GList *l = self->web_extensions; l; l = g_list_next (l)) {
-    EphyWebExtension *web_extension = l->data;
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *web_extension = g_ptr_array_index (self->web_extensions, i);
     if (strcmp (guid, ephy_web_extension_get_guid (web_extension)) == 0)
       return web_extension;
   }

@@ -216,13 +216,13 @@ create_row (EphyWebExtensionDialog *self,
 static void
 ephy_web_extension_dialog_refresh_listbox (EphyWebExtensionDialog *self)
 {
-  GList *extensions = ephy_web_extension_manager_get_web_extensions (self->web_extension_manager);
+  GPtrArray *extensions = ephy_web_extension_manager_get_web_extensions (self->web_extension_manager);
   gboolean empty = TRUE;
 
   clear_listbox (self->listbox);
 
-  for (GList *tmp = extensions; tmp && tmp->data; tmp = tmp->next) {
-    EphyWebExtension *web_extension = tmp->data;
+  for (guint i = 0; i < extensions->len; i++) {
+    EphyWebExtension *web_extension = g_ptr_array_index (extensions, i);
     GtkWidget *row;
 
     row = create_row (self, web_extension);

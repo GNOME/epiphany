@@ -35,7 +35,7 @@ typedef void (*EphyWebExtensionForeachFunc) (EphyWebExtension *extension, gpoint
 
 EphyWebExtensionManager *ephy_web_extension_manager_get_default                     (void);
 
-GList                  *ephy_web_extension_manager_get_web_extensions               (EphyWebExtensionManager *self);
+GPtrArray              *ephy_web_extension_manager_get_web_extensions               (EphyWebExtensionManager *self);
 
 void                    ephy_web_extension_manager_install_actions                  (EphyWebExtensionManager *self,
                                                                                      EphyWindow              *window);
