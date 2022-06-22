@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-12 15:26+0000\n"
-"PO-Revision-Date: 2022-06-12 20:51+0300\n"
+"POT-Creation-Date: 2022-06-22 00:18+0000\n"
+"PO-Revision-Date: 2022-06-22 09:10+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1075,18 +1075,19 @@ msgstr ""
 "роботі. Провайдер, ваш уряд, чужі уряди, самі сайти, рекламодавці на них "
 "можуть слідкувати за вами."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "Виберіть каталог"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_Вибрати"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
@@ -1096,38 +1097,43 @@ msgstr "_Вибрати"
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+#| msgid "Select a Directory"
+msgid "Select the Destination"
+msgstr "Виберіть призначення"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "Запит на завантаження"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "_Завантажити"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Тип: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "З: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "Де бажаєте зберегти цей файл?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Завершено завантаження %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "Завантаження завершено"
 
@@ -2884,15 +2890,15 @@ msgstr "Якщо закриєте вікно, всі відкриті вклад
 msgid "C_lose tabs"
 msgstr "_Закрити вкладки"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "Зберегти посилання як"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "Зберегти зображення як"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "Зберегти медіа як"
 
@@ -3161,7 +3167,6 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Закладіть кілька сайтів, щоб бачити їх тут."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#| msgid "Website"
 msgid "Website Data"
 msgstr "Дані сайтів"
 
@@ -3170,27 +3175,22 @@ msgid "_Clear Data"
 msgstr "_Очистити дані"
 
 #: src/resources/gtk/clear-data-view.ui:24
-#| msgid "Remove selected personal data"
 msgid "Remove selected website data"
 msgstr "Вилучити вибрані дані сайтів"
 
 #: src/resources/gtk/clear-data-view.ui:25
-#| msgid "Search personal data"
 msgid "Search website data"
 msgstr "Шукати у даних сайтів"
 
 #: src/resources/gtk/clear-data-view.ui:26
-#| msgid "There is no Personal Data"
 msgid "There is no Website Data"
 msgstr "Немає даних сайтів"
 
 #: src/resources/gtk/clear-data-view.ui:27
-#| msgid "Personal data will be listed here"
 msgid "Website data will be listed here"
 msgstr "Тут буде показано список даних сайтів"
 
 #: src/resources/gtk/clear-data-view.ui:55
-#| msgid "Clear selected personal data:"
 msgid "Clear selected website data:"
 msgstr "Очистити вибрані дані сайтів:"
 
@@ -3693,7 +3693,6 @@ msgid "Personal Data"
 msgstr "Особисті дані"
 
 #: src/resources/gtk/prefs-privacy-page.ui:91
-#| msgid "Clear Personal _Data"
 msgid "Clear Website _Data"
 msgstr "Вилучити дані с_айтів"
 
@@ -4131,7 +4130,7 @@ msgstr "Вебпрограми «%s» не існує"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Не вдалося вилучити вебпрограму «%s»"
 
-#: src/webextension/api/runtime.c:121
+#: src/webextension/api/runtime.c:125
 #, c-format
 msgid "Options for %s"
 msgstr "Параметри для %s"
