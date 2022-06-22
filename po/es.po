@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-05-05 13:04+0000\n"
-"PO-Revision-Date: 2022-05-19 10:31+0200\n"
+"POT-Creation-Date: 2022-06-22 00:18+0000\n"
+"PO-Revision-Date: 2022-06-22 11:12+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
 #: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:411 src/window-commands.c:1005
+#: src/ephy-main.c:409 src/window-commands.c:1005
 msgid "Web"
 msgstr "Web"
 
@@ -1125,18 +1125,19 @@ msgstr ""
 "servicios de Internet, su gobierno u otros gobiernos, las páginas web que "
 "visite o los anunciantes en dichas páginas pueden seguir rastreándole."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "Seleccione una carpeta"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
@@ -1146,38 +1147,42 @@ msgstr "_Seleccionar"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+msgid "Select the Destination"
+msgstr "Seleccione el destino"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "Descarga requerida"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "_Descargar"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Tipo: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "De: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "¿Dónde quiere guardar el archivo?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Descarga terminada: %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "Descarga finalizada"
 
@@ -2024,31 +2029,31 @@ msgid "Unspecified"
 msgstr "Sin especificar"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197
+#: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "Descargas"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
+#: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: lib/ephy-file-helpers.c:191
+#: lib/ephy-file-helpers.c:190
 msgid "Home"
 msgstr "Inicio"
 
-#: lib/ephy-file-helpers.c:429
+#: lib/ephy-file-helpers.c:427
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "No se pudo crear la carpeta temporal en: «%s»."
 
-#: lib/ephy-file-helpers.c:555
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "el archivo «%s» ya existe. Muévalo fuera de la ruta."
 
-#: lib/ephy-file-helpers.c:574
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Falló al crear la carpeta «%s»."
@@ -2184,14 +2189,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:433
+#: lib/sync/ephy-password-manager.c:435
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Contraseña para %s en un formulario en %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:437
+#: lib/sync/ephy-password-manager.c:439
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Contraseña para %s en un formulario"
@@ -2324,7 +2329,7 @@ msgstr ""
 "El certificado es válido. Sin embargo, los recursos de esta página se han "
 "enviado de manera insegura."
 
-#: lib/widgets/ephy-downloads-popover.c:213
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2429,7 +2434,7 @@ msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:929
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:932
 msgid "_Undo"
 msgstr "_Deshacer"
 
@@ -2722,179 +2727,179 @@ msgstr "Quitar la WebExtension seleccionada"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Abrir archivo (manifest.json/xpi)"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:933
 msgid "Re_do"
 msgstr "_Rehacer"
 
 #. Edit.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:936
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:937
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:938
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:939
 msgid "_Paste Text Only"
 msgstr "_Pegar texto solamente"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:940
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 # Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
-#: src/ephy-window.c:939
+#: src/ephy-window.c:942
 msgid "S_end Link by Email…"
 msgstr "_Enviar enlace por correo-e…"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:944
 msgid "_Reload"
 msgstr "Re_cargar"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:945
 msgid "_Back"
 msgstr "_Atrás"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:946
 msgid "_Forward"
 msgstr "A_delante"
 
 #. Bookmarks
-#: src/ephy-window.c:946
+#: src/ephy-window.c:949
 msgid "Add Boo_kmark…"
 msgstr "Añadir _marcador…"
 
 #. Links.
-#: src/ephy-window.c:950
+#: src/ephy-window.c:953
 msgid "Open Link in New _Window"
 msgstr "Abrir enlace en una _ventana nueva"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:954
 msgid "Open Link in New _Tab"
 msgstr "Abrir enlace en una pe_staña nueva"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:955
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir enlace en una ventana de i_ncógnito"
 
-#: src/ephy-window.c:953
+#: src/ephy-window.c:956
 msgid "_Save Link As…"
 msgstr "Guardar _enlace como…"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:957
 msgid "_Copy Link Address"
 msgstr "_Copiar dirección del enlace"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:958
 msgid "_Copy E-mail Address"
 msgstr "_Copiar dirección de correo-e"
 
 #. Images.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:962
 msgid "View _Image in New Tab"
 msgstr "Ver _imagen en una pestaña nueva"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:963
 msgid "Copy I_mage Address"
 msgstr "Copiar dirección de la i_magen"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:964
 msgid "_Save Image As…"
 msgstr "_Guardar imagen como…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:965
 msgid "Set as _Wallpaper"
 msgstr "Establecer como _fondo"
 
 #. Video.
-#: src/ephy-window.c:966
+#: src/ephy-window.c:969
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo en una _ventana nueva"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:970
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo en una _pestaña nueva"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:971
 msgid "_Save Video As…"
 msgstr "Guardar _vídeo como…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:972
 msgid "_Copy Video Address"
 msgstr "_Copiar la dirección del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:973
+#: src/ephy-window.c:976
 msgid "Open Audio in New _Window"
 msgstr "Abrir sonido en una _ventana nueva"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:977
 msgid "Open Audio in New _Tab"
 msgstr "Abrir sonido en una _pestaña nueva"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:978
 msgid "_Save Audio As…"
 msgstr "Guardar _sonido como…"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:979
 msgid "_Copy Audio Address"
 msgstr "_Copiar la dirección del sonido"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:985
 msgid "Save Pa_ge As…"
 msgstr "Guardar pá_gina como…"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:986
 msgid "_Page Source"
 msgstr "Código _fuente"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1370
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Buscar «%s» en la web"
 
-#: src/ephy-window.c:1396
+#: src/ephy-window.c:1399
 msgid "Open Link"
 msgstr "Abrir enlace"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1401
 msgid "Open Link In New Tab"
 msgstr "Abrir enlace en una pestaña nueva"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1403
 msgid "Open Link In New Window"
 msgstr "Abrir enlace en una ventana nueva"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1405
 msgid "Open Link In Incognito Window"
 msgstr "Abrir enlace en una ventana de incógnito"
 
-#: src/ephy-window.c:2843 src/ephy-window.c:4170
+#: src/ephy-window.c:2846 src/ephy-window.c:4175
 msgid "Do you want to leave this website?"
 msgstr "¿quiere salir de esta página web?"
 
-#: src/ephy-window.c:2844 src/ephy-window.c:4171 src/window-commands.c:1213
+#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "El formulario que ha modificado no se ha enviado."
 
-#: src/ephy-window.c:2845 src/ephy-window.c:4172 src/window-commands.c:1215
+#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Descartar formulario"
 
-#: src/ephy-window.c:2866
+#: src/ephy-window.c:2869
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:2868
+#: src/ephy-window.c:2871
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:2870
+#: src/ephy-window.c:2873
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2902,49 +2907,49 @@ msgstr[0] "%d descarga activa"
 msgstr[1] "%d descargas activas"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3364
+#: src/ephy-window.c:3367
 msgid "View open tabs"
 msgstr "Ver las pestañas abiertas"
 
-#: src/ephy-window.c:3494
+#: src/ephy-window.c:3497
 msgid "Set Web as your default browser?"
 msgstr "¿Establecer Web como su navegador predeterminado?"
 
-#: src/ephy-window.c:3496
+#: src/ephy-window.c:3499
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "¿Quiere establecer la tecnología de vista previa de Epiphany como su "
 "navegador predeterminado?"
 
-#: src/ephy-window.c:3508
+#: src/ephy-window.c:3511
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3512
 msgid "_No"
 msgstr "_No"
 
-#: src/ephy-window.c:4304
+#: src/ephy-window.c:4309
 msgid "There are multiple tabs open."
 msgstr "Hay varias pestañas abiertas."
 
-#: src/ephy-window.c:4305
+#: src/ephy-window.c:4310
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Si cierra esta ventana se perderán todas las pestañas abiertas"
 
-#: src/ephy-window.c:4306
+#: src/ephy-window.c:4311
 msgid "C_lose tabs"
 msgstr "C_errar pestañas"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "Guardar enlace como"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "Guardar imagen como"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "Abrir medio como"
 
@@ -3211,33 +3216,32 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Guarde en marcadores algunas páginas para verlas aquí."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "Datos personales"
+msgid "Website Data"
+msgstr "Datos del sitio web"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "_Limpiar datos"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "Eliminar los datos personales seleccionados"
+msgid "Remove selected website data"
+msgstr "Eliminar los datos del sitio web seleccionado"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "Buscar datos personales"
+msgid "Search website data"
+msgstr "Buscar datos del sitio web"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "No hay datos personales"
+msgid "There is no Website Data"
+msgstr "No hay datos del sitio web"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "Los datos personales se listarán aquí"
+msgid "Website data will be listed here"
+msgstr "Los datos del sitio web se listarán aquí"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "Limpiar los datos personales seleccionados:"
+msgid "Clear selected website data:"
+msgstr "Limpiar los datos del sitio web seleccionado:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3522,7 +3526,7 @@ msgid "Tabs"
 msgstr "Pestañas"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "Contraseñas"
 
@@ -3737,19 +3741,19 @@ msgstr "Activar ls sugerencias de búsqueda en la entrada de URL."
 msgid "_Google Search Suggestions"
 msgstr "Sugerencias de búsqueda de _Google"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "Datos personales"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "Puede limpiar los datos personales almacenados."
+msgid "Clear Website _Data"
+msgstr "Limpiar _datos del sitio web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "Limpiar _datos personales"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "_Contraseñas"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "_Recordar contraseñas"
 
@@ -4178,6 +4182,11 @@ msgstr "La aplicación web «%s» no existe"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "No se pudo eliminar la aplicación web «%s»"
 
+#: src/webextension/api/runtime.c:125
+#, c-format
+msgid "Options for %s"
+msgstr "Opciones para %s"
+
 #: src/window-commands.c:113
 msgid "GVDB File"
 msgstr "Archivo GVDB"
@@ -4345,6 +4354,9 @@ msgstr ""
 #: src/window-commands.c:2678
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "Puede limpiar los datos personales almacenados."
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "La página web de GNOME mostrada en GNOME Web"
@@ -6183,9 +6195,6 @@ msgstr "_Activar"
 
 #~ msgid "Delete text"
 #~ msgstr "Borrar texto"
-
-#~ msgid "Select the entire page"
-#~ msgstr "Selecciona la página completa"
 
 #~ msgid "Find a word or phrase in the page"
 #~ msgstr "Buscar una palabra o frase en la página"
