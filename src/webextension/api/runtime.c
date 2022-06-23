@@ -52,24 +52,6 @@ runtime_handler_get_browser_info (EphyWebExtension  *self,
 }
 
 static const char *
-get_os (void)
-{
-  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformOs */
-#if defined(__linux__)
-  return "linux";
-#elif defined(_WIN32)
-  return "win";
-#elif defined(__OpenBSD__) || defined(__FreeBSD__)
-  return "openbsd"; /* MDN documents same for both. */
-#elif defined(__APPLE__)
-  return "mac";
-#else
-  #warning "Unknown OS"
-  return "unknown";
-#endif
-}
-
-static const char *
 get_arch (void)
 {
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformArch */
@@ -97,7 +79,9 @@ runtime_handler_get_platform_info (EphyWebExtension  *self,
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "os");
-  json_builder_add_string_value (builder, get_os ());
+  /* Epiphany doesn't support Windows or macOS and seperating out BSDs is most likely
+   * to be used improperly anyway. */
+  json_builder_add_string_value (builder, "linux");
   json_builder_set_member_name (builder, "arch");
   json_builder_add_string_value (builder, get_arch ());
   json_builder_set_member_name (builder, "nacl_arch");
