@@ -115,8 +115,6 @@ const char            *ephy_web_extension_browser_action_get_tooltip      (EphyW
 
 const char            *ephy_web_extension_get_browser_popup               (EphyWebExtension *self);
 
-GPtrArray             *ephy_web_extension_background_web_view_get_scripts (EphyWebExtension *self);
-
 GList                 *ephy_web_extension_get_content_scripts             (EphyWebExtension *self);
 
 GList                 *ephy_web_extension_get_content_script_js           (EphyWebExtension *self,

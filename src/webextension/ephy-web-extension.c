@@ -67,7 +67,6 @@ typedef struct {
 } WebExtensionBrowserAction;
 
 typedef struct {
-  GPtrArray *scripts;
   char *page;
 } WebExtensionBackground;
 
@@ -120,6 +119,10 @@ G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean is_supported_scheme (const char *scheme);
+static void web_extension_add_resource (EphyWebExtension *self,
+                                        const char       *name,
+                                        gpointer          data,
+                                        guint             len);
 
 gboolean
 ephy_web_extension_has_resource (EphyWebExtension *self,
@@ -262,15 +265,12 @@ web_extension_background_new (void)
 {
   WebExtensionBackground *background = g_malloc0 (sizeof (WebExtensionBackground));
 
-  background->scripts = g_ptr_array_new_full (1, g_free);
-
   return background;
 }
 
 static void
 web_extension_background_free (WebExtensionBackground *background)
 {
-  g_clear_pointer (&background->scripts, g_ptr_array_unref);
   g_clear_pointer (&background->page, g_free);
   g_free (background);
 }
@@ -511,15 +511,29 @@ web_extension_add_content_script (JsonArray *array,
   self->content_scripts = g_list_append (self->content_scripts, content_script);
 }
 
-static void
-web_extension_add_scripts (JsonArray *array,
-                           guint      index_,
-                           JsonNode  *element_node,
-                           gpointer   user_data)
+static char *
+generate_background_page (EphyWebExtension *self,
+                          JsonArray        *scripts)
 {
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
+  /* The entry point is always an HTML file, if they list scripts we just generate one.
+   * This behavior exactly matches Firefox. */
+  g_autoptr (GString) background_page = g_string_new ("<html><head><meta charset=\"utf-8\"></head><body>");
+  char *path = g_strdup ("_generated_background_page.html");
 
-  g_ptr_array_add (self->background->scripts, g_strdup (json_node_get_string (element_node)));
+  for (unsigned int i = 0; i < json_array_get_length (scripts); i++) {
+    const char *script_file = json_array_get_string_element (scripts, i);
+    g_autofree char *escaped_script_file = g_uri_escape_string (script_file, G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
+
+    g_string_append_printf (background_page,
+                            "<script type=\"text/javascript\" src=\"ephy-webextension://%s/%s\"></script>",
+                            ephy_web_extension_get_guid (self),
+                            escaped_script_file);
+  }
+  g_string_append (background_page, "</body>");
+
+  web_extension_add_resource (self, path, background_page->str, background_page->len);
+
+  return path;
 }
 
 static void
@@ -533,7 +547,6 @@ web_extension_add_background (JsonObject *object,
    *  - persistent with false is not supported yet.
    */
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  JsonArray *child_array;
 
   if (!json_object_has_member (object, "scripts") && !json_object_has_member (object, "page") && !json_object_has_member (object, "persistent")) {
     g_warning ("Invalid background section, it must be either scripts, page or persistent entry.");
@@ -544,8 +557,7 @@ web_extension_add_background (JsonObject *object,
     self->background = web_extension_background_new ();
 
   if (json_object_has_member (object, "scripts")) {
-    child_array = json_object_get_array_member (object, "scripts");
-    json_array_foreach_element (child_array, web_extension_add_scripts, self);
+    self->background->page = generate_background_page (self, json_object_get_array_member (object, "scripts"));
   } else if (!self->background->page && json_object_has_member (object, "page")) {
     self->background->page = g_strdup (json_object_get_string_member (object, "page"));
   } else if (json_object_has_member (object, "persistent")) {
@@ -998,8 +1010,6 @@ ephy_web_extension_load (GFile *target)
 
     json_object_foreach_member (background_object, web_extension_add_background, self);
   }
-  if (self->background)
-    g_ptr_array_add (self->background->scripts, NULL);
 
   if (json_object_has_member (root_object, "page_action")) {
     g_autoptr (JsonObject) page_action_object = json_object_get_object_member (root_object, "page_action");
@@ -1115,12 +1125,6 @@ const char *
 ephy_web_extension_background_web_view_get_page (EphyWebExtension *self)
 {
   return self->background->page;
-}
-
-GPtrArray *
-ephy_web_extension_background_web_view_get_scripts (EphyWebExtension *self)
-{
-  return self->background->scripts;
 }
 
 GList *
