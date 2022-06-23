@@ -882,10 +882,22 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (WebKitUserContentManager) ucm = NULL;
-  WebKitSettings *settings;
+  g_autoptr (WebKitSettings) settings = NULL;
   WebKitWebContext *web_context;
   GtkWidget *web_view;
   const char *custom_user_agent;
+
+  settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
+                                                "enable-fullscreen", FALSE,
+                                                "enable-write-console-messages-to-stdout", TRUE,
+                                                "javascript-can-access-clipboard", ephy_web_extension_has_permission (web_extension, "clipboardWrite"),
+                                                NULL);
+  custom_user_agent = g_hash_table_lookup (manager->user_agent_overrides,
+                                           ephy_web_extension_get_name (web_extension));
+  if (custom_user_agent)
+    webkit_settings_set_user_agent (settings, custom_user_agent);
+  else
+    webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
 
   /* Create an own ucm so new scripts/css are only applied to this web_view */
   ucm = webkit_user_content_manager_new ();
@@ -900,26 +912,12 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                            "web-context", web_context,
                            "user-content-manager", ucm,
-                           "settings", ephy_embed_prefs_get_settings (),
+                           "settings", settings,
                            "related-view", ephy_web_extension_manager_get_background_web_view (manager, web_extension),
                            NULL);
 
   webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), ephy_web_extension_get_host_permissions (web_extension));
   g_signal_connect (web_view, "user-message-received", G_CALLBACK (extension_view_handle_user_message), web_extension);
-
-  settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (web_view));
-  webkit_settings_set_enable_write_console_messages_to_stdout (settings, TRUE);
-
-  if (ephy_web_extension_has_permission (web_extension, "clipboardWrite"))
-    webkit_settings_set_javascript_can_access_clipboard (settings, TRUE);
-
-  custom_user_agent = g_hash_table_lookup (manager->user_agent_overrides,
-                                           ephy_web_extension_get_name (web_extension));
-  if (custom_user_agent)
-    webkit_settings_set_user_agent (settings, custom_user_agent);
-  else
-    webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
-
   g_signal_connect (web_view, "decide-policy", G_CALLBACK (decide_policy_cb), web_extension);
 
   return web_view;
