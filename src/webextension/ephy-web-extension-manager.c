@@ -769,6 +769,17 @@ update_translations (EphyWebExtension *web_extension)
 }
 
 static void
+send_to_page_ready_cb (WebKitWebView    *web_view,
+                       GAsyncResult     *result,
+                       EphyWebExtension *web_extension)
+{
+  g_autoptr (WebKitUserMessage) response = webkit_web_view_send_message_to_page_finish (web_view, result, NULL);
+
+  update_translations (web_extension);
+  add_content_scripts (web_extension, EPHY_WEB_VIEW (web_view));
+}
+
+static void
 ephy_web_extension_manager_add_web_extension_to_webview (EphyWebExtensionManager *self,
                                                          EphyWebExtension        *web_extension,
                                                          EphyWindow              *window,
@@ -800,10 +811,7 @@ ephy_web_extension_manager_add_web_extension_to_webview (EphyWebExtensionManager
 
   webkit_web_view_send_message_to_page (WEBKIT_WEB_VIEW (web_view),
                                         webkit_user_message_new ("WebExtension.Initialize", g_variant_new_string (ephy_web_extension_get_guid (web_extension))),
-                                        NULL, NULL, NULL);
-
-  update_translations (web_extension);
-  add_content_scripts (web_extension, web_view);
+                                        NULL, (GAsyncReadyCallback)send_to_page_ready_cb, web_extension);
 }
 
 static void
