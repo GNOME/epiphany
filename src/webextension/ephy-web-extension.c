@@ -124,6 +124,16 @@ static void web_extension_add_resource (EphyWebExtension *self,
                                         gpointer          data,
                                         guint             len);
 
+static const char *
+get_string_member (JsonObject *object,
+                   const char *name)
+{
+  JsonNode *node = json_object_get_member (object, name);
+  if (!node || !JSON_NODE_HOLDS_VALUE (node))
+    return NULL;
+  return json_node_get_string (node);
+}
+
 gboolean
 ephy_web_extension_has_resource (EphyWebExtension *self,
                                  const char       *name)
@@ -570,23 +580,27 @@ web_extension_add_page_action (JsonObject *object,
                                gpointer    user_data)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  WebExtensionPageAction *page_action = g_malloc0 (sizeof (WebExtensionPageAction));
+  const char *default_icon = get_string_member (object, "default_icon");
+  g_autofree char *path = NULL;
+  WebExtensionPageAction *page_action;
+  WebExtensionIcon *icon;
 
+  if (!default_icon) {
+    g_debug ("We only support page_action's default_icon as a string currently.");
+    return;
+  }
+
+  page_action = g_malloc0 (sizeof (WebExtensionPageAction));
   self->page_action = page_action;
 
-  if (json_object_has_member (object, "default_icon")) {
-    WebExtensionIcon *icon = g_malloc (sizeof (WebExtensionIcon));
-    const char *default_icon = json_object_get_string_member (object, "default_icon");
-    g_autofree char *path = NULL;
+  icon = g_malloc (sizeof (WebExtensionIcon));
+  icon->size = -1;
+  icon->file = g_strdup (default_icon);
 
-    icon->size = -1;
-    icon->file = g_strdup (default_icon);
+  path = g_build_filename (self->base_location, icon->file, NULL);
+  icon->pixbuf = gdk_pixbuf_new_from_file (path, NULL);
 
-    path = g_build_filename (self->base_location, icon->file, NULL);
-    icon->pixbuf = gdk_pixbuf_new_from_file (path, NULL);
-
-    self->page_action->default_icons = g_list_append (self->page_action->default_icons, icon);
-  }
+  self->page_action->default_icons = g_list_append (self->page_action->default_icons, icon);
 }
 
 static void
