@@ -107,6 +107,7 @@ struct _EphyWebExtension {
   GCancellable *cancellable;
   char *local_storage_path;
   JsonNode *local_storage;
+  GHashTable *web_accessible_resources;
 };
 
 G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
@@ -753,6 +754,24 @@ web_extension_add_permission (JsonArray *array,
 }
 
 static void
+web_extension_add_web_accessible_resource (JsonArray *array,
+                                           guint      index_,
+                                           JsonNode  *element_node,
+                                           gpointer   user_data)
+{
+  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
+  const char *web_accessible_resource = json_node_get_string (element_node);
+
+  if (!web_accessible_resource)
+    return;
+
+  if (!self->web_accessible_resources)
+    self->web_accessible_resources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  g_hash_table_add (self->web_accessible_resources, g_strdup (web_accessible_resource));
+}
+
+static void
 ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (object);
@@ -775,6 +794,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->permissions, g_hash_table_unref);
   g_clear_pointer (&self->host_permissions, g_ptr_array_unref);
   g_clear_pointer (&self->local_storage, json_node_unref);
+  g_clear_pointer (&self->web_accessible_resources, g_hash_table_unref);
 
   g_clear_pointer (&self->page_action, web_extension_page_action_free);
   g_clear_pointer (&self->browser_action, web_extension_browser_action_free);
@@ -909,6 +929,20 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
     JsonArray *array = json_object_get_array_member (root_object, "permissions");
 
     json_array_foreach_element (array, web_extension_add_permission, self);
+  }
+
+  if (json_object_has_member (root_object, "web_accessible_resources")) {
+    JsonNode *node;
+    JsonArray *array;
+
+    node = json_object_get_member (root_object, "web_accessible_resources");
+    if (!JSON_NODE_HOLDS_ARRAY (node)) {
+      g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "web_accessible_resources is not an array");
+      return FALSE;
+    }
+
+    array = json_node_get_array (node);
+    json_array_foreach_element (array, web_extension_add_web_accessible_resource, self);
   }
 
   return TRUE;
@@ -1575,4 +1609,14 @@ ephy_web_extension_create_sender_object (EphyWebExtension *self,
   }
 
   return json_to_string (node, FALSE);
+}
+
+gboolean
+ephy_web_extension_has_web_accessible_resource (EphyWebExtension *self,
+                                                const char       *path)
+{
+  if (!self->web_accessible_resources)
+    return FALSE;
+
+  return g_hash_table_contains (self->web_accessible_resources, path);
 }

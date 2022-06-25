@@ -57,6 +57,7 @@ typedef enum {
   WEB_EXTENSION_ERROR_NOT_IMPLEMENTED = 1003,
   WEB_EXTENSION_ERROR_INVALID_MANIFEST = 1004,
   WEB_EXTENSION_ERROR_INVALID_XPI = 1005,
+  WEB_EXTENSION_ERROR_INVALID_HOST = 1006,
 } WebExtensionErrorCode;
 
 typedef struct {
@@ -167,6 +168,9 @@ void                   ephy_web_extension_clear_local_storage             (EphyW
 
 char                  *ephy_web_extension_create_sender_object            (EphyWebExtension *self,
                                                                           WebKitWebView     *web_view);
+
+gboolean               ephy_web_extension_has_web_accessible_resource     (EphyWebExtension *self,
+                                                                           const char       *path);
 
 G_END_DECLS
 

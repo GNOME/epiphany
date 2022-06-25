@@ -120,6 +120,19 @@ ephy_web_extension_manager_remove_from_list (EphyWebExtensionManager *self,
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
+static EphyWebExtension *
+ephy_web_extension_manager_get_extension_by_guid (EphyWebExtensionManager *self,
+                                                  const char              *guid)
+{
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *web_extension = g_ptr_array_index (self->web_extensions, i);
+    if (strcmp (guid, ephy_web_extension_get_guid (web_extension)) == 0)
+      return web_extension;
+  }
+
+  return NULL;
+}
+
 static void
 on_web_extension_loaded (GObject      *source_object,
                          GAsyncResult *result,
@@ -189,47 +202,57 @@ ephy_web_extension_manager_scan_directory_async (EphyWebExtensionManager *self,
 }
 
 static void
-main_context_web_extension_scheme_cb (WebKitURISchemeRequest *request,
-                                      gpointer                user_data)
-{
-  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
-  EphyWebExtension *web_extension = NULL;
-  const char *path;
-  const unsigned char *data;
-  gsize length;
-  g_autoptr (GInputStream) stream = NULL;
-  g_auto (GStrv) split = NULL;
-
-  path = webkit_uri_scheme_request_get_uri (request) + strlen ("ephy-webextension://");
-
-  split = g_strsplit (path, "/", -1);
-  for (guint i = 0; i < self->web_extensions->len; i++) {
-    EphyWebExtension *ext = g_ptr_array_index (self->web_extensions, i);
-
-    if (strcmp (ephy_web_extension_get_guid (ext), split[0]) == 0) {
-      web_extension = ext;
-      break;
-    }
-  }
-
-  if (!web_extension)
-    return;
-
-  /* FIXME: This needs to be filtered by the extension manifest's "web_accessible_resources"
-   * property which involves some pattern matching. */
-
-  data = ephy_web_extension_get_resource (web_extension, path + strlen (split[0]) + 1, &length);
-  if (!data)
-    return;
-
-  stream = g_memory_input_stream_new_from_data (data, length, NULL);
-  webkit_uri_scheme_request_finish (request, stream, length, NULL);
-}
-
-static void
 destroy_widget_list (GSList *widget_list)
 {
   g_slist_free_full (widget_list, (GDestroyNotify)gtk_widget_destroy);
+}
+
+static void
+ephy_webextension_scheme_cb (WebKitURISchemeRequest *request,
+                             gpointer                user_data)
+{
+  EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
+  EphyWebExtension *web_extension = user_data;
+  EphyWebExtension *target_web_extension;
+  g_autoptr (GInputStream) stream = NULL;
+  g_autoptr (GUri) uri = NULL;
+  g_autoptr (GError) error = NULL;
+  const unsigned char *data;
+  gsize length;
+
+  uri = g_uri_parse (webkit_uri_scheme_request_get_uri (request),
+                     G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_SCHEME_NORMALIZE,
+                     &error);
+  if (!uri) {
+    webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
+    return;
+  }
+
+  target_web_extension = ephy_web_extension_manager_get_extension_by_guid (self, g_uri_get_host (uri));
+  if (!target_web_extension) {
+    error = g_error_new (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_HOST, "Could not find extension %s", g_uri_get_host (uri));
+    webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
+    return;
+  }
+
+  /* If this is not originating from the same WebExtension view we must find it and filter it by web_accessible_resources. */
+  if (web_extension != target_web_extension) {
+    if (!ephy_web_extension_has_web_accessible_resource (target_web_extension, g_uri_get_path (uri) + 1)) {
+      error = g_error_new (G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "'%s' is not a web_accessible_resource", g_uri_get_path (uri));
+      webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
+      return;
+    }
+  }
+
+  data = ephy_web_extension_get_resource (target_web_extension, g_uri_get_path (uri) + 1, &length);
+  if (!data) {
+    error = g_error_new (G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "'%s' was not found", g_uri_get_path (uri));
+    webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
+    return;
+  }
+
+  stream = g_memory_input_stream_new_from_data (data, length, NULL);
+  webkit_uri_scheme_request_finish (request, stream, length, NULL);
 }
 
 static void
@@ -286,7 +309,7 @@ ephy_web_extension_manager_init (EphyWebExtensionManager *self)
   WebKitWebContext *web_context;
 
   web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
-  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", main_context_web_extension_scheme_cb, self, NULL);
+  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, NULL, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
 
@@ -799,35 +822,6 @@ page_attached_cb (HdyTabView *tab_view,
 }
 
 static void
-web_extension_cb (WebKitURISchemeRequest *request,
-                  gpointer                user_data)
-{
-  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
-  const char *path;
-  const unsigned char *data;
-  gsize length;
-  g_autoptr (GInputStream) stream = NULL;
-  g_autoptr (GError) error = NULL;
-
-  /* FIXME: For paths on different hosts we should support web_accessible_resources. */
-  path = webkit_uri_scheme_request_get_path (request);
-
-  /* FIXME: This may be the place to handle predefined messages and localized CSS:
-   * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization#predefined_messages
-   */
-
-  data = ephy_web_extension_get_resource (web_extension, path + 1, &length);
-  if (!data) {
-    error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "Resource not found: %s", path);
-    webkit_uri_scheme_request_finish_error (request, error);
-    return;
-  }
-
-  stream = g_memory_input_stream_new_from_data (data, length, NULL);
-  webkit_uri_scheme_request_finish (request, stream, length, NULL);
-}
-
-static void
 init_web_extension_api (WebKitWebContext *web_context,
                         EphyWebExtension *web_extension)
 {
@@ -918,7 +912,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
 
   web_context = webkit_web_context_new ();
 
-  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", web_extension_cb, web_extension, NULL);
+  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
   g_signal_connect_object (web_context, "initialize-web-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
@@ -1330,19 +1324,6 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
     ret = g_hash_table_lookup (table, web_view);
 
   return ret;
-}
-
-static EphyWebExtension *
-ephy_web_extension_manager_get_extension_by_guid (EphyWebExtensionManager *self,
-                                                  const char              *guid)
-{
-  for (guint i = 0; i < self->web_extensions->len; i++) {
-    EphyWebExtension *web_extension = g_ptr_array_index (self->web_extensions, i);
-    if (strcmp (guid, ephy_web_extension_get_guid (web_extension)) == 0)
-      return web_extension;
-  }
-
-  return NULL;
 }
 
 void
