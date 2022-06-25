@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-12 15:26+0000\n"
-"PO-Revision-Date: 2022-06-12 22:01+0300\n"
+"POT-Creation-Date: 2022-06-22 00:18+0000\n"
+"PO-Revision-Date: 2022-06-22 12:52+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1109,18 +1109,19 @@ msgstr ""
 "стран, веб-сайты, которые вы посещаете, и рекламодатели на этих сайтах, все "
 "ещё могут отслеживать вас."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "Выберите каталог"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_Выбрать"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
@@ -1130,38 +1131,42 @@ msgstr "_Выбрать"
 msgid "_Cancel"
 msgstr "_Отмена"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+msgid "Select the Destination"
+msgstr "Выберите место размещения"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "Скачать запрошенный"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "_Загрузить"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Тип: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "От: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "Где вы хотите сохранить файл?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Ошибка загрузки: %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "Загрузки"
 
@@ -2913,15 +2918,15 @@ msgstr "Если вы закроете это окно, все открытые 
 msgid "C_lose tabs"
 msgstr "_Закрыть вкладки"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "Сохранить ссылку как"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "Сохранить изображение как"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "Сохранить мультимедиа как"
 
@@ -4154,7 +4159,7 @@ msgstr "Веб-приложение '%s' не существует"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Веб-приложение '%s' не может быть удалено"
 
-#: src/webextension/api/runtime.c:121
+#: src/webextension/api/runtime.c:125
 #, c-format
 msgid "Options for %s"
 msgstr "Параметры для %s"
