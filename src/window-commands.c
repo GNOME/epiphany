@@ -2964,5 +2964,6 @@ window_cmd_extensions (GSimpleAction *action,
 
   dialog = ephy_web_extension_dialog_new ();
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_window_set_modal (GTK_WINDOW (dialog), FALSE);
   gtk_widget_show_all (dialog);
 }

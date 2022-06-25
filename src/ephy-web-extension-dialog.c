@@ -263,6 +263,7 @@ on_add_button_clicked (GtkButton *button,
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("_Open"),
                                         _("_Cancel"));
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), "WebExtensions");
