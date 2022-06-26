@@ -27,6 +27,7 @@
 
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
+#include "ephy-json-utils.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-web-extension.h"
@@ -68,10 +69,6 @@ typedef struct {
 
 typedef struct {
   char *page;
-} WebExtensionBackground;
-
-typedef struct {
-  char *page;
 } WebExtensionOptionsUI;
 
 typedef struct {
@@ -95,7 +92,7 @@ struct _EphyWebExtension {
   char *homepage_url;
   GList *icons;
   GList *content_scripts;
-  WebExtensionBackground *background;
+  char *background_page;
   GHashTable *page_action_map;
   WebExtensionPageAction *page_action;
   WebExtensionBrowserAction *browser_action;
@@ -115,16 +112,6 @@ G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean is_supported_scheme (const char *scheme);
-
-static const char *
-get_string_member (JsonObject *object,
-                   const char *name)
-{
-  JsonNode *node = json_object_get_member (object, name);
-  if (!node || !JSON_NODE_HOLDS_VALUE (node))
-    return NULL;
-  return json_node_get_string (node);
-}
 
 gboolean
 ephy_web_extension_has_resource (EphyWebExtension *self,
@@ -184,7 +171,7 @@ web_extension_icon_new (EphyWebExtension *self,
     if (!self->xpi) {
       g_autofree char *path = NULL;
       path = g_build_filename (self->base_location, file, NULL);
-      pixbuf = gdk_pixbuf_new_from_file (path, NULL);
+      pixbuf = gdk_pixbuf_new_from_file (path, &error);
     }
   } else {
     stream = g_memory_input_stream_new_from_data (data, length, NULL);
@@ -254,21 +241,6 @@ web_extension_options_ui_free (WebExtensionOptionsUI *options_ui)
   g_free (options_ui);
 }
 
-static WebExtensionBackground *
-web_extension_background_new (void)
-{
-  WebExtensionBackground *background = g_malloc0 (sizeof (WebExtensionBackground));
-
-  return background;
-}
-
-static void
-web_extension_background_free (WebExtensionBackground *background)
-{
-  g_clear_pointer (&background->page, g_free);
-  g_free (background);
-}
-
 static void
 web_extension_add_icon (JsonObject *object,
                         const char *member_name,
@@ -277,8 +249,14 @@ web_extension_add_icon (JsonObject *object,
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
   WebExtensionIcon *icon;
-  const char *file = json_node_get_string (member_node);
+  const char *file;
   gint64 size;
+
+  file = ephy_json_node_to_string (member_node);
+  if (!file) {
+    LOG ("Skipping icon as value is invalid");
+    return;
+  }
 
   size = g_ascii_strtoll (member_name, NULL, 0);
   if (size == 0) {
@@ -287,7 +265,6 @@ web_extension_add_icon (JsonObject *object,
   }
 
   icon = web_extension_icon_new (self, file, size);
-
   if (icon)
     self->icons = g_list_append (self->icons, icon);
 }
@@ -300,16 +277,22 @@ web_extension_add_browser_icons (JsonObject *object,
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
   WebExtensionIcon *icon;
-  const char *file = json_node_get_string (member_node);
+  const char *file;
   gint64 size;
+
+  file = ephy_json_node_to_string (member_node);
+  if (!file) {
+    LOG ("Skipping browser icon as value is invalid");
+    return;
+  }
 
   size = g_ascii_strtoll (member_name, NULL, 0);
   if (size == 0) {
     LOG ("Skipping %s as web extension browser icon as size is 0", file);
     return;
   }
-  icon = web_extension_icon_new (self, file, size);
 
+  icon = web_extension_icon_new (self, file, size);
   if (icon)
     self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
 }
@@ -386,7 +369,12 @@ web_extension_add_allow_list (JsonArray *array,
                               gpointer   user_data)
 {
   WebExtensionContentScript *content_script = user_data;
-  const char *match = json_node_get_string (element_node);
+  const char *match = ephy_json_node_to_string (element_node);
+
+  if (!match) {
+    LOG ("Skipping invalid content_script match rule");
+    return;
+  }
 
   if (g_strcmp0 (match, "<all_urls>") == 0) {
     g_ptr_array_add (content_script->allow_list, g_strdup ("https://*/*"));
@@ -404,8 +392,14 @@ web_extension_add_block_list (JsonArray *array,
                               gpointer   user_data)
 {
   WebExtensionContentScript *content_script = user_data;
+  const char *exclude = ephy_json_node_to_string (element_node);
 
-  g_ptr_array_add (content_script->block_list, g_strdup (json_node_get_string (element_node)));
+  if (!exclude) {
+    LOG ("Skipping invalid content_script exclude rule");
+    return;
+  }
+
+  g_ptr_array_add (content_script->block_list, g_strdup (exclude));
 }
 
 static void
@@ -415,8 +409,14 @@ web_extension_add_js (JsonArray *array,
                       gpointer   user_data)
 {
   WebExtensionContentScript *content_script = user_data;
+  const char *file = ephy_json_node_to_string (element_node);
 
-  g_ptr_array_add (content_script->js, g_strdup (json_node_get_string (element_node)));
+  if (!file) {
+    LOG ("Skipping invalid content_script js file");
+    return;
+  }
+
+  g_ptr_array_add (content_script->js, g_strdup (file));
 }
 
 static void
@@ -456,10 +456,15 @@ web_extension_add_content_script (JsonArray *array,
   WebKitUserContentInjectedFrames injected_frames = WEBKIT_USER_CONTENT_INJECT_TOP_FRAME;
   WebKitUserScriptInjectionTime injection_time = WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END;
   WebExtensionContentScript *content_script;
-  JsonObject *object = json_node_get_object (element_node);
+  JsonObject *object = ephy_json_node_get_object (element_node);
   JsonArray *child_array;
   const char *run_at;
   gboolean all_frames;
+
+  if (!object) {
+    LOG ("Skipping content script as invalid object");
+    return;
+  }
 
   /* TODO: The default value is "document_idle", which in WebKit term is document_end */
   run_at = json_object_get_string_member_with_default (object, "run_at", "document_idle");
@@ -468,35 +473,30 @@ web_extension_add_content_script (JsonArray *array,
   } else if (strcmp (run_at, "document_end") == 0) {
     injection_time = WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END;
   } else if (strcmp (run_at, "document_idle") == 0) {
-    g_warning ("run_at: document_idle not supported by WebKit, falling back to document_end");
+    LOG ("run_at: document_idle not supported by WebKit, falling back to document_end");
     injection_time = WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END;
   } else {
-    g_warning ("Unhandled run_at '%s' in web_extension, ignoring.", run_at);
+    LOG ("Unhandled run_at '%s' in web_extension, ignoring.", run_at);
     return;
   }
 
   /* all_frames */
-  all_frames = json_object_get_boolean_member_with_default (object, "all_frames", FALSE);
+  all_frames = ephy_json_object_get_boolean (object, "all_frames", FALSE);
   injected_frames = all_frames ? WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES : WEBKIT_USER_CONTENT_INJECT_TOP_FRAME;
 
   content_script = web_extension_content_script_new (injected_frames, injection_time);
-  if (json_object_has_member (object, "matches")) {
-    child_array = json_object_get_array_member (object, "matches");
+
+  if ((child_array = ephy_json_object_get_array (object, "matches")))
     json_array_foreach_element (child_array, web_extension_add_allow_list, content_script);
-  }
-  g_ptr_array_add (content_script->allow_list, NULL);
+  g_ptr_array_add (content_script->allow_list, NULL); /* This is a GStrv later. */
 
-  if (json_object_has_member (object, "exclude_matches")) {
-    child_array = json_object_get_array_member (object, "exclude_matches");
+  if ((child_array = ephy_json_object_get_array (object, "exclude_matches")))
     json_array_foreach_element (child_array, web_extension_add_block_list, content_script);
-  }
-  g_ptr_array_add (content_script->block_list, NULL);
+  g_ptr_array_add (content_script->block_list, NULL); /* This is a GStrv later. */
 
-  if (json_object_has_member (object, "js")) {
-    child_array = json_object_get_array_member (object, "js");
-    if (child_array)
-      json_array_foreach_element (child_array, web_extension_add_js, content_script);
-  }
+
+  if ((child_array = ephy_json_object_get_array (object, "js")))
+    json_array_foreach_element (child_array, web_extension_add_js, content_script);
 
   /* Create user scripts so that we can unload them if necessary */
   web_extension_content_script_build (self, content_script);
@@ -534,46 +534,53 @@ generate_background_page (EphyWebExtension *self,
 }
 
 static void
-web_extension_add_background (JsonObject *object,
-                              const char *member_name,
-                              JsonNode   *member_node,
-                              gpointer    user_data)
+web_extension_parse_background (EphyWebExtension *self,
+                                JsonObject       *object)
 {
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background
    * Limitations:
    *  - persistent with false is not supported yet.
    */
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
+  const char *page;
+  JsonArray *scripts;
 
-  if (!json_object_has_member (object, "scripts") && !json_object_has_member (object, "page") && !json_object_has_member (object, "persistent")) {
-    g_warning ("Invalid background section, it must be either scripts, page or persistent entry.");
-    return;
+  if ((page = ephy_json_object_get_string (object, "page")))
+    self->background_page = g_strdup (page);
+
+  if ((scripts = ephy_json_object_get_array (object, "scripts"))) {
+    if (self->background_page)
+      LOG ("background already has page set, ignoring scripts");
+    else
+      self->background_page = generate_background_page (self, scripts);
   }
 
-  if (!self->background)
-    self->background = web_extension_background_new ();
-
-  if (json_object_has_member (object, "scripts")) {
-    self->background->page = generate_background_page (self, json_object_get_array_member (object, "scripts"));
-  } else if (!self->background->page && json_object_has_member (object, "page")) {
-    self->background->page = g_strdup (json_object_get_string_member (object, "page"));
-  } else if (json_object_has_member (object, "persistent")) {
+  if (json_object_has_member (object, "persistent"))
     LOG ("persistent background setting is not handled in Epiphany");
-  }
+
+  if (!self->background_page)
+    LOG ("Invalid background object. Missing either scripts or page");
 }
 
 static void
-web_extension_add_page_action (JsonObject *object,
-                               gpointer    user_data)
+web_extension_parse_page_action (EphyWebExtension *self,
+                                 JsonObject       *object)
 {
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  const char *default_icon = get_string_member (object, "default_icon");
+  const char *default_icon = ephy_json_object_get_string (object, "default_icon");
   g_autofree char *path = NULL;
   WebExtensionPageAction *page_action;
   WebExtensionIcon *icon;
+  g_autoptr (GFile) base = NULL;
+  g_autoptr (GFile) icon_file = NULL;
 
   if (!default_icon) {
-    g_debug ("We only support page_action's default_icon as a string currently.");
+    LOG ("We only support page_action's default_icon as a string currently.");
+    return;
+  }
+  base = g_file_new_for_path (self->base_location);
+  icon_file = g_file_resolve_relative_path (base, default_icon);
+
+  if (!g_file_has_prefix (icon_file, base)) {
+    LOG ("page_action's default_icon is outside of the extension");
     return;
   }
 
@@ -583,9 +590,7 @@ web_extension_add_page_action (JsonObject *object,
   icon = g_malloc (sizeof (WebExtensionIcon));
   icon->size = -1;
   icon->file = g_strdup (default_icon);
-
-  path = g_build_filename (self->base_location, icon->file, NULL);
-  icon->pixbuf = gdk_pixbuf_new_from_file (path, NULL);
+  icon->pixbuf = gdk_pixbuf_new_from_file (g_file_peek_path (icon_file), NULL);
 
   self->page_action->default_icons = g_list_append (self->page_action->default_icons, icon);
 }
@@ -643,65 +648,56 @@ web_extension_get_translation (EphyWebExtension *self,
 }
 
 char *
-ephy_web_extension_manifest_get_key (EphyWebExtension *self,
-                                     JsonObject       *object,
-                                     char             *key)
+ephy_web_extension_manifest_get_localized_string (EphyWebExtension *self,
+                                                  JsonObject       *object,
+                                                  char             *name)
 {
-  char *value = NULL;
+  g_autofree char *value = g_strdup (ephy_json_object_get_string (object, name));
+  if (!value)
+    return g_strdup ("");
 
-  if (json_object_has_member (object, key)) {
-    g_autofree char *ret = g_strdup (json_object_get_string_member (object, key));
+  /* Translation are requested with a unique string, e.g.:
+   * __MSG_unique_name__ but stored as unique_name in messages.json.
+   * Let's check for this prefix and suffix and extract the unique name
+   */
+  if (g_str_has_prefix (value, "__MSG_") && g_str_has_suffix (value, "__")) {
+    /* FIXME: Set current locale */
+    g_autofree char *locale = g_strdup ("en");
 
-    /* Translation are requested with a unique string, e.g.:
-     * __MSG_unique_name__ but stored as unique_name in messages.json.
-     * Let's check for this prefix and suffix and extract the unique name
-     */
-    if (g_str_has_prefix (ret, "__MSG_") && g_str_has_suffix (ret, "__")) {
-      /* FIXME: Set current locale */
-      g_autofree char *locale = g_strdup ("en");
-
-      /* Remove trailing __ */
-      ret[strlen (ret) - 2] = '\0';
-      value = web_extension_get_translation (self, locale, ret + strlen ("__MSG_"));
-    } else {
-      value = g_strdup (ret);
-    }
+    /* Remove trailing __ */
+    value[strlen (value) - 2] = '\0';
+    return web_extension_get_translation (self, locale, value + strlen ("__MSG_"));
   }
 
-  return value;
+  return g_steal_pointer (&value);
 }
 
 static void
-web_extension_add_browser_action (JsonObject *object,
-                                  gpointer    user_data)
+web_extension_parse_browser_action (EphyWebExtension *self,
+                                    JsonObject       *object)
 {
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
   WebExtensionBrowserAction *browser_action = g_malloc0 (sizeof (WebExtensionBrowserAction));
 
-  g_clear_object (&self->browser_action);
   self->browser_action = browser_action;
-
-  if (json_object_has_member (object, "default_title")) {
-    self->browser_action->title = ephy_web_extension_manifest_get_key (self, object, "default_title");
-  }
+  self->browser_action->title = ephy_web_extension_manifest_get_localized_string (self, object, "default_title");
+  self->browser_action->popup = g_strdup (ephy_json_object_get_string (object, "default_popup"));
 
   if (json_object_has_member (object, "default_icon")) {
-    /* defaullt_icon can be Object or String */
     JsonNode *icon_node = json_object_get_member (object, "default_icon");
 
+    /* default_icon can be Object or String */
     if (json_node_get_node_type (icon_node) == JSON_NODE_OBJECT) {
       JsonObject *icon_object = json_object_get_object_member (object, "default_icon");
       json_object_foreach_member (icon_object, web_extension_add_browser_icons, self);
-    } else {
+    } else if (JSON_NODE_HOLDS_VALUE (icon_node) && json_node_get_value_type (icon_node) == G_TYPE_STRING) {
       const char *default_icon = json_object_get_string_member (object, "default_icon");
       WebExtensionIcon *icon = web_extension_icon_new (self, default_icon, -1);
 
       self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
+    } else {
+      LOG ("browser_action's default_icon is invalid");
     }
   }
-
-  if (json_object_has_member (object, "default_popup"))
-    self->browser_action->popup = g_strdup (json_object_get_string_member (object, "default_popup"));
 }
 
 static void
@@ -714,15 +710,17 @@ web_extension_browser_action_free (WebExtensionBrowserAction *browser_action)
 }
 
 static void
-web_extension_add_options_ui (JsonObject *object,
-                              gpointer    user_data)
+web_extension_parse_options_ui (EphyWebExtension *self,
+                                JsonObject       *object)
 {
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  const char *page = json_object_get_string_member (object, "page");
-  WebExtensionOptionsUI *options_ui = web_extension_options_ui_new (page);
+  const char *page = ephy_json_object_get_string (object, "page");
 
-  g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
-  self->options_ui = options_ui;
+  if (!page) {
+    LOG ("Skipping options_ui without page");
+    return;
+  }
+
+  self->options_ui = web_extension_options_ui_new (page);
 }
 
 static void
@@ -732,12 +730,17 @@ web_extension_add_permission (JsonArray *array,
                               gpointer   user_data)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  const char *permission = json_node_get_string (element_node);
+  const char *permission = ephy_json_node_to_string (element_node);
+
+  if (!permission) {
+    LOG ("Skipping invalid permission");
+    return;
+  }
 
   if (strstr (permission, "://") != NULL) {
     if (!g_str_has_prefix (permission, "*://") &&
         !is_supported_scheme (g_uri_peek_scheme (permission))) {
-      g_warning ("Unsupported host permission: %s", permission);
+      LOG ("Unsupported host permission: %s", permission);
       return;
     }
     g_ptr_array_insert (self->host_permissions, 0, g_strdup (permission));
@@ -760,7 +763,7 @@ web_extension_add_web_accessible_resource (JsonArray *array,
                                            gpointer   user_data)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  const char *web_accessible_resource = json_node_get_string (element_node);
+  const char *web_accessible_resource = ephy_json_node_to_string (element_node);
 
   if (!web_accessible_resource)
     return;
@@ -789,7 +792,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_list (&self->icons, (GDestroyNotify)web_extension_icon_free);
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
   g_clear_pointer (&self->resources, g_hash_table_unref);
-  g_clear_pointer (&self->background, web_extension_background_free);
+  g_clear_pointer (&self->background_page, g_free);
   g_clear_pointer (&self->options_ui, web_extension_options_ui_free);
   g_clear_pointer (&self->permissions, g_hash_table_unref);
   g_clear_pointer (&self->host_permissions, g_ptr_array_unref);
@@ -833,13 +836,13 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 {
   g_autoptr (GError) local_error = NULL;
   g_autoptr (JsonParser) parser = NULL;
-  JsonObject *icons_object = NULL;
-  JsonArray *content_scripts_array = NULL;
-  JsonObject *background_object = NULL;
-  JsonNode *root = NULL;
-  JsonObject *root_object = NULL;
+  JsonNode *root;
+  JsonObject *root_object;
+  JsonObject *child_object;
+  JsonArray *child_array;
   gsize length = 0;
   const guchar *manifest;
+  g_autofree char *extension_basename = NULL;
   g_autofree char *local_storage_contents = NULL;
 
   manifest = ephy_web_extension_get_resource (self, "manifest.json", &length);
@@ -866,17 +869,27 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
     return FALSE;
   }
 
-  /* FIXME: Implement i18n: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization#retrieving_localized_strings_in_manifests */
   self->manifest = g_strndup ((char *)manifest, length);
-  self->description = ephy_web_extension_manifest_get_key (self, root_object, "description");
-  self->manifest_version = json_object_get_int_member (root_object, "manifest_version");
-  self->name = ephy_web_extension_manifest_get_key (self, root_object, "name");
-  self->version = ephy_web_extension_manifest_get_key (self, root_object, "version");
-  self->homepage_url = ephy_web_extension_manifest_get_key (self, root_object, "homepage_url");
-  self->author = ephy_web_extension_manifest_get_key (self, root_object, "author");
+  self->manifest_version = ephy_json_object_get_int (root_object, "manifest_version");
+  if (self->manifest_version != 2) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Only manifest_version 2 is supported");
+    return FALSE;
+  }
 
+  self->description = ephy_web_extension_manifest_get_localized_string (self, root_object, "description");
+  self->name = ephy_web_extension_manifest_get_localized_string (self, root_object, "name");
+  self->version = ephy_web_extension_manifest_get_localized_string (self, root_object, "version");
+  self->homepage_url = ephy_web_extension_manifest_get_localized_string (self, root_object, "homepage_url");
+  self->author = ephy_web_extension_manifest_get_localized_string (self, root_object, "author");
+
+  if (!*self->version || !*self->name) {
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Missing name or version");
+    return FALSE;
+  }
+
+  extension_basename = g_path_get_basename (self->base_location);
   self->local_storage_path = g_build_filename (ephy_config_dir (), "web_extensions",
-                                               g_path_get_basename (self->base_location), "local-storage.json", NULL);
+                                               extension_basename, "local-storage.json", NULL);
 
   if (g_file_get_contents (self->local_storage_path, &local_storage_contents, NULL, NULL)) {
     self->local_storage = json_from_string (local_storage_contents, &local_error);
@@ -889,61 +902,29 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   if (!self->local_storage)
     self->local_storage = json_node_init_object (json_node_alloc (), json_object_new ());
 
-  if (json_object_has_member (root_object, "icons")) {
-    icons_object = json_object_get_object_member (root_object, "icons");
+  if ((child_object = ephy_json_object_get_object (root_object, "icons")))
+    json_object_foreach_member (child_object, web_extension_add_icon, self);
 
-    json_object_foreach_member (icons_object, web_extension_add_icon, self);
-  }
+  if ((child_array = ephy_json_object_get_array (root_object, "content_scripts")))
+    json_array_foreach_element (child_array, web_extension_add_content_script, self);
 
-  if (json_object_has_member (root_object, "content_scripts")) {
-    content_scripts_array = json_object_get_array_member (root_object, "content_scripts");
+  if ((child_object = ephy_json_object_get_object (root_object, "background")))
+    web_extension_parse_background (self, child_object);
 
-    json_array_foreach_element (content_scripts_array, web_extension_add_content_script, self);
-  }
+  if ((child_object = ephy_json_object_get_object (root_object, "page_action")))
+    web_extension_parse_page_action (self, child_object);
 
-  if (json_object_has_member (root_object, "background")) {
-    background_object = json_object_get_object_member (root_object, "background");
+  if ((child_object = ephy_json_object_get_object (root_object, "browser_action")))
+    web_extension_parse_browser_action (self, child_object);
 
-    json_object_foreach_member (background_object, web_extension_add_background, self);
-  }
+  if ((child_object = ephy_json_object_get_object (root_object, "options_ui")))
+    web_extension_parse_options_ui (self, child_object);
 
-  if (json_object_has_member (root_object, "page_action")) {
-    JsonObject *page_action_object = json_object_get_object_member (root_object, "page_action");
+  if ((child_array = ephy_json_object_get_array (root_object, "permissions")))
+    json_array_foreach_element (child_array, web_extension_add_permission, self);
 
-    web_extension_add_page_action (page_action_object, self);
-  }
-
-  if (json_object_has_member (root_object, "browser_action")) {
-    JsonObject *browser_action_object = json_object_get_object_member (root_object, "browser_action");
-
-    web_extension_add_browser_action (browser_action_object, self);
-  }
-
-  if (json_object_has_member (root_object, "options_ui")) {
-    JsonObject *browser_action_object = json_object_get_object_member (root_object, "options_ui");
-
-    web_extension_add_options_ui (browser_action_object, self);
-  }
-
-  if (json_object_has_member (root_object, "permissions")) {
-    JsonArray *array = json_object_get_array_member (root_object, "permissions");
-
-    json_array_foreach_element (array, web_extension_add_permission, self);
-  }
-
-  if (json_object_has_member (root_object, "web_accessible_resources")) {
-    JsonNode *node;
-    JsonArray *array;
-
-    node = json_object_get_member (root_object, "web_accessible_resources");
-    if (!JSON_NODE_HOLDS_ARRAY (node)) {
-      g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "web_accessible_resources is not an array");
-      return FALSE;
-    }
-
-    array = json_node_get_array (node);
-    json_array_foreach_element (array, web_extension_add_web_accessible_resource, self);
-  }
+  if ((child_array = ephy_json_object_get_array (root_object, "web_accessible_resources")))
+    json_array_foreach_element (child_array, web_extension_add_web_accessible_resource, self);
 
   return TRUE;
 }
@@ -1184,13 +1165,13 @@ ephy_web_extension_has_browser_action (EphyWebExtension *self)
 gboolean
 ephy_web_extension_has_background_web_view (EphyWebExtension *self)
 {
-  return !!self->background;
+  return !!self->background_page;
 }
 
 const char *
 ephy_web_extension_background_web_view_get_page (EphyWebExtension *self)
 {
-  return self->background->page;
+  return self->background_page;
 }
 
 GList *

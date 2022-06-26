@@ -138,13 +138,14 @@ on_web_extension_loaded (GObject      *source_object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
+  GFile *target = G_FILE (source_object);
   g_autoptr (GError) error = NULL;
   EphyWebExtension *web_extension;
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
 
   web_extension = ephy_web_extension_load_finished (source_object, result, &error);
   if (!web_extension) {
-    g_warning ("Failed to load extension: %s", error->message);
+    g_warning ("Failed to load extension %s: %s", g_file_peek_path (target), error->message);
     return;
   }
 

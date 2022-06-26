@@ -9,6 +9,7 @@ ephywebextension_src = [
   'webextension/api/storage.c',
   'webextension/api/tabs.c',
   'webextension/api/windows.c',
+  'webextension/ephy-json-utils.c',
   'webextension/ephy-web-extension-manager.c',
   'webextension/ephy-web-extension.c',
 ]
