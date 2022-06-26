@@ -61,7 +61,8 @@ pageaction_handler_seticon (EphyWebExtension  *self,
                             GError           **error)
 {
   GtkWidget *action;
-  g_autoptr (JSCValue) path = NULL;
+  g_autofree char *path_str = NULL;
+  g_autoptr (JSCValue) path_value = NULL;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
@@ -71,11 +72,16 @@ pageaction_handler_seticon (EphyWebExtension  *self,
     return NULL;
   }
 
-  path = jsc_value_object_get_property (value, "path");
-  pixbuf = ephy_web_extension_load_pixbuf (self, jsc_value_to_string (path));
+  path_value = jsc_value_object_get_property (value, "path");
+  if (jsc_value_is_string (path_value)) {
+    path_str = jsc_value_to_string (path_value);
+    pixbuf = ephy_web_extension_load_pixbuf (self, path_str, -1);
+  } else {
+    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
+    return NULL;
+  }
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_bin_get_child (GTK_BIN (action))), pixbuf);
-
   return NULL;
 }
 

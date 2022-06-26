@@ -42,7 +42,6 @@
 
 typedef struct {
   gint64 size;
-  char *file;
   GdkPixbuf *pixbuf;
 } WebExtensionIcon;
 
@@ -156,35 +155,17 @@ ephy_web_extension_get_resource_as_string (EphyWebExtension *self,
 
 static WebExtensionIcon *
 web_extension_icon_new (EphyWebExtension *self,
-                        const char       *file,
+                        const char       *resource_path,
                         gint64            size)
 {
   WebExtensionIcon *icon = NULL;
-  g_autoptr (GInputStream) stream = NULL;
-  g_autoptr (GError) error = NULL;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
-  const unsigned char *data = NULL;
-  gsize length;
 
-  data = ephy_web_extension_get_resource (self, file, &length);
-  if (!data) {
-    if (!self->xpi) {
-      g_autofree char *path = NULL;
-      path = g_build_filename (self->base_location, file, NULL);
-      pixbuf = gdk_pixbuf_new_from_file (path, &error);
-    }
-  } else {
-    stream = g_memory_input_stream_new_from_data (data, length, NULL);
-    pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
-  }
-
-  if (!pixbuf) {
-    g_warning ("Could not read web_extension icon: %s", error ? error->message : "");
+  pixbuf = ephy_web_extension_load_pixbuf (self, resource_path, size);
+  if (!pixbuf)
     return NULL;
-  }
 
-  icon = g_malloc0 (sizeof (WebExtensionIcon));
-  icon->file = g_strdup (file);
+  icon = g_new (WebExtensionIcon, 1);
   icon->size = size;
   icon->pixbuf = g_steal_pointer (&pixbuf);
 
@@ -194,7 +175,6 @@ web_extension_icon_new (EphyWebExtension *self,
 static void
 web_extension_icon_free (WebExtensionIcon *icon)
 {
-  g_clear_pointer (&icon->file, g_free);
   g_clear_object (&icon->pixbuf);
   g_free (icon);
 }
@@ -249,22 +229,22 @@ web_extension_add_icon (JsonObject *object,
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
   WebExtensionIcon *icon;
-  const char *file;
+  const char *path;
   gint64 size;
 
-  file = ephy_json_node_to_string (member_node);
-  if (!file) {
+  path = ephy_json_node_to_string (member_node);
+  if (!path) {
     LOG ("Skipping icon as value is invalid");
     return;
   }
 
   size = g_ascii_strtoll (member_name, NULL, 0);
   if (size == 0) {
-    LOG ("Skipping %s as web extension icon as size is 0", file);
+    LOG ("Skipping %s as web extension icon as size is 0", path);
     return;
   }
 
-  icon = web_extension_icon_new (self, file, size);
+  icon = web_extension_icon_new (self, path, size);
   if (icon)
     self->icons = g_list_append (self->icons, icon);
 }
@@ -307,7 +287,7 @@ ephy_web_extension_get_icon (EphyWebExtension *self,
     WebExtensionIcon *icon = list->data;
 
     if (icon->size == size)
-      return gdk_pixbuf_scale_simple (icon->pixbuf, size, size, GDK_INTERP_BILINEAR);
+      return gdk_pixbuf_copy (icon->pixbuf);
 
     if (!icon_fallback || icon->size > icon_fallback->size)
       icon_fallback = icon;
@@ -566,32 +546,23 @@ web_extension_parse_page_action (EphyWebExtension *self,
                                  JsonObject       *object)
 {
   const char *default_icon = ephy_json_object_get_string (object, "default_icon");
-  g_autofree char *path = NULL;
-  WebExtensionPageAction *page_action;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
   WebExtensionIcon *icon;
-  g_autoptr (GFile) base = NULL;
-  g_autoptr (GFile) icon_file = NULL;
 
   if (!default_icon) {
     LOG ("We only support page_action's default_icon as a string currently.");
     return;
   }
-  base = g_file_new_for_path (self->base_location);
-  icon_file = g_file_resolve_relative_path (base, default_icon);
 
-  if (!g_file_has_prefix (icon_file, base)) {
-    LOG ("page_action's default_icon is outside of the extension");
+  pixbuf = ephy_web_extension_load_pixbuf (self, default_icon, -1);
+  if (!pixbuf)
     return;
-  }
 
-  page_action = g_malloc0 (sizeof (WebExtensionPageAction));
-  self->page_action = page_action;
-
-  icon = g_malloc (sizeof (WebExtensionIcon));
+  icon = g_new (WebExtensionIcon, 1);
   icon->size = -1;
-  icon->file = g_strdup (default_icon);
-  icon->pixbuf = gdk_pixbuf_new_from_file (g_file_peek_path (icon_file), NULL);
+  icon->pixbuf = g_steal_pointer (&pixbuf);
 
+  self->page_action = g_new0 (WebExtensionPageAction, 1);
   self->page_action->default_icons = g_list_append (self->page_action->default_icons, icon);
 }
 
@@ -692,8 +663,8 @@ web_extension_parse_browser_action (EphyWebExtension *self,
     } else if (JSON_NODE_HOLDS_VALUE (icon_node) && json_node_get_value_type (icon_node) == G_TYPE_STRING) {
       const char *default_icon = json_object_get_string_member (object, "default_icon");
       WebExtensionIcon *icon = web_extension_icon_new (self, default_icon, -1);
-
-      self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
+      if (icon)
+        self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
     } else {
       LOG ("browser_action's default_icon is invalid");
     }
@@ -1128,13 +1099,32 @@ ephy_web_extension_load_async (GFile               *target,
 
 GdkPixbuf *
 ephy_web_extension_load_pixbuf (EphyWebExtension *self,
-                                char             *file)
+                                const char       *resource_path,
+                                int               size)
 {
-  g_autofree gchar *path = NULL;
+  g_autoptr (GInputStream) stream = NULL;
+  g_autoptr (GError) error = NULL;
+  GdkPixbuf *pixbuf;
+  const unsigned char *data = NULL;
+  gsize length;
 
-  path = g_build_filename (self->base_location, file, NULL);
+  if (*resource_path == '/')
+    resource_path++;
 
-  return gdk_pixbuf_new_from_file (path, NULL);
+  data = ephy_web_extension_get_resource (self, resource_path, &length);
+  if (!data) {
+    g_warning ("Failed to find web extension icon %s", resource_path);
+    return NULL;
+  }
+
+  stream = g_memory_input_stream_new_from_data (data, length, NULL);
+  pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream, size, size, TRUE, NULL, &error);
+  if (!pixbuf) {
+    g_warning ("Could not load web extension icon: %s", error->message);
+    return NULL;
+  }
+
+  return pixbuf;
 }
 
 void

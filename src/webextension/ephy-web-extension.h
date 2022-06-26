@@ -94,7 +94,8 @@ EphyWebExtension      *ephy_web_extension_load_finished                   (GObje
                                                                            GError       **error);
 
 GdkPixbuf             *ephy_web_extension_load_pixbuf                     (EphyWebExtension *self,
-                                                                           char             *file);
+                                                                           const char       *resource_path,
+                                                                           int               size);
 
 gboolean               ephy_web_extension_has_page_action                 (EphyWebExtension *self);
 
