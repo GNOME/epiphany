@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-12 15:26+0000\n"
-"PO-Revision-Date: 2022-06-13 10:16+0430\n"
+"POT-Creation-Date: 2022-06-22 00:18+0000\n"
+"PO-Revision-Date: 2022-06-28 14:59+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -565,16 +565,16 @@ msgstr ""
 "دهندهٔ اینترنتی شما، حکومت شما، حکومت‌های دیگر، وب‌گاه‌هایی که بازدید می‌کنید و آگهی "
 "دهنده‌ها در این وب‌گاه‌ها ممکن است هم‌چنان شما را ردگیری کنند."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "گزینش یک شاخه"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_گزینش"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
+#: embed/ephy-download.c:682 embed/ephy-download.c:688 embed/ephy-download.c:739
 #: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
 #: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
@@ -584,38 +584,42 @@ msgstr "_گزینش"
 msgid "_Cancel"
 msgstr "_لغو"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+msgid "Select the Destination"
+msgstr "گزینش مقصد"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "بارگیری درخواست شد"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "_بارگیری"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "گونه: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "از: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "می‌خواهید پرونده را کجا ذخیره کنید؟"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "پایان بارگیری %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "بارگیری تمام شد"
 
@@ -2325,15 +2329,15 @@ msgstr "اگر این پنجره را ببندید، همهٔ زبانه‌ها�
 msgid "C_lose tabs"
 msgstr "بستن _زبانه‌ها"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "ذخیرهٔ پیوند به نام"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "ذخیرهٔ تصویر به نام"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "ذخیرهٔ رسانه به عنوان"
 
@@ -3559,7 +3563,7 @@ msgstr "برنامهٔ وب «%s» وجود ندارد"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "برنامهٔ وب «%s» نتوانست حذف شود"
 
-#: src/webextension/api/runtime.c:121
+#: src/webextension/api/runtime.c:125
 #, c-format
 msgid "Options for %s"
 msgstr "گزینه‌های %s"
