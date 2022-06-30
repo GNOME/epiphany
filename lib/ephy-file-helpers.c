@@ -892,6 +892,8 @@ ephy_copy_directory (const char *source,
         return;
       }
     }
+  } else {
+    g_warning ("Copying the file type of %s isn't supported.", source);
   }
 }
 

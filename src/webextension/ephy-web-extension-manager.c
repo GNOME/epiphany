@@ -377,29 +377,40 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   g_autoptr (GFileInfo) file_info = NULL;
   gboolean is_xpi = FALSE;
   g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) web_extensions_dir = NULL;
 
-  basename = g_file_get_basename (file);
-  is_xpi = g_str_has_suffix (basename, ".xpi");
+  web_extensions_dir = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
+  is_xpi = g_str_has_suffix (g_file_peek_path (file), ".xpi");
 
   /* FIXME: Make this async. */
 
-  if (!is_xpi) {
-    g_autoptr (GFile) source = NULL;
+  if (is_xpi) {
+    /* If we are given an .xpi file its a direct copy. */
+    basename = g_file_get_basename (file);
+    target = g_file_get_child (web_extensions_dir, basename);
 
-    /* Get parent directory */
-    source = g_file_get_parent (file);
-    target = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", g_file_get_basename (source), NULL);
-
-    ephy_copy_directory (g_file_get_path (source), g_file_get_path (target));
-  } else {
-    target = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", g_file_get_basename (file), NULL);
+    if (!g_file_make_directory_with_parents (web_extensions_dir, NULL, &error)) {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+        g_warning ("Failed to create web_extensions directory: %s", error->message);
+        return;
+      }
+      g_clear_error (&error);
+    }
 
     if (!g_file_copy (file, target, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
-        g_warning ("Could not copy file for web_extensions: %s", error->message);
+        g_warning ("Could not copy file for web_extension: %s", error->message);
         return;
       }
+      g_clear_error (&error);
     }
+  } else {
+    /* Otherwise we copy the parent directory. */
+    g_autoptr (GFile) parent = g_file_get_parent (file);
+    basename = g_file_get_basename (parent);
+    target = g_file_get_child (web_extensions_dir, basename);
+
+    ephy_copy_directory (g_file_peek_path (parent), g_file_peek_path (target));
   }
 
   if (target) {

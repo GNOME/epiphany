@@ -926,7 +926,6 @@ load_directory_or_xpi_ready_cb (GFile        *target,
   GTask *load_task = user_data;
   g_autoptr (GError) error = NULL;
   g_autoptr (GHashTable) resources = NULL;
-  g_autoptr (GFile) parent = NULL;
   gboolean was_xpi = GPOINTER_TO_UINT (g_task_get_task_data (G_TASK (result)));
 
   resources = g_task_propagate_pointer (G_TASK (result), &error);
@@ -935,11 +934,9 @@ load_directory_or_xpi_ready_cb (GFile        *target,
     return;
   }
 
-  parent = g_file_get_parent (target);
-
   web_extension = g_object_new (EPHY_TYPE_WEB_EXTENSION, NULL);
   web_extension->xpi = was_xpi;
-  web_extension->base_location = g_file_get_path (parent);
+  web_extension->base_location = g_file_get_path (target);
   web_extension->resources = g_steal_pointer (&resources);
 
   if (!ephy_web_extension_parse_manifest (web_extension, &error)) {
@@ -1145,7 +1142,9 @@ ephy_web_extension_remove (EphyWebExtension *self)
     if (!ephy_file_delete_dir_recursively (self->base_location, &error))
       g_warning ("Could not delete web_extension from %s: %s", self->base_location, error->message);
   } else {
-    g_unlink (self->base_location);
+    g_autoptr (GFile) file = g_file_new_for_path (self->base_location);
+    if (!g_file_delete (file, NULL, &error))
+      g_warning ("Could not delete web_extension %s: %s", self->base_location, error->message);
   }
 }
 
