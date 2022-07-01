@@ -27,11 +27,11 @@
 #include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 
-static char *
-runtime_handler_get_browser_info (EphyWebExtensionSender  *sender,
-                                  char                    *name,
-                                  JSCValue                *args,
-                                  GError                 **error)
+static void
+runtime_handler_get_browser_info (EphyWebExtensionSender *sender,
+                                  char                   *name,
+                                  JSCValue               *args,
+                                  GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -47,7 +47,7 @@ runtime_handler_get_browser_info (EphyWebExtensionSender  *sender,
 
   root = json_builder_get_root (builder);
 
-  return json_to_string (root, FALSE);
+  g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
 static const char *
@@ -66,11 +66,11 @@ get_arch (void)
 #endif
 }
 
-static char *
-runtime_handler_get_platform_info (EphyWebExtensionSender  *sender,
-                                   char                    *name,
-                                   JSCValue                *args,
-                                   GError                 **error)
+static void
+runtime_handler_get_platform_info (EphyWebExtensionSender *sender,
+                                   char                   *name,
+                                   JSCValue               *args,
+                                   GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -88,7 +88,7 @@ runtime_handler_get_platform_info (EphyWebExtensionSender  *sender,
 
   root = json_builder_get_root (builder);
 
-  return json_to_string (root, FALSE);
+  g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
 static gboolean
@@ -143,11 +143,11 @@ runtime_handler_send_message (EphyWebExtensionSender *sender,
   return;
 }
 
-static char *
-runtime_handler_open_options_page (EphyWebExtensionSender  *sender,
-                                   char                    *name,
-                                   JSCValue                *args,
-                                   GError                 **error)
+static void
+runtime_handler_open_options_page (EphyWebExtensionSender *sender,
+                                   char                   *name,
+                                   JSCValue               *args,
+                                   GTask                  *task)
 {
   const char *options_ui = ephy_web_extension_get_option_ui_page (sender->extension);
   EphyShell *shell = ephy_shell_get_default ();
@@ -157,8 +157,8 @@ runtime_handler_open_options_page (EphyWebExtensionSender  *sender,
   GtkWindow *new_window;
 
   if (!options_ui) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Extension does not have an options page");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Extension does not have an options page");
+    return;
   }
 
   title = g_strdup_printf (_("Options for %s"), ephy_web_extension_get_name (sender->extension));
@@ -178,16 +178,13 @@ runtime_handler_open_options_page (EphyWebExtensionSender  *sender,
   gtk_widget_show (new_web_view);
   gtk_window_present (new_window);
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionSyncApiHandler runtime_sync_handlers[] = {
+static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
   {"getBrowserInfo", runtime_handler_get_browser_info},
   {"getPlatformInfo", runtime_handler_get_platform_info},
   {"openOptionsPage", runtime_handler_open_options_page},
-};
-
-static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
   {"sendMessage", runtime_handler_send_message},
 };
 
@@ -197,26 +194,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtensionSender *sender,
                                         JSCValue               *args,
                                         GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-  guint idx;
-
-  for (idx = 0; idx < G_N_ELEMENTS (runtime_sync_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = runtime_sync_handlers[idx];
-    char *ret;
-
-    if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (sender, name, args, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
-      return;
-    }
-  }
-
-  for (idx = 0; idx < G_N_ELEMENTS (runtime_async_handlers); idx++) {
+  for (guint idx = 0; idx < G_N_ELEMENTS (runtime_async_handlers); idx++) {
     EphyWebExtensionAsyncApiHandler handler = runtime_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
@@ -225,7 +203,5 @@ ephy_web_extension_api_runtime_handler (EphyWebExtensionSender *sender,
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
 }

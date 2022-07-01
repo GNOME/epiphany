@@ -560,12 +560,8 @@ ephy_web_extension_api_cookies_handler (EphyWebExtensionSender *sender,
                                         JSCValue               *args,
                                         GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-
   if (!ephy_web_extension_has_permission (sender->extension, "cookies")) {
-    g_warning ("Extension %s tried to use cookies without permission.", ephy_web_extension_get_name (sender->extension));
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
-    g_task_return_error (task, g_steal_pointer (&error));
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return;
   }
 
@@ -578,7 +574,5 @@ ephy_web_extension_api_cookies_handler (EphyWebExtensionSender *sender,
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
 }

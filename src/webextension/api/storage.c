@@ -57,11 +57,11 @@ strv_from_value (JSCValue *array)
   return g_strv_builder_end (builder);
 }
 
-static char *
-storage_handler_local_set (EphyWebExtensionSender  *sender,
-                           char                    *name,
-                           JSCValue                *args,
-                           GError                 **error)
+static void
+storage_handler_local_set (EphyWebExtensionSender *sender,
+                           char                   *name,
+                           JSCValue               *args,
+                           GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
@@ -69,8 +69,8 @@ storage_handler_local_set (EphyWebExtensionSender  *sender,
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
   if (!jsc_value_is_object (value)) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   keys = jsc_value_object_enumerate_properties (value);
@@ -82,14 +82,14 @@ storage_handler_local_set (EphyWebExtensionSender  *sender,
   /* FIXME: Async IO */
   ephy_web_extension_save_local_storage (sender->extension);
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-storage_handler_local_get (EphyWebExtensionSender  *sender,
-                           char                    *name,
-                           JSCValue                *args,
-                           GError                 **error)
+static void
+storage_handler_local_get (EphyWebExtensionSender *sender,
+                           char                   *name,
+                           JSCValue               *args,
+                           GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
@@ -97,8 +97,10 @@ storage_handler_local_get (EphyWebExtensionSender  *sender,
   g_auto (GStrv) keys = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  if (jsc_value_is_null (value))
-    return json_to_string (local_storage, FALSE);
+  if (jsc_value_is_null (value)) {
+    g_task_return_pointer (task, json_to_string (local_storage, FALSE), g_free);
+    return;
+  }
 
   builder = json_builder_new ();
   json_builder_begin_object (builder);
@@ -141,14 +143,14 @@ storage_handler_local_get (EphyWebExtensionSender  *sender,
 
 end_get:
   json_builder_end_object (builder);
-  return json_to_string (json_builder_get_root (builder), FALSE);
+  g_task_return_pointer (task, json_to_string (json_builder_get_root (builder), FALSE), g_free);
 }
 
-static char *
-storage_handler_local_remove (EphyWebExtensionSender  *sender,
-                              char                    *name,
-                              JSCValue                *args,
-                              GError                 **error)
+static void
+storage_handler_local_remove (EphyWebExtensionSender *sender,
+                              char                   *name,
+                              JSCValue               *args,
+                              GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
@@ -170,21 +172,21 @@ storage_handler_local_remove (EphyWebExtensionSender  *sender,
 
 end_remove:
   ephy_web_extension_save_local_storage (sender->extension);
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-storage_handler_local_clear (EphyWebExtensionSender  *sender,
-                             char                    *name,
-                             JSCValue                *args,
-                             GError                 **error)
+static void
+storage_handler_local_clear (EphyWebExtensionSender *sender,
+                             char                   *name,
+                             JSCValue               *args,
+                             GTask                  *task)
 {
   ephy_web_extension_clear_local_storage (sender->extension);
   ephy_web_extension_save_local_storage (sender->extension);
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionSyncApiHandler storage_handlers[] = {
+static EphyWebExtensionAsyncApiHandler storage_handlers[] = {
   {"local.set", storage_handler_local_set},
   {"local.get", storage_handler_local_get},
   {"local.remove", storage_handler_local_remove},
@@ -197,33 +199,20 @@ ephy_web_extension_api_storage_handler (EphyWebExtensionSender *sender,
                                         JSCValue               *args,
                                         GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-  guint idx;
-
   if (!ephy_web_extension_has_permission (sender->extension, "storage")) {
     g_warning ("Extension %s tried to use storage without permission.", ephy_web_extension_get_name (sender->extension));
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
-    g_task_return_error (task, g_steal_pointer (&error));
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "storage: Permission Denied");
     return;
   }
 
-  for (idx = 0; idx < G_N_ELEMENTS (storage_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = storage_handlers[idx];
-    char *ret;
+  for (guint idx = 0; idx < G_N_ELEMENTS (storage_handlers); idx++) {
+    EphyWebExtensionAsyncApiHandler handler = storage_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (sender, name, args, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
+      handler.execute (sender, name, args, task);
       return;
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "storage.%s(): Not Implemented", name);
 }

@@ -85,11 +85,6 @@ typedef struct {
   executeTaskHandler execute;
 } EphyWebExtensionAsyncApiHandler;
 
-typedef struct {
-  char *name;
-  executeHandler execute;
-} EphyWebExtensionSyncApiHandler;
-
 GdkPixbuf             *ephy_web_extension_get_icon                        (EphyWebExtension *self,
                                                                            gint64            size);
 

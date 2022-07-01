@@ -90,35 +90,37 @@ downloads_handler_download (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, g_strdup_printf ("%" G_GUINT64_FORMAT, ephy_download_get_uid (download)), g_free);
 }
 
-static char *
-downloads_handler_cancel (EphyWebExtensionSender  *sender,
-                          char                    *name,
-                          JSCValue                *args,
-                          GError                 **error)
+static void
+downloads_handler_cancel (EphyWebExtensionSender *sender,
+                          char                   *name,
+                          JSCValue               *args,
+                          GTask                  *task)
 {
   g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   EphyDownload *download;
 
   if (!jsc_value_is_number (download_id)) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.cancel(): Missing downloadId");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.cancel(): Missing downloadId");
+    return;
   }
 
   download = ephy_downloads_manager_find_download_by_id (downloads_manager, jsc_value_to_int32 (download_id));
   /* If we fail to find one its possible it was removed already. So instead of erroring just consider it a success. */
-  if (!download)
-    return NULL;
+  if (!download) {
+    g_task_return_pointer (task, NULL, NULL);
+    return;
+  }
 
   ephy_download_cancel (download);
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-downloads_handler_open_or_show (EphyWebExtensionSender  *sender,
-                                char                    *name,
-                                JSCValue                *args,
-                                GError                 **error)
+static void
+downloads_handler_open_or_show (EphyWebExtensionSender *sender,
+                                char                   *name,
+                                JSCValue               *args,
+                                GTask                  *task)
 {
   g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -128,14 +130,14 @@ downloads_handler_open_or_show (EphyWebExtensionSender  *sender,
   /* We reuse this method for both downloads.open() and downloads.show() as they are identical other than the action. */
 
   if (!jsc_value_is_number (download_id)) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Missing downloadId", name);
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Missing downloadId", name);
+    return;
   }
 
   download = ephy_downloads_manager_find_download_by_id (downloads_manager, jsc_value_to_int32 (download_id));
   if (!download) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to find downloadId", name);
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to find downloadId", name);
+    return;
   }
 
   if (strcmp (name, "open") == 0)
@@ -144,11 +146,11 @@ downloads_handler_open_or_show (EphyWebExtensionSender  *sender,
     action = EPHY_DOWNLOAD_ACTION_BROWSE_TO;
 
   if (!ephy_download_do_download_action (download, action)) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to %s download", name, name);
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to %s download", name, name);
+    return;
   }
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
 static GDateTime *
@@ -613,11 +615,11 @@ download_to_json (EphyDownload *download)
   return json_to_string (root, FALSE);
 }
 
-static char *
-downloads_handler_search (EphyWebExtensionSender  *sender,
-                          char                    *name,
-                          JSCValue                *args,
-                          GError                 **error)
+static void
+downloads_handler_search (EphyWebExtensionSender *sender,
+                          char                   *name,
+                          JSCValue               *args,
+                          GTask                  *task)
 {
   g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -627,8 +629,8 @@ downloads_handler_search (EphyWebExtensionSender  *sender,
   GList *downloads;
 
   if (!jsc_value_is_object (query_object)) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.query(): Missing query");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.query(): Missing query");
+    return;
   }
 
   query = download_query_new (query_object);
@@ -641,14 +643,14 @@ downloads_handler_search (EphyWebExtensionSender  *sender,
   json_builder_end_array (builder);
 
   root = json_builder_get_root (builder);
-  return json_to_string (root, FALSE);
+  g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
-static char *
-downloads_handler_erase (EphyWebExtensionSender  *sender,
-                         char                    *name,
-                         JSCValue                *args,
-                         GError                 **error)
+static void
+downloads_handler_erase (EphyWebExtensionSender *sender,
+                         char                   *name,
+                         JSCValue               *args,
+                         GTask                  *task)
 {
   g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -658,8 +660,8 @@ downloads_handler_erase (EphyWebExtensionSender  *sender,
   GList *downloads;
 
   if (!jsc_value_is_object (query_object)) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.erase(): Missing query");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.erase(): Missing query");
+    return;
   }
 
   query = download_query_new (query_object);
@@ -676,18 +678,18 @@ downloads_handler_erase (EphyWebExtensionSender  *sender,
   json_builder_end_array (builder);
 
   root = json_builder_get_root (builder);
-  return json_to_string (root, FALSE);
+  g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
-static char *
-downloads_handler_showdefaultfolder (EphyWebExtensionSender  *sender,
-                                     char                    *name,
-                                     JSCValue                *args,
-                                     GError                 **error)
+static void
+downloads_handler_showdefaultfolder (EphyWebExtensionSender *sender,
+                                     char                   *name,
+                                     JSCValue               *args,
+                                     GTask                  *task)
 {
   g_autoptr (GFile) default_folder = g_file_new_for_path (ephy_file_get_downloads_dir ());
   ephy_file_browse_to (default_folder);
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
 static void
@@ -745,7 +747,9 @@ downloads_handler_removefile (EphyWebExtensionSender *sender,
   g_file_delete_async (destination_file, G_PRIORITY_DEFAULT, NULL, (GAsyncReadyCallback)delete_file_ready_cb, task);
 }
 
-static EphyWebExtensionSyncApiHandler downloads_sync_handlers[] = {
+static EphyWebExtensionAsyncApiHandler downloads_async_handlers[] = {
+  {"download", downloads_handler_download},
+  {"removeFile", downloads_handler_removefile},
   {"cancel", downloads_handler_cancel},
   {"open", downloads_handler_open_or_show},
   {"show", downloads_handler_open_or_show},
@@ -754,19 +758,12 @@ static EphyWebExtensionSyncApiHandler downloads_sync_handlers[] = {
   {"erase", downloads_handler_erase},
 };
 
-static EphyWebExtensionAsyncApiHandler downloads_async_handlers[] = {
-  {"download", downloads_handler_download},
-  {"removeFile", downloads_handler_removefile},
-};
-
 void
 ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
                                           char                   *name,
                                           JSCValue               *args,
                                           GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-
   if (!ephy_web_extension_has_permission (sender->extension, "downloads")) {
     g_warning ("Extension %s tried to use downloads without permission.", ephy_web_extension_get_name (sender->extension));
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "downloads: Permission Denied");
@@ -778,22 +775,6 @@ ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
 
     if (g_strcmp0 (handler.name, name) == 0) {
       handler.execute (sender, name, args, task);
-      return;
-    }
-  }
-
-  for (guint idx = 0; idx < G_N_ELEMENTS (downloads_sync_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = downloads_sync_handlers[idx];
-    char *ret;
-
-    if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (sender, name, args, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
       return;
     }
   }

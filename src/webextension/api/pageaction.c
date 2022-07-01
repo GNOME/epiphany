@@ -53,11 +53,11 @@ pageaction_get_action (EphyWebExtension *extension,
   return ephy_web_extension_manager_get_page_action (manager, extension, web_view);
 }
 
-static char *
-pageaction_handler_seticon (EphyWebExtensionSender  *sender,
-                            char                    *name,
-                            JSCValue                *args,
-                            GError                 **error)
+static void
+pageaction_handler_seticon (EphyWebExtensionSender *sender,
+                            char                   *name,
+                            JSCValue               *args,
+                            GTask                  *task)
 {
   GtkWidget *action;
   g_autofree char *path_str = NULL;
@@ -67,8 +67,8 @@ pageaction_handler_seticon (EphyWebExtensionSender  *sender,
 
   action = pageaction_get_action (sender->extension, value);
   if (!action) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   path_value = jsc_value_object_get_property (value, "path");
@@ -76,19 +76,19 @@ pageaction_handler_seticon (EphyWebExtensionSender  *sender,
     path_str = jsc_value_to_string (path_value);
     pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path_str, -1);
   } else {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
+    return;
   }
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_bin_get_child (GTK_BIN (action))), pixbuf);
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-pageaction_handler_settitle (EphyWebExtensionSender  *sender,
-                             char                    *name,
-                             JSCValue                *args,
-                             GError                 **error)
+static void
+pageaction_handler_settitle (EphyWebExtensionSender *sender,
+                             char                   *name,
+                             JSCValue               *args,
+                             GTask                  *task)
 {
   GtkWidget *action;
   g_autoptr (JSCValue) title = NULL;
@@ -96,21 +96,21 @@ pageaction_handler_settitle (EphyWebExtensionSender  *sender,
 
   action = pageaction_get_action (sender->extension, value);
   if (!action) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   title = jsc_value_object_get_property (value, "title");
   gtk_widget_set_tooltip_text (action, jsc_value_to_string (title));
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-pageaction_handler_gettitle (EphyWebExtensionSender  *sender,
-                             char                    *name,
-                             JSCValue                *args,
-                             GError                 **error)
+static void
+pageaction_handler_gettitle (EphyWebExtensionSender *sender,
+                             char                   *name,
+                             JSCValue               *args,
+                             GTask                  *task)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
@@ -118,56 +118,56 @@ pageaction_handler_gettitle (EphyWebExtensionSender  *sender,
 
   action = pageaction_get_action (sender->extension, value);
   if (!action) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   title = gtk_widget_get_tooltip_text (action);
 
-  return g_strdup_printf ("\"%s\"", title ? title : "");
+  g_task_return_pointer (task, g_strdup_printf ("\"%s\"", title ? title : ""), g_free);
 }
 
-static char *
-pageaction_handler_show (EphyWebExtensionSender  *sender,
-                         char                    *name,
-                         JSCValue                *args,
-                         GError                 **error)
+static void
+pageaction_handler_show (EphyWebExtensionSender *sender,
+                         char                   *name,
+                         JSCValue               *args,
+                         GTask                  *task)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
   action = pageaction_get_action (sender->extension, value);
   if (!action) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   gtk_widget_set_visible (action, TRUE);
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-pageaction_handler_hide (EphyWebExtensionSender  *sender,
-                         char                    *name,
-                         JSCValue                *args,
-                         GError                 **error)
+static void
+pageaction_handler_hide (EphyWebExtensionSender *sender,
+                         char                   *name,
+                         JSCValue               *args,
+                         GTask                  *task)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
   action = pageaction_get_action (sender->extension, value);
   if (!action) {
-    g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    return;
   }
 
   gtk_widget_set_visible (action, FALSE);
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionSyncApiHandler pageaction_handlers[] = {
+static EphyWebExtensionAsyncApiHandler pageaction_handlers[] = {
   {"setIcon", pageaction_handler_seticon},
   {"setTitle", pageaction_handler_settitle},
   {"getTitle", pageaction_handler_gettitle},
@@ -181,26 +181,14 @@ ephy_web_extension_api_pageaction_handler (EphyWebExtensionSender *sender,
                                            JSCValue               *args,
                                            GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-  guint idx;
-
-  for (idx = 0; idx < G_N_ELEMENTS (pageaction_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = pageaction_handlers[idx];
-    char *ret;
+  for (guint idx = 0; idx < G_N_ELEMENTS (pageaction_handlers); idx++) {
+    EphyWebExtensionAsyncApiHandler handler = pageaction_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (sender, name, args, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
+      handler.execute (sender, name, args, task);
       return;
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
 }

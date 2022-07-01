@@ -162,11 +162,11 @@ on_alarm_start (gpointer user_data)
   return G_SOURCE_REMOVE;
 }
 
-static char *
+static void
 alarms_handler_create (EphyWebExtensionSender *sender,
-                       char                   *name,
-                       JSCValue               *args,
-                       GError                **error)
+                        char                   *name,
+                        JSCValue               *args,
+                        GTask                  *task)
 {
   g_autoptr (JSCValue) alarm_name = NULL;
   g_autoptr (JSCValue) alarm_info = NULL;
@@ -194,8 +194,8 @@ alarms_handler_create (EphyWebExtensionSender *sender,
   }
 
   if (delay_in_minutes && when) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "alarms.create(): Both 'when' and 'delayInMinutes' cannot be set");
-    return NULL;
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "alarms.create(): Both 'when' and 'delayInMinutes' cannot be set");
+    return;
   }
 
   alarm = g_new0 (Alarm, 1);
@@ -216,14 +216,14 @@ alarms_handler_create (EphyWebExtensionSender *sender,
 
   g_hash_table_replace (alarms, alarm->name, alarm);
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
+static void
 alarms_handler_clear (EphyWebExtensionSender *sender,
-                      char                   *name,
-                      JSCValue               *args,
-                      GError                **error)
+                        char                   *name,
+                        JSCValue               *args,
+                        GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
@@ -234,32 +234,36 @@ alarms_handler_clear (EphyWebExtensionSender *sender,
   else
     name_str = jsc_value_to_string (name_value);
 
-  if (g_hash_table_remove (alarms, name_str))
-    return g_strdup ("true");
+  if (g_hash_table_remove (alarms, name_str)) {
+    g_task_return_pointer (task, g_strdup ("true"), g_free);
+    return;
+  }
 
-  return g_strdup ("false");
+  g_task_return_pointer (task, g_strdup ("false"), g_free);
 }
 
-static char *
-alarms_handler_clear_all (EphyWebExtensionSender  *sender,
-                          char                    *name,
-                          JSCValue                *args,
-                          GError                 **error)
+static void
+alarms_handler_clear_all (EphyWebExtensionSender *sender,
+                        char                   *name,
+                        JSCValue               *args,
+                        GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
 
-  if (g_hash_table_size (alarms) == 0)
-    return g_strdup ("false");
+  if (g_hash_table_size (alarms) == 0) {
+    g_task_return_pointer (task, g_strdup ("false"), g_free);
+    return;
+  }
 
   g_hash_table_remove_all (alarms);
-  return g_strdup ("true");
+  g_task_return_pointer (task, g_strdup ("true"), g_free);
 }
 
-static char *
-alarms_handler_get (EphyWebExtensionSender  *sender,
-                    char                    *name,
-                    JSCValue                *args,
-                    GError                 **error)
+static void
+alarms_handler_get (EphyWebExtensionSender *sender,
+                    char                   *name,
+                    JSCValue               *args,
+                    GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
@@ -272,14 +276,14 @@ alarms_handler_get (EphyWebExtensionSender  *sender,
     name_str = jsc_value_to_string (name_value);
 
   alarm = g_hash_table_lookup (alarms, name_str);
-  return alarm_to_json (alarm);
+  g_task_return_pointer (task, alarm_to_json (alarm), g_free);
 }
 
-static char *
-alarms_handler_get_all (EphyWebExtensionSender  *sender,
-                        char                    *name,
-                        JSCValue                *args,
-                        GError                 **error)
+static void
+alarms_handler_get_all (EphyWebExtensionSender *sender,
+                        char                   *name,
+                        JSCValue               *args,
+                        GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JsonNode) node = json_node_init_array (json_node_alloc (), json_array_new ());
@@ -291,10 +295,10 @@ alarms_handler_get_all (EphyWebExtensionSender  *sender,
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&alarm))
     json_array_add_element (array, alarm_to_node (alarm));
 
-  return json_to_string (node, FALSE);
+  g_task_return_pointer (task, json_to_string (node, FALSE), g_free);
 }
 
-static EphyWebExtensionSyncApiHandler alarms_handlers[] = {
+static EphyWebExtensionAsyncApiHandler alarms_handlers[] = {
   {"clear", alarms_handler_clear},
   {"clearAll", alarms_handler_clear_all},
   {"create", alarms_handler_create},
@@ -308,31 +312,19 @@ ephy_web_extension_api_alarms_handler (EphyWebExtensionSender *sender,
                                        JSCValue               *args,
                                        GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-
   if (!ephy_web_extension_has_permission (sender->extension, "alarms")) {
-    g_warning ("Extension %s tried to use alarms without permission.", ephy_web_extension_get_name (sender->extension));
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "alarms: Permission Denied");
-    g_task_return_error (task, g_steal_pointer (&error));
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "alarms: Permission Denied");
     return;
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (alarms_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = alarms_handlers[idx];
-    char *ret;
+    EphyWebExtensionAsyncApiHandler handler = alarms_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (sender, name, args, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
+      handler.execute (sender, name, args, task);
       return;
     }
   }
 
-  error = g_error_new (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "alarms.%s(): Not Implemented", name);
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "alarms.%s(): Not Implemented", name);
 }
