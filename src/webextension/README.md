@@ -208,24 +208,41 @@ APIs:
 
 ### Contexts
 
-There are roughly 3 contexts in which WebExtension code executes in that need to be handled properly:
+Extensions generally have content running in their own private pages. That is pages under the `eph-webextension:` URL.
+These pages have full access to the WebExtension API available in the default JavaScriptWorld.
 
-#### Content Scripts
+Extensions can also inject [Content Scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts)
+which run in a private JavaScriptWorld per-extension on each page it has permission to.
 
-The full details can be found here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts
+## How to add API
 
-These run inside of the main web views context and have access to the DOM however they are in
-a private ScriptWorld and cannot directly interact with other extensions or the websites JavaScript.
+Adding a new API involves touching a few areas.
 
-They also only have access to a small subset of the WebExtensions API.
+- `embed/web-process-extension/resources/js/webextensions-common.js` and `embed/web-process-extension/resources/js/webextensions.js` These files contain JavaScript injected into pages. The former is injected for Content Scripts and Extension Pages while the latter is only injected into Extension Pages. They do little more than expose the API.
 
-#### Action Views
+- `embed/web-process-extension/ephy-webextension-api.c` This is a WebKitWebExtension that extends Extension Page web views. This defines some
+JavaScript API in C.
 
-These are WebExtension views created when the user triggers an action. They are short lived and limited in presentation but have
-full access to the WebExtension APIs.
+- `embed/web-process-extension/ephy-web-process-extension.c` This is a WebKitWebExtension that extends normal web pages. It sets up the
+private JavaScriptWorlds used for Content Scripts.
 
-Since they are isolated from the website they run their scripts in its default context.
+- `embed/web-process-extension/ephy-webextension-common.c` This is shared between the two WebKitWebExtensions above. It is the bulk of the
+`extension`/`runtime` and `i18n` APIs. It also handles much of the message passing to the UI process described below.
 
-#### Background Page
+- `src/webextension/ephy-web-extension-manager.c` This is where all extensions are managed in the UI process and also where all messages from web views are
+handled; In `content_scripts_handle_user_message()` and `extension_view_handle_user_message()` specifically with `api_handlers` being defined at the top of the file. These call out to the real API handlers.
+This is also where a lot of event handling happens. The manager will listen to signals throughout Epiphany and call `ephy_web_extension_manager_emit_in_extension_views()`
+to trigger events.
 
-This is similar to an Action view except that is a long-lived view, Action Views can't get direct access with it, and Content Scripts can communicate with it.
+- `src/webextension/api/*` This is where all actual API handlers are implemented. A handler is given the source of the call (the WebExtension, its WebKitWebView), the name
+of the call, the arguments (which were serialized over JSON), and a GTask to respond to the call.
+
+NOTE: Please use `menus.c`/`menus.h` as an example starting point. The handlers have evolved to be written in a few styles with this being the direction we want to go in. It uses
+only asynchronous API handlers and uses `json-glib` for all JSON parsing.
+
+Be very careful about parsing the JSON arguments to be defensive against invalid values. The funcitons in `ephy-json-utils.h` help you by being strict on expected types.
+
+Every API handler must return either an error with `g_task_return_new_error (task, WEB_EXTENSION_ERROR, ..., "foo.function(): Helpful reason");` or return a valid JSON
+string with `g_task_return_pointer (task, allocated_json_string, g_free);`. `JsonBuilder` is helpful for building complex response objects or a simple `g_strdup ("true");`
+works for some APIs. Many APIs require an empty response on success which is just `g_task_return_pointer (task, NULL, NULL);`. Your handler is entirely asynchronous and you
+can store the GTask for later.
