@@ -75,6 +75,12 @@ typedef struct {
   WebKitUserStyleSheet *style;
 } WebExtensionCustomCSS;
 
+typedef struct {
+  char *shortcut;
+  char *suggested_key;
+  char *description;
+} WebExtensionCommand;
+
 struct _EphyWebExtension {
   GObject parent_instance;
 
@@ -105,6 +111,7 @@ struct _EphyWebExtension {
   char *local_storage_path;
   JsonNode *local_storage;
   GHashTable *web_accessible_resources;
+  GList *commands;
 };
 
 G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
@@ -752,6 +759,131 @@ web_extension_add_web_accessible_resource (JsonArray *array,
   g_hash_table_add (self->web_accessible_resources, g_strdup (web_accessible_resource));
 }
 
+char *
+ephy_web_extension_get_command_accelerator (JsonObject *suggested_key_object)
+{
+  const char *orig_string = NULL;
+  char **accelerator_keys = NULL;
+  char *accelerator = "";
+
+  if (!ephy_json_object_get_string (suggested_key_object, "default") &&
+      !ephy_json_object_get_string (suggested_key_object, "linux")) {
+    return NULL;
+  } else if (ephy_json_object_get_string (suggested_key_object, "default")) {
+    orig_string = ephy_json_object_get_string (suggested_key_object, "default");
+  } else if (ephy_json_object_get_string (suggested_key_object, "linux")) {
+    orig_string = ephy_json_object_get_string (suggested_key_object, "linux");
+  }
+
+  accelerator_keys = g_strsplit ((const gchar *)orig_string, "+", 0);
+
+  for (int i = 0; accelerator_keys[i]; i++) {
+    /* We have to use 2 here, as F# keys are treated like normal keys. */
+    if (strlen (accelerator_keys[i]) > 2) {
+      accelerator = g_strdup_printf ("%s<%s>", accelerator, accelerator_keys[i]);
+    } else {
+      accelerator = g_strdup_printf ("%s%s", accelerator, accelerator_keys[i]);
+    }
+  }
+
+  return accelerator;
+}
+
+static void
+web_extension_parse_commands (EphyWebExtension *self,
+                              JsonObject       *object)
+{
+  JsonNode *node = NULL;
+  JsonObject *cmd_object = NULL;
+  JsonObject *key_object = NULL;
+  WebExtensionCommand *cmd = g_malloc0 (sizeof (WebExtensionCommand));
+  const char *description;
+  const char *shortcut;
+  const char *suggested_key;
+
+  for (GList *list = json_object_get_members (object); list && list->data; list = list->next) {
+    node = json_object_get_member (object, (gchar *)list->data);
+    cmd_object = ephy_json_node_get_object (node);
+    key_object = ephy_json_object_get_object (cmd_object, "suggested_key");
+
+    if (!cmd_object) {
+      LOG ("Skipping command as value is invalid");
+      return;
+    }
+
+    description = ephy_json_object_get_string (cmd_object, "description");
+
+    shortcut = (gchar *)list->data;
+    if (!shortcut) {
+      LOG ("Skipping command as value is invalid");
+      return;
+    }
+
+    cmd->description = g_strdup (description);
+    cmd->shortcut = g_strdup (shortcut);
+
+    suggested_key = ephy_web_extension_get_command_accelerator (key_object);
+
+    if (!g_strcmp0 (suggested_key, "") == 0)
+      cmd->suggested_key = g_strdup (suggested_key);
+
+    self->commands = g_list_append (self->commands, cmd);
+  }
+}
+
+void *
+ephy_web_extension_get_command_data_from_index (EphyWebExtension  *self,
+                                                guint              command,
+                                                char             **shortcut,
+                                                char             **suggested_key,
+                                                char             **description)
+{
+  WebExtensionCommand *cmd = g_list_nth_data (self->commands, command);
+
+  *shortcut = strdup (cmd->shortcut);
+  *suggested_key = strdup (cmd->suggested_key);
+  *description = strdup (cmd->description);
+
+  return NULL;
+}
+
+void *
+ephy_web_extension_get_command_data_from_name (EphyWebExtension  *self,
+                                               const char        *name,
+                                               char             **shortcut,
+                                               char             **suggested_key,
+                                               char             **description)
+{
+  WebExtensionCommand *cmd = NULL;
+
+  for (GList *list = self->commands; list && list->data; list = list->next) {
+    cmd = list->data;
+
+    if (strcmp (cmd->shortcut, name) == 0) {
+      *shortcut = strdup (cmd->shortcut);
+      *suggested_key = strdup (cmd->suggested_key);
+      *description = strdup (cmd->description);
+    }
+  }
+
+  return NULL;
+}
+
+GList *
+ephy_web_extension_get_commands (EphyWebExtension *self)
+{
+  return self->commands;
+}
+
+static void
+web_extension_commands_free (WebExtensionCommand *cmd)
+{
+  g_clear_pointer (&cmd->shortcut, g_free);
+  g_clear_pointer (&cmd->suggested_key, g_free);
+  g_clear_pointer (&cmd->description, g_free);
+  g_free (cmd);
+}
+
 static void
 ephy_web_extension_dispose (GObject *object)
 {
@@ -781,6 +913,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->page_action, web_extension_page_action_free);
   g_clear_pointer (&self->browser_action, web_extension_browser_action_free);
   g_clear_list (&self->custom_css, (GDestroyNotify)webkit_user_style_sheet_unref);
+  g_clear_list (&self->commands, (GDestroyNotify)web_extension_commands_free);
 
   g_hash_table_destroy (self->page_action_map);
 
@@ -905,6 +1038,9 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 
   if ((child_array = ephy_json_object_get_array (root_object, "web_accessible_resources")))
     json_array_foreach_element (child_array, web_extension_add_web_accessible_resource, self);
+
+  if ((child_object = ephy_json_object_get_object (root_object, "commands")))
+    web_extension_parse_commands (self, child_object);
 
   return TRUE;
 }

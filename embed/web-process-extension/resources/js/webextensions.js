@@ -13,6 +13,13 @@ window.browser.alarms = {
     onAlarm: new EphyEventListener (),
 };
 
+window.browser.commands = {
+    getAll: function (...args) { return ephy_message ('commands.getAll', args); },
+    reset: function (...args) { return ephy_message ('commands.reset', args); },
+    update: function (...args) { return ephy_message ('commands.update', args); },
+    onCommand: new EphyEventListener (),
+};
+
 window.browser.windows = {
     onRemoved: new EphyEventListener (),
 };

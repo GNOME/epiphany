@@ -148,6 +148,20 @@ const char            *ephy_web_extension_get_option_ui_page              (EphyW
 
 const char            *ephy_web_extension_get_guid                        (EphyWebExtension *self);
 
+GList                 *ephy_web_extension_get_commands                    (EphyWebExtension *self);
+
+void                  *ephy_web_extension_get_command_data_from_index     (EphyWebExtension    *self,
+                                                                           guint                command,
+                                                                           char               **shortcut,
+                                                                           char               **suggested_key,
+                                                                           char               **description);
+
+void                  *ephy_web_extension_get_command_data_from_name      (EphyWebExtension    *self,
+                                                                           const char          *name,
+                                                                           char               **shortcut,
+                                                                           char               **suggested_key,
+                                                                           char               **description);
+
 gboolean               ephy_web_extension_has_tab_or_host_permission      (EphyWebExtension *self,
                                                                            EphyWebView      *web_view,
                                                                            gboolean          is_user_interaction);

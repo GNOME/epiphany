@@ -1,5 +1,6 @@
 ephywebextension_src = [
   'webextension/api/alarms.c',
+  'webextension/api/commands.c',
   'webextension/api/cookies.c',
   'webextension/api/downloads.c',
   'webextension/api/menus.c',
