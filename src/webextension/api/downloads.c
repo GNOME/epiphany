@@ -33,11 +33,10 @@ get_downloads_manager (void)
 }
 
 static void
-downloads_handler_download (EphyWebExtension *self,
-                            char             *name,
-                            JSCValue         *args,
-                            WebKitWebView    *web_view,
-                            GTask            *task)
+downloads_handler_download (EphyWebExtensionSender *sender,
+                            char                   *name,
+                            JSCValue               *args,
+                            GTask                  *task)
 {
   g_autoptr (JSCValue) options = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -82,7 +81,7 @@ downloads_handler_download (EphyWebExtension *self,
   ephy_download_set_choose_filename (download, TRUE);
   ephy_download_set_suggested_destination (download, suggested_directory, suggested_filename);
   ephy_download_set_always_ask_destination (download, api_utils_get_boolean_property (options, "saveAs", FALSE));
-  ephy_download_set_initiating_web_extension_info (download, ephy_web_extension_get_guid (self), ephy_web_extension_get_name (self));
+  ephy_download_set_initiating_web_extension_info (download, ephy_web_extension_get_guid (sender->extension), ephy_web_extension_get_name (sender->extension));
   ephy_downloads_manager_add_download (downloads_manager, download);
 
   /* FIXME: We should wait to return until after the user has been prompted to error if they cancelled it. */
@@ -92,11 +91,10 @@ downloads_handler_download (EphyWebExtension *self,
 }
 
 static char *
-downloads_handler_cancel (EphyWebExtension  *self,
-                          char              *name,
-                          JSCValue          *args,
-                          WebKitWebView     *web_view,
-                          GError           **error)
+downloads_handler_cancel (EphyWebExtensionSender  *sender,
+                          char                    *name,
+                          JSCValue                *args,
+                          GError                 **error)
 {
   g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -117,11 +115,10 @@ downloads_handler_cancel (EphyWebExtension  *self,
 }
 
 static char *
-downloads_handler_open_or_show (EphyWebExtension  *self,
-                                char              *name,
-                                JSCValue          *args,
-                                WebKitWebView     *web_view,
-                                GError           **error)
+downloads_handler_open_or_show (EphyWebExtensionSender  *sender,
+                                char                    *name,
+                                JSCValue                *args,
+                                GError                 **error)
 {
   g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -617,11 +614,10 @@ download_to_json (EphyDownload *download)
 }
 
 static char *
-downloads_handler_search (EphyWebExtension  *self,
-                          char              *name,
-                          JSCValue          *args,
-                          WebKitWebView     *web_view,
-                          GError           **error)
+downloads_handler_search (EphyWebExtensionSender  *sender,
+                          char                    *name,
+                          JSCValue                *args,
+                          GError                 **error)
 {
   g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -649,11 +645,10 @@ downloads_handler_search (EphyWebExtension  *self,
 }
 
 static char *
-downloads_handler_erase (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+downloads_handler_erase (EphyWebExtensionSender  *sender,
+                         char                    *name,
+                         JSCValue                *args,
+                         GError                 **error)
 {
   g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -685,11 +680,10 @@ downloads_handler_erase (EphyWebExtension  *self,
 }
 
 static char *
-downloads_handler_showdefaultfolder (EphyWebExtension  *self,
-                                     char              *name,
-                                     JSCValue          *args,
-                                     WebKitWebView     *web_view,
-                                     GError           **error)
+downloads_handler_showdefaultfolder (EphyWebExtensionSender  *sender,
+                                     char                    *name,
+                                     JSCValue                *args,
+                                     GError                 **error)
 {
   g_autoptr (GFile) default_folder = g_file_new_for_path (ephy_file_get_downloads_dir ());
   ephy_file_browse_to (default_folder);
@@ -715,11 +709,10 @@ delete_file_ready_cb (GFile        *file,
 }
 
 static void
-downloads_handler_removefile (EphyWebExtension *self,
-                              char             *name,
-                              JSCValue         *args,
-                              WebKitWebView    *web_view,
-                              GTask            *task)
+downloads_handler_removefile (EphyWebExtensionSender *sender,
+                              char                   *name,
+                              JSCValue               *args,
+                              GTask                  *task)
 {
   g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
@@ -767,16 +760,15 @@ static EphyWebExtensionAsyncApiHandler downloads_async_handlers[] = {
 };
 
 void
-ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
-                                          char             *name,
-                                          JSCValue         *args,
-                                          WebKitWebView    *web_view,
-                                          GTask            *task)
+ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
+                                          char                   *name,
+                                          JSCValue               *args,
+                                          GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
 
-  if (!ephy_web_extension_has_permission (self, "downloads")) {
-    g_warning ("Extension %s tried to use downloads without permission.", ephy_web_extension_get_name (self));
+  if (!ephy_web_extension_has_permission (sender->extension, "downloads")) {
+    g_warning ("Extension %s tried to use downloads without permission.", ephy_web_extension_get_name (sender->extension));
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "downloads: Permission Denied");
     return;
   }
@@ -785,7 +777,7 @@ ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
     EphyWebExtensionAsyncApiHandler handler = downloads_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, args, web_view, task);
+      handler.execute (sender, name, args, task);
       return;
     }
   }
@@ -795,7 +787,7 @@ ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

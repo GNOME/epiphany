@@ -35,11 +35,10 @@ create_extension_notification_id (EphyWebExtension *web_extension,
 }
 
 static char *
-notifications_handler_create (EphyWebExtension  *self,
-                              char              *name,
-                              JSCValue          *args,
-                              WebKitWebView     *web_view,
-                              GError           **error)
+notifications_handler_create (EphyWebExtensionSender  *sender,
+                              char                    *name,
+                              JSCValue                *args,
+                              GError                 **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autoptr (JSCValue) button_array = NULL;
@@ -48,7 +47,7 @@ notifications_handler_create (EphyWebExtension  *self,
   g_autofree char *title = NULL;
   g_autofree char *message = NULL;
   g_autoptr (GNotification) notification = NULL;
-  const char *extension_guid = ephy_web_extension_get_guid (self);
+  const char *extension_guid = ephy_web_extension_get_guid (sender->extension);
 
   /* We share the same "create" and "update" function here because our
    * implementation would be the same. The only difference is we require
@@ -92,18 +91,17 @@ notifications_handler_create (EphyWebExtension  *self,
     }
   }
 
-  namespaced_id = create_extension_notification_id (self, id);
+  namespaced_id = create_extension_notification_id (sender->extension, id);
   g_application_send_notification (G_APPLICATION (ephy_shell_get_default ()), namespaced_id, notification);
 
   return g_strdup_printf ("\"%s\"", id);
 }
 
 static char *
-notifications_handler_clear (EphyWebExtension  *self,
-                             char              *name,
-                             JSCValue          *args,
-                             WebKitWebView     *web_view,
-                             GError           **error)
+notifications_handler_clear (EphyWebExtensionSender  *sender,
+                             char                    *name,
+                             JSCValue                *args,
+                             GError                 **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *id = NULL;
@@ -115,7 +113,7 @@ notifications_handler_clear (EphyWebExtension  *self,
   }
 
   id = jsc_value_to_string (value);
-  namespaced_id = create_extension_notification_id (self, id);
+  namespaced_id = create_extension_notification_id (sender->extension, id);
 
   g_application_withdraw_notification (G_APPLICATION (ephy_shell_get_default ()), namespaced_id);
 
@@ -124,11 +122,10 @@ notifications_handler_clear (EphyWebExtension  *self,
 }
 
 static char *
-notifications_handler_get_all (EphyWebExtension  *self,
-                               char              *name,
-                               JSCValue          *args,
-                               WebKitWebView     *web_view,
-                               GError           **error)
+notifications_handler_get_all (EphyWebExtensionSender  *sender,
+                               char                    *name,
+                               JSCValue                *args,
+                               GError                 **error)
 {
   /* GNotification does not provide information on the state of notifications. */
   return g_strdup ("[]");
@@ -142,16 +139,15 @@ static EphyWebExtensionSyncApiHandler notifications_handlers[] = {
 };
 
 void
-ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
-                                              char             *name,
-                                              JSCValue         *args,
-                                              WebKitWebView    *web_view,
-                                              GTask            *task)
+ephy_web_extension_api_notifications_handler (EphyWebExtensionSender *sender,
+                                              char                   *name,
+                                              JSCValue               *args,
+                                              GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
 
-  if (!ephy_web_extension_has_permission (self, "notifications")) {
-    g_warning ("Extension %s tried to use notifications without permission.", ephy_web_extension_get_name (self));
+  if (!ephy_web_extension_has_permission (sender->extension, "notifications")) {
+    g_warning ("Extension %s tried to use notifications without permission.", ephy_web_extension_get_name (sender->extension));
     error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
@@ -162,7 +158,7 @@ ephy_web_extension_api_notifications_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

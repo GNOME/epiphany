@@ -571,6 +571,7 @@ respond_with_error (WebKitUserMessage *message,
 }
 
 typedef struct {
+  EphyWebExtensionSender *sender;
   WebKitUserMessage *message;
   JSCValue *args;
 } ApiHandlerData;
@@ -580,16 +581,24 @@ api_handler_data_free (ApiHandlerData *data)
 {
   g_object_unref (data->message);
   g_object_unref (data->args);
+  g_free (data->sender);
   g_free (data);
 }
 
 static ApiHandlerData *
-api_handler_data_new (WebKitUserMessage *message,
+api_handler_data_new (EphyWebExtension  *extension,
+                      WebKitWebView     *view,
+                      guint64            frame_id,
+                      WebKitUserMessage *message,
                       JSCValue          *args)
 {
   ApiHandlerData *data = g_new (ApiHandlerData, 1);
   data->message = g_object_ref (message);
   data->args = g_object_ref (args);
+  data->sender = g_new (EphyWebExtensionSender, 1);
+  data->sender->extension = extension;
+  data->sender->view = view;
+  data->sender->frame_id = frame_id;
   return data;
 }
 
@@ -626,8 +635,9 @@ extension_view_handle_user_message (WebKitWebView     *web_view,
   g_auto (GStrv) split = NULL;
   const char *guid;
   const char *json_args;
+  guint64 frame_id;
 
-  g_variant_get (webkit_user_message_get_parameters (message), "(&s&s)", &guid, &json_args);
+  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &guid, &frame_id, &json_args);
 
   js_context = jsc_context_new ();
   args = jsc_value_new_from_json (js_context, json_args);
@@ -654,9 +664,10 @@ extension_view_handle_user_message (WebKitWebView     *web_view,
     if (g_strcmp0 (handler.name, split[0]) == 0) {
       /* TODO: Cancellable */
       GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
-      g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
+      ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
+      g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
-      handler.execute (web_extension, split[1], args, web_view, task);
+      handler.execute (data->sender, split[1], args, task);
       return TRUE;
     }
   }
@@ -679,8 +690,9 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
   const char *json_args;
   const char *extension_guid;
   GTask *task;
+  guint64 frame_id;
 
-  g_variant_get (webkit_user_message_get_parameters (message), "(&s&s)", &extension_guid, &json_args);
+  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &extension_guid, &frame_id, &json_args);
 
   /* Multiple extensions can send user-messages from the same web-view, so only the target one handles this. */
   if (strcmp (extension_guid, ephy_web_extension_get_guid (web_extension)) != 0)
@@ -707,18 +719,21 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
 
   /* Content Scripts are very limited in their API access compared to extension views so we handle them individually. */
   if (strcmp (split[0], "storage") == 0) {
+    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
-    g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
+    g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
-    ephy_web_extension_api_storage_handler (web_extension, split[1], args, web_view, task);
+    ephy_web_extension_api_storage_handler (data->sender, split[1], args, task);
     return TRUE;
   }
 
   if (strcmp (name, "runtime.sendMessage") == 0) {
+    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
-    g_task_set_task_data (task, api_handler_data_new (message, args), (GDestroyNotify)api_handler_data_free);
 
-    ephy_web_extension_api_runtime_handler (web_extension, split[1], args, web_view, task);
+    g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
+
+    ephy_web_extension_api_runtime_handler (data->sender, split[1], args, task);
     return TRUE;
   }
 
@@ -1576,9 +1591,9 @@ on_extension_emit_ready (GObject      *source,
 static void
 ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionManager *self,
                                                              EphyWebExtension        *web_extension,
+                                                             EphyWebExtensionSender  *sender,
                                                              const char              *name,
                                                              const char              *message_json,
-                                                             WebKitWebView           *own_web_view,
                                                              GTask                   *reply_task)
 {
   WebKitWebView *background_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
@@ -1599,7 +1614,7 @@ ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionMan
    *  - The first `runtime._sendMessageReply` call wins and completes the GTask with its data.
    */
   if (reply_task) {
-    g_autofree char *sender_json = ephy_web_extension_create_sender_object (web_extension, own_web_view);
+    g_autofree char *sender_json = ephy_web_extension_create_sender_object (sender);
     message_guid = g_dbus_generate_guid ();
     tracker = g_new0 (PendingMessageReplyTracker, 1);
     script = g_strdup_printf ("window.browser.%s._emit_with_reply(%s, %s, '%s');", name, message_json, sender_json, message_guid);
@@ -1607,7 +1622,7 @@ ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionMan
     script = g_strdup_printf ("window.browser.%s._emit(%s);", name, message_json);
 
   if (background_view) {
-    if (own_web_view != background_view) {
+    if (!sender || (sender->view != background_view)) {
       webkit_web_view_run_javascript (background_view,
                                       script,
                                       NULL,
@@ -1620,7 +1635,7 @@ ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionMan
   if (popup_views) {
     for (guint i = 0; i < popup_views->len; i++) {
       WebKitWebView *popup_view = g_ptr_array_index (popup_views, i);
-      if (own_web_view == popup_view)
+      if (!sender || (sender->view == popup_view))
         continue;
 
       webkit_web_view_run_javascript (popup_view,
@@ -1661,28 +1676,18 @@ ephy_web_extension_manager_emit_in_extension_views (EphyWebExtensionManager *sel
                                                     const char              *name,
                                                     const char              *json)
 {
-  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, NULL, NULL);
-}
-
-void
-ephy_web_extension_manager_emit_in_extension_views_except_self (EphyWebExtensionManager *self,
-                                                                EphyWebExtension        *web_extension,
-                                                                const char              *name,
-                                                                const char              *json,
-                                                                WebKitWebView           *own_webview)
-{
-  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, own_webview, NULL);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, NULL, name, json, NULL);
 }
 
 void
 ephy_web_extension_manager_emit_in_extension_views_with_reply (EphyWebExtensionManager *self,
                                                                EphyWebExtension        *web_extension,
+                                                               EphyWebExtensionSender  *sender,
                                                                const char              *name,
                                                                const char              *json,
-                                                               WebKitWebView           *own_web_view,
                                                                GTask                   *reply_task)
 {
   g_assert (reply_task);
-  g_assert (own_web_view);
-  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, name, json, own_web_view, reply_task);
+  g_assert (sender);
+  ephy_web_extension_manager_emit_in_extension_views_internal (self, web_extension, sender, name, json, reply_task);
 }

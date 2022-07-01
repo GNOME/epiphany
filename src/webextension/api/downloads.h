@@ -32,10 +32,9 @@ void ephy_web_extension_api_downloads_init (EphyWebExtensionManager *manager);
 
 void ephy_web_extension_api_downloads_dispose (EphyWebExtensionManager *manager);
 
-void ephy_web_extension_api_downloads_handler (EphyWebExtension *self,
-                                               char             *name,
-                                               JSCValue         *value,
-                                               WebKitWebView    *web_view,
-                                               GTask            *task);
+void ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
+                                               char                   *name,
+                                               JSCValue               *value,
+                                               GTask                  *task);
 
 G_END_DECLS

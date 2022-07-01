@@ -27,7 +27,7 @@
 #include "pageaction.h"
 
 static GtkWidget *
-pageaction_get_action (EphyWebExtension *self,
+pageaction_get_action (EphyWebExtension *extension,
                        JSCValue         *value)
 {
   EphyWebView *web_view = NULL;
@@ -50,15 +50,14 @@ pageaction_get_action (EphyWebExtension *self,
     return NULL;
   }
 
-  return ephy_web_extension_manager_get_page_action (manager, self, web_view);
+  return ephy_web_extension_manager_get_page_action (manager, extension, web_view);
 }
 
 static char *
-pageaction_handler_seticon (EphyWebExtension  *self,
-                            char              *name,
-                            JSCValue          *args,
-                            WebKitWebView     *web_view,
-                            GError           **error)
+pageaction_handler_seticon (EphyWebExtensionSender  *sender,
+                            char                    *name,
+                            JSCValue                *args,
+                            GError                 **error)
 {
   GtkWidget *action;
   g_autofree char *path_str = NULL;
@@ -66,7 +65,7 @@ pageaction_handler_seticon (EphyWebExtension  *self,
   g_autoptr (GdkPixbuf) pixbuf = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (self, value);
+  action = pageaction_get_action (sender->extension, value);
   if (!action) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
@@ -75,7 +74,7 @@ pageaction_handler_seticon (EphyWebExtension  *self,
   path_value = jsc_value_object_get_property (value, "path");
   if (jsc_value_is_string (path_value)) {
     path_str = jsc_value_to_string (path_value);
-    pixbuf = ephy_web_extension_load_pixbuf (self, path_str, -1);
+    pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path_str, -1);
   } else {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
     return NULL;
@@ -86,17 +85,16 @@ pageaction_handler_seticon (EphyWebExtension  *self,
 }
 
 static char *
-pageaction_handler_settitle (EphyWebExtension  *self,
-                             char              *name,
-                             JSCValue          *args,
-                             WebKitWebView     *web_view,
-                             GError           **error)
+pageaction_handler_settitle (EphyWebExtensionSender  *sender,
+                             char                    *name,
+                             JSCValue                *args,
+                             GError                 **error)
 {
   GtkWidget *action;
   g_autoptr (JSCValue) title = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (self, value);
+  action = pageaction_get_action (sender->extension, value);
   if (!action) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
@@ -109,17 +107,16 @@ pageaction_handler_settitle (EphyWebExtension  *self,
 }
 
 static char *
-pageaction_handler_gettitle (EphyWebExtension  *self,
-                             char              *name,
-                             JSCValue          *args,
-                             WebKitWebView     *web_view,
-                             GError           **error)
+pageaction_handler_gettitle (EphyWebExtensionSender  *sender,
+                             char                    *name,
+                             JSCValue                *args,
+                             GError                 **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
   g_autofree char *title = NULL;
 
-  action = pageaction_get_action (self, value);
+  action = pageaction_get_action (sender->extension, value);
   if (!action) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
@@ -131,16 +128,15 @@ pageaction_handler_gettitle (EphyWebExtension  *self,
 }
 
 static char *
-pageaction_handler_show (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+pageaction_handler_show (EphyWebExtensionSender  *sender,
+                         char                    *name,
+                         JSCValue                *args,
+                         GError                 **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (self, value);
+  action = pageaction_get_action (sender->extension, value);
   if (!action) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
@@ -152,16 +148,15 @@ pageaction_handler_show (EphyWebExtension  *self,
 }
 
 static char *
-pageaction_handler_hide (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+pageaction_handler_hide (EphyWebExtensionSender  *sender,
+                         char                    *name,
+                         JSCValue                *args,
+                         GError                 **error)
 {
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (self, value);
+  action = pageaction_get_action (sender->extension, value);
   if (!action) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return NULL;
@@ -181,11 +176,10 @@ static EphyWebExtensionSyncApiHandler pageaction_handlers[] = {
 };
 
 void
-ephy_web_extension_api_pageaction_handler (EphyWebExtension *self,
-                                           char             *name,
-                                           JSCValue         *args,
-                                           WebKitWebView    *web_view,
-                                           GTask            *task)
+ephy_web_extension_api_pageaction_handler (EphyWebExtensionSender *sender,
+                                           char                   *name,
+                                           JSCValue               *args,
+                                           GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
   guint idx;
@@ -195,7 +189,7 @@ ephy_web_extension_api_pageaction_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

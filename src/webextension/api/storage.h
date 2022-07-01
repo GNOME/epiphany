@@ -28,10 +28,9 @@
 
 G_BEGIN_DECLS
 
-void ephy_web_extension_api_storage_handler (EphyWebExtension *self,
-                                              char            *name,
-                                              JSCValue        *value,
-                                              WebKitWebView   *web_view,
-                                              GTask           *task);
+void ephy_web_extension_api_storage_handler (EphyWebExtensionSender *sender,
+                                             char                   *name,
+                                             JSCValue               *value,
+                                             GTask                  *task);
 
 G_END_DECLS

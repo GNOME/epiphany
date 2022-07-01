@@ -1571,19 +1571,19 @@ ephy_web_extension_clear_local_storage (EphyWebExtension *self)
 }
 
 char *
-ephy_web_extension_create_sender_object (EphyWebExtension *self,
-                                         WebKitWebView    *web_view)
+ephy_web_extension_create_sender_object (EphyWebExtensionSender *sender)
 {
   g_autoptr (JsonNode) node = json_node_init_object (json_node_alloc (), json_object_new ());
   JsonObject *obj = json_node_get_object (node);
 
-  json_object_set_string_member (obj, "id", ephy_web_extension_get_guid (self));
-  if (web_view) {
-    json_object_set_string_member (obj, "url", webkit_web_view_get_uri (web_view));
+  json_object_set_string_member (obj, "id", ephy_web_extension_get_guid (sender->extension));
+  if (sender->view) {
+    json_object_set_string_member (obj, "url", webkit_web_view_get_uri (sender->view));
+    json_object_set_int_member (obj, "frameId", sender->frame_id);
 
     /* For now these are always regular views and not extension views. */
-    if (EPHY_IS_WEB_VIEW (web_view)) {
-      json_object_set_member (obj, "tab", ephy_web_extension_api_tabs_create_tab_object (self, EPHY_WEB_VIEW (web_view)));
+    if (EPHY_IS_WEB_VIEW (sender->view)) {
+      json_object_set_member (obj, "tab", ephy_web_extension_api_tabs_create_tab_object (sender->extension, EPHY_WEB_VIEW (sender->view)));
     }
   }
 

@@ -27,11 +27,10 @@
 
 G_BEGIN_DECLS
 
-void ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
-                                          char             *name,
-                                          JSCValue         *value,
-                                          WebKitWebView    *web_view,
-                                          GTask            *task);
+void ephy_web_extension_api_tabs_handler (EphyWebExtensionSender *sender,
+                                          char                   *name,
+                                          JSCValue               *value,
+                                          GTask                  *task);
 
 JsonNode *ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *self,
                                                          EphyWebView      *web_view);

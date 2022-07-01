@@ -25,10 +25,9 @@
 
 G_BEGIN_DECLS
 
-void ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
-                                              char            *name,
-                                              JSCValue        *args,
-                                              WebKitWebView   *web_view,
-                                              GTask           *task);
+void ephy_web_extension_api_runtime_handler (EphyWebExtensionSender *sender,
+                                             char                   *name,
+                                             JSCValue               *args,
+                                             GTask                  *task);
 
 G_END_DECLS

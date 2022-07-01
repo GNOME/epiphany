@@ -24,6 +24,7 @@
 
 typedef struct {
   WebKitWebPage *page;
+  WebKitFrame *frame;
   const char *guid;
 } EphySendMessageData;
 
@@ -105,7 +106,7 @@ ephy_send_message (const char *function_name,
 
   args_json = jsc_value_to_json (function_args, 0);
   message = webkit_user_message_new (function_name,
-                                     g_variant_new ("(ss)", send_message_data->guid, args_json));
+                                     g_variant_new ("(sts)", send_message_data->guid, webkit_frame_get_id (send_message_data->frame), args_json));
 
   webkit_web_page_send_message_to_view (send_message_data->page, message, NULL,
                                         (GAsyncReadyCallback)on_send_message_finish,
@@ -174,6 +175,7 @@ js_exception_handler (JSCContext   *context,
 
 void
 ephy_webextension_install_common_apis (WebKitWebPage *page,
+                                       WebKitFrame   *frame,
                                        JSCContext    *js_context,
                                        const char    *guid,
                                        JsonObject    *translations)
@@ -231,6 +233,7 @@ ephy_webextension_install_common_apis (WebKitWebPage *page,
   /* global functions */
   send_message_data = g_new (EphySendMessageData, 1);
   send_message_data->page = page;
+  send_message_data->frame = frame;
   send_message_data->guid = guid;
   js_function = jsc_value_new_function (js_context,
                                         NULL,

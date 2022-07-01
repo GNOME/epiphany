@@ -206,11 +206,10 @@ get_cookies_ready_cb (WebKitCookieManager *cookie_manager,
 }
 
 static void
-cookies_handler_get (EphyWebExtension *self,
-                     char             *name,
-                     JSCValue         *args,
-                     WebKitWebView    *web_view,
-                     GTask            *task)
+cookies_handler_get (EphyWebExtensionSender *sender,
+                     char                   *name,
+                     JSCValue               *args,
+                     GTask                  *task)
 {
   g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
@@ -231,7 +230,7 @@ cookies_handler_get (EphyWebExtension *self,
     return;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, url)) {
+  if (!ephy_web_extension_has_host_permission (sender->extension, url)) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "cookies.get(): Permission denied for host '%s'", url);
     return;
   }
@@ -264,11 +263,10 @@ add_cookie_ready_cb (WebKitCookieManager *cookie_manager,
 }
 
 static void
-cookies_handler_set (EphyWebExtension *self,
-                     char             *name,
-                     JSCValue         *args,
-                     WebKitWebView    *web_view,
-                     GTask            *task)
+cookies_handler_set (EphyWebExtensionSender *sender,
+                     char                   *name,
+                     JSCValue               *args,
+                     GTask                  *task)
 {
   g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *url = NULL;
@@ -306,7 +304,7 @@ cookies_handler_set (EphyWebExtension *self,
     return;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, url) || (domain && !ephy_web_extension_has_host_permission (self, domain))) {
+  if (!ephy_web_extension_has_host_permission (sender->extension, url) || (domain && !ephy_web_extension_has_host_permission (sender->extension, domain))) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "cookies.set(): Permission denied for host '%s'", url);
     return;
   }
@@ -334,11 +332,10 @@ cookies_handler_set (EphyWebExtension *self,
 }
 
 static void
-cookies_handler_remove (EphyWebExtension *self,
-                        char             *name,
-                        JSCValue         *args,
-                        WebKitWebView    *web_view,
-                        GTask            *task)
+cookies_handler_remove (EphyWebExtensionSender *sender,
+                        char                   *name,
+                        JSCValue               *args,
+                        GTask                  *task)
 {
   g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *url = NULL;
@@ -359,7 +356,7 @@ cookies_handler_remove (EphyWebExtension *self,
     return;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, url)) {
+  if (!ephy_web_extension_has_host_permission (sender->extension, url)) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "cookies.remove(): Permission denied for host '%s'", url);
     return;
   }
@@ -459,11 +456,10 @@ get_all_cookies_ready_cb (WebKitCookieManager       *cookie_manager,
 }
 
 static void
-cookies_handler_get_all (EphyWebExtension *self,
-                         char             *name,
-                         JSCValue         *args,
-                         WebKitWebView    *web_view,
-                         GTask            *task)
+cookies_handler_get_all (EphyWebExtensionSender *sender,
+                         char                   *name,
+                         JSCValue               *args,
+                         GTask                  *task)
 {
   g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
@@ -484,7 +480,7 @@ cookies_handler_get_all (EphyWebExtension *self,
     return;
   }
 
-  if (!ephy_web_extension_has_host_permission (self, url)) {
+  if (!ephy_web_extension_has_host_permission (sender->extension, url)) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "cookies.getAll(): Permission denied for host '%s'", url);
     return;
   }
@@ -525,11 +521,10 @@ create_array_of_all_tab_ids (void)
 }
 
 static void
-cookies_handler_get_all_cookie_stores (EphyWebExtension *self,
-                                       char             *name,
-                                       JSCValue         *args,
-                                       WebKitWebView    *web_view,
-                                       GTask            *task)
+cookies_handler_get_all_cookie_stores (EphyWebExtensionSender *sender,
+                                       char                   *name,
+                                       JSCValue               *args,
+                                       GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -560,16 +555,15 @@ static EphyWebExtensionAsyncApiHandler cookies_async_handlers[] = {
 };
 
 void
-ephy_web_extension_api_cookies_handler (EphyWebExtension *self,
-                                        char             *name,
-                                        JSCValue         *args,
-                                        WebKitWebView    *web_view,
-                                        GTask            *task)
+ephy_web_extension_api_cookies_handler (EphyWebExtensionSender *sender,
+                                        char                   *name,
+                                        JSCValue               *args,
+                                        GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
 
-  if (!ephy_web_extension_has_permission (self, "cookies")) {
-    g_warning ("Extension %s tried to use cookies without permission.", ephy_web_extension_get_name (self));
+  if (!ephy_web_extension_has_permission (sender->extension, "cookies")) {
+    g_warning ("Extension %s tried to use cookies without permission.", ephy_web_extension_get_name (sender->extension));
     error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
@@ -579,7 +573,7 @@ ephy_web_extension_api_cookies_handler (EphyWebExtension *self,
     EphyWebExtensionAsyncApiHandler handler = cookies_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, args, web_view, task);
+      handler.execute (sender, name, args, task);
       return;
     }
   }

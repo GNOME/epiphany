@@ -28,11 +28,10 @@
 #include "ephy-shell.h"
 
 static char *
-runtime_handler_get_browser_info (EphyWebExtension  *self,
-                                  char              *name,
-                                  JSCValue          *args,
-                                  WebKitWebView     *web_view,
-                                  GError           **error)
+runtime_handler_get_browser_info (EphyWebExtensionSender  *sender,
+                                  char                    *name,
+                                  JSCValue                *args,
+                                  GError                 **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -68,11 +67,10 @@ get_arch (void)
 }
 
 static char *
-runtime_handler_get_platform_info (EphyWebExtension  *self,
-                                   char              *name,
-                                   JSCValue          *args,
-                                   WebKitWebView     *web_view,
-                                   GError           **error)
+runtime_handler_get_platform_info (EphyWebExtensionSender  *sender,
+                                   char                    *name,
+                                   JSCValue                *args,
+                                   GError                 **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -105,11 +103,10 @@ is_empty_object (JSCValue *value)
 }
 
 static void
-runtime_handler_send_message (EphyWebExtension *self,
-                              char             *name,
-                              JSCValue         *args,
-                              WebKitWebView    *web_view,
-                              GTask            *task)
+runtime_handler_send_message (EphyWebExtensionSender *sender,
+                              char                   *name,
+                              JSCValue               *args,
+                              GTask                  *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (GError) error = NULL;
@@ -137,22 +134,22 @@ runtime_handler_send_message (EphyWebExtension *self,
   }
 
   json = jsc_value_to_json (message, 0);
-  ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, self, "runtime.onMessage",
+  ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, sender->extension,
+                                                                 sender,
+                                                                 "runtime.onMessage",
                                                                  json,
-                                                                 web_view,
                                                                  task);
 
   return;
 }
 
 static char *
-runtime_handler_open_options_page (EphyWebExtension  *self,
-                                   char              *name,
-                                   JSCValue          *args,
-                                   WebKitWebView     *web_view,
-                                   GError           **error)
+runtime_handler_open_options_page (EphyWebExtensionSender  *sender,
+                                   char                    *name,
+                                   JSCValue                *args,
+                                   GError                 **error)
 {
-  const char *options_ui = ephy_web_extension_get_option_ui_page (self);
+  const char *options_ui = ephy_web_extension_get_option_ui_page (sender->extension);
   EphyShell *shell = ephy_shell_get_default ();
   g_autofree char *title = NULL;
   g_autofree char *options_uri = NULL;
@@ -164,8 +161,8 @@ runtime_handler_open_options_page (EphyWebExtension  *self,
     return NULL;
   }
 
-  title = g_strdup_printf (_("Options for %s"), ephy_web_extension_get_name (self));
-  options_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (self), options_ui);
+  title = g_strdup_printf (_("Options for %s"), ephy_web_extension_get_name (sender->extension));
+  options_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (sender->extension), options_ui);
 
   new_window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
   gtk_window_set_transient_for (new_window, gtk_application_get_active_window (GTK_APPLICATION (shell)));
@@ -173,7 +170,7 @@ runtime_handler_open_options_page (EphyWebExtension  *self,
   gtk_window_set_title (new_window, title);
   gtk_window_set_position (new_window, GTK_WIN_POS_CENTER_ON_PARENT);
 
-  new_web_view = ephy_web_extensions_manager_create_web_extensions_webview (self);
+  new_web_view = ephy_web_extensions_manager_create_web_extensions_webview (sender->extension);
   gtk_container_add (GTK_CONTAINER (new_window), new_web_view);
 
   webkit_web_view_load_uri (WEBKIT_WEB_VIEW (new_web_view), options_uri);
@@ -195,11 +192,10 @@ static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
 };
 
 void
-ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
-                                        char             *name,
-                                        JSCValue         *args,
-                                        WebKitWebView    *web_view,
-                                        GTask            *task)
+ephy_web_extension_api_runtime_handler (EphyWebExtensionSender *sender,
+                                        char                   *name,
+                                        JSCValue               *args,
+                                        GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
   guint idx;
@@ -209,7 +205,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));
@@ -224,7 +220,7 @@ ephy_web_extension_api_runtime_handler (EphyWebExtension *self,
     EphyWebExtensionAsyncApiHandler handler = runtime_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, args, web_view, task);
+      handler.execute (sender, name, args, task);
       return;
     }
   }

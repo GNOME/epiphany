@@ -318,15 +318,14 @@ get_menus (EphyWebExtension *extension)
 }
 
 static void
-menus_handler_create (EphyWebExtension *self,
-                      char             *name,
-                      JsonArray        *args,
-                      WebKitWebView    *web_view,
-                      GTask            *task)
+menus_handler_create (EphyWebExtensionSender *sender,
+                      char                   *name,
+                      JsonArray              *args,
+                      GTask                  *task)
 {
   JsonObject *create_properties = ephy_json_array_get_object (args, 0);
   MenuItem *item;
-  GHashTable *menus = get_menus (self);
+  GHashTable *menus = get_menus (sender->extension);
 
   if (!create_properties) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "menus.create(): Missing createProperties");
@@ -373,11 +372,10 @@ menus_remove_by_id (GHashTable *menus,
 }
 
 static void
-menus_handler_remove (EphyWebExtension *self,
-                      char             *name,
-                      JsonArray        *args,
-                      WebKitWebView    *web_view,
-                      GTask            *task)
+menus_handler_remove (EphyWebExtensionSender *sender,
+                      char                   *name,
+                      JsonArray              *args,
+                      GTask                  *task)
 {
   const char *menu_id = ephy_json_array_get_string (args, 0);
 
@@ -386,7 +384,7 @@ menus_handler_remove (EphyWebExtension *self,
     return;
   }
 
-  if (!menus_remove_by_id (get_menus (self), menu_id)) {
+  if (!menus_remove_by_id (get_menus (sender->extension), menu_id)) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "menus.remove(): Failed to find menuId '%s'", menu_id);
     return;
   }
@@ -395,13 +393,12 @@ menus_handler_remove (EphyWebExtension *self,
 }
 
 static void
-menus_handler_remove_all (EphyWebExtension *self,
-                          char             *name,
-                          JsonArray        *args,
-                          WebKitWebView    *web_view,
-                          GTask            *task)
+menus_handler_remove_all (EphyWebExtensionSender *sender,
+                          char                   *name,
+                          JsonArray              *args,
+                          GTask                  *task)
 {
-  g_object_set_data (G_OBJECT (self), "menus", NULL);
+  g_object_set_data (G_OBJECT (sender->extension), "menus", NULL);
   g_task_return_pointer (task, NULL, NULL);
 }
 
@@ -676,11 +673,10 @@ static EphyWebExtensionApiHandler menus_handlers[] = {
 };
 
 void
-ephy_web_extension_api_menus_handler (EphyWebExtension *self,
-                                      char             *name,
-                                      JSCValue         *args,
-                                      WebKitWebView    *web_view,
-                                      GTask            *task)
+ephy_web_extension_api_menus_handler (EphyWebExtensionSender *sender,
+                                      char                   *name,
+                                      JSCValue               *args,
+                                      GTask                  *task)
 {
   /* Temporary conversion as we migrate to json-glib here. */
   g_autofree char *json = jsc_value_to_json (args, 0);
@@ -689,7 +685,7 @@ ephy_web_extension_api_menus_handler (EphyWebExtension *self,
   json_array_seal (json_args);
 
   /* We slightly differ from Firefox here that either permission works for either API but they are identical. */
-  if (!ephy_web_extension_has_permission (self, "menus") && !ephy_web_extension_has_permission (self, "contextMenus")) {
+  if (!ephy_web_extension_has_permission (sender->extension, "menus") && !ephy_web_extension_has_permission (sender->extension, "contextMenus")) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return;
   }
@@ -698,7 +694,7 @@ ephy_web_extension_api_menus_handler (EphyWebExtension *self,
     EphyWebExtensionApiHandler handler = menus_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, json_args, web_view, task);
+      handler.execute (sender, name, json_args, task);
       return;
     }
   }

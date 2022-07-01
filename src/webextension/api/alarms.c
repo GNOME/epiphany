@@ -163,15 +163,14 @@ on_alarm_start (gpointer user_data)
 }
 
 static char *
-alarms_handler_create (EphyWebExtension  *self,
-                       char              *name,
-                       JSCValue          *args,
-                       WebKitWebView     *web_view,
-                       GError           **error)
+alarms_handler_create (EphyWebExtensionSender *sender,
+                       char                   *name,
+                       JSCValue               *args,
+                       GError                **error)
 {
   g_autoptr (JSCValue) alarm_name = NULL;
   g_autoptr (JSCValue) alarm_info = NULL;
-  GHashTable *alarms = get_alarms (self);
+  GHashTable *alarms = get_alarms (sender->extension);
   Alarm *alarm;
   double delay_in_minutes = 0.0;
   double period_in_minutes = 0.0;
@@ -201,7 +200,7 @@ alarms_handler_create (EphyWebExtension  *self,
 
   alarm = g_new0 (Alarm, 1);
   alarm->repeat_interval_ms = minutes_to_ms (period_in_minutes);
-  alarm->web_extension = self;
+  alarm->web_extension = sender->extension;
   alarm->name = g_steal_pointer (&name_str);
 
   if (delay_in_minutes) {
@@ -221,13 +220,12 @@ alarms_handler_create (EphyWebExtension  *self,
 }
 
 static char *
-alarms_handler_clear (EphyWebExtension  *self,
-                      char              *name,
-                      JSCValue          *args,
-                      WebKitWebView     *web_view,
-                      GError           **error)
+alarms_handler_clear (EphyWebExtensionSender *sender,
+                      char                   *name,
+                      JSCValue               *args,
+                      GError                **error)
 {
-  GHashTable *alarms = get_alarms (self);
+  GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *name_str = NULL;
 
@@ -243,13 +241,12 @@ alarms_handler_clear (EphyWebExtension  *self,
 }
 
 static char *
-alarms_handler_clear_all (EphyWebExtension  *self,
-                          char              *name,
-                          JSCValue          *args,
-                          WebKitWebView     *web_view,
-                          GError           **error)
+alarms_handler_clear_all (EphyWebExtensionSender  *sender,
+                          char                    *name,
+                          JSCValue                *args,
+                          GError                 **error)
 {
-  GHashTable *alarms = get_alarms (self);
+  GHashTable *alarms = get_alarms (sender->extension);
 
   if (g_hash_table_size (alarms) == 0)
     return g_strdup ("false");
@@ -259,13 +256,12 @@ alarms_handler_clear_all (EphyWebExtension  *self,
 }
 
 static char *
-alarms_handler_get (EphyWebExtension  *self,
-                    char              *name,
-                    JSCValue          *args,
-                    WebKitWebView     *web_view,
-                    GError           **error)
+alarms_handler_get (EphyWebExtensionSender  *sender,
+                    char                    *name,
+                    JSCValue                *args,
+                    GError                 **error)
 {
-  GHashTable *alarms = get_alarms (self);
+  GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
   g_autofree char *name_str = NULL;
   Alarm *alarm;
@@ -280,13 +276,12 @@ alarms_handler_get (EphyWebExtension  *self,
 }
 
 static char *
-alarms_handler_get_all (EphyWebExtension  *self,
-                        char              *name,
-                        JSCValue          *args,
-                        WebKitWebView     *web_view,
-                        GError           **error)
+alarms_handler_get_all (EphyWebExtensionSender  *sender,
+                        char                    *name,
+                        JSCValue                *args,
+                        GError                 **error)
 {
-  GHashTable *alarms = get_alarms (self);
+  GHashTable *alarms = get_alarms (sender->extension);
   g_autoptr (JsonNode) node = json_node_init_array (json_node_alloc (), json_array_new ());
   JsonArray *array = json_node_get_array (node);
   GHashTableIter iter;
@@ -308,16 +303,15 @@ static EphyWebExtensionSyncApiHandler alarms_handlers[] = {
 };
 
 void
-ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
-                                       char             *name,
-                                       JSCValue         *args,
-                                       WebKitWebView    *web_view,
-                                       GTask            *task)
+ephy_web_extension_api_alarms_handler (EphyWebExtensionSender *sender,
+                                       char                   *name,
+                                       JSCValue               *args,
+                                       GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
 
-  if (!ephy_web_extension_has_permission (self, "alarms")) {
-    g_warning ("Extension %s tried to use alarms without permission.", ephy_web_extension_get_name (self));
+  if (!ephy_web_extension_has_permission (sender->extension, "alarms")) {
+    g_warning ("Extension %s tried to use alarms without permission.", ephy_web_extension_get_name (sender->extension));
     error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "alarms: Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
@@ -328,7 +322,7 @@ ephy_web_extension_api_alarms_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

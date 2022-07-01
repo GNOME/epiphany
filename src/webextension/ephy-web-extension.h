@@ -35,23 +35,32 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, EPHY, WEB_EXTENSION, GObject)
 
-typedef void (*executeTaskHandler)(EphyWebExtension *web_extension,
-                                   char             *name,
-                                   JSCValue         *args,
-                                   WebKitWebView    *web_view,
-                                   GTask            *task);
+/**
+ * EphyWebExtensionSender:
+ *
+ * Represents the sender of a message or API call.
+ * Which extension from which view in which frame.
+ */
+typedef struct {
+  EphyWebExtension *extension;
+  WebKitWebView *view;
+  guint64 frame_id;
+} EphyWebExtensionSender;
 
-typedef char *(*executeHandler)(EphyWebExtension  *web_extension,
-                                char              *name,
-                                JSCValue          *args,
-                                WebKitWebView     *web_view,
-                                GError           **error);
+typedef void (*executeTaskHandler)(EphyWebExtensionSender *sender,
+                                   char                   *name,
+                                   JSCValue               *args,
+                                   GTask                  *task);
 
-typedef void (*EphyApiExecuteFunc)(EphyWebExtension *web_extension,
-                                   char             *name,
-                                   JsonArray        *args,
-                                   WebKitWebView    *web_view,
-                                   GTask            *task);
+typedef char *(*executeHandler)(EphyWebExtensionSender  *sender,
+                                char                    *name,
+                                JSCValue                *args,
+                                GError                 **error);
+
+typedef void (*EphyApiExecuteFunc)(EphyWebExtensionSender *sender,
+                                   char                   *name,
+                                   JsonArray              *args,
+                                   GTask                  *task);
 
 
 extern GQuark web_extension_error_quark (void);
@@ -180,8 +189,8 @@ void                   ephy_web_extension_save_local_storage              (EphyW
 
 void                   ephy_web_extension_clear_local_storage             (EphyWebExtension *self);
 
-char                  *ephy_web_extension_create_sender_object            (EphyWebExtension *self,
-                                                                           WebKitWebView     *web_view);
+char                  *ephy_web_extension_create_sender_object            (EphyWebExtensionSender *sender);
+
 gboolean               ephy_web_extension_rule_matches_uri                (const char       *rule,
                                                                            GUri             *uri);
 

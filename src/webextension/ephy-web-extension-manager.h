@@ -82,19 +82,12 @@ void                     ephy_web_extension_manager_emit_in_extension_views     
                                                                                      const char              *name,
                                                                                      const char              *json);
 
-void                     ephy_web_extension_manager_emit_in_extension_views_except_self
-                                                                                    (EphyWebExtensionManager *self,
-                                                                                     EphyWebExtension        *web_extension,
-                                                                                     const char              *name,
-                                                                                     const char              *json,
-                                                                                     WebKitWebView           *own_web_view);
-
 void                     ephy_web_extension_manager_emit_in_extension_views_with_reply
                                                                                     (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
+                                                                                     EphyWebExtensionSender  *sender,
                                                                                      const char              *name,
                                                                                      const char              *json,
-                                                                                     WebKitWebView           *own_web_view,
                                                                                      GTask                   *reply_task);
 
 void                     ephy_web_extension_manager_emit_in_tab_with_reply          (EphyWebExtensionManager *self,

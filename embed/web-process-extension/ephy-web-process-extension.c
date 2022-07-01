@@ -259,6 +259,7 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
   g_clear_object (&result);
 
   ephy_webextension_install_common_apis (page,
+                                         frame,
                                          js_context,
                                          guid,
                                          translations);

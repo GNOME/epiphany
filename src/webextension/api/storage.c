@@ -58,13 +58,12 @@ strv_from_value (JSCValue *array)
 }
 
 static char *
-storage_handler_local_set (EphyWebExtension  *self,
-                           char              *name,
-                           JSCValue          *args,
-                           WebKitWebView     *web_view,
-                           GError           **error)
+storage_handler_local_set (EphyWebExtensionSender  *sender,
+                           char                    *name,
+                           JSCValue                *args,
+                           GError                 **error)
 {
-  JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
+  JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
   g_auto (GStrv) keys = NULL;
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
@@ -81,19 +80,18 @@ storage_handler_local_set (EphyWebExtension  *self,
 
   /* FIXME: Implement storage.onChanged */
   /* FIXME: Async IO */
-  ephy_web_extension_save_local_storage (self);
+  ephy_web_extension_save_local_storage (sender->extension);
 
   return NULL;
 }
 
 static char *
-storage_handler_local_get (EphyWebExtension  *self,
-                           char              *name,
-                           JSCValue          *args,
-                           WebKitWebView     *web_view,
-                           GError           **error)
+storage_handler_local_get (EphyWebExtensionSender  *sender,
+                           char                    *name,
+                           JSCValue                *args,
+                           GError                 **error)
 {
-  JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
+  JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
   g_autoptr (JsonBuilder) builder = NULL;
   g_auto (GStrv) keys = NULL;
@@ -147,13 +145,12 @@ end_get:
 }
 
 static char *
-storage_handler_local_remove (EphyWebExtension  *self,
-                              char              *name,
-                              JSCValue          *args,
-                              WebKitWebView     *web_view,
-                              GError           **error)
+storage_handler_local_remove (EphyWebExtensionSender  *sender,
+                              char                    *name,
+                              JSCValue                *args,
+                              GError                 **error)
 {
-  JsonNode *local_storage = ephy_web_extension_get_local_storage (self);
+  JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
   g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
@@ -172,19 +169,18 @@ storage_handler_local_remove (EphyWebExtension  *self,
   }
 
 end_remove:
-  ephy_web_extension_save_local_storage (self);
+  ephy_web_extension_save_local_storage (sender->extension);
   return NULL;
 }
 
 static char *
-storage_handler_local_clear (EphyWebExtension  *self,
-                             char              *name,
-                             JSCValue          *args,
-                             WebKitWebView     *web_view,
-                             GError           **error)
+storage_handler_local_clear (EphyWebExtensionSender  *sender,
+                             char                    *name,
+                             JSCValue                *args,
+                             GError                 **error)
 {
-  ephy_web_extension_clear_local_storage (self);
-  ephy_web_extension_save_local_storage (self);
+  ephy_web_extension_clear_local_storage (sender->extension);
+  ephy_web_extension_save_local_storage (sender->extension);
   return NULL;
 }
 
@@ -196,17 +192,16 @@ static EphyWebExtensionSyncApiHandler storage_handlers[] = {
 };
 
 void
-ephy_web_extension_api_storage_handler (EphyWebExtension *self,
-                                        char             *name,
-                                        JSCValue         *args,
-                                        WebKitWebView    *web_view,
-                                        GTask            *task)
+ephy_web_extension_api_storage_handler (EphyWebExtensionSender *sender,
+                                        char                   *name,
+                                        JSCValue               *args,
+                                        GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
   guint idx;
 
-  if (!ephy_web_extension_has_permission (self, "storage")) {
-    g_warning ("Extension %s tried to use storage without permission.", ephy_web_extension_get_name (self));
+  if (!ephy_web_extension_has_permission (sender->extension, "storage")) {
+    g_warning ("Extension %s tried to use storage without permission.", ephy_web_extension_get_name (sender->extension));
     error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     g_task_return_error (task, g_steal_pointer (&error));
     return;
@@ -217,7 +212,7 @@ ephy_web_extension_api_storage_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));

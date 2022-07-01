@@ -28,6 +28,7 @@
 G_BEGIN_DECLS
 
 void ephy_webextension_install_common_apis (WebKitWebPage *page,
+                                            WebKitFrame   *frame,
                                             JSCContext    *js_context,
                                             const char    *guid,
                                             JsonObject    *translations);

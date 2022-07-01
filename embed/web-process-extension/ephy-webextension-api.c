@@ -178,7 +178,12 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (JSCValue) result = NULL;
   const char *data;
+  const char *uri;
   gsize data_size;
+
+  uri = webkit_web_page_get_uri (page);
+  if (!uri || !g_str_has_prefix (uri, "ephy-webextension:"))
+    return;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
 
@@ -202,6 +207,7 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
   g_clear_object (&result);
 
   ephy_webextension_install_common_apis (page,
+                                         frame,
                                          js_context,
                                          extension->guid,
                                          extension->translations);

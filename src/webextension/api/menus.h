@@ -26,11 +26,10 @@
 
 G_BEGIN_DECLS
 
-void         ephy_web_extension_api_menus_handler                    (EphyWebExtension *self,
-                                                                      char             *name,
-                                                                      JSCValue         *value,
-                                                                      WebKitWebView    *web_view,
-                                                                      GTask            *task);
+void         ephy_web_extension_api_menus_handler                    (EphyWebExtensionSender *sender,
+                                                                      char                   *name,
+                                                                      JSCValue               *value,
+                                                                      GTask                  *task);
 
 WebKitContextMenuItem  *ephy_web_extension_api_menus_create_context_menu        (EphyWebExtension    *self,
                                                                                  WebKitWebView       *web_view,

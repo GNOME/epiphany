@@ -66,7 +66,7 @@ get_web_view_for_tab_id (EphyShell   *shell,
 }
 
 static void
-add_web_view_to_json (EphyWebExtension *self,
+add_web_view_to_json (EphyWebExtension *extension,
                       JsonBuilder      *builder,
                       EphyWindow       *window,
                       EphyWebView      *web_view)
@@ -76,7 +76,7 @@ add_web_view_to_json (EphyWebExtension *self,
   gboolean is_active = ephy_tab_view_get_current_page (tab_view) == page;
   WebKitFaviconDatabase *favicon_db = webkit_web_context_get_favicon_database (webkit_web_view_get_context (WEBKIT_WEB_VIEW (web_view)));
   const char *favicon_uri = webkit_favicon_database_get_favicon_uri (favicon_db, ephy_web_view_get_address (web_view));
-  gboolean has_tab_permission = ephy_web_extension_has_tab_or_host_permission (self, web_view, TRUE);
+  gboolean has_tab_permission = ephy_web_extension_has_tab_or_host_permission (extension, web_view, TRUE);
 
   json_builder_begin_object (builder);
   if (has_tab_permission) {
@@ -120,20 +120,20 @@ add_web_view_to_json (EphyWebExtension *self,
 }
 
 void
-ephy_web_extension_api_tabs_add_tab_to_json (EphyWebExtension *self,
+ephy_web_extension_api_tabs_add_tab_to_json (EphyWebExtension *extension,
                                              JsonBuilder      *builder,
                                              EphyWindow       *window,
                                              EphyWebView      *web_view)
 {
-  add_web_view_to_json (self, builder, window, web_view);
+  add_web_view_to_json (extension, builder, window, web_view);
 }
 
 JsonNode *
-ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *self,
+ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *extension,
                                                EphyWebView      *web_view)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
-  add_web_view_to_json (self,
+  add_web_view_to_json (extension,
                         builder,
                         EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view))),
                         web_view);
@@ -158,11 +158,10 @@ get_window_by_id (EphyShell *shell,
 }
 
 static char *
-tabs_handler_query (EphyWebExtension  *self,
-                    char              *name,
-                    JSCValue          *args,
-                    WebKitWebView     *web_view,
-                    GError           **error)
+tabs_handler_query (EphyWebExtensionSender  *sender,
+                    char                    *name,
+                    JSCValue                *args,
+                    GError                 **error)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
@@ -224,7 +223,7 @@ tabs_handler_query (EphyWebExtension  *self,
       else if (active == API_VALUE_FALSE && web_view == active_web_view)
         continue;
 
-      add_web_view_to_json (self, builder, window, web_view);
+      add_web_view_to_json (sender->extension, builder, window, web_view);
     }
   }
 
@@ -235,11 +234,10 @@ tabs_handler_query (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_insert_css (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+tabs_handler_insert_css (EphyWebExtensionSender  *sender,
+                         char                    *name,
+                         JSCValue                *args,
+                         GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   WebKitUserContentManager *ucm;
@@ -273,7 +271,7 @@ tabs_handler_insert_css (EphyWebExtension  *self,
     return NULL;
   }
 
-  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+  if (!ephy_web_extension_has_host_or_active_permission (sender->extension, EPHY_WEB_VIEW (target_web_view), TRUE)) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
@@ -281,7 +279,7 @@ tabs_handler_insert_css (EphyWebExtension  *self,
   ucm = webkit_web_view_get_user_content_manager (target_web_view);
 
   code = jsc_value_object_get_property (obj, "code");
-  css = ephy_web_extension_add_custom_css (self, jsc_value_to_string (code));
+  css = ephy_web_extension_add_custom_css (sender->extension, jsc_value_to_string (code));
 
   if (css)
     webkit_user_content_manager_add_style_sheet (ucm, css);
@@ -290,11 +288,10 @@ tabs_handler_insert_css (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_remove_css (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+tabs_handler_remove_css (EphyWebExtensionSender  *sender,
+                         char                    *name,
+                         JSCValue                *args,
+                         GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   JSCValue *code;
@@ -328,7 +325,7 @@ tabs_handler_remove_css (EphyWebExtension  *self,
     return NULL;
   }
 
-  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+  if (!ephy_web_extension_has_host_or_active_permission (sender->extension, EPHY_WEB_VIEW (target_web_view), TRUE)) {
     g_set_error_literal (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
     return NULL;
   }
@@ -336,7 +333,7 @@ tabs_handler_remove_css (EphyWebExtension  *self,
   ucm = webkit_web_view_get_user_content_manager (target_web_view);
 
   code = jsc_value_object_get_property (obj, "code");
-  css = ephy_web_extension_get_custom_css (self, jsc_value_to_string (code));
+  css = ephy_web_extension_get_custom_css (sender->extension, jsc_value_to_string (code));
   if (css)
     webkit_user_content_manager_remove_style_sheet (ucm, css);
 
@@ -344,11 +341,10 @@ tabs_handler_remove_css (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_get (EphyWebExtension  *self,
-                  char              *name,
-                  JSCValue          *args,
-                  WebKitWebView     *web_view,
-                  GError           **error)
+tabs_handler_get (EphyWebExtensionSender  *sender,
+                  char                    *name,
+                  JSCValue                *args,
+                  GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -369,7 +365,7 @@ tabs_handler_get (EphyWebExtension  *self,
     return NULL;
   }
 
-  add_web_view_to_json (self, builder, parent_window, target_web_view);
+  add_web_view_to_json (sender->extension, builder, parent_window, target_web_view);
   root = json_builder_get_root (builder);
 
   return json_to_string (root, FALSE);
@@ -397,11 +393,10 @@ on_execute_script_ready (GObject      *source,
 }
 
 static void
-tabs_handler_execute_script (EphyWebExtension *self,
-                             char             *name,
-                             JSCValue         *args,
-                             WebKitWebView    *web_view,
-                             GTask            *task)
+tabs_handler_execute_script (EphyWebExtensionSender *sender,
+                             char                   *name,
+                             JSCValue               *args,
+                             GTask                  *task)
 {
   g_autoptr (JSCValue) code_value = NULL;
   g_autoptr (JSCValue) file_value = NULL;
@@ -433,7 +428,7 @@ tabs_handler_execute_script (EphyWebExtension *self,
     code = jsc_value_to_string (code_value);
   else if (jsc_value_is_string (file_value)) {
     g_autofree char *resource_path = jsc_value_to_string (file_value);
-    code = ephy_web_extension_get_resource_as_string (self, resource_path[0] == '/' ? resource_path + 1 : resource_path);
+    code = ephy_web_extension_get_resource_as_string (sender->extension, resource_path[0] == '/' ? resource_path + 1 : resource_path);
   } else {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
     return;
@@ -445,14 +440,14 @@ tabs_handler_execute_script (EphyWebExtension *self,
     target_web_view = get_web_view_for_tab_id (shell, jsc_value_to_int32 (tab_id_value), NULL);
 
   if (code && target_web_view) {
-    if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+    if (!ephy_web_extension_has_host_or_active_permission (sender->extension, EPHY_WEB_VIEW (target_web_view), TRUE)) {
       g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
       return;
     }
 
     webkit_web_view_run_javascript_in_world (target_web_view,
                                              code,
-                                             ephy_web_extension_get_guid (self),
+                                             ephy_web_extension_get_guid (sender->extension),
                                              NULL,
                                              on_execute_script_ready,
                                              task);
@@ -460,11 +455,10 @@ tabs_handler_execute_script (EphyWebExtension *self,
 }
 
 static void
-tabs_handler_send_message (EphyWebExtension *self,
-                           char             *name,
-                           JSCValue         *args,
-                           WebKitWebView    *web_view,
-                           GTask            *task)
+tabs_handler_send_message (EphyWebExtensionSender *sender,
+                           char                   *name,
+                           JSCValue               *args,
+                           GTask                  *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (JSCValue) tab_id_value = NULL;
@@ -492,18 +486,18 @@ tabs_handler_send_message (EphyWebExtension *self,
   }
 
 
-  if (!ephy_web_extension_has_host_or_active_permission (self, EPHY_WEB_VIEW (target_web_view), TRUE)) {
+  if (!ephy_web_extension_has_host_or_active_permission (sender->extension, EPHY_WEB_VIEW (target_web_view), TRUE)) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "tabs.sendMessage(): Permission Denied");
     return;
   }
 
   serialized_message = jsc_value_to_json (message_value, 0);
   ephy_web_extension_manager_emit_in_tab_with_reply (manager,
-                                                     self,
+                                                     sender->extension,
                                                      "runtime.onMessage",
                                                      serialized_message,
                                                      target_web_view,
-                                                     ephy_web_extension_create_sender_object (self, web_view),
+                                                     ephy_web_extension_create_sender_object (sender),
                                                      task);
 }
 
@@ -551,11 +545,10 @@ ephy_web_extension_api_tabs_url_is_unprivileged (const char *url)
 }
 
 static char *
-tabs_handler_create (EphyWebExtension  *self,
-                     char              *name,
-                     JSCValue          *args,
-                     WebKitWebView     *web_view,
-                     GError           **error)
+tabs_handler_create (EphyWebExtensionSender  *sender,
+                     char                    *name,
+                     JSCValue                *args,
+                     GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   EphyEmbed *embed;
@@ -573,7 +566,7 @@ tabs_handler_create (EphyWebExtension  *self,
     return NULL;
   }
 
-  url = resolve_to_absolute_url (self, api_utils_get_string_property (create_properties, "url", NULL));
+  url = resolve_to_absolute_url (sender->extension, api_utils_get_string_property (create_properties, "url", NULL));
   if (!ephy_web_extension_api_tabs_url_is_unprivileged (url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.create(): URL '%s' is not allowed", url);
     return NULL;
@@ -598,17 +591,16 @@ tabs_handler_create (EphyWebExtension  *self,
     ephy_web_view_load_new_tab_page (new_web_view);
 
   builder = json_builder_new ();
-  add_web_view_to_json (self, builder, parent_window, new_web_view);
+  add_web_view_to_json (sender->extension, builder, parent_window, new_web_view);
   root = json_builder_get_root (builder);
   return json_to_string (root, FALSE);
 }
 
 static char *
-tabs_handler_update (EphyWebExtension  *self,
-                     char              *name,
-                     JSCValue          *args,
-                     WebKitWebView     *web_view,
-                     GError           **error)
+tabs_handler_update (EphyWebExtensionSender  *sender,
+                     char                    *name,
+                     JSCValue                *args,
+                     GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JSCValue) update_properties = NULL;
@@ -648,7 +640,7 @@ tabs_handler_update (EphyWebExtension  *self,
     return NULL;
   }
 
-  new_url = resolve_to_absolute_url (self, api_utils_get_string_property (update_properties, "url", NULL));
+  new_url = resolve_to_absolute_url (sender->extension, api_utils_get_string_property (update_properties, "url", NULL));
   if (!ephy_web_extension_api_tabs_url_is_unprivileged (new_url)) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "tabs.update(): URL '%s' is not allowed", new_url);
     return NULL;
@@ -662,7 +654,7 @@ tabs_handler_update (EphyWebExtension  *self,
     webkit_web_view_load_uri (target_web_view, new_url);
 
   builder = json_builder_new ();
-  add_web_view_to_json (self, builder, parent_window, EPHY_WEB_VIEW (target_web_view));
+  add_web_view_to_json (sender->extension, builder, parent_window, EPHY_WEB_VIEW (target_web_view));
   root = json_builder_get_root (builder);
   return json_to_string (root, FALSE);
 }
@@ -684,11 +676,10 @@ close_tab_id (EphyShell *shell,
 }
 
 static char *
-tabs_handler_remove (EphyWebExtension  *self,
-                     char              *name,
-                     JSCValue          *args,
-                     WebKitWebView     *web_view,
-                     GError           **error)
+tabs_handler_remove (EphyWebExtensionSender  *sender,
+                     char                    *name,
+                     JSCValue                *args,
+                     GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JSCValue) tab_ids = NULL;
@@ -720,11 +711,10 @@ tabs_handler_remove (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_set_zoom (EphyWebExtension  *self,
-                       char              *name,
-                       JSCValue          *args,
-                       WebKitWebView     *web_view,
-                       GError           **error)
+tabs_handler_set_zoom (EphyWebExtensionSender  *sender,
+                       char                    *name,
+                       JSCValue                *args,
+                       GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JSCValue) zoom_level_value = NULL;
@@ -769,11 +759,10 @@ tabs_handler_set_zoom (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_get_zoom (EphyWebExtension  *self,
-                       char              *name,
-                       JSCValue          *args,
-                       WebKitWebView     *web_view,
-                       GError           **error)
+tabs_handler_get_zoom (EphyWebExtensionSender  *sender,
+                       char                    *name,
+                       JSCValue                *args,
+                       GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JSCValue) tab_id_value = NULL;
@@ -798,11 +787,10 @@ tabs_handler_get_zoom (EphyWebExtension  *self,
 }
 
 static char *
-tabs_handler_reload (EphyWebExtension  *self,
-                     char              *name,
-                     JSCValue          *args,
-                     WebKitWebView     *web_view,
-                     GError           **error)
+tabs_handler_reload (EphyWebExtensionSender  *sender,
+                     char                    *name,
+                     JSCValue                *args,
+                     GError                 **error)
 {
   EphyShell *shell = ephy_shell_get_default ();
   g_autoptr (JSCValue) tab_id_value = NULL;
@@ -847,11 +835,10 @@ static EphyWebExtensionAsyncApiHandler tab_async_handlers[] = {
 };
 
 void
-ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
-                                     char             *name,
-                                     JSCValue         *args,
-                                     WebKitWebView    *web_view,
-                                     GTask            *task)
+ephy_web_extension_api_tabs_handler (EphyWebExtensionSender *sender,
+                                     char                   *name,
+                                     JSCValue               *args,
+                                     GTask                  *task)
 {
   g_autoptr (GError) error = NULL;
 
@@ -860,7 +847,7 @@ ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
     char *ret;
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
+      ret = handler.execute (sender, name, args, &error);
 
       if (error)
         g_task_return_error (task, g_steal_pointer (&error));
@@ -875,7 +862,7 @@ ephy_web_extension_api_tabs_handler (EphyWebExtension *self,
     EphyWebExtensionAsyncApiHandler handler = tab_async_handlers[idx];
 
     if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (self, name, args, web_view, task);
+      handler.execute (sender, name, args, task);
       return;
     }
   }
