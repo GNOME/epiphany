@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: evolution master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-05-27 21:42+0000\n"
-"PO-Revision-Date: 2022-06-02 10:58+0200\n"
+"POT-Creation-Date: 2022-06-22 00:18+0000\n"
+"PO-Revision-Date: 2022-07-03 10:52+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <f.t.public@gmail.com>\n"
 "Language: fur\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Editor: HaiPO 0.9 beta\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
@@ -1125,18 +1125,19 @@ msgstr ""
 "tu visitis e chei che a publichin publicitât a puedin ancjemò regjistrâ ce "
 "che tu fasis."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "Selezione une cartele"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_Selezione"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
@@ -1146,38 +1147,42 @@ msgstr "_Selezione"
 msgid "_Cancel"
 msgstr "_Anule"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+msgid "Select the Destination"
+msgstr "Selezione la destinazion"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "Discjariament domandât"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "_Discjarie"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Gjenar: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "Di: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "Dulà si desiderie salvâ il file?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Discjariament di %s finît"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "Discjariament finît"
 
@@ -2314,7 +2319,7 @@ msgstr ""
 "Chest certificât al è valit. Dut câs, lis risorsis di cheste pagjine a son "
 "stadis inviadis in maniere no sigure."
 
-#: lib/widgets/ephy-downloads-popover.c:213
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2926,15 +2931,15 @@ msgstr "Se si siere chest barcon, dutis lis schedis viertis a laran pierdudis"
 msgid "C_lose tabs"
 msgstr "Sie_re schedis"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "Salve colegament come"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "Salve imagjin come"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "Salve file multimediâl come"
 
@@ -3202,33 +3207,32 @@ msgid "Bookmark some webpages to view them here."
 msgstr "Met tal segnelibris cualchi pagjine web par viodile chi."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "Dâts personâi"
+msgid "Website Data"
+msgstr "Dâts di sît web"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "_Nete dâts"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "Elimine i dâts personâi selezionâts"
+msgid "Remove selected website data"
+msgstr "Elimine i dâts dal sît web selezionât"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "Cîr dâts personâi"
+msgid "Search website data"
+msgstr "Cîr dâts di sîts web"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "No son presints dâts personai"
+msgid "There is no Website Data"
+msgstr "No son presints dâts di sîts web"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "I dâts personâi a vignaran listâts achì"
+msgid "Website data will be listed here"
+msgstr "I dâts dai sîts web a vignaran listâts achì"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "Nete i dâts personâi selezionâts:"
+msgid "Clear selected website data:"
+msgstr "Nete i dâts dai sîts web selezionâts:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3513,7 +3517,7 @@ msgid "Tabs"
 msgstr "Schedis"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "Password"
 
@@ -3727,19 +3731,19 @@ msgstr "Abilite i sugjeriments di ricercje te casele dal URL."
 msgid "_Google Search Suggestions"
 msgstr "Sugjeriments di ricercje _Google"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "Dâts personâi"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "Al è pussibil netâ i dâts personâi memorizâts."
+msgid "Clear Website _Data"
+msgstr "Nete _dâts di sît web"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "Nete _dâts personâi"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "_Password"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "_Visâsi lis password"
 
@@ -4168,6 +4172,11 @@ msgstr "La aplicazion web ‘%s’ no esist"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Nol è stât pussibil eliminâ la aplicazion web ‘%s’"
 
+#: src/webextension/api/runtime.c:125
+#, c-format
+msgid "Options for %s"
+msgstr "Opzions par %s"
+
 #: src/window-commands.c:113
 msgid "GVDB File"
 msgstr "File GVDB"
@@ -4332,6 +4341,9 @@ msgstr ""
 #: src/window-commands.c:2678
 msgid "_Enable"
 msgstr "_Abilite"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "Al è pussibil netâ i dâts personâi memorizâts."
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "Il sît web di GNOME viodût cun GNOME Web"
@@ -7839,9 +7851,6 @@ msgstr "_Abilite"
 
 #~ msgid "Contact Editor"
 #~ msgstr "Editôr dai contats"
-
-#~ msgid "Options"
-#~ msgstr "Opzions"
 
 #~ msgid "Image"
 #~ msgstr "Imagjin"
@@ -15097,9 +15106,6 @@ msgstr "_Abilite"
 
 #~ msgid "_Destination"
 #~ msgstr "_Destinazion"
-
-#~ msgid "Select destination"
-#~ msgstr "Selezione destinazion"
 
 #~ msgid "(no suggestions)"
 #~ msgstr "(Nissun sugjeriment)"
