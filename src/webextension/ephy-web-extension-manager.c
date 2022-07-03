@@ -398,11 +398,8 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
     }
 
     if (!g_file_copy (file, target, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
-        g_warning ("Could not copy file for web_extension: %s", error->message);
-        return;
-      }
-      g_clear_error (&error);
+      g_warning ("Could not copy file for web_extension: %s", error->message);
+      return;
     }
   } else {
     /* Otherwise we copy the parent directory. */

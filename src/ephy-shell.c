@@ -1461,6 +1461,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   EphyNewTabFlags page_flags = 0;
   gboolean reusing_empty_tab = FALSE;
   const char *url;
+  gboolean url_is_xpi;
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell));
 
@@ -1475,7 +1476,10 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
       reusing_empty_tab = TRUE;
   }
 
-  if (!reusing_empty_tab) {
+  url = data->uris ? data->uris[data->current_uri] : NULL;
+  url_is_xpi = url && g_str_has_prefix (url, "file:") && g_str_has_suffix (url, ".xpi");
+
+  if (!reusing_empty_tab && !url_is_xpi) {
     embed = ephy_shell_new_tab_full (data->shell,
                                      NULL, NULL,
                                      data->window,
@@ -1484,8 +1488,10 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
                                      data->user_time);
   }
 
-  url = data->uris ? data->uris[data->current_uri] : NULL;
-  if (url && url[0] != '\0') {
+  if (url_is_xpi) {
+    g_autoptr (GFile) xpi_file = g_file_new_for_uri (url);
+    ephy_web_extension_manager_install (ephy_web_extension_manager_get_default (), xpi_file);
+  } else if (url && url[0] != '\0') {
     ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
 
     /* When reusing an empty tab, the focus is in the location entry */
@@ -1500,10 +1506,12 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
       ephy_window_activate_location (data->window);
   }
 
-  /* Set address from the very beginning. Looks odd in app mode if it appears later on. */
-  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (data->window));
-  title_widget = ephy_header_bar_get_title_widget (header_bar);
-  ephy_title_widget_set_address (title_widget, url);
+  if (!url_is_xpi) {
+    /* Set address from the very beginning. Looks odd in app mode if it appears later on. */
+    header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (data->window));
+    title_widget = ephy_header_bar_get_title_widget (header_bar);
+    ephy_title_widget_set_address (title_widget, url);
+  }
 
   data->current_uri++;
   data->previous_embed = embed;
