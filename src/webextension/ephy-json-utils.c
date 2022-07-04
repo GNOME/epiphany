@@ -45,6 +45,22 @@ ephy_json_object_get_string (JsonObject *object,
 }
 
 /**
+ * ephy_json_object_dup_string:
+ * @object: A valid #JsonObject
+ * @name: The member name
+ *
+ * This safely looks up a string member of a #JsonObject.
+ *
+ * Returns: (transfer full): An allocated string or %NULL if member was missing or not a string.
+ */
+char *
+ephy_json_object_dup_string (JsonObject *object,
+                             const char *name)
+{
+  return g_strdup (ephy_json_object_get_string (object, name));
+}
+
+/**
  * ephy_json_object_get_int:
  * @object: A valid #JsonObject
  * @name: The member name
@@ -62,10 +78,36 @@ ephy_json_object_get_int (JsonObject *object,
   if (!node || !JSON_NODE_HOLDS_VALUE (node))
     return -1;
 
-  if (json_node_get_value_type (node) != G_TYPE_INT64)
+  if (json_node_get_value_type (node) == G_TYPE_STRING)
     return -1;
 
   return json_node_get_int (node);
+}
+
+/**
+ * ephy_json_object_get_double:
+ * @object: A valid #JsonObject
+ * @name: The member name
+ * @default: Default value
+ *
+ * This safely looks up a double member of a #JsonObject.
+ *
+ * Returns: A number or @default if member was missing or not a number.
+ */
+double
+ephy_json_object_get_double_with_default (JsonObject *object,
+                                          const char *name,
+                                          double      default_value)
+{
+  JsonNode *node = json_object_get_member (object, name);
+
+  if (!node || !JSON_NODE_HOLDS_VALUE (node))
+    return default_value;
+
+  if (json_node_get_value_type (node) == G_TYPE_STRING)
+    return default_value;
+
+  return json_node_get_double (node);
 }
 
 /**
@@ -81,15 +123,7 @@ double
 ephy_json_object_get_double (JsonObject *object,
                              const char *name)
 {
-  JsonNode *node = json_object_get_member (object, name);
-
-  if (!node || !JSON_NODE_HOLDS_VALUE (node))
-    return -1;
-
-  if (json_node_get_value_type (node) != G_TYPE_DOUBLE)
-    return -1;
-
-  return json_node_get_int (node);
+  return ephy_json_object_get_double_with_default (object, name, -1.0);
 }
 
 /**
@@ -142,7 +176,7 @@ ephy_json_object_get_object (JsonObject *object,
  *
  * This safely looks up a boolean member of a #JsonObject.
  *
- * Returns: A number or @default if member was missing or not a boolean.
+ * Returns: A number or @default_value if member was missing or not a boolean.
  */
 gboolean
 ephy_json_object_get_boolean (JsonObject *object,
@@ -154,7 +188,7 @@ ephy_json_object_get_boolean (JsonObject *object,
   if (!node || !JSON_NODE_HOLDS_VALUE (node))
     return default_value;
 
-  if (json_node_get_value_type (node) != G_TYPE_BOOLEAN)
+  if (json_node_get_value_type (node) == G_TYPE_STRING)
     return default_value;
 
   return json_node_get_boolean (node);
@@ -198,6 +232,85 @@ ephy_json_node_to_string (JsonNode *node)
 }
 
 /**
+ * ephy_json_node_get_int:
+ * @node: (nullable): A #JsonNode or %NULL
+ *
+ * This safely turns a #JsonNode into an int.
+ *
+ * Returns: (transfer none): A int or -1 if not a number.
+ */
+gint64
+ephy_json_node_get_int (JsonNode *node)
+{
+  if (!node || !JSON_NODE_HOLDS_VALUE (node))
+    return -1;
+
+  if (json_node_get_value_type (node) == G_TYPE_STRING)
+    return -1;
+
+  return json_node_get_int (node);
+}
+
+/**
+ * ephy_json_node_get_double:
+ * @node: (nullable): A #JsonNode or %NULL
+ *
+ * This safely turns a #JsonNode into a double.
+ *
+ * Returns: (transfer none): A double or -1.0 if not a number.
+ */
+double
+ephy_json_node_get_double (JsonNode *node)
+{
+  if (!node || !JSON_NODE_HOLDS_VALUE (node))
+    return -1.0;
+
+  if (json_node_get_value_type (node) == G_TYPE_STRING)
+    return -1.0;
+
+  return json_node_get_double (node);
+}
+
+/**
+ * ephy_json_array_get_string_with_default:
+ * @array: A #JsonArray
+ * @default_value: Default string value
+ *
+ * This safely gets a string from an array.
+ *
+ * Returns: (transfer none): A string or @default_value if not a string.
+ */
+const char *
+ephy_json_array_get_string_with_default (JsonArray  *array,
+                                         guint       index,
+                                         const char *default_value)
+{
+  const char *value = ephy_json_node_to_string (json_array_get_element (array, index));
+  if (!value)
+    return default_value;
+
+  return value;
+}
+
+/**
+ * ephy_json_array_get_element:
+ * @array: A #JsonArray
+ *
+ * This safely returns an element from an array.
+ *
+ * Returns: (transfer none): A #JsonNode or %NULL if out of bounds.
+ */
+JsonNode *
+ephy_json_array_get_element (JsonArray *array,
+                             guint      index)
+{
+  if (index >= json_array_get_length (array))
+    return NULL;
+
+  return json_array_get_element (array, index);
+}
+
+/**
  * ephy_json_array_get_string:
  * @array: A #JsonArray
  *
@@ -209,7 +322,7 @@ const char *
 ephy_json_array_get_string (JsonArray *array,
                             guint      index)
 {
-  return ephy_json_node_to_string (json_array_get_element (array, index));
+  return ephy_json_node_to_string (ephy_json_array_get_element (array, index));
 }
 
 /**
@@ -224,5 +337,67 @@ JsonObject *
 ephy_json_array_get_object (JsonArray *array,
                             guint      index)
 {
-  return ephy_json_node_get_object (json_array_get_element (array, index));
+  return ephy_json_node_get_object (ephy_json_array_get_element (array, index));
+}
+
+/**
+ * ephy_json_array_get_int:
+ * @array: A #JsonArray
+ *
+ * This safely gets an int from an array.
+ *
+ * Returns: (transfer none): An int or -1 if not a number.
+ */
+gint64
+ephy_json_array_get_int (JsonArray *array,
+                         guint      index)
+{
+  return ephy_json_node_get_int (ephy_json_array_get_element (array, index));
+}
+
+/**
+ * ephy_json_array_get_double:
+ * @array: A #JsonArray
+ *
+ * This safely gets a double from an array.
+ *
+ * Returns: (transfer none): An double or -1.0 if not a number.
+ */
+double
+ephy_json_array_get_double (JsonArray *array,
+                            guint      index)
+{
+  return ephy_json_node_get_double (ephy_json_array_get_element (array, index));
+}
+
+/**
+ * ephy_json_object_get_string_array:
+ * @object: A #JsonObject
+ * @name: Property name
+ *
+ * This safely gets a string array from an object.
+ *
+ * Returns: (transfer full): A valid, maybe empty, #GPtrArray of strings.
+ */
+GPtrArray *
+ephy_json_object_get_string_array (JsonObject *object,
+                                   const char *name)
+{
+  JsonArray *array = ephy_json_object_get_array (object, name);
+  GPtrArray *strings;
+
+  if (!array)
+    return g_ptr_array_new ();
+
+  strings = g_ptr_array_new_full (json_array_get_length (array), g_free);
+  for (guint i = 0; i < json_array_get_length (array); i++) {
+    const char *value = ephy_json_array_get_string (array, i);
+
+    if (!value)
+      break;
+
+    g_ptr_array_add (strings, g_strdup (value));
+  }
+
+  return strings;
 }

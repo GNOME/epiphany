@@ -23,6 +23,7 @@
 #include <time.h>
 
 #include "ephy-embed-utils.h"
+#include "ephy-json-utils.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
@@ -55,16 +56,6 @@ get_alarms (EphyWebExtension *extension)
   alarms = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)alarm_destroy);
   g_object_set_data_full (G_OBJECT (extension), "alarms", alarms, (GDestroyNotify)g_hash_table_destroy);
   return alarms;
-}
-
-static gdouble
-get_double_property (JSCValue   *object,
-                     const char *name)
-{
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (object, name);
-  if (jsc_value_is_number (value))
-    return jsc_value_to_double (value);
-  return 0.0;
 }
 
 static guint64
@@ -164,12 +155,12 @@ on_alarm_start (gpointer user_data)
 
 static void
 alarms_handler_create (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
-                        GTask                  *task)
+                       const char             *method_name,
+                       JsonArray              *args,
+                       GTask                  *task)
 {
-  g_autoptr (JSCValue) alarm_name = NULL;
-  g_autoptr (JSCValue) alarm_info = NULL;
+  const char *name;
+  JsonObject *alarm_info;
   GHashTable *alarms = get_alarms (sender->extension);
   Alarm *alarm;
   double delay_in_minutes = 0.0;
@@ -178,19 +169,16 @@ alarms_handler_create (EphyWebExtensionSender *sender,
   g_autofree char *name_str = NULL;
 
   /* This takes two optional args, name:str, info:obj */
-  alarm_name = jsc_value_object_get_property_at_index (args, 0);
-  if (jsc_value_is_string (alarm_name)) {
-    name_str = jsc_value_to_string (alarm_name);
-    alarm_info = jsc_value_object_get_property_at_index (args, 1);
-  } else {
-    name_str = g_strdup ("");
-    alarm_info = g_steal_pointer (&alarm_name);
-  }
+  name = ephy_json_array_get_string (args, 0);
+  alarm_info = ephy_json_array_get_object (args, name ? 1 : 0);
 
-  if (jsc_value_is_object (alarm_info)) {
-    delay_in_minutes = get_double_property (alarm_info, "delayInMinutes");
-    period_in_minutes = get_double_property (alarm_info, "periodInMinutes");
-    when = get_double_property (alarm_info, "when");
+  if (!name)
+    name = "";
+
+  if (alarm_info) {
+    delay_in_minutes = ephy_json_object_get_double_with_default (alarm_info, "delayInMinutes", 0.0);
+    period_in_minutes = ephy_json_object_get_double_with_default (alarm_info, "periodInMinutes", 0.0);
+    when = ephy_json_object_get_double_with_default (alarm_info, "when", 0.0);
   }
 
   if (delay_in_minutes && when) {
@@ -201,7 +189,7 @@ alarms_handler_create (EphyWebExtensionSender *sender,
   alarm = g_new0 (Alarm, 1);
   alarm->repeat_interval_ms = minutes_to_ms (period_in_minutes);
   alarm->web_extension = sender->extension;
-  alarm->name = g_steal_pointer (&name_str);
+  alarm->name = g_strdup (name);
 
   if (delay_in_minutes) {
     alarm->timeout_id = g_timeout_add (minutes_to_ms (delay_in_minutes), on_alarm_start, alarm);
@@ -221,20 +209,14 @@ alarms_handler_create (EphyWebExtensionSender *sender,
 
 static void
 alarms_handler_clear (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
-                        GTask                  *task)
+                      const char             *method_name,
+                      JsonArray              *args,
+                      GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
-  g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *name_str = NULL;
+  const char *name = ephy_json_array_get_string_with_default (args, 0, "");
 
-  if (!jsc_value_is_string (name_value))
-    name_str = g_strdup ("");
-  else
-    name_str = jsc_value_to_string (name_value);
-
-  if (g_hash_table_remove (alarms, name_str)) {
+  if (g_hash_table_remove (alarms, name)) {
     g_task_return_pointer (task, g_strdup ("true"), g_free);
     return;
   }
@@ -244,9 +226,9 @@ alarms_handler_clear (EphyWebExtensionSender *sender,
 
 static void
 alarms_handler_clear_all (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
-                        GTask                  *task)
+                          const char             *method_name,
+                          JsonArray              *args,
+                          GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
 
@@ -261,28 +243,30 @@ alarms_handler_clear_all (EphyWebExtensionSender *sender,
 
 static void
 alarms_handler_get (EphyWebExtensionSender *sender,
-                    char                   *name,
-                    JSCValue               *args,
+                    const char             *method_name,
+                    JsonArray              *args,
                     GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
-  g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *name_str = NULL;
+  const char *name = ephy_json_array_get_string (args, 0);
   Alarm *alarm;
 
-  if (!jsc_value_is_string (name_value))
-    name_str = g_strdup ("");
-  else
-    name_str = jsc_value_to_string (name_value);
+  if (!name)
+    name = "";
 
-  alarm = g_hash_table_lookup (alarms, name_str);
+  alarm = g_hash_table_lookup (alarms, name);
+  if (!alarm) {
+    g_task_return_pointer (task, NULL, NULL);
+    return;
+  }
+
   g_task_return_pointer (task, alarm_to_json (alarm), g_free);
 }
 
 static void
 alarms_handler_get_all (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
+                        const char             *method_name,
+                        JsonArray              *args,
                         GTask                  *task)
 {
   GHashTable *alarms = get_alarms (sender->extension);
@@ -298,7 +282,7 @@ alarms_handler_get_all (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, json_to_string (node, FALSE), g_free);
 }
 
-static EphyWebExtensionAsyncApiHandler alarms_handlers[] = {
+static EphyWebExtensionApiHandler alarms_handlers[] = {
   {"clear", alarms_handler_clear},
   {"clearAll", alarms_handler_clear_all},
   {"create", alarms_handler_create},
@@ -308,8 +292,8 @@ static EphyWebExtensionAsyncApiHandler alarms_handlers[] = {
 
 void
 ephy_web_extension_api_alarms_handler (EphyWebExtensionSender *sender,
-                                       char                   *name,
-                                       JSCValue               *args,
+                                       const char             *method_name,
+                                       JsonArray              *args,
                                        GTask                  *task)
 {
   if (!ephy_web_extension_has_permission (sender->extension, "alarms")) {
@@ -318,13 +302,13 @@ ephy_web_extension_api_alarms_handler (EphyWebExtensionSender *sender,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (alarms_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = alarms_handlers[idx];
+    EphyWebExtensionApiHandler handler = alarms_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }
 
-  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "alarms.%s(): Not Implemented", name);
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "alarms.%s(): Not Implemented", method_name);
 }

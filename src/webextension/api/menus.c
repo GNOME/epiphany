@@ -319,7 +319,7 @@ get_menus (EphyWebExtension *extension)
 
 static void
 menus_handler_create (EphyWebExtensionSender *sender,
-                      char                   *name,
+                      const char             *method_name,
                       JsonArray              *args,
                       GTask                  *task)
 {
@@ -373,7 +373,7 @@ menus_remove_by_id (GHashTable *menus,
 
 static void
 menus_handler_remove (EphyWebExtensionSender *sender,
-                      char                   *name,
+                      const char             *method_name,
                       JsonArray              *args,
                       GTask                  *task)
 {
@@ -394,7 +394,7 @@ menus_handler_remove (EphyWebExtensionSender *sender,
 
 static void
 menus_handler_remove_all (EphyWebExtensionSender *sender,
-                          char                   *name,
+                          const char             *method_name,
                           JsonArray              *args,
                           GTask                  *task)
 {
@@ -674,16 +674,10 @@ static EphyWebExtensionApiHandler menus_handlers[] = {
 
 void
 ephy_web_extension_api_menus_handler (EphyWebExtensionSender *sender,
-                                      char                   *name,
-                                      JSCValue               *args,
+                                      const char             *method_name,
+                                      JsonArray              *args,
                                       GTask                  *task)
 {
-  /* Temporary conversion as we migrate to json-glib here. */
-  g_autofree char *json = jsc_value_to_json (args, 0);
-  g_autoptr (JsonNode) json_node = json_from_string (json, NULL);
-  JsonArray *json_args = json_node_get_array (json_node);
-  json_array_seal (json_args);
-
   /* We slightly differ from Firefox here that either permission works for either API but they are identical. */
   if (!ephy_web_extension_has_permission (sender->extension, "menus") && !ephy_web_extension_has_permission (sender->extension, "contextMenus")) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_PERMISSION_DENIED, "Permission Denied");
@@ -693,8 +687,8 @@ ephy_web_extension_api_menus_handler (EphyWebExtensionSender *sender,
   for (guint idx = 0; idx < G_N_ELEMENTS (menus_handlers); idx++) {
     EphyWebExtensionApiHandler handler = menus_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, json_args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }

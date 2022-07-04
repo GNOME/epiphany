@@ -28,8 +28,8 @@
 G_BEGIN_DECLS
 
 void ephy_web_extension_api_alarms_handler (EphyWebExtensionSender *sender,
-                                            char                   *name,
-                                            JSCValue               *value,
+                                            const char             *method_name,
+                                            JsonArray              *args,
                                             GTask                  *task);
 
 G_END_DECLS

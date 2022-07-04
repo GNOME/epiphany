@@ -19,8 +19,10 @@
 
 #include "config.h"
 
-#include "api-utils.h"
+#include "ephy-json-utils.h"
 #include "ephy-shell.h"
+
+#include "api-utils.h"
 #include "cookies.h"
 
 static WebKitCookieManager *
@@ -207,23 +209,23 @@ get_cookies_ready_cb (WebKitCookieManager *cookie_manager,
 
 static void
 cookies_handler_get (EphyWebExtensionSender *sender,
-                     char                   *name,
-                     JSCValue               *args,
+                     const char             *method_name,
+                     JsonArray              *args,
                      GTask                  *task)
 {
-  g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *details = ephy_json_array_get_object (args, 0);
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
-  g_autofree char *cookie_name = NULL;
-  g_autofree char *url = NULL;
+  const char *cookie_name;
+  const char *url;
   CookiesCallbackData *callback_data;
 
-  if (!jsc_value_is_object (details)) {
+  if (!details) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.get(): Missing details object");
     return;
   }
 
-  cookie_name = api_utils_get_string_property (details, "name", NULL);
-  url = api_utils_get_string_property (details, "url", NULL);
+  cookie_name = ephy_json_object_get_string (details, "name");
+  url = ephy_json_object_get_string (details, "url");
 
   if (!url || !cookie_name) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.get(): details missing url or name");
@@ -237,7 +239,7 @@ cookies_handler_get (EphyWebExtensionSender *sender,
 
   callback_data = g_new0 (CookiesCallbackData, 1);
   callback_data->task = task;
-  callback_data->cookie_name = g_steal_pointer (&cookie_name);
+  callback_data->cookie_name = g_strdup (cookie_name);
 
   /* FIXME: The WebKit API doesn't expose details like first-party URLs to better filter this. The underlying libsoup API does so
    * this just requires additions to WebKitGTK. */
@@ -264,40 +266,41 @@ add_cookie_ready_cb (WebKitCookieManager *cookie_manager,
 
 static void
 cookies_handler_set (EphyWebExtensionSender *sender,
-                     char                   *name,
-                     JSCValue               *args,
+                     const char             *method_name,
+                     JsonArray              *args,
                      GTask                  *task)
 {
-  g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *url = NULL;
-  g_autofree char *domain = NULL;
-  g_autofree char *cookie_name = NULL;
-  g_autofree char *value = NULL;
-  g_autofree char *path = NULL;
-  g_autofree char *same_site_str = NULL;
+  JsonObject *details = ephy_json_array_get_object (args, 0);
+  const char *url;
+  const char *domain;
+  const char *cookie_name;
+  const char *value;
+  const char *path;
+  const char *same_site_str;
   gboolean secure;
   gboolean http_only;
-  gint32 expiration;
+  gint64 expiration;
   g_autoptr (SoupCookie) new_cookie = NULL;
   g_autoptr (GUri) parsed_uri = NULL;
   g_autoptr (GError) error = NULL;
+  g_autoptr (GDateTime) expires_date = NULL;
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
   CookiesCallbackData *callback_data;
 
-  if (!jsc_value_is_object (details)) {
+  if (!details) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.set(): Missing details object");
     return;
   }
 
-  url = api_utils_get_string_property (details, "url", NULL);
-  domain = api_utils_get_string_property (details, "domain", NULL);
-  cookie_name = api_utils_get_string_property (details, "name", NULL);
-  value = api_utils_get_string_property (details, "value", NULL);
-  path = api_utils_get_string_property (details, "path", NULL);
-  same_site_str = api_utils_get_string_property (details, "sameSite", NULL);
-  expiration = api_utils_get_int32_property (details, "expirationDate", -1);
-  secure = api_utils_get_boolean_property (details, "secure", FALSE);
-  http_only = api_utils_get_boolean_property (details, "httpOnline", FALSE);
+  url = ephy_json_object_get_string (details, "url");
+  domain = ephy_json_object_get_string (details, "domain");
+  cookie_name = ephy_json_object_get_string (details, "name");
+  value = ephy_json_object_get_string (details, "value");
+  path = ephy_json_object_get_string (details, "path");
+  same_site_str = ephy_json_object_get_string (details, "sameSite");
+  expiration = ephy_json_object_get_int (details, "expirationDate");
+  secure = ephy_json_object_get_boolean (details, "secure", FALSE);
+  http_only = ephy_json_object_get_boolean (details, "httpOnline", FALSE);
 
   if (!url) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.set(): Missing url property");
@@ -319,10 +322,14 @@ cookies_handler_set (EphyWebExtensionSender *sender,
                                 value ? value : "",
                                 domain ? domain : g_uri_get_host (parsed_uri),
                                 path ? path : g_uri_get_path (parsed_uri),
-                                expiration);
+                                -1);
   soup_cookie_set_secure (new_cookie, secure);
   soup_cookie_set_http_only (new_cookie, http_only);
   soup_cookie_set_same_site_policy (new_cookie, string_to_samesite (same_site_str));
+  if (expiration != -1) {
+    expires_date = g_date_time_new_from_unix_local (expiration);
+    soup_cookie_set_expires (new_cookie, expires_date);
+  }
 
   callback_data = g_new0 (CookiesCallbackData, 1);
   callback_data->task = task;
@@ -333,25 +340,25 @@ cookies_handler_set (EphyWebExtensionSender *sender,
 
 static void
 cookies_handler_remove (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
+                        const char             *method_name,
+                        JsonArray              *args,
                         GTask                  *task)
 {
-  g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *url = NULL;
-  g_autofree char *cookie_name = NULL;
+  JsonObject *details = ephy_json_array_get_object (args, 0);
+  const char *url;
+  const char *cookie_name;
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
   CookiesCallbackData *callback_data;
 
-  if (!jsc_value_is_object (details)) {
+  if (!details) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.remove(): Missing details object");
     return;
   }
 
-  url = api_utils_get_string_property (details, "url", NULL);
-  cookie_name = api_utils_get_string_property (details, "name", NULL);
+  url = ephy_json_object_get_string (details, "url");
+  cookie_name = ephy_json_object_get_string (details, "name");
 
-  if (!url || !name) {
+  if (!url || !cookie_name) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.remove(): Missing url or name property");
     return;
   }
@@ -363,7 +370,7 @@ cookies_handler_remove (EphyWebExtensionSender *sender,
 
   callback_data = g_new0 (CookiesCallbackData, 1);
   callback_data->task = task;
-  callback_data->cookie_name = g_steal_pointer (&cookie_name);
+  callback_data->cookie_name = g_strdup (cookie_name);
   callback_data->remove_after_find = TRUE;
 
   webkit_cookie_manager_get_cookies (cookie_manager, url, NULL, (GAsyncReadyCallback)get_cookies_ready_cb, callback_data);
@@ -457,21 +464,21 @@ get_all_cookies_ready_cb (WebKitCookieManager       *cookie_manager,
 
 static void
 cookies_handler_get_all (EphyWebExtensionSender *sender,
-                         char                   *name,
-                         JSCValue               *args,
+                         const char             *method_name,
+                         JsonArray              *args,
                          GTask                  *task)
 {
-  g_autoptr (JSCValue) details = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *details = ephy_json_array_get_object (args, 0);
   WebKitCookieManager *cookie_manager = get_cookie_manager ();
-  g_autofree char *url = NULL;
+  const char *url;
   GetAllCookiesCallbackData *callback_data;
 
-  if (!jsc_value_is_object (details)) {
+  if (!details) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.getAll(): Missing details object");
     return;
   }
 
-  url = api_utils_get_string_property (details, "url", NULL);
+  url = ephy_json_object_get_string (details, "url");
 
   /* TODO: We can handle the case of no url by using webkit_website_data_manager_fetch() to list all domains and then get all cookies
    * for all domains, but this is rather an ugly amount of work compared to libsoup directly. */
@@ -487,11 +494,11 @@ cookies_handler_get_all (EphyWebExtensionSender *sender,
 
   callback_data = g_new0 (GetAllCookiesCallbackData, 1);
   callback_data->task = task;
-  callback_data->name = api_utils_get_string_property (details, "name", NULL);
-  callback_data->domain = api_utils_get_string_property (details, "domain", NULL);
-  callback_data->path = api_utils_get_string_property (details, "path", NULL);
-  callback_data->secure = api_utils_get_tri_state_value_property (details, "secure");
-  callback_data->session = api_utils_get_tri_state_value_property (details, "session");
+  callback_data->name = ephy_json_object_dup_string (details, "name");
+  callback_data->domain = ephy_json_object_dup_string (details, "domain");
+  callback_data->path = ephy_json_object_dup_string (details, "path");
+  callback_data->secure = ephy_json_object_get_boolean (details, "secure", API_VALUE_UNSET);
+  callback_data->session = ephy_json_object_get_boolean (details, "session", API_VALUE_UNSET);
 
   /* FIXME: The WebKit API doesn't expose details like first-party URLs to better filter this. The underlying libsoup API does so
    * this just requires additions to WebKitGTK. */
@@ -522,8 +529,8 @@ create_array_of_all_tab_ids (void)
 
 static void
 cookies_handler_get_all_cookie_stores (EphyWebExtensionSender *sender,
-                                       char                   *name,
-                                       JSCValue               *args,
+                                       const char             *method_name,
+                                       JsonArray              *args,
                                        GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -546,7 +553,7 @@ cookies_handler_get_all_cookie_stores (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
-static EphyWebExtensionAsyncApiHandler cookies_async_handlers[] = {
+static EphyWebExtensionApiHandler cookies_async_handlers[] = {
   {"get", cookies_handler_get},
   {"getAll", cookies_handler_get_all},
   {"getAllCookieStores", cookies_handler_get_all_cookie_stores},
@@ -556,8 +563,8 @@ static EphyWebExtensionAsyncApiHandler cookies_async_handlers[] = {
 
 void
 ephy_web_extension_api_cookies_handler (EphyWebExtensionSender *sender,
-                                        char                   *name,
-                                        JSCValue               *args,
+                                        const char             *method_name,
+                                        JsonArray              *args,
                                         GTask                  *task)
 {
   if (!ephy_web_extension_has_permission (sender->extension, "cookies")) {
@@ -566,10 +573,10 @@ ephy_web_extension_api_cookies_handler (EphyWebExtensionSender *sender,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (cookies_async_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = cookies_async_handlers[idx];
+    EphyWebExtensionApiHandler handler = cookies_async_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }

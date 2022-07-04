@@ -28,8 +28,8 @@
 G_BEGIN_DECLS
 
 void ephy_web_extension_api_tabs_handler (EphyWebExtensionSender *sender,
-                                          char                   *name,
-                                          JSCValue               *value,
+                                          const char             *method_name,
+                                          JsonArray              *args,
                                           GTask                  *task);
 
 JsonNode *ephy_web_extension_api_tabs_create_tab_object (EphyWebExtension *self,

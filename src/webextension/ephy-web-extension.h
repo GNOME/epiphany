@@ -22,6 +22,7 @@
 #pragma once
 
 #include "ephy-debug.h"
+#include "ephy-json-utils.h"
 #include "ephy-window.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -47,18 +48,8 @@ typedef struct {
   guint64 frame_id;
 } EphyWebExtensionSender;
 
-typedef void (*executeTaskHandler)(EphyWebExtensionSender *sender,
-                                   char                   *name,
-                                   JSCValue               *args,
-                                   GTask                  *task);
-
-typedef char *(*executeHandler)(EphyWebExtensionSender  *sender,
-                                char                    *name,
-                                JSCValue                *args,
-                                GError                 **error);
-
 typedef void (*EphyApiExecuteFunc)(EphyWebExtensionSender *sender,
-                                   char                   *name,
+                                   const char             *method_name,
                                    JsonArray              *args,
                                    GTask                  *task);
 
@@ -79,11 +70,6 @@ typedef struct {
   char *name;
   EphyApiExecuteFunc execute;
 } EphyWebExtensionApiHandler;
-
-typedef struct {
-  char *name;
-  executeTaskHandler execute;
-} EphyWebExtensionAsyncApiHandler;
 
 GdkPixbuf             *ephy_web_extension_get_icon                        (EphyWebExtension *self,
                                                                            gint64            size);

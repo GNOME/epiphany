@@ -36,44 +36,43 @@ create_extension_notification_id (EphyWebExtension *web_extension,
 
 static void
 notifications_handler_create (EphyWebExtensionSender *sender,
-                              char                   *name,
-                              JSCValue               *args,
+                              const char             *method_name,
+                              JsonArray              *args,
                               GTask                  *task)
 {
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
-  g_autoptr (JSCValue) button_array = NULL;
   g_autofree char *id = NULL;
   g_autofree char *namespaced_id = NULL;
-  g_autofree char *title = NULL;
-  g_autofree char *message = NULL;
+  JsonObject *notification_options;
+  const char *title;
+  const char *message;
+  JsonArray *buttons;
   g_autoptr (GNotification) notification = NULL;
   const char *extension_guid = ephy_web_extension_get_guid (sender->extension);
 
   /* We share the same "create" and "update" function here because our
    * implementation would be the same. The only difference is we require
    * an id if its for an update. */
-  if (jsc_value_is_string (value)) {
-    id = jsc_value_to_string (value);
-    g_object_unref (value);
-    value = jsc_value_object_get_property_at_index (args, 1);
-  } else {
-    if (strcmp (name, "update") == 0) {
+  id = g_strdup (ephy_json_array_get_string (args, 0));
+  notification_options = ephy_json_array_get_object (args, id ? 1 : 0);
+
+  if (!id) {
+    if (strcmp (method_name, "update") == 0) {
       g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.update(): id not given");
       return;
     }
     id = g_dbus_generate_guid ();
   }
 
-  if (!jsc_value_is_object (value)) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): notificationOptions not given", name);
+  if (!notification_options) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): notificationOptions not given", method_name);
     return;
   }
 
-  title = api_utils_get_string_property (value, "title", NULL);
-  message = api_utils_get_string_property (value, "message", NULL);
+  title = ephy_json_object_get_string (notification_options, "title");
+  message = ephy_json_object_get_string (notification_options, "message");
 
   if (!title || !message) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): title and message are required", name);
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.%s(): title and message are required", method_name);
     return;
   }
 
@@ -81,11 +80,12 @@ notifications_handler_create (EphyWebExtensionSender *sender,
   g_notification_set_body (notification, message);
   g_notification_set_default_action_and_target (notification, "app.webextension-notification", "(ssi)", extension_guid, id, -1);
 
-  button_array = jsc_value_object_get_property (value, "buttons");
-  if (jsc_value_is_array (button_array)) {
+  buttons = ephy_json_object_get_array (notification_options, "buttons");
+  if (buttons) {
+    /* Only max of 2 buttons are supported. */
     for (guint i = 0; i < 2; i++) {
-      g_autoptr (JSCValue) button = jsc_value_object_get_property_at_index (button_array, i);
-      g_autofree char *button_title = api_utils_get_string_property (button, "title", NULL);
+      JsonObject *button = ephy_json_array_get_object (buttons, i);
+      const char *button_title = button ? ephy_json_object_get_string (button, "title") : NULL;
       if (button_title)
         g_notification_add_button_with_target (notification, button_title, "app.webextension-notification", "(ssi)", extension_guid, id, i);
     }
@@ -99,20 +99,18 @@ notifications_handler_create (EphyWebExtensionSender *sender,
 
 static void
 notifications_handler_clear (EphyWebExtensionSender *sender,
-                             char                   *name,
-                             JSCValue               *args,
+                             const char             *method_name,
+                             JsonArray              *args,
                              GTask                  *task)
 {
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *id = NULL;
+  const char *id = ephy_json_array_get_string (args, 0);
   g_autofree char *namespaced_id = NULL;
 
-  if (!jsc_value_is_string (value)) {
+  if (!id) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "notifications.clear(): id not given");
     return;
   }
 
-  id = jsc_value_to_string (value);
   namespaced_id = create_extension_notification_id (sender->extension, id);
 
   g_application_withdraw_notification (G_APPLICATION (ephy_shell_get_default ()), namespaced_id);
@@ -123,15 +121,15 @@ notifications_handler_clear (EphyWebExtensionSender *sender,
 
 static void
 notifications_handler_get_all (EphyWebExtensionSender *sender,
-                               char                   *name,
-                               JSCValue               *args,
+                               const char             *method_name,
+                               JsonArray              *args,
                                GTask                  *task)
 {
   /* GNotification does not provide information on the state of notifications. */
   g_task_return_pointer (task, g_strdup ("[]"), g_free);
 }
 
-static EphyWebExtensionAsyncApiHandler notifications_handlers[] = {
+static EphyWebExtensionApiHandler notifications_handlers[] = {
   {"create", notifications_handler_create},
   {"clear", notifications_handler_clear},
   {"getAll", notifications_handler_get_all},
@@ -140,8 +138,8 @@ static EphyWebExtensionAsyncApiHandler notifications_handlers[] = {
 
 void
 ephy_web_extension_api_notifications_handler (EphyWebExtensionSender *sender,
-                                              char                   *name,
-                                              JSCValue               *args,
+                                              const char             *method_name,
+                                              JsonArray              *args,
                                               GTask                  *task)
 {
   if (!ephy_web_extension_has_permission (sender->extension, "notifications")) {
@@ -151,10 +149,10 @@ ephy_web_extension_api_notifications_handler (EphyWebExtensionSender *sender,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (notifications_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = notifications_handlers[idx];
+    EphyWebExtensionApiHandler handler = notifications_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }

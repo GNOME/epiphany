@@ -21,6 +21,7 @@
 
 #include "ephy-link.h"
 #include "ephy-shell.h"
+
 #include "tabs.h"
 #include "windows.h"
 
@@ -128,32 +129,27 @@ ephy_web_extension_api_windows_create_window_json (EphyWebExtension *extension,
 
 static void
 windows_handler_get (EphyWebExtensionSender *sender,
-                     char                   *name,
-                     JSCValue               *args,
+                     const char             *method_name,
+                     JsonArray              *args,
                      GTask                  *task)
 {
-  g_autoptr (JSCValue) window_id_value = jsc_value_object_get_property_at_index (args, 0);
-  g_autoptr (JSCValue) get_info_value = jsc_value_object_get_property_at_index (args, 1);
+  gint64 window_id = ephy_json_array_get_int (args, 0);
+  JsonObject *get_info = ephy_json_array_get_object (args, 1);
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   EphyWindow *window;
-  gboolean populate_tabs = FALSE;
+  gboolean populate_tabs;
 
-  if (!jsc_value_is_number (window_id_value)) {
+  if (window_id == -1) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.get(): First argument is not a windowId");
     return;
   }
 
-  window = ephy_web_extension_api_windows_get_window_for_id (jsc_value_to_int32 (window_id_value));
-
+  populate_tabs = get_info ? ephy_json_object_get_boolean (get_info, "populate", FALSE) : FALSE;
+  window = ephy_web_extension_api_windows_get_window_for_id (window_id);
   if (!window) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.get(): Failed to find window by id");
     return;
-  }
-
-  if (jsc_value_is_object (get_info_value)) {
-    g_autoptr (JSCValue) populate = jsc_value_object_get_property (get_info_value, "populate");
-    populate_tabs = jsc_value_to_boolean (populate);
   }
 
   add_window_to_json (sender->extension, builder, window, populate_tabs);
@@ -163,12 +159,12 @@ windows_handler_get (EphyWebExtensionSender *sender,
 
 static void
 windows_handler_get_current (EphyWebExtensionSender *sender,
-                             char                   *name,
-                             JSCValue               *args,
+                             const char             *method_name,
+                             JsonArray              *args,
                              GTask                  *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  g_autoptr (JSCValue) get_info_value = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *get_info = ephy_json_array_get_object (args, 0);
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   gboolean populate_tabs = FALSE;
@@ -179,10 +175,7 @@ windows_handler_get_current (EphyWebExtensionSender *sender,
   else
     window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sender->view)));
 
-  if (jsc_value_is_object (get_info_value)) {
-    g_autoptr (JSCValue) populate = jsc_value_object_get_property (get_info_value, "populate");
-    populate_tabs = jsc_value_to_boolean (populate);
-  }
+  populate_tabs = get_info ? ephy_json_object_get_boolean (get_info, "populate", FALSE) : FALSE;
 
   add_window_to_json (sender->extension, builder, window, populate_tabs);
   root = json_builder_get_root (builder);
@@ -191,22 +184,18 @@ windows_handler_get_current (EphyWebExtensionSender *sender,
 
 static void
 windows_handler_get_last_focused (EphyWebExtensionSender *sender,
-                                  char                   *name,
-                                  JSCValue               *args,
+                                  const char             *method_name,
+                                  JsonArray              *args,
                                   GTask                  *task)
 {
-  g_autoptr (JSCValue) get_info_value = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *get_info = ephy_json_array_get_object (args, 0);
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
-  gboolean populate_tabs = FALSE;
+  gboolean populate_tabs;
   EphyWindow *window;
 
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
-
-  if (jsc_value_is_object (get_info_value)) {
-    g_autoptr (JSCValue) populate = jsc_value_object_get_property (get_info_value, "populate");
-    populate_tabs = jsc_value_to_boolean (populate);
-  }
+  populate_tabs = get_info ? ephy_json_object_get_boolean (get_info, "populate", FALSE) : FALSE;
 
   add_window_to_json (sender->extension, builder, window, populate_tabs);
   root = json_builder_get_root (builder);
@@ -215,84 +204,92 @@ windows_handler_get_last_focused (EphyWebExtensionSender *sender,
 
 static void
 windows_handler_get_all (EphyWebExtensionSender *sender,
-                         char                   *name,
-                         JSCValue               *args,
+                         const char             *method_name,
+                         JsonArray              *args,
                          GTask                  *task)
 {
-  g_autoptr (JSCValue) get_info_value = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *get_info = ephy_json_array_get_object (args, 0);
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
-  gboolean populate_tabs = FALSE;
+  gboolean populate_tabs;
   GList *windows;
 
-  if (jsc_value_is_object (get_info_value)) {
-    g_autoptr (JSCValue) populate = jsc_value_object_get_property (get_info_value, "populate");
-    populate_tabs = jsc_value_to_boolean (populate);
-  }
+  windows = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
+  populate_tabs = get_info ? ephy_json_object_get_boolean (get_info, "populate", FALSE) : FALSE;
 
   json_builder_begin_array (builder);
-  windows = gtk_application_get_windows (GTK_APPLICATION (ephy_shell_get_default ()));
-
   for (GList *win_list = windows; win_list; win_list = g_list_next (win_list)) {
     EphyWindow *window = EPHY_WINDOW (win_list->data);
     add_window_to_json (sender->extension, builder, window, populate_tabs);
   }
-
   json_builder_end_array (builder);
 
   root = json_builder_get_root (builder);
   g_task_return_pointer (task, json_to_string (root, FALSE), g_free);
 }
 
+/*
+ * get_url_property:
+ * @object: Object containing urls
+ *
+ * Returns: (transfer container): A #GPtrArray of urls, maybe empty or %NULL if invalid. Strings are owned by @object.
+ */
 static GPtrArray *
-get_url_property (JSCValue *object)
+get_url_property (JsonObject *object)
 {
-  g_autoptr (JSCValue) url_value = jsc_value_object_get_property (object, "url");
-  GPtrArray *urls = g_ptr_array_new_full (2, g_free);
+  JsonNode *node = json_object_get_member (object, "url");
+  GPtrArray *urls;
 
-  if (jsc_value_is_undefined (url_value))
-    return urls;
+  if (!node)
+    return NULL;
 
-  if (jsc_value_is_string (url_value)) {
-    g_autofree char *url = jsc_value_to_string (url_value);
-    if (ephy_web_extension_api_tabs_url_is_unprivileged (url))
-      g_ptr_array_add (urls, g_steal_pointer (&url));
-    return urls;
+  if (ephy_json_node_to_string (node)) {
+    const char *url = ephy_json_node_to_string (node);
+
+    if (ephy_web_extension_api_tabs_url_is_unprivileged (url)) {
+      urls = g_ptr_array_sized_new (1);
+      g_ptr_array_add (urls, (char *)url);
+      return urls;
+    }
+
+    return NULL;
   }
 
-  if (jsc_value_is_array (url_value)) {
-    for (guint i = 0; ; i++) {
-      g_autoptr (JSCValue) indexed_value = jsc_value_object_get_property_at_index (url_value, i);
-      g_autofree char *url = NULL;
-      if (!jsc_value_is_string (indexed_value))
-        break;
-      url = jsc_value_to_string (indexed_value);
+  if (JSON_NODE_HOLDS_ARRAY (node)) {
+    JsonArray *array = json_node_get_array (node);
+    urls = g_ptr_array_sized_new (json_array_get_length (array));
+
+    for (guint i = 0; i < json_array_get_length (array); i++) {
+      const char *url = ephy_json_array_get_string (array, i);
+
+      if (!url)
+        continue;
+
       if (ephy_web_extension_api_tabs_url_is_unprivileged (url))
-        g_ptr_array_add (urls, g_steal_pointer (&url));
+        g_ptr_array_add (urls, (char *)url);
     }
 
     return urls;
   }
 
   g_debug ("Received invalid urls property");
-  return urls;
+  return NULL;
 }
 
 static void
 windows_handler_create (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
+                        const char             *method_name,
+                        JsonArray              *args,
                         GTask                  *task)
 {
-  g_autoptr (JSCValue) create_data_value = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *create_data = ephy_json_array_get_object (args, 0);
   g_autoptr (GPtrArray) urls = NULL;
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   EphyWindow *window;
 
-  if (jsc_value_is_object (create_data_value)) {
-    urls = get_url_property (create_data_value);
-  }
+  if (create_data)
+    urls = get_url_property (create_data);
 
   window = ephy_window_new ();
 
@@ -312,19 +309,19 @@ windows_handler_create (EphyWebExtensionSender *sender,
 
 static void
 windows_handler_remove (EphyWebExtensionSender *sender,
-                        char                   *name,
-                        JSCValue               *args,
+                        const char             *method_name,
+                        JsonArray              *args,
                         GTask                  *task)
 {
-  g_autoptr (JSCValue) window_id_value = jsc_value_object_get_property_at_index (args, 0);
+  gint64 window_id = ephy_json_array_get_int (args, 0);
   EphyWindow *window;
 
-  if (!jsc_value_is_number (window_id_value)) {
+  if (window_id == -1) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): First argument is not a windowId");
     return;
   }
 
-  window = ephy_web_extension_api_windows_get_window_for_id (jsc_value_to_int32 (window_id_value));
+  window = ephy_web_extension_api_windows_get_window_for_id (window_id);
 
   if (!window) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "window.remove(): Failed to find window by id");
@@ -336,7 +333,7 @@ windows_handler_remove (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionAsyncApiHandler windows_handlers[] = {
+static EphyWebExtensionApiHandler windows_handlers[] = {
   {"get", windows_handler_get},
   {"getCurrent", windows_handler_get_current},
   {"getLastFocused", windows_handler_get_last_focused},
@@ -347,18 +344,18 @@ static EphyWebExtensionAsyncApiHandler windows_handlers[] = {
 
 void
 ephy_web_extension_api_windows_handler (EphyWebExtensionSender *sender,
-                                        char                   *name,
-                                        JSCValue               *args,
+                                        const char             *method_name,
+                                        JsonArray              *args,
                                         GTask                  *task)
 {
   for (guint idx = 0; idx < G_N_ELEMENTS (windows_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = windows_handlers[idx];
+    EphyWebExtensionApiHandler handler = windows_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }
 
-  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "windows.%s(): Not Implemented", name);
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "windows.%s(): Not Implemented", method_name);
 }

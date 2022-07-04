@@ -27,58 +27,57 @@
 #include "pageaction.h"
 
 static GtkWidget *
-pageaction_get_action (EphyWebExtension *extension,
-                       JSCValue         *value)
+get_action_for_tab_id (EphyWebExtension *extension,
+                       gint64            tab_id)
 {
-  EphyWebView *web_view = NULL;
-  EphyShell *shell = ephy_shell_get_default ();
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  g_autoptr (JSCValue) tab_id = NULL;
-  gint32 nr;
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWebView *web_view;
 
-  if (!jsc_value_is_object (value))
+  if (tab_id <= 0)
     return NULL;
 
-  tab_id = jsc_value_object_get_property (value, "tabId");
-  if (!jsc_value_is_number (tab_id))
+  web_view = ephy_shell_get_web_view (shell, tab_id);
+  if (!web_view)
     return NULL;
-
-  nr = jsc_value_to_int32 (tab_id);
-  web_view = ephy_shell_get_web_view (shell, nr);
-  if (!web_view) {
-    LOG ("%s(): Invalid tabId '%d', abort\n", __FUNCTION__, nr);
-    return NULL;
-  }
 
   return ephy_web_extension_manager_get_page_action (manager, extension, web_view);
 }
 
 static void
 pageaction_handler_seticon (EphyWebExtensionSender *sender,
-                            char                   *name,
-                            JSCValue               *args,
+                            const char             *method_name,
+                            JsonArray              *args,
                             GTask                  *task)
 {
+  JsonObject *details = ephy_json_array_get_object (args, 0);
+  gint64 tab_id;
+  const char *path;
   GtkWidget *action;
-  g_autofree char *path_str = NULL;
-  g_autoptr (JSCValue) path_value = NULL;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (sender->extension, value);
-  if (!action) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+  if (!details) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Missing details object");
     return;
   }
 
-  path_value = jsc_value_object_get_property (value, "path");
-  if (jsc_value_is_string (path_value)) {
-    path_str = jsc_value_to_string (path_value);
-    pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path_str, -1);
-  } else {
+  tab_id = ephy_json_object_get_int (details, "tabId");
+  action = get_action_for_tab_id (sender->extension, tab_id);
+  if (!action) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Failed to find action by tabId");
+    return;
+  }
+
+  if (ephy_json_object_get_object (details, "path")) {
+    /* FIXME: Support object here. */
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
     return;
   }
+
+  /* FIXME: path == ""  should reset to default icon and path == NULL should be set to the mainfest's page_action icon. */
+  path = ephy_json_object_get_string (details, "path");
+  if (path)
+    pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path, -1);
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (gtk_bin_get_child (GTK_BIN (action))), pixbuf);
   g_task_return_pointer (task, NULL, NULL);
@@ -86,88 +85,92 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
 
 static void
 pageaction_handler_settitle (EphyWebExtensionSender *sender,
-                             char                   *name,
-                             JSCValue               *args,
+                             const char             *method_name,
+                             JsonArray              *args,
                              GTask                  *task)
 {
+  JsonObject *details = ephy_json_array_get_object (args, 0);
+  gint64 tab_id;
+  const char *title;
   GtkWidget *action;
-  g_autoptr (JSCValue) title = NULL;
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  action = pageaction_get_action (sender->extension, value);
-  if (!action) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+  if (!details) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setTitle(): Missing details object");
     return;
   }
 
-  title = jsc_value_object_get_property (value, "title");
-  gtk_widget_set_tooltip_text (action, jsc_value_to_string (title));
+  tab_id = ephy_json_object_get_int (details, "tabId");
+  action = get_action_for_tab_id (sender->extension, tab_id);
+  if (!action) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setTitle(): Failed to find action by tabId");
+    return;
+  }
 
+  /* FIXME: NULL title should set it to the default value in the manifest. */
+  title = ephy_json_object_get_string (details, "title");
+  gtk_widget_set_tooltip_text (action, title);
   g_task_return_pointer (task, NULL, NULL);
 }
 
 static void
 pageaction_handler_gettitle (EphyWebExtensionSender *sender,
-                             char                   *name,
-                             JSCValue               *args,
+                             const char             *method_name,
+                             JsonArray              *args,
                              GTask                  *task)
 {
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  gint64 tab_id = ephy_json_array_get_int (args, 0);
   GtkWidget *action;
   g_autofree char *title = NULL;
 
-  action = pageaction_get_action (sender->extension, value);
+  action = get_action_for_tab_id (sender->extension, tab_id);
   if (!action) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.getTitle(): Failed to find action by tabId");
     return;
   }
 
   title = gtk_widget_get_tooltip_text (action);
-
   g_task_return_pointer (task, g_strdup_printf ("\"%s\"", title ? title : ""), g_free);
 }
 
 static void
 pageaction_handler_show (EphyWebExtensionSender *sender,
-                         char                   *name,
-                         JSCValue               *args,
+                         const char             *method_name,
+                         JsonArray              *args,
                          GTask                  *task)
 {
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  gint64 tab_id = ephy_json_array_get_int (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (sender->extension, value);
+  action = get_action_for_tab_id (sender->extension, tab_id);
   if (!action) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.show(): Failed to find action by tabId");
     return;
   }
 
   gtk_widget_set_visible (action, TRUE);
-
   g_task_return_pointer (task, NULL, NULL);
 }
 
 static void
 pageaction_handler_hide (EphyWebExtensionSender *sender,
-                         char                   *name,
-                         JSCValue               *args,
+                         const char             *method_name,
+                         JsonArray              *args,
                          GTask                  *task)
 {
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  gint64 tab_id = ephy_json_array_get_int (args, 0);
   GtkWidget *action;
 
-  action = pageaction_get_action (sender->extension, value);
+  action = get_action_for_tab_id (sender->extension, tab_id);
   if (!action) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.hide(): Failed to find action by tabId");
     return;
   }
 
   gtk_widget_set_visible (action, FALSE);
-
   g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionAsyncApiHandler pageaction_handlers[] = {
+static EphyWebExtensionApiHandler pageaction_handlers[] = {
   {"setIcon", pageaction_handler_seticon},
   {"setTitle", pageaction_handler_settitle},
   {"getTitle", pageaction_handler_gettitle},
@@ -177,15 +180,15 @@ static EphyWebExtensionAsyncApiHandler pageaction_handlers[] = {
 
 void
 ephy_web_extension_api_pageaction_handler (EphyWebExtensionSender *sender,
-                                           char                   *name,
-                                           JSCValue               *args,
+                                           const char             *method_name,
+                                           JsonArray              *args,
                                            GTask                  *task)
 {
   for (guint idx = 0; idx < G_N_ELEMENTS (pageaction_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = pageaction_handlers[idx];
+    EphyWebExtensionApiHandler handler = pageaction_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }

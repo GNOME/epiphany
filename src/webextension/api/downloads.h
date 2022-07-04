@@ -33,8 +33,8 @@ void ephy_web_extension_api_downloads_init (EphyWebExtensionManager *manager);
 void ephy_web_extension_api_downloads_dispose (EphyWebExtensionManager *manager);
 
 void ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
-                                               char                   *name,
-                                               JSCValue               *value,
+                                               const char             *method_name,
+                                               JsonArray              *args,
                                                GTask                  *task);
 
 G_END_DECLS

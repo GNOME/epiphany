@@ -27,8 +27,8 @@
 G_BEGIN_DECLS
 
 void         ephy_web_extension_api_menus_handler                    (EphyWebExtensionSender *sender,
-                                                                      char                   *name,
-                                                                      JSCValue               *value,
+                                                                      const char             *method_name,
+                                                                      JsonArray              *args,
                                                                       GTask                  *task);
 
 WebKitContextMenuItem  *ephy_web_extension_api_menus_create_context_menu        (EphyWebExtension    *self,

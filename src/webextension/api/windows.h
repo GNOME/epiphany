@@ -27,8 +27,8 @@
 G_BEGIN_DECLS
 
 void         ephy_web_extension_api_windows_handler                    (EphyWebExtensionSender *sender,
-                                                                        char                   *name,
-                                                                        JSCValue               *value,
+                                                                        const char             *method_name,
+                                                                        JsonArray              *args,
                                                                         GTask                  *task);
 
 char        *ephy_web_extension_api_windows_create_window_json          (EphyWebExtension *self,

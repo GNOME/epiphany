@@ -27,56 +27,25 @@
 
 #include "storage.h"
 
-static JsonNode *
-node_from_value_property (JSCValue   *object,
-                          const char *property)
-{
-  g_autoptr (JSCValue) property_value = jsc_value_object_get_property (object, property);
-  g_autofree char *value_json = jsc_value_to_json (property_value, 0);
-  JsonNode *json = json_from_string (value_json, NULL);
-  g_assert (json);
-  return json;
-}
-
-static GStrv
-strv_from_value (JSCValue *array)
-{
-  g_autoptr (GStrvBuilder) builder = g_strv_builder_new ();
-
-  for (guint i = 0;; i++) {
-    g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (array, i);
-    g_autofree char *str = NULL;
-
-    if (jsc_value_is_undefined (value))
-      break;
-
-    str = jsc_value_to_string (value);
-    g_strv_builder_add (builder, str);
-  }
-
-  return g_strv_builder_end (builder);
-}
-
 static void
 storage_handler_local_set (EphyWebExtensionSender *sender,
-                           char                   *name,
-                           JSCValue               *args,
+                           const char             *method_name,
+                           JsonArray              *args,
                            GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
-  g_auto (GStrv) keys = NULL;
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *keys = ephy_json_array_get_object (args, 0);
 
-  if (!jsc_value_is_object (value)) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "Invalid Arguments");
+  if (!keys) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "storage.local.set(): Missing keys");
     return;
   }
 
-  keys = jsc_value_object_enumerate_properties (value);
-
-  for (guint i = 0; keys[i]; i++)
-    json_object_set_member (local_storage_obj, keys[i], node_from_value_property (value, keys[i]));
+  for (GList *l = json_object_get_members (keys); l; l = g_list_next (l)) {
+    const char *member_name = l->data;
+    json_object_set_member (local_storage_obj, member_name, json_node_ref (json_object_get_member (keys, member_name)));
+  }
 
   /* FIXME: Implement storage.onChanged */
   /* FIXME: Async IO */
@@ -87,17 +56,16 @@ storage_handler_local_set (EphyWebExtensionSender *sender,
 
 static void
 storage_handler_local_get (EphyWebExtensionSender *sender,
-                           char                   *name,
-                           JSCValue               *args,
+                           const char             *method_name,
+                           JsonArray              *args,
                            GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
+  JsonNode *node = ephy_json_array_get_element (args, 0);
   g_autoptr (JsonBuilder) builder = NULL;
-  g_auto (GStrv) keys = NULL;
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
 
-  if (jsc_value_is_null (value)) {
+  if (!node) {
     g_task_return_pointer (task, json_to_string (local_storage, FALSE), g_free);
     return;
   }
@@ -105,40 +73,52 @@ storage_handler_local_get (EphyWebExtensionSender *sender,
   builder = json_builder_new ();
   json_builder_begin_object (builder);
 
-  if (jsc_value_is_string (value)) {
-    g_autofree char *key = jsc_value_to_string (value);
+  if (ephy_json_node_to_string (node)) {
+    const char *key = ephy_json_node_to_string (node);
     JsonNode *member = json_object_get_member (local_storage_obj, key);
     if (member) {
       json_builder_set_member_name (builder, key);
-      json_builder_add_value (builder, member);
+      json_builder_add_value (builder, json_node_ref (member));
     }
     goto end_get;
   }
 
-  if (jsc_value_is_array (value)) {
-    keys = strv_from_value (value);
-    for (guint i = 0; keys[i]; i++) {
-      const char *key = keys[i];
-      JsonNode *member = json_object_get_member (local_storage_obj, key);
+  if (JSON_NODE_HOLDS_ARRAY (node)) {
+    JsonArray *array = json_node_get_array (node);
+    for (guint i = 0; i < json_array_get_length (array); i++) {
+      const char *key = ephy_json_array_get_string (array, i);
+      JsonNode *member;
+
+      if (!key)
+        continue;
+
+      member = json_object_get_member (local_storage_obj, key);
       if (member) {
         json_builder_set_member_name (builder, key);
-        json_builder_add_value (builder, member);
+        json_builder_add_value (builder, json_node_ref (member));
       }
     }
     goto end_get;
   }
 
-  if (jsc_value_is_object (value)) {
-    keys = jsc_value_object_enumerate_properties (value);
-    for (guint i = 0; keys[i]; i++) {
-      const char *key = keys[i];
-      JsonNode *member = json_object_get_member (local_storage_obj, key);
-      json_builder_set_member_name (builder, key);
-      if (!member)
-        member = node_from_value_property (value, key);
-      json_builder_add_value (builder, member);
+  if (JSON_NODE_HOLDS_OBJECT (node)) {
+    JsonObject *object = json_node_get_object (node);
+    GList *members = json_object_get_members (object);
+    for (GList *l = members; l; l = g_list_next (l)) {
+      const char *member_name = l->data;
+      JsonNode *member;
+
+      /* Either we find the member or we return the value we were given, unless it was undefined. */
+      if (!json_object_has_member (local_storage_obj, member_name))
+        member = json_object_get_member (object, member_name);
+      else
+        member = json_object_get_member (local_storage_obj, member_name);
+
+      if (member) {
+        json_builder_set_member_name (builder, member_name);
+        json_builder_add_value (builder, json_node_ref (member));
+      }
     }
-    goto end_get;
   }
 
 end_get:
@@ -148,25 +128,31 @@ end_get:
 
 static void
 storage_handler_local_remove (EphyWebExtensionSender *sender,
-                              char                   *name,
-                              JSCValue               *args,
+                              const char             *method_name,
+                              JsonArray              *args,
                               GTask                  *task)
 {
   JsonNode *local_storage = ephy_web_extension_get_local_storage (sender->extension);
   JsonObject *local_storage_obj = json_node_get_object (local_storage);
-  g_autoptr (JSCValue) value = jsc_value_object_get_property_at_index (args, 0);
+  JsonNode *node = ephy_json_array_get_element (args, 0);
+  const char *string_value;
 
-  if (jsc_value_is_string (value)) {
-    g_autofree char *key = jsc_value_to_string (value);
-    json_object_remove_member (local_storage_obj, key);
+  if (!node)
+    goto end_remove;
+
+  if (JSON_NODE_HOLDS_ARRAY (node)) {
+    JsonArray *array = json_node_get_array (node);
+    for (guint i = 0; i < json_array_get_length (array); i++) {
+      const char *name = ephy_json_array_get_string (array, i);
+      if (name)
+        json_object_remove_member (local_storage_obj, name);
+    }
     goto end_remove;
   }
 
-  if (jsc_value_is_array (value)) {
-    g_auto (GStrv) keys = strv_from_value (value);
-    for (guint i = 0; keys[i]; i++) {
-      json_object_remove_member (local_storage_obj, keys[i]);
-    }
+  string_value = ephy_json_node_to_string (node);
+  if (string_value) {
+    json_object_remove_member (local_storage_obj, string_value);
     goto end_remove;
   }
 
@@ -177,8 +163,8 @@ end_remove:
 
 static void
 storage_handler_local_clear (EphyWebExtensionSender *sender,
-                             char                   *name,
-                             JSCValue               *args,
+                             const char             *method_name,
+                             JsonArray              *args,
                              GTask                  *task)
 {
   ephy_web_extension_clear_local_storage (sender->extension);
@@ -186,7 +172,7 @@ storage_handler_local_clear (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionAsyncApiHandler storage_handlers[] = {
+static EphyWebExtensionApiHandler storage_handlers[] = {
   {"local.set", storage_handler_local_set},
   {"local.get", storage_handler_local_get},
   {"local.remove", storage_handler_local_remove},
@@ -195,8 +181,8 @@ static EphyWebExtensionAsyncApiHandler storage_handlers[] = {
 
 void
 ephy_web_extension_api_storage_handler (EphyWebExtensionSender *sender,
-                                        char                   *name,
-                                        JSCValue               *args,
+                                        const char             *method_name,
+                                        JsonArray              *args,
                                         GTask                  *task)
 {
   if (!ephy_web_extension_has_permission (sender->extension, "storage")) {
@@ -206,13 +192,13 @@ ephy_web_extension_api_storage_handler (EphyWebExtensionSender *sender,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (storage_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = storage_handlers[idx];
+    EphyWebExtensionApiHandler handler = storage_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }
 
-  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "storage.%s(): Not Implemented", name);
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "storage.%s(): Not Implemented", method_name);
 }

@@ -34,31 +34,31 @@ get_downloads_manager (void)
 
 static void
 downloads_handler_download (EphyWebExtensionSender *sender,
-                            char                   *name,
-                            JSCValue               *args,
+                            const char             *method_name,
+                            JsonArray              *args,
                             GTask                  *task)
 {
-  g_autoptr (JSCValue) options = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *options = ephy_json_array_get_object (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   g_autoptr (EphyDownload) download = NULL;
-  g_autofree char *url = NULL;
-  g_autofree char *filename = NULL;
   g_autofree char *suggested_filename = NULL;
   g_autofree char *suggested_directory = NULL;
-  g_autofree char *conflict_action = NULL;
+  const char *url;
+  const char *filename;
+  const char *conflict_action;
 
-  if (!jsc_value_is_object (options)) {
+  if (!options) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.download(): Missing options object");
     return;
   }
 
-  url = api_utils_get_string_property (options, "url", NULL);
+  url = ephy_json_object_get_string (options, "url");
   if (!url) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.download(): Missing url");
     return;
   }
 
-  filename = api_utils_get_string_property (options, "filename", NULL);
+  filename = ephy_json_object_get_string (options, "filename");
   if (filename) {
     g_autoptr (GFile) downloads_dir = g_file_new_for_path (ephy_file_get_downloads_dir ());
     g_autoptr (GFile) destination = g_file_resolve_relative_path (downloads_dir, filename);
@@ -74,13 +74,13 @@ downloads_handler_download (EphyWebExtensionSender *sender,
     suggested_directory = g_file_get_path (parent_dir);
   }
 
-  conflict_action = api_utils_get_string_property (options, "conflictAction", NULL);
+  conflict_action = ephy_json_object_get_string (options, "conflictAction");
 
   download = ephy_download_new_for_uri (url);
   ephy_download_set_allow_overwrite (download, g_strcmp0 (conflict_action, "overwrite") == 0);
   ephy_download_set_choose_filename (download, TRUE);
   ephy_download_set_suggested_destination (download, suggested_directory, suggested_filename);
-  ephy_download_set_always_ask_destination (download, api_utils_get_boolean_property (options, "saveAs", FALSE));
+  ephy_download_set_always_ask_destination (download, ephy_json_object_get_boolean (options, "saveAs", FALSE));
   ephy_download_set_initiating_web_extension_info (download, ephy_web_extension_get_guid (sender->extension), ephy_web_extension_get_name (sender->extension));
   ephy_downloads_manager_add_download (downloads_manager, download);
 
@@ -92,20 +92,20 @@ downloads_handler_download (EphyWebExtensionSender *sender,
 
 static void
 downloads_handler_cancel (EphyWebExtensionSender *sender,
-                          char                   *name,
-                          JSCValue               *args,
+                          const char             *method_name,
+                          JsonArray              *args,
                           GTask                  *task)
 {
-  g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
+  gint64 download_id = ephy_json_array_get_int (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   EphyDownload *download;
 
-  if (!jsc_value_is_number (download_id)) {
+  if (download_id < 0) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.cancel(): Missing downloadId");
     return;
   }
 
-  download = ephy_downloads_manager_find_download_by_id (downloads_manager, jsc_value_to_int32 (download_id));
+  download = ephy_downloads_manager_find_download_by_id (downloads_manager, (guint64)download_id);
   /* If we fail to find one its possible it was removed already. So instead of erroring just consider it a success. */
   if (!download) {
     g_task_return_pointer (task, NULL, NULL);
@@ -118,35 +118,35 @@ downloads_handler_cancel (EphyWebExtensionSender *sender,
 
 static void
 downloads_handler_open_or_show (EphyWebExtensionSender *sender,
-                                char                   *name,
-                                JSCValue               *args,
+                                const char             *method_name,
+                                JsonArray              *args,
                                 GTask                  *task)
 {
-  g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
+  gint64 download_id = ephy_json_array_get_int (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   EphyDownloadActionType action;
   EphyDownload *download;
 
   /* We reuse this method for both downloads.open() and downloads.show() as they are identical other than the action. */
 
-  if (!jsc_value_is_number (download_id)) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Missing downloadId", name);
+  if (download_id < 0) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Missing downloadId", method_name);
     return;
   }
 
-  download = ephy_downloads_manager_find_download_by_id (downloads_manager, jsc_value_to_int32 (download_id));
+  download = ephy_downloads_manager_find_download_by_id (downloads_manager, (guint64)download_id);
   if (!download) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to find downloadId", name);
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to find downloadId", method_name);
     return;
   }
 
-  if (strcmp (name, "open") == 0)
+  if (strcmp (method_name, "open") == 0)
     action = EPHY_DOWNLOAD_ACTION_OPEN;
   else
     action = EPHY_DOWNLOAD_ACTION_BROWSE_TO;
 
   if (!ephy_download_do_download_action (download, action)) {
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to %s download", name, name);
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.%s(): Failed to %s download", method_name, method_name);
     return;
   }
 
@@ -154,14 +154,17 @@ downloads_handler_open_or_show (EphyWebExtensionSender *sender,
 }
 
 static GDateTime *
-get_download_time_property (JSCValue   *obj,
+get_download_time_property (JsonObject *obj,
                             const char *name)
 {
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/downloads/DownloadTime */
-  g_autoptr (JSCValue) value = jsc_value_object_get_property (obj, name);
+  JsonNode *node = json_object_get_member (obj, name);
 
-  if (jsc_value_is_string (value)) {
-    g_autofree char *string = jsc_value_to_string (value);
+  if (!node || !JSON_NODE_HOLDS_VALUE (node))
+    return NULL;
+
+  if (json_node_get_value_type (node) == G_TYPE_STRING) {
+    const char *string = json_node_get_string (node);
     char *end = NULL;
     guint64 timestamp;
 
@@ -173,10 +176,8 @@ get_download_time_property (JSCValue   *obj,
     return g_date_time_new_from_iso8601 (string, NULL);
   }
 
-  if (jsc_value_is_number (value)) {
-    gint32 timestamp = jsc_value_to_int32 (value);
-    return g_date_time_new_from_unix_local (timestamp);
-  }
+  if (json_node_get_value_type (node) == G_TYPE_INT64)
+    return g_date_time_new_from_unix_local (json_node_get_int (node));
 
   return NULL;
 }
@@ -203,13 +204,13 @@ typedef struct {
   char *url;
   char *content_type;
   char *interrupt_reason;
-  gint32 limit;
-  gint32 id;
-  gint32 bytes_received;
-  gint32 total_bytes;
-  gint32 file_size;
-  gint32 total_bytes_greater;
-  gint32 total_bytes_less;
+  gint64 limit;
+  gint64 id;
+  gint64 bytes_received;
+  gint64 total_bytes;
+  gint64 file_size;
+  gint64 total_bytes_greater;
+  gint64 total_bytes_less;
   DownloadState state;
   ApiTriStateValue paused;
   ApiTriStateValue exists;
@@ -237,28 +238,28 @@ download_query_free (DownloadQuery *query)
 }
 
 static DownloadQuery *
-download_query_new (JSCValue *object)
+download_query_new (JsonObject *object)
 {
   DownloadQuery *query = g_new (DownloadQuery, 1);
-  g_autofree char *danger = NULL;
-  g_autofree char *state = NULL;
-  g_autofree char *mime = NULL;
+  const char *danger;
+  const char *state;
+  const char *mime;
 
-  query->filename = api_utils_get_string_property (object, "filename", NULL);
-  query->filename_regex = api_utils_get_string_property (object, "filenameRegex", NULL);
-  query->url = api_utils_get_string_property (object, "url", NULL);
-  query->url_regex = api_utils_get_string_property (object, "urlRegex", NULL);
-  query->interrupt_reason = api_utils_get_string_property (object, "error", NULL);
-  mime = api_utils_get_string_property (object, "mime", NULL);
+  query->filename = ephy_json_object_dup_string (object, "filename");
+  query->filename_regex = ephy_json_object_dup_string (object, "filenameRegex");
+  query->url = ephy_json_object_dup_string (object, "url");
+  query->url_regex = ephy_json_object_dup_string (object, "urlRegex");
+  query->interrupt_reason = ephy_json_object_dup_string (object, "error");
+  mime = ephy_json_object_get_string (object, "mime");
   query->content_type = mime ? g_content_type_from_mime_type (mime) : NULL;
 
-  query->total_bytes_greater = api_utils_get_int32_property (object, "totalBytesGreater", -1);
-  query->total_bytes_less = api_utils_get_int32_property (object, "totalBytesLess", -1);
-  query->limit = api_utils_get_int32_property (object, "limit", -1);
-  query->bytes_received = api_utils_get_int32_property (object, "bytesReceived", -1);
-  query->total_bytes = api_utils_get_int32_property (object, "totalBytes", -1);
-  query->file_size = api_utils_get_int32_property (object, "fileSize", -1);
-  query->id = api_utils_get_int32_property (object, "id", -1);
+  query->total_bytes_greater = ephy_json_object_get_int (object, "totalBytesGreater");
+  query->total_bytes_less = ephy_json_object_get_int (object, "totalBytesLess");
+  query->limit = ephy_json_object_get_int (object, "limit");
+  query->bytes_received = ephy_json_object_get_int (object, "bytesReceived");
+  query->total_bytes = ephy_json_object_get_int (object, "totalBytes");
+  query->file_size = ephy_json_object_get_int (object, "fileSize");
+  query->id = ephy_json_object_get_int (object, "id");
 
   query->start_time = get_download_time_property (object, "startTime");
   query->started_before = get_download_time_property (object, "startedBefore");
@@ -267,19 +268,19 @@ download_query_new (JSCValue *object)
   query->ended_before = get_download_time_property (object, "endedBefore");
   query->ended_after = get_download_time_property (object, "endedAfter");
 
-  query->query = api_utils_get_string_array_property (object, "query");
-  query->order_by = api_utils_get_string_array_property (object, "orderBy");
+  query->query = ephy_json_object_get_string_array (object, "query");
+  query->order_by = ephy_json_object_get_string_array (object, "orderBy");
 
-  query->paused = api_utils_get_tri_state_value_property (object, "paused");
-  query->exists = api_utils_get_tri_state_value_property (object, "exists");
+  query->paused = ephy_json_object_get_boolean (object, "paused", -1);
+  query->exists = ephy_json_object_get_boolean (object, "exists", -1);
 
   /* Epiphany doesn't detect dangerous files so we only care if the query wanted to
    * filter out *safe* files. */
-  danger = api_utils_get_string_property (object, "danger", NULL);
+  danger = ephy_json_object_get_string (object, "danger");
   query->dangerous_only = danger ? strcmp (danger, "safe") != 0 : API_VALUE_UNSET;
 
   query->state = DOWNLOAD_STATE_ANY;
-  state = api_utils_get_string_property (object, "state", NULL);
+  state = ephy_json_object_get_string (object, "state");
   if (state) {
     if (strcmp (state, "in_progress") == 0)
       query->state = DOWNLOAD_STATE_IN_PROGRESS;
@@ -328,8 +329,7 @@ regex_matches (JSCContext *context,
   /* WebExtensions can include arbitrary regex; To match expectations we need to run this against
    * the JavaScript implementation of regex rather than PCREs.
    * Note that this is absolutely untrusted code, however @context is private to this single API call
-   * (created in content_scripts_handle_user_message()) so they cannot actually do anything except
-   * make this match succeed or fail. */
+   * so they cannot actually do anything except make this match succeed or fail. */
   /* FIXME: Maybe this can use `jsc_value_constructor_call()` and `jsc_context_evaluate_in_object()` instead of
    * printf to avoid quotes potentially conflicting. */
   g_autofree char *code = g_strdup_printf ("let re = new RegExp('%s'); re.test('%s');", regex, string);
@@ -339,11 +339,11 @@ regex_matches (JSCContext *context,
 
 static gboolean
 matches_filename_or_url (EphyDownload  *download,
-                         DownloadQuery *query,
-                         JSCContext    *context)
+                         DownloadQuery *query)
 {
   g_autofree char *filename = download_get_filename (download);
   const char *url = download_get_url (download);
+  g_autoptr (JSCContext) js_context = NULL;
 
   /* query contains a list of strings that must be in either the URL or the filename.
    * They may also be prefixed with `-` to require negative matches. */
@@ -364,10 +364,13 @@ matches_filename_or_url (EphyDownload  *download,
   if (query->url && g_strcmp0 (query->url, url))
     return FALSE;
 
-  if (query->url_regex && !regex_matches (context, query->url_regex, url))
+  if (query->url_regex || query->filename_regex)
+    js_context = jsc_context_new ();
+
+  if (query->url_regex && !regex_matches (js_context, query->url_regex, url))
     return FALSE;
 
-  if (query->filename_regex && !regex_matches (context, query->filename_regex, filename))
+  if (query->filename_regex && !regex_matches (js_context, query->filename_regex, filename))
     return FALSE;
 
   return TRUE;
@@ -443,8 +446,7 @@ order_downloads (EphyDownload *d1,
 
 static GList *
 filter_downloads (GList         *downloads,
-                  DownloadQuery *query,
-                  JSCContext    *context)
+                  DownloadQuery *query)
 {
   GList *matches = NULL;
   GList *extras = NULL;
@@ -491,7 +493,7 @@ filter_downloads (GList         *downloads,
     if (query->total_bytes_less != -1 && (guint64)query->total_bytes_less > received_size)
       continue;
 
-    if (!matches_filename_or_url (dl, query, context))
+    if (!matches_filename_or_url (dl, query))
       continue;
 
     if (!matches_times (dl, query))
@@ -585,7 +587,7 @@ add_download_to_json (JsonBuilder  *builder,
     json_builder_add_string_value (builder, end_time_iso8601);
   }
   json_builder_set_member_name (builder, "bytesReceived");
-  json_builder_add_int_value (builder, (gint32)download_get_received_size (download));
+  json_builder_add_int_value (builder, (gint64)download_get_received_size (download));
   json_builder_set_member_name (builder, "totalBytes");
   json_builder_add_int_value (builder, -1);
   json_builder_set_member_name (builder, "fileSize");
@@ -617,24 +619,24 @@ download_to_json (EphyDownload *download)
 
 static void
 downloads_handler_search (EphyWebExtensionSender *sender,
-                          char                   *name,
-                          JSCValue               *args,
+                          const char             *method_name,
+                          JsonArray              *args,
                           GTask                  *task)
 {
-  g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *query_object = ephy_json_array_get_object (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   DownloadQuery *query;
   GList *downloads;
 
-  if (!jsc_value_is_object (query_object)) {
+  if (!query_object) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.query(): Missing query");
     return;
   }
 
   query = download_query_new (query_object);
-  downloads = filter_downloads (ephy_downloads_manager_get_downloads (downloads_manager), query, jsc_value_get_context (args));
+  downloads = filter_downloads (ephy_downloads_manager_get_downloads (downloads_manager), query);
   download_query_free (query);
 
   json_builder_begin_array (builder);
@@ -648,24 +650,24 @@ downloads_handler_search (EphyWebExtensionSender *sender,
 
 static void
 downloads_handler_erase (EphyWebExtensionSender *sender,
-                         char                   *name,
-                         JSCValue               *args,
+                         const char             *method_name,
+                         JsonArray              *args,
                          GTask                  *task)
 {
-  g_autoptr (JSCValue) query_object = jsc_value_object_get_property_at_index (args, 0);
+  JsonObject *query_object = ephy_json_array_get_object (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   DownloadQuery *query;
   GList *downloads;
 
-  if (!jsc_value_is_object (query_object)) {
+  if (!query_object) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.erase(): Missing query");
     return;
   }
 
   query = download_query_new (query_object);
-  downloads = filter_downloads (ephy_downloads_manager_get_downloads (downloads_manager), query, jsc_value_get_context (args));
+  downloads = filter_downloads (ephy_downloads_manager_get_downloads (downloads_manager), query);
   download_query_free (query);
 
   json_builder_begin_array (builder);
@@ -683,8 +685,8 @@ downloads_handler_erase (EphyWebExtensionSender *sender,
 
 static void
 downloads_handler_showdefaultfolder (EphyWebExtensionSender *sender,
-                                     char                   *name,
-                                     JSCValue               *args,
+                                     const char             *method_name,
+                                     JsonArray              *args,
                                      GTask                  *task)
 {
   g_autoptr (GFile) default_folder = g_file_new_for_path (ephy_file_get_downloads_dir ());
@@ -712,22 +714,22 @@ delete_file_ready_cb (GFile        *file,
 
 static void
 downloads_handler_removefile (EphyWebExtensionSender *sender,
-                              char                   *name,
-                              JSCValue               *args,
+                              const char             *method_name,
+                              JsonArray              *args,
                               GTask                  *task)
 {
-  g_autoptr (JSCValue) download_id = jsc_value_object_get_property_at_index (args, 0);
+  gint64 download_id = ephy_json_array_get_int (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
   const char *destination_uri;
   g_autoptr (GFile) destination_file = NULL;
   EphyDownload *download;
 
-  if (!jsc_value_is_number (download_id)) {
+  if (download_id < 0) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.removeFile(): Missing downloadId");
     return;
   }
 
-  download = ephy_downloads_manager_find_download_by_id (downloads_manager, jsc_value_to_int32 (download_id));
+  download = ephy_downloads_manager_find_download_by_id (downloads_manager, (guint64)download_id);
   if (!download) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "downloads.removeFile(): Failed to find downloadId");
     return;
@@ -747,7 +749,7 @@ downloads_handler_removefile (EphyWebExtensionSender *sender,
   g_file_delete_async (destination_file, G_PRIORITY_DEFAULT, NULL, (GAsyncReadyCallback)delete_file_ready_cb, task);
 }
 
-static EphyWebExtensionAsyncApiHandler downloads_async_handlers[] = {
+static EphyWebExtensionApiHandler downloads_async_handlers[] = {
   {"download", downloads_handler_download},
   {"removeFile", downloads_handler_removefile},
   {"cancel", downloads_handler_cancel},
@@ -760,8 +762,8 @@ static EphyWebExtensionAsyncApiHandler downloads_async_handlers[] = {
 
 void
 ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
-                                          char                   *name,
-                                          JSCValue               *args,
+                                          const char             *method_name,
+                                          JsonArray              *args,
                                           GTask                  *task)
 {
   if (!ephy_web_extension_has_permission (sender->extension, "downloads")) {
@@ -771,15 +773,15 @@ ephy_web_extension_api_downloads_handler (EphyWebExtensionSender *sender,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (downloads_async_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = downloads_async_handlers[idx];
+    EphyWebExtensionApiHandler handler = downloads_async_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }
 
-  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "downloads.%s(): Not Implemented", name);
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "downloads.%s(): Not Implemented", method_name);
 }
 
 typedef struct {

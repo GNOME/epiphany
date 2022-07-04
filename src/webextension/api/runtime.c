@@ -20,17 +20,16 @@
 
 #include "config.h"
 
-#include "runtime.h"
-
-#include "ephy-web-extension-manager.h"
-
 #include "ephy-embed-utils.h"
+#include "ephy-web-extension-manager.h"
 #include "ephy-shell.h"
+
+#include "runtime.h"
 
 static void
 runtime_handler_get_browser_info (EphyWebExtensionSender *sender,
-                                  char                   *name,
-                                  JSCValue               *args,
+                                  const char             *method_name,
+                                  JsonArray              *args,
                                   GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -68,8 +67,8 @@ get_arch (void)
 
 static void
 runtime_handler_get_platform_info (EphyWebExtensionSender *sender,
-                                   char                   *name,
-                                   JSCValue               *args,
+                                   const char             *method_name,
+                                   JsonArray              *args,
                                    GTask                  *task)
 {
   g_autoptr (JsonBuilder) builder = json_builder_new ();
@@ -92,48 +91,46 @@ runtime_handler_get_platform_info (EphyWebExtensionSender *sender,
 }
 
 static gboolean
-is_empty_object (JSCValue *value)
+is_empty_object (JsonNode *node)
 {
-  if (jsc_value_is_object (value)) {
-    g_auto (GStrv) keys = jsc_value_object_enumerate_properties (value);
-    return keys == NULL;
-  }
+  g_assert (node);
 
-  return FALSE;
+  if (!JSON_NODE_HOLDS_OBJECT (node))
+    return FALSE;
+
+  return (json_object_get_size (json_node_get_object (node)) == 0);
 }
 
 static void
 runtime_handler_send_message (EphyWebExtensionSender *sender,
-                              char                   *name,
-                              JSCValue               *args,
+                              const char             *method_name,
+                              JsonArray              *args,
                               GTask                  *task)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  g_autoptr (GError) error = NULL;
-  g_autoptr (JSCValue) last_value = NULL;
-  g_autoptr (JSCValue) message = NULL;
   g_autofree char *json = NULL;
+  JsonNode *last_arg;
+  JsonNode *message;
 
   /* The arguments of this are so terrible Mozilla dedicates this to describing how to parse it:
    * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#parameters */
-  last_value = jsc_value_object_get_property_at_index (args, 2);
-  if (!jsc_value_is_undefined (last_value)) {
+
+  /* If 3 args were passed the first arg was an extensionId. */
+  if (ephy_json_array_get_element (args, 2)) {
     /* We don't actually support sending to external extensions yet. */
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
-    g_task_return_error (task, g_steal_pointer (&error));
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
     return;
   }
 
-  last_value = jsc_value_object_get_property_at_index (args, 1);
-  if (jsc_value_is_undefined (last_value) || jsc_value_is_null (last_value) || is_empty_object (last_value)) {
-    message = jsc_value_object_get_property_at_index (args, 0);
-  } else {
-    error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
-    g_task_return_error (task, g_steal_pointer (&error));
+  last_arg = ephy_json_array_get_element (args, 1);
+  if (!last_arg || json_node_is_null (last_arg) || is_empty_object (last_arg))
+    message = ephy_json_array_get_element (args, 0);
+  else {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "extensionId is not supported");
     return;
   }
 
-  json = jsc_value_to_json (message, 0);
+  json = message ? json_to_string (message, FALSE) : g_strdup ("undefined");
   ephy_web_extension_manager_emit_in_extension_views_with_reply (manager, sender->extension,
                                                                  sender,
                                                                  "runtime.onMessage",
@@ -145,8 +142,8 @@ runtime_handler_send_message (EphyWebExtensionSender *sender,
 
 static void
 runtime_handler_open_options_page (EphyWebExtensionSender *sender,
-                                   char                   *name,
-                                   JSCValue               *args,
+                                   const char             *method_name,
+                                   JsonArray              *args,
                                    GTask                  *task)
 {
   const char *options_ui = ephy_web_extension_get_option_ui_page (sender->extension);
@@ -181,7 +178,7 @@ runtime_handler_open_options_page (EphyWebExtensionSender *sender,
   g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
+static EphyWebExtensionApiHandler runtime_async_handlers[] = {
   {"getBrowserInfo", runtime_handler_get_browser_info},
   {"getPlatformInfo", runtime_handler_get_platform_info},
   {"openOptionsPage", runtime_handler_open_options_page},
@@ -190,15 +187,15 @@ static EphyWebExtensionAsyncApiHandler runtime_async_handlers[] = {
 
 void
 ephy_web_extension_api_runtime_handler (EphyWebExtensionSender *sender,
-                                        char                   *name,
-                                        JSCValue               *args,
+                                        const char             *method_name,
+                                        JsonArray              *args,
                                         GTask                  *task)
 {
   for (guint idx = 0; idx < G_N_ELEMENTS (runtime_async_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = runtime_async_handlers[idx];
+    EphyWebExtensionApiHandler handler = runtime_async_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      handler.execute (sender, name, args, task);
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }

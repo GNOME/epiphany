@@ -49,7 +49,7 @@
 #include <json-glib/json-glib.h>
 
 static void handle_message_reply (EphyWebExtension *web_extension,
-                                  JSCValue         *args);
+                                  JsonArray        *args);
 
 struct _EphyWebExtensionManager {
   GObject parent_instance;
@@ -69,7 +69,7 @@ struct _EphyWebExtensionManager {
 
 G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
 
-EphyWebExtensionAsyncApiHandler api_handlers[] = {
+EphyWebExtensionApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},
   {"cookies", ephy_web_extension_api_cookies_handler},
   {"downloads", ephy_web_extension_api_downloads_handler},
@@ -573,14 +573,14 @@ respond_with_error (WebKitUserMessage *message,
 typedef struct {
   EphyWebExtensionSender *sender;
   WebKitUserMessage *message;
-  JSCValue *args;
+  JsonNode *args;
 } ApiHandlerData;
 
 static void
 api_handler_data_free (ApiHandlerData *data)
 {
   g_object_unref (data->message);
-  g_object_unref (data->args);
+  json_node_unref (data->args);
   g_free (data->sender);
   g_free (data);
 }
@@ -590,11 +590,11 @@ api_handler_data_new (EphyWebExtension  *extension,
                       WebKitWebView     *view,
                       guint64            frame_id,
                       WebKitUserMessage *message,
-                      JSCValue          *args)
+                      JsonNode          *args)
 {
   ApiHandlerData *data = g_new (ApiHandlerData, 1);
   data->message = g_object_ref (message);
-  data->args = g_object_ref (args);
+  data->args = json_node_ref (args);
   data->sender = g_new (EphyWebExtensionSender, 1);
   data->sender->extension = extension;
   data->sender->view = view;
@@ -629,25 +629,33 @@ extension_view_handle_user_message (WebKitWebView     *web_view,
                                     gpointer           user_data)
 {
   EphyWebExtension *web_extension = user_data;
-  g_autoptr (JSCContext) js_context = NULL;
-  g_autoptr (JSCValue) args = NULL;
   const char *name = webkit_user_message_get_name (message);
+  g_autoptr (GError) error = NULL;
   g_auto (GStrv) split = NULL;
   const char *guid;
-  const char *json_args;
+  const char *json_string;
+  g_autoptr (JsonNode) json = NULL;
+  JsonArray *json_args;
   guint64 frame_id;
 
-  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &guid, &frame_id, &json_args);
+  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &guid, &frame_id, &json_string);
 
-  js_context = jsc_context_new ();
-  args = jsc_value_new_from_json (js_context, json_args);
+  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, json_string);
 
-  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, json_args);
+  json = json_from_string (json_string, &error);
+  if (!json || !JSON_NODE_HOLDS_ARRAY (json)) {
+    g_warning ("Received invalid JSON: %s", error ? error->message : "JSON was not an array");
+    respond_with_error (message, "Invalid function arguments");
+    return TRUE;
+  }
+
+  json_args = json_node_get_array (json);
+  json_array_seal (json_args);
 
   /* Private API for message replies handled by the manager. */
   if (strcmp (name, "runtime._sendMessageReply") == 0) {
     WebKitUserMessage *reply = webkit_user_message_new ("", g_variant_new_string (""));
-    handle_message_reply (web_extension, args);
+    handle_message_reply (web_extension, json_args);
     webkit_user_message_send_reply (message, reply);
     return TRUE;
   }
@@ -659,15 +667,15 @@ extension_view_handle_user_message (WebKitWebView     *web_view,
   }
 
   for (guint idx = 0; idx < G_N_ELEMENTS (api_handlers); idx++) {
-    EphyWebExtensionAsyncApiHandler handler = api_handlers[idx];
+    EphyWebExtensionApiHandler handler = api_handlers[idx];
 
     if (g_strcmp0 (handler.name, split[0]) == 0) {
       /* TODO: Cancellable */
       GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
-      ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
+      ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
       g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
-      handler.execute (data->sender, split[1], args, task);
+      handler.execute (data->sender, split[1], json_args, task);
       return TRUE;
     }
   }
@@ -683,30 +691,38 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
                                      gpointer           user_data)
 {
   EphyWebExtension *web_extension = user_data;
-  g_autoptr (JSCContext) js_context = NULL;
-  g_autoptr (JSCValue) args = NULL;
+  g_autoptr (GError) error = NULL;
   const char *name = webkit_user_message_get_name (message);
   g_auto (GStrv) split = NULL;
-  const char *json_args;
+  const char *json_string;
+  g_autoptr (JsonNode) json = NULL;
+  JsonArray *json_args;
   const char *extension_guid;
   GTask *task;
   guint64 frame_id;
 
-  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &extension_guid, &frame_id, &json_args);
+  g_variant_get (webkit_user_message_get_parameters (message), "(&st&s)", &extension_guid, &frame_id, &json_string);
 
   /* Multiple extensions can send user-messages from the same web-view, so only the target one handles this. */
   if (strcmp (extension_guid, ephy_web_extension_get_guid (web_extension)) != 0)
     return FALSE;
 
-  js_context = jsc_context_new ();
-  args = jsc_value_new_from_json (js_context, json_args);
+  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, json_string);
 
-  LOG ("%s(): Called for %s, function %s (%s)\n", __FUNCTION__, ephy_web_extension_get_name (web_extension), name, json_args);
+  json = json_from_string (json_string, &error);
+  if (!json || !JSON_NODE_HOLDS_ARRAY (json)) {
+    g_warning ("Received invalid JSON: %s", error ? error->message : "JSON was not an array");
+    respond_with_error (message, "Invalid function arguments");
+    return TRUE;
+  }
+
+  json_args = json_node_get_array (json);
+  json_array_seal (json_args);
 
   /* Private API for message replies handled by the manager. */
   if (strcmp (name, "runtime._sendMessageReply") == 0) {
     WebKitUserMessage *reply = webkit_user_message_new ("", g_variant_new_string (""));
-    handle_message_reply (web_extension, args);
+    handle_message_reply (web_extension, json_args);
     webkit_user_message_send_reply (message, reply);
     return TRUE;
   }
@@ -719,21 +735,21 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
 
   /* Content Scripts are very limited in their API access compared to extension views so we handle them individually. */
   if (strcmp (split[0], "storage") == 0) {
-    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
+    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
     g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
-    ephy_web_extension_api_storage_handler (data->sender, split[1], args, task);
+    ephy_web_extension_api_storage_handler (data->sender, split[1], json_args, task);
     return TRUE;
   }
 
   if (strcmp (name, "runtime.sendMessage") == 0) {
-    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, args);
+    ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
 
     g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
-    ephy_web_extension_api_runtime_handler (data->sender, split[1], args, task);
+    ephy_web_extension_api_runtime_handler (data->sender, split[1], json_args, task);
     return TRUE;
   }
 
@@ -1433,31 +1449,29 @@ ephy_web_extension_manager_handle_context_menu_action (EphyWebExtensionManager *
 
 static void
 handle_message_reply (EphyWebExtension *web_extension,
-                      JSCValue         *args)
+                      JsonArray        *args)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   GHashTable *pending_messages = g_hash_table_lookup (manager->pending_messages, web_extension);
   GTask *pending_task;
-  g_autofree char *message_guid = NULL;
-  g_autoptr (JSCValue) message_guid_value = NULL;
-  g_autoptr (JSCValue) reply_value = NULL;
+  const char *message_guid;
+  JsonNode *reply;
 
-  message_guid_value = jsc_value_object_get_property_at_index (args, 0);
-  if (!jsc_value_is_string (message_guid_value)) {
+  message_guid = ephy_json_array_get_string (args, 0);
+  if (!message_guid) {
     g_debug ("Received invalid message reply");
     return;
   }
 
-  message_guid = jsc_value_to_string (message_guid_value);
   pending_task = g_hash_table_lookup (pending_messages, message_guid);
   if (!pending_task) {
     g_debug ("Received message not found in pending replies");
     return;
   }
-
-  reply_value = jsc_value_object_get_property_at_index (args, 1);
   g_hash_table_steal (pending_messages, message_guid);
-  g_task_return_pointer (pending_task, jsc_value_to_json (reply_value, 0), g_free);
+
+  reply = ephy_json_array_get_element (args, 1);
+  g_task_return_pointer (pending_task, reply ? json_to_string (reply, FALSE) : NULL, g_free);
 }
 
 typedef struct {
