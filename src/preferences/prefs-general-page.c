@@ -556,7 +556,7 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   guint i, n;
   GtkBuilder *builder;
   GtkWidget *prefs_dialog;
-  g_auto (GStrv) locales;
+  g_auto (GStrv) locales = NULL;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
   prefs_dialog = gtk_widget_get_toplevel (GTK_WIDGET (general_page));
