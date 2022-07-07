@@ -68,6 +68,16 @@ typedef enum {
 
 typedef struct {
   char *name;
+  char *description;
+  char *accelerator;
+  char *shortcut;
+} WebExtensionCommand;
+
+WebExtensionCommand *web_extension_command_copy (WebExtensionCommand *command);
+void                 web_extension_command_free (WebExtensionCommand *command);
+
+typedef struct {
+  char *name;
   EphyApiExecuteFunc execute;
 } EphyWebExtensionApiHandler;
 
@@ -148,19 +158,7 @@ const char            *ephy_web_extension_get_option_ui_page              (EphyW
 
 const char            *ephy_web_extension_get_guid                        (EphyWebExtension *self);
 
-GList                 *ephy_web_extension_get_commands                    (EphyWebExtension *self);
-
-void                   ephy_web_extension_get_command_data_from_index     (EphyWebExtension    *self,
-                                                                           guint                command,
-                                                                           char               **shortcut,
-                                                                           char               **suggested_key,
-                                                                           char               **description);
-
-void                  *ephy_web_extension_get_command_data_from_name      (EphyWebExtension    *self,
-                                                                           const char          *name,
-                                                                           char               **shortcut,
-                                                                           char               **suggested_key,
-                                                                           char               **description);
+GHashTable            *ephy_web_extension_get_commands                    (EphyWebExtension *self);
 
 gboolean               ephy_web_extension_has_tab_or_host_permission      (EphyWebExtension *self,
                                                                            EphyWebView      *web_view,
@@ -191,6 +189,8 @@ gboolean               ephy_web_extension_rule_matches_uri                (const
 
 gboolean               ephy_web_extension_has_web_accessible_resource     (EphyWebExtension *self,
                                                                            const char       *path);
+
+char                   *ephy_web_extension_parse_command_key              (const char       *suggested_key);
 
 G_END_DECLS
 

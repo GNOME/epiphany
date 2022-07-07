@@ -32,4 +32,7 @@ void ephy_web_extension_api_commands_handler (EphyWebExtensionSender *sender,
                                               JsonArray              *args,
                                               GTask                  *task);
 
+void ephy_web_extension_api_commands_init    (EphyWebExtension *self);
+void ephy_web_extension_api_commands_dispose (EphyWebExtension *self);
+
 G_END_DECLS

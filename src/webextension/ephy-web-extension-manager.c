@@ -1381,12 +1381,15 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
 
     if (ephy_web_extension_has_background_web_view (web_extension))
       run_background_script (self, web_extension);
+
+    ephy_web_extension_api_commands_init (web_extension);
   } else {
     g_signal_handlers_disconnect_by_data (shell, web_extension);
 
     g_hash_table_remove (self->browser_action_map, web_extension);
     g_hash_table_remove (self->background_web_views, web_extension);
     g_object_set_data (G_OBJECT (web_extension), "alarms", NULL); /* Set in alarms.c */
+    ephy_web_extension_api_commands_dispose (web_extension);
   }
 }
 
