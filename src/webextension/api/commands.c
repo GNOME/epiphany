@@ -33,10 +33,12 @@ typedef struct {
 } Command;
 
 static void
-command_destroy (Command *cmd)
+command_destroy (Command *command)
 {
-  /* g_clear_pointer (&cmd->name); */
-  g_free (cmd);
+  g_free (command->name);
+  g_free (command->accelerator);
+  g_free (command->description);
+  g_free (command);
 }
 
 static void
@@ -85,9 +87,9 @@ create_command (EphyWebExtension *self,
                                                   &description);
 
   command->web_extension = self;
-  command->name = g_strdup (shortcut);
-  command->accelerator = g_strdup (suggested_key);
-  command->description = g_strdup (description);
+  command->name = shortcut;
+  command->accelerator = suggested_key;
+  command->description = description;
 
   setup_actions (command);
 
@@ -133,14 +135,15 @@ command_to_node (Command *cmd)
   return node;
 }
 
-char *
-create_accelerator (char *orig_string)
+static char *
+create_accelerator (const char *orig_string)
 {
   char **accelerator_keys = NULL;
   char *accelerator = "";
 
+  /* FIXME: Stricter validation. */
   if (strchr (orig_string, '<') != NULL || strchr (orig_string, '>') != NULL)
-    return orig_string;
+    return NULL;
 
   accelerator_keys = g_strsplit ((const gchar *)orig_string, "+", 0);
 
@@ -156,14 +159,13 @@ create_accelerator (char *orig_string)
   return accelerator;
 }
 
-static char *
-commands_handler_get_all (EphyWebExtension  *self,
-                          char              *name,
-                          JSCValue          *args,
-                          WebKitWebView     *web_view,
-                          GError           **error)
+static void
+commands_handler_get_all (EphyWebExtensionSender *sender,
+                          const char             *method_name,
+                          JsonArray              *args,
+                          GTask                  *task)
 {
-  GHashTable *commands = get_commands (self);
+  GHashTable *commands = get_commands (sender->extension);
   g_autoptr (JsonNode) node = json_node_init_array (json_node_alloc (), json_array_new ());
   JsonArray *rel = json_node_get_array (node);
   GHashTableIter iter;
@@ -173,124 +175,138 @@ commands_handler_get_all (EphyWebExtension  *self,
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cmd))
     json_array_add_element (rel, command_to_node (cmd));
 
-  return json_to_string (node, FALSE);
+  g_task_return_pointer (task, json_to_string (node, FALSE), g_free);
 }
 
-static char *
-commands_handler_reset (EphyWebExtension  *self,
-                        char              *name,
-                        JSCValue          *args,
-                        WebKitWebView     *web_view,
-                        GError           **error)
+static void
+commands_handler_reset (EphyWebExtensionSender *sender,
+                        const char             *method_name,
+                        JsonArray              *args,
+                        GTask                  *task)
 {
-  GHashTable *commands = get_commands (self);
-  g_autoptr (JSCValue) name_value = jsc_value_object_get_property_at_index (args, 0);
-  g_autofree char *name_str = NULL;
-  Command *cmd = NULL;
-  char *shortcut;
-  char *suggested_key;
-  char *description;
+  GHashTable *commands = get_commands (sender->extension);
+  const char *name = ephy_json_array_get_string (args, 0);
+  Command *command;
+  g_autofree char *action_name = NULL;
+  g_autofree char *shortcut = NULL;
+  g_autofree char *suggested_key = NULL;
+  g_autofree char *description = NULL;
 
-  if (!jsc_value_is_string (name_value))
-    name_str = g_strdup ("");
-  else
-    name_str = jsc_value_to_string (name_value);
-
-  if (g_hash_table_lookup (commands, name_str)) {
-    cmd = g_hash_table_lookup (commands, name_str);
-    ephy_web_extension_get_command_data_from_name (self,
-                                                   name_str,
-                                                   &shortcut,
-                                                   &suggested_key,
-                                                   &description);
-
-    cmd->name = g_strdup (shortcut);
-    cmd->accelerator = g_strdup (suggested_key);
-    cmd->description = g_strdup (description);
+  if (!name) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.reset(): Missing name argument");
+    return;
   }
 
-  return NULL;
+  command = g_hash_table_lookup (commands, name);
+  if (!command) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.reset(): Did not find command by name %s", name);
+    return;
+  }
+
+  ephy_web_extension_get_command_data_from_name (sender->extension,
+                                                 name,
+                                                 &shortcut,
+                                                 &suggested_key,
+                                                 &description);
+
+  g_free (command->accelerator);
+  g_free (command->description);
+  command->description = g_steal_pointer (&description);
+  command->accelerator = create_accelerator (suggested_key);
+
+  action_name = g_strdup_printf ("app.%s", command->name);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (ephy_shell_get_default ()),
+                                         action_name,
+                                         (const char *[]) { command->accelerator, NULL });
+
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static char *
-commands_handler_update (EphyWebExtension  *self,
-                         char              *name,
-                         JSCValue          *args,
-                         WebKitWebView     *web_view,
-                         GError           **error)
+static void
+commands_handler_update (EphyWebExtensionSender *sender,
+                         const char             *method_name,
+                         JsonArray              *args,
+                         GTask                  *task)
 {
-  GHashTable *commands = get_commands (self);
-  g_autoptr (JSCValue) obj = jsc_value_object_get_property_at_index (args, 0);
-  Command *cmd = NULL;
-  g_autofree char *name_str = NULL;
-  g_autofree char *desc_str = NULL;
-  g_autofree char *shortcut_str = NULL;
+  GHashTable *commands = get_commands (sender->extension);
+  JsonObject *details = ephy_json_array_get_object (args, 0);
+  Command *command;
+  g_autofree char *action_name = NULL;
+  const char *name;
+  const char *description;
+  const char *shortcut;
 
-  if (!jsc_value_is_object (obj))
-    return NULL;
-  else {
-    if (!jsc_value_object_has_property (obj, "name"))
-      return NULL;
-    else
-      name_str = jsc_value_to_string (jsc_value_object_get_property (obj, "name"));
+  if (!details) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.update(): Missing details object");
+    return;
+  }
 
-    if (jsc_value_object_has_property (obj, "description"))
-      desc_str = jsc_value_to_string (jsc_value_object_get_property (obj, "description"));
+  name = ephy_json_object_get_string (details, "name");
+  if (!name) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.update(): Missing name");
+    return;
+  }
 
-    if (jsc_value_object_has_property (obj, "shortcut")) {
-      shortcut_str = jsc_value_to_string (jsc_value_object_get_property (obj, "shortcut"));
-      shortcut_str = create_accelerator (shortcut_str);
+  command = g_hash_table_lookup (commands, name);
+  if (!command) {
+    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.update(): Could not find command by name %s", name);
+    return;
+  }
+
+  description = ephy_json_object_get_string (details, "description");
+  if (description) {
+    g_free (command->description);
+    command->description = g_strdup (description);
+  }
+
+  shortcut = ephy_json_object_get_string (details, "shortcut");
+  if (shortcut && !*shortcut) {
+    /* Empty string is set to nothing. */
+    g_free (command->accelerator);
+    command->accelerator = NULL;
+  } else if (shortcut) {
+    g_autofree char *new_accelerator = create_accelerator (shortcut);
+
+    if (!new_accelerator) {
+      g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.update(): Shortcut was invalid: '%s'", shortcut);
+      return;
     }
+
+    g_free (command->accelerator);
+    command->accelerator = g_steal_pointer (&new_accelerator);
   }
 
-  if (g_hash_table_lookup (commands, name_str)) {
-    cmd = g_hash_table_lookup (commands, name_str);
-    cmd->name = g_strdup (name_str);
-    cmd->accelerator = g_strdup (shortcut_str);
-    cmd->description = g_strdup (desc_str);
+  if (shortcut) {
+    action_name = g_strdup_printf ("app.%s", command->name);
     gtk_application_set_accels_for_action (GTK_APPLICATION (ephy_shell_get_default ()),
-                                           g_strdup_printf ("app.%s", cmd->name),
-                                           (const char *[]) {
-      cmd->accelerator,
-      NULL,
-    });
+                                           action_name,
+                                           (const char *[]) { command->accelerator, NULL });
   }
 
-  return NULL;
+  g_task_return_pointer (task, NULL, NULL);
 }
 
-static EphyWebExtensionSyncApiHandler commands_handlers[] = {
+static EphyWebExtensionApiHandler commands_handlers[] = {
   {"getAll", commands_handler_get_all},
   {"reset", commands_handler_reset},
   {"update", commands_handler_update}
 };
 
 void
-ephy_web_extension_api_commands_handler (EphyWebExtension *self,
-                                         char             *name,
-                                         JSCValue         *args,
-                                         WebKitWebView    *web_view,
-                                         GTask            *task)
+ephy_web_extension_api_commands_handler (EphyWebExtensionSender *sender,
+                                         const char             *method_name,
+                                         JsonArray              *args,
+                                         GTask                  *task)
 {
-  g_autoptr (GError) error = NULL;
-
   for (guint idx = 0; idx < G_N_ELEMENTS (commands_handlers); idx++) {
-    EphyWebExtensionSyncApiHandler handler = commands_handlers[idx];
-    char *ret;
+    EphyWebExtensionApiHandler handler = commands_handlers[idx];
 
-    if (g_strcmp0 (handler.name, name) == 0) {
-      ret = handler.execute (self, name, args, web_view, &error);
-
-      if (error)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_pointer (task, ret, g_free);
-
+    if (g_strcmp0 (handler.name, method_name) == 0) {
+      handler.execute (sender, method_name, args, task);
       return;
     }
   }
 
-  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, name);
-  error = g_error_new_literal (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
-  g_task_return_error (task, g_steal_pointer (&error));
+  g_warning ("%s(): '%s' not implemented by Epiphany!", __FUNCTION__, method_name);
+  g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_NOT_IMPLEMENTED, "Not Implemented");
 }

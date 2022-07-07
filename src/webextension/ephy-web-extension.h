@@ -150,7 +150,7 @@ const char            *ephy_web_extension_get_guid                        (EphyW
 
 GList                 *ephy_web_extension_get_commands                    (EphyWebExtension *self);
 
-void                  *ephy_web_extension_get_command_data_from_index     (EphyWebExtension    *self,
+void                   ephy_web_extension_get_command_data_from_index     (EphyWebExtension    *self,
                                                                            guint                command,
                                                                            char               **shortcut,
                                                                            char               **suggested_key,

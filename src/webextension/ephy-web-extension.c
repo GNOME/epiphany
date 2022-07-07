@@ -831,7 +831,7 @@ web_extension_parse_commands (EphyWebExtension *self,
   }
 }
 
-void *
+void
 ephy_web_extension_get_command_data_from_index (EphyWebExtension  *self,
                                                 guint              command,
                                                 char             **shortcut,
@@ -840,11 +840,11 @@ ephy_web_extension_get_command_data_from_index (EphyWebExtension  *self,
 {
   WebExtensionCommand *cmd = g_list_nth_data (self->commands, command);
 
-  *shortcut = strdup (cmd->shortcut);
-  *suggested_key = strdup (cmd->suggested_key);
-  *description = strdup (cmd->description);
+  *shortcut = g_strdup (cmd->shortcut);
+  *suggested_key = g_strdup (cmd->suggested_key);
+  *description = g_strdup (cmd->description);
 
-  return NULL;
+  return;
 }
 
 void *
