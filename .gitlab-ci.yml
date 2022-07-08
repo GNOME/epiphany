@@ -30,6 +30,7 @@ check-code-style:
 
 flatpak:
   extends: '.flatpak'
+  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:42"
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true --werror'
   except:
@@ -38,6 +39,7 @@ flatpak:
 
 flatpak stable:
   extends: '.flatpak'
+  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:42"
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true -Dsoup2=enabled'
   only:
@@ -45,14 +47,16 @@ flatpak stable:
 
 flatpak master:
   extends: '.flatpak'
+  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:42"
   variables:
     CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Denable_gsb=true'
   only:
     - master
+    - gnome-42
 
 scanbuild:
   extends: '.flatpak'
-  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
+  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:42"
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
