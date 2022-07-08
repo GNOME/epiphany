@@ -1,6 +1,6 @@
 project('epiphany', 'c',
   license: 'GPL3+',
-  version: '42.2',
+  version: '42.3',
   meson_version: '>= 0.51.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
