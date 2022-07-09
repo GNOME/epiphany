@@ -78,6 +78,9 @@ gtk_requirement = '>= 3.24.0'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.33.2'
 
+conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_68')
+conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_68')
+
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
