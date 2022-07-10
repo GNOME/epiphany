@@ -984,6 +984,7 @@ GtkWidget *
 ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web_extension)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  g_autoptr (WebKitWebsiteDataManager) data_manager = NULL;
   g_autoptr (WebKitSettings) settings = NULL;
   WebKitWebContext *web_context;
   GtkWidget *web_view;
@@ -1001,7 +1002,8 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   else
     webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
 
-  web_context = webkit_web_context_new ();
+  data_manager = webkit_web_context_get_website_data_manager (ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ()));
+  web_context = webkit_web_context_new_with_website_data_manager (data_manager);
 
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
