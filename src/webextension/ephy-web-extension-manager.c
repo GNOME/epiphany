@@ -338,6 +338,18 @@ ephy_web_extension_manager_get_web_extensions (EphyWebExtensionManager *self)
   return self->web_extensions;
 }
 
+void
+ephy_web_extension_manager_open_inspector (EphyWebExtensionManager *self,
+                                           EphyWebExtension        *web_extension)
+{
+  WebKitWebView *background_page = ephy_web_extension_manager_get_background_web_view (self, web_extension);
+
+  if (!background_page)
+    return;
+
+  webkit_web_inspector_show (webkit_web_view_get_inspector (background_page));
+}
+
 /**
  * Installs/Adds all web_extensions to new EphyWindow.
  */

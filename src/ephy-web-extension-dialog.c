@@ -100,6 +100,16 @@ on_remove_button_clicked (GtkButton *button,
 }
 
 static void
+on_inspector_button_clicked (GtkButton *button,
+                             gpointer   user_data)
+{
+  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+
+  ephy_web_extension_manager_open_inspector (manager, web_extension);
+}
+
+static void
 toggle_state_set_cb (GtkSwitch *widget,
                      gboolean   state,
                      gpointer   user_data)
@@ -196,9 +206,16 @@ create_row (EphyWebExtensionDialog *self,
     g_object_set_data (G_OBJECT (sub_row), "web_extension", web_extension);
   }
 
-  /* Remove button */
+  /* Action buttons */
   sub_row = hdy_action_row_new ();
   gtk_container_add (GTK_CONTAINER (row), sub_row);
+
+  button = gtk_button_new_with_mnemonic (_("Open _Inspector"));
+  gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (button, _("Open Inspector for debugging Background Page"));
+  g_object_bind_property (toggle, "active", button, "sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_inspector_button_clicked), web_extension);
+  gtk_container_add (GTK_CONTAINER (sub_row), button);
 
   button = gtk_button_new_with_mnemonic (_("_Remove"));
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);

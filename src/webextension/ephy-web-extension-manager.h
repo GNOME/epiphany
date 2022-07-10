@@ -112,4 +112,7 @@ void                      ephy_web_extension_manager_append_context_menu        
                                                                                      gboolean                 is_audio,
                                                                                      gboolean                 is_video);
 
+void                      ephy_web_extension_manager_open_inspector                  (EphyWebExtensionManager *self,
+                                                                                      EphyWebExtension        *web_extension);
+
 G_END_DECLS
