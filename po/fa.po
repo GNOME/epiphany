@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-22 00:18+0000\n"
-"PO-Revision-Date: 2022-06-28 14:59+0430\n"
+"POT-Creation-Date: 2022-07-10 17:06+0000\n"
+"PO-Revision-Date: 2022-07-11 18:13+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -576,7 +576,7 @@ msgstr "_گزینش"
 
 #: embed/ephy-download.c:682 embed/ephy-download.c:688 embed/ephy-download.c:739
 #: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: src/ephy-web-extension-dialog.c:282 src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91 src/resources/gtk/prefs-lang-dialog.ui:14
 #: src/window-commands.c:309 src/window-commands.c:381 src/window-commands.c:428
@@ -1018,7 +1018,7 @@ msgstr "پیدا کردن مورد قبلی رشتهٔ جست‌وجو"
 msgid "Find next occurrence of the search string"
 msgstr "پیدا کردن مورد بعدی رشتهٔ جست‌وجو"
 
-#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s یک نشانی معتبر نیست"
@@ -1797,7 +1797,7 @@ msgstr "در حال لغو…"
 msgid "Starting…"
 msgstr "در حال شروع…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_گشودن"
@@ -2092,29 +2092,37 @@ msgstr "گشودن زبانه‌ای جدید"
 msgid "Do you really want to remove this extension?"
 msgstr "واقعاً می‌خواهید این افزونه را بردارید؟"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "_‌حذف"
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "نگارنده"
 
-#: src/ephy-web-extension-dialog.c:181
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "نگارش"
 
-#: src/ephy-web-extension-dialog.c:190 src/resources/gtk/prefs-general-page.ui:127
+#: src/ephy-web-extension-dialog.c:200 src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "صفحهٔ خانگی"
 
-#: src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:213
+msgid "Open _Inspector"
+msgstr "گشودن _بازرس"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "گشودن بازرس برای اشکال‌زدایی صفحهٔ پس‌زمینه"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "برداشتن افزونهٔ وب گزیده"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:261
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "گشودن پرونده (manifest.json/xpi)"
 
@@ -2269,27 +2277,27 @@ msgstr "گشودن پیوند در پنجرهٔ جدید"
 msgid "Open Link In Incognito Window"
 msgstr "گشودن پیوند در پنجرهٔ ناشناس"
 
-#: src/ephy-window.c:2846 src/ephy-window.c:4175
+#: src/ephy-window.c:2852 src/ephy-window.c:4181
 msgid "Do you want to leave this website?"
 msgstr "می‌خواهید از این پایگاه وب خارج شوید؟"
 
-#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
+#: src/ephy-window.c:2853 src/ephy-window.c:4182 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "فرمی که تغییر دادید، ثبت نشده است."
 
-#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
+#: src/ephy-window.c:2854 src/ephy-window.c:4183 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_دور انداختن فرم"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:2875
 msgid "Download operation"
 msgstr "عملیات بارگیری"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2877
 msgid "Show details"
 msgstr "نمایش جزییات"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2879
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2297,35 +2305,35 @@ msgstr[0] "%Id عملیات بارگیری فعّال"
 msgstr[1] "%Id عملیات بارگیری فعّال"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3367
+#: src/ephy-window.c:3373
 msgid "View open tabs"
 msgstr "دیدن زبانه‌های باز"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3503
 msgid "Set Web as your default browser?"
 msgstr "تنظیم وب به عنوان مرورگر پیش‌گزیده‌تان؟"
 
-#: src/ephy-window.c:3499
+#: src/ephy-window.c:3505
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "تنظیم پیش‌نمایش فنی اپیفنی به عنوان مرورگر پیش‌گزیده‌تان؟"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3517
 msgid "_Yes"
 msgstr "_بله"
 
-#: src/ephy-window.c:3512
+#: src/ephy-window.c:3518
 msgid "_No"
 msgstr "_خیر"
 
-#: src/ephy-window.c:4309
+#: src/ephy-window.c:4315
 msgid "There are multiple tabs open."
 msgstr "چندین زبانه بازند."
 
-#: src/ephy-window.c:4310
+#: src/ephy-window.c:4316
 msgid "If you close this window, all open tabs will be lost"
 msgstr "اگر این پنجره را ببندید، همهٔ زبانه‌های باز از دست می‌روند"
 
-#: src/ephy-window.c:4311
+#: src/ephy-window.c:4317
 msgid "C_lose tabs"
 msgstr "بستن _زبانه‌ها"
 
@@ -3563,7 +3571,7 @@ msgstr "برنامهٔ وب «%s» وجود ندارد"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "برنامهٔ وب «%s» نتوانست حذف شود"
 
-#: src/webextension/api/runtime.c:125
+#: src/webextension/api/runtime.c:161
 #, c-format
 msgid "Options for %s"
 msgstr "گزینه‌های %s"
@@ -3717,11 +3725,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2672
+#: src/window-commands.c:2653
 msgid "Enable caret browsing mode?"
 msgstr "به‌کار انداختن حالت مرور با هشتک؟"
 
-#: src/window-commands.c:2675
+#: src/window-commands.c:2656
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you want "
@@ -3731,7 +3739,7 @@ msgstr ""
 "شونده را در صفحهٔ وب می‌گذارد، تا به شما اجازه دهد بوسیلهٔ صفحهٔ کلید خود در صفحه "
 "جابجا شوید. آیا مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2659
 msgid "_Enable"
 msgstr "_به کار انداختن"
 
@@ -4568,9 +4576,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Text _Encoding"
 #~ msgstr "_کدگذاری متن"
-
-#~ msgid "_Toggle Inspector"
-#~ msgstr "_بازرس وب"
 
 #~ msgid "_Location…"
 #~ msgstr "_محل..."
