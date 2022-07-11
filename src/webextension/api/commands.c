@@ -69,27 +69,35 @@ destroy_action (EphyWebExtension    *self,
   g_action_map_remove_action (G_ACTION_MAP (ephy_shell_get_default ()), action_name);
 }
 
-static void
-setup_action (EphyWebExtension    *self,
-              WebExtensionCommand *command)
+void
+set_accel_for_action (EphyWebExtension    *self,
+                      WebExtensionCommand *command)
 {
-  const char * const accels[] = { command->accelerator, NULL };
-  g_autofree char *action_name = get_action_name (self, command);
-  g_autofree char *accel_action_name = get_accel_action_name (self, command);
-  g_autoptr (GSimpleAction) action = g_simple_action_new (action_name, NULL);
-  g_autofree char **current_actions = gtk_application_get_actions_for_accel (GTK_APPLICATION (ephy_shell_get_default ()),
-                                                                             accels[0]);
-
-  g_action_map_add_action (G_ACTION_MAP (ephy_shell_get_default ()), G_ACTION (action));
+  g_auto (GStrv) current_actions = gtk_application_get_actions_for_accel (GTK_APPLICATION (ephy_shell_get_default ()),
+                                                                          command->accelerator);
+  g_autofree char *action_name = get_accel_action_name (self, command);
 
   if (current_actions[0] != NULL) {
-    g_warning ("Accelerator %s already set, not overriding", command->accelerator);
+    g_debug ("commands: Accelerator %s already set, not overriding", command->accelerator);
     return;
   }
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (ephy_shell_get_default ()),
-                                         accel_action_name,
-                                         accels);
+                                         action_name,
+                                         (const char *[]) { command->accelerator, NULL });
+}
+
+static void
+setup_action (EphyWebExtension    *self,
+              WebExtensionCommand *command)
+{
+  g_autofree char *action_name = get_action_name (self, command);
+  g_autofree char *accel_action_name = get_accel_action_name (self, command);
+  g_autoptr (GSimpleAction) action = g_simple_action_new (action_name, NULL);
+
+  g_action_map_add_action (G_ACTION_MAP (ephy_shell_get_default ()), G_ACTION (action));
+
+  set_accel_for_action (self, command);
 
   g_signal_connect (action, "activate", G_CALLBACK (on_command_activated), self);
   /* Lazy way to pass this info to on_command_activated(). */
@@ -240,17 +248,7 @@ commands_handler_update (EphyWebExtensionSender *sender,
   }
 
   if (shortcut) {
-    g_autofree char **current_accels = gtk_application_get_actions_for_accel (GTK_APPLICATION (ephy_shell_get_default ()),
-                                                                              command->accelerator);
-    action_name = get_accel_action_name (sender->extension, command);
-
-    if (current_accels[0] != NULL) {
-      g_warning ("Accelerator %s already set, not overriding", command->accelerator);
-    } else {
-      gtk_application_set_accels_for_action (GTK_APPLICATION (ephy_shell_get_default ()),
-                                             action_name,
-                                             (const char *[]) { command->accelerator, NULL });
-    }
+    set_accel_for_action (sender->extension, command);
   }
 
   g_task_return_pointer (task, NULL, NULL);
