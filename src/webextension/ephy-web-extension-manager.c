@@ -990,10 +990,11 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   GtkWidget *web_view;
   const char *custom_user_agent;
 
-  settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
+  settings = webkit_settings_new_with_settings ("enable-write-console-messages-to-stdout", TRUE,
+                                                "enable-developer-extras", TRUE,
                                                 "enable-fullscreen", FALSE,
-                                                "enable-write-console-messages-to-stdout", TRUE,
                                                 "javascript-can-access-clipboard", ephy_web_extension_has_permission (web_extension, "clipboardWrite"),
+                                                "hardware-acceleration-policy", WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER, /* Reduces memory usage. */
                                                 NULL);
   custom_user_agent = g_hash_table_lookup (manager->user_agent_overrides,
                                            ephy_web_extension_get_name (web_extension));
