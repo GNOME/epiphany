@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-22 00:18+0000\n"
-"PO-Revision-Date: 2022-06-22 09:10+0300\n"
+"POT-Creation-Date: 2022-07-10 17:06+0000\n"
+"PO-Revision-Date: 2022-07-11 14:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
-"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -864,7 +864,8 @@ msgid "The timestamp at which last open tabs sync was made."
 msgstr "Часова мітка, що позначає останню синхронізацію відкритих вкладок."
 
 #: data/org.gnome.epiphany.gschema.xml:463
-msgid "Decision to apply when microphone permission is requested for this host"
+msgid ""
+"Decision to apply when microphone permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на мікрофон для цього вузла"
 
 #: data/org.gnome.epiphany.gschema.xml:464
@@ -916,7 +917,8 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "Decision to apply when save password permission is requested for this host"
-msgstr "Що робити, коли вимагаються права на збереження паролю для цього вузла"
+msgstr ""
+"Що робити, коли вимагаються права на збереження паролю для цього вузла"
 
 #: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
@@ -1086,7 +1088,7 @@ msgstr "_Вибрати"
 
 #: embed/ephy-download.c:682 embed/ephy-download.c:688
 #: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
 #: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
@@ -1098,7 +1100,6 @@ msgid "_Cancel"
 msgstr "_Скасувати"
 
 #: embed/ephy-download.c:684
-#| msgid "Select a Directory"
 msgid "Select the Destination"
 msgstr "Виберіть призначення"
 
@@ -1532,7 +1533,7 @@ msgstr "Пошук попереднього екземпляра рядка по
 msgid "Find next occurrence of the search string"
 msgstr "Пошук наступного екземпляра рядка пошуку"
 
-#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s це неправильний URI"
@@ -1673,7 +1674,8 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1801
-msgid "This website’s identification was not issued by a trusted organization."
+msgid ""
+"This website’s identification was not issued by a trusted organization."
 msgstr "Ототожнення цього сайта не було видано довіреною організацією."
 
 #. Possible error message when a site presents a bad certificate.
@@ -2352,7 +2354,7 @@ msgstr "Скасування…"
 msgid "Starting…"
 msgstr "Запускається…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_Відкрити"
@@ -2650,30 +2652,40 @@ msgstr "Відкрити нову вкладку"
 msgid "Do you really want to remove this extension?"
 msgstr "Ви справді хочете вилучити це розширення?"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "В_илучити"
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "Автор"
 
-#: src/ephy-web-extension-dialog.c:181
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "Версія"
 
-#: src/ephy-web-extension-dialog.c:190
+#: src/ephy-web-extension-dialog.c:200
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Домівка"
 
-#: src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:213
+#| msgctxt "shortcut window"
+#| msgid "Toggle inspector"
+msgid "Open _Inspector"
+msgstr "Відкрити _Ревізор"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "Відкрити ревізор для діагностики фонової сторінки"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "Вилучити вибране веброзширення"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:261
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "Відкрити файл (manifest.json/xpi)"
 
@@ -2828,27 +2840,27 @@ msgstr "Відкрити посилання у новому вікні"
 msgid "Open Link In Incognito Window"
 msgstr "Відкрити посилання у конфіденційному вікні"
 
-#: src/ephy-window.c:2846 src/ephy-window.c:4175
+#: src/ephy-window.c:2852 src/ephy-window.c:4181
 msgid "Do you want to leave this website?"
 msgstr "Бажаєте покинути цей сайт?"
 
-#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
+#: src/ephy-window.c:2853 src/ephy-window.c:4182 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "Змінену форму не було надіслано."
 
-#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
+#: src/ephy-window.c:2854 src/ephy-window.c:4183 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Відхилити форму"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:2875
 msgid "Download operation"
 msgstr "Завантаження"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2877
 msgid "Show details"
 msgstr "Показати подробиці"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2879
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2857,36 +2869,36 @@ msgstr[1] "%d файли завантажуються"
 msgstr[2] "%d файлів завантажуються"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3367
+#: src/ephy-window.c:3373
 msgid "View open tabs"
 msgstr "Переглянути відкриті вкладки"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3503
 msgid "Set Web as your default browser?"
 msgstr "Бажаєте встановити Тенет своїм типовим браузером?"
 
-#: src/ephy-window.c:3499
+#: src/ephy-window.c:3505
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Бажаєте встановити Epiphany Technology Preview своїм типовим браузером?"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3517
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:3512
+#: src/ephy-window.c:3518
 msgid "_No"
 msgstr "_Ні"
 
-#: src/ephy-window.c:4309
+#: src/ephy-window.c:4315
 msgid "There are multiple tabs open."
 msgstr "Відкрито декілька вкладок."
 
-#: src/ephy-window.c:4310
+#: src/ephy-window.c:4316
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Якщо закриєте вікно, всі відкриті вкладки будуть втрачені"
 
-#: src/ephy-window.c:4311
+#: src/ephy-window.c:4317
 msgid "C_lose tabs"
 msgstr "_Закрити вкладки"
 
@@ -3670,7 +3682,8 @@ msgstr "Intelligent _Tracking Prevention"
 
 #: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
-msgstr "Дозволити сайтам зберігати куки, бази даних і дані локального сховища."
+msgstr ""
+"Дозволити сайтам зберігати куки, бази даних і дані локального сховища."
 
 #: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
@@ -4130,7 +4143,7 @@ msgstr "Вебпрограми «%s» не існує"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Не вдалося вилучити вебпрограму «%s»"
 
-#: src/webextension/api/runtime.c:125
+#: src/webextension/api/runtime.c:161
 #, c-format
 msgid "Options for %s"
 msgstr "Параметри для %s"
@@ -4252,7 +4265,8 @@ msgstr "Запустити"
 
 #: src/window-commands.c:1896
 #, c-format
-msgid "A web application named “%s” already exists. Do you want to replace it?"
+msgid ""
+"A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Вебпрограма з назвою «%s» вже існує. Замінити її?"
 
 #: src/window-commands.c:1899
@@ -4285,11 +4299,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2672
+#: src/window-commands.c:2653
 msgid "Enable caret browsing mode?"
 msgstr "Увімкнути режим перегляду з курсором??"
 
-#: src/window-commands.c:2675
+#: src/window-commands.c:2656
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4299,7 +4313,7 @@ msgstr ""
 "помістити рухомий курсор на сторінку, дозволяючи вам вибирати блоки тексту "
 "клавіатурою. Хочете увімкнути Перегляд з курсором?"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2659
 msgid "_Enable"
 msgstr "_Увімкнути"
 
