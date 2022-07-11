@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.22\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-22 00:18+0000\n"
-"PO-Revision-Date: 2022-06-22 14:27+0100\n"
+"POT-Creation-Date: 2022-07-10 17:06+0000\n"
+"PO-Revision-Date: 2022-07-11 16:01+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (https://l10n.gnome.org/teams/pt/)\n"
 "Language: pt\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Language: pt_PT\n"
 "X-Source-Language: C\n"
@@ -1122,7 +1122,7 @@ msgstr "_Selecionar"
 
 #: embed/ephy-download.c:682 embed/ephy-download.c:688
 #: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
 #: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
@@ -1567,7 +1567,7 @@ msgstr "Procurar a ocorrência anterior da cadeia"
 msgid "Find next occurrence of the search string"
 msgstr "Procurar a ocorrência seguinte da cadeia"
 
-#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s é um URI inválido"
@@ -2378,7 +2378,7 @@ msgstr "A cancelar…"
 msgid "Starting…"
 msgstr "A iniciar…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_Abrir"
@@ -2678,30 +2678,38 @@ msgstr "Abrir um novo separador"
 msgid "Do you really want to remove this extension?"
 msgstr "Deseja realmente remover esta extensão?"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "_Remover"
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "Autor"
 
-#: src/ephy-web-extension-dialog.c:181
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "Versão"
 
-#: src/ephy-web-extension-dialog.c:190
+#: src/ephy-web-extension-dialog.c:200
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Página inicial"
 
-#: src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:213
+msgid "Open _Inspector"
+msgstr "Abrir _inspetor"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "Abrir inspetor para depuração da página de fundo"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "Remover a Extensão da Web selecionada"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:261
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "Abrir ficheiro (manifest.json/xpi)"
 
@@ -2856,27 +2864,27 @@ msgstr "Abrir ligação em nova janela"
 msgid "Open Link In Incognito Window"
 msgstr "Abrir ligação em janela de navegação anónima"
 
-#: src/ephy-window.c:2846 src/ephy-window.c:4175
+#: src/ephy-window.c:2852 src/ephy-window.c:4181
 msgid "Do you want to leave this website?"
 msgstr "Deseja deixar este website?"
 
-#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
+#: src/ephy-window.c:2853 src/ephy-window.c:4182 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "Um formulado alterado por si não foi enviado."
 
-#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
+#: src/ephy-window.c:2854 src/ephy-window.c:4183 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Descartar formulário"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:2875
 msgid "Download operation"
 msgstr "Transferências"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2877
 msgid "Show details"
 msgstr "Mostrar detalhes"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2879
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2884,37 +2892,37 @@ msgstr[0] "%d transferência ativa"
 msgstr[1] "%d transferências ativas"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3367
+#: src/ephy-window.c:3373
 msgid "View open tabs"
 msgstr "Ver separadores abertos"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3503
 msgid "Set Web as your default browser?"
 msgstr "Definir o Web como navegador principal?"
 
-#: src/ephy-window.c:3499
+#: src/ephy-window.c:3505
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Definir a Pré-visualização de Tecnologia Epiphany como seu navegador "
 "principal?"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3517
 msgid "_Yes"
 msgstr "_Sim"
 
-#: src/ephy-window.c:3512
+#: src/ephy-window.c:3518
 msgid "_No"
 msgstr "_Não"
 
-#: src/ephy-window.c:4309
+#: src/ephy-window.c:4315
 msgid "There are multiple tabs open."
 msgstr "Há vários separadores abertos."
 
-#: src/ephy-window.c:4310
+#: src/ephy-window.c:4316
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Se fechar esta janela, todos os separadores abertos serão perdidos"
 
-#: src/ephy-window.c:4311
+#: src/ephy-window.c:4317
 msgid "C_lose tabs"
 msgstr "Fec_har separadores"
 
@@ -3982,7 +3990,7 @@ msgstr "Código da página"
 #: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Toggle inspector"
-msgstr "Ativar a inspeção"
+msgstr "Ativar inspetor"
 
 #: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
@@ -4159,7 +4167,7 @@ msgstr "A aplicação web '%s' não existe"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "A aplicação web '%s' não pôde ser eliminada"
 
-#: src/webextension/api/runtime.c:125
+#: src/webextension/api/runtime.c:161
 #, c-format
 msgid "Options for %s"
 msgstr "Opções para %s"
@@ -4317,11 +4325,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2672
+#: src/window-commands.c:2653
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: src/window-commands.c:2675
+#: src/window-commands.c:2656
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4331,7 +4339,7 @@ msgstr ""
 "cursor móvel nas páginas web, permitindo-lhe que se desloque com o teclado. "
 "Quer ativar a navegação com cursor?"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2659
 msgid "_Enable"
 msgstr "_Ativar"
 
