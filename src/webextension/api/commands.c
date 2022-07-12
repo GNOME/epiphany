@@ -73,9 +73,17 @@ void
 set_accel_for_action (EphyWebExtension    *self,
                       WebExtensionCommand *command)
 {
-  g_auto (GStrv) current_actions = gtk_application_get_actions_for_accel (GTK_APPLICATION (ephy_shell_get_default ()),
-                                                                          command->accelerator);
-  g_autofree char *action_name = get_accel_action_name (self, command);
+  g_auto (GStrv) current_actions = NULL;
+  g_autofree char *action_name = NULL;
+
+  if (command->accelerator == NULL) {
+    g_debug ("commands: Command has no accelerator, skipping");
+    return;
+  }
+
+  current_actions = gtk_application_get_actions_for_accel (GTK_APPLICATION (ephy_shell_get_default ()),
+                                                           command->accelerator);
+  action_name = get_accel_action_name (self, command);
 
   if (current_actions[0] != NULL) {
     g_debug ("commands: Accelerator %s already set, not overriding", command->accelerator);
