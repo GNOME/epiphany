@@ -1,6 +1,6 @@
 /*!
-  Highlight.js v11.5.0 (git: 7a62552656)
-  (c) 2006-2022 Ivan Sagalaev and other contributors
+  Highlight.js v11.6.0 (git: bed790f3f3)
+  (c) 2006-2022 undefined and other contributors
   License: BSD-3-Clause
  */
 var hljs = (function () {
@@ -36,8 +36,6 @@ var hljs = (function () {
 
     deepFreezeEs6.exports = deepFreeze;
     deepFreezeEs6.exports.default = deepFreeze;
-
-    var deepFreeze$1 = deepFreezeEs6.exports;
 
     /** @typedef {import('highlight.js').CallbackResponse} CallbackResponse */
     /** @typedef {import('highlight.js').CompiledMode} CompiledMode */
@@ -104,7 +102,7 @@ var hljs = (function () {
      * @property {() => string} value
      */
 
-    /** @typedef {{kind?: string, sublanguage?: boolean}} Node */
+    /** @typedef {{scope?: string, language?: string, sublanguage?: boolean}} Node */
     /** @typedef {{walk: (r: Renderer) => void}} Tree */
     /** */
 
@@ -115,7 +113,9 @@ var hljs = (function () {
      *
      * @param {Node} node */
     const emitsWrappingTags = (node) => {
-      return !!node.kind;
+      // rarely we can have a sublanguage where language is undefined
+      // TODO: track down why
+      return !!node.scope || (node.sublanguage && node.language);
     };
 
     /**
@@ -123,7 +123,7 @@ var hljs = (function () {
      * @param {string} name
      * @param {{prefix:string}} options
      */
-    const expandScopeName = (name, { prefix }) => {
+    const scopeToCSSClass = (name, { prefix }) => {
       if (name.includes(".")) {
         const pieces = name.split(".");
         return [
@@ -163,13 +163,13 @@ var hljs = (function () {
       openNode(node) {
         if (!emitsWrappingTags(node)) return;
 
-        let scope = node.kind;
+        let className = "";
         if (node.sublanguage) {
-          scope = `language-${scope}`;
+          className = `language-${node.language}`;
         } else {
-          scope = expandScopeName(scope, { prefix: this.classPrefix });
+          className = scopeToCSSClass(node.scope, { prefix: this.classPrefix });
         }
-        this.span(scope);
+        this.span(className);
       }
 
       /**
@@ -200,15 +200,23 @@ var hljs = (function () {
       }
     }
 
-    /** @typedef {{kind?: string, sublanguage?: boolean, children: Node[]} | string} Node */
-    /** @typedef {{kind?: string, sublanguage?: boolean, children: Node[]} } DataNode */
+    /** @typedef {{scope?: string, language?: string, sublanguage?: boolean, children: Node[]} | string} Node */
+    /** @typedef {{scope?: string, language?: string, sublanguage?: boolean, children: Node[]} } DataNode */
     /** @typedef {import('highlight.js').Emitter} Emitter */
     /**  */
+
+    /** @returns {DataNode} */
+    const newNode = (opts = {}) => {
+      /** @type DataNode */
+      const result = { children: [] };
+      Object.assign(result, opts);
+      return result;
+    };
 
     class TokenTree {
       constructor() {
         /** @type DataNode */
-        this.rootNode = { children: [] };
+        this.rootNode = newNode();
         this.stack = [this.rootNode];
       }
 
@@ -223,10 +231,10 @@ var hljs = (function () {
         this.top.children.push(node);
       }
 
-      /** @param {string} kind */
-      openNode(kind) {
+      /** @param {string} scope */
+      openNode(scope) {
         /** @type Node */
-        const node = { kind, children: [] };
+        const node = newNode({ scope });
         this.add(node);
         this.stack.push(node);
       }
@@ -298,11 +306,11 @@ var hljs = (function () {
 
       Minimal interface:
 
-      - addKeyword(text, kind)
+      - addKeyword(text, scope)
       - addText(text)
       - addSublanguage(emitter, subLanguageName)
       - finalize()
-      - openNode(kind)
+      - openNode(scope)
       - closeNode()
       - closeAllNodes()
       - toHTML()
@@ -323,12 +331,12 @@ var hljs = (function () {
 
       /**
        * @param {string} text
-       * @param {string} kind
+       * @param {string} scope
        */
-      addKeyword(text, kind) {
+      addKeyword(text, scope) {
         if (text === "") { return; }
 
-        this.openNode(kind);
+        this.openNode(scope);
         this.addText(text);
         this.closeNode();
       }
@@ -349,8 +357,8 @@ var hljs = (function () {
       addSublanguage(emitter, name) {
         /** @type DataNode */
         const node = emitter.root;
-        node.kind = name;
         node.sublanguage = true;
+        node.language = name;
         this.add(node);
       }
 
@@ -1558,7 +1566,7 @@ var hljs = (function () {
       return mode;
     }
 
-    var version = "11.5.0";
+    var version = "11.6.0";
 
     class HTMLInjectionError extends Error {
       constructor(reason, html) {
@@ -1790,7 +1798,7 @@ var hljs = (function () {
             lastIndex = top.keywordPatternRe.lastIndex;
             match = top.keywordPatternRe.exec(modeBuffer);
           }
-          buf += modeBuffer.substr(lastIndex);
+          buf += modeBuffer.substring(lastIndex);
           emitter.addText(buf);
         }
 
@@ -1965,7 +1973,7 @@ var hljs = (function () {
          */
         function doEndMatch(match) {
           const lexeme = match[0];
-          const matchPlusRemainder = codeToHighlight.substr(match.index);
+          const matchPlusRemainder = codeToHighlight.substring(match.index);
 
           const endMode = endOfMode(top, match, matchPlusRemainder);
           if (!endMode) { return NO_MATCH; }
@@ -2138,7 +2146,7 @@ var hljs = (function () {
             const processedCount = processLexeme(beforeMatch, match);
             index = match.index + processedCount;
           }
-          processLexeme(codeToHighlight.substr(index));
+          processLexeme(codeToHighlight.substring(index));
           emitter.closeAllNodes();
           emitter.finalize();
           result = emitter.toHTML();
@@ -2548,7 +2556,7 @@ var hljs = (function () {
         // @ts-ignore
         if (typeof MODES$1[key] === "object") {
           // @ts-ignore
-          deepFreeze$1(MODES$1[key]);
+          deepFreezeEs6.exports(MODES$1[key]);
         }
       }
 
@@ -3244,6 +3252,7 @@ var hljs = (function () {
                 relevance: 0, // from keywords
                 keywords: { built_in: "url data-uri" },
                 contains: [
+                  ...STRINGS,
                   {
                     className: "string",
                     // any character other than `)` as in `url()` will be the start
@@ -3521,7 +3530,7 @@ var hljs = (function () {
           // `<From extends string>`
           // technically this could be HTML, but it smells like a type
           let m;
-          const afterMatch = match.input.substr(afterMatchIndex);
+          const afterMatch = match.input.substring(afterMatchIndex);
           // NOTE: This is ugh, but added specifically for https://github.com/highlightjs/highlight.js/issues/3276
           if ((m = afterMatch.match(/^\s+extends\s+/))) {
             if (m.index === 0) {
@@ -4040,9 +4049,15 @@ var hljs = (function () {
     /** @type LanguageFn */
     function xml(hljs) {
       const regex = hljs.regex;
-      // Element names can contain letters, digits, hyphens, underscores, and periods
-      const TAG_NAME_RE = regex.concat(/[A-Z_]/, regex.optional(/[A-Z0-9_.-]*:/), /[A-Z0-9_.-]*/);
-      const XML_IDENT_RE = /[A-Za-z0-9._:-]+/;
+      // XML names can have the following additional letters: https://www.w3.org/TR/xml/#NT-NameChar
+      // OTHER_NAME_CHARS = /[:\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]/;
+      // Element names start with NAME_START_CHAR followed by optional other Unicode letters, ASCII digits, hyphens, underscores, and periods
+      // const TAG_NAME_RE = regex.concat(/[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, regex.optional(/[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*:/), /[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*/);;
+      // const XML_IDENT_RE = /[A-Z_a-z:\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]+/;
+      // const TAG_NAME_RE = regex.concat(/[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, regex.optional(/[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*:/), /[A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*/);
+      // however, to cater for performance and more Unicode support rely simply on the Unicode letter class
+      const TAG_NAME_RE = regex.concat(/[\p{L}_]/u, regex.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u);
+      const XML_IDENT_RE = /[\p{L}0-9._:-]+/u;
       const XML_ENTITIES = {
         className: 'symbol',
         begin: /&[a-z]+;|&#[0-9]+;|&#x[a-f0-9]+;/
@@ -4113,6 +4128,7 @@ var hljs = (function () {
           'svg'
         ],
         case_insensitive: true,
+        unicodeRegex: true,
         contains: [
           {
             className: 'meta',
