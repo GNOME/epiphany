@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-05-27 21:42+0000\n"
-"PO-Revision-Date: 2022-05-30 20:44+0300\n"
+"POT-Creation-Date: 2022-07-10 17:06+0000\n"
+"PO-Revision-Date: 2022-07-14 12:15+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -139,12 +139,6 @@ msgid "List of the search engines."
 msgstr "List of the search engines."
 
 #: data/org.gnome.epiphany.gschema.xml:62
-#| msgid ""
-#| "List of the search engines. It is an array of vardicts with each vardict "
-#| "corresponding to a search engine, and with the following supported keys: "
-#| "- name: The name of the search engine - url: The search URL with the "
-#| "search term replaced with %s. - bang: The \"bang\" (shortcut word) of the "
-#| "search engine"
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -1078,19 +1072,19 @@ msgstr ""
 "ממשלות אחרות, אתרי האינטרנט בהם ביקרת וכן מפרסמים באתרי אינטרנט עדיין עשויים "
 "לעקוב אחריך."
 
-#: embed/ephy-download.c:652 src/preferences/prefs-general-page.c:723
-#| msgid "Select a directory"
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
 msgid "Select a Directory"
 msgstr "בחירת תיקייה"
 
-#: embed/ephy-download.c:655 src/preferences/prefs-general-page.c:726
-#: src/window-commands.c:311
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
 msgid "_Select"
 msgstr "_בחירה"
 
-#: embed/ephy-download.c:656 embed/ephy-download.c:704
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:265 src/preferences/prefs-general-page.c:727
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
@@ -1100,38 +1094,43 @@ msgstr "_בחירה"
 msgid "_Cancel"
 msgstr "_ביטול"
 
-#: embed/ephy-download.c:703
+#: embed/ephy-download.c:684
+#| msgid "Select the entire page"
+msgid "Select the Destination"
+msgstr "בחירת יעד"
+
+#: embed/ephy-download.c:738
 msgid "Download requested"
 msgstr "הורדה החלה"
 
-#: embed/ephy-download.c:704
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "הו_רדה"
 
-#: embed/ephy-download.c:717
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "סוג: ‏%s ‏(‏%s)"
 
 #. From
-#: embed/ephy-download.c:723
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "מאת: %s"
 
 #. Question
-#: embed/ephy-download.c:728
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "היכן לשמור את הקובץ?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:896
+#: embed/ephy-download.c:942
 #, c-format
 msgid "Finished downloading %s"
 msgstr "הסתיימה הורדה של %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:898
+#: embed/ephy-download.c:944
 msgid "Download finished"
 msgstr "הורדה הסתיימה"
 
@@ -1530,7 +1529,7 @@ msgstr "חיפוש המופע הקודמת של המילה או הביטוי"
 msgid "Find next occurrence of the search string"
 msgstr "חיפוש המופע הבא של המילה או הביטוי"
 
-#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "‏%s אינה כתובת תקפה"
@@ -2078,25 +2077,21 @@ msgstr "נכשלה קבלת שם קובץ שולחן עבודה עבור ייש�
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
-#| msgid "File is not a valid .desktop file"
 msgid "Failed to install desktop file %s: "
 msgstr "התקנת קובץ שולחן עבודה %s נכשלה: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
-#| msgid "A file %s already exists."
 msgid "Profile directory %s already exists"
 msgstr "תיקיית הפרופיל %s כבר קיימת"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create directory %s"
 msgstr "יצירת התיקייה „%s” נכשלה"
 
 #: lib/ephy-web-app-utils.c:406
 #, c-format
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to create .app file: %s"
 msgstr "יצירת קובץ ‎.app נכשלה: %s"
 
@@ -2247,7 +2242,7 @@ msgid ""
 "insecurely."
 msgstr "אישור זה תקף. אולם, משאבים בדף זה נשלחו באופן לא בטוח."
 
-#: lib/widgets/ephy-downloads-popover.c:213
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2330,7 +2325,7 @@ msgstr "מבטל…"
 msgid "Starting…"
 msgstr "הפעלה…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_פתיחה"
@@ -2621,30 +2616,39 @@ msgstr "פתיחת לשונית חדשה"
 msgid "Do you really want to remove this extension?"
 msgstr "למחוק הרחבה זו?"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "_הסרה"
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "יוצר"
 
-#: src/ephy-web-extension-dialog.c:181
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "גרסה"
 
-#: src/ephy-web-extension-dialog.c:190
+#: src/ephy-web-extension-dialog.c:200
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "דף הבית"
 
-#: src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:213
+#| msgid "_Toggle Inspector"
+msgid "Open _Inspector"
+msgstr "פתיחת _מנתח"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "פתיחת מנתח לניפוי שגיאות בדף"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "מחיקת הרחבת WebExtension הנבחרת"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:261
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "פתיחת קובץ (‎manifest.json/xpi‎)"
 
@@ -2799,27 +2803,27 @@ msgstr "פתיחת הקישור בחלון חדש"
 msgid "Open Link In Incognito Window"
 msgstr "פתיחת הקישור בחלון גלישת סתר חדש"
 
-#: src/ephy-window.c:2846 src/ephy-window.c:4175
+#: src/ephy-window.c:2852 src/ephy-window.c:4181
 msgid "Do you want to leave this website?"
 msgstr "לעזוב את האתר הזה?"
 
-#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
+#: src/ephy-window.c:2853 src/ephy-window.c:4182 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "טופס ששינית טרם נשלח."
 
-#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
+#: src/ephy-window.c:2854 src/ephy-window.c:4183 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_מחיקת הטופס"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:2875
 msgid "Download operation"
 msgstr "הורדה פעילה"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2877
 msgid "Show details"
 msgstr "הצגת פרטים"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2879
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2829,47 +2833,47 @@ msgstr[2] "‏%d הורדות פעילות"
 msgstr[3] "‫‏%d הורדות פעילות"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3367
+#: src/ephy-window.c:3373
 msgid "View open tabs"
 msgstr "הצגת לשוניות פתוחות"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3503
 msgid "Set Web as your default browser?"
 msgstr "להגדיר את הדפדפן כדפדפן בררת המחדל שלך?"
 
-#: src/ephy-window.c:3499
+#: src/ephy-window.c:3505
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "הגדרת טכנולוגיית התצוגה המקדימה של Epiphany כדפדפן בררת המחדל שלך?"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3517
 msgid "_Yes"
 msgstr "_כן"
 
-#: src/ephy-window.c:3512
+#: src/ephy-window.c:3518
 msgid "_No"
 msgstr "_לא"
 
-#: src/ephy-window.c:4309
+#: src/ephy-window.c:4315
 msgid "There are multiple tabs open."
 msgstr "מספר רב של לשוניות פתוחות."
 
-#: src/ephy-window.c:4310
+#: src/ephy-window.c:4316
 msgid "If you close this window, all open tabs will be lost"
 msgstr "סגירת החלון תוביל לאובדן כל הלשוניות הפתוחות"
 
-#: src/ephy-window.c:4311
+#: src/ephy-window.c:4317
 msgid "C_lose tabs"
 msgstr "סגירת _לשונית"
 
-#: src/popup-commands.c:271
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "שמירת הקישור בשם"
 
-#: src/popup-commands.c:279
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "שמירת התמונה בשם"
 
-#: src/popup-commands.c:287
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "שמירת מדיה בשם"
 
@@ -3135,33 +3139,38 @@ msgid "Bookmark some webpages to view them here."
 msgstr "אתרים שיישמרו כסימנייה יופיעו כאן."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "נתונים אישיים"
+#| msgid "Website"
+msgid "Website Data"
+msgstr "מידע על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "_ניקוי נתונים"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "מחיקת המידע האישי הנבחר"
+#| msgid "Remove selected personal data"
+msgid "Remove selected website data"
+msgstr "הסרת מידע נבחר על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "חיפוש מידע אישי"
+#| msgid "Search personal data"
+msgid "Search website data"
+msgstr "חיפוש מידע על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "אין מידע אישי"
+#| msgid "There is no Personal Data"
+msgid "There is no Website Data"
+msgstr "אין מידע על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "מידע אישי יופיע כאן"
+#| msgid "Personal data will be listed here"
+msgid "Website data will be listed here"
+msgstr "מידע על אתר האינטרנט יופיע כאן"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "ניקוי המידע האישי הנבחר:"
+#| msgid "Clear selected personal data:"
+msgid "Clear selected website data:"
+msgstr "ניקוי מידע נבחר על אתר האינטרנט:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3444,7 +3453,7 @@ msgid "Tabs"
 msgstr "לשוניות"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "ססמאות"
 
@@ -3656,19 +3665,20 @@ msgstr "לאפשר הצעות חיפוש בשורת הכתובות."
 msgid "_Google Search Suggestions"
 msgstr "הצעות חיפוש מ־_Google"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "נתונים אישיים"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "ניתן לנקות מידע אישי מאוחסן."
+#| msgid "Clear Personal _Data"
+msgid "Clear Website _Data"
+msgstr "ניקוי _מידע על אתר האינטרנט"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "ניקוי _מידע אישי"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "_ססמאות"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "שמירת _ססמאות"
 
@@ -4074,14 +4084,11 @@ msgid "The url passed was not valid: ‘%s’"
 msgstr "כתובת ה־URL שהועברה אינה תקפה: „%s”"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
-#| msgid "The address you entered is not valid."
 msgid "The name passed was not valid"
 msgstr "השם שהועבר אינו תקף"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
-#| msgctxt "shortcut window"
-#| msgid "Install site as web application"
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
 msgstr "התקנת יישום הרשת „%s” ‏(%s) נכשלה: %s"
 
@@ -4092,15 +4099,18 @@ msgstr "מזהה קובץ שולחן העבודה שהועבר „%s” אינו
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ does not exist"
 msgstr "יישום הרשת „%s” לא קיים"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "יישום הרשת „%s” לא ניתן למחיקה"
+
+#: src/webextension/api/runtime.c:161
+#, c-format
+msgid "Options for %s"
+msgstr "אפשרויות עבור %s"
 
 #: src/window-commands.c:113
 msgid "GVDB File"
@@ -4212,7 +4222,6 @@ msgstr "היישום „%s” מוכן לשימוש"
 
 #: src/window-commands.c:1816
 #, c-format
-#| msgid "The application “%s” could not be created"
 msgid "The application “%s” could not be created: %s"
 msgstr "לא ניתן ליצור את היישום „%s”: ‏%s"
 
@@ -4256,11 +4265,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2672
+#: src/window-commands.c:2653
 msgid "Enable caret browsing mode?"
 msgstr "לאפשר מצב ניווט באמצעות סמן?"
 
-#: src/window-commands.c:2675
+#: src/window-commands.c:2656
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4269,9 +4278,12 @@ msgstr ""
 "לחיצה על F7 מפעילה או מכבה גלישה בעזרת סמן. תכונה זו מציבה באתרי האינטרנט "
 "סמן שניתן להזיז ומאפשר לך לנווט באמצעות המקלדת. להפעיל גלישה בעזרת סמן?"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2659
 msgid "_Enable"
 msgstr "ה_פעלה"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "ניתן לנקות מידע אישי מאוחסן."
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "אתר האינטרנט של GNOME מוצג בדפדפן GNOME"
@@ -5155,9 +5167,6 @@ msgstr "ה_פעלה"
 #~ msgid "_Normal Size"
 #~ msgstr "_גודל רגיל"
 
-#~ msgid "_Toggle Inspector"
-#~ msgstr "ה_צגת המנתח"
-
 #~ msgid "_Location…"
 #~ msgstr "_מיקום…"
 
@@ -5808,9 +5817,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Delete text"
 #~ msgstr "מחיקת טקסט"
-
-#~ msgid "Select the entire page"
-#~ msgstr "בחירת כל הדף"
 
 #~ msgid "Find a word or phrase in the page"
 #~ msgstr "חיפוש מילה או ביטוי בדף"
