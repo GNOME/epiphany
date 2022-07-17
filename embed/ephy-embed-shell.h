@@ -90,5 +90,8 @@ void                     ephy_embed_shell_register_ucm_handler (EphyEmbedShell  
                                                                 WebKitUserContentManager *ucm);
 void                     ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
                                                                   WebKitUserContentManager *ucm);
+void                     ephy_embed_shell_set_web_extension_initialization_data
+                                                               (EphyEmbedShell           *shell,
+                                                                GVariant                 *data);
 
 G_END_DECLS
