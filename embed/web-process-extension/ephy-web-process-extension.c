@@ -389,7 +389,8 @@ content_script_window_object_cleared_cb (WebKitScriptWorld *world,
                                          frame,
                                          js_context,
                                          guid,
-                                         extension_data->translations);
+                                         extension_data->translations,
+                                         extension_data->manifest);
 }
 
 static void
@@ -904,7 +905,8 @@ default_window_object_cleared_cb (WebKitScriptWorld       *world,
                                          frame,
                                          js_context,
                                          guid,
-                                         extension_data->translations);
+                                         extension_data->translations,
+                                         extension_data->manifest);
 
   js_browser = jsc_context_get_value (js_context, "browser");
   js_extension = jsc_value_object_get_property (js_browser, "extension");

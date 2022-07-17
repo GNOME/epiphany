@@ -115,6 +115,7 @@ create_extension_data_variant (EphyWebExtension *extension)
   g_auto (GVariantDict) dict = G_VARIANT_DICT_INIT (NULL);
   g_autofree char *translations = get_translation_contents (extension);
 
+  /* FIXME: The manifest is not localized. */
   g_variant_dict_insert (&dict, "manifest", "s", ephy_web_extension_get_manifest (extension));
   g_variant_dict_insert (&dict, "translations", "s", translations);
   g_variant_dict_insert (&dict, "has-background-page", "b", ephy_web_extension_has_background_web_view (extension));
