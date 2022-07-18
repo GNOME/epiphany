@@ -1,7 +1,7 @@
 project('epiphany', 'c',
   license: 'GPL3+',
   version: '43.alpha',
-  meson_version: '>= 0.51.0',
+  meson_version: '>= 0.59.0',
   default_options: ['c_std=gnu11',
                     'warning_level=2']
 )
@@ -159,5 +159,8 @@ subdir('embed')
 subdir('src')
 subdir('tests')
 
-meson.add_install_script('post_install.py')
-
+gnome.post_install(
+  gtk_update_icon_cache: true,
+  glib_compile_schemas: true,
+  update_desktop_database: true
+)
