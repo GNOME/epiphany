@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-06-22 00:18+0000\n"
-"PO-Revision-Date: 2022-06-22 12:52+0300\n"
+"POT-Creation-Date: 2022-07-11 04:04+0000\n"
+"PO-Revision-Date: 2022-07-11 11:41+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -56,7 +56,7 @@ msgstr "Веб-браузер часто упоминается под кодо�
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:35
 msgid "The GNOME Project"
-msgstr "Проект GNOME"
+msgstr "The GNOME Project"
 
 #: data/org.gnome.Epiphany.desktop.in.in:4
 msgid "Web Browser"
@@ -1120,7 +1120,7 @@ msgstr "_Выбрать"
 
 #: embed/ephy-download.c:682 embed/ephy-download.c:688
 #: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:265
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
 #: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
@@ -1565,7 +1565,7 @@ msgstr "Найти предыдущее вхождение строки поис
 msgid "Find next occurrence of the search string"
 msgstr "Найти следующее вхождение строки поиска"
 
-#: embed/ephy-reader-handler.c:296 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s не является допустимым URI"
@@ -2383,7 +2383,7 @@ msgstr "Отмена…"
 msgid "Starting…"
 msgstr "Запуск…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:264
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "_Открыть"
@@ -2678,30 +2678,38 @@ msgstr "Открыть в новой вкладке"
 msgid "Do you really want to remove this extension?"
 msgstr "Вы действительно хотите удалить это расширение?"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:203
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "_Удалить"
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "Автор"
 
-#: src/ephy-web-extension-dialog.c:181
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "Версия"
 
-#: src/ephy-web-extension-dialog.c:190
+#: src/ephy-web-extension-dialog.c:200
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "Домашняя страница"
 
-#: src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:213
+msgid "Open _Inspector"
+msgstr "Открыть _Инспектор"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "Открыть Инспектор для отладки фоновой страницы"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "Удалить выбранное веб-расширение"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:261
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "Открытый файл (manifest.json/xpi)"
 
@@ -2856,27 +2864,27 @@ msgstr "Открыть ссылку в новом окне"
 msgid "Open Link In Incognito Window"
 msgstr "Открыть ссылку в окне инкогнито"
 
-#: src/ephy-window.c:2846 src/ephy-window.c:4175
+#: src/ephy-window.c:2852 src/ephy-window.c:4181
 msgid "Do you want to leave this website?"
 msgstr "Покинуть этот веб-сайт?"
 
-#: src/ephy-window.c:2847 src/ephy-window.c:4176 src/window-commands.c:1213
+#: src/ephy-window.c:2853 src/ephy-window.c:4182 src/window-commands.c:1213
 msgid "A form you modified has not been submitted."
 msgstr "Изменённая вами форма не может быть отправлена."
 
-#: src/ephy-window.c:2848 src/ephy-window.c:4177 src/window-commands.c:1215
+#: src/ephy-window.c:2854 src/ephy-window.c:4183 src/window-commands.c:1215
 msgid "_Discard form"
 msgstr "_Отменить изменения"
 
-#: src/ephy-window.c:2869
+#: src/ephy-window.c:2875
 msgid "Download operation"
 msgstr "Операция загрузки"
 
-#: src/ephy-window.c:2871
+#: src/ephy-window.c:2877
 msgid "Show details"
 msgstr "Показать детали"
 
-#: src/ephy-window.c:2873
+#: src/ephy-window.c:2879
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2885,36 +2893,36 @@ msgstr[1] "Активны %d операции загрузки"
 msgstr[2] "Активно %d операций загрузки"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3367
+#: src/ephy-window.c:3373
 msgid "View open tabs"
 msgstr "Просмотреть открытые вкладки"
 
-#: src/ephy-window.c:3497
+#: src/ephy-window.c:3503
 msgid "Set Web as your default browser?"
 msgstr "Установить Web в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3499
+#: src/ephy-window.c:3505
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Установить Epiphany Technology Preview в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3517
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:3512
+#: src/ephy-window.c:3518
 msgid "_No"
 msgstr "_Нет"
 
-#: src/ephy-window.c:4309
+#: src/ephy-window.c:4315
 msgid "There are multiple tabs open."
 msgstr "Открыто несколько вкладок."
 
-#: src/ephy-window.c:4310
+#: src/ephy-window.c:4316
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Если вы закроете это окно, все открытые вкладки будут потеряны"
 
-#: src/ephy-window.c:4311
+#: src/ephy-window.c:4317
 msgid "C_lose tabs"
 msgstr "_Закрыть вкладки"
 
@@ -4159,7 +4167,7 @@ msgstr "Веб-приложение '%s' не существует"
 msgid "The web application ‘%s’ could not be deleted"
 msgstr "Веб-приложение '%s' не может быть удалено"
 
-#: src/webextension/api/runtime.c:125
+#: src/webextension/api/runtime.c:161
 #, c-format
 msgid "Options for %s"
 msgstr "Параметры для %s"
@@ -4320,11 +4328,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2672
+#: src/window-commands.c:2653
 msgid "Enable caret browsing mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: src/window-commands.c:2675
+#: src/window-commands.c:2656
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4334,7 +4342,7 @@ msgstr ""
 "помещает на страницу курсор, позволяющий перемещаться по странице с помощью "
 "клавиатуры. Включить клавишную навигацию?"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2659
 msgid "_Enable"
 msgstr "_Включить"
 
