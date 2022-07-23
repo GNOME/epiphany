@@ -90,6 +90,7 @@ const struct {
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
+  { "win.screeenshot", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
   { "win.redo", { "<shift><Primary>Z", NULL } },
   { "win.copy", { "<Primary>C", NULL } },
@@ -819,6 +820,7 @@ static const GActionEntry window_entries [] = {
   { "open", window_cmd_open },
   { "save-as", window_cmd_save_as },
   { "save-as-application", window_cmd_save_as_application },
+  { "screenshot", window_cmd_screenshot },
   { "open-application-manager", window_cmd_open_application_manager },
   { "undo", window_cmd_undo },
   { "redo", window_cmd_redo },
@@ -983,6 +985,7 @@ const struct {
   { "open-selection", "open-selection-placeholder" },
 
   { "save-as", N_("Save Pa_ge As…") },
+  { "screenshot", N_("_Take Screenshot…") },
   { "page-source", N_("_Page Source") }
 };
 
@@ -1010,7 +1013,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   int i;
 
   const char *action_group_actions[] = {
-    "save-as", "save-as-application", "print",
+    "save-as", "save-as-application", "screenshot" "print",
     "find", "find-prev", "find-next",
     "bookmark-page", "encoding", "page-source",
     "send-to",
@@ -1795,6 +1798,8 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
                                 "save-as", window);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "screenshot", window);
 
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
