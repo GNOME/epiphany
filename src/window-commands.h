@@ -95,6 +95,9 @@ void window_cmd_save_as                         (GSimpleAction *action,
 void window_cmd_save_as_application             (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_screenshot                      (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_undo                            (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

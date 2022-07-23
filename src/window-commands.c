@@ -2145,12 +2145,58 @@ window_cmd_save_as (GSimpleAction *action,
   gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.mhtml");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
+
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
+  g_free (suggested_filename);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (save_response_cb), embed);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+}
+
+void
+window_cmd_screenshot (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  GtkFileChooser *dialog;
+  GtkFileFilter *filter;
+  char *suggested_filename;
+  const char *last_directory_path;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  dialog = ephy_create_file_chooser (_("Save"),
+                                     GTK_WIDGET (window),
+                                     GTK_FILE_CHOOSER_ACTION_SAVE,
+                                     EPHY_FILE_FILTER_NONE);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+
+  last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
+
+  if (last_directory_path && last_directory_path[0]) {
+    g_autoptr (GFile) last_directory = NULL;
+    g_autoptr (GError) error = NULL;
+
+    last_directory = g_file_new_for_path (last_directory_path);
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), last_directory, &error);
+
+    if (error)
+      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+  }
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("PNG"));
   gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
-  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
+  suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".png", NULL);
 
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
   g_free (suggested_filename);
