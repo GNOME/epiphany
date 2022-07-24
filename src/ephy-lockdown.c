@@ -100,7 +100,9 @@ static const BindAction window_actions[] = {
 
   { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" },
 
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" }
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" },
+
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "screenshot", "enabled" }
 };
 
 static const BindAction popup_actions[] = {
