@@ -73,7 +73,7 @@ nightly:
   dependencies: ['flatpak master']
 
 canary:
-  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
   stage: 'test'
   interruptible: true
   tags:
