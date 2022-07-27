@@ -52,7 +52,6 @@ flatpak master:
 
 scanbuild:
   extends: '.flatpak'
-  image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
@@ -69,7 +68,7 @@ nightly:
   dependencies: ['flatpak master']
 
 canary:
-  image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
   stage: 'test'
   interruptible: true
   tags:
