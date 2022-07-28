@@ -1,15 +1,9 @@
-# Copyright (C) 2022 The Abkhazian language development fund named after Bagrat Shinkuba
-# This file is distributed under the same license as the epiphany package.
-# Нанба Наала <naala-nanba@rambler.ru>, 2022.
-
 msgid ""
 msgstr ""
-"Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
 "POT-Creation-Date: 2022-07-21 10:09+0000\n"
-"PO-Revision-Date: 2022-07-22 16:00+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
-"Language-Team: Abkhazian <LL@li.org>\n"
+"Language-Team: Abkhazian <ab@li.org>\n"
 "Language: ab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +35,7 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:35
 msgid "The GNOME Project"
-msgstr ""
+msgstr "The GNOME Project"
 
 #: data/org.gnome.Epiphany.desktop.in.in:4
 msgid "Web Browser"
@@ -107,10 +101,10 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
@@ -878,7 +872,7 @@ msgstr ""
 
 #: embed/ephy-about-handler.c:310
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #. Note for translators: this refers to the installation date.
 #: embed/ephy-about-handler.c:312
@@ -1018,7 +1012,16 @@ msgstr ""
 msgid "Send an email message to “%s”"
 msgstr ""
 
+#. TRANSLATORS: This string is part of the previous translatable string.
+#. * It is appended for each extraneous mailto: URI email address. For
+#. * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
+#. * it will show
+#. * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
+#. * when you hover such link, at the same place as regular URLs when you hover
+#. * a link in a web page.
+#.
 #: embed/ephy-embed-utils.c:82
+#, c-format
 msgid ", “%s”"
 msgstr ", “%s”"
 
@@ -1773,7 +1776,7 @@ msgstr ""
 
 #: embed/ephy-web-view.c:3580
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -1792,7 +1795,7 @@ msgstr ""
 
 #: lib/ephy-file-helpers.c:190
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: lib/ephy-file-helpers.c:427
 #, c-format
@@ -1814,7 +1817,12 @@ msgstr ""
 msgid "Could not display help: %s"
 msgstr ""
 
+#. TRANSLATORS: Please modify the main address of duckduckgo in order to match
+#. * the version used in your country. For example for the french version :
+#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
+#.
 #: lib/ephy-search-engine-manager.h:35
+#, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 
@@ -1850,6 +1858,9 @@ msgstr ""
 msgid "Yesterday %H∶%M"
 msgstr ""
 
+#. Translators: "friendly time" string for a day in the current week,
+#. * strftime format. e.g. "Wed 12∶34 am"
+#.
 #: lib/ephy-time-helpers.c:277
 msgid "%a %I∶%M %p"
 msgstr "%a, %I∶%M %p"
@@ -1861,6 +1872,9 @@ msgstr "%a, %I∶%M %p"
 msgid "%a %H∶%M"
 msgstr ""
 
+#. Translators: "friendly time" string for a day in the current year,
+#. * strftime format. e.g. "Feb 12 12∶34 am"
+#.
 #: lib/ephy-time-helpers.c:296
 msgid "%b %d %I∶%M %p"
 msgstr "%e %b., %I∶%M %p"
@@ -2161,11 +2175,11 @@ msgstr ""
 #. Undo, redo.
 #: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:932
 msgid "_Undo"
-msgstr ""
+msgstr "_архынҳәра"
 
 #: lib/widgets/ephy-location-entry.c:797
 msgid "_Redo"
-msgstr ""
+msgstr "Ар_хынҳәра"
 
 #: lib/widgets/ephy-location-entry.c:1044
 msgid "Show website security status and permissions"
@@ -2418,7 +2432,7 @@ msgstr ""
 msgid "_Remove"
 msgstr ""
 
-#: src/ephy-web-extension-dialog.c:172
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "Аԥҵаҩы"
 
@@ -2639,7 +2653,7 @@ msgstr ""
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3514
 msgid "_Yes"
 msgstr "_Ааи"
 
@@ -2724,6 +2738,7 @@ msgid "Address must start with either http:// or https://"
 msgstr "Аҭыӡҭыԥ алагозароуп http:// мамзар https:// рыла"
 
 #: src/preferences/ephy-search-engine-row.c:131
+#, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Аҭыӡҭыԥқәа ирымазароуп апшаага адҵаалара, иаарԥшу %s ала"
 
@@ -2736,6 +2751,7 @@ msgid "Address is not a valid URI"
 msgstr "Иԥаршеиу аҭыӡҭыԥ URI"
 
 #: src/preferences/ephy-search-engine-row.c:145
+#, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
 "com/search?q=%s"
@@ -3012,7 +3028,7 @@ msgstr ""
 
 #: src/resources/gtk/firefox-sync-dialog.ui:51
 msgid "Logged in"
-msgstr ""
+msgstr "Зхаҭара шьақәыргылоу"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:56
 msgid "Sign _out"
@@ -3896,11 +3912,11 @@ msgstr ""
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116+src/window-commands.c:693
+#: src/window-commands.c:116 src/window-commands.c:693
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117+src/window-commands.c:694
+#: src/window-commands.c:117 src/window-commands.c:694
 msgid "Chromium"
 msgstr "Chromium"
 
@@ -3942,6 +3958,7 @@ msgstr ""
 msgid "Bookmarks successfully exported!"
 msgstr ""
 
+#. Translators: Only translate the part before ".html" (e.g. "bookmarks")
 #: src/window-commands.c:658
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
@@ -4041,23 +4058,3 @@ msgstr ""
 #: src/window-commands.c:2659
 msgid "_Enable"
 msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:53
-msgid ""
-"[{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},{'name': <'Google'>, 'url': <'https://www."
-"google.com/search?q=%s'>, 'bang': <'!g'>},{'name': <'Bing'>, 'url': "
-"<'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}]"
-msgstr ""
-"[{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},{'name': <'Google'>, 'url': <'https://www."
-"google.com/search?q=%s'>, 'bang': <'!g'>},{'name': <'Bing'>, 'url': "
-"<'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}]"
-
-#: embed/ephy-web-view.c:1917+embed/ephy-web-view.c:1970+embed/ephy-web-view.c:2006+embed/ephy-web-view.c:2042
-msgid "R"
-msgstr "R"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:52
-msgid "URL"
-msgstr "URL"
