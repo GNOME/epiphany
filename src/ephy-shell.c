@@ -989,7 +989,6 @@ show_notification_cb (WebKitWebView      *web_view,
   notify = g_notification_new (webkit_notification_get_title (notification));
   g_notification_set_body (notify, webkit_notification_get_body (notification));
 
-  g_notification_set_priority (notify, G_NOTIFICATION_PRIORITY_LOW);
   g_notification_set_default_action_and_target (notify, "app.notification-clicked", "t", webkit_notification_get_id (notification));
 
   g_hash_table_insert (shell->notifications, GINT_TO_POINTER (webkit_notification_get_id (notification)), notification);
