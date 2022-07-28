@@ -45,6 +45,7 @@ struct _PrefsPrivacyPage {
   GtkWidget *enable_website_data_storage_switch;
 
   /* Search Suggestions */
+  GtkWidget *search_suggestions_box;
   GtkWidget *enable_google_search_suggestions_switch;
 
   /* Passwords */
@@ -152,6 +153,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_switch);
 
   /* Search Suggestions */
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, search_suggestions_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_switch);
 
   /* Passwords */
@@ -165,7 +167,12 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
 static void
 prefs_privacy_page_init (PrefsPrivacyPage *privacy_page)
 {
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
   gtk_widget_init_template (GTK_WIDGET (privacy_page));
 
   setup_privacy_page (privacy_page);
+
+  gtk_widget_set_visible (privacy_page->search_suggestions_box,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 }
