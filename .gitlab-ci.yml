@@ -1,4 +1,6 @@
-include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
+include:
+ - remote: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
+ - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/c5626190ec14b475271288dda7a7dae8dbe0cd76/templates/alpine.yml'
 
 cache:
   paths:
@@ -11,15 +13,59 @@ variables:
   FLATPAK_MODULE: 'epiphany'
   APP_ID: 'org.gnome.Epiphany.Devel'
   ESLINT_LOG: "eslint-report.txt"
+  FDO_UPSTREAM_REPO: GNOME/epiphany
 
 stages:
+  - prepare
   - test
 
+# Use freedesktop-ci-templates for code style check and eslint.
+# Everything else uses flatpak-ci-initiative
+
+.alpine.container.common:
+  variables:
+    FDO_DISTRIBUTION_TAG: '2022-07-29.1'
+    FDO_DISTRIBUTION_VERSION: 'latest'
+
+build.container.alpine@x86_64:
+  extends:
+  - '.fdo.container-build@alpine'
+  - '.alpine.container.common'
+  stage: 'prepare'
+  variables:
+    GIT_STRATEGY: none
+    FDO_EXPIRES_AFTER: 8w
+    FDO_DISTRIBUTION_PACKAGES: >-
+      bash
+      nodejs
+      npm
+      python3
+      uncrustify
+    FDO_DISTRIBUTION_EXEC: >-
+      npm install -g eslint
+
 check-code-style:
-  image: registry.gitlab.gnome.org/gnome/epiphany/master:v4
+  extends:
+    - '.fdo.distribution-image@alpine'
+    - '.alpine.container.common'
+  stage: 'test'
   interruptible: true
   script:
     - bash data/check-code-style
+  artifacts:
+    paths:
+      - ${ESLINT_LOG}
+    when: on_failure
+  except:
+    - gnome-*
+
+eslint:
+  extends:
+    - '.fdo.distribution-image@alpine'
+    - '.alpine.container.common'
+  stage: 'test'
+  interruptible: true
+  script:
     - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
   artifacts:
     paths:
