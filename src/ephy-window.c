@@ -1013,7 +1013,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   int i;
 
   const char *action_group_actions[] = {
-    "save-as", "save-as-application", "screenshot" "print",
+    "save-as", "save-as-application", "screenshot", "print",
     "find", "find-prev", "find-next",
     "bookmark-page", "encoding", "page-source",
     "send-to",
