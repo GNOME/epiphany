@@ -909,7 +909,7 @@ web_extension_parse_commands (EphyWebExtension *self,
     }
 
     command = web_extension_command_new (name, description, accelerator, suggested_key);
-    g_message ("Inserting command %s (%s)", command->name, command->accelerator);
+    g_debug ("Inserting command %s (%s)", command->name, command->accelerator);
     g_hash_table_replace (self->commands, command->name, command);
   }
 }
