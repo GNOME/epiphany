@@ -299,7 +299,7 @@ show_firefox_profile_selector_cb (GtkDialog       *selector,
     g_autoptr (GError) error = NULL;
     gboolean imported = ephy_bookmarks_import_from_firefox (manager, selected_profile, &error);
 
-    show_import_export_result (parent, imported, imported, error,
+    show_import_export_result (parent, FALSE, imported, error,
                                _("Bookmarks successfully imported!"));
   }
 }
@@ -374,7 +374,7 @@ dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import (manager, filename, &error);
 
-  show_import_export_result (parent, imported, imported, error,
+  show_import_export_result (parent, FALSE, imported, error,
                              _("Bookmarks successfully imported!"));
 }
 
@@ -421,7 +421,7 @@ dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import_from_html (manager, filename, &error);
 
-  show_import_export_result (parent, imported, imported, error,
+  show_import_export_result (parent, FALSE, imported, error,
                              _("Bookmarks successfully imported!"));
 }
 
@@ -464,7 +464,7 @@ dialog_bookmarks_import_from_firefox (GtkWindow *parent)
   if (num_profiles == 1) {
     imported = ephy_bookmarks_import_from_firefox (manager, profiles->data, &error);
 
-    show_import_export_result (parent, imported, imported, error,
+    show_import_export_result (parent, FALSE, imported, error,
                                _("Bookmarks successfully imported!"));
   } else if (num_profiles > 1) {
     show_firefox_profile_selector (parent, profiles);
@@ -487,7 +487,7 @@ dialog_bookmarks_import_from_chrome (GtkWindow *parent)
 
   imported = ephy_bookmarks_import_from_chrome (manager, filename, &error);
 
-  show_import_export_result (parent, imported, imported, error,
+  show_import_export_result (parent, FALSE, imported, error,
                              _("Bookmarks successfully imported!"));
 }
 
@@ -503,34 +503,35 @@ dialog_bookmarks_import_from_chromium (GtkWindow *parent)
 
   imported = ephy_bookmarks_import_from_chrome (manager, filename, &error);
 
-  show_import_export_result (parent, imported, imported, error,
+  show_import_export_result (parent, FALSE, imported, error,
                              _("Bookmarks successfully imported!"));
 }
 
 static void
-dialog_bookmarks_import_cb (GtkWindow       *parent,
+dialog_bookmarks_import_cb (GtkDialog       *dialog,
                             GtkResponseType  response,
                             GtkComboBox     *combo_box)
 {
+  GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (dialog));
   const char *active;
 
   if (response == GTK_RESPONSE_OK) {
     active = gtk_combo_box_get_active_id (combo_box);
     if (strcmp (active, IMPORT_FROM_GVDB_ID) == 0)
-      dialog_bookmarks_import (parent);
+      dialog_bookmarks_import (window);
     else if (strcmp (active, IMPORT_FROM_HTML_ID) == 0)
-      dialog_bookmarks_import_from_html (parent);
+      dialog_bookmarks_import_from_html (window);
     else if (strcmp (active, IMPORT_FROM_FIREFOX_ID) == 0)
-      dialog_bookmarks_import_from_firefox (parent);
+      dialog_bookmarks_import_from_firefox (window);
     else if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
-      dialog_bookmarks_import_from_chrome (parent);
+      dialog_bookmarks_import_from_chrome (window);
     else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
-      dialog_bookmarks_import_from_chromium (parent);
+      dialog_bookmarks_import_from_chromium (window);
     else
       g_assert_not_reached ();
-  } else if (response == GTK_RESPONSE_CANCEL) {
-    gtk_widget_destroy (GTK_WIDGET (parent));
   }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 void
