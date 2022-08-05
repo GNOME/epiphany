@@ -1,4 +1,4 @@
-po_dir = join_paths(meson.source_root(), 'po')
+po_dir = join_paths(meson.project_source_root(), 'po')
 
 icondir = join_paths('icons', 'hicolor', 'scalable', 'apps')
 install_data(
