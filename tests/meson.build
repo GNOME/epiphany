@@ -3,7 +3,7 @@ envs = [
   'G_TEST_BUILDDIR=' + meson.current_build_dir(),
   'GSETTINGS_SCHEMA_DIR=' + join_paths(meson.build_root(), 'data'),
   'GSETTINGS_BACKEND=memory',
-  'PATH=' + join_paths(meson.build_root(), 'src') + ':' + run_command('printenv', 'PATH').stdout(),
+  'PATH=' + join_paths(meson.build_root(), 'src') + ':' + run_command('printenv', 'PATH', check: true).stdout(),
 ]
 
 test_cargs = ['-UG_DISABLE_ASSERT']
