@@ -1124,7 +1124,8 @@ on_browser_action_visible_changed (GtkWidget  *popover,
 }
 
 GtkWidget *
-create_browser_action (EphyWebExtension *web_extension)
+create_browser_action (EphyWebExtension *web_extension,
+                       EphyWindow       *window)
 {
   GtkWidget *button;
   GtkWidget *image;
@@ -1148,6 +1149,9 @@ create_browser_action (EphyWebExtension *web_extension)
     g_signal_connect_object (button, "clicked", G_CALLBACK (on_browser_action_clicked), web_extension, 0);
     gtk_button_set_image (GTK_BUTTON (button), image);
   }
+
+  /* This makes it much easier then going through layers of HeaderBars and ActionBars */
+  g_object_set_data (G_OBJECT (button), "window", window);
 
   gtk_widget_set_visible (button, TRUE);
 
@@ -1174,7 +1178,7 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
   }
 
   if (ephy_web_extension_has_browser_action (web_extension)) {
-    GtkWidget *browser_action_widget = create_browser_action (web_extension);
+    GtkWidget *browser_action_widget = create_browser_action (web_extension, window);
     GSList *widget_list = g_hash_table_lookup (self->browser_action_map, web_extension);
 
     ephy_header_bar_add_browser_action (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)), browser_action_widget);
@@ -1408,6 +1412,35 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
     g_hash_table_remove (self->background_web_views, web_extension);
     g_object_set_data (G_OBJECT (web_extension), "alarms", NULL); /* Set in alarms.c */
     ephy_web_extension_api_commands_dispose (web_extension);
+  }
+}
+
+gint
+get_browser_action_for_window (gconstpointer value,
+                               gconstpointer user_data)
+{
+  const EphyWindow *window = user_data;
+  const GtkWidget *widget = value;
+
+  if (g_object_get_data (G_OBJECT (widget), "window") == window)
+    return 0;
+
+  return -1;
+}
+
+
+void
+ephy_web_extension_manager_activate_browser_action (EphyWebExtensionManager *self,
+                                                    EphyWebExtension        *web_extension,
+                                                    EphyWindow              *window)
+{
+  GSList *table;
+  GtkWidget *button;
+
+  table = g_hash_table_lookup (self->browser_action_map, web_extension);
+  if (table) {
+    button = g_slist_find_custom (table, window, get_browser_action_for_window)->data;
+    gtk_widget_mnemonic_activate (button, false);
   }
 }
 

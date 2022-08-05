@@ -64,6 +64,10 @@ void                    ephy_web_extension_manager_set_active                   
                                                                                      EphyWebExtension        *web_extension,
                                                                                      gboolean                 active);
 
+void                    ephy_web_extension_manager_activate_browser_action          (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     EphyWindow              *window);
+
 GtkWidget               *ephy_web_extension_manager_get_page_action                 (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
                                                                                      EphyWebView             *web_view);

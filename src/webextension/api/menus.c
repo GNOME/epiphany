@@ -62,7 +62,6 @@ typedef enum {
   COMMAND_NONE,
   COMMAND_BROWSER_ACTION,
   COMMAND_PAGE_ACTION,
-  COMMAND_SIDEBAR_ACTION,
 } Command;
 
 typedef struct {
@@ -128,8 +127,6 @@ get_command_property (JsonObject *object)
     return COMMAND_BROWSER_ACTION;
   if (strcmp (command, "_execute_page_action") == 0)
     return COMMAND_PAGE_ACTION;
-  if (strcmp (command, "_execute_sidebar_action") == 0)
-    return COMMAND_SIDEBAR_ACTION;
 
   return COMMAND_NONE;
 }
@@ -556,6 +553,46 @@ rules_match_uri (GStrv  rules,
   return FALSE;
 }
 
+gboolean
+menu_activate_browser_action (gpointer user_data)
+{
+  EphyWebExtension *web_extension = user_data;
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
+  ephy_web_extension_manager_activate_browser_action (manager, web_extension, window);
+  return G_SOURCE_REMOVE;
+}
+
+gboolean
+menu_activate_page_button (gpointer user_data)
+{
+  EphyWebExtension *web_extension = user_data;
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWebView *view = EPHY_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  GtkWidget *button = ephy_web_extension_manager_get_page_action (manager, web_extension, view);
+
+  gtk_widget_mnemonic_activate (button, false);
+  return G_SOURCE_REMOVE;
+}
+
+void
+menu_activate_command_action (GAction  *action,
+                              GVariant *params,
+                              gpointer  user_data)
+{
+  EphyWebExtension *web_extension = user_data;
+  Command command = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (action), "command"));
+
+  if (command == COMMAND_BROWSER_ACTION) {
+    g_idle_add (menu_activate_browser_action, web_extension);
+  } else if (command == COMMAND_PAGE_ACTION) {
+    g_idle_add (menu_activate_page_button, web_extension);
+  }
+}
+
 static WebKitContextMenuItem *
 create_context_menu_item (GHashTable          *menus,
                           const char          *name,
@@ -623,6 +660,13 @@ create_context_menu_item (GHashTable          *menus,
                                                                             ephy_web_extension_get_guid (self),
                                                                             onclickdata,
                                                                             tab_data));
+    }
+
+    if (item->command != COMMAND_NONE) {
+      g_object_set_data (G_OBJECT (action), "command", GINT_TO_POINTER (item->command));
+      g_signal_connect (action, "activate",
+                        G_CALLBACK (menu_activate_command_action),
+                        self);
     }
 
     menu_items = g_list_append (menu_items, menu_item);

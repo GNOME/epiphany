@@ -31,11 +31,25 @@ on_command_activated (GAction  *action,
 {
   EphyWebExtension *self = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWebView *view = EPHY_WEB_VIEW (ephy_shell_get_active_web_view (shell));
+  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  GtkWidget *button;
+  const char *command_name = g_object_get_data (G_OBJECT (action), "command-name-json");
+
+  if (strcmp (command_name, "\"_execute_browser_action\"") == 0) {
+    ephy_web_extension_manager_activate_browser_action (manager, self, window);
+    return;
+  } else if (strcmp (command_name, "\"_execute_page_action\"") == 0) {
+    button = ephy_web_extension_manager_get_page_action (manager, self, view);
+    gtk_widget_mnemonic_activate (button, false);
+    return;
+  }
 
   ephy_web_extension_manager_emit_in_extension_views (manager,
                                                       self,
                                                       "commands.onCommand",
-                                                      g_object_get_data (G_OBJECT (action), "command-name-json"));
+                                                      command_name);
 }
 
 char *
