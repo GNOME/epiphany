@@ -105,7 +105,7 @@ sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 webkit2gtk_dep = dependency('webkit2gtk-4.1', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.1', version: webkitgtk_requirement)
 
-webkit_revision = webkit2gtk_dep.get_variable(pkgconfig : 'revision', default_value : '')
+webkit_revision = webkit2gtk_dep.get_variable(pkgconfig: 'revision', default_value: '')
 if webkit_revision == 'tarball'
   webkit_revision = ''
 elif webkit_revision != ''
