@@ -9,7 +9,7 @@ project('epiphany', 'c',
 gnome = import('gnome')
 i18n = import('i18n')
 
-r = run_command('grep', '-Po', '^NAME=\K.*', '/etc/os-release', check: true)
+r = run_command('grep', '-Po', '^NAME=\K.*', '/etc/os-release', check: false)
 if r.returncode() == 0
   distributor_name = r.stdout().strip()
 else
