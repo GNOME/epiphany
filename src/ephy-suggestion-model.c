@@ -588,7 +588,7 @@ bookmarks_query (EphySuggestionModel *self,
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
       suggestion = ephy_suggestion_new (markup, title, url);
-      ephy_suggestion_set_secondary_icon (suggestion, "starred-symbolic");
+      ephy_suggestion_set_secondary_icon (suggestion, "ephy-starred-symbolic");
 
       g_sequence_append (data->bookmarks, g_object_ref (suggestion));
     }

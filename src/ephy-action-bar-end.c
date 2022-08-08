@@ -377,13 +377,13 @@ ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd      *action_bar_e
     case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_end->bookmark_image),
-                                    "non-starred-symbolic",
+                                    "ephy-non-starred-symbolic",
                                     GTK_ICON_SIZE_BUTTON);
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (action_bar_end->bookmark_image),
-                                    "starred-symbolic",
+                                    "ephy-starred-symbolic",
                                     GTK_ICON_SIZE_BUTTON);
       break;
     default:

@@ -1102,7 +1102,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                            G_CALLBACK (update_reader_icon), entry, G_CONNECT_SWAPPED);
 
   /* Bookmark */
-  entry->bookmark_icon = gtk_image_new_from_icon_name ("non-starred-symbolic", GTK_ICON_SIZE_MENU);
+  entry->bookmark_icon = gtk_image_new_from_icon_name ("ephy-non-starred-symbolic", GTK_ICON_SIZE_MENU);
   context = gtk_widget_get_style_context (entry->bookmark_icon);
   gtk_style_context_add_class (context, "entry_icon");
   gtk_widget_show (entry->bookmark_icon);
@@ -1405,7 +1405,7 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
     case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (self->bookmark_icon),
-                                    "non-starred-symbolic",
+                                    "ephy-non-starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "starred");
       gtk_style_context_add_class (context, "non-starred");
@@ -1413,7 +1413,7 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (self->bookmark_icon),
-                                    "starred-symbolic",
+                                    "ephy-starred-symbolic",
                                     GTK_ICON_SIZE_MENU);
       gtk_style_context_remove_class (context, "non-starred");
       gtk_style_context_add_class (context, "starred");
