@@ -81,7 +81,8 @@ gint          ephy_tab_view_add_tab           (EphyTabView *self,
 
 GtkWidget    *ephy_tab_view_get_current_page  (EphyTabView *self);
 
-void          ephy_tab_view_set_tab_bar       (EphyTabView *self,
-                                               AdwTabBar   *tab_bar);
-
+void          ephy_tab_view_set_tab_bar       (EphyTabView    *self,
+                                               AdwTabBar      *tab_bar);
+void          ephy_tab_view_set_tab_overview  (EphyTabView    *self,
+                                               AdwTabOverview *tab_overview);
 G_END_DECLS

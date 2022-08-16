@@ -176,9 +176,6 @@ void window_cmd_location_search                 (GSimpleAction *action,
 void window_cmd_go_home                         (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
-void window_cmd_go_content                      (GSimpleAction *action,
-                                                 GVariant      *parameter,
-                                                 gpointer       user_data);
 void window_cmd_go_tabs_view                    (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

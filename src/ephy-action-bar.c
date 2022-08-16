@@ -164,6 +164,8 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
                                            EPHY_ADAPTIVE_MODE_NARROW);
+  ephy_action_bar_end_set_adaptive_mode (action_bar->action_bar_end,
+                                         EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 EphyActionBar *

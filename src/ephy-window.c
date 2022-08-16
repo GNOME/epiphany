@@ -47,8 +47,6 @@
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-mouse-gesture-controller.h"
-#include "ephy-pages-popover.h"
-#include "ephy-pages-view.h"
 #include "ephy-password-popover.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-permission-popover.h"
@@ -120,7 +118,7 @@ const struct {
   { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
   { "win.location-search", {"<Primary>K", NULL} },
   { "win.home", { "<alt>Home", NULL } },
-  { "win.content", { "Escape", NULL } },
+  { "win.tabs-view", { "<shift><Primary>O", NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -152,16 +150,13 @@ static guint64 window_uid = 1;
 struct _EphyWindow {
   AdwApplicationWindow parent_instance;
 
-  GtkWidget *main_leaflet;
+  GtkWidget *overview;
   EphyFullscreenBox *fullscreen_box;
   GtkWidget *header_bar;
-  EphyPagesView *pages_view;
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
-  GtkRevealer *pages_menu_revealer;
-  EphyPagesPopover *pages_popover;
   GtkWidget *action_bar;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
@@ -219,6 +214,7 @@ enum {
   SENS_FLAG_NAVIGATION    = 1 << 4,
   SENS_FLAG_IS_BLANK      = 1 << 5,
   SENS_FLAG_IS_INTERNAL_PAGE = 1 << 6,
+  SENS_FLAG_IS_OVERVIEW   = 1 << 7,
 };
 
 static gint
@@ -349,7 +345,12 @@ ephy_window_open_link (EphyLink      *link,
                EPHY_LINK_NEW_TAB |
                EPHY_LINK_NEW_WINDOW)) {
     EphyNewTabFlags ntflags = 0;
-    EphyWindow *target_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed)));
+    EphyWindow *target_window;
+
+    if (embed == NULL)
+      target_window = window;
+    else
+      target_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed)));
 
     if (flags & EPHY_LINK_JUMP_TO) {
       ntflags |= EPHY_NEW_TAB_JUMP;
@@ -509,12 +510,6 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
     gtk_widget_add_css_class (GTK_WIDGET (window), "narrow");
   else
     gtk_widget_remove_css_class (GTK_WIDGET (window), "narrow");
-
-  /* When switching to desktop sizes, drop the tabs view and go back
-   * to the main view.
-   */
-  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL)
-    ephy_window_close_pages_view (window);
 }
 
 static void
@@ -545,16 +540,27 @@ notify_fullscreen_cb (EphyWindow *window)
   ephy_fullscreen_box_set_fullscreen (window->fullscreen_box,
                                       fullscreen && window->show_fullscreen_header_bar);
 
-  sync_chromes_visibility (window);
+  adw_tab_overview_set_show_start_title_buttons (ADW_TAB_OVERVIEW (window->overview),
+                                                 !fullscreen);
+  adw_tab_overview_set_show_end_title_buttons (ADW_TAB_OVERVIEW (window->overview),
+                                               !fullscreen);
 
-  if (!fullscreen)
-    window->show_fullscreen_header_bar = FALSE;
+  sync_chromes_visibility (window);
 
   action_group = ephy_window_get_action_group (window, "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
 
   g_simple_action_set_state (G_SIMPLE_ACTION (action),
                              g_variant_new_boolean (fullscreen));
+
+  action_group = ephy_window_get_action_group (window, "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "tabs-view");
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               !fullscreen || window->show_fullscreen_header_bar);
+
+  if (!fullscreen)
+    window->show_fullscreen_header_bar = FALSE;
 }
 
 #if 0
@@ -811,7 +817,6 @@ static const GActionEntry window_entries [] = {
   { "location", window_cmd_go_location },
   { "location-search", window_cmd_location_search },
   { "home", window_cmd_go_home },
-  { "content", window_cmd_go_content },
   { "tabs-view", window_cmd_go_tabs_view },
   { "switch-new-tab", window_cmd_switch_new_tab },
 
@@ -2893,6 +2898,9 @@ tab_view_page_detached_cb (AdwTabView *tab_view,
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (download_only_load_cb), window);
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (permission_requested_cb), window);
+
+  if (ephy_tab_view_get_n_pages (window->tab_view) == 0)
+    window->active_embed = NULL;
 }
 
 static void
@@ -2934,7 +2942,8 @@ ephy_window_close_tab (EphyWindow *window,
    * Beware: window->closing could be true now, after destroying the
    * tab, even if it wasn't at the start of this function.
    */
-  if (!window->closing && ephy_tab_view_get_n_pages (window->tab_view) == 0)
+  if (!window->closing && ephy_tab_view_get_n_pages (window->tab_view) == 0 &&
+      !adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview)))
     gtk_window_destroy (GTK_WINDOW (window));
 }
 
@@ -3166,6 +3175,22 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   load_all_available_popovers (window, view);
 }
 
+static void
+tab_view_notify_n_pages_cb (EphyWindow *window)
+{
+  int n_pages = ephy_tab_view_get_n_pages (window->tab_view);
+  GActionGroup *action_group;
+  GAction *action;
+
+  action_group = ephy_window_get_action_group (window, "tab");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "close");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 0);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "mute");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 0);
+}
+
 static EphyTabView *
 setup_tab_view (EphyWindow *window)
 {
@@ -3181,6 +3206,10 @@ setup_tab_view (EphyWindow *window)
 
   g_signal_connect_object (view, "notify::selected-page",
                            G_CALLBACK (tab_view_notify_selected_page_cb),
+                           window,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+  g_signal_connect_object (view, "notify::n-pages",
+                           G_CALLBACK (tab_view_notify_n_pages_cb),
                            window,
                            G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
@@ -3596,48 +3625,6 @@ setup_header_bar (EphyWindow *window)
   return header_bar;
 }
 
-static void
-update_pages_menu_revealer (EphyWindow *window)
-{
-  gtk_revealer_set_reveal_child (window->pages_menu_revealer,
-                                 adw_tab_bar_get_is_overflowing (window->tab_bar) ||
-                                 gtk_widget_get_visible (GTK_WIDGET (window->pages_popover)));
-}
-
-static void
-setup_tabs_menu (EphyWindow *window)
-{
-  GtkRevealer *revealer;
-  GtkWidget *menu_button;
-  EphyPagesPopover *popover;
-
-  revealer = GTK_REVEALER (gtk_revealer_new ());
-  gtk_revealer_set_transition_type (revealer,
-                                    GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
-  adw_tab_bar_set_end_action_widget (window->tab_bar, GTK_WIDGET (revealer));
-  window->pages_menu_revealer = revealer;
-
-  menu_button = gtk_menu_button_new ();
-  gtk_widget_add_css_class (menu_button, "flat");
-  /* Translators: tooltip for the tab switcher menu button */
-  gtk_widget_set_tooltip_text (menu_button, _("View open tabs"));
-  gtk_widget_set_margin_start (menu_button, 1);
-  gtk_revealer_set_child (revealer, menu_button);
-
-  popover = ephy_pages_popover_new ();
-  ephy_pages_popover_set_tab_view (popover, window->tab_view);
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (menu_button),
-                               GTK_WIDGET (popover));
-  window->pages_popover = popover;
-
-  g_signal_connect_object (window->tab_bar, "notify::is-overflowing",
-                           G_CALLBACK (update_pages_menu_revealer), window,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (window->pages_popover, "notify::visible",
-                           G_CALLBACK (update_pages_menu_revealer), window,
-                           G_CONNECT_SWAPPED);
-}
-
 static EphyLocationController *
 setup_location_controller (EphyWindow    *window,
                            EphyHeaderBar *header_bar)
@@ -3815,24 +3802,59 @@ save_password_cb (EphyEmbedShell          *shell,
   }
 }
 
-/* Ignore AdwLeaflet deprecations throughout next several functions */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+static const char *disabled_win_actions_for_overview[] = {
+  "bookmarks",
+  "browse-with-caret",
+  "location",
+  "location-search",
+  "select-all",
+  "toggle-inspector",
+  "toggle-reader-mode",
+};
+
+static const char *disabled_toolbar_actions_for_overview[] = {
+  "reload",
+  "reload-bypass-cache",
+};
 
 static void
-notify_leaflet_child_cb (EphyWindow *window)
+notify_overview_open_cb (EphyWindow *window)
 {
   GActionGroup *action_group;
   GAction *action;
-  gboolean pages_open;
+  gboolean overview_open;
+  guint i;
 
-  pages_open = adw_leaflet_get_visible_child (ADW_LEAFLET (window->main_leaflet)) == GTK_WIDGET (window->pages_view);
+  overview_open = adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview));
   action_group = ephy_window_get_action_group (window, "win");
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "content");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), pages_open);
+  for (i = 0; i < G_N_ELEMENTS (disabled_win_actions_for_overview); i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         disabled_win_actions_for_overview[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                          SENS_FLAG_IS_OVERVIEW, overview_open);
+  }
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "tabs-view");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !pages_open);
+  action_group = ephy_window_get_action_group (window, "toolbar");
+
+  for (i = 0; i < G_N_ELEMENTS (disabled_toolbar_actions_for_overview); i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         disabled_toolbar_actions_for_overview[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                          SENS_FLAG_IS_OVERVIEW, overview_open);
+  }
+
+  _ephy_window_set_default_actions_sensitive (window, SENS_FLAG_IS_OVERVIEW, overview_open);
+}
+
+static AdwTabPage *
+create_tab_cb (EphyWindow *window)
+{
+  AdwTabView *view = ephy_tab_view_get_tab_view (window->tab_view);
+
+  window_cmd_new_tab (NULL, NULL, window);
+
+  return adw_tab_view_get_selected_page (view);
 }
 
 static void
@@ -3856,6 +3878,7 @@ ephy_window_constructed (GObject *object)
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
   AdwBreakpoint *breakpoint;
+  g_autoptr (GtkBuilder) builder = NULL;
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   GtkEventController *controller;
@@ -3937,18 +3960,21 @@ ephy_window_constructed (GObject *object)
 
   window->tab_view = setup_tab_view (window);
   window->tab_bar = adw_tab_bar_new ();
-  window->main_leaflet = adw_leaflet_new ();
+  window->overview = adw_tab_overview_new ();
   window->fullscreen_box = ephy_fullscreen_box_new ();
-  window->pages_view = ephy_pages_view_new ();
 
-  adw_leaflet_set_can_unfold (ADW_LEAFLET (window->main_leaflet), FALSE);
-  g_signal_connect_swapped (window->main_leaflet, "notify::visible-child",
-                            G_CALLBACK (notify_leaflet_child_cb), window);
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/tab-overview-menu.ui");
+
+  adw_tab_overview_set_enable_new_tab (ADW_TAB_OVERVIEW (window->overview), TRUE);
+  adw_tab_overview_set_secondary_menu (ADW_TAB_OVERVIEW (window->overview),
+                                       G_MENU_MODEL (gtk_builder_get_object (builder, "overview-menu")));
+  g_signal_connect_swapped (window->overview, "notify::open",
+                            G_CALLBACK (notify_overview_open_cb), window);
+  g_signal_connect_swapped (window->overview, "create-tab",
+                            G_CALLBACK (create_tab_cb), window);
 
   adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
-  ephy_pages_view_set_tab_view (window->pages_view, window->tab_view);
-
-  setup_tabs_menu (window);
+  adw_tab_overview_set_view (ADW_TAB_OVERVIEW (window->overview), ephy_tab_view_get_tab_view (window->tab_view));
 
   shell = ephy_shell_get_default ();
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
@@ -3971,14 +3997,12 @@ ephy_window_constructed (GObject *object)
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar);
 
-  adw_leaflet_append (ADW_LEAFLET (window->main_leaflet), GTK_WIDGET (window->fullscreen_box));
-  adw_leaflet_append (ADW_LEAFLET (window->main_leaflet), GTK_WIDGET (window->pages_view));
-  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->main_leaflet));
+  adw_tab_overview_set_child (ADW_TAB_OVERVIEW (window->overview),
+                              GTK_WIDGET (window->fullscreen_box));
+  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->overview));
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
-
-  adw_leaflet_set_visible_child (ADW_LEAFLET (window->main_leaflet), GTK_WIDGET (window->fullscreen_box));
-  adw_leaflet_set_can_navigate_back (ADW_LEAFLET (window->main_leaflet), TRUE);
+  ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
 
   /* other notifiers */
   action_group = ephy_window_get_action_group (window, "win");
@@ -4164,35 +4188,18 @@ ephy_window_get_tab_view (EphyWindow *window)
 }
 
 /**
- * ephy_window_open_pages_view
+ * ephy_window_open_tab_overview
  * @window: an #EphyWindow
  *
- * Opens the mobile pages view
+ * Opens the tab overview
  **/
 void
-ephy_window_open_pages_view (EphyWindow *window)
+ephy_window_open_tab_overview (EphyWindow *window)
 {
   g_assert (EPHY_IS_WINDOW (window));
 
-  adw_leaflet_navigate (ADW_LEAFLET (window->main_leaflet), ADW_NAVIGATION_DIRECTION_FORWARD);
+  adw_tab_overview_set_open (ADW_TAB_OVERVIEW (window->overview), TRUE);
 }
-
-/**
- * ephy_window_close_pages_view
- * @window: an #EphyWindow
- *
- * Closes the mobile pages view
- **/
-void
-ephy_window_close_pages_view (EphyWindow *window)
-{
-  g_assert (EPHY_IS_WINDOW (window));
-
-  adw_leaflet_navigate (ADW_LEAFLET (window->main_leaflet), ADW_NAVIGATION_DIRECTION_BACK);
-}
-
-/* Ignore AdwLeaflet deprecations for above several functions */
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * ephy_window_get_find_toolbar:
@@ -4294,7 +4301,9 @@ ephy_window_set_zoom (EphyWindow *window,
   g_assert (EPHY_IS_WINDOW (window));
 
   embed = window->active_embed;
-  g_assert (embed != NULL);
+
+  if (!embed)
+    return;
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 

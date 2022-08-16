@@ -41,6 +41,7 @@ struct _EphyActionBarEnd {
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
   GtkWidget *downloads_icon;
+  GtkWidget *overview_button;
   GtkWidget *browser_actions_button;
   GtkWidget *browser_actions_popover;
   GtkWidget *browser_actions_scrolled_window;
@@ -238,6 +239,9 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
                                         downloads_icon);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
+                                        overview_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarEnd,
                                         browser_actions_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
@@ -292,6 +296,8 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   if (is_desktop_pantheon ()) {
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmarks_button),
                                    "user-bookmarks");
+    gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->overview_button),
+                                   "view-grid");
   }
 
   g_signal_connect_object (downloads_manager, "download-added",
@@ -440,4 +446,12 @@ set_browser_actions (EphyActionBarEnd *action_bar_end,
                            action_bar_end, 0);
 
   browser_actions_items_changed_cb (G_LIST_MODEL (browser_actions), 0, 0, 0, action_bar_end);
+}
+
+void
+ephy_action_bar_end_set_adaptive_mode (EphyActionBarEnd *action_bar_end,
+                                       EphyAdaptiveMode  adaptive_mode)
+{
+  gtk_widget_set_visible (action_bar_end->overview_button,
+                          adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
 }

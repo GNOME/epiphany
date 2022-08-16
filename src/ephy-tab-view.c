@@ -34,6 +34,7 @@ struct _EphyTabView {
 
   AdwTabView *tab_view;
   AdwTabBar *tab_bar;
+  AdwTabOverview *tab_overview;
   AdwTabPage *current_page;
 };
 
@@ -401,6 +402,20 @@ update_icon_cb (AdwTabPage *page)
 }
 
 static void
+update_uri_cb (AdwTabPage *page)
+{
+  EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  const char *uri;
+
+  update_icon_cb (page);
+
+  uri = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+
+  adw_tab_page_set_keyword (page, uri);
+}
+
+static void
 update_indicator_cb (AdwTabPage *page)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
@@ -457,7 +472,7 @@ ephy_tab_view_add_tab (EphyTabView *self,
                            G_CALLBACK (update_icon_cb), page,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (view, "notify::uri",
-                           G_CALLBACK (update_icon_cb), page,
+                           G_CALLBACK (update_uri_cb), page,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (view, "notify::is-playing-audio",
                            G_CALLBACK (update_indicator_cb), page,
@@ -467,7 +482,7 @@ ephy_tab_view_add_tab (EphyTabView *self,
                            G_CONNECT_SWAPPED);
 
   update_title_cb (page);
-  update_icon_cb (page);
+  update_uri_cb (page);
   update_indicator_cb (page);
 
   return adw_tab_view_get_page_position (self->tab_view, page);
@@ -586,7 +601,13 @@ is_layout_reversed (void)
 static void
 notify_decoration_layout_cb (EphyTabView *self)
 {
-  adw_tab_bar_set_inverted (self->tab_bar, is_layout_reversed ());
+  gboolean inverted = is_layout_reversed ();
+
+  if (self->tab_bar)
+    adw_tab_bar_set_inverted (self->tab_bar, inverted);
+
+  if (self->tab_overview)
+    adw_tab_overview_set_inverted (self->tab_overview, inverted);
 }
 
 void
@@ -641,5 +662,24 @@ ephy_tab_view_set_tab_bar (EphyTabView *self,
                            G_CONNECT_SWAPPED);
 
   visibility_policy_changed_cb (self);
+  notify_decoration_layout_cb (self);
+}
+
+void
+ephy_tab_view_set_tab_overview (EphyTabView    *self,
+                                AdwTabOverview *tab_overview)
+{
+  self->tab_overview = tab_overview;
+
+  adw_tab_overview_setup_extra_drop_target (tab_overview, GDK_ACTION_COPY, (GType[3]) {
+    G_TYPE_STRING,
+    G_TYPE_FILE,
+    GDK_TYPE_FILE_LIST,
+  }, 3);
+
+  g_signal_connect_object (tab_overview, "extra-drag-drop",
+                           G_CALLBACK (drag_drop_cb), self,
+                           G_CONNECT_SWAPPED);
+
   notify_decoration_layout_cb (self);
 }

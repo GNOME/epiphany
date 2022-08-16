@@ -21,9 +21,10 @@
 
 #pragma once
 
-#include "ephy-bookmark-states.h"
-
 #include <gtk/gtk.h>
+
+#include "ephy-adaptive-mode.h"
+#include "ephy-bookmark-states.h"
 
 G_BEGIN_DECLS
 
@@ -46,4 +47,8 @@ void              ephy_action_bar_end_set_show_bookmark_button (EphyActionBarEnd
 
 void              ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd       *action_bar_end,
                                                                EphyBookmarkIconState  state);
+
+void              ephy_action_bar_end_set_adaptive_mode       (EphyActionBarEnd *action_bar_end,
+                                                               EphyAdaptiveMode  adaptive_mode);
+
 G_END_DECLS

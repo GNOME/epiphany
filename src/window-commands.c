@@ -1349,7 +1349,6 @@ window_cmd_new_tab (GSimpleAction *action,
   ephy_link_open (EPHY_LINK (window),
                   url, NULL,
                   EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
-  ephy_window_close_pages_view (window);
   g_free (url);
 }
 
@@ -2268,7 +2267,9 @@ window_cmd_cut (GSimpleAction *action,
   } else {
     EphyEmbed *embed;
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+
+    if (!embed)
+      return;
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
   }
@@ -2288,7 +2289,9 @@ window_cmd_copy (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+
+    if (!embed)
+      return;
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
   }
@@ -2308,7 +2311,9 @@ window_cmd_paste (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+
+    if (!embed)
+      return;
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
   }
@@ -2328,7 +2333,9 @@ window_cmd_paste_as_plain_text (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+
+    if (!embed)
+      return;
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE_AS_PLAIN_TEXT);
   }
@@ -2348,7 +2355,9 @@ window_cmd_delete (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+
+    if (!embed)
+      return;
 
     /* FIXME: TODO */
 #if 0
@@ -2572,7 +2581,6 @@ window_cmd_select_all (GSimpleAction *action,
 
     embed = ephy_embed_container_get_active_child
               (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
   }
@@ -2636,19 +2644,11 @@ window_cmd_go_home (GSimpleAction *action,
 }
 
 void
-window_cmd_go_content (GSimpleAction *action,
-                       GVariant      *parameter,
-                       gpointer       user_data)
-{
-  ephy_window_close_pages_view (EPHY_WINDOW (user_data));
-}
-
-void
 window_cmd_go_tabs_view (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  ephy_window_open_pages_view (EPHY_WINDOW (user_data));
+  ephy_window_open_tab_overview (EPHY_WINDOW (user_data));
 }
 
 static void
