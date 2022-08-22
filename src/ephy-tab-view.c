@@ -153,7 +153,8 @@ ephy_tab_view_init (EphyTabView *self)
   self->tab_view = HDY_TAB_VIEW (hdy_tab_view_new ());
   gtk_widget_show (GTK_WIDGET (self->tab_view));
 
-  g_object_set_data (G_OBJECT (self->tab_view), "ephy-tab-view", self);
+  g_object_set_data_full (G_OBJECT (self->tab_view), "ephy-tab-view",
+                          g_object_ref (self), g_object_unref);
 
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->tab_view));
 
