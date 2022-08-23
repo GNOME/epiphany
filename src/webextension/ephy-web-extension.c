@@ -649,10 +649,21 @@ ephy_web_extension_manifest_get_localized_string (EphyWebExtension *self,
   if (g_str_has_prefix (value, "__MSG_") && g_str_has_suffix (value, "__")) {
     /* FIXME: Set current locale */
     g_autofree char *locale = g_strdup ("en");
+    g_autofree char *translated_string = NULL;
+    char *message_name;
 
-    /* Remove trailing __ */
+    /* Strip prefix and remove trailing __ */
+    message_name = value + strlen ("__MSG_");
     value[strlen (value) - 2] = '\0';
-    return web_extension_get_translation (self, locale, value + strlen ("__MSG_"));
+
+    translated_string = web_extension_get_translation (self, locale, message_name);
+
+    if (!translated_string) {
+      g_debug ("Failed to find '%s' translation for message '%s'", locale, message_name);
+      return g_strdup ("");
+    }
+
+    return g_steal_pointer (&translated_string);
   }
 
   return g_steal_pointer (&value);
