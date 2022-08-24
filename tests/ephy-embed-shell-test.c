@@ -18,7 +18,16 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef G_DISABLE_ASSERT
+#error "assert disabled at top of file"
+#endif
+
 #include "config.h"
+
+#ifdef G_DISABLE_ASSERT
+#error "assert disabled after config.h"
+#endif
+
 #include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-embed-prefs.h"
@@ -29,6 +38,10 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+
+#ifdef G_DISABLE_ASSERT
+#error "assert disabled after other includes"
+#endif
 
 static void
 web_view_created_cb (EphyEmbedShell *shell,
