@@ -173,7 +173,6 @@ struct _EphyWindow {
   EphyLocationController *location_controller;
   guint modified_forms_timeout_id;
   EphyMouseGestureController *mouse_gesture_controller;
-  EphyEmbed *last_opened_embed;
   EphyAdaptiveMode adaptive_mode;
   int last_opened_pos;
   gboolean show_fullscreen_header_bar;
@@ -2765,10 +2764,6 @@ ephy_window_close_tab (EphyWindow *window,
 
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
 
-  if (window->last_opened_embed)
-    g_clear_weak_pointer ((gpointer *)&window->last_opened_embed);
-  window->last_opened_embed = NULL;
-
   /* If that was the last tab, destroy the window.
    *
    * Beware: window->closing could be true now, after destroying the
@@ -3008,12 +3003,6 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   update_reader_mode (window, view);
 }
 
-static void
-tab_view_page_reordered_cb (EphyWindow *window)
-{
-  window->last_opened_embed = NULL;
-}
-
 static EphyTabView *
 setup_tab_view (EphyWindow *window)
 {
@@ -3054,10 +3043,6 @@ setup_tab_view (EphyWindow *window)
                            G_CALLBACK (tab_view_page_detached_cb),
                            window,
                            0);
-  g_signal_connect_object (view, "page-reordered",
-                           G_CALLBACK (tab_view_page_reordered_cb),
-                           window,
-                           G_CONNECT_SWAPPED);
 
   return tab_view;
 }
@@ -3074,9 +3059,6 @@ ephy_window_dispose (GObject *object)
     window->closing = TRUE;
 
     _ephy_window_set_context_event (window, NULL);
-
-    if (window->last_opened_embed)
-      g_clear_weak_pointer ((gpointer *)&window->last_opened_embed);
 
     g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
