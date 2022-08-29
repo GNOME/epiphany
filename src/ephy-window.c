@@ -2722,14 +2722,6 @@ tab_view_page_detached_cb (HdyTabView *tab_view,
 
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (download_only_load_cb), window);
-
-  if (ephy_tab_view_get_n_pages (window->tab_view) == 0) {
-    EphyShell *shell = ephy_shell_get_default ();
-    GList *windows = gtk_application_get_windows (GTK_APPLICATION (shell));
-
-    if (g_list_length (windows) > 1)
-      gtk_window_close (GTK_WINDOW (window));
-  }
 }
 
 static void
