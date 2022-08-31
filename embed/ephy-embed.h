@@ -56,5 +56,7 @@ void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
 void             ephy_embed_download_started              (EphyEmbed    *embed,
                                                            EphyDownload *ephy_download);
+WebKitWebViewSessionState
+                *ephy_embed_get_session_state             (EphyEmbed *embed);
 
 G_END_DECLS

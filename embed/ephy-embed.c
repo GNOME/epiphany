@@ -1008,3 +1008,11 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }
+
+WebKitWebViewSessionState *
+ephy_embed_get_session_state (EphyEmbed *embed)
+{
+  if (embed->delayed_state)
+    return webkit_web_view_session_state_ref (embed->delayed_state);
+  return webkit_web_view_get_session_state (embed->web_view);
+}

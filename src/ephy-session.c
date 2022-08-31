@@ -219,7 +219,7 @@ closed_tab_new (EphyWebView    *web_view,
   tab->position = position;
   /* Takes the ownership of the tracker */
   tab->tab_view_tracker = tab_view_tracker;
-  tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
+  tab->state = ephy_embed_get_session_state (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
 
   return tab;
 }
@@ -574,7 +574,7 @@ session_tab_new (EphyEmbed   *embed,
                           !session->closing);
   session_tab->crashed = (error_page == EPHY_WEB_VIEW_ERROR_PAGE_CRASH ||
                           error_page == EPHY_WEB_VIEW_ERROR_PROCESS_CRASH);
-  session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
+  session_tab->state = ephy_embed_get_session_state (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
   session_tab->pinned = ephy_tab_view_get_is_pinned (tab_view, GTK_WIDGET (embed));
 
   return session_tab;
