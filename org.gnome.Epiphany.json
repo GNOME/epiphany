@@ -106,24 +106,6 @@
             ]
         },
         {
-            "name" : "gcr",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dintrospection=false",
-                "-Dvapi=false",
-                "-Dgtk3=false",
-                "-Dgtk_doc=false",
-                "-Dssh_agent=false",
-                "-Dsystemd=disabled"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git"
-                }
-            ]
-        },
-        {
             "name" : "epiphany",
             "buildsystem" : "meson",
             "builddir" : true,

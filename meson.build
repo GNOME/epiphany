@@ -82,7 +82,7 @@ conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_70')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_70')
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
-gcr_dep = dependency('gcr-4-gtk4', version: '>= 3.9.0')
+gcr_dep = dependency('gcr-4', version: '>= 3.9.0')
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
 gio_dep = dependency('gio-2.0', version: glib_requirement)
 gio_unix_dep = dependency('gio-unix-2.0', version: glib_requirement)
