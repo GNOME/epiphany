@@ -893,7 +893,7 @@ unresponsive_process_timeout_cb (gpointer user_data)
                                                                   ephy_web_view_get_address (web_view));
 
   gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Wait"), GTK_RESPONSE_NO);
-  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Kill"), GTK_RESPONSE_YES);
+  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("Force _Stop"), GTK_RESPONSE_YES);
 
   g_signal_connect (web_view->unresponsive_process_dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view);
   gtk_widget_show_all (web_view->unresponsive_process_dialog);
