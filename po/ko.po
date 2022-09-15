@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-02-24 20:04+0000\n"
-"PO-Revision-Date: 2022-02-27 19:14-0500\n"
+"POT-Creation-Date: 2022-08-05 20:20+0000\n"
+"PO-Revision-Date: 2022-09-15 01:47-0400\n"
 "Last-Translator: ChangSeok Oh <changseok@gnome.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -27,12 +27,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
-#: embed/ephy-about-handler.c:227 src/ephy-main.c:101 src/ephy-main.c:253
-#: src/ephy-main.c:403 src/window-commands.c:999
+#: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
+#: src/ephy-main.c:409 src/window-commands.c:1013
 msgid "Web"
 msgstr "웹"
 
@@ -123,17 +123,17 @@ msgstr "사용되지 않음. 대신 검색 엔진 제공자를 사용하세요."
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'덕덕고'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'덕덕고'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
 "\t\t\t\t\t{'name': <'구글'>, 'url': <'https://www.google.com/search?q=%s'>, "
 "'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'빙'>, 'url': <'https://www.bing.com/search?q=%s'>, "
@@ -147,37 +147,38 @@ msgstr "검색 엔진 목록."
 #: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
-"corresponding to a search engine, and with the following supported keys: - "
-"name: The name of the search engine - url: The search URL with the search "
-"term replaced with %s. - bang: The \"bang\" (shortcut word) of the search "
-"engine"
+"corresponding to a search engine, and with the following supported keys: "
+"\"name\" is the name of the search engine. \"url\" is the search URL with "
+"the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
+"the search engine."
 msgstr ""
-"검색 엔진 목록. 각 항목이 검색 엔진에 대응하는 사전형 변수의 배열로, 다음"
-"과 같은 키를 지원합니다: - name: 검색 엔진의 이름 - url: 검색어로 바뀌는 "
-"%s가 들어있는 검색 URL. - bang: 검색 엔진의 \"뱅\" (단축어)"
+"검색 엔진 목록. 각 항목이 검색 엔진에 대응하는 사전형 변수의 배열로, 다음과 "
+"같은 키를 지원합니다: \"name\"은 검색 엔진의 이름입니다. \"url\"은 검색어"
+"로 바뀌는 %s가 들어있는 검색 URL입니다. \"bang\"은 검색 엔진의 "
+"\"bang\" (단축어)입니다."
 
-#: data/org.gnome.epiphany.gschema.xml:70
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
 msgstr "구글 검색 제안 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:71
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr "URL 입력 팝업 창에 구글 검색 제안을 보여줄지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:75
+#: data/org.gnome.epiphany.gschema.xml:77
 msgid "Force new windows to be opened in tabs"
 msgstr "새 창을 탭에서 열도록 강제"
 
-#: data/org.gnome.epiphany.gschema.xml:76
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "새 창 요청을 하면 새 창을 열지 않고 탭에서 열도록 강제합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid "Whether to automatically restore the last session"
 msgstr "자동으로 마지막 세션을 복구할지 여부"
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:86
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
@@ -187,13 +188,13 @@ msgstr ""
 "의 이전 상태를 항상 복구), 그리고 “crashed” (프로그램이 충돌했을 경우에만 세"
 "션을 복구)."
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr "세션 복구에서 당장 보이지 않는 탭 읽어들이기를 미룰지 여부"
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:91
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -201,21 +202,21 @@ msgstr ""
 "이 옵션을 참으로 설정하면, 세션을 복구할 때 사용자가 해당 탭으로 이동하기 전"
 "에는 탭을 읽어들이지 않습니다."
 
-#: data/org.gnome.epiphany.gschema.xml:93
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid "List of adblock filters"
 msgstr "광고 차단 목록"
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr "광고 차단이 사용할 JSON 형태의 내용 여과 규칙과 URL 목록."
 
-#: data/org.gnome.epiphany.gschema.xml:98
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Whether to ask for setting browser as default"
 msgstr "브라우저를 기본값으로 설정할 것인지를 물어볼지 여부"
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -223,20 +224,20 @@ msgstr ""
 "이 옵션을 참으로 설정하면, 브라우저가 이미 기본으로 설정되어 있지 않을 경우 "
 "기본 브라우저로 설정할 것인지 물어봅니다."
 
-#: data/org.gnome.epiphany.gschema.xml:103
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Start in incognito mode"
 msgstr "익명 모드로 시작"
 
-#: data/org.gnome.epiphany.gschema.xml:104
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr "이 옵션을 참으로 설정하면, 브라우저가 항상 익명 모드로 시작합니다"
 
-#: data/org.gnome.epiphany.gschema.xml:108
+#: data/org.gnome.epiphany.gschema.xml:110
 msgid "Active clear data items."
 msgstr "활성화한 지우기 데이터 항목."
 
-#: data/org.gnome.epiphany.gschema.xml:109
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -249,11 +250,11 @@ msgstr ""
 "션 캐시, 16 = IndexDB 데이터베이스, 32 = WebSQL 데이터베이스, 64 = 플러그인 "
 "데이터, 128 = HSTS 정책 캐시, 256 = 지능형 추적 방지 데이터."
 
-#: data/org.gnome.epiphany.gschema.xml:115
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "탭 크기를 탭 막대에서 가용한 공간을 채우도록 늘립니다."
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
@@ -261,11 +262,11 @@ msgstr ""
 "만약 켜져있다면, 탭이 탭 막대 내 전체 가용한 공간을 사용하도록 늘어납니다. "
 "이 설정은 판테온 데스크톱에서 무시합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:120
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid "The visibility policy for the tabs bar."
 msgstr "탭 막대에 대한 표시 정책."
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -277,19 +278,19 @@ msgstr ""
 "never” (탭 막대를 표시하지 않음). 이 설정은 판테온 데스크톱에서 무시하고, "
 "“always” 값을 사용합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:125
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid "Keep window open when closing last tab"
 msgstr "마지막 탭을 닫을 때 창 열어두기"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr "만약 켜져있다면, 마지막 탭을 닫을 때 프로그램 창을 열어둡니다."
 
-#: data/org.gnome.epiphany.gschema.xml:132
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid "Reader mode article font style."
 msgstr "읽기 모드 기사 글꼴 모양."
 
-#: data/org.gnome.epiphany.gschema.xml:133
+#: data/org.gnome.epiphany.gschema.xml:135
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -297,11 +298,11 @@ msgstr ""
 "읽기 모드에서 기사의 본문 텍스트 모양을 선택합니다. 사용할 수 있는 값은 “산세"
 "리프”와 “세리프”."
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Reader mode color scheme."
 msgstr "읽기 모드 색상 구성표."
 
-#: data/org.gnome.epiphany.gschema.xml:138
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -313,106 +314,106 @@ msgstr ""
 "그놈 42 이상과 같이 시스템 차원의 어두운 스타일 기본 설정을 제공하는 시스템"
 "은 이 설정을 무시합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:144
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Minimum font size"
 msgstr "최소 글꼴 크기"
 
-#: data/org.gnome.epiphany.gschema.xml:148
+#: data/org.gnome.epiphany.gschema.xml:150
 msgid "Use GNOME fonts"
 msgstr "그놈 글꼴 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:149
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Use GNOME font settings."
 msgstr "그놈 글꼴 설정 사용."
 
-#: data/org.gnome.epiphany.gschema.xml:153
+#: data/org.gnome.epiphany.gschema.xml:155
 msgid "Custom sans-serif font"
 msgstr "사용자 맞춤 산세리프 글꼴"
 
-#: data/org.gnome.epiphany.gschema.xml:154
+#: data/org.gnome.epiphany.gschema.xml:156
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
 "use-gnome-fonts을 설정했을 때, 산세리프 데스크톱 글꼴 대신에 사용할 값."
 
-#: data/org.gnome.epiphany.gschema.xml:158
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Custom serif font"
 msgstr "사용자 맞춤 세리프 글꼴"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr "use-gnome-fonts을 설정했을 때, 세리프 데스크톱 글꼴 대신에 사용할 값."
 
-#: data/org.gnome.epiphany.gschema.xml:163
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Custom monospace font"
 msgstr "사용자 맞춤 고정폭 글꼴"
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr "use-gnome-fonts을 설정했을 때, 고정폭 데스크톱 글꼴 대신에 사용할 값."
 
-#: data/org.gnome.epiphany.gschema.xml:168
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Use a custom CSS"
 msgstr "사용자 맞춤 CSS 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "웹페이지의 자체 CSS 대신 사용자 맞춤 CSS 파일을 사용합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:173
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Use a custom JS"
 msgstr "사용자 맞춤 자바스크립트 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Use a custom JS file to modify websites."
 msgstr "웹사이트를 수정려고 사용자 맞춤 자바스크립트 파일을 사용합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:178
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable spell checking"
 msgstr "맞춤법 검사 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Spell check any text typed in editable areas."
 msgstr "편집 가능 입력창에서 입력한 모든 텍스트에 대해 맞춤법 검사."
 
-#: data/org.gnome.epiphany.gschema.xml:183
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "Default encoding"
 msgstr "기본 인코딩"
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "기본 인코딩. WebKitGTK에서 받아들이는 값을 사용할 수 있습니다."
 
-#: data/org.gnome.epiphany.gschema.xml:188
-#: src/resources/gtk/prefs-general-page.ui:293
+#: data/org.gnome.epiphany.gschema.xml:190
+#: src/resources/gtk/prefs-general-page.ui:329
 msgid "Languages"
 msgstr "언어"
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr "선호하는 언어 모음. 지역 코드 배열 혹은 현재 지역를 사용할 “시스템”."
 
-#: data/org.gnome.epiphany.gschema.xml:193
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Allow popups"
 msgstr "팝업 창 허용"
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "자바스크립트에서 새 창을 열 수 있게 허용(자바스크립트를 사용할 경우)."
 
-#: data/org.gnome.epiphany.gschema.xml:198
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "User agent"
 msgstr "사용자 에이전트"
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -420,29 +421,29 @@ msgstr ""
 "사용자 에이전트로 사용할 문자열. 사용자 에이전트는 웹서버에 브라우저 종류를 "
 "알리는데 사용합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:203
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable adblock"
 msgstr "광고 차단 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "웹 페이지에 있을 수 있는 광고를 차단할지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:208
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Remember passwords"
 msgstr "암호 저장"
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid "Whether to store and prefill passwords in websites."
 msgstr "웹사이트의 암호를 저장하고 미리 채울지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable site-specific quirks"
 msgstr "사이트별 하위 호환 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -450,11 +451,11 @@ msgstr ""
 "특정 웹사이트를 더 잘 동작하게 하려면 하위 호환을 사용하세요. 만약 특정 문제"
 "를 디버깅하려면 이 설정을 비활성화해야 할 수도 있습니다."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Enable safe browsing"
 msgstr "안전한 브라우징 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -462,19 +463,19 @@ msgstr ""
 "안전한 브라우징 사용할지 여부. 안전한 브라우징은 구글 안전한 브라우징 API v4"
 "를 통해 작동합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "지능형 추적 방지 (ITP) 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "지능형 추적 방지 사용 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Allow websites to store local website data"
 msgstr "웹사이트가 로컬 웹사이트 데이터를 저장하도록 허용"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -482,15 +483,15 @@ msgstr ""
 "웹사이트가 쿠키, 로컬 저장소 데이터, 그리고 IndexedDB 데이터베이스를 저장하도"
 "록 허용할지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Default zoom level for new pages"
 msgstr "새 페이지의 기본 확대/축소 단계"
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Enable autosearch"
 msgstr "자동 검색 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -498,42 +499,42 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 "URL처럼 보이지 않는 어떤 것을 주소창에 입력했을 때 자동으로 그 웹을 검색할지 "
-"여부. 만약 이 설정을 끄면, 드롭다운 메뉴에서 명시적으로 검색 엔진을 선택하"
-"지 않는 한 모든 것을 URL로서 읽어들입니다."
+"여부. 만약 이 설정을 끄면, 드롭다운 메뉴에서 명시적으로 검색 엔진을 선택하지 "
+"않는 한 모든 것을 URL로서 읽어들입니다."
 
-#: data/org.gnome.epiphany.gschema.xml:242
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Enable mouse gestures"
 msgstr "마우스 제스처 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
-"마우스 제스처를 사용할지 여부. 마우스 제스처는 오페라 작동 방식에 기반하고 "
-"마우스 가운데 단추 + 제스처를 사용해서 활성화합니다."
+"마우스 제스처를 사용할지 여부. 마우스 제스처는 오페라 작동 방식에 기반하고 마"
+"우스 가운데 단추 + 제스처를 사용해서 활성화합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last upload directory"
 msgstr "마지막 업로드 디렉터리"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "Keep track of last upload directory"
 msgstr "마지막 업로드 디렉터리 추적"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last download directory"
 msgstr "마지막 다운로드 디렉터리"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:255
 msgid "Keep track of last download directory"
 msgstr "마지막 다운로드 디렉터리 추적"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Hardware acceleration policy"
 msgstr "하드웨어 가속 정책"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:260
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -548,63 +549,63 @@ msgstr ""
 "픽 드라이버 버그를 노출할 수 있습니다. 정책이 “on-demand”일 때, 오직 3D 변환"
 "을 표시할 경우에만 하드웨어 가속을 사용합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
 msgstr "항상 다운로드 디렉터리 물어보기"
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "모든 다운로드에 대해 디렉터리 선택창을 표시할지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Enable immediately switch to new open tab"
 msgstr "즉시 새로 열린 탭으로 전환 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid "Whether to automatically switch to a new open tab."
 msgstr "자동으로 새로 열린 탭으로 전환할지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:272
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid "Enable WebExtensions"
 msgstr "웹 확장 기능 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:273
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
 "웹 확장 기능 사용 여부. 웹 확장 기능은 확장용 브라우저 간 시스템입니다."
 
-#: data/org.gnome.epiphany.gschema.xml:277
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid "Active WebExtensions"
 msgstr "활성화한 웹 확장 기능"
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Indicates which WebExtensions are set to active."
 msgstr "어떤 웹 확장 기능를 활성화했는지 표시합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
 msgstr "웹 애플리케이션 부가적인 URL 모음"
 
 # 웹 애플리케이션
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "The list of URLs that should be opened by the web application"
 msgstr "웹 애플리케이션이 열어야하는 URL 목록"
 
-#: data/org.gnome.epiphany.gschema.xml:289
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid "Show navigation buttons in WebApp"
 msgstr "웹앱 내에 탐색 단추를 표시"
 
-#: data/org.gnome.epiphany.gschema.xml:290
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "웹앱 내 탐색을 위한 단추를 보여줄지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:294
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "Run in background"
 msgstr "백그라운드에서 실행"
 
-#: data/org.gnome.epiphany.gschema.xml:295
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
@@ -612,19 +613,19 @@ msgstr ""
 "만약 켜져있다면, 창을 닫은 후에도 애플리케이션을 백그라운드에서 계속 실행합니"
 "다."
 
-#: data/org.gnome.epiphany.gschema.xml:299
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid "WebApp is system-wide"
 msgstr "웹앱은 시스템 수준입니다"
 
-#: data/org.gnome.epiphany.gschema.xml:300
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "If enabled, application cannot be edited or removed."
 msgstr "만약 켜져있다면, 애플리케이션을 편집하거나 제거할 수 없습니다."
 
-#: data/org.gnome.epiphany.gschema.xml:306
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The downloads folder"
 msgstr "다운로드 폴더"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -632,41 +633,41 @@ msgstr ""
 "파일을 다운로드할 폴더의 경로. 설정하지 않으면 기본 다운로드 폴더로 사용하는 "
 "“다운로드”, 또는 바탕 화면 폴더로 사용하는 “바탕 화면”."
 
-#: data/org.gnome.epiphany.gschema.xml:314
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid "Window position"
 msgstr "창 위치"
 
-#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "이전 세션으로부터 복구하지 않은 새 창에 사용할 위치."
 
-#: data/org.gnome.epiphany.gschema.xml:319
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window size"
 msgstr "창 크기"
 
-#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "이전 세션으로부터 복구하지 않은 새 창에 사용할 크기."
 
-#: data/org.gnome.epiphany.gschema.xml:324
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Is maximized"
 msgstr "최대화 됨"
 
-#: data/org.gnome.epiphany.gschema.xml:325
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr "이전 세션으로부터 복구하지 않은 새 창을 초기에 최대화할지 여부."
 
-#: data/org.gnome.epiphany.gschema.xml:340
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Disable forward and back buttons"
 msgstr "앞으로 및 뒤로 단추 비활성화"
 
-#: data/org.gnome.epiphany.gschema.xml:341
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -674,27 +675,27 @@ msgstr ""
 "만약 “참”으로 설정하면, 앞으로 및 뒤로 단추를 비활성화해서 사용자가 직접적인 "
 "브라우저 기록에 접근하는 것을 방지합니다"
 
-#: data/org.gnome.epiphany.gschema.xml:359
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "Firefox Sync Token Server URL"
 msgstr "파이어폭스 동기화 토큰 서버 URL"
 
-#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "URL to a custom Firefox Sync token server."
 msgstr "사용자 맞춤 파이어폭스 동기화 토큰 서버로의 URL."
 
-#: data/org.gnome.epiphany.gschema.xml:364
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "Firefox Sync Accounts Server URL"
 msgstr "파이어폭스 동기화 계정 서버 URL"
 
-#: data/org.gnome.epiphany.gschema.xml:365
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "사용자 맞춤 파이어폭스 동기화 계정 서버로의 URL."
 
-#: data/org.gnome.epiphany.gschema.xml:369
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "Currently signed in sync user"
 msgstr "현재 로그인한 동기화 사용자"
 
-#: data/org.gnome.epiphany.gschema.xml:370
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -702,142 +703,142 @@ msgstr ""
 "전자메일이 모질라 서버와의 데이터 동기화에 사용한 파이어폭스 계정과 이어집니"
 "다."
 
-#: data/org.gnome.epiphany.gschema.xml:374
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "Last sync timestamp"
 msgstr "마지막 동기화 타임스탬프"
 
-#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "마지막 동기화를 수행했을 때의 초 단위 유닉스 시간."
 
-#: data/org.gnome.epiphany.gschema.xml:379
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "Sync device ID"
 msgstr "동기화 장치 아이디"
 
-#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "The sync device ID of the current device."
 msgstr "현재 장치의 동기화 장치 아이디."
 
-#: data/org.gnome.epiphany.gschema.xml:384
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "Sync device name"
 msgstr "동기화 장치 이름"
 
-#: data/org.gnome.epiphany.gschema.xml:385
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "The sync device name of the current device."
 msgstr "현재 장치의 동기화 장치 이름."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "The sync frequency in minutes"
 msgstr "동기화 분 단위 빈도"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "The number of minutes between two consecutive syncs."
 msgstr "두 개의 연속한 동기화 사이의 분 단위 시간."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "Sync data with Firefox"
 msgstr "파이어폭스와 데이터 동기화"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
 "에피퍼니 모음집을 파이어폭스 수집물과 동기화하려면 TRUE, 그렇지 않으면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "Enable bookmarks sync"
 msgstr "책갈피 동기화 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "책갈피 모음집을 동기화하려면 TRUE, 그렇지 않으면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "Bookmarks sync timestamp"
 msgstr "책갈피 동기화 타임스탬프"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "마지막 동기화를 수행했을 때의 타임스탬프."
 
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "Initial sync or normal sync"
 msgstr "처음 동기화 혹은 일반 동기화"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "책갈피 모음집을 처음으로 동기화해야한다면 TRUE, 그렇지않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "Enable passwords sync"
 msgstr "암호 동기화 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "암호 모음집을 동기화해야 한다면 TRUE, 그렇지 않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "Passwords sync timestamp"
 msgstr "암호 동기화 타임스탬프"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "The timestamp at which last passwords sync was made."
 msgstr "마지막 암호 동기화를 수행했을 때의 타임스탬프."
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:427
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "암호 모음집을 처음으로 동기화해야 한다면 TRUE, 그렇지 않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "Enable history sync"
 msgstr "기록 동기화 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "기록 모음집을 동기화해야 한다면 TRUE, 그렇지 않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "History sync timestamp"
 msgstr "기록 동기화 타임스탬프"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "The timestamp at which last history sync was made."
 msgstr "마지막 기록 동기화를 수행했을 때의 타임스탬프."
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:442
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "기록 모음집을 처음으로 동기화해야한다면 TRUE, 그렇지않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:444
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "Enable open tabs sync"
 msgstr "열린 탭 동기화 사용"
 
-#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "열린 탭 모음집을 동기화해야 한다면 TRUE, 그렇지 않다면 FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:449
+#: data/org.gnome.epiphany.gschema.xml:451
 msgid "Open tabs sync timestamp"
 msgstr "열린 탭 동기화 타임스탬프"
 
-#: data/org.gnome.epiphany.gschema.xml:450
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "마지막 열린 탭 동기화를 수행했을 때의 타임스탬프."
 
-#: data/org.gnome.epiphany.gschema.xml:461
+#: data/org.gnome.epiphany.gschema.xml:463
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "이 호스트에 대해 마이크 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:462
+#: data/org.gnome.epiphany.gschema.xml:464
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -849,12 +850,12 @@ msgstr ""
 "요청해야함을 의미하는 반면, “allow”과 “deny”은 요청에 따라 자동으로 결정하는 "
 "것을 말합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:466
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "이 호스트에 대해 지리적 위치 정보 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:467
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -866,12 +867,12 @@ msgstr ""
 "을 요청해야함을 의미하는 반면, “allow”과 “deny”은 요청에 따라 자동으로 결정하"
 "는 것을 말합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "이 호스트에 대해 알림 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:472
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -883,12 +884,12 @@ msgstr ""
 "을 의미하는 반면, “allow”과 “deny”은 요청에 따라 자동으로 결정하는 것을 말합"
 "니다."
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "이 호스트에 대해 암호 저장 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:477
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -899,11 +900,11 @@ msgstr ""
 "용합니다. 기본값 “undecided”은 브라우저가 유저에게 권한을 요청해야함을 의미하"
 "는 반면, “allow”과 “deny”은 요청에 따라 자동으로 결정하는 것을 말합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "이 호스트에 대해 웹캠 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:482
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -915,12 +916,12 @@ msgstr ""
 "을 의미하는 반면, “allow”과 “deny”은 요청에 따라 자동으로 결정하는 것을 말합"
 "니다."
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "이 호스트에 대해 광고 권한을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:487
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -931,11 +932,11 @@ msgstr ""
 "용합니다. 기본값 “undecided”은 브라우저의 전역 설정을 사용할 것을 의미하는 반"
 "면, “allow”과 “deny”은 요청에 대해 자동으로 결정하는 것을 말합니다."
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "이 호스트에 대해 자동 재생 정책을 요청할 때 적용할 결정"
 
-#: data/org.gnome.epiphany.gschema.xml:492
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -960,7 +961,7 @@ msgstr "버전 %s"
 msgid "About Web"
 msgstr "웹 정보"
 
-#: embed/ephy-about-handler.c:195 src/window-commands.c:1001
+#: embed/ephy-about-handler.c:195 src/window-commands.c:1015
 msgid "Epiphany Technology Preview"
 msgstr "에피퍼니 기술 미리보기"
 
@@ -971,7 +972,7 @@ msgstr "간단하고 깔끔하고 아름다운 웹 보기"
 # 애플리케이션
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:259 embed/ephy-about-handler.c:260
-#: embed/ephy-about-handler.c:309 embed/ephy-about-handler.c:324
+#: embed/ephy-about-handler.c:324 embed/ephy-about-handler.c:339
 msgid "Applications"
 msgstr "애플리케이션"
 
@@ -980,16 +981,16 @@ msgstr "애플리케이션"
 msgid "List of installed web applications"
 msgstr "설치한 웹 애플리케이션 목록"
 
-#: embed/ephy-about-handler.c:295
+#: embed/ephy-about-handler.c:310
 msgid "Delete"
 msgstr "삭제"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:297
+#: embed/ephy-about-handler.c:312
 msgid "Installed on:"
 msgstr "설치 날짜:"
 
-#: embed/ephy-about-handler.c:324
+#: embed/ephy-about-handler.c:339
 msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
@@ -998,26 +999,26 @@ msgstr ""
 "웹사이트를 추가할 수 있습니다."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:416
+#: embed/ephy-about-handler.c:431
 msgid "Welcome to Web"
 msgstr "웹에 오신 것을 환영합니다"
 
-#: embed/ephy-about-handler.c:416
+#: embed/ephy-about-handler.c:431
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "브라우징을 시작하세요, 그러면 당신이 자주 방문하는 사이트가 여기에 나타납니"
 "다."
 
-#: embed/ephy-about-handler.c:452
+#: embed/ephy-about-handler.c:467
 #: embed/web-process-extension/resources/js/overview.js:148
 msgid "Remove from overview"
 msgstr "미리보기에서 제거"
 
-#: embed/ephy-about-handler.c:542 embed/ephy-about-handler.c:543
+#: embed/ephy-about-handler.c:557 embed/ephy-about-handler.c:558
 msgid "Private Browsing"
 msgstr "개인정보 보호 브라우징"
 
-#: embed/ephy-about-handler.c:544
+#: embed/ephy-about-handler.c:559
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1027,12 +1028,12 @@ msgstr ""
 "나타나지 않고 저장한 정보는 창을 닫을 때 지워집니다. 다운로드한 파일은 유지합"
 "니다."
 
-#: embed/ephy-about-handler.c:548
+#: embed/ephy-about-handler.c:563
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr "익명 모드는 이 컴퓨터를 사용하는 사람으로부터 당신의 활동을 숨깁니다."
 
-#: embed/ephy-about-handler.c:550
+#: embed/ephy-about-handler.c:565
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1042,56 +1043,66 @@ msgstr ""
 "다. 이러한 웹사이트에서 당신의 인터넷 서비스 제공자, 정부, 또 다른 정부, 당신"
 "이 방문한 웹사이트 그리고 광고업자는 여전히 당신을 추척하고 있을지 모릅니다."
 
-#. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:725
-#, c-format
-msgid "Finished downloading %s"
-msgstr "%s 다운로드 완료"
+#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
+msgid "Select a Directory"
+msgstr "디렉터리 선택"
 
-#. Translators: the title of the notification.
-#: embed/ephy-download.c:727
-msgid "Download finished"
-msgstr "다운로드 완료"
+#: embed/ephy-download.c:681 embed/ephy-download.c:687
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:321
+msgid "_Select"
+msgstr "선택(_S)"
 
-#: embed/ephy-download.c:854
-msgid "Download requested"
-msgstr "다운로드 요청함"
-
-#: embed/ephy-download.c:855 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:93 src/ephy-web-extension-dialog.c:269
+#: embed/ephy-download.c:682 embed/ephy-download.c:688
+#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
+#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
+#: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
-#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
-#: src/window-commands.c:379 src/window-commands.c:424
-#: src/window-commands.c:550 src/window-commands.c:648
-#: src/window-commands.c:792 src/window-commands.c:1920
+#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:319
+#: src/window-commands.c:391 src/window-commands.c:438
+#: src/window-commands.c:559 src/window-commands.c:660
+#: src/window-commands.c:805
 msgid "_Cancel"
 msgstr "취소(_C)"
 
-#: embed/ephy-download.c:855
+#: embed/ephy-download.c:684
+msgid "Select the Destination"
+msgstr "대상 선택"
+
+#: embed/ephy-download.c:738
+msgid "Download requested"
+msgstr "다운로드 요청함"
+
+#: embed/ephy-download.c:739
 msgid "_Download"
 msgstr "다운로드(_D)"
 
-#: embed/ephy-download.c:868
+#: embed/ephy-download.c:752
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "종류: %s (%s)"
 
 #. From
-#: embed/ephy-download.c:874
+#: embed/ephy-download.c:758
 #, c-format
 msgid "From: %s"
 msgstr "출처: %s"
 
 #. Question
-#: embed/ephy-download.c:879
+#: embed/ephy-download.c:763
 msgid "Where do you want to save the file?"
 msgstr "파일을 어디에 저장하시겠습니까?"
 
-#. File Chooser Button
-#: embed/ephy-download.c:884
-msgid "Save file"
-msgstr "파일 저장"
+#. Translators: a desktop notification when a download finishes.
+#: embed/ephy-download.c:942
+#, c-format
+msgid "Finished downloading %s"
+msgstr "%s 다운로드 완료"
+
+#. Translators: the title of the notification.
+#: embed/ephy-download.c:944
+msgid "Download finished"
+msgstr "다운로드 완료"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
 #: embed/ephy-embed.c:533
@@ -1112,7 +1123,7 @@ msgstr "F11"
 msgid "Web is being controlled by automation."
 msgstr "웹을 자동화로 제어하고 있습니다."
 
-#: embed/ephy-embed-shell.c:766
+#: embed/ephy-embed-shell.c:753
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI %s은(는) 에피퍼니 리소스 %s에 접근할 수 있는 권한이 없음"
@@ -1468,58 +1479,58 @@ msgstr "유니코드(UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "알 수 없음(%s)"
 
-#: embed/ephy-find-toolbar.c:113
+#: embed/ephy-find-toolbar.c:111
 msgid "Text not found"
 msgstr "텍스트를 찾을 수 없음"
 
-#: embed/ephy-find-toolbar.c:119
+#: embed/ephy-find-toolbar.c:117
 msgid "Search wrapped back to the top"
 msgstr "다시 맨 위부터 검색합니다"
 
-#: embed/ephy-find-toolbar.c:395
+#: embed/ephy-find-toolbar.c:370
 msgid "Type to search…"
 msgstr "검색어 입력…"
 
-#: embed/ephy-find-toolbar.c:401
+#: embed/ephy-find-toolbar.c:376
 msgid "Find previous occurrence of the search string"
 msgstr "이전에 나타난 단어나 문장을 찾습니다"
 
-#: embed/ephy-find-toolbar.c:408
+#: embed/ephy-find-toolbar.c:383
 msgid "Find next occurrence of the search string"
 msgstr "다음에 나타난 단어나 문장을 찾습니다"
 
-#: embed/ephy-reader-handler.c:297 embed/ephy-view-source-handler.c:266
+#: embed/ephy-reader-handler.c:296
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s은(는) 유효한 URL이 아닙니다"
 
-#: embed/ephy-web-view.c:193 src/window-commands.c:1359
+#: embed/ephy-web-view.c:202 src/window-commands.c:1373
 msgid "Open"
 msgstr "열기"
 
-#: embed/ephy-web-view.c:372
+#: embed/ephy-web-view.c:376
 msgid "Not No_w"
 msgstr "나중에(_W)"
 
-#: embed/ephy-web-view.c:373
+#: embed/ephy-web-view.c:377
 msgid "_Never Save"
 msgstr "저장하지 않음(_N)"
 
-#: embed/ephy-web-view.c:374 lib/widgets/ephy-file-chooser.c:124
-#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:647
+#: embed/ephy-web-view.c:378 lib/widgets/ephy-file-chooser.c:124
+#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:659
 msgid "_Save"
 msgstr "저장(_S)"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:381
+#: embed/ephy-web-view.c:385
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "“%s”의 암호를 저장하시겠습니까?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:620
+#: embed/ephy-web-view.c:624
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1527,100 +1538,100 @@ msgstr ""
 "주의: 이 양식은 안전하지 않습니다. 만약 암호를 입력하면, 그 암호가 비공개로 "
 "유지되지 않습니다."
 
-#: embed/ephy-web-view.c:844
+#: embed/ephy-web-view.c:842
 msgid "Web process crashed"
 msgstr "충돌난 웹 프로세스"
 
-#: embed/ephy-web-view.c:847
+#: embed/ephy-web-view.c:845
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "메모리 제한 초과로 중단된 웹 프로세스"
 
-#: embed/ephy-web-view.c:850
+#: embed/ephy-web-view.c:848
 msgid "Web process terminated by API request"
 msgstr "API 요청으로 중단된 웹 프로세스"
 
-#: embed/ephy-web-view.c:894
+#: embed/ephy-web-view.c:892
 #, c-format
 msgid "The current page '%s' is unresponsive"
-msgstr "현재 페이지 '%s'이(가) 응답하지 않습니다."
+msgstr "현재 페이지 '%s'이(가) 응답하지 않습니다"
 
-#: embed/ephy-web-view.c:897
+#: embed/ephy-web-view.c:895
 msgid "_Wait"
 msgstr "기다림(_W)"
 
-#: embed/ephy-web-view.c:898
+#: embed/ephy-web-view.c:896
 msgid "_Kill"
 msgstr "중단(_K)"
 
-#: embed/ephy-web-view.c:1123 embed/ephy-web-view.c:1244
+#: embed/ephy-web-view.c:1107 embed/ephy-web-view.c:1228
 #: lib/widgets/ephy-security-popover.c:512
 msgid "Deny"
 msgstr "거절"
 
-#: embed/ephy-web-view.c:1124 embed/ephy-web-view.c:1245
+#: embed/ephy-web-view.c:1108 embed/ephy-web-view.c:1229
 #: lib/widgets/ephy-security-popover.c:511
 msgid "Allow"
 msgstr "허용"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1137
+#: embed/ephy-web-view.c:1121
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "%s의 페이지가 바탕 화면 알림을 보여주려고 합니다."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1126
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "%s의 페이지가 당신의 위치를 알."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1147
+#: embed/ephy-web-view.c:1131
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "%s의 페이지가 당신의 마이크를 사용하려고 합니다."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1152
+#: embed/ephy-web-view.c:1136
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "%s의 페이지가 당신의 웹캠을 사용하려고 합니다."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1157
+#: embed/ephy-web-view.c:1141
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "%s의 페이지가 당신의 웹캠과 마이크를 사용하려고 합니다."
 
-#: embed/ephy-web-view.c:1252
+#: embed/ephy-web-view.c:1236
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
 msgstr ""
 "“%s”을(를) 브라우징하는 동안 “%s”이(가) 쿠키를 사용하도록 허용하시겠습니까?"
 
-#: embed/ephy-web-view.c:1261
+#: embed/ephy-web-view.c:1245
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "이것은 “%s”이(가) 당신의 활동을 추적하도록 하용합니다."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1439
+#: embed/ephy-web-view.c:1423
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” 페이지를 읽는 중입니다…"
 
-#: embed/ephy-web-view.c:1441 embed/ephy-web-view.c:1447
+#: embed/ephy-web-view.c:1425 embed/ephy-web-view.c:1431
 msgid "Loading…"
 msgstr "읽는 중입니다…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1786
+#: embed/ephy-web-view.c:1764
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "이 웹사이트는 다른 웹사이트의 신분증을 제시했습니다."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1769
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1629,20 +1640,20 @@ msgstr ""
 "를 확인하세요."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1774
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "이 웹사이트의 신분증은 신뢰할 수 있는 기관으로부터 발행된 것이 아닙니다."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1779
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "이 웹사이트의 신분증은 처리할 수 없습니다. 아마도 손상되었을 수 있습니다."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1784
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1650,14 +1661,14 @@ msgstr ""
 "이 웹사이트의 신분증은 이것을 발행한 신뢰할 수 있는 기관이 파기했습니다."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1811
+#: embed/ephy-web-view.c:1789
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "이 웹사이트의 신분증은 매우 약한 암호화를 사용해서 신뢰할 수 없습니다."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1816
+#: embed/ephy-web-view.c:1794
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1667,24 +1678,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1881 embed/ephy-web-view.c:1937
+#: embed/ephy-web-view.c:1859 embed/ephy-web-view.c:1915
 #, c-format
 msgid "Problem Loading Page"
 msgstr "페이지를 읽어들이는 문제"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1862
 msgid "Unable to display this website"
 msgstr "이 웹사이트를 표시할 수 없음"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1889
+#: embed/ephy-web-view.c:1867
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "%s의 사이트가 이용할 수 없어 보입니다."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1893
+#: embed/ephy-web-view.c:1871
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1693,7 +1704,7 @@ msgstr ""
 "모르니 인터넷 연결이 올바르게 동작하는지 확인해보세요."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1903
+#: embed/ephy-web-view.c:1881
 #, c-format
 msgid "The precise error was: %s"
 msgstr "정확한 오류: %s"
@@ -1702,49 +1713,49 @@ msgstr "정확한 오류: %s"
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1908 embed/ephy-web-view.c:1961
-#: embed/ephy-web-view.c:1997 embed/ephy-web-view.c:2033
+#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1939
+#: embed/ephy-web-view.c:1975 embed/ephy-web-view.c:2011
 #: src/resources/gtk/page-menu-popover.ui:102
 msgid "Reload"
 msgstr "다시 읽기"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1912 embed/ephy-web-view.c:1965
-#: embed/ephy-web-view.c:2001 embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:1890 embed/ephy-web-view.c:1943
+#: embed/ephy-web-view.c:1979 embed/ephy-web-view.c:2015
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1918
 msgid "Oops! There may be a problem"
 msgstr "앗! 문제가 있는 것같습니다"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1945
+#: embed/ephy-web-view.c:1923
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "페이지 %s(으)로 인해 웹이 예상치 못하게 닫힐 수 있습니다."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1930
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "만약 이것이 다시 나타나면, %s 개발자에게 그 문제를 알려주세요."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1986
+#: embed/ephy-web-view.c:1964
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "페이지를 표시하는 문제"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1989
+#: embed/ephy-web-view.c:1967
 msgid "Oops!"
 msgstr "앗!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1992
+#: embed/ephy-web-view.c:1970
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1753,18 +1764,18 @@ msgstr ""
 "른 페이지를 방문하세요."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2022
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid "Unresponsive Page"
 msgstr "응답하지 않는 페이지"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2025
+#: embed/ephy-web-view.c:2003
 msgid "Uh-oh!"
 msgstr "이런!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2028
+#: embed/ephy-web-view.c:2006
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1773,18 +1784,18 @@ msgstr ""
 "다른 페이지를 방문하세요."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2064
+#: embed/ephy-web-view.c:2042
 #, c-format
 msgid "Security Violation"
 msgstr "보안 위배"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2045
 msgid "This Connection is Not Secure"
 msgstr "이 접속은 안전하지 않습니다"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2072
+#: embed/ephy-web-view.c:2050
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1796,45 +1807,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2082 embed/ephy-web-view.c:2170
-#: embed/ephy-web-view.c:2220
+#: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2148
+#: embed/ephy-web-view.c:2198
 msgid "Go Back"
 msgstr "뒤로 가기"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2085 embed/ephy-web-view.c:2173
-#: embed/ephy-web-view.c:2223
+#: embed/ephy-web-view.c:2063 embed/ephy-web-view.c:2151
+#: embed/ephy-web-view.c:2201
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2088 embed/ephy-web-view.c:2176
+#: embed/ephy-web-view.c:2066 embed/ephy-web-view.c:2154
 msgid "Accept Risk and Proceed"
 msgstr "위험을 감수하고 진행합니다"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2092 embed/ephy-web-view.c:2180
+#: embed/ephy-web-view.c:2070 embed/ephy-web-view.c:2158
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2120
+#: embed/ephy-web-view.c:2098
 #, c-format
 msgid "Security Warning"
 msgstr "보안 경고"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2123
+#: embed/ephy-web-view.c:2101
 msgid "Unsafe website detected!"
 msgstr "안전하지 않은 웹사이트 감지!"
 
-#: embed/ephy-web-view.c:2131
+#: embed/ephy-web-view.c:2109
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1843,7 +1854,7 @@ msgstr ""
 "%s 방문이 당신의 컴퓨터에 피해를 입힐 수도 있습니다. 이 페이지는 당신의 동의"
 "없이 컴퓨터에 다운로드될 수 있는 악의적인 코드가 들어있을 수 있습니다."
 
-#: embed/ephy-web-view.c:2135
+#: embed/ephy-web-view.c:2113
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1852,7 +1863,7 @@ msgstr ""
 "바이러스 및 그 외 악의적인 코드가 들어 있는 유해한 웹 콘텐츠 그리고 어떻게 당"
 "신의 컴퓨터를 보호할 지에 대해 %s에서 더 알아볼 수 있습니다."
 
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2120
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1862,13 +1873,13 @@ msgstr ""
 "%s의 공격자가 소프트웨어 설치나 개인 정보 누설 (예를 들어, 암호, 전화번호 혹"
 "은 신용카드) 같은 어떤 위험한 것을 하도록 당신을 속일 수 있습니다."
 
-#: embed/ephy-web-view.c:2147
+#: embed/ephy-web-view.c:2125
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "%s 혹은 %s에서 사회 공학 (피싱)에 대해 더 찾아볼 수 있습니다."
 
-#: embed/ephy-web-view.c:2156
+#: embed/ephy-web-view.c:2134
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1879,25 +1890,25 @@ msgstr ""
 "험을 해치는 프로그램을 설치하도록 당신을 속이려고 시도할 수 있습니다 (예를 들"
 "어, 홈페이지 변경 혹은 당신이 방문한 사이트에 추가적인 광고 표시)."
 
-#: embed/ephy-web-view.c:2161
+#: embed/ephy-web-view.c:2139
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "%s에서 불필요한 소프트웨어에 관해 더 알아볼 수 있습니다."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2203 embed/ephy-web-view.c:2206
+#: embed/ephy-web-view.c:2181 embed/ephy-web-view.c:2184
 #, c-format
 msgid "File not found"
 msgstr "파일을 찾을 수 없음"
 
 # 웹 애플리케이션
-#: embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2189
 #, c-format
 msgid "%s could not be found."
 msgstr "%s을(를) 찾을 수 없습니다."
 
-#: embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:2191
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1906,15 +1917,15 @@ msgstr ""
 "대문자 혹은 다른 입력 오류가 있는지 파일 이름을 확인하세요. 또한 이동, 이름 "
 "변경 또는 삭제되었는지 확인하세요."
 
-#: embed/ephy-web-view.c:2276
+#: embed/ephy-web-view.c:2254
 msgid "None specified"
 msgstr "지정하지 않음"
 
-#: embed/ephy-web-view.c:2407
+#: embed/ephy-web-view.c:2385
 msgid "Technical information"
 msgstr "기술 정보"
 
-#: embed/ephy-web-view.c:3602
+#: embed/ephy-web-view.c:3580
 msgid "_OK"
 msgstr "확인(_O)"
 
@@ -1923,27 +1934,32 @@ msgid "Unspecified"
 msgstr "미지정"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:185
+#: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
+#: src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "다운로드"
 
 # XDG 폴더 이름, shared-mime-info에 있는 것처럼 "바탕화면"이라고 번역
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:175
+#: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
 msgstr "바탕 화면"
 
-#: lib/ephy-file-helpers.c:392
+#: lib/ephy-file-helpers.c:190
+msgid "Home"
+msgstr "홈"
+
+#: lib/ephy-file-helpers.c:427
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s”에서 임시 디렉터리를 만들 수 없습니다."
 
-#: lib/ephy-file-helpers.c:514
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s”(이)가 있습니다. 다른 곳으로 옮기십시오."
 
-#: lib/ephy-file-helpers.c:533
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "디렉터리 “%s” 만들기 실패."
@@ -2034,6 +2050,31 @@ msgstr "%Y년 %b %d일"
 msgid "Unknown"
 msgstr "알 수 없음"
 
+#: lib/ephy-web-app-utils.c:325
+#, c-format
+msgid "Failed to get desktop filename for webapp id %s"
+msgstr "%s 웹앱 아이디의 데스크톱 파일 이름 가져오기 실패"
+
+#: lib/ephy-web-app-utils.c:348
+#, c-format
+msgid "Failed to install desktop file %s: "
+msgstr "%s 데스크톱 파일 설치 실패: "
+
+#: lib/ephy-web-app-utils.c:387
+#, c-format
+msgid "Profile directory %s already exists"
+msgstr "%s 프로파일 디렉터리가 이미 있습니다"
+
+#: lib/ephy-web-app-utils.c:394
+#, c-format
+msgid "Failed to create directory %s"
+msgstr "%s 디렉터리 만들기 실패"
+
+#: lib/ephy-web-app-utils.c:406
+#, c-format
+msgid "Failed to create .app file: %s"
+msgstr ".app 파일 만들기 실패: %s"
+
 #: lib/sync/ephy-password-import.c:133
 #, c-format
 msgid "Cannot create SQLite connection. Close browser and try again."
@@ -2049,14 +2090,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:433
+#: lib/sync/ephy-password-manager.c:435
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "%s의 암호, 호스트 %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:437
+#: lib/sync/ephy-password-manager.c:439
 #, c-format
 msgid "Password in a form in %s"
 msgstr "%s안의 폼의 암호"
@@ -2184,7 +2225,7 @@ msgid ""
 msgstr ""
 "이 인증서는 유효합니다. 하지만, 이 페이지의 자료가 불안전하게 전송되었습니다."
 
-#: lib/widgets/ephy-downloads-popover.c:228
+#: lib/widgets/ephy-downloads-popover.c:216
 #: src/resources/gtk/history-dialog.ui:216
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
@@ -2227,7 +2268,7 @@ msgid_plural "%d months left"
 msgstr[0] "%d달 남음"
 
 #: lib/widgets/ephy-download-widget.c:213
-#: lib/widgets/ephy-download-widget.c:427
+#: lib/widgets/ephy-download-widget.c:426
 msgid "Finished"
 msgstr "완료"
 
@@ -2236,7 +2277,7 @@ msgid "Moved or deleted"
 msgstr "이동 혹은 삭제함"
 
 #: lib/widgets/ephy-download-widget.c:238
-#: lib/widgets/ephy-download-widget.c:424
+#: lib/widgets/ephy-download-widget.c:423
 #, c-format
 msgid "Error downloading: %s"
 msgstr "다운로드에 오류가 발생했습니다: %s"
@@ -2245,11 +2286,11 @@ msgstr "다운로드에 오류가 발생했습니다: %s"
 msgid "Cancelling…"
 msgstr "취소 중…"
 
-#: lib/widgets/ephy-download-widget.c:429
+#: lib/widgets/ephy-download-widget.c:428
 msgid "Starting…"
 msgstr "시작하는 중…"
 
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:268
+#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
 #: src/resources/gtk/history-dialog.ui:255
 msgid "_Open"
 msgstr "열기(_O)"
@@ -2274,36 +2315,36 @@ msgstr "모든 파일"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:743 src/ephy-history-dialog.c:565
+#: lib/widgets/ephy-location-entry.c:749 src/ephy-history-dialog.c:600
 msgid "Cl_ear"
 msgstr "지우기(_E)"
 
-#: lib/widgets/ephy-location-entry.c:763
+#: lib/widgets/ephy-location-entry.c:769
 msgid "Paste and _Go"
 msgstr "붙여넣고 바로 이동(_G)"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:784 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:934
 msgid "_Undo"
 msgstr "실행 취소(_U)"
 
-#: lib/widgets/ephy-location-entry.c:791
+#: lib/widgets/ephy-location-entry.c:797
 msgid "_Redo"
 msgstr "다시 실행(_R)"
 
-#: lib/widgets/ephy-location-entry.c:1075
+#: lib/widgets/ephy-location-entry.c:1044
 msgid "Show website security status and permissions"
 msgstr "웹 사이트 보안 상태와 권한 표시"
 
-#: lib/widgets/ephy-location-entry.c:1077
+#: lib/widgets/ephy-location-entry.c:1046
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "웹 사이트, 책갈피, 그리고 열린 탭을 검색"
 
-#: lib/widgets/ephy-location-entry.c:1121
+#: lib/widgets/ephy-location-entry.c:1091
 msgid "Toggle reader mode"
 msgstr "읽기 모드 전환"
 
-#: lib/widgets/ephy-location-entry.c:1134
+#: lib/widgets/ephy-location-entry.c:1115
 msgid "Bookmark this page"
 msgstr "이 페이지 책갈피하기"
 
@@ -2441,7 +2482,7 @@ msgstr "모바일"
 msgid "Reload the current page"
 msgstr "현재 페이지 다시 읽기"
 
-#: src/ephy-action-bar-start.c:644 src/ephy-header-bar.c:485
+#: src/ephy-action-bar-start.c:644 src/ephy-header-bar.c:453
 msgid "Stop loading the current page"
 msgstr "현재 페이지 읽어들이기 중지"
 
@@ -2457,75 +2498,81 @@ msgstr "마지막 동기화: %s"
 msgid "Something went wrong, please try again later."
 msgstr "뭔가 잘못되었습니다. 나중에 다시 시도하세요."
 
-#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:977
+#: src/ephy-firefox-sync-dialog.c:703
+#, c-format
+msgid "%u min"
+msgid_plural "%u mins"
+msgstr[0] "%u분"
+
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1012
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "익명 모드일 때 기록을 수정하는 것이 가능하지 않습니다."
 
-#: src/ephy-history-dialog.c:459
+#: src/ephy-history-dialog.c:495
 msgid "Remove the selected pages from history"
 msgstr "선택한 페이지 모음을 기록에서 제거"
 
-#: src/ephy-history-dialog.c:465
+#: src/ephy-history-dialog.c:501
 msgid "Copy URL"
 msgstr "복사 URL"
 
-#: src/ephy-history-dialog.c:555
+#: src/ephy-history-dialog.c:590
 msgid "Clear browsing history?"
 msgstr "방문 기록을 비우시겠습니까?"
 
-#: src/ephy-history-dialog.c:559
+#: src/ephy-history-dialog.c:594
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "방문 기록을 지우면 모든 방문 링크를 완전히 지웁니다."
 
-#: src/ephy-history-dialog.c:980
+#: src/ephy-history-dialog.c:1015
 msgid "Remove all history"
 msgstr "모든 기록 제거"
 
-#: src/ephy-main.c:110
+#: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
 msgstr "새 탭 대신 새 브라우저 창을 열기"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "Load the given session state file"
 msgstr "주어진 세션 상태 파일을 읽어들이기"
 
-#: src/ephy-main.c:112
+#: src/ephy-main.c:113
 msgid "FILE"
 msgstr "파일"
 
 # 익명 모드와 똑같다
-#: src/ephy-main.c:114
+#: src/ephy-main.c:115
 msgid "Start an instance with user data read-only"
 msgstr "읽기 전용 사용자 데이터로 인스턴스 시작하기"
 
-#: src/ephy-main.c:116
+#: src/ephy-main.c:117
 msgid "Start a private instance with separate user data"
 msgstr "별도의 사용자 데이터로 개인 인스턴스 시작하기"
 
 # 웹 애플리케이션
-#: src/ephy-main.c:119
+#: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
 msgstr "웹 애플리케이션 모드로 개인 인스턴스 시작하기"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
 msgstr "WebDriver 조절용 개인 인스턴스 시작하기"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:124
 msgid "Custom profile directory for private instance"
 msgstr "개인 인스턴스용 맞춤 프로파일 디렉터리"
 
-#: src/ephy-main.c:123
+#: src/ephy-main.c:124
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:126
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:254
+#: src/ephy-main.c:257
 msgid "Web options"
 msgstr "웹 옵션"
 
@@ -2534,34 +2581,42 @@ msgstr "웹 옵션"
 msgid "Open a new tab"
 msgstr "새 탭 열기"
 
-#: src/ephy-web-extension-dialog.c:91
+#: src/ephy-web-extension-dialog.c:87
 msgid "Do you really want to remove this extension?"
 msgstr "이 확장 기능을 정말 제거하시겠습니까?"
 
-#: src/ephy-web-extension-dialog.c:95 src/ephy-web-extension-dialog.c:207
+#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
 #: src/resources/gtk/bookmark-properties.ui:120
 msgid "_Remove"
 msgstr "제거(_R)"
 
-#: src/ephy-web-extension-dialog.c:176
+#: src/ephy-web-extension-dialog.c:182
 msgid "Author"
 msgstr "작성자"
 
-#: src/ephy-web-extension-dialog.c:185
+#: src/ephy-web-extension-dialog.c:191
 msgid "Version"
 msgstr "버전"
 
-#: src/ephy-web-extension-dialog.c:194
+#: src/ephy-web-extension-dialog.c:200
 #: src/resources/gtk/prefs-general-page.ui:127
 msgid "Homepage"
 msgstr "홈페이지"
 
-#: src/ephy-web-extension-dialog.c:211
+#: src/ephy-web-extension-dialog.c:213
+msgid "Open _Inspector"
+msgstr "검사기 열기(_I)"
+
+#: src/ephy-web-extension-dialog.c:215
+msgid "Open Inspector for debugging Background Page"
+msgstr "배경 페이지 디버깅을 위한 검사기 열기"
+
+#: src/ephy-web-extension-dialog.c:224
 msgid "Remove selected WebExtension"
 msgstr "선택한 웹 확장 기능 제거"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:265
+#: src/ephy-web-extension-dialog.c:278
 msgid "Open File (manifest.json/xpi)"
 msgstr "파일 열기 (manifest.json/xpi)"
 
@@ -2692,98 +2747,102 @@ msgid "Save Pa_ge As…"
 msgstr "페이지를 다른 이름으로 저장(_G)…"
 
 #: src/ephy-window.c:988
+msgid "_Take Screenshot…"
+msgstr "스크린샷 찍기(_T)…"
+
+#: src/ephy-window.c:989
 msgid "_Page Source"
 msgstr "페이지 소스(_P)"
 
-#: src/ephy-window.c:1374
+#: src/ephy-window.c:1373
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "웹에서 “%s” 검색"
 
-#: src/ephy-window.c:1403
+#: src/ephy-window.c:1402
 msgid "Open Link"
 msgstr "링크 열기"
 
-#: src/ephy-window.c:1405
+#: src/ephy-window.c:1404
 msgid "Open Link In New Tab"
 msgstr "링크를 새 탭에서 열기"
 
-#: src/ephy-window.c:1407
+#: src/ephy-window.c:1406
 msgid "Open Link In New Window"
 msgstr "링크를 새 창에서 열기"
 
-#: src/ephy-window.c:1409
+#: src/ephy-window.c:1408
 msgid "Open Link In Incognito Window"
 msgstr "링크를 익명 창에서 열기"
 
-#: src/ephy-window.c:2865 src/ephy-window.c:4220
+#: src/ephy-window.c:2854 src/ephy-window.c:4183
 msgid "Do you want to leave this website?"
 msgstr "이 웹사이트를 떠나시겠습니까?"
 
-#: src/ephy-window.c:2866 src/ephy-window.c:4221 src/window-commands.c:1207
+#: src/ephy-window.c:2855 src/ephy-window.c:4184 src/window-commands.c:1221
 msgid "A form you modified has not been submitted."
 msgstr "수정한 양식을 제출하지 않았습니다."
 
-#: src/ephy-window.c:2867 src/ephy-window.c:4222 src/window-commands.c:1209
+#: src/ephy-window.c:2856 src/ephy-window.c:4185 src/window-commands.c:1223
 msgid "_Discard form"
 msgstr "양식 버리기(_D)"
 
-#: src/ephy-window.c:2888
+#: src/ephy-window.c:2877
 msgid "Download operation"
 msgstr "다운로드 작업"
 
-#: src/ephy-window.c:2890
+#: src/ephy-window.c:2879
 msgid "Show details"
 msgstr "세부사항 표시"
 
-#: src/ephy-window.c:2892
+#: src/ephy-window.c:2881
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d 다운로드 작업 활성화"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3414
+#: src/ephy-window.c:3375
 msgid "View open tabs"
 msgstr "열린 탭 보기"
 
-#: src/ephy-window.c:3544
+#: src/ephy-window.c:3505
 msgid "Set Web as your default browser?"
 msgstr "웹을 당신의 기본 브라우저로 설정하시겠습니까?"
 
-#: src/ephy-window.c:3546
+#: src/ephy-window.c:3507
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "에피퍼니 기술 미리보기를 당신의 기본 브라우저로 설정하시겠습니까?"
 
-#: src/ephy-window.c:3558
+#: src/ephy-window.c:3519
 msgid "_Yes"
 msgstr "네(_Y)"
 
-#: src/ephy-window.c:3559
+#: src/ephy-window.c:3520
 msgid "_No"
 msgstr "아니요(_N)"
 
-#: src/ephy-window.c:4354
+#: src/ephy-window.c:4317
 msgid "There are multiple tabs open."
 msgstr "여러개의 탭이 열려있습니다."
 
-#: src/ephy-window.c:4355
+#: src/ephy-window.c:4318
 msgid "If you close this window, all open tabs will be lost"
 msgstr "만약 이 창을 닫으면, 열려있는 탭을 잃어버립니다"
 
-#: src/ephy-window.c:4356
+#: src/ephy-window.c:4319
 msgid "C_lose tabs"
 msgstr "탭 닫기(_L)"
 
-#: src/popup-commands.c:240
+#: src/context-menu-commands.c:271
 msgid "Save Link As"
 msgstr "링크 다른 이름으로 저장"
 
-#: src/popup-commands.c:248
+#: src/context-menu-commands.c:279
 msgid "Save Image As"
 msgstr "그림 다른 이름으로 저장"
 
-#: src/popup-commands.c:256
+#: src/context-menu-commands.c:287
 msgid "Save Media As"
 msgstr "미디어를 다른 이름으로 저장"
 
@@ -2832,28 +2891,28 @@ msgstr "새로운 검색 엔진"
 msgid "A_dd Search Engine…"
 msgstr "검색 엔진 추가(_D)…"
 
-#: src/preferences/ephy-search-engine-row.c:115
+#: src/preferences/ephy-search-engine-row.c:114
 msgid "This field is required"
 msgstr "이 입력란은 필요합니다"
 
-#: src/preferences/ephy-search-engine-row.c:120
+#: src/preferences/ephy-search-engine-row.c:119
 msgid "Address must start with either http:// or https://"
 msgstr "주소는 반드시 http:// 혹은 https://로 시작해야 합니다"
 
-#: src/preferences/ephy-search-engine-row.c:132
+#: src/preferences/ephy-search-engine-row.c:131
 #, c-format
 msgid "Address must contain the search term represented by %s"
-msgstr "주소는 %s을(를) 표현하는 검색어가 반드시 들어있어야 합니다."
+msgstr "주소는 %s을(를) 표현하는 검색어가 반드시 들어있어야 합니다"
 
-#: src/preferences/ephy-search-engine-row.c:135
+#: src/preferences/ephy-search-engine-row.c:134
 msgid "Address should not contain the search term several times"
 msgstr "주소는 검색어를 여러번 포함해서는 안됩니다"
 
-#: src/preferences/ephy-search-engine-row.c:141
+#: src/preferences/ephy-search-engine-row.c:140
 msgid "Address is not a valid URI"
 msgstr "주소가 유효한 URI가 아닙니다"
 
-#: src/preferences/ephy-search-engine-row.c:146
+#: src/preferences/ephy-search-engine-row.c:145
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
@@ -2862,59 +2921,59 @@ msgstr ""
 "주소가 유효한 URL이 아닙니다. 주소는 https://www.example.com/search?q=%s처럼 "
 "보여야 합니다"
 
-#: src/preferences/ephy-search-engine-row.c:191
+#: src/preferences/ephy-search-engine-row.c:190
 msgid "This shortcut is already used."
 msgstr "이 바로 가기는 이미 사용 중 입니다."
 
-#: src/preferences/ephy-search-engine-row.c:193
+#: src/preferences/ephy-search-engine-row.c:192
 msgid "Search shortcuts must not contain any space."
 msgstr "검색 바로 가기는 어떤 공백도 포함해서는 안됩니다."
 
-#: src/preferences/ephy-search-engine-row.c:201
+#: src/preferences/ephy-search-engine-row.c:200
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "검색 바로 가기는 !, # or @와 같은 기호로 시작해야 합니다."
 
-#: src/preferences/ephy-search-engine-row.c:334
+#: src/preferences/ephy-search-engine-row.c:333
 msgid "A name is required"
 msgstr "이름이 필요합니다"
 
-#: src/preferences/ephy-search-engine-row.c:336
+#: src/preferences/ephy-search-engine-row.c:335
 msgid "This search engine already exists"
 msgstr "이 검색 엔진이 이미 존재합니다"
 
-#: src/preferences/passwords-view.c:196
+#: src/preferences/passwords-view.c:191
 msgid "Delete All Passwords?"
 msgstr "모든 암호를 삭제하시겠습니까?"
 
-#: src/preferences/passwords-view.c:199
+#: src/preferences/passwords-view.c:194
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "이것은 로컬에 저장한 모든 암호를 지울 것이고, 되돌릴 수 없습니다."
 
-#: src/preferences/passwords-view.c:204 src/resources/gtk/history-dialog.ui:239
+#: src/preferences/passwords-view.c:199 src/resources/gtk/history-dialog.ui:239
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: src/preferences/passwords-view.c:262
+#: src/preferences/passwords-view.c:257
 msgid "Copy password"
 msgstr "암호 복사"
 
-#: src/preferences/passwords-view.c:268
+#: src/preferences/passwords-view.c:263
 msgid "Username"
 msgstr "사용자 이름"
 
-#: src/preferences/passwords-view.c:291
+#: src/preferences/passwords-view.c:286
 msgid "Copy username"
 msgstr "사용자 이름 복사"
 
-#: src/preferences/passwords-view.c:297
+#: src/preferences/passwords-view.c:292
 msgid "Password"
 msgstr "암호"
 
-#: src/preferences/passwords-view.c:322
+#: src/preferences/passwords-view.c:317
 msgid "Reveal password"
 msgstr "암호 드러내기"
 
-#: src/preferences/passwords-view.c:332
+#: src/preferences/passwords-view.c:327
 msgid "Remove Password"
 msgstr "암호 제거"
 
@@ -2934,48 +2993,44 @@ msgstr "밝게"
 msgid "Dark"
 msgstr "어둡게"
 
-#: src/preferences/prefs-general-page.c:297
+#: src/preferences/prefs-general-page.c:301
 #: src/resources/gtk/prefs-lang-dialog.ui:11
 msgid "Add Language"
 msgstr "언어 추가"
 
-#: src/preferences/prefs-general-page.c:526
-#: src/preferences/prefs-general-page.c:685
+#: src/preferences/prefs-general-page.c:530
+#: src/preferences/prefs-general-page.c:689
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "시스템 언어(%s)"
 
-#: src/preferences/prefs-general-page.c:713
-msgid "Select a directory"
-msgstr "디렉터리 선택"
-
 # 웹 애플리케이션
-#: src/preferences/prefs-general-page.c:859
+#: src/preferences/prefs-general-page.c:895
 msgid "Web Application Icon"
 msgstr "웹 애플리케이션 아이콘"
 
-#: src/preferences/prefs-general-page.c:864
+#: src/preferences/prefs-general-page.c:900
 msgid "Supported Image Files"
 msgstr "지원하는 그림 파일"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1593
+#: src/profile-migrator/ephy-profile-migrator.c:1803
 msgid "Executes only the n-th migration step"
 msgstr "지정한 단계의 프로파일 이동 단계만 실행합니다"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1595
+#: src/profile-migrator/ephy-profile-migrator.c:1805
 msgid "Specifies the required version for the migrator"
 msgstr "프로파일 이동에 필요한 버전을 지정합니다"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1597
+#: src/profile-migrator/ephy-profile-migrator.c:1807
 msgid "Specifies the profile where the migrator should run"
 msgstr "프로파일 이동을 실행할 프로파일을 지정합니다"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1618
+#: src/profile-migrator/ephy-profile-migrator.c:1828
 msgid "Web profile migrator"
 msgstr "웹 프로파일 이동"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1619
+#: src/profile-migrator/ephy-profile-migrator.c:1829
 msgid "Web profile migrator options"
 msgstr "웹 프로파일 이동 옵션"
 
@@ -3053,33 +3108,32 @@ msgid "Bookmark some webpages to view them here."
 msgstr "여기에서 보려면 몇몇 웹페이지를 책갈피해보세요."
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:86
-msgid "Personal Data"
-msgstr "개인 데이터"
+msgid "Website Data"
+msgstr "웹사이트 데이터"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "데이터 지우기(_C)"
 
 #: src/resources/gtk/clear-data-view.ui:24
-msgid "Remove selected personal data"
-msgstr "선택한 개인 데이터 제거"
+msgid "Remove selected website data"
+msgstr "선택한 웹사이트 데이터 제거"
 
 #: src/resources/gtk/clear-data-view.ui:25
-msgid "Search personal data"
-msgstr "개인 데이터 검색"
+msgid "Search website data"
+msgstr "웹사이트 데이터 검색"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Personal Data"
-msgstr "개인 데이터가 없습니다"
+msgid "There is no Website Data"
+msgstr "웹사이트 데이터가 없습니다"
 
 #: src/resources/gtk/clear-data-view.ui:27
-msgid "Personal data will be listed here"
-msgstr "여기에 개인 데이터를 열거합니다"
+msgid "Website data will be listed here"
+msgstr "여기에 웹사이트 데이터를 열거합니다"
 
 #: src/resources/gtk/clear-data-view.ui:55
-msgid "Clear selected personal data:"
-msgstr "선택한 개인 데이터 지우기:"
+msgid "Clear selected website data:"
+msgstr "선택한 웹사이트 데이터 지우기:"
 
 #: src/resources/gtk/clear-data-view.ui:113
 msgid ""
@@ -3365,7 +3419,7 @@ msgid "Tabs"
 msgstr "탭"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:108
+#: src/resources/gtk/prefs-privacy-page.ui:107
 msgid "Passwords"
 msgstr "암호"
 
@@ -3502,35 +3556,35 @@ msgstr "다운로드할 때 물어보기(_N)"
 msgid "_Download Folder"
 msgstr "다운로드 폴더(_D)"
 
-#: src/resources/gtk/prefs-general-page.ui:214
+#: src/resources/gtk/prefs-general-page.ui:250
 msgid "Search Engines"
 msgstr "검색 엔진"
 
-#: src/resources/gtk/prefs-general-page.ui:225
+#: src/resources/gtk/prefs-general-page.ui:261
 msgid "Session"
 msgstr "세션"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:266
 msgid "Start in _Incognito Mode"
 msgstr "익명 모드로 시작(_I)"
 
-#: src/resources/gtk/prefs-general-page.ui:244
+#: src/resources/gtk/prefs-general-page.ui:280
 msgid "_Restore Tabs on Startup"
 msgstr "시작할 때 탭 복구(_R)"
 
-#: src/resources/gtk/prefs-general-page.ui:259
+#: src/resources/gtk/prefs-general-page.ui:295
 msgid "Browsing"
 msgstr "브라우징"
 
-#: src/resources/gtk/prefs-general-page.ui:264
+#: src/resources/gtk/prefs-general-page.ui:300
 msgid "Mouse _Gestures"
 msgstr "마우스 제스처(_G)"
 
-#: src/resources/gtk/prefs-general-page.ui:278
+#: src/resources/gtk/prefs-general-page.ui:314
 msgid "S_witch Immediately to New Tabs"
 msgstr "새 탭으로 즉시 전환(_W)"
 
-#: src/resources/gtk/prefs-general-page.ui:313
+#: src/resources/gtk/prefs-general-page.ui:349
 msgid "_Spell Checking"
 msgstr "맞춤법 검사(_S)"
 
@@ -3580,19 +3634,19 @@ msgstr "URL 입력란에 검색 제안 사용."
 msgid "_Google Search Suggestions"
 msgstr "구글 검색 제안(_G)"
 
+#: src/resources/gtk/prefs-privacy-page.ui:86
+msgid "Personal Data"
+msgstr "개인 데이터"
+
 #: src/resources/gtk/prefs-privacy-page.ui:91
-msgid "You can clear stored personal data."
-msgstr "저장된 개인 데이터를 지울 수 있습니다."
+msgid "Clear Website _Data"
+msgstr "웹사이트 데이터 지우기(_D)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
-msgid "Clear Personal _Data"
-msgstr "개인 데이터 지우기(_D)"
-
-#: src/resources/gtk/prefs-privacy-page.ui:113
+#: src/resources/gtk/prefs-privacy-page.ui:112
 msgid "_Passwords"
 msgstr "암호(_P)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:128
+#: src/resources/gtk/prefs-privacy-page.ui:127
 msgid "_Remember Passwords"
 msgstr "암호 저장(_R)"
 
@@ -3652,173 +3706,172 @@ msgstr "페이지 저장"
 
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
+msgid "Take Screenshot"
+msgstr "스크린샷 찍기"
+
+#: src/resources/gtk/shortcuts-dialog.ui:54
+msgctxt "shortcut window"
 msgid "Print page"
 msgstr "페이지 인쇄"
 
-#: src/resources/gtk/shortcuts-dialog.ui:54
+#: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "끝내기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "도움말"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:75
 msgctxt "shortcut window"
 msgid "Open menu"
 msgstr "메뉴 열기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:82
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "바로 가기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:82
+#: src/resources/gtk/shortcuts-dialog.ui:89
 msgctxt "shortcut window"
 msgid "Show downloads list"
 msgstr "다운로드 목록을 표시"
 
-#: src/resources/gtk/shortcuts-dialog.ui:93
+#: src/resources/gtk/shortcuts-dialog.ui:100
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "탐색"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "홈페이지로 이동"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "현재 페이지 다시 읽기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:118
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "캐시를 우회하여 다시 읽어들이기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:125
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "현재 페이지 읽어들이는 것을 중지"
 
-#: src/resources/gtk/shortcuts-dialog.ui:125
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:132
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "이전 페이지로 뒤로 가기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:132
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:139
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "다음 페이지로 앞으로 가기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:157
+#: src/resources/gtk/shortcuts-dialog.ui:164
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "탭"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "새 탭"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "현재 탭 닫기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:182
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "닫은 탭 다시 열기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
+#: src/resources/gtk/shortcuts-dialog.ui:189
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "다음 탭으로 이동"
 
-#: src/resources/gtk/shortcuts-dialog.ui:189
+#: src/resources/gtk/shortcuts-dialog.ui:196
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "이전 탭으로 이동"
 
-#: src/resources/gtk/shortcuts-dialog.ui:196
+#: src/resources/gtk/shortcuts-dialog.ui:203
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "현재 탭을 왼쪽으로 옮기기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:203
+#: src/resources/gtk/shortcuts-dialog.ui:210
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "현재 탭을 오른쪽으로 옮기기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:210
+#: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "현재 탭 복제"
 
-#: src/resources/gtk/shortcuts-dialog.ui:221
+#: src/resources/gtk/shortcuts-dialog.ui:228
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "잡동사니"
 
-#: src/resources/gtk/shortcuts-dialog.ui:225
+#: src/resources/gtk/shortcuts-dialog.ui:232
 msgctxt "shortcut window"
 msgid "History"
 msgstr "기록"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:239
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "기본 설정"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:246
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "현재 페이지 책갈피하기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:253
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "책갈피 목록을 표시"
 
-#: src/resources/gtk/shortcuts-dialog.ui:253
+#: src/resources/gtk/shortcuts-dialog.ui:260
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "책갈피 가져오기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:260
+#: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "책갈피 내보내기"
 
-#: src/resources/gtk/shortcuts-dialog.ui:267
+#: src/resources/gtk/shortcuts-dialog.ui:274
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "캐릿 브라우징 끄거나 켜기"
 
 # 애플리케이션
-#: src/resources/gtk/shortcuts-dialog.ui:278
+#: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
 msgid "Web application"
 msgstr "웹 애플리케이션"
 
 # 웹 애플리케이션
-#: src/resources/gtk/shortcuts-dialog.ui:282
+#: src/resources/gtk/shortcuts-dialog.ui:289
 msgctxt "shortcut window"
 msgid "Install site as web application"
 msgstr "사이트를 웹 애플리케이션으로 설치"
-
-# 웹 애플리케이션
-#: src/resources/gtk/shortcuts-dialog.ui:289
-msgctxt "shortcut window"
-msgid "Open web application manager"
-msgstr "웹 애플리케이션 관리자 열기"
 
 #: src/resources/gtk/shortcuts-dialog.ui:300
 msgctxt "shortcut window"
@@ -3995,82 +4048,119 @@ msgstr "“%s” 읽어들이기"
 msgid "Local Tabs"
 msgstr "로컬 탭"
 
-#: src/window-commands.c:113
+#: src/webapp-provider/ephy-webapp-provider.c:120
+msgid "The install_token is required for the Install() method"
+msgstr "Install() 메서드를 위한 install_token이 필요합니다"
+
+#: src/webapp-provider/ephy-webapp-provider.c:126
+#, c-format
+msgid "The url passed was not valid: ‘%s’"
+msgstr "전달한 URL이 유효하지 않습니다: ‘%s’"
+
+#: src/webapp-provider/ephy-webapp-provider.c:132
+msgid "The name passed was not valid"
+msgstr "전달한 이름이 유효하지 않습니다"
+
+# 웹 애플리케이션
+#: src/webapp-provider/ephy-webapp-provider.c:144
+#, c-format
+msgid "Installing the web application ‘%s’ (%s) failed: %s"
+msgstr "웹 애플리케이션 ‘%s’ (%s) 설치를 실패했습니다: %s"
+
+#: src/webapp-provider/ephy-webapp-provider.c:176
+#, c-format
+msgid "The desktop file ID passed ‘%s’ was not valid"
+msgstr "전달한 '%s' 데스크톱 파일 아이디가 유효하지 않습니다"
+
+# 웹 애플리케이션
+#: src/webapp-provider/ephy-webapp-provider.c:185
+#, c-format
+msgid "The web application ‘%s’ does not exist"
+msgstr "‘%s’ 웹 애플리케이션이 이미 있습니다"
+
+# 웹 애플리케이션
+#: src/webapp-provider/ephy-webapp-provider.c:190
+#, c-format
+msgid "The web application ‘%s’ could not be deleted"
+msgstr "‘%s’ 웹 애플리케이션을 삭제할 수 없습니다"
+
+#: src/webextension/api/runtime.c:161
+#, c-format
+msgid "Options for %s"
+msgstr "%s에 대한 옵션"
+
+#: src/window-commands.c:119
 msgid "GVDB File"
 msgstr "GVDB 파일"
 
-#: src/window-commands.c:114
+#: src/window-commands.c:120
 msgid "HTML File"
 msgstr "HTML 파일"
 
-#: src/window-commands.c:115
+#: src/window-commands.c:121
 msgid "Firefox"
 msgstr "파이어폭스"
 
-#: src/window-commands.c:116 src/window-commands.c:687
+#: src/window-commands.c:122 src/window-commands.c:699
 msgid "Chrome"
 msgstr "크롬"
 
-#: src/window-commands.c:117 src/window-commands.c:688
+#: src/window-commands.c:123 src/window-commands.c:700
 msgid "Chromium"
 msgstr "크로미움"
 
-#: src/window-commands.c:131 src/window-commands.c:552
-#: src/window-commands.c:766
+#: src/window-commands.c:137 src/window-commands.c:561
+#: src/window-commands.c:778
 msgid "Ch_oose File"
 msgstr "파일 고르기(_O)"
 
-#: src/window-commands.c:133 src/window-commands.c:378
-#: src/window-commands.c:423 src/window-commands.c:768
-#: src/window-commands.c:794
+#: src/window-commands.c:139 src/window-commands.c:390
+#: src/window-commands.c:437 src/window-commands.c:780
+#: src/window-commands.c:807
 msgid "I_mport"
 msgstr "가져오기(_M)"
 
-#: src/window-commands.c:293 src/window-commands.c:366
-#: src/window-commands.c:411 src/window-commands.c:454
-#: src/window-commands.c:477 src/window-commands.c:493
+#: src/window-commands.c:303 src/window-commands.c:378
+#: src/window-commands.c:425 src/window-commands.c:468
+#: src/window-commands.c:491 src/window-commands.c:507
 msgid "Bookmarks successfully imported!"
 msgstr "책갈피 모음을 성공적으로 가져왔습니다!"
 
-#: src/window-commands.c:306
+#: src/window-commands.c:316
 msgid "Select Profile"
 msgstr "프로파일 선택"
 
-#: src/window-commands.c:311
-msgid "_Select"
-msgstr "선택(_S)"
-
-#: src/window-commands.c:375 src/window-commands.c:420
-#: src/window-commands.c:644
+#: src/window-commands.c:387 src/window-commands.c:434
+#: src/window-commands.c:656
 msgid "Choose File"
 msgstr "파일 고르기"
 
-#: src/window-commands.c:547
+#: src/window-commands.c:556
 msgid "Import Bookmarks"
 msgstr "책갈피 가져오기"
 
-#: src/window-commands.c:566 src/window-commands.c:808
+#: src/window-commands.c:575 src/window-commands.c:821
 msgid "From:"
 msgstr "출처:"
 
-#: src/window-commands.c:608
+#: src/window-commands.c:618
 msgid "Bookmarks successfully exported!"
 msgstr "책갈피 모음을 성공적으로 내보냈습니다!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:652
+#: src/window-commands.c:664
 msgid "bookmarks.html"
 msgstr "책갈피.html"
 
-#: src/window-commands.c:725
+#: src/window-commands.c:741
 msgid "Passwords successfully imported!"
 msgstr "암호를 성공적으로 가져왔습니다!"
 
-#: src/window-commands.c:789
+#: src/window-commands.c:802
 msgid "Import Passwords"
 msgstr "암호 가져오기"
 
-#: src/window-commands.c:982
+#: src/window-commands.c:996
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -4079,94 +4169,84 @@ msgstr ""
 "간단하고 깔끔하며 아름다운 웹 보기.\n"
 "WebKitGTK %d.%d.%d 사용"
 
-#: src/window-commands.c:996
+#: src/window-commands.c:1010
 msgid "Epiphany Canary"
 msgstr "에피퍼니 카나리아"
 
-#: src/window-commands.c:1012
+#: src/window-commands.c:1026
 msgid "Website"
 msgstr "웹사이트"
 
-#: src/window-commands.c:1045
+#: src/window-commands.c:1059
 msgid "translator-credits"
 msgstr ""
 "차영호 <ganadist@gmail.com>\n"
 "류창우 <cwryu@debian.org>\n"
 "오창석 <changseok@gnome.org>"
 
-#: src/window-commands.c:1205
+#: src/window-commands.c:1219
 msgid "Do you want to reload this website?"
 msgstr "이 웹사이트를 다시 읽어들이겠습니까?"
 
 # 웹 애플리케이션
-#: src/window-commands.c:1794
+#: src/window-commands.c:1821
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "“%s” 애플리케이션을 사용할 준비가 되었습니다"
 
 # 웹 애플리케이션
-#: src/window-commands.c:1797
+#: src/window-commands.c:1824
 #, c-format
-msgid "The application “%s” could not be created"
-msgstr "“%s” 애플리케이션을 만들 수 없습니다"
+msgid "The application “%s” could not be created: %s"
+msgstr "“%s” 애플리케이션을 만들 수 없습니다: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1812
+#: src/window-commands.c:1833
 msgid "Launch"
 msgstr "시작"
 
 # 웹 애플리케이션
-#: src/window-commands.c:1873
+#: src/window-commands.c:1904
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "이름이 “%s”인 웹 애플리케이션이 이미 있습니다. 덮어 쓰시겠습니까?"
 
-#: src/window-commands.c:1876
+#: src/window-commands.c:1907
 msgid "Cancel"
 msgstr "취소"
 
-#: src/window-commands.c:1878
+#: src/window-commands.c:1909
 msgid "Replace"
 msgstr "바꾸기"
 
 # 웹 애플리케이션
-#: src/window-commands.c:1882
+#: src/window-commands.c:1913
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "같은 이름의 애플리케이션이 이미 있습니다. 덮어 쓰게 됩니다."
 
-# 웹 애플리케이션
-#. Show dialog with icon, title.
-#: src/window-commands.c:1917
-msgid "Create Web Application"
-msgstr "웹 애플리케이션 만들기"
-
-#: src/window-commands.c:1922
-msgid "C_reate"
-msgstr "만들기(_R)"
-
-#: src/window-commands.c:2141
+#: src/window-commands.c:2126 src/window-commands.c:2182
 msgid "Save"
 msgstr "저장"
 
-#: src/window-commands.c:2150
+#: src/window-commands.c:2147
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2155
+#: src/window-commands.c:2152
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2160
+#: src/window-commands.c:2203
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2699
+#: src/window-commands.c:2707
 msgid "Enable caret browsing mode?"
 msgstr "캐릿 브라우징 모드를 사용하시겠습니까?"
 
-#: src/window-commands.c:2702
+#: src/window-commands.c:2710
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4176,9 +4256,27 @@ msgstr ""
 "수 있는 커서를 표시하고, 키보드로 이동할 수 있게 합니다. 캐릿 브라우징 모드"
 "를 사용하시겠습니까?"
 
-#: src/window-commands.c:2705
+#: src/window-commands.c:2713
 msgid "_Enable"
 msgstr "사용(_E)"
+
+#~ msgid "Save file"
+#~ msgstr "파일 저장"
+
+#~ msgid "You can clear stored personal data."
+#~ msgstr "저장된 개인 데이터를 지울 수 있습니다."
+
+# 웹 애플리케이션
+#~ msgctxt "shortcut window"
+#~ msgid "Open web application manager"
+#~ msgstr "웹 애플리케이션 관리자 열기"
+
+# 웹 애플리케이션
+#~ msgid "Create Web Application"
+#~ msgstr "웹 애플리케이션 만들기"
+
+#~ msgid "C_reate"
+#~ msgstr "만들기(_R)"
 
 #~ msgid "GNOME Web"
 #~ msgstr "그놈 웹"
@@ -4486,9 +4584,6 @@ msgstr "사용(_E)"
 
 #~ msgid "Collections"
 #~ msgstr "모음집"
-
-#~ msgid "_5 min"
-#~ msgstr "5분(_5)"
 
 #~ msgid "_15 min"
 #~ msgstr "15분(_1)"
@@ -4809,8 +4904,8 @@ msgstr "사용(_E)"
 #~ "How to present animated images. Possible values are \"normal\", \"once\" "
 #~ "and \"disabled\"."
 #~ msgstr ""
-#~ "애니메이션 그림을 표시하는 방법. 사용할 수 있는 값은 \"normal\", \"once"
-#~ "\", \"disabled\"."
+#~ "애니메이션 그림을 표시하는 방법. 사용할 수 있는 값은 \"normal\", "
+#~ "\"once\", \"disabled\"."
 
 #~ msgid "Enable JavaScript"
 #~ msgstr "자바스크립트 사용"
@@ -5139,9 +5234,6 @@ msgstr "사용(_E)"
 #~ msgid "_Normal Size"
 #~ msgstr "보통 크기(_N)"
 
-#~ msgid "_Toggle Inspector"
-#~ msgstr "검사기 끄고 켜기(_T)"
-
 #~ msgid "_Add Bookmark…"
 #~ msgstr "책갈피 추가(_A)…"
 
@@ -5292,13 +5384,13 @@ msgstr "사용(_E)"
 #~ msgstr "도구 모음 스타일"
 
 #~ msgid ""
-#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-#~ "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-#~ "\"text\"."
+#~ "Toolbar style. Allowed values are \"\" (use GNOME default style), "
+#~ "\"both\" (text and icons), \"both-horiz\" (text besides icons), "
+#~ "\"icons\", and \"text\"."
 #~ msgstr ""
-#~ "도구 모음 스타일. 사용 가능한 값은 \"\"(그놈 기본 스타일 사용), \"both"
-#~ "\"(텍스트 및 아이콘), \"both-horiz\"(텍스트 옆에 아이콘), \"icons\", "
-#~ "\"text\"."
+#~ "도구 모음 스타일. 사용 가능한 값은 \"\"(그놈 기본 스타일 사용), "
+#~ "\"both\"(텍스트 및 아이콘), \"both-horiz\"(텍스트 옆에 아이콘), "
+#~ "\"icons\", \"text\"."
 
 #~ msgid "Size of disk cache, in MB."
 #~ msgstr "디스크 캐시 크기, MB 단위."
