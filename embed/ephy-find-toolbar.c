@@ -418,6 +418,8 @@ ephy_find_toolbar_dispose (GObject *object)
   g_cancellable_cancel (toolbar->cancellable);
   g_clear_object (&toolbar->cancellable);
 
+  g_clear_object (&toolbar->entry_tag);
+
   G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
 }
 
