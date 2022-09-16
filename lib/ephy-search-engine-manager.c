@@ -123,6 +123,7 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
       url = "";
     if (!g_variant_dict_lookup (&dict, "bang", "&s", &bang))
       bang = "";
+    g_variant_dict_clear (&dict);
 
     search_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
                                   "name", name,
