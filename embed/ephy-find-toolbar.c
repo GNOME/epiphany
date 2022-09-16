@@ -412,20 +412,11 @@ ephy_find_toolbar_dispose (GObject *object)
 {
   EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 
-  if (toolbar->find_again_source_id != 0) {
-    g_source_remove (toolbar->find_again_source_id);
-    toolbar->find_again_source_id = 0;
-  }
+  g_clear_handle_id (&toolbar->find_again_source_id, g_source_remove);
+  g_clear_handle_id (&toolbar->find_source_id, g_source_remove);
 
-  if (toolbar->find_source_id != 0) {
-    g_source_remove (toolbar->find_source_id);
-    toolbar->find_source_id = 0;
-  }
-
-  if (toolbar->cancellable) {
-    g_cancellable_cancel (toolbar->cancellable);
-    g_clear_object (&toolbar->cancellable);
-  }
+  g_cancellable_cancel (toolbar->cancellable);
+  g_clear_object (&toolbar->cancellable);
 
   G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
 }
