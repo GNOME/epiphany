@@ -1434,12 +1434,16 @@ ephy_web_extension_manager_activate_browser_action (EphyWebExtensionManager *sel
                                                     EphyWebExtension        *web_extension,
                                                     EphyWindow              *window)
 {
-  GSList *table;
+  GSList *table, *l;
   GtkWidget *button;
 
   table = g_hash_table_lookup (self->browser_action_map, web_extension);
   if (table) {
-    button = g_slist_find_custom (table, window, get_browser_action_for_window)->data;
+    l = g_slist_find_custom (table, window, get_browser_action_for_window);
+
+    g_assert (l && l->data);
+
+    button = l->data;
     gtk_widget_mnemonic_activate (button, FALSE);
   }
 }
