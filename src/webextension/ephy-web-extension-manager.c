@@ -1150,9 +1150,6 @@ create_browser_action (EphyWebExtension *web_extension,
     gtk_button_set_image (GTK_BUTTON (button), image);
   }
 
-  /* This makes it much easier then going through layers of HeaderBars and ActionBars */
-  g_object_set_data (G_OBJECT (button), "window", window);
-
   gtk_widget_set_visible (button, TRUE);
 
   return button;
@@ -1416,16 +1413,10 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
 }
 
 gint
-get_browser_action_for_window (gconstpointer value,
-                               gconstpointer user_data)
+get_browser_action_for_window (GtkWidget *widget,
+                               GtkWidget *window)
 {
-  const EphyWindow *window = user_data;
-  const GtkWidget *widget = value;
-
-  if (g_object_get_data (G_OBJECT (widget), "window") == window)
-    return 0;
-
-  return -1;
+  return gtk_widget_get_toplevel (widget) != window;
 }
 
 
@@ -1439,7 +1430,7 @@ ephy_web_extension_manager_activate_browser_action (EphyWebExtensionManager *sel
 
   table = g_hash_table_lookup (self->browser_action_map, web_extension);
   if (table) {
-    l = g_slist_find_custom (table, window, get_browser_action_for_window);
+    l = g_slist_find_custom (table, window, (GCompareFunc)get_browser_action_for_window);
 
     g_assert (l && l->data);
 
