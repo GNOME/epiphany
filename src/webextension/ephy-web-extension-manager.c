@@ -1440,7 +1440,7 @@ ephy_web_extension_manager_activate_browser_action (EphyWebExtensionManager *sel
   table = g_hash_table_lookup (self->browser_action_map, web_extension);
   if (table) {
     button = g_slist_find_custom (table, window, get_browser_action_for_window)->data;
-    gtk_widget_mnemonic_activate (button, false);
+    gtk_widget_mnemonic_activate (button, FALSE);
   }
 }
 
