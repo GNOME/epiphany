@@ -558,10 +558,8 @@ menu_activate_browser_action (gpointer user_data)
 {
   EphyWebExtension *web_extension = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
-  EphyShell *shell = ephy_shell_get_default ();
-  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
-  ephy_web_extension_manager_activate_browser_action (manager, web_extension, window);
+  ephy_web_extension_manager_show_browser_action (manager, web_extension);
   return G_SOURCE_REMOVE;
 }
 

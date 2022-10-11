@@ -3,12 +3,6 @@
   <template class="EphyActionBarEnd" parent="GtkBox">
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="browser_action_box">
-        <property name="visible">True</property>
-        <property name="spacing">6</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkRevealer" id="downloads_revealer">
         <property name="visible">True</property>
         <property name="transition-type">crossfade</property>
@@ -45,6 +39,21 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="browser_actions_button">
+        <!-- Translators: tooltip for the webextension actions button -->
+        <property name="tooltip_text" translatable="yes">View extension actions</property>
+        <property name="visible">False</property>
+        <property name="receives_default">True</property>
+        <property name="popover">browser_actions_popover</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="icon-name">application-x-addon-symbolic</property>
           </object>
         </child>
       </object>
@@ -87,5 +96,76 @@
   </template>
   <object class="EphyBookmarksPopover" id="bookmarks_popover">
     <property name="visible">True</property>
+  </object>
+  <object class="GtkPopover" id="browser_actions_popover">
+    <property name="width-request">250</property>
+    <child>
+      <object class="GtkStack" id="browser_actions_stack">
+        <property name="visible">True</property>
+        <property name="transition-type">slide-left-right</property>
+        <property name="interpolate-size">True</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <child>
+          <object class="GtkScrolledWindow" id="browser_actions_scrolled_window">
+            <property name="visible">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="max-content-height">360</property>
+            <property name="propagate-natural-height">True</property>
+            <child>
+              <object class="GtkListBox" id="browser_actions_listbox">
+                <property name="visible">True</property>
+                <property name="selection-mode">none</property>
+                <signal name="row-activated" handler="browser_actions_row_activated_cb"/>
+                <style>
+                  <class name="browser-actions-listbox"/>\
+                  <class name="background"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="browser_actions_popup_view_box">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="visible">True</property>
+                    <signal name="clicked" handler="browser_actions_popup_view_back_clicked_cb"/>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon-name">go-previous-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="browser_actions_popup_view_label">
+                    <property name="visible">True</property>
+                    <property name="hexpand">True</property>
+                    <style>
+                      <class name="heading"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
 </interface>

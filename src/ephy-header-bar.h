@@ -49,7 +49,4 @@ void                ephy_header_bar_start_change_combined_stop_reload_state (Eph
 void                ephy_header_bar_set_zoom_level                 (EphyHeaderBar *header_bar,
                                                                     gdouble        zoom);
 
-void                ephy_header_bar_add_browser_action             (EphyHeaderBar *header_bar,
-                                                                    GtkWidget     *action);
-
 G_END_DECLS

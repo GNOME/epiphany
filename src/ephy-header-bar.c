@@ -468,10 +468,3 @@ ephy_header_bar_set_zoom_level (EphyHeaderBar *header_bar,
 
   gtk_label_set_label (GTK_LABEL (header_bar->zoom_level_label), zoom_level);
 }
-
-void
-ephy_header_bar_add_browser_action (EphyHeaderBar *header_bar,
-                                    GtkWidget     *action)
-{
-  ephy_action_bar_end_add_browser_action (header_bar->action_bar_end, action);
-}

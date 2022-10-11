@@ -64,17 +64,19 @@ void                    ephy_web_extension_manager_set_active                   
                                                                                      EphyWebExtension        *web_extension,
                                                                                      gboolean                 active);
 
-void                    ephy_web_extension_manager_activate_browser_action          (EphyWebExtensionManager *self,
-                                                                                     EphyWebExtension        *web_extension,
-                                                                                     EphyWindow              *window);
+void                    ephy_web_extension_manager_show_browser_action              (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension);
 
 GtkWidget               *ephy_web_extension_manager_get_page_action                 (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension,
                                                                                      EphyWebView             *web_view);
 
+GListStore              *ephy_web_extension_manager_get_browser_actions             (EphyWebExtensionManager *self);
+
 WebKitWebView           *ephy_web_extension_manager_get_background_web_view         (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension);
-
+GtkWidget               *ephy_web_extension_manager_create_browser_popup           (EphyWebExtensionManager *self,
+                                                                                    EphyWebExtension        *web_extension);
 void                     ephy_web_extension_manager_handle_notifications_action     (EphyWebExtensionManager *self,
                                                                                      GVariant                *params);
 
@@ -101,6 +103,10 @@ void                     ephy_web_extension_manager_emit_in_tab_with_reply      
                                                                                      WebKitWebView           *target_web_view,
                                                                                      const char              *sender_json,
                                                                                      GTask                   *reply_task);
+void                     ephy_web_extension_manager_emit_in_background_view         (EphyWebExtensionManager *self,
+                                                                                     EphyWebExtension        *web_extension,
+                                                                                     const char              *name,
+                                                                                     const char              *json);
 
 GtkWidget                *ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension        *web_extension);
 

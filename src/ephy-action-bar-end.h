@@ -38,13 +38,12 @@ void              ephy_action_bar_end_show_downloads            (EphyActionBarEn
 void              ephy_action_bar_end_show_bookmarks            (EphyActionBarEnd *action_bar_end);
 GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEnd *action_bar_end);
 
-void              ephy_action_bar_end_add_browser_action        (EphyActionBarEnd *action_bar_end,
-                                                                 GtkWidget        *action);
+void              ephy_action_bar_end_set_browser_actions       (EphyActionBarEnd *action_bar_end,
+                                                                 GListStore       *browser_actions);
 
 void              ephy_action_bar_end_set_show_bookmark_button (EphyActionBarEnd *action_bar_end,
                                                                 gboolean          show);
 
 void              ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd       *action_bar_end,
                                                                EphyBookmarkIconState  state);
-
 G_END_DECLS

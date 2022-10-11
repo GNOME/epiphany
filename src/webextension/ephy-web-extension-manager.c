@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "ephy-browser-action.h"
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-prefs.h"
@@ -58,7 +59,9 @@ struct _EphyWebExtensionManager {
   GCancellable *cancellable;
   GPtrArray *web_extensions;
   GHashTable *page_action_map;
+
   GHashTable *browser_action_map;
+  GListStore *browser_actions;
 
   GHashTable *user_agent_overrides;
 
@@ -87,6 +90,7 @@ EphyWebExtensionApiHandler api_handlers[] = {
 
 enum {
   CHANGED,
+  SHOW_BROWSER_ACTION,
   LAST_SIGNAL
 };
 
@@ -207,12 +211,6 @@ ephy_web_extension_manager_scan_directory_async (EphyWebExtensionManager *self,
 }
 
 static void
-destroy_widget_list (GSList *widget_list)
-{
-  g_slist_free_full (widget_list, (GDestroyNotify)gtk_widget_destroy);
-}
-
-static void
 ephy_webextension_scheme_cb (WebKitURISchemeRequest *request,
                              gpointer                user_data)
 {
@@ -269,7 +267,8 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->background_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)gtk_widget_destroy);
   self->popup_web_views = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_ptr_array_free);
   self->page_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_hash_table_destroy);
-  self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)destroy_widget_list);
+  self->browser_action_map = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_object_unref);
+  self->browser_actions = g_list_store_new (EPHY_TYPE_BROWSER_ACTION);
   self->pending_messages = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_hash_table_destroy);
   self->web_extensions = g_ptr_array_new_full (0, g_object_unref);
   self->user_agent_overrides = create_user_agent_overrides ();
@@ -284,8 +283,12 @@ ephy_web_extension_manager_dispose (GObject *object)
 
   ephy_web_extension_api_downloads_dispose (self);
 
+  g_list_store_remove_all (self->browser_actions);
+
   g_clear_pointer (&self->background_web_views, g_hash_table_destroy);
   g_clear_pointer (&self->popup_web_views, g_hash_table_destroy);
+  g_clear_object (&self->browser_actions);
+  g_clear_pointer (&self->browser_action_map, g_hash_table_destroy);
   g_clear_pointer (&self->page_action_map, g_hash_table_destroy);
   g_clear_pointer (&self->pending_messages, g_hash_table_destroy);
   g_clear_pointer (&self->web_extensions, g_ptr_array_unref);
@@ -306,6 +309,14 @@ ephy_web_extension_manager_class_init (EphyWebExtensionManagerClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  signals[SHOW_BROWSER_ACTION] =
+    g_signal_new ("show-browser-action",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1, EPHY_TYPE_BROWSER_ACTION);
 }
 
 static void
@@ -1066,17 +1077,20 @@ ephy_web_extension_manager_register_popup_view (EphyWebExtensionManager *manager
   g_signal_connect (web_view, "destroy", G_CALLBACK (on_popup_view_destroyed), web_extension);
 }
 
-static GtkWidget *
-create_browser_popup (EphyWebExtension *web_extension)
+GtkWidget *
+ephy_web_extension_manager_create_browser_popup (EphyWebExtensionManager *self,
+                                                 EphyWebExtension        *web_extension)
 {
-  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   GtkWidget *web_view;
   g_autofree char *popup_uri = NULL;
   const char *popup;
 
   web_view = ephy_web_extensions_manager_create_web_extensions_webview (web_extension);
+  gtk_widget_set_hexpand (web_view, TRUE);
+  gtk_widget_set_vexpand (web_view, TRUE);
   gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
-  ephy_web_extension_manager_register_popup_view (manager, web_extension, web_view);
+
+  ephy_web_extension_manager_register_popup_view (self, web_extension, web_view);
 
   popup = ephy_web_extension_get_browser_popup (web_extension);
   popup_uri = g_strdup_printf ("ephy-webextension://%s/%s", ephy_web_extension_get_guid (web_extension), popup);
@@ -1084,75 +1098,6 @@ create_browser_popup (EphyWebExtension *web_extension)
   g_signal_connect (web_view, "load-changed", G_CALLBACK (on_popup_load_changed), NULL);
 
   return web_view;
-}
-
-static gboolean
-on_browser_action_clicked (GtkWidget *event_box,
-                           gpointer   user_data)
-{
-  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
-  EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
-  g_autofree char *script = NULL;
-  WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
-
-  script = g_strdup_printf ("window.browser.browserAction.onClicked._emit();");
-
-  webkit_web_view_run_javascript (web_view,
-                                  script,
-                                  NULL,
-                                  NULL,
-                                  NULL);
-
-  return GDK_EVENT_STOP;
-}
-
-static void
-on_browser_action_visible_changed (GtkWidget  *popover,
-                                   GParamSpec *pspec,
-                                   gpointer    user_data)
-{
-  EphyWebExtension *web_extension = EPHY_WEB_EXTENSION (user_data);
-  GtkWidget *child;
-
-  if (gtk_widget_get_visible (popover)) {
-    child = create_browser_popup (web_extension);
-    gtk_container_add (GTK_CONTAINER (popover), child);
-  } else {
-    child = gtk_bin_get_child (GTK_BIN (popover));
-    gtk_container_remove (GTK_CONTAINER (popover), child);
-  }
-}
-
-GtkWidget *
-create_browser_action (EphyWebExtension *web_extension,
-                       EphyWindow       *window)
-{
-  GtkWidget *button;
-  GtkWidget *image;
-  GtkWidget *popover;
-  GdkPixbuf *pixbuf;
-
-  pixbuf = ephy_web_extension_browser_action_get_icon (web_extension, 16);
-  if (pixbuf)
-    image = gtk_image_new_from_pixbuf (pixbuf);
-  else
-    image = gtk_image_new_from_icon_name ("application-x-addon-symbolic", GTK_ICON_SIZE_BUTTON);
-
-  if (ephy_web_extension_get_browser_popup (web_extension)) {
-    button = gtk_menu_button_new ();
-    popover = gtk_popover_new (NULL);
-    g_signal_connect (popover, "notify::visible", G_CALLBACK (on_browser_action_visible_changed), web_extension);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
-    gtk_button_set_image (GTK_BUTTON (button), image);
-  } else {
-    button = gtk_button_new ();
-    g_signal_connect_object (button, "clicked", G_CALLBACK (on_browser_action_clicked), web_extension, 0);
-    gtk_button_set_image (GTK_BUTTON (button), image);
-  }
-
-  gtk_widget_set_visible (button, TRUE);
-
-  return button;
 }
 
 void
@@ -1172,16 +1117,6 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
     EphyWebView *web_view = ephy_embed_get_web_view (EPHY_EMBED (page));
 
     ephy_web_extension_manager_add_web_extension_to_webview (self, web_extension, window, web_view);
-  }
-
-  if (ephy_web_extension_has_browser_action (web_extension)) {
-    GtkWidget *browser_action_widget = create_browser_action (web_extension, window);
-    GSList *widget_list = g_hash_table_lookup (self->browser_action_map, web_extension);
-
-    ephy_header_bar_add_browser_action (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)), browser_action_widget);
-
-    g_hash_table_steal (self->browser_action_map, web_extension); /* Avoid freeing list. */
-    g_hash_table_insert (self->browser_action_map, web_extension, g_slist_append (widget_list, browser_action_widget));
   }
 
   ephy_web_extension_manager_update_location_entry (self, window);
@@ -1356,6 +1291,23 @@ application_window_removed_cb (EphyShell        *shell,
   ephy_web_extension_manager_emit_in_extension_views (manager, web_extension, "windows.onRemoved", window_json);
 }
 
+static void
+remove_browser_action (EphyWebExtensionManager *self,
+                       EphyWebExtension        *web_extension)
+{
+  EphyBrowserAction *action;
+  guint position;
+
+  action = g_hash_table_lookup (self->browser_action_map, web_extension);
+  if (!action)
+    return;
+
+  g_assert (g_list_store_find (self->browser_actions, action, &position));
+  g_list_store_remove (self->browser_actions, position);
+
+  g_hash_table_remove (self->browser_action_map, web_extension);
+}
+
 void
 ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
                                        EphyWebExtension        *web_extension,
@@ -1401,42 +1353,33 @@ ephy_web_extension_manager_set_active (EphyWebExtensionManager *self,
     if (ephy_web_extension_has_background_web_view (web_extension))
       run_background_script (self, web_extension);
 
+    if (ephy_web_extension_has_browser_action (web_extension)) {
+      EphyBrowserAction *action = ephy_browser_action_new (web_extension);
+      g_list_store_append (self->browser_actions, action);
+      g_hash_table_insert (self->browser_action_map, web_extension, g_steal_pointer (&action));
+    }
+
     ephy_web_extension_api_commands_init (web_extension);
   } else {
     g_signal_handlers_disconnect_by_data (shell, web_extension);
 
-    g_hash_table_remove (self->browser_action_map, web_extension);
+    remove_browser_action (self, web_extension);
     g_hash_table_remove (self->background_web_views, web_extension);
     g_object_set_data (G_OBJECT (web_extension), "alarms", NULL); /* Set in alarms.c */
     ephy_web_extension_api_commands_dispose (web_extension);
   }
 }
 
-gint
-get_browser_action_for_window (GtkWidget *widget,
-                               GtkWidget *window)
-{
-  return gtk_widget_get_toplevel (widget) != window;
-}
-
-
 void
-ephy_web_extension_manager_activate_browser_action (EphyWebExtensionManager *self,
-                                                    EphyWebExtension        *web_extension,
-                                                    EphyWindow              *window)
+ephy_web_extension_manager_show_browser_action (EphyWebExtensionManager *self,
+                                                EphyWebExtension        *web_extension)
 {
-  GSList *table, *l;
-  GtkWidget *button;
+  EphyBrowserAction *action = EPHY_BROWSER_ACTION (g_hash_table_lookup (self->browser_action_map, web_extension));
 
-  table = g_hash_table_lookup (self->browser_action_map, web_extension);
-  if (table) {
-    l = g_slist_find_custom (table, window, (GCompareFunc)get_browser_action_for_window);
+  if (!action || ephy_browser_action_activate (action))
+    return;
 
-    g_assert (l && l->data);
-
-    button = l->data;
-    gtk_widget_mnemonic_activate (button, FALSE);
-  }
+  g_signal_emit (self, signals[SHOW_BROWSER_ACTION], 0, action);
 }
 
 GtkWidget *
@@ -1452,6 +1395,12 @@ ephy_web_extension_manager_get_page_action (EphyWebExtensionManager *self,
     ret = g_hash_table_lookup (table, web_view);
 
   return ret;
+}
+
+GListStore *
+ephy_web_extension_manager_get_browser_actions (EphyWebExtensionManager *self)
+{
+  return self->browser_actions;
 }
 
 void
@@ -1651,6 +1600,24 @@ on_extension_emit_ready (GObject      *source,
 
   if (error)
     g_warning ("Emitting in view errored: %s", error->message);
+}
+
+void
+ephy_web_extension_manager_emit_in_background_view (EphyWebExtensionManager *self,
+                                                    EphyWebExtension        *web_extension,
+                                                    const char              *name,
+                                                    const char              *json)
+{
+  g_autofree char *script = NULL;
+  WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
+
+  script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
+
+  webkit_web_view_run_javascript (web_view,
+                                  script,
+                                  NULL,
+                                  NULL,
+                                  NULL);
 }
 
 static void
