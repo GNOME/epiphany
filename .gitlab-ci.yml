@@ -89,8 +89,17 @@ flatpak stable:
   only:
     - gnome-*
 
+flatpak master gtk3:
+  extends: '.flatpak'
+  variables:
+    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
+  only:
+    - master
+
 flatpak master:
   extends: '.flatpak'
+  before_script:
+    - git checkout wip/exalm/gtk4
   variables:
     CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
