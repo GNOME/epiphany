@@ -941,6 +941,7 @@ decide_policy_cb (WebKitWebView            *web_view,
   const char *request_uri;
   gboolean is_main_resource;
 
+  /* Non-response policy decisions are handled in EphyWindow instead. */
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
 

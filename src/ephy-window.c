@@ -2319,6 +2319,7 @@ decide_policy_cb (WebKitWebView            *web_view,
   WebKitURIRequest *request;
   const char *request_uri;
 
+  /* Response policy decisions are handled in EphyWebView instead. */
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
       decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
     return FALSE;
