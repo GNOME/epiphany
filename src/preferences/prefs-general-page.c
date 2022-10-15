@@ -287,6 +287,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), row, len - 1);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 add_lang_dialog_response_cb (GtkWidget        *widget,
                              int               response,
@@ -470,6 +471,7 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
 
   return GTK_DIALOG (ad);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static char *
 language_for_locale (const char *locale)

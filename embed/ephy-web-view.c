@@ -3931,6 +3931,7 @@ ephy_web_view_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 ephy_web_view_constructed (GObject *object)
 {
@@ -3961,6 +3962,7 @@ ephy_web_view_constructed (GObject *object)
   cors_allowlist[1] = NULL;
   webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), (const char * const *)cors_allowlist);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_web_view_init (EphyWebView *web_view)

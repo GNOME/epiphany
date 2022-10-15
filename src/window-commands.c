@@ -123,6 +123,7 @@ static struct import_option import_options[] = {
   { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_exists }
 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 combo_box_changed_cb (GtkComboBox *combo_box,
                       GtkButton   *button)
@@ -138,6 +139,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
   else if (import_options[active].type == IMPORT_TYPE_IMPORT)
     gtk_button_set_label (button, _("I_mport"));
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GSList *
 get_firefox_profiles (void)
@@ -216,6 +218,7 @@ chromium_exists (void)
   return g_file_test (filename, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkTreeModel *
 create_tree_model (int *out_id_column)
 {
@@ -243,6 +246,7 @@ create_tree_model (int *out_id_column)
 
   return GTK_TREE_MODEL (list_store);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 show_import_export_result (GtkWindow  *parent,
@@ -505,6 +509,7 @@ dialog_bookmarks_import_from_chromium (GtkWindow *parent)
                              _("Bookmarks successfully imported!"));
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_bookmarks_import_cb (GtkDialog       *dialog,
                             GtkResponseType  response,
@@ -600,6 +605,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 bookmarks_export_cb (GObject      *source_object,
@@ -698,6 +704,7 @@ static struct import_option import_passwords_options[] = {
   { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_passwords_exists }
 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkTreeModel *
 create_import_passwords_tree_model (int *out_id_column)
 {
@@ -725,6 +732,7 @@ create_import_passwords_tree_model (int *out_id_column)
 
   return GTK_TREE_MODEL (list_store);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 dialog_password_import_cb (GObject      *source_object,
@@ -739,6 +747,7 @@ dialog_password_import_cb (GObject      *source_object,
                              _("Passwords successfully imported!"));
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_passwords_import_cb (GtkDialog   *dialog,
                             int          response,
@@ -853,6 +862,7 @@ window_cmd_import_passwords (GSimpleAction *action,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 void
 window_cmd_show_history (GSimpleAction *action,

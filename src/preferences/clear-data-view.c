@@ -87,6 +87,7 @@ get_website_data_manger (void)
   return webkit_web_context_get_website_data_manager (web_context);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 website_data_fetched_cb (WebKitWebsiteDataManager *manager,
                          GAsyncResult             *result,
@@ -392,6 +393,7 @@ row_visible_func (GtkTreeModel  *model,
 
   return visible;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 clear_data_view_dispose (GObject *object)
@@ -427,6 +429,7 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 clear_data_view_init (ClearDataView *clear_data_view)
 {
@@ -447,3 +450,4 @@ clear_data_view_init (ClearDataView *clear_data_view)
                                      (GAsyncReadyCallback)website_data_fetched_cb,
                                      clear_data_view);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS

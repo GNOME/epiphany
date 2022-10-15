@@ -73,6 +73,7 @@ struct _EphySecurityPopover {
 
 G_DEFINE_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 set_permission_ads_combobox_state (EphyPermissionsManager *permissions_manager,
                                    gint                    permission_id,
@@ -124,6 +125,7 @@ set_permission_combobox_state (EphyPermissionsManager *permissions_manager,
       break;
   }
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_security_popover_set_address (EphySecurityPopover *popover,
@@ -367,6 +369,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static gboolean
 on_ad_combobox_changed (GtkComboBox         *widget,
                         EphySecurityPopover *popover)
@@ -394,6 +397,7 @@ on_ad_combobox_changed (GtkComboBox         *widget,
 
   return FALSE;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 handle_permission_combobox_changed (EphySecurityPopover *popover,
@@ -429,6 +433,7 @@ handle_permission_combobox_changed (EphySecurityPopover *popover,
                                            permission);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 on_notification_combobox_changed (GtkComboBox         *box,
                                   EphySecurityPopover *popover)
@@ -506,6 +511,7 @@ add_permission_combobox (EphySecurityPopover *popover,
 
   return widget;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_security_popover_init (EphySecurityPopover *popover)

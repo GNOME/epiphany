@@ -89,6 +89,7 @@ populate_row_async_data_free (PopulateRowAsyncData *data)
   g_free (data);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 treeview_row_activated_cb (GtkTreeView       *view,
                            GtkTreePath       *path,
@@ -213,6 +214,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
                                          data);
   }
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 synced_tabs_dialog_populate_model (SyncedTabsDialog *dialog)
@@ -317,6 +319,7 @@ synced_tabs_dialog_class_init (SyncedTabsDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, treeview_row_activated_cb);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 {
@@ -329,6 +332,7 @@ synced_tabs_dialog_init (SyncedTabsDialog *dialog)
   context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
   dialog->database = webkit_web_context_get_favicon_database (context);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 SyncedTabsDialog *
 synced_tabs_dialog_new (EphyOpenTabsManager *manager)

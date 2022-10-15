@@ -36,6 +36,7 @@ struct _EphyWebappAdditionalURLsDialog {
 
 G_DEFINE_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, GTK_TYPE_DIALOG)
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static gboolean
 add_to_builder (GtkTreeModel    *model,
                 GtkTreePath     *path,
@@ -85,6 +86,7 @@ on_cell_edited (GtkCellRendererText            *cell,
 
   ephy_webapp_additional_urls_update_settings (dialog);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 update_selection_actions (GActionMap *action_map,
@@ -96,6 +98,7 @@ update_selection_actions (GActionMap *action_map,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), has_selection);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 on_treeview_selection_changed (GtkTreeSelection               *selection,
                                EphyWebappAdditionalURLsDialog *dialog)
@@ -103,6 +106,7 @@ on_treeview_selection_changed (GtkTreeSelection               *selection,
   update_selection_actions (G_ACTION_MAP (dialog->action_group),
                             gtk_tree_selection_count_selected_rows (selection) > 0);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogClass *klass)
@@ -121,6 +125,7 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
   gtk_widget_class_bind_template_callback (widget_class, on_cell_edited);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 add_new (GSimpleAction *action,
          GVariant      *parameter,
@@ -213,6 +218,7 @@ forget_all (GSimpleAction *action,
   gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
   g_settings_set_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS, NULL);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GActionGroup *
 create_action_group (EphyWebappAdditionalURLsDialog *dialog)
@@ -230,6 +236,7 @@ create_action_group (EphyWebappAdditionalURLsDialog *dialog)
   return G_ACTION_GROUP (group);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 show_dialog_cb (GtkWidget *widget,
                 gpointer   user_data)
@@ -246,6 +253,7 @@ show_dialog_cb (GtkWidget *widget,
   }
   g_strfreev (urls);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_webapp_additional_urls_dialog_init (EphyWebappAdditionalURLsDialog *dialog)
