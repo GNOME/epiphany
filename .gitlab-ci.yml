@@ -99,7 +99,6 @@ flatpak master gtk3:
 flatpak master:
   extends: '.flatpak'
   before_script:
-    - git config --add safe.directory .
     - git checkout wip/exalm/gtk4
   variables:
     CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
