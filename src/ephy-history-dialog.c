@@ -206,14 +206,12 @@ set_selection_active (EphyHistoryDialog *self,
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
     GtkWidget *check_button = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "check-button"));
-    GtkWidget *separator = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "separator"));
 
     /* Uncheck all rows when toggling selection mode */
     gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), FALSE);
 
-    /* Show/Hide row selection widgets (check_button + separator) */
+    /* Show/Hide row selection widgets (check_button) */
     gtk_widget_set_visible (check_button, selection_active);
-    gtk_widget_set_visible (separator, selection_active);
   }
 
   update_ui_state (self);
@@ -456,7 +454,6 @@ create_row (EphyHistoryDialog *self,
   GtkWidget *icon;
   GtkWidget *date;
   GtkWidget *row;
-  GtkWidget *separator;
   GtkWidget *check_button;
   GtkWidget *copy_url_button;
   g_autofree char *title_escaped = g_markup_escape_text (url->title, -1);
@@ -488,12 +485,6 @@ create_row (EphyHistoryDialog *self,
   gtk_label_set_ellipsize (GTK_LABEL (date), PANGO_ELLIPSIZE_END);
   gtk_label_set_xalign (GTK_LABEL (date), 0);
 
-  /* Separator */
-  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-  g_object_set_data (G_OBJECT (row), "separator", separator);
-  gtk_widget_set_margin_top (separator, 8);
-  gtk_widget_set_margin_bottom (separator, 8);
-
   /* CheckButton */
   check_button = gtk_check_button_new ();
   g_object_set_data (G_OBJECT (row), "check-button", check_button);
@@ -505,20 +496,18 @@ create_row (EphyHistoryDialog *self,
   copy_url_button = gtk_button_new_from_icon_name ("edit-copy-symbolic");
   gtk_widget_set_valign (copy_url_button, GTK_ALIGN_CENTER);
   gtk_widget_set_tooltip_text (copy_url_button, _("Copy URL"));
+  gtk_widget_add_css_class (copy_url_button, "flat");
   g_signal_connect (copy_url_button, "clicked", G_CALLBACK (row_copy_url_button_clicked), row);
 
-  adw_action_row_add_prefix (ADW_ACTION_ROW (row), separator);
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), check_button);
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), date);
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), copy_url_button);
 
   gtk_widget_set_sensitive (check_button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
-  /* Hide the Separator and CheckButton if selection isn't active */
-  if (!self->selection_active) {
-    gtk_widget_set_visible (separator, FALSE);
+  /* Hide the CheckButton if selection isn't active */
+  if (!self->selection_active)
     gtk_widget_set_visible (check_button, FALSE);
-  }
 
   return row;
 }
