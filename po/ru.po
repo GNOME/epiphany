@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-08-01 21:13+0000\n"
-"PO-Revision-Date: 2022-08-02 19:47+0300\n"
+"POT-Creation-Date: 2022-10-13 15:11+0000\n"
+"PO-Revision-Date: 2022-10-13 19:45+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -25,12 +25,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
 #: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:409 src/window-commands.c:1005
+#: src/ephy-main.c:409 src/window-commands.c:1013
 msgid "Web"
 msgstr "Веб-браузер"
 
@@ -68,8 +68,8 @@ msgstr "Просмотр веб-страниц"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
-msgid "web;browser;internet;"
-msgstr "веб;браузер;интернет;"
+msgid "web;browser;internet;epiphany;"
+msgstr "веб;браузер;интернет;web;browser;internet;epiphany;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -1026,7 +1026,7 @@ msgstr "Версия %s"
 msgid "About Web"
 msgstr "О приложении"
 
-#: embed/ephy-about-handler.c:195 src/window-commands.c:1007
+#: embed/ephy-about-handler.c:195 src/window-commands.c:1015
 msgid "Epiphany Technology Preview"
 msgstr "Предварительный выпуск Epiphany"
 
@@ -1114,7 +1114,7 @@ msgid "Select a Directory"
 msgstr "Выберите каталог"
 
 #: embed/ephy-download.c:681 embed/ephy-download.c:687
-#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
+#: src/preferences/prefs-general-page.c:726 src/window-commands.c:321
 msgid "_Select"
 msgstr "_Выбрать"
 
@@ -1124,10 +1124,10 @@ msgstr "_Выбрать"
 #: src/preferences/prefs-general-page.c:727
 #: src/resources/gtk/firefox-sync-dialog.ui:166
 #: src/resources/gtk/history-dialog.ui:91
-#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:309
-#: src/window-commands.c:381 src/window-commands.c:428
-#: src/window-commands.c:554 src/window-commands.c:654
-#: src/window-commands.c:798
+#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:319
+#: src/window-commands.c:391 src/window-commands.c:438
+#: src/window-commands.c:559 src/window-commands.c:660
+#: src/window-commands.c:805
 msgid "_Cancel"
 msgstr "_Отмена"
 
@@ -1570,7 +1570,7 @@ msgstr "Найти следующее вхождение строки поиск
 msgid "%s is not a valid URI"
 msgstr "%s не является допустимым URI"
 
-#: embed/ephy-web-view.c:202 src/window-commands.c:1365
+#: embed/ephy-web-view.c:202 src/window-commands.c:1373
 msgid "Open"
 msgstr "Открыть"
 
@@ -1583,7 +1583,7 @@ msgid "_Never Save"
 msgstr "Не сохранять _никогда"
 
 #: embed/ephy-web-view.c:378 lib/widgets/ephy-file-chooser.c:124
-#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:653
+#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:659
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -1626,8 +1626,8 @@ msgid "_Wait"
 msgstr "_Подождать"
 
 #: embed/ephy-web-view.c:896
-msgid "_Kill"
-msgstr "_Закрыть"
+msgid "Force _Stop"
+msgstr "Принудительно _остановить"
 
 #: embed/ephy-web-view.c:1107 embed/ephy-web-view.c:1228
 #: lib/widgets/ephy-security-popover.c:512
@@ -2417,7 +2417,7 @@ msgid "Paste and _Go"
 msgstr "Вставить и _перейти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:933
 msgid "_Undo"
 msgstr "_Отменить"
 
@@ -2670,7 +2670,7 @@ msgid "Web options"
 msgstr "Параметры веб-браузера"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:90
+#: src/ephy-tab-view.c:637 src/resources/gtk/action-bar-start.ui:90
 msgid "Open a new tab"
 msgstr "Открыть в новой вкладке"
 
@@ -2713,182 +2713,182 @@ msgstr "Удалить выбранное веб-расширение"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Открытый файл (manifest.json/xpi)"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:934
 msgid "Re_do"
 msgstr "От_менить"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:937
 msgid "Cu_t"
 msgstr "_Вырезать"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:938
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:939
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:940
 msgid "_Paste Text Only"
 msgstr "_Вставить только текст"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:941
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:943
 msgid "S_end Link by Email…"
 msgstr "_Отправить ссылку по почте…"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:945
 msgid "_Reload"
 msgstr "_Обновить"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:946
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:947
 msgid "_Forward"
 msgstr "_Вперёд"
 
 #. Bookmarks
-#: src/ephy-window.c:951
+#: src/ephy-window.c:950
 msgid "Add Boo_kmark…"
 msgstr "Добавить _закладку…"
 
 #. Links.
-#: src/ephy-window.c:955
+#: src/ephy-window.c:954
 msgid "Open Link in New _Window"
 msgstr "Открыть ссылку в _новом окне"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:955
 msgid "Open Link in New _Tab"
 msgstr "Открыть ссылку в новой _вкладке"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:956
 msgid "Open Link in I_ncognito Window"
 msgstr "Открыть ссылку в _новом приватном окне"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:957
 msgid "_Save Link As…"
 msgstr "Сохранить сс_ылку как…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:958
 msgid "_Copy Link Address"
 msgstr "_Копировать адрес ссылки"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:959
 msgid "_Copy E-mail Address"
 msgstr "_Копировать адрес e-mail"
 
 #. Images.
-#: src/ephy-window.c:964
+#: src/ephy-window.c:963
 msgid "View _Image in New Tab"
 msgstr "_Открыть изображение в новой вкладке"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:964
 msgid "Copy I_mage Address"
 msgstr "_Копировать адрес изображения"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:965
 msgid "_Save Image As…"
 msgstr "Сохранить _изображение как…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:966
 msgid "Set as _Wallpaper"
 msgstr "Использовать как _фон рабочего стола"
 
 #. Video.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:970
 msgid "Open Video in New _Window"
 msgstr "Открыть видео в _новом окне"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:971
 msgid "Open Video in New _Tab"
 msgstr "Открыть видео в новой _вкладке"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:972
 msgid "_Save Video As…"
 msgstr "_Сохранить видео как…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:973
 msgid "_Copy Video Address"
 msgstr "_Копировать адрес видео"
 
 #. Audio.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:977
 msgid "Open Audio in New _Window"
 msgstr "Открыть аудио в _новом окне"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:978
 msgid "Open Audio in New _Tab"
 msgstr "Открыть аудио в новой _вкладке"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:979
 msgid "_Save Audio As…"
 msgstr "_Сохранить аудио как…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:980
 msgid "_Copy Audio Address"
 msgstr "_Копировать адрес аудио"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:986
 msgid "Save Pa_ge As…"
 msgstr "Сохранить _страницу как…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:987
 msgid "_Take Screenshot…"
 msgstr "_Сделать снимок экрана…"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:988
 msgid "_Page Source"
 msgstr "_Исходный код страницы"
 
-#: src/ephy-window.c:1373
+#: src/ephy-window.c:1372
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Поиск «%s» в интернете"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1401
 msgid "Open Link"
 msgstr "Открыть ссылку"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1403
 msgid "Open Link In New Tab"
 msgstr "Открыть ссылку в новой вкладке"
 
-#: src/ephy-window.c:1406
+#: src/ephy-window.c:1405
 msgid "Open Link In New Window"
 msgstr "Открыть ссылку в новом окне"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1407
 msgid "Open Link In Incognito Window"
 msgstr "Открыть ссылку в окне инкогнито"
 
-#: src/ephy-window.c:2854 src/ephy-window.c:4183
+#: src/ephy-window.c:2841 src/ephy-window.c:4157
 msgid "Do you want to leave this website?"
 msgstr "Покинуть этот веб-сайт?"
 
-#: src/ephy-window.c:2855 src/ephy-window.c:4184 src/window-commands.c:1213
+#: src/ephy-window.c:2842 src/ephy-window.c:4158 src/window-commands.c:1221
 msgid "A form you modified has not been submitted."
 msgstr "Изменённая вами форма не может быть отправлена."
 
-#: src/ephy-window.c:2856 src/ephy-window.c:4185 src/window-commands.c:1215
+#: src/ephy-window.c:2843 src/ephy-window.c:4159 src/window-commands.c:1223
 msgid "_Discard form"
 msgstr "_Отменить изменения"
 
-#: src/ephy-window.c:2877
+#: src/ephy-window.c:2864
 msgid "Download operation"
 msgstr "Операция загрузки"
 
-#: src/ephy-window.c:2879
+#: src/ephy-window.c:2866
 msgid "Show details"
 msgstr "Показать детали"
 
-#: src/ephy-window.c:2881
+#: src/ephy-window.c:2868
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2897,36 +2897,36 @@ msgstr[1] "Активны %d операции загрузки"
 msgstr[2] "Активно %d операций загрузки"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3375
+#: src/ephy-window.c:3349
 msgid "View open tabs"
 msgstr "Просмотреть открытые вкладки"
 
-#: src/ephy-window.c:3505
+#: src/ephy-window.c:3479
 msgid "Set Web as your default browser?"
 msgstr "Установить Веб-браузер в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3507
+#: src/ephy-window.c:3481
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 "Установить Epiphany Technology Preview в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3519
+#: src/ephy-window.c:3493
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:3520
+#: src/ephy-window.c:3494
 msgid "_No"
 msgstr "_Нет"
 
-#: src/ephy-window.c:4317
+#: src/ephy-window.c:4291
 msgid "There are multiple tabs open."
 msgstr "Открыто несколько вкладок."
 
-#: src/ephy-window.c:4318
+#: src/ephy-window.c:4292
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Если вы закроете это окно, все открытые вкладки будут потеряны"
 
-#: src/ephy-window.c:4319
+#: src/ephy-window.c:4293
 msgid "C_lose tabs"
 msgstr "_Закрыть вкладки"
 
@@ -3131,17 +3131,22 @@ msgid "Web profile migrator options"
 msgstr "Параметры помощника переноса профилей"
 
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:18
+#: src/resources/gtk/action-bar-end.ui:12
 msgid "View downloads"
-msgstr "Просмотреть загрузки"
+msgstr "Просмотр загрузок"
+
+#. Translators: tooltip for the webextension actions button
+#: src/resources/gtk/action-bar-end.ui:49
+msgid "View extension actions"
+msgstr "Просмотр действий расширения"
 
 #. Translators: tooltip for the bookmark button
-#: src/resources/gtk/action-bar-end.ui:56
+#: src/resources/gtk/action-bar-end.ui:65
 msgid "Bookmark page"
 msgstr "Добавить страницу в закладки"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:73
+#: src/resources/gtk/action-bar-end.ui:82
 msgid "View and manage your bookmarks"
 msgstr "Просмотр и управление закладками"
 
@@ -3163,7 +3168,7 @@ msgstr "Перейти на вашу домашнюю страницу"
 #. Translators: tooltip for the page switcher button
 #: src/resources/gtk/action-bar.ui:23
 msgid "View open pages"
-msgstr "Просмотреть открытые страницы"
+msgstr "Просмотр открытых страниц"
 
 #: src/resources/gtk/bookmark-properties.ui:16
 msgid "Bookmark"
@@ -4181,78 +4186,78 @@ msgstr "Веб-приложение '%s' не может быть удалено
 msgid "Options for %s"
 msgstr "Параметры для %s"
 
-#: src/window-commands.c:113
+#: src/window-commands.c:119
 msgid "GVDB File"
 msgstr "Файл GVDB"
 
-#: src/window-commands.c:114
+#: src/window-commands.c:120
 msgid "HTML File"
 msgstr "Файл HTML"
 
-#: src/window-commands.c:115
+#: src/window-commands.c:121
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:693
+#: src/window-commands.c:122 src/window-commands.c:699
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:694
+#: src/window-commands.c:123 src/window-commands.c:700
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:556
-#: src/window-commands.c:772
+#: src/window-commands.c:137 src/window-commands.c:561
+#: src/window-commands.c:778
 msgid "Ch_oose File"
 msgstr "В_ыбрать файл"
 
-#: src/window-commands.c:133 src/window-commands.c:380
-#: src/window-commands.c:427 src/window-commands.c:774
-#: src/window-commands.c:800
+#: src/window-commands.c:139 src/window-commands.c:390
+#: src/window-commands.c:437 src/window-commands.c:780
+#: src/window-commands.c:807
 msgid "I_mport"
 msgstr "И_мпортировать"
 
-#: src/window-commands.c:293 src/window-commands.c:368
-#: src/window-commands.c:415 src/window-commands.c:458
-#: src/window-commands.c:481 src/window-commands.c:497
+#: src/window-commands.c:303 src/window-commands.c:378
+#: src/window-commands.c:425 src/window-commands.c:468
+#: src/window-commands.c:491 src/window-commands.c:507
 msgid "Bookmarks successfully imported!"
 msgstr "Закладки успешно импортированы!"
 
-#: src/window-commands.c:306
+#: src/window-commands.c:316
 msgid "Select Profile"
 msgstr "Выбрать профиль"
 
-#: src/window-commands.c:377 src/window-commands.c:424
-#: src/window-commands.c:650
+#: src/window-commands.c:387 src/window-commands.c:434
+#: src/window-commands.c:656
 msgid "Choose File"
 msgstr "Выбрать файл"
 
-#: src/window-commands.c:551
+#: src/window-commands.c:556
 msgid "Import Bookmarks"
 msgstr "Импортировать закладки"
 
-#: src/window-commands.c:570 src/window-commands.c:814
+#: src/window-commands.c:575 src/window-commands.c:821
 msgid "From:"
 msgstr "Из:"
 
-#: src/window-commands.c:612
+#: src/window-commands.c:618
 msgid "Bookmarks successfully exported!"
 msgstr "Закладки успешно экспортированы!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:658
+#: src/window-commands.c:664
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
-#: src/window-commands.c:731
+#: src/window-commands.c:741
 msgid "Passwords successfully imported!"
 msgstr "Пароли успешно импортированы!"
 
-#: src/window-commands.c:795
+#: src/window-commands.c:802
 msgid "Import Passwords"
 msgstr "Импорт паролей"
 
-#: src/window-commands.c:988
+#: src/window-commands.c:996
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -4263,15 +4268,15 @@ msgstr ""
 
 # Today I am happy to unveil GNOME Web Canary which aims to provide bleeding edge, most likely very unstable builds of Epiphany, depending on daily builds of the WebKitGTK development version. Read on to know more about this.
 # https://base-art.net/Articles/introducing-the-gnome-web-canary-flavor/
-#: src/window-commands.c:1002
+#: src/window-commands.c:1010
 msgid "Epiphany Canary"
 msgstr "Веб-бразузер Epiphany Canary"
 
-#: src/window-commands.c:1018
+#: src/window-commands.c:1026
 msgid "Website"
 msgstr "Веб-сайт"
 
-#: src/window-commands.c:1051
+#: src/window-commands.c:1059
 msgid "translator-credits"
 msgstr ""
 "Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012-2014.\n"
@@ -4281,39 +4286,39 @@ msgstr ""
 "Alexey Rubtsov <rushills@gmail.com>, 2021\n"
 "Aleksandr Melman <alexmelman88@gmail.com>, 2022"
 
-#: src/window-commands.c:1211
+#: src/window-commands.c:1219
 msgid "Do you want to reload this website?"
 msgstr "Вы хотите перезагрузить этот сайт?"
 
-#: src/window-commands.c:1813
+#: src/window-commands.c:1821
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Приложение «%s» готово к использованию"
 
-#: src/window-commands.c:1816
+#: src/window-commands.c:1824
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Приложение \"%s\" не может быть создано: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1825
+#: src/window-commands.c:1833
 msgid "Launch"
 msgstr "Запустить"
 
-#: src/window-commands.c:1896
+#: src/window-commands.c:1904
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Веб-приложение «%s» уже существует. Хотите его заменить?"
 
-#: src/window-commands.c:1899
+#: src/window-commands.c:1907
 msgid "Cancel"
 msgstr "Отменить"
 
-#: src/window-commands.c:1901
+#: src/window-commands.c:1909
 msgid "Replace"
 msgstr "Заменить"
 
-#: src/window-commands.c:1905
+#: src/window-commands.c:1913
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -4321,27 +4326,27 @@ msgstr ""
 "Приложение с таким именем уже существует. Его замена приведёт к перезаписи "
 "приложения."
 
-#: src/window-commands.c:2118 src/window-commands.c:2174
+#: src/window-commands.c:2126 src/window-commands.c:2182
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/window-commands.c:2139
+#: src/window-commands.c:2147
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2144
+#: src/window-commands.c:2152
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2195
+#: src/window-commands.c:2203
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2699
+#: src/window-commands.c:2707
 msgid "Enable caret browsing mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: src/window-commands.c:2702
+#: src/window-commands.c:2710
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4351,9 +4356,12 @@ msgstr ""
 "помещает на страницу курсор, позволяющий перемещаться по странице с помощью "
 "клавиатуры. Включить клавишную навигацию?"
 
-#: src/window-commands.c:2705
+#: src/window-commands.c:2713
 msgid "_Enable"
 msgstr "_Включить"
+
+#~ msgid "_Kill"
+#~ msgstr "_Закрыть"
 
 #~ msgid "You can clear stored personal data."
 #~ msgstr "Вы можете удалить сохранённые личные данные."
