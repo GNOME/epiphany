@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2020 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2022 Jamie Murphy
  *
  *  This file is part of Epiphany.
  *
@@ -20,16 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "ephy-window.h"
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WEB_EXTENSION_DIALOG (ephy_web_extension_dialog_get_type ())
+#define EPHY_TYPE_PREFS_EXTENSIONS_PAGE (prefs_extensions_page_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWebExtensionDialog, ephy_web_extension_dialog, EPHY, WEB_EXTENSION_DIALOG, GtkWindow)
-
-GtkWidget *ephy_web_extension_dialog_new (void);
+G_DECLARE_FINAL_TYPE (PrefsExtensionsPage, prefs_extensions_page, EPHY, PREFS_EXTENSIONS_PAGE, AdwPreferencesPage)
 
 G_END_DECLS

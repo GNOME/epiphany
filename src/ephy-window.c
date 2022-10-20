@@ -119,7 +119,6 @@ const struct {
   { "win.location-search", {"<Primary>K", NULL} },
   { "win.home", { "<alt>Home", NULL } },
   { "win.content", { "Escape", NULL } },
-  { "win.extensions", { NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -836,7 +835,6 @@ static const GActionEntry window_entries [] = {
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
   { "toggle-reader-mode", window_cmd_toggle_reader_mode },
-  { "extensions", window_cmd_extensions },
 
   { "select-all", window_cmd_select_all },
 
@@ -1105,21 +1103,6 @@ sync_tab_zoom (WebKitWebView *web_view,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_out);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "zoom-normal");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_normal);
-}
-
-static void
-sync_extensions (EphyWindow *window)
-{
-  gboolean enable_extensions;
-  GActionGroup *action_group;
-  GAction *action;
-
-  enable_extensions = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS);
-
-  action_group = ephy_window_get_action_group (window, "win");
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "extensions");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enable_extensions);
 }
 
 static void
@@ -3765,13 +3748,6 @@ ephy_window_constructed (GObject *object)
   ephy_window_set_chrome (window, chrome);
 
   ephy_web_extension_manager_install_actions (ephy_web_extension_manager_get_default (), window);
-
-  sync_extensions (window);
-  g_signal_connect_object (EPHY_SETTINGS_WEB,
-                           "changed::" EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
-                           G_CALLBACK (sync_extensions),
-                           window,
-                           G_CONNECT_SWAPPED);
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);

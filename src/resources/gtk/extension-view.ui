@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <menu id="menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open _Inspector</attribute>
+        <attribute name="action">prefs.inspector</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="EphyExtensionView" parent="AdwBin">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar" id="header_bar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle" id="window_title"/>
+            </property>
+            <child type="start">
+              <object class="GtkButton" id="back_button">
+                <property name="icon-name">go-previous-symbolic</property>
+                <signal name="clicked" handler="on_back_button_clicked"/>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkMenuButton" id="menu_button">
+                <property name="menu-model">menu</property>
+                <property name="icon-name">view-more-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesPage">
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwActionRow" id="author_row">
+                    <property name="title" translatable="yes">Author</property>
+                    <property name="visible">False</property>
+                    <child>
+                      <object class="GtkLabel" id="author_label">
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="version_row">
+                    <property name="title" translatable="yes">Version</property>
+                    <child>
+                      <object class="GtkLabel" id="version_label">
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="homepage_row">
+                    <property name="activatable">True</property>
+                    <property name="visible">False</property>
+                    <property name="title" translatable="yes">Homepage</property>
+                    <signal name="activated" handler="on_homepage_activated" />
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">ephy-open-link-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="activatable_widget">enabled_switch</property>
+                    <property name="title" translatable="yes">Enabled</property>
+                    <child>
+                      <object class="GtkSwitch" id="enabled_switch">
+                        <property name="valign">center</property>
+                        <signal name="notify::active" handler="on_toggle_extension_enabled" object="EphyExtensionView" swapped="yes"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkListBox">
+                    <signal name="row-activated" handler="on_remove_button_clicked" />
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Remove Extension</property>
+                            <property name="margin-top">12</property>
+                            <property name="margin-bottom">12</property>
+                            <property name="xalign">0.5</property>
+                            <style>
+                              <class name="error"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="boxed-list" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

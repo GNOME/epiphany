@@ -27,15 +27,21 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-gui.h"
+#include "ephy-prefs.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-settings.h"
+#include "ephy-web-extension.h"
+#include "extension-view.h"
 #include "passwords-view.h"
 #include "prefs-general-page.h"
+#include "prefs-extensions-page.h"
 
 struct _EphyPrefsDialog {
   AdwPreferencesWindow parent_instance;
 
   PrefsGeneralPage *general_page;
+  GtkWidget *extensions_page;
 
   GtkWidget *active_data_view;
 };
@@ -97,6 +103,35 @@ on_clear_data_row_activated (GtkWidget       *privacy_page,
 }
 
 static void
+on_extension_row_activated (GtkWidget        *extensions_page,
+                            EphyWebExtension *extension,
+                            EphyPrefsDialog  *prefs_dialog)
+{
+  GtkWidget *view = GTK_WIDGET (ephy_extension_view_new (extension));
+
+  present_data_view (prefs_dialog, view);
+}
+
+static void
+sync_extensions (EphyPrefsDialog *self)
+{
+  gboolean enable_extensions;
+
+  enable_extensions = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS);
+
+  if (enable_extensions && !self->extensions_page) {
+    self->extensions_page = g_object_new (EPHY_TYPE_PREFS_EXTENSIONS_PAGE, NULL);
+    g_signal_connect (self->extensions_page, "extension-row-activated", G_CALLBACK (on_extension_row_activated), self);
+    adw_preferences_window_add (ADW_PREFERENCES_WINDOW (self),
+                                ADW_PREFERENCES_PAGE (self->extensions_page));
+  } else if (self->extensions_page) {
+    adw_preferences_window_remove (ADW_PREFERENCES_WINDOW (self),
+                                   ADW_PREFERENCES_PAGE (self->extensions_page));
+    g_clear_weak_pointer (&self->extensions_page);
+  }
+}
+
+static void
 ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -119,4 +154,11 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
   gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
+
+  sync_extensions (dialog);
+  g_signal_connect_object (EPHY_SETTINGS_WEB,
+                           "changed::" EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
+                           G_CALLBACK (sync_extensions),
+                           dialog,
+                           G_CONNECT_SWAPPED);
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="PrefsExtensionsPage" parent="AdwPreferencesPage">
+    <property name="icon_name">application-x-addon-symbolic</property>
+    <property name="title" translatable="yes">Extensions</property>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwActionRow">
+            <property name="activatable">True</property>
+            <property name="title" translatable="yes">Add New Extension</property>
+            <property name="subtitle" translatable="yes">Extensions must be installed manually from their files</property>
+            <property name="use_underline">True</property>
+            <signal name="activated" handler="on_add_button_clicked"/>
+            <child type="suffix">
+              <object class="GtkImage">
+                <property name="icon-name">list-add-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="wrap">True</property>
+            <property name="use-markup">True</property>
+            <property name="label" translatable="yes">Epiphany is compatible with web extensions for Mozilla Firefox. To find and add web extensions, visit &lt;a href="https://addons.mozilla.org"&gt;addons.mozilla.org&lt;/a&gt;</property>
+            <property name="margin-top">12</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="GtkStack" id="stack">
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">list</property>
+                <property name="child">
+                  <object class="GtkListBox" id="listbox">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">empty</property>
+                <property name="child">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">No extensions installed</property>
+                    <property name="wrap">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="height-request">50</property>
+                    <style>
+                      <class name="card"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
