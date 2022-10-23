@@ -27,6 +27,7 @@ libephyembed_sources = [
   'ephy-reader-handler.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
+  'nautilus-floating-bar.c',
   enums
 ]
 
@@ -51,7 +52,6 @@ libephyembed_includes = include_directories(
   '../lib/history',
   '../lib/sync',
   '../lib/widgets',
-  '../lib/widgets/contrib'
 )
 
 libephyembed = static_library('ephyembed',

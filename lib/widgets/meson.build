@@ -7,7 +7,6 @@ enums = gnome.mkenums_simple('ephy-widgets-type-builtins',
 )
 
 libephywidgets_sources = [
-  'contrib/nautilus-floating-bar.c',
   'ephy-certificate-dialog.c',
   'ephy-downloads-paintable.c',
   'ephy-downloads-popover.c',
@@ -40,7 +39,6 @@ libephywidgets_includes = include_directories(
   '../..',
   '../../embed',
   '../sync',
-  'contrib'
 )
 
 libephywidgets = static_library('ephywidgets',
