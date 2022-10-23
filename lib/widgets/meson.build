@@ -1,11 +1,3 @@
-types_headers = [
-  'ephy-search-entry.h'
-]
-
-enums = gnome.mkenums_simple('ephy-widgets-type-builtins',
-  sources: types_headers
-)
-
 libephywidgets_sources = [
   'ephy-certificate-dialog.c',
   'ephy-downloads-paintable.c',
@@ -13,11 +5,9 @@ libephywidgets_sources = [
   'ephy-download-widget.c',
   'ephy-file-chooser.c',
   'ephy-location-entry.c',
-  'ephy-search-entry.c',
   'ephy-security-popover.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',
-  enums
 ]
 
 libephywidgets_deps = [
@@ -51,5 +41,4 @@ ephywidgets_dep = declare_dependency(
   link_with: libephywidgets,
   include_directories: libephywidgets_includes,
   dependencies: libephywidgets_deps,
-  sources: enums
 )

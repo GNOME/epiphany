@@ -31,7 +31,6 @@
 #include "ephy-suggestion-model.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-widgets-type-builtins.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>

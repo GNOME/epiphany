@@ -20,7 +20,7 @@
 
 #include "config.h"
 #include "ephy-search-entry.h"
-#include "ephy-widgets-type-builtins.h"
+#include "ephy-embed-type-builtins.h"
 
 #include <glib/gi18n.h>
 

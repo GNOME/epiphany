@@ -25,7 +25,6 @@
 #include "config.h"
 #include "ephy-location-entry.h"
 
-#include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"

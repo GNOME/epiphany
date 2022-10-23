@@ -3,6 +3,7 @@ subdir('web-process-extension')
 types_headers = [
   'ephy-download.h',
   'ephy-embed-shell.h',
+  'ephy-search-entry.h',
   'ephy-web-view.h'
 ]
 
@@ -25,6 +26,7 @@ libephyembed_sources = [
   'ephy-filters-manager.c',
   'ephy-find-toolbar.c',
   'ephy-reader-handler.c',
+  'ephy-search-entry.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
   'nautilus-floating-bar.c',
