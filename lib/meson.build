@@ -98,4 +98,3 @@ ephymisc_dep = declare_dependency(
 )
 
 subdir('sync')
-subdir('widgets')

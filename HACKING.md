@@ -56,7 +56,6 @@ example of a delegate interface that allows `embed/` limited access to
 `EphyWindow`, even though `EphyWindow` is in `src/`.) The levels are:
 
  * `src/`, the highest layer, mostly GUI stuff
- * `lib/widgets/`. FIXME: very confusing, this layering should be fixed
  * `embed/`, stuff relating to the web view
  * `lib/` lowest layer, helper classes that don't need higher-level stuff
 

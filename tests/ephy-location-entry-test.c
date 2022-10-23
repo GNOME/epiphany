@@ -140,19 +140,19 @@ main (int   argc,
     return -1;
   }
 
-  g_test_add_func ("/lib/widgets/ephy-location-entry/new",
+  g_test_add_func ("/src/ephy-location-entry/new",
                    test_entry_new);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/set_location",
+  g_test_add_func ("/src/ephy-location-entry/set_location",
                    test_entry_set_location);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/get_location",
+  g_test_add_func ("/src/ephy-location-entry/get_location",
                    test_entry_get_location);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/set_location_null",
+  g_test_add_func ("/src/ephy-location-entry/set_location_null",
                    test_entry_set_location_null);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/get_location_empty",
+  g_test_add_func ("/src/ephy-location-entry/get_location_empty",
                    test_entry_get_location_empty);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/can_undo",
+  g_test_add_func ("/src/ephy-location-entry/can_undo",
                    test_entry_can_undo);
-  g_test_add_func ("/lib/widgets/ephy-location-entry/can_redo",
+  g_test_add_func ("/src/ephy-location-entry/can_redo",
                    test_entry_can_redo);
 
   return g_test_run ();

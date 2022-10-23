@@ -53,7 +53,6 @@ libephyembed_includes = include_directories(
   '../lib/contrib',
   '../lib/history',
   '../lib/sync',
-  '../lib/widgets',
 )
 
 libephyembed = static_library('ephyembed',
