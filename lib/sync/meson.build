@@ -23,7 +23,6 @@ libephysync_deps = [
   libsecret_dep,
   libsoup_dep,
   nettle_dep,
-  webkit2gtk_dep
 ]
 
 libephysync_includes = include_directories(
