@@ -15,6 +15,7 @@ libephymisc_sources = [
   'contrib/gnome-languages.c',
   'ephy-debug.c',
   'ephy-favicon-helpers.c',
+  'ephy-file-chooser.c',
   'ephy-file-helpers.c',
   'ephy-flatpak-utils.c',
   'ephy-gui.c',

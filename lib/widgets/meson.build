@@ -3,7 +3,6 @@ libephywidgets_sources = [
   'ephy-downloads-paintable.c',
   'ephy-downloads-popover.c',
   'ephy-download-widget.c',
-  'ephy-file-chooser.c',
   'ephy-location-entry.c',
   'ephy-security-popover.c',
   'ephy-title-box.c',
