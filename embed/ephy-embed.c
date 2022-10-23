@@ -35,7 +35,7 @@
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
-#include "nautilus-floating-bar.h"
+#include "ephy-floating-bar.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -158,7 +158,7 @@ static void
 ephy_embed_set_statusbar_label (EphyEmbed  *embed,
                                 const char *label)
 {
-  nautilus_floating_bar_set_primary_label (NAUTILUS_FLOATING_BAR (embed->floating_bar), label);
+  ephy_floating_bar_set_primary_label (EPHY_FLOATING_BAR (embed->floating_bar), label);
 
   if (label == NULL || label[0] == '\0') {
     gtk_widget_hide (embed->floating_bar);
@@ -751,7 +751,7 @@ ephy_embed_constructed (GObject *object)
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
-  embed->floating_bar = nautilus_floating_bar_new ();
+  embed->floating_bar = ephy_floating_bar_new ();
   gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
   gtk_widget_hide (embed->floating_bar);

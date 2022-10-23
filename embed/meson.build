@@ -25,11 +25,11 @@ libephyembed_sources = [
   'ephy-file-monitor.c',
   'ephy-filters-manager.c',
   'ephy-find-toolbar.c',
+  'ephy-floating-bar.c',
   'ephy-reader-handler.c',
   'ephy-search-entry.c',
   'ephy-view-source-handler.c',
   'ephy-web-view.c',
-  'nautilus-floating-bar.c',
   enums
 ]
 

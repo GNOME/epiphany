@@ -1,4 +1,4 @@
-/* Nautilus - Floating status bar.
+/* Copied from Nautilus for use in Epiphany - Floating status bar.
  *
  * Copyright (C) 2011 Red Hat Inc.
  *
@@ -23,11 +23,11 @@
 
 #include <string.h>
 
-#include "nautilus-floating-bar.h"
+#include "ephy-floating-bar.h"
 
 #define HOVER_HIDE_TIMEOUT_INTERVAL 100
 
-struct _NautilusFloatingBar {
+struct _EphyFloatingBar {
   GtkBox parent_instance;
 
   gchar *primary_label;
@@ -41,26 +41,25 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (NautilusFloatingBar, nautilus_floating_bar,
-               GTK_TYPE_BOX);
+G_DEFINE_TYPE (EphyFloatingBar, ephy_floating_bar, GTK_TYPE_BOX);
 
 static void
-nautilus_floating_bar_finalize (GObject *obj)
+ephy_floating_bar_finalize (GObject *obj)
 {
-  NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (obj);
+  EphyFloatingBar *self = EPHY_FLOATING_BAR (obj);
 
   g_free (self->primary_label);
 
-  G_OBJECT_CLASS (nautilus_floating_bar_parent_class)->finalize (obj);
+  G_OBJECT_CLASS (ephy_floating_bar_parent_class)->finalize (obj);
 }
 
 static void
-nautilus_floating_bar_get_property (GObject    *object,
-                                    guint       property_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
+ephy_floating_bar_get_property (GObject    *object,
+                                guint       property_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
-  NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (object);
+  EphyFloatingBar *self = EPHY_FLOATING_BAR (object);
 
   switch (property_id) {
     case PROP_PRIMARY_LABEL:
@@ -73,16 +72,16 @@ nautilus_floating_bar_get_property (GObject    *object,
 }
 
 static void
-nautilus_floating_bar_set_property (GObject      *object,
-                                    guint         property_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
+ephy_floating_bar_set_property (GObject      *object,
+                                guint         property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (object);
+  EphyFloatingBar *self = EPHY_FLOATING_BAR (object);
 
   switch (property_id) {
     case PROP_PRIMARY_LABEL:
-      nautilus_floating_bar_set_primary_label (self, g_value_get_string (value));
+      ephy_floating_bar_set_primary_label (self, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -91,7 +90,7 @@ nautilus_floating_bar_set_property (GObject      *object,
 }
 
 static void
-nautilus_floating_bar_init (NautilusFloatingBar *self)
+ephy_floating_bar_init (EphyFloatingBar *self)
 {
   GtkWidget *w = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_MIDDLE);
@@ -109,13 +108,13 @@ nautilus_floating_bar_init (NautilusFloatingBar *self)
 }
 
 static void
-nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
+ephy_floating_bar_class_init (EphyFloatingBarClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
 
-  oclass->set_property = nautilus_floating_bar_set_property;
-  oclass->get_property = nautilus_floating_bar_get_property;
-  oclass->finalize = nautilus_floating_bar_finalize;
+  oclass->set_property = ephy_floating_bar_set_property;
+  oclass->get_property = ephy_floating_bar_get_property;
+  oclass->finalize = ephy_floating_bar_finalize;
 
   properties[PROP_PRIMARY_LABEL] =
     g_param_spec_string ("primary-label",
@@ -128,8 +127,8 @@ nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
 }
 
 void
-nautilus_floating_bar_set_primary_label (NautilusFloatingBar *self,
-                                         const gchar         *label)
+ephy_floating_bar_set_primary_label (EphyFloatingBar *self,
+                                     const gchar     *label)
 {
   if (g_strcmp0 (self->primary_label, label) != 0) {
     g_free (self->primary_label);
@@ -142,7 +141,7 @@ nautilus_floating_bar_set_primary_label (NautilusFloatingBar *self,
 }
 
 GtkWidget *
-nautilus_floating_bar_new (void)
+ephy_floating_bar_new (void)
 {
-  return g_object_new (NAUTILUS_TYPE_FLOATING_BAR, NULL);
+  return g_object_new (EPHY_TYPE_FLOATING_BAR, NULL);
 }

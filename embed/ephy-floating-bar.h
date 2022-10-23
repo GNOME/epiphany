@@ -1,4 +1,4 @@
-/* Nautilus - Floating status bar.
+/* Copied from Nautilus for use in Epiphany - Floating status bar.
  *
  * Copyright (C) 2011 Red Hat Inc.
  * Copyright (C) 2018 Igalia S.L.
@@ -26,13 +26,13 @@
 
 G_BEGIN_DECLS
 
-#define NAUTILUS_TYPE_FLOATING_BAR nautilus_floating_bar_get_type ()
+#define EPHY_TYPE_FLOATING_BAR ephy_floating_bar_get_type ()
 
-G_DECLARE_FINAL_TYPE (NautilusFloatingBar, nautilus_floating_bar, NAUTILUS, FLOATING_BAR, GtkBox)
+G_DECLARE_FINAL_TYPE (EphyFloatingBar, ephy_floating_bar, EPHY, FLOATING_BAR, GtkBox)
 
-GtkWidget *nautilus_floating_bar_new               (void);
+GtkWidget *ephy_floating_bar_new               (void);
 
-void       nautilus_floating_bar_set_primary_label (NautilusFloatingBar *self,
-                                                    const char          *label);
+void       ephy_floating_bar_set_primary_label (EphyFloatingBar *self,
+                                                const char          *label);
 
 G_END_DECLS
