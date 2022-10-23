@@ -29,7 +29,6 @@ libephysync_includes = include_directories(
   '.',
   '..',
   '../history',
-  '../widgets',
   '../..',
   'debug'
 )
