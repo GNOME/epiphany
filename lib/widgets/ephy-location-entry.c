@@ -64,6 +64,7 @@ struct _EphyLocationEntry {
   GList *page_actions;
 
   GtkWidget *suggestions_popover;
+  GtkWidget *scrolled_window;
   GtkSingleSelection *suggestions_model;
 
   GtkWidget *context_menu;
@@ -718,6 +719,21 @@ reader_mode_clicked_cb (EphyLocationEntry *entry)
 }
 
 static void
+suggestions_popover_notify_visible_cb (EphyLocationEntry *entry)
+{
+  GtkAdjustment *adj;
+
+  if (!gtk_widget_get_visible (entry->suggestions_popover))
+    return;
+
+  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (entry->scrolled_window));
+
+  g_assert (adj);
+
+  gtk_adjustment_set_value (adj, 0);
+}
+
+static void
 suggestion_activated_cb (EphyLocationEntry *entry,
                          guint              position)
 {
@@ -1258,6 +1274,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, context_menu);
 
@@ -1267,6 +1284,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cut_clipboard_cb);
   gtk_widget_class_bind_template_callback (widget_class, copy_clipboard_cb);
   gtk_widget_class_bind_template_callback (widget_class, reader_mode_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, suggestions_popover_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, suggestion_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, update_suggestions_popover);
   gtk_widget_class_bind_template_callback (widget_class, focus_enter_cb);

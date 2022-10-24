@@ -97,8 +97,9 @@
         <property name="has-arrow">False</property>
         <property name="autohide">False</property>
         <property name="can-focus">False</property>
+        <signal name="notify::visible" handler="suggestions_popover_notify_visible_cb" swapped="yes"/>
         <property name="child">
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="scrolled_window">
             <property name="hscrollbar-policy">never</property>
             <property name="max-content-height">400</property>
             <property name="propagate-natural-height">True</property>
