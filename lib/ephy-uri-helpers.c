@@ -24,7 +24,7 @@
 
 #include <glib.h>
 #include <string.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 /* Use this function to format a URI for display. The URIs used
  * internally by WebKit may contain percent-encoded characters or

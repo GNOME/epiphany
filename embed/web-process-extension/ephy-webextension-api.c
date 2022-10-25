@@ -23,7 +23,7 @@
 #include "ephy-webextension-common.h"
 
 #include <json-glib/json-glib.h>
-#include <webkit2/webkit-web-extension.h>
+#include <webkit/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
 
 struct _EphyWebExtensionExtension {

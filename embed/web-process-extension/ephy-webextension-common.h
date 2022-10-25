@@ -23,7 +23,7 @@
 #include <glib-object.h>
 #include <jsc/jsc.h>
 #include <json-glib/json-glib.h>
-#include <webkit2/webkit-web-extension.h>
+#include <webkit/webkit-web-extension.h>
 
 G_BEGIN_DECLS
 

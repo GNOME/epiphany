@@ -29,7 +29,7 @@
 #include <json-glib/json-glib.h>
 #include <stdio.h>
 #include <string.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 #if defined(__linux__)
 #include <sys/random.h>
 #elif defined(__FreeBSD__) || defined(__OpenBSD__)

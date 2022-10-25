@@ -24,7 +24,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 const char *
 ephy_user_agent_get (void)

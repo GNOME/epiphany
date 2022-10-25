@@ -38,7 +38,7 @@
 #include <jsc/jsc.h>
 #include <libsoup/soup.h>
 #include <string.h>
-#include <webkit2/webkit-web-extension.h>
+#include <webkit/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
 
 struct _EphyWebProcessExtension {

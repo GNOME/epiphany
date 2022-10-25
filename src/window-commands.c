@@ -62,7 +62,7 @@
 #include <gst/gst.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 #include <libportal-gtk4/portal-gtk4.h>
 
 #define DEFAULT_ICON_SIZE 192

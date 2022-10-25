@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
-#include <webkit2/webkit-web-extension.h>
+#include <webkit/webkit-web-extension.h>
 
 G_BEGIN_DECLS
 

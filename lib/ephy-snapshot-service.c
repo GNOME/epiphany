@@ -29,7 +29,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 struct _EphySnapshotService {
   GObject parent_instance;

@@ -29,7 +29,7 @@
 #include <gio/gsettingsbackend.h>
 #include <stdlib.h>
 #include <string.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 struct _EphyPermissionsManager {
   GObject parent_instance;

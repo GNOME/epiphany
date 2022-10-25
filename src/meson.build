@@ -87,7 +87,7 @@ libephymain_deps = [
   libadwaita_dep,
   libsoup_dep,
   portal_dep,
-  webkit2gtk_dep,
+  webkitgtk_dep,
 ]
 
 libephymain_includes = include_directories(

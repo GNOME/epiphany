@@ -23,7 +23,7 @@
 
 #include "ephy-embed.h"
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
 #define USER_JAVASCRIPT_FILENAME	"user-javascript.js"

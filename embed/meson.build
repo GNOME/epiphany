@@ -43,7 +43,7 @@ libephyembed_deps = [
   libsecret_dep,
   libsoup_dep,
   m_dep,
-  webkit2gtk_dep
+  webkitgtk_dep
 ]
 
 libephyembed_includes = include_directories(

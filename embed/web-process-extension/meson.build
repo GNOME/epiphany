@@ -25,7 +25,7 @@ web_process_extension_deps = [
   config_h,
   ephymisc_dep,
   ephysync_dep,
-  webkit2gtk_web_extension_dep
+  webkitgtk_web_extension_dep
 ]
 
 shared_module('ephywebprocessextension',
@@ -57,7 +57,7 @@ web_extension_deps = [
   config_h,
   ephymisc_dep,
   ephysync_dep,
-  webkit2gtk_web_extension_dep
+  webkitgtk_web_extension_dep
 ]
 
 shared_module('ephywebextension',

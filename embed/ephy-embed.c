@@ -38,7 +38,7 @@
 #include "ephy-floating-bar.h"
 
 #include <glib/gi18n.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 static void     ephy_embed_constructed (GObject *object);
 static void     ephy_embed_restored_window_cb (EphyEmbedShell *shell,

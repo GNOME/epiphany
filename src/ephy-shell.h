@@ -33,7 +33,7 @@
 #include "ephy-web-extension-manager.h"
 #include "ephy-window.h"
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 #include <glib-object.h>
 #include <glib.h>
 

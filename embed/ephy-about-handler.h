@@ -22,7 +22,7 @@
 
 #include "ephy-history-service.h"
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 G_BEGIN_DECLS
 

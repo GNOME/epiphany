@@ -27,7 +27,7 @@
 #include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 struct _EphyDownloadWidget {
   AdwBin parent_instance;

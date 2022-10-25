@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"

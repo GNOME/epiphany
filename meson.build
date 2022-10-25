@@ -76,7 +76,7 @@ conf.set10('ENABLE_GSB', gsb_api_key != '')
 glib_requirement = '>= 2.70.0'
 gtk_requirement = '>= 4.6.0'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.37.90'
+webkitgtk_requirement = '>= 2.39.0'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_70')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_70')
@@ -104,10 +104,10 @@ libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 nettle_dep = dependency('nettle', version: nettle_requirement)
 portal_dep = dependency('libportal-gtk4', version: '>= 0.6')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
-webkit2gtk_dep = dependency('webkit2gtk-5.0', version: webkitgtk_requirement)
-webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-5.0', version: webkitgtk_requirement)
+webkitgtk_dep = dependency('webkitgtk-6.0', version: webkitgtk_requirement)
+webkitgtk_web_extension_dep = dependency('webkitgtk-web-extension-6.0', version: webkitgtk_requirement)
 
-webkit_revision = webkit2gtk_dep.get_variable(pkgconfig: 'revision', default_value: '')
+webkit_revision = webkitgtk_dep.get_variable(pkgconfig: 'revision', default_value: '')
 if webkit_revision == 'tarball'
   webkit_revision = ''
 elif webkit_revision != ''
