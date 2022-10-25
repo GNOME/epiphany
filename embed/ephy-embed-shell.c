@@ -816,7 +816,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 
   priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
                                     "website-data-manager", manager,
-                                    "process-swap-on-cross-site-navigation-enabled", TRUE,
                                     NULL);
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
