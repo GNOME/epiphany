@@ -969,10 +969,7 @@ decide_policy_cb (WebKitWebView            *web_view,
 {
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
-  WebKitURIRequest *request;
-  WebKitWebResource *main_resource;
   const char *mime_type;
-  const char *request_uri;
   gboolean is_main_resource;
 
   /* Non-response policy decisions are handled in EphyWindow instead. */
@@ -982,22 +979,17 @@ decide_policy_cb (WebKitWebView            *web_view,
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
-  request = webkit_response_policy_decision_get_request (response_decision);
-  request_uri = webkit_uri_request_get_uri (request);
 
-  main_resource = webkit_web_view_get_main_resource (web_view);
-  is_main_resource = g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) == 0;
+  is_main_resource = webkit_response_policy_decision_is_main_frame_main_resource (response_decision);
 
-  /* If WebKit can handle the MIME type, let it.
-   * Otherwise, we'll start a download.
-   */
+  /* If WebKit can handle the MIME type, let it... */
   if (webkit_response_policy_decision_is_mime_type_supported (response_decision)) {
-    /* If it's not the main resource, we don't need to set the document type. */
     if (is_main_resource)
       ephy_web_view_set_document_type (EPHY_WEB_VIEW (web_view), mime_type);
     return FALSE;
   }
 
+  /* ...otherwise, we'll start a download if it's the main resource. */
   if (is_main_resource) {
     webkit_policy_decision_download (decision);
     return TRUE;
