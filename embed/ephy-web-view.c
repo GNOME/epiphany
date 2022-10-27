@@ -938,6 +938,29 @@ is_web_process_responsive_changed_cb (EphyWebView *web_view,
   }
 }
 
+static void
+ephy_web_view_set_document_type (EphyWebView *web_view,
+                                 const char  *mime_type)
+{
+  EphyWebViewDocumentType type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
+
+  if (strcmp (mime_type, "text/html") == 0 || strcmp (mime_type, "text/plain") == 0) {
+    type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+  } else if (strcmp (mime_type, "application/xhtml+xml") == 0) {
+    type = EPHY_WEB_VIEW_DOCUMENT_XML;
+  } else if (strncmp (mime_type, "image/", 6) == 0) {
+    type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
+  }
+
+  /* FIXME: maybe it makes more sense to have an API to query the mime
+   * type when the load of a page starts than doing this here.
+   */
+  if (web_view->document_type != type) {
+    web_view->document_type = type;
+    g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_DOCUMENT_TYPE]);
+  }
+}
+
 static gboolean
 decide_policy_cb (WebKitWebView            *web_view,
                   WebKitPolicyDecision     *decision,
@@ -948,7 +971,6 @@ decide_policy_cb (WebKitWebView            *web_view,
   WebKitURIResponse *response;
   WebKitURIRequest *request;
   WebKitWebResource *main_resource;
-  EphyWebViewDocumentType type;
   const char *mime_type;
   const char *request_uri;
   gboolean is_main_resource;
@@ -957,13 +979,7 @@ decide_policy_cb (WebKitWebView            *web_view,
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
 
-  /* If WebKit can handle the MIME type, let it.
-   * Otherwise, we'll start a download.
-   */
   response_decision = WEBKIT_RESPONSE_POLICY_DECISION (decision);
-  if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
-    return FALSE;
-
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
   request = webkit_response_policy_decision_get_request (response_decision);
@@ -972,29 +988,22 @@ decide_policy_cb (WebKitWebView            *web_view,
   main_resource = webkit_web_view_get_main_resource (web_view);
   is_main_resource = g_strcmp0 (webkit_web_resource_get_uri (main_resource), request_uri) == 0;
 
-  /* If it's not the main resource, we don't need to set the document type. */
-  if (is_main_resource) {
-    type = EPHY_WEB_VIEW_DOCUMENT_OTHER;
-    if (strcmp (mime_type, "text/html") == 0 || strcmp (mime_type, "text/plain") == 0) {
-      type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-    } else if (strcmp (mime_type, "application/xhtml+xml") == 0) {
-      type = EPHY_WEB_VIEW_DOCUMENT_XML;
-    } else if (strncmp (mime_type, "image/", 6) == 0) {
-      type = EPHY_WEB_VIEW_DOCUMENT_IMAGE;
-    }
-
-    /* FIXME: maybe it makes more sense to have an API to query the mime
-     * type when the load of a page starts than doing this here.
-     */
-    if (EPHY_WEB_VIEW (web_view)->document_type != type) {
-      EPHY_WEB_VIEW (web_view)->document_type = type;
-
-      g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_DOCUMENT_TYPE]);
-    }
+  /* If WebKit can handle the MIME type, let it.
+   * Otherwise, we'll start a download.
+   */
+  if (webkit_response_policy_decision_is_mime_type_supported (response_decision)) {
+    /* If it's not the main resource, we don't need to set the document type. */
+    if (is_main_resource)
+      ephy_web_view_set_document_type (EPHY_WEB_VIEW (web_view), mime_type);
+    return FALSE;
   }
 
-  webkit_policy_decision_download (decision);
-  return TRUE;
+  if (is_main_resource) {
+    webkit_policy_decision_download (decision);
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 typedef struct {
