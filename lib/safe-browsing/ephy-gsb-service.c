@@ -192,10 +192,8 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   char *body;
   g_autoptr (GBytes) response_body = NULL;
   guint status_code;
-#if SOUP_CHECK_VERSION (2, 99, 4)
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
-#endif
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
@@ -220,7 +218,6 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   body = ephy_gsb_utils_make_list_updates_request (threat_lists);
   url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   bytes = g_bytes_new_take (body, strlen (body));
   soup_message_set_request_body_from_bytes (msg, "application/json", bytes);
   response_body = soup_session_send_and_read (self->session, msg, NULL, &error);
@@ -232,12 +229,6 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   }
 
   status_code = soup_message_get_status (msg);
-#else
-  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
-  soup_session_send_message (self->session, msg);
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Handle unsuccessful responses. */
   if (status_code != 200) {
@@ -575,10 +566,8 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   double duration;
   g_autoptr (GBytes) response_body = NULL;
   guint status_code;
-#if SOUP_CHECK_VERSION (2, 99, 4)
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
-#endif
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
@@ -605,7 +594,6 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   body = ephy_gsb_utils_make_full_hashes_request (threat_lists, data->prefixes);
   url = g_strdup_printf ("%sfullHashes:find?key=%s", API_PREFIX, self->api_key);
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   bytes = g_bytes_new_take (body, strlen (body));
   soup_message_set_request_body_from_bytes (msg, "application/json", bytes);
   response_body = soup_session_send_and_read (self->session, msg, NULL, &error);
@@ -617,12 +605,6 @@ ephy_gsb_service_update_full_hashes_in_thread (UpdateFullHashesData *data)
   }
 
   status_code = soup_message_get_status (msg);
-#else
-  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
-  soup_session_send_message (self->session, msg);
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Handle unsuccessful responses. */
   if (status_code != 200) {

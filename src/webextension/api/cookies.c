@@ -63,11 +63,7 @@ static void
 add_cookie_to_json (JsonBuilder *builder,
                     SoupCookie  *cookie)
 {
-#if SOUP_CHECK_VERSION (2, 99, 4)
   GDateTime *expires = soup_cookie_get_expires (cookie);
-#else
-  SoupDate *expires = soup_cookie_get_expires (cookie);
-#endif
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "name");
@@ -86,11 +82,7 @@ add_cookie_to_json (JsonBuilder *builder,
   json_builder_add_string_value (builder, samesite_to_string (soup_cookie_get_same_site_policy (cookie)));
   if (expires) {
     json_builder_set_member_name (builder, "expirationDate");
-#if SOUP_CHECK_VERSION (2, 99, 4)
     json_builder_add_int_value (builder, g_date_time_to_unix (expires));
-#else
-    json_builder_add_int_value (builder, soup_date_to_time_t (expires));
-#endif
   }
   json_builder_end_object (builder);
 }

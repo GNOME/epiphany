@@ -97,11 +97,9 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
 typedef void (*SoupSessionCallback) (SoupSession *session,
                                      SoupMessage *msg,
                                      gpointer     user_data);
-#endif
 
 typedef struct {
   char *endpoint;
@@ -185,7 +183,6 @@ storage_request_async_data_free (StorageRequestAsyncData *data)
   g_free (data);
 }
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
 typedef struct {
   SoupSessionCallback callback;
   gpointer user_data;
@@ -249,7 +246,6 @@ storage_request_async_ready_cb (SoupSession             *session,
   data->callback (session, msg, data->user_data);
   storage_request_async_data_free (data);
 }
-#endif
 
 static SignInAsyncData *
 sign_in_async_data_new (EphySyncService *service,
@@ -539,9 +535,7 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   char *url;
   const char *content_type = "application/json; charset=utf-8";
   g_autofree char *accounts_server = NULL;
-#if SOUP_CHECK_VERSION (2, 99, 4)
   g_autoptr (GBytes) bytes = NULL;
-#endif
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (endpoint);
@@ -552,15 +546,9 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   accounts_server = ephy_sync_utils_get_accounts_server ();
   url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   bytes = g_bytes_new (request_body, strlen (request_body));
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   request_headers = soup_message_get_request_headers (msg);
-#else
-  soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY,
-                            request_body, strlen (request_body));
-  request_headers = msg->request_headers;
-#endif
 
   options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
                                                NULL, NULL, NULL, request_body,
@@ -568,13 +556,9 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   header = ephy_sync_crypto_hawk_header_new (url, "POST", id, key, key_len, options);
   soup_message_headers_append (request_headers, "authorization", header->header);
   soup_message_headers_append (request_headers, "content-type", content_type);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)send_and_read_async_ready_cb,
                                     send_and_read_async_data_new (callback, user_data));
-#else
-  soup_session_queue_message (self->session, msg, callback, user_data);
-#endif
 
   g_free (url);
   ephy_sync_crypto_hawk_options_free (options);
@@ -605,19 +589,11 @@ ephy_sync_service_fxa_hawk_get (EphySyncService     *self,
   url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
   msg = soup_message_new (SOUP_METHOD_GET, url);
   header = ephy_sync_crypto_hawk_header_new (url, "GET", id, key, key_len, NULL);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
   soup_message_headers_append (request_headers, "authorization", header->header);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)send_and_read_async_ready_cb,
                                     send_and_read_async_data_new (callback, user_data));
-#else
-  soup_session_queue_message (self->session, msg, callback, user_data);
-#endif
 
   g_free (url);
   ephy_sync_crypto_hawk_header_free (header);
@@ -643,27 +619,16 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
   msg = soup_message_new (data->method, url);
 
   if (data->request_body) {
-#if SOUP_CHECK_VERSION (2, 99, 4)
     g_autoptr (GBytes) bytes = NULL;
-#endif
+
     options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
                                                  NULL, NULL, NULL, data->request_body,
                                                  NULL);
-#if SOUP_CHECK_VERSION (2, 99, 4)
     bytes = g_bytes_new (data->request_body, strlen (data->request_body));
     soup_message_set_request_body_from_bytes (msg, content_type, bytes);
-#else
-    soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY,
-                              data->request_body, strlen (data->request_body));
-#endif
   }
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
-
 
   if (!g_strcmp0 (data->method, SOUP_METHOD_PUT) || !g_strcmp0 (data->method, SOUP_METHOD_POST))
     soup_message_headers_append (request_headers, "content-type", content_type);
@@ -684,14 +649,9 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
                                              strlen (self->storage_credentials_key),
                                              options);
   soup_message_headers_append (request_headers, "authorization", header->header);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)storage_request_async_ready_cb,
                                     data);
-#else
-  soup_session_queue_message (self->session, msg, data->callback, data->user_data);
-  storage_request_async_data_free (data);
-#endif
 
   g_free (url);
   g_free (if_modified_since);
@@ -857,13 +817,8 @@ destroy_session_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to destroy session. Status code: %u, response: %s",
@@ -873,7 +828,6 @@ destroy_session_cb (SoupSession *session,
   }
 }
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
 static void
 destroy_session_send_and_read_ready_cb (SoupSession  *session,
                                         GAsyncResult *result,
@@ -893,7 +847,6 @@ destroy_session_send_and_read_ready_cb (SoupSession  *session,
                           (GDestroyNotify)g_bytes_unref);
   destroy_session_cb (session, msg, user_data);
 }
-#endif
 
 static void
 ephy_sync_service_destroy_session (EphySyncService *self,
@@ -911,9 +864,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   const char *content_type = "application/json; charset=utf-8";
   const char *request_body = "{}";
   g_autofree char *accounts_server = NULL;
-#if SOUP_CHECK_VERSION (2, 99, 4)
   g_autoptr (GBytes) bytes = NULL;
-#endif
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   if (!session_token)
@@ -928,15 +879,9 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
 
   msg = soup_message_new (SOUP_METHOD_POST, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   bytes = g_bytes_new_static (request_body, strlen (request_body));
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   request_headers = soup_message_get_request_headers (msg);
-#else
-  soup_message_set_request (msg, content_type, SOUP_MEMORY_STATIC,
-                            request_body, strlen (request_body));
-  request_headers = msg->request_headers;
-#endif
   options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
                                                NULL, NULL, NULL, request_body,
                                                NULL);
@@ -944,13 +889,9 @@ ephy_sync_service_destroy_session (EphySyncService *self,
                                              req_hmac_key, 32, options);
   soup_message_headers_append (request_headers, "authorization", header->header);
   soup_message_headers_append (request_headers, "content-type", content_type);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)destroy_session_send_and_read_ready_cb,
                                     NULL);
-#else
-  soup_session_queue_message (self->session, msg, destroy_session_cb, NULL);
-#endif
 
   g_free (token_id_hex);
   g_free (token_id);
@@ -999,13 +940,8 @@ get_storage_credentials_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to obtain storage credentials. Status code: %u, response: %s",
@@ -1059,7 +995,6 @@ out:
     g_error_free (error);
 }
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
 static void
 get_storage_credentials_ready_cb (SoupSession  *session,
                                   GAsyncResult *result,
@@ -1079,7 +1014,6 @@ get_storage_credentials_ready_cb (SoupSession  *session,
                           (GDestroyNotify)g_bytes_unref);
   get_storage_credentials_cb (session, msg, user_data);
 }
-#endif
 
 static void
 ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
@@ -1108,23 +1042,15 @@ ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
   authorization = g_strdup_printf ("BrowserID %s", assertion);
 
   msg = soup_message_new (SOUP_METHOD_GET, token_server);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
   /* We need to add the X-Client-State header so that the Token Server will
    * recognize accounts that were previously used to sync Firefox data too.
    */
   soup_message_headers_append (request_headers, "X-Client-State", client_state);
   soup_message_headers_append (request_headers, "authorization", authorization);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)get_storage_credentials_ready_cb,
                                     self);
-#else
-  soup_session_queue_message (self->session, msg, get_storage_credentials_cb, self);
-#endif
 
   g_free (kb);
   g_free (hashed_kb);
@@ -1149,13 +1075,8 @@ get_signed_certificate_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
   if (error) {
@@ -1330,13 +1251,8 @@ delete_synchronizable_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code == 200) {
     LOG ("Successfully deleted from server");
@@ -1421,13 +1337,8 @@ download_synchronizable_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to download object. Status code: %u, response: %s",
@@ -1515,13 +1426,8 @@ upload_synchronizable_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Code 412 means that there is a more recent version on the server.
    * Download it.
@@ -1647,15 +1553,9 @@ commit_batch_cb (SoupSession *session,
   SoupMessageHeaders *response_headers;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_headers = soup_message_get_response_headers (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_headers = msg->response_headers;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to commit batch. Status code: %u, response: %s",
@@ -1683,13 +1583,8 @@ upload_batch_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Note: "202 Accepted" status code. */
   if (status_code != 202) {
@@ -1732,13 +1627,8 @@ start_batch_upload_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   /* Note: "202 Accepted" status code. */
   if (status_code != 202) {
@@ -1836,13 +1726,8 @@ sync_collection_cb (SoupSession *session,
 
   collection = ephy_synchronizable_manager_get_collection_name (data->manager);
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to get records in collection %s. Status code: %u, response: %s",
@@ -2169,13 +2054,8 @@ upload_client_record_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to upload client record. Status code: %u, response: %s",
@@ -2378,13 +2258,8 @@ upload_crypto_keys_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to upload crypto/keys record. Status code: %u, response: %s",
@@ -2455,13 +2330,8 @@ get_crypto_keys_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code == 404) {
     LOG ("crypto/keys record not found, uploading new one...");
@@ -2554,13 +2424,8 @@ upload_meta_global_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to upload meta/global record. Status code: %u, response: %s",
@@ -2640,13 +2505,8 @@ verify_storage_version_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code == 404) {
     LOG ("meta/global record not found, uploading new one...");
@@ -2736,13 +2596,8 @@ upload_fxa_device_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to upload device info on FxA Server. Status code: %u, response: %s",
@@ -2885,13 +2740,8 @@ get_account_keys_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
   if (error) {
@@ -3086,13 +2936,8 @@ delete_open_tabs_record_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
@@ -3123,13 +2968,8 @@ delete_client_record_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-#else
-  status_code = msg->status_code;
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     g_warning ("Failed to delete client record. Status code: %u, response: %s",

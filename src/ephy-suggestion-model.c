@@ -635,17 +635,10 @@ history_query_completed_cb (EphyHistoryService *service,
   query_collection_done (self, g_steal_pointer (&task));
 }
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
 static void
 google_search_suggestions_cb (SoupSession  *session,
                               GAsyncResult *result,
                               gpointer      user_data)
-#else
-static void
-google_search_suggestions_cb (SoupSession *session,
-                              SoupMessage *msg,
-                              gpointer     user_data)
-#endif
 {
   GTask *task = G_TASK (user_data);
   EphySuggestionModel *self = g_task_get_source_object (task);
@@ -658,7 +651,7 @@ google_search_suggestions_cb (SoupSession *session,
   EphySearchEngine *engine;
   int added = 0;
   g_autoptr (GBytes) body = NULL;
-#if SOUP_CHECK_VERSION (2, 99, 4)
+
   SoupMessage *msg;
 
   body = soup_session_send_and_read_finish (session, result, NULL);
@@ -670,12 +663,6 @@ google_search_suggestions_cb (SoupSession *session,
     goto out;
 
   /* FIXME: we don't have a way to get the status code */
-#else
-  if (msg->status_code != 200)
-    goto out;
-
-  body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   shell = ephy_embed_shell_get_default ();
   manager = ephy_embed_shell_get_search_engine_manager (shell);
@@ -731,14 +718,10 @@ google_search_suggestions_query (EphySuggestionModel *self,
   escaped_query = g_markup_escape_text (query, -1);
   url = g_strdup_printf ("http://suggestqueries.google.com/complete/search?client=firefox&q=%s", escaped_query);
   msg = soup_message_new (SOUP_METHOD_GET, url);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)google_search_suggestions_cb,
                                     g_steal_pointer (&task));
   g_object_unref (msg);
-#else
-  soup_session_queue_message (self->session, g_steal_pointer (&msg), google_search_suggestions_cb, g_steal_pointer (&task));
-#endif
 }
 
 void

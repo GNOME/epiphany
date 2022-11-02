@@ -237,25 +237,15 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
 
   msg = soup_message_new (method, url);
 
-#if SOUP_CHECK_VERSION (2, 99, 4)
   request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
 
   if (body) {
-#if SOUP_CHECK_VERSION (2, 99, 4)
     g_autoptr (GBytes) bytes = NULL;
-#endif
 
     options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
                                                  NULL, NULL, NULL, body, NULL);
-#if SOUP_CHECK_VERSION (2, 99, 4)
     bytes = g_bytes_new (body, strlen (body));
     soup_message_set_request_body_from_bytes (msg, content_type, bytes);
-#else
-    soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY, body, strlen (body));
-#endif
   }
 
   if (!g_strcmp0 (method, "PUT") || !g_strcmp0 (method, "POST"))
@@ -321,7 +311,6 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   msg = ephy_sync_debug_prepare_soup_message (url, "POST", body,
                                               id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
   response_body = soup_session_send_and_read (session, msg, NULL, &error);
   if (!response_body) {
     LOG ("Failed to get signed certificate: %s", error->message);
@@ -329,11 +318,6 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   }
 
   status_code = soup_message_get_status (msg);
-#else
-  status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
-
   if (status_code != 200) {
     LOG ("Failed to get signed certificate: %s", (const char *)g_bytes_get_data (response_body, NULL));
     goto free_session;
@@ -410,15 +394,10 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
   msg = soup_message_new ("GET", token_server);
-#if SOUP_CHECK_VERSION (2, 99, 4)
   request_headers = soup_message_get_request_headers (msg);
-#else
-  request_headers = msg->request_headers;
-#endif
   soup_message_headers_append (request_headers, "X-Client-State", client_state);
   soup_message_headers_append (request_headers, "authorization", authorization);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
   response_body = soup_session_send_and_read (session, msg, NULL, &error);
   if (!response_body) {
     LOG ("Failed to get storage credentials: %s", error->message);
@@ -426,10 +405,6 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   }
 
   status_code = soup_message_get_status (msg);
-#else
-  status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     LOG ("Failed to get storage credentials: %s", (const char *)g_bytes_get_data (response_body, NULL));
@@ -498,13 +473,8 @@ ephy_sync_debug_send_request (const char *endpoint,
                                               (const guint8 *)storage_key,
                                               strlen (storage_key));
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
   response_body = soup_session_send_and_read (session, msg, NULL, NULL);
   status_code = soup_message_get_status (msg);
-#else
-  status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (response_body) {
     if (status_code == 200)
@@ -1096,12 +1066,7 @@ ephy_sync_debug_view_connected_devices (void)
   id_hex = ephy_sync_utils_encode_hex (id, 32);
   msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
   response_body = soup_session_send_and_read (session, msg, NULL, NULL);
-#else
-  soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (response_body)
     LOG ("%s", (const char *)g_bytes_get_data (response_body, NULL));
@@ -1157,7 +1122,6 @@ ephy_sync_debug_get_current_device (void)
   id_hex = ephy_sync_utils_encode_hex (id, 32);
   msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
   session = soup_session_new ();
-#if SOUP_CHECK_VERSION (2, 99, 4)
   response_body = soup_session_send_and_read (session, msg, NULL, &error);
   if (!response_body) {
     LOG ("Failed to GET account devices: %s", error->message);
@@ -1165,10 +1129,6 @@ ephy_sync_debug_get_current_device (void)
   }
 
   status_code = soup_message_get_status (msg);
-#else
-  status_code = soup_session_send_message (session, msg);
-  response_body = g_bytes_new_static (msg->response_body->data, msg->response_body->length);
-#endif
 
   if (status_code != 200) {
     LOG ("Failed to GET account devices: %s", (const char *)g_bytes_get_data (response_body, NULL));
