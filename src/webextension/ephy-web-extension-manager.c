@@ -404,9 +404,12 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   gboolean is_xpi = FALSE;
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) web_extensions_dir = NULL;
+  const char *path;
 
   web_extensions_dir = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
-  is_xpi = g_str_has_suffix (g_file_peek_path (file), ".xpi");
+  path = g_file_peek_path (file);
+  g_assert (path);
+  is_xpi = g_str_has_suffix (path, ".xpi");
 
   /* FIXME: Make this async. */
 
