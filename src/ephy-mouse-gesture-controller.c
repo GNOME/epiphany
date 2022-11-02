@@ -51,7 +51,6 @@ struct _EphyMouseGestureController {
   gint sequence_pos;
   gdouble last_x;
   gdouble last_y;
-  gboolean gesture_active;
 };
 
 enum {
@@ -71,7 +70,8 @@ ephy_mouse_gesture_controller_reset (EphyMouseGestureController *self)
   self->sequence_pos = 0;
   self->last_x = 0;
   self->last_y = 0;
-  self->gesture_active = FALSE;
+
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->gesture));
 }
 
 static void
@@ -107,18 +107,23 @@ drag_update_cb (GtkGestureDrag             *gesture,
   MouseDirection direction;
   double delta_x = offset_x - self->last_x;
   double delta_y = offset_y - self->last_y;
+  GdkEventSequence *sequence;
 
   self->last_x = offset_x;
   self->last_y = offset_y;
 
-  if (!self->gesture_active &&
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) != GTK_EVENT_SEQUENCE_CLAIMED &&
       gtk_drag_check_threshold (GTK_WIDGET (self->window),
                                 0, 0, offset_x, offset_y)) {
-    self->gesture_active = TRUE;
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   }
 
-  if (!self->gesture_active || self->sequence_pos == NUM_SEQUENCES)
+  if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) != GTK_EVENT_SEQUENCE_CLAIMED ||
+      self->sequence_pos == NUM_SEQUENCES) {
     return;
+  }
 
   /* Try to guess direction */
   if (fabs (delta_x) > fabs (delta_y) * 2) {
@@ -153,11 +158,6 @@ drag_end_cb (GtkGestureDrag             *gesture,
   GActionGroup *action_group_win = ephy_window_get_action_group (self->window, "win");
   GActionGroup *action_group_tab = ephy_window_get_action_group (self->window, "tab");
   GAction *action;
-
-  if (!self->gesture_active)
-    return;
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   switch (self->sequence_pos) {
     case 1:
