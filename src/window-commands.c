@@ -1074,8 +1074,6 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_set_documenters (dialog, (const char **)documenters);
   gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_window_destroy), NULL);
   gtk_window_present (GTK_WINDOW (dialog));
 
   g_free (comments);
