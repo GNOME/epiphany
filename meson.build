@@ -74,12 +74,14 @@ conf.set_quoted('GSB_API_KEY', gsb_api_key)
 conf.set10('ENABLE_GSB', gsb_api_key != '')
 
 glib_requirement = '>= 2.70.0'
-gtk_requirement = '>= 4.5.0'
+gtk_requirement = '>= 4.6.0'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.37.90'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_70')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_70')
+conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_6')
+conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_6')
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-4', version: '>= 3.9.0')
