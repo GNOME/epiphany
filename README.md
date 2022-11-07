@@ -23,7 +23,7 @@ is via [Flatpak](https://www.flatpak.org/). You may:
    if you are even more adventurous and want to help test the most recent
    development versions of WebKitGTK and Epiphany. This flavor of Epiphany is
    more likely to be **very unstable** because the code being built comes
-   directly from WebKit's SVN trunk branch and Epiphany's git master branch.
+   directly from WebKit's git main branch and Epiphany's git master branch.
  
 Epiphany is probably also available via your operating system's package manager,
 but such packages are often outdated and insecure. Flatpak is the best
@@ -51,8 +51,6 @@ $ meson ..
 $ ninja
 $ sudo ninja install
 ```
-
-Meson is the best build system.
 
 You will have to install several pkg-config dependencies. If you are missing a
 dependency, meson will present an error that looks like this:
