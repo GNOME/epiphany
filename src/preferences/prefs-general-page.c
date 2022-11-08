@@ -20,6 +20,7 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "prefs-general-page.h"
 
 #include "ephy-embed-shell.h"
