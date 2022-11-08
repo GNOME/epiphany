@@ -59,6 +59,7 @@
 #include <gio/gio.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gst/gst.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
@@ -979,8 +980,8 @@ window_cmd_show_about (GSimpleAction *action,
                        gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  GtkAboutDialog *dialog;
-  char *comments = NULL;
+  AdwAboutWindow *dialog;
+  char *debug_info;
   GKeyFile *key_file;
   GBytes *bytes;
   GError *error = NULL;
@@ -1008,76 +1009,68 @@ window_cmd_show_about (GSimpleAction *action,
   documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", NULL, NULL);
   g_key_file_free (key_file);
 
-  comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
-                                "Powered by WebKitGTK %d.%d.%d" WEBKIT_REVISION),
-                              webkit_get_major_version (),
-                              webkit_get_minor_version (),
-                              webkit_get_micro_version ());
-
-  dialog = GTK_ABOUT_DIALOG (gtk_about_dialog_new ());
-
-  if (window) {
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  }
-
-  if (g_str_equal (PROFILE, "Canary"))
-    gtk_about_dialog_set_program_name (dialog, _("Epiphany Canary"));
-  else {
-#if !TECH_PREVIEW
-    gtk_about_dialog_set_program_name (dialog, _("Web"));
-#else
-    gtk_about_dialog_set_program_name (dialog, _("Epiphany Technology Preview"));
-#endif
-  }
-
-  gtk_about_dialog_set_version (dialog, VERSION);
-  gtk_about_dialog_set_copyright (dialog,
-                                  "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                                  "Copyright © 2003–2021 The GNOME Web Developers");
-  gtk_about_dialog_set_comments (dialog, comments);
-  gtk_about_dialog_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
-  gtk_about_dialog_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
-  gtk_about_dialog_set_website_label (dialog, _("Website"));
-  gtk_about_dialog_set_logo_icon_name (dialog, APPLICATION_ID);
+  debug_info = g_strdup_printf ("WebKitGTK %d.%d.%d" WEBKIT_REVISION "\n"
+                                "%s",
+                                webkit_get_major_version (),
+                                webkit_get_minor_version (),
+                                webkit_get_micro_version (),
+                                gst_version_string ());
 
   length = g_strv_length (orig_authors) +
            g_strv_length (maintainers) +
            g_strv_length (past_maintainers) +
-           g_strv_length (contributors) +
-           3;
+           g_strv_length (contributors);
 
   authors = g_malloc0 (sizeof (char *) * (length + 1));
 
   for (index = 0; index < g_strv_length (orig_authors); index++)
     authors[author_index++] = g_strdup (orig_authors[index]);
 
-  authors[author_index++] = g_strdup ("");
-
   for (index = 0; index < g_strv_length (maintainers); index++)
     authors[author_index++] = g_strdup (maintainers[index]);
 
-  authors[author_index++] = g_strdup ("");
-
   for (index = 0; index < g_strv_length (past_maintainers); index++)
     authors[author_index++] = g_strdup (past_maintainers[index]);
-
-  authors[author_index++] = g_strdup ("");
 
   for (index = 0; index < g_strv_length (contributors); index++) {
     authors[author_index++] = g_strdup (contributors[index]);
   }
 
-  gtk_about_dialog_set_authors (dialog, (const char **)authors);
-  gtk_about_dialog_set_artists (dialog, (const char **)artists);
-  gtk_about_dialog_set_documenters (dialog, (const char **)documenters);
-  gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
+  dialog = ADW_ABOUT_WINDOW (adw_about_window_new ());
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_window_destroy), NULL);
+  if (window)
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+
+  if (g_str_equal (PROFILE, "Canary"))
+    adw_about_window_set_application_name (dialog, _("Epiphany Canary"));
+  else {
+#if !TECH_PREVIEW
+    adw_about_window_set_application_name (dialog, _("Web"));
+#else
+    adw_about_window_set_application_name (dialog, _("Epiphany Technology Preview"));
+#endif
+  }
+
+  adw_about_window_set_version (dialog, VERSION);
+  adw_about_window_set_copyright (dialog,
+                                  "Copyright © 2002–2004 Marco Pesenti Gritti\n"
+                                  "Copyright © 2003–2021 The GNOME Web Developers");
+  adw_about_window_set_developer_name (dialog, _("The GNOME Project"));
+
+  adw_about_window_set_debug_info (dialog, debug_info);
+  adw_about_window_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
+  adw_about_window_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
+  adw_about_window_set_application_icon (dialog, APPLICATION_ID);
+
+  adw_about_window_set_developers (dialog, (const char **)authors);
+  adw_about_window_set_designers (dialog, (const char **)artists);
+  adw_about_window_set_documenters (dialog, (const char **)documenters);
+  adw_about_window_set_translator_credits (dialog, _("translator-credits"));
+  adw_about_window_set_issue_url (dialog, "https://gitlab.gnome.org/GNOME/epiphany/-/issues/new");
+
   gtk_window_present (GTK_WINDOW (dialog));
 
-  g_free (comments);
+  g_free (debug_info);
   g_strfreev (artists);
   g_strfreev (authors);
   g_strfreev (contributors);
