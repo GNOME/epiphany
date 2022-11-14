@@ -98,33 +98,33 @@ entry_activate_cb (EphyLocationEntry      *entry,
     EphyWebView *webview;
     g_auto (GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
 
-    g_assert (g_strv_length (split) == 2);
+    if (g_strv_length (split) == 2) {
+      tab = ephy_tab_view_get_selected_page (tab_view);
+      webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
 
-    tab = ephy_tab_view_get_selected_page (tab_view);
-    webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
+      if (atoi (split[1]) != 0) {
+        GApplication *application;
+        EphyEmbedShell *shell;
+        EphyWindow *window;
+        GList *windows;
 
-    if (atoi (split[1]) != 0) {
-      GApplication *application;
-      EphyEmbedShell *shell;
-      EphyWindow *window;
-      GList *windows;
+        shell = ephy_embed_shell_get_default ();
+        application = G_APPLICATION (shell);
+        windows = gtk_application_get_windows (GTK_APPLICATION (application));
 
-      shell = ephy_embed_shell_get_default ();
-      application = G_APPLICATION (shell);
-      windows = gtk_application_get_windows (GTK_APPLICATION (application));
+        window = g_list_nth_data (windows, atoi (split[1]));
+        tab_view = ephy_window_get_tab_view (window);
 
-      window = g_list_nth_data (windows, atoi (split[1]));
-      tab_view = ephy_window_get_tab_view (window);
+        gtk_window_present (GTK_WINDOW (window));
+      }
 
-      gtk_window_present (GTK_WINDOW (window));
+      ephy_tab_view_select_nth_page (tab_view, atoi (split[0]));
+
+      if (ephy_web_view_is_overview (webview))
+        ephy_tab_view_close (tab_view, tab);
+
+      return;
     }
-
-    ephy_tab_view_select_nth_page (tab_view, atoi (split[0]));
-
-    if (ephy_web_view_is_overview (webview))
-      ephy_tab_view_close (tab_view, tab);
-
-    return;
   }
 
   address = g_strdup (content);
