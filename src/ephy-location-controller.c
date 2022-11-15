@@ -99,10 +99,13 @@ entry_activate_cb (EphyLocationEntry      *entry,
     g_auto (GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
 
     if (g_strv_length (split) == 2) {
+      int window_id = atoi (split[1]);
+      int tab_id = atoi (split[0]);
+
       tab = ephy_tab_view_get_selected_page (tab_view);
       webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
 
-      if (atoi (split[1]) != 0) {
+      if (window_id != 0) {
         GApplication *application;
         EphyEmbedShell *shell;
         EphyWindow *window;
@@ -112,13 +115,16 @@ entry_activate_cb (EphyLocationEntry      *entry,
         application = G_APPLICATION (shell);
         windows = gtk_application_get_windows (GTK_APPLICATION (application));
 
-        window = g_list_nth_data (windows, atoi (split[1]));
-        tab_view = ephy_window_get_tab_view (window);
+        if (window_id < g_list_length (windows)) {
+          window = g_list_nth_data (windows, window_id);
+          tab_view = ephy_window_get_tab_view (window);
 
-        gtk_window_present (GTK_WINDOW (window));
+          gtk_window_present (GTK_WINDOW (window));
+        }
       }
 
-      ephy_tab_view_select_nth_page (tab_view, atoi (split[0]));
+      if (tab_id < ephy_tab_view_get_n_pages (tab_view))
+        ephy_tab_view_select_nth_page (tab_view, tab_id);
 
       if (ephy_web_view_is_overview (webview))
         ephy_tab_view_close (tab_view, tab);
