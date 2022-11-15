@@ -109,6 +109,9 @@ handle_ephy_tab_uri (EphyLocationController *controller,
     window = g_list_nth_data (windows, window_id);
     tab_view = ephy_window_get_tab_view (window);
 
+    /* FIXME: this doesn't actually work.
+     * https://gitlab.gnome.org/GNOME/epiphany/-/issues/1908
+     */
     gtk_window_present (GTK_WINDOW (window));
   }
 
