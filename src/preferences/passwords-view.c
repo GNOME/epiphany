@@ -239,9 +239,7 @@ populate_model_cb (GList    *records,
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
     GtkWidget *row;
     GtkWidget *sub_row;
-    GtkWidget *separator;
     GtkWidget *button;
-    GtkWidget *entry;
     const char *text;
 
     row = adw_expander_row_new ();
@@ -253,68 +251,36 @@ populate_model_cb (GList    *records,
     button = gtk_button_new_from_icon_name ("edit-copy-symbolic");
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_widget_set_tooltip_text (button, _("Copy password"));
+    gtk_widget_add_css_class (button, "flat");
     adw_expander_row_add_action (ADW_EXPANDER_ROW (row), button);
     g_signal_connect (button, "clicked", G_CALLBACK (copy_password_clicked), (void *)(ephy_password_record_get_password (record)));
 
     /* Username */
-    sub_row = adw_action_row_new ();
+    sub_row = adw_entry_row_new ();
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Username"));
+    gtk_editable_set_editable (GTK_EDITABLE (sub_row), FALSE);
     adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
-
-    entry = gtk_entry_new ();
-    gtk_widget_set_hexpand (entry, TRUE);
-    gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
-    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
-    gtk_entry_set_alignment (GTK_ENTRY (entry), 1.0f);
-    gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
 
     text = ephy_password_record_get_username (record);
     if (text)
-      gtk_editable_set_text (GTK_EDITABLE (entry), text);
-
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), entry);
-
-    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_margin_top (separator, 8);
-    gtk_widget_set_margin_bottom (separator, 8);
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), separator);
+      gtk_editable_set_text (GTK_EDITABLE (sub_row), text);
 
     button = gtk_button_new_from_icon_name ("edit-copy-symbolic");
     g_signal_connect (button, "clicked", G_CALLBACK (copy_username_clicked), (void *)(ephy_password_record_get_username (record)));
     gtk_widget_set_tooltip_text (button, _("Copy username"));
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), button);
+    gtk_widget_add_css_class (button, "flat");
+    adw_entry_row_add_suffix (ADW_ENTRY_ROW (sub_row), button);
 
     /* Password */
-    sub_row = adw_action_row_new ();
+    sub_row = adw_password_entry_row_new ();
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Password"));
+    gtk_editable_set_editable (GTK_EDITABLE (sub_row), FALSE);
     adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
-
-    entry = gtk_password_entry_new ();
-    gtk_widget_set_hexpand (entry, TRUE);
-    gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
-    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
-    gtk_entry_set_alignment (GTK_ENTRY (entry), 1.0f);
-    gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
 
     text = ephy_password_record_get_password (record);
     if (text)
-      gtk_editable_set_text (GTK_EDITABLE (entry), text);
-
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), entry);
-
-    separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_margin_top (separator, 8);
-    gtk_widget_set_margin_bottom (separator, 8);
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), separator);
-
-    button = gtk_toggle_button_new ();
-    gtk_button_set_icon_name (GTK_BUTTON (button), "dialog-password-symbolic");
-    gtk_widget_set_tooltip_text (button, _("Reveal password"));
-    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-
-    g_object_bind_property (G_OBJECT (button), "active", G_OBJECT (entry), "visibility", G_BINDING_DEFAULT);
-    adw_action_row_add_suffix (ADW_ACTION_ROW (sub_row), button);
+      gtk_editable_set_text (GTK_EDITABLE (sub_row), text);
 
     /* Remove button */
     sub_row = adw_action_row_new ();
