@@ -145,6 +145,7 @@ create_row (PrefsExtensionsPage *self,
 
   /* Arrow */
   arrow = gtk_image_new_from_icon_name ("go-next-symbolic");
+  gtk_widget_set_margin_start (arrow, 6);
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), arrow);
 
   return GTK_WIDGET (row);
