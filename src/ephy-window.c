@@ -634,11 +634,11 @@ ephy_window_should_view_receive_key_press_event (EphyWindow      *window,
 }
 
 static gboolean
-key_pressed_cb (EphyWindow            *window,
-                guint                  keyval,
-                guint                  keycode,
-                GdkModifierType        state,
-                GtkEventControllerKey *controller)
+handle_key_cb (EphyWindow            *window,
+               guint                  keyval,
+               guint                  keycode,
+               GdkModifierType        state,
+               GtkEventControllerKey *controller)
 {
   EphyWebView *view;
 
@@ -3751,7 +3751,8 @@ ephy_window_constructed (GObject *object)
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (key_pressed_cb), window);
+  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (handle_key_cb), window);
+  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
   gtk_widget_add_controller (GTK_WIDGET (window), controller);
 }
 
