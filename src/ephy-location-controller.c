@@ -74,6 +74,55 @@ G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYP
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
                                                 NULL))
 
+static gboolean
+handle_ephy_tab_uri (EphyLocationController *controller,
+                     const char             *content)
+{
+  EphyTabView *tab_view = ephy_window_get_tab_view (controller->window);
+  GtkWidget *tab;
+  EphyWebView *webview;
+  int window_id;
+  int tab_id;
+  g_auto (GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
+
+  if (g_strv_length (split) != 2)
+    return FALSE;
+
+  window_id = atoi (split[1]);
+  tab_id = atoi (split[0]);
+  tab = ephy_tab_view_get_selected_page (tab_view);
+  webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
+
+  if (window_id != 0) {
+    GApplication *application;
+    EphyEmbedShell *shell;
+    EphyWindow *window;
+    GList *windows;
+
+    shell = ephy_embed_shell_get_default ();
+    application = G_APPLICATION (shell);
+    windows = gtk_application_get_windows (GTK_APPLICATION (application));
+
+    if ((guint)window_id >= g_list_length (windows))
+      return FALSE;
+
+    window = g_list_nth_data (windows, window_id);
+    tab_view = ephy_window_get_tab_view (window);
+
+    gtk_window_present (GTK_WINDOW (window));
+  }
+
+  if (tab_id >= ephy_tab_view_get_n_pages (tab_view))
+    return FALSE;
+
+  ephy_tab_view_select_nth_page (tab_view, tab_id);
+
+  if (ephy_web_view_is_overview (webview))
+    ephy_tab_view_close (tab_view, tab);
+
+  return TRUE;
+}
+
 static void
 entry_activate_cb (EphyLocationEntry      *entry,
                    GdkModifierType         modifiers,
@@ -92,46 +141,8 @@ entry_activate_cb (EphyLocationEntry      *entry,
   if (content == NULL || content[0] == '\0')
     return;
 
-  if (g_str_has_prefix (content, "ephy-tab://")) {
-    EphyTabView *tab_view = ephy_window_get_tab_view (controller->window);
-    GtkWidget *tab;
-    EphyWebView *webview;
-    g_auto (GStrv) split = g_strsplit (content + strlen ("ephy-tab://"), "@", -1);
-
-    if (g_strv_length (split) == 2) {
-      int window_id = atoi (split[1]);
-      int tab_id = atoi (split[0]);
-
-      tab = ephy_tab_view_get_selected_page (tab_view);
-      webview = ephy_embed_get_web_view (EPHY_EMBED (tab));
-
-      if (window_id != 0) {
-        GApplication *application;
-        EphyEmbedShell *shell;
-        EphyWindow *window;
-        GList *windows;
-
-        shell = ephy_embed_shell_get_default ();
-        application = G_APPLICATION (shell);
-        windows = gtk_application_get_windows (GTK_APPLICATION (application));
-
-        if (window_id < g_list_length (windows)) {
-          window = g_list_nth_data (windows, window_id);
-          tab_view = ephy_window_get_tab_view (window);
-
-          gtk_window_present (GTK_WINDOW (window));
-        }
-      }
-
-      if (tab_id < ephy_tab_view_get_n_pages (tab_view))
-        ephy_tab_view_select_nth_page (tab_view, tab_id);
-
-      if (ephy_web_view_is_overview (webview))
-        ephy_tab_view_close (tab_view, tab);
-
-      return;
-    }
-  }
+  if (g_str_has_prefix (content, "ephy-tab://") && handle_ephy_tab_uri (controller, content))
+    return;
 
   address = g_strdup (content);
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
