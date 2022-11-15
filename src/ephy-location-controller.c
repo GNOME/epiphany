@@ -117,8 +117,11 @@ handle_ephy_tab_uri (EphyLocationController *controller,
 
   ephy_tab_view_select_nth_page (tab_view, tab_id);
 
-  if (ephy_web_view_is_overview (webview))
+  if (ephy_web_view_is_overview (webview)) {
+    if (window_id != 0)
+      tab_view = ephy_window_get_tab_view (controller->window);
     ephy_tab_view_close (tab_view, tab);
+  }
 
   return TRUE;
 }
