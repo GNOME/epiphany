@@ -207,6 +207,9 @@ is_host_with_port (const char *address)
   if (strchr (address, ' '))
     return FALSE;
 
+  if (g_str_has_suffix (address, "/"))
+    return TRUE;
+
   split = g_strsplit (address, ":", -1);
   if (g_strv_length (split) == 2)
     port = g_ascii_strtoll (split[1], NULL, 10);
