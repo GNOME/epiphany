@@ -646,16 +646,6 @@ handle_key_cb (EphyWindow            *window,
   if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
     return GDK_EVENT_PROPAGATE;
 
-  /* GtkWindow's key press handler first calls gtk_window_activate_key,
-   * then gtk_window_propagate_key_event. We want to do the opposite,
-   * because we want to give webpages the chance to override most
-   * Epiphany shortcuts. For example, Ctrl+I in Google Docs should
-   * italicize your text and not open a new incognito window. So:
-   * first, propagate the event to the web view. Next, try
-   * accelerators only if the web view did not handle the event. But
-   * short-circuit the event propagation if it's a special keybinding
-   * that is reserved for Epiphany not allowed to be seen by webpages.
-   */
   if (ephy_window_should_view_receive_key_press_event (window, keyval, state))
     return gtk_event_controller_key_forward (controller, GTK_WIDGET (view));
 
