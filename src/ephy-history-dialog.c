@@ -555,50 +555,36 @@ add_urls_source (EphyHistoryDialog *self)
 }
 
 static void
-confirmation_dialog_response_cb (GtkWidget         *dialog,
-                                 int                response,
-                                 EphyHistoryDialog *self)
+confirmation_dialog_response_cb (EphyHistoryDialog *self)
 {
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  ephy_history_service_clear (self->history_service,
+                              NULL, NULL, NULL);
+  filter_now (self);
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    ephy_history_service_clear (self->history_service,
-                                NULL, NULL, NULL);
-    filter_now (self);
-
-    ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
-  }
+  ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
 }
 
 static GtkWidget *
 confirmation_dialog_construct (EphyHistoryDialog *self)
 {
-  GtkWidget *dialog, *button;
+  GtkWidget *dialog;
 
-  dialog = gtk_message_dialog_new
-             (GTK_WINDOW (self),
-             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-             GTK_MESSAGE_WARNING,
-             GTK_BUTTONS_CANCEL,
-             _("Clear browsing history?"));
+  dialog = adw_message_dialog_new (GTK_WINDOW (self),
+                                   _("Clear Browsing History?"),
+                                   _("Clearing the browsing history will cause all"
+                                     " history links to be permanently deleted."));
 
-  gtk_message_dialog_format_secondary_text
-    (GTK_MESSAGE_DIALOG (dialog),
-    _("Clearing the browsing history will cause all"
-      " history links to be permanently deleted."));
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "clear", _("Cl_ear"),
+                                    NULL);
+  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+                                              "clear",
+                                              ADW_RESPONSE_DESTRUCTIVE);
 
-  gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (self)),
-                               GTK_WINDOW (dialog));
-
-  button = gtk_button_new_with_mnemonic (_("Cl_ear"));
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (confirmation_dialog_response_cb),
-                    self);
+  g_signal_connect_swapped (dialog, "response::clear",
+                            G_CALLBACK (confirmation_dialog_response_cb),
+                            self);
 
   return dialog;
 }

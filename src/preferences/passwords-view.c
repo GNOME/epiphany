@@ -157,53 +157,40 @@ ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
 }
 
 static void
-confirmation_dialog_response_cb (GtkWidget         *dialog,
-                                 int                response,
-                                 EphyPasswordsView *self)
+confirmation_dialog_response_cb (EphyPasswordsView *self)
 {
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  ephy_password_manager_forget_all (self->manager);
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    ephy_password_manager_forget_all (self->manager);
+  clear_listbox (self->listbox);
+  ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), FALSE);
 
-    clear_listbox (self->listbox);
-    ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), FALSE);
-
-    g_list_free_full (self->records, g_object_unref);
-    self->records = NULL;
-  }
+  g_list_free_full (self->records, g_object_unref);
+  self->records = NULL;
 }
 
 static GtkWidget *
 confirmation_dialog_construct (EphyPasswordsView *self)
 {
   GtkWidget *dialog;
-  GtkWidget *button;
   GtkRoot *window;
 
   window = gtk_widget_get_root (GTK_WIDGET (self));
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_WARNING,
-                                   GTK_BUTTONS_CANCEL,
-                                   _("Delete All Passwords?"));
+  dialog = adw_message_dialog_new (GTK_WINDOW (window),
+                                   _("Delete All Passwords?"),
+                                   _("This will clear all locally stored passwords, and can not be undone."));
 
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            _("This will clear all locally stored passwords, and can not be undone."));
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "delete", _("_Delete"),
+                                    NULL);
+  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+                                              "delete",
+                                              ADW_RESPONSE_DESTRUCTIVE);
 
-  gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (window)),
-                               GTK_WINDOW (dialog));
-
-  button = gtk_button_new_with_mnemonic (_("_Delete"));
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (confirmation_dialog_response_cb),
-                    self);
+  g_signal_connect_swapped (dialog, "response::delete",
+                            G_CALLBACK (confirmation_dialog_response_cb),
+                            self);
 
   return dialog;
 }

@@ -252,24 +252,18 @@ construct_confirm_close_dialog (EphyWindow *window,
                                 const char *action)
 {
   GtkWidget *dialog;
-  GtkWidget *button;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                   GTK_DIALOG_MODAL,
-                                   GTK_MESSAGE_WARNING,
-                                   GTK_BUTTONS_CANCEL,
-                                   "%s", title);
+  dialog = adw_message_dialog_new (GTK_WINDOW (window), title, info);
 
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", info);
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "accept", action,
+                                    NULL);
 
-  button = gtk_dialog_add_button (GTK_DIALOG (dialog), action, GTK_RESPONSE_ACCEPT);
-  gtk_widget_add_css_class (button, "destructive-action");
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-  /* FIXME gtk_window_set_title (GTK_WINDOW (dialog), _("Close Document?")); */
-  gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
-                               GTK_WINDOW (dialog));
+  adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+                                              "accept",
+                                              ADW_RESPONSE_DESTRUCTIVE);
 
   return dialog;
 }
@@ -2774,15 +2768,13 @@ tab_has_modified_forms_data_free (TabHasModifiedFormsData *data)
 }
 
 static void
-tab_has_modified_forms_dialog_cb (GtkDialog               *dialog,
-                                  GtkResponseType          response,
+tab_has_modified_forms_dialog_cb (AdwMessageDialog        *dialog,
+                                  const char              *response,
                                   TabHasModifiedFormsData *data)
 {
   AdwTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT) {
+  if (!strcmp (response, "accept")) {
     /* It's safe to close the tab immediately because we are only checking a
      * single tab for modified forms here. There is an entirely separate
      * codepath for checking modified forms when closing the whole window,
@@ -2817,9 +2809,9 @@ tab_has_modified_forms_cb (EphyWebView             *view,
       GtkWidget *dialog;
 
       dialog = construct_confirm_close_dialog (data->window,
-                                               _("Do you want to leave this website?"),
-                                               _("A form you modified has not been submitted."),
-                                               _("_Discard form"));
+                                               _("Leave Website?"),
+                                               _("A form was modified and has not been submitted"),
+                                               _("_Discard Form"));
 
       g_signal_connect (dialog, "response",
                         G_CALLBACK (tab_has_modified_forms_dialog_cb),
@@ -4091,19 +4083,6 @@ finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data
 }
 
 static void
-confirm_close_window_with_modified_forms_cb (GtkDialog                  *dialog,
-                                             GtkResponseType             response,
-                                             WindowHasModifiedFormsData *data)
-{
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT)
-    finish_window_close_after_modified_forms_check (data);
-  else
-    window_has_modified_forms_data_free (data);
-}
-
-static void
 continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
   data->window->checking_modified_forms = FALSE;
@@ -4117,12 +4096,15 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
                            data->modified_embed);
 
     dialog = construct_confirm_close_dialog (data->window,
-                                             _("Do you want to leave this website?"),
-                                             _("A form you modified has not been submitted."),
-                                             _("_Discard form"));
-    g_signal_connect (dialog, "response",
-                      G_CALLBACK (confirm_close_window_with_modified_forms_cb),
-                      data);
+                                             _("Leave Website?"),
+                                             _("A form was modified and has not been submitted"),
+                                             _("_Discard Form"));
+    g_signal_connect_swapped (dialog, "response::accept",
+                              G_CALLBACK (finish_window_close_after_modified_forms_check),
+                              data);
+    g_signal_connect_swapped (dialog, "response::cancel",
+                              G_CALLBACK (window_has_modified_forms_data_free),
+                              data);
     gtk_window_present (GTK_WINDOW (dialog));
 
     return;
@@ -4196,16 +4178,10 @@ ephy_window_check_modified_forms (EphyWindow *window)
 }
 
 static void
-window_close_with_multiple_tabs_cb (GtkDialog       *dialog,
-                                    GtkResponseType  response,
-                                    EphyWindow      *window)
+window_close_with_multiple_tabs_cb (EphyWindow *window)
 {
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT) {
-    window->confirmed_close_with_multiple_tabs = TRUE;
-    gtk_window_close (GTK_WINDOW (window));
-  }
+  window->confirmed_close_with_multiple_tabs = TRUE;
+  gtk_window_close (GTK_WINDOW (window));
 }
 
 /**
@@ -4251,13 +4227,13 @@ ephy_window_close (EphyWindow *window)
     GtkWidget *dialog;
 
     dialog = construct_confirm_close_dialog (window,
-                                             _("There are multiple tabs open."),
-                                             _("If you close this window, all open tabs will be lost"),
-                                             _("C_lose tabs"));
+                                             _("Close Multiple Tabs?"),
+                                             _("If this window is closed, all open tabs will be lost"),
+                                             _("C_lose Tabs"));
 
-    g_signal_connect (dialog, "response",
-                      G_CALLBACK (window_close_with_multiple_tabs_cb),
-                      window);
+    g_signal_connect_swapped (dialog, "response::accept",
+                              G_CALLBACK (window_close_with_multiple_tabs_cb),
+                              window);
     gtk_window_present (GTK_WINDOW (dialog));
 
     /* stop window close */

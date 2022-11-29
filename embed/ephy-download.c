@@ -626,11 +626,11 @@ typedef struct {
 } SuggestedFilenameData;
 
 static void
-filename_suggested_dialog_cb (GtkDialog             *dialog,
-                              GtkResponseType        response,
+filename_suggested_dialog_cb (AdwMessageDialog      *dialog,
+                              const char            *response,
                               SuggestedFilenameData *data)
 {
-  if (response == GTK_RESPONSE_OK) {
+  if (!strcmp (response, "download")) {
     g_autofree gchar *directory = g_file_get_path (data->directory);
 
     set_destination_uri_for_suggested_filename (data->download, directory, data->suggested_filename);
@@ -647,7 +647,6 @@ filename_suggested_dialog_cb (GtkDialog             *dialog,
     data->result = FALSE;
   }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
   g_main_loop_quit (data->nested_loop);
 }
 
@@ -708,7 +707,6 @@ run_download_confirmation_dialog (EphyDownload *download,
 {
   GApplication *application;
   GtkWidget *dialog = NULL;
-  GtkWidget *message_area;
   GtkWidget *box;
   GtkWindow *toplevel;
   GtkWidget *type_label;
@@ -730,21 +728,19 @@ run_download_confirmation_dialog (EphyDownload *download,
   application = G_APPLICATION (ephy_embed_shell_get_default ());
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (toplevel),
-                                   GTK_DIALOG_USE_HEADER_BAR | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   "%s",
-                                   _("Download requested"));
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL, _("_Download"), GTK_RESPONSE_OK, NULL);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", suggested_filename);
-  message_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
+  dialog = adw_message_dialog_new (GTK_WINDOW (toplevel),
+                                   _("Download requested"),
+                                   suggested_filename);
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "download", _("_Download"),
+                                    NULL);
 
   webkit_download = ephy_download_get_webkit_download (download);
   response = webkit_download_get_response (webkit_download);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_append (GTK_BOX (message_area), box);
+  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), box);
 
   /* Type */
   content_length = g_format_size (webkit_uri_response_get_content_length (response));

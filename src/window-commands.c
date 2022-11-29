@@ -257,19 +257,15 @@ show_import_export_result (GtkWindow  *parent,
 {
   GtkWidget *info_dialog;
 
-  info_dialog = gtk_message_dialog_new (parent,
-                                        GTK_DIALOG_MODAL,
-                                        success ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
-                                        GTK_BUTTONS_OK,
-                                        "%s",
+  info_dialog = adw_message_dialog_new (parent, NULL,
                                         success ? message : error->message);
+
+  adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (info_dialog),
+                                   "close", _("_Close"));
 
   if (destroy_parent)
     g_signal_connect_swapped (info_dialog, "response",
                               G_CALLBACK (gtk_window_destroy), parent);
-
-  g_signal_connect (info_dialog, "response",
-                    G_CALLBACK (gtk_window_destroy), NULL);
 
   gtk_window_present (GTK_WINDOW (info_dialog));
 }
@@ -1192,15 +1188,13 @@ window_cmd_stop (GSimpleAction *action,
 }
 
 static void
-check_tab_has_modified_forms_confirm_cb (GtkDialog       *dialog,
-                                         GtkResponseType  response,
-                                         EphyEmbed       *embed)
+check_tab_has_modified_forms_confirm_cb (AdwMessageDialog *dialog,
+                                         const char       *response,
+                                         EphyEmbed        *embed)
 {
   WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response == GTK_RESPONSE_ACCEPT) {
+  if (!strcmp (response, "discard")) {
     gtk_widget_grab_focus (GTK_WIDGET (embed));
     webkit_web_view_reload (view);
   }
@@ -1215,26 +1209,22 @@ check_tab_has_modified_forms_and_reload_cb (EphyWebView  *view,
 {
   EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (view)));
   GtkWidget *dialog;
-  GtkWidget *button;
   gboolean has_modified_forms;
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
   if (has_modified_forms) {
-    dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                     GTK_DIALOG_MODAL,
-                                     GTK_MESSAGE_WARNING,
-                                     GTK_BUTTONS_CANCEL,
-                                     "%s", _("Do you want to reload this website?"));
+    dialog = adw_message_dialog_new (GTK_WINDOW (window),
+                                     _("Reload Website?"),
+                                     _("A form was modified and has not been submitted"));
 
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", _("A form you modified has not been submitted."));
+    adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                      "cancel", _("_Cancel"),
+                                      "discard", _("_Discard Form"),
+                                      NULL);
 
-    button = gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Discard form"), GTK_RESPONSE_ACCEPT);
-    gtk_widget_add_css_class (button, "destructive-action");
-
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
-
-    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (window)),
-                                 GTK_WINDOW (dialog));
+    adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+                                                "discard",
+                                                ADW_RESPONSE_DESTRUCTIVE);
 
     g_signal_connect (dialog, "response",
                       G_CALLBACK (check_tab_has_modified_forms_confirm_cb), embed);
@@ -1850,13 +1840,11 @@ save_as_application_proceed (EphyApplicationDialogData *data)
 }
 
 static void
-dialog_save_as_application_confirmation_cb (GtkDialog                 *dialog,
-                                            GtkResponseType            response,
+dialog_save_as_application_confirmation_cb (AdwMessageDialog          *dialog,
+                                            const char                *response,
                                             EphyApplicationDialogData *data)
 {
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response == GTK_RESPONSE_OK) {
+  if (!strcmp (response, "replace")) {
     ephy_web_application_delete (data->app_id, NULL);
     save_as_application_proceed (data);
   } else {
@@ -1903,22 +1891,18 @@ prepare_install_cb (GObject      *object,
   }
 
   confirmation_dialog =
-    gtk_message_dialog_new (GTK_WINDOW (data->window),
-                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                            GTK_MESSAGE_QUESTION,
-                            GTK_BUTTONS_NONE,
-                            _("A web application named “%s” already exists. Do you want to replace it?"),
-                            data->chosen_name);
-  gtk_dialog_add_buttons (GTK_DIALOG (confirmation_dialog),
-                          _("Cancel"),
-                          GTK_RESPONSE_CANCEL,
-                          _("Replace"),
-                          GTK_RESPONSE_OK,
-                          NULL);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (confirmation_dialog),
-                                            _("An application with the same name already exists. Replacing it will "
-                                              "overwrite it."));
-  gtk_dialog_set_default_response (GTK_DIALOG (confirmation_dialog), GTK_RESPONSE_CANCEL);
+    adw_message_dialog_new (GTK_WINDOW (data->window),
+                            _("Replace Existing Web App?"),
+                            NULL);
+
+  adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (confirmation_dialog),
+                                  _("An application named “%s” already exists, replacing it will overwrite it"),
+                                  data->chosen_name);
+
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (confirmation_dialog),
+                                    "cancel", _("_Cancel"),
+                                    "replace", _("_Replace"),
+                                    NULL);
 
   g_signal_connect (confirmation_dialog, "response",
                     G_CALLBACK (dialog_save_as_application_confirmation_cb), data);
@@ -2662,19 +2646,17 @@ window_cmd_go_tabs_view (GSimpleAction *action,
 }
 
 static void
-enable_browse_with_caret_state_cb (GtkMessageDialog *dialog,
-                                   GtkResponseType   response,
+enable_browse_with_caret_state_cb (AdwMessageDialog *dialog,
+                                   const char       *response,
                                    EphyWindow       *window)
 {
   GActionGroup *action_group = ephy_window_get_action_group (window, "win");
   GAction *action;
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "browse-with-caret");
 
-  if (response == GTK_RESPONSE_CANCEL) {
+  if (strcmp (response, "enable")) {
     g_simple_action_set_state (G_SIMPLE_ACTION (action),
                                g_variant_new_boolean (FALSE));
 
@@ -2700,17 +2682,15 @@ window_cmd_change_browse_with_caret_state (GSimpleAction *action,
   if (active) {
     GtkWidget *dialog;
 
-    dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_CANCEL,
-                                     _("Enable caret browsing mode?"));
-
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              _("Pressing F7 turns caret browsing on or off. This feature "
-                                                "places a moveable cursor in web pages, allowing you to move "
-                                                "around with your keyboard. Do you want to enable caret browsing?"));
-    gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Enable"), GTK_RESPONSE_ACCEPT);
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+    dialog = adw_message_dialog_new (GTK_WINDOW (window),
+                                     _("Enable Caret Browsing Mode?"),
+                                     _("Pressing F7 turns caret browsing on or off. This feature "
+                                       "places a moveable cursor in web pages, allowing you to move "
+                                       "around with your keyboard. Do you want to enable caret browsing?"));
+    adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                      "cancel", _("_Cancel"),
+                                      "enable", _("_Enable"),
+                                      NULL);
 
     g_signal_connect (dialog, "response",
                       G_CALLBACK (enable_browse_with_caret_state_cb), window);

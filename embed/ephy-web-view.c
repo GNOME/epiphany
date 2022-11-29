@@ -871,13 +871,11 @@ static gboolean
 unresponsive_process_timeout_cb (gpointer user_data);
 
 static void
-on_unresponsive_dialog_response (GtkDialog *dialog,
-                                 int        response_id,
-                                 gpointer   user_data)
+on_unresponsive_dialog_response (AdwMessageDialog *dialog,
+                                 const char       *response,
+                                 EphyWebView      *web_view)
 {
-  EphyWebView *web_view = EPHY_WEB_VIEW (user_data);
-
-  if (response_id == GTK_RESPONSE_YES)
+  if (!strcmp (response, "stop"))
     webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
   else
     web_view->unresponsive_process_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_HIGH,
@@ -885,7 +883,8 @@ on_unresponsive_dialog_response (GtkDialog *dialog,
                                                                             (GSourceFunc)unresponsive_process_timeout_cb,
                                                                             web_view,
                                                                             NULL);
-  g_clear_pointer (&web_view->unresponsive_process_dialog, gtk_window_destroy);
+
+  web_view->unresponsive_process_dialog = NULL;
 }
 
 static gboolean
@@ -897,15 +896,18 @@ unresponsive_process_timeout_cb (gpointer user_data)
     return G_SOURCE_CONTINUE;
 
   web_view->unresponsive_process_dialog =
-    GTK_WINDOW (gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view))),
-                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_NONE,
-                                        _("The current page '%s' is unresponsive"),
-                                        ephy_web_view_get_address (web_view)));
+    GTK_WINDOW (adw_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view))),
+                                        _("Page Unresponsive"),
+                                        NULL));
 
-  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("_Wait"), GTK_RESPONSE_NO);
-  gtk_dialog_add_button (GTK_DIALOG (web_view->unresponsive_process_dialog), _("Force _Stop"), GTK_RESPONSE_YES);
+  adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (web_view->unresponsive_process_dialog),
+                                  _("The current page “%s” is not responding"),
+                                  ephy_web_view_get_address (web_view));
+
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (web_view->unresponsive_process_dialog),
+                                    "wait", _("_Wait"),
+                                    "stop", _("Force _Stop"),
+                                    NULL);
 
   g_signal_connect (web_view->unresponsive_process_dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view);
   gtk_window_present (web_view->unresponsive_process_dialog);
