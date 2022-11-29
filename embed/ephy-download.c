@@ -707,10 +707,12 @@ run_download_confirmation_dialog (EphyDownload *download,
 {
   GApplication *application;
   GtkWidget *dialog = NULL;
-  GtkWidget *box;
+  GtkWidget *grid;
   GtkWindow *toplevel;
+  GtkWidget *icon;
+  GtkWidget *name_label;
   GtkWidget *type_label;
-  GtkWidget *from_label;
+  GtkWidget *source_label;
   GtkWidget *question_label;
   GtkWidget *button;
   GtkWidget *button_box;
@@ -718,9 +720,10 @@ run_download_confirmation_dialog (EphyDownload *download,
   WebKitDownload *webkit_download;
   WebKitURIResponse *response;
   g_autofree gchar *type_text = NULL;
-  g_autofree gchar *from_text = NULL;
+  g_autofree gchar *source_text = NULL;
   g_autofree gchar *content_length = NULL;
   g_autofree gchar *display_name = NULL;
+  g_autoptr (GIcon) gicon = NULL;
   const gchar *content_type;
   const char *directory_path;
   SuggestedFilenameData data;
@@ -729,8 +732,8 @@ run_download_confirmation_dialog (EphyDownload *download,
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
 
   dialog = adw_message_dialog_new (GTK_WINDOW (toplevel),
-                                   _("Download requested"),
-                                   suggested_filename);
+                                   _("Download Requested"),
+                                   NULL);
   adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
                                     "cancel", _("_Cancel"),
                                     "download", _("_Download"),
@@ -739,30 +742,48 @@ run_download_confirmation_dialog (EphyDownload *download,
   webkit_download = ephy_download_get_webkit_download (download);
   response = webkit_download_get_response (webkit_download);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), box);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  gtk_widget_set_margin_top (grid, 6);
+  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), grid);
 
-  /* Type */
   content_length = g_format_size (webkit_uri_response_get_content_length (response));
   content_type = ephy_download_get_content_type (download);
+
+  /* Icon */
+  gicon = g_content_type_get_symbolic_icon (content_type);
+  icon = gtk_image_new_from_gicon (gicon);
+  gtk_image_set_pixel_size (GTK_IMAGE (icon), 64);
+  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 3);
+
+  /* Name */
+  name_label = gtk_label_new (suggested_filename);
+  gtk_label_set_ellipsize (GTK_LABEL (name_label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_xalign (GTK_LABEL (name_label), 0);
+  gtk_widget_add_css_class (name_label, "heading");
+  gtk_grid_attach (GTK_GRID (grid), name_label, 1, 0, 1, 1);
+
+  /* Type */
   type_text = g_strdup_printf (_("Type: %s (%s)"), g_content_type_get_description (content_type), content_length);
   type_label = gtk_label_new (type_text);
-  gtk_widget_set_margin_top (type_label, 12);
-  gtk_box_append (GTK_BOX (box), type_label);
+  gtk_label_set_xalign (GTK_LABEL (type_label), 0);
+  gtk_grid_attach (GTK_GRID (grid), type_label, 1, 1, 1, 1);
 
-  /* From */
-  from_text = g_strdup_printf (_("From: %s"), ephy_string_get_host_name (webkit_uri_response_get_uri (response)));
-  from_label = gtk_label_new (from_text);
-  gtk_box_append (GTK_BOX (box), from_label);
+  /* Source */
+  source_text = g_strdup_printf (_("Source: %s"), ephy_string_get_host_name (webkit_uri_response_get_uri (response)));
+  source_label = gtk_label_new (source_text);
+  gtk_label_set_xalign (GTK_LABEL (source_label), 0);
+  gtk_grid_attach (GTK_GRID (grid), source_label, 1, 2, 1, 1);
 
   /* Question */
   question_label = gtk_label_new (_("Where do you want to save the file?"));
-  gtk_widget_set_margin_top (question_label, 12);
-  gtk_box_append (GTK_BOX (box), question_label);
+  gtk_widget_set_margin_top (question_label, 18);
+  gtk_widget_set_margin_bottom (question_label, 6);
+  gtk_grid_attach (GTK_GRID (grid), question_label, 0, 3, 2, 1);
 
   /* File Chooser Button */
   button = gtk_button_new ();
-  gtk_box_append (GTK_BOX (box), button);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 4, 2, 1);
 
   button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_hexpand (button_box, FALSE);
