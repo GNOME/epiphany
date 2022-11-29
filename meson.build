@@ -76,7 +76,7 @@ conf.set10('ENABLE_GSB', gsb_api_key != '')
 glib_requirement = '>= 2.70.0'
 gtk_requirement = '>= 4.6.0'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.39.0'
+webkitgtk_requirement = '>= 2.39.2'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_70')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_70')

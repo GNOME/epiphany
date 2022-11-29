@@ -1468,7 +1468,6 @@ parse_context_menu_user_data (WebKitContextMenu  *context_menu,
 static gboolean
 populate_context_menu (WebKitWebView       *web_view,
                        WebKitContextMenu   *context_menu,
-                       GdkEvent            *event,
                        WebKitHitTestResult *hit_test_result,
                        EphyWindow          *window)
 {
@@ -1498,6 +1497,7 @@ populate_context_menu (WebKitWebView       *web_view,
   char *open_selection_action_name = NULL;
   const char *selected_text = NULL;
   const char *uri = NULL;
+  GdkEvent *event = NULL;
   GdkModifierType state = 0;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -1790,6 +1790,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
   }
 
+  event = webkit_context_menu_get_event (context_menu);
   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     state = gdk_event_get_modifier_state (event);
 
