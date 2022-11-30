@@ -228,9 +228,6 @@ certificate_button_clicked_cb (GtkButton *button,
                                         popover->tls_errors,
                                         popover->security_level);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_window_destroy),
-                    NULL);
 
   gtk_popover_popdown (GTK_POPOVER (popover));
   gtk_window_present (GTK_WINDOW (dialog));

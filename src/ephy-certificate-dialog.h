@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_CERTIFICATE_DIALOG (ephy_certificate_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, EPHY, CERTIFICATE_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, EPHY, CERTIFICATE_DIALOG, GtkWindow)
 
 GtkWidget *ephy_certificate_dialog_new      (GtkWindow           *parent,
                                              const char          *address,

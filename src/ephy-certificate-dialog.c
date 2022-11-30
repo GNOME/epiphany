@@ -50,7 +50,7 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphyCertificateDialog {
-  GtkDialog parent_object;
+  GtkWindow parent_object;
 
   GtkWidget *icon;
   GtkWidget *title;
@@ -61,7 +61,7 @@ struct _EphyCertificateDialog {
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_WINDOW)
 
 static char *
 bytes_to_display (GBytes *bytes)
@@ -385,6 +385,7 @@ static void
 ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_certificate_dialog_constructed;
   object_class->set_property = ephy_certificate_dialog_set_property;
@@ -440,6 +441,8 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 static void
@@ -447,7 +450,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 {
   GtkWidget *grid;
   GtkWidget *scrolled_window;
-  GtkWidget *content_area;
   GtkWidget *clamp;
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
@@ -495,8 +497,8 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), clamp);
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_append (GTK_BOX (content_area), scrolled_window);
+  gtk_window_set_child (GTK_WINDOW (dialog), scrolled_window);
+  gtk_window_set_titlebar (GTK_WINDOW (dialog), gtk_header_bar_new ());
 }
 
 GtkWidget *
@@ -517,7 +519,6 @@ ephy_certificate_dialog_new (GtkWindow            *parent,
                                      "security-level", security_level,
                                      "tls-errors", tls_errors,
                                      "modal", TRUE,
-                                     "use-header-bar", TRUE,
                                      "width-request", 500,
                                      NULL));
   if (parent)
