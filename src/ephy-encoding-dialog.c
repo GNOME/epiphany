@@ -37,7 +37,7 @@
 #include <webkit/webkit.h>
 
 struct _EphyEncodingDialog {
-  GtkDialog parent_instance;
+  GtkWindow parent_instance;
 
   EphyEncodings *encodings;
   EphyWindow *window;
@@ -70,7 +70,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_WINDOW)
 
 static void
 select_encoding_row (GtkListBox   *list_box,
@@ -209,14 +209,6 @@ activate_choice (EphyEncodingDialog *dialog)
 
     ephy_encodings_add_recent (dialog->encodings, code);
   }
-}
-
-static void
-ephy_encoding_dialog_response_cb (GtkWidget          *widget,
-                                  int                 response,
-                                  EphyEncodingDialog *dialog)
-{
-  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -510,16 +502,16 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_box);
 
   gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
-  gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, show_all_button_clicked_cb);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 EphyEncodingDialog *
 ephy_encoding_dialog_new (EphyWindow *parent)
 {
   return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
-                       "use-header-bar", TRUE,
                        "parent-window", parent,
                        NULL);
 }

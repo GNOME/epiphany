@@ -2,13 +2,15 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
-  <template class="EphyEncodingDialog" parent="GtkDialog">
+  <template class="EphyEncodingDialog" parent="GtkWindow">
     <property name="title" translatable="yes">Text Encoding</property>
     <property name="modal">True</property>
     <property name="default_width">500</property>
     <property name="default_height">420</property>
-    <signal name="response" handler="ephy_encoding_dialog_response_cb" swapped="no"/>
-    <child internal-child="content_area">
+    <property name="titlebar">
+      <object class="GtkHeaderBar"/>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
@@ -136,6 +138,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>
