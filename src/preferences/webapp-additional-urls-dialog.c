@@ -123,6 +123,11 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
 
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_cell_edited);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Delete, 0, "webapp-additional-urls.forget", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, 0, "webapp-additional-urls.forget", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

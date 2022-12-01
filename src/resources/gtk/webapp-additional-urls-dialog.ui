@@ -15,6 +15,7 @@
     <property name="title" translatable="yes">Additional URLs</property>
     <child internal-child="content_area">
       <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel">
             <property name="xalign">0</property>
@@ -65,8 +66,9 @@
         </child>
         <child>
           <object class="GtkActionBar">
-            <child>
-              <object class="GtkButton" type="start">
+            <property name="revealed">True</property>
+            <child type="start">
+              <object class="GtkButton">
                 <property name="icon_name">list-add-symbolic</property>
                 <property name="tooltip_text" translatable="yes">Add new URL</property>
                 <property name="action-name">webapp-additional-urls.new</property>
@@ -77,8 +79,6 @@
                 <property name="tooltip_text" translatable="yes">Remove the selected URLs</property>
                 <property name="icon_name">list-remove-symbolic</property>
                 <property name="action-name">webapp-additional-urls.forget</property>
-                <accelerator key="Delete" signal="clicked"/>
-                <accelerator key="KP_Delete" signal="clicked"/>
               </object>
             </child>
             <child type="end">
@@ -86,7 +86,6 @@
                 <property name="label" translatable="yes">C_lear All</property>
                 <property name="use_underline">True</property>
                 <property name="action-name">webapp-additional-urls.forget-all</property>
-                <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
                 <style>
                   <class name="destructive-action"/>
                 </style>
