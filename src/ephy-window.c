@@ -575,6 +575,8 @@ notify_fullscreen_cb (EphyWindow *window)
                              g_variant_new_boolean (fullscreen));
 }
 
+#if 0
+/* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
 static gboolean
 ephy_window_should_view_receive_key_press_event (EphyWindow      *window,
                                                  guint            keyval,
@@ -645,6 +647,7 @@ handle_key_cb (EphyWindow            *window,
 
   return GDK_EVENT_PROPAGATE;
 }
+#endif
 
 static gboolean
 ephy_window_close_request (GtkWindow *window)
@@ -3538,7 +3541,10 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
+#if 0
+  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   GtkEventController *controller;
+#endif
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -3732,11 +3738,14 @@ ephy_window_constructed (GObject *object)
 
   ephy_web_extension_manager_install_actions (ephy_web_extension_manager_get_default (), window);
 
+#if 0
+  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (handle_key_cb), window);
   g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
   gtk_widget_add_controller (GTK_WIDGET (window), controller);
+#endif
 }
 
 static void
