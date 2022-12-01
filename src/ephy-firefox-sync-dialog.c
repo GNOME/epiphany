@@ -679,6 +679,8 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, get_sync_frequency_minutes_name);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 static gboolean
