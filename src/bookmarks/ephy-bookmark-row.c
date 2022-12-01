@@ -53,25 +53,32 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
 {
   GtkWidget *popover;
   GtkWidget *dialog;
-  GtkWidget *content_area;
   GtkWidget *grid;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
 
-  dialog = g_object_new (GTK_TYPE_DIALOG,
+  dialog = g_object_new (GTK_TYPE_WINDOW,
                          "title", _("Bookmark Properties"),
                          "transient-for", GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row))),
-                         "use-header-bar", TRUE,
+                         "titlebar", gtk_header_bar_new (),
                          "modal", TRUE,
                          NULL);
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+                               gtk_named_action_new ("window.close"));
+  controller = gtk_shortcut_controller_new ();
+
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  gtk_widget_add_controller (dialog, controller);
 
   popover = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_POPOVER);
 
   if (popover)
     gtk_popover_popdown (GTK_POPOVER (popover));
-
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   grid = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
                                        EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
@@ -79,7 +86,7 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   gtk_window_set_default_widget (GTK_WINDOW (dialog),
                                  ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
 
-  gtk_box_append (GTK_BOX (content_area), grid);
+  gtk_window_set_child (GTK_WINDOW (dialog), grid);
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
