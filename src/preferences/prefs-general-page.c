@@ -51,9 +51,7 @@ struct _PrefsGeneralPage {
   GtkWidget *webapp_box;
   GtkWidget *webapp_icon;
   GtkWidget *webapp_icon_row;
-  GtkWidget *webapp_url;
   GtkWidget *webapp_url_row;
-  GtkWidget *webapp_title;
   GtkWidget *webapp_title_row;
 
   /* Web Content */
@@ -628,14 +626,14 @@ save_web_application (PrefsGeneralPage *general_page)
   if (!general_page->webapp)
     return G_SOURCE_REMOVE;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_url));
+  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_url_row));
   if (g_strcmp0 (general_page->webapp->url, text) != 0) {
     g_free (general_page->webapp->url);
     general_page->webapp->url = g_strdup (text);
     changed = TRUE;
   }
 
-  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_title));
+  text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_title_row));
   if (g_strcmp0 (general_page->webapp->name, text) != 0) {
     g_free (general_page->webapp->name);
     general_page->webapp->name = g_strdup (text);
@@ -717,8 +715,8 @@ prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page)
 }
 
 static void
-on_webapp_icon_button_clicked (GtkWidget        *button,
-                               PrefsGeneralPage *general_page)
+on_webapp_icon_row_activated (GtkWidget        *button,
+                              PrefsGeneralPage *general_page)
 {
   GtkFileChooser *file_chooser;
   GSList *pixbuf_formats, *l;
@@ -888,8 +886,8 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_manage_webapp_additional_urls_button_clicked (GtkWidget        *button,
-                                                 PrefsGeneralPage *general_page)
+on_manage_webapp_additional_urls_row_activated (GtkWidget        *button,
+                                                PrefsGeneralPage *general_page)
 {
   EphyWebappAdditionalURLsDialog *urls_dialog;
   GtkWindow *prefs_dialog;
@@ -917,9 +915,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_icon);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_icon_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_url);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_url_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title_row);
 
   /* Web Content */
@@ -959,9 +955,9 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_spell_checking_switch);
 
   /* Signals */
-  gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, download_folder_row_activated_cb);
 }
 
@@ -1010,8 +1006,8 @@ setup_general_page (PrefsGeneralPage *general_page)
 
     if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
       prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_path);
-      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_url), general_page->webapp->url);
-      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_title), general_page->webapp->name);
+      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_url_row), general_page->webapp->url);
+      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_title_row), general_page->webapp->name);
     }
   }
 

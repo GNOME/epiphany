@@ -9,66 +9,42 @@
         <property name="title" translatable="yes">Web Application</property>
         <child>
           <object class="AdwActionRow" id="webapp_icon_row">
-            <property name="activatable">False</property>
+            <property name="activatable">True</property>
             <property name="title" translatable="yes">_Icon</property>
             <property name="use_underline">True</property>
+            <signal name="activated" handler="on_webapp_icon_row_activated"/>
             <child>
-              <object class="GtkButton" id="webapp_icon_button">
-                <property name="valign">center</property>
-                <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage" id="webapp_icon"/>
-               </child>
+              <object class="GtkImage" id="webapp_icon">
+                <property name="width-request">34</property>
               </object>
-            </child>
+           </child>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="webapp_url_row">
-            <property name="activatable">False</property>
+          <object class="AdwEntryRow" id="webapp_url_row">
             <property name="title" translatable="yes">_Homepage</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkEntry" id="webapp_url">
-                <property name="valign">center</property>
-                <signal name="changed" handler="on_webapp_entry_changed"/>
-              </object>
-            </child>
+            <signal name="changed" handler="on_webapp_entry_changed"/>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="webapp_title_row">
-            <property name="activatable">False</property>
+          <object class="AdwEntryRow" id="webapp_title_row">
             <property name="title" translatable="yes">_Title</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkEntry" id="webapp_title">
-                <property name="valign">center</property>
-                <signal name="changed" handler="on_webapp_entry_changed"/>
-              </object>
-            </child>
+            <signal name="changed" handler="on_webapp_entry_changed"/>
           </object>
         </child>
         <child>
           <object class="AdwActionRow">
-            <property name="activatable">False</property>
+            <property name="activatable">True</property>
             <property name="title" translatable="yes">_Manage Additional URLs</property>
             <property name="use_underline">True</property>
+            <signal name="activated" handler="on_manage_webapp_additional_urls_row_activated"/>
             <child>
-              <object class="GtkButton" id="webapp_additional_urls_dialog_button">
+              <object class="GtkImage">
                 <property name="valign">center</property>
-                <signal name="clicked" handler="on_manage_webapp_additional_urls_button_clicked"/>
-                <style>
-                  <class name="image-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">emblem-system-symbolic</property>
-                  </object>
-                </child>
+                <property name="icon_name">emblem-system-symbolic</property>
+                <property name="width-request">34</property>
               </object>
             </child>
           </object>
@@ -307,11 +283,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="webapp_url"/>
-      <widget name="webapp_title"/>
-    </widgets>
-  </object>
 </interface>
