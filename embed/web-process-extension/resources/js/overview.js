@@ -29,6 +29,9 @@ Ephy.Overview = class Overview
     _initialize()
     {
         const anchors = document.getElementsByTagName('a');
+        if (anchors.length === 0)
+            return;
+
         for (let i = 0; i < anchors.length; i++) {
             const anchor = anchors[i];
             if (anchor.className !== 'overview-item')
