@@ -253,11 +253,7 @@ Ephy.Overview.Item = class OverviewItem
 
     thumbnailPath()
     {
-        const style = this._thumbnail.style;
-        if (style.isPropertyImplicit('background'))
-            return null;
-
-        const background = style.getPropertyValue('background');
+        const background = this._thumbnail.style.getPropertyValue('background');
         if (!background)
             return null;
 
