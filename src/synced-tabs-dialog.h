@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_SYNCED_TABS_DIALOG (synced_tabs_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, EPHY, SYNCED_TABS_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, EPHY, SYNCED_TABS_DIALOG, GtkWindow)
 
 SyncedTabsDialog *synced_tabs_dialog_new (EphyOpenTabsManager *manager);
 

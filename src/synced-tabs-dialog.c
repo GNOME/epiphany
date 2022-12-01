@@ -30,7 +30,7 @@
 #include <json-glib/json-glib.h>
 
 struct _SyncedTabsDialog {
-  GtkDialog parent_instance;
+  GtkWindow parent_instance;
 
   EphyOpenTabsManager *manager;
 
@@ -40,7 +40,7 @@ struct _SyncedTabsDialog {
   GtkWidget *treeview;
 };
 
-G_DEFINE_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_WINDOW)
 
 enum {
   ICON_COLUMN,
@@ -317,6 +317,8 @@ synced_tabs_dialog_class_init (SyncedTabsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, SyncedTabsDialog, treestore);
   gtk_widget_class_bind_template_child (widget_class, SyncedTabsDialog, treeview);
   gtk_widget_class_bind_template_callback (widget_class, treeview_row_activated_cb);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -338,7 +340,6 @@ SyncedTabsDialog *
 synced_tabs_dialog_new (EphyOpenTabsManager *manager)
 {
   return EPHY_SYNCED_TABS_DIALOG (g_object_new (EPHY_TYPE_SYNCED_TABS_DIALOG,
-                                                "use-header-bar", TRUE,
                                                 "open-tabs-manager", manager,
                                                 NULL));
 }
