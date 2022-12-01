@@ -7,13 +7,16 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="EphyWebappAdditionalURLsDialog" parent="GtkDialog">
+  <template class="EphyWebappAdditionalURLsDialog" parent="GtkWindow">
     <property name="modal">True</property>
     <property name="default_width">300</property>
     <property name="default_height">400</property>
     <property name="destroy_with_parent">True</property>
     <property name="title" translatable="yes">Additional URLs</property>
-    <child internal-child="content_area">
+    <property name="titlebar">
+      <object class="GtkHeaderBar"/>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
@@ -94,6 +97,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

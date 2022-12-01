@@ -24,7 +24,7 @@
 #include "ephy-settings.h"
 
 struct _EphyWebappAdditionalURLsDialog {
-  GtkDialog parent_instance;
+  GtkWindow parent_instance;
 
   GtkWidget *treeview;
   GtkTreeViewColumn *url_column;
@@ -34,7 +34,7 @@ struct _EphyWebappAdditionalURLsDialog {
   GActionGroup *action_group;
 };
 
-G_DEFINE_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, GTK_TYPE_WINDOW)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static gboolean
@@ -128,6 +128,8 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, 0, "webapp-additional-urls.forget", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -276,7 +278,5 @@ ephy_webapp_additional_urls_dialog_init (EphyWebappAdditionalURLsDialog *dialog)
 EphyWebappAdditionalURLsDialog *
 ephy_webapp_additional_urls_dialog_new (void)
 {
-  return EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (g_object_new (EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG,
-                                                           "use-header-bar", TRUE,
-                                                           NULL));
+  return g_object_new (EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG, NULL);
 }
