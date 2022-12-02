@@ -90,7 +90,7 @@ struct _PrefsGeneralPage {
   GtkWidget *lang_listbox;
   GtkWidget *enable_spell_checking_switch;
 
-  GtkDialog *add_lang_dialog;
+  GtkWindow *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
 };
 
@@ -102,7 +102,7 @@ prefs_general_page_finalize (GObject *object)
   PrefsGeneralPage *general_page = EPHY_PREFS_GENERAL_PAGE (object);
 
   if (general_page->add_lang_dialog != NULL) {
-    GtkDialog **add_lang_dialog = &general_page->add_lang_dialog;
+    GtkWindow **add_lang_dialog = &general_page->add_lang_dialog;
 
     g_object_remove_weak_pointer (G_OBJECT (general_page->add_lang_dialog),
                                   (gpointer *)add_lang_dialog);
@@ -153,7 +153,7 @@ language_editor_update_pref (PrefsGeneralPage *general_page)
                   "as", &builder);
 }
 
-static GtkDialog *setup_add_language_dialog (PrefsGeneralPage *general_page);
+static GtkWindow *setup_add_language_dialog (PrefsGeneralPage *general_page);
 
 static void
 language_editor_add_activated (GtkWidget *listbox,
@@ -169,7 +169,7 @@ language_editor_add_activated (GtkWidget *listbox,
 
   if (general_page->add_lang_dialog == NULL) {
     GtkWindow *prefs_dialog;
-    GtkDialog **add_lang_dialog;
+    GtkWindow **add_lang_dialog;
 
     prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
     general_page->add_lang_dialog = setup_add_language_dialog (general_page);
@@ -288,11 +288,10 @@ language_editor_add (PrefsGeneralPage *general_page,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-add_lang_dialog_response_cb (GtkWidget        *widget,
-                             int               response,
+add_lang_dialog_response_cb (GtkWidget        *button,
                              PrefsGeneralPage *general_page)
 {
-  GtkDialog *dialog = general_page->add_lang_dialog;
+  GtkWindow *dialog = general_page->add_lang_dialog;
   GtkTreeModel *model;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
@@ -300,38 +299,35 @@ add_lang_dialog_response_cb (GtkWidget        *widget,
 
   g_assert (dialog != NULL);
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    selection = gtk_tree_view_get_selection (general_page->add_lang_treeview);
+  selection = gtk_tree_view_get_selection (general_page->add_lang_treeview);
 
-    rows = gtk_tree_selection_get_selected_rows (selection, &model);
+  rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
-    for (r = rows; r != NULL; r = r->next) {
-      GtkTreePath *path = (GtkTreePath *)r->data;
+  for (r = rows; r != NULL; r = r->next) {
+    GtkTreePath *path = (GtkTreePath *)r->data;
 
-      if (gtk_tree_model_get_iter (model, &iter, path)) {
-        char *code, *desc;
+    if (gtk_tree_model_get_iter (model, &iter, path)) {
+      char *code, *desc;
 
-        gtk_tree_model_get (model, &iter,
-                            COL_LANG_NAME, &desc,
-                            COL_LANG_CODE, &code,
-                            -1);
+      gtk_tree_model_get (model, &iter,
+                          COL_LANG_NAME, &desc,
+                          COL_LANG_CODE, &code,
+                          -1);
 
-        language_editor_add (general_page, code, desc);
+      language_editor_add (general_page, code, desc);
 
-        g_free (desc);
-        g_free (code);
-      }
+      g_free (desc);
+      g_free (code);
     }
-
-    g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free (rows);
-
-    language_editor_update_pref (general_page);
-    language_editor_update_state (general_page);
   }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
-  general_page->add_lang_dialog = NULL;
+  g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
+  g_list_free (rows);
+
+  language_editor_update_pref (general_page);
+  language_editor_update_state (general_page);
+
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 static void
@@ -372,7 +368,7 @@ add_language_add_system_language_entry (GtkListStore *store)
   g_free (text);
 }
 
-static GtkDialog *
+static GtkWindow *
 setup_add_language_dialog (PrefsGeneralPage *general_page)
 {
   GtkWidget *ad;
@@ -386,11 +382,9 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   GtkTreeIter iter;
   guint i, n;
   g_autoptr (GtkBuilder) builder = NULL;
-  GtkWindow *prefs_dialog;
   g_auto (GStrv) locales = NULL;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
   add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
   treeview = GTK_TREE_VIEW (gtk_builder_get_object (builder, "languages_treeview"));
@@ -434,8 +428,6 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   gtk_tree_sortable_set_sort_column_id
     (GTK_TREE_SORTABLE (sortmodel), COL_LANG_NAME, GTK_SORT_ASCENDING);
 
-  gtk_window_group_add_window (gtk_window_get_group (prefs_dialog),
-                               GTK_WINDOW (ad));
   gtk_window_set_modal (GTK_WINDOW (ad), TRUE);
 
   gtk_tree_view_set_reorderable (GTK_TREE_VIEW (treeview), FALSE);
@@ -462,13 +454,13 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   g_signal_connect (selection, "changed",
                     G_CALLBACK (add_lang_dialog_selection_changed), add_button);
 
-  g_signal_connect (ad, "response",
+  g_signal_connect (add_button, "clicked",
                     G_CALLBACK (add_lang_dialog_response_cb), general_page);
 
   g_object_unref (store);
   g_object_unref (sortmodel);
 
-  return GTK_DIALOG (ad);
+  return GTK_WINDOW (ad);
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
