@@ -385,7 +385,7 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   guint i, n;
-  GtkBuilder *builder;
+  g_autoptr (GtkBuilder) builder = NULL;
   GtkWindow *prefs_dialog;
   g_auto (GStrv) locales = NULL;
 
