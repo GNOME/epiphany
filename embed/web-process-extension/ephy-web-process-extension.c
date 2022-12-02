@@ -65,35 +65,15 @@ struct _EphyWebProcessExtension {
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
 static void
-web_page_will_submit_form (WebKitWebPage            *web_page,
-                           WebKitDOMHTMLFormElement *dom_form,
-                           WebKitFormSubmissionStep  step,
-                           WebKitFrame              *source_frame,
-                           WebKitFrame              *target_frame,
-                           GPtrArray                *text_field_names,
-                           GPtrArray                *text_field_values)
+web_page_will_submit_form (WebKitWebPage *web_page,
+                           JSCValue      *js_form,
+                           WebKitFrame   *source_frame,
+                           WebKitFrame   *target_frame)
 {
-  EphyWebProcessExtension *extension;
-  gboolean form_submit_handled;
-  g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_ephy = NULL;
-  g_autoptr (JSCValue) js_form = NULL;
   g_autoptr (JSCValue) js_result = NULL;
 
-  form_submit_handled =
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dom_form),
-                                        "ephy-form-submit-handled"));
-  if (form_submit_handled)
-    return;
-
-  g_object_set_data (G_OBJECT (dom_form),
-                     "ephy-form-submit-handled",
-                     GINT_TO_POINTER (TRUE));
-
-  extension = ephy_web_process_extension_get ();
-  js_context = webkit_frame_get_js_context_for_script_world (source_frame, extension->script_world);
-  js_ephy = jsc_context_get_value (js_context, "Ephy");
-  js_form = webkit_frame_get_js_value_for_dom_object_in_script_world (source_frame, WEBKIT_DOM_OBJECT (dom_form), extension->script_world);
+  js_ephy = jsc_context_get_value (jsc_value_get_context (js_form), "Ephy");
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "handleFormSubmission",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
@@ -139,29 +119,20 @@ frame_destroyed_notify (EphyWebProcessExtension *extension,
 }
 
 static void
-web_page_form_controls_associated (WebKitWebPage           *web_page,
-                                   GPtrArray               *elements,
-                                   WebKitFrame             *frame,
-                                   EphyWebProcessExtension *extension)
+web_page_form_controls_associated (WebKitWebPage *web_page,
+                                   GPtrArray     *form_controls,
+                                   WebKitFrame   *frame)
 {
-  g_autoptr (GPtrArray) form_controls = NULL;
+  EphyWebProcessExtension *extension;
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_ephy = NULL;
   g_autoptr (JSCValue) js_serializer = NULL;
   g_autoptr (JSCValue) js_result = NULL;
   guint64 frame_id;
   guint64 *frame_id_copy;
-  guint i;
 
+  extension = ephy_web_process_extension_get ();
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
-
-  form_controls = g_ptr_array_new_with_free_func (g_object_unref);
-  for (i = 0; i < elements->len; ++i) {
-    WebKitDOMObject *element = WEBKIT_DOM_OBJECT (g_ptr_array_index (elements, i));
-
-    g_ptr_array_add (form_controls, webkit_frame_get_js_value_for_dom_object_in_script_world (frame, element, extension->script_world));
-  }
-
   js_ephy = jsc_context_get_value (js_context, "Ephy");
   js_serializer = jsc_value_new_function (js_context,
                                           "passwordFormMessageSerializer",
@@ -309,20 +280,26 @@ static void
 ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                                             WebKitWebPage           *web_page)
 {
+  WebKitWebFormManager *form_manager;
   g_autoptr (JSCContext) js_context = NULL;
 
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
                     extension);
-  g_signal_connect (web_page, "will-submit-form",
-                    G_CALLBACK (web_page_will_submit_form),
-                    extension);
-  g_signal_connect (web_page, "form-controls-associated-for-frame",
-                    G_CALLBACK (web_page_form_controls_associated),
-                    extension);
   g_signal_connect (web_page, "user-message-received",
                     G_CALLBACK (web_page_received_message),
                     extension);
+
+  form_manager = webkit_web_page_get_form_manager (web_page, extension->script_world);
+  g_signal_connect_swapped (form_manager, "will-send-submit-event",
+                            G_CALLBACK (web_page_will_submit_form),
+                            web_page);
+  g_signal_connect_swapped (form_manager, "will-submit-form",
+                            G_CALLBACK (web_page_will_submit_form),
+                            web_page);
+  g_signal_connect_swapped (form_manager, "form-controls-associated",
+                            G_CALLBACK (web_page_form_controls_associated),
+                            web_page);
 }
 
 static void
@@ -552,14 +529,7 @@ static void
 js_auto_fill (JSCValue   *js_element,
               const char *value)
 {
-  WebKitDOMNode *node;
-  WebKitDOMElement *element;
-
-  node = webkit_dom_node_for_js_value (js_element);
-  element = WEBKIT_DOM_ELEMENT (node);
-
-  webkit_dom_element_html_input_element_set_auto_filled (element, TRUE);
-  webkit_dom_element_html_input_element_set_editing_value (element, value);
+  webkit_web_form_manager_input_element_auto_fill (js_element, value);
 }
 
 typedef struct {
@@ -724,9 +694,7 @@ js_is_web_application (void)
 static gboolean
 js_is_edited (JSCValue *js_element)
 {
-  WebKitDOMNode *node = webkit_dom_node_for_js_value (js_element);
-
-  return webkit_dom_element_html_input_element_is_user_edited (WEBKIT_DOM_ELEMENT (node));
+  return webkit_web_form_manager_input_element_is_user_edited (js_element);
 }
 
 static gboolean

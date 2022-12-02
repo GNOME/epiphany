@@ -448,6 +448,7 @@ Ephy.FormManager = class FormManager
         this._passwordFormMessageSerializer = null;
         this._preFillUserMenu = null;
         this._elementBeingAutoFilled = null;
+        this._submissionHandled = false;
     }
 
     // Public
@@ -542,6 +543,11 @@ Ephy.FormManager = class FormManager
     {
         if (!Ephy.shouldRememberPasswords())
             return;
+
+        if (this._submissionHandled)
+            return;
+
+        this._submissionHandled = true;
 
         const formAuth = this._generateFormAuth(false);
         if (!formAuth || !formAuth.password)
