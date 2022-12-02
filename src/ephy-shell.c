@@ -552,7 +552,7 @@ ephy_shell_startup (GApplication *application)
 
   /* Actions that are available in both app mode and browser mode */
   set_accel_for_action (shell, "app.history", "<Primary>h");
-  set_accel_for_action (shell, "app.preferences", "<Primary>e");
+  set_accel_for_action (shell, "app.preferences", "<Primary>comma");
   set_accel_for_action (shell, "app.quit", "<Primary>q");
 }
 
