@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-10-25 21:19+0000\n"
+"POT-Creation-Date: 2022-11-04 06:38+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -53,15 +53,35 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
-msgstr ""
+msgstr "Аҧенџьыр ҿыц"
 
 #: data/org.gnome.Epiphany.desktop.in.in:25
 msgid "New Incognito Window"
 msgstr ""
 
+#: data/org.gnome.epiphany.gschema.xml:13
+msgid "Browse with caret"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:17
+msgid "Home page"
+msgstr "_Ахалагалатә даҟьа"
+
 #: data/org.gnome.epiphany.gschema.xml:18
 msgid "Address of the user’s home page."
 msgstr "ахархәаҩ иҩнытә даҟьа аҭыӡҭыԥ"
+
+#: data/org.gnome.epiphany.gschema.xml:22
+msgid "Default search engine."
+msgstr "_Апшааратә система аныхра"
+
+#: data/org.gnome.epiphany.gschema.xml:23
+msgid "Name of the search engine selected by default."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:33
+msgid "Deprecated. Please use search-engine-providers instead."
+msgstr ""
 
 #. TRANSLATORS: These are the prepopulated search engines. You should
 #. add country-specific URL query parameters if appropriate or change
@@ -99,17 +119,284 @@ msgstr ""
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 
+#: data/org.gnome.epiphany.gschema.xml:61
+msgid "List of the search engines."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:62
+msgid ""
+"List of the search engines. It is an array of vardicts with each vardict "
+"corresponding to a search engine, and with the following supported keys: "
+"\"name\" is the name of the search engine. \"url\" is the search URL with "
+"the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
+"the search engine."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:72
+msgid "Enable Google Search Suggestions"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:73
+msgid "Whether to show Google Search Suggestion in url entry popdown."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:77
+msgid "Force new windows to be opened in tabs"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:78
+msgid ""
+"Force new window requests to be opened in tabs instead of using a new window."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:85
+msgid "Whether to automatically restore the last session"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:86
+msgid ""
+"Defines how the session will be restored during startup. Allowed values are "
+"“always” (the previous state of the application is always restored) and "
+"“crashed” (the session is only restored if the application crashes)."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:90
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:91
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:95
+msgid "List of adblock filters"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:96
+msgid ""
+"List of URLs with content filtering rules in JSON format to be used by the "
+"ad blocker."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:100
+msgid "Whether to ask for setting browser as default"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:101
+msgid ""
+"When this option is set to true, browser will ask for being default if it is "
+"not already set."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:105
+msgid "Start in incognito mode"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:106
+msgid ""
+"When this option is set to true, browser will always start in incognito mode"
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Active clear data items."
 msgstr "Иактиву   ахәҭақәа адыррақәа ррыцқьаразы"
+
+#: data/org.gnome.epiphany.gschema.xml:111
+msgid ""
+"Selection (bitmask) which clear data items should be active by default. 1 = "
+"Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
+"application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = "
+"Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
+"Prevention data."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:117
+msgid "Expand tabs size to fill the available space on the tabs bar."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:118
+msgid ""
+"If enabled the tabs will expand to use the entire available space in the "
+"tabs bar. This setting is ignored in Pantheon desktop."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:122
+msgid "The visibility policy for the tabs bar."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:123
+msgid ""
+"Controls when the tabs bar is shown. Possible values are “always” (the tabs "
+"bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:127
+msgid "Keep window open when closing last tab"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:128
+msgid "If enabled application window is kept open when closing the last tab."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:134
+msgid "Reader mode article font style."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:135
+msgid ""
+"Chooses the style of the main body text for articles in reader mode. "
+"Possible values are “sans” and “serif”."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:139
+msgid "Reader mode color scheme."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:140
+msgid ""
+"Selects the style of colors for articles displayed in reader mode. Possible "
+"values are “light” (dark text on light background) and “dark” (light text on "
+"dark background). This setting is ignored on systems that provide a system-"
+"wide dark style preference, such as GNOME 42 and newer."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:146
+msgid "Minimum font size"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:150
+msgid "Use GNOME fonts"
+msgstr "The GNOME Project"
+
+#: data/org.gnome.epiphany.gschema.xml:151
+msgid "Use GNOME font settings."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:155
+msgid "Custom sans-serif font"
+msgstr "Аԥыҳәҳәақәа змам ашрифи"
+
+#: data/org.gnome.epiphany.gschema.xml:156
+msgid ""
+"A value to be used to override sans-serif desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:160
+msgid "Custom serif font"
+msgstr "Аԥыҳәҳәақәа змам ашрифи"
+
+#: data/org.gnome.epiphany.gschema.xml:161
+msgid ""
+"A value to be used to override serif desktop font when use-gnome-fonts is "
+"set."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:165
+msgid "Custom monospace font"
+msgstr "моноҭбааратә шрифт"
+
+#: data/org.gnome.epiphany.gschema.xml:166
+msgid ""
+"A value to be used to override monospace desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:170
+msgid "Use a custom CSS"
+msgstr "Схатәы ашрифтқәа ахархәара рыҭара"
+
+#: data/org.gnome.epiphany.gschema.xml:171
+msgid "Use a custom CSS file to modify websites own CSS."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:175
+msgid "Use a custom JS"
+msgstr "Схатәы ашрифтқәа ахархәара рыҭара"
+
+#: data/org.gnome.epiphany.gschema.xml:176
+msgid "Use a custom JS file to modify websites."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:180
+msgid "Enable spell checking"
+msgstr "Ишәарҭам ахәаԥшра аҿакра"
+
+#: data/org.gnome.epiphany.gschema.xml:181
+msgid "Spell check any text typed in editable areas."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:185
+msgid "Default encoding"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:186
+msgid ""
+"Default encoding. Accepted values are the ones WebKitGTK can understand."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:190
+#: src/resources/gtk/prefs-general-page.ui:329
+msgid "Languages"
+msgstr "Абызшәақәа"
+
+#: data/org.gnome.epiphany.gschema.xml:191
+msgid ""
+"Preferred languages. Array of locale codes or “system” to use current locale."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:195
+msgid "Allow popups"
+msgstr "Иханагало аԥенџьырқәа азин рыҭара"
+
+#: data/org.gnome.epiphany.gschema.xml:196
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:200
 msgid "User agent"
 msgstr "User agent"
 
+#: data/org.gnome.epiphany.gschema.xml:201
+msgid ""
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable adblock"
 msgstr "Adblock аҿакра"
+
+#: data/org.gnome.epiphany.gschema.xml:206
+msgid ""
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:210
+msgid "Remember passwords"
+msgstr "_Ажәамаӡақәа агәынкылара"
+
+#: data/org.gnome.epiphany.gschema.xml:211
+msgid "Whether to store and prefill passwords in websites."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:215
+msgid "Enable site-specific quirks"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:216
+msgid ""
+"Enable quirks to make specific websites work better. You might want to "
+"disable this setting if debugging a specific issue."
+msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:220
 msgid "Enable safe browsing"
@@ -127,13 +414,91 @@ msgstr ""
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Интелектуалла ашьҭаԥшра аҽацәыхьчара аҿакра (ITP)"
 
+#: data/org.gnome.epiphany.gschema.xml:226
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "Интелектуалла ашьҭаԥшра аҽацәыхьчара аҿакра (ITP)"
+
+#: data/org.gnome.epiphany.gschema.xml:230
+msgid "Allow websites to store local website data"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:231
+msgid ""
+"Whether to allow websites to store cookies, local storage data, and "
+"IndexedDB databases. Disabling this will break many websites."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:235
+msgid "Default zoom level for new pages"
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:239
 msgid "Enable autosearch"
 msgstr "Автоматикла аԥшаара аҿакра"
 
+#: data/org.gnome.epiphany.gschema.xml:240
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:244
+msgid "Enable mouse gestures"
+msgstr "Аҳәынаԥ аиҭаҵра аҿакра"
+
+#: data/org.gnome.epiphany.gschema.xml:245
+msgid ""
+"Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
+"behaviour and are activated using the middle mouse button + gesture."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:249
+msgid "Last upload directory"
+msgstr "Еснагь шәадҵаалала аҭагалара аизакхьӡынҵа"
+
+#: data/org.gnome.epiphany.gschema.xml:250
+msgid "Keep track of last upload directory"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:254
+msgid "Last download directory"
+msgstr "Еснагь шәадҵаалала аҭагалара аизакхьӡынҵа"
+
+#: data/org.gnome.epiphany.gschema.xml:255
+msgid "Keep track of last download directory"
+msgstr "Еснагь шәадҵаалала аҭагалара аизакхьӡынҵа"
+
+#: data/org.gnome.epiphany.gschema.xml:259
+msgid "Hardware acceleration policy"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:260
+msgid ""
+"Whether to enable hardware acceleration. Possible values are “on-demand”, "
+"“always”, and “never”. Hardware acceleration may be required to achieve "
+"acceptable performance on embedded devices, but increases memory usage "
+"requirements and could expose severe hardware-specific graphics driver bugs. "
+"When the policy is “on-demand”, hardware acceleration will be used only when "
+"required to display 3D transforms."
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
 msgstr "Еснагь шәадҵаалала аҭагалара аизакхьӡынҵа"
+
+#: data/org.gnome.epiphany.gschema.xml:265
+msgid "Whether to present a directory chooser dialog for every download."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:269
+msgid "Enable immediately switch to new open tab"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:270
+msgid "Whether to automatically switch to a new open tab."
+msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:274
 msgid "Enable WebExtensions"
@@ -151,13 +516,97 @@ msgstr ""
 msgid "Active WebExtensions"
 msgstr "Иактиву веб-аҭбаара"
 
+#: data/org.gnome.epiphany.gschema.xml:280
+msgid "Indicates which WebExtensions are set to active."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:286
+msgid "Web application additional URLs"
+msgstr "Веб-аҧшьы"
+
+#: data/org.gnome.epiphany.gschema.xml:287
+msgid "The list of URLs that should be opened by the web application"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:291
+msgid "Show navigation buttons in WebApp"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:292
+msgid "Whether to show buttons for navigation in WebApp."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:296
+msgid "Run in background"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:297
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:301
+msgid "WebApp is system-wide"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:302
+msgid "If enabled, application cannot be edited or removed."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:308
+msgid "The downloads folder"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:309
+msgid ""
+"The path of the folder where to download files to; or “Downloads” to use the "
+"default downloads folder, or “Desktop” to use the desktop folder."
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:316
 msgid "Window position"
 msgstr "Аԥенџьыр аҭыԥ"
 
+#: data/org.gnome.epiphany.gschema.xml:317
+msgid ""
+"The position to use for a new window that is not restored from a previous "
+"session."
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window size"
 msgstr "Аԥенџьыр ашәагаа"
+
+#: data/org.gnome.epiphany.gschema.xml:322
+msgid ""
+"The size to use for a new window that is not restored from a previous "
+"session."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:326
+msgid "Is maximized"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:327
+msgid ""
+"Whether a new window that is not restored from a previous session should be "
+"initially maximized."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:342
+msgid "Disable forward and back buttons"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:343
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:361
+msgid "Firefox Sync Token Server URL"
+msgstr "Firefox Sync Accounts Server URL"
 
 #: data/org.gnome.epiphany.gschema.xml:362
 msgid "URL to a custom Firefox Sync token server."
@@ -171,6 +620,10 @@ msgstr "Firefox Sync Accounts Server URL"
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "URL- аҭыӡҭыԥ  аҳасабырбатә нҵамҭақәа рхархәагатә сервер Firefox Sync."
 
+#: data/org.gnome.epiphany.gschema.xml:371
+msgid "Currently signed in sync user"
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:372
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
@@ -179,10 +632,228 @@ msgstr ""
 "Аел .ԥошьҭа аҭыӡҭыԥ , аҳасабырбатә нҵамҭа Firefox иаҿаԥшьу, ахархәара зауо "
 "адыррақәеи  асерверқәа Mozilla  асинхронркра рзуразы."
 
+#: data/org.gnome.epiphany.gschema.xml:376
+msgid "Last sync timestamp"
+msgstr ""
+
 #: data/org.gnome.epiphany.gschema.xml:377
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr ""
 "Аҵыхәтәантәи асинхронтәра аныҟацаз аамҭа UNIX секундала аамҭа аҭагылазаашьа ."
+
+#: data/org.gnome.epiphany.gschema.xml:381
+msgid "Sync device ID"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:382
+msgid "The sync device ID of the current device."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:386
+msgid "Sync device name"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:387
+msgid "The sync device name of the current device."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:391
+msgid "The sync frequency in minutes"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:392
+msgid "The number of minutes between two consecutive syncs."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:396
+msgid "Sync data with Firefox"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:397
+msgid ""
+"TRUE if Ephy collections should be synced with Firefox collections, FALSE "
+"otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:401
+msgid "Enable bookmarks sync"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:402
+msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:406
+msgid "Bookmarks sync timestamp"
+msgstr "Аҭаҵа аҟазшьаҷыдақәа"
+
+#: data/org.gnome.epiphany.gschema.xml:407
+msgid "The timestamp at which last bookmarks sync was made."
+msgstr ""
+"Аҵыхәтәантәи асинхронтәра аныҟацаз аамҭа UNIX секундала аамҭа аҭагылазаашьа ."
+
+#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:441
+msgid "Initial sync or normal sync"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:412
+msgid ""
+"TRUE if bookmarks collection needs to be synced for the first time, FALSE "
+"otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:416
+msgid "Enable passwords sync"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:417
+msgid "TRUE if passwords collection should be synced, FALSE otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:421
+msgid "Passwords sync timestamp"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:422
+msgid "The timestamp at which last passwords sync was made."
+msgstr ""
+"Аҵыхәтәантәи асинхронтәра аныҟацаз аамҭа UNIX секундала аамҭа аҭагылазаашьа ."
+
+#: data/org.gnome.epiphany.gschema.xml:427
+msgid ""
+"TRUE if passwords collection needs to be synced for the first time, FALSE "
+"otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:431
+msgid "Enable history sync"
+msgstr "Автоматикла аԥшаара аҿакра"
+
+#: data/org.gnome.epiphany.gschema.xml:432
+msgid "TRUE if history collection should be synced, FALSE otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:436
+msgid "History sync timestamp"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:437
+msgid "The timestamp at which last history sync was made."
+msgstr ""
+"Аҵыхәтәантәи асинхронтәра аныҟацаз аамҭа UNIX секундала аамҭа аҭагылазаашьа ."
+
+#: data/org.gnome.epiphany.gschema.xml:442
+msgid ""
+"TRUE if history collection needs to be synced for the first time, FALSE "
+"otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:446
+msgid "Enable open tabs sync"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:447
+msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:451
+msgid "Open tabs sync timestamp"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:452
+msgid "The timestamp at which last open tabs sync was made."
+msgstr ""
+"Аҵыхәтәантәи асинхронтәра аныҟацаз аамҭа UNIX секундала аамҭа аҭагылазаашьа ."
+
+#: data/org.gnome.epiphany.gschema.xml:463
+msgid "Decision to apply when microphone permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:464
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to access the user’s microphone. The “undecided” default means the browser "
+"needs to ask the user for permission, while “allow” and “deny” tell it to "
+"automatically make the decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:468
+msgid ""
+"Decision to apply when geolocation permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:469
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to access the user’s location. The “undecided” default means the browser "
+"needs to ask the user for permission, while “allow” and “deny” tell it to "
+"automatically make the decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:473
+msgid ""
+"Decision to apply when notification permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:474
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to show notifications. The “undecided” default means the browser needs to "
+"ask the user for permission, while “allow” and “deny” tell it to "
+"automatically make the decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:478
+msgid ""
+"Decision to apply when save password permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:479
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to save passwords. The “undecided” default means the browser needs to ask "
+"the user for permission, while “allow” and “deny” tell it to automatically "
+"make the decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:483
+msgid "Decision to apply when webcam permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:484
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to access the user’s webcam. The “undecided” default means the browser needs "
+"to ask the user for permission, while “allow” and “deny” tell it to "
+"automatically make the decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:488
+msgid ""
+"Decision to apply when advertisement permission is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:489
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to allow advertisements. The “undecided” default means the browser global "
+"setting is used, while “allow” and “deny” tell it to automatically make the "
+"decision upon request."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:493
+msgid "Decision to apply when an autoplay policy is requested for this host"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:494
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to autoplay. The “undecided” default means to allow autoplay of muted media, "
+"while “allow” and “deny” tell it to allow / deny all requests to autoplay "
+"media respectively."
+msgstr ""
 
 #: embed/ephy-about-handler.c:117 embed/ephy-about-handler.c:119
 msgid "Memory usage"
@@ -195,7 +866,7 @@ msgstr "Аверсиа %s"
 
 #: embed/ephy-about-handler.c:190
 msgid "About Web"
-msgstr ""
+msgstr "Аԥшьы иазкны"
 
 #: embed/ephy-about-handler.c:195 src/window-commands.c:1015
 msgid "Epiphany Technology Preview"
@@ -242,7 +913,7 @@ msgstr ""
 #: embed/ephy-about-handler.c:467
 #: embed/web-process-extension/resources/js/overview.js:148
 msgid "Remove from overview"
-msgstr ""
+msgstr "Аныхра"
 
 #: embed/ephy-about-handler.c:557 embed/ephy-about-handler.c:558
 msgid "Private Browsing"
@@ -377,7 +1048,7 @@ msgstr ""
 #. Title for the blank page
 #: embed/ephy-embed-utils.h:32
 msgid "New Tab"
-msgstr ""
+msgstr "Агәылаҵа ҿыц"
 
 #: embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
@@ -417,135 +1088,135 @@ msgstr "_Ақырҭуатә (GEOSTD8)"
 
 #: embed/ephy-encodings.c:67
 msgid "Central European (_IBM-852)"
-msgstr ""
+msgstr "Агәҭантәи европа (_IBM-852)"
 
 #: embed/ephy-encodings.c:68
 msgid "Central European (I_SO-8859-2)"
-msgstr ""
+msgstr "Агәҭантәи европа (I_SO-8859-2)"
 
 #: embed/ephy-encodings.c:69
 msgid "Central European (_MacCE)"
-msgstr ""
+msgstr "Агәҭантәи европа (_MacCE)"
 
 #: embed/ephy-encodings.c:70
 msgid "Central European (_Windows-1250)"
-msgstr ""
+msgstr "Агәҭантәи европа (_Windows-1250)"
 
 #: embed/ephy-encodings.c:71
 msgid "Chinese Simplified (_GB18030)"
-msgstr ""
+msgstr "Ирмариоу акитаитә (_GB18030)"
 
 #: embed/ephy-encodings.c:72
 msgid "Chinese Simplified (G_B2312)"
-msgstr ""
+msgstr "Ирмариоу акитаитә (G_B2312)"
 
 #: embed/ephy-encodings.c:73
 msgid "Chinese Simplified (GB_K)"
-msgstr ""
+msgstr "Ирмариоу акитаитә(GB_K)"
 
 #: embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_HZ)"
-msgstr ""
+msgstr "Ирмариоу акитаитә (_HZ)"
 
 #: embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_ISO-2022-CN)"
-msgstr ""
+msgstr "Ирмариоу акитаитә (_ISO-2022-CN)"
 
 #: embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big_5)"
-msgstr ""
+msgstr "Акитаи атрадициатә (Big_5)"
 
 #: embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big5-HK_SCS)"
-msgstr ""
+msgstr "Акитаи атрадициатә (Big5-HK_SCS)"
 
 #: embed/ephy-encodings.c:78
 msgid "Chinese Traditional (_EUC-TW)"
-msgstr ""
+msgstr "Акитаи атрадициатә (_EUC-TW)"
 
 #: embed/ephy-encodings.c:79
 msgid "Cyrillic (_IBM-855)"
-msgstr ""
+msgstr "Акириллица (_IBM-855)"
 
 #: embed/ephy-encodings.c:80
 msgid "Cyrillic (I_SO-8859-5)"
-msgstr ""
+msgstr "Акириллица (I_SO-8859-5)"
 
 #: embed/ephy-encodings.c:81
 msgid "Cyrillic (IS_O-IR-111)"
-msgstr ""
+msgstr "Акириллица (IS_O-IR-111)"
 
 #: embed/ephy-encodings.c:82
 msgid "Cyrillic (_KOI8-R)"
-msgstr ""
+msgstr "Акириллица (_KOI8-R)"
 
 #: embed/ephy-encodings.c:83
 msgid "Cyrillic (_MacCyrillic)"
-msgstr ""
+msgstr "Акириллица (_MacCirillic)"
 
 #: embed/ephy-encodings.c:84
 msgid "Cyrillic (_Windows-1251)"
-msgstr ""
+msgstr "Акириллица (_Windows-1251)"
 
 #: embed/ephy-encodings.c:85
 msgid "Cyrillic/_Russian (IBM-866)"
-msgstr ""
+msgstr "Акириллица/_Русская (CP-866)"
 
 #: embed/ephy-encodings.c:86
 msgid "Greek (_ISO-8859-7)"
-msgstr ""
+msgstr "Абырзентә (_ISO-8859-7)"
 
 #: embed/ephy-encodings.c:87
 msgid "Greek (_MacGreek)"
-msgstr ""
+msgstr "Абырзентә (_MacGreek)"
 
 #: embed/ephy-encodings.c:88
 msgid "Greek (_Windows-1253)"
-msgstr ""
+msgstr "Абырзентә (_Windows-1253)"
 
 #: embed/ephy-encodings.c:89
 msgid "Gujarati (_MacGujarati)"
-msgstr ""
+msgstr "Агуджарати (_MacGujarati)"
 
 #: embed/ephy-encodings.c:90
 msgid "Gurmukhi (Mac_Gurmukhi)"
-msgstr ""
+msgstr "Агурмухи (Mac_Gurmukhi)"
 
 #: embed/ephy-encodings.c:91
 msgid "Hindi (Mac_Devanagari)"
-msgstr ""
+msgstr "Ахинди (Mac_Devanagari)"
 
 #: embed/ephy-encodings.c:92
 msgid "Hebrew (_IBM-862)"
-msgstr ""
+msgstr "Аиврит (_IBM-862)"
 
 #: embed/ephy-encodings.c:93
 msgid "Hebrew (IS_O-8859-8-I)"
-msgstr ""
+msgstr "Аиврит (IS_O-8859-8-I)"
 
 #: embed/ephy-encodings.c:94
 msgid "Hebrew (_MacHebrew)"
-msgstr ""
+msgstr "Аиврит (_MacHebrew)"
 
 #: embed/ephy-encodings.c:95
 msgid "Hebrew (_Windows-1255)"
-msgstr ""
+msgstr "Аиврит (_Windows-1255)"
 
 #: embed/ephy-encodings.c:96
 msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "_Лаԥшылатәи аиврит (ISO-8859-8)"
 
 #: embed/ephy-encodings.c:97
 msgid "Japanese (_EUC-JP)"
-msgstr ""
+msgstr "Иапониатәи (_EUC-JP)"
 
 #: embed/ephy-encodings.c:98
 msgid "Japanese (_ISO-2022-JP)"
-msgstr ""
+msgstr "Иапониатәи (_ISO-2022-JP)"
 
 #: embed/ephy-encodings.c:99
 msgid "Japanese (_Shift-JIS)"
-msgstr ""
+msgstr "Иапониатәи (_Shift_JIS)"
 
 #: embed/ephy-encodings.c:100
 msgid "Korean (_EUC-KR)"
@@ -709,19 +1380,19 @@ msgstr ""
 
 #: embed/ephy-find-toolbar.c:117
 msgid "Search wrapped back to the top"
-msgstr ""
+msgstr "Аԥшаара алагамҭахь ихынҳәит"
 
 #: embed/ephy-find-toolbar.c:370
 msgid "Type to search…"
-msgstr ""
+msgstr "Аԥшаара..."
 
 #: embed/ephy-find-toolbar.c:376
 msgid "Find previous occurrence of the search string"
-msgstr ""
+msgstr "Аԥшаара ацәаҳәа иаԥхьааиуа аҭалара аԥшаара"
 
 #: embed/ephy-find-toolbar.c:383
 msgid "Find next occurrence of the search string"
-msgstr ""
+msgstr "Аԥшаара ацәаҳәа анаҩстәи аҭалара аԥшаара"
 
 #: embed/ephy-reader-handler.c:296
 #, c-format
@@ -734,11 +1405,11 @@ msgstr "Аартра"
 
 #: embed/ephy-web-view.c:376
 msgid "Not No_w"
-msgstr ""
+msgstr "Уажәи акә_ым"
 
 #: embed/ephy-web-view.c:377
 msgid "_Never Save"
-msgstr ""
+msgstr "Ахаангьы_аиқәмырхара"
 
 #: embed/ephy-web-view.c:378 lib/widgets/ephy-file-chooser.c:124
 #: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:659
@@ -751,7 +1422,7 @@ msgstr "_Аиқәырхара"
 #: embed/ephy-web-view.c:385
 #, c-format
 msgid "Do you want to save your password for “%s”?"
-msgstr ""
+msgstr "Еиқәырхатәума ажәамаӡа «%s» азы?"
 
 #. Translators: Message appears when insecure password form is focused.
 #: embed/ephy-web-view.c:624
@@ -788,7 +1459,7 @@ msgstr "_Аркра"
 #: embed/ephy-web-view.c:1107 embed/ephy-web-view.c:1228
 #: lib/widgets/ephy-security-popover.c:512
 msgid "Deny"
-msgstr ""
+msgstr "Азин амҭара"
 
 #: embed/ephy-web-view.c:1108 embed/ephy-web-view.c:1229
 #: lib/widgets/ephy-security-popover.c:511
@@ -1016,7 +1687,7 @@ msgstr ""
 #: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2148
 #: embed/ephy-web-view.c:2198
 msgid "Go Back"
-msgstr ""
+msgstr "Шьҭахьҟа"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
@@ -1666,7 +2337,7 @@ msgstr "Иалкаау"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:35
 msgid "Mobile"
-msgstr ""
+msgstr "Абилин"
 
 #. Translators: tooltip for the refresh button
 #: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:52
@@ -1841,7 +2512,7 @@ msgstr ""
 
 #: src/ephy-window.c:945
 msgid "_Reload"
-msgstr ""
+msgstr "_Аиҭаҿакра"
 
 #: src/ephy-window.c:946
 msgid "_Back"
@@ -2260,7 +2931,7 @@ msgstr ""
 
 #: src/resources/gtk/bookmark-properties.ui:16
 msgid "Bookmark"
-msgstr ""
+msgstr "Агәылаҵақәа рахь ацҵара"
 
 #: src/resources/gtk/bookmark-properties.ui:26
 msgid "_Name"
@@ -2392,35 +3063,35 @@ msgstr "Асинхронтәра ахышәарақәа"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:74
 msgid "Sync _Bookmarks"
-msgstr ""
+msgstr "Асинхронркра _агәылаҵақәа"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:88
 msgid "Sync _Passwords"
-msgstr ""
+msgstr "Асинхронркра _ ажәамаӡақәа"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:102
 msgid "Sync _History"
-msgstr ""
+msgstr "Асинхронркра _аҭоурых"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:116
 msgid "Sync Open _Tabs"
-msgstr ""
+msgstr "Асинхронркра _иаарту агәылаҵақәа"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:127
 msgid "S_ynced tabs"
-msgstr ""
+msgstr "Исинхронрку_ агәылаҵақәа"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:138
 msgid "Frequency"
-msgstr ""
+msgstr "Аҵыс-ҵысра"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:149
 msgid "Sync _now"
-msgstr ""
+msgstr "Асинхронркра _абыржәы"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:161
 msgid "Device name"
-msgstr ""
+msgstr "Аиҿартәыра ахьӡ"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:184
 msgid "_Change"
@@ -2433,23 +3104,23 @@ msgstr "Аҭоурых"
 
 #: src/resources/gtk/history-dialog.ui:39
 msgid "Select Items"
-msgstr ""
+msgstr "Аелементқәа ралхра"
 
 #: src/resources/gtk/history-dialog.ui:138
 msgid "Search history"
-msgstr ""
+msgstr "Аҧшаара ажурнал"
 
 #: src/resources/gtk/history-dialog.ui:190
 msgid "The History is Empty"
-msgstr ""
+msgstr "Аҭоурых ҭацәуп"
 
 #: src/resources/gtk/history-dialog.ui:191
 msgid "Visited pages will be listed here"
-msgstr ""
+msgstr "Изҭаахьоу адаҟьақәа абраҟа еиқәыҧхьаӡахоит"
 
 #: src/resources/gtk/lang-row.ui:39
 msgid "Delete language"
-msgstr ""
+msgstr "Абызшәа аныхра"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -2457,11 +3128,11 @@ msgstr "_Арҿыцра"
 
 #: src/resources/gtk/notebook-context-menu.ui:11
 msgid "Reload _All Tabs"
-msgstr ""
+msgstr "_Агәылаҵақәа зегьы рырҿыцра"
 
 #: src/resources/gtk/notebook-context-menu.ui:15
 msgid "_Duplicate"
-msgstr ""
+msgstr "Аду_бльҟаҵара"
 
 #: src/resources/gtk/notebook-context-menu.ui:21
 msgid "P_in Tab"
@@ -2469,7 +3140,7 @@ msgstr "_Агәылаҵа ашьақәырӷәара"
 
 #: src/resources/gtk/notebook-context-menu.ui:26
 msgid "Unp_in Tab"
-msgstr ""
+msgstr "Агәылаҵа аушьҭра"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
 msgid "_Mute Tab"
@@ -2477,15 +3148,15 @@ msgstr "_Агәылаҵаҟны абжьы аҿыхра"
 
 #: src/resources/gtk/notebook-context-menu.ui:38
 msgid "Close Tabs to the _Left"
-msgstr ""
+msgstr "Арымарахьтәи агәылаҵақәа рыркра"
 
 #: src/resources/gtk/notebook-context-menu.ui:42
 msgid "Close Tabs to the _Right"
-msgstr ""
+msgstr "_Арыӷьарахьтәи агәылаҵақәа рыркра"
 
 #: src/resources/gtk/notebook-context-menu.ui:46
 msgid "Close _Other Tabs"
-msgstr ""
+msgstr "_Егьырҭ агәылаҵақәа рыркра"
 
 #: src/resources/gtk/notebook-context-menu.ui:50
 msgid "_Close"
@@ -2498,7 +3169,7 @@ msgstr ""
 
 #: src/resources/gtk/page-menu-popover.ui:36
 msgid "Restore Zoom"
-msgstr ""
+msgstr "Амасштаб аиҭашьақәыргылара"
 
 #: src/resources/gtk/page-menu-popover.ui:49
 msgctxt "tooltip"
@@ -2507,11 +3178,11 @@ msgstr ""
 
 #: src/resources/gtk/page-menu-popover.ui:72
 msgid "Print…"
-msgstr ""
+msgstr "Акьыҧхьра…"
 
 #: src/resources/gtk/page-menu-popover.ui:82
 msgid "Find…"
-msgstr ""
+msgstr "Аҧшаара…"
 
 #: src/resources/gtk/page-menu-popover.ui:92
 msgid "Fullscreen"
@@ -2519,7 +3190,7 @@ msgstr "Аекран зегьы иҭаӡо"
 
 #: src/resources/gtk/page-menu-popover.ui:138
 msgid "_Run in Background"
-msgstr ""
+msgstr "Адыԥшылахәтә режим аҟны аҿакра"
 
 #: src/resources/gtk/page-menu-popover.ui:155
 msgid "_New Window"
@@ -2527,19 +3198,19 @@ msgstr "_Аҧенџьыр ҿыц"
 
 #: src/resources/gtk/page-menu-popover.ui:162
 msgid "New _Incognito Window"
-msgstr ""
+msgstr "Иҿыцу _иофицалым аҧенџьыр"
 
 #: src/resources/gtk/page-menu-popover.ui:178
 msgid "Reopen Closed _Tab"
-msgstr ""
+msgstr "_Иаркыз агәылаҵа еиҭа аартра"
 
 #: src/resources/gtk/page-menu-popover.ui:185
 msgid "_History"
-msgstr ""
+msgstr "_Ажурнал"
 
 #: src/resources/gtk/page-menu-popover.ui:201
 msgid "Firefox _Sync"
-msgstr ""
+msgstr "_Асинхронтәра Firefox"
 
 #: src/resources/gtk/page-menu-popover.ui:208
 msgid "I_mport and Export"
@@ -2636,7 +3307,7 @@ msgstr "Аԥшра"
 
 #: src/resources/gtk/prefs-appearance-page.ui:10
 msgid "Fonts"
-msgstr ""
+msgstr "Ашрифтқәа"
 
 #: src/resources/gtk/prefs-appearance-page.ui:15
 msgid "Use Custom Fonts"
@@ -3415,822 +4086,3 @@ msgstr ""
 #: src/window-commands.c:2713
 msgid "_Enable"
 msgstr "_Аҿакра"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
