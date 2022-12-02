@@ -271,25 +271,23 @@ show_import_export_result (GtkWindow  *parent,
 }
 
 static void
-show_firefox_profile_selector_cb (GtkDialog       *selector,
-                                  GtkResponseType  response,
-                                  GtkWindow       *parent)
+show_firefox_profile_selector_cb (GtkWidget *button,
+                                  GtkWindow *parent)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWindow *selector;
+  GtkListBox *list_box;
+  GtkListBoxRow *row;
+  GtkWidget *row_widget;
   const char *selected_profile = NULL;
 
-  if (response == GTK_RESPONSE_OK) {
-    GtkListBox *list_box;
-    GtkListBoxRow *row;
-    GtkWidget *row_widget;
+  selector = GTK_WINDOW (gtk_widget_get_root (button));
+  list_box = GTK_LIST_BOX (gtk_window_get_child (selector));
+  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (list_box));
+  row_widget = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
+  selected_profile = g_object_steal_data (G_OBJECT (row_widget), "profile_path");
 
-    list_box = g_object_get_data (G_OBJECT (selector), "list_box");
-    row = gtk_list_box_get_selected_row (GTK_LIST_BOX (list_box));
-    row_widget = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
-    selected_profile = g_object_steal_data (G_OBJECT (row_widget), "profile_path");
-  }
-
-  gtk_window_destroy (GTK_WINDOW (selector));
+  gtk_window_close (GTK_WINDOW (selector));
 
   /* If there are multiple profiles, but the user didn't select one in
    * the profile (he pressed Cancel), don't display the import info dialog
@@ -309,28 +307,43 @@ show_firefox_profile_selector (GtkWindow *parent,
                                GSList    *profiles)
 {
   GtkWidget *selector;
+  GtkWidget *header_bar;
+  GtkWidget *button;
   GtkWidget *list_box;
-  GtkWidget *content_area;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
   GSList *l;
 
-  selector = gtk_dialog_new_with_buttons (_("Select Profile"),
-                                          parent,
-                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
-                                          _("_Cancel"),
-                                          GTK_RESPONSE_CANCEL,
-                                          _("_Select"),
-                                          GTK_RESPONSE_OK,
-                                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
+  selector = gtk_window_new ();
+  gtk_window_set_modal (GTK_WINDOW (selector), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (selector), parent);
+  gtk_window_set_title (GTK_WINDOW (selector), _("Select Profile"));
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (selector));
-  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+                               gtk_named_action_new ("window.close"));
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (selector, controller);
+
+  header_bar = gtk_header_bar_new ();
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), FALSE);
+  gtk_window_set_titlebar (GTK_WINDOW (selector), header_bar);
+
+  button = gtk_button_new_with_mnemonic (_("_Cancel"));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+
+  button = gtk_button_new_with_mnemonic (_("_Select"));
+  gtk_widget_add_css_class (button, "suggested-action");
+  gtk_window_set_default_widget (GTK_WINDOW (selector), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   list_box = gtk_list_box_new ();
   gtk_widget_set_margin_top (list_box, 5);
   gtk_widget_set_margin_bottom (list_box, 5);
   gtk_widget_set_margin_start (list_box, 5);
   gtk_widget_set_margin_end (list_box, 5);
+  gtk_window_set_child (GTK_WINDOW (selector), list_box);
 
   for (l = profiles; l != NULL; l = l->next) {
     const gchar *profile = l->data;
@@ -342,10 +355,8 @@ show_firefox_profile_selector (GtkWindow *parent,
     gtk_widget_set_margin_bottom (label, 6);
     gtk_list_box_insert (GTK_LIST_BOX (list_box), label, -1);
   }
-  gtk_box_append (GTK_BOX (content_area), list_box);
-  g_object_set_data (G_OBJECT (selector), "list_box", list_box);
 
-  g_signal_connect (selector, "response",
+  g_signal_connect (button, "clicked",
                     G_CALLBACK (show_firefox_profile_selector_cb),
                     parent);
 
@@ -507,30 +518,27 @@ dialog_bookmarks_import_from_chromium (GtkWindow *parent)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-dialog_bookmarks_import_cb (GtkDialog       *dialog,
-                            GtkResponseType  response,
-                            GtkComboBox     *combo_box)
+dialog_bookmarks_import_cb (GtkWidget   *button,
+                            GtkComboBox *combo_box)
 {
-  GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (dialog));
-  const char *active;
+  GtkWindow *dialog = GTK_WINDOW (gtk_widget_get_root (button));
+  GtkWindow *window = gtk_window_get_transient_for (dialog);
+  const char *active = gtk_combo_box_get_active_id (combo_box);
 
-  if (response == GTK_RESPONSE_OK) {
-    active = gtk_combo_box_get_active_id (combo_box);
-    if (strcmp (active, IMPORT_FROM_GVDB_ID) == 0)
-      dialog_bookmarks_import (window);
-    else if (strcmp (active, IMPORT_FROM_HTML_ID) == 0)
-      dialog_bookmarks_import_from_html (window);
-    else if (strcmp (active, IMPORT_FROM_FIREFOX_ID) == 0)
-      dialog_bookmarks_import_from_firefox (window);
-    else if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
-      dialog_bookmarks_import_from_chrome (window);
-    else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
-      dialog_bookmarks_import_from_chromium (window);
-    else
-      g_assert_not_reached ();
-  }
+  if (strcmp (active, IMPORT_FROM_GVDB_ID) == 0)
+    dialog_bookmarks_import (window);
+  else if (strcmp (active, IMPORT_FROM_HTML_ID) == 0)
+    dialog_bookmarks_import_from_html (window);
+  else if (strcmp (active, IMPORT_FROM_FIREFOX_ID) == 0)
+    dialog_bookmarks_import_from_firefox (window);
+  else if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
+    dialog_bookmarks_import_from_chrome (window);
+  else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
+    dialog_bookmarks_import_from_chromium (window);
+  else
+    g_assert_not_reached ();
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 void
@@ -540,37 +548,49 @@ window_cmd_import_bookmarks (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   GtkWidget *dialog;
-  GtkWidget *content_area;
+  GtkWidget *header_bar;
+  GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *combo_box;
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
   int id_column = 0;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
 
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "use-header-bar", TRUE,
-                         "modal", TRUE,
-                         "transient-for", window,
-                         "title", _("Import Bookmarks"),
-                         NULL);
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("_Cancel"),
-                          GTK_RESPONSE_CANCEL,
-                          _("Ch_oose File"),
-                          GTK_RESPONSE_OK,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  dialog = gtk_window_new ();
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Bookmarks"));
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_top (content_area, 5);
-  gtk_widget_set_margin_bottom (content_area, 5);
-  gtk_widget_set_margin_start (content_area, 30);
-  gtk_widget_set_margin_end (content_area, 30);
+  controller = gtk_shortcut_controller_new ();
+  gtk_widget_add_controller (dialog, controller);
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+                               gtk_named_action_new ("window.close"));
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  header_bar = gtk_header_bar_new ();
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), FALSE);
+  gtk_window_set_titlebar (GTK_WINDOW (dialog), header_bar);
+
+  button = gtk_button_new_with_mnemonic (_("_Cancel"));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+
+  button = gtk_button_new_with_mnemonic (_("Ch_oose File"));
+  gtk_widget_add_css_class (button, "suggested-action");
+  gtk_window_set_default_widget (GTK_WINDOW (dialog), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_set_vexpand (hbox, TRUE);
+  gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (hbox, 5);
+  gtk_widget_set_margin_bottom (hbox, 5);
+  gtk_widget_set_margin_start (hbox, 30);
+  gtk_widget_set_margin_end (hbox, 30);
+  gtk_window_set_child (GTK_WINDOW (dialog), hbox);
 
   label = gtk_label_new (_("From:"));
   gtk_box_append (GTK_BOX (hbox), label);
@@ -583,8 +603,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
-                    G_CALLBACK (combo_box_changed_cb),
-                    gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK));
+                    G_CALLBACK (combo_box_changed_cb), button);
 
   cell_renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
@@ -592,10 +611,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
                                   "text", 0, NULL);
   gtk_box_append (GTK_BOX (hbox), combo_box);
 
-  gtk_box_append (GTK_BOX (content_area), hbox);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  g_signal_connect (dialog, "response",
+  g_signal_connect (button, "clicked",
                     G_CALLBACK (dialog_bookmarks_import_cb),
                     GTK_COMBO_BOX (combo_box));
 
@@ -745,26 +761,23 @@ dialog_password_import_cb (GObject      *source_object,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-dialog_passwords_import_cb (GtkDialog   *dialog,
-                            int          response,
+dialog_passwords_import_cb (GtkWidget   *button,
                             GtkComboBox *combo_box)
 {
-  if (response == GTK_RESPONSE_OK) {
-    EphyPasswordManager *manager;
-    const char *active;
+  EphyPasswordManager *manager;
+  const char *active;
+  GtkWidget *dialog;
 
-    manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-    active = gtk_combo_box_get_active_id (combo_box);
+  manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+  active = gtk_combo_box_get_active_id (combo_box);
+  dialog = GTK_WIDGET (gtk_widget_get_root (button));
 
-    if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
-      ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
-    else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
-      ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
-    else
-      g_assert_not_reached ();
-  } else {
-    gtk_window_destroy (GTK_WINDOW (dialog));
-  }
+  if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
+    ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
+  else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
+    ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
+  else
+    g_assert_not_reached ();
 }
 
 static void
@@ -790,55 +803,63 @@ window_cmd_import_passwords (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   GtkWidget *dialog;
-  GtkWidget *content_area;
+  GtkWidget *header_bar;
+  GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *combo_box;
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
   int id_column = 0;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
 
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "use-header-bar", TRUE,
-                         "modal", TRUE,
-                         "transient-for", window,
-                         "title", _("Import Passwords"),
-                         NULL);
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("_Cancel"),
-                          GTK_RESPONSE_CANCEL,
-                          _("I_mport"),
-                          GTK_RESPONSE_OK,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  dialog = gtk_window_new ();
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Passwords"));
 
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_top (content_area, 5);
-  gtk_widget_set_margin_bottom (content_area, 5);
-  gtk_widget_set_margin_start (content_area, 30);
-  gtk_widget_set_margin_end (content_area, 30);
+  controller = gtk_shortcut_controller_new ();
+  gtk_widget_add_controller (dialog, controller);
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+                               gtk_named_action_new ("window.close"));
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  header_bar = gtk_header_bar_new ();
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), FALSE);
+  gtk_window_set_titlebar (GTK_WINDOW (dialog), header_bar);
+
+  button = gtk_button_new_with_mnemonic (_("_Cancel"));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+
+  button = gtk_button_new_with_mnemonic (_("I_mport"));
+  gtk_widget_add_css_class (button, "suggested-action");
+  gtk_window_set_default_widget (GTK_WINDOW (dialog), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_set_vexpand (hbox, TRUE);
+  gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (hbox, 5);
+  gtk_widget_set_margin_bottom (hbox, 5);
+  gtk_widget_set_margin_start (hbox, 30);
+  gtk_widget_set_margin_end (hbox, 30);
+  gtk_window_set_child (GTK_WINDOW (dialog), hbox);
 
   label = gtk_label_new (_("From:"));
   gtk_box_append (GTK_BOX (hbox), label);
 
   tree_model = create_import_passwords_tree_model (&id_column);
 
-  if (gtk_tree_model_iter_n_children (tree_model, NULL))
-    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
-  else
-    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
+  if (!gtk_tree_model_iter_n_children (tree_model, NULL))
+    gtk_widget_set_sensitive (button, FALSE);
 
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
   gtk_widget_set_hexpand (combo_box, TRUE);
   g_object_unref (tree_model);
 
   g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
-                    G_CALLBACK (passwords_combo_box_changed_cb),
-                    gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK));
+                    G_CALLBACK (passwords_combo_box_changed_cb), button);
 
   gtk_combo_box_set_id_column (GTK_COMBO_BOX (combo_box), id_column);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
@@ -849,10 +870,7 @@ window_cmd_import_passwords (GSimpleAction *action,
                                   "text", 0, NULL);
   gtk_box_append (GTK_BOX (hbox), combo_box);
 
-  gtk_box_append (GTK_BOX (content_area), hbox);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  g_signal_connect (dialog, "response",
+  g_signal_connect (button, "clicked",
                     G_CALLBACK (dialog_passwords_import_cb),
                     GTK_COMBO_BOX (combo_box));
 
