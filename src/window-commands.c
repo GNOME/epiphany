@@ -364,9 +364,9 @@ show_firefox_profile_selector (GtkWindow *parent,
 }
 
 static void
-dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
-                                         GtkResponseType  response,
-                                         GtkWindow       *parent)
+dialog_bookmarks_import_file_dialog_cb (GtkFileDialog *dialog,
+                                        GAsyncResult  *result,
+                                        GtkWindow     *parent)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   g_autoptr (GError) error = NULL;
@@ -374,12 +374,11 @@ dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
   g_autofree char *filename = NULL;
   gboolean imported;
 
-  gtk_native_dialog_destroy (file_chooser_dialog);
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
-  if (response != GTK_RESPONSE_ACCEPT)
+  if (!file)
     return;
 
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser_dialog));
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import (manager, filename, &error);
 
@@ -390,30 +389,32 @@ dialog_bookmarks_import_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
 static void
 dialog_bookmarks_import (GtkWindow *parent)
 {
-  GtkFileChooserNative *file_chooser_dialog;
-  GtkFileFilter *filter;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
 
-  file_chooser_dialog = gtk_file_chooser_native_new (_("Choose File"),
-                                                     parent,
-                                                     GTK_FILE_CHOOSER_ACTION_OPEN,
-                                                     _("I_mport"),
-                                                     _("_Cancel"));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Choose File"));
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.gvdb");
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_chooser_dialog), filter);
 
-  g_signal_connect (file_chooser_dialog, "response",
-                    G_CALLBACK (dialog_bookmarks_import_file_chooser_cb),
-                    parent);
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (file_chooser_dialog));
+  gtk_file_dialog_open (dialog,
+                        parent,
+                        NULL,
+                        NULL,
+                        (GAsyncReadyCallback)dialog_bookmarks_import_file_dialog_cb,
+                        parent);
 }
 
 static void
-dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser_dialog,
-                                                   GtkResponseType  response,
-                                                   GtkWindow       *parent)
+dialog_bookmarks_import_from_html_file_dialog_cb (GtkFileDialog *dialog,
+                                                  GAsyncResult  *result,
+                                                  GtkWindow     *parent)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   g_autoptr (GError) error = NULL;
@@ -421,12 +422,11 @@ dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser
   g_autofree char *filename = NULL;
   gboolean imported;
 
-  gtk_native_dialog_destroy (file_chooser_dialog);
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
-  if (response != GTK_RESPONSE_ACCEPT)
+  if (!file)
     return;
 
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser_dialog));
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import_from_html (manager, filename, &error);
 
@@ -437,24 +437,26 @@ dialog_bookmarks_import_from_html_file_chooser_cb (GtkNativeDialog *file_chooser
 static void
 dialog_bookmarks_import_from_html (GtkWindow *parent)
 {
-  GtkFileChooserNative *file_chooser_dialog;
-  GtkFileFilter *filter;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
 
-  file_chooser_dialog = gtk_file_chooser_native_new (_("Choose File"),
-                                                     parent,
-                                                     GTK_FILE_CHOOSER_ACTION_OPEN,
-                                                     _("I_mport"),
-                                                     _("_Cancel"));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Choose File"));
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.html");
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_chooser_dialog), filter);
 
-  g_signal_connect (file_chooser_dialog, "response",
-                    G_CALLBACK (dialog_bookmarks_import_from_html_file_chooser_cb),
-                    parent);
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (file_chooser_dialog));
+  gtk_file_dialog_open (dialog,
+                        parent,
+                        NULL,
+                        NULL,
+                        (GAsyncReadyCallback)dialog_bookmarks_import_from_html_file_dialog_cb,
+                        parent);
 }
 
 static void
@@ -639,20 +641,19 @@ bookmarks_export_cb (GObject      *source_object,
 }
 
 static void
-export_bookmarks_file_chooser_cb (GtkNativeDialog *dialog,
-                                  GtkResponseType  response,
-                                  GtkWindow       *parent)
+export_bookmarks_file_dialog_cb (GtkFileDialog *dialog,
+                                 GAsyncResult  *result,
+                                 GtkWindow     *parent)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   g_autoptr (GFile) file = NULL;
   g_autofree char *filename = NULL;
 
-  gtk_native_dialog_destroy (dialog);
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
-  if (response != GTK_RESPONSE_ACCEPT)
+  if (!file)
     return;
 
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
   filename = g_file_get_path (file);
   ephy_bookmarks_export (g_object_ref (manager),
                          filename,
@@ -666,29 +667,30 @@ window_cmd_export_bookmarks (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
-  GtkFileChooser *dialog;
-  GtkFileFilter *filter;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
   GtkWindow *window = user_data;
 
-  dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
-                                                          window,
-                                                          GTK_FILE_CHOOSER_ACTION_SAVE,
-                                                          _("_Save"),
-                                                          _("_Cancel")));
-
-  /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
-  gtk_file_chooser_set_current_name (dialog, _("bookmarks.html"));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Choose File"));
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.html");
   gtk_file_filter_add_pattern (filter, "*.gvdb");
-  gtk_file_chooser_set_filter (dialog, filter);
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (export_bookmarks_file_chooser_cb),
-                    g_object_ref (window));
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_save (dialog,
+                        window,
+                        NULL,
+                        /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
+                        _("bookmarks.html"),
+                        NULL,
+                        (GAsyncReadyCallback)export_bookmarks_file_dialog_cb,
+                        g_object_ref (window));
 }
 
 static gboolean
