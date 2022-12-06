@@ -38,6 +38,7 @@ struct _PrefsExtensionsPage {
 
   GtkWidget *stack;
   GtkWidget *listbox;
+  GCancellable *cancellable;
 };
 
 static guint signals[LAST_SIGNAL];
@@ -54,19 +55,14 @@ on_extension_row_activated (GtkWidget           *row,
 }
 
 static void
-on_add_file_selected (GtkNativeDialog *dialog,
-                      GtkResponseType  response,
-                      gpointer         user_data)
+on_add_file_selected (GtkFileDialog       *dialog,
+                      GAsyncResult        *result,
+                      PrefsExtensionsPage *self)
 {
-  PrefsExtensionsPage *self = user_data;
+  g_autoptr (GFile) file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
-  gtk_native_dialog_destroy (dialog);
-
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-
+  if (file)
     ephy_web_extension_manager_install (self->web_extension_manager, file);
-  }
 }
 
 static void
@@ -74,25 +70,29 @@ on_add_button_clicked (GtkButton *button,
                        gpointer   user_data)
 {
   PrefsExtensionsPage *self = EPHY_PREFS_EXTENSIONS_PAGE (user_data);
-  GtkFileChooserNative *dialog = NULL;
-  GtkFileFilter *filter;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
 
+  dialog = gtk_file_dialog_new ();
   /* Translators: this is the title of a file chooser dialog. */
-  dialog = gtk_file_chooser_native_new (_("Open File (manifest.json/xpi)"),
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        _("_Open"),
-                                        _("_Cancel"));
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+  gtk_file_dialog_set_title (dialog, _("Open File (manifest.json/xpi)"));
 
   filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), "WebExtensions");
-  gtk_file_filter_add_mime_type (GTK_FILE_FILTER (filter), "application/json");
-  gtk_file_filter_add_mime_type (GTK_FILE_FILTER (filter), "application/x-xpinstall");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), g_steal_pointer (&filter));
+  gtk_file_filter_set_name (filter, "WebExtensions");
+  gtk_file_filter_add_mime_type (filter, "application/json");
+  gtk_file_filter_add_mime_type (filter, "application/x-xpinstall");
 
-  g_signal_connect (dialog, "response", G_CALLBACK (on_add_file_selected), self);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                        NULL,
+                        self->cancellable,
+                        (GAsyncReadyCallback)on_add_file_selected,
+                        self);
 }
 
 static void
@@ -194,6 +194,11 @@ prefs_extensions_page_dispose (GObject *object)
 {
   PrefsExtensionsPage *self = EPHY_PREFS_EXTENSIONS_PAGE (object);
 
+  if (self->cancellable) {
+    g_cancellable_cancel (self->cancellable);
+    g_clear_object (&self->cancellable);
+  }
+
   g_clear_weak_pointer (&self->web_extension_manager);
 
   G_OBJECT_CLASS (prefs_extensions_page_parent_class)->dispose (object);
@@ -234,6 +239,8 @@ prefs_extensions_page_init (PrefsExtensionsPage *self)
   manager = ephy_web_extension_manager_get_default ();
   g_set_weak_pointer (&self->web_extension_manager, manager);
   g_signal_connect_object (self->web_extension_manager, "changed", G_CALLBACK (on_web_extension_manager_changed), self, 0);
+
+  self->cancellable = g_cancellable_new ();
 
   refresh_listbox (self);
 }
