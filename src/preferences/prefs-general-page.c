@@ -92,14 +92,21 @@ struct _PrefsGeneralPage {
 
   GtkWindow *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
+
+  GCancellable *cancellable;
 };
 
 G_DEFINE_TYPE (PrefsGeneralPage, prefs_general_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
-prefs_general_page_finalize (GObject *object)
+prefs_general_page_dispose (GObject *object)
 {
   PrefsGeneralPage *general_page = EPHY_PREFS_GENERAL_PAGE (object);
+
+  if (general_page->cancellable) {
+    g_cancellable_cancel (general_page->cancellable);
+    g_clear_object (&general_page->cancellable);
+  }
 
   if (general_page->add_lang_dialog != NULL) {
     GtkWindow **add_lang_dialog = &general_page->add_lang_dialog;
@@ -110,7 +117,7 @@ prefs_general_page_finalize (GObject *object)
   }
 
   g_clear_pointer (&general_page->webapp, ephy_web_application_free);
-  G_OBJECT_CLASS (prefs_general_page_parent_class)->finalize (object);
+  G_OBJECT_CLASS (prefs_general_page_parent_class)->dispose (object);
 }
 
 static int
@@ -517,61 +524,49 @@ add_system_language_entry (PrefsGeneralPage *general_page)
 }
 
 static void
-download_folder_file_chooser_cb (GtkNativeDialog  *chooser,
-                                 GtkResponseType   response,
-                                 PrefsGeneralPage *general_page)
+download_folder_file_dialog_cb (GtkFileDialog    *dialog,
+                                GAsyncResult     *result,
+                                PrefsGeneralPage *general_page)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = NULL;
-    g_autofree char *path = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *path = NULL;
 
-    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
-    path = g_file_get_path (file);
+  file = gtk_file_dialog_select_folder_finish (dialog, result, NULL);
 
-    if (path)
-      g_settings_set_string (EPHY_SETTINGS_STATE,
-                             EPHY_PREFS_STATE_DOWNLOAD_DIR, path);
-  }
+  if (!file)
+    return;
 
-  gtk_native_dialog_destroy (chooser);
+  path = g_file_get_path (file);
+
+  if (path)
+    g_settings_set_string (EPHY_SETTINGS_STATE,
+                           EPHY_PREFS_STATE_DOWNLOAD_DIR, path);
 }
 
 static void
 download_folder_row_activated_cb (PrefsGeneralPage *general_page)
 {
-  GtkRoot *root;
   g_autofree char *downloads_path = NULL;
-  GtkFileChooserNative *chooser;
+  g_autoptr (GFile) downloads_dir = NULL;
+  GtkFileDialog *dialog;
+  GtkRoot *root;
 
-  root = gtk_widget_get_root (GTK_WIDGET (general_page));
-  chooser = gtk_file_chooser_native_new (_("Select a Directory"),
-                                         GTK_WINDOW (root),
-                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                         _("_Select"),
-                                         _("_Cancel"));
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Select a Directory"));
 
   downloads_path = ephy_file_get_downloads_dir ();
 
-  if (downloads_path && downloads_path[0]) {
-    g_autoptr (GFile) downloads_dir = NULL;
-    g_autoptr (GError) error = NULL;
-
+  if (downloads_path && downloads_path[0])
     downloads_dir = g_file_new_for_path (downloads_path);
 
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser),
-                                         downloads_dir,
-                                         &error);
+  root = gtk_widget_get_root (GTK_WIDGET (general_page));
 
-    if (error)
-      g_warning ("Failed to set current folder %s: %s", downloads_path, error->message);
-  }
-
-  g_signal_connect (chooser, "response",
-                    G_CALLBACK (download_folder_file_chooser_cb),
-                    general_page);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+  gtk_file_dialog_select_folder (dialog,
+                                 GTK_WINDOW (root),
+                                 downloads_dir,
+                                 general_page->cancellable,
+                                 (GAsyncReadyCallback)download_folder_file_dialog_cb,
+                                 general_page);
 }
 
 static gboolean
@@ -898,7 +893,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = prefs_general_page_finalize;
+  object_class->dispose = prefs_general_page_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-general-page.ui");
@@ -1150,6 +1145,8 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
   gtk_widget_init_template (GTK_WIDGET (general_page));
 
   setup_general_page (general_page);
+
+  general_page->cancellable = g_cancellable_new ();
 
   gtk_widget_set_visible (general_page->webapp_box,
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION &&
