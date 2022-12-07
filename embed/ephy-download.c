@@ -651,54 +651,54 @@ filename_suggested_dialog_cb (AdwMessageDialog      *dialog,
 }
 
 static void
-filename_suggested_file_chooser_cb (GtkNativeDialog       *chooser,
-                                    GtkResponseType        response,
-                                    SuggestedFilenameData *data)
+filename_suggested_file_dialog_cb (GtkFileDialog         *dialog,
+                                   GAsyncResult          *result,
+                                   SuggestedFilenameData *data)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autofree char *display_name = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *display_name = NULL;
 
-    g_set_object (&data->directory, gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser)));
+  if (!data->choose_filename)
+    file = gtk_file_dialog_select_folder_finish (dialog, result, NULL);
+  else
+    file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
-    display_name = ephy_file_get_display_name (data->directory);
-    gtk_label_set_label (data->directory_label, display_name);
-  }
+  if (!file)
+    return;
 
-  gtk_native_dialog_destroy (chooser);
+  g_set_object (&data->directory, file);
+
+  display_name = ephy_file_get_display_name (data->directory);
+  gtk_label_set_label (data->directory_label, display_name);
 }
 
 static void
 filename_suggested_button_cb (GtkButton             *button,
                               SuggestedFilenameData *data)
 {
-  GtkFileChooserNative *chooser;
+  GtkFileDialog *dialog = gtk_file_dialog_new ();
 
   if (!data->choose_filename) {
-    chooser = gtk_file_chooser_native_new (_("Select a Directory"),
-                                           data->dialog,
-                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                           _("_Select"),
-                                           _("_Cancel"));
+    gtk_file_dialog_set_title (dialog, _("Select a Directory"));
+
+    gtk_file_dialog_select_folder (dialog,
+                                   data->dialog,
+                                   data->directory,
+                                   NULL,
+                                   (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
+                                   data);
   } else {
-    chooser = gtk_file_chooser_native_new (_("Select the Destination"),
-                                           data->dialog,
-                                           GTK_FILE_CHOOSER_ACTION_SAVE,
-                                           _("_Select"),
-                                           _("_Cancel"));
-    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), data->suggested_filename);
+    gtk_file_dialog_set_title (dialog, _("Select the Destination"));
+    gtk_file_dialog_set_current_folder (dialog, data->directory);
+
+    gtk_file_dialog_save (dialog,
+                          data->dialog,
+                          NULL,
+                          data->suggested_filename,
+                          NULL,
+                          (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
+                          data);
   }
-
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), TRUE);
-
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser),
-                                       data->directory,
-                                       NULL);
-
-  g_signal_connect (chooser, "response",
-                    G_CALLBACK (filename_suggested_file_chooser_cb),
-                    data);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
 }
 
 static gboolean
