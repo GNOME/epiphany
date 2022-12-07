@@ -152,20 +152,20 @@ typedef struct {
 } SavePropertyURLData;
 
 static void
-filename_confirmed_cb (GtkFileChooser      *dialog,
-                       GtkResponseType      response,
+filename_confirmed_cb (GtkFileDialog       *dialog,
+                       GAsyncResult        *result,
                        SavePropertyURLData *data)
 {
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
+  g_autoptr (GFile) file = NULL;
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = NULL;
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
+
+  if (file) {
     g_autoptr (GFile) current_folder = NULL;
     g_autofree char *uri = NULL;
     g_autofree char *current_folder_path = NULL;
     WebKitDownload *webkit_download;
 
-    file = gtk_file_chooser_get_file (dialog);
     uri = g_file_get_uri (file);
     ephy_download_set_destination_uri (data->download, uri);
 
@@ -175,7 +175,7 @@ filename_confirmed_cb (GtkFileChooser      *dialog,
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
 
-    current_folder = gtk_file_chooser_get_current_folder (dialog);
+    current_folder = gtk_file_dialog_get_current_folder (dialog);
     current_folder_path = g_file_get_path (current_folder);
     g_settings_set_string (EPHY_SETTINGS_WEB,
                            EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
@@ -201,35 +201,31 @@ filename_suggested_cb (EphyDownload        *download,
                        const char          *suggested_filename,
                        SavePropertyURLData *data)
 {
-  GtkFileChooser *dialog;
+  GtkFileDialog *dialog;
   const char *last_directory_path;
-  char *sanitized_filename;
+  g_autofree char *sanitized_filename = NULL;
 
-  dialog = ephy_create_file_chooser (data->title,
-                                     GTK_WIDGET (data->window),
-                                     GTK_FILE_CHOOSER_ACTION_SAVE,
-                                     EPHY_FILE_FILTER_NONE);
+  dialog = gtk_file_dialog_new ();
+  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   if (last_directory_path && last_directory_path[0]) {
     g_autoptr (GFile) last_directory = NULL;
-    g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
-
-    if (error)
-      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+    gtk_file_dialog_set_current_folder (dialog, last_directory);
   }
 
   sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
-  gtk_file_chooser_set_current_name (dialog, sanitized_filename);
-  g_free (sanitized_filename);
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (filename_confirmed_cb), data);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (data->window),
+                        NULL,
+                        sanitized_filename,
+                        NULL,
+                        (GAsyncReadyCallback)filename_confirmed_cb,
+                        data);
 
   /* We have to set a download destination before this signal handler completes,
    * so we'll spin the default main context until the dialog is finished.

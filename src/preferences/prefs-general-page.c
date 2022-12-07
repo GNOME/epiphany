@@ -667,21 +667,21 @@ prefs_general_page_update_webapp_icon (PrefsGeneralPage *general_page,
 }
 
 static void
-webapp_icon_chooser_response_cb (GtkNativeDialog  *file_chooser,
-                                 int               response,
-                                 PrefsGeneralPage *general_page)
+webapp_icon_dialog_cb (GtkFileDialog    *dialog,
+                       GAsyncResult     *result,
+                       PrefsGeneralPage *general_page)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) icon_file = NULL;
-    g_autofree char *icon_path = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *icon_path = NULL;
 
-    icon_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (file_chooser));
-    icon_path = g_file_get_path (icon_file);
-    prefs_general_page_update_webapp_icon (general_page, icon_path);
-    prefs_general_page_save_web_application (general_page);
-  }
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
-  g_object_unref (file_chooser);
+  if (!file)
+    return;
+
+  icon_path = g_file_get_path (file);
+  prefs_general_page_update_webapp_icon (general_page, icon_path);
+  prefs_general_page_save_web_application (general_page);
 }
 
 static void
@@ -705,23 +705,28 @@ static void
 on_webapp_icon_row_activated (GtkWidget        *button,
                               PrefsGeneralPage *general_page)
 {
-  GtkFileChooser *file_chooser;
+  GtkFileDialog *dialog;
   GSList *pixbuf_formats, *l;
-  GtkFileFilter *images_filter;
+  g_autoptr (GtkFileFilter) images_filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
+  GtkRoot *root;
 
-  file_chooser = ephy_create_file_chooser (_("Web Application Icon"),
-                                           GTK_WIDGET (general_page),
-                                           GTK_FILE_CHOOSER_ACTION_OPEN,
-                                           EPHY_FILE_FILTER_NONE);
+  dialog = gtk_file_dialog_new ();
+
+  ephy_file_dialog_add_shortcuts (dialog);
+
+  root = gtk_widget_get_root (GTK_WIDGET (general_page));
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+
   images_filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (images_filter, _("Supported Image Files"));
-  gtk_file_chooser_add_filter (file_chooser, images_filter);
+  g_list_store_append (filters, images_filter);
 
   pixbuf_formats = gdk_pixbuf_get_formats ();
   for (l = pixbuf_formats; l; l = g_slist_next (l)) {
     GdkPixbufFormat *format = (GdkPixbufFormat *)l->data;
-    GtkFileFilter *filter;
-    gchar *name;
+    g_autoptr (GtkFileFilter) filter = NULL;
+    g_autofree char *name = NULL;
     gchar **mime_types;
     guint i;
 
@@ -731,7 +736,6 @@ on_webapp_icon_row_activated (GtkWidget        *button,
     filter = gtk_file_filter_new ();
     name = gdk_pixbuf_format_get_description (format);
     gtk_file_filter_set_name (filter, name);
-    g_free (name);
 
     mime_types = gdk_pixbuf_format_get_mime_types (format);
     for (i = 0; mime_types[i] != 0; i++) {
@@ -740,15 +744,18 @@ on_webapp_icon_row_activated (GtkWidget        *button,
     }
     g_strfreev (mime_types);
 
-    gtk_file_chooser_add_filter (file_chooser, filter);
+    g_list_store_append (filters, filter);
   }
   g_slist_free (pixbuf_formats);
 
-  g_signal_connect (file_chooser, "response",
-                    G_CALLBACK (webapp_icon_chooser_response_cb),
-                    general_page);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (file_chooser));
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (root),
+                        NULL,
+                        general_page->cancellable,
+                        (GAsyncReadyCallback)webapp_icon_dialog_cb,
+                        general_page);
 }
 
 static void

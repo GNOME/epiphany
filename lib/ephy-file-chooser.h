@@ -37,9 +37,9 @@ typedef enum
         EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
 } EphyFileFilterDefault;
 
-GtkFileChooser *ephy_create_file_chooser (const char *title,
-                                          GtkWidget *parent,
-                                          GtkFileChooserAction action,
-                                          EphyFileFilterDefault default_filter);
+void ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog);
+
+void ephy_file_dialog_add_filters (GtkFileDialog         *dialog,
+                                   EphyFileFilterDefault  default_filter);
 
 G_END_DECLS

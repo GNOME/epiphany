@@ -156,12 +156,25 @@ static GParamSpec *obj_properties[LAST_PROP];
 G_DEFINE_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
 
 static void
-open_response_cb (GtkFileChooser           *dialog,
-                  gint                      response,
-                  WebKitFileChooserRequest *request)
+open_dialog_cb (GtkFileDialog            *dialog,
+                GAsyncResult             *result,
+                WebKitFileChooserRequest *request)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GListModel) files = gtk_file_chooser_get_files (dialog);
+  g_autoptr (GListModel) files = NULL;
+
+  if (webkit_file_chooser_request_get_select_multiple (request)) {
+    files = gtk_file_dialog_open_multiple_finish (dialog, result, NULL);
+  } else {
+    g_autoptr (GFile) file = gtk_file_dialog_open_finish (dialog, result, NULL);
+
+    if (file) {
+      files = G_LIST_MODEL (g_list_store_new (G_TYPE_FILE));
+
+      g_list_store_append (G_LIST_STORE (files), file);
+    }
+  }
+
+  if (files) {
     GPtrArray *file_array = g_ptr_array_new ();
     g_autoptr (GFile) current_folder = NULL;
     g_autofree char *current_folder_path = NULL;
@@ -179,7 +192,7 @@ open_response_cb (GtkFileChooser           *dialog,
     g_ptr_array_set_free_func (file_array, g_free);
     g_ptr_array_free (file_array, TRUE);
 
-    current_folder = gtk_file_chooser_get_current_folder (dialog);
+    current_folder = gtk_file_dialog_get_current_folder (dialog);
     if (current_folder) {
       current_folder_path = g_file_get_path (current_folder);
       g_settings_set_string (EPHY_SETTINGS_WEB,
@@ -191,41 +204,42 @@ open_response_cb (GtkFileChooser           *dialog,
   }
 
   g_object_unref (request);
-  g_object_unref (dialog);
 }
 
 static gboolean
 ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                 WebKitFileChooserRequest *request)
 {
+  EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (web_view));
-  GtkFileChooser *dialog;
-  gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
+  GtkFileDialog *dialog;
   g_autofree char *last_directory_path = NULL;
   const char * const *mime_types = webkit_file_chooser_request_get_mime_types (request);
-  GtkFileFilter *all_filter;
+  g_autoptr (GtkFileFilter) all_filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
 
-  dialog = ephy_create_file_chooser (_("Open"),
-                                     GTK_WIDGET (root),
-                                     GTK_FILE_CHOOSER_ACTION_OPEN,
-                                     EPHY_FILE_FILTER_NONE);
+  dialog = gtk_file_dialog_new ();
+  ephy_file_dialog_add_shortcuts (dialog);
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
   all_filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (all_filter, _("All files"));
   gtk_file_filter_add_pattern (all_filter, "*");
-  gtk_file_chooser_add_filter (dialog, all_filter);
+  g_list_store_append (filters, all_filter);
 
   if (mime_types && mime_types[0]) {
-    GtkFileFilter *supported_filter;
+    g_autoptr (GtkFileFilter) supported_filter = NULL;
     int i;
 
     supported_filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (supported_filter, _("All supported types"));
-    gtk_file_chooser_add_filter (dialog, supported_filter);
-    gtk_file_chooser_set_filter (dialog, supported_filter);
+    g_list_store_append (filters, supported_filter);
+    gtk_file_dialog_set_current_filter (dialog, supported_filter);
 
     for (i = 0; mime_types[i]; i++) {
-      GtkFileFilter *filter = NULL;
+      g_autoptr (GtkFileFilter) filter = NULL;
       g_autofree char *content_type = NULL;
       g_autofree char *description = NULL;
 
@@ -241,7 +255,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
       gtk_file_filter_add_mime_type (filter, mime_types[i]);
       gtk_file_filter_add_mime_type (supported_filter, mime_types[i]);
 
-      gtk_file_chooser_add_filter (dialog, filter);
+      g_list_store_append (filters, filter);
     }
   }
 
@@ -249,22 +263,24 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
 
   if (last_directory_path && last_directory_path[0]) {
     g_autoptr (GFile) last_directory = NULL;
-    g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder (dialog, last_directory, &error);
-
-    if (error)
-      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+    gtk_file_dialog_set_current_folder (dialog, last_directory);
   }
 
-  gtk_file_chooser_set_select_multiple (dialog, allows_multiple_selection);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (open_response_cb),
-                    g_object_ref (request));
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  if (webkit_file_chooser_request_get_select_multiple (request))
+    gtk_file_dialog_open_multiple (dialog,
+                                   GTK_WINDOW (root),
+                                   ephy_web_view->cancellable,
+                                   (GAsyncReadyCallback)open_dialog_cb,
+                                   g_object_ref (request));
+  else
+    gtk_file_dialog_open (dialog,
+                          GTK_WINDOW (root),
+                          NULL,
+                          ephy_web_view->cancellable,
+                          (GAsyncReadyCallback)open_dialog_cb,
+                          g_object_ref (request));
 
   return TRUE;
 }

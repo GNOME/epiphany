@@ -1355,27 +1355,26 @@ window_cmd_new_tab (GSimpleAction *action,
 }
 
 static void
-open_response_cb (GtkNativeDialog *dialog,
-                  int              response,
-                  EphyWindow      *window)
+open_dialog_cb (GtkFileDialog *dialog,
+                GAsyncResult  *result,
+                EphyWindow    *window)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = NULL;
-    g_autofree char *uri = NULL;
-    g_autofree char *converted = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *uri = NULL;
+  g_autofree char *converted = NULL;
 
-    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-    uri = g_file_get_uri (file);
-    if (uri != NULL) {
-      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
 
-      if (converted != NULL) {
-        ephy_window_load_url (window, converted);
-      }
-    }
+  if (!file)
+    return;
+
+  uri = g_file_get_uri (file);
+  if (uri != NULL) {
+    converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+    if (converted != NULL)
+      ephy_window_load_url (window, converted);
   }
-
-  g_object_unref (dialog);
 }
 
 void
@@ -1384,17 +1383,19 @@ window_cmd_open (GSimpleAction *action,
                  gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  GtkFileChooser *dialog;
+  GtkFileDialog *dialog;
 
-  dialog = ephy_create_file_chooser (_("Open"),
-                                     GTK_WIDGET (window),
-                                     GTK_FILE_CHOOSER_ACTION_OPEN,
-                                     EPHY_FILE_FILTER_ALL_SUPPORTED);
+  dialog = gtk_file_dialog_new ();
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (open_response_cb), window);
+  ephy_file_dialog_add_shortcuts (dialog);
+  ephy_file_dialog_add_filters (dialog, EPHY_FILE_FILTER_ALL_SUPPORTED);
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (window),
+                        NULL,
+                        NULL,
+                        (GAsyncReadyCallback)open_dialog_cb,
+                        window);
 }
 
 typedef struct {
@@ -2082,40 +2083,40 @@ take_snapshot (EphyEmbed *embed,
 
 
 static void
-save_response_cb (GtkNativeDialog *dialog,
-                  int              response,
-                  EphyEmbed       *embed)
+save_dialog_cb (GtkFileDialog *dialog,
+                GAsyncResult  *result,
+                EphyEmbed     *embed)
 {
-  if (response == GTK_RESPONSE_ACCEPT) {
-    g_autoptr (GFile) file = NULL;
-    g_autoptr (GFile) current_file = NULL;
-    g_autofree char *uri = NULL;
-    g_autofree char *converted = NULL;
-    g_autofree char *current_path = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autoptr (GFile) current_file = NULL;
+  g_autofree char *uri = NULL;
+  g_autofree char *converted = NULL;
+  g_autofree char *current_path = NULL;
 
-    file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-    uri = g_file_get_uri (file);
-    if (uri != NULL) {
-      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
-      if (converted != NULL) {
-        if (g_str_has_suffix (converted, ".png")) {
-          take_snapshot (embed, converted);
-        } else {
-          EphyWebView *web_view = ephy_embed_get_web_view (embed);
-          ephy_web_view_save (web_view, converted);
-        }
+  if (!file)
+    return;
+
+  uri = g_file_get_uri (file);
+  if (uri != NULL) {
+    converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+    if (converted != NULL) {
+      if (g_str_has_suffix (converted, ".png")) {
+        take_snapshot (embed, converted);
+      } else {
+        EphyWebView *web_view = ephy_embed_get_web_view (embed);
+        ephy_web_view_save (web_view, converted);
       }
     }
-
-    current_file = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
-    current_path = g_file_get_path (current_file);
-    g_settings_set_string (EPHY_SETTINGS_WEB,
-                           EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
-                           current_path);
   }
 
-  g_object_unref (dialog);
+  current_file = gtk_file_dialog_get_current_folder (dialog);
+  current_path = g_file_get_path (current_file);
+  g_settings_set_string (EPHY_SETTINGS_WEB,
+                         EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
+                         current_path);
 }
 
 void
@@ -2125,51 +2126,50 @@ window_cmd_save_as (GSimpleAction *action,
 {
   EphyWindow *window = user_data;
   EphyEmbed *embed;
-  GtkFileChooser *dialog;
-  GtkFileFilter *filter;
-  char *suggested_filename;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) html_filter = NULL;
+  g_autoptr (GtkFileFilter) mthtml_filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
+  g_autofree char *suggested_filename = NULL;
   const char *last_directory_path;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
-  dialog = ephy_create_file_chooser (_("Save"),
-                                     GTK_WIDGET (window),
-                                     GTK_FILE_CHOOSER_ACTION_SAVE,
-                                     EPHY_FILE_FILTER_NONE);
+  dialog = gtk_file_dialog_new ();
+  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   if (last_directory_path && last_directory_path[0]) {
     g_autoptr (GFile) last_directory = NULL;
-    g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
-
-    if (error)
-      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+    gtk_file_dialog_set_current_folder (dialog, last_directory);
   }
 
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("HTML"));
-  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.html");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  html_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (html_filter, _("HTML"));
+  gtk_file_filter_add_pattern (html_filter, "*.html");
 
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("MHTML"));
-  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.mhtml");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  mthtml_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (mthtml_filter, _("MHTML"));
+  gtk_file_filter_add_pattern (mthtml_filter, "*.mhtml");
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, html_filter);
+  g_list_store_append (filters, mthtml_filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
   suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
 
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
-  g_free (suggested_filename);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (save_response_cb), embed);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (window),
+                        NULL,
+                        suggested_filename,
+                        NULL,
+                        (GAsyncReadyCallback)save_dialog_cb,
+                        embed);
 }
 
 void
@@ -2179,46 +2179,44 @@ window_cmd_screenshot (GSimpleAction *action,
 {
   EphyWindow *window = user_data;
   EphyEmbed *embed;
-  GtkFileChooser *dialog;
-  GtkFileFilter *filter;
-  char *suggested_filename;
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
+  g_autofree char *suggested_filename = NULL;
   const char *last_directory_path;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
-  dialog = ephy_create_file_chooser (_("Save"),
-                                     GTK_WIDGET (window),
-                                     GTK_FILE_CHOOSER_ACTION_SAVE,
-                                     EPHY_FILE_FILTER_NONE);
+  dialog = gtk_file_dialog_new ();
+  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
   if (last_directory_path && last_directory_path[0]) {
     g_autoptr (GFile) last_directory = NULL;
-    g_autoptr (GError) error = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), last_directory, &error);
-
-    if (error)
-      g_warning ("Failed to set current folder %s: %s", last_directory_path, error->message);
+    gtk_file_dialog_set_current_folder (dialog, last_directory);
   }
 
   filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (GTK_FILE_FILTER (filter), _("PNG"));
-  gtk_file_filter_add_pattern (GTK_FILE_FILTER (filter), "*.png");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  gtk_file_filter_set_name (filter, _("PNG"));
+  gtk_file_filter_add_pattern (filter, "*.png");
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
   suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".png", NULL);
 
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
-  g_free (suggested_filename);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (save_response_cb), embed);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (window),
+                        NULL,
+                        suggested_filename,
+                        NULL,
+                        (GAsyncReadyCallback)save_dialog_cb,
+                        embed);
 }
 
 void
