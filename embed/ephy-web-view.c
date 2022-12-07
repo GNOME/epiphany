@@ -201,17 +201,48 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (web_view));
   GtkFileChooser *dialog;
   gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
-  GtkFileFilter *filter = webkit_file_chooser_request_get_mime_types_filter (request);
   g_autofree char *last_directory_path = NULL;
+  const char * const *mime_types = webkit_file_chooser_request_get_mime_types (request);
+  GtkFileFilter *all_filter;
 
   dialog = ephy_create_file_chooser (_("Open"),
                                      GTK_WIDGET (root),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
-                                     EPHY_FILE_FILTER_ALL);
+                                     EPHY_FILE_FILTER_NONE);
 
-  if (filter) {
-    gtk_file_chooser_add_filter (dialog, filter);
-    gtk_file_chooser_set_filter (dialog, filter);
+  all_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, _("All files"));
+  gtk_file_filter_add_pattern (all_filter, "*");
+  gtk_file_chooser_add_filter (dialog, all_filter);
+
+  if (mime_types && mime_types[0]) {
+    GtkFileFilter *supported_filter;
+    int i;
+
+    supported_filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (supported_filter, _("All supported types"));
+    gtk_file_chooser_add_filter (dialog, supported_filter);
+    gtk_file_chooser_set_filter (dialog, supported_filter);
+
+    for (i = 0; mime_types[i]; i++) {
+      GtkFileFilter *filter = NULL;
+      g_autofree char *content_type = NULL;
+      g_autofree char *description = NULL;
+
+      content_type = g_content_type_from_mime_type (mime_types[i]);
+
+      if (content_type)
+        description = g_content_type_get_description (content_type);
+      else
+        description = g_strdup (mime_types[i]);
+
+      filter = gtk_file_filter_new ();
+      gtk_file_filter_set_name (filter, description);
+      gtk_file_filter_add_mime_type (filter, mime_types[i]);
+      gtk_file_filter_add_mime_type (supported_filter, mime_types[i]);
+
+      gtk_file_chooser_add_filter (dialog, filter);
+    }
   }
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_UPLOAD_DIRECTORY);
