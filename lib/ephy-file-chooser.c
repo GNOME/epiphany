@@ -36,55 +36,23 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-static GtkFileFilter *
-ephy_file_dialog_create_pattern_filter (const char *title,
-                                        const char *first_pattern,
-                                        ...)
-{
-  GtkFileFilter *filth;
-  va_list args;
-  const char *pattern;
+static const char *webpage_types[] = {
+  "text/html",
+  "application/xhtml+xml",
+  "text/xml",
+  "message/rfc822",                                     /* MHTML */
+  "multipart/related",                                  /* MHTML */
+  "application/x-mimearchive",                          /* MHTML */
+  NULL
+};
 
-  filth = gtk_file_filter_new ();
-
-  va_start (args, first_pattern);
-
-  pattern = first_pattern;
-  while (pattern != NULL) {
-    gtk_file_filter_add_pattern (filth, pattern);
-    pattern = va_arg (args, const char *);
-  }
-  va_end (args);
-
-  gtk_file_filter_set_name (filth, title);
-
-  return filth;
-}
-
-static GtkFileFilter *
-ephy_file_dialog_create_mime_filter (const char *title,
-                                     const char *first_mimetype,
-                                     ...)
-{
-  GtkFileFilter *filth;
-  va_list args;
-  const char *mimetype;
-
-  filth = gtk_file_filter_new ();
-
-  va_start (args, first_mimetype);
-
-  mimetype = first_mimetype;
-  while (mimetype != NULL) {
-    gtk_file_filter_add_mime_type (filth, mimetype);
-    mimetype = va_arg (args, const char *);
-  }
-  va_end (args);
-
-  gtk_file_filter_set_name (filth, title);
-
-  return filth;
-}
+static const char *image_types[] = {
+  "image/png",
+  "image/jpeg",
+  "image/gif",
+  "image/webp",
+  NULL
+};
 
 void
 ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog)
@@ -105,63 +73,46 @@ ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog)
 }
 
 void
-ephy_file_dialog_add_filters (GtkFileDialog         *dialog,
-                              EphyFileFilterDefault  default_filter)
+ephy_file_dialog_add_filters (GtkFileDialog *dialog)
 {
-  GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
   g_autoptr (GListStore) filters = NULL;
+  g_autoptr (GtkFileFilter) supported_filter = NULL;
+  g_autoptr (GtkFileFilter) webpages_filter = NULL;
+  g_autoptr (GtkFileFilter) images_filter = NULL;
+  g_autoptr (GtkFileFilter) all_filter = NULL;
   int i;
 
   g_assert (GTK_IS_FILE_DIALOG (dialog));
-  g_assert (default_filter >= 0 && default_filter < EPHY_FILE_FILTER_LAST);
-
-  filter[EPHY_FILE_FILTER_ALL_SUPPORTED] =
-    ephy_file_dialog_create_mime_filter
-      (_("All supported types"),
-      "text/html",
-      "application/xhtml+xml",
-      "text/xml",
-      "message/rfc822",                                     /* MHTML */
-      "multipart/related",                                  /* MHTML */
-      "application/x-mimearchive",                          /* MHTML */
-      "application/pdf",
-      "image/png",
-      "image/jpeg",
-      "image/gif",
-      "image/webp",
-      NULL);
-
-  filter[EPHY_FILE_FILTER_WEBPAGES] =
-    ephy_file_dialog_create_mime_filter
-      (_("Web pages"),
-      "text/html",
-      "application/xhtml+xml",
-      "text/xml",
-      "message/rfc822",                                     /* MHTML */
-      "multipart/related",                                  /* MHTML */
-      "application/x-mimearchive",                          /* MHTML */
-      NULL);
-
-  filter[EPHY_FILE_FILTER_IMAGES] =
-    ephy_file_dialog_create_mime_filter
-      (_("Images"),
-      "image/png",
-      "image/jpeg",
-      "image/gif",
-      "image/webp",
-      NULL);
-
-  filter[EPHY_FILE_FILTER_ALL] =
-    ephy_file_dialog_create_pattern_filter
-      (_("All files"), "*", NULL);
 
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
-  for (i = 0; i < EPHY_FILE_FILTER_LAST; i++)
-    g_list_store_append (filters, filter[i]);
+
+  supported_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (supported_filter, _("All supported types"));
+  g_list_store_append (filters, supported_filter);
+
+  webpages_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (webpages_filter, _("Web pages"));
+  g_list_store_append (filters, webpages_filter);
+
+  images_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (images_filter, _("Images"));
+  g_list_store_append (filters, images_filter);
+
+  all_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, _("All files"));
+  gtk_file_filter_add_pattern (all_filter, "*");
+  g_list_store_append (filters, all_filter);
+
+  for (i = 0; webpage_types[i]; i++) {
+    gtk_file_filter_add_mime_type (supported_filter, webpage_types[i]);
+    gtk_file_filter_add_mime_type (webpages_filter, webpage_types[i]);
+  }
+
+  for (i = 0; image_types[i]; i++) {
+    gtk_file_filter_add_mime_type (supported_filter, image_types[i]);
+    gtk_file_filter_add_mime_type (images_filter, image_types[i]);
+  }
 
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
-  gtk_file_dialog_set_current_filter (dialog, filter[default_filter]);
-
-  for (i = 0; i < EPHY_FILE_FILTER_LAST; i++)
-    g_object_unref (filter[i]);
+  gtk_file_dialog_set_current_filter (dialog, supported_filter);
 }

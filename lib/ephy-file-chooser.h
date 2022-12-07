@@ -27,19 +27,8 @@
 
 G_BEGIN_DECLS
 
-typedef enum
-{
-        EPHY_FILE_FILTER_ALL_SUPPORTED,
-        EPHY_FILE_FILTER_WEBPAGES,
-        EPHY_FILE_FILTER_IMAGES,
-        EPHY_FILE_FILTER_ALL,
-        EPHY_FILE_FILTER_NONE,
-        EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
-} EphyFileFilterDefault;
-
 void ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog);
 
-void ephy_file_dialog_add_filters (GtkFileDialog         *dialog,
-                                   EphyFileFilterDefault  default_filter);
+void ephy_file_dialog_add_filters (GtkFileDialog *dialog);
 
 G_END_DECLS

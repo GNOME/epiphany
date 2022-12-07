@@ -1388,7 +1388,7 @@ window_cmd_open (GSimpleAction *action,
   dialog = gtk_file_dialog_new ();
 
   ephy_file_dialog_add_shortcuts (dialog);
-  ephy_file_dialog_add_filters (dialog, EPHY_FILE_FILTER_ALL_SUPPORTED);
+  ephy_file_dialog_add_filters (dialog);
 
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (window),
