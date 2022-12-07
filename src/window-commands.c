@@ -36,7 +36,7 @@
 #include "ephy-embed.h"
 #include "ephy-encoding-dialog.h"
 #include "ephy-favicon-helpers.h"
-#include "ephy-file-chooser.h"
+#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-flatpak-utils.h"

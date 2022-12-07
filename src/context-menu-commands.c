@@ -25,7 +25,7 @@
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-file-chooser.h"
+#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"

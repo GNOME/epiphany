@@ -22,19 +22,13 @@
 
 #include "config.h"
 
-#include "ephy-file-chooser.h"
+#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"
-#include "ephy-settings.h"
-#include "ephy-string.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glib/gstdio.h>
-
-#include <sys/stat.h>
-#include <sys/types.h>
 
 static const char *webpage_types[] = {
   "text/html",

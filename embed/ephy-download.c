@@ -25,7 +25,6 @@
 #include "ephy-embed.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
-#include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"

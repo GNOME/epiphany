@@ -24,7 +24,7 @@
 #include "prefs-general-page.h"
 
 #include "ephy-embed-shell.h"
-#include "ephy-file-chooser.h"
+#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-lang-row.h"
