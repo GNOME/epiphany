@@ -45,6 +45,7 @@ static const char *image_types[] = {
   "image/jpeg",
   "image/gif",
   "image/webp",
+  "image/avif",
   NULL
 };
 
