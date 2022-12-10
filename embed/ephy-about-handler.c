@@ -266,9 +266,9 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "</script>"
                             "</head><div id=\"applications\"><body class=\"applications-body\"><h1>%s</h1>"
                             "<p>%s</p>",
-                            _("Applications"),
-                            _("Applications"),
-                            _("List of installed web applications"));
+                            _("Apps"),
+                            _("Apps"),
+                            _("List of installed web apps"));
 
     g_string_append (data_str, "<table>");
 
@@ -332,7 +332,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                             "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                             "</head><body class=\"applications-body\">",
-                            _("Applications"));
+                            _("Apps"));
 
     icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
     paintable = gtk_icon_theme_lookup_icon (icon_theme,
@@ -358,7 +358,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "</body></html>\n",
                             path ? path : "",
                             /* Displayed when opening applications without any installed web apps. */
-                            _("Applications"), _("You can add your favorite website by clicking <b>Install Site as Web Application…</b> within the page menu."));
+                            _("Apps"), _("You can add your favorite website by clicking <b>Install as Web App…</b> within the page menu."));
   }
 
   ephy_web_application_free_application_list (applications);
