@@ -242,5 +242,8 @@ void window_cmd_change_tabs_mute_state          (GSimpleAction *action,
 void window_cmd_import_passwords                (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_switch_new_tab                  (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS

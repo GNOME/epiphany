@@ -3001,3 +3001,13 @@ window_cmd_change_tabs_mute_state (GSimpleAction *action,
 
   g_simple_action_set_state (action, g_variant_new_boolean (mute));
 }
+
+void
+window_cmd_switch_new_tab (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  ephy_window_switch_to_new_tab (window);
+}

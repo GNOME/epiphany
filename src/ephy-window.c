@@ -174,6 +174,9 @@ struct _EphyWindow {
   int last_opened_pos;
   gboolean show_fullscreen_header_bar;
   guint64 uid;
+  GtkWidget *toast_overlay;
+  GtkWidget *switch_to_tab;
+  AdwToast *switch_toast;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -830,6 +833,7 @@ static const GActionEntry window_entries [] = {
   { "home", window_cmd_go_home },
   { "content", window_cmd_go_content },
   { "tabs-view", window_cmd_go_tabs_view },
+  { "switch-new-tab", window_cmd_switch_new_tab },
 
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
@@ -3633,7 +3637,9 @@ ephy_window_constructed (GObject *object)
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
   window->action_bar = setup_action_bar (window);
+  window->toast_overlay = adw_toast_overlay_new ();
   box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (box));
   window->titlebar_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT) &&
@@ -3646,7 +3652,7 @@ ephy_window_constructed (GObject *object)
   gtk_box_append (window->titlebar_box, GTK_WIDGET (window->tab_bar_revealer));
   gtk_box_append (box, GTK_WIDGET (window->tab_view));
   gtk_box_append (box, GTK_WIDGET (window->action_bar));
-  ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (box));
+  ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
   ephy_fullscreen_box_set_titlebar (window->fullscreen_box, GTK_WIDGET (window->titlebar_box));
 
   adw_leaflet_append (ADW_LEAFLET (window->main_leaflet), GTK_WIDGET (window->fullscreen_box));
@@ -4304,4 +4310,39 @@ ephy_window_get_action_group (EphyWindow *window,
                               const char *prefix)
 {
   return g_hash_table_lookup (window->action_groups, prefix);
+}
+
+static void
+drop_toast (EphyWindow *self)
+{
+  g_clear_pointer (&self->switch_toast, adw_toast_dismiss);
+}
+
+static void
+toast_dismissed_cb (EphyWindow *self)
+{
+  g_object_weak_unref (G_OBJECT (self->switch_to_tab), (GWeakNotify)drop_toast, self);
+  self->switch_to_tab = NULL;
+}
+
+void
+ephy_window_switch_to_new_tab_toast (EphyWindow *self,
+                                     GtkWidget  *tab)
+{
+  if (self->adaptive_mode != EPHY_ADAPTIVE_MODE_NARROW)
+    return;
+
+  self->switch_toast = adw_toast_new (_("New tab opened"));
+  g_signal_connect_swapped (self->switch_toast, "dismissed", G_CALLBACK (toast_dismissed_cb), self);
+  self->switch_to_tab = tab;
+  g_object_weak_ref (G_OBJECT (self->switch_to_tab), (GWeakNotify)drop_toast, self);
+  adw_toast_set_button_label (ADW_TOAST (self->switch_toast), _("Switch"));
+  adw_toast_set_action_name (ADW_TOAST (self->switch_toast), "win.switch-new-tab");
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), self->switch_toast);
+}
+
+void
+ephy_window_switch_to_new_tab (EphyWindow *window)
+{
+  ephy_tab_view_select_page (ephy_window_get_tab_view (window), window->switch_to_tab);
 }

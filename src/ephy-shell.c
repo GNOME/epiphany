@@ -1030,6 +1030,9 @@ ephy_shell_new_tab_full (EphyShell       *shell,
     gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
   }
 
+  if (shell->startup_finished && !jump_to)
+    ephy_window_switch_to_new_tab_toast (window, GTK_WIDGET (embed));
+
   return embed;
 }
 
