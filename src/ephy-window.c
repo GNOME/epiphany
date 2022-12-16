@@ -850,6 +850,7 @@ static const GActionEntry tab_entries [] = {
 };
 
 static const GActionEntry toolbar_entries [] = {
+  { "duplicate-tab", window_cmd_tabs_duplicate },
   { "navigation-back", window_cmd_navigation },
   { "navigation-back-new-tab", window_cmd_navigation_new_tab },
   { "navigation-forward", window_cmd_navigation },

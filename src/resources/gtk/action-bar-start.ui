@@ -71,6 +71,14 @@
       <object class="GtkButton" id="combined_stop_reload_button">
         <property name="action-name">toolbar.combined-stop-reload</property>
         <property name="icon-name">view-refresh-symbolic</property>
+        <child>
+          <object class="GtkGestureClick">
+            <!-- GDK_BUTTON_MIDDLE -->
+            <property name="button">2</property>
+            <signal name="pressed" handler="middle_click_pressed_cb"/>
+            <signal name="released" handler="middle_click_released_cb"/>
+          </object>
+        </child>
       </object>
     </child>
     <child>

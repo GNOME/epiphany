@@ -396,6 +396,8 @@ middle_click_released_cb (GtkGesture         *gesture,
     action_name = "navigation-back-new-tab";
   else if (widget == action_bar_start->navigation_forward)
     action_name = "navigation-forward-new-tab";
+  else if (widget == action_bar_start->combined_stop_reload_button)
+    action_name = "duplicate-tab";
   else if (widget == action_bar_start->homepage_button)
     action_name = "homepage-new-tab";
   else if (widget == action_bar_start->new_tab_button)
