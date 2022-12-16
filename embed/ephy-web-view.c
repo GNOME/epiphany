@@ -2900,6 +2900,49 @@ scale_factor_changed_cb (EphyWebView *web_view,
   _ephy_web_view_update_icon (web_view);
 }
 
+static gboolean
+query_permission_state_cb (EphyWebView                *web_view,
+                           WebKitPermissionStateQuery *query)
+{
+  const char *name = webkit_permission_state_query_get_name (query);
+  EphyPermissionType permission_type;
+  EphyPermissionsManager *permissions_manager;
+  WebKitSecurityOrigin *security_origin;
+  g_autofree char *origin = NULL;
+
+  /* See https://w3c.github.io/permissions and https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md */
+  if (g_strcmp0 (name, "notifications") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
+  else if (g_strcmp0 (name, "geolocation") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_ACCESS_LOCATION;
+  else if (g_strcmp0 (name, "microphone") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
+  else if (g_strcmp0 (name, "camera") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
+  else if (g_strcmp0 (name, "autoplay") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY;
+  else
+    return FALSE;
+
+  security_origin = webkit_permission_state_query_get_security_origin (query);
+  origin = webkit_security_origin_to_string (security_origin);
+
+  permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
+  switch (ephy_permissions_manager_get_permission (permissions_manager, permission_type, origin)) {
+    case EPHY_PERMISSION_UNDECIDED:
+      webkit_permission_state_query_finish (query, WEBKIT_PERMISSION_STATE_PROMPT);
+      break;
+    case EPHY_PERMISSION_DENY:
+      webkit_permission_state_query_finish (query, WEBKIT_PERMISSION_STATE_DENIED);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      webkit_permission_state_query_finish (query, WEBKIT_PERMISSION_STATE_GRANTED);
+      break;
+  }
+
+  return TRUE;
+}
+
 /**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
@@ -4118,6 +4161,10 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "notify::scale-factor",
                     G_CALLBACK (scale_factor_changed_cb),
+                    NULL);
+
+  g_signal_connect (web_view, "query-permission-state",
+                    G_CALLBACK (query_permission_state_cb),
                     NULL);
 
   g_signal_connect_object (shell, "password-form-focused",
