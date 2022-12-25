@@ -34,7 +34,7 @@
 #include "ephy-window.h"
 
 /* Translators: tooltip for the refresh button */
-static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
+static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload");
 
 struct _EphyActionBarStart {
   GtkBox parent_instance;
@@ -558,7 +558,7 @@ ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *act
                               "process-stop-symbolic");
     /* Translators: tooltip for the stop button */
     gtk_widget_set_tooltip_text (action_bar_start->combined_stop_reload_button,
-                                 _("Stop loading the current page"));
+                                 _("Stop"));
   } else {
     gtk_button_set_icon_name (GTK_BUTTON (action_bar_start->combined_stop_reload_button),
                               "view-refresh-symbolic");
