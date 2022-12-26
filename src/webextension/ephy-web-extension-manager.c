@@ -1061,7 +1061,7 @@ on_popup_load_changed (WebKitWebView   *web_view,
   /* TODO: Other browsers resize on DOM changes.
    *       We also need to limit this to a max size of 800x600 like Firefox. */
   if (load_event == WEBKIT_LOAD_FINISHED)
-    gtk_widget_show (GTK_WIDGET (web_view));
+    gtk_widget_set_visible (GTK_WIDGET (web_view), TRUE);
 }
 
 static void
@@ -1102,7 +1102,7 @@ ephy_web_extension_manager_create_browser_popup (EphyWebExtensionManager *self,
   web_view = ephy_web_extensions_manager_create_web_extensions_webview (web_extension);
   gtk_widget_set_hexpand (web_view, TRUE);
   gtk_widget_set_vexpand (web_view, TRUE);
-  gtk_widget_hide (web_view); /* Shown in on_popup_load_changed. */
+  gtk_widget_set_visible (web_view, FALSE); /* Shown in on_popup_load_changed. */
 
   ephy_web_extension_manager_register_popup_view (self, web_extension, web_view);
 

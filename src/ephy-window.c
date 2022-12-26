@@ -653,7 +653,7 @@ static gboolean
 ephy_window_close_request (GtkWindow *window)
 {
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) && g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
-    gtk_widget_hide (GTK_WIDGET (window));
+    gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
     return TRUE;
   }
 
@@ -1942,7 +1942,7 @@ web_view_ready_cb (WebKitWebView *web_view,
     g_signal_emit_by_name (parent_web_view, "new-window", web_view);
   }
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
 
   return TRUE;
 }
@@ -2101,7 +2101,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     if (!gtk_widget_is_visible (GTK_WIDGET (window))) {
       if (ephy_web_application_is_uri_allowed (uri)) {
-        gtk_widget_show (GTK_WIDGET (window));
+        gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
       } else {
         ephy_file_open_uri_in_default_browser (uri,
                                                gdk_surface_get_display (gtk_native_get_surface (GTK_NATIVE (window))));
@@ -2846,7 +2846,7 @@ run_downloads_in_background (EphyWindow *window,
 
   ephy_shell_send_notification (ephy_shell_get_default (), "progress", notification);
 
-  gtk_widget_hide (GTK_WIDGET (window));
+  gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
 }
 
 static gboolean
@@ -3454,7 +3454,6 @@ add_default_browser_question (GtkBox *box)
   label = gtk_label_new (_("Set Epiphany Technology Preview as your default browser?"));
 #endif
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_widget_show (label);
 
   info_bar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_QUESTION);
@@ -4268,7 +4267,7 @@ ephy_window_close (EphyWindow *window)
   }
 
   /* See bug #114689 */
-  gtk_widget_hide (GTK_WIDGET (window));
+  gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
 
   return TRUE;
 }

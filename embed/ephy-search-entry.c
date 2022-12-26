@@ -318,7 +318,7 @@ ephy_search_entry_init (EphySearchEntry *self)
                                    "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                    "icon-name", "edit-clear-symbolic",
                                    NULL);
-  gtk_widget_hide (self->clear_icon);
+  gtk_widget_set_visible (self->clear_icon, FALSE);
   gtk_widget_set_parent (self->clear_icon, GTK_WIDGET (self));
 
   gesture = gtk_gesture_click_new ();
@@ -330,7 +330,7 @@ ephy_search_entry_init (EphySearchEntry *self)
   self->matches_label = gtk_label_new (NULL);
   gtk_widget_add_css_class (self->matches_label, "dim-label");
   gtk_widget_add_css_class (self->matches_label, "numeric");
-  gtk_widget_hide (self->matches_label);
+  gtk_widget_set_visible (self->matches_label, FALSE);
   gtk_widget_set_parent (self->matches_label, GTK_WIDGET (self));
 
   gtk_editable_init_delegate (GTK_EDITABLE (self));

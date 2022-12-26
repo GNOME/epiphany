@@ -52,10 +52,7 @@ ephy_encoding_row_set_selected (EphyEncodingRow *row,
 {
   g_assert (EPHY_IS_ENCODING_ROW (row));
 
-  if (selected)
-    gtk_widget_show (GTK_WIDGET (row->selected_image));
-  else
-    gtk_widget_hide (GTK_WIDGET (row->selected_image));
+  gtk_widget_set_visible (GTK_WIDGET (row->selected_image), selected);
 }
 
 static void

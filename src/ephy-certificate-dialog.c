@@ -181,8 +181,8 @@ static void
 reveal_clicked_cb (GtkWidget *button,
                    GtkWidget *secondary_info)
 {
-  gtk_widget_hide (button);
-  gtk_widget_show (secondary_info);
+  gtk_widget_set_visible (button, FALSE);
+  gtk_widget_set_visible (secondary_info, TRUE);
 }
 
 static GtkWidget *
@@ -202,7 +202,7 @@ create_page (GcrCertificate *certificate)
   gtk_box_append (GTK_BOX (box), reveal_button);
 
   secondary_info = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_widget_hide (secondary_info);
+  gtk_widget_set_visible (secondary_info, FALSE);
   gtk_box_append (GTK_BOX (box), secondary_info);
 
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);

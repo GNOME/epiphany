@@ -70,7 +70,7 @@ update_revealer (EphyActionBar *action_bar)
                     (action_bar->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
 
   if (reveal)
-    gtk_widget_show (GTK_WIDGET (action_bar));
+    gtk_widget_set_visible (GTK_WIDGET (action_bar), TRUE);
 
   gtk_revealer_set_reveal_child (action_bar->revealer, reveal);
 }

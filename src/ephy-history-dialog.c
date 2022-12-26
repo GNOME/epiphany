@@ -810,7 +810,7 @@ on_clear_all_button_clicked (GtkButton         *button,
                                (gpointer *)confirmation_dialog);
   }
 
-  gtk_widget_show (self->confirmation_dialog);
+  gtk_widget_set_visible (self->confirmation_dialog, TRUE);
 }
 
 static void

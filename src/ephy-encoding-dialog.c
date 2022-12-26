@@ -384,7 +384,7 @@ ephy_encoding_dialog_constructed (GObject *object)
     recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
     g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
   } else
-    gtk_widget_hide (dialog->recent_box);
+    gtk_widget_set_visible (dialog->recent_box, FALSE);
 
   /* related */
   if (dialog->selected_encoding != NULL) {
@@ -398,7 +398,7 @@ ephy_encoding_dialog_constructed (GObject *object)
     related = g_list_sort (related, (GCompareFunc)sort_encodings);
     g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
   } else
-    gtk_widget_hide (dialog->related_box);
+    gtk_widget_set_visible (dialog->related_box, FALSE);
 
   /* update list_boxes */
   sync_encoding_against_embed (dialog);

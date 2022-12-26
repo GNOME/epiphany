@@ -511,7 +511,7 @@ ephy_web_view_show_auth_form_save_request (EphyWebView                     *web_
                          G_CALLBACK (info_bar_save_request_response_cb),
                          data, (GClosureNotify)save_auth_request_destroy, 0);
 
-  gtk_widget_show (info_bar);
+  gtk_widget_set_visible (info_bar, TRUE);
 }
 
 static void
@@ -666,6 +666,13 @@ icon_changed_cb (EphyWebView *view,
 }
 
 static void
+password_form_info_bar_response_cb (GtkInfoBar *info_bar,
+                                    gint        response_id)
+{
+  gtk_widget_set_visible (GTK_WIDGET (info_bar), FALSE);
+}
+
+static void
 password_form_focused_cb (EphyEmbedShell *shell,
                           guint64         page_id,
                           gboolean        insecure_form_action,
@@ -691,7 +698,7 @@ password_form_focused_cb (EphyEmbedShell *shell,
   gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
   gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
 
-  g_signal_connect (info_bar, "response", G_CALLBACK (gtk_widget_hide), NULL);
+  g_signal_connect (info_bar, "response", G_CALLBACK (password_form_info_bar_response_cb), NULL);
 
   track_info_bar (info_bar, &web_view->password_form_info_bar);
 

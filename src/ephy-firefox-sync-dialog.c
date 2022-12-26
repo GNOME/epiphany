@@ -195,9 +195,9 @@ sync_secrets_store_finished_cb (EphySyncService       *service,
   if (!error) {
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sync_dialog->sync_firefox_account_row),
                                    ephy_sync_utils_get_sync_user ());
-    gtk_widget_hide (sync_dialog->sync_page_group);
-    gtk_widget_show (sync_dialog->sync_firefox_account_group);
-    gtk_widget_show (sync_dialog->sync_options_group);
+    gtk_widget_set_visible (sync_dialog->sync_page_group, FALSE);
+    gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, TRUE);
+    gtk_widget_set_visible (sync_dialog->sync_options_group, TRUE);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (sync_dialog, error->message);
@@ -538,9 +538,9 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);
-  gtk_widget_hide (sync_dialog->sync_firefox_account_group);
-  gtk_widget_hide (sync_dialog->sync_options_group);
-  gtk_widget_show (sync_dialog->sync_page_group);
+  gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, FALSE);
+  gtk_widget_set_visible (sync_dialog->sync_options_group, FALSE);
+  gtk_widget_set_visible (sync_dialog->sync_page_group, TRUE);
   adw_action_row_set_subtitle (ADW_ACTION_ROW (sync_dialog->sync_firefox_account_row), NULL);
 }
 
@@ -744,12 +744,12 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
 
   if (!user) {
     sync_setup_firefox_iframe (sync_dialog);
-    gtk_widget_hide (sync_dialog->sync_firefox_account_group);
-    gtk_widget_hide (sync_dialog->sync_options_group);
+    gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, FALSE);
+    gtk_widget_set_visible (sync_dialog->sync_options_group, FALSE);
   } else {
     sync_set_last_sync_time (sync_dialog);
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sync_dialog->sync_firefox_account_row), user);
-    gtk_widget_hide (sync_dialog->sync_page_group);
+    gtk_widget_set_visible (sync_dialog->sync_page_group, FALSE);
   }
 
   g_settings_bind (sync_settings,

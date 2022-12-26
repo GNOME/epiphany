@@ -209,7 +209,7 @@ static void
 download_finished_cb (EphyDownload       *download,
                       EphyDownloadWidget *widget)
 {
-  gtk_widget_hide (widget->progress);
+  gtk_widget_set_visible (widget->progress, FALSE);
   update_status_label (widget, _("Finished"));
   gtk_button_set_icon_name (GTK_BUTTON (widget->action_button),
                             "folder-open-symbolic");
@@ -232,7 +232,7 @@ download_failed_cb (EphyDownload       *download,
 
   g_signal_handlers_disconnect_by_func (download, download_progress_cb, widget);
 
-  gtk_widget_hide (widget->progress);
+  gtk_widget_set_visible (widget->progress, FALSE);
 
   error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
   update_status_label (widget, error_msg);
@@ -367,14 +367,13 @@ ephy_download_widget_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->constructed (object);
 
   grid = gtk_grid_new ();
-  gtk_widget_show (grid);
+  gtk_widget_set_visible (grid, TRUE);
   adw_bin_set_child (ADW_BIN (widget), grid);
 
   widget->icon = gtk_image_new ();
   gtk_widget_set_margin_end (widget->icon, 4);
   update_download_icon (widget);
   gtk_grid_attach (GTK_GRID (grid), widget->icon, 0, 0, 1, 1);
-  gtk_widget_show (widget->icon);
 
   widget->filename = gtk_label_new (NULL);
   gtk_widget_set_hexpand (widget->filename, true);
@@ -383,15 +382,12 @@ ephy_download_widget_constructed (GObject *object)
   gtk_label_set_ellipsize (GTK_LABEL (widget->filename), PANGO_ELLIPSIZE_END);
   update_download_destination (widget);
   gtk_grid_attach (GTK_GRID (grid), widget->filename, 1, 0, 1, 1);
-  gtk_widget_show (widget->filename);
 
   widget->progress = gtk_progress_bar_new ();
   gtk_widget_set_margin_top (widget->progress, 6);
   gtk_widget_set_margin_bottom (widget->progress, 6);
   gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
   gtk_grid_attach (GTK_GRID (grid), widget->progress, 0, 1, 2, 1);
-  if (ephy_download_is_active (widget->download))
-    gtk_widget_show (widget->progress);
 
   widget->status = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (widget->status), 0);
@@ -414,7 +410,6 @@ ephy_download_widget_constructed (GObject *object)
     update_status_label (widget, _("Starting…"));
   }
   gtk_grid_attach (GTK_GRID (grid), widget->status, 0, 2, 2, 1);
-  gtk_widget_show (widget->status);
 
   if (ephy_download_succeeded (widget->download))
     action_icon_name = "folder-open-symbolic";

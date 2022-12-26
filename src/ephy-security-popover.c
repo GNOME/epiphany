@@ -248,7 +248,6 @@ ephy_security_popover_constructed (GObject *object)
   gtk_widget_set_halign (certificate_button, GTK_ALIGN_END);
   gtk_widget_set_margin_top (certificate_button, 5);
   gtk_widget_set_receives_default (certificate_button, FALSE);
-  gtk_widget_show (certificate_button);
   g_signal_connect (certificate_button, "clicked",
                     G_CALLBACK (certificate_button_clicked_cb),
                     popover);

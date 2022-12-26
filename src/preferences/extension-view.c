@@ -160,11 +160,11 @@ update (EphyExtensionView *self)
   /* Information Rows */
   gtk_label_set_label (GTK_LABEL (self->version_label), ephy_web_extension_get_version (self->web_extension));
   if (*ephy_web_extension_get_author (self->web_extension)) {
-    gtk_widget_show (self->author_row);
+    gtk_widget_set_visible (self->author_row, TRUE);
     gtk_label_set_label (GTK_LABEL (self->author_label), ephy_web_extension_get_author (self->web_extension));
   }
   if (*ephy_web_extension_get_homepage_url (self->web_extension))
-    gtk_widget_show (self->homepage_row);
+    gtk_widget_set_visible (self->homepage_row, TRUE);
 
   gtk_switch_set_active (self->enabled_switch, ephy_web_extension_manager_is_active (manager, self->web_extension));
 

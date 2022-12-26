@@ -1594,17 +1594,17 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
 
   switch (state) {
     case EPHY_BOOKMARK_ICON_HIDDEN:
-      gtk_widget_hide (self->bookmark_button);
+      gtk_widget_set_visible (self->bookmark_button, FALSE);
       gtk_widget_remove_css_class (self->bookmark_button, "starred");
       break;
     case EPHY_BOOKMARK_ICON_EMPTY:
-      gtk_widget_show (self->bookmark_button);
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
                                      "ephy-non-starred-symbolic");
       gtk_widget_remove_css_class (self->bookmark_button, "starred");
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
-      gtk_widget_show (self->bookmark_button);
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
                                      "ephy-starred-symbolic");
       gtk_widget_add_css_class (self->bookmark_button, "starred");

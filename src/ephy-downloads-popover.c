@@ -99,7 +99,7 @@ download_removed_cb (EphyDownloadsPopover *popover,
   /* Hide the popover before removing the last download widget so it "crumples"
    * more smoothly */
   if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (popover->downloads_box), 2))
-    gtk_widget_hide (GTK_WIDGET (popover));
+    gtk_widget_set_visible (GTK_WIDGET (popover), FALSE);
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (popover->downloads_box), i++))) {
     GtkWidget *widget = gtk_list_box_row_get_child (row);
@@ -123,7 +123,7 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
   GtkListBoxRow *row;
   int i = 0;
 
-  gtk_widget_hide (GTK_WIDGET (popover));
+  gtk_widget_set_visible (GTK_WIDGET (popover), FALSE);
 
   manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   g_signal_handlers_block_by_func (manager, download_removed_cb, popover);

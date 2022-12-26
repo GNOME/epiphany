@@ -51,7 +51,7 @@ ephy_notification_container_init (EphyNotificationContainer *self)
   self->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_revealer_set_child (GTK_REVEALER (self->revealer), self->box);
 
-  gtk_widget_hide (GTK_WIDGET (self));
+  gtk_widget_set_visible (GTK_WIDGET (self), FALSE);
 }
 
 static void
@@ -76,7 +76,7 @@ notification_close_cb (EphyNotification          *notification,
   gtk_box_remove (GTK_BOX (self->box), GTK_WIDGET (notification));
 
   if (!gtk_widget_get_first_child (self->box)) {
-    gtk_widget_hide (GTK_WIDGET (self));
+    gtk_widget_set_visible (GTK_WIDGET (self), FALSE);
     gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), FALSE);
   }
 }
@@ -102,7 +102,7 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
   }
 
   gtk_box_append (GTK_BOX (self->box), notification);
-  gtk_widget_show (GTK_WIDGET (self));
+  gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 
   g_signal_connect (notification, "close", G_CALLBACK (notification_close_cb), self);

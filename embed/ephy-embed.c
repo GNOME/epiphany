@@ -161,11 +161,11 @@ ephy_embed_set_statusbar_label (EphyEmbed  *embed,
   ephy_floating_bar_set_primary_label (EPHY_FLOATING_BAR (embed->floating_bar), label);
 
   if (label == NULL || label[0] == '\0') {
-    gtk_widget_hide (embed->floating_bar);
+    gtk_widget_set_visible (embed->floating_bar, FALSE);
     gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
     gtk_widget_remove_css_class (embed->floating_bar, "end");
   } else
-    gtk_widget_show (embed->floating_bar);
+    gtk_widget_set_visible (embed->floating_bar, TRUE);
 }
 
 static void
@@ -329,7 +329,7 @@ static gboolean
 fullscreen_message_label_hide (EphyEmbed *embed)
 {
   if (embed->fullscreen_message_id) {
-    gtk_widget_hide (embed->fullscreen_message_label);
+    gtk_widget_set_visible (embed->fullscreen_message_label, FALSE);
     g_source_remove (embed->fullscreen_message_id);
     embed->fullscreen_message_id = 0;
   }
@@ -341,7 +341,7 @@ void
 ephy_embed_entering_fullscreen (EphyEmbed *embed)
 {
   if (!g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN)) {
-    gtk_widget_show (embed->fullscreen_message_label);
+    gtk_widget_set_visible (embed->fullscreen_message_label, TRUE);
 
     g_clear_handle_id (&embed->fullscreen_message_id, g_source_remove);
     embed->fullscreen_message_id = g_timeout_add_seconds (5,
@@ -591,7 +591,7 @@ status_message_notify_cb (EphyWebView *view,
 static gboolean
 clear_progress_cb (EphyEmbed *embed)
 {
-  gtk_widget_hide (embed->progress);
+  gtk_widget_set_visible (embed->progress, FALSE);
   embed->clear_progress_source_id = 0;
 
   return FALSE;
@@ -611,7 +611,7 @@ progress_update (EphyWebView *view,
   uri = webkit_web_view_get_uri (embed->web_view);
   if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
       g_str_has_prefix (uri, "about:")) {
-    gtk_widget_hide (embed->progress);
+    gtk_widget_set_visible (embed->progress, FALSE);
     return;
   }
 
@@ -624,7 +624,7 @@ progress_update (EphyWebView *view,
                                                      embed);
     g_source_set_name_by_id (embed->clear_progress_source_id, "[epiphany] clear_progress_cb");
   } else
-    gtk_widget_show (embed->progress);
+    gtk_widget_set_visible (embed->progress, TRUE);
 
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (embed->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
@@ -746,7 +746,7 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_halign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
   gtk_widget_set_can_target (embed->fullscreen_message_label, FALSE);
-  gtk_widget_hide (embed->fullscreen_message_label);
+  gtk_widget_set_visible (embed->fullscreen_message_label, FALSE);
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->fullscreen_message_label);
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
@@ -754,7 +754,7 @@ ephy_embed_constructed (GObject *object)
   embed->floating_bar = ephy_floating_bar_new ();
   gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
-  gtk_widget_hide (embed->floating_bar);
+  gtk_widget_set_visible (embed->floating_bar, FALSE);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
 

@@ -322,7 +322,7 @@ show_downloads (GSimpleAction *action,
   g_application_withdraw_notification (G_APPLICATION (ephy_shell), ephy_shell->open_notification_id);
   g_clear_pointer (&ephy_shell->open_notification_id, g_free);
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
   g_signal_emit_by_name (manager, "show-downloads", NULL);
 }
 
@@ -1024,12 +1024,11 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                                     "title", title,
                                     "progress-bar-enabled", ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION,
                                     NULL));
-  gtk_widget_show (GTK_WIDGET (embed));
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, parent, position, jump_to);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
-    gtk_widget_show (GTK_WIDGET (window));
+    gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
   }
 
   return embed;

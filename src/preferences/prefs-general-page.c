@@ -1073,7 +1073,7 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ========================== Downloads =================================== */
   /* ======================================================================== */
   if (ephy_is_running_inside_sandbox ())
-    gtk_widget_hide (general_page->download_box);
+    gtk_widget_set_visible (general_page->download_box, FALSE);
   else
     g_settings_bind_with_mapping (EPHY_SETTINGS_STATE,
                                   EPHY_PREFS_STATE_DOWNLOAD_DIR,

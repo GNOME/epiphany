@@ -211,7 +211,7 @@ forget_all (GSimpleAction *action,
                                (gpointer *)confirmation_dialog);
   }
 
-  gtk_widget_show (self->confirmation_dialog);
+  gtk_widget_set_visible (self->confirmation_dialog, TRUE);
 }
 
 static void
@@ -331,7 +331,7 @@ password_filter (GtkListBoxRow *row,
   const char *search_text = ephy_data_view_get_search_text (EPHY_DATA_VIEW (passwords_view));
 
   if (search_text == NULL) {
-    gtk_widget_show (GTK_WIDGET (row));
+    gtk_widget_set_visible (GTK_WIDGET (row), TRUE);
 
     return TRUE;
   }
