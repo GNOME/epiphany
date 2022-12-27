@@ -51,7 +51,7 @@ ephy_uri_normalize (const char *uri_string)
   if (!uri_string || !*uri_string)
     return NULL;
 
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
   if (!uri)
     return g_strdup (uri_string);
 
