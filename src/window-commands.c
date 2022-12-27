@@ -2999,9 +2999,6 @@ window_cmd_change_tabs_mute_state (GSimpleAction *action,
 
   view = ephy_embed_get_web_view (embed);
 
-  if (!webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view)))
-    return;
-
   mute = !webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
 
   webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), mute);

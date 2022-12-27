@@ -2533,25 +2533,18 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
                         AdwTabPage *page,
                         EphyWindow *window)
 {
-  EphyWebView *view;
   GActionGroup *action_group;
   GAction *action;
   int n_pages;
   int n_pinned_pages;
   int position;
   gboolean pinned;
-  gboolean audio_playing;
-  gboolean muted;
 
   if (page) {
     n_pages = adw_tab_view_get_n_pages (tab_view);
     n_pinned_pages = adw_tab_view_get_n_pinned_pages (tab_view);
     position = adw_tab_view_get_page_position (tab_view, page);
     pinned = adw_tab_page_get_pinned (page);
-
-    view = ephy_embed_get_web_view (EPHY_EMBED (adw_tab_page_get_child (page)));
-    audio_playing = webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view));
-    muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
   }
 
   action_group = ephy_window_get_action_group (window, "tab");
@@ -2581,12 +2574,6 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "unpin");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || pinned);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       "mute");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || audio_playing);
-  g_simple_action_set_state (G_SIMPLE_ACTION (action),
-                             g_variant_new_boolean (!page || muted));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "close");
