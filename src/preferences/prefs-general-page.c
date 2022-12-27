@@ -559,11 +559,12 @@ download_folder_row_activated_cb (PrefsGeneralPage *general_page)
   if (downloads_path && downloads_path[0])
     downloads_dir = g_file_new_for_path (downloads_path);
 
+  gtk_file_dialog_set_initial_folder (dialog, downloads_dir);
+
   root = gtk_widget_get_root (GTK_WIDGET (general_page));
 
   gtk_file_dialog_select_folder (dialog,
                                  GTK_WINDOW (root),
-                                 downloads_dir,
                                  general_page->cancellable,
                                  (GAsyncReadyCallback)download_folder_file_dialog_cb,
                                  general_page);
@@ -752,7 +753,6 @@ on_webapp_icon_row_activated (GtkWidget        *button,
 
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (root),
-                        NULL,
                         general_page->cancellable,
                         (GAsyncReadyCallback)webapp_icon_dialog_cb,
                         general_page);

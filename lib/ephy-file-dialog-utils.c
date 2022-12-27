@@ -109,5 +109,5 @@ ephy_file_dialog_add_filters (GtkFileDialog *dialog)
   }
 
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
-  gtk_file_dialog_set_current_filter (dialog, supported_filter);
+  gtk_file_dialog_set_default_filter (dialog, supported_filter);
 }

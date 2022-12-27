@@ -89,7 +89,6 @@ on_add_button_clicked (GtkButton *button,
 
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                        NULL,
                         self->cancellable,
                         (GAsyncReadyCallback)on_add_file_selected,
                         self);

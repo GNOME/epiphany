@@ -176,6 +176,7 @@ open_dialog_cb (GtkFileDialog            *dialog,
 
   if (files) {
     GPtrArray *file_array = g_ptr_array_new ();
+    g_autoptr (GFile) first_file = NULL;
     g_autoptr (GFile) current_folder = NULL;
     g_autofree char *current_folder_path = NULL;
     guint i, n = g_list_model_get_n_items (files);
@@ -192,7 +193,8 @@ open_dialog_cb (GtkFileDialog            *dialog,
     g_ptr_array_set_free_func (file_array, g_free);
     g_ptr_array_free (file_array, TRUE);
 
-    current_folder = gtk_file_dialog_get_current_folder (dialog);
+    first_file = G_FILE (g_list_model_get_item (files, 0));
+    current_folder = g_file_get_parent (first_file);
     if (current_folder) {
       current_folder_path = g_file_get_path (current_folder);
       g_settings_set_string (EPHY_SETTINGS_WEB,
@@ -236,7 +238,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
     supported_filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (supported_filter, _("All supported types"));
     g_list_store_append (filters, supported_filter);
-    gtk_file_dialog_set_current_filter (dialog, supported_filter);
+    gtk_file_dialog_set_default_filter (dialog, supported_filter);
 
     for (i = 0; mime_types[i]; i++) {
       g_autoptr (GtkFileFilter) filter = NULL;
@@ -265,7 +267,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
     g_autoptr (GFile) last_directory = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_dialog_set_current_folder (dialog, last_directory);
+    gtk_file_dialog_set_initial_folder (dialog, last_directory);
   }
 
   if (webkit_file_chooser_request_get_select_multiple (request))
@@ -277,7 +279,6 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   else
     gtk_file_dialog_open (dialog,
                           GTK_WINDOW (root),
-                          NULL,
                           ephy_web_view->cancellable,
                           (GAsyncReadyCallback)open_dialog_cb,
                           g_object_ref (request));

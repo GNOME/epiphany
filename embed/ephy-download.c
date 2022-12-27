@@ -677,23 +677,22 @@ filename_suggested_button_cb (GtkButton             *button,
 {
   GtkFileDialog *dialog = gtk_file_dialog_new ();
 
+  gtk_file_dialog_set_initial_folder (dialog, data->directory);
+
   if (!data->choose_filename) {
     gtk_file_dialog_set_title (dialog, _("Select a Directory"));
 
     gtk_file_dialog_select_folder (dialog,
                                    data->dialog,
-                                   data->directory,
                                    NULL,
                                    (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
                                    data);
   } else {
     gtk_file_dialog_set_title (dialog, _("Select the Destination"));
-    gtk_file_dialog_set_current_folder (dialog, data->directory);
+    gtk_file_dialog_set_initial_name (dialog, data->suggested_filename);
 
     gtk_file_dialog_save (dialog,
                           data->dialog,
-                          NULL,
-                          data->suggested_filename,
                           NULL,
                           (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
                           data);

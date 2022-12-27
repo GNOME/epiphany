@@ -175,7 +175,7 @@ filename_confirmed_cb (GtkFileDialog       *dialog,
     ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                          data->download);
 
-    current_folder = gtk_file_dialog_get_current_folder (dialog);
+    current_folder = g_file_get_parent (file);
     current_folder_path = g_file_get_path (current_folder);
     g_settings_set_string (EPHY_SETTINGS_WEB,
                            EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
@@ -214,15 +214,14 @@ filename_suggested_cb (EphyDownload        *download,
     g_autoptr (GFile) last_directory = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_dialog_set_current_folder (dialog, last_directory);
+    gtk_file_dialog_set_initial_folder (dialog, last_directory);
   }
 
   sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
+  gtk_file_dialog_set_initial_name (dialog, sanitized_filename);
 
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (data->window),
-                        NULL,
-                        sanitized_filename,
                         NULL,
                         (GAsyncReadyCallback)filename_confirmed_cb,
                         data);

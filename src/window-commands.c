@@ -406,7 +406,6 @@ dialog_bookmarks_import (GtkWindow *parent)
   gtk_file_dialog_open (dialog,
                         parent,
                         NULL,
-                        NULL,
                         (GAsyncReadyCallback)dialog_bookmarks_import_file_dialog_cb,
                         parent);
 }
@@ -453,7 +452,6 @@ dialog_bookmarks_import_from_html (GtkWindow *parent)
 
   gtk_file_dialog_open (dialog,
                         parent,
-                        NULL,
                         NULL,
                         (GAsyncReadyCallback)dialog_bookmarks_import_from_html_file_dialog_cb,
                         parent);
@@ -683,11 +681,11 @@ window_cmd_export_bookmarks (GSimpleAction *action,
   g_list_store_append (filters, filter);
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
+  /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
+  gtk_file_dialog_set_initial_name (dialog, _("bookmarks.html"));
+
   gtk_file_dialog_save (dialog,
                         window,
-                        NULL,
-                        /* Translators: Only translate the part before ".html" (e.g. "bookmarks") */
-                        _("bookmarks.html"),
                         NULL,
                         (GAsyncReadyCallback)export_bookmarks_file_dialog_cb,
                         g_object_ref (window));
@@ -1392,7 +1390,6 @@ window_cmd_open (GSimpleAction *action,
 
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (window),
-                        NULL,
                         NULL,
                         (GAsyncReadyCallback)open_dialog_cb,
                         window);
@@ -2112,7 +2109,7 @@ save_dialog_cb (GtkFileDialog *dialog,
     }
   }
 
-  current_file = gtk_file_dialog_get_current_folder (dialog);
+  current_file = g_file_get_parent (file);
   current_path = g_file_get_path (current_file);
   g_settings_set_string (EPHY_SETTINGS_WEB,
                          EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
@@ -2145,7 +2142,7 @@ window_cmd_save_as (GSimpleAction *action,
     g_autoptr (GFile) last_directory = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_dialog_set_current_folder (dialog, last_directory);
+    gtk_file_dialog_set_initial_folder (dialog, last_directory);
   }
 
   html_filter = gtk_file_filter_new ();
@@ -2162,11 +2159,10 @@ window_cmd_save_as (GSimpleAction *action,
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
   suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
+  gtk_file_dialog_set_initial_name (dialog, suggested_filename);
 
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (window),
-                        NULL,
-                        suggested_filename,
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
                         embed);
@@ -2197,7 +2193,7 @@ window_cmd_screenshot (GSimpleAction *action,
     g_autoptr (GFile) last_directory = NULL;
 
     last_directory = g_file_new_for_path (last_directory_path);
-    gtk_file_dialog_set_current_folder (dialog, last_directory);
+    gtk_file_dialog_set_initial_folder (dialog, last_directory);
   }
 
   filter = gtk_file_filter_new ();
@@ -2209,11 +2205,10 @@ window_cmd_screenshot (GSimpleAction *action,
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
   suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".png", NULL);
+  gtk_file_dialog_set_initial_name (dialog, suggested_filename);
 
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (window),
-                        NULL,
-                        suggested_filename,
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
                         embed);
