@@ -54,9 +54,7 @@ G_DEFINE_TYPE (ClearDataView, clear_data_view, EPHY_TYPE_DATA_VIEW)
   WEBKIT_WEBSITE_DATA_DISK_CACHE | \
   WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE | \
   WEBKIT_WEBSITE_DATA_LOCAL_STORAGE | \
-  WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES | \
   WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES | \
-  WEBKIT_WEBSITE_DATA_PLUGIN_DATA | \
   WEBKIT_WEBSITE_DATA_HSTS_CACHE | \
   WEBKIT_WEBSITE_DATA_ITP
 
@@ -72,10 +70,8 @@ static const DataEntry data_entries[] = {
   { 0x004, WEBKIT_WEBSITE_DATA_LOCAL_STORAGE, N_("Local storage data") },
   { 0x008, WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, N_("Offline web application cache") },
   { 0x010, WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, N_("IndexedDB databases") },
-  { 0x020, WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES, N_("WebSQL databases") },
-  { 0x040, WEBKIT_WEBSITE_DATA_PLUGIN_DATA, N_("Plugins data") },
-  { 0x080, WEBKIT_WEBSITE_DATA_HSTS_CACHE, N_("HSTS policies cache") },
-  { 0x100, WEBKIT_WEBSITE_DATA_ITP, N_("Intelligent Tracking Prevention data") }
+  { 0x020, WEBKIT_WEBSITE_DATA_HSTS_CACHE, N_("HSTS policies cache") },
+  { 0x040, WEBKIT_WEBSITE_DATA_ITP, N_("Intelligent Tracking Prevention data") }
 };
 
 static WebKitWebsiteDataManager *
