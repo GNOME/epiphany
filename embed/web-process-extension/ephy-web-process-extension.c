@@ -120,8 +120,8 @@ frame_destroyed_notify (EphyWebProcessExtension *extension,
 
 static void
 web_page_form_controls_associated (WebKitWebPage *web_page,
-                                   GPtrArray     *form_controls,
-                                   WebKitFrame   *frame)
+                                   WebKitFrame   *frame,
+                                   GPtrArray     *form_controls)
 {
   EphyWebProcessExtension *extension;
   g_autoptr (JSCContext) js_context = NULL;
