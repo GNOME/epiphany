@@ -70,6 +70,7 @@ struct _EphyLocationEntry {
 
   char *saved_text;
   char *jump_tab;
+  char *complete_address;
 
   guint progress_timeout;
   gdouble progress_fraction;
@@ -204,7 +205,9 @@ schedule_dns_prefetch (EphyLocationEntry *entry,
 static void
 editable_changed_cb (GtkEditable       *editable,
                      EphyLocationEntry *entry);
-
+static void
+ephy_location_entry_set_text (EphyLocationEntry *self,
+                              const char        *text);
 static void
 update_selected_url (EphyLocationEntry *entry)
 {
@@ -223,9 +226,9 @@ update_selected_url (EphyLocationEntry *entry)
 
   if (g_str_has_prefix (uri, "ephy-tab://")) {
     entry->jump_tab = g_strdup (uri);
-    gtk_editable_set_text (GTK_EDITABLE (entry), dzl_suggestion_get_subtitle (suggestion));
+    ephy_location_entry_set_text (entry, dzl_suggestion_get_subtitle (suggestion));
   } else {
-    gtk_editable_set_text (GTK_EDITABLE (entry), uri);
+    ephy_location_entry_set_text (entry, uri);
   }
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
@@ -555,10 +558,12 @@ update_entry_style (EphyLocationEntry *self,
   PangoAttribute *color_normal;
   PangoAttribute *color_dimmed;
   g_autoptr (GUri) uri = NULL;
+  g_autofree char *new_text = NULL;
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self));
   const char *host;
   const char *base_domain;
   char *sub_string;
+  int offset = 0;
 
   attrs = pango_attr_list_new ();
 
@@ -566,8 +571,20 @@ update_entry_style (EphyLocationEntry *self,
     goto out;
 
   uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
-  if (!uri)
-    goto out;
+  if (!uri) {
+    /* Maybe text is missing its scheme (due to narrow mode).
+     * Let's create a temporary full address and try it again.
+     * It will not be added to the current address.
+     */
+    new_text = g_strconcat ("https://", text, NULL);
+
+    text = new_text;
+    offset = 8;
+
+    uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
+    if (!uri)
+      goto out;
+  }
 
   host = g_uri_get_host (uri);
   if (!host || strlen (host) == 0)
@@ -587,13 +604,43 @@ update_entry_style (EphyLocationEntry *self,
 
   /* Base domain with normal style */
   color_normal = pango_attr_foreground_alpha_new (65535);
-  color_normal->start_index = sub_string - text;
+  color_normal->start_index = sub_string - text - offset;
   color_normal->end_index = color_normal->start_index + strlen (base_domain);
   pango_attr_list_insert (attrs, color_normal);
 
 out:
   gtk_text_set_attributes (GTK_TEXT (self->text), attrs);
   pango_attr_list_unref (attrs);
+}
+
+static void
+ephy_location_entry_set_text (EphyLocationEntry *self,
+                              const char        *text)
+{
+  if (text) {
+    g_clear_pointer (&self->complete_address, g_free);
+    self->complete_address = g_strdup (text);
+  } else {
+    text = self->complete_address;
+  }
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self)) && self->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
+    g_autoptr (GUri) uri = NULL;
+    const char *host = NULL;
+
+    uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
+    if (uri) {
+      host = g_uri_get_host (uri);
+      if (host) {
+        char *pos = strstr (text, host);
+        if (pos)
+          text = pos;
+      }
+    }
+  }
+
+  gtk_editable_set_text (GTK_EDITABLE (self), text);
+  update_entry_style (self, gtk_widget_has_focus (GTK_WIDGET (self)));
 }
 
 static void
@@ -643,15 +690,13 @@ emit_activate (EphyLocationEntry *entry,
 {
   if (entry->jump_tab) {
     g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-    gtk_editable_set_text (GTK_EDITABLE (entry), entry->jump_tab);
+    ephy_location_entry_set_text (entry, entry->jump_tab);
     g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
     g_clear_pointer (&entry->jump_tab, g_free);
   } else {
     g_autofree gchar *text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
     gchar *url = g_strstrip (text);
     g_autofree gchar *new_url = NULL;
-
-    gtk_editable_set_text (GTK_EDITABLE (entry), entry->jump_tab ? entry->jump_tab : text);
 
     if (strlen (url) > 5 && g_str_has_prefix (url, "http:") && url[5] != '/')
       new_url = g_strdup_printf ("http://%s", url + 5);
@@ -660,7 +705,11 @@ emit_activate (EphyLocationEntry *entry,
 
     if (new_url) {
       g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-      gtk_editable_set_text (GTK_EDITABLE (entry), new_url);
+      ephy_location_entry_set_text (entry, new_url);
+      g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
+    } else {
+      g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
+      ephy_location_entry_set_text (entry, entry->jump_tab ? entry->jump_tab : text);
       g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
     }
 
@@ -672,7 +721,7 @@ emit_activate (EphyLocationEntry *entry,
         g_autofree gchar *new_url = g_strdup_printf ("www.%s.com", url);
 
         g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-        gtk_editable_set_text (GTK_EDITABLE (entry), new_url);
+        ephy_location_entry_set_text (entry, new_url);
         g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
       }
     }
@@ -743,7 +792,7 @@ suggestion_activated_cb (EphyLocationEntry *entry,
   text = ephy_suggestion_get_uri (suggestion);
 
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_editable_set_text (GTK_EDITABLE (entry), entry->jump_tab ? entry->jump_tab : text);
+  ephy_location_entry_set_text (entry, entry->jump_tab ? entry->jump_tab : text);
   g_clear_pointer (&entry->jump_tab, g_free);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
 
@@ -816,7 +865,7 @@ paste_received (GdkClipboard      *clipboard,
   }
 
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_editable_set_text (GTK_EDITABLE (entry), text);
+  ephy_location_entry_set_text (entry, text);
   emit_activate (entry, 0);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
 
@@ -838,7 +887,7 @@ clear_activate (EphyLocationEntry *entry)
 {
   entry->block_update = TRUE;
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_editable_set_text (GTK_EDITABLE (entry), "");
+  ephy_location_entry_set_text (entry, "");
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
   entry->block_update = FALSE;
   entry->user_changed = TRUE;
@@ -1404,7 +1453,7 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
 
   entry->block_update = TRUE;
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_editable_set_text (GTK_EDITABLE (widget), final_text);
+  ephy_location_entry_set_text (entry, final_text);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
   update_entry_style (entry, gtk_widget_has_focus (entry->text));
 
@@ -1526,7 +1575,7 @@ void
 ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
   g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
-  gtk_editable_set_text (GTK_EDITABLE (entry), entry->saved_text);
+  ephy_location_entry_set_text (entry, entry->saved_text);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
   entry->can_redo = FALSE;
   entry->user_changed = TRUE;
@@ -1576,9 +1625,12 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
  *
  **/
 void
-ephy_location_entry_focus (EphyLocationEntry *entry)
+ephy_location_entry_focus (EphyLocationEntry *self)
 {
-  gtk_widget_grab_focus (entry->text);
+  g_signal_handlers_block_by_func (self, G_CALLBACK (editable_changed_cb), self);
+  ephy_location_entry_set_text (self, NULL);
+  g_signal_handlers_unblock_by_func (self, G_CALLBACK (editable_changed_cb), self);
+  gtk_widget_grab_focus (self->text);
 }
 
 void
@@ -1733,17 +1785,20 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
 }
 
 void
-ephy_location_entry_set_adaptive_mode (EphyLocationEntry *entry,
+ephy_location_entry_set_adaptive_mode (EphyLocationEntry *self,
                                        EphyAdaptiveMode   adaptive_mode)
 {
-  entry->adaptive_mode = adaptive_mode;
+  self->adaptive_mode = adaptive_mode;
+  g_signal_handlers_block_by_func (self, G_CALLBACK (editable_changed_cb), self);
+  ephy_location_entry_set_text (self, NULL);
+  g_signal_handlers_unblock_by_func (self, G_CALLBACK (editable_changed_cb), self);
 
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
-    gtk_widget_add_css_class (GTK_WIDGET (entry), "narrow");
+    gtk_widget_add_css_class (GTK_WIDGET (self), "narrow");
   else
-    gtk_widget_remove_css_class (GTK_WIDGET (entry), "narrow");
+    gtk_widget_remove_css_class (GTK_WIDGET (self), "narrow");
 
-  ephy_location_entry_set_bookmark_icon_state (entry, entry->icon_state);
+  ephy_location_entry_set_bookmark_icon_state (self, self->icon_state);
 }
 
 void
