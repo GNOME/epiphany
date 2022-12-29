@@ -566,7 +566,6 @@ ephy_embed_prefs_init (gpointer user_data)
   webkit_settings = webkit_settings_new_with_settings ("enable-back-forward-navigation-gestures", TRUE,
                                                        "enable-developer-extras", TRUE,
                                                        "enable-dns-prefetching", TRUE,
-                                                       "enable-plugins", FALSE,
                                                        "enable-media-stream", TRUE,
                                                        "enable-smooth-scrolling", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
