@@ -2468,8 +2468,7 @@ load_failed_cb (WebKitWebView   *web_view,
   ephy_web_view_set_link_message (view, NULL);
 
   if (error->domain != WEBKIT_NETWORK_ERROR &&
-      error->domain != WEBKIT_POLICY_ERROR &&
-      error->domain != WEBKIT_PLUGIN_ERROR) {
+      error->domain != WEBKIT_POLICY_ERROR) {
     if (view->address && g_str_has_prefix (view->address, "file:"))
       ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error, NULL);
     else
@@ -2486,11 +2485,6 @@ load_failed_cb (WebKitWebView   *web_view,
     case WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE:
     case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI:
     case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
-    case WEBKIT_PLUGIN_ERROR_FAILED:
-    case WEBKIT_PLUGIN_ERROR_CANNOT_FIND_PLUGIN:
-    case WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN:
-    case WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE:
-    case WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED:
       ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
       return TRUE;
     case WEBKIT_NETWORK_ERROR_CANCELLED: {
@@ -2508,9 +2502,6 @@ load_failed_cb (WebKitWebView   *web_view,
       if (!view->ever_committed)
         g_signal_emit_by_name (view, "download-only-load", NULL);
       break;
-    /* In case the resource is going to be showed with a plugin just let
-     * WebKit do it */
-    case WEBKIT_PLUGIN_ERROR_WILL_HANDLE_LOAD:
     default:
       break;
   }
