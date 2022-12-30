@@ -169,6 +169,16 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
+  uri_helpers_test = executable('test-ephy-uri-helpers',
+    'ephy-uri-helpers-test.c',
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
+  )
+  test('URI helpers test',
+    uri_helpers_test,
+    env: envs
+  )
+
   web_view_test = executable('test-ephy-web-view',
     'ephy-web-view-test.c',
     resources,
