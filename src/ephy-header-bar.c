@@ -295,6 +295,7 @@ ephy_header_bar_constructed (GObject *object)
   button = gtk_menu_button_new ();
   header_bar->page_menu_button = button;
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (button), "open-menu-symbolic");
+  gtk_widget_set_tooltip_text (button, _("Main Menu"));
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   menu = G_MENU (gtk_builder_get_object (builder, "menu"));
   header_bar->page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
