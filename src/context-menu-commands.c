@@ -301,8 +301,11 @@ context_cmd_set_image_as_background (GSimpleAction *action,
 {
   WebKitHitTestResult *hit_test_result;
   const char *location;
-  char *dest_uri, *dest, *base, *base_converted;
-  EphyDownload *download;
+  g_autofree char *dest_uri = NULL;
+  g_autofree char *dest = NULL;
+  g_autofree char *base = NULL;
+  g_autofree char *base_converted = NULL;
+  g_autoptr (EphyDownload) download = NULL;
 
   /* FIXME: Use wallpaper portal */
   if (ephy_is_running_inside_sandbox ())
@@ -323,15 +326,9 @@ context_cmd_set_image_as_background (GSimpleAction *action,
   ephy_download_set_destination_uri (download, dest_uri);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                        download);
-  g_object_unref (download);
 
   g_signal_connect (download, "completed",
                     G_CALLBACK (background_download_completed), user_data);
-
-  g_free (base);
-  g_free (base_converted);
-  g_free (dest);
-  g_free (dest_uri);
 }
 
 static void
