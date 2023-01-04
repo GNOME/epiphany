@@ -255,12 +255,10 @@ webkit_pref_callback_user_javascript (GSettings  *settings,
                      (GAsyncReadyCallback)user_javascript_read_cb, NULL);
 
   user_javascript_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
-  if (!user_javascript_monitor) {
+  if (!user_javascript_monitor)
     g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
-    g_error_free (error);
-  } else {
+  else
     g_signal_connect (user_javascript_monitor, "changed", G_CALLBACK (user_javascript_file_changed), NULL);
-  }
 }
 
 static void
