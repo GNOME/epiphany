@@ -3604,8 +3604,6 @@ ephy_window_constructed (GObject *object)
   g_signal_connect (window, "notify::fullscreened",
                     G_CALLBACK (notify_fullscreen_cb), NULL);
 
-  ephy_gui_ensure_window_group (GTK_WINDOW (window));
-
   window->tab_view = setup_tab_view (window);
   window->tab_bar = adw_tab_bar_new ();
   window->tab_bar_revealer = GTK_REVEALER (gtk_revealer_new ());

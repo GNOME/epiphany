@@ -1028,8 +1028,6 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (self->search_bar),
                                 GTK_EDITABLE (self->search_entry));
 
-  ephy_gui_ensure_window_group (GTK_WINDOW (self));
-
   if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     tooltip = _("It is not possible to modify history when in incognito mode.");
     set_can_clear (self, FALSE);

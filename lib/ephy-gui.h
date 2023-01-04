@@ -24,8 +24,6 @@
 
 G_BEGIN_DECLS
 
-GtkWindowGroup *ephy_gui_ensure_window_group             (GtkWindow *window);
-
 void            ephy_gui_help                            (GtkWidget *parent,
                                                           const char *page);
 

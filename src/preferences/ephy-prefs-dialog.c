@@ -153,8 +153,6 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
   gtk_widget_init_template (GTK_WIDGET (dialog));
   gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
 
-  ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
-
   sync_extensions (dialog);
   g_signal_connect_object (EPHY_SETTINGS_WEB,
                            "changed::" EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,

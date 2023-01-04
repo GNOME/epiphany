@@ -24,21 +24,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-GtkWindowGroup *
-ephy_gui_ensure_window_group (GtkWindow *window)
-{
-  GtkWindowGroup *group;
-
-  group = gtk_window_get_group (window);
-  if (group == NULL) {
-    group = gtk_window_group_new ();
-    gtk_window_group_add_window (group, window);
-    g_object_unref (group);
-  }
-
-  return group;
-}
-
 /**
  * ephy_gui_help:
  * @parent: the parent window where help is being called
