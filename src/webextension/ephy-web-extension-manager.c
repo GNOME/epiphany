@@ -149,7 +149,7 @@ on_web_extension_loaded (GObject      *source_object,
 {
   GFile *target = G_FILE (source_object);
   g_autoptr (GError) error = NULL;
-  EphyWebExtension *web_extension;
+  g_autoptr (EphyWebExtension) web_extension = NULL;
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
 
   web_extension = ephy_web_extension_load_finished (source_object, result, &error);
@@ -159,7 +159,6 @@ on_web_extension_loaded (GObject      *source_object,
   }
 
   ephy_web_extension_manager_add_to_list (self, web_extension);
-  g_object_unref (web_extension);
 
   if (ephy_web_extension_manager_is_active (self, web_extension))
     ephy_web_extension_manager_set_active (self, web_extension, TRUE);
