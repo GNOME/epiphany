@@ -79,6 +79,7 @@ bookmark_removed_cb (EphyAddBookmarkPopover *self,
 static void
 popover_shown (EphyAddBookmarkPopover *self)
 {
+  g_autoptr (EphyBookmark) new_bookmark = NULL;
   GtkWidget *parent;
   GtkRoot *window;
   EphyBookmarksManager *manager;
@@ -100,7 +101,6 @@ popover_shown (EphyAddBookmarkPopover *self)
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
     g_autofree char *id = NULL;
-    g_autoptr (EphyBookmark) new_bookmark = NULL;
 
     id = ephy_bookmark_generate_random_id ();
     new_bookmark = ephy_bookmark_new (address,
