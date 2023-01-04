@@ -24,7 +24,6 @@
 
 #include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
-#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 #include <gtk/gtk.h>

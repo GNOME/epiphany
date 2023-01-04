@@ -28,7 +28,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
-#include "ephy-gui.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"

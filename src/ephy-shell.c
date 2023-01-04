@@ -29,7 +29,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-firefox-sync-dialog.h"
-#include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"

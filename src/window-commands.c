@@ -40,7 +40,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-flatpak-utils.h"
-#include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
@@ -983,7 +982,7 @@ window_cmd_show_help (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
 {
-  ephy_gui_help (GTK_WIDGET (user_data), NULL);
+  gtk_show_uri (GTK_WINDOW (user_data), "help:epiphany", GDK_CURRENT_TIME);
 }
 
 #define ABOUT_GROUP "About"

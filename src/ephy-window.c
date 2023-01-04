@@ -42,7 +42,6 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-fullscreen-box.h"
 #include "ephy-gsb-utils.h"
-#include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"

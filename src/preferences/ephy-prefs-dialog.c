@@ -26,7 +26,6 @@
 #include "ephy-data-view.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
-#include "ephy-gui.h"
 #include "ephy-prefs.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-search-engine-manager.h"

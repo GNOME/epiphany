@@ -30,7 +30,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
-#include "ephy-gui.h"
 #include "ephy-link.h"
 #include "ephy-tab-view.h"
 #include "ephy-prefs.h"

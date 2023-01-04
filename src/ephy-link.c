@@ -25,7 +25,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-type-builtins.h"
 #include "ephy-signal-accumulator.h"
-#include "ephy-gui.h"
 #include "ephy-debug.h"
 
 enum {

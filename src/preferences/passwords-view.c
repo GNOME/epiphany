@@ -29,7 +29,6 @@
 #include <libsecret/secret.h>
 
 #include "ephy-shell.h"
-#include "ephy-gui.h"
 #include "ephy-uri-helpers.h"
 #include "passwords-view.h"
 
