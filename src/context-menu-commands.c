@@ -25,7 +25,6 @@
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
-#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-prefs.h"
@@ -206,7 +205,6 @@ filename_suggested_cb (EphyDownload        *download,
   g_autofree char *sanitized_filename = NULL;
 
   dialog = gtk_file_dialog_new ();
-  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 

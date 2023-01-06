@@ -24,7 +24,6 @@
 #include "prefs-general-page.h"
 
 #include "ephy-embed-shell.h"
-#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-lang-row.h"
@@ -713,8 +712,6 @@ on_webapp_icon_row_activated (GtkWidget        *button,
   GtkRoot *root;
 
   dialog = gtk_file_dialog_new ();
-
-  ephy_file_dialog_add_shortcuts (dialog);
 
   root = gtk_widget_get_root (GTK_WIDGET (general_page));
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);

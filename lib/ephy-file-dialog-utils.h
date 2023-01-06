@@ -27,8 +27,6 @@
 
 G_BEGIN_DECLS
 
-void ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog);
-
 void ephy_file_dialog_add_filters (GtkFileDialog *dialog);
 
 G_END_DECLS

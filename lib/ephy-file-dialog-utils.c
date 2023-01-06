@@ -23,8 +23,6 @@
 #include "config.h"
 
 #include "ephy-file-dialog-utils.h"
-#include "ephy-file-helpers.h"
-#include "ephy-debug.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -47,24 +45,6 @@ static const char *image_types[] = {
   "image/avif",
   NULL
 };
-
-void
-ephy_file_dialog_add_shortcuts (GtkFileDialog *dialog)
-{
-  g_autofree char *downloads_dir_path = NULL;
-  g_autoptr (GFile) downloads_dir = NULL;
-  g_autoptr (GListStore) shortcuts = NULL;
-
-  g_assert (GTK_IS_FILE_DIALOG (dialog));
-
-  downloads_dir_path = ephy_file_get_downloads_dir ();
-  downloads_dir = g_file_new_for_path (downloads_dir_path);
-
-  shortcuts = g_list_store_new (G_TYPE_FILE);
-  g_list_store_append (shortcuts, downloads_dir);
-
-  gtk_file_dialog_set_shortcut_folders (dialog, G_LIST_MODEL (shortcuts));
-}
 
 void
 ephy_file_dialog_add_filters (GtkFileDialog *dialog)

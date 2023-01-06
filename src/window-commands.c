@@ -1384,7 +1384,6 @@ window_cmd_open (GSimpleAction *action,
 
   dialog = gtk_file_dialog_new ();
 
-  ephy_file_dialog_add_shortcuts (dialog);
   ephy_file_dialog_add_filters (dialog);
 
   gtk_file_dialog_open (dialog,
@@ -2133,7 +2132,6 @@ window_cmd_save_as (GSimpleAction *action,
   g_assert (embed != NULL);
 
   dialog = gtk_file_dialog_new ();
-  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 
@@ -2184,7 +2182,6 @@ window_cmd_screenshot (GSimpleAction *action,
   g_assert (embed != NULL);
 
   dialog = gtk_file_dialog_new ();
-  ephy_file_dialog_add_shortcuts (dialog);
 
   last_directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
 

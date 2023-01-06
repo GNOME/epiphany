@@ -31,7 +31,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-favicon-helpers.h"
-#include "ephy-file-dialog-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
 #include "ephy-filters-manager.h"
@@ -221,7 +220,6 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   g_autoptr (GListStore) filters = NULL;
 
   dialog = gtk_file_dialog_new ();
-  ephy_file_dialog_add_shortcuts (dialog);
 
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
