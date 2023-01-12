@@ -2465,7 +2465,8 @@ load_failed_cb (WebKitWebView   *web_view,
   view->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
 
-  if (error->domain != WEBKIT_NETWORK_ERROR &&
+  if (error->domain != WEBKIT_MEDIA_ERROR &&
+      error->domain != WEBKIT_NETWORK_ERROR &&
       error->domain != WEBKIT_POLICY_ERROR) {
     if (view->address && g_str_has_prefix (view->address, "file:"))
       ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error, NULL);
@@ -2500,6 +2501,8 @@ load_failed_cb (WebKitWebView   *web_view,
       if (!view->ever_committed)
         g_signal_emit_by_name (view, "download-only-load", NULL);
       break;
+    case WEBKIT_MEDIA_ERROR_WILL_HANDLE_LOAD:
+    /* Fallthrough so WebKit will start a new load to handle the media. */
     default:
       break;
   }
