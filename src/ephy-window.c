@@ -3001,6 +3001,90 @@ setup_tab_view (EphyWindow *window)
   return tab_view;
 }
 
+static const char *supported_mime_types[] = {
+  "x-scheme-handler/http",
+  "x-scheme-handler/https",
+  "text/html",
+  "application/xhtml+xml",
+  NULL
+};
+
+static void
+set_as_default_browser (void)
+{
+  g_autoptr (GError) error = NULL;
+  GDesktopAppInfo *desktop_info;
+  GAppInfo *info = NULL;
+  g_autofree char *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
+  int i;
+
+  desktop_info = g_desktop_app_info_new (id);
+  if (!desktop_info)
+    return;
+
+  info = G_APP_INFO (desktop_info);
+
+  for (i = 0; supported_mime_types[i]; i++) {
+    if (!g_app_info_set_as_default_for_type (info, supported_mime_types[i], &error)) {
+      g_warning ("Failed to set '%s' as the default application for secondary content type '%s': %s",
+                 g_app_info_get_name (info), supported_mime_types[i], error->message);
+    } else {
+      LOG ("Set '%s' as the default application for '%s'",
+           g_app_info_get_name (info),
+           supported_mime_types[i]);
+    }
+  }
+}
+
+static void
+ignore_default_browser (void)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT, FALSE);
+}
+
+static void
+add_default_browser_question (EphyWindow *window)
+{
+  AdwMessageDialog *dialog;
+
+  dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), NULL, NULL));
+
+  adw_message_dialog_set_heading (dialog, _("Set as Default Browser?"));
+#if !TECH_PREVIEW
+  adw_message_dialog_set_body (dialog, _("Use Web as your default web browser and for opening external links"));
+#else
+  adw_message_dialog_set_body (dialog, _("Use Epiphany Technology Preview as your default web browser and for opening external links"));
+#endif
+
+  adw_message_dialog_add_responses (dialog,
+                                    "close", _("_Ask Again Later"),
+                                    "no", _("_No"),
+                                    "yes", _("_Yes"),
+                                    NULL);
+  adw_message_dialog_set_response_appearance (dialog, "no", ADW_RESPONSE_DESTRUCTIVE);
+  adw_message_dialog_set_response_appearance (dialog, "yes", ADW_RESPONSE_SUGGESTED);
+
+  g_signal_connect (dialog, "response::yes", G_CALLBACK (set_as_default_browser), NULL);
+  g_signal_connect (dialog, "response::no", G_CALLBACK (ignore_default_browser), NULL);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static gboolean
+is_browser_default (void)
+{
+  g_autoptr (GAppInfo) info = g_app_info_get_default_for_type (supported_mime_types[0], TRUE);
+
+  if (info) {
+    g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
+
+    if (!strcmp (g_app_info_get_id (info), id))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_window_dispose (GObject *object)
 {
@@ -3117,6 +3201,12 @@ ephy_window_show (GtkWidget *widget)
   update_adaptive_mode (window);
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
+
+  /* Check for default browser */
+  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT) &&
+      !is_browser_default () &&
+      !ephy_profile_dir_is_web_application ())
+    add_default_browser_question (window);
 }
 
 static gboolean
@@ -3379,102 +3469,6 @@ browse_with_caret_get_mapping (GValue   *value,
   return TRUE;
 }
 
-static
-const gchar *supported_mime_types[] = {
-  "x-scheme-handler/http",
-  "x-scheme-handler/https",
-  "text/html",
-  "application/xhtml+xml",
-  NULL
-};
-
-static void
-set_as_default_browser ()
-{
-  g_autoptr (GError) error = NULL;
-  GDesktopAppInfo *desktop_info;
-  GAppInfo *info = NULL;
-  g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
-  int i;
-
-  desktop_info = g_desktop_app_info_new (id);
-  if (!desktop_info)
-    return;
-
-  info = G_APP_INFO (desktop_info);
-
-  for (i = 0; supported_mime_types[i]; i++) {
-    if (!g_app_info_set_as_default_for_type (info, supported_mime_types[i], &error))
-      g_warning ("Failed to set '%s' as the default application for secondary content type '%s': %s",
-                 g_app_info_get_name (info), supported_mime_types[i], error->message);
-    else
-      LOG ("Set '%s' as the default application for '%s'",
-           g_app_info_get_name (info),
-           supported_mime_types[i]);
-  }
-}
-
-static void
-on_default_browser_question_response (GtkInfoBar *info_bar,
-                                      gint        response_id,
-                                      gpointer    user_data)
-{
-  GtkWidget *parent;
-
-  if (response_id == GTK_RESPONSE_YES)
-    set_as_default_browser ();
-  else if (response_id == GTK_RESPONSE_NO)
-    g_settings_set_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT, FALSE);
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (info_bar));
-
-  g_assert (GTK_IS_BOX (parent));
-
-  gtk_box_remove (GTK_BOX (parent), GTK_WIDGET (info_bar));
-}
-
-static void
-add_default_browser_question (GtkBox *box)
-{
-  GtkWidget *label;
-  GtkWidget *info_bar;
-
-#if !TECH_PREVIEW
-  label = gtk_label_new (_("Set Web as your default browser?"));
-#else
-  label = gtk_label_new (_("Set Epiphany Technology Preview as your default browser?"));
-#endif
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-
-  info_bar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_QUESTION);
-  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
-
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
-
-  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Yes"), GTK_RESPONSE_YES);
-  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_No"), GTK_RESPONSE_NO);
-
-  g_signal_connect (info_bar, "response", G_CALLBACK (on_default_browser_question_response), NULL);
-
-  gtk_box_append (box, info_bar);
-}
-
-static gboolean
-is_browser_default (void)
-{
-  g_autoptr (GAppInfo) info = g_app_info_get_default_for_type (supported_mime_types[0], TRUE);
-
-  if (info) {
-    g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
-
-    if (!strcmp (g_app_info_get_id (info), id))
-      return TRUE;
-  }
-
-  return FALSE;
-}
-
 static void
 download_completed_cb (EphyDownload *download,
                        gpointer      user_data)
@@ -3641,11 +3635,6 @@ ephy_window_constructed (GObject *object)
   box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (box));
   window->titlebar_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_ASK_FOR_DEFAULT) &&
-      !is_browser_default () &&
-      !ephy_profile_dir_is_web_application ())
-    add_default_browser_question (box);
 
   gtk_revealer_set_child (window->tab_bar_revealer, GTK_WIDGET (window->tab_bar));
   gtk_box_append (window->titlebar_box, GTK_WIDGET (window->header_bar));
