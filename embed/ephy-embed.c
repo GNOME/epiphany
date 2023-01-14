@@ -799,16 +799,13 @@ ephy_embed_constructed (GObject *object)
                     embed);
 
   if (webkit_web_view_is_controlled_by_automation (embed->web_view)) {
-    GtkWidget *info_bar;
-    GtkWidget *label;
+    GtkWidget *banner;
 
-    info_bar = gtk_info_bar_new ();
-    gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_INFO);
     /* Translators: this means WebDriver control. */
-    label = gtk_label_new (_("Web is being controlled by automation."));
-    gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
+    banner = adw_banner_new (_("Web is being controlled by automation"));
+    adw_banner_set_revealed (ADW_BANNER (banner), TRUE);
 
-    ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
+    ephy_embed_add_top_widget (embed, banner, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
   }
 
   controller = gtk_event_controller_motion_new ();
