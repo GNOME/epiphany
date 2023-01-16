@@ -483,8 +483,7 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 
   obj_properties[PROP_PARENT_WINDOW] =
     g_param_spec_object ("parent-window",
-                         "Parent window",
-                         "Parent window",
+                         NULL, NULL,
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

@@ -123,8 +123,7 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
 
   properties[PROP_N_PAGES] =
     g_param_spec_int ("n-pages",
-                      "Number of pages",
-                      "The number of pages in the tab view",
+                      NULL, NULL,
                       0,
                       G_MAXINT,
                       0,
@@ -134,8 +133,7 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
 
   properties[PROP_SELECTED_INDEX] =
     g_param_spec_int ("selected-index",
-                      "Selected index",
-                      "The index of the currently selected page",
+                      NULL, NULL,
                       0,
                       G_MAXINT,
                       0,

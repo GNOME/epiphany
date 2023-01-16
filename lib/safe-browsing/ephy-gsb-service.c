@@ -501,15 +501,13 @@ ephy_gsb_service_class_init (EphyGSBServiceClass *klass)
 
   obj_properties[PROP_API_KEY] =
     g_param_spec_string ("api-key",
-                         "API key",
-                         "The API key to access the Google Safe Browsing API",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_GSB_STORAGE] =
     g_param_spec_object ("gsb-storage",
-                         "GSB filename",
-                         "Handler object for the Google Safe Browsing database",
+                         NULL, NULL,
                          EPHY_TYPE_GSB_STORAGE,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

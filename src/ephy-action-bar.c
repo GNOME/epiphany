@@ -148,15 +148,13 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
-                         "Window",
-                         "The action_bar's EphyWindow",
+                         NULL, NULL,
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   object_properties[PROP_CAN_REVEAL] =
     g_param_spec_boolean ("can-reveal",
-                          "Can Reveal",
-                          "Whether the action bar can be revealed",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

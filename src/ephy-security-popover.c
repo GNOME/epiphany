@@ -319,8 +319,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
    */
   obj_properties[PROP_ADDRESS] =
     g_param_spec_string ("address",
-                         "Address",
-                         "The address of the website",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -331,8 +330,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
    */
   obj_properties[PROP_CERTIFICATE] =
     g_param_spec_object ("certificate",
-                         "Certificate",
-                         "The certificate of the website, if HTTPS",
+                         NULL, NULL,
                          G_TYPE_TLS_CERTIFICATE,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -343,8 +341,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
    */
   obj_properties[PROP_TLS_ERRORS] =
     g_param_spec_flags ("tls-errors",
-                        "TLS Errors",
-                        "Issues with the security of the website, if HTTPS",
+                        NULL, NULL,
                         G_TYPE_TLS_CERTIFICATE_FLAGS,
                         0,
                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
@@ -356,8 +353,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
    */
   obj_properties[PROP_SECURITY_LEVEL] =
     g_param_spec_enum ("security-level",
-                       "Security Level",
-                       "Determines what type of information to display",
+                       NULL, NULL,
                        EPHY_TYPE_SECURITY_LEVEL,
                        EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);

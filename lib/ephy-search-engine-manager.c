@@ -238,8 +238,7 @@ ephy_search_engine_manager_class_init (EphySearchEngineManagerClass *klass)
 
   properties [PROP_DEFAULT_ENGINE] =
     g_param_spec_object ("default-engine",
-                         "Default search engine",
-                         "The default search engine for this manager.",
+                         NULL, NULL,
                          EPHY_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |

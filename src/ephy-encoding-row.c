@@ -123,8 +123,7 @@ ephy_encoding_row_class_init (EphyEncodingRowClass *klass)
 
   obj_properties[PROP_ENCODING] =
     g_param_spec_object ("encoding",
-                         "encoding",
-                         "encoding",
+                         NULL, NULL,
                          EPHY_TYPE_ENCODING,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

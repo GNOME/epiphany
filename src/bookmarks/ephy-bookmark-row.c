@@ -246,8 +246,7 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
-                         "An EphyBookmark object",
-                         "The EphyBookmark shown by this widget",
+                         NULL, NULL,
                          EPHY_TYPE_BOOKMARK,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

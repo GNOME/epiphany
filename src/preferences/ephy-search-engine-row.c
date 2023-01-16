@@ -456,13 +456,11 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
   object_class->constructed = on_ephy_search_engine_row_constructed;
 
   properties[PROP_SEARCH_ENGINE] = g_param_spec_object ("search-engine",
-                                                        "search-engine",
-                                                        "The search engine that this row should show and allow to edit.",
+                                                        NULL, NULL,
                                                         EPHY_TYPE_SEARCH_ENGINE,
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
   properties[PROP_MANAGER] = g_param_spec_object ("manager",
-                                                  "manager",
-                                                  "The search engine manager that manages @search-engine.",
+                                                  NULL, NULL,
                                                   EPHY_TYPE_SEARCH_ENGINE_MANAGER,
                                                   G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, N_PROPS, properties);

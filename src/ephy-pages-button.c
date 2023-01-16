@@ -178,8 +178,7 @@ ephy_pages_button_class_init (EphyPagesButtonClass *klass)
 
   properties [PROP_N_PAGES] =
     g_param_spec_int ("n-pages",
-                      "Number of pages",
-                      "The number of pages displayed on the button",
+                      NULL, NULL,
                       0,
                       G_MAXINT,
                       1,

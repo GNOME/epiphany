@@ -182,8 +182,7 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
    */
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",
-                         "Id",
-                         "Id of the password record",
+                         NULL, NULL,
                          "Default id",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   /* Origin matches hostname field from Firefox.
@@ -193,8 +192,7 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
    */
   obj_properties[PROP_ORIGIN] =
     g_param_spec_string ("hostname",
-                         "Security origin",
-                         "Security origin of the URI that password is applicable at",
+                         NULL, NULL,
                          "Default security origin",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   /* Target origin matches formSubmitURL field from Firefox.
@@ -203,46 +201,39 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
    */
   obj_properties[PROP_TARGET_ORIGIN] =
     g_param_spec_string ("formSubmitURL",
-                         "Target origin",
-                         "The target origin of the URI that password is applicable at",
+                         NULL, NULL,
                          "Default target origin",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_USERNAME] =
     g_param_spec_string ("username",
-                         "Username",
-                         "Username to log in as",
+                         NULL, NULL,
                          "Default username",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_PASSWORD] =
     g_param_spec_string ("password",
-                         "Password",
-                         "Password for the username",
+                         NULL, NULL,
                          "Default password",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_USERNAME_FIELD] =
     g_param_spec_string ("usernameField",
-                         "Username field",
-                         "HTML field name of the username",
+                         NULL, NULL,
                          "Default username field",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_PASSWORD_FIELD] =
     g_param_spec_string ("passwordField",
-                         "Password field",
-                         "HTML field name of the password",
+                         NULL, NULL,
                          "Default password field",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_TIME_CREATED] =
     g_param_spec_uint64 ("timeCreated",
-                         "Time created",
-                         "Unix timestamp in milliseconds at which the password was created",
+                         NULL, NULL,
                          0,
                          G_MAXUINT64,
                          0,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_TIME_PASSWORD_CHANGED] =
     g_param_spec_uint64 ("timePasswordChanged",
-                         "Time password changed",
-                         "Unix timestamp in milliseconds at which the password was changed",
+                         NULL, NULL,
                          0,
                          G_MAXUINT64,
                          0,

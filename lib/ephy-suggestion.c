@@ -111,8 +111,7 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
 
   obj_properties[PROP_UNESCAPED_TITLE] =
     g_param_spec_string ("unescaped-title",
-                         "Unescaped title",
-                         "The title of the suggestion, not XML-escaped",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

@@ -29,15 +29,13 @@ ephy_title_widget_default_init (EphyTitleWidgetInterface *iface)
 {
   g_object_interface_install_property (iface,
                                        g_param_spec_string ("address",
-                                                            "Address",
-                                                            "The current address",
+                                                            NULL, NULL,
                                                             "",
                                                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_interface_install_property (iface,
                                        g_param_spec_enum ("security-level",
-                                                          "Security level",
-                                                          "State of the security icon",
+                                                          NULL, NULL,
                                                           EPHY_TYPE_SECURITY_LEVEL,
                                                           EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

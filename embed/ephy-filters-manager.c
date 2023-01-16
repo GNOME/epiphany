@@ -1104,15 +1104,13 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
 
   object_properties[PROP_FILTERS_DIR] =
     g_param_spec_string ("filters-dir",
-                         "Filters directory",
-                         "The directory in which adblock filters are saved",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   object_properties[PROP_IS_INITIALIZED] =
     g_param_spec_boolean ("is-initialized",
-                          "Filters manager is initialized",
-                          "Whether initialization was completed",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

@@ -486,22 +486,19 @@ ephy_embed_class_init (EphyEmbedClass *klass)
 
   obj_properties[PROP_WEB_VIEW] =
     g_param_spec_object ("web-view",
-                         "Web View",
-                         "The WebView contained in the embed",
+                         NULL, NULL,
                          EPHY_TYPE_WEB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
-                         "Title",
-                         "The embed's title",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_PROGRESS_BAR_ENABLED] =
     g_param_spec_boolean ("progress-bar-enabled",
-                          "Progress bar",
-                          "Whether to show progress bar within embed",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 

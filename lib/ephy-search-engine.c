@@ -172,24 +172,21 @@ ephy_search_engine_class_init (EphySearchEngineClass *klass)
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",
-                         "Name",
-                         "Name",
+                         NULL, NULL,
                          "",
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY));
   properties [PROP_URL] =
     g_param_spec_string ("url",
-                         "Url",
-                         "The search URL with %s placeholder for this search engine.",
+                         NULL, NULL,
                          "",
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY));
   properties [PROP_BANG] =
     g_param_spec_string ("bang",
-                         "Bang",
-                         "The search shortcut (bang) for this search engine.",
+                         NULL, NULL,
                          "",
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |

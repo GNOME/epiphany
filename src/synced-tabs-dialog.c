@@ -304,8 +304,7 @@ synced_tabs_dialog_class_init (SyncedTabsDialogClass *klass)
 
   obj_properties[PROP_OPEN_TABS_MANAGER] =
     g_param_spec_object ("open-tabs-manager",
-                         "Open tabs manager",
-                         "Open Tabs Manager",
+                         NULL, NULL,
                          EPHY_TYPE_OPEN_TABS_MANAGER,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

@@ -470,8 +470,7 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
    */
   obj_properties[PROP_DOWNLOAD] =
     g_param_spec_object ("download",
-                         "An EphyDownload object",
-                         "The EphyDownload shown by this widget",
+                         NULL, NULL,
                          G_TYPE_OBJECT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

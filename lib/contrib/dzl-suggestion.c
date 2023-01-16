@@ -190,50 +190,43 @@ dzl_suggestion_class_init (DzlSuggestionClass *klass)
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
-                         "Id",
-                         "The suggestion identifier",
+                         NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ICON] =
     g_param_spec_object ("icon",
-                         "Icon",
-                         "The GIcon for the suggestion",
+                         NULL, NULL,
                          G_TYPE_ICON,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
-                         "Icon Name",
-                         "The name of the icon to display",
+                         NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SECONDARY_ICON] =
     g_param_spec_object ("secondary-icon",
-                         "Secondary Icon",
-                         "The secondary GIcon for the suggestion on the right",
+                         NULL, NULL,
                          G_TYPE_ICON,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SECONDARY_ICON_NAME] =
     g_param_spec_string ("secondary-icon-name",
-                         "Secondary Icon Name",
-                         "The name of the secondary icon to display",
+                         NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
-                         "Title",
-                         "The title of the suggestion",
+                         NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
-                         "Subtitle",
-                         "The subtitle of the suggestion",
+                         NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 

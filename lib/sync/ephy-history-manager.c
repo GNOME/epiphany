@@ -188,8 +188,7 @@ ephy_history_manager_class_init (EphyHistoryManagerClass *klass)
 
   obj_properties[PROP_HISTORY_SERVICE] =
     g_param_spec_object ("history-service",
-                         "History service",
-                         "History Service",
+                         NULL, NULL,
                          EPHY_TYPE_HISTORY_SERVICE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

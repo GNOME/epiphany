@@ -118,8 +118,7 @@ ephy_floating_bar_class_init (EphyFloatingBarClass *klass)
 
   properties[PROP_PRIMARY_LABEL] =
     g_param_spec_string ("primary-label",
-                         "Bar's primary label",
-                         "Primary label displayed by the bar",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 

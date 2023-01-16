@@ -299,8 +299,7 @@ ephy_mouse_gesture_controller_class_init (EphyMouseGestureControllerClass *klass
 
   obj_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
-                         "window",
-                         "window",
+                         NULL, NULL,
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

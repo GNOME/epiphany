@@ -482,8 +482,7 @@ ephy_session_class_init (EphySessionClass *class)
 
   obj_properties[PROP_CAN_UNDO_TAB_CLOSED] =
     g_param_spec_boolean ("can-undo-tab-closed",
-                          "Can undo tab close",
-                          "Session can undo a tab closure",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

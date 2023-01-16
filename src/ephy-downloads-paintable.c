@@ -163,15 +163,13 @@ ephy_downloads_paintable_class_init (EphyDownloadsPaintableClass *klass)
 
   properties[PROP_WIDGET] =
     g_param_spec_object ("widget",
-                         "Widget",
-                         "The widget to take scale factor and frame clock from",
+                         NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_PROGRESS] =
     g_param_spec_double ("progress",
-                         "Progress",
-                         "Progress value",
+                         NULL, NULL,
                          0, 1, 0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

@@ -344,8 +344,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 
   obj_properties[PROP_WEB_VIEW] =
     g_param_spec_object ("web-view",
-                         "WebView",
-                         "Parent web view",
+                         NULL, NULL,
                          WEBKIT_TYPE_WEB_VIEW,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

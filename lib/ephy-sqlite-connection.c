@@ -85,16 +85,14 @@ ephy_sqlite_connection_class_init (EphySQLiteConnectionClass *klass)
 
   obj_properties[PROP_MODE] =
     g_param_spec_enum ("mode",
-                       "SQLite connection mode",
-                       "Whether the SQLite connection is read-only or writable",
+                       NULL, NULL,
                        EPHY_TYPE_SQ_LITE_CONNECTION_MODE,
                        EPHY_SQLITE_CONNECTION_MODE_READWRITE,
                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_DATABASE_PATH] =
     g_param_spec_string ("database-path",
-                         "Database path",
-                         "The path of the SQLite database file",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 

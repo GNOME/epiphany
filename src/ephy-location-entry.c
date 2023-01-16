@@ -1216,15 +1216,13 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   props[PROP_MODEL] =
     g_param_spec_object ("model",
-                         "Model",
-                         "The model to be used for suggestions",
+                         NULL, NULL,
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_SHOW_SUGGESTIONS] =
     g_param_spec_boolean ("show-suggestions",
-                          "Show suggestions",
-                          "Whether to show the suggestions popover",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

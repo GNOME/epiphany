@@ -199,8 +199,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 
   obj_properties[PROP_TIME_ADDED] =
     g_param_spec_int64 ("time-added",
-                        "Time added",
-                        "The bookmark's creation time",
+                        NULL, NULL,
                         0,
                         G_MAXINT64,
                         0,
@@ -208,56 +207,48 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",
-                         "Id",
-                         "The bookmark's id",
+                         NULL, NULL,
                          "Default bookmark id",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
-                         "Title",
-                         "The bookmark's title",
+                         NULL, NULL,
                          "Default bookmark title",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_BMK_URI] =
     g_param_spec_string ("bmkUri",
-                         "URI",
-                         "The bookmark's URI",
+                         NULL, NULL,
                          "about:overview",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TAGS] =
     g_param_spec_pointer ("tags",
-                          "Tags",
-                          "The bookmark's tags",
+                          NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TYPE] =
     g_param_spec_string ("type",
-                         "Type",
-                         "Of type bookmark",
+                         NULL, NULL,
                          "default",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_PARENT_ID] =
     g_param_spec_string ("parentid",
-                         "ParentID",
-                         "The parent's id",
+                         NULL, NULL,
                          "default",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_PARENT_NAME] =
     g_param_spec_string ("parentName",
-                         "ParentName",
-                         "The parent's name",
+                         NULL, NULL,
                          "default",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_LOAD_IN_SIDEBAR] =
     g_param_spec_boolean ("loadInSidebar",
-                          "LoadInSiderbar",
-                          "Load in sidebar",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 

@@ -418,8 +418,7 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
    */
   obj_properties[PROP_ADDRESS] =
     g_param_spec_string ("address",
-                         "Address",
-                         "The address of the current location",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -430,8 +429,7 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
    */
   obj_properties[PROP_EDITABLE] =
     g_param_spec_boolean ("editable",
-                          "Editable",
-                          "Whether the location bar entry can be edited",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -442,8 +440,7 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
    */
   obj_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
-                         "Window",
-                         "The parent window",
+                         NULL, NULL,
                          G_TYPE_OBJECT,
                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
@@ -454,8 +451,7 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
    */
   obj_properties[PROP_TITLE_WIDGET] =
     g_param_spec_object ("title-widget",
-                         "Title widget",
-                         "The title widget whose address will be managed",
+                         NULL, NULL,
                          G_TYPE_OBJECT,
                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 

@@ -117,8 +117,7 @@ ephy_open_tabs_manager_class_init (EphyOpenTabsManagerClass *klass)
 
   obj_properties[PROP_TABS_CATALOG] =
     g_param_spec_object ("tabs-catalog",
-                         "Tabs catalog",
-                         "Tabs Catalog",
+                         NULL, NULL,
                          EPHY_TYPE_TABS_CATALOG,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

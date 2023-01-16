@@ -132,15 +132,13 @@ ephy_suggestion_model_class_init (EphySuggestionModelClass *klass)
 
   properties [PROP_BOOKMARKS_MANAGER] =
     g_param_spec_object ("bookmarks-manager",
-                         "Bookmarks Manager",
-                         "The bookmarks manager for suggestions",
+                         NULL, NULL,
                          EPHY_TYPE_BOOKMARKS_MANAGER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_HISTORY_SERVICE] =
     g_param_spec_object ("history-service",
-                         "History Service",
-                         "The history service for suggestions",
+                         NULL, NULL,
                          EPHY_TYPE_HISTORY_SERVICE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

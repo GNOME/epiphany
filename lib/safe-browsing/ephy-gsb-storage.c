@@ -531,8 +531,7 @@ ephy_gsb_storage_class_init (EphyGSBStorageClass *klass)
 
   obj_properties[PROP_DB_PATH] =
     g_param_spec_string ("db-path",
-                         "Database path",
-                         "The path of the SQLite file holding the lists of unsafe web resources",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

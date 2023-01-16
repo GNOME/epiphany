@@ -89,14 +89,12 @@ ephy_sqlite_statement_class_init (EphySQLiteStatementClass *klass)
 
   obj_properties[PROP_PREPARED_STATEMENT] =
     g_param_spec_pointer ("prepared-statement",
-                          "Prepared statement",
-                          "The statement's backing SQLite prepared statement",
+                          NULL, NULL,
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_CONNECTION] =
     g_param_spec_object ("connection",
-                         "Connection",
-                         "The statement's backing SQLite connection",
+                         NULL, NULL,
                          EPHY_TYPE_SQLITE_CONNECTION,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 

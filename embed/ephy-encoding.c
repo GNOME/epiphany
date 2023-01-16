@@ -179,36 +179,31 @@ ephy_encoding_class_init (EphyEncodingClass *klass)
 
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
-                         "Title",
-                         "The encoding's title",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TITLE_ELIDED] =
     g_param_spec_string ("title-elided",
-                         "Title Elided",
-                         "The encoding's elided title",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_COLLATION_KEY] =
     g_param_spec_string ("collation-key",
-                         "Collation Key",
-                         "The encoding's collation key",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_ENCODING] =
     g_param_spec_string ("encoding",
-                         "Encoding",
-                         "The encoding's encoding",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_LANGUAGE_GROUPS] =
     g_param_spec_int ("language-groups",
-                      "Language Groups",
-                      "The encoding's language groups",
+                      NULL, NULL,
                       LG_NONE, LG_ALL,
                       LG_NONE,
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);

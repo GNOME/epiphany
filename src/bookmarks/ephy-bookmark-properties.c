@@ -447,23 +447,20 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
-                         "An EphyBookmark object",
-                         "The EphyBookmark whose properties are being displayed",
+                         NULL, NULL,
                          EPHY_TYPE_BOOKMARK,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TYPE] =
     g_param_spec_enum ("type",
-                       "An EphyBookmarkProperties object",
-                       "The type of widget the bookmark properties will be used for",
+                       NULL, NULL,
                        EPHY_TYPE_BOOKMARK_PROPERTIES_TYPE,
                        EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_PARENT] =
     g_param_spec_object ("parent",
-                         "A GtkWidget",
-                         "The dialog or popover that needs to be destroyed when the bookmark is removed",
+                         NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

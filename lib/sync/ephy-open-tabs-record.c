@@ -131,20 +131,17 @@ ephy_open_tabs_record_class_init (EphyOpenTabsRecordClass *klass)
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",
-                         "Id",
-                         "Id of the open tabs record",
+                         NULL, NULL,
                          "Default id",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_CLIENT_NAME] =
     g_param_spec_string ("clientName",
-                         "Client name",
-                         "Name of the sync client providing the tabs",
+                         NULL, NULL,
                          "Default client name",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_TABS] =
     g_param_spec_pointer ("tabs",
-                          "Tabs",
-                          "A list of JSON objects describing the tabs",
+                          NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);

@@ -499,8 +499,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
    */
   obj_properties[PROP_DOWNLOAD] =
     g_param_spec_object ("download",
-                         "Internal WebKitDownload",
-                         "The WebKitDownload used internally by EphyDownload",
+                         NULL, NULL,
                          WEBKIT_TYPE_DOWNLOAD,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
@@ -512,8 +511,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
    */
   obj_properties[PROP_DESTINATION] =
     g_param_spec_string ("destination",
-                         "Destination",
-                         "Destination file URI",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS);
@@ -526,8 +524,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
    */
   obj_properties[PROP_ACTION] =
     g_param_spec_enum ("action",
-                       "Download action",
-                       "Action to take when download finishes",
+                       NULL, NULL,
                        EPHY_TYPE_DOWNLOAD_ACTION_TYPE,
                        EPHY_DOWNLOAD_ACTION_NONE,
                        G_PARAM_READABLE |
@@ -535,8 +532,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
 
   obj_properties[PROP_CONTENT_TYPE] =
     g_param_spec_string ("content-type",
-                         "Content Type",
-                         "The download content type",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);

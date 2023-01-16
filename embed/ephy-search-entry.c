@@ -210,36 +210,31 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
 
   props[PROP_PLACEHOLDER_TEXT] =
     g_param_spec_string ("placeholder-text",
-                         "Placeholder text",
-                         "Show text in the entry when it’s empty and unfocused",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   props[PROP_SHOW_MATCHES] =
     g_param_spec_boolean ("show-matches",
-                          "Show matches",
-                          "Whether to show search matches",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   props[PROP_N_MATCHES] =
     g_param_spec_uint ("n-matches",
-                       "Number of matches",
-                       "The total number of search matches",
+                       NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   props[PROP_CURRENT_MATCH] =
     g_param_spec_uint ("current-match",
-                       "Current match",
-                       "The current search match",
+                       NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   props[PROP_FIND_RESULT] =
     g_param_spec_enum ("find-result",
-                       "Find result",
-                       "The current state",
+                       NULL, NULL,
                        EPHY_TYPE_FIND_RESULT,
                        EPHY_FIND_RESULT_FOUND,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);

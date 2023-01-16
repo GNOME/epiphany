@@ -136,8 +136,7 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
 
   properties[PROP_WEB_EXTENSION] =
     g_param_spec_object ("web-extension",
-                         "",
-                         "",
+                         NULL, NULL,
                          EPHY_TYPE_WEB_EXTENSION,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

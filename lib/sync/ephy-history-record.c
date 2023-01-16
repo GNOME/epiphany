@@ -174,26 +174,22 @@ ephy_history_record_class_init (EphyHistoryRecordClass *klass)
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",
-                         "Id",
-                         "Id of the history record",
+                         NULL, NULL,
                          "Default id",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
-                         "Title",
-                         "Title of the history record",
+                         NULL, NULL,
                          "Default title",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_URI] =
     g_param_spec_string ("histUri",
-                         "History URI",
-                         "URI of the history record",
+                         NULL, NULL,
                          "Default history uri",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_VISITS] =
     g_param_spec_pointer ("visits",
-                          "Visits",
-                          "An array of how and when URI of the history record was visited",
+                          NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);

@@ -341,36 +341,31 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
 
   props[PROP_FULLSCREEN] =
     g_param_spec_boolean ("fullscreen",
-                          "Fullscreen",
-                          "Fullscreen",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_AUTOHIDE] =
     g_param_spec_boolean ("autohide",
-                          "Autohide",
-                          "Autohide",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_TITLEBAR] =
     g_param_spec_object ("titlebar",
-                         "Titlebar",
-                         "Titlebar",
+                         NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_CONTENT] =
     g_param_spec_object ("content",
-                         "Content",
-                         "Content",
+                         NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_REVEALED] =
     g_param_spec_boolean ("revealed",
-                          "Revealed",
-                          "Revealed",
+                          NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

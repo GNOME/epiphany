@@ -4163,8 +4163,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_ADDRESS] =
     g_param_spec_string ("address",
-                         "Address",
-                         "The view's address",
+                         NULL, NULL,
                          "",
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4175,8 +4174,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_TYPED_ADDRESS] =
     g_param_spec_string ("typed-address",
-                         "Typed Address",
-                         "The typed address",
+                         NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -4187,8 +4185,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_SECURITY] =
     g_param_spec_enum ("security-level",
-                       "Security Level",
-                       "The view's security level",
+                       NULL, NULL,
                        EPHY_TYPE_SECURITY_LEVEL,
                        EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -4200,8 +4197,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_DOCUMENT_TYPE] =
     g_param_spec_enum ("document-type",
-                       "Document Type",
-                       "The view's document type",
+                       NULL, NULL,
                        EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
                        EPHY_WEB_VIEW_DOCUMENT_HTML,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -4213,8 +4209,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_NAVIGATION] =
     g_param_spec_flags ("navigation",
-                        "Navigation flags",
-                        "The view's navigation flags",
+                        NULL, NULL,
                         EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
                         0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -4226,8 +4221,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_STATUS_MESSAGE] =
     g_param_spec_string ("status-message",
-                         "Status Message",
-                         "The view's statusbar message",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4238,8 +4232,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_LINK_MESSAGE] =
     g_param_spec_string ("link-message",
-                         "Link Message",
-                         "The view's link message",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4250,8 +4243,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_ICON] =
     g_param_spec_object ("icon",
-                         "Icon",
-                         "The view icon's",
+                         NULL, NULL,
                          GDK_TYPE_PIXBUF,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4262,8 +4254,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_IS_BLANK] =
     g_param_spec_boolean ("is-blank",
-                          "Is blank",
-                          "If the EphyWebView is blank",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4274,8 +4265,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_READER_MODE] =
     g_param_spec_boolean ("reader-mode",
-                          "Reader mode",
-                          "If the EphyWebView is in reader mode",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4286,8 +4276,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_DISPLAY_ADDRESS] =
     g_param_spec_string ("display-address",
-                         "Display address",
-                         "The view's display address",
+                         NULL, NULL,
                          "",
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -4298,8 +4287,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  **/
   obj_properties[PROP_ENTERING_READER_MODE] =
     g_param_spec_boolean ("entering-reader-mode",
-                          "Entering reader mode",
-                          "If the EphyWebView is entering reader mode",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

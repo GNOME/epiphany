@@ -112,8 +112,7 @@ ephy_browser_action_row_class_init (EphyBrowserActionRowClass *klass)
 
   obj_properties[PROP_BROWSER_ACTION] =
     g_param_spec_object ("browser-action",
-                         "",
-                         "",
+                         NULL, NULL,
                          EPHY_TYPE_BROWSER_ACTION,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

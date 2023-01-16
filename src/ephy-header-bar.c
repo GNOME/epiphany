@@ -395,8 +395,7 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
-                         "Window",
-                         "The header_bar's EphyWindow",
+                         NULL, NULL,
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

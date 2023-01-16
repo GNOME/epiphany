@@ -293,15 +293,13 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 
   obj_properties[PROP_HISTORY_FILENAME] =
     g_param_spec_string ("history-filename",
-                         "History filename",
-                         "The filename of the SQLite file holding containing history",
+                         NULL, NULL,
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_MEMORY] =
     g_param_spec_boolean ("memory",
-                          "In memory mode",
-                          "Whether the history service works in memory mode",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 

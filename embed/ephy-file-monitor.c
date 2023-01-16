@@ -275,8 +275,7 @@ ephy_file_monitor_class_init (EphyFileMonitorClass *klass)
 
   obj_properties[PROP_VIEW] =
     g_param_spec_object ("view",
-                         "View",
-                         "The file monitor's associated view",
+                         NULL, NULL,
                          EPHY_TYPE_WEB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

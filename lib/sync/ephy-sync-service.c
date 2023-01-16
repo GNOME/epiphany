@@ -2203,8 +2203,7 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
 
   obj_properties[PROP_SYNC_PERIODICALLY] =
     g_param_spec_boolean ("sync-periodically",
-                          "Sync periodically",
-                          "Whether should periodically sync data",
+                          NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
