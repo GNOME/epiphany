@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="EphyPermissionPopover" parent="GtkPopover">
+    <style>
+      <class name="message-popover"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">18</property>
+            <property name="margin-bottom">12</property>
+            <property name="margin-start">18</property>
+            <property name="margin-end">18</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="permission_title">
+                <property name="xalign">0</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="heading"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="permission_description">
+                <property name="wrap">True</property>
+                <property name="max-width-chars">40</property>
+                <property name="use-markup">True</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="response-area"/>
+            </style>
+            <child>
+              <object class="GtkButton" id="deny_button">
+                <property name="label">_Deny</property>
+                <property name="use-underline">True</property>
+                <property name="hexpand">True</property>
+                <signal name="clicked" handler="on_permission_deny" object="EphyPermissionPopover" swapped="yes"/>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="allow_button">
+                <property name="label">_Allow</property>
+                <property name="use-underline">True</property>
+                <property name="hexpand">True</property>
+                <signal name="clicked" handler="on_permission_allow" object="EphyPermissionPopover" swapped="yes"/>
+                <style>
+                  <class name="flat"/>
+                  <class name="suggested"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="deny_button"/>
+      <widget name="allow_button"/>
+    </widgets>
+  </object>
+</interface>

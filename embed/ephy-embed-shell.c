@@ -79,6 +79,7 @@ enum {
   ALLOW_UNSAFE_BROWSING,
   RELOAD_PAGE,
   PASSWORD_FORM_FOCUSED,
+  PASSWORD_FORM_SUBMITTED,
 
   LAST_SIGNAL
 };
@@ -360,48 +361,6 @@ property_to_uint64 (JSCValue   *value,
   return (guint64)jsc_value_to_double (prop);
 }
 
-typedef struct {
-  EphyPasswordManager *password_manager;
-  EphyPermissionsManager *permissions_manager;
-  char *origin;
-  char *target_origin;
-  char *username;
-  char *password;
-  char *username_field;
-  char *password_field;
-  gboolean is_new;
-} SaveAuthRequest;
-
-static void
-save_auth_request_free (SaveAuthRequest *request)
-{
-  g_object_unref (request->password_manager);
-  g_object_unref (request->permissions_manager);
-  g_free (request->origin);
-  g_free (request->target_origin);
-  g_free (request->username);
-  g_free (request->password);
-  g_free (request->username_field);
-  g_free (request->password_field);
-  g_free (request);
-}
-
-static void
-save_auth_request_response_cb (gint             response_id,
-                               SaveAuthRequest *data)
-{
-  if (response_id == GTK_RESPONSE_REJECT) {
-    ephy_permissions_manager_set_permission (data->permissions_manager,
-                                             EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
-                                             data->origin,
-                                             EPHY_PERMISSION_DENY);
-  } else if (response_id == GTK_RESPONSE_YES) {
-    ephy_password_manager_save (data->password_manager, data->origin, data->target_origin,
-                                data->username, data->password, data->username_field,
-                                data->password_field, data->is_new);
-  }
-}
-
 static void
 web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
                                                   JSCValue       *value,
@@ -418,7 +377,7 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
   gboolean is_new = jsc_value_to_boolean (is_new_prop);
   guint64 page_id = property_to_uint64 (value, "pageID");
   EphyWebView *view;
-  SaveAuthRequest *request;
+  EphyPasswordRequestData *request_data;
 
   /* Both origin and target origin are required. */
   if (!origin || !target_origin)
@@ -447,25 +406,26 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
   if (!view)
     return;
 
+  /* Since we're automatically storing the password, no user interaction is required,
+  so we don't need to send the data anywhere */
   if (!is_request) {
     ephy_password_manager_save (priv->password_manager, origin, target_origin, username,
                                 password, username_field, password_field, is_new);
     return;
-  }
+  } else {
+    /* User interaction is required, so whatever is handling the EmbedShell should
+    handle the request + saving the password */
 
-  request = g_new (SaveAuthRequest, 1);
-  request->password_manager = g_object_ref (priv->password_manager);
-  request->permissions_manager = g_object_ref (priv->permissions_manager);
-  request->origin = g_steal_pointer (&origin);
-  request->target_origin = g_steal_pointer (&target_origin);
-  request->username = g_steal_pointer (&username);
-  request->password = g_steal_pointer (&password);
-  request->username_field = g_steal_pointer (&username_field);
-  request->password_field = g_steal_pointer (&password_field);
-  request->is_new = is_new;
-  ephy_web_view_show_auth_form_save_request (view, request->origin, request->username,
-                                             (EphyPasswordSaveRequestCallback)save_auth_request_response_cb,
-                                             request, (GDestroyNotify)save_auth_request_free);
+    request_data = g_new (EphyPasswordRequestData, 1);
+    request_data->origin = g_steal_pointer (&origin);
+    request_data->target_origin = g_steal_pointer (&target_origin);
+    request_data->username = g_steal_pointer (&username);
+    request_data->password = g_steal_pointer (&password);
+    request_data->usernameField = g_steal_pointer (&username_field);
+    request_data->passwordField = g_steal_pointer (&password_field);
+    request_data->isNew = is_new;
+    g_signal_emit (shell, signals[PASSWORD_FORM_SUBMITTED], 0, request_data);
+  }
 }
 
 static void
@@ -1156,6 +1116,22 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_NONE, 2,
                   G_TYPE_UINT64,
                   G_TYPE_BOOLEAN);
+
+  /**
+   * EphyEmbedShell::password-form-submitted:
+   * @shell: the #EphyEmbedShell
+   * @data: An #EphyPasswordRequestData containing information regarding the password
+   *
+   * Emitted when a Password Save request has been received, and the UI should
+   * provide the user with a prompt of some form
+   */
+  signals[PASSWORD_FORM_SUBMITTED] =
+    g_signal_new ("password-form-submitted",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_POINTER);
 }
 
 /**

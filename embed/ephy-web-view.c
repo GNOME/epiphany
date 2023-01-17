@@ -99,13 +99,6 @@ struct _EphyWebView {
   /* Local file watch. */
   EphyFileMonitor *file_monitor;
 
-  GtkWidget *geolocation_info_bar;
-  GtkWidget *notification_info_bar;
-  GtkWidget *microphone_info_bar;
-  GtkWidget *webcam_info_bar;
-  GtkWidget *webcam_mic_info_bar;
-  GtkWidget *password_info_bar;
-  GtkWidget *itp_info_bar;
   GtkWidget *password_form_banner;
 
   EphyHistoryService *history_service;
@@ -389,130 +382,6 @@ button_pressed_cb (GtkGesture  *gesture,
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
-static inline void
-remove_info_bar (GtkWidget *info_bar)
-{
-  EphyEmbed *embed = EPHY_EMBED (gtk_widget_get_ancestor (info_bar, EPHY_TYPE_EMBED));
-
-  ephy_embed_remove_top_widget (embed, info_bar);
-}
-
-static void
-untrack_info_bar (GtkWidget **tracked_info_bar)
-{
-  g_assert (tracked_info_bar);
-  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar) || ADW_IS_BANNER (*tracked_info_bar));
-
-  if (*tracked_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar), (gpointer *)tracked_info_bar);
-    remove_info_bar (*tracked_info_bar);
-    *tracked_info_bar = NULL;
-  }
-}
-
-static void
-track_info_bar (GtkWidget  *new_info_bar,
-                GtkWidget **tracked_info_bar)
-{
-  g_assert (GTK_IS_INFO_BAR (new_info_bar) || ADW_IS_BANNER (new_info_bar));
-  g_assert (tracked_info_bar);
-  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar) || ADW_IS_BANNER (*tracked_info_bar));
-
-  untrack_info_bar (tracked_info_bar);
-
-  *tracked_info_bar = new_info_bar;
-  g_object_add_weak_pointer (G_OBJECT (new_info_bar),
-                             (gpointer *)tracked_info_bar);
-}
-
-static GtkWidget *
-ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
-                                                           const char  *origin,
-                                                           const char  *username)
-{
-  GtkWidget *info_bar;
-  GtkWidget *label;
-  char *message;
-
-  LOG ("Going to show infobar about %s", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
-
-  info_bar = gtk_info_bar_new_with_buttons (_("Not No_w"), GTK_RESPONSE_CLOSE,
-                                            _("_Never Save"), GTK_RESPONSE_REJECT,
-                                            _("_Save"), GTK_RESPONSE_YES,
-                                            NULL);
-
-  label = gtk_label_new (NULL);
-  /* Translators: The %s the hostname where this is happening.
-   * Example: mail.google.com.
-   */
-  message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"), origin);
-  gtk_label_set_markup (GTK_LABEL (label), message);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  g_free (message);
-
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
-
-  track_info_bar (info_bar, &web_view->password_info_bar);
-
-  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar,
-                             EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
-
-  return info_bar;
-}
-
-typedef struct {
-  EphyPasswordSaveRequestCallback callback;
-  gpointer callback_data;
-  GDestroyNotify callback_destroy;
-} SaveRequestData;
-
-static void
-save_auth_request_destroy (SaveRequestData *data,
-                           GClosure        *ignored)
-{
-  if (data->callback_destroy)
-    data->callback_destroy (data->callback_data);
-
-  g_free (data);
-}
-
-static void
-info_bar_save_request_response_cb (GtkInfoBar      *info_bar,
-                                   gint             response_id,
-                                   SaveRequestData *data)
-{
-  g_assert (data->callback);
-  data->callback (response_id, data->callback_data);
-  remove_info_bar (GTK_WIDGET (info_bar));
-}
-
-void
-ephy_web_view_show_auth_form_save_request (EphyWebView                     *web_view,
-                                           const char                      *origin,
-                                           const char                      *username,
-                                           EphyPasswordSaveRequestCallback  response_callback,
-                                           gpointer                         response_data,
-                                           GDestroyNotify                   response_destroy)
-{
-  GtkWidget *info_bar;
-  SaveRequestData *data;
-
-  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
-
-  data = g_new (SaveRequestData, 1);
-  data->callback = response_callback;
-  data->callback_data = response_data;
-  data->callback_destroy = response_destroy;
-
-  g_signal_connect_data (info_bar, "response",
-                         G_CALLBACK (info_bar_save_request_response_cb),
-                         data, (GClosureNotify)save_auth_request_destroy, 0);
-
-  gtk_widget_set_visible (info_bar, TRUE);
-}
-
 static void
 update_navigation_flags (WebKitWebView *view)
 {
@@ -693,7 +562,7 @@ password_form_focused_cb (EphyEmbedShell *shell,
 
   g_signal_connect (banner, "button-clicked", G_CALLBACK (password_form_banner_response_cb), NULL);
 
-  track_info_bar (banner, &web_view->password_form_banner);
+  web_view->password_form_banner = banner;
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              banner,
@@ -1047,278 +916,6 @@ decide_policy_cb (WebKitWebView            *web_view,
   return FALSE;
 }
 
-typedef struct {
-  EphyWebView *web_view;
-  WebKitPermissionRequest *request;
-  char *origin;
-} PermissionRequestData;
-
-static PermissionRequestData *
-permission_request_data_new (EphyWebView             *web_view,
-                             WebKitPermissionRequest *request,
-                             const char              *origin)
-{
-  PermissionRequestData *data;
-  data = g_new (PermissionRequestData, 1);
-  data->web_view = web_view;
-  /* Ref the decision to keep it alive while we decide */
-  data->request = g_object_ref (request);
-  data->origin = g_strdup (origin);
-  return data;
-}
-
-static void
-permission_request_data_free (PermissionRequestData *data)
-{
-  g_object_unref (data->request);
-  g_free (data->origin);
-  g_free (data);
-}
-
-static void
-permission_request_info_bar_destroyed_cb (PermissionRequestData *data,
-                                          GObject               *where_the_info_bar_was)
-{
-  webkit_permission_request_deny (data->request);
-  permission_request_data_free (data);
-}
-
-static void
-decide_on_permission_request (GtkWidget             *info_bar,
-                              int                    response,
-                              PermissionRequestData *data)
-{
-  const char *address;
-  EphyPermissionType permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
-
-  switch (response) {
-    case GTK_RESPONSE_YES:
-      webkit_permission_request_allow (data->request);
-      break;
-    default:
-      webkit_permission_request_deny (data->request);
-      break;
-  }
-
-  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request)) {
-    permission_type = EPHY_PERMISSION_TYPE_ACCESS_LOCATION;
-  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request)) {
-    permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
-  } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (data->request)) {
-    gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request));
-    gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request));
-
-    if (is_for_audio_device) {
-      if (is_for_video_device)
-        permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE;
-      else
-        permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
-    } else if (is_for_video_device) {
-      permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
-    }
-  } else {
-    g_assert_not_reached ();
-  }
-
-  address = ephy_web_view_get_address (data->web_view);
-
-  if (response != GTK_RESPONSE_NONE && ephy_embed_utils_address_has_web_scheme (address)) {
-    EphyEmbedShell *shell;
-    EphyPermissionsManager *permissions_manager;
-
-    shell = ephy_embed_shell_get_default ();
-    permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
-
-    if (permission_type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
-      ephy_permissions_manager_set_permission (permissions_manager,
-                                               permission_type,
-                                               data->origin,
-                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
-                                                                            : EPHY_PERMISSION_DENY);
-    } else {
-      ephy_permissions_manager_set_permission (permissions_manager,
-                                               EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
-                                               data->origin,
-                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
-                                                                            : EPHY_PERMISSION_DENY);
-      ephy_permissions_manager_set_permission (permissions_manager,
-                                               EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
-                                               data->origin,
-                                               response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
-                                                                            : EPHY_PERMISSION_DENY);
-    }
-  }
-
-  g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
-  remove_info_bar (info_bar);
-  permission_request_data_free (data);
-}
-
-static void
-show_permission_request_info_bar (WebKitWebView           *web_view,
-                                  WebKitPermissionRequest *decision,
-                                  EphyPermissionType       permission_type)
-{
-  PermissionRequestData *data;
-  GtkWidget *info_bar;
-  GtkWidget *label;
-  char *message;
-  char *origin;
-  char *bold_origin;
-
-  info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
-                                            _("Allow"), GTK_RESPONSE_YES,
-                                            NULL);
-
-  /* Label */
-  origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
-  if (origin == NULL)
-    return;
-
-  bold_origin = g_markup_printf_escaped ("<b>%s</b>", origin);
-
-  switch (permission_type) {
-    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-      /* Translators: Notification policy for a specific site. */
-      message = g_strdup_printf (_("The page at %s wants to show desktop notifications."),
-                                 bold_origin);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-      /* Translators: Geolocation policy for a specific site. */
-      message = g_strdup_printf (_("The page at %s wants to know your location."),
-                                 bold_origin);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-      /* Translators: Microphone policy for a specific site. */
-      message = g_strdup_printf (_("The page at %s wants to use your microphone."),
-                                 bold_origin);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-      /* Translators: Webcam policy for a specific site. */
-      message = g_strdup_printf (_("The page at %s wants to use your webcam."),
-                                 bold_origin);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
-      /* Translators: Webcam and microphone policy for a specific site. */
-      message = g_strdup_printf (_("The page at %s wants to use your webcam and microphone."),
-                                 bold_origin);
-      break;
-    case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
-    default:
-      g_assert_not_reached ();
-  }
-
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), message);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
-
-  data = permission_request_data_new (EPHY_WEB_VIEW (web_view), decision, origin);
-
-  g_signal_connect (info_bar, "response",
-                    G_CALLBACK (decide_on_permission_request),
-                    data);
-  g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
-
-  switch (permission_type) {
-    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
-      track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_mic_info_bar);
-      break;
-    case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
-    default:
-      g_assert_not_reached ();
-  }
-
-  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar,
-                             EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
-
-  g_free (message);
-  g_free (origin);
-  g_free (bold_origin);
-}
-
-static void
-decide_on_itp_permission_request (GtkWidget               *info_bar,
-                                  int                      response,
-                                  WebKitPermissionRequest *request)
-{
-  switch (response) {
-    case GTK_RESPONSE_YES:
-      webkit_permission_request_allow (request);
-      break;
-    default:
-      webkit_permission_request_deny (request);
-      break;
-  }
-
-  g_object_set_data (G_OBJECT (info_bar), "ephy-itp-decision", NULL);
-  remove_info_bar (info_bar);
-}
-
-static void
-ephy_web_view_show_itp_permission_info_bar (EphyWebView                              *web_view,
-                                            WebKitWebsiteDataAccessPermissionRequest *decision)
-{
-  GtkWidget *info_bar;
-  GtkWidget *box;
-  GtkWidget *label;
-  g_autofree char *message = NULL;
-  g_autofree char *secondary_message = NULL;
-  g_autofree char *markup = NULL;
-  const char *requesting_domain;
-  const char *current_domain;
-
-  info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
-                                            _("Allow"), GTK_RESPONSE_YES,
-                                            NULL);
-
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
-  requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (decision);
-  current_domain = webkit_website_data_access_permission_request_get_current_domain (decision);
-  message = g_strdup_printf (_("Do you want to allow “%s” to use cookies while browsing “%s”?"), requesting_domain, current_domain);
-  markup = g_strdup_printf ("<span weight='bold'>%s</span>", message);
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_box_append (GTK_BOX (box), label);
-
-  secondary_message = g_strdup_printf (_("This will allow “%s” to track your activity."), requesting_domain);
-  label = gtk_label_new (secondary_message);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_box_append (GTK_BOX (box), label);
-
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), box);
-
-  track_info_bar (info_bar, &web_view->itp_info_bar);
-
-  g_signal_connect (info_bar, "response",
-                    G_CALLBACK (decide_on_itp_permission_request),
-                    decision);
-  g_object_set_data_full (G_OBJECT (info_bar), "ephy-itp-decision", g_object_ref (decision), g_object_unref);
-
-  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar,
-                             EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
-}
-
 static gboolean
 permission_request_cb (WebKitWebView           *web_view,
                        WebKitPermissionRequest *decision)
@@ -1351,8 +948,6 @@ permission_request_cb (WebKitWebView           *web_view,
       return FALSE;
     }
   } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
-    ephy_web_view_show_itp_permission_info_bar (EPHY_WEB_VIEW (web_view),
-                                                WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision));
     return TRUE;
   } else {
     return FALSE;
@@ -1403,7 +998,7 @@ permission_request_cb (WebKitWebView           *web_view,
                                                  EPHY_PERMISSION_PERMIT);
         webkit_permission_request_allow (decision);
       } else {
-        show_permission_request_info_bar (web_view, decision, permission_type);
+        g_signal_emit_by_name (web_view, "permission-requested", permission_type, decision, origin);
       }
   }
 
@@ -3973,15 +3568,6 @@ ephy_web_view_dispose (GObject *object)
   ephy_embed_prefs_unregister_ucm (ucm);
   ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
 
-  untrack_info_bar (&view->geolocation_info_bar);
-  untrack_info_bar (&view->notification_info_bar);
-  untrack_info_bar (&view->microphone_info_bar);
-  untrack_info_bar (&view->webcam_info_bar);
-  untrack_info_bar (&view->webcam_mic_info_bar);
-  untrack_info_bar (&view->password_info_bar);
-  untrack_info_bar (&view->password_form_banner);
-  untrack_info_bar (&view->itp_info_bar);
-
   g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
   g_clear_object (&view->icon);
@@ -4364,6 +3950,23 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE,
                 0);
+
+/**
+ * EphyWebView::permission-requested:
+ * @view: the #EphyWebView that sent the signal
+ *
+ * The ::permission-requested signal is emitted when the @view is requesting a
+ * particular permission
+ **/
+  g_signal_new ("permission-requested",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_FIRST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                3,
+                EPHY_TYPE_PERMISSION_TYPE,
+                WEBKIT_TYPE_PERMISSION_REQUEST,
+                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void

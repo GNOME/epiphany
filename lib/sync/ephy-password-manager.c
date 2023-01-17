@@ -30,6 +30,21 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+void
+ephy_password_request_data_free (EphyPasswordRequestData *request_data)
+{
+  g_assert (request_data);
+
+  g_free (request_data->origin);
+  g_free (request_data->target_origin);
+  g_free (request_data->username);
+  g_free (request_data->password);
+  g_free (request_data->usernameField);
+  g_free (request_data->passwordField);
+
+  g_free (request_data);
+}
+
 const SecretSchema *
 ephy_password_manager_get_password_schema (void)
 {

@@ -27,6 +27,8 @@
 
 #include "ephy-adaptive-mode.h"
 #include "ephy-bookmark-states.h"
+#include "ephy-password-popover.h"
+#include "ephy-permission-popover.h"
 #include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
@@ -53,6 +55,18 @@ void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntr
 
 void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
                                                                 const char        *tooltip);
+
+void            ephy_location_entry_set_password_popover       (EphyLocationEntry   *entry,
+                                                                EphyPasswordPopover *popover);
+
+void            ephy_location_entry_show_password_popover      (EphyLocationEntry *entry);
+
+void            ephy_location_entry_add_permission_popover     (EphyLocationEntry     *entry,
+                                                                EphyPermissionPopover *popover);
+
+void            ephy_location_entry_show_best_permission_popover (EphyLocationEntry *entry);
+
+void            ephy_location_entry_clear_permission_buttons   (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_add_bookmark_popover   (EphyLocationEntry *entry,
                                                                 GtkPopover        *popover);

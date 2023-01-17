@@ -76,8 +76,6 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE,
 } EphyWebViewErrorPage;
 
-typedef void (* EphyPasswordSaveRequestCallback) (int      response_id,
-                                                  gpointer data);
 
 GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
@@ -177,12 +175,7 @@ gboolean                   ephy_web_view_get_reader_mode_state    (EphyWebView  
 
 gboolean                   ephy_web_view_is_in_auth_dialog        (EphyWebView               *view);
 
-void                       ephy_web_view_show_auth_form_save_request (EphyWebView                    *web_view,
-                                                                      const char                     *origin,
-                                                                      const char                     *username,
-                                                                      EphyPasswordSaveRequestCallback response_callback,
-                                                                      gpointer                        response_data,
-                                                                      GDestroyNotify                  response_destroy);
+GtkWidget                 *ephy_web_view_new_with_user_content_manager (WebKitUserContentManager *ucm);
 
 guint64                    ephy_web_view_get_uid                       (EphyWebView *web_view);
 

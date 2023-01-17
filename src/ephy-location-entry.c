@@ -57,9 +57,11 @@ struct _EphyLocationEntry {
   GtkWidget *text;
   GtkWidget *progress;
   GtkWidget *security_button;
+  GtkWidget *password_button;
   GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
   GList *page_actions;
+  GList *permission_buttons;
 
   GtkWidget *suggestions_popover;
   GtkWidget *scrolled_window;
@@ -867,6 +869,15 @@ root_notify_is_active_cb (EphyLocationEntry *entry)
 }
 
 static void
+on_permission_popover_response (EphyPermissionPopover *popover,
+                                GtkMenuButton         *button)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (gtk_widget_get_parent (GTK_WIDGET (button)));
+  gtk_widget_unparent (GTK_WIDGET (button));
+  entry->permission_buttons = g_list_remove (entry->permission_buttons, button);
+}
+
+static void
 update_reader_icon (EphyLocationEntry *entry)
 {
   GdkDisplay *display;
@@ -981,8 +992,24 @@ ephy_location_entry_measure (GtkWidget      *widget,
     gtk_widget_measure (entry->text, orientation, for_size, &min, &nat, NULL, NULL);
 
     /* Any other icons need to be similarly added to the text width */
+    for (l = entry->permission_buttons; l; l = l->next) {
+      if (gtk_widget_should_layout (GTK_WIDGET (l->data))) {
+        gtk_widget_measure (GTK_WIDGET (l->data), orientation, for_size,
+                            &child_min, &child_nat, NULL, NULL);
+        min += child_min;
+        nat += child_nat;
+      }
+    }
+
     if (gtk_widget_should_layout (entry->security_button)) {
       gtk_widget_measure (entry->security_button, orientation, for_size,
+                          &child_min, &child_nat, NULL, NULL);
+      min += child_min;
+      nat += child_nat;
+    }
+
+    if (gtk_widget_should_layout (entry->password_button)) {
+      gtk_widget_measure (entry->password_button, orientation, for_size,
                           &child_min, &child_nat, NULL, NULL);
       min += child_min;
       nat += child_nat;
@@ -1070,8 +1097,14 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
   GskTransform *transform;
   GList *l;
 
+  for (l = entry->permission_buttons; l; l = l->next) {
+    allocate_icon (widget, height, baseline, l->data,
+                   GTK_PACK_START, &icon_left_pos, &icon_right_pos);
+  }
   allocate_icon (widget, height, baseline, entry->security_button,
                  GTK_PACK_START, &icon_left_pos, &icon_right_pos);
+  allocate_icon (widget, height, baseline, entry->password_button,
+                 GTK_PACK_END, &icon_left_pos, &icon_right_pos);
   allocate_icon (widget, height, baseline, entry->bookmark_button,
                  GTK_PACK_END, &icon_left_pos, &icon_right_pos);
   allocate_icon (widget, height, baseline, entry->reader_mode_button,
@@ -1227,6 +1260,7 @@ static void
 ephy_location_entry_dispose (GObject *object)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+  GList *l;
 
   g_clear_handle_id (&entry->progress_timeout, g_source_remove);
 
@@ -1235,10 +1269,14 @@ ephy_location_entry_dispose (GObject *object)
 
   ephy_location_entry_page_action_clear (entry);
 
+  for (l = entry->permission_buttons; l; l = l->next)
+    gtk_widget_unparent (GTK_WIDGET (l->data));
+
   gtk_widget_unparent (entry->context_menu);
   gtk_widget_unparent (entry->text);
   gtk_widget_unparent (entry->progress);
   gtk_widget_unparent (entry->security_button);
+  gtk_widget_unparent (entry->password_button);
   gtk_widget_unparent (entry->bookmark_button);
   gtk_widget_unparent (entry->reader_mode_button);
   gtk_widget_unparent (entry->suggestions_popover);
@@ -1394,6 +1432,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, security_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
@@ -1770,6 +1809,106 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
                                       const char        *tooltip)
 {
   gtk_widget_set_tooltip_text (entry->security_button, tooltip);
+}
+
+void
+ephy_location_entry_add_permission_popover (EphyLocationEntry     *entry,
+                                            EphyPermissionPopover *popover)
+{
+  GtkMenuButton *menu_button;
+
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+  g_assert (EPHY_IS_PERMISSION_POPOVER (popover));
+
+  menu_button = GTK_MENU_BUTTON (gtk_menu_button_new ());
+
+  switch (ephy_permission_popover_get_permission_type (popover)) {
+    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-notifications-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Notification Request"));
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-camera-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Camera Request"));
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-microphone-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Microphone Request"));
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-location-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Location Request"));
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Webcam and Microphone Request"));
+      break;
+    default:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Permission Request"));
+  }
+
+  gtk_widget_set_valign (GTK_WIDGET (menu_button), GTK_ALIGN_CENTER);
+  gtk_menu_button_set_popover (menu_button, GTK_WIDGET (popover));
+
+  gtk_widget_add_css_class (GTK_WIDGET (menu_button), "entry-icon");
+  gtk_widget_add_css_class (GTK_WIDGET (menu_button), "start");
+
+  gtk_widget_set_parent (GTK_WIDGET (menu_button), GTK_WIDGET (entry));
+  entry->permission_buttons = g_list_prepend (entry->permission_buttons, menu_button);
+  g_signal_connect (popover, "allow", G_CALLBACK (on_permission_popover_response), menu_button);
+  g_signal_connect (popover, "deny", G_CALLBACK (on_permission_popover_response), menu_button);
+}
+
+void
+ephy_location_entry_show_best_permission_popover (EphyLocationEntry *entry)
+{
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+
+  if (entry->permission_buttons) {
+    GtkWidget *menu_button = g_list_last (entry->permission_buttons)->data;
+
+    gtk_menu_button_popup (GTK_MENU_BUTTON (menu_button));
+  }
+}
+
+void
+ephy_location_entry_clear_permission_buttons (EphyLocationEntry *entry)
+{
+  GList *l;
+
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+
+  for (l = entry->permission_buttons; l; l = l->next) {
+    GtkMenuButton *button = l->data;
+    GtkPopover *popover = gtk_menu_button_get_popover (button);
+
+    g_signal_handlers_disconnect_by_func (popover, G_CALLBACK (on_permission_popover_response), button);
+
+    gtk_widget_unparent (GTK_WIDGET (button));
+  }
+
+  g_clear_pointer (&entry->permission_buttons, g_list_free);
+}
+
+void
+ephy_location_entry_set_password_popover (EphyLocationEntry   *entry,
+                                          EphyPasswordPopover *popover)
+{
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+  g_assert (popover == NULL || EPHY_IS_PASSWORD_POPOVER (popover));
+
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (entry->password_button),
+                               GTK_WIDGET (popover));
+  gtk_widget_set_visible (entry->password_button, popover != NULL);
+}
+
+void
+ephy_location_entry_show_password_popover (EphyLocationEntry *entry)
+{
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+
+  gtk_menu_button_popup (GTK_MENU_BUTTON (entry->password_button));
 }
 
 void

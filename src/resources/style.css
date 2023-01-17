@@ -231,3 +231,36 @@ dnd > .boxed-list {
   background-color: @window_bg_color;
   background-image: image(@card_bg_color);
 }
+
+.message-popover > contents {
+  padding: 0;
+  margin: 0;
+}
+
+.message-popover .response-area > button {
+  padding: 10px 14px;
+  border-radius: 0;
+  margin-top: -1px;
+  margin-right: -1px;
+  margin-left: -1px;
+}
+
+.message-popover .response-area > button.suggested {
+  color: @accent_color;
+}
+
+.message-popover .response-area > button.destructive {
+  color: @destructive_color;
+}
+
+.message-popover .response-area > button:first-child:dir(ltr),
+.message-popover .response-area > button:last-child:dir(rtl) {
+  border-bottom-left-radius: 12px;
+  margin-left: 0;
+}
+
+.message-popover .response-area > button:last-child:dir(ltr),
+.message-popover .response-area > button:first-child:dir(rtl) {
+  border-bottom-right-radius: 12px;
+  margin-right: 0;
+}

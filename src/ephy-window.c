@@ -43,12 +43,15 @@
 #include "ephy-fullscreen-box.h"
 #include "ephy-gsb-utils.h"
 #include "ephy-header-bar.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-mouse-gesture-controller.h"
 #include "ephy-pages-popover.h"
 #include "ephy-pages-view.h"
+#include "ephy-password-popover.h"
 #include "ephy-permissions-manager.h"
+#include "ephy-permission-popover.h"
 #include "ephy-prefs.h"
 #include "ephy-security-popover.h"
 #include "ephy-session.h"
@@ -177,6 +180,7 @@ struct _EphyWindow {
   GtkWidget *toast_overlay;
   GtkWidget *switch_to_tab;
   AdwToast *switch_toast;
+  GHashTable *active_permission_requests;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -2646,6 +2650,187 @@ reader_mode_cb (EphyWebView *view,
 }
 
 static void
+load_all_available_popovers (EphyWindow  *window,
+                             EphyWebView *view)
+{
+  GList *popover_list = g_hash_table_lookup (window->active_permission_requests, view);
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  EphyLocationEntry *lentry;
+  GList *l;
+
+  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
+    return;
+
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+
+  ephy_location_entry_set_password_popover (lentry, NULL);
+  ephy_location_entry_clear_permission_buttons (lentry);
+
+  for (l = popover_list; l; l = l->next) {
+    if (EPHY_IS_PASSWORD_POPOVER (l->data))
+      ephy_location_entry_set_password_popover (lentry, EPHY_PASSWORD_POPOVER (l->data));
+    else if (EPHY_IS_PERMISSION_POPOVER (l->data))
+      ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
+  }
+}
+
+static void
+popover_response_cb (EphyWindow *window,
+                     gpointer    popover)
+{
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  EphyLocationEntry *lentry;
+  EphyWebView *view;
+  GList *popover_list;
+
+  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
+    return;
+
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+
+  if (EPHY_IS_PASSWORD_POPOVER (popover))
+    ephy_location_entry_set_password_popover (lentry, NULL);
+
+  view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
+  popover_list = g_hash_table_lookup (window->active_permission_requests, view);
+  popover_list = g_list_remove (popover_list, popover);
+
+  if (!popover_list)
+    g_hash_table_steal (window->active_permission_requests, view);
+  else
+    g_hash_table_replace (window->active_permission_requests, view, popover_list);
+
+  g_object_unref (popover);
+}
+
+static void
+set_permission (EphyPermissionPopover *popover,
+                gboolean               response)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyPermissionsManager *permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
+  EphyPermissionType permission_type = ephy_permission_popover_get_permission_type (popover);
+  const char *origin = ephy_permission_popover_get_origin (popover);
+
+  if (permission_type != (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE | EPHY_PERMISSION_TYPE_COOKIES)) {
+    ephy_permissions_manager_set_permission (permissions_manager,
+                                             permission_type, origin,
+                                             response ? EPHY_PERMISSION_PERMIT
+                                                      : EPHY_PERMISSION_DENY);
+  } else {
+    ephy_permissions_manager_set_permission (permissions_manager,
+                                             EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
+                                             origin,
+                                             response ? EPHY_PERMISSION_PERMIT
+                                                      : EPHY_PERMISSION_DENY);
+    ephy_permissions_manager_set_permission (permissions_manager,
+                                             EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
+                                             origin,
+                                             response ? EPHY_PERMISSION_PERMIT
+                                                      : EPHY_PERMISSION_DENY);
+  }
+
+  gtk_widget_unparent (GTK_WIDGET (popover));
+}
+
+static void
+on_permission_allow (AdwMessageDialog      *self,
+                     char                  *response,
+                     EphyPermissionPopover *popover)
+{
+  webkit_permission_request_allow (ephy_permission_popover_get_permission_request (popover));
+  set_permission (popover, TRUE);
+}
+
+static void
+on_permission_deny (AdwMessageDialog      *self,
+                    char                  *response,
+                    EphyPermissionPopover *popover)
+{
+  webkit_permission_request_deny (ephy_permission_popover_get_permission_request (popover));
+  set_permission (popover, FALSE);
+}
+
+static void
+popover_allow_cb (EphyPermissionPopover *popover,
+                  EphyWindow            *window)
+{
+  webkit_permission_request_allow (ephy_permission_popover_get_permission_request (popover));
+  set_permission (popover, TRUE);
+
+  popover_response_cb (window, popover);
+}
+
+static void
+popover_deny_cb (EphyPermissionPopover *popover,
+                 EphyWindow            *window)
+{
+  webkit_permission_request_deny (ephy_permission_popover_get_permission_request (popover));
+  set_permission (popover, FALSE);
+
+  popover_response_cb (window, popover);
+}
+
+static void
+permission_requested_cb (EphyWebView             *view,
+                         EphyPermissionType       permission_type,
+                         WebKitPermissionRequest *request,
+                         const char              *origin,
+                         EphyWindow              *window)
+{
+  EphyPermissionPopover *popover;
+
+  if (!gtk_widget_is_visible (GTK_WIDGET (window)))
+    return;
+
+  popover = ephy_permission_popover_new (permission_type, request, origin);
+
+  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
+      (window->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
+    AdwMessageDialog *dialog;
+    g_autofree char *title = NULL;
+    g_autofree char *message = NULL;
+
+    ephy_permission_popover_get_text (popover, &title, &message);
+    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), title, message));
+
+    adw_message_dialog_add_responses (dialog,
+                                      "close", _("_Ask Later"),
+                                      "deny", _("_Deny"),
+                                      "allow", _("_Allow"),
+                                      NULL);
+
+    adw_message_dialog_set_body_use_markup (dialog, TRUE);
+    adw_message_dialog_set_response_appearance (dialog, "deny", ADW_RESPONSE_DESTRUCTIVE);
+    adw_message_dialog_set_response_appearance (dialog, "allow", ADW_RESPONSE_SUGGESTED);
+    adw_message_dialog_set_default_response (dialog, "close");
+    adw_message_dialog_set_close_response (dialog, "close");
+
+    g_signal_connect (dialog, "response::allow", G_CALLBACK (on_permission_allow), popover);
+    g_signal_connect (dialog, "response::deny", G_CALLBACK (on_permission_deny), popover);
+
+    gtk_window_present (GTK_WINDOW (dialog));
+  } else {
+    EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+    EphyLocationEntry *lentry;
+    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_requests, view);
+
+    g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
+
+    g_object_ref_sink (popover);
+
+    lentry = EPHY_LOCATION_ENTRY (title_widget);
+    ephy_location_entry_add_permission_popover (lentry, popover);
+    ephy_location_entry_show_best_permission_popover (lentry);
+    list = g_list_append (list, popover);
+    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_requests, view, list);
+
+    g_signal_connect (popover, "allow", G_CALLBACK (popover_allow_cb), window);
+    g_signal_connect (popover, "deny", G_CALLBACK (popover_deny_cb), window);
+  }
+}
+
+static void
 tab_view_page_attached_cb (AdwTabView *tab_view,
                            AdwTabPage *page,
                            gint        position,
@@ -2662,6 +2847,9 @@ tab_view_page_attached_cb (AdwTabView *tab_view,
 
   g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
                            G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
+
+  g_signal_connect_object (ephy_embed_get_web_view (embed), "permission-requested",
+                           G_CALLBACK (permission_requested_cb), window, G_CONNECT_AFTER);
 
   g_signal_connect_object (ephy_embed_get_web_view (embed), "notify::reader-mode",
                            G_CALLBACK (reader_mode_cb), window, G_CONNECT_AFTER);
@@ -2689,6 +2877,8 @@ tab_view_page_detached_cb (AdwTabView *tab_view,
 
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (download_only_load_cb), window);
+  g_signal_handlers_disconnect_by_func
+    (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (permission_requested_cb), window);
 }
 
 static void
@@ -2956,6 +3146,8 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   ephy_window_set_active_tab (window, embed);
 
   update_reader_mode (window, view);
+
+  load_all_available_popovers (window, view);
 }
 
 static EphyTabView *
@@ -3086,6 +3278,13 @@ is_browser_default (void)
 }
 
 static void
+free_permission_requests (gpointer  key,
+                          GList    *value)
+{
+  g_list_free_full (value, g_object_unref);
+}
+
+static void
 ephy_window_dispose (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
@@ -3105,6 +3304,11 @@ ephy_window_dispose (GObject *object)
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
     g_hash_table_unref (window->action_labels);
+
+    g_hash_table_foreach (window->active_permission_requests,
+                          (GHFunc)free_permission_requests, NULL);
+
+    g_hash_table_unref (window->active_permission_requests);
   }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -3488,6 +3692,125 @@ download_completed_cb (EphyDownload *download,
 }
 
 static void
+on_username_entry_changed (GtkEditable             *entry,
+                           EphyPasswordRequestData *request_data)
+{
+  const char *text = gtk_editable_get_text (entry);
+  g_free (request_data->username);
+  request_data->username = g_strdup (text);
+}
+
+static void
+on_password_entry_changed (GtkEditable             *entry,
+                           EphyPasswordRequestData *request_data)
+{
+  const char *text = gtk_editable_get_text (entry);
+  g_free (request_data->password);
+  request_data->password = g_strdup (text);
+}
+
+static void
+on_password_never (AdwMessageDialog        *dialog,
+                   const char              *response,
+                   EphyPasswordRequestData *request_data)
+{
+  EphyEmbedShell *shell = EPHY_EMBED_SHELL (ephy_embed_shell_get_default ());
+  EphyPermissionsManager *permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
+
+  ephy_permissions_manager_set_permission (permissions_manager,
+                                           EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                           request_data->origin,
+                                           EPHY_PERMISSION_DENY);
+}
+
+static void
+on_password_save (AdwMessageDialog        *dialog,
+                  const char              *response,
+                  EphyPasswordRequestData *request_data)
+{
+  EphyEmbedShell *shell = EPHY_EMBED_SHELL (ephy_embed_shell_get_default ());
+  EphyPasswordManager *password_manager = ephy_embed_shell_get_password_manager (shell);
+
+  ephy_password_manager_save (password_manager, request_data->origin,
+                              request_data->target_origin, request_data->username,
+                              request_data->password, request_data->usernameField,
+                              request_data->passwordField, request_data->isNew);
+}
+
+static void
+save_password_cb (EphyEmbedShell          *shell,
+                  EphyPasswordRequestData *request_data)
+{
+  GtkWindow *window;
+  GtkWidget *title_widget;
+  EphyLocationEntry *lentry;
+
+  /* Sanity checks would have already occurred before this point */
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
+  if (!gtk_widget_is_visible (GTK_WIDGET (window)))
+    return;
+
+  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
+      (EPHY_WINDOW (window)->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
+    AdwMessageDialog *dialog;
+    GtkBox *entry_box;
+    GtkWidget *username_entry;
+    GtkWidget *password_entry;
+
+    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), _("Save login?"),
+                                                         _("Passwords are saved only on your device and can be removed at any time in Preferences")));
+    entry_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 6));
+    username_entry = gtk_entry_new ();
+    password_entry = gtk_password_entry_new ();
+
+    adw_message_dialog_add_responses (dialog,
+                                      "close", _("Not Now"),
+                                      "never", _("Never Save"),
+                                      "save", _("Save"),
+                                      NULL);
+
+    adw_message_dialog_set_response_appearance (dialog, "never", ADW_RESPONSE_DESTRUCTIVE);
+    adw_message_dialog_set_response_appearance (dialog, "save", ADW_RESPONSE_SUGGESTED);
+    adw_message_dialog_set_default_response (dialog, "close");
+    adw_message_dialog_set_close_response (dialog, "close");
+
+    gtk_editable_set_text (GTK_EDITABLE (username_entry), request_data->username);
+    gtk_editable_set_text (GTK_EDITABLE (password_entry), request_data->password);
+    gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (password_entry), TRUE);
+
+    adw_message_dialog_set_extra_child (dialog, GTK_WIDGET (entry_box));
+    gtk_box_append (entry_box, username_entry);
+    gtk_box_append (entry_box, password_entry);
+
+    g_signal_connect (dialog, "response::save", G_CALLBACK (on_password_save), request_data);
+    g_signal_connect (dialog, "response::never", G_CALLBACK (on_password_never), request_data);
+    g_signal_connect (username_entry, "changed", G_CALLBACK (on_username_entry_changed), request_data);
+    g_signal_connect (password_entry, "changed", G_CALLBACK (on_password_entry_changed), request_data);
+
+    gtk_window_present (GTK_WINDOW (dialog));
+  } else {
+    EphyPasswordPopover *popover = ephy_password_popover_new (request_data);
+    EphyWebView *view = ephy_shell_get_active_web_view (EPHY_SHELL (shell));
+    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_requests, view);
+
+    title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (ephy_window_get_header_bar (EPHY_WINDOW (window)))));
+
+    g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
+
+    lentry = EPHY_LOCATION_ENTRY (title_widget);
+
+    g_object_ref_sink (popover);
+
+    ephy_location_entry_set_password_popover (lentry, popover);
+    ephy_location_entry_show_password_popover (lentry);
+    list = g_list_append (list, popover);
+    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_requests, view, list);
+
+    g_signal_connect_swapped (popover, "response", G_CALLBACK (popover_response_cb), window);
+  }
+}
+
+static void
 notify_leaflet_child_cb (EphyWindow *window)
 {
   GActionGroup *action_group;
@@ -3580,6 +3903,9 @@ ephy_window_constructed (GObject *object)
                          g_strdup (action_label[i].action),
                          g_strdup (action_label[i].label));
   }
+
+  window->active_permission_requests = g_hash_table_new (g_direct_hash,
+                                                         g_direct_equal);
 
   /* Set accels for actions */
   app = g_application_get_default ();
@@ -3733,6 +4059,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
+  EphyShell *shell;
   EphyDownloadsManager *manager;
 
   object_class->constructed = ephy_window_constructed;
@@ -3766,8 +4093,10 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS));
 
-  manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+  shell = ephy_shell_get_default ();
+  manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
   g_signal_connect (manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);
+  g_signal_connect (shell, "password-form-submitted", G_CALLBACK (save_password_cb), NULL);
 }
 
 static void

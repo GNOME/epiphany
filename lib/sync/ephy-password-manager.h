@@ -46,6 +46,18 @@ G_DECLARE_FINAL_TYPE (EphyPasswordManager, ephy_password_manager, EPHY, PASSWORD
 
 typedef void (*EphyPasswordManagerQueryCallback) (GList *records, gpointer user_data);
 
+typedef struct {
+  char *origin;
+  char *target_origin;
+  char *username;
+  char *password;
+  char *usernameField;
+  char *passwordField;
+  gboolean isNew;
+} EphyPasswordRequestData;
+
+void                 ephy_password_request_data_free                (EphyPasswordRequestData *request_data);
+
 EphyPasswordManager *ephy_password_manager_new                      (void);
 GList               *ephy_password_manager_get_usernames_for_origin (EphyPasswordManager *self,
                                                                      const char          *origin);

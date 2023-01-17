@@ -44,6 +44,8 @@ libephymain_sources = [
   'ephy-page-row.c',
   'ephy-pages-popover.c',
   'ephy-pages-view.c',
+  'ephy-permission-popover.c',
+  'ephy-password-popover.c',
   'ephy-security-popover.c',
   'ephy-session.c',
   'ephy-shell.c',

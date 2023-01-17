@@ -92,6 +92,18 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuButton" id="password_button">
+        <property name="tooltip-text" translatable="yes">View available passwords</property>
+        <property name="valign">center</property>
+        <property name="visible">False</property>
+        <property name="icon-name">dialog-password-symbolic</property>
+        <style>
+          <class name="entry-icon"/>
+          <class name="end"/>
+        </style>
+      </object>
+    </child>
+    <child>
       <object class="GtkPopover" id="suggestions_popover">
         <property name="has-arrow">False</property>
         <property name="autohide">False</property>
