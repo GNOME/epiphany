@@ -105,8 +105,8 @@ struct _EphyWebView {
   GtkWidget *webcam_info_bar;
   GtkWidget *webcam_mic_info_bar;
   GtkWidget *password_info_bar;
-  GtkWidget *password_form_info_bar;
   GtkWidget *itp_info_bar;
+  GtkWidget *password_form_banner;
 
   EphyHistoryService *history_service;
 
@@ -401,7 +401,7 @@ static void
 untrack_info_bar (GtkWidget **tracked_info_bar)
 {
   g_assert (tracked_info_bar);
-  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar));
+  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar) || ADW_IS_BANNER (*tracked_info_bar));
 
   if (*tracked_info_bar) {
     g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar), (gpointer *)tracked_info_bar);
@@ -414,9 +414,9 @@ static void
 track_info_bar (GtkWidget  *new_info_bar,
                 GtkWidget **tracked_info_bar)
 {
-  g_assert (GTK_IS_INFO_BAR (new_info_bar));
+  g_assert (GTK_IS_INFO_BAR (new_info_bar) || ADW_IS_BANNER (new_info_bar));
   g_assert (tracked_info_bar);
-  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar));
+  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar) || ADW_IS_BANNER (*tracked_info_bar));
 
   untrack_info_bar (tracked_info_bar);
 
@@ -665,10 +665,10 @@ icon_changed_cb (EphyWebView *view,
 }
 
 static void
-password_form_info_bar_response_cb (GtkInfoBar *info_bar,
-                                    gint        response_id)
+password_form_banner_response_cb (AdwBanner *self,
+                                  gpointer   user_data)
 {
-  gtk_widget_set_visible (GTK_WIDGET (info_bar), FALSE);
+  adw_banner_set_revealed (self, FALSE);
 }
 
 static void
@@ -677,10 +677,9 @@ password_form_focused_cb (EphyEmbedShell *shell,
                           gboolean        insecure_form_action,
                           EphyWebView    *web_view)
 {
-  GtkWidget *info_bar;
-  GtkWidget *label;
+  GtkWidget *banner;
 
-  if (web_view->password_form_info_bar)
+  if (web_view->password_form_banner)
     return;
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
@@ -688,21 +687,16 @@ password_form_focused_cb (EphyEmbedShell *shell,
     return;
 
   /* Translators: Message appears when insecure password form is focused. */
-  label = gtk_label_new (_("Heads-up: this form is not secure. If you type your password, it will not be kept private."));
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  banner = adw_banner_new (_("This form is not secure ‒ passwords will not be kept private"));
+  adw_banner_set_button_label (ADW_BANNER (banner), _("_Dismiss"));
+  adw_banner_set_revealed (ADW_BANNER (banner), TRUE);
 
-  info_bar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
-  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
+  g_signal_connect (banner, "button-clicked", G_CALLBACK (password_form_banner_response_cb), NULL);
 
-  g_signal_connect (info_bar, "response", G_CALLBACK (password_form_info_bar_response_cb), NULL);
-
-  track_info_bar (info_bar, &web_view->password_form_info_bar);
+  track_info_bar (banner, &web_view->password_form_banner);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar,
+                             banner,
                              EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
 }
 
@@ -3987,7 +3981,7 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->webcam_info_bar);
   untrack_info_bar (&view->webcam_mic_info_bar);
   untrack_info_bar (&view->password_info_bar);
-  untrack_info_bar (&view->password_form_info_bar);
+  untrack_info_bar (&view->password_form_banner);
   untrack_info_bar (&view->itp_info_bar);
 
   g_clear_object (&view->certificate);
