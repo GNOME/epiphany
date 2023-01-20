@@ -1029,7 +1029,9 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
 
   data_manager = webkit_web_context_get_website_data_manager (ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ()));
   web_context = webkit_web_context_new_with_website_data_manager (data_manager);
+#if !WEBKIT_CHECK_VERSION (2, 39, 5)
   webkit_web_context_set_sandbox_enabled (web_context, TRUE);
+#endif
 
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
