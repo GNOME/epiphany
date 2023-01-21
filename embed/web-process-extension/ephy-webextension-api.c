@@ -72,7 +72,6 @@ ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
   } else if (strcmp (name, "sendMessage") == 0) {
     GVariant *parameters;
     const char *script;
-    g_autofree char *uri = NULL;
     JSCContext *context = webkit_frame_get_js_context (frame);
 
     parameters = webkit_user_message_get_parameters (message);
@@ -172,7 +171,6 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
 {
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_browser = NULL;
-  g_autoptr (JSCValue) js_i18n = NULL;
   g_autoptr (JSCValue) js_extension = NULL;
   g_autoptr (JSCValue) js_function = NULL;
   g_autoptr (GBytes) bytes = NULL;

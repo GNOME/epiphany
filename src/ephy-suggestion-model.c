@@ -558,7 +558,6 @@ bookmarks_query (EphySuggestionModel *self,
                  QueryData           *data,
                  GTask               *task)
 {
-  g_autoptr (GList) new_urls = NULL;
   GSequence *bookmarks;
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks (self->bookmarks_manager);

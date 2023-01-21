@@ -1816,7 +1816,6 @@ fill_mobile_capable_cb (GObject      *source,
 static void
 save_as_application_proceed (EphyApplicationDialogData *data)
 {
-  g_autofree gchar *desktop_file_id = NULL;
   g_autofree char *message = NULL;
   GNotification *notification;
   gboolean success;

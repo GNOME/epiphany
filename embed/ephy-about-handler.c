@@ -278,7 +278,6 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
       g_autofree char *encoded_icon_path = NULL;
       g_autofree char *encoded_name = NULL;
       g_autofree char *encoded_url = NULL;
-      g_autofree char *js_encoded_id = NULL;
       g_autoptr (GDate) date = NULL;
       char install_date[128];
 

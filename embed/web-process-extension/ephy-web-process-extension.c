@@ -281,7 +281,6 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                                             WebKitWebPage           *web_page)
 {
   WebKitWebFormManager *form_manager;
-  g_autoptr (JSCContext) js_context = NULL;
 
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),

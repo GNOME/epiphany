@@ -1555,7 +1555,6 @@ migrate_pre_flatpak_webapps (void)
       g_autoptr (GKeyFile) keyfile = NULL;
       g_autoptr (GFile) app_link_file = NULL;
       g_autoptr (GFile) old_desktop_file = NULL;
-      g_autoptr (GFileInfo) file_info = NULL;
       const char *final_hyphen, *checksum;
       g_autofree char *new_name = NULL;
 

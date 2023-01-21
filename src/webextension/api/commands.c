@@ -113,7 +113,6 @@ setup_action (EphyWebExtension    *self,
               WebExtensionCommand *command)
 {
   g_autofree char *action_name = get_action_name (self, command);
-  g_autofree char *accel_action_name = get_accel_action_name (self, command);
   g_autoptr (GSimpleAction) action = g_simple_action_new (action_name, NULL);
 
   g_action_map_add_action (G_ACTION_MAP (ephy_shell_get_default ()), G_ACTION (action));
@@ -176,10 +175,6 @@ commands_handler_reset (EphyWebExtensionSender *sender,
   const char *name = ephy_json_array_get_string (args, 0);
   WebExtensionCommand *command;
   WebExtensionCommand *default_command;
-  g_autofree char *action_name = NULL;
-  g_autofree char *shortcut = NULL;
-  g_autofree char *suggested_key = NULL;
-  g_autofree char *description = NULL;
 
   if (!name) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "commands.reset(): Missing name argument");

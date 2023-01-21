@@ -101,6 +101,7 @@ ephy_send_message (const char *function_name,
 
   if (!jsc_value_is_array (function_args) || !jsc_value_is_function (resolve_callback)) {
     g_autoptr (JSCValue) ret = jsc_value_function_call (reject_callback, G_TYPE_STRING, "ephy_send_message(): Invalid Arguments", G_TYPE_NONE);
+    (void)ret;
     return;
   }
 
@@ -180,12 +181,10 @@ ephy_webextension_install_common_apis (WebKitWebPage *page,
                                        const char    *guid,
                                        JsonObject    *translations)
 {
-  g_autoptr (JSCValue) result = NULL;
   g_autoptr (JSCValue) js_browser = NULL;
   g_autoptr (JSCValue) js_i18n = NULL;
   g_autoptr (JSCValue) js_extension = NULL;
   g_autoptr (JSCValue) js_function = NULL;
-  g_autoptr (JSCValue) js_object = NULL;
   EphySendMessageData *send_message_data;
 
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);

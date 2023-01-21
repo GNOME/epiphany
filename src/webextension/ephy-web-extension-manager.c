@@ -870,6 +870,7 @@ send_to_page_ready_cb (WebKitWebView    *web_view,
                        EphyWebExtension *web_extension)
 {
   g_autoptr (WebKitUserMessage) response = webkit_web_view_send_message_to_page_finish (web_view, result, NULL);
+  (void)response;
 
   update_translations (web_extension);
   add_content_scripts (web_extension, EPHY_WEB_VIEW (web_view));

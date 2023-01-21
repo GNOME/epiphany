@@ -166,7 +166,6 @@ alarms_handler_create (EphyWebExtensionSender *sender,
   double delay_in_minutes = 0.0;
   double period_in_minutes = 0.0;
   double when = 0.0;
-  g_autofree char *name_str = NULL;
 
   /* This takes two optional args, name:str, info:obj */
   name = ephy_json_array_get_string (args, 0);
