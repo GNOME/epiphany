@@ -649,17 +649,29 @@ Ephy.FormManager = class FormManager
         window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._pageID, isFormActionInsecure));
     }
 
+    _isElementVisible(element)
+    {
+        // https://stackoverflow.com/a/33456469
+        return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length) && window.getComputedStyle(element).visibility !== 'hidden';
+    }
+
     _findPasswordFields()
     {
         const passwordFields = [];
         for (let i = 0; i < this._form.elements.length; i++) {
             const element = this._form.elements[i];
-            if (element instanceof HTMLInputElement && element.type === 'password') {
-                // We only want to process forms with 1-3 fields. A common
-                // case is to have a "change password" form with 3 fields:
-                // Old password, New password, Confirm new password.
-                // Forms with more than 3 password fields are unlikely,
-                // and we don't know how to process them, so reject them
+            // We only want to process forms with 1-3 fields. A common
+            // case is to have a "change password" form with 3 fields:
+            // Old password, New password, Confirm new password.
+            // Forms with more than 3 password fields are unlikely,
+            // and we don't know how to process them, so reject them.
+            //
+            // But be careful, because sometimes a form might have a bunch
+            // of invisible password elements that we need to ignore. I worry
+            // we might also need to consider cases where the form is initially
+            // invisible and then set visible later, in which case we'll miss
+            // it, but that's currently not handled here.
+            if (element instanceof HTMLInputElement && element.type === 'password' && this._isElementVisible(element)) {
                 if (passwordFields.length === 3)
                     return null;
                 passwordFields.push({ 'element' : element, 'index' : i });
