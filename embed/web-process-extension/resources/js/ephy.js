@@ -511,12 +511,27 @@ Ephy.FormManager = class FormManager
         if (!Ephy.shouldRememberPasswords())
             return;
 
+        // We pass null for the last two parameters here, formAuth.usernameField
+        // and formAuth.passwordField, to maximize our chance of receiving a
+        // matching result. This allows us to fill passwords on websites that
+        // do weird things like changing the form elements after autofill but
+        // before the form is submitted, which would otherwise prevent us from
+        // matching successfully.
+        //
+        // This means we have no hope of supporting websites that require
+        // multiple passwords without username selectors, like old Mailman
+        // lists, but it improves our robustness for typical websites.
+        //
+        // And yes, this does indeed mean that it's useless for us to store the
+        // username and password field names, since this is the only place they
+        // would ever be used, but perhaps they'll be useful in the future if
+        // our strategy ever chances.
         Ephy.passwordManager.query(
             formAuth.origin,
             formAuth.targetOrigin,
             formAuth.username,
-            formAuth.usernameField,
-            formAuth.passwordField).then(authInfo => {
+            null,
+            null).then(authInfo => {
                 if (!authInfo) {
                     Ephy.log('No result');
                     return;
