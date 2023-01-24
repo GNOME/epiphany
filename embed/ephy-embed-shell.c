@@ -891,8 +891,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
-
 #if !WEBKIT_CHECK_VERSION (2, 39, 5)
   webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
 #endif
