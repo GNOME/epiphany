@@ -269,7 +269,9 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
   WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
 
   g_assert (!request->web_view);
-  request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (webkit_web_view_new_with_context (context)));
+  request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                                                        "web-context", context,
+                                                                        NULL)));
 
   g_assert (request->load_changed_id == 0);
   request->load_changed_id = g_signal_connect (request->web_view, "load-changed",
