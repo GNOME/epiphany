@@ -3646,28 +3646,26 @@ ephy_web_view_get_security_level (EphyWebView           *view,
 }
 
 static void
-info_bar_response_cb (GtkInfoBar *info_bar,
-                      int         response_id,
-                      EphyEmbed  *embed)
+print_failed_banner_response_cb (AdwBanner *banner,
+                                 EphyEmbed *embed)
 {
-  ephy_embed_remove_top_widget (embed, GTK_WIDGET (info_bar));
+  ephy_embed_remove_top_widget (embed, GTK_WIDGET (banner));
 }
 
 static void
-ephy_web_view_print_failed (EphyWebView *view,
+ephy_web_view_print_failed (EphyWebView *web_view,
                             GError      *error)
 {
-  GtkWidget *info_bar;
-  GtkWidget *label;
-  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+  GtkWidget *banner;
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
 
-  info_bar = gtk_info_bar_new_with_buttons (_("_OK"), GTK_RESPONSE_OK, NULL);
-  label = gtk_label_new (error->message);
+  banner = adw_banner_new (error->message);
+  adw_banner_set_button_label (ADW_BANNER (banner), _("_Dismiss"));
+  adw_banner_set_revealed (ADW_BANNER (banner), TRUE);
 
-  gtk_info_bar_add_child (GTK_INFO_BAR (info_bar), label);
-  g_signal_connect (info_bar, "response", G_CALLBACK (info_bar_response_cb), embed);
+  g_signal_connect (banner, "button-clicked", G_CALLBACK (print_failed_banner_response_cb), embed);
 
-  ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
+  ephy_embed_add_top_widget (embed, banner, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
 }
 
 static void
