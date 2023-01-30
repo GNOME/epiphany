@@ -1741,12 +1741,16 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
                                      "ephy-non-starred-symbolic");
       gtk_widget_remove_css_class (self->bookmark_button, "starred");
+      /* Translators: tooltip for the empty bookmark button */
+      gtk_widget_set_tooltip_text (self->bookmark_button, _("Bookmark Page"));
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
                                      "ephy-starred-symbolic");
       gtk_widget_add_css_class (self->bookmark_button, "starred");
+      /* Translators: tooltip for the bookmarked button */
+      gtk_widget_set_tooltip_text (self->bookmark_button, _("Edit Bookmark"));
       break;
     default:
       g_assert_not_reached ();

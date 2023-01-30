@@ -390,11 +390,16 @@ ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd      *action_bar_e
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmark_button),
                                      "ephy-non-starred-symbolic");
+      /* Translators: tooltip for the empty bookmark button */
+      gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Bookmark Page"));
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
       gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmark_button),
                                      "ephy-starred-symbolic");
+
+      /* Translators: tooltip for the bookmarked button */
+      gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Edit Bookmark"));
       break;
     default:
       g_assert_not_reached ();
