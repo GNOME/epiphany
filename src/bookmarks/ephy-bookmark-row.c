@@ -218,7 +218,10 @@ ephy_bookmark_row_constructed (GObject *object)
                    "visible",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 
-  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
+  database = ephy_embed_shell_get_favicon_database (shell);
+  if (!database)
+    return;
+
   webkit_favicon_database_get_favicon (database,
                                        ephy_bookmark_get_url (self->bookmark),
                                        NULL,

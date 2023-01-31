@@ -1674,8 +1674,14 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
   g_autofree char *tmp_filename = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  data->download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell),
+                                                        data->icon_href);
+#else
   data->download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell),
                                                     data->icon_href);
+#endif
+
   /* We do not want this download to show up in the UI, so let's
    * set 'ephy-download-set' to make Epiphany think this is
    * already there. */

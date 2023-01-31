@@ -280,8 +280,10 @@ load_favicon (EphySuggestionModel *model,
               const char          *url)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
-  WebKitFaviconDatabase *database = webkit_web_context_get_favicon_database (context);
+  WebKitFaviconDatabase *database = ephy_embed_shell_get_favicon_database (shell);
+
+  if (!database)
+    return;
 
   webkit_favicon_database_get_favicon (database,
                                        url,

@@ -452,18 +452,29 @@ webkit_pref_callback_enable_website_data_storage (GSettings  *settings,
                                                   const char *key,
                                                   gpointer    data)
 {
-  EphyEmbedShell *shell;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  WebKitNetworkSession *network_session;
+#else
   WebKitWebContext *context;
+#endif
   WebKitCookieManager *manager;
   gboolean value;
+
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+    return;
 
   value = g_settings_get_boolean (settings, key);
   webkit_settings_set_enable_html5_database (webkit_settings, value);
   webkit_settings_set_enable_html5_local_storage (webkit_settings, value);
 
-  shell = ephy_embed_shell_get_default ();
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  network_session = ephy_embed_shell_get_network_session (shell);
+  manager = webkit_network_session_get_cookie_manager (network_session);
+#else
   context = ephy_embed_shell_get_web_context (shell);
   manager = webkit_web_context_get_cookie_manager (context);
+#endif
   webkit_cookie_manager_set_accept_policy (manager, value ? WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS : WEBKIT_COOKIE_POLICY_ACCEPT_NEVER);
 }
 

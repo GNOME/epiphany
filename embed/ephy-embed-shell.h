@@ -62,6 +62,9 @@ struct _EphyEmbedShellClass
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 const char        *ephy_embed_shell_get_guid                   (EphyEmbedShell   *shell);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+WebKitNetworkSession *ephy_embed_shell_get_network_session     (EphyEmbedShell   *shell);
+#endif
 EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 EphyGSBService    *ephy_embed_shell_get_global_gsb_service     (EphyEmbedShell   *shell);
@@ -74,7 +77,6 @@ void               ephy_embed_shell_set_print_settings         (EphyEmbedShell  
                                                                 GtkPrintSettings *settings);
 GtkPrintSettings  *ephy_embed_shell_get_print_settings         (EphyEmbedShell   *shell);
 EphyEmbedShellMode ephy_embed_shell_get_mode                   (EphyEmbedShell   *shell);
-void               ephy_embed_shell_clear_cache                (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell   *shell,
                                                                 const char       *url,
                                                                 const char       *path);
@@ -85,6 +87,7 @@ EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedSh
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
 EphySearchEngineManager  *ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell);
 EphyPasswordManager      *ephy_embed_shell_get_password_manager      (EphyEmbedShell *shell);
+WebKitFaviconDatabase    *ephy_embed_shell_get_favicon_database      (EphyEmbedShell *shell);
 
 void                     ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
                                                                 WebKitUserContentManager *ucm);

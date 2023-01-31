@@ -1083,7 +1083,11 @@ ephy_download_new_for_uri (const char *uri)
 
   g_assert (uri != NULL);
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell), uri);
+#else
   download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
+#endif
   ephy_download = ephy_download_new (download);
   g_object_unref (download);
 
@@ -1099,7 +1103,11 @@ ephy_download_new_for_uri_internal (const char *uri)
 
   g_assert (uri != NULL);
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell), uri);
+#else
   download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
+#endif
   ephy_download = ephy_download_new_internal (download);
 
   return ephy_download;

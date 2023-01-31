@@ -53,6 +53,9 @@
 
 typedef struct {
   WebKitWebContext *web_context;
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  WebKitNetworkSession *network_session;
+#endif
   EphyHistoryService *global_history_service;
   EphyGSBService *global_gsb_service;
   EphyEncodings *encodings;
@@ -147,7 +150,7 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
   g_assert ((gpointer)catalog == (gpointer)embed_shell);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (embed_shell));
-  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (embed_shell));
+  database = ephy_embed_shell_get_favicon_database (embed_shell);
 
   for (GList *l = windows; l && l->data; l = l->next) {
     tabs = ephy_embed_container_get_children (l->data);
@@ -160,7 +163,7 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
         continue;
 
       url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));
-      favicon = webkit_favicon_database_get_favicon_uri (database, url);
+      favicon = database ? webkit_favicon_database_get_favicon_uri (database, url) : NULL;
 
       tabs_info = g_list_prepend (tabs_info,
                                   ephy_tab_info_new (title, url, favicon));
@@ -198,6 +201,9 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->password_manager);
   g_clear_object (&priv->permissions_manager);
   g_clear_object (&priv->web_context);
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  g_clear_object (&priv->network_session);
+#endif
   g_clear_pointer (&priv->guid, g_free);
   g_clear_object (&priv->filters_manager);
   g_clear_object (&priv->search_engine_manager);
@@ -795,12 +801,39 @@ initialize_notification_permissions (WebKitWebContext *web_context,
   webkit_web_context_initialize_notification_permissions (web_context, permitted_origins, denied_origins);
 }
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+static void
+ephy_embed_shell_create_network_session_if_needed (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+    return;
+
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    priv->network_session = webkit_network_session_new_ephemeral ();
+  else {
+    priv->network_session = webkit_network_session_new (ephy_profile_dir (), ephy_cache_dir ());
+    webkit_network_session_set_persistent_credential_storage_enabled (priv->network_session, FALSE);
+  }
+
+  webkit_network_session_set_itp_enabled (priv->network_session,
+                                          g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                                                  EPHY_PREFS_WEB_ENABLE_ITP));
+}
+#endif
+
 static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+#if !WEBKIT_CHECK_VERSION (2, 39, 6)
   g_autoptr (WebKitWebsiteDataManager) manager = NULL;
+#endif
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  priv->web_context = webkit_web_context_new ();
+#else
   if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     manager = webkit_website_data_manager_new_ephemeral ();
   } else {
@@ -817,15 +850,15 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT,
                                     "website-data-manager", manager,
                                     NULL);
+#endif
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     webkit_web_context_set_automation_allowed (priv->web_context, TRUE);
 }
 
 static void
-download_started_cb (WebKitWebContext *web_context,
-                     WebKitDownload   *download,
-                     EphyEmbedShell   *shell)
+download_started_cb (EphyEmbedShell *shell,
+                     WebKitDownload *download)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (EphyDownload) ephy_download = NULL;
@@ -872,12 +905,18 @@ enable_itp_setting_changed_cb (GSettings      *settings,
                                EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+#if !WEBKIT_CHECK_VERSION (2, 39, 6)
   WebKitWebsiteDataManager *manager;
 
   manager = webkit_web_context_get_website_data_manager (priv->web_context);
   webkit_website_data_manager_set_itp_enabled (manager,
                                                g_settings_get_boolean (EPHY_SETTINGS_WEB,
                                                                        EPHY_PREFS_WEB_ENABLE_ITP));
+#else
+  webkit_network_session_set_itp_enabled (priv->network_session,
+                                          g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                                                  EPHY_PREFS_WEB_ENABLE_ITP));
+#endif
 }
 
 static void
@@ -885,7 +924,9 @@ ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+#if !WEBKIT_CHECK_VERSION (2, 39, 6)
   g_autofree char *favicon_db_path = NULL;
+#endif
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
 
@@ -912,14 +953,14 @@ ephy_embed_shell_startup (GApplication *application)
 
   priv->password_manager = ephy_password_manager_new ();
 
-  /* Do not cache favicons in automation mode. Don't change the TLS policy either, since that's
-   * handled by session capabilities in automation mode.
-   */
+#if !WEBKIT_CHECK_VERSION (2, 39, 6)
+  /* Do not cache favicons in automation mode. */
   if (priv->mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     /* Favicon Database */
     favicon_db_path = g_build_filename (ephy_cache_dir (), "icondatabase", NULL);
     webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
   }
+#endif
 
   /* about: URIs handler */
   priv->about_handler = ephy_about_handler_new ();
@@ -952,21 +993,39 @@ ephy_embed_shell_startup (GApplication *application)
                                                          "ephy-resource");
 
   /* Store cookies in moz-compatible SQLite format */
-  cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
-  if (!webkit_web_context_is_ephemeral (priv->web_context)) {
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  if (priv->network_session && !webkit_network_session_is_ephemeral (priv->network_session)) {
+    cookie_manager = webkit_network_session_get_cookie_manager (priv->network_session);
     filename = g_build_filename (ephy_profile_dir (), "cookies.sqlite", NULL);
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
   }
+#else
+  if (!webkit_web_context_is_ephemeral (priv->web_context)) {
+    cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
+    filename = g_build_filename (ephy_profile_dir (), "cookies.sqlite", NULL);
+    webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
+                                                  WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
+  }
+#endif
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  if (priv->network_session) {
+    g_signal_connect_object (priv->network_session, "download-started",
+                             G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
+  }
+#else
   g_signal_connect_object (priv->web_context, "download-started",
-                           G_CALLBACK (download_started_cb), shell, 0);
+                           G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
+#endif
 
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
                            G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
 
-  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
-                           G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+    g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
+                             G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
+  }
 }
 
 static void
@@ -1024,6 +1083,9 @@ ephy_embed_shell_constructed (GObject *object)
   priv = ephy_embed_shell_get_instance_private (shell);
   priv->guid = g_dbus_generate_guid ();
 
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  ephy_embed_shell_create_network_session_if_needed (shell);
+#endif
   ephy_embed_shell_create_web_context (shell);
 
   priv->permissions_manager = ephy_permissions_manager_new ();
@@ -1302,20 +1364,6 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
   return priv->mode;
 }
 
-/**
- * ephy_embed_shell_clear_cache:
- * @shell: an #EphyEmbedShell
- *
- * Clears the HTTP cache (temporarily saved web pages).
- **/
-void
-ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  webkit_web_context_clear_cache (priv->web_context);
-}
-
 EphyFiltersManager *
 ephy_embed_shell_get_filters_manager (EphyEmbedShell *shell)
 {
@@ -1339,6 +1387,16 @@ ephy_embed_shell_get_web_context (EphyEmbedShell *shell)
 
   return priv->web_context;
 }
+
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+WebKitNetworkSession *
+ephy_embed_shell_get_network_session (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->network_session;
+}
+#endif
 
 EphyDownloadsManager *
 ephy_embed_shell_get_downloads_manager (EphyEmbedShell *shell)
@@ -1374,6 +1432,23 @@ ephy_embed_shell_get_password_manager (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   return priv->password_manager;
+}
+
+WebKitFaviconDatabase *
+ephy_embed_shell_get_favicon_database (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  WebKitWebsiteDataManager *manager;
+
+  if (!priv->network_session)
+    return NULL;
+
+  manager = webkit_network_session_get_website_data_manager (priv->network_session);
+  return webkit_website_data_manager_get_favicon_database (manager);
+#else
+  return webkit_web_context_get_favicon_database (priv->web_context);
+#endif
 }
 
 void

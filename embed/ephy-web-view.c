@@ -720,9 +720,15 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
   g_assert (view->tls_error_failing_uri != NULL);
 
   uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_NONE, NULL);
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  webkit_network_session_allow_tls_certificate_for_host (ephy_embed_shell_get_network_session (shell),
+                                                         view->certificate,
+                                                         g_uri_get_host (uri));
+#else
   webkit_web_context_allow_tls_certificate_for_host (ephy_embed_shell_get_web_context (shell),
                                                      view->certificate,
                                                      g_uri_get_host (uri));
+#endif
   ephy_web_view_load_url (view, ephy_web_view_get_address (view));
 }
 
@@ -2900,19 +2906,6 @@ scale_factor_changed_cb (EphyWebView *web_view,
   _ephy_web_view_update_icon (web_view);
 }
 
-GtkWidget *
-ephy_web_view_new_with_user_content_manager (WebKitUserContentManager *ucm)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
-  return g_object_new (EPHY_TYPE_WEB_VIEW,
-                       "web-context", ephy_embed_shell_get_web_context (shell),
-                       "user-content-manager", ucm,
-                       "settings", ephy_embed_prefs_get_settings (),
-                       "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,
-                       NULL);
-}
-
 /**
  * ephy_web_view_load_request:
  * @view: the #EphyWebView in which to load the request
@@ -4374,6 +4367,9 @@ ephy_web_view_new (void)
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "web-context", ephy_embed_shell_get_web_context (shell),
+#if WEBKIT_CHECK_VERSION (2, 39, 6)
+                       "network-session", ephy_embed_shell_get_network_session (shell),
+#endif
                        "user-content-manager", ucm,
                        "settings", ephy_embed_prefs_get_settings (),
                        "is-controlled-by-automation", ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION,

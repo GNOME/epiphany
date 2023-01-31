@@ -209,9 +209,11 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
     url = json_array_get_string_element (url_history, 0);
 
     data = populate_row_async_data_new (dialog, title, url, index);
-    webkit_favicon_database_get_favicon (dialog->database, url, NULL,
-                                         synced_tabs_dialog_favicon_loaded_cb,
-                                         data);
+    if (dialog->database) {
+      webkit_favicon_database_get_favicon (dialog->database, url, NULL,
+                                           synced_tabs_dialog_favicon_loaded_cb,
+                                           data);
+    }
   }
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -324,14 +326,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 {
-  WebKitWebContext *context;
-
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
   gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (dialog->treeview), URL_COLUMN);
 
-  context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
-  dialog->database = webkit_web_context_get_favicon_database (context);
+  dialog->database = ephy_embed_shell_get_favicon_database (ephy_embed_shell_get_default ());
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
