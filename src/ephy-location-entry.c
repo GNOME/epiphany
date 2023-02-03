@@ -136,13 +136,8 @@ do_dns_prefetch (PrefetchHelper *helper)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  if (helper->uri) {
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
+  if (helper->uri)
     webkit_network_session_prefetch_dns (ephy_embed_shell_get_network_session (shell), g_uri_get_host (helper->uri));
-#else
-    webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), g_uri_get_host (helper->uri));
-#endif
-  }
 
   helper->entry->dns_prefetch_handle_id = 0;
 

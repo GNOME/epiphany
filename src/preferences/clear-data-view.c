@@ -77,17 +77,10 @@ static const DataEntry data_entries[] = {
 static WebKitWebsiteDataManager *
 get_website_data_manger (void)
 {
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
   WebKitNetworkSession *network_session;
 
   network_session = ephy_embed_shell_get_network_session (ephy_embed_shell_get_default ());
   return webkit_network_session_get_website_data_manager (network_session);
-#else
-  WebKitWebContext *web_context;
-
-  web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
-  return webkit_web_context_get_website_data_manager (web_context);
-#endif
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

@@ -28,14 +28,8 @@
 static WebKitCookieManager *
 get_cookie_manager (void)
 {
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
   WebKitNetworkSession *network_session = ephy_embed_shell_get_network_session (ephy_embed_shell_get_default ());
   return webkit_network_session_get_cookie_manager (network_session);
-#else
-  WebKitWebContext *web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
-  WebKitWebsiteDataManager *data_manager = webkit_web_context_get_website_data_manager (web_context);
-  return webkit_website_data_manager_get_cookie_manager (data_manager);
-#endif
 }
 
 static const char *

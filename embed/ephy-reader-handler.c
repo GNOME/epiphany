@@ -267,16 +267,12 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
   WebKitNetworkSession *network_session = ephy_embed_shell_get_network_session (shell);
-#endif
 
   g_assert (!request->web_view);
   request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (g_object_new (WEBKIT_TYPE_WEB_VIEW,
                                                                         "web-context", context,
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
                                                                         "network-session", network_session,
-#endif
                                                                         NULL)));
 
   g_assert (request->load_changed_id == 0);

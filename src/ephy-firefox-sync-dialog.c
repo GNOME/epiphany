@@ -461,11 +461,7 @@ static void
 sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
 {
   EphyEmbedShell *shell;
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
   WebKitNetworkSession *network_session;
-#else
-  WebKitWebsiteDataManager *manager;
-#endif
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
   const char *script;
@@ -508,13 +504,8 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
 
     shell = ephy_embed_shell_get_default ();
     embed_context = ephy_embed_shell_get_web_context (shell);
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
     network_session = ephy_embed_shell_get_network_session (shell);
     sync_context = webkit_web_context_new ();
-#else
-    manager = webkit_web_context_get_website_data_manager (embed_context);
-    sync_context = webkit_web_context_new_with_website_data_manager (manager);
-#endif
     webkit_web_context_set_preferred_languages (sync_context,
                                                 g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
 
@@ -522,9 +513,7 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
                                                                "user-content-manager", sync_dialog->fxa_manager,
                                                                "settings", ephy_embed_prefs_get_settings (),
                                                                "web-context", sync_context,
-#if WEBKIT_CHECK_VERSION (2, 39, 6)
                                                                "network-session", network_session,
-#endif
                                                                NULL));
     gtk_widget_set_overflow (GTK_WIDGET (sync_dialog->fxa_web_view), GTK_OVERFLOW_HIDDEN);
     gtk_widget_add_css_class (GTK_WIDGET (sync_dialog->fxa_web_view), "card");
