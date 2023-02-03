@@ -110,11 +110,14 @@ enum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_editable_init (GtkEditableInterface *iface);
+static void ephy_location_entry_accessible_init (GtkAccessibleInterface *iface);
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 ephy_location_entry_editable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                ephy_location_entry_accessible_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
 
@@ -1521,6 +1524,19 @@ static void
 ephy_location_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->get_delegate = ephy_location_entry_get_delegate;
+}
+
+static gboolean
+ephy_location_entry_accessible_get_platform_state (GtkAccessible              *accessible,
+                                                   GtkAccessiblePlatformState  state)
+{
+  return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (accessible), state);
+}
+
+static void
+ephy_location_entry_accessible_init (GtkAccessibleInterface *iface)
+{
+  iface->get_platform_state = ephy_location_entry_accessible_get_platform_state;
 }
 
 GtkWidget *
