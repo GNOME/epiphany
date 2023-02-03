@@ -21,7 +21,6 @@
 
 #include "ephy-action-bar.h"
 #include "ephy-add-bookmark-popover.h"
-#include "ephy-pages-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-tab-view.h"
@@ -42,7 +41,7 @@ struct _EphyActionBar {
   GtkRevealer *revealer;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
-  EphyPagesButton *pages_button;
+  AdwTabButton *tab_button;
 
   EphyAdaptiveMode adaptive_mode;
   gboolean can_reveal;
@@ -131,9 +130,8 @@ ephy_action_bar_constructed (GObject *object)
                            G_CALLBACK (sync_chromes_visibility), action_bar,
                            G_CONNECT_SWAPPED);
 
-  g_object_bind_property (view, "n-pages",
-                          action_bar->pages_button, "n-pages",
-                          G_BINDING_SYNC_CREATE);
+  adw_tab_button_set_view (action_bar->tab_button,
+                           ephy_tab_view_get_tab_view (view));
 }
 
 static void
@@ -173,7 +171,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                                         action_bar_start);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
-                                        pages_button);
+                                        tab_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
                                         action_bar_end);
@@ -187,12 +185,11 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   /* Ensure the types used by the template have been initialized. */
   EPHY_TYPE_ACTION_BAR_END;
   EPHY_TYPE_ACTION_BAR_START;
-  EPHY_TYPE_PAGES_BUTTON;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-  gtk_widget_set_visible (GTK_WIDGET (action_bar->pages_button),
+  gtk_widget_set_visible (GTK_WIDGET (action_bar->tab_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,

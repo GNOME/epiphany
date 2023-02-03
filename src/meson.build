@@ -42,7 +42,6 @@ libephymain_sources = [
   'ephy-lockdown.c',
   'ephy-mouse-gesture-controller.c',
   'ephy-page-row.c',
-  'ephy-pages-button.c',
   'ephy-pages-popover.c',
   'ephy-pages-view.c',
   'ephy-security-popover.c',
