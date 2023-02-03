@@ -60,10 +60,13 @@ enum {
 static int signals[LAST_SIGNAL] = {};
 
 static void ephy_search_entry_editable_init (GtkEditableInterface *iface);
+static void ephy_search_entry_accessible_init (GtkAccessibleInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphySearchEntry, ephy_search_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-                                                ephy_search_entry_editable_init))
+                                                ephy_search_entry_editable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                ephy_search_entry_accessible_init))
 
 static void
 update_matches (EphySearchEntry *self)
@@ -346,6 +349,19 @@ static void
 ephy_search_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->get_delegate = ephy_search_entry_get_delegate;
+}
+
+static gboolean
+ephy_search_entry_accessible_get_platform_state (GtkAccessible              *accessible,
+                                                 GtkAccessiblePlatformState  state)
+{
+  return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (accessible), state);
+}
+
+static void
+ephy_search_entry_accessible_init (GtkAccessibleInterface *iface)
+{
+  iface->get_platform_state = ephy_search_entry_accessible_get_platform_state;
 }
 
 GtkWidget *
