@@ -214,7 +214,6 @@ commands_handler_update (EphyWebExtensionSender *sender,
   GHashTable *commands = get_commands (sender->extension);
   JsonObject *details = ephy_json_array_get_object (args, 0);
   WebExtensionCommand *command;
-  g_autofree char *action_name = NULL;
   const char *name;
   const char *description;
   const char *shortcut;
