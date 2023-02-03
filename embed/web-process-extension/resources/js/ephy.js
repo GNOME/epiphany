@@ -354,6 +354,12 @@ Ephy.hasModifiedForms = function()
     }
 };
 
+Ephy.isSandboxedWebContent = function()
+{
+    // https://github.com/google/security-research/security/advisories/GHSA-mhhf-w9xw-pp9x
+    return self.origin === null || self.origin === 'null';
+};
+
 Ephy.PasswordManager = class PasswordManager
 {
     constructor(pageID, frameID)
@@ -387,6 +393,11 @@ Ephy.PasswordManager = class PasswordManager
 
     query(origin, targetOrigin, username, usernameField, passwordField)
     {
+        if (Ephy.isSandboxedWebContent()) {
+            Ephy.log(`Not querying passwords for origin=${origin} because web content is sandboxed`);
+            return Promise.resolve(null);
+        }
+
         Ephy.log(`Querying passwords for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}`);
 
         return new Promise((resolver, reject) => {
@@ -398,6 +409,11 @@ Ephy.PasswordManager = class PasswordManager
 
     save(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
     {
+        if (Ephy.isSandboxedWebContent()) {
+            Ephy.log(`Not saving password for origin=${origin} because web content is sandboxed`);
+            return;
+        }
+
         Ephy.log(`Saving password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
 
         window.webkit.messageHandlers.passwordManagerSave.postMessage({
@@ -409,6 +425,11 @@ Ephy.PasswordManager = class PasswordManager
     // FIXME: Why is pageID a parameter here?
     requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
     {
+        if (Ephy.isSandboxedWebContent()) {
+            Ephy.log(`Not requesting to save password for origin=${origin} because web content is sandboxed`);
+            return;
+        }
+
         Ephy.log(`Requesting to save password for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}, isNew=${isNew}`);
 
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
@@ -428,6 +449,11 @@ Ephy.PasswordManager = class PasswordManager
 
     queryUsernames(origin)
     {
+        if (Ephy.isSandboxedWebContent()) {
+            Ephy.log(`Not querying usernames for origin=${origin} because web content is sandboxed`);
+            return Promise.resolve(null);
+        }
+
         Ephy.log(`Requesting usernames for origin=${origin}`);
 
         return new Promise((resolver, reject) => {
