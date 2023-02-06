@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
 "POT-Creation-Date: 2023-02-03 23:45+0000\n"
-"PO-Revision-Date: 2023-02-05 13:29+0200\n"
+"PO-Revision-Date: 2023-02-06 23:39+0200\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Ελληνικά <>\n"
 "Language: el\n"
@@ -85,10 +85,8 @@ msgstr "Περιηγητής Ιστού"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
-#, fuzzy
-#| msgid "web;browser;internet;"
 msgid "web;browser;internet;epiphany;"
-msgstr "ιστός;περιηγητής;διαδίκτυο;web;browser;internet;"
+msgstr "ιστός;περιηγητής;διαδίκτυο;epiphany;web;browser;internet;epiphany;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -171,6 +169,12 @@ msgid ""
 "the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
 "the search engine."
 msgstr ""
+"Λίστα με τις μηχανές αναζήτησης. Είναι μια σειρά από vardicts με κάθε "
+"vardict να αντιστοιχεί σε μια μηχανή αναζήτησης και με τα ακόλουθα "
+"υποστηριζόμενα κλειδιά: \"name\" είναι το όνομα της μηχανής αναζήτησης. "
+"\"url\" είναι η διεύθυνση URL αναζήτησης με τον όρο αναζήτησης να "
+"αντικατασταθεί από %s. Το \"bang\" είναι το bang (συντόμευση λέξης) της "
+"μηχανής αναζήτησης."
 
 #: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
@@ -1105,10 +1109,6 @@ msgid "Installed on:"
 msgstr "Εγκαταστάθηκε:"
 
 #: embed/ephy-about-handler.c:360
-#, fuzzy
-#| msgid ""
-#| "You can add your favorite website by clicking <b>Install Site as Web "
-#| "Application…</b> within the page menu."
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
@@ -1677,8 +1677,7 @@ msgid "Page Unresponsive"
 msgstr "Μη ανταποκρινόμενη σελίδα"
 
 #: embed/ephy-web-view.c:963
-#, fuzzy, c-format
-#| msgid "The current page '%s' is unresponsive"
+#, c-format
 msgid "The current page “%s” is not responding"
 msgstr "Η τρέχουσα σελίδα «%s» δεν ανταποκρίνεται"
 
@@ -1687,10 +1686,8 @@ msgid "_Wait"
 msgstr "_Αναμονή"
 
 #: embed/ephy-web-view.c:968
-#, fuzzy
-#| msgid "_Stop"
 msgid "Force _Stop"
-msgstr "_Διακοπή"
+msgstr "Εξαναγκασμένη _Διακοπή"
 
 #: embed/ephy-web-view.c:1181 embed/ephy-web-view.c:1298
 #: src/ephy-security-popover.c:493
@@ -2207,18 +2204,18 @@ msgstr "Άγνωστο"
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
+"Αποτυχία λήψης ονόματος αρχείου επιφάνειας εργασίας για το αναγνωριστικό "
+"εφαρμογής ιστού %s"
 
 #: lib/ephy-web-app-utils.c:348
-#, fuzzy, c-format
-#| msgid "File is not a valid .desktop file"
+#, c-format
 msgid "Failed to install desktop file %s: "
-msgstr "Το αρχείο δεν είναι έγκυρο αρχείο .desktop"
+msgstr "Αποτυχία εγκατάστασης του αρχείου επιφάνειας εργασίας %s: "
 
 #: lib/ephy-web-app-utils.c:387
-#, fuzzy, c-format
-#| msgid "Custom profile directory for private instance"
+#, c-format
 msgid "Profile directory %s already exists"
-msgstr "Προσαρμοσμένος κατάλογος προφίλ για ιδιωτική συνεδρία"
+msgstr "Ο κατάλογος προφίλ %s υπάρχει ήδη"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -2226,10 +2223,9 @@ msgid "Failed to create directory %s"
 msgstr "Αποτυχία δημιουργίας καταλόγου %s"
 
 #: lib/ephy-web-app-utils.c:406
-#, fuzzy, c-format
-#| msgid "Failed to create directory “%s”."
+#, c-format
 msgid "Failed to create .app file: %s"
-msgstr "Αποτυχία δημιουργίας καταλόγου “%s”."
+msgstr "Αποτυχία δημιουργίας αρχείου .app: %s"
 
 #: lib/sync/ephy-password-import.c:133
 #, c-format
@@ -2888,14 +2884,10 @@ msgid "Leave Website?"
 msgstr "Θέλετε να εγκαταλείψετε αυτή την ιστοσελίδα;"
 
 #: src/ephy-window.c:2803 src/ephy-window.c:4093 src/window-commands.c:1235
-#, fuzzy
-#| msgid "A form you modified has not been submitted."
 msgid "A form was modified and has not been submitted"
-msgstr "Δεν έχετε υποβάλει μια φόρμα που τροποποιήσατε."
+msgstr "Μια φόρμα τροποποιήθηκε και δεν έχει υποβληθεί"
 
 #: src/ephy-window.c:2804 src/ephy-window.c:4094 src/window-commands.c:1239
-#, fuzzy
-#| msgid "_Discard form"
 msgid "_Discard Form"
 msgstr "_Απόρριψη φόρμας"
 
@@ -2942,8 +2934,6 @@ msgid "Close Multiple Tabs?"
 msgstr "Κλείσιμο πολλαπλών καρτελών;"
 
 #: src/ephy-window.c:4224
-#, fuzzy
-#| msgid "If you close this window, all open tabs will be lost"
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Εάν κλείσετε αυτό το παράθυρο, όλες οι ανοιχτές καρτέλες θα χαθούν"
 
@@ -3024,11 +3014,13 @@ msgstr "Αυτή η συντόμευση χρησιμοποιείται ήδη."
 
 #: src/preferences/ephy-search-engine-row.c:190
 msgid "Search shortcuts must not contain any space."
-msgstr ""
+msgstr "Οι συντομεύσεις αναζήτησης δεν πρέπει να περιέχουν κενό διάστημα."
 
 #: src/preferences/ephy-search-engine-row.c:198
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr ""
+"Οι συντομεύσεις αναζήτησης θα πρέπει να ξεκινούν με ένα σύμβολο όπως !, # ή "
+"@."
 
 #: src/preferences/ephy-search-engine-row.c:331
 msgid "A name is required"
@@ -3217,44 +3209,32 @@ msgid "Bookmarked pages will appear here"
 msgstr "Οι ιστοσελίδες που προστέθηκαν στους σελιδοδείκτες θα εμφανίζονται εδώ"
 
 #: src/resources/gtk/clear-data-view.ui:22
-#, fuzzy
-#| msgid "Website"
 msgid "Website Data"
-msgstr "Ιστότοπος"
+msgstr "Δεδομένα Ιστοσελίδας"
 
 #: src/resources/gtk/clear-data-view.ui:23
 msgid "_Clear Data"
 msgstr "_Εκκαθάριση δεδομένων"
 
 #: src/resources/gtk/clear-data-view.ui:24
-#, fuzzy
-#| msgid "Remove selected personal data"
 msgid "Remove selected website data"
-msgstr "Αφαίρεση των επιλεγμένων προσωπικών δεδομένων"
+msgstr "Αφαίρεση των επιλεγμένων δεδομένων ιστοσελίδας"
 
 #: src/resources/gtk/clear-data-view.ui:25
-#, fuzzy
-#| msgid "Search personal data"
 msgid "Search website data"
-msgstr "Αναζήτηση προσωπικών δεδομένων"
+msgstr "Αναζήτηση δεδομένων ιστοσελίδας"
 
 #: src/resources/gtk/clear-data-view.ui:26
-#, fuzzy
-#| msgid "There is no Personal Data"
 msgid "There is no Website Data"
-msgstr "Δεν υπάρχουν προσωπικά δεδομένα"
+msgstr "Δεν υπάρχουν δεδομένα ιστοσελίδας"
 
 #: src/resources/gtk/clear-data-view.ui:27
-#, fuzzy
-#| msgid "Personal data will be listed here"
 msgid "Website data will be listed here"
-msgstr "Τα προσωπικά δεδομένα θα εμφανιστούν εδώ"
+msgstr "Τα δεδομένα ιστοσελίδας θα εμφανιστούν εδώ"
 
 #: src/resources/gtk/clear-data-view.ui:50
-#, fuzzy
-#| msgid "Clear selected personal data:"
 msgid "Clear selected website data:"
-msgstr "Εκκαθάριση επιλεγμένων προσωπικών δεδομένων:"
+msgstr "Εκκαθάριση επιλεγμένων δεδομένων ιστοσελίδας:"
 
 #: src/resources/gtk/clear-data-view.ui:105
 msgid ""
@@ -3413,10 +3393,8 @@ msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Αναζήτηση ιστότοπων, σελιδοδεικτών και ανοιχτών καρτελών"
 
 #: src/resources/gtk/location-entry.ui:65
-#, fuzzy
-#| msgid "Show website security status and permissions"
 msgid "Website Security Status and Permissions"
-msgstr "Εμφάνιση της κατάστασης και των δικαιωμάτων ασφαλείας ιστότοπου"
+msgstr "Κατάσταση και δικαιώματα ασφαλείας ιστότοπου"
 
 #: src/resources/gtk/location-entry.ui:85
 #: src/resources/gtk/prefs-appearance-page.ui:59
@@ -3512,14 +3490,12 @@ msgid "Import _Passwords…"
 msgstr "Εισαγωγή _συνθηματικών…"
 
 #: src/resources/gtk/page-menu-popover.ui:67
-#, fuzzy
-#| msgid "Install Site as Web _Application…"
 msgid "Install as _Web App…"
 msgstr "Εγκατάσταση ως διαδικτυακή _εφαρμογή…"
 
 #: src/resources/gtk/page-menu-popover.ui:71
 msgid "Manag_e Web Apps"
-msgstr ""
+msgstr "_Διαχείριση διαδικτυακών εφαρμογών"
 
 #: src/resources/gtk/page-menu-popover.ui:77
 msgid "Text Enco_ding…"
@@ -3658,7 +3634,7 @@ msgstr "Προσθήκη νέας επέκτασης"
 
 #: src/resources/gtk/prefs-extensions-page.ui:13
 msgid "Extensions must be installed manually from their files"
-msgstr ""
+msgstr "Οι επεκτάσεις πρέπει να εγκατασταθούν χειροκίνητα από τα αρχεία τους"
 
 #: src/resources/gtk/prefs-extensions-page.ui:27
 msgid ""
@@ -3666,6 +3642,9 @@ msgid ""
 "add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
 "mozilla.org</a>"
 msgstr ""
+"Το Epiphany είναι συμβατό με επεκτάσεις ιστού για Mozilla Firefox. Για να "
+"βρείτε και να προσθέσετε επεκτάσεις ιστού, επισκεφτείτε τη διεύθυνση <a "
+"href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
 msgid "No extensions installed"
@@ -3879,7 +3858,7 @@ msgstr "Αποθήκευση σελίδας"
 #: src/resources/gtk/shortcuts-dialog.ui:40
 msgctxt "shortcut window"
 msgid "Take Screenshot"
-msgstr ""
+msgstr "Λήψη στιγμιοτύπου οθόνης"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
 msgctxt "shortcut window"
@@ -4039,9 +4018,6 @@ msgid "Web app"
 msgstr "Εφαρμογή Ιστού"
 
 #: src/resources/gtk/shortcuts-dialog.ui:248
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Install site as web application"
 msgctxt "shortcut window"
 msgid "Install site as web app"
 msgstr "Εγκατάσταση ισοτόπου ως διαδικτυακή εφαρμογή"
@@ -4208,40 +4184,38 @@ msgstr "Τοπικές καρτέλες"
 
 #: src/webapp-provider/ephy-webapp-provider.c:120
 msgid "The install_token is required for the Install() method"
-msgstr ""
+msgstr "Το install_token απαιτείται για τη μέθοδο Install()"
 
 #: src/webapp-provider/ephy-webapp-provider.c:126
 #, c-format
 msgid "The url passed was not valid: ‘%s’"
-msgstr ""
+msgstr "Η διεύθυνση url που διαβιβάστηκε δεν ήταν έγκυρη: ‘%s’"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
 msgid "The name passed was not valid"
-msgstr ""
+msgstr "Το όνομα που πέρασε δεν ήταν έγκυρο"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
-#, fuzzy, c-format
-#| msgctxt "shortcut window"
-#| msgid "Install site as web application"
+#, c-format
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
-msgstr "Εγκατάσταση ισοτόπου ως διαδικτυακή εφαρμογή"
+msgstr "Η εγκατάσταση της εφαρμογής Ιστού «%s» (%s) απέτυχε: %s"
 
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
 msgid "The desktop file ID passed ‘%s’ was not valid"
 msgstr ""
+"Το αναγνωριστικό αρχείου επιφάνειας εργασίας που πέρασε από το '%s' δεν ήταν "
+"έγκυρο"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The web application ‘%s’ does not exist"
-msgstr "Η εφαρμογή «%s» δεν μπόρεσε να δημιουργηθεί"
+msgstr "Η εφαρμογή «%s» δεν υπάρχει"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The web application ‘%s’ could not be deleted"
-msgstr "Η εφαρμογή «%s» δεν μπόρεσε να δημιουργηθεί"
+msgstr "Η εφαρμογή «%s» δεν μπόρεσε να διαγραφεί"
 
 #: src/webextension/api/runtime.c:161
 #, c-format
@@ -4343,10 +4317,8 @@ msgstr ""
 "http://gnome.gr/"
 
 #: src/window-commands.c:1234
-#, fuzzy
-#| msgid "Web Website"
 msgid "Reload Website?"
-msgstr "Ιστότοπος της εφαρμογής Ιστός"
+msgstr "Επαναφόρτωση ιστότοπου;"
 
 #: src/window-commands.c:1838
 #, c-format
@@ -4354,10 +4326,9 @@ msgid "The application “%s” is ready to be used"
 msgstr "Η εφαρμογή «%s» είναι έτοιμη να χρησιμοποιηθεί"
 
 #: src/window-commands.c:1841
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The application “%s” could not be created: %s"
-msgstr "Η εφαρμογή «%s» δεν μπόρεσε να δημιουργηθεί"
+msgstr "Η εφαρμογή «%s» δεν μπόρεσε να δημιουργηθεί: %s"
 
 #. Translators: Desktop notification when a new web app is created.
 #: src/window-commands.c:1850
@@ -4366,18 +4337,15 @@ msgstr "Εκκίνηση"
 
 #: src/window-commands.c:1916
 msgid "Replace Existing Web App?"
-msgstr ""
+msgstr "Αντικατάσταση υπάρχουσας εφαρμογής Ιστού;"
 
 #: src/window-commands.c:1920
-#, fuzzy, c-format
-#| msgid ""
-#| "An application with the same name already exists. Replacing it will "
-#| "overwrite it."
+#, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
-"Μια εφαρμογή με το ίδιο όνομα υπάρχει ήδη. Αν την αντικαταστασήσετε θα γίνει "
-"εγγραφή επάνω στην ήδη υπάρχουσα."
+"Μια εφαρμογή με το όνομα \"%s\" υπάρχει ήδη, η αντικατάστασή της θα την "
+"αντικαταστήσει"
 
 #: src/window-commands.c:1925
 msgid "_Replace"
@@ -4396,8 +4364,6 @@ msgid "PNG"
 msgstr "PNG"
 
 #: src/window-commands.c:2700
-#, fuzzy
-#| msgid "Enable caret browsing mode?"
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ενεργοποίηση της περιήγησης με δρομέα;"
 
