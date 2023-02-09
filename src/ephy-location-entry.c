@@ -847,6 +847,49 @@ activate_cb (EphyLocationEntry *entry)
 }
 
 static void
+item_pressed_cb (GtkListItem *item,
+                 int          n_click,
+                 double       x,
+                 double       y,
+                 GtkGesture  *gesture)
+{
+  GtkWidget *widget;
+  EphyLocationEntry *entry;
+  guint position;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  entry = EPHY_LOCATION_ENTRY (gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY));
+  position = gtk_list_item_get_position (item);
+
+  gtk_single_selection_set_selected (entry->suggestions_model, position);
+}
+
+static void
+item_released_cb (GtkListItem *item,
+                  int          n_click,
+                  double       x,
+                  double       y,
+                  GtkGesture  *gesture)
+{
+  GtkWidget *widget;
+  EphyLocationEntry *entry;
+  guint position;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  entry = EPHY_LOCATION_ENTRY (gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY));
+  position = gtk_list_item_get_position (item);
+
+  /* We only want to handle clicks with press and release on the same row */
+  if (!gtk_widget_contains (widget, x, y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  suggestion_activated_cb (entry, position);
+}
+
+static void
 root_notify_is_active_cb (EphyLocationEntry *entry)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (entry));
@@ -1406,6 +1449,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, key_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, text_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, item_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, item_released_cb);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_secondary_icon);
 

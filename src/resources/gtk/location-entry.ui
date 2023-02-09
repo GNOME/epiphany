@@ -106,7 +106,6 @@
             <property name="child">
               <object class="GtkListView">
                 <signal name="activate" handler="suggestion_activated_cb" swapped="yes"/>
-                <property name="single-click-activate">True</property>
                 <property name="model">
                   <object class="GtkSingleSelection" id="suggestions_model">
                     <property name="autoselect">False</property>
@@ -123,6 +122,15 @@
       <object class="GtkGrid">
         <property name="column-spacing">6</property>
         <property name="row-spacing">3</property>
+        <child>
+          <object class="GtkGestureClick">
+            <!-- GDK_BUTTON_PRIMARY -->
+            <property name="button">1</property>
+            <property name="exclusive">True</property>
+            <signal name="pressed" handler="item_pressed_cb" object="GtkListItem"/>
+            <signal name="released" handler="item_released_cb" object="GtkListItem"/>
+          </object>
+        </child>
         <child>
           <object class="GtkImage">
             <property name="pixel-size">16</property>

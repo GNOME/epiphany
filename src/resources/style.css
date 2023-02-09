@@ -121,15 +121,31 @@ popover.suggestions {
 }
 
 popover.suggestions listview > row {
-  background: none;
+  padding: 0;
+}
+
+popover.suggestions listview > row > grid {
+  padding: 9px 12px;
+}
+
+popover.suggestions listview > row:hover {
+  background-color: alpha(currentColor, .04);
+}
+
+popover.suggestions listview > row:active {
+  background-color: alpha(currentColor, .08);
 }
 
 popover.suggestions listview > row:selected {
-  background-color: alpha(currentColor, .07);
+  background-color: alpha(currentColor, .1);
+}
+
+popover.suggestions listview > row:selected:hover {
+  background-color: alpha(currentColor, .13);
 }
 
 popover.suggestions listview > row:selected:active {
-  background-color: alpha(currentColor, .16);
+  background-color: alpha(currentColor, .19);
 }
 
 /* bookmarks */
