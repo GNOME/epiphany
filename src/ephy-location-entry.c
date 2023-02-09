@@ -1677,9 +1677,6 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 void
 ephy_location_entry_grab_focus (EphyLocationEntry *self)
 {
-  g_signal_handlers_block_by_func (self, G_CALLBACK (editable_changed_cb), self);
-  ephy_location_entry_set_text (self, NULL);
-  g_signal_handlers_unblock_by_func (self, G_CALLBACK (editable_changed_cb), self);
   gtk_widget_grab_focus (self->text);
 }
 
