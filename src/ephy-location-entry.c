@@ -282,6 +282,33 @@ update_actions (EphyLocationEntry *entry)
 }
 
 static void
+update_suggestions_popover (EphyLocationEntry *entry)
+{
+  guint n_items;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (entry->suggestions_model));
+
+  if (entry->show_suggestions && n_items > 0)
+    gtk_popover_popup (GTK_POPOVER (entry->suggestions_popover));
+  else
+    gtk_popover_popdown (GTK_POPOVER (entry->suggestions_popover));
+}
+
+static void
+set_show_suggestions (EphyLocationEntry *entry,
+                      gboolean           show)
+{
+  if (entry->show_suggestions == show)
+    return;
+
+  entry->show_suggestions = show;
+
+  update_suggestions_popover (entry);
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_SUGGESTIONS]);
+}
+
+static void
 show_context_menu (EphyLocationEntry *entry,
                    double             x,
                    double             y)
@@ -404,6 +431,12 @@ key_pressed_cb (EphyLocationEntry     *entry,
   selected = gtk_single_selection_get_selected (entry->suggestions_model);
 
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up) {
+    if (!entry->show_suggestions)
+      set_show_suggestions (entry, TRUE);
+
+    if (!gtk_widget_get_visible (entry->suggestions_popover))
+      return FALSE;
+
     if (selected == 0) {
       gtk_widget_error_bell (GTK_WIDGET (entry));
       return TRUE;
@@ -420,6 +453,12 @@ key_pressed_cb (EphyLocationEntry     *entry,
   }
 
   if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down) {
+    if (!entry->show_suggestions)
+      set_show_suggestions (entry, TRUE);
+
+    if (!gtk_widget_get_visible (entry->suggestions_popover))
+      return FALSE;
+
     if (selected == matches - 1) {
       gtk_widget_error_bell (GTK_WIDGET (entry));
       return TRUE;
@@ -436,6 +475,12 @@ key_pressed_cb (EphyLocationEntry     *entry,
   }
 
   if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up) {
+    if (!entry->show_suggestions)
+      set_show_suggestions (entry, TRUE);
+
+    if (!gtk_widget_get_visible (entry->suggestions_popover))
+      return FALSE;
+
     if (selected == 0) {
       gtk_widget_error_bell (GTK_WIDGET (entry));
       return TRUE;
@@ -454,6 +499,12 @@ key_pressed_cb (EphyLocationEntry     *entry,
   }
 
   if (keyval == GDK_KEY_Page_Down || keyval == GDK_KEY_KP_Page_Down) {
+    if (!entry->show_suggestions)
+      set_show_suggestions (entry, TRUE);
+
+    if (!gtk_widget_get_visible (entry->suggestions_popover))
+      return FALSE;
+
     if (selected == matches - 1) {
       gtk_widget_error_bell (GTK_WIDGET (entry));
       return TRUE;
@@ -643,33 +694,6 @@ ephy_location_entry_set_text (EphyLocationEntry *self,
 
   gtk_editable_set_text (GTK_EDITABLE (self), text);
   update_entry_style (self, gtk_widget_has_focus (GTK_WIDGET (self)));
-}
-
-static void
-update_suggestions_popover (EphyLocationEntry *entry)
-{
-  guint n_items;
-
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (entry->suggestions_model));
-
-  if (entry->show_suggestions && n_items > 0)
-    gtk_popover_popup (GTK_POPOVER (entry->suggestions_popover));
-  else
-    gtk_popover_popdown (GTK_POPOVER (entry->suggestions_popover));
-}
-
-static void
-set_show_suggestions (EphyLocationEntry *entry,
-                      gboolean           show)
-{
-  if (entry->show_suggestions == show)
-    return;
-
-  entry->show_suggestions = show;
-
-  update_suggestions_popover (entry);
-
-  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_SUGGESTIONS]);
 }
 
 static void
