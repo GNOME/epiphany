@@ -1083,6 +1083,42 @@ ephy_location_entry_unroot (GtkWidget *widget)
   GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->unroot (widget);
 }
 
+static gboolean
+ephy_location_entry_focus (GtkWidget        *widget,
+                           GtkDirectionType  direction)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  if (entry->show_suggestions && (direction == GTK_DIR_TAB_FORWARD ||
+                                  direction == GTK_DIR_TAB_BACKWARD)) {
+    guint selected, matches;
+
+    if (!entry->show_suggestions)
+      return FALSE;
+
+    matches = g_list_model_get_n_items (G_LIST_MODEL (entry->suggestions_model));
+    selected = gtk_single_selection_get_selected (entry->suggestions_model);
+
+    if (direction == GTK_DIR_TAB_FORWARD) {
+      if (selected == GTK_INVALID_LIST_POSITION || selected == matches - 1)
+        selected = 0;
+      else
+        selected++;
+    } else {
+      if (selected == GTK_INVALID_LIST_POSITION || selected == 0)
+        selected = matches - 1;
+      else
+        selected--;
+    }
+
+    gtk_single_selection_set_selected (entry->suggestions_model, selected);
+    update_selected_url (entry);
+    return TRUE;
+  }
+
+  return GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->focus (widget, direction);
+}
+
 static void
 ephy_location_entry_set_property (GObject      *object,
                                   guint         prop_id,
@@ -1213,6 +1249,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   widget_class->size_allocate = ephy_location_entry_size_allocate;
   widget_class->root = ephy_location_entry_root;
   widget_class->unroot = ephy_location_entry_unroot;
+  widget_class->focus = ephy_location_entry_focus;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
@@ -1630,7 +1667,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 }
 
 /**
- * ephy_location_entry_focus:
+ * ephy_location_entry_grab_focus:
  * @entry: an #EphyLocationEntry widget
  *
  * Set focus on @entry and select the text whithin. This is called when the
@@ -1638,7 +1675,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
  *
  **/
 void
-ephy_location_entry_focus (EphyLocationEntry *self)
+ephy_location_entry_grab_focus (EphyLocationEntry *self)
 {
   g_signal_handlers_block_by_func (self, G_CALLBACK (editable_changed_cb), self);
   ephy_location_entry_set_text (self, NULL);
