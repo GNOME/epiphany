@@ -457,9 +457,6 @@ webkit_pref_callback_enable_website_data_storage (GSettings  *settings,
   WebKitCookieManager *manager;
   gboolean value;
 
-  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_AUTOMATION)
-    return;
-
   value = g_settings_get_boolean (settings, key);
   webkit_settings_set_enable_html5_database (webkit_settings, value);
   webkit_settings_set_enable_html5_local_storage (webkit_settings, value);

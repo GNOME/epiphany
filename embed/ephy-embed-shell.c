@@ -763,9 +763,8 @@ ephy_embed_shell_create_network_session_if_needed (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   if (priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
-    return;
-
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    priv->network_session = g_object_ref (webkit_web_context_get_network_session_for_automation (priv->web_context));
+  else if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     priv->network_session = webkit_network_session_new_ephemeral ();
   else {
     priv->network_session = webkit_network_session_new (ephy_profile_dir (), ephy_cache_dir ());
@@ -902,25 +901,21 @@ ephy_embed_shell_startup (GApplication *application)
                                                          "ephy-resource");
 
   /* Store cookies in moz-compatible SQLite format */
-  if (priv->network_session && !webkit_network_session_is_ephemeral (priv->network_session)) {
+  if (!webkit_network_session_is_ephemeral (priv->network_session)) {
     cookie_manager = webkit_network_session_get_cookie_manager (priv->network_session);
     filename = g_build_filename (ephy_profile_dir (), "cookies.sqlite", NULL);
     webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                   WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
   }
 
-  if (priv->network_session) {
-    g_signal_connect_object (priv->network_session, "download-started",
-                             G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
-  }
+  g_signal_connect_object (priv->network_session, "download-started",
+                           G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
                            G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
 
-  if (priv->mode != EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
-                             G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
-  }
+  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
+                           G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
 }
 
 static void
@@ -978,8 +973,8 @@ ephy_embed_shell_constructed (GObject *object)
   priv = ephy_embed_shell_get_instance_private (shell);
   priv->guid = g_dbus_generate_guid ();
 
-  ephy_embed_shell_create_network_session_if_needed (shell);
   ephy_embed_shell_create_web_context (shell);
+  ephy_embed_shell_create_network_session_if_needed (shell);
 
   priv->permissions_manager = ephy_permissions_manager_new ();
   priv->filters_manager = ephy_filters_manager_new (NULL);
@@ -1346,9 +1341,6 @@ ephy_embed_shell_get_favicon_database (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   WebKitWebsiteDataManager *manager;
-
-  if (!priv->network_session)
-    return NULL;
 
   manager = webkit_network_session_get_website_data_manager (priv->network_session);
   return webkit_website_data_manager_get_favicon_database (manager);
