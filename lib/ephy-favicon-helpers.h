@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include <cairo.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-GdkPixbuf *ephy_pixbuf_get_from_surface_scaled (cairo_surface_t *surface, int width, int height);
+GIcon *ephy_favicon_get_from_texture_scaled (GdkTexture *texture, int width, int height);
 
 G_END_DECLS

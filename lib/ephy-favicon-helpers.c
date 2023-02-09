@@ -24,29 +24,28 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 
-GdkPixbuf *
-ephy_pixbuf_get_from_surface_scaled (cairo_surface_t *surface,
-                                     int              width,
-                                     int              height)
+GIcon *
+ephy_favicon_get_from_texture_scaled (GdkTexture *texture,
+                                      int         width,
+                                      int         height)
 {
-  GdkPixbuf *pixbuf;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
   int favicon_width;
   int favicon_height;
 
-  /* Treat NULL surface cleanly. */
-  if (!surface)
+  /* Treat NULL texture cleanly. */
+  if (texture)
     return NULL;
 
-  favicon_width = cairo_image_surface_get_width (surface);
-  favicon_height = cairo_image_surface_get_height (surface);
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, favicon_width, favicon_height);
-
   /* A size of (0, 0) means the original size of the favicon. */
-  if (width && height && (favicon_width != width || favicon_height != height)) {
-    GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR);
-    g_object_unref (pixbuf);
-    pixbuf = scaled_pixbuf;
-  }
+  if (width == 0 && height == 0)
+    return G_ICON (g_object_ref (texture));
 
-  return pixbuf;
+  favicon_width = gdk_texture_get_width (texture);
+  favicon_height = gdk_texture_get_height (texture);
+  if (favicon_width == width && favicon_height == height)
+    return G_ICON (g_object_ref (texture));
+
+  pixbuf = gdk_pixbuf_get_from_texture (texture);
+  return G_ICON (gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR));
 }

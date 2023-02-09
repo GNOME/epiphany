@@ -254,23 +254,27 @@ icon_loaded_cb (GObject      *source,
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   EphySuggestion *suggestion;
-  GError *error = NULL;
+  g_autoptr (GdkTexture) texture = NULL;
   cairo_surface_t *favicon;
   gdouble x_scale, y_scale;
-  int x, y;
+  int w, h;
 
-  favicon = webkit_favicon_database_get_favicon_finish (database, result, &error);
-
-  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) || favicon == NULL)
+  texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  if (texture == NULL)
     return;
 
   suggestion = EPHY_SUGGESTION (user_data);
 
-  x = cairo_image_surface_get_width (favicon);
-  y = cairo_image_surface_get_height (favicon);
-  x_scale = (gdouble)x / 16;
-  y_scale = (gdouble)y / 16;
+  w = gdk_texture_get_width (texture);
+  h = gdk_texture_get_height (texture);
+  favicon = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w, h);
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (favicon),
+                        cairo_image_surface_get_stride (favicon));
+  cairo_surface_mark_dirty (favicon);
 
+  x_scale = (gdouble)w / 16;
+  y_scale = (gdouble)h / 16;
   cairo_surface_set_device_scale (favicon, x_scale, y_scale);
 
   ephy_suggestion_set_favicon (suggestion, favicon);

@@ -425,23 +425,21 @@ ephy_history_dialog_row_favicon_loaded_cb (GObject      *source,
 {
   g_autoptr (GtkWidget) icon = user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  cairo_surface_t *icon_surface;
-  g_autoptr (GdkPixbuf) favicon = NULL;
+  g_autoptr (GdkTexture) icon_texture = NULL;
+  g_autoptr (GIcon) favicon = NULL;
   g_autoptr (GError) error = NULL;
 
-  icon_surface = webkit_favicon_database_get_favicon_finish (database, result, &error);
+  icon_texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
   if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     return;
 
-  if (icon_surface) {
+  if (icon_texture) {
     int scale = gtk_widget_get_scale_factor (icon);
 
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    cairo_surface_destroy (icon_surface);
+    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+    if (favicon && icon)
+      gtk_image_set_from_gicon (GTK_IMAGE (icon), favicon);
   }
-
-  if (favicon && icon)
-    gtk_image_set_from_gicon (GTK_IMAGE (icon), G_ICON (favicon));
 }
 
 static GtkWidget *

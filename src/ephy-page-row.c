@@ -114,7 +114,7 @@ update_icon_cb (EphyPageRow *self)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (self->page));
   EphyWebView *view = ephy_embed_get_web_view (embed);
-  GIcon *icon = G_ICON (ephy_web_view_get_icon (view));
+  GIcon *icon = ephy_web_view_get_icon (view);
   const char *uri, *favicon_name;
   AdwTabView *tab_view;
 

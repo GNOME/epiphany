@@ -75,6 +75,17 @@ ephy_suggestion_get_property (GObject    *object,
   }
 }
 
+static void
+ephy_suggestion_finalize (GObject *object)
+{
+  EphySuggestion *self = EPHY_SUGGESTION (object);
+
+  g_free (self->unescaped_title);
+  g_clear_pointer (&self->favicon, cairo_surface_destroy);
+
+  G_OBJECT_CLASS (ephy_suggestion_parent_class)->finalize (object);
+}
+
 char *
 ephy_suggestion_replace_typed_text (DzlSuggestion *self,
                                     const char    *typed_text)
@@ -105,6 +116,7 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
 
   object_class->get_property = ephy_suggestion_get_property;
   object_class->set_property = ephy_suggestion_set_property;
+  object_class->finalize = ephy_suggestion_finalize;
 
   dzl_suggestion_class->replace_typed_text = ephy_suggestion_replace_typed_text;
   dzl_suggestion_class->get_icon_surface = ephy_suggestion_get_icon_surface;
@@ -207,6 +219,7 @@ void
 ephy_suggestion_set_favicon (EphySuggestion  *self,
                              cairo_surface_t *favicon)
 {
+  g_clear_pointer (&self->favicon, cairo_surface_destroy);
   self->favicon = favicon;
   g_object_notify (G_OBJECT (self), "icon");
 }

@@ -1529,12 +1529,51 @@ rounded_rectangle (cairo_t *cr,
 }
 
 static GdkPixbuf *
-frame_pixbuf (GdkPixbuf *pixbuf,
-              GdkRGBA   *rgba,
-              int        width,
-              int        height)
+scaled_pixbuf_from_icon (GIcon *icon,
+                         int    width,
+                         int    height)
+{
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
+  int w, h;
+  GdkPixbuf *scaled;
+
+  if (!icon)
+    return NULL;
+
+  if (GDK_IS_PIXBUF (icon))
+    pixbuf = GDK_PIXBUF (g_object_ref (icon));
+  else if (GDK_IS_TEXTURE (icon))
+    pixbuf = gdk_pixbuf_get_from_texture (GDK_TEXTURE (icon));
+  else
+    g_assert_not_reached ();
+
+  w = gdk_pixbuf_get_width (pixbuf);
+  h = gdk_pixbuf_get_height (pixbuf);
+
+  if (w < 48 || h < 48) {
+    scaled = gdk_pixbuf_scale_simple (pixbuf, w * 3, h * 3, GDK_INTERP_NEAREST);
+  } else if (w > width || h > height) {
+    double ws, hs, s;
+
+    ws = (double)width / w;
+    hs = (double)height / h;
+    s = MIN (ws, hs);
+    scaled = gdk_pixbuf_scale_simple (pixbuf, w * s, h * s, GDK_INTERP_BILINEAR);
+  } else {
+    scaled = g_object_ref (pixbuf);
+  }
+
+  return scaled;
+}
+
+static GdkPixbuf *
+frame_pixbuf (GIcon   *icon,
+              GdkRGBA *rgba,
+              int      width,
+              int      height)
 {
   GdkPixbuf *framed;
+  g_autoptr (GdkPixbuf) scaled = NULL;
   cairo_surface_t *surface;
   cairo_t *cr;
   int frame_width;
@@ -1564,34 +1603,14 @@ frame_pixbuf (GdkPixbuf *pixbuf,
     cairo_set_source_rgba (cr, 0.5, 0.5, 0.5, 0.3);
   cairo_fill_preserve (cr);
 
-  if (pixbuf != NULL) {
-    GdkPixbuf *scaled;
-    int w;
-    int h;
-
-    w = gdk_pixbuf_get_width (pixbuf);
-    h = gdk_pixbuf_get_height (pixbuf);
-
-    if (w < 48 || h < 48) {
-      scaled = gdk_pixbuf_scale_simple (pixbuf, w * 3, h * 3, GDK_INTERP_NEAREST);
-    } else if (w > width || h > height) {
-      double ws, hs, s;
-
-      ws = (double)width / w;
-      hs = (double)height / h;
-      s = MIN (ws, hs);
-      scaled = gdk_pixbuf_scale_simple (pixbuf, w * s, h * s, GDK_INTERP_BILINEAR);
-    } else {
-      scaled = g_object_ref (pixbuf);
-    }
-
-    w = gdk_pixbuf_get_width (scaled);
-    h = gdk_pixbuf_get_height (scaled);
+  scaled = scaled_pixbuf_from_icon (icon, width, height);
+  if (scaled != NULL) {
+    int w = gdk_pixbuf_get_width (scaled);
+    int h = gdk_pixbuf_get_height (scaled);
 
     gdk_cairo_set_source_pixbuf (cr, scaled,
                                  (width - w) / 2,
                                  (height - h) / 2);
-    g_object_unref (scaled);
     cairo_fill (cr);
   }
 
@@ -1607,11 +1626,10 @@ static void create_install_dialog_when_ready (EphyApplicationDialogData *data);
 static void
 set_image_from_favicon (EphyApplicationDialogData *data)
 {
-  g_autoptr (GdkPixbuf) icon = NULL;
-  cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
+  g_autoptr (GIcon) icon = NULL;
+  g_autoptr (GdkTexture) icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
 
-  if (icon_surface)
-    icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, 0, 0);
+  icon = ephy_favicon_get_from_texture_scaled (icon_texture, 0, 0);
 
   if (icon != NULL) {
     data->framed_pixbuf = frame_pixbuf (icon, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
@@ -1634,7 +1652,7 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
   pixbuf = gdk_pixbuf_new_from_file_at_size (filename, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE, NULL);
 
   if (pixbuf != NULL) {
-    data->framed_pixbuf = frame_pixbuf (pixbuf, &data->icon_rgba, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
+    data->framed_pixbuf = frame_pixbuf (G_ICON (pixbuf), &data->icon_rgba, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
     g_assert (data->icon_v == NULL);
     data->icon_v = g_icon_serialize (G_ICON (data->framed_pixbuf));
     create_install_dialog_when_ready (data);

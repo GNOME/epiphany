@@ -171,18 +171,16 @@ icon_loaded_cb (GObject      *source,
                 GtkWidget    *image)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  GdkPixbuf *favicon = NULL;
-  cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  g_autoptr (GIcon) favicon = NULL;
+  g_autoptr (GdkTexture) icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
 
-  if (icon_surface) {
+  if (icon_texture) {
     int scale = gtk_widget_get_scale_factor (image);
 
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    cairo_surface_destroy (icon_surface);
+    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+    if (favicon)
+      gtk_image_set_from_gicon (GTK_IMAGE (image), favicon);
   }
-
-  if (favicon)
-    gtk_image_set_from_pixbuf (GTK_IMAGE (image), favicon);
 
   g_object_unref (image);
 }

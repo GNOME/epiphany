@@ -135,16 +135,13 @@ synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   PopulateRowAsyncData *data = (PopulateRowAsyncData *)user_data;
-  cairo_surface_t *surface;
+  g_autoptr (GdkTexture) texture = NULL;
   g_autoptr (GIcon) favicon = NULL;
   GtkTreeIter parent_iter;
   char *escaped_url;
 
-  surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
-  if (surface) {
-    favicon = G_ICON (ephy_pixbuf_get_from_surface_scaled (surface, FAVICON_SIZE, FAVICON_SIZE));
-    cairo_surface_destroy (surface);
-  }
+  texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  favicon = ephy_favicon_get_from_texture_scaled (texture, FAVICON_SIZE, FAVICON_SIZE);
 
   gtk_tree_model_get_iter_first (data->dialog->treestore, &parent_iter);
   for (guint i = 0; i < data->parent_index; i++)

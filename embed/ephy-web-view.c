@@ -89,7 +89,7 @@ struct _EphyWebView {
   char *last_committed_address;
   char *loading_message;
   char *link_message;
-  GdkPixbuf *icon;
+  GIcon *icon;
 
   /* Reader mode */
   gboolean entering_reader_mode;
@@ -515,10 +515,11 @@ _ephy_web_view_update_icon (EphyWebView *view)
   g_clear_object (&view->icon);
 
   if (view->address) {
-    cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
-    if (icon_surface) {
+    GdkTexture *icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
+
+    if (icon_texture) {
       gint scale = gtk_widget_get_scale_factor (GTK_WIDGET (view));
-      view->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, scale * FAVICON_SIZE, scale * FAVICON_SIZE);
+      view->icon = ephy_favicon_get_from_texture_scaled (icon_texture, scale * FAVICON_SIZE, scale * FAVICON_SIZE);
     }
   }
 
@@ -2716,7 +2717,7 @@ ephy_web_view_load_failed (EphyWebView *view)
  *
  * Return value: (transfer none): a the view's site icon
  **/
-GdkPixbuf *
+GIcon *
 ephy_web_view_get_icon (EphyWebView *view)
 {
   return view->icon;
@@ -3889,7 +3890,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   obj_properties[PROP_ICON] =
     g_param_spec_object ("icon",
                          NULL, NULL,
-                         GDK_TYPE_PIXBUF,
+                         G_TYPE_ICON,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**

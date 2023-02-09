@@ -98,22 +98,18 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
 {
   g_autoptr (EphyBookmarkRow) self = user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  cairo_surface_t *icon_surface;
-  g_autoptr (GdkPixbuf) favicon = NULL;
+  g_autoptr (GdkTexture) icon_texture = NULL;
+  g_autoptr (GIcon) favicon = NULL;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
-  icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
-  if (icon_surface) {
+  icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  if (icon_texture) {
     int scale = gtk_widget_get_scale_factor (self->favicon_image);
 
-    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    cairo_surface_destroy (icon_surface);
-  }
-
-  if (favicon) {
-    if (self->favicon_image != NULL)
-      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), G_ICON (favicon));
+    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+    if (favicon && self->favicon_image)
+      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), favicon);
   }
 }
 
