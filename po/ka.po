@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-01-24 18:42+0000\n"
-"PO-Revision-Date: 2023-01-24 20:18+0100\n"
+"POT-Creation-Date: 2023-02-08 20:18+0000\n"
+"PO-Revision-Date: 2023-02-09 13:24+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -61,7 +61,7 @@ msgstr "ახალი ფანჯარა"
 
 #: data/org.gnome.Epiphany.desktop.in.in:25
 msgid "New Incognito Window"
-msgstr ""
+msgstr "ახალი ინკოგნიტო ფანჯარა"
 
 #: data/org.gnome.epiphany.gschema.xml:13
 msgid "Browse with caret"
@@ -69,21 +69,31 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:17
 msgid "Home page"
-msgstr ""
+msgstr "საწყისი გვერდი"
 
 #: data/org.gnome.epiphany.gschema.xml:18
 msgid "Address of the user’s home page."
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:22
-msgid "Default search engine."
-msgstr ""
+msgid "New tab page."
+msgstr "ახალი ჩანართის გვერდი."
 
 #: data/org.gnome.epiphany.gschema.xml:23
+msgid ""
+"Selects which page should be shown as a new page tab. Possible values are "
+"“homepage” and “blank”."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:27
+msgid "Default search engine."
+msgstr "ნაგულისხმებ საძიებო სისტემა."
+
+#: data/org.gnome.epiphany.gschema.xml:28
 msgid "Name of the search engine selected by default."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:33
+#: data/org.gnome.epiphany.gschema.xml:38
 msgid "Deprecated. Please use search-engine-providers instead."
 msgstr ""
 
@@ -103,7 +113,7 @@ msgstr ""
 #. missing ', <, > or trailing comma), and that you're keeping the %s
 #. placeholder for the search query. Also please check if they are actually
 #. properly shown in the Preferences if you reset the gsettings key.
-#: data/org.gnome.epiphany.gschema.xml:53
+#: data/org.gnome.epiphany.gschema.xml:58
 msgid ""
 "[\n"
 "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
@@ -115,11 +125,11 @@ msgid ""
 "\t\t\t\t]"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:66
 msgid "List of the search engines."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -128,80 +138,80 @@ msgid ""
 "the search engine."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:77
 msgid "Enable Google Search Suggestions"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:82
 msgid "Force new windows to be opened in tabs"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid "Whether to automatically restore the last session"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:86
+#: data/org.gnome.epiphany.gschema.xml:91
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "List of adblock filters"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Whether to ask for setting browser as default"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:110
 msgid "Start in incognito mode"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:115
 msgid "Active clear data items."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -210,21 +220,21 @@ msgid ""
 "Prevention data."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid "The visibility policy for the tabs bar."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -232,29 +242,29 @@ msgid ""
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid "Keep window open when closing last tab"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:128
+#: data/org.gnome.epiphany.gschema.xml:133
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Reader mode article font style."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid "Reader mode color scheme."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:145
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -262,175 +272,175 @@ msgid ""
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Minimum font size"
 msgstr "ფონტის მინიმალური ზომა"
 
-#: data/org.gnome.epiphany.gschema.xml:150
-msgid "Use GNOME fonts"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:151
-msgid "Use GNOME font settings."
-msgstr ""
-
 #: data/org.gnome.epiphany.gschema.xml:155
+msgid "Use GNOME fonts"
+msgstr "GNOME-ის ფონტები"
+
+#: data/org.gnome.epiphany.gschema.xml:156
+msgid "Use GNOME font settings."
+msgstr "GNOME-ის ფონტის პარამეტრების გამოყენება."
+
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Custom sans-serif font"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Custom serif font"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid "Custom monospace font"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Use a custom CSS"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Use a custom JS"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Use a custom JS file to modify websites."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "Enable spell checking"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Default encoding"
 msgstr "ნაგულისხმები კოდირება"
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:258
+#: data/org.gnome.epiphany.gschema.xml:195
+#: src/resources/gtk/prefs-general-page.ui:278
 msgid "Languages"
 msgstr "ენები"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Allow popups"
-msgstr ""
+msgstr "მხტუნარების დაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "User agent"
-msgstr ""
+msgstr "მომხმარებლის აგენტი"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable adblock"
 msgstr "AdBlock-ის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Remember passwords"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Whether to store and prefill passwords in websites."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Enable site-specific quirks"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Enable safe browsing"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Allow websites to store local website data"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid "Default zoom level for new pages"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Enable autosearch"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -438,325 +448,323 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Enable mouse gestures"
-msgstr ""
+msgstr "თაგუნას ჟესტების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last upload directory"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:255
 msgid "Keep track of last upload directory"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Last download directory"
-msgstr ""
+msgstr "ბოლო გადმოწერის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:260
 msgid "Keep track of last download directory"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:259
-msgid "Hardware acceleration policy"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:260
-msgid ""
-"Whether to enable hardware acceleration. Possible values are “on-demand”, "
-"“always”, and “never”. Hardware acceleration may be required to achieve "
-"acceptable performance on embedded devices, but increases memory usage "
-"requirements and could expose severe hardware-specific graphics driver bugs. "
-"When the policy is “on-demand”, hardware acceleration will be used only when "
-"required to display 3D transforms."
-msgstr ""
-
 #: data/org.gnome.epiphany.gschema.xml:264
-msgid "Always ask for download directory"
-msgstr ""
+msgid "Hardware acceleration policy"
+msgstr "აპარატურული აჩქარების პოლიტიკა"
 
 #: data/org.gnome.epiphany.gschema.xml:265
-msgid "Whether to present a directory chooser dialog for every download."
+msgid ""
+"Whether to enable hardware acceleration. Possible values are “always” and "
+"“never”. Hardware acceleration may be required to achieve acceptable "
+"performance on embedded devices, but increases memory usage requirements and "
+"could expose severe hardware-specific graphics driver bugs."
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:269
-msgid "Enable immediately switch to new open tab"
+msgid "Always ask for download directory"
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:270
-msgid "Whether to automatically switch to a new open tab."
+msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:274
-msgid "Enable WebExtensions"
+msgid "Enable immediately switch to new open tab"
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:275
+msgid "Whether to automatically switch to a new open tab."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:279
+msgid "Enable WebExtensions"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:284
 msgid "Active WebExtensions"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid "Indicates which WebExtensions are set to active."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid "Web application additional URLs"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "The list of URLs that should be opened by the web application"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "Show navigation buttons in WebApp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid "Run in background"
 msgstr "ფონურად გაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid "WebApp is system-wide"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "If enabled, application cannot be edited or removed."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The downloads folder"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:309
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:316
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window position"
 msgstr "ფანჯრის მდებარეობა"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Window size"
 msgstr "ფანჯრის ზომა"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "Is maximized"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Disable forward and back buttons"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "Firefox Sync Token Server URL"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "URL to a custom Firefox Sync token server."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "Firefox Sync Accounts Server URL"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "Currently signed in sync user"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "Last sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "Sync device ID"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "The sync device ID of the current device."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "Sync device name"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "The sync device name of the current device."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "The sync frequency in minutes"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "The number of minutes between two consecutive syncs."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "Sync data with Firefox"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "Enable bookmarks sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "Bookmarks sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:411
-#: data/org.gnome.epiphany.gschema.xml:426
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "Initial sync or normal sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "Enable passwords sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "Passwords sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:427
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "Enable history sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "History sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:442
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:451
 msgid "Enable open tabs sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:456
 msgid "Open tabs sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -764,12 +772,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -777,12 +785,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -790,12 +798,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -803,11 +811,11 @@ msgid ""
 "make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -815,12 +823,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -828,11 +836,11 @@ msgid ""
 "decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:498
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -863,7 +871,7 @@ msgstr ""
 
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:269 embed/ephy-about-handler.c:270
-#: embed/ephy-about-handler.c:335 embed/ephy-about-handler.c:361
+#: embed/ephy-about-handler.c:334 embed/ephy-about-handler.c:360
 msgid "Apps"
 msgstr "აპები"
 
@@ -871,72 +879,72 @@ msgstr "აპები"
 msgid "List of installed web apps"
 msgstr ""
 
-#: embed/ephy-about-handler.c:320
+#: embed/ephy-about-handler.c:319
 msgid "Delete"
 msgstr "წაშლა"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:322
+#: embed/ephy-about-handler.c:321
 msgid "Installed on:"
 msgstr ""
 
-#: embed/ephy-about-handler.c:361
+#: embed/ephy-about-handler.c:360
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
 msgstr ""
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:466
+#: embed/ephy-about-handler.c:465
 msgid "Welcome to Web"
 msgstr ""
 
-#: embed/ephy-about-handler.c:466
+#: embed/ephy-about-handler.c:465
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 
-#: embed/ephy-about-handler.c:500
+#: embed/ephy-about-handler.c:499
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr ""
 
-#: embed/ephy-about-handler.c:590 embed/ephy-about-handler.c:591
+#: embed/ephy-about-handler.c:589 embed/ephy-about-handler.c:590
 msgid "Private Browsing"
 msgstr ""
 
-#: embed/ephy-about-handler.c:592
+#: embed/ephy-about-handler.c:591
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
 "when you close the window. Files you download will be kept."
 msgstr ""
 
-#: embed/ephy-about-handler.c:596
+#: embed/ephy-about-handler.c:595
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 
-#: embed/ephy-about-handler.c:598
+#: embed/ephy-about-handler.c:597
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
 
-#: embed/ephy-download.c:683 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:679 src/preferences/prefs-general-page.c:558
 msgid "Select a Directory"
 msgstr ""
 
-#: embed/ephy-download.c:691
+#: embed/ephy-download.c:687
 msgid "Select the Destination"
 msgstr "აირჩიეთ სამიზნე"
 
-#: embed/ephy-download.c:733
+#: embed/ephy-download.c:729
 msgid "Download Requested"
 msgstr "გადმოწერა მოთხოვნილია"
 
-#: embed/ephy-download.c:736 src/ephy-history-dialog.c:577
-#: src/ephy-window.c:258 src/preferences/extension-view.c:133
+#: embed/ephy-download.c:732 src/ephy-history-dialog.c:579
+#: src/ephy-window.c:261 src/preferences/extension-view.c:133
 #: src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:139
 #: src/resources/gtk/history-dialog.ui:42
@@ -947,58 +955,58 @@ msgstr "გადმოწერა მოთხოვნილია"
 msgid "_Cancel"
 msgstr "_გაუქმება"
 
-#: embed/ephy-download.c:737
+#: embed/ephy-download.c:733
 msgid "_Download"
 msgstr "_გადმოწერა"
 
 #. Type
-#: embed/ephy-download.c:765
+#: embed/ephy-download.c:761
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "ტიპი: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:771
+#: embed/ephy-download.c:767
 #, c-format
 msgid "Source: %s"
 msgstr "წყარო: %s"
 
 #. Question
-#: embed/ephy-download.c:777
+#: embed/ephy-download.c:773
 msgid "Where do you want to save the file?"
 msgstr "სად გნებავთ ფაილის შენახვა?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:955
+#: embed/ephy-download.c:951
 #, c-format
 msgid "Finished downloading %s"
 msgstr "%s-ის გადმოწერა დასრულდა"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:957
+#: embed/ephy-download.c:953
 msgid "Download finished"
 msgstr "გადმოწერა დასრულდა"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:536
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr ""
 
-#: embed/ephy-embed.c:536
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:536
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:811
+#: embed/ephy-embed.c:808
 msgid "Web is being controlled by automation."
 msgstr ""
 
-#: embed/ephy-embed-shell.c:753
+#: embed/ephy-embed-shell.c:755
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr ""
@@ -1028,6 +1036,7 @@ msgstr "სუფთა გვერდი"
 #. Title for the blank page
 #. Translators: tooltip for the new tab button
 #: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.ui:105
+#: src/resources/gtk/prefs-general-page.ui:135
 msgid "New Tab"
 msgstr "ახალი ჩანართი"
 
@@ -1367,16 +1376,16 @@ msgstr "იპოვე საძიებო ნუსხის  წინა �
 msgid "Find next occurrence of the search string"
 msgstr "იპოვე საძიებო ნუსხის  შემდეგი ვარიანტი"
 
-#: embed/ephy-reader-handler.c:296
+#: embed/ephy-reader-handler.c:300
 #, c-format
 msgid "%s is not a valid URI"
 msgstr ""
 
-#: embed/ephy-search-entry.c:484
+#: embed/ephy-search-entry.c:495
 msgid "Text not found"
 msgstr "ტექსტი ვერ ვიპოვე"
 
-#: embed/ephy-search-entry.c:488
+#: embed/ephy-search-entry.c:499
 msgid "Search wrapped back to the top"
 msgstr ""
 
@@ -1445,12 +1454,12 @@ msgid "Force _Stop"
 msgstr ""
 
 #: embed/ephy-web-view.c:1175 embed/ephy-web-view.c:1292
-#: src/ephy-security-popover.c:497
+#: src/ephy-security-popover.c:493
 msgid "Deny"
 msgstr "უარყოფა"
 
 #: embed/ephy-web-view.c:1176 embed/ephy-web-view.c:1293
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:492
 msgid "Allow"
 msgstr "დაშვება"
 
@@ -1779,7 +1788,7 @@ msgstr ""
 msgid "Technical information"
 msgstr ""
 
-#: embed/ephy-web-view.c:3637
+#: embed/ephy-web-view.c:3627
 msgid "_OK"
 msgstr "_დიახ"
 
@@ -1799,7 +1808,7 @@ msgstr "სურათები"
 #. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/action-bar-end.ui:11
-#: src/resources/gtk/prefs-general-page.ui:135
+#: src/resources/gtk/prefs-general-page.ui:155
 msgid "Downloads"
 msgstr "გადმოწერები"
 
@@ -2000,34 +2009,34 @@ msgstr ""
 msgid "Failed to upload client record."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2267
 msgid "Failed to upload crypto/keys record."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2379
 msgid "Failed to retrieve crypto keys."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2433
 msgid "Failed to upload meta/global record."
 msgstr ""
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2555
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2566
 msgid "Failed to verify storage version."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2624
 msgid "Failed to upload device info"
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2700 lib/sync/ephy-sync-service.c:2783
 msgid "Failed to retrieve the Sync Key"
 msgstr ""
 
@@ -2096,7 +2105,7 @@ msgstr "შევინახო ნახატი როგორც"
 msgid "Save Media As"
 msgstr ""
 
-#: src/ephy-action-bar-start.c:560
+#: src/ephy-action-bar-start.c:562
 msgid "Stop"
 msgstr "შეჩერება"
 
@@ -2227,7 +2236,7 @@ msgstr ""
 msgid "Something went wrong, please try again later."
 msgstr ""
 
-#: src/ephy-firefox-sync-dialog.c:624
+#: src/ephy-firefox-sync-dialog.c:625
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
@@ -2237,43 +2246,43 @@ msgstr[1] "%u წთ"
 #. Translators: tooltip for the refresh button
 #: src/ephy-header-bar.c:52
 msgid "Reload the current page"
-msgstr ""
+msgstr "მიმდინარე გვერდის გადატვირთვა"
 
 #: src/ephy-header-bar.c:298
 msgid "Main Menu"
 msgstr "მთავარი მენიუ"
 
-#: src/ephy-header-bar.c:483
+#: src/ephy-header-bar.c:482
 msgid "Stop loading the current page"
 msgstr ""
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1031
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1032
 msgid "It is not possible to modify history when in incognito mode."
 msgstr ""
 
-#: src/ephy-history-dialog.c:491
+#: src/ephy-history-dialog.c:493
 msgid "Remove the selected pages from history"
 msgstr ""
 
-#: src/ephy-history-dialog.c:497
+#: src/ephy-history-dialog.c:499
 msgid "Copy URL"
 msgstr "URL-ის კოპირება"
 
-#: src/ephy-history-dialog.c:572
+#: src/ephy-history-dialog.c:574
 msgid "Clear Browsing History?"
 msgstr ""
 
-#: src/ephy-history-dialog.c:573
+#: src/ephy-history-dialog.c:575
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 
-#: src/ephy-history-dialog.c:578 src/resources/gtk/location-entry.ui:275
+#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:275
 msgid "Cl_ear"
 msgstr "_გასუფთავება"
 
-#: src/ephy-history-dialog.c:1034
+#: src/ephy-history-dialog.c:1035
 msgid "Remove all history"
 msgstr ""
 
@@ -2351,232 +2360,232 @@ msgstr ""
 msgid "_View Certificate…"
 msgstr ""
 
-#: src/ephy-security-popover.c:500
+#: src/ephy-security-popover.c:496
 msgid "Ask"
 msgstr "კითხვა"
 
-#: src/ephy-security-popover.c:518
+#: src/ephy-security-popover.c:514
 msgid "Permissions"
 msgstr "წვდომები"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:556
 msgid "Advertisements"
 msgstr ""
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:557
 msgid "Notifications"
 msgstr "გაფრთხილებები"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:558
 msgid "Password saving"
 msgstr ""
 
-#: src/ephy-security-popover.c:563
+#: src/ephy-security-popover.c:559
 msgid "Location access"
 msgstr ""
 
-#: src/ephy-security-popover.c:564
+#: src/ephy-security-popover.c:560
 msgid "Microphone access"
 msgstr ""
 
-#: src/ephy-security-popover.c:565
+#: src/ephy-security-popover.c:561
 msgid "Webcam access"
 msgstr ""
 
-#: src/ephy-security-popover.c:566
+#: src/ephy-security-popover.c:562
 msgid "Media autoplay"
 msgstr ""
 
-#: src/ephy-security-popover.c:566
+#: src/ephy-security-popover.c:562
 msgid "Without Sound"
 msgstr ""
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:620
+#: src/ephy-tab-view.c:618
 msgid "Open a new tab"
 msgstr "ახალ ჩანართის გახსნა"
 
 #. Undo, redo.
-#: src/ephy-window.c:912 src/resources/gtk/location-entry.ui:243
+#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:243
 msgid "_Undo"
 msgstr "_დაბრუნება"
 
-#: src/ephy-window.c:913
+#: src/ephy-window.c:917
 msgid "Re_do"
 msgstr ""
 
 #. Edit.
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:253
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:253
 msgid "Cu_t"
 msgstr "ამო_ჭრა"
 
-#: src/ephy-window.c:917 src/resources/gtk/location-entry.ui:257
+#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:257
 msgid "_Copy"
 msgstr "_ასლი"
 
-#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:261
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:261
 msgid "_Paste"
 msgstr "_ჩასმა"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:923
 msgid "_Paste Text Only"
 msgstr ""
 
-#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:279
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:279
 msgid "Select _All"
 msgstr "მონიშნე _ყველა"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:926
 msgid "S_end Link by Email…"
 msgstr ""
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:928
 msgid "_Reload"
 msgstr "_გადატვირთვა"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:929
 msgid "_Back"
 msgstr "უკან"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:930
 msgid "_Forward"
 msgstr "_გადაგზავნა"
 
 #. Bookmarks
-#: src/ephy-window.c:929
+#: src/ephy-window.c:933
 msgid "Add Boo_kmark…"
 msgstr ""
 
 #. Links.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:937
 msgid "Open Link in New _Window"
 msgstr "ბმულის ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:938
 msgid "Open Link in New _Tab"
 msgstr ""
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:939
 msgid "Open Link in I_ncognito Window"
 msgstr ""
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:940
 msgid "_Save Link As…"
 msgstr ""
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:941
 msgid "_Copy Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:942
 msgid "_Copy E-mail Address"
 msgstr "_დააკოპირე ელ-ფოსტის მისამართი"
 
 #. Images.
-#: src/ephy-window.c:942
+#: src/ephy-window.c:946
 msgid "View _Image in New Tab"
 msgstr ""
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:947
 msgid "Copy I_mage Address"
 msgstr ""
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:948
 msgid "_Save Image As…"
 msgstr "_გამოსახულების შენახვა, როგორც…"
 
-#: src/ephy-window.c:945
+#: src/ephy-window.c:949
 msgid "Set as _Wallpaper"
 msgstr ""
 
 #. Video.
-#: src/ephy-window.c:949
+#: src/ephy-window.c:953
 msgid "Open Video in New _Window"
 msgstr ""
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:954
 msgid "Open Video in New _Tab"
 msgstr ""
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:955
 msgid "_Save Video As…"
 msgstr "ვიდეოს შენახვა, როგორც…"
 
-#: src/ephy-window.c:952
+#: src/ephy-window.c:956
 msgid "_Copy Video Address"
 msgstr ""
 
 #. Audio.
-#: src/ephy-window.c:956
+#: src/ephy-window.c:960
 msgid "Open Audio in New _Window"
 msgstr ""
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:961
 msgid "Open Audio in New _Tab"
 msgstr ""
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:962
 msgid "_Save Audio As…"
 msgstr ""
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:963
 msgid "_Copy Audio Address"
 msgstr ""
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:969
 msgid "Save Pa_ge As…"
 msgstr ""
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:970
 msgid "_Take Screenshot…"
 msgstr ""
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:971
 msgid "_Page Source"
 msgstr ""
 
-#: src/ephy-window.c:1349
+#: src/ephy-window.c:1353
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr ""
 
-#: src/ephy-window.c:1378
+#: src/ephy-window.c:1382
 msgid "Open Link"
 msgstr "ბმულის გახსნა"
 
-#: src/ephy-window.c:1380
+#: src/ephy-window.c:1384
 msgid "Open Link In New Tab"
 msgstr ""
 
-#: src/ephy-window.c:1382
+#: src/ephy-window.c:1386
 msgid "Open Link In New Window"
 msgstr ""
 
-#: src/ephy-window.c:1384
+#: src/ephy-window.c:1388
 msgid "Open Link In Incognito Window"
 msgstr ""
 
-#: src/ephy-window.c:2802 src/ephy-window.c:4092
+#: src/ephy-window.c:2806 src/ephy-window.c:4098
 msgid "Leave Website?"
 msgstr "დატოვებთ ვებგვერდს?"
 
-#: src/ephy-window.c:2803 src/ephy-window.c:4093 src/window-commands.c:1235
+#: src/ephy-window.c:2807 src/ephy-window.c:4099 src/window-commands.c:1235
 msgid "A form was modified and has not been submitted"
 msgstr ""
 
-#: src/ephy-window.c:2804 src/ephy-window.c:4094 src/window-commands.c:1239
+#: src/ephy-window.c:2808 src/ephy-window.c:4100 src/window-commands.c:1239
 msgid "_Discard Form"
 msgstr ""
 
-#: src/ephy-window.c:2825
+#: src/ephy-window.c:2829
 msgid "Download operation"
 msgstr ""
 
-#: src/ephy-window.c:2827
+#: src/ephy-window.c:2831
 msgid "Show details"
 msgstr "დეტალების ჩვენება"
 
-#: src/ephy-window.c:2829
+#: src/ephy-window.c:2833
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2584,37 +2593,45 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3307
+#: src/ephy-window.c:3311
 msgid "View open tabs"
 msgstr ""
 
-#: src/ephy-window.c:3439
+#: src/ephy-window.c:3443
 msgid "Set Web as your default browser?"
 msgstr ""
 
-#: src/ephy-window.c:3441
+#: src/ephy-window.c:3445
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr ""
 
-#: src/ephy-window.c:3451
+#: src/ephy-window.c:3455
 msgid "_Yes"
 msgstr "_დიახ"
 
-#: src/ephy-window.c:3452
+#: src/ephy-window.c:3456
 msgid "_No"
 msgstr "_არა"
 
-#: src/ephy-window.c:4223
+#: src/ephy-window.c:4229
 msgid "Close Multiple Tabs?"
 msgstr "დახურავთ ბევრ ჩანართს ერთდროულად?"
 
-#: src/ephy-window.c:4224
+#: src/ephy-window.c:4230
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 
-#: src/ephy-window.c:4225
+#: src/ephy-window.c:4231
 msgid "C_lose Tabs"
 msgstr "_ჩანართების დახურვა"
+
+#: src/ephy-window.c:4335
+msgid "New tab opened"
+msgstr "ახალი ჩანართი გაიხსნა"
+
+#: src/ephy-window.c:4339
+msgid "Switch"
+msgstr "გადართვა"
 
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
@@ -2767,40 +2784,53 @@ msgstr "ბნელი"
 msgid "Open File (manifest.json/xpi)"
 msgstr ""
 
-#: src/preferences/prefs-general-page.c:201
+#: src/preferences/prefs-general-page.c:205
 #: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "ენის დამატება"
 
-#: src/preferences/prefs-general-page.c:363
-#: src/preferences/prefs-general-page.c:519
+#: src/preferences/prefs-general-page.c:367
+#: src/preferences/prefs-general-page.c:523
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/preferences/prefs-general-page.c:720
+#: src/preferences/prefs-general-page.c:724
 msgid "Supported Image Files"
 msgstr "გამოსახულების მხარდაჭერილი ფაილები"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1803
+#. Translators: tooltip for the secret homepage button
+#: src/preferences/prefs-general-page.c:904
+#: src/resources/gtk/action-bar-start.ui:89
+#: src/resources/gtk/extension-view.ui:69
+#: src/resources/gtk/prefs-general-page.ui:85
+msgid "Homepage"
+msgstr "Homepage"
+
+#: src/preferences/prefs-general-page.c:906
+#: src/preferences/prefs-general-page.c:909
+msgid "Blank"
+msgstr "ცარიელი"
+
+#: src/profile-migrator/ephy-profile-migrator.c:1802
 msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1805
+#: src/profile-migrator/ephy-profile-migrator.c:1804
 msgid "Specifies the required version for the migrator"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1807
+#: src/profile-migrator/ephy-profile-migrator.c:1806
 msgid "Specifies the profile where the migrator should run"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1828
+#: src/profile-migrator/ephy-profile-migrator.c:1827
 msgid "Web profile migrator"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1829
+#: src/profile-migrator/ephy-profile-migrator.c:1828
 msgid "Web profile migrator options"
 msgstr ""
 
@@ -2830,18 +2860,6 @@ msgstr "უკან"
 #: src/resources/gtk/action-bar-start.ui:45
 msgid "Forward"
 msgstr "წინ"
-
-#. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:89
-#: src/resources/gtk/extension-view.ui:69
-#: src/resources/gtk/prefs-general-page.ui:85
-msgid "Homepage"
-msgstr "Homepage"
-
-#. Translators: tooltip for the page switcher button
-#: src/resources/gtk/action-bar.ui:15
-msgid "Open Pages"
-msgstr "გვერდების გახსნა"
 
 #: src/resources/gtk/bookmark-properties.ui:14
 msgid "Bookmark"
@@ -3362,43 +3380,47 @@ msgstr "_სუფთა გვერდი"
 msgid "_Custom"
 msgstr "_ხელით"
 
-#: src/resources/gtk/prefs-general-page.ui:139
+#: src/resources/gtk/prefs-general-page.ui:138
+msgid "New Tab Page"
+msgstr "ახალი ჩანართის გვერდი"
+
+#: src/resources/gtk/prefs-general-page.ui:159
 msgid "Ask o_n Download"
 msgstr "_კითხვა გადმოწერისას"
 
-#: src/resources/gtk/prefs-general-page.ui:152
+#: src/resources/gtk/prefs-general-page.ui:172
 msgid "_Download Folder"
 msgstr "_გადმოწერილი ფაილების საქაღლდე"
 
-#: src/resources/gtk/prefs-general-page.ui:192
+#: src/resources/gtk/prefs-general-page.ui:212
 msgid "Search Engines"
 msgstr "საძებნი _ძრავები"
 
-#: src/resources/gtk/prefs-general-page.ui:200
+#: src/resources/gtk/prefs-general-page.ui:220
 msgid "Session"
 msgstr "სესია"
 
-#: src/resources/gtk/prefs-general-page.ui:204
+#: src/resources/gtk/prefs-general-page.ui:224
 msgid "Start in _Incognito Mode"
 msgstr ""
 
-#: src/resources/gtk/prefs-general-page.ui:216
+#: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Restore Tabs on Startup"
 msgstr ""
 
-#: src/resources/gtk/prefs-general-page.ui:229
+#: src/resources/gtk/prefs-general-page.ui:249
 msgid "Browsing"
 msgstr "არჩევა"
 
-#: src/resources/gtk/prefs-general-page.ui:233
+#: src/resources/gtk/prefs-general-page.ui:253
 msgid "Mouse _Gestures"
 msgstr "თაგუნას _ჟესტები"
 
-#: src/resources/gtk/prefs-general-page.ui:245
+#: src/resources/gtk/prefs-general-page.ui:265
 msgid "S_witch Immediately to New Tabs"
 msgstr ""
 
-#: src/resources/gtk/prefs-general-page.ui:274
+#: src/resources/gtk/prefs-general-page.ui:294
 msgid "_Spell Checking"
 msgstr ""
 
@@ -3448,7 +3470,7 @@ msgstr ""
 
 #: src/resources/gtk/prefs-privacy-page.ui:74
 msgid "Personal Data"
-msgstr ""
+msgstr "პირადი მონაცემებები"
 
 #: src/resources/gtk/prefs-privacy-page.ui:78
 msgid "Clear Website _Data"
@@ -3910,7 +3932,7 @@ msgstr ""
 
 #: src/window-commands.c:319
 msgid "Select Profile"
-msgstr ""
+msgstr "აირჩიეთ პროფილი"
 
 #: src/window-commands.c:335
 msgid "_Select"
@@ -4013,6 +4035,9 @@ msgstr ""
 #: src/window-commands.c:2701
 msgid "_Enable"
 msgstr "_ჩართვა"
+
+#~ msgid "Open Pages"
+#~ msgstr "გვერდების გახსნა"
 
 #~ msgid "Applications"
 #~ msgstr "აპლიკაციები"
