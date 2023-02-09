@@ -427,102 +427,70 @@ key_pressed_cb (EphyLocationEntry     *entry,
   if (state & (GDK_SHIFT_MASK | GDK_ALT_MASK | GDK_CONTROL_MASK))
     return FALSE;
 
+  if (keyval != GDK_KEY_Up && keyval != GDK_KEY_KP_Up &&
+      keyval != GDK_KEY_Down && keyval != GDK_KEY_KP_Down &&
+      keyval != GDK_KEY_Page_Up && keyval != GDK_KEY_KP_Page_Up &&
+      keyval != GDK_KEY_Page_Down && keyval != GDK_KEY_KP_Page_Down) {
+    return FALSE;
+  }
+
+  if (!entry->show_suggestions)
+    set_show_suggestions (entry, TRUE);
+
+  if (!gtk_widget_get_visible (entry->suggestions_popover))
+    return FALSE;
+
   matches = g_list_model_get_n_items (G_LIST_MODEL (entry->suggestions_model));
   selected = gtk_single_selection_get_selected (entry->suggestions_model);
 
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up) {
-    if (!entry->show_suggestions)
-      set_show_suggestions (entry, TRUE);
-
-    if (!gtk_widget_get_visible (entry->suggestions_popover))
-      return FALSE;
-
-    if (selected == 0) {
-      gtk_widget_error_bell (GTK_WIDGET (entry));
-      return TRUE;
-    }
-
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = matches - 1;
+    else if (selected == 0)
+      selected = GTK_INVALID_LIST_POSITION;
     else
       selected--;
-
-    gtk_single_selection_set_selected (entry->suggestions_model, selected);
-    update_selected_url (entry);
-    return TRUE;
   }
 
   if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down) {
-    if (!entry->show_suggestions)
-      set_show_suggestions (entry, TRUE);
-
-    if (!gtk_widget_get_visible (entry->suggestions_popover))
-      return FALSE;
-
-    if (selected == matches - 1) {
-      gtk_widget_error_bell (GTK_WIDGET (entry));
-      return TRUE;
-    }
-
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = 0;
+    else if (selected == matches - 1)
+      selected = GTK_INVALID_LIST_POSITION;
     else
       selected++;
-
-    gtk_single_selection_set_selected (entry->suggestions_model, selected);
-    update_selected_url (entry);
-    return TRUE;
   }
 
   if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up) {
-    if (!entry->show_suggestions)
-      set_show_suggestions (entry, TRUE);
-
-    if (!gtk_widget_get_visible (entry->suggestions_popover))
-      return FALSE;
-
-    if (selected == 0) {
-      gtk_widget_error_bell (GTK_WIDGET (entry));
-      return TRUE;
-    }
-
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = matches - 1;
+    else if (selected == 0)
+      selected = GTK_INVALID_LIST_POSITION;
     else if (selected < PAGE_STEP)
       selected = 0;
     else
       selected -= PAGE_STEP;
-
-    gtk_single_selection_set_selected (entry->suggestions_model, selected);
-    update_selected_url (entry);
-    return TRUE;
   }
 
   if (keyval == GDK_KEY_Page_Down || keyval == GDK_KEY_KP_Page_Down) {
-    if (!entry->show_suggestions)
-      set_show_suggestions (entry, TRUE);
-
-    if (!gtk_widget_get_visible (entry->suggestions_popover))
-      return FALSE;
-
-    if (selected == matches - 1) {
-      gtk_widget_error_bell (GTK_WIDGET (entry));
-      return TRUE;
-    }
-
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = 0;
+    else if (selected == matches - 1)
+      selected = GTK_INVALID_LIST_POSITION;
     else if (selected + PAGE_STEP > matches - 1)
       selected = matches - 1;
     else
       selected += PAGE_STEP;
+  }
 
-    gtk_single_selection_set_selected (entry->suggestions_model, selected);
-    update_selected_url (entry);
+  if (selected == GTK_INVALID_LIST_POSITION) {
+    gtk_widget_error_bell (GTK_WIDGET (entry));
     return TRUE;
   }
 
-  return FALSE;
+  gtk_single_selection_set_selected (entry->suggestions_model, selected);
+  update_selected_url (entry);
+  return TRUE;
 }
 
 static void
