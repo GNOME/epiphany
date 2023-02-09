@@ -212,22 +212,21 @@ out:
 }
 
 static GdkPixbuf *
-ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
+ephy_snapshot_service_prepare_snapshot (GdkTexture *texture)
 {
   GdkPixbuf *snapshot, *scaled;
   int orig_width, orig_height;
 
-  orig_width = cairo_image_surface_get_width (surface);
-  orig_height = cairo_image_surface_get_height (surface);
+  orig_width = gdk_texture_get_width (texture);
+  orig_height = gdk_texture_get_height (texture);
 
   if (!orig_width || !orig_height)
     return NULL;
 
+  snapshot = gdk_pixbuf_get_from_texture (texture);
+
   if (orig_width < EPHY_THUMBNAIL_WIDTH ||
       orig_height < EPHY_THUMBNAIL_HEIGHT) {
-    snapshot = gdk_pixbuf_get_from_surface (surface,
-                                            0, 0,
-                                            orig_width, orig_height);
     scaled = gdk_pixbuf_scale_simple (snapshot,
                                       EPHY_THUMBNAIL_WIDTH,
                                       EPHY_THUMBNAIL_HEIGHT,
@@ -236,7 +235,6 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface)
     gfloat width_ratio = (gfloat)EPHY_THUMBNAIL_WIDTH / (gfloat)orig_width;
     gfloat new_height = orig_height * width_ratio;
 
-    snapshot = gdk_pixbuf_get_from_surface (surface, 0, 0, orig_width, orig_height);
     scaled = gdk_pixbuf_scale_simple (snapshot,
                                       EPHY_THUMBNAIL_WIDTH,
                                       new_height,
@@ -393,12 +391,12 @@ snapshot_saved (EphySnapshotService *service,
 }
 
 static void
-save_snapshot (cairo_surface_t *surface,
-               GTask           *task)
+save_snapshot (GdkTexture *texture,
+               GTask      *task)
 {
   SnapshotAsyncData *data = g_task_get_task_data (task);
 
-  data->snapshot = ephy_snapshot_service_prepare_snapshot (surface);
+  data->snapshot = ephy_snapshot_service_prepare_snapshot (texture);
   if (!data->snapshot) {
     g_task_return_new_error (task,
                              EPHY_SNAPSHOT_SERVICE_ERROR,
@@ -421,18 +419,17 @@ on_snapshot_ready (WebKitWebView *web_view,
                    GAsyncResult  *result,
                    GTask         *task)
 {
-  cairo_surface_t *surface;
+  g_autoptr (GdkTexture) texture = NULL;
   GError *error = NULL;
 
-  surface = webkit_web_view_get_snapshot_finish (web_view, result, &error);
+  texture = webkit_web_view_get_snapshot_finish (web_view, result, &error);
   if (error) {
     g_task_return_error (task, error);
     g_object_unref (task);
     return;
   }
 
-  save_snapshot (surface, task);
-  cairo_surface_destroy (surface);
+  save_snapshot (texture, task);
 }
 
 static gboolean

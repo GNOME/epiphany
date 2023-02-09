@@ -2028,55 +2028,25 @@ get_suggested_filename (EphyEmbed *embed)
 
 
 static void
-save_snapshot (cairo_surface_t *surface,
-               const char      *file)
-{
-  g_autoptr (GdkPixbuf) pixbuf = NULL;
-  g_autofree char *snapshot_path = NULL;
-  g_autoptr (GError) error = NULL;
-  int width;
-  int height;
-  gboolean ret;
-
-  /* Create a pixbuf */
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-  if (!pixbuf)
-    return;
-
-  ret = gdk_pixbuf_save (pixbuf, file, "png", &error, NULL);
-  if (!ret) {
-    g_warning ("Failed to save image to %s: %s", snapshot_path, error->message);
-    return;
-  }
-}
-
-static void
 take_snapshot_full_cb (GObject      *source,
                        GAsyncResult *res,
                        gpointer      user_data)
 {
-  WebKitWebView *view = WEBKIT_WEB_VIEW (source);
-  GError *error = NULL;
-  cairo_surface_t *surface;
-  gchar *file = user_data;
+  g_autoptr (WebKitWebView) view = WEBKIT_WEB_VIEW (source);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GdkTexture) texture = NULL;
+  g_autofree char *file = user_data;
 
   if (!file)
     return;
 
-  surface = webkit_web_view_get_snapshot_finish (view, res, &error);
+  texture = webkit_web_view_get_snapshot_finish (view, res, &error);
   if (error) {
     g_warning ("Failed to take snapshot: %s", error->message);
     return;
   }
 
-  save_snapshot (surface, file);
-  cairo_surface_destroy (surface);
-
-  g_free (file);
-  g_object_unref (view);
+  gdk_texture_save_to_png (texture, file);
 }
 
 void
