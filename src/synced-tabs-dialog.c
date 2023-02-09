@@ -206,11 +206,9 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
     url = json_array_get_string_element (url_history, 0);
 
     data = populate_row_async_data_new (dialog, title, url, index);
-    if (dialog->database) {
-      webkit_favicon_database_get_favicon (dialog->database, url, NULL,
-                                           synced_tabs_dialog_favicon_loaded_cb,
-                                           data);
-    }
+    webkit_favicon_database_get_favicon (dialog->database, url, NULL,
+                                         synced_tabs_dialog_favicon_loaded_cb,
+                                         data);
   }
 }
 G_GNUC_END_IGNORE_DEPRECATIONS

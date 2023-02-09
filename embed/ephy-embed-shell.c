@@ -162,7 +162,7 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
         continue;
 
       url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));
-      favicon = database ? webkit_favicon_database_get_favicon_uri (database, url) : NULL;
+      favicon = webkit_favicon_database_get_favicon_uri (database, url);
 
       tabs_info = g_list_prepend (tabs_info,
                                   ephy_tab_info_new (title, url, favicon));
@@ -847,6 +847,7 @@ ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  WebKitWebsiteDataManager *data_manager;
   WebKitCookieManager *cookie_manager;
   g_autofree char *filename = NULL;
 
@@ -869,6 +870,9 @@ ephy_embed_shell_startup (GApplication *application)
                            shell, 0);
 
   priv->password_manager = ephy_password_manager_new ();
+
+  data_manager = webkit_network_session_get_website_data_manager (priv->network_session);
+  webkit_website_data_manager_set_favicons_enabled (data_manager, TRUE);
 
   /* about: URIs handler */
   priv->about_handler = ephy_about_handler_new ();

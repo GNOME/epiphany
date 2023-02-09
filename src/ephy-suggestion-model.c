@@ -288,9 +288,6 @@ load_favicon (EphySuggestionModel *model,
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitFaviconDatabase *database = ephy_embed_shell_get_favicon_database (shell);
 
-  if (!database)
-    return;
-
   webkit_favicon_database_get_favicon (database,
                                        url,
                                        model->icon_cancellable,

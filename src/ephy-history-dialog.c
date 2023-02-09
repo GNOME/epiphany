@@ -471,13 +471,11 @@ create_row (EphyHistoryDialog *self,
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), icon);
 
   database = ephy_embed_shell_get_favicon_database (shell);
-  if (database) {
-    webkit_favicon_database_get_favicon (database,
-                                         url->url,
-                                         self->cancellable,
-                                         (GAsyncReadyCallback)ephy_history_dialog_row_favicon_loaded_cb,
-                                         g_object_ref (icon));
-  }
+  webkit_favicon_database_get_favicon (database,
+                                       url->url,
+                                       self->cancellable,
+                                       (GAsyncReadyCallback)ephy_history_dialog_row_favicon_loaded_cb,
+                                       g_object_ref (icon));
 
   /* Date */
   date = gtk_label_new (ephy_time_helpers_utf_friendly_time (url->last_visit_time / 1000000));

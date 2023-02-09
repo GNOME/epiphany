@@ -75,7 +75,7 @@ add_web_view_to_json (EphyWebExtension *extension,
   GtkWidget *page = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (web_view)));
   gboolean is_active = ephy_tab_view_get_current_page (tab_view) == page;
   WebKitFaviconDatabase *favicon_db = ephy_embed_shell_get_favicon_database (ephy_embed_shell_get_default ());
-  const char *favicon_uri = favicon_db ? webkit_favicon_database_get_favicon_uri (favicon_db, ephy_web_view_get_address (web_view)) : NULL;
+  const char *favicon_uri = webkit_favicon_database_get_favicon_uri (favicon_db, ephy_web_view_get_address (web_view));
   gboolean has_tab_permission = ephy_web_extension_has_tab_or_host_permission (extension, web_view, TRUE);
 
   json_builder_begin_object (builder);

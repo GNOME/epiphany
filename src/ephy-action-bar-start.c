@@ -239,12 +239,10 @@ build_history_row (EphyActionBarStart        *action_bar_start,
     gtk_label_set_label (GTK_LABEL (label), uri);
 
   database = ephy_embed_shell_get_favicon_database (shell);
-  if (database) {
-    webkit_favicon_database_get_favicon (database, uri,
-                                         NULL,
-                                         (GAsyncReadyCallback)icon_loaded_cb,
-                                         g_object_ref (icon));
-  }
+  webkit_favicon_database_get_favicon (database, uri,
+                                       NULL,
+                                       (GAsyncReadyCallback)icon_loaded_cb,
+                                       g_object_ref (icon));
 
   g_object_set_data_full (G_OBJECT (row), "link-message",
                           g_strdup (uri), (GDestroyNotify)g_free);
