@@ -168,7 +168,7 @@ readability_js_finish_cb (GObject      *object,
   const gchar *color_scheme;
   AdwStyleManager *style_manager;
 
-  js_result = webkit_web_view_run_javascript_finish (web_view, result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (web_view, result, &error);
   if (!js_result) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error running javascript: %s", error->message);
@@ -241,11 +241,23 @@ static void
 ephy_reader_request_begin_get_source_from_web_view (EphyReaderRequest *request,
                                                     WebKitWebView     *web_view)
 {
-  webkit_web_view_run_javascript_from_gresource (web_view,
-                                                 "/org/gnome/epiphany/readability/Readability.js",
-                                                 request->cancellable,
-                                                 readability_js_finish_cb,
-                                                 request);
+  gsize length;
+  const char *script;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GBytes) bytes = g_resources_lookup_data ("/org/gnome/epiphany/readability/Readability.js",
+                                                      G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
+
+  if (!bytes) {
+    g_critical ("Failed to get Readability.js from resources: %s", error->message);
+    return;
+  }
+
+  script = (const char *)g_bytes_get_data (bytes, &length);
+  webkit_web_view_evaluate_javascript (web_view, script, length, NULL,
+                                       "resource:///org/gnome/epiphany/readability/Readability.js",
+                                       request->cancellable,
+                                       readability_js_finish_cb,
+                                       request);
 }
 
 static void

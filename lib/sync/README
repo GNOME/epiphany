@@ -231,7 +231,7 @@
   the JavaScript forwards it to the WebKitUserContentManager via the
   "script-message-received" signal. The callback connected to this signal in
   the preferences dialog will parse the message and respond with a
-  WebChannelMessageToContent event through webkit_web_view_run_javascript()
+  WebChannelMessageToContent event through webkit_web_view_evaluate_javascript()
   if necessary. WebChannelMessageToContent events are messages that go from
   the web browser to the Firefox Accounts Content Server.
   Both WebChannelMessageToChrome and WebChannelMessageToContent events have a

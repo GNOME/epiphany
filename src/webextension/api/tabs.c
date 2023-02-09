@@ -396,9 +396,9 @@ on_execute_script_ready (GObject      *source,
   g_autoptr (GError) error = NULL;
   GTask *task = user_data;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (WEBKIT_WEB_VIEW (source),
-                                                              result,
-                                                              &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                          result,
+                                                          &error);
 
   if (error) {
     g_task_return_error (task, g_steal_pointer (&error));
@@ -459,12 +459,13 @@ tabs_handler_execute_script (EphyWebExtensionSender *sender,
     return;
   }
 
-  webkit_web_view_run_javascript_in_world (target_web_view,
-                                           code,
-                                           ephy_web_extension_get_guid (sender->extension),
-                                           NULL,
-                                           on_execute_script_ready,
-                                           task);
+  webkit_web_view_evaluate_javascript (target_web_view,
+                                       code, -1,
+                                       ephy_web_extension_get_guid (sender->extension),
+                                       NULL,
+                                       NULL,
+                                       on_execute_script_ready,
+                                       task);
 }
 
 static void

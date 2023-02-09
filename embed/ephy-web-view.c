@@ -632,7 +632,7 @@ readability_js_finish_cb (GObject      *object,
   g_autoptr (GError) error = NULL;
   JSCValue *jsc_value;
 
-  js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
   if (!js_result) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error running javascript: %s", error->message);
@@ -656,11 +656,23 @@ run_readability_js_if_needed (gpointer data)
 
   /* Internal pages should never receive reader mode. */
   if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
-    webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
-                                                   "/org/gnome/epiphany/readability/Readability-readerable.js",
-                                                   web_view->cancellable,
-                                                   readability_js_finish_cb,
-                                                   web_view);
+    g_autoptr (GError) error = NULL;
+    g_autoptr (GBytes) bytes = g_resources_lookup_data ("/org/gnome/epiphany/readability/Readability-readerable.js",
+                                                        G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
+
+    if (bytes) {
+      gsize length;
+      const char *script;
+
+      script = (const char *)g_bytes_get_data (bytes, &length);
+      webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (web_view),
+                                           script, length, NULL,
+                                           "resource:///org/gnome/epiphany/readability/Readability-readerable.js",
+                                           web_view->cancellable,
+                                           readability_js_finish_cb,
+                                           web_view);
+    } else
+      g_critical ("Failed to get Readability-readerable.js from resources: %s", error->message);
   }
 
   web_view->reader_js_timeout = 0;
@@ -2228,12 +2240,13 @@ reader_setting_changed_cb (EphyWebView *web_view)
   js_snippet = g_strdup_printf ("document.body.className = '%s %s'",
                                 font_style,
                                 color_scheme);
-  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (web_view),
-                                           js_snippet,
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           NULL,
-                                           NULL,
-                                           NULL);
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (web_view),
+                                       js_snippet, -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL);
   g_free (js_snippet);
 }
 
@@ -2581,7 +2594,7 @@ ephy_web_view_load_url (EphyWebView *view,
 
     uri = g_uri_parse (effective_url, G_URI_FLAGS_NONE, NULL);
     decoded_url = g_uri_to_string (uri);
-    webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view), decoded_url, NULL, NULL, NULL);
+    webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view), decoded_url, -1, NULL, NULL, NULL, NULL, NULL);
   } else
     webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), effective_url);
 
@@ -2922,7 +2935,7 @@ has_modified_forms_cb (WebKitWebView *view,
   GError *error = NULL;
   gulong id;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
 
   id = GPOINTER_TO_INT (g_task_get_task_data (task));
   if (id == 0) {
@@ -2973,7 +2986,7 @@ ephy_web_view_has_modified_forms (EphyWebView         *view,
 
   /* Set timeout to guard against web process hangs. Otherwise, a single
    * unresponsive web process would prevent the window from closing. Note that
-   * although webkit_web_view_run_javascript_in_world() takes a cancellable,
+   * although webkit_web_view_evaluate_javascript() takes a cancellable,
    * it's not *really* cancellable and attempting to cancel it just causes it to
    * return G_IO_ERROR_CANCELLED after however long it takes to finish, which
    * will be never if the web process is unresponsive, so we always fake
@@ -2982,12 +2995,13 @@ ephy_web_view_has_modified_forms (EphyWebView         *view,
   id = g_timeout_add_seconds (2, has_modified_forms_timeout_cb, task);
   g_task_set_task_data (task, GINT_TO_POINTER (id), NULL);
 
-  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
-                                           "Ephy.hasModifiedForms();",
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           cancellable,
-                                           (GAsyncReadyCallback)has_modified_forms_cb,
-                                           task);
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
+                                       "Ephy.hasModifiedForms();", -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       cancellable,
+                                       (GAsyncReadyCallback)has_modified_forms_cb,
+                                       task);
 }
 
 gboolean
@@ -3022,7 +3036,7 @@ get_best_web_app_icon_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
   if (js_result) {
     JSCValue *js_value, *js_uri, *js_color;
     GetBestWebAppIconAsyncData *data;
@@ -3062,12 +3076,13 @@ ephy_web_view_get_best_web_app_icon (EphyWebView         *view,
 
   task = g_task_new (view, cancellable, callback, user_data);
   script = g_strdup_printf ("Ephy.getWebAppIcon(\"%s\");", webkit_web_view_get_uri (wk_view));
-  webkit_web_view_run_javascript_in_world (wk_view,
-                                           script,
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           cancellable,
-                                           (GAsyncReadyCallback)get_best_web_app_icon_cb,
-                                           task);
+  webkit_web_view_evaluate_javascript (wk_view,
+                                       script, -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       cancellable,
+                                       (GAsyncReadyCallback)get_best_web_app_icon_cb,
+                                       task);
   g_free (script);
 }
 
@@ -3108,7 +3123,7 @@ get_web_app_title_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
   if (js_result) {
     JSCValue *js_value;
     char *retval = NULL;
@@ -3135,12 +3150,13 @@ ephy_web_view_get_web_app_title (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
-  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
-                                           "Ephy.getWebAppTitle();",
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           cancellable,
-                                           (GAsyncReadyCallback)get_web_app_title_cb,
-                                           task);
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
+                                       "Ephy.getWebAppTitle();", -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       cancellable,
+                                       (GAsyncReadyCallback)get_web_app_title_cb,
+                                       task);
 }
 
 char *
@@ -3161,7 +3177,7 @@ get_web_app_mobile_capable_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
   if (js_result) {
     JSCValue *js_value;
     gboolean retval = FALSE;
@@ -3188,12 +3204,13 @@ ephy_web_view_get_web_app_mobile_capable (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
-  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
-                                           "Ephy.getAppleMobileWebAppCapable();",
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                           cancellable,
-                                           (GAsyncReadyCallback)get_web_app_mobile_capable_cb,
-                                           task);
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
+                                       "Ephy.getAppleMobileWebAppCapable();", -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       cancellable,
+                                       (GAsyncReadyCallback)get_web_app_mobile_capable_cb,
+                                       task);
 }
 
 gboolean

@@ -561,11 +561,13 @@ page_action_clicked (GtkButton *button,
   json = json_to_string (root, FALSE);
 
   script = g_strdup_printf ("window.browser.pageAction.onClicked._emit(%s);", json);
-  webkit_web_view_run_javascript (web_view,
-                                  script,
-                                  NULL,
-                                  NULL,
-                                  NULL);
+  webkit_web_view_evaluate_javascript (web_view,
+                                       script, -1,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL);
 }
 
 static GtkWidget *
@@ -1582,9 +1584,9 @@ tab_emit_ready_cb (GObject      *source,
   g_autoptr (WebKitJavascriptResult) js_result = NULL;
   GTask *pending_task;
 
-  js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (source),
-                                                     result,
-                                                     &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                          result,
+                                                          &error);
 
   /* If it returned true it will be asynchronously handled later. Otherwise we
    * complete it now with undefined. */
@@ -1631,12 +1633,13 @@ ephy_web_extension_manager_emit_in_tab_with_reply (EphyWebExtensionManager *self
   tracker = g_new0 (PendingMessageReplyTracker, 1);
   tracker->web_extension = web_extension;
   tracker->message_guid = message_guid;
-  webkit_web_view_run_javascript_in_world (target_web_view,
-                                           script,
-                                           ephy_web_extension_get_guid (web_extension),
-                                           NULL,
-                                           tab_emit_ready_cb,
-                                           tracker);
+  webkit_web_view_evaluate_javascript (target_web_view,
+                                       script, -1,
+                                       ephy_web_extension_get_guid (web_extension),
+                                       NULL,
+                                       NULL,
+                                       tab_emit_ready_cb,
+                                       tracker);
 
   pending_messages = g_hash_table_lookup (self->pending_messages, web_extension);
   if (!pending_messages) {
@@ -1659,9 +1662,9 @@ on_extension_emit_ready (GObject      *source,
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitJavascriptResult) js_result = NULL;
 
-  js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (source),
-                                                     result,
-                                                     &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                          result,
+                                                          &error);
 
   if (!error && jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result)))
     tracker->handled = TRUE;
@@ -1702,11 +1705,13 @@ ephy_web_extension_manager_emit_in_background_view (EphyWebExtensionManager *sel
 
   script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
 
-  webkit_web_view_run_javascript (web_view,
-                                  script,
-                                  NULL,
-                                  NULL,
-                                  NULL);
+  webkit_web_view_evaluate_javascript (web_view,
+                                       script, -1,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL);
 }
 
 static void
@@ -1744,11 +1749,11 @@ ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionMan
 
   if (background_view) {
     if (!sender || (sender->view != background_view)) {
-      webkit_web_view_run_javascript (background_view,
-                                      script,
-                                      NULL,
-                                      reply_task ? on_extension_emit_ready : NULL,
-                                      tracker);
+      webkit_web_view_evaluate_javascript (background_view,
+                                           script, -1,
+                                           NULL, NULL, NULL,
+                                           reply_task ? on_extension_emit_ready : NULL,
+                                           tracker);
       pending_views++;
     }
   }
@@ -1759,11 +1764,11 @@ ephy_web_extension_manager_emit_in_extension_views_internal (EphyWebExtensionMan
       if (!sender || (sender->view == popup_view))
         continue;
 
-      webkit_web_view_run_javascript (popup_view,
-                                      script,
-                                      NULL,
-                                      reply_task ? on_extension_emit_ready : NULL,
-                                      tracker);
+      webkit_web_view_evaluate_javascript (popup_view,
+                                           script, -1,
+                                           NULL, NULL, NULL,
+                                           reply_task ? on_extension_emit_ready : NULL,
+                                           tracker);
       pending_views++;
     }
   }

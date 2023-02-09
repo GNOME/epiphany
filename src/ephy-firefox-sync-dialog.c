@@ -242,7 +242,7 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
                             type, detail_str);
 
   /* We don't expect any response from the server. */
-  webkit_web_view_run_javascript (sync_dialog->fxa_web_view, script, NULL, NULL, NULL);
+  webkit_web_view_evaluate_javascript (sync_dialog->fxa_web_view, script, -1, NULL, NULL, NULL, NULL, NULL);
 
   g_free (script);
   g_free (detail_str);

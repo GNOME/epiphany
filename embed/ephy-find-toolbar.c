@@ -448,7 +448,7 @@ ephy_find_toolbar_selection_async (GObject      *source_object,
   g_autoptr (WebKitJavascriptResult) js_result = NULL;
   JSCValue *value = NULL;
 
-  js_result = webkit_web_view_run_javascript_finish (web_view, res, &error);
+  js_result = webkit_web_view_evaluate_javascript_finish (web_view, res, &error);
   if (!js_result) {
     g_warning ("Error running javascript: %s", error->message);
     return;
@@ -475,7 +475,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar)
 {
   g_assert (toolbar->web_view != NULL);
 
-  webkit_web_view_run_javascript (toolbar->web_view, "window.getSelection().toString();", toolbar->cancellable, ephy_find_toolbar_selection_async, toolbar);
+  webkit_web_view_evaluate_javascript (toolbar->web_view, "window.getSelection().toString();", -1, NULL, NULL, toolbar->cancellable, ephy_find_toolbar_selection_async, toolbar);
 
   gtk_editable_select_region (GTK_EDITABLE (toolbar->entry), 0, -1);
 
