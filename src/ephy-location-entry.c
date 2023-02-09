@@ -773,8 +773,11 @@ suggestions_popover_notify_visible_cb (EphyLocationEntry *entry)
 {
   GtkAdjustment *adj;
 
-  if (!gtk_widget_get_visible (entry->suggestions_popover))
+  if (!gtk_widget_get_visible (entry->suggestions_popover)) {
+    gtk_single_selection_set_selected (entry->suggestions_model, GTK_INVALID_LIST_POSITION);
+    entry->show_suggestions = FALSE;
     return;
+  }
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (entry->scrolled_window));
 
