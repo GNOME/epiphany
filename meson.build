@@ -75,6 +75,7 @@ conf.set10('ENABLE_GSB', gsb_api_key != '')
 
 glib_requirement = '>= 2.70.0'
 gtk_requirement = '>= 4.9.3'
+libadwaita_requirement = '>= 1.3.alpha'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.39.7'
 
@@ -97,7 +98,7 @@ hogweed_dep = dependency('hogweed', version: nettle_requirement)
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.6')
 libarchive_dep = dependency('libarchive')
-libadwaita_dep = dependency('libadwaita-1', version: '>= 1.0.0')
+libadwaita_dep = dependency('libadwaita-1', version: libadwaita_requirement)
 libsecret_dep = dependency('libsecret-1', version: '>= 0.19.0')
 libsoup_dep = dependency('libsoup-3.0', version: '>= 2.99.4')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
