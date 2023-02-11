@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-02-08 20:18+0000\n"
-"PO-Revision-Date: 2023-02-09 23:09+0200\n"
+"POT-Creation-Date: 2023-02-11 00:00+0000\n"
+"PO-Revision-Date: 2023-02-11 18:08+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -86,8 +86,6 @@ msgid "Address of the user’s home page."
 msgstr "Адреса домівки."
 
 #: data/org.gnome.epiphany.gschema.xml:22
-#| msgctxt "shortcut window"
-#| msgid "New tab"
 msgid "New tab page."
 msgstr "Нова сторінка-вкладка."
 
@@ -96,8 +94,8 @@ msgid ""
 "Selects which page should be shown as a new page tab. Possible values are "
 "“homepage” and “blank”."
 msgstr ""
-"Вибирає, яку сторінку має бути показано як нову сторінку-вкладку. Можливі"
-" значення: «homepage» і «blank»."
+"Вибирає, яку сторінку має бути показано як нову сторінку-вкладку. Можливі "
+"значення: «homepage» і «blank»."
 
 #: data/org.gnome.epiphany.gschema.xml:27
 msgid "Default search engine."
@@ -567,21 +565,14 @@ msgid "Hardware acceleration policy"
 msgstr "Політика апаратного прискорення"
 
 #: data/org.gnome.epiphany.gschema.xml:265
-#| msgid ""
-#| "Whether to enable hardware acceleration. Possible values are “on-demand”, "
-#| "“always”, and “never”. Hardware acceleration may be required to achieve "
-#| "acceptable performance on embedded devices, but increases memory usage "
-#| "requirements and could expose severe hardware-specific graphics driver "
-#| "bugs. When the policy is “on-demand”, hardware acceleration will be used "
-#| "only when required to display 3D transforms."
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
 "performance on embedded devices, but increases memory usage requirements and "
 "could expose severe hardware-specific graphics driver bugs."
 msgstr ""
-"Увімкнути апаратне прискорення. Можливі значення це «always», «never»."
-" Апаратне прискорення може знадобитися для отримання прийнятної "
+"Увімкнути апаратне прискорення. Можливі значення це «always», «never». "
+"Апаратне прискорення може знадобитися для отримання прийнятної "
 "продуктивності на вбудованих пристроях, але збільшує потреби в пам'яті й "
 "може виявити серйозні помилки графічного драйвера, пов'язані з обладнанням."
 
@@ -1989,7 +1980,7 @@ msgstr "Не вказано"
 msgid "Technical information"
 msgstr "Технічна інформація"
 
-#: embed/ephy-web-view.c:3627
+#: embed/ephy-web-view.c:3670
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -2320,6 +2311,17 @@ msgstr "Зберегти зображення як"
 msgid "Save Media As"
 msgstr "Зберегти медіа як"
 
+#. Translators: tooltip for the empty bookmark button
+#: src/ephy-action-bar-end.c:394
+msgid "Bookmark Page"
+msgstr "Створити закладку для сторінки"
+
+#. Translators: tooltip for the bookmarked button
+#: src/ephy-action-bar-end.c:402
+#| msgid "Bookmark"
+msgid "Edit Bookmark"
+msgstr "Редагувати закладку"
+
 #: src/ephy-action-bar-start.c:562
 msgid "Stop"
 msgstr "Зупинити"
@@ -2504,7 +2506,7 @@ msgstr ""
 "Очищення історії перегляду призведе до остаточного вилучення усіх посилань з "
 "історії."
 
-#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:275
+#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:282
 msgid "Cl_ear"
 msgstr "О_чистити"
 
@@ -2637,7 +2639,7 @@ msgid "Open a new tab"
 msgstr "Відкрити нову вкладку"
 
 #. Undo, redo.
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:243
+#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:250
 msgid "_Undo"
 msgstr "Повер_нути"
 
@@ -2646,15 +2648,15 @@ msgid "Re_do"
 msgstr "Повт_орити"
 
 #. Edit.
-#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:253
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:260
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:257
+#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:264
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:261
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:268
 msgid "_Paste"
 msgstr "Вст_авити"
 
@@ -2662,7 +2664,7 @@ msgstr "Вст_авити"
 msgid "_Paste Text Only"
 msgstr "Лише _вставити текст"
 
-#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:279
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:286
 msgid "Select _All"
 msgstr "Виді_лити все"
 
@@ -2859,8 +2861,6 @@ msgid "C_lose Tabs"
 msgstr "_Закрити вкладки"
 
 #: src/ephy-window.c:4335
-#| msgctxt "shortcut window"
-#| msgid "New tab"
 msgid "New tab opened"
 msgstr "Відкрито нову вкладку"
 
@@ -2979,7 +2979,7 @@ msgstr ""
 "дії неможливо скасувати."
 
 #: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:155
-#: src/resources/gtk/location-entry.ui:269
+#: src/resources/gtk/location-entry.ui:276
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -3052,7 +3052,6 @@ msgstr "Домівка"
 
 #: src/preferences/prefs-general-page.c:906
 #: src/preferences/prefs-general-page.c:909
-#| msgid "Blank page"
 msgid "Blank"
 msgstr "Порожня"
 
@@ -3082,14 +3081,8 @@ msgstr "Параметри перенесення профілів для Тен
 msgid "Extensions"
 msgstr "Розширення"
 
-#. Translators: tooltip for the bookmark button
-#: src/resources/gtk/action-bar-end.ui:95
-#: src/resources/gtk/location-entry.ui:75
-msgid "Bookmark Page"
-msgstr "Створити закладку для сторінки"
-
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:102
+#: src/resources/gtk/action-bar-end.ui:100
 msgid "Bookmarks"
 msgstr "Закладки"
 
@@ -3327,16 +3320,16 @@ msgstr "Шукати сайти, закладки і відкривати вкл
 msgid "Website Security Status and Permissions"
 msgstr "Стан безпеки та дозволи сайта"
 
-#: src/resources/gtk/location-entry.ui:85
+#: src/resources/gtk/location-entry.ui:84
 #: src/resources/gtk/prefs-appearance-page.ui:59
 msgid "Reader Mode"
 msgstr "Режим читача"
 
-#: src/resources/gtk/location-entry.ui:247
+#: src/resources/gtk/location-entry.ui:254
 msgid "_Redo"
 msgstr "По_вторити"
 
-#: src/resources/gtk/location-entry.ui:265
+#: src/resources/gtk/location-entry.ui:272
 msgid "Paste and _Go"
 msgstr "Вставити та пере_йти"
 
@@ -3630,7 +3623,6 @@ msgid "_Custom"
 msgstr "_Інше"
 
 #: src/resources/gtk/prefs-general-page.ui:138
-#| msgid "New Tab"
 msgid "New Tab Page"
 msgstr "Нова сторінка-вкладка"
 
