@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-02-08 19:25+0000\n"
-"PO-Revision-Date: 2023-02-08 22:16+0200\n"
+"POT-Creation-Date: 2023-02-11 00:00+0000\n"
+"PO-Revision-Date: 2023-02-11 18:22+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -83,8 +83,8 @@ msgstr "עמוד הבית"
 msgid "Address of the user’s home page."
 msgstr "כתובת עמוד הבית של המשתמש."
 
-#: data/org.gnome.epiphany.gschema.xml:22
 # msgctxt "shortcut window"
+#: data/org.gnome.epiphany.gschema.xml:22
 msgid "New tab page."
 msgstr "New tab page."
 
@@ -1956,7 +1956,7 @@ msgstr "לא צוינה"
 msgid "Technical information"
 msgstr "מידע טכני"
 
-#: embed/ephy-web-view.c:3627
+#: embed/ephy-web-view.c:3670
 msgid "_OK"
 msgstr "_אישור"
 
@@ -2275,6 +2275,16 @@ msgstr "שמירת התמונה בשם"
 msgid "Save Media As"
 msgstr "שמירת מדיה בשם"
 
+#. Translators: tooltip for the empty bookmark button
+#: src/ephy-action-bar-end.c:394
+msgid "Bookmark Page"
+msgstr "הוספת דף לסימניות"
+
+#. Translators: tooltip for the bookmarked button
+#: src/ephy-action-bar-end.c:402
+msgid "Edit Bookmark"
+msgstr "עריכת סימניה"
+
 #: src/ephy-action-bar-start.c:562
 msgid "Stop"
 msgstr "עצירה"
@@ -2463,7 +2473,7 @@ msgid ""
 "deleted."
 msgstr "פינוי היסטוריית הגלישה יימחק את כל הקישורים מההיסטוריה לצמיתות."
 
-#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:275
+#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:282
 msgid "Cl_ear"
 msgstr "_ניקוי"
 
@@ -2591,7 +2601,7 @@ msgid "Open a new tab"
 msgstr "פתיחת לשונית חדשה"
 
 #. Undo, redo.
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:243
+#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:250
 msgid "_Undo"
 msgstr "בי_טול פעולה"
 
@@ -2600,15 +2610,15 @@ msgid "Re_do"
 msgstr "בי_צוע שוב"
 
 #. Edit.
-#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:253
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:260
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:257
+#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:264
 msgid "_Copy"
 msgstr "_העתקה"
 
-#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:261
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:268
 msgid "_Paste"
 msgstr "ה_דבקה"
 
@@ -2616,7 +2626,7 @@ msgstr "ה_דבקה"
 msgid "_Paste Text Only"
 msgstr "ה_דבקת טקסט בלבד"
 
-#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:279
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:286
 msgid "Select _All"
 msgstr "בחירה בה_כול"
 
@@ -2812,8 +2822,8 @@ msgstr "סגירת החלון תגרום לסגירת כל הלשוניות הפ
 msgid "C_lose Tabs"
 msgstr "ס_גירת לשוניות"
 
-#: src/ephy-window.c:4335
 # msgctxt "shortcut window"
+#: src/ephy-window.c:4335
 msgid "New tab opened"
 msgstr "נפתחה לשונית חדשה"
 
@@ -2928,7 +2938,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "פעולה זו תמחק את כל הססמאות המאוחסנות באופן מקומי, ללא יכולת שחזור."
 
 #: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:155
-#: src/resources/gtk/location-entry.ui:269
+#: src/resources/gtk/location-entry.ui:276
 msgid "_Delete"
 msgstr "_מחיקה"
 
@@ -3031,14 +3041,8 @@ msgstr "אפשרויות מייבא הפרופילים של Web"
 msgid "Extensions"
 msgstr "הרחבות"
 
-#. Translators: tooltip for the bookmark button
-#: src/resources/gtk/action-bar-end.ui:95
-#: src/resources/gtk/location-entry.ui:75
-msgid "Bookmark Page"
-msgstr "הוספת דף לסימניות"
-
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:102
+#: src/resources/gtk/action-bar-end.ui:100
 msgid "Bookmarks"
 msgstr "סימניות"
 
@@ -3276,16 +3280,16 @@ msgstr "חיפוש אתרים, סימניות ולשוניות פתוחות"
 msgid "Website Security Status and Permissions"
 msgstr "מצב האבטחה והרשאות האתר"
 
-#: src/resources/gtk/location-entry.ui:85
+#: src/resources/gtk/location-entry.ui:84
 #: src/resources/gtk/prefs-appearance-page.ui:59
 msgid "Reader Mode"
 msgstr "מצב קריאה"
 
-#: src/resources/gtk/location-entry.ui:247
+#: src/resources/gtk/location-entry.ui:254
 msgid "_Redo"
 msgstr "_ביצוע שוב"
 
-#: src/resources/gtk/location-entry.ui:265
+#: src/resources/gtk/location-entry.ui:272
 msgid "Paste and _Go"
 msgstr "להדביק ול_עבור"
 
@@ -5236,9 +5240,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Find Pre_vious"
 #~ msgstr "חיפוש ה_קודם"
-
-#~ msgid "Edit _Bookmarks"
-#~ msgstr "_עריכת הסימניות"
 
 #~ msgid "_Normal Size"
 #~ msgstr "_גודל רגיל"
