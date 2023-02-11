@@ -140,7 +140,7 @@ make sense, but they should always be carefully-considered.
 ### Target Audience
 
 We target nontechnical users by design. This happens to be 90% of the user
-population. Technical details should not exposed in the interface.
+population. Technical details should not be exposed in the interface.
 
 We target web users, not web developers. A few geek-oriented features, like the
 web inspector, are welcome so long as they are non-obtrusive.
