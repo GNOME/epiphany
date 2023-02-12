@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-02-11 00:00+0000\n"
-"PO-Revision-Date: 2023-02-11 05:51+0100\n"
+"POT-Creation-Date: 2023-02-11 19:13+0000\n"
+"PO-Revision-Date: 2023-02-12 09:34+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -53,7 +53,7 @@ msgstr "ვებ-ბრაუზერი"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
 msgid "web;browser;internet;epiphany;"
-msgstr ""
+msgstr "web;browser;internet;epiphany;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -332,7 +332,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:185
 msgid "Enable spell checking"
-msgstr ""
+msgstr "მართლწერის შემოწმების ჩართვა"
 
 #: data/org.gnome.epiphany.gschema.xml:186
 msgid "Spell check any text typed in editable areas."
@@ -586,7 +586,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:331
 msgid "Is maximized"
-msgstr ""
+msgstr "გაშლილია"
 
 #: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
@@ -910,7 +910,7 @@ msgstr ""
 
 #: embed/ephy-about-handler.c:589 embed/ephy-about-handler.c:590
 msgid "Private Browsing"
-msgstr ""
+msgstr "ანონიმური ფანჯარა"
 
 #: embed/ephy-about-handler.c:591
 msgid ""
@@ -944,7 +944,7 @@ msgid "Download Requested"
 msgstr "გადმოწერა მოთხოვნილია"
 
 #: embed/ephy-download.c:732 src/ephy-history-dialog.c:579
-#: src/ephy-window.c:261 src/preferences/extension-view.c:133
+#: src/ephy-window.c:265 src/preferences/extension-view.c:133
 #: src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:139
 #: src/resources/gtk/history-dialog.ui:42
@@ -1002,11 +1002,11 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:808
-msgid "Web is being controlled by automation."
+#: embed/ephy-embed.c:805
+msgid "Web is being controlled by automation"
 msgstr ""
 
-#: embed/ephy-embed-shell.c:755
+#: embed/ephy-embed-shell.c:715
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr ""
@@ -1226,7 +1226,7 @@ msgstr "კორეული (_UHC)"
 
 #: embed/ephy-encodings.c:104
 msgid "_Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "_კელტური (ISO-8859-14)"
 
 #: embed/ephy-encodings.c:105
 msgid "_Icelandic (MacIcelandic)"
@@ -1234,7 +1234,7 @@ msgstr ""
 
 #: embed/ephy-encodings.c:106
 msgid "_Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "_ნორდული (ISO-8859-10)"
 
 #: embed/ephy-encodings.c:107
 msgid "_Persian (MacFarsi)"
@@ -1389,170 +1389,102 @@ msgstr "ტექსტი ვერ ვიპოვე"
 msgid "Search wrapped back to the top"
 msgstr ""
 
-#: embed/ephy-web-view.c:228 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:221 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "ყველა ფაილი"
 
-#: embed/ephy-web-view.c:237 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:230 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr ""
 
-#: embed/ephy-web-view.c:439
-msgid "Not No_w"
-msgstr "_არა ახლა"
-
-#: embed/ephy-web-view.c:440
-msgid "_Never Save"
-msgstr "ა_რასოდეს შეინახო"
-
-#: embed/ephy-web-view.c:441 src/resources/gtk/firefox-sync-dialog.ui:148
-msgid "_Save"
-msgstr "_შენახვა"
-
-#. Translators: The %s the hostname where this is happening.
-#. * Example: mail.google.com.
-#.
-#: embed/ephy-web-view.c:448
-#, c-format
-msgid "Do you want to save your password for “%s”?"
-msgstr ""
-
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:691
-msgid ""
-"Heads-up: this form is not secure. If you type your password, it will not be "
-"kept private."
+#: embed/ephy-web-view.c:559
+msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr ""
 
-#: embed/ephy-web-view.c:906
+#: embed/ephy-web-view.c:560 embed/ephy-web-view.c:3258
+msgid "_Dismiss"
+msgstr "_მოცილება"
+
+#: embed/ephy-web-view.c:769
 msgid "Web process crashed"
 msgstr ""
 
-#: embed/ephy-web-view.c:909
+#: embed/ephy-web-view.c:772
 msgid "Web process terminated due to exceeding memory limit"
 msgstr ""
 
-#: embed/ephy-web-view.c:912
+#: embed/ephy-web-view.c:775
 msgid "Web process terminated by API request"
 msgstr ""
 
-#: embed/ephy-web-view.c:953
+#: embed/ephy-web-view.c:816
 msgid "Page Unresponsive"
 msgstr ""
 
-#: embed/ephy-web-view.c:957
+#: embed/ephy-web-view.c:820
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr ""
 
-#: embed/ephy-web-view.c:961
+#: embed/ephy-web-view.c:824
 msgid "_Wait"
-msgstr ""
+msgstr "_მოცდა"
 
-#: embed/ephy-web-view.c:962
+#: embed/ephy-web-view.c:825
 msgid "Force _Stop"
-msgstr ""
-
-#: embed/ephy-web-view.c:1175 embed/ephy-web-view.c:1292
-#: src/ephy-security-popover.c:493
-msgid "Deny"
-msgstr "უარყოფა"
-
-#: embed/ephy-web-view.c:1176 embed/ephy-web-view.c:1293
-#: src/ephy-security-popover.c:492
-msgid "Allow"
-msgstr "დაშვება"
-
-#. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1189
-#, c-format
-msgid "The page at %s wants to show desktop notifications."
-msgstr ""
-
-#. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1194
-#, c-format
-msgid "The page at %s wants to know your location."
-msgstr ""
-
-#. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1199
-#, c-format
-msgid "The page at %s wants to use your microphone."
-msgstr ""
-
-#. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1204
-#, c-format
-msgid "The page at %s wants to use your webcam."
-msgstr ""
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1209
-#, c-format
-msgid "The page at %s wants to use your webcam and microphone."
-msgstr ""
-
-#: embed/ephy-web-view.c:1300
-#, c-format
-msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
-msgstr ""
-
-#: embed/ephy-web-view.c:1308
-#, c-format
-msgid "This will allow “%s” to track your activity."
-msgstr ""
+msgstr "ძალით _გაჩერება"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1482
+#: embed/ephy-web-view.c:1071
 #, c-format
 msgid "Loading “%s”…"
 msgstr "%s-ის ჩატვირთვა…"
 
-#: embed/ephy-web-view.c:1484 embed/ephy-web-view.c:1490
+#: embed/ephy-web-view.c:1073 embed/ephy-web-view.c:1079
 msgid "Loading…"
 msgstr "იტვირთება…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1823
+#: embed/ephy-web-view.c:1412
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1828
+#: embed/ephy-web-view.c:1417
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1422
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1838
+#: embed/ephy-web-view.c:1427
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1843
+#: embed/ephy-web-view.c:1432
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1848
+#: embed/ephy-web-view.c:1437
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1853
+#: embed/ephy-web-view.c:1442
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1560,31 +1492,31 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1918 embed/ephy-web-view.c:1974
+#: embed/ephy-web-view.c:1507 embed/ephy-web-view.c:1563
 #, c-format
 msgid "Problem Loading Page"
 msgstr "გვერდის ჩატვირთვის პრობლემა"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1921
+#: embed/ephy-web-view.c:1510
 msgid "Unable to display this website"
 msgstr "ამ ვებგვერდის ჩვენება შეუძლებელია"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1926
+#: embed/ephy-web-view.c:1515
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr ""
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1930
+#: embed/ephy-web-view.c:1519
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr ""
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1529
 #, c-format
 msgid "The precise error was: %s"
 msgstr "ზუსტი შეცდომა: %s"
@@ -1594,85 +1526,85 @@ msgstr "ზუსტი შეცდომა: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1945 embed/ephy-web-view.c:1998
-#: embed/ephy-web-view.c:2034 embed/ephy-web-view.c:2070
+#: embed/ephy-web-view.c:1534 embed/ephy-web-view.c:1587
+#: embed/ephy-web-view.c:1623 embed/ephy-web-view.c:1659
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:166
 msgid "Reload"
 msgstr "თავიდან ჩატვირთვა"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1949 embed/ephy-web-view.c:2002
-#: embed/ephy-web-view.c:2038 embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:1538 embed/ephy-web-view.c:1591
+#: embed/ephy-web-view.c:1627 embed/ephy-web-view.c:1663
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "მარჯ"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:1566
 msgid "Oops! There may be a problem"
 msgstr ""
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1571
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1989
+#: embed/ephy-web-view.c:1578
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2023
+#: embed/ephy-web-view.c:1612
 #, c-format
 msgid "Problem Displaying Page"
-msgstr ""
+msgstr "გვერდის ჩვენების პრობლემა"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:1615
 msgid "Oops!"
 msgstr "უფს!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1618
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2059
+#: embed/ephy-web-view.c:1648
 #, c-format
 msgid "Unresponsive Page"
-msgstr ""
+msgstr "გვერდი არ პასუხობს"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2062
+#: embed/ephy-web-view.c:1651
 msgid "Uh-oh!"
-msgstr ""
+msgstr "რაღაც გაფუჭდა!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2065
+#: embed/ephy-web-view.c:1654
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr ""
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2101
+#: embed/ephy-web-view.c:1690
 #, c-format
 msgid "Security Violation"
 msgstr "უსაფრთხოების დარღვევა"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:1693
 msgid "This Connection is Not Secure"
 msgstr ""
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2109
+#: embed/ephy-web-view.c:1698
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1682,59 +1614,59 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2207
-#: embed/ephy-web-view.c:2257
+#: embed/ephy-web-view.c:1708 embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1846
 msgid "Go Back"
 msgstr "უკან დაბრუნება"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2122 embed/ephy-web-view.c:2210
-#: embed/ephy-web-view.c:2260
+#: embed/ephy-web-view.c:1711 embed/ephy-web-view.c:1799
+#: embed/ephy-web-view.c:1849
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2125 embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:1714 embed/ephy-web-view.c:1802
 msgid "Accept Risk and Proceed"
 msgstr ""
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2217
+#: embed/ephy-web-view.c:1718 embed/ephy-web-view.c:1806
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "პეტა"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2157
+#: embed/ephy-web-view.c:1746
 #, c-format
 msgid "Security Warning"
 msgstr "უსაფრთხოების შეტყობინება"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2160
+#: embed/ephy-web-view.c:1749
 msgid "Unsafe website detected!"
 msgstr ""
 
-#: embed/ephy-web-view.c:2168
+#: embed/ephy-web-view.c:1757
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
 "code that could be downloaded to your computer without your consent."
 msgstr ""
 
-#: embed/ephy-web-view.c:2172
+#: embed/ephy-web-view.c:1761
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
 msgstr ""
 
-#: embed/ephy-web-view.c:2179
+#: embed/ephy-web-view.c:1768
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1742,13 +1674,13 @@ msgid ""
 "phone numbers, or credit cards)."
 msgstr ""
 
-#: embed/ephy-web-view.c:2184
+#: embed/ephy-web-view.c:1773
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 
-#: embed/ephy-web-view.c:2193
+#: embed/ephy-web-view.c:1782
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1756,41 +1688,37 @@ msgid ""
 "changing your homepage or showing extra ads on sites you visit)."
 msgstr ""
 
-#: embed/ephy-web-view.c:2198
+#: embed/ephy-web-view.c:1787
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr ""
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2240 embed/ephy-web-view.c:2243
+#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1832
 #, c-format
 msgid "File not found"
 msgstr "ფაილი ვერ მოიძებნა"
 
-#: embed/ephy-web-view.c:2248
+#: embed/ephy-web-view.c:1837
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ვერ ვიპოვე."
 
-#: embed/ephy-web-view.c:2250
+#: embed/ephy-web-view.c:1839
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr ""
 
-#: embed/ephy-web-view.c:2313
+#: embed/ephy-web-view.c:1902
 msgid "None specified"
 msgstr "მითითებული არაა"
 
-#: embed/ephy-web-view.c:2444
+#: embed/ephy-web-view.c:2033
 msgid "Technical information"
 msgstr "ტექნიკური ინფორმაცია"
-
-#: embed/ephy-web-view.c:3670
-msgid "_OK"
-msgstr "_დიახ"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -1956,14 +1884,14 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:435
+#: lib/sync/ephy-password-manager.c:450
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr ""
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:439
+#: lib/sync/ephy-password-manager.c:454
 #, c-format
 msgid "Password in a form in %s"
 msgstr ""
@@ -2169,49 +2097,49 @@ msgstr ""
 #: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:140
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
-msgstr ""
+msgstr "_ყველას გასუფთავება"
 
 #: src/ephy-download-widget.c:78
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d წამი"
+msgstr[1] "დარჩენილია %d წამი"
 
 #: src/ephy-download-widget.c:82
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d წუთი"
+msgstr[1] "დარჩენილია %d წუთი"
 
 #: src/ephy-download-widget.c:86
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d საათი"
+msgstr[1] "დარჩენილია %d საათი"
 
 #: src/ephy-download-widget.c:90
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d დღე"
+msgstr[1] "დარჩენილია %d დღე"
 
 #: src/ephy-download-widget.c:94
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d კვირა"
+msgstr[1] "დარჩენილია %d კვირა"
 
 #: src/ephy-download-widget.c:98
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დარჩენილია %d თვე"
+msgstr[1] "დარჩენილია %d თვე"
 
 #: src/ephy-download-widget.c:213 src/ephy-download-widget.c:408
 msgid "Finished"
@@ -2224,7 +2152,7 @@ msgstr ""
 #: src/ephy-download-widget.c:237 src/ephy-download-widget.c:405
 #, c-format
 msgid "Error downloading: %s"
-msgstr ""
+msgstr "გადმოწერის შეცდომა: %s"
 
 #: src/ephy-download-widget.c:262
 msgid "Cancelling…"
@@ -2240,7 +2168,7 @@ msgstr "გაშვება…"
 #: src/ephy-firefox-sync-dialog.c:139
 #, c-format
 msgid "Last synchronized: %s"
-msgstr ""
+msgstr "ბოლო სინქრონიზაცია: %s"
 
 #: src/ephy-firefox-sync-dialog.c:427
 msgid "Something went wrong, please try again later."
@@ -2288,13 +2216,13 @@ msgid ""
 "deleted."
 msgstr ""
 
-#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:282
+#: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:294
 msgid "Cl_ear"
 msgstr "_გასუფთავება"
 
 #: src/ephy-history-dialog.c:1035
 msgid "Remove all history"
-msgstr ""
+msgstr "ისტორიის წაშლა"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2338,7 +2266,7 @@ msgstr "URL …"
 
 #: src/ephy-main.c:257
 msgid "Web options"
-msgstr ""
+msgstr "ვების მორგება"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2368,7 +2296,15 @@ msgstr ""
 
 #: src/ephy-security-popover.c:247
 msgid "_View Certificate…"
-msgstr ""
+msgstr "_სერტიფიკატის ნახვა…"
+
+#: src/ephy-security-popover.c:492
+msgid "Allow"
+msgstr "დაშვება"
+
+#: src/ephy-security-popover.c:493
+msgid "Deny"
+msgstr "უარყოფა"
 
 #: src/ephy-security-popover.c:496
 msgid "Ask"
@@ -2380,7 +2316,7 @@ msgstr "წვდომები"
 
 #: src/ephy-security-popover.c:556
 msgid "Advertisements"
-msgstr ""
+msgstr "რეკლამები"
 
 #: src/ephy-security-popover.c:557
 msgid "Notifications"
@@ -2388,27 +2324,27 @@ msgstr "გაფრთხილებები"
 
 #: src/ephy-security-popover.c:558
 msgid "Password saving"
-msgstr ""
+msgstr "პაროლების შენახვა"
 
 #: src/ephy-security-popover.c:559
 msgid "Location access"
-msgstr ""
+msgstr "მდებარეობასთან წვდომა"
 
 #: src/ephy-security-popover.c:560
 msgid "Microphone access"
-msgstr ""
+msgstr "მიკროფონთან წვდომა"
 
 #: src/ephy-security-popover.c:561
 msgid "Webcam access"
-msgstr ""
+msgstr "ვებკამერასთან წვდომა"
 
 #: src/ephy-security-popover.c:562
 msgid "Media autoplay"
-msgstr ""
+msgstr "მედიის ავტომატური დაკვრა"
 
 #: src/ephy-security-popover.c:562
 msgid "Without Sound"
-msgstr ""
+msgstr "ხმის გარეშე"
 
 #. Translators: tooltip for the new tab button
 #: src/ephy-tab-view.c:618
@@ -2416,230 +2352,274 @@ msgid "Open a new tab"
 msgstr "ახალ ჩანართის გახსნა"
 
 #. Undo, redo.
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:250
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:262
 msgid "_Undo"
 msgstr "_დაბრუნება"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:921
 msgid "Re_do"
 msgstr ""
 
 #. Edit.
-#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:260
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:272
 msgid "Cu_t"
 msgstr "ამო_ჭრა"
 
-#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:925 src/resources/gtk/location-entry.ui:276
 msgid "_Copy"
 msgstr "_ასლი"
 
-#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:268
+#: src/ephy-window.c:926 src/resources/gtk/location-entry.ui:280
 msgid "_Paste"
 msgstr "_ჩასმა"
 
-#: src/ephy-window.c:923
+#: src/ephy-window.c:927
 msgid "_Paste Text Only"
-msgstr ""
+msgstr "_მხოლოდ ტექსტის ჩასმა"
 
-#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:286
+#: src/ephy-window.c:928 src/resources/gtk/location-entry.ui:298
 msgid "Select _All"
 msgstr "მონიშნე _ყველა"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:930
 msgid "S_end Link by Email…"
 msgstr ""
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:932
 msgid "_Reload"
 msgstr "_გადატვირთვა"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:933
 msgid "_Back"
 msgstr "უკან"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:934
 msgid "_Forward"
 msgstr "_გადაგზავნა"
 
 #. Bookmarks
-#: src/ephy-window.c:933
+#: src/ephy-window.c:937
 msgid "Add Boo_kmark…"
 msgstr ""
 
 #. Links.
-#: src/ephy-window.c:937
+#: src/ephy-window.c:941
 msgid "Open Link in New _Window"
 msgstr "ბმულის ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:942
 msgid "Open Link in New _Tab"
 msgstr ""
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:943
 msgid "Open Link in I_ncognito Window"
 msgstr ""
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:944
 msgid "_Save Link As…"
 msgstr ""
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:945
 msgid "_Copy Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:946
 msgid "_Copy E-mail Address"
 msgstr "_დააკოპირე ელ-ფოსტის მისამართი"
 
 #. Images.
-#: src/ephy-window.c:946
+#: src/ephy-window.c:950
 msgid "View _Image in New Tab"
 msgstr ""
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:951
 msgid "Copy I_mage Address"
 msgstr ""
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:952
 msgid "_Save Image As…"
 msgstr "_გამოსახულების შენახვა, როგორც…"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:953
 msgid "Set as _Wallpaper"
-msgstr ""
+msgstr "ფონის სურათად _დაყენება"
 
 #. Video.
-#: src/ephy-window.c:953
+#: src/ephy-window.c:957
 msgid "Open Video in New _Window"
-msgstr ""
+msgstr "ვიდეოს ახალ ფანჯარაში _გახსნა"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:958
 msgid "Open Video in New _Tab"
-msgstr ""
+msgstr "_ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:959
 msgid "_Save Video As…"
 msgstr "ვიდეოს შენახვა, როგორც…"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:960
 msgid "_Copy Video Address"
-msgstr ""
+msgstr "ვიდეოს მისამართის _კოპირება"
 
 #. Audio.
-#: src/ephy-window.c:960
+#: src/ephy-window.c:964
 msgid "Open Audio in New _Window"
-msgstr ""
+msgstr "აუდიოს ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:965
 msgid "Open Audio in New _Tab"
-msgstr ""
+msgstr "აუდიოს ახალ _ჩანართში გახსნა"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:966
 msgid "_Save Audio As…"
-msgstr ""
+msgstr "აუდიოს _შენახვა, როგორც…"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:967
 msgid "_Copy Audio Address"
-msgstr ""
+msgstr "აუდიოს მისამართის _კოპირება"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:973
 msgid "Save Pa_ge As…"
-msgstr ""
+msgstr "_გვერდის შენახვა, როგორც…"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:974
 msgid "_Take Screenshot…"
 msgstr ""
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:975
 msgid "_Page Source"
-msgstr ""
+msgstr "_გვერდის წყარო"
 
-#: src/ephy-window.c:1353
+#: src/ephy-window.c:1357
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr ""
 
-#: src/ephy-window.c:1382
+#: src/ephy-window.c:1386
 msgid "Open Link"
 msgstr "ბმულის გახსნა"
 
-#: src/ephy-window.c:1384
+#: src/ephy-window.c:1388
 msgid "Open Link In New Tab"
 msgstr ""
 
-#: src/ephy-window.c:1386
+#: src/ephy-window.c:1390
 msgid "Open Link In New Window"
 msgstr ""
 
-#: src/ephy-window.c:1388
+#: src/ephy-window.c:1392
 msgid "Open Link In Incognito Window"
 msgstr ""
 
-#: src/ephy-window.c:2806 src/ephy-window.c:4098
+#: src/ephy-window.c:2798
+msgid "_Ask Later"
+msgstr ""
+
+#: src/ephy-window.c:2799
+msgid "_Deny"
+msgstr "_უარყოფა"
+
+#: src/ephy-window.c:2800
+msgid "_Allow"
+msgstr "_დაშვება"
+
+#: src/ephy-window.c:2996 src/ephy-window.c:4416
 msgid "Leave Website?"
 msgstr "დატოვებთ ვებგვერდს?"
 
-#: src/ephy-window.c:2807 src/ephy-window.c:4099 src/window-commands.c:1235
+#: src/ephy-window.c:2997 src/ephy-window.c:4417 src/window-commands.c:1235
 msgid "A form was modified and has not been submitted"
 msgstr ""
 
-#: src/ephy-window.c:2808 src/ephy-window.c:4100 src/window-commands.c:1239
+#: src/ephy-window.c:2998 src/ephy-window.c:4418 src/window-commands.c:1239
 msgid "_Discard Form"
 msgstr ""
 
-#: src/ephy-window.c:2829
+#: src/ephy-window.c:3019
 msgid "Download operation"
-msgstr ""
+msgstr "გადმოწერის ოპერაცია"
 
-#: src/ephy-window.c:2831
+#: src/ephy-window.c:3021
 msgid "Show details"
 msgstr "დეტალების ჩვენება"
 
-#: src/ephy-window.c:2833
+#: src/ephy-window.c:3023
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] ""
 msgstr[1] ""
 
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3311
-msgid "View open tabs"
+#: src/ephy-window.c:3244
+msgid "Set as Default Browser?"
 msgstr ""
 
-#: src/ephy-window.c:3443
-msgid "Set Web as your default browser?"
+#: src/ephy-window.c:3246
+msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 
-#: src/ephy-window.c:3445
-msgid "Set Epiphany Technology Preview as your default browser?"
+#: src/ephy-window.c:3248
+msgid ""
+"Use Epiphany Technology Preview as your default web browser and for opening "
+"external links"
 msgstr ""
 
-#: src/ephy-window.c:3455
-msgid "_Yes"
-msgstr "_დიახ"
+#: src/ephy-window.c:3252
+msgid "_Ask Again Later"
+msgstr ""
 
-#: src/ephy-window.c:3456
+#: src/ephy-window.c:3253
 msgid "_No"
 msgstr "_არა"
 
-#: src/ephy-window.c:4229
+#: src/ephy-window.c:3254
+msgid "_Yes"
+msgstr "_დიახ"
+
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3605
+msgid "View open tabs"
+msgstr ""
+
+#: src/ephy-window.c:3760
+msgid "Save login?"
+msgstr "შევინახო დეტალები?"
+
+#: src/ephy-window.c:3761
+msgid ""
+"Passwords are saved only on your device and can be removed at any time in "
+"Preferences"
+msgstr ""
+
+#: src/ephy-window.c:3767
+msgid "Not Now"
+msgstr "არა ახლა"
+
+#: src/ephy-window.c:3768
+msgid "Never Save"
+msgstr "არასოდეს შეინახო"
+
+#: src/ephy-window.c:3769
+msgid "Save"
+msgstr "შენახვა"
+
+#: src/ephy-window.c:4547
 msgid "Close Multiple Tabs?"
 msgstr "დახურავთ ბევრ ჩანართს ერთდროულად?"
 
-#: src/ephy-window.c:4230
+#: src/ephy-window.c:4548
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 
-#: src/ephy-window.c:4231
+#: src/ephy-window.c:4549
 msgid "C_lose Tabs"
 msgstr "_ჩანართების დახურვა"
 
-#: src/ephy-window.c:4335
+#: src/ephy-window.c:4653
 msgid "New tab opened"
 msgstr "ახალი ჩანართი გაიხსნა"
 
-#: src/ephy-window.c:4339
+#: src/ephy-window.c:4657
 msgid "Switch"
 msgstr "გადართვა"
 
@@ -2749,7 +2729,7 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 
 #: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:155
-#: src/resources/gtk/location-entry.ui:276
+#: src/resources/gtk/location-entry.ui:288
 msgid "_Delete"
 msgstr "_წაშლა"
 
@@ -3045,6 +3025,10 @@ msgstr "ახლავე _სინქრონიზაცია"
 msgid "Device name"
 msgstr "მოწყობილობის სახელი"
 
+#: src/resources/gtk/firefox-sync-dialog.ui:148
+msgid "_Save"
+msgstr "_შენახვა"
+
 #: src/resources/gtk/firefox-sync-dialog.ui:157
 msgid "_Change"
 msgstr "_შეცვლა"
@@ -3090,11 +3074,15 @@ msgstr ""
 msgid "Reader Mode"
 msgstr "კითხვის რეჟიმი"
 
-#: src/resources/gtk/location-entry.ui:254
+#: src/resources/gtk/location-entry.ui:96
+msgid "View available passwords"
+msgstr "ხელმისაწვდომი პაროლების ჩვენება"
+
+#: src/resources/gtk/location-entry.ui:266
 msgid "_Redo"
 msgstr "_გამეორება"
 
-#: src/resources/gtk/location-entry.ui:272
+#: src/resources/gtk/location-entry.ui:284
 msgid "Paste and _Go"
 msgstr ""
 
@@ -4040,6 +4028,9 @@ msgstr ""
 msgid "_Enable"
 msgstr "_ჩართვა"
 
+#~ msgid "_OK"
+#~ msgstr "_დიახ"
+
 #~ msgid "Open Pages"
 #~ msgstr "გვერდების გახსნა"
 
@@ -4055,9 +4046,6 @@ msgstr "_ჩართვა"
 
 #~ msgid "_Kill"
 #~ msgstr "_მოკვლა"
-
-#~ msgid "Reveal password"
-#~ msgstr "პაროლის ჩვენება"
 
 #~ msgid "_History"
 #~ msgstr "_ისტორია"
