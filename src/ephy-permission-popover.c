@@ -269,30 +269,35 @@ ephy_permission_popover_get_text (EphyPermissionPopover  *self,
     case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
       /* Translators: Notification policy for a specific site. */
       *title = g_strdup (_("Notification Request"));
+      /* Translators: Notification policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to send you notifications"),
                                   bold_origin);
       break;
     case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
       /* Translators: Geolocation policy for a specific site. */
       *title = g_strdup (_("Location Access Request"));
+      /* Translators: Geolocation policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to know your location"),
                                   bold_origin);
       break;
     case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
       /* Translators: Microphone policy for a specific site. */
       *title = g_strdup (_("Microphone Access Request"));
+      /* Translators: Microphone policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to use your microphone"),
                                   bold_origin);
       break;
     case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
       /* Translators: Webcam policy for a specific site. */
       *title = g_strdup (_("Webcam Access Request"));
+      /* Translators: Webcam policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to use your webcam"),
                                   bold_origin);
       break;
     case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
       /* Translators: Webcam and microphone policy for a specific site. */
       *title = g_strdup (_("Webcam and Microphone Access Request"));
+      /* Translators: Webcam and microphone policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to use your webcam and microphone"),
                                   bold_origin);
       break;
@@ -301,6 +306,7 @@ ephy_permission_popover_get_text (EphyPermissionPopover  *self,
       current_domain = webkit_website_data_access_permission_request_get_current_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (self->permission_request));
       /* Translators: Cookie policy for a specific site. */
       *title = g_strdup (_("Third-party Cookies Request"));
+      /* Translators: Cookie policy for a specific site. */
       *message = g_strdup_printf (_("The page at “%s” would like to use cookies while browsing “%s”. This will allow “%s” to track your activity."),
                                   requesting_domain, current_domain, requesting_domain);
       break;
