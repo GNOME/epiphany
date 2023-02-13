@@ -38,6 +38,8 @@ struct _SyncedTabsDialog {
 
   GtkTreeModel *treestore;
   GtkWidget *treeview;
+
+  GCancellable *cancellable;
 };
 
 G_DEFINE_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_WINDOW)
@@ -137,10 +139,14 @@ synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
   PopulateRowAsyncData *data = (PopulateRowAsyncData *)user_data;
   g_autoptr (GdkTexture) texture = NULL;
   g_autoptr (GIcon) favicon = NULL;
+  g_autoptr (GError) error = NULL;
   GtkTreeIter parent_iter;
   char *escaped_url;
 
-  texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
+  if (!texture && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
   favicon = ephy_favicon_get_from_texture_scaled (texture, FAVICON_SIZE, FAVICON_SIZE);
 
   gtk_tree_model_get_iter_first (data->dialog->treestore, &parent_iter);
@@ -206,7 +212,8 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
     url = json_array_get_string_element (url_history, 0);
 
     data = populate_row_async_data_new (dialog, title, url, index);
-    webkit_favicon_database_get_favicon (dialog->database, url, NULL,
+    webkit_favicon_database_get_favicon (dialog->database, url,
+                                         dialog->cancellable,
                                          synced_tabs_dialog_favicon_loaded_cb,
                                          data);
   }
@@ -285,6 +292,9 @@ synced_tabs_dialog_dispose (GObject *object)
 
   g_clear_object (&dialog->manager);
 
+  g_cancellable_cancel (dialog->cancellable);
+  g_clear_object (&dialog->cancellable);
+
   G_OBJECT_CLASS (synced_tabs_dialog_parent_class)->dispose (object);
 }
 
@@ -326,6 +336,7 @@ synced_tabs_dialog_init (SyncedTabsDialog *dialog)
   gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (dialog->treeview), URL_COLUMN);
 
   dialog->database = ephy_embed_shell_get_favicon_database (ephy_embed_shell_get_default ());
+  dialog->cancellable = g_cancellable_new ();
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
 

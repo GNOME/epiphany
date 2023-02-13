@@ -427,19 +427,16 @@ ephy_history_dialog_row_favicon_loaded_cb (GObject      *source,
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   g_autoptr (GdkTexture) icon_texture = NULL;
   g_autoptr (GIcon) favicon = NULL;
-  g_autoptr (GError) error = NULL;
+  int scale;
 
-  icon_texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
-  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+  icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  if (!icon_texture)
     return;
 
-  if (icon_texture) {
-    int scale = gtk_widget_get_scale_factor (icon);
-
-    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    if (favicon && icon)
-      gtk_image_set_from_gicon (GTK_IMAGE (icon), favicon);
-  }
+  scale = gtk_widget_get_scale_factor (icon);
+  favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+  if (favicon && icon)
+    gtk_image_set_from_gicon (GTK_IMAGE (icon), favicon);
 }
 
 static GtkWidget *
@@ -770,10 +767,8 @@ ephy_history_dialog_dispose (GObject *object)
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
-  if (self->cancellable) {
-    g_cancellable_cancel (self->cancellable);
-    g_clear_object (&self->cancellable);
-  }
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
 
   g_clear_object (&self->history_service);
 

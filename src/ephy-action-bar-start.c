@@ -47,6 +47,8 @@ struct _EphyActionBarStart {
   GtkWidget *placeholder;
 
   GtkWidget *history_menu;
+
+  GCancellable *cancellable;
 };
 
 G_DEFINE_TYPE (EphyActionBarStart, ephy_action_bar_start, GTK_TYPE_BOX)
@@ -168,21 +170,21 @@ history_row_released_cb (GtkGesture         *gesture,
 static void
 icon_loaded_cb (GObject      *source,
                 GAsyncResult *result,
-                GtkWidget    *image)
+                gpointer      user_data)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+  g_autoptr (GtkWidget) image = user_data;
   g_autoptr (GIcon) favicon = NULL;
   g_autoptr (GdkTexture) icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  int scale;
 
-  if (icon_texture) {
-    int scale = gtk_widget_get_scale_factor (image);
+  if (!icon_texture)
+    return;
 
-    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    if (favicon)
-      gtk_image_set_from_gicon (GTK_IMAGE (image), favicon);
-  }
-
-  g_object_unref (image);
+  scale = gtk_widget_get_scale_factor (image);
+  favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+  if (favicon)
+    gtk_image_set_from_gicon (GTK_IMAGE (image), favicon);
 }
 
 static GList *
@@ -240,7 +242,7 @@ build_history_row (EphyActionBarStart        *action_bar_start,
 
   database = ephy_embed_shell_get_favicon_database (shell);
   webkit_favicon_database_get_favicon (database, uri,
-                                       NULL,
+                                       action_bar_start->cancellable,
                                        (GAsyncReadyCallback)icon_loaded_cb,
                                        g_object_ref (icon));
 
@@ -308,6 +310,10 @@ history_menu_closed_cb (EphyActionBarStart *action_bar_start)
 
   g_clear_pointer (&action_bar_start->history_menu, gtk_widget_unparent);
   gtk_widget_unset_state_flags (parent, GTK_STATE_FLAG_CHECKED);
+
+  g_cancellable_cancel (action_bar_start->cancellable);
+  g_clear_object (&action_bar_start->cancellable);
+  action_bar_start->cancellable = g_cancellable_new ();
 }
 
 static void
@@ -433,6 +439,9 @@ ephy_action_bar_start_dispose (GObject *object)
 
   g_clear_pointer (&action_bar_start->history_menu, gtk_widget_unparent);
 
+  g_cancellable_cancel (action_bar_start->cancellable);
+  g_clear_object (&action_bar_start->cancellable);
+
   G_OBJECT_CLASS (ephy_action_bar_start_parent_class)->dispose (object);
 }
 
@@ -531,6 +540,7 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
 static void
 ephy_action_bar_start_init (EphyActionBarStart *action_bar_start)
 {
+  action_bar_start->cancellable = g_cancellable_new ();
 }
 
 EphyActionBarStart *

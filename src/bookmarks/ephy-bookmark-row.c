@@ -31,6 +31,7 @@ struct _EphyBookmarkRow {
   GtkListBoxRow parent_instance;
 
   EphyBookmark *bookmark;
+  GCancellable *cancellable;
 
   GtkWidget *favicon_image;
   GtkWidget *title_label;
@@ -96,21 +97,22 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  g_autoptr (EphyBookmarkRow) self = user_data;
+  EphyBookmarkRow *self = user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   g_autoptr (GdkTexture) icon_texture = NULL;
   g_autoptr (GIcon) favicon = NULL;
+  int scale;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
   icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
-  if (icon_texture) {
-    int scale = gtk_widget_get_scale_factor (self->favicon_image);
+  if (!icon_texture)
+    return;
 
-    favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-    if (favicon && self->favicon_image)
-      gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), favicon);
-  }
+  scale = gtk_widget_get_scale_factor (self->favicon_image);
+  favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+  if (favicon && self->favicon_image)
+    gtk_image_set_from_gicon (GTK_IMAGE (self->favicon_image), favicon);
 }
 
 static void
@@ -154,14 +156,10 @@ ephy_bookmark_row_dispose (GObject *object)
 
   g_clear_object (&self->bookmark);
 
-  G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->dispose (object);
-}
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
 
-static void
-favicon_image_destroyed (EphyBookmarkRow *self,
-                         GtkWidget       *favicon_image)
-{
-  self->favicon_image = NULL;
+  G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->dispose (object);
 }
 
 static gboolean
@@ -217,16 +215,9 @@ ephy_bookmark_row_constructed (GObject *object)
   database = ephy_embed_shell_get_favicon_database (shell);
   webkit_favicon_database_get_favicon (database,
                                        ephy_bookmark_get_url (self->bookmark),
-                                       NULL,
+                                       self->cancellable,
                                        (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
-                                       g_object_ref (self));
-
-  /* Although we keep a ref to ourself during the favicon load, so we are
-   * guaranteed to remain a valid GObject, the widget hierarchy could still
-   * be destroyed before ephy_bookmark_favicon_loaded_cb() is called. Hence we
-   * need to keep track of whether self->favicon_image is still valid. */
-  g_signal_connect_object (self->favicon_image, "destroy",
-                           G_CALLBACK (favicon_image_destroyed), self, G_CONNECT_SWAPPED);
+                                       self);
 }
 
 static void
@@ -264,6 +255,8 @@ ephy_bookmark_row_init (EphyBookmarkRow *self)
                            G_CALLBACK (ephy_bookmark_row_button_clicked_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  self->cancellable = g_cancellable_new ();
 }
 
 GtkWidget *
