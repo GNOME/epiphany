@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.22\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-02-11 19:13+0000\n"
-"PO-Revision-Date: 2023-02-11 22:28+0000\n"
+"POT-Creation-Date: 2023-02-12 12:33+0000\n"
+"PO-Revision-Date: 2023-02-14 10:59+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (https://l10n.gnome.org/teams/pt/)\n"
 "Language: pt\n"
@@ -1190,7 +1190,7 @@ msgstr "F11"
 #. Translators: this means WebDriver control.
 #: embed/ephy-embed.c:805
 msgid "Web is being controlled by automation"
-msgstr "O Web está sob controlo de automação."
+msgstr "O Web está sob controlo de automação"
 
 #: embed/ephy-embed-shell.c:715
 #, c-format
@@ -2273,12 +2273,12 @@ msgid "Save Media As"
 msgstr "Gravar multimédia como"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:394
+#: src/ephy-action-bar-end.c:394 src/ephy-location-entry.c:1784
 msgid "Bookmark Page"
 msgstr "Página de marcadores"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:402
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1792
 msgid "Edit Bookmark"
 msgstr "Editar marcador"
 
@@ -2456,8 +2456,8 @@ msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
-"Limpar o histórico de navegação irá remover permanentemente todos os links "
-"de histórico."
+"Limpar o histórico de navegação irá remover permanentemente todas as "
+"ligações do histórico."
 
 #: src/ephy-history-dialog.c:580 src/resources/gtk/location-entry.ui:294
 msgid "Cl_ear"
@@ -2466,6 +2466,31 @@ msgstr "_Limpar"
 #: src/ephy-history-dialog.c:1035
 msgid "Remove all history"
 msgstr "Limpar o histórico"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-location-entry.c:1828 src/ephy-permission-popover.c:271
+msgid "Notification Request"
+msgstr "Pedido de notificação"
+
+#: src/ephy-location-entry.c:1832
+msgid "Camera Request"
+msgstr "Pedido da câmara"
+
+#: src/ephy-location-entry.c:1836
+msgid "Microphone Request"
+msgstr "Pedido do microfone"
+
+#: src/ephy-location-entry.c:1840
+msgid "Location Request"
+msgstr "Pedido de localização"
+
+#: src/ephy-location-entry.c:1844
+msgid "Webcam and Microphone Request"
+msgstr "Pedido da webcam e microfone"
+
+#: src/ephy-location-entry.c:1848
+msgid "Permission Request"
+msgstr "Pedido de permissão"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2510,6 +2535,65 @@ msgstr "URL …"
 #: src/ephy-main.c:257
 msgid "Web options"
 msgstr "Opções do Navegador Web"
+
+#: src/ephy-permission-popover.c:272
+#, c-format
+msgid "The page at “%s” would like to send you notifications"
+msgstr "A página em \"%s\" gostaria de lhe enviar notificações"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:277
+msgid "Location Access Request"
+msgstr "Pedido de acesso à localização"
+
+#: src/ephy-permission-popover.c:278
+#, c-format
+msgid "The page at “%s” would like to know your location"
+msgstr "A página em \"%s\" gostaria de saber a sua localização"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:283
+msgid "Microphone Access Request"
+msgstr "Pedido de acesso ao microfone"
+
+#: src/ephy-permission-popover.c:284
+#, c-format
+msgid "The page at “%s” would like to use your microphone"
+msgstr "A página em \"%s\" gostaria de utilizar o seu microfone"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:289
+msgid "Webcam Access Request"
+msgstr "Pedido de acesso à webcam"
+
+#: src/ephy-permission-popover.c:290
+#, c-format
+msgid "The page at “%s” would like to use your webcam"
+msgstr "A página em \"%s\" gostaria de utilizar a sua webcam"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:295
+msgid "Webcam and Microphone Access Request"
+msgstr "Pedido de acesso à webcam e ao microfone"
+
+#: src/ephy-permission-popover.c:296
+#, c-format
+msgid "The page at “%s” would like to use your webcam and microphone"
+msgstr "A página em \"%s\" gostaria de utilizar a sua webcam e microfone"
+
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:303
+msgid "Third-party Cookies Request"
+msgstr "Pedido de cookies de terceiros"
+
+#: src/ephy-permission-popover.c:304
+#, c-format
+msgid ""
+"The page at “%s” would like to use cookies while browsing “%s”. This will "
+"allow “%s” to track your activity."
+msgstr ""
+"A página em \"%s\" gostaria de utilizar cookies enquanto navega em \"%s\". "
+"Isto permitirá a \"%s\" rastrear a sua atividade."
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2587,7 +2671,7 @@ msgstr "Acesso à câmara"
 
 #: src/ephy-security-popover.c:562
 msgid "Media autoplay"
-msgstr "Reprodução automática dos média"
+msgstr "Reprodução automática de ficheiros"
 
 #: src/ephy-security-popover.c:562
 msgid "Without Sound"
@@ -2634,7 +2718,7 @@ msgstr "_Enviar ligação por correio…"
 
 #: src/ephy-window.c:932
 msgid "_Reload"
-msgstr "_Atualizar"
+msgstr "_Recarregar"
 
 #: src/ephy-window.c:933
 msgid "_Back"
@@ -4318,26 +4402,6 @@ msgstr "_Ativar"
 #, c-format
 #~ msgid "Do you want to save your password for “%s”?"
 #~ msgstr "Deseja gravar a sua palavra-passe para “%s”?"
-
-#, c-format
-#~ msgid "The page at %s wants to show desktop notifications."
-#~ msgstr "A página %s deseja mostrar notificações no ambiente de trabalho."
-
-#, c-format
-#~ msgid "The page at %s wants to know your location."
-#~ msgstr "A página %s deseja saber a sua localização."
-
-#, c-format
-#~ msgid "The page at %s wants to use your microphone."
-#~ msgstr "A página %s deseja utilizar o seu microfone."
-
-#, c-format
-#~ msgid "The page at %s wants to use your webcam."
-#~ msgstr "A página %s deseja utilizar a sua câmara."
-
-#, c-format
-#~ msgid "The page at %s wants to use your webcam and microphone."
-#~ msgstr "A página %s deseja utilizar a sua câmara e o microfone."
 
 #, c-format
 #~ msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
