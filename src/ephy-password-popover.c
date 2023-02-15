@@ -136,8 +136,10 @@ ephy_password_popover_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_password_popover_parent_class)->constructed (object);
 
-  gtk_editable_set_text (GTK_EDITABLE (self->username_entry),
-                         self->request_data->username);
+  if (self->request_data->username) {
+    gtk_editable_set_text (GTK_EDITABLE (self->username_entry),
+                           self->request_data->username);
+  }
   gtk_editable_set_text (GTK_EDITABLE (self->password_entry),
                          self->request_data->password);
 }
