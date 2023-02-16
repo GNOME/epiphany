@@ -3754,15 +3754,10 @@ save_password_cb (EphyEmbedShell          *shell,
       (EPHY_WINDOW (window)->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
     AdwMessageDialog *dialog;
     GtkBox *entry_box;
-    GtkWidget *username_entry;
     GtkWidget *password_entry;
 
     dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), _("Save login?"),
                                                          _("Passwords are saved only on your device and can be removed at any time in Preferences")));
-    entry_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 6));
-    username_entry = gtk_entry_new ();
-    password_entry = gtk_password_entry_new ();
-
     adw_message_dialog_add_responses (dialog,
                                       "close", _("Not Now"),
                                       "never", _("Never Save"),
@@ -3774,18 +3769,24 @@ save_password_cb (EphyEmbedShell          *shell,
     adw_message_dialog_set_default_response (dialog, "close");
     adw_message_dialog_set_close_response (dialog, "close");
 
-    gtk_editable_set_text (GTK_EDITABLE (username_entry), request_data->username);
-    gtk_editable_set_text (GTK_EDITABLE (password_entry), request_data->password);
-    gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (password_entry), TRUE);
-
+    entry_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 6));
     adw_message_dialog_set_extra_child (dialog, GTK_WIDGET (entry_box));
-    gtk_box_append (entry_box, username_entry);
+
+    if (request_data->username) {
+      GtkWidget *username_entry = gtk_entry_new ();
+      gtk_editable_set_text (GTK_EDITABLE (username_entry), request_data->username);
+      gtk_box_append (entry_box, username_entry);
+      g_signal_connect (username_entry, "changed", G_CALLBACK (on_username_entry_changed), request_data);
+    }
+
+    password_entry = gtk_password_entry_new ();
+    gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (password_entry), TRUE);
+    gtk_editable_set_text (GTK_EDITABLE (password_entry), request_data->password);
     gtk_box_append (entry_box, password_entry);
+    g_signal_connect (password_entry, "changed", G_CALLBACK (on_password_entry_changed), request_data);
 
     g_signal_connect (dialog, "response::save", G_CALLBACK (on_password_save), request_data);
     g_signal_connect (dialog, "response::never", G_CALLBACK (on_password_never), request_data);
-    g_signal_connect (username_entry, "changed", G_CALLBACK (on_username_entry_changed), request_data);
-    g_signal_connect (password_entry, "changed", G_CALLBACK (on_password_entry_changed), request_data);
 
     gtk_window_present (GTK_WINDOW (dialog));
   } else {
