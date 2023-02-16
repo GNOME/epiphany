@@ -139,7 +139,10 @@ ephy_password_popover_constructed (GObject *object)
   if (self->request_data->username) {
     gtk_editable_set_text (GTK_EDITABLE (self->username_entry),
                            self->request_data->username);
+  } else {
+    gtk_widget_set_visible (self->username_entry, FALSE);
   }
+
   gtk_editable_set_text (GTK_EDITABLE (self->password_entry),
                          self->request_data->password);
 }
