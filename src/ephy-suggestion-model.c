@@ -174,12 +174,11 @@ ephy_suggestion_model_get_item (GListModel *model,
   GSequenceIter *iter;
   DzlSuggestion *suggestion;
 
-  if (position == GTK_INVALID_LIST_POSITION)
+  iter = g_sequence_get_iter_at_pos (self->items, position);
+  if (g_sequence_iter_is_end (iter))
     return NULL;
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
   suggestion = g_sequence_get (iter);
-
   return g_object_ref (suggestion);
 }
 
