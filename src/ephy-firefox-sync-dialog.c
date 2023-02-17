@@ -498,9 +498,11 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
                       G_CALLBACK (sync_open_webmail_clicked_cb),
                       sync_dialog);
     webkit_user_content_manager_register_script_message_handler (sync_dialog->fxa_manager,
-                                                                 "toChromeMessageHandler");
+                                                                 "toChromeMessageHandler",
+                                                                 NULL);
     webkit_user_content_manager_register_script_message_handler (sync_dialog->fxa_manager,
-                                                                 "openWebmailClickHandler");
+                                                                 "openWebmailClickHandler",
+                                                                 NULL);
 
     shell = ephy_embed_shell_get_default ();
     embed_context = ephy_embed_shell_get_web_context (shell);
@@ -634,9 +636,11 @@ prefs_sync_page_finalize (GObject *object)
 
   if (sync_dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
-                                                                   "toChromeMessageHandler");
+                                                                   "toChromeMessageHandler",
+                                                                   NULL);
     webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
-                                                                   "openWebmailClickHandler");
+                                                                   "openWebmailClickHandler",
+                                                                   NULL);
     webkit_user_script_unref (sync_dialog->fxa_script);
     g_object_unref (sync_dialog->fxa_manager);
   }
