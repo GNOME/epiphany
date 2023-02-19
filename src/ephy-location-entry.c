@@ -30,10 +30,12 @@
 #include "ephy-embed-shell.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-settings.h"
+#include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
 #include "ephy-suggestion.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
+#include "ephy-web-view.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -290,10 +292,27 @@ update_suggestions_popover (EphyLocationEntry *entry)
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (entry->suggestions_model));
 
-  if (entry->show_suggestions && n_items > 0)
+  if (entry->show_suggestions && n_items > 0) {
+    if (entry->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
+      GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (entry));
+      double offset;
+
+      gtk_widget_translate_coordinates (GTK_WIDGET (entry),
+                                        GTK_WIDGET (root),
+                                        0, 0,
+                                        &offset, NULL);
+
+      gtk_widget_set_halign (entry->suggestions_popover, GTK_ALIGN_START);
+      gtk_popover_set_offset (GTK_POPOVER (entry->suggestions_popover), -offset, 0);
+    } else {
+      gtk_widget_set_halign (entry->suggestions_popover, GTK_ALIGN_FILL);
+      gtk_popover_set_offset (GTK_POPOVER (entry->suggestions_popover), 0, 0);
+    }
+
     gtk_popover_popup (GTK_POPOVER (entry->suggestions_popover));
-  else
+  } else {
     gtk_popover_popdown (GTK_POPOVER (entry->suggestions_popover));
+  }
 }
 
 static void
@@ -1096,6 +1115,7 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
   int icon_right_pos = width;
   GskTransform *transform;
   GList *l;
+  GtkWidget *root = GTK_WIDGET (gtk_widget_get_root (widget));
 
   for (l = entry->permission_buttons; l; l = l->next) {
     allocate_icon (widget, height, baseline, l->data,
@@ -1121,8 +1141,13 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
 
   gtk_widget_allocate (entry->progress, width, height, baseline, NULL);
 
-  gtk_widget_set_size_request (entry->suggestions_popover,
-                               gtk_widget_get_allocated_width (widget), -1);
+  if (entry->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
+    gtk_widget_set_size_request (entry->suggestions_popover,
+                                 gtk_widget_get_width (root), -1);
+  else
+    gtk_widget_set_size_request (entry->suggestions_popover,
+                                 gtk_widget_get_allocated_width (widget), -1);
+
   gtk_widget_queue_resize (entry->suggestions_popover);
 
   gtk_popover_present (GTK_POPOVER (entry->suggestions_popover));
