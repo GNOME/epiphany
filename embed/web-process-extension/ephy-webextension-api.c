@@ -24,7 +24,6 @@
 
 #include <json-glib/json-glib.h>
 #include <webkit/webkit-web-extension.h>
-#include <JavaScriptCore/JavaScript.h>
 
 struct _EphyWebExtensionExtension {
   GObject parent_instance;
