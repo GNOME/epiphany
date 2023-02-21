@@ -98,11 +98,6 @@ ephy_floating_bar_init (EphyFloatingBar *self)
   gtk_box_append (GTK_BOX (self), w);
   self->primary_label_widget = w;
 
-  gtk_widget_set_margin_top (w, 2);
-  gtk_widget_set_margin_bottom (w, 2);
-  gtk_widget_set_margin_start (w, 12);
-  gtk_widget_set_margin_end (w, 12);
-
   gtk_widget_set_can_target (GTK_WIDGET (self), FALSE);
   gtk_widget_add_css_class (GTK_WIDGET (self), "floating-bar");
 }
