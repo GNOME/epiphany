@@ -90,6 +90,7 @@ gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
 gio_dep = dependency('gio-2.0', version: glib_requirement)
 gio_unix_dep = dependency('gio-unix-2.0', version: glib_requirement)
 glib_dep = dependency('glib-2.0', version: glib_requirement)
+granite_dep = dependency('granite-7', version: '>= 7.2.0', required: get_option('granite'))
 gsettings_desktop_schemas = dependency('gsettings-desktop-schemas')
 gstreamer_dep = dependency('gstreamer-1.0')
 gtk_dep = dependency('gtk4', version: gtk_requirement)
@@ -107,6 +108,10 @@ portal_dep = dependency('libportal-gtk4', version: '>= 0.6')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 webkitgtk_dep = dependency('webkitgtk-6.0', version: webkitgtk_requirement)
 webkitgtk_web_extension_dep = dependency('webkitgtk-web-extension-6.0', version: webkitgtk_requirement)
+
+if granite_dep.found()
+  conf.set('USE_GRANITE', 1)
+endif
 
 webkit_revision = webkitgtk_dep.get_variable(pkgconfig: 'revision', default_value: '')
 if webkit_revision == 'tarball'

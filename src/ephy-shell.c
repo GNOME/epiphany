@@ -50,6 +50,10 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#ifdef USE_GRANITE
+#include <granite-7.h>
+#endif
+
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
@@ -843,6 +847,11 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell->startup_finished = FALSE;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+#ifdef USE_GRANITE
+  if (is_desktop_pantheon ())
+    granite_init ();
+#endif
 }
 
 static void

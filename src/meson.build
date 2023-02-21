@@ -82,6 +82,7 @@ libephymain_deps = [
   ephysync_dep,
   gcr_dep,
   gdk_pixbuf_dep,
+  granite_dep,
   gstreamer_dep,
   gvdb_dep,
   libarchive_dep,
