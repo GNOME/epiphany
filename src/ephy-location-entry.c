@@ -1956,6 +1956,7 @@ progress_hide (gpointer user_data)
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
 
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress), 0);
+  gtk_widget_set_visible (entry->progress, FALSE);
 
   g_clear_handle_id (&entry->progress_timeout, g_source_remove);
 
@@ -1988,6 +1989,8 @@ ephy_location_entry_set_fraction_internal (gpointer user_data)
       entry->progress_timeout = g_timeout_add (500, progress_hide, entry);
   }
 
+  gtk_widget_set_visible (entry->progress, TRUE);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -2005,8 +2008,10 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
      * progress bar to be shown. Yikes....
      */
     current_progress = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (entry->progress));
-    if (current_progress != 0.0)
+    if (current_progress != 0.0) {
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress), 0.0);
+      gtk_widget_set_visible (entry->progress, FALSE);
+    }
     return;
   }
 
