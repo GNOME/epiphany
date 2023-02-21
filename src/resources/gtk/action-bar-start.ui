@@ -15,6 +15,9 @@
             <property name="icon-name">go-previous-symbolic</property>
             <!-- Translators: tooltip for the back button -->
             <property name="tooltip_text" translatable="yes">Back</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
             <child>
               <object class="GtkGestureClick">
                 <!-- GDK_BUTTON_MIDDLE -->
@@ -43,6 +46,9 @@
             <property name="icon-name">go-next-symbolic</property>
             <!-- Translators: tooltip for the forward button -->
             <property name="tooltip_text" translatable="yes">Forward</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
             <child>
               <object class="GtkGestureClick">
                 <!-- GDK_BUTTON_MIDDLE -->
@@ -71,6 +77,9 @@
       <object class="GtkButton" id="combined_stop_reload_button">
         <property name="action-name">toolbar.combined-stop-reload</property>
         <property name="icon-name">view-refresh-symbolic</property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
         <child>
           <object class="GtkGestureClick">
             <!-- GDK_BUTTON_MIDDLE -->
@@ -87,6 +96,9 @@
         <property name="icon-name">go-home-symbolic</property>
         <!-- Translators: tooltip for the secret homepage button -->
         <property name="tooltip_text" translatable="yes">Homepage</property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
         <child>
           <object class="GtkGestureClick">
             <!-- GDK_BUTTON_MIDDLE -->
@@ -103,6 +115,9 @@
         <property name="icon-name">tab-new-symbolic</property>
         <!-- Translators: tooltip for the new tab button -->
         <property name="tooltip_text" translatable="yes">New Tab</property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
         <child>
           <object class="GtkGestureClick">
             <!-- GDK_BUTTON_MIDDLE -->

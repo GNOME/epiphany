@@ -135,11 +135,14 @@
       </object>
     </child>
     <child type="header">
-      <object class="GtkBox">
+      <object class="GtkBox" id="button-box">
         <property name="orientation">horizontal</property>
         <property name="spacing">6</property>
         <property name="homogeneous">True</property>
         <property name="margin-top">6</property>
+        <style>
+          <class name="page-menu-button-box"/>
+        </style>
         <child>
           <object class="GtkButton">
             <property name="tooltip_text" translatable="yes">Print…</property>

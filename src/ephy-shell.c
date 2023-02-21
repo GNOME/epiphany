@@ -74,6 +74,10 @@ struct _EphyShell {
 
   gchar *open_notification_id;
   gboolean startup_finished;
+
+#if USE_GRANITE
+  GtkStyleProvider *style_provider;
+#endif
 };
 
 static EphyShell *ephy_shell = NULL;
@@ -493,14 +497,24 @@ ephy_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
-  /* If we are under Pantheon set the icon-theme and cursor-theme accordingly. */
+#if USE_GRANITE
   if (is_desktop_pantheon ()) {
+    /* If we are under Pantheon set the icon-theme and cursor-theme accordingly. */
     GtkSettings *settings = gtk_settings_get_default ();
     g_object_set (settings,
                   "gtk-icon-theme-name", "elementary",
                   "gtk-cursor-theme-name", "elementary",
                   NULL);
+
+    shell->style_provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
+    gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (shell->style_provider),
+                                         "/org/gnome/Epiphany/style-elementary.css");
+
+    gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                shell->style_provider,
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
+#endif
 
   /* We're not remoting; start our services */
 
@@ -889,6 +903,10 @@ ephy_shell_dispose (GObject *object)
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
+
+#if USE_GRANITE
+  g_clear_object (&shell->style_provider);
+#endif
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }

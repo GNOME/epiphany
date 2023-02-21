@@ -12,6 +12,7 @@
             <property name="receives_default">True</property>
             <style>
               <class name="image-button"/>
+              <class name="toolbar-button"/>
             </style>
             <child>
               <object class="GtkImage" id="downloads_icon">
@@ -29,6 +30,9 @@
         <property name="visible">False</property>
         <property name="receives_default">True</property>
         <property name="icon-name">application-x-addon-symbolic</property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
         <property name="popover">
           <object class="GtkPopover" id="browser_actions_popover">
             <property name="width-request">250</property>
@@ -92,6 +96,9 @@
     <child>
       <object class="GtkMenuButton" id="bookmark_button">
         <property name="icon-name">ephy-non-starred-symbolic</property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
       </object>
     </child>
     <child>
@@ -102,6 +109,9 @@
         <property name="popover">
           <object class="EphyBookmarksPopover" id="bookmarks_popover"/>
         </property>
+        <style>
+          <class name="toolbar-button"/>
+        </style>
       </object>
     </child>
   </template>

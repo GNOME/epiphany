@@ -330,9 +330,16 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
 
   if (is_desktop_pantheon ()) {
+    GtkWidget *button_box;
+
     remove_menu_item (menu, "app.about");
 
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (button), "open-menu");
+    gtk_widget_add_css_class (button, "toolbar-button");
+
+    button_box = GTK_WIDGET (gtk_builder_get_object (builder, "button-box"));
+    gtk_widget_add_css_class (button_box, "linked");
+    gtk_box_set_spacing (GTK_BOX (button_box), 0);
   }
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->page_menu_popover);
