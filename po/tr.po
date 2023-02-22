@@ -22,16 +22,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-02-12 12:43+0000\n"
-"PO-Revision-Date: 2023-02-13 21:05+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-02-18 20:29+0000\n"
+"PO-Revision-Date: 2023-02-20 15:28+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
@@ -562,11 +562,11 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last upload directory"
-msgstr "Son karşıya yükleme dizini"
+msgstr "Son yükleme dizini"
 
 #: data/org.gnome.epiphany.gschema.xml:255
 msgid "Keep track of last upload directory"
-msgstr "Son karşıya yükleme dizininin kaydını tut"
+msgstr "Son yükleme dizininin kaydını tut"
 
 #: data/org.gnome.epiphany.gschema.xml:259
 msgid "Last download directory"
@@ -1979,7 +1979,7 @@ msgstr "“%s” dosyası var. Lütfen başka yere taşıyın."
 #: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
-msgstr "“%s” dizini oluşturulurken hata oluştu."
+msgstr "“%s” dizini oluşturulamadı."
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -2075,7 +2075,7 @@ msgstr "%s masaüstü dosyası kurulamadı: "
 #: lib/ephy-web-app-utils.c:387
 #, c-format
 msgid "Profile directory %s already exists"
-msgstr "%s profil dizini halihazırda var"
+msgstr "%s profil dizini zaten var"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -2117,7 +2117,7 @@ msgstr "%s formundaki parola"
 
 #: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain storage credentials."
-msgstr "Depo kimlik bilgilerini alma başarısız."
+msgstr "Depo kimlik bilgileri alınamadı."
 
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
 #: lib/sync/ephy-sync-service.c:1940
@@ -2140,7 +2140,7 @@ msgstr ""
 
 #: lib/sync/ephy-sync-service.c:1125
 msgid "Failed to obtain signed certificate."
-msgstr "İmzalı sertifikayı alma başarısız."
+msgstr "İmzalı sertifika alınamadı."
 
 #: lib/sync/ephy-sync-service.c:1906 lib/sync/ephy-sync-service.c:1911
 msgid "Could not find the sync secrets for the current sync user."
@@ -2159,19 +2159,19 @@ msgstr "%s kullanıcısının eşzamanlama anahtarları"
 
 #: lib/sync/ephy-sync-service.c:2064
 msgid "Failed to upload client record."
-msgstr "İstemci kaydı yükleme başarısız."
+msgstr "İstemci kaydı yüklenemedi."
 
 #: lib/sync/ephy-sync-service.c:2267
 msgid "Failed to upload crypto/keys record."
-msgstr "Şifreleme/anahtar kaydını karşıya yukleme başarısız."
+msgstr "Şifreleme/anahtar kaydını yüklenemedi."
 
 #: lib/sync/ephy-sync-service.c:2379
 msgid "Failed to retrieve crypto keys."
-msgstr "Şifreleme anahtarını alma başarısız."
+msgstr "Şifreleme anahtarı alınamadı."
 
 #: lib/sync/ephy-sync-service.c:2433
 msgid "Failed to upload meta/global record."
-msgstr "Üst/genel kayıtları karşıya yukleme başarısız."
+msgstr "Üst/genel kayıtları yüklenemedi."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:2555
@@ -2184,15 +2184,15 @@ msgstr ""
 
 #: lib/sync/ephy-sync-service.c:2566
 msgid "Failed to verify storage version."
-msgstr "Depo sürümünü doğrulama başarısız."
+msgstr "Depo sürümü doğrulanamadı."
 
 #: lib/sync/ephy-sync-service.c:2624
 msgid "Failed to upload device info"
-msgstr "Aygıt bilgisi yükleme başarısız"
+msgstr "Aygıt bilgisi yüklenemedi"
 
 #: lib/sync/ephy-sync-service.c:2700 lib/sync/ephy-sync-service.c:2783
 msgid "Failed to retrieve the Sync Key"
-msgstr "Eşzamanlama anahtarını alma başarısız"
+msgstr "Eşzamanlama anahtarı alınamadı."
 
 #: src/bookmarks/ephy-bookmark-row.c:64
 msgid "Bookmark Properties"
@@ -2519,57 +2519,63 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "Web seçenekleri"
 
-#: src/ephy-permission-popover.c:272
+#. Translators: Notification policy for a specific site.
+#: src/ephy-permission-popover.c:273
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "“%s” sayfası size bildirim göndermek istiyor"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-permission-popover.c:277
+#: src/ephy-permission-popover.c:278
 msgid "Location Access Request"
 msgstr "Konum Erişimi İsteği"
 
-#: src/ephy-permission-popover.c:278
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:280
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "“%s” sayfası konumunuzu bilmek istiyor"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-permission-popover.c:283
+#: src/ephy-permission-popover.c:285
 msgid "Microphone Access Request"
 msgstr "Mikrofon Erişimi İsteği"
 
-#: src/ephy-permission-popover.c:284
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:287
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "“%s” sayfası mikrofonunuzu kullanmak istiyor"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-permission-popover.c:289
+#: src/ephy-permission-popover.c:292
 msgid "Webcam Access Request"
 msgstr "Web Kamerası Erişimi İsteği"
 
-#: src/ephy-permission-popover.c:290
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:294
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "“%s” sayfası web kameranızı kullanmak istiyor"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-permission-popover.c:295
+#: src/ephy-permission-popover.c:299
 msgid "Webcam and Microphone Access Request"
 msgstr "Web Kamerası ve Mikrofon Erişimi İsteği"
 
-#: src/ephy-permission-popover.c:296
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:301
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "“%s” sayfası web kameranızı ve mikrofonunuzu kullanmak istiyor"
 
 #. Translators: Cookie policy for a specific site.
-#: src/ephy-permission-popover.c:303
+#: src/ephy-permission-popover.c:308
 msgid "Third-party Cookies Request"
 msgstr "Üçüncü Taraf Çerez İsteği"
 
-#: src/ephy-permission-popover.c:304
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:310
 #, c-format
 msgid ""
 "The page at “%s” would like to use cookies while browsing “%s”. This will "
@@ -2837,15 +2843,15 @@ msgstr "_Reddet"
 msgid "_Allow"
 msgstr "_İzin Ver"
 
-#: src/ephy-window.c:2996 src/ephy-window.c:4416
+#: src/ephy-window.c:2996 src/ephy-window.c:4417
 msgid "Leave Website?"
 msgstr "Web Sitesinden Çıkılsın Mı?"
 
-#: src/ephy-window.c:2997 src/ephy-window.c:4417 src/window-commands.c:1235
+#: src/ephy-window.c:2997 src/ephy-window.c:4418 src/window-commands.c:1235
 msgid "A form was modified and has not been submitted"
 msgstr "Bir form değiştirildi ve gönderilmedi"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4418 src/window-commands.c:1239
+#: src/ephy-window.c:2998 src/ephy-window.c:4419 src/window-commands.c:1239
 msgid "_Discard Form"
 msgstr "Formdan _Vazgeç"
 
@@ -2897,11 +2903,11 @@ msgstr "_Evet"
 msgid "View open tabs"
 msgstr "Açık sekmeleri gör"
 
-#: src/ephy-window.c:3760
+#: src/ephy-window.c:3759
 msgid "Save login?"
 msgstr "Giriş kaydedilsin mi?"
 
-#: src/ephy-window.c:3761
+#: src/ephy-window.c:3760
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
@@ -2909,35 +2915,35 @@ msgstr ""
 "Parolalar yalnızca aygıtınıza kaydedilir ve istendiğinde Tercihlerʼden "
 "kaldırılabilir"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3762
 msgid "Not Now"
 msgstr "Şimdi Değil"
 
-#: src/ephy-window.c:3768
+#: src/ephy-window.c:3763
 msgid "Never Save"
 msgstr "Asla Kaydetme"
 
-#: src/ephy-window.c:3769
+#: src/ephy-window.c:3764
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/ephy-window.c:4547
+#: src/ephy-window.c:4548
 msgid "Close Multiple Tabs?"
 msgstr "Birden Çok Sekme Kapatılsın Mı?"
 
-#: src/ephy-window.c:4548
+#: src/ephy-window.c:4549
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Bu pencere kapatılırsa tüm açık sekmeler yitirilecektir"
 
-#: src/ephy-window.c:4549
+#: src/ephy-window.c:4550
 msgid "C_lose Tabs"
 msgstr "Sek_meleri Kapat"
 
-#: src/ephy-window.c:4653
+#: src/ephy-window.c:4654
 msgid "New tab opened"
 msgstr "Yeni sekme açıldı"
 
-#: src/ephy-window.c:4657
+#: src/ephy-window.c:4658
 msgid "Switch"
 msgstr "Geç"
 
