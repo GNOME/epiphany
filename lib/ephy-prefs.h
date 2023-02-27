@@ -37,12 +37,6 @@ typedef enum
 
 typedef enum
 {
-  EPHY_PREFS_NEW_TAB_PAGE_HOMEPAGE,
-  EPHY_PREFS_NEW_TAB_PAGE_BLANK
-} EphyPrefsNewTabPage;
-
-typedef enum
-{
   EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS,
   EPHY_PREFS_RESTORE_SESSION_POLICY_CRASHED
 } EphyPrefsRestoreSessionPolicy;
@@ -158,7 +152,6 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_START_IN_INCOGNITO_MODE            "start-in-incognito-mode"
 #define EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS            "active-clear-data-items"
 #define EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS      "use-google-search-suggestions"
-#define EPHY_PREFS_NEW_TAB_PAGE                       "new-tab-page"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"

@@ -28,7 +28,6 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-lang-row.h"
 #include "ephy-langs.h"
-#include "ephy-lib-type-builtins.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-listbox.h"
 #include "ephy-web-app-utils.h"
@@ -64,9 +63,6 @@ struct _PrefsGeneralPage {
   GtkWidget *blank_homepage_radiobutton;
   GtkWidget *custom_homepage_radiobutton;
   GtkWidget *custom_homepage_entry;
-
-  /* New Tab */
-  GtkWidget *new_tab_page;
 
   /* Downloads */
   GtkWidget *download_box;
@@ -895,50 +891,6 @@ on_manage_webapp_additional_urls_row_activated (GtkWidget        *button,
   gtk_window_present (GTK_WINDOW (urls_dialog));
 }
 
-static gchar *
-new_tab_page_get_name (gpointer            user_data,
-                       EphyPrefsNewTabPage new_tab_page)
-{
-  switch (new_tab_page) {
-    case EPHY_PREFS_NEW_TAB_PAGE_HOMEPAGE:
-      return g_strdup (_("Homepage"));
-    case EPHY_PREFS_NEW_TAB_PAGE_BLANK:
-      return g_strdup (_("Blank"));
-  }
-
-  return g_strdup (_("Blank"));
-}
-
-static gboolean
-new_tab_page_get_mapping (GValue   *value,
-                          GVariant *variant,
-                          gpointer  user_data)
-{
-  const char *settings = g_variant_get_string (variant, NULL);
-
-  if (g_strcmp0 (settings, "homepage") == 0)
-    g_value_set_uint (value, EPHY_PREFS_NEW_TAB_PAGE_HOMEPAGE);
-  else if (g_strcmp0 (settings, "blank") == 0)
-    g_value_set_uint (value, EPHY_PREFS_NEW_TAB_PAGE_BLANK);
-
-  return TRUE;
-}
-
-static GVariant *
-new_tab_page_set_mapping (const GValue       *value,
-                          const GVariantType *expected_type,
-                          gpointer            user_data)
-{
-  switch (g_value_get_uint (value)) {
-    case EPHY_PREFS_NEW_TAB_PAGE_HOMEPAGE:
-      return g_variant_new_string ("homepage");
-    case EPHY_PREFS_NEW_TAB_PAGE_BLANK:
-      return g_variant_new_string ("blank");
-    default:
-      return g_variant_new_string ("homepage");
-  }
-}
-
 static void
 prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 {
@@ -968,9 +920,6 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, custom_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, custom_homepage_entry);
 
-  /* New Tab */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, new_tab_page);
-
   /* Downloads */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, ask_on_download_switch);
@@ -997,7 +946,6 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_spell_checking_switch);
 
   /* Signals */
-  gtk_widget_class_bind_template_callback (widget_class, new_tab_page_get_name);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_row_activated);
@@ -1117,18 +1065,6 @@ setup_general_page (PrefsGeneralPage *general_page)
   g_signal_connect (general_page->custom_homepage_entry, "icon-release",
                     G_CALLBACK (custom_homepage_entry_icon_released),
                     NULL);
-
-  /* ======================================================================== */
-  /* =========================== New Tab ==================================== */
-  /* ======================================================================== */
-  g_settings_bind_with_mapping (settings,
-                                EPHY_PREFS_NEW_TAB_PAGE,
-                                general_page->new_tab_page,
-                                "selected",
-                                G_SETTINGS_BIND_DEFAULT,
-                                new_tab_page_get_mapping,
-                                new_tab_page_set_mapping,
-                                NULL, NULL);
 
   /* ======================================================================== */
   /* ========================== Downloads =================================== */
