@@ -501,10 +501,20 @@ ephy_shell_startup (GApplication *application)
   if (is_desktop_pantheon ()) {
     /* If we are under Pantheon set the icon-theme and cursor-theme accordingly. */
     GtkSettings *settings = gtk_settings_get_default ();
+    g_autofree char *theme_name = NULL;
+
     g_object_set (settings,
                   "gtk-icon-theme-name", "elementary",
                   "gtk-cursor-theme-name", "elementary",
                   NULL);
+
+    g_object_get (settings, "gtk-theme-name", &theme_name, NULL);
+
+    if (!g_str_has_prefix (theme_name, "io.elementary")) {
+      g_object_set (settings,
+                    "gtk-theme-name", "io.elementary.stylesheet.blueberry",
+                    NULL);
+    }
 
     shell->style_provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
     gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (shell->style_provider),
