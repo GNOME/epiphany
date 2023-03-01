@@ -33,8 +33,7 @@ ephy_favicon_get_from_texture_scaled (GdkTexture *texture,
   int favicon_width;
   int favicon_height;
 
-  /* Treat NULL texture cleanly. */
-  if (texture)
+  if (!texture)
     return NULL;
 
   /* A size of (0, 0) means the original size of the favicon. */
