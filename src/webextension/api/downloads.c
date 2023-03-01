@@ -296,13 +296,13 @@ download_query_new (JsonObject *object)
 static char *
 download_get_filename (EphyDownload *download)
 {
-  const char *destination_uri = ephy_download_get_destination_uri (download);
+  const char *destination_path = ephy_download_get_destination (download);
   g_autoptr (GFile) dest_file = NULL;
 
-  if (!destination_uri)
+  if (!destination_path)
     return NULL;
 
-  dest_file = g_file_new_for_uri (destination_uri);
+  dest_file = g_file_new_for_path (destination_path);
   return g_file_get_path (dest_file);
 }
 
@@ -720,7 +720,7 @@ downloads_handler_removefile (EphyWebExtensionSender *sender,
 {
   gint64 download_id = ephy_json_array_get_int (args, 0);
   EphyDownloadsManager *downloads_manager = get_downloads_manager ();
-  const char *destination_uri;
+  const char *destination;
   g_autoptr (GFile) destination_file = NULL;
   EphyDownload *download;
 
@@ -738,14 +738,14 @@ downloads_handler_removefile (EphyWebExtensionSender *sender,
   /* Ensure the download isn't active. */
   ephy_download_cancel (download);
 
-  destination_uri = ephy_download_get_destination_uri (download);
+  destination = ephy_download_get_destination (download);
   /* If a destination was never chosen this was never written to disk. */
-  if (!destination_uri) {
+  if (!destination) {
     g_task_return_pointer (task, NULL, NULL);
     return;
   }
 
-  destination_file = g_file_new_for_uri (destination_uri);
+  destination_file = g_file_new_for_path (destination);
   g_file_delete_async (destination_file, G_PRIORITY_DEFAULT, NULL, (GAsyncReadyCallback)delete_file_ready_cb, task);
 }
 

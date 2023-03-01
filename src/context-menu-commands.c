@@ -161,12 +161,9 @@ filename_confirmed_cb (GtkFileDialog       *dialog,
 
   if (file) {
     g_autoptr (GFile) current_folder = NULL;
-    g_autofree char *uri = NULL;
-    g_autofree char *current_folder_path = NULL;
     WebKitDownload *webkit_download;
 
-    uri = g_file_get_uri (file);
-    ephy_download_set_destination_uri (data->download, uri);
+    ephy_download_set_destination (data->download, g_file_peek_path (file));
 
     webkit_download = ephy_download_get_webkit_download (data->download);
     webkit_download_set_allow_overwrite (webkit_download, TRUE);
@@ -175,10 +172,9 @@ filename_confirmed_cb (GtkFileDialog       *dialog,
                                          data->download);
 
     current_folder = g_file_get_parent (file);
-    current_folder_path = g_file_get_path (current_folder);
     g_settings_set_string (EPHY_SETTINGS_WEB,
                            EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
-                           current_folder_path);
+                           g_file_peek_path (current_folder));
   } else {
     g_idle_add_full (G_PRIORITY_DEFAULT,
                      (GSourceFunc)cancel_download_idle_cb,
@@ -284,12 +280,16 @@ static void
 background_download_completed (EphyDownload *download,
                                GtkWidget    *window)
 {
-  const char *uri;
-  GSettings *settings;
+  const char *path;
+  g_autofree char *uri = NULL;
+  g_autoptr (GError) error = NULL;
 
-  uri = ephy_download_get_destination_uri (download);
-  settings = ephy_settings_get ("org.gnome.desktop.background");
-  g_settings_set_string (settings, "picture-uri", uri);
+  path = ephy_download_get_destination (download);
+  uri = g_filename_to_uri (path, NULL, &error);
+  if (!uri)
+    g_warning ("Failed to set desktop background: could not convert path %s to URI: %s", path, error->message);
+  else
+    g_settings_set_string (ephy_settings_get ("org.gnome.desktop.background"), "picture-uri", uri);
 }
 
 void
@@ -299,7 +299,6 @@ context_cmd_set_image_as_background (GSimpleAction *action,
 {
   WebKitHitTestResult *hit_test_result;
   const char *location;
-  g_autofree char *dest_uri = NULL;
   g_autofree char *dest = NULL;
   g_autofree char *base = NULL;
   g_autofree char *base_converted = NULL;
@@ -319,9 +318,8 @@ context_cmd_set_image_as_background (GSimpleAction *action,
   base = g_path_get_basename (location);
   base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
   dest = g_build_filename (g_get_user_special_dir (G_USER_DIRECTORY_PICTURES), base_converted, NULL);
-  dest_uri = g_filename_to_uri (dest, NULL, NULL);
 
-  ephy_download_set_destination_uri (download, dest_uri);
+  ephy_download_set_destination (download, dest);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                        download);
 

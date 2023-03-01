@@ -101,7 +101,7 @@ ephy_download_get_property (GObject    *object,
       g_value_set_object (value, ephy_download_get_webkit_download (download));
       break;
     case PROP_DESTINATION:
-      g_value_set_string (value, ephy_download_get_destination_uri (download));
+      g_value_set_string (value, ephy_download_get_destination (download));
       break;
     case PROP_ACTION:
       g_value_set_enum (value, ephy_download_get_action (download));
@@ -126,7 +126,7 @@ ephy_download_set_property (GObject      *object,
 
   switch (property_id) {
     case PROP_DESTINATION:
-      ephy_download_set_destination_uri (download, g_value_get_string (value));
+      ephy_download_set_destination (download, g_value_get_string (value));
       break;
     case PROP_ACTION:
       ephy_download_set_action (download, g_value_get_enum (value));
@@ -206,14 +206,13 @@ parse_extension (const char *filename)
 }
 
 static gboolean
-set_destination_uri_for_suggested_filename (EphyDownload *download,
-                                            const char   *directory,
-                                            const char   *suggested_filename)
+set_destination_for_suggested_filename (EphyDownload *download,
+                                        const char   *directory,
+                                        const char   *suggested_filename)
 {
   char *dest_dir;
   char *dest_name;
-  char *destination_filename;
-  char *destination_uri;
+  g_autofree char *destination_filename = NULL;
 
   if (directory)
     dest_dir = g_strdup (directory);
@@ -267,30 +266,24 @@ set_destination_uri_for_suggested_filename (EphyDownload *download,
     g_string_free (tmp_filename, TRUE);
   }
 
-  destination_uri = g_filename_to_uri (destination_filename, NULL, NULL);
-  g_free (destination_filename);
-
-  g_assert (destination_uri);
-  webkit_download_set_destination (download->download, destination_uri);
-  g_free (destination_uri);
+  webkit_download_set_destination (download->download, destination_filename);
 
   return TRUE;
 }
 
 /**
- * ephy_download_set_destination_uri:
+ * ephy_download_set_destination:
  * @download: an #EphyDownload
- * @destination: URI where to save @download
+ * @destination: path at which to save @download
  *
- * Sets the destination URI of @download. It must be a proper URI, with a
- * scheme like file:/// or similar.
+ * Sets the destination of @download.
  **/
 void
-ephy_download_set_destination_uri (EphyDownload *download,
-                                   const char   *destination)
+ephy_download_set_destination (EphyDownload *download,
+                               const char   *destination)
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
-  g_assert (destination != NULL);
+  g_assert (destination);
 
   webkit_download_set_destination (download->download, destination);
   g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_DESTINATION]);
@@ -332,15 +325,15 @@ ephy_download_get_webkit_download (EphyDownload *download)
 }
 
 /**
- * ephy_download_get_destination_uri:
+ * ephy_download_get_destination:
  * @download: an #EphyDownload
  *
- * Gets the destination URI where the download is being saved.
+ * Gets the destination where the download is being saved.
  *
- * Returns: (transfer none): destination URI.
+ * Returns: (transfer none): destination path
  **/
 const char *
-ephy_download_get_destination_uri (EphyDownload *download)
+ephy_download_get_destination (EphyDownload *download)
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
 
@@ -427,11 +420,11 @@ ephy_download_do_download_action (EphyDownload           *download,
                                   EphyDownloadActionType  action)
 {
   GFile *destination;
-  const char *destination_uri;
+  const char *destination_path;
   gboolean ret = FALSE;
 
-  destination_uri = webkit_download_get_destination (download->download);
-  destination = g_file_new_for_uri (destination_uri);
+  destination_path = webkit_download_get_destination (download->download);
+  destination = g_file_new_for_path (destination_path);
 
   switch ((action ? action : download->action)) {
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
@@ -628,7 +621,7 @@ filename_suggested_dialog_cb (AdwMessageDialog      *dialog,
   if (!strcmp (response, "download")) {
     g_autofree gchar *directory = g_file_get_path (data->directory);
 
-    set_destination_uri_for_suggested_filename (data->download, directory, data->suggested_filename);
+    set_destination_for_suggested_filename (data->download, directory, data->suggested_filename);
 
     webkit_download_set_allow_overwrite (data->webkit_download, TRUE);
 
@@ -881,7 +874,7 @@ download_decide_destination_cb (WebKitDownload *wk_download,
        download->always_ask_destination))
     return run_download_confirmation_dialog (download, suggested_filename);
 
-  return set_destination_uri_for_suggested_filename (download, download->suggested_directory, suggested_filename);
+  return set_destination_for_suggested_filename (download, download->suggested_directory, suggested_filename);
 }
 
 static void
@@ -968,7 +961,7 @@ download_file_monitor_changed (GFileMonitor      *monitor,
                                EphyDownload      *download)
 {
   /* Skip messages for <file>.wkdownload */
-  if (strcmp (g_file_get_uri (file), webkit_download_get_destination (download->download)) != 0)
+  if (strcmp (g_file_peek_path (file), webkit_download_get_destination (download->download)) != 0)
     return;
 
   download->was_moved = TRUE;
@@ -994,7 +987,7 @@ download_finished_cb (WebKitDownload *wk_download,
 
   g_signal_emit (download, signals[COMPLETED], 0);
 
-  file = g_file_new_for_uri (webkit_download_get_destination (wk_download));
+  file = g_file_new_for_path (webkit_download_get_destination (wk_download));
   download->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, &error);
   if (!download->file_monitor)
     g_warning ("Could not add a file monitor for %s, error: %s\n", g_file_get_uri (file), error->message);

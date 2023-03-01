@@ -599,13 +599,13 @@ json_file_info_callback (GObject      *source_object,
   if (info)
     content_type = g_file_info_get_content_type (info);
   else
-    g_warning ("Couldn't query filter file %s: %s", ephy_download_get_destination_uri (data->download), error->message);
+    g_warning ("Couldn't query filter file %s: %s", ephy_download_get_destination (data->download), error->message);
 
   if (content_type && g_strcmp0 ("application/json", content_type) == 0) {
     filter_info_setup_load_file (data->self, json_file);
   } else {
     g_warning ("Filter source %s has invalid MIME type: %s",
-               ephy_download_get_destination_uri (data->download),
+               ephy_download_get_destination (data->download),
                content_type);
 
     g_file_delete_async (json_file, G_PRIORITY_DEFAULT, NULL, json_file_deleted, NULL);
@@ -635,7 +635,7 @@ download_completed_cb (EphyDownload *download,
   data->download = download;
   data->self = self;
 
-  json_file = g_file_new_for_uri (ephy_download_get_destination_uri (download));
+  json_file = g_file_new_for_path (ephy_download_get_destination (download));
   g_file_query_info_async (json_file,
                            G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                            G_FILE_QUERY_INFO_NONE,
@@ -678,7 +678,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) source_file = NULL;
   g_autoptr (GFile) json_file = NULL;
-  g_autofree char *json_file_uri = NULL;
   EphyDownload *download;
 
   if (!self->manager)
@@ -740,8 +739,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   download = ephy_download_new_for_uri_internal (self->source_uri);
 
   json_file = filter_info_get_source_file (self);
-  json_file_uri = g_file_get_uri (json_file);
-  ephy_download_set_destination_uri (download, json_file_uri);
+  ephy_download_set_destination (download, g_file_peek_path (json_file));
   ephy_download_disable_desktop_notification (download);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (download), TRUE);
 

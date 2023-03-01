@@ -56,18 +56,13 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
 {
   WebKitDownload *download;
   const char *dest;
-  char *basename;
-  g_autofree char *decoded = NULL;
 
   download = ephy_download_get_webkit_download (ephy_download);
   dest = webkit_download_get_destination (download);
   if (!dest)
     return NULL;
 
-  decoded = ephy_uri_decode (dest);
-  basename = g_filename_display_basename (decoded);
-
-  return basename;
+  return g_filename_display_basename (dest);
 }
 
 /* modified from telepathy-account-widgets/tpaw-time.c */
@@ -285,10 +280,8 @@ download_destination_changed_cb (WebKitDownload     *download,
 static GdkContentProvider *
 download_drag_prepare (WebKitDownload *download)
 {
-  const char *uri = webkit_download_get_destination (download);
-  GFile *file = g_file_new_for_uri (uri);
-
-  return gdk_content_provider_new_typed (G_TYPE_FILE, file);
+  const char *dest = webkit_download_get_destination (download);
+  return gdk_content_provider_new_typed (G_TYPE_FILE, g_file_new_for_path (dest));
 }
 
 static void

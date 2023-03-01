@@ -77,21 +77,14 @@ static void
 fixture_setup (Fixture       *fixture,
                gconstpointer  data)
 {
-  char *tmp_filename;
-  char *dest_file;
-
-  tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
-  dest_file = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
+  g_autofree char *tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
 
   fixture->source = get_uri_for_path ("/default");
   fixture->download = ephy_download_new_for_uri (fixture->source);
-  fixture->destination = g_filename_to_uri (dest_file, NULL, NULL);
+  fixture->destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
   fixture->loop = g_main_loop_new (NULL, TRUE);
 
   ephy_download_set_destination_uri (fixture->download, fixture->destination);
-
-  g_free (tmp_filename);
-  g_free (dest_file);
 }
 
 static void
@@ -109,16 +102,9 @@ fixture_teardown (Fixture       *fixture,
 static gboolean
 test_file_was_downloaded (EphyDownload *download)
 {
-  char *filename;
-  gboolean ret;
+  const char *filename = ephy_download_get_destination (download);
 
-  filename = g_filename_from_uri (ephy_download_get_destination_uri (download),
-                                  NULL, NULL);
-
-  ret = g_file_test (filename, G_FILE_TEST_EXISTS);
-  g_free (filename);
-
-  return ret;
+  return g_file_test (filename, G_FILE_TEST_EXISTS);
 }
 
 static void

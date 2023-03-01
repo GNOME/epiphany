@@ -1670,7 +1670,7 @@ download_finished_cb (WebKitDownload            *download,
 {
   g_autofree char *filename = NULL;
 
-  filename = g_filename_from_uri (webkit_download_get_destination (download), NULL, NULL);
+  filename = g_filename_display_basename (webkit_download_get_destination (download));
   set_app_icon_from_filename (data, filename);
 }
 
@@ -1688,7 +1688,6 @@ static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
   g_autofree char *destination = NULL;
-  g_autofree char *destination_uri = NULL;
   g_autofree char *tmp_filename = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
@@ -1704,8 +1703,7 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 
   tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
   destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
-  destination_uri = g_filename_to_uri (destination, NULL, NULL);
-  webkit_download_set_destination (data->download, destination_uri);
+  webkit_download_set_destination (data->download, destination);
 
   g_signal_connect (data->download, "finished",
                     G_CALLBACK (download_finished_cb), data);
