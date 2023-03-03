@@ -178,7 +178,8 @@ scan_directory_ready_cb (GFile        *file,
   enumerator = g_file_enumerate_children_finish (file, result, &error);
 
   if (error) {
-    g_warning ("Failed to scan extensions directory: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+      g_warning ("Failed to scan extensions directory: %s", error->message);
     return;
   }
 
