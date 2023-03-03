@@ -950,9 +950,9 @@ init_web_extension_api (WebKitWebContext *web_context,
   g_autofree char *translations = get_translation_contents (web_extension);
 
 #if DEVELOPER_MODE
-  webkit_web_context_set_web_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
+  webkit_web_context_set_web_process_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
 #else
-  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
+  webkit_web_context_set_web_process_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
   user_data = g_variant_new ("(smsbbbs)",
@@ -962,7 +962,7 @@ init_web_extension_api (WebKitWebContext *web_context,
                              FALSE /* private_profile */,
                              TRUE /* is_webextension */,
                              translations);
-  webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
+  webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
 static gboolean
@@ -1036,7 +1036,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");
-  g_signal_connect_object (web_context, "initialize-web-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+  g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
 
   web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                            "web-context", web_context,

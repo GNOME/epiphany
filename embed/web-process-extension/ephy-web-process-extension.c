@@ -38,12 +38,12 @@
 #include <jsc/jsc.h>
 #include <libsoup/soup.h>
 #include <string.h>
-#include <webkit/webkit-web-extension.h>
+#include <webkit/webkit-web-process-extension.h>
 
 struct _EphyWebProcessExtension {
   GObject parent_instance;
 
-  WebKitWebExtension *extension;
+  WebKitWebProcessExtension *extension;
   gboolean initialized;
 
   GCancellable *cancellable;
@@ -591,7 +591,7 @@ js_query_usernames (const char              *origin,
   if (!origin)
     return;
 
-  web_page = webkit_web_extension_get_page (extension->extension, page_id);
+  web_page = webkit_web_process_extension_get_page (extension->extension, page_id);
   if (!web_page)
     return;
 
@@ -667,7 +667,7 @@ js_query_password (const char              *origin,
   if (!origin || !target_origin || !password_field)
     return;
 
-  web_page = webkit_web_extension_get_page (extension->extension, page_id);
+  web_page = webkit_web_process_extension_get_page (extension->extension, page_id);
   if (!web_page)
     return;
 
@@ -857,11 +857,11 @@ window_object_cleared_cb (WebKitScriptWorld       *world,
 }
 
 void
-ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
-                                       WebKitWebExtension      *wk_extension,
-                                       const char              *guid,
-                                       gboolean                 should_remember_passwords,
-                                       gboolean                 is_private_profile)
+ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
+                                       WebKitWebProcessExtension *wk_extension,
+                                       const char                *guid,
+                                       gboolean                   should_remember_passwords,
+                                       gboolean                   is_private_profile)
 {
   g_assert (EPHY_IS_WEB_PROCESS_EXTENSION (extension));
 

@@ -32,8 +32,8 @@
 static EphyWebProcessExtension *extension = NULL;
 
 G_MODULE_EXPORT void
-webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
-                                                GVariant           *user_data)
+webkit_web_process_extension_initialize_with_user_data (WebKitWebProcessExtension *webkit_extension,
+                                                        GVariant                  *user_data)
 {
   const char *guid;
   const char *profile_dir;

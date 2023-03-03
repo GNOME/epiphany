@@ -148,10 +148,10 @@ called the "web process extension" and lives in `embed/web-process-extension/`.
 It is compiled into a shared library `libephywebprocessextension.so` and
 installed in `$(pkglibdir)` (e.g. `/usr/lib64/epiphany`). `EphyEmbedShell` tells
 WebKit to look for extensions in that location using
-`webkit_web_context_set_web_extensions_directory()`. Now the Epiphany UI process
+`webkit_web_context_set_web_process_extensions_directory()`. Now the Epiphany UI process
 and web process extension can communicate back and forth via the WebKit IPC
 functions webkit_web_context_send_message_to_all_extensions(),
-webkit_web_view_send_message_to_page(), webkit_web_extension_send_message_to_context(),
+webkit_web_view_send_message_to_page(), webkit_web_process_extension_send_message_to_context(),
 and webkit_web_page_send_message_to_view().
 
 If you are making changes to the web process extension, you'll need to enable
@@ -166,11 +166,9 @@ the web extension to send a `WebKitJavascriptResult` to the UI process, which
 is received in `EphyEmbedShell`.
 
 Corresponding to `WebKitWebContext` and `WebKitWebView`, the central classes of
-the UI process API, the web process API has `WebKitWebExtension` and
-`WebKitWebPage`. Confusingly, the `WebKitWebExtension` class refers to the web
-process extension, NOT to WebExtensions. Each `WebKitWebContext` may have one or
-more `WebKitWebExtension`s (web process extensions). Meanwhile, each
-`WebKitWebView` will have one or more `WebKitWebPage`s. Only one page will be
+the UI process API, the web process API has `WebKitWebProcessExtension` and
+`WebKitWebPage`. Each `WebKitWebContext` may have one or more `WebKitWebProcessExtension`s.
+Meanwhile, each `WebKitWebView` will have one or more `WebKitWebPage`s. Only one page will be
 active in a view at a given time: the other pages are for process swaps.
 
 # Security

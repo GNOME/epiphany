@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
-#include <webkit/webkit-web-extension.h>
+#include <webkit/webkit-web-process-extension.h>
 
 G_BEGIN_DECLS
 
@@ -30,11 +30,11 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyWebProcessExtension, ephy_web_process_extension, EPHY, WEB_PROCESS_EXTENSION, GObject)
 
 EphyWebProcessExtension *ephy_web_process_extension_get        (void);
-void                     ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
-                                                                WebKitWebExtension      *wk_extension,
-                                                                const char              *guid,
-                                                                gboolean                 should_remember_passwords,
-                                                                gboolean                 is_private_profile);
+void                     ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
+                                                                WebKitWebProcessExtension *wk_extension,
+                                                                const char                *guid,
+                                                                gboolean                   should_remember_passwords,
+                                                                gboolean                   is_private_profile);
 
 void                     ephy_web_process_extension_deinitialize (EphyWebProcessExtension *extension);
 

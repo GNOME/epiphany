@@ -107,7 +107,7 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 portal_dep = dependency('libportal-gtk4', version: '>= 0.6')
 sqlite3_dep = dependency('sqlite3', version: '>= 3.22')
 webkitgtk_dep = dependency('webkitgtk-6.0', version: webkitgtk_requirement)
-webkitgtk_web_extension_dep = dependency('webkitgtk-web-extension-6.0', version: webkitgtk_requirement)
+webkitgtk_web_extension_dep = dependency('webkitgtk-web-process-extension-6.0', version: webkitgtk_requirement)
 
 if granite_dep.found()
   conf.set('USE_GRANITE', 1)

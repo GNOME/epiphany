@@ -220,13 +220,13 @@ Adding a new API involves touching a few areas.
 
 - `embed/web-process-extension/resources/js/webextensions-common.js` and `embed/web-process-extension/resources/js/webextensions.js` These files contain JavaScript injected into pages. The former is injected for Content Scripts and Extension Pages while the latter is only injected into Extension Pages. They do little more than expose the API.
 
-- `embed/web-process-extension/ephy-webextension-api.c` This is a WebKitWebExtension that extends Extension Page web views. This defines some
+- `embed/web-process-extension/ephy-webextension-api.c` This is a WebKitWebProcessExtension that extends Extension Page web views. This defines some
 JavaScript API in C.
 
-- `embed/web-process-extension/ephy-web-process-extension.c` This is a WebKitWebExtension that extends normal web pages. It sets up the
+- `embed/web-process-extension/ephy-web-process-extension.c` This is a WebKitWebProcessExtension that extends normal web pages. It sets up the
 private JavaScriptWorlds used for Content Scripts.
 
-- `embed/web-process-extension/ephy-webextension-common.c` This is shared between the two WebKitWebExtensions above. It is the bulk of the
+- `embed/web-process-extension/ephy-webextension-common.c` This is shared between the two WebKitWebProcessExtensions above. It is the bulk of the
 `extension`/`runtime` and `i18n` APIs. It also handles much of the message passing to the UI process described below.
 
 - `src/webextension/ephy-web-extension-manager.c` This is where all extensions are managed in the UI process and also where all messages from web views are
