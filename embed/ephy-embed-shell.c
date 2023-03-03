@@ -726,9 +726,9 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
   gboolean private_profile;
 
 #if DEVELOPER_MODE
-  webkit_web_context_set_web_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
+  webkit_web_context_set_web_process_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
 #else
-  webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
+  webkit_web_context_set_web_process_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
@@ -739,7 +739,7 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
                              private_profile,
                              FALSE /* is_webextension */,
                              "" /* webextension_translations */);
-  webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
+  webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
 static void
@@ -861,7 +861,7 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
 #endif
 
-  g_signal_connect_object (priv->web_context, "initialize-web-extensions",
+  g_signal_connect_object (priv->web_context, "initialize-web-process-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
                            shell, 0);
 

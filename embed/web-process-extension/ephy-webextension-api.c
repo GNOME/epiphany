@@ -23,12 +23,12 @@
 #include "ephy-webextension-common.h"
 
 #include <json-glib/json-glib.h>
-#include <webkit/webkit-web-extension.h>
+#include <webkit/webkit-web-process-extension.h>
 
 struct _EphyWebExtensionExtension {
   GObject parent_instance;
 
-  WebKitWebExtension *extension;
+  WebKitWebProcessExtension *extension;
   char *guid;
   gboolean initialized;
 
@@ -256,7 +256,7 @@ ephy_web_extension_extension_update_translations (EphyWebExtensionExtension *ext
 
 void
 ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
-                                         WebKitWebExtension        *wk_extension,
+                                         WebKitWebProcessExtension *wk_extension,
                                          const char                *guid,
                                          const char                *translations)
 {
@@ -286,8 +286,8 @@ ephy_web_extension_extension_initialize (EphyWebExtensionExtension *extension,
 }
 
 G_MODULE_EXPORT void
-webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
-                                                GVariant           *user_data)
+webkit_web_process_extension_initialize_with_user_data (WebKitWebProcessExtension *webkit_extension,
+                                                        GVariant                  *user_data)
 {
   const char *guid;
   const char *profile_dir;
