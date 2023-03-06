@@ -10,14 +10,14 @@
 # Petr Kovar <pknbe@volny.cz>, 2008, 2010.
 # Lucas Lommer <llommer@svn.gnome.org>, 2008, 2009, 2010, 2011, 2012.
 # Adam Matoušek <adamatousek@gmail.com>, 2012, 2013.
-# Marek Černocký <marek@manet.cz>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Marek Černocký <marek@manet.cz>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-08-05 20:20+0000\n"
-"PO-Revision-Date: 2022-09-13 22:51+0200\n"
+"POT-Creation-Date: 2023-03-03 14:38+0000\n"
+"PO-Revision-Date: 2023-03-05 09:13+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -28,15 +28,16 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
-#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
-#: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:409 src/window-commands.c:1013
+#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
+#: embed/ephy-about-handler.c:237 src/ephy-main.c:102 src/ephy-main.c:256
+#: src/ephy-main.c:409 src/window-commands.c:1061
 msgid "Web"
 msgstr "Web"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:7
-msgid "Web browser for GNOME"
-msgstr "Webový prohlížeč pro GNOME"
+#: data/org.gnome.Epiphany.desktop.in.in:5
+msgid "Browse the web"
+msgstr "Prohlížejte si webové stránky"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:9
 msgid ""
@@ -54,7 +55,7 @@ msgstr ""
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Pro aplikaci Web je často používán její kódový název Epiphany."
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1071
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -62,14 +63,10 @@ msgstr "Projekt GNOME"
 msgid "Web Browser"
 msgstr "Prohlížeč WWW"
 
-#: data/org.gnome.Epiphany.desktop.in.in:5
-msgid "Browse the web"
-msgstr "Prohlížejte si webové stránky"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
-msgid "web;browser;internet;"
-msgstr "web;www;prohlížeč;internet;"
+msgid "web;browser;internet;epiphany;"
+msgstr "web;www;prohlížeč;internet;epiphany;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -122,21 +119,21 @@ msgstr "Zavrženo. Místo toho prosím použijte search-engine-providers."
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q="
-"%s&cc=cz'>, 'bang': <'!b'>}\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?"
+"q=%s&cc=cz'>, 'bang': <'!b'>}\n"
 "\t\t\t\t]"
 
 #: data/org.gnome.epiphany.gschema.xml:61
@@ -152,9 +149,9 @@ msgid ""
 "the search engine."
 msgstr ""
 "Seznam vyhledávačů. Jedná se o pole proměnlivých slovníků, kdy každý slovník "
-"odpovídá jednomu vyhledávači a podporuje následující klíče: • „name“ je název "
-"vyhledávače; • „url“ je adresa URL pro vyhledávání, ve které je hledaný výraz "
-"zastoupen pomocí %s. • „bang“ je zkratka do daného vyhledávače"
+"odpovídá jednomu vyhledávači a podporuje následující klíče: • „name“ je "
+"název vyhledávače; • „url“ je adresa URL pro vyhledávání, ve které je "
+"hledaný výraz zastoupen pomocí %s. • „bang“ je zkratka do daného vyhledávače"
 
 #: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
@@ -403,7 +400,7 @@ msgstr ""
 "Výchozí kódování. Přijatelné hodnoty jsou všechny, kterým rozumí WebKitGTK."
 
 #: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:329
+#: src/resources/gtk/prefs-general-page.ui:258
 msgid "Languages"
 msgstr "Jazyky"
 
@@ -560,19 +557,15 @@ msgstr "Zásada pro hardwarové urychlení"
 
 #: data/org.gnome.epiphany.gschema.xml:260
 msgid ""
-"Whether to enable hardware acceleration. Possible values are “on-demand”, "
-"“always”, and “never”. Hardware acceleration may be required to achieve "
-"acceptable performance on embedded devices, but increases memory usage "
-"requirements and could expose severe hardware-specific graphics driver bugs. "
-"When the policy is “on-demand”, hardware acceleration will be used only when "
-"required to display 3D transforms."
+"Whether to enable hardware acceleration. Possible values are “always” and "
+"“never”. Hardware acceleration may be required to achieve acceptable "
+"performance on embedded devices, but increases memory usage requirements and "
+"could expose severe hardware-specific graphics driver bugs."
 msgstr ""
-"Zda povolit hardwarové urychlení. Možné hodnoty jsou „on-demand“ (na "
-"vyžádání), „always“ (vždy) a „never“ (nikdy). Hardwarové urychlení může být "
-"požadováno pro dosažení přijatelné rychlosti na vestavěných zařízeních, ale "
-"zvyšuje paměťové nároky a může způsobit závažné chyby v grafickém ovladači "
-"na určitém hardwaru. Pokud je zásada nastavena na „on-demand“, použije se "
-"hardwarové urychlení jen při požadavku 3D transformací."
+"Zda povolit hardwarové urychlení. Možné hodnoty jsou „always“ (vždy) a "
+"„never“ (nikdy). Hardwarové urychlení může být požadováno pro dosažení "
+"přijatelné rychlosti na vestavěných zařízeních, ale zvyšuje paměťové nároky a "
+"může způsobit závažné chyby v grafickém ovladači na určitém hardwaru."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
@@ -1017,70 +1010,70 @@ msgstr ""
 msgid "Memory usage"
 msgstr "Využití paměti"
 
-#: embed/ephy-about-handler.c:169
+#: embed/ephy-about-handler.c:171
 #, c-format
 msgid "Version %s"
 msgstr "Verze %s"
 
-#: embed/ephy-about-handler.c:190
+#: embed/ephy-about-handler.c:202
 msgid "About Web"
 msgstr "O aplikaci Web"
 
-#: embed/ephy-about-handler.c:195 src/window-commands.c:1015
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1063
 msgid "Epiphany Technology Preview"
 msgstr "Ukázka technologií Epiphany"
 
-#: embed/ephy-about-handler.c:198
+#: embed/ephy-about-handler.c:210
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Jednoduché, přehledné a okouzlující prohlížení webových stránek"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:259 embed/ephy-about-handler.c:260
-#: embed/ephy-about-handler.c:324 embed/ephy-about-handler.c:339
-msgid "Applications"
+#: embed/ephy-about-handler.c:269 embed/ephy-about-handler.c:270
+#: embed/ephy-about-handler.c:334 embed/ephy-about-handler.c:360
+msgid "Apps"
 msgstr "Aplikace"
 
-#: embed/ephy-about-handler.c:261
-msgid "List of installed web applications"
-msgstr "Seznam instalovaných webových aplikací"
+#: embed/ephy-about-handler.c:271
+msgid "List of installed web apps"
+msgstr "Seznam nainstalovaných webových aplikací"
 
-#: embed/ephy-about-handler.c:310
+#: embed/ephy-about-handler.c:319
 msgid "Delete"
 msgstr "Odstranit"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:312
+#: embed/ephy-about-handler.c:321
 msgid "Installed on:"
 msgstr "Instalováno:"
 
-#: embed/ephy-about-handler.c:339
+#: embed/ephy-about-handler.c:360
 msgid ""
-"You can add your favorite website by clicking <b>Install Site as Web "
-"Application…</b> within the page menu."
+"You can add your favorite website by clicking <b>Install as Web App…</b> "
+"within the page menu."
 msgstr ""
 "Své oblíbené webové stránky můžete přidávat kliknutím na <b>Nainstalovat "
 "jako webovou aplikaci…</b> v nabídce stránky."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:431
+#: embed/ephy-about-handler.c:465
 msgid "Welcome to Web"
 msgstr "Vítejte v aplikaci Web"
 
-#: embed/ephy-about-handler.c:431
+#: embed/ephy-about-handler.c:465
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Začněte s prohlížením a objeví se zde vaše nejnavštěvovanější webové stránky."
 
-#: embed/ephy-about-handler.c:467
-#: embed/web-process-extension/resources/js/overview.js:148
+#: embed/ephy-about-handler.c:499
+#: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "Odstranit z přehledu"
 
-#: embed/ephy-about-handler.c:557 embed/ephy-about-handler.c:558
+#: embed/ephy-about-handler.c:589 embed/ephy-about-handler.c:590
 msgid "Private Browsing"
 msgstr "Prohlížení v soukromí"
 
-#: embed/ephy-about-handler.c:559
+#: embed/ephy-about-handler.c:591
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1091,14 +1084,14 @@ msgstr ""
 "uložené během tohoto prohlížení. Soubory, které si stáhnete, zůstanou "
 "uchovány."
 
-#: embed/ephy-about-handler.c:563
+#: embed/ephy-about-handler.c:595
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Anonymní režim skryje vaše činnosti pouze před lidmi používajícími tento "
 "počítač."
 
-#: embed/ephy-about-handler.c:565
+#: embed/ephy-about-handler.c:597
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1109,64 +1102,59 @@ msgstr ""
 "i cizími vládami, před servery, které navštívíte a reklamní společnosti vás "
 "budou na webech pravděpodoně také schopné sledovat."
 
-#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:679 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "Výběr složky"
 
-#: embed/ephy-download.c:681 embed/ephy-download.c:687
-#: src/preferences/prefs-general-page.c:726 src/window-commands.c:321
-msgid "_Select"
-msgstr "_Vybrat"
-
-#: embed/ephy-download.c:682 embed/ephy-download.c:688
-#: embed/ephy-download.c:739 lib/widgets/ephy-file-chooser.c:113
-#: src/ephy-web-extension-dialog.c:89 src/ephy-web-extension-dialog.c:282
-#: src/preferences/prefs-general-page.c:727
-#: src/resources/gtk/firefox-sync-dialog.ui:166
-#: src/resources/gtk/history-dialog.ui:91
-#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:319
-#: src/window-commands.c:391 src/window-commands.c:438
-#: src/window-commands.c:559 src/window-commands.c:660
-#: src/window-commands.c:805
-msgid "_Cancel"
-msgstr "_Zrušit"
-
-#: embed/ephy-download.c:684
+#: embed/ephy-download.c:687
 msgid "Select the Destination"
 msgstr "Výběr cíle"
 
-#: embed/ephy-download.c:738
-msgid "Download requested"
+#: embed/ephy-download.c:729
+msgid "Download Requested"
 msgstr "Požadováno stažení"
 
-#: embed/ephy-download.c:739
+#: embed/ephy-download.c:732 src/ephy-history-dialog.c:572
+#: src/ephy-window.c:265 src/preferences/extension-view.c:133
+#: src/preferences/passwords-view.c:183
+#: src/resources/gtk/firefox-sync-dialog.ui:139
+#: src/resources/gtk/history-dialog.ui:42
+#: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:331
+#: src/window-commands.c:577 src/window-commands.c:831
+#: src/window-commands.c:1238 src/window-commands.c:1937
+#: src/window-commands.c:2688
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+#: embed/ephy-download.c:733
 msgid "_Download"
 msgstr "_Stáhnout"
 
-#: embed/ephy-download.c:752
+#. Type
+#: embed/ephy-download.c:761
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Typ: %s (%s)"
 
-#. From
-#: embed/ephy-download.c:758
+#. Source
+#: embed/ephy-download.c:767
 #, c-format
-msgid "From: %s"
-msgstr "Z: %s"
+msgid "Source: %s"
+msgstr "Zdroj: %s"
 
 #. Question
-#: embed/ephy-download.c:763
+#: embed/ephy-download.c:773
 msgid "Where do you want to save the file?"
 msgstr "Opravdu chcete uložit tento soubor?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:942
+#: embed/ephy-download.c:951
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Bylo dokončeno stahování %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:944
+#: embed/ephy-download.c:953
 msgid "Download finished"
 msgstr "Stahování bylo dokončeno"
 
@@ -1185,11 +1173,11 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:807
-msgid "Web is being controlled by automation."
-msgstr "Web je ovládán automaticky."
+#: embed/ephy-embed.c:805
+msgid "Web is being controlled by automation"
+msgstr "Web je ovládán automaticky"
 
-#: embed/ephy-embed-shell.c:753
+#: embed/ephy-embed-shell.c:715
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI %s není oprávněná k přístupu ke prostředku Epiphany %s"
@@ -1217,7 +1205,8 @@ msgid "Blank page"
 msgstr "Prázdná stránka"
 
 #. Title for the blank page
-#: embed/ephy-embed-utils.h:32
+#. Translators: tooltip for the new tab button
+#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.ui:105
 msgid "New Tab"
 msgstr "Nová karta"
 
@@ -1545,159 +1534,96 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Neznámé (%s)"
 
-#: embed/ephy-find-toolbar.c:111
-msgid "Text not found"
-msgstr "Text nenalezen"
-
-#: embed/ephy-find-toolbar.c:117
-msgid "Search wrapped back to the top"
-msgstr "Hledání přeskočilo zpět na začátek"
-
-#: embed/ephy-find-toolbar.c:370
+#: embed/ephy-find-toolbar.c:235
 msgid "Type to search…"
 msgstr "vyhledávejte psaním…"
 
-#: embed/ephy-find-toolbar.c:376
+#: embed/ephy-find-toolbar.c:241
 msgid "Find previous occurrence of the search string"
 msgstr "Hledat předchozí výskyt hledaného řetězce"
 
-#: embed/ephy-find-toolbar.c:383
+#: embed/ephy-find-toolbar.c:248
 msgid "Find next occurrence of the search string"
 msgstr "Hledat následující výskyt hledaného řetězce"
 
-#: embed/ephy-reader-handler.c:296
+#: embed/ephy-reader-handler.c:312
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s není platná adresa URI"
 
-#: embed/ephy-web-view.c:202 src/window-commands.c:1373
-msgid "Open"
-msgstr "Otevřít"
+#: embed/ephy-search-entry.c:495
+msgid "Text not found"
+msgstr "Text nenalezen"
 
-#: embed/ephy-web-view.c:376
-msgid "Not No_w"
-msgstr "Nyní n_e"
+#: embed/ephy-search-entry.c:499
+msgid "Search wrapped back to the top"
+msgstr "Hledání přeskočilo zpět na začátek"
 
-#: embed/ephy-web-view.c:377
-msgid "_Never Save"
-msgstr "_Nikdy neukládat"
+#: embed/ephy-web-view.c:221 lib/ephy-file-dialog-utils.c:76
+msgid "All files"
+msgstr "Všechny soubory"
 
-#: embed/ephy-web-view.c:378 lib/widgets/ephy-file-chooser.c:124
-#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:659
-msgid "_Save"
-msgstr "_Uložit"
-
-#. Translators: The %s the hostname where this is happening.
-#. * Example: mail.google.com.
-#.
-#: embed/ephy-web-view.c:385
-#, c-format
-msgid "Do you want to save your password for “%s”?"
-msgstr "Chcete uložit své heslo pro „%s“?"
+#: embed/ephy-web-view.c:230 lib/ephy-file-dialog-utils.c:64
+msgid "All supported types"
+msgstr "Všechny podporované typy"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:624
-msgid ""
-"Heads-up: this form is not secure. If you type your password, it will not be "
-"kept private."
-msgstr ""
-"Mějte se na pozoru: tento formulář není bezpečný. Když do něj uvedete své "
-"heslo, nebude udrženo v bezpečí."
+#: embed/ephy-web-view.c:560
+msgid "This form is not secure ‒ passwords will not be kept private"
+msgstr "Tento formulář není bezpečný – heslo nezůstane uchováno v soukromí"
 
-#: embed/ephy-web-view.c:842
+#: embed/ephy-web-view.c:561 embed/ephy-web-view.c:3276
+msgid "_Dismiss"
+msgstr "_Zavřít"
+
+#: embed/ephy-web-view.c:782
 msgid "Web process crashed"
 msgstr "Webový proces se zhroutil"
 
-#: embed/ephy-web-view.c:845
+#: embed/ephy-web-view.c:785
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Webový proces byl ukončen z důvodu překročení paměťového limitu"
 
-#: embed/ephy-web-view.c:848
+#: embed/ephy-web-view.c:788
 msgid "Web process terminated by API request"
 msgstr "Webový proces byl ukončen na žádost přes API"
 
-#: embed/ephy-web-view.c:892
+#: embed/ephy-web-view.c:829
+msgid "Page Unresponsive"
+msgstr "Nereagující stránka"
+
+#: embed/ephy-web-view.c:833
 #, c-format
-msgid "The current page '%s' is unresponsive"
+msgid "The current page “%s” is not responding"
 msgstr "Aktuální stránka „%s“ nereaguje"
 
-#: embed/ephy-web-view.c:895
+#: embed/ephy-web-view.c:837
 msgid "_Wait"
 msgstr "Ček_at"
 
-#: embed/ephy-web-view.c:896
-msgid "_Kill"
-msgstr "Za_bít"
-
-#: embed/ephy-web-view.c:1107 embed/ephy-web-view.c:1228
-#: lib/widgets/ephy-security-popover.c:512
-msgid "Deny"
-msgstr "Zakázat"
-
-#: embed/ephy-web-view.c:1108 embed/ephy-web-view.c:1229
-#: lib/widgets/ephy-security-popover.c:511
-msgid "Allow"
-msgstr "Povolit"
-
-#. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1121
-#, c-format
-msgid "The page at %s wants to show desktop notifications."
-msgstr "Stránka %s chce zobrazit upozornění přímo v pracovním prostředí."
-
-#. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1126
-#, c-format
-msgid "The page at %s wants to know your location."
-msgstr "Stránka %s chce zjistit vaši polohu."
-
-#. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1131
-#, c-format
-msgid "The page at %s wants to use your microphone."
-msgstr "Stránka %s chce použít váš mikrofón."
-
-#. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1136
-#, c-format
-msgid "The page at %s wants to use your webcam."
-msgstr "Stránka %s chce použít vaši webovou kameru."
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1141
-#, c-format
-msgid "The page at %s wants to use your webcam and microphone."
-msgstr "Stránka %s chce použít váši webovou kameru a mikrofón."
-
-#: embed/ephy-web-view.c:1236
-#, c-format
-msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
-msgstr "Chcete dovolit webu „%s“ používat při prohlížení „%s“ cookies?"
-
-#: embed/ephy-web-view.c:1245
-#, c-format
-msgid "This will allow “%s” to track your activity."
-msgstr "Tím se webu „%s“ dovolí sledování vašich aktivit."
+#: embed/ephy-web-view.c:838
+msgid "Force _Stop"
+msgstr "Za_stavit"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1423
+#: embed/ephy-web-view.c:1084
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Načítá se „%s“…"
 
-#: embed/ephy-web-view.c:1425 embed/ephy-web-view.c:1431
+#: embed/ephy-web-view.c:1086 embed/ephy-web-view.c:1092
 msgid "Loading…"
 msgstr "Načítá se…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1764
+#: embed/ephy-web-view.c:1425
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Tato webová stránka se prokázala identifikací, která náleží jinému webu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1430
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1706,13 +1632,13 @@ msgstr ""
 "důvěřovat. Zkontrolujte datum v kalendáři svého počítače."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1774
+#: embed/ephy-web-view.c:1435
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identifikace této webové stránky nebyla vytvořena důvěryhodnou organizací."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1779
+#: embed/ephy-web-view.c:1440
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1720,7 +1646,7 @@ msgstr ""
 "poškozena."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1445
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1729,7 +1655,7 @@ msgstr ""
 "která ji vydala."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1789
+#: embed/ephy-web-view.c:1450
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1738,7 +1664,7 @@ msgstr ""
 "slabé šifrování."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1794
+#: embed/ephy-web-view.c:1455
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1748,24 +1674,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1859 embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:1520 embed/ephy-web-view.c:1576
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problém s načtením stránky"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1862
+#: embed/ephy-web-view.c:1523
 msgid "Unable to display this website"
 msgstr "Tuto stránku není možné zobrazit"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1867
+#: embed/ephy-web-view.c:1528
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Vypadá to, že server %s je nedostupný."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1871
+#: embed/ephy-web-view.c:1532
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1775,7 +1701,7 @@ msgstr ""
 "Internetu."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1881
+#: embed/ephy-web-view.c:1542
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Přesné znění chyby: %s"
@@ -1784,50 +1710,51 @@ msgstr "Přesné znění chyby: %s"
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1939
-#: embed/ephy-web-view.c:1975 embed/ephy-web-view.c:2011
-#: src/resources/gtk/page-menu-popover.ui:102
+#. Translators: tooltip for the refresh button
+#: embed/ephy-web-view.c:1547 embed/ephy-web-view.c:1600
+#: embed/ephy-web-view.c:1636 embed/ephy-web-view.c:1672
+#: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:166
 msgid "Reload"
 msgstr "Znovu načíst"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1890 embed/ephy-web-view.c:1943
-#: embed/ephy-web-view.c:1979 embed/ephy-web-view.c:2015
+#: embed/ephy-web-view.c:1551 embed/ephy-web-view.c:1604
+#: embed/ephy-web-view.c:1640 embed/ephy-web-view.c:1676
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "N"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1918
+#: embed/ephy-web-view.c:1579
 msgid "Oops! There may be a problem"
 msgstr "Vyskytl se problém"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1923
+#: embed/ephy-web-view.c:1584
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Webová stránka %s možná způsobila nechtěné zavření aplikace Web."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1930
+#: embed/ephy-web-view.c:1591
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Jestli se to stane znovu, nahlaste to prosím jako problém vývojářům %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1964
+#: embed/ephy-web-view.c:1625
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problém se zobrazením stránky"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1967
+#: embed/ephy-web-view.c:1628
 msgid "Oops!"
 msgstr "Problém!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1631
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1836,18 +1763,18 @@ msgstr ""
 "prosím znovu načtěte nebo navštivte jinou stránku."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:1661
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Nereagující stránka"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2003
+#: embed/ephy-web-view.c:1664
 msgid "Uh-oh!"
 msgstr "Jejda"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2006
+#: embed/ephy-web-view.c:1667
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1856,18 +1783,18 @@ msgstr ""
 "načtěte nebo navštivte jinou stránku."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2042
+#: embed/ephy-web-view.c:1703
 #, c-format
 msgid "Security Violation"
 msgstr "Narušení bezpečnosti"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2045
+#: embed/ephy-web-view.c:1706
 msgid "This Connection is Not Secure"
 msgstr "Toto připojení není bezpečné"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2050
+#: embed/ephy-web-view.c:1711
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1879,45 +1806,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2148
-#: embed/ephy-web-view.c:2198
+#: embed/ephy-web-view.c:1721 embed/ephy-web-view.c:1809
+#: embed/ephy-web-view.c:1859
 msgid "Go Back"
 msgstr "Vrátit se zpět"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2063 embed/ephy-web-view.c:2151
-#: embed/ephy-web-view.c:2201
+#: embed/ephy-web-view.c:1724 embed/ephy-web-view.c:1812
+#: embed/ephy-web-view.c:1862
 msgctxt "back-access-key"
 msgid "B"
 msgstr "Z"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2066 embed/ephy-web-view.c:2154
+#: embed/ephy-web-view.c:1727 embed/ephy-web-view.c:1815
 msgid "Accept Risk and Proceed"
 msgstr "Přijmout riziko a pokračovat"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2070 embed/ephy-web-view.c:2158
+#: embed/ephy-web-view.c:1731 embed/ephy-web-view.c:1819
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2098
+#: embed/ephy-web-view.c:1759
 #, c-format
 msgid "Security Warning"
 msgstr "Bezpečnostní varování"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2101
+#: embed/ephy-web-view.c:1762
 msgid "Unsafe website detected!"
 msgstr "Detekován nebezpečný web!"
 
-#: embed/ephy-web-view.c:2109
+#: embed/ephy-web-view.c:1770
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1927,7 +1854,7 @@ msgstr ""
 "obsahuje škodlivý kód, který by mohl být stažen do vašeho počítače bez "
 "vašeho vědomí."
 
-#: embed/ephy-web-view.c:2113
+#: embed/ephy-web-view.c:1774
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1936,7 +1863,7 @@ msgstr ""
 "O zákeřném obsahu webů, včetně virů a jiného škodlivého kódu, a o tom, jak "
 "se mu bránit, se můžete dozvědět na %s."
 
-#: embed/ephy-web-view.c:2120
+#: embed/ephy-web-view.c:1781
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1947,7 +1874,7 @@ msgstr ""
 "je instalace nevyžádaného softwaru nebo vyzrazení vašich osobních údajů "
 "(například hesel, telefonního čísla nebo čísla platební karty)."
 
-#: embed/ephy-web-view.c:2125
+#: embed/ephy-web-view.c:1786
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1955,7 +1882,7 @@ msgstr ""
 "Více o sociálním inženýrství (tzv. phishingu neboli rhybaření) se můžete "
 "dozvědět na %s nebo z %s."
 
-#: embed/ephy-web-view.c:2134
+#: embed/ephy-web-view.c:1795
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1966,24 +1893,24 @@ msgstr ""
 "nainstalovat programy, které vám znepříjemní prohlížení webů (například "
 "změnou domovské stránky nebo přidáním obsahu do stránek, které navštívíte)."
 
-#: embed/ephy-web-view.c:2139
+#: embed/ephy-web-view.c:1800
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "O nevyžádaném softwaru se můžete více dozvědět na %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2181 embed/ephy-web-view.c:2184
+#: embed/ephy-web-view.c:1842 embed/ephy-web-view.c:1845
 #, c-format
 msgid "File not found"
 msgstr "Soubor nebyl nenalezen"
 
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:1850
 #, c-format
 msgid "%s could not be found."
 msgstr "Nezdařilo se najít %s."
 
-#: embed/ephy-web-view.c:2191
+#: embed/ephy-web-view.c:1852
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1992,25 +1919,31 @@ msgstr ""
 "Zkontrolujte prosím velká/malá písmena a jiné překlepy v názvu souboru. Také "
 "prosím zkontrolujte, jestli nebyl přemístěn, přejmenován nebo smazán."
 
-#: embed/ephy-web-view.c:2254
+#: embed/ephy-web-view.c:1915
 msgid "None specified"
 msgstr "Není specifikováno"
 
-#: embed/ephy-web-view.c:2385
+#: embed/ephy-web-view.c:2046
 msgid "Technical information"
 msgstr "Technické informace"
-
-#: embed/ephy-web-view.c:3580
-msgid "_OK"
-msgstr "_Budiž"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
 msgstr "Neurčeno"
 
+#: lib/ephy-file-dialog-utils.c:68
+msgid "Web pages"
+msgstr "Webové stránky"
+
+#: lib/ephy-file-dialog-utils.c:72
+msgid "Images"
+msgstr "Obrázky"
+
 #. If we don't have XDG user dirs info, return an educated guess.
+#. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
-#: src/resources/gtk/prefs-general-page.ui:185
+#: src/resources/gtk/action-bar-end.ui:11
+#: src/resources/gtk/prefs-general-page.ui:135
 msgid "Downloads"
 msgstr "Stahování"
 
@@ -2037,11 +1970,6 @@ msgstr "Soubor „%s“ existuje. Přesuňte jej prosím jinam."
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Nelze vytvořit složku „%s“."
-
-#: lib/ephy-gui.c:73
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Nelze zobrazit nápovědu: %s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -2167,34 +2095,34 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:435
+#: lib/sync/ephy-password-manager.c:450
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Heslo pro uživatele %s ve formuláři na %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:439
+#: lib/sync/ephy-password-manager.c:454
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Heslo ve formuláři na %s"
 
-#: lib/sync/ephy-sync-service.c:1043
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain storage credentials."
 msgstr "Selhalo získání oprávnění k úložišti."
 
-#: lib/sync/ephy-sync-service.c:1044 lib/sync/ephy-sync-service.c:1205
-#: lib/sync/ephy-sync-service.c:2055
+#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
+#: lib/sync/ephy-sync-service.c:1940
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Navšitvte prosím Firefox Sync a znovu se přihlaste, aby bylo možné "
 "pokračovat se synchronizací."
 
-#: lib/sync/ephy-sync-service.c:1195
+#: lib/sync/ephy-sync-service.c:1116
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Zdá se, že se změnilo heslo k vašemu účtu Firefox."
 
-#: lib/sync/ephy-sync-service.c:1196
+#: lib/sync/ephy-sync-service.c:1117
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2202,323 +2130,65 @@ msgstr ""
 "Navšitvte prosím Firefox Sync a přihlaste se s novým heslem, aby bylo možné "
 "pokračovat se synchronizací."
 
-#: lib/sync/ephy-sync-service.c:1204
+#: lib/sync/ephy-sync-service.c:1125
 msgid "Failed to obtain signed certificate."
 msgstr "Selhalo získání podepisovacího certifikátu."
 
-#: lib/sync/ephy-sync-service.c:2021 lib/sync/ephy-sync-service.c:2026
+#: lib/sync/ephy-sync-service.c:1906 lib/sync/ephy-sync-service.c:1911
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nezdařilo se najít synchronizační tajemství pro aktuálního synchronizujícího "
 "uživatele."
 
-#: lib/sync/ephy-sync-service.c:2033 lib/sync/ephy-sync-service.c:2041
+#: lib/sync/ephy-sync-service.c:1918 lib/sync/ephy-sync-service.c:1926
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Synchronizační tajemství pro aktuálního synchronizjícího uživatele je "
 "neplatné."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2149
+#: lib/sync/ephy-sync-service.c:2034
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Synchronizační tajemství pro %s"
 
-#: lib/sync/ephy-sync-service.c:2184
+#: lib/sync/ephy-sync-service.c:2064
 msgid "Failed to upload client record."
 msgstr "Selhalo nahrání záznamu klienta."
 
-#: lib/sync/ephy-sync-service.c:2393
+#: lib/sync/ephy-sync-service.c:2267
 msgid "Failed to upload crypto/keys record."
 msgstr "Selhalo nahrání záznamu kryptografie/klíče."
 
-#: lib/sync/ephy-sync-service.c:2510
+#: lib/sync/ephy-sync-service.c:2379
 msgid "Failed to retrieve crypto keys."
 msgstr "Selhalo získání kryptografických klíčů."
 
-#: lib/sync/ephy-sync-service.c:2569
+#: lib/sync/ephy-sync-service.c:2433
 msgid "Failed to upload meta/global record."
 msgstr "Selhalo nahrání meta/globálního záznamu."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2696
+#: lib/sync/ephy-sync-service.c:2555
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Váš účet Firefox používá verzi úložiště %d. Web podporuje jen verzi %d."
 
-#: lib/sync/ephy-sync-service.c:2707
+#: lib/sync/ephy-sync-service.c:2566
 msgid "Failed to verify storage version."
 msgstr "Selhalo ověření verze úložiště."
 
-#: lib/sync/ephy-sync-service.c:2770
+#: lib/sync/ephy-sync-service.c:2624
 msgid "Failed to upload device info"
 msgstr "Selhalo nahrání informace o zařízení."
 
-#: lib/sync/ephy-sync-service.c:2846 lib/sync/ephy-sync-service.c:2934
+#: lib/sync/ephy-sync-service.c:2700 lib/sync/ephy-sync-service.c:2783
 msgid "Failed to retrieve the Sync Key"
 msgstr "Selhalo získání synchronizačního klíče."
 
-#: lib/widgets/ephy-certificate-dialog.c:101
-msgid "The certificate does not match this website"
-msgstr "Certifikát neodpovídá této webové stránce."
-
-#: lib/widgets/ephy-certificate-dialog.c:104
-msgid "The certificate has expired"
-msgstr "Platnost certifikátu vypršela."
-
-#: lib/widgets/ephy-certificate-dialog.c:107
-msgid "The signing certificate authority is not known"
-msgstr "Autorita podepisující certifikát není známa."
-
-#: lib/widgets/ephy-certificate-dialog.c:110
-msgid "The certificate contains errors"
-msgstr "Certifikát obsahuje chyby."
-
-#: lib/widgets/ephy-certificate-dialog.c:113
-msgid "The certificate has been revoked"
-msgstr "Certifikát byl odvolán."
-
-#: lib/widgets/ephy-certificate-dialog.c:116
-msgid "The certificate is signed using a weak signature algorithm"
-msgstr "Certifikát byl podepsán za použití slabého algoritmu podpisu."
-
-#: lib/widgets/ephy-certificate-dialog.c:119
-msgid "The certificate activation time is still in the future"
-msgstr "Čas aktivace certifikátu je v budoucnosti"
-
-#: lib/widgets/ephy-certificate-dialog.c:161
-msgid "The identity of this website has been verified."
-msgstr "Identita této stránky byla ověřena."
-
-#: lib/widgets/ephy-certificate-dialog.c:162
-msgid "The identity of this website has not been verified."
-msgstr "Identita této stránky nebyla ověřena."
-
-#. Message on certificte dialog ertificate dialog
-#: lib/widgets/ephy-certificate-dialog.c:174
-msgid "No problems have been detected with your connection."
-msgstr "U vašeho připojení nebyl zjištěn žádný problém."
-
-#: lib/widgets/ephy-certificate-dialog.c:177
-msgid ""
-"This certificate is valid. However, resources on this page were sent "
-"insecurely."
-msgstr ""
-"Tento certifikát je platný. Avšak součásti této stránky nebyl přeneseny "
-"bezpečným způsobem."
-
-#: lib/widgets/ephy-downloads-popover.c:216
-#: src/resources/gtk/history-dialog.ui:216
-#: src/resources/gtk/passwords-view.ui:27
-msgid "_Clear All"
-msgstr "Vy_mazat vše"
-
-#: lib/widgets/ephy-download-widget.c:78
-#, c-format
-msgid "%d second left"
-msgid_plural "%d seconds left"
-msgstr[0] "zbývá %d sekunda"
-msgstr[1] "zbývají %d sekundy"
-msgstr[2] "zbývá %d sekund"
-
-#: lib/widgets/ephy-download-widget.c:82
-#, c-format
-msgid "%d minute left"
-msgid_plural "%d minutes left"
-msgstr[0] "zbývá %d minuta"
-msgstr[1] "zbývají %d minuty"
-msgstr[2] "zbývá %d minut"
-
-#: lib/widgets/ephy-download-widget.c:86
-#, c-format
-msgid "%d hour left"
-msgid_plural "%d hours left"
-msgstr[0] "zbývá %d hodina"
-msgstr[1] "zbývají %d hodiny"
-msgstr[2] "zbývá %d hodin"
-
-#: lib/widgets/ephy-download-widget.c:90
-#, c-format
-msgid "%d day left"
-msgid_plural "%d days left"
-msgstr[0] "zbývá %d den"
-msgstr[1] "zbývají %d dny"
-msgstr[2] "zbývá %d dnů"
-
-#: lib/widgets/ephy-download-widget.c:94
-#, c-format
-msgid "%d week left"
-msgid_plural "%d weeks left"
-msgstr[0] "zbývá %d týden"
-msgstr[1] "zbývají %d týdny"
-msgstr[2] "zbývá %d týdnů"
-
-#: lib/widgets/ephy-download-widget.c:98
-#, c-format
-msgid "%d month left"
-msgid_plural "%d months left"
-msgstr[0] "zbývá %d měsíc"
-msgstr[1] "zbývají %d měsíce"
-msgstr[2] "zbývá %d měsíců"
-
-#: lib/widgets/ephy-download-widget.c:213
-#: lib/widgets/ephy-download-widget.c:426
-msgid "Finished"
-msgstr "Dokončeno"
-
-#: lib/widgets/ephy-download-widget.c:223
-msgid "Moved or deleted"
-msgstr "Přesunuto nebo smazáno"
-
-#: lib/widgets/ephy-download-widget.c:238
-#: lib/widgets/ephy-download-widget.c:423
-#, c-format
-msgid "Error downloading: %s"
-msgstr "Chyba při stahování: %s"
-
-#: lib/widgets/ephy-download-widget.c:264
-msgid "Cancelling…"
-msgstr "Ruší se…"
-
-#: lib/widgets/ephy-download-widget.c:428
-msgid "Starting…"
-msgstr "Spouští se…"
-
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
-#: src/resources/gtk/history-dialog.ui:255
-msgid "_Open"
-msgstr "_Otevřít"
-
-#: lib/widgets/ephy-file-chooser.c:131
-msgid "All supported types"
-msgstr "Všechny podporované typy"
-
-#: lib/widgets/ephy-file-chooser.c:147
-msgid "Web pages"
-msgstr "Webové stránky"
-
-#: lib/widgets/ephy-file-chooser.c:158
-msgid "Images"
-msgstr "Obrázky"
-
-#: lib/widgets/ephy-file-chooser.c:167
-msgid "All files"
-msgstr "Všechny soubory"
-
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: lib/widgets/ephy-location-entry.c:749 src/ephy-history-dialog.c:600
-msgid "Cl_ear"
-msgstr "Vy_mazat"
-
-#: lib/widgets/ephy-location-entry.c:769
-msgid "Paste and _Go"
-msgstr "Vložit a pře_jít"
-
-#. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:934
-msgid "_Undo"
-msgstr "_Zpět"
-
-#: lib/widgets/ephy-location-entry.c:797
-msgid "_Redo"
-msgstr "Zn_ovu"
-
-#: lib/widgets/ephy-location-entry.c:1044
-msgid "Show website security status and permissions"
-msgstr "Zobrazit bezpečnostní hlášení a oprávnění stránky"
-
-#: lib/widgets/ephy-location-entry.c:1046
-msgid "Search for websites, bookmarks, and open tabs"
-msgstr "Vyhledat weby, záložky a otevřené karty"
-
-#: lib/widgets/ephy-location-entry.c:1091
-msgid "Toggle reader mode"
-msgstr "Přepnout režim čtečky"
-
-#: lib/widgets/ephy-location-entry.c:1115
-msgid "Bookmark this page"
-msgstr "Aktuální stránku do záložek"
-
-#. Label in certificate popover when site is untrusted. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:183
-#, c-format
-msgid ""
-"This web site’s digital identification is not trusted. You may have "
-"connected to an attacker pretending to be %s."
-msgstr ""
-"Digitální identifikace této webové stránky není důvěryhodná. Pravděpodobně "
-"jste se připojili k útočníkovi, který se snaží předstírat, že je %s."
-
-#. Label in certificate popover when site uses HTTP. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:190
-#, c-format
-msgid ""
-"This site has no security. An attacker could see any information you send, "
-"or control the content that you see."
-msgstr ""
-"Tento web nemá žádné zabezpečení. Případný útočník může vidět všechny "
-"informace, které posíláte, nebo zasahovat do obsahu, který se vám zobrazí."
-
-#. Label in certificate popover when site sends mixed content.
-#: lib/widgets/ephy-security-popover.c:197
-msgid "This web site did not properly secure your connection."
-msgstr "Webový server vaše připojený správně nezabezpečuje."
-
-#. Label in certificate popover on secure sites.
-#: lib/widgets/ephy-security-popover.c:202
-msgid "Your connection seems to be secure."
-msgstr "Vaše připojení se zdá být bezpečné."
-
-#: lib/widgets/ephy-security-popover.c:248
-msgid "_View Certificate…"
-msgstr "_Zobrazit certifikát…"
-
-#: lib/widgets/ephy-security-popover.c:515
-msgid "Ask"
-msgstr "Zeptat se"
-
-#: lib/widgets/ephy-security-popover.c:532
-msgid "Permissions"
-msgstr "Oprávnění"
-
-#: lib/widgets/ephy-security-popover.c:572
-msgid "Advertisements"
-msgstr "Zobrazování reklam"
-
-#: lib/widgets/ephy-security-popover.c:573
-msgid "Notifications"
-msgstr "Zobrazování upozornění"
-
-#: lib/widgets/ephy-security-popover.c:574
-msgid "Password saving"
-msgstr "Ukládání hesel"
-
-#: lib/widgets/ephy-security-popover.c:575
-msgid "Location access"
-msgstr "Přístup k informacím o poloze"
-
-#: lib/widgets/ephy-security-popover.c:576
-msgid "Microphone access"
-msgstr "Přístup k mikrofonu"
-
-#: lib/widgets/ephy-security-popover.c:577
-msgid "Webcam access"
-msgstr "Přístup k webové kameře"
-
-#: lib/widgets/ephy-security-popover.c:578
-msgid "Media autoplay"
-msgstr "Automatické přehrávání multimédií"
-
-#: lib/widgets/ephy-security-popover.c:578
-msgid "Without Sound"
-msgstr "Bez zvuku"
-
-#: src/bookmarks/ephy-bookmark-row.c:62
+#: src/bookmarks/ephy-bookmark-row.c:65
 msgid "Bookmark Properties"
 msgstr "Vlastnosti záložky"
 
@@ -2577,28 +2247,168 @@ msgstr "Oblíbené"
 msgid "Mobile"
 msgstr "Mobilní"
 
-#. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:52
-msgid "Reload the current page"
-msgstr "Znovu načíst aktuální stránku"
+#: src/context-menu-commands.c:264
+msgid "Save Link As"
+msgstr "Uložit odkaz jako"
 
-#: src/ephy-action-bar-start.c:644 src/ephy-header-bar.c:453
-msgid "Stop loading the current page"
-msgstr "Zastavit načítání aktuální stránky"
+#: src/context-menu-commands.c:272
+msgid "Save Image As"
+msgstr "Uložit obrázek jako"
+
+#: src/context-menu-commands.c:280
+msgid "Save Media As"
+msgstr "Uložit multimédia jako"
+
+#. Translators: tooltip for the empty bookmark button
+#: src/ephy-action-bar-end.c:394 src/ephy-location-entry.c:1784
+msgid "Bookmark Page"
+msgstr "Přidat stránku do záložek"
+
+#. Translators: tooltip for the bookmarked button
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1792
+msgid "Edit Bookmark"
+msgstr "Upravit záložku"
+
+#: src/ephy-action-bar-start.c:568
+msgid "Stop"
+msgstr "Zastavit"
+
+#: src/ephy-certificate-dialog.c:269
+msgid "The certificate does not match this website"
+msgstr "Certifikát neodpovídá této webové stránce."
+
+#: src/ephy-certificate-dialog.c:272
+msgid "The certificate has expired"
+msgstr "Platnost certifikátu vypršela."
+
+#: src/ephy-certificate-dialog.c:275
+msgid "The signing certificate authority is not known"
+msgstr "Autorita podepisující certifikát není známa."
+
+#: src/ephy-certificate-dialog.c:278
+msgid "The certificate contains errors"
+msgstr "Certifikát obsahuje chyby."
+
+#: src/ephy-certificate-dialog.c:281
+msgid "The certificate has been revoked"
+msgstr "Certifikát byl odvolán."
+
+#: src/ephy-certificate-dialog.c:284
+msgid "The certificate is signed using a weak signature algorithm"
+msgstr "Certifikát byl podepsán za použití slabého algoritmu podpisu."
+
+#: src/ephy-certificate-dialog.c:287
+msgid "The certificate activation time is still in the future"
+msgstr "Čas aktivace certifikátu je v budoucnosti"
+
+#: src/ephy-certificate-dialog.c:329
+msgid "The identity of this website has been verified."
+msgstr "Identita této stránky byla ověřena."
+
+#: src/ephy-certificate-dialog.c:330
+msgid "The identity of this website has not been verified."
+msgstr "Identita této stránky nebyla ověřena."
+
+#. Message on certificte dialog ertificate dialog
+#: src/ephy-certificate-dialog.c:342
+msgid "No problems have been detected with your connection."
+msgstr "U vašeho připojení nebyl zjištěn žádný problém."
+
+#: src/ephy-certificate-dialog.c:345
+msgid ""
+"This certificate is valid. However, resources on this page were sent "
+"insecurely."
+msgstr ""
+"Tento certifikát je platný. Avšak součásti této stránky nebyl přeneseny "
+"bezpečným způsobem."
+
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:140
+#: src/resources/gtk/passwords-view.ui:27
+msgid "_Clear All"
+msgstr "Vy_mazat vše"
+
+#: src/ephy-download-widget.c:78
+#, c-format
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "zbývá %d sekunda"
+msgstr[1] "zbývají %d sekundy"
+msgstr[2] "zbývá %d sekund"
+
+#: src/ephy-download-widget.c:82
+#, c-format
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "zbývá %d minuta"
+msgstr[1] "zbývají %d minuty"
+msgstr[2] "zbývá %d minut"
+
+#: src/ephy-download-widget.c:86
+#, c-format
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "zbývá %d hodina"
+msgstr[1] "zbývají %d hodiny"
+msgstr[2] "zbývá %d hodin"
+
+#: src/ephy-download-widget.c:90
+#, c-format
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "zbývá %d den"
+msgstr[1] "zbývají %d dny"
+msgstr[2] "zbývá %d dnů"
+
+#: src/ephy-download-widget.c:94
+#, c-format
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "zbývá %d týden"
+msgstr[1] "zbývají %d týdny"
+msgstr[2] "zbývá %d týdnů"
+
+#: src/ephy-download-widget.c:98
+#, c-format
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "zbývá %d měsíc"
+msgstr[1] "zbývají %d měsíce"
+msgstr[2] "zbývá %d měsíců"
+
+#: src/ephy-download-widget.c:213 src/ephy-download-widget.c:408
+msgid "Finished"
+msgstr "Dokončeno"
+
+#: src/ephy-download-widget.c:222
+msgid "Moved or deleted"
+msgstr "Přesunuto nebo smazáno"
+
+#: src/ephy-download-widget.c:237 src/ephy-download-widget.c:405
+#, c-format
+msgid "Error downloading: %s"
+msgstr "Chyba při stahování: %s"
+
+#: src/ephy-download-widget.c:262
+msgid "Cancelling…"
+msgstr "Ruší se…"
+
+#: src/ephy-download-widget.c:410
+msgid "Starting…"
+msgstr "Spouští se…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:108
+#: src/ephy-firefox-sync-dialog.c:139
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Naposledy synchronizováno: %s"
 
-#: src/ephy-firefox-sync-dialog.c:396
+#: src/ephy-firefox-sync-dialog.c:427
 msgid "Something went wrong, please try again later."
 msgstr "Něco proběhlo špatně, zkuste to prosím později znovu."
 
-#: src/ephy-firefox-sync-dialog.c:703
+#: src/ephy-firefox-sync-dialog.c:627
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
@@ -2606,32 +2416,74 @@ msgstr[0] "%u min"
 msgstr[1] "%u min"
 msgstr[2] "%u min"
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1012
+#. Translators: tooltip for the refresh button
+#: src/ephy-header-bar.c:52
+msgid "Reload the current page"
+msgstr "Znovu načíst aktuální stránku"
+
+#: src/ephy-header-bar.c:298
+msgid "Main Menu"
+msgstr "Hlavní nabídka"
+
+#: src/ephy-header-bar.c:482
+msgid "Stop loading the current page"
+msgstr "Zastavit načítání aktuální stránky"
+
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "V anonymním režimu není možné měnit historii."
 
-#: src/ephy-history-dialog.c:495
+#: src/ephy-history-dialog.c:486
 msgid "Remove the selected pages from history"
 msgstr "Odstranit vybranou stránku z historie"
 
-#: src/ephy-history-dialog.c:501
+#: src/ephy-history-dialog.c:492
 msgid "Copy URL"
 msgstr "Zkopírovat URL"
 
-#: src/ephy-history-dialog.c:590
-msgid "Clear browsing history?"
+#: src/ephy-history-dialog.c:567
+msgid "Clear Browsing History?"
 msgstr "Vymazat historii prohlížení?"
 
-#: src/ephy-history-dialog.c:594
+#: src/ephy-history-dialog.c:568
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 "Vymazání historie prohlížení způsobí trvalé odstranění všech odkazů historie."
 
-#: src/ephy-history-dialog.c:1015
+#: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:294
+msgid "Cl_ear"
+msgstr "Vy_mazat"
+
+#: src/ephy-history-dialog.c:1026
 msgid "Remove all history"
 msgstr "Odstranit celou historii"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-location-entry.c:1828 src/ephy-permission-popover.c:271
+msgid "Notification Request"
+msgstr "Požadováno upozornění"
+
+#: src/ephy-location-entry.c:1832
+msgid "Camera Request"
+msgstr "Požadována kamera"
+
+#: src/ephy-location-entry.c:1836
+msgid "Microphone Request"
+msgstr "Požadován mikrofón"
+
+#: src/ephy-location-entry.c:1840
+msgid "Location Request"
+msgstr "Požadována informace o poloze"
+
+#: src/ephy-location-entry.c:1844
+msgid "Webcam and Microphone Request"
+msgstr "Požadována kamera a mikrofón"
+
+#: src/ephy-location-entry.c:1848
+msgid "Permission Request"
+msgstr "Požadováno oprávnění"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2677,226 +2529,351 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "Volby aplikace Web"
 
+#. Translators: Notification policy for a specific site.
+#: src/ephy-permission-popover.c:273
+#, c-format
+msgid "The page at “%s” would like to send you notifications"
+msgstr "Stránka „%s“ by ráda zobrazovala upozornění v pracovním prostředí"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:278
+msgid "Location Access Request"
+msgstr "Požadavek na přístup k poloze"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:280
+#, c-format
+msgid "The page at “%s” would like to know your location"
+msgstr "Stránka „%s“ by ráda znala vaši polohu"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:285
+msgid "Microphone Access Request"
+msgstr "Požadavek na přístup k mikrofonu"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:287
+#, c-format
+msgid "The page at “%s” would like to use your microphone"
+msgstr "Stránka „%s“ by ráda používala váš mikrofón"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:292
+msgid "Webcam Access Request"
+msgstr "Požadavek na přístup k webové kameře"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:294
+#, c-format
+msgid "The page at “%s” would like to use your webcam"
+msgstr "Stránka „%s“ by ráda používala vaši webovou kameru"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:299
+msgid "Webcam and Microphone Access Request"
+msgstr "Požadavek na přístup k mikrofonu a webové kameře"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:301
+#, c-format
+msgid "The page at “%s” would like to use your webcam and microphone"
+msgstr "Stránka „%s“ by ráda používala váši webovou kameru a mikrofón"
+
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:308
+msgid "Third-party Cookies Request"
+msgstr "Požadavek na cookies třetí strany"
+
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:310
+#, c-format
+msgid ""
+"The page at “%s” would like to use cookies while browsing “%s”. This will "
+"allow “%s” to track your activity."
+msgstr ""
+"Stránka z „%s“ by ráda použila cookie při prohlížení „%s“. To umožní z „%s“ "
+"sledovat, co děláte."
+
+#. Label in certificate popover when site is untrusted. %s is a URL.
+#: src/ephy-security-popover.c:185
+#, c-format
+msgid ""
+"This web site’s digital identification is not trusted. You may have "
+"connected to an attacker pretending to be %s."
+msgstr ""
+"Digitální identifikace této webové stránky není důvěryhodná. Pravděpodobně "
+"jste se připojili k útočníkovi, který se snaží předstírat, že je %s."
+
+#. Label in certificate popover when site uses HTTP. %s is a URL.
+#: src/ephy-security-popover.c:192
+#, c-format
+msgid ""
+"This site has no security. An attacker could see any information you send, "
+"or control the content that you see."
+msgstr ""
+"Tento web nemá žádné zabezpečení. Případný útočník může vidět všechny "
+"informace, které posíláte, nebo zasahovat do obsahu, který se vám zobrazí."
+
+#. Label in certificate popover when site sends mixed content.
+#: src/ephy-security-popover.c:199
+msgid "This web site did not properly secure your connection."
+msgstr "Webový server vaše připojený správně nezabezpečuje."
+
+#. Label in certificate popover on secure sites.
+#: src/ephy-security-popover.c:204
+msgid "Your connection seems to be secure."
+msgstr "Vaše připojení se zdá být bezpečné."
+
+#: src/ephy-security-popover.c:247
+msgid "_View Certificate…"
+msgstr "_Zobrazit certifikát…"
+
+#: src/ephy-security-popover.c:492
+msgid "Allow"
+msgstr "Povolit"
+
+#: src/ephy-security-popover.c:493
+msgid "Deny"
+msgstr "Zakázat"
+
+#: src/ephy-security-popover.c:496
+msgid "Ask"
+msgstr "Zeptat se"
+
+#: src/ephy-security-popover.c:514
+msgid "Permissions"
+msgstr "Oprávnění"
+
+#: src/ephy-security-popover.c:556
+msgid "Advertisements"
+msgstr "Zobrazování reklam"
+
+#: src/ephy-security-popover.c:557
+msgid "Notifications"
+msgstr "Zobrazování upozornění"
+
+#: src/ephy-security-popover.c:558
+msgid "Password saving"
+msgstr "Ukládání hesel"
+
+#: src/ephy-security-popover.c:559
+msgid "Location access"
+msgstr "Přístup k informacím o poloze"
+
+#: src/ephy-security-popover.c:560
+msgid "Microphone access"
+msgstr "Přístup k mikrofonu"
+
+#: src/ephy-security-popover.c:561
+msgid "Webcam access"
+msgstr "Přístup k webové kameře"
+
+#: src/ephy-security-popover.c:562
+msgid "Media autoplay"
+msgstr "Automatické přehrávání multimédií"
+
+#: src/ephy-security-popover.c:562
+msgid "Without Sound"
+msgstr "Bez zvuku"
+
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:90
+#: src/ephy-tab-view.c:618
 msgid "Open a new tab"
 msgstr "Otevřít novou kartu"
 
-#: src/ephy-web-extension-dialog.c:87
-msgid "Do you really want to remove this extension?"
-msgstr "Opravdu chcete odebrat toto rozšíření?"
+#. Undo, redo.
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:262
+msgid "_Undo"
+msgstr "_Zpět"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
-#: src/resources/gtk/bookmark-properties.ui:120
-msgid "_Remove"
-msgstr "Odeb_rat"
-
-#: src/ephy-web-extension-dialog.c:182
-msgid "Author"
-msgstr "Autor"
-
-#: src/ephy-web-extension-dialog.c:191
-msgid "Version"
-msgstr "Verze"
-
-#: src/ephy-web-extension-dialog.c:200
-#: src/resources/gtk/prefs-general-page.ui:127
-msgid "Homepage"
-msgstr "Domovská stránka"
-
-#: src/ephy-web-extension-dialog.c:213
-msgid "Open _Inspector"
-msgstr "Otevřít _inspektora"
-
-#: src/ephy-web-extension-dialog.c:215
-msgid "Open Inspector for debugging Background Page"
-msgstr "Otevřít inspektora pro ladění stránky v pozadí"
-
-#: src/ephy-web-extension-dialog.c:224
-msgid "Remove selected WebExtension"
-msgstr "Odebrat vybrané webové rozšíření"
-
-#. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:278
-msgid "Open File (manifest.json/xpi)"
-msgstr "Otevření souboru (manifest.json/xpi)"
-
-#: src/ephy-window.c:935
+#: src/ephy-window.c:921
 msgid "Re_do"
 msgstr "Zn_ovu"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:272
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:925 src/resources/gtk/location-entry.ui:276
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:926 src/resources/gtk/location-entry.ui:280
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:927
 msgid "_Paste Text Only"
 msgstr "Vložit _pouze text"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:928 src/resources/gtk/location-entry.ui:298
 msgid "Select _All"
 msgstr "Vy_brat vše"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:930
 msgid "S_end Link by Email…"
 msgstr "Odeslat odkaz _e-mailem…"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:932
 msgid "_Reload"
 msgstr "_Obnovit"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:933
 msgid "_Back"
 msgstr "_Zpět"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:934
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. Bookmarks
-#: src/ephy-window.c:951
+#: src/ephy-window.c:937
 msgid "Add Boo_kmark…"
 msgstr "Přid_at záložku…"
 
 #. Links.
-#: src/ephy-window.c:955
+#: src/ephy-window.c:941
 msgid "Open Link in New _Window"
 msgstr "Otevřít odkaz v novém _okně"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:942
 msgid "Open Link in New _Tab"
 msgstr "Otevřít odkaz v nové _kartě"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:943
 msgid "Open Link in I_ncognito Window"
 msgstr "Otevřít odkaz v a_nonymním okně"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:944
 msgid "_Save Link As…"
 msgstr "_Uložit odkaz jako…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:945
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:946
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
 #. Images.
-#: src/ephy-window.c:964
+#: src/ephy-window.c:950
 msgid "View _Image in New Tab"
 msgstr "Zobraz_it obrázek v nové kartě"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:951
 msgid "Copy I_mage Address"
 msgstr "Kopírovat adresu _obrázku"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:952
 msgid "_Save Image As…"
 msgstr "_Uložit obrázek jako…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:953
 msgid "Set as _Wallpaper"
 msgstr "Nastavit jako _tapetu plochy"
 
 #. Video.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:957
 msgid "Open Video in New _Window"
 msgstr "Otevřít video v novém _okně"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:958
 msgid "Open Video in New _Tab"
 msgstr "Otevřít video v nové kar_tě"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:959
 msgid "_Save Video As…"
 msgstr "_Uložit video jako…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:960
 msgid "_Copy Video Address"
 msgstr "_Kopírovat adresu videa"
 
 #. Audio.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:964
 msgid "Open Audio in New _Window"
 msgstr "Otevřít zvuk v novém _okně"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:965
 msgid "Open Audio in New _Tab"
 msgstr "Otevřít zvuk v nové kar_tě"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:966
 msgid "_Save Audio As…"
 msgstr "_Uložit zvuk jako…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:967
 msgid "_Copy Audio Address"
 msgstr "_Kopírovat adresu zvuku"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:973
 msgid "Save Pa_ge As…"
 msgstr "_Uložit stránku jako…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:974
 msgid "_Take Screenshot…"
 msgstr "Pořídi_t snímek obrazovky"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:975
 msgid "_Page Source"
 msgstr "Z_drojový kód stránky"
 
-#: src/ephy-window.c:1373
+#: src/ephy-window.c:1357
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Na webu vyhledat „%s“"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1386
 msgid "Open Link"
 msgstr "Otevřít odkaz"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1388
 msgid "Open Link In New Tab"
 msgstr "Otevřít odkaz v nové kartě"
 
-#: src/ephy-window.c:1406
+#: src/ephy-window.c:1390
 msgid "Open Link In New Window"
 msgstr "Otevřít odkaz v novém okně"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1392
 msgid "Open Link In Incognito Window"
 msgstr "Otevřít odkaz v anonymním okně"
 
-#: src/ephy-window.c:2854 src/ephy-window.c:4183
-msgid "Do you want to leave this website?"
-msgstr "Opravdu chcete opustit tuto stránku www?"
+#: src/ephy-window.c:2798
+msgid "_Ask Later"
+msgstr "P_tát se i příště"
 
-#: src/ephy-window.c:2855 src/ephy-window.c:4184 src/window-commands.c:1221
-msgid "A form you modified has not been submitted."
-msgstr "Formulář, který jste upravili, nebyl odeslán."
+#: src/ephy-window.c:2799
+msgid "_Deny"
+msgstr "_Zakázat"
 
-#: src/ephy-window.c:2856 src/ephy-window.c:4185 src/window-commands.c:1223
-msgid "_Discard form"
+#: src/ephy-window.c:2800
+msgid "_Allow"
+msgstr "_Povolit"
+
+#: src/ephy-window.c:2996 src/ephy-window.c:4417
+msgid "Leave Website?"
+msgstr "Opeustit webovou stránku?"
+
+#: src/ephy-window.c:2997 src/ephy-window.c:4418 src/window-commands.c:1235
+msgid "A form was modified and has not been submitted"
+msgstr "Formulář by upraven, ale není odeslán."
+
+#: src/ephy-window.c:2998 src/ephy-window.c:4419 src/window-commands.c:1239
+msgid "_Discard Form"
 msgstr "Zaho_dit formulář"
 
-#: src/ephy-window.c:2877
+#: src/ephy-window.c:3019
 msgid "Download operation"
 msgstr "Operace stahování"
 
-#: src/ephy-window.c:2879
+#: src/ephy-window.c:3021
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
-#: src/ephy-window.c:2881
+#: src/ephy-window.c:3023
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2904,84 +2881,110 @@ msgstr[0] "%d aktivní stahování"
 msgstr[1] "%d aktivní stahování"
 msgstr[2] "%d aktivních stahování"
 
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3375
-msgid "View open tabs"
-msgstr "Zobrazit otevřené karty"
+#: src/ephy-window.c:3244
+msgid "Set as Default Browser?"
+msgstr "Nastavit jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3505
-msgid "Set Web as your default browser?"
-msgstr "Nastavit aplikaci Web jako výchozí prohlížeč?"
+#: src/ephy-window.c:3246
+msgid "Use Web as your default web browser and for opening external links"
+msgstr ""
+"Používat aplikaci Web jako výchozí webový prohlížeč a pro otevírání externích "
+"odkazů"
 
-#: src/ephy-window.c:3507
-msgid "Set Epiphany Technology Preview as your default browser?"
-msgstr "Nastavit Epiphany Technology Preview jako výchozí prohlížeč?"
+#: src/ephy-window.c:3248
+msgid ""
+"Use Epiphany Technology Preview as your default web browser and for opening "
+"external links"
+msgstr ""
+"Používat Epiphany Technology Preview jako výchozí prohlížeč a k otevírání "
+"externích odkazů"
 
-#: src/ephy-window.c:3519
-msgid "_Yes"
-msgstr "_Ano"
+#: src/ephy-window.c:3252
+msgid "_Ask Again Later"
+msgstr "P_tát se i příště znovu"
 
-#: src/ephy-window.c:3520
+#: src/ephy-window.c:3253
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:4317
-msgid "There are multiple tabs open."
-msgstr "Je otevřeno více karet."
+#: src/ephy-window.c:3254
+msgid "_Yes"
+msgstr "_Ano"
 
-#: src/ephy-window.c:4318
-msgid "If you close this window, all open tabs will be lost"
-msgstr "Pokud toto okno zavřete, všechny otevřené karty budou ztraceny"
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3605
+msgid "View open tabs"
+msgstr "Zobrazit otevřené karty"
 
-#: src/ephy-window.c:4319
-msgid "C_lose tabs"
+#: src/ephy-window.c:3759
+msgid "Save login?"
+msgstr "Uložit přihlašovací údaje?"
+
+#: src/ephy-window.c:3760
+msgid ""
+"Passwords are saved only on your device and can be removed at any time in "
+"Preferences"
+msgstr ""
+"Hesla se ukládají pouze na vašem zařízení a kdykoliv je můžete odstranit v "
+"Předvolbách."
+
+#: src/ephy-window.c:3762
+msgid "Not Now"
+msgstr "Nyní ne"
+
+#: src/ephy-window.c:3763
+msgid "Never Save"
+msgstr "Nikdy neukládat"
+
+#: src/ephy-window.c:3764
+msgid "Save"
+msgstr "Uložit"
+
+#: src/ephy-window.c:4548
+msgid "Close Multiple Tabs?"
+msgstr "Zavřít několik karet?"
+
+#: src/ephy-window.c:4549
+msgid "If this window is closed, all open tabs will be lost"
+msgstr "Při zavření okna příjdete o všechny otevřené karty"
+
+#: src/ephy-window.c:4550
+msgid "C_lose Tabs"
 msgstr "Zavřít _karty"
 
-#: src/context-menu-commands.c:271
-msgid "Save Link As"
-msgstr "Uložit odkaz jako"
+#: src/ephy-window.c:4654
+msgid "New tab opened"
+msgstr "Byla otevřena nová karta"
 
-#: src/context-menu-commands.c:279
-msgid "Save Image As"
-msgstr "Uložit obrázek jako"
+#: src/ephy-window.c:4658
+msgid "Switch"
+msgstr "Přepnout na ni"
 
-#: src/context-menu-commands.c:287
-msgid "Save Media As"
-msgstr "Uložit multimédia jako"
-
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:68
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:69
 msgid "HTTP disk cache"
 msgstr "Disková mezipaměť HTTP"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:70
 msgid "Local storage data"
 msgstr "Místní úložiště dat"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:71
 msgid "Offline web application cache"
 msgstr "Mezipaměť webových aplikaci pro režim odpojení"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:72
 msgid "IndexedDB databases"
 msgstr "Databáze IndexedDB"
 
-#: src/preferences/clear-data-view.c:75
-msgid "WebSQL databases"
-msgstr "Databáze WebSQL"
-
-#: src/preferences/clear-data-view.c:76
-msgid "Plugins data"
-msgstr "Data zásuvných modulů"
-
-#: src/preferences/clear-data-view.c:77
+#: src/preferences/clear-data-view.c:73
 msgid "HSTS policies cache"
 msgstr "Mezipaměť zásad HSTS"
 
-#: src/preferences/clear-data-view.c:78
+#: src/preferences/clear-data-view.c:74
 msgid "Intelligent Tracking Prevention data"
 msgstr "Data inteligentní prevence sledování"
 
@@ -3023,86 +3026,101 @@ msgstr ""
 "Adresa není platné URL. Měla by vypadat nějak jako ttps://www.example.com/"
 "search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:190
+#: src/preferences/ephy-search-engine-row.c:188
 msgid "This shortcut is already used."
 msgstr "Tato klávesová zkratka je již použita."
 
-#: src/preferences/ephy-search-engine-row.c:192
+#: src/preferences/ephy-search-engine-row.c:190
 msgid "Search shortcuts must not contain any space."
 msgstr "Vyhledávací zkratky nesmí obsahovat žádné mezery."
 
-#: src/preferences/ephy-search-engine-row.c:200
+#: src/preferences/ephy-search-engine-row.c:198
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "Vyhledávací zkratky nesmí začínat symboly jako je !, # nebo @."
 
-#: src/preferences/ephy-search-engine-row.c:333
+#: src/preferences/ephy-search-engine-row.c:331
 msgid "A name is required"
 msgstr "Název je povinný."
 
-#: src/preferences/ephy-search-engine-row.c:335
+#: src/preferences/ephy-search-engine-row.c:333
 msgid "This search engine already exists"
 msgstr "Tento vyhledávač je již zadaný"
 
-#: src/preferences/passwords-view.c:191
+#: src/preferences/extension-view.c:129 src/resources/gtk/extension-view.ui:108
+msgid "Remove Extension"
+msgstr "Odebrání rozšíření"
+
+#: src/preferences/extension-view.c:130
+msgid "Do you really want to remove this extension?"
+msgstr "Opravdu chcete odebrat toto rozšíření?"
+
+#: src/preferences/extension-view.c:134
+#: src/resources/gtk/bookmark-properties.ui:106
+msgid "_Remove"
+msgstr "Odeb_rat"
+
+#: src/preferences/passwords-view.c:179
 msgid "Delete All Passwords?"
 msgstr "Smazat všechna hesla?"
 
-#: src/preferences/passwords-view.c:194
+#: src/preferences/passwords-view.c:180
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Tímto se smažou všechna místně uložená hesla a nepůjde je obnovit zpět."
 
-#: src/preferences/passwords-view.c:199 src/resources/gtk/history-dialog.ui:239
+#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:155
+#: src/resources/gtk/location-entry.ui:288
 msgid "_Delete"
 msgstr "Od_stranit"
 
-#: src/preferences/passwords-view.c:257
+#: src/preferences/passwords-view.c:239
 msgid "Copy password"
 msgstr "Zkopírovat heslo"
 
-#: src/preferences/passwords-view.c:263
+#: src/preferences/passwords-view.c:246
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: src/preferences/passwords-view.c:286
+#: src/preferences/passwords-view.c:256
 msgid "Copy username"
 msgstr "Zk_opírovat uživatelské jméno"
 
-#: src/preferences/passwords-view.c:292
+#: src/preferences/passwords-view.c:263
 msgid "Password"
 msgstr "Heslo"
 
-#: src/preferences/passwords-view.c:317
-msgid "Reveal password"
-msgstr "Odhalit heslo"
-
-#: src/preferences/passwords-view.c:327
+#: src/preferences/passwords-view.c:275
 msgid "Remove Password"
 msgstr "Odstranit heslo"
 
-#: src/preferences/prefs-appearance-page.c:66
+#: src/preferences/prefs-appearance-page.c:64
 msgid "Sans"
 msgstr "Bezpatkové"
 
-#: src/preferences/prefs-appearance-page.c:68
+#: src/preferences/prefs-appearance-page.c:66
 msgid "Serif"
 msgstr "Patkové"
 
-#: src/preferences/prefs-appearance-page.c:146
+#: src/preferences/prefs-appearance-page.c:108
 msgid "Light"
 msgstr "Světlé"
 
-#: src/preferences/prefs-appearance-page.c:148
+#: src/preferences/prefs-appearance-page.c:110
 msgid "Dark"
 msgstr "Tmavé"
 
-#: src/preferences/prefs-general-page.c:301
-#: src/resources/gtk/prefs-lang-dialog.ui:11
+#. Translators: this is the title of a file chooser dialog.
+#: src/preferences/prefs-extensions-page.c:79
+msgid "Open File (manifest.json/xpi)"
+msgstr "Otevření souboru (manifest.json/xpi)"
+
+#: src/preferences/prefs-general-page.c:201
+#: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "Přidat jazyk"
 
-#: src/preferences/prefs-general-page.c:530
-#: src/preferences/prefs-general-page.c:689
+#: src/preferences/prefs-general-page.c:363
+#: src/preferences/prefs-general-page.c:519
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -3110,106 +3128,95 @@ msgstr[0] "Jazyk systému (%s)"
 msgstr[1] "Jazyky systému (%s)"
 msgstr[2] "Jazyků systému (%s)"
 
-#: src/preferences/prefs-general-page.c:895
-msgid "Web Application Icon"
-msgstr "Ikona webové aplikace"
-
-#: src/preferences/prefs-general-page.c:900
+#: src/preferences/prefs-general-page.c:720
 msgid "Supported Image Files"
 msgstr "Podporované soubory s obrazy"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1803
+#: src/profile-migrator/ephy-profile-migrator.c:1802
 msgid "Executes only the n-th migration step"
 msgstr "Provede pouze n-tý krok převodu"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1805
+#: src/profile-migrator/ephy-profile-migrator.c:1804
 msgid "Specifies the required version for the migrator"
 msgstr "Udává požadovanou verzi nástroje pro převod profilu"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1807
+#: src/profile-migrator/ephy-profile-migrator.c:1806
 msgid "Specifies the profile where the migrator should run"
 msgstr "Udává název profilu, ve kterém převod spustit"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1828
+#: src/profile-migrator/ephy-profile-migrator.c:1827
 msgid "Web profile migrator"
 msgstr "Převod profilu aplikace Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1829
+#: src/profile-migrator/ephy-profile-migrator.c:1828
 msgid "Web profile migrator options"
 msgstr "Volby převodu profilu aplikace Web"
 
-#. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:18
-msgid "View downloads"
-msgstr "Zobrazit stahování"
-
-#. Translators: tooltip for the bookmark button
-#: src/resources/gtk/action-bar-end.ui:56
-msgid "Bookmark page"
-msgstr "Přidat stránku do záložek"
+#. Translators: tooltip for the webextension actions button
+#: src/resources/gtk/action-bar-end.ui:28
+#: src/resources/gtk/prefs-extensions-page.ui:6
+msgid "Extensions"
+msgstr "Rozšíření"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:73
-msgid "View and manage your bookmarks"
-msgstr "Zobrazit a spravovat záložky"
+#: src/resources/gtk/action-bar-end.ui:100
+msgid "Bookmarks"
+msgstr "Záložky"
 
 #. Translators: tooltip for the back button
-#: src/resources/gtk/action-bar-start.ui:18
-msgid "Go back to the previous page"
-msgstr "Zpět na předchozí stránku"
+#: src/resources/gtk/action-bar-start.ui:17
+msgid "Back"
+msgstr "Zpět"
 
 #. Translators: tooltip for the forward button
-#: src/resources/gtk/action-bar-start.ui:36
-msgid "Go forward to the next page"
-msgstr "Vpřed na následující stránku"
+#: src/resources/gtk/action-bar-start.ui:45
+msgid "Forward"
+msgstr "Vpřed"
 
 #. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:72
-msgid "Go to your homepage"
-msgstr "Na domovskou stránku"
+#: src/resources/gtk/action-bar-start.ui:89
+#: src/resources/gtk/extension-view.ui:69
+#: src/resources/gtk/prefs-general-page.ui:85
+msgid "Homepage"
+msgstr "Domovská stránka"
 
-#. Translators: tooltip for the page switcher button
-#: src/resources/gtk/action-bar.ui:23
-msgid "View open pages"
-msgstr "Zobrazit otevřené stránky"
-
-#: src/resources/gtk/bookmark-properties.ui:16
+#: src/resources/gtk/bookmark-properties.ui:14
 msgid "Bookmark"
 msgstr "Záložka"
 
-#: src/resources/gtk/bookmark-properties.ui:26
+#: src/resources/gtk/bookmark-properties.ui:23
 msgid "_Name"
 msgstr "_Název"
 
-#: src/resources/gtk/bookmark-properties.ui:45
+#: src/resources/gtk/bookmark-properties.ui:40
 msgid "_Address"
 msgstr "_Adresa"
 
-#: src/resources/gtk/bookmark-properties.ui:63
-#: src/resources/gtk/bookmarks-popover.ui:77
+#: src/resources/gtk/bookmark-properties.ui:55
+#: src/resources/gtk/bookmarks-popover.ui:57
 msgid "Tags"
 msgstr "Štítky"
 
-#: src/resources/gtk/bookmark-properties.ui:100
+#: src/resources/gtk/bookmark-properties.ui:88
 msgid "Add Tag…"
 msgstr "Přidat štítek…"
 
-#: src/resources/gtk/bookmark-properties.ui:105
-#: src/resources/gtk/prefs-lang-dialog.ui:23
+#: src/resources/gtk/bookmark-properties.ui:93
+#: src/resources/gtk/prefs-lang-dialog.ui:22
 msgid "_Add"
 msgstr "Přid_at"
 
-#: src/resources/gtk/bookmarks-popover.ui:56
+#: src/resources/gtk/bookmarks-popover.ui:36
 msgid "All"
 msgstr "Vše"
 
-#: src/resources/gtk/bookmarks-popover.ui:163
-msgid "No bookmarks yet?"
-msgstr "Nemáte zatím žádné záložky?"
+#: src/resources/gtk/bookmarks-popover.ui:138
+msgid "No Bookmarks"
+msgstr "Žádné záložky"
 
-#: src/resources/gtk/bookmarks-popover.ui:179
-msgid "Bookmark some webpages to view them here."
-msgstr "Dejte si nějaké stránky do záložek a uvidíte je zde."
+#: src/resources/gtk/bookmarks-popover.ui:139
+msgid "Bookmarked pages will appear here"
+msgstr "Stránky zařazené do záložek uvidíte zde."
 
 #: src/resources/gtk/clear-data-view.ui:22
 msgid "Website Data"
@@ -3235,27 +3242,27 @@ msgstr "Nejsou uchována žádná data webu"
 msgid "Website data will be listed here"
 msgstr "Zde budou vypsána data webu"
 
-#: src/resources/gtk/clear-data-view.ui:55
+#: src/resources/gtk/clear-data-view.ui:50
 msgid "Clear selected website data:"
 msgstr "Vymazat vybraná data webu:"
 
-#: src/resources/gtk/clear-data-view.ui:113
+#: src/resources/gtk/clear-data-view.ui:105
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr ""
 "Tuto akci nelze vrátit zpět. Data vybraná k vymazání budou odstraněna trvale."
 
-#: src/resources/gtk/data-view.ui:44 src/resources/gtk/history-dialog.ui:69
-#: src/resources/gtk/history-dialog.ui:114
+#: src/resources/gtk/data-view.ui:24 src/resources/gtk/history-dialog.ui:30
+#: src/resources/gtk/history-dialog.ui:49
 msgid "Search"
 msgstr "Hledat"
 
-#: src/resources/gtk/data-view.ui:100 src/resources/gtk/history-dialog.ui:198
+#: src/resources/gtk/data-view.ui:76 src/resources/gtk/history-dialog.ui:126
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#: src/resources/gtk/data-view.ui:101 src/resources/gtk/history-dialog.ui:199
+#: src/resources/gtk/data-view.ui:77 src/resources/gtk/history-dialog.ui:127
 msgid "Try a different search"
 msgstr "Zkuste vyhledat něco jiného"
 
@@ -3263,27 +3270,43 @@ msgstr "Zkuste vyhledat něco jiného"
 msgid "Text Encoding"
 msgstr "Kódování textu"
 
-#: src/resources/gtk/encoding-dialog.ui:34
+#: src/resources/gtk/encoding-dialog.ui:29
 msgid "Use the encoding specified by the document"
 msgstr "Používat kódování určené dokumentem"
 
-#: src/resources/gtk/encoding-dialog.ui:68
+#: src/resources/gtk/encoding-dialog.ui:61
 msgid "Recent encodings"
 msgstr "Nedávná kódování"
 
-#: src/resources/gtk/encoding-dialog.ui:98
+#: src/resources/gtk/encoding-dialog.ui:87
 msgid "Related encodings"
 msgstr "Související kódování"
 
-#: src/resources/gtk/encoding-dialog.ui:123
+#: src/resources/gtk/encoding-dialog.ui:110
 msgid "Show all…"
 msgstr "Zobrazit vše…"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:20
+#: src/resources/gtk/extension-view.ui:7
+msgid "Open _Inspector"
+msgstr "Otevřít _inspektora"
+
+#: src/resources/gtk/extension-view.ui:42
+msgid "Author"
+msgstr "Autor"
+
+#: src/resources/gtk/extension-view.ui:55
+msgid "Version"
+msgstr "Verze"
+
+#: src/resources/gtk/extension-view.ui:85
+msgid "Enabled"
+msgstr "Povolené"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:28
+#: src/resources/gtk/firefox-sync-dialog.ui:17
 msgid ""
 "Sign in with your Firefox account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3293,82 +3316,114 @@ msgstr ""
 "webovými aplikacemi na různých počítačích. Aplikace Web GNOME není Firefox a "
 "není vytvářena, či podporována, organizací Mozilla."
 
-#: src/resources/gtk/firefox-sync-dialog.ui:47
+#: src/resources/gtk/firefox-sync-dialog.ui:34
 msgid "Firefox Account"
 msgstr "Účet Firefox"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:51
+#: src/resources/gtk/firefox-sync-dialog.ui:37
 msgid "Logged in"
 msgstr "Přihlášen"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:56
+#: src/resources/gtk/firefox-sync-dialog.ui:41
 msgid "Sign _out"
 msgstr "_Odhlásit"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:69
+#: src/resources/gtk/firefox-sync-dialog.ui:53
 msgid "Sync Options"
 msgstr "Volby synchronizace"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:74
+#: src/resources/gtk/firefox-sync-dialog.ui:57
 msgid "Sync _Bookmarks"
 msgstr "Synchronizovat _záložky"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:88
+#: src/resources/gtk/firefox-sync-dialog.ui:69
 msgid "Sync _Passwords"
 msgstr "Synchronizovat _hesla"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:102
+#: src/resources/gtk/firefox-sync-dialog.ui:81
 msgid "Sync _History"
 msgstr "Synchronizovat _historii"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:116
+#: src/resources/gtk/firefox-sync-dialog.ui:93
 msgid "Sync Open _Tabs"
 msgstr "Synchronizovat otevřené kar_ty"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:127
+#: src/resources/gtk/firefox-sync-dialog.ui:102
 msgid "S_ynced tabs"
 msgstr "S_ynchronizované karty"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:138
+#: src/resources/gtk/firefox-sync-dialog.ui:112
 msgid "Frequency"
 msgstr "Četnost"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:149
+#: src/resources/gtk/firefox-sync-dialog.ui:124
 msgid "Sync _now"
 msgstr "Synchronizovat _nyní"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:161
+#: src/resources/gtk/firefox-sync-dialog.ui:135
 msgid "Device name"
 msgstr "Název zařízení"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:184
+#: src/resources/gtk/firefox-sync-dialog.ui:148
+msgid "_Save"
+msgstr "_Uložit"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:157
 msgid "_Change"
 msgstr "Z_měnit"
 
-#: src/resources/gtk/history-dialog.ui:27
-#: src/resources/gtk/history-dialog.ui:82
+#: src/resources/gtk/history-dialog.ui:10
 msgid "History"
 msgstr "Historie"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:23
 msgid "Select Items"
 msgstr "Vybrat položky"
 
-#: src/resources/gtk/history-dialog.ui:138
+#: src/resources/gtk/history-dialog.ui:68
 msgid "Search history"
 msgstr "Vyhledat v historii"
 
-#: src/resources/gtk/history-dialog.ui:190
+#: src/resources/gtk/history-dialog.ui:119
 msgid "The History is Empty"
 msgstr "Historie je prázdná"
 
-#: src/resources/gtk/history-dialog.ui:191
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Visited pages will be listed here"
 msgstr "Zde budou vypsány navštívené stránky"
 
-#: src/resources/gtk/lang-row.ui:39
+#: src/resources/gtk/history-dialog.ui:166
+msgid "_Open"
+msgstr "_Otevřít"
+
+#: src/resources/gtk/lang-row.ui:21
 msgid "Delete language"
 msgstr "Odebrat jazyk"
+
+#: src/resources/gtk/location-entry.ui:11
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "Vyhledat weby, záložky a otevřené karty"
+
+#: src/resources/gtk/location-entry.ui:65
+msgid "Website Security Status and Permissions"
+msgstr "Bezpečnostní hlášení a oprávnění stránky"
+
+#: src/resources/gtk/location-entry.ui:84
+#: src/resources/gtk/prefs-appearance-page.ui:59
+msgid "Reader Mode"
+msgstr "Režim čtečky"
+
+#: src/resources/gtk/location-entry.ui:96
+msgid "View available passwords"
+msgstr "Zobrazit dostupná hesla"
+
+#: src/resources/gtk/location-entry.ui:266
+msgid "_Redo"
+msgstr "Zn_ovu"
+
+#: src/resources/gtk/location-entry.ui:284
+msgid "Paste and _Go"
+msgstr "Vložit a pře_jít"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -3394,134 +3449,126 @@ msgstr "Odepn_out kartu"
 msgid "_Mute Tab"
 msgstr "Z_tišit kartu"
 
-#: src/resources/gtk/notebook-context-menu.ui:38
+#: src/resources/gtk/notebook-context-menu.ui:37
 msgid "Close Tabs to the _Left"
 msgstr "Zavřít karty v_levo"
 
-#: src/resources/gtk/notebook-context-menu.ui:42
+#: src/resources/gtk/notebook-context-menu.ui:41
 msgid "Close Tabs to the _Right"
 msgstr "Zavřít karty vp_ravo"
 
-#: src/resources/gtk/notebook-context-menu.ui:46
+#: src/resources/gtk/notebook-context-menu.ui:45
 msgid "Close _Other Tabs"
 msgstr "Zavřít _ostatní karty"
 
-#: src/resources/gtk/notebook-context-menu.ui:50
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:263
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: src/resources/gtk/page-menu-popover.ui:23
+#: src/resources/gtk/page-menu-popover.ui:14
+msgid "_Run in Background"
+msgstr "_Běžet na pozadí"
+
+#: src/resources/gtk/page-menu-popover.ui:21
+msgid "_New Window"
+msgstr "_Nové okno"
+
+#: src/resources/gtk/page-menu-popover.ui:25
+msgid "New _Incognito Window"
+msgstr "Nové _anonymní okno"
+
+#: src/resources/gtk/page-menu-popover.ui:31
+msgid "Reopen Closed _Tab"
+msgstr "Znovu otevřít _zavřenou kartu"
+
+#: src/resources/gtk/page-menu-popover.ui:35
+msgid "Histo_ry"
+msgstr "Histo_rie"
+
+#: src/resources/gtk/page-menu-popover.ui:41
+msgid "Firefox _Sync"
+msgstr "Firefox _Sync"
+
+#: src/resources/gtk/page-menu-popover.ui:45
+msgid "I_mport and Export"
+msgstr "I_mport a export"
+
+#: src/resources/gtk/page-menu-popover.ui:49
+msgid "I_mport Bookmarks…"
+msgstr "Nai_mportovat záložky…"
+
+#: src/resources/gtk/page-menu-popover.ui:53
+msgid "E_xport Bookmarks…"
+msgstr "Vye_xportovat záložky…"
+
+#: src/resources/gtk/page-menu-popover.ui:59
+msgid "Import _Passwords…"
+msgstr "Naimportovat _hesla…"
+
+#: src/resources/gtk/page-menu-popover.ui:67
+msgid "Install as _Web App…"
+msgstr "Nainstalovat jako _webovou aplikaci…"
+
+#: src/resources/gtk/page-menu-popover.ui:71
+msgid "Manag_e Web Apps"
+msgstr "Spravovat w_ebové aplikace"
+
+#: src/resources/gtk/page-menu-popover.ui:77
+msgid "Text Enco_ding…"
+msgstr "Kó_dování textu…"
+
+#: src/resources/gtk/page-menu-popover.ui:83
+msgid "Pr_eferences"
+msgstr "Př_edvolby"
+
+#: src/resources/gtk/page-menu-popover.ui:87
+msgid "_Keyboard Shortcuts"
+msgstr "_Klávesové zkratky"
+
+#: src/resources/gtk/page-menu-popover.ui:91
+msgid "_Help"
+msgstr "_Nápověda"
+
+#: src/resources/gtk/page-menu-popover.ui:95
+msgid "_About Web"
+msgstr "O _aplikaci Web"
+
+#: src/resources/gtk/page-menu-popover.ui:112
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Oddálit"
 
-#: src/resources/gtk/page-menu-popover.ui:36
+#: src/resources/gtk/page-menu-popover.ui:119
 msgid "Restore Zoom"
 msgstr "Výchozí přiblížení"
 
-#: src/resources/gtk/page-menu-popover.ui:49
+#: src/resources/gtk/page-menu-popover.ui:130
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Přiblížit"
 
-#: src/resources/gtk/page-menu-popover.ui:72
+#: src/resources/gtk/page-menu-popover.ui:145
 msgid "Print…"
 msgstr "Tisk…"
 
-#: src/resources/gtk/page-menu-popover.ui:82
+#: src/resources/gtk/page-menu-popover.ui:152
 msgid "Find…"
 msgstr "Hledat…"
 
-#: src/resources/gtk/page-menu-popover.ui:92
+#: src/resources/gtk/page-menu-popover.ui:159
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/resources/gtk/page-menu-popover.ui:138
-msgid "_Run in Background"
-msgstr "_Běžet na pozadí"
-
-#: src/resources/gtk/page-menu-popover.ui:155
-msgid "_New Window"
-msgstr "_Nové okno"
-
-#: src/resources/gtk/page-menu-popover.ui:162
-msgid "New _Incognito Window"
-msgstr "Nové _anonymní okno"
-
-#: src/resources/gtk/page-menu-popover.ui:178
-msgid "Reopen Closed _Tab"
-msgstr "Znovu otevřít _zavřenou kartu"
-
-#: src/resources/gtk/page-menu-popover.ui:185
-msgid "_History"
-msgstr "_Historie"
-
-#: src/resources/gtk/page-menu-popover.ui:201
-msgid "Firefox _Sync"
-msgstr "Firefox _Sync"
-
-#: src/resources/gtk/page-menu-popover.ui:208
-msgid "I_mport and Export"
-msgstr "I_mport a export"
-
-#: src/resources/gtk/page-menu-popover.ui:224
-msgid "Install Site as Web _Application…"
-msgstr "Nainstalovat jako _webovou aplikaci…"
-
-#: src/resources/gtk/page-menu-popover.ui:231
-msgid "Open Appli_cation Manager"
-msgstr "Otevřít správu a_plikací"
-
-#: src/resources/gtk/page-menu-popover.ui:238
-msgid "E_xtensions"
-msgstr "_Rozšíření"
-
-#: src/resources/gtk/page-menu-popover.ui:254
-msgid "_Override Text Encoding…"
-msgstr "Vnutit kód_ování textu…"
-
-#: src/resources/gtk/page-menu-popover.ui:269
-msgid "Pr_eferences"
-msgstr "Př_edvolby"
-
-#: src/resources/gtk/page-menu-popover.ui:277
-msgid "_Keyboard Shortcuts"
-msgstr "_Klávesové zkratky"
-
-#: src/resources/gtk/page-menu-popover.ui:285
-msgid "_Help"
-msgstr "_Nápověda"
-
-#: src/resources/gtk/page-menu-popover.ui:293
-msgid "_About Web"
-msgstr "O _aplikaci Web"
-
-#: src/resources/gtk/page-menu-popover.ui:316
-msgid "Import and Export"
-msgstr "Import a export"
-
-#: src/resources/gtk/page-menu-popover.ui:326
-msgid "I_mport Bookmarks…"
-msgstr "Nai_mportovat záložky…"
-
-#: src/resources/gtk/page-menu-popover.ui:333
-msgid "E_xport Bookmarks…"
-msgstr "Vye_xportovat záložky…"
-
-#: src/resources/gtk/page-menu-popover.ui:348
-msgid "Import _Passwords…"
-msgstr "Naimportovat _hesla…"
-
-#: src/resources/gtk/page-row.ui:61
-msgid "Close page"
-msgstr "Zavřít stránku"
+#: src/resources/gtk/page-row.ui:52
+msgid "Close"
+msgstr "Zavřít"
 
 #: src/resources/gtk/pages-view.ui:11
 msgid "Tabs"
 msgstr "Karty"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:107
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "Passwords"
 msgstr "Hesla"
 
@@ -3541,11 +3588,11 @@ msgstr "Nejsou uchována žádná hesla"
 msgid "Saved passwords will be listed here"
 msgstr "Zde budou vypsána uložená hesla"
 
-#: src/resources/gtk/passwords-view.ui:73
+#: src/resources/gtk/passwords-view.ui:69
 msgid "_Copy Password"
 msgstr "_Kopírovat heslo"
 
-#: src/resources/gtk/passwords-view.ui:77
+#: src/resources/gtk/passwords-view.ui:73
 msgid "C_opy Username"
 msgstr "K_opírovat uživatelské jméno"
 
@@ -3553,143 +3600,161 @@ msgstr "K_opírovat uživatelské jméno"
 msgid "Appearance"
 msgstr "Vzhled"
 
-#: src/resources/gtk/prefs-appearance-page.ui:10
+#: src/resources/gtk/prefs-appearance-page.ui:9
 msgid "Fonts"
 msgstr "Fonty"
 
-#: src/resources/gtk/prefs-appearance-page.ui:15
+#: src/resources/gtk/prefs-appearance-page.ui:13
 msgid "Use Custom Fonts"
 msgstr "Používat vlastní fonty"
 
-#: src/resources/gtk/prefs-appearance-page.ui:20
+#: src/resources/gtk/prefs-appearance-page.ui:17
 msgid "Sans serif font"
 msgstr "Bezpatkový font"
 
-#: src/resources/gtk/prefs-appearance-page.ui:35
+#: src/resources/gtk/prefs-appearance-page.ui:30
 msgid "Serif font"
 msgstr "Patkový font"
 
-#: src/resources/gtk/prefs-appearance-page.ui:50
+#: src/resources/gtk/prefs-appearance-page.ui:43
 msgid "Monospace font"
 msgstr "Font s pevnou šířkou"
 
-#: src/resources/gtk/prefs-appearance-page.ui:68
-msgid "Reader Mode"
-msgstr "Režim čtečky"
-
-#: src/resources/gtk/prefs-appearance-page.ui:72
+#: src/resources/gtk/prefs-appearance-page.ui:62
 msgid "Font Style"
 msgstr "Styl fontu"
 
-#: src/resources/gtk/prefs-appearance-page.ui:78
+#: src/resources/gtk/prefs-appearance-page.ui:77
 msgid "Color Scheme"
 msgstr "Barevné schéma"
 
-#: src/resources/gtk/prefs-appearance-page.ui:86
+#: src/resources/gtk/prefs-appearance-page.ui:94
 msgid "Style"
 msgstr "Vzhled"
 
-#: src/resources/gtk/prefs-appearance-page.ui:91
+#: src/resources/gtk/prefs-appearance-page.ui:98
 msgid "Use Custom Stylesheet"
 msgstr "Používat vlastní stylopis"
 
-#: src/resources/gtk/prefs-appearance-page.ui:126
+#: src/resources/gtk/prefs-appearance-page.ui:118
 msgid "Use Custom JavaScript"
 msgstr "Používat vlastní JavaScript"
 
-#: src/resources/gtk/prefs-appearance-page.ui:161
+#: src/resources/gtk/prefs-appearance-page.ui:138
 msgid "Default Zoom Level"
 msgstr "Výchozí úroveň přiblížení"
+
+#: src/resources/gtk/prefs-extensions-page.ui:12
+msgid "Add New Extension"
+msgstr "Přidání nového rozšíření"
+
+#: src/resources/gtk/prefs-extensions-page.ui:13
+msgid "Extensions must be installed manually from their files"
+msgstr "Rozšíření je třeba instalovat z jejích souborů."
+
+#: src/resources/gtk/prefs-extensions-page.ui:27
+msgid ""
+"Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
+"add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
+"mozilla.org</a>"
+msgstr ""
+"Aplikace Web je kompatibilní s webovými rozšířeními pro Mozilla Firefox. Když "
+"chcete vyhledat a nainstalovat webové rozšíření, navštivte <a href="
+"\"https://addons.mozilla.org\">addons.mozilla.org</a>."
+
+#: src/resources/gtk/prefs-extensions-page.ui:59
+msgid "No extensions installed"
+msgstr "Není nainstalováno žádné rozšíření"
 
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
 msgstr "Obecné"
 
-#: src/resources/gtk/prefs-general-page.ui:10
-msgid "Web Application"
+#: src/resources/gtk/prefs-general-page.ui:9
+msgid "Web App"
 msgstr "Webová aplikace"
 
-#: src/resources/gtk/prefs-general-page.ui:15
+#: src/resources/gtk/prefs-general-page.ui:13
 msgid "_Icon"
 msgstr "_Ikona"
 
-#: src/resources/gtk/prefs-general-page.ui:38
+#: src/resources/gtk/prefs-general-page.ui:25
 msgid "_Homepage"
 msgstr "_Domovská stránka"
 
-#: src/resources/gtk/prefs-general-page.ui:53
+#: src/resources/gtk/prefs-general-page.ui:32
 msgid "_Title"
 msgstr "_Název"
 
-#: src/resources/gtk/prefs-general-page.ui:68
+#: src/resources/gtk/prefs-general-page.ui:40
 msgid "_Manage Additional URLs"
 msgstr "_Spravovat dodatečné URL"
 
-#: src/resources/gtk/prefs-general-page.ui:93
+#: src/resources/gtk/prefs-general-page.ui:56
 msgid "Web Content"
 msgstr "Obsah webových stránek"
 
-#: src/resources/gtk/prefs-general-page.ui:98
+#: src/resources/gtk/prefs-general-page.ui:60
 msgid "Block _Advertisements"
 msgstr "Blokovat rekl_amy"
 
-#: src/resources/gtk/prefs-general-page.ui:112
+#: src/resources/gtk/prefs-general-page.ui:72
 msgid "Block _Popup Windows"
 msgstr "Blokovat _vyskakovací okna"
 
-#: src/resources/gtk/prefs-general-page.ui:132
+#: src/resources/gtk/prefs-general-page.ui:89
 msgid "Most _Visited Pages"
 msgstr "Nejna_vštěvovanější stránky"
 
-#: src/resources/gtk/prefs-general-page.ui:146
+#: src/resources/gtk/prefs-general-page.ui:101
 msgid "_Blank Page"
 msgstr "_Prázdná stránka"
 
-#: src/resources/gtk/prefs-general-page.ui:161
+#: src/resources/gtk/prefs-general-page.ui:114
 msgid "_Custom"
 msgstr "_Vlastní"
 
-#: src/resources/gtk/prefs-general-page.ui:190
+#: src/resources/gtk/prefs-general-page.ui:139
 msgid "Ask o_n Download"
 msgstr "Při stahová_ní se zeptat"
 
-#: src/resources/gtk/prefs-general-page.ui:205
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "_Download Folder"
 msgstr "Složka pro _stažené"
 
-#: src/resources/gtk/prefs-general-page.ui:250
+#: src/resources/gtk/prefs-general-page.ui:192
 msgid "Search Engines"
 msgstr "Vyhledávače"
 
-#: src/resources/gtk/prefs-general-page.ui:261
+#: src/resources/gtk/prefs-general-page.ui:200
 msgid "Session"
 msgstr "Sezení"
 
-#: src/resources/gtk/prefs-general-page.ui:266
+#: src/resources/gtk/prefs-general-page.ui:204
 msgid "Start in _Incognito Mode"
 msgstr "Spustit v anonymním rež_imu"
 
-#: src/resources/gtk/prefs-general-page.ui:280
+#: src/resources/gtk/prefs-general-page.ui:216
 msgid "_Restore Tabs on Startup"
 msgstr "Při spuštění obnovit ka_rty"
 
-#: src/resources/gtk/prefs-general-page.ui:295
+#: src/resources/gtk/prefs-general-page.ui:229
 msgid "Browsing"
 msgstr "Prohlížení"
 
-#: src/resources/gtk/prefs-general-page.ui:300
+#: src/resources/gtk/prefs-general-page.ui:233
 msgid "Mouse _Gestures"
 msgstr "_Gesta myší"
 
-#: src/resources/gtk/prefs-general-page.ui:314
+#: src/resources/gtk/prefs-general-page.ui:245
 msgid "S_witch Immediately to New Tabs"
 msgstr "I_hned přepínat na nové karty"
 
-#: src/resources/gtk/prefs-general-page.ui:349
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "_Spell Checking"
 msgstr "Kontrola pravopi_su"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:48
+#: src/resources/gtk/prefs-lang-dialog.ui:43
 msgid "Choose a language:"
 msgstr "Vyberte jazyk:"
 
@@ -3697,75 +3762,75 @@ msgstr "Vyberte jazyk:"
 msgid "Privacy"
 msgstr "Soukromí"
 
-#: src/resources/gtk/prefs-privacy-page.ui:10
+#: src/resources/gtk/prefs-privacy-page.ui:9
 msgid "Web Safety"
 msgstr "Bezpečnost na webu"
 
-#: src/resources/gtk/prefs-privacy-page.ui:15
+#: src/resources/gtk/prefs-privacy-page.ui:13
 msgid "Block Dangerous Web_sites"
 msgstr "Blokovat nebezpečné we_by"
 
-#: src/resources/gtk/prefs-privacy-page.ui:30
+#: src/resources/gtk/prefs-privacy-page.ui:26
 msgid "Web Tracking"
 msgstr "Sledování weby"
 
-#: src/resources/gtk/prefs-privacy-page.ui:35
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "Intelligent _Tracking Prevention"
 msgstr "Inteligen_tní prevence sledování"
 
-#: src/resources/gtk/prefs-privacy-page.ui:49
+#: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr "Dovolit webům ukládata cookies, databáze a místní úložiště dat."
 
-#: src/resources/gtk/prefs-privacy-page.ui:50
+#: src/resources/gtk/prefs-privacy-page.ui:43
 msgid "_Website Data Storage"
 msgstr "Úložiště dat _webů"
 
-#: src/resources/gtk/prefs-privacy-page.ui:65
+#: src/resources/gtk/prefs-privacy-page.ui:56
 msgid "Search Suggestions"
 msgstr "Doporučení vyhledávačů"
 
-#: src/resources/gtk/prefs-privacy-page.ui:70
+#: src/resources/gtk/prefs-privacy-page.ui:60
 msgid "Enable search suggestions in the URL entry."
 msgstr "Povolit doporučení vyhledávačů v poli pro adresu URL."
 
-#: src/resources/gtk/prefs-privacy-page.ui:71
+#: src/resources/gtk/prefs-privacy-page.ui:61
 msgid "_Google Search Suggestions"
 msgstr "Doporučení vyhledávače _Google"
 
-#: src/resources/gtk/prefs-privacy-page.ui:86
+#: src/resources/gtk/prefs-privacy-page.ui:74
 msgid "Personal Data"
 msgstr "Osobní data"
 
-#: src/resources/gtk/prefs-privacy-page.ui:91
+#: src/resources/gtk/prefs-privacy-page.ui:78
 msgid "Clear Website _Data"
 msgstr "Vymazat _data webu"
 
-#: src/resources/gtk/prefs-privacy-page.ui:112
+#: src/resources/gtk/prefs-privacy-page.ui:96
 msgid "_Passwords"
 msgstr "_Hesla"
 
-#: src/resources/gtk/prefs-privacy-page.ui:127
+#: src/resources/gtk/prefs-privacy-page.ui:109
 msgid "_Remember Passwords"
 msgstr "_Pamatovat hesla"
 
-#: src/resources/gtk/search-engine-row.ui:10
+#: src/resources/gtk/search-engine-row.ui:8
 msgid "Selects the default search engine"
 msgstr "Vybírá výchozí vyhledávač"
 
-#: src/resources/gtk/search-engine-row.ui:31
+#: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
 msgstr "Název"
 
-#: src/resources/gtk/search-engine-row.ui:53
+#: src/resources/gtk/search-engine-row.ui:46
 msgid "Address"
 msgstr "Adresa"
 
-#: src/resources/gtk/search-engine-row.ui:79
+#: src/resources/gtk/search-engine-row.ui:69
 msgid "Shortcut"
 msgstr "Klávesová zkratka"
 
-#: src/resources/gtk/search-engine-row.ui:106
+#: src/resources/gtk/search-engine-row.ui:92
 #, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine "
@@ -3775,307 +3840,307 @@ msgstr ""
 "jakýkoliv výraz vyhledávačem, který chcete přidat, a následně v adrese, "
 "kterou uvidíte v adresní liště, změňte hledaný výraz na %s."
 
-#: src/resources/gtk/search-engine-row.ui:126
+#: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
 msgstr "Od_ebrat vyhledávač"
 
-#: src/resources/gtk/shortcuts-dialog.ui:15
+#: src/resources/gtk/shortcuts-dialog.ui:13
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Obecné"
 
-#: src/resources/gtk/shortcuts-dialog.ui:19
+#: src/resources/gtk/shortcuts-dialog.ui:16
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "Nové okno"
 
-#: src/resources/gtk/shortcuts-dialog.ui:26
+#: src/resources/gtk/shortcuts-dialog.ui:22
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "Nové anonymní okno"
 
-#: src/resources/gtk/shortcuts-dialog.ui:33
+#: src/resources/gtk/shortcuts-dialog.ui:28
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "Otevřít soubor"
 
-#: src/resources/gtk/shortcuts-dialog.ui:40
+#: src/resources/gtk/shortcuts-dialog.ui:34
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "Uložit stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:47
+#: src/resources/gtk/shortcuts-dialog.ui:40
 msgctxt "shortcut window"
 msgid "Take Screenshot"
 msgstr "Pořídit snímek obrazovky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:54
+#: src/resources/gtk/shortcuts-dialog.ui:46
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Vytisknout stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:52
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Ukončit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:58
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Nápověda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:64
 msgctxt "shortcut window"
 msgid "Open menu"
 msgstr "Otevřít nabídku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:82
+#: src/resources/gtk/shortcuts-dialog.ui:70
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Klávesové zkratky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:89
+#: src/resources/gtk/shortcuts-dialog.ui:76
 msgctxt "shortcut window"
 msgid "Show downloads list"
 msgstr "Zobrazit seznam stahování"
 
-#: src/resources/gtk/shortcuts-dialog.ui:100
+#: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigace"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:89
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Na domovskou stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:95
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Znovu načíst aktuální stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:101
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "Znovu načíst s obejitím mezipaměti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:125
+#: src/resources/gtk/shortcuts-dialog.ui:107
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Zastavit načítání aktuální stránky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:132
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:113
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Zpět na předchozí stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:139
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:119
+#: src/resources/gtk/shortcuts-dialog.ui:132
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Vpřed na následující stránku"
 
-#: src/resources/gtk/shortcuts-dialog.ui:164
+#: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Karty"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:144
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Nová karta"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Zavřít aktuální kartu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
+#: src/resources/gtk/shortcuts-dialog.ui:156
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Znovu otevřít zavřenou kartu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:189
+#: src/resources/gtk/shortcuts-dialog.ui:162
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Přejít na následující kartu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:196
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Přejít na předchozí kartu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:203
+#: src/resources/gtk/shortcuts-dialog.ui:174
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Přesunout aktuální kartu doleva"
 
-#: src/resources/gtk/shortcuts-dialog.ui:210
+#: src/resources/gtk/shortcuts-dialog.ui:180
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Přesunout aktuální kartu doprava"
 
-#: src/resources/gtk/shortcuts-dialog.ui:217
+#: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "Duplikovat aktuální kartu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:228
+#: src/resources/gtk/shortcuts-dialog.ui:196
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Různé"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:199
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Historie"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:205
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Aktuální stránku do záložek"
 
-#: src/resources/gtk/shortcuts-dialog.ui:253
+#: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "Zobrazit seznam záložek"
 
-#: src/resources/gtk/shortcuts-dialog.ui:260
+#: src/resources/gtk/shortcuts-dialog.ui:223
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "Importovat záložky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:267
+#: src/resources/gtk/shortcuts-dialog.ui:229
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "Exportovat záložky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:274
+#: src/resources/gtk/shortcuts-dialog.ui:235
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: src/resources/gtk/shortcuts-dialog.ui:285
+#: src/resources/gtk/shortcuts-dialog.ui:245
 msgctxt "shortcut window"
-msgid "Web application"
+msgid "Web app"
 msgstr "Webová aplikace"
 
-#: src/resources/gtk/shortcuts-dialog.ui:289
+#: src/resources/gtk/shortcuts-dialog.ui:248
 msgctxt "shortcut window"
-msgid "Install site as web application"
-msgstr "Nainstalovat jako webovou aplikaci"
+msgid "Install site as web app"
+msgstr "Nainstalovat stránky jako webovou aplikaci"
 
-#: src/resources/gtk/shortcuts-dialog.ui:300
+#: src/resources/gtk/shortcuts-dialog.ui:258
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Zobrazení"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Přiblížit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Oddálit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:273
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Výchozí přiblížení"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:279
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Zobrazit zdrojový kód stránky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:291
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Zobrazit/skrýt inspektora"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "Přepnout režim čtečky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:357
+#: src/resources/gtk/shortcuts-dialog.ui:307
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Úpravy"
 
-#: src/resources/gtk/shortcuts-dialog.ui:361
+#: src/resources/gtk/shortcuts-dialog.ui:310
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: src/resources/gtk/shortcuts-dialog.ui:368
+#: src/resources/gtk/shortcuts-dialog.ui:316
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:375
+#: src/resources/gtk/shortcuts-dialog.ui:322
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Vložit"
 
-#: src/resources/gtk/shortcuts-dialog.ui:382
+#: src/resources/gtk/shortcuts-dialog.ui:328
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Zpět"
 
-#: src/resources/gtk/shortcuts-dialog.ui:389
+#: src/resources/gtk/shortcuts-dialog.ui:334
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Znovu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:396
+#: src/resources/gtk/shortcuts-dialog.ui:340
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: src/resources/gtk/shortcuts-dialog.ui:403
+#: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Vybrat adresu URL stránky"
 
-#: src/resources/gtk/shortcuts-dialog.ui:410
+#: src/resources/gtk/shortcuts-dialog.ui:352
 msgctxt "shortcut window"
 msgid "Search with default search engine"
 msgstr "Hledat pomocí výchozího vyhledávače"
 
-#: src/resources/gtk/shortcuts-dialog.ui:417
+#: src/resources/gtk/shortcuts-dialog.ui:358
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Hledat…"
 
-#: src/resources/gtk/shortcuts-dialog.ui:424
+#: src/resources/gtk/shortcuts-dialog.ui:364
 msgctxt "shortcut window"
 msgid "Next find result"
 msgstr "Následující výsledek hledání"
 
-#: src/resources/gtk/shortcuts-dialog.ui:431
+#: src/resources/gtk/shortcuts-dialog.ui:370
 msgctxt "shortcut window"
 msgid "Previous find result"
 msgstr "Předchozí výsledek hledání"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:22
+#: src/resources/gtk/synced-tabs-dialog.ui:18
 msgid "Synced Tabs"
 msgstr "Synchronizované karty"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:41
+#: src/resources/gtk/synced-tabs-dialog.ui:35
 msgid ""
 "Below are the synced open tabs of your other devices that use Firefox Sync "
 "with this account. Open a tab by double clicking its name (tabs under Local "
@@ -4085,11 +4150,11 @@ msgstr ""
 "Firefox synchronizuje s tímto účtem. Kliknutím na název karty ji otevřete "
 "(karty v Místní karty otevřít nelze)."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:17
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:15
 msgid "Additional URLs"
 msgstr "Dodatečné adresy URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:28
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:29
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded "
@@ -4099,39 +4164,22 @@ msgstr ""
 "aplikací. Pokud vynecháte schéma URL, bude použita jedna z právě načtených "
 "adres URL."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:52
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:51
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
 msgstr "Adresa URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:77
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:76
 msgid "Add new URL"
 msgstr "Přidat novou URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:90
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:82
 msgid "Remove the selected URLs"
 msgstr "Odstranit vybrané URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:104
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:89
 msgid "C_lear All"
 msgstr "Vy_mazat vše"
-
-#: src/resources/gtk/web-extensions-dialog.ui:12
-#: src/resources/gtk/web-extensions-dialog.ui:21
-msgid "Extensions"
-msgstr "Rozšíření"
-
-#: src/resources/gtk/web-extensions-dialog.ui:26
-msgid "_Add…"
-msgstr "Přid_at…"
-
-#: src/resources/gtk/web-extensions-dialog.ui:40
-msgid "No Extensions Installed"
-msgstr "Není nainstalováno žádné rozšíření"
-
-#: src/resources/gtk/web-extensions-dialog.ui:41
-msgid "Add some extensions to display them here."
-msgstr "Přidejte si nějaké rozšíření a uvidíte je zde."
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -4143,7 +4191,7 @@ msgstr "Na webu vyhledat „%s“"
 msgid "Load “%s”"
 msgstr "Načíst „%s“"
 
-#: src/synced-tabs-dialog.c:190
+#: src/synced-tabs-dialog.c:194
 msgid "Local Tabs"
 msgstr "Místní karty"
 
@@ -4185,95 +4233,85 @@ msgstr "Webovou aplikaci „%s“ nelze smazat"
 msgid "Options for %s"
 msgstr "Volby pro %s"
 
-#: src/window-commands.c:119
+#: src/window-commands.c:118
 msgid "GVDB File"
 msgstr "Soubor GVDB"
 
-#: src/window-commands.c:120
+#: src/window-commands.c:119
 msgid "HTML File"
 msgstr "Soubor HTML"
 
-#: src/window-commands.c:121
+#: src/window-commands.c:120
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:122 src/window-commands.c:699
+#: src/window-commands.c:121 src/window-commands.c:714
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:123 src/window-commands.c:700
+#: src/window-commands.c:122 src/window-commands.c:715
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:137 src/window-commands.c:561
-#: src/window-commands.c:778
+#: src/window-commands.c:137 src/window-commands.c:581
+#: src/window-commands.c:793
 msgid "Ch_oose File"
 msgstr "Vybrat s_oubor"
 
-#: src/window-commands.c:139 src/window-commands.c:390
-#: src/window-commands.c:437 src/window-commands.c:780
-#: src/window-commands.c:807
+#: src/window-commands.c:139 src/window-commands.c:795
+#: src/window-commands.c:835
 msgid "I_mport"
 msgstr "I_mportovat"
 
-#: src/window-commands.c:303 src/window-commands.c:378
-#: src/window-commands.c:425 src/window-commands.c:468
-#: src/window-commands.c:491 src/window-commands.c:507
+#: src/window-commands.c:300 src/window-commands.c:385
+#: src/window-commands.c:432 src/window-commands.c:476
+#: src/window-commands.c:499 src/window-commands.c:515
 msgid "Bookmarks successfully imported!"
 msgstr "Záložky byly úspěšně nainstalovány!"
 
-#: src/window-commands.c:316
+#: src/window-commands.c:319
 msgid "Select Profile"
 msgstr "Výběr profilu"
 
-#: src/window-commands.c:387 src/window-commands.c:434
-#: src/window-commands.c:656
+#: src/window-commands.c:335
+msgid "_Select"
+msgstr "_Vybrat"
+
+#: src/window-commands.c:396 src/window-commands.c:443
+#: src/window-commands.c:673
 msgid "Choose File"
 msgstr "Výběr souboru"
 
-#: src/window-commands.c:556
+#: src/window-commands.c:564
 msgid "Import Bookmarks"
 msgstr "Import záložek"
 
-#: src/window-commands.c:575 src/window-commands.c:821
+#: src/window-commands.c:594 src/window-commands.c:848
 msgid "From:"
 msgstr "Z:"
 
-#: src/window-commands.c:618
+#: src/window-commands.c:634
 msgid "Bookmarks successfully exported!"
 msgstr "Záložky byly úspěšně exportovány!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:664
+#: src/window-commands.c:684
 msgid "bookmarks.html"
 msgstr "záložky.html"
 
-#: src/window-commands.c:741
+#: src/window-commands.c:758
 msgid "Passwords successfully imported!"
 msgstr "Hesla byla úspěšně naimportována!"
 
-#: src/window-commands.c:802
+#: src/window-commands.c:819
 msgid "Import Passwords"
 msgstr "Import hesel"
 
-#: src/window-commands.c:996
-#, c-format
-msgid ""
-"A simple, clean, beautiful view of the web.\n"
-"Powered by WebKitGTK %d.%d.%d"
-msgstr ""
-"Prosté, přehledné a okouzlující prohlížení webových stránek.\n"
-"Pohání WebKitGTK %d.%d.%d"
-
-#: src/window-commands.c:1010
+#: src/window-commands.c:1058
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1026
-msgid "Website"
-msgstr "Webové stránky"
-
-#: src/window-commands.c:1059
+#: src/window-commands.c:1081
 msgid "translator-credits"
 msgstr ""
 "Miloslav Trmač <mitr@volny.cz>\n"
@@ -4286,66 +4324,57 @@ msgstr ""
 "Adam Matoušek <adamatousek@gmail.com> \n"
 "Ondřej Kolín <ondrej.kolin@gmail.com>"
 
-#: src/window-commands.c:1219
-msgid "Do you want to reload this website?"
-msgstr "Chcete webovou stránku znvou načíst?"
+#: src/window-commands.c:1234
+msgid "Reload Website?"
+msgstr "Načíst webovou stránku znovu?"
 
-#: src/window-commands.c:1821
+#: src/window-commands.c:1851
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplikace „%s“ je připravena k použití"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1854
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Aplikaci „%s“ se nezdařilo vytvořit: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1833
+#: src/window-commands.c:1863
 msgid "Launch"
 msgstr "Spustit"
 
-#: src/window-commands.c:1904
+#: src/window-commands.c:1929
+msgid "Replace Existing Web App?"
+msgstr "Nahradit stávající webovou aplikaci?"
+
+#: src/window-commands.c:1933
 #, c-format
-msgid "A web application named “%s” already exists. Do you want to replace it?"
-msgstr "Webová aplikace s názvem „%s“ již existuje. Chcete ji nahradit?"
-
-#: src/window-commands.c:1907
-msgid "Cancel"
-msgstr "Zrušit"
-
-#: src/window-commands.c:1909
-msgid "Replace"
-msgstr "Nahradit"
-
-#: src/window-commands.c:1913
 msgid ""
-"An application with the same name already exists. Replacing it will "
-"overwrite it."
+"An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
-"Aplikace s tímto názvem již existuje. Nahrazením způsobíte její přepsání."
+"Aplikace s názvem „%s“ již existuje. Nahrazením způsobíte její přepsání."
 
-#: src/window-commands.c:2126 src/window-commands.c:2182
-msgid "Save"
-msgstr "Uložit"
+#: src/window-commands.c:1938
+msgid "_Replace"
+msgstr "Nah_radit"
 
-#: src/window-commands.c:2147
+#: src/window-commands.c:2134
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2152
+#: src/window-commands.c:2138
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2203
+#: src/window-commands.c:2184
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2707
-msgid "Enable caret browsing mode?"
+#: src/window-commands.c:2683
+msgid "Enable Caret Browsing Mode?"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: src/window-commands.c:2710
+#: src/window-commands.c:2684
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4355,6 +4384,6 @@ msgstr ""
 "funkce vloží do stránky pohyblivý kurzor umožňující navigaci pomocí "
 "klávesnice. Přejete si zapnout prohlížení s kurzorem?"
 
-#: src/window-commands.c:2713
+#: src/window-commands.c:2689
 msgid "_Enable"
 msgstr "_Povolit"
