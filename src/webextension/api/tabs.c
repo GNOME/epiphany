@@ -392,20 +392,20 @@ on_execute_script_ready (GObject      *source,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (JSCValue) value = NULL;
   g_autoptr (GError) error = NULL;
   GTask *task = user_data;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
-                                                          result,
-                                                          &error);
+  value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                      result,
+                                                      &error);
 
   if (error) {
     g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
 
-  g_task_return_pointer (task, jsc_value_to_json (webkit_javascript_result_get_js_value (js_result), 0), g_free);
+  g_task_return_pointer (task, jsc_value_to_json (value, 0), g_free);
 }
 
 static void

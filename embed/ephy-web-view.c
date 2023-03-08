@@ -54,6 +54,8 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <jsc/jsc.h>
+#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-web-view
@@ -629,21 +631,18 @@ readability_js_finish_cb (GObject      *object,
                           gpointer      user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (user_data);
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (JSCValue) jsc_value = NULL;
   g_autoptr (GError) error = NULL;
-  JSCValue *jsc_value;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
-  if (!js_result) {
+  jsc_value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
+  if (!jsc_value) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error running javascript: %s", error->message);
     return;
   }
 
-  jsc_value = webkit_javascript_result_get_js_value (js_result);
-  if (!jsc_value_is_boolean (jsc_value)) {
+  if (!jsc_value_is_boolean (jsc_value))
     return;
-  }
 
   view->reader_mode_available = jsc_value_to_boolean (jsc_value);
 
@@ -2931,12 +2930,12 @@ has_modified_forms_cb (WebKitWebView *view,
                        GAsyncResult  *result,
                        GTask         *task)
 {
-  WebKitJavascriptResult *js_result;
+  g_autoptr (JSCValue) value = NULL;
   gboolean retval = FALSE;
   GError *error = NULL;
   gulong id;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
+  value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
 
   id = GPOINTER_TO_INT (g_task_get_task_data (task));
   if (id == 0) {
@@ -2945,16 +2944,14 @@ has_modified_forms_cb (WebKitWebView *view,
   }
   g_source_remove (id);
 
-  if (!js_result) {
+  if (!value) {
     g_task_return_error (task, error);
   } else {
-    retval = jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result));
+    retval = jsc_value_to_boolean (value);
     g_task_return_boolean (task, retval);
   }
 
 out:
-  if (js_result)
-    webkit_javascript_result_unref (js_result);
   g_object_unref (task);
 }
 
@@ -3034,28 +3031,25 @@ get_best_web_app_icon_cb (WebKitWebView *view,
                           GAsyncResult  *result,
                           GTask         *task)
 {
-  WebKitJavascriptResult *js_result;
+  g_autoptr (JSCValue) js_value = NULL;
   GError *error = NULL;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
-  if (js_result) {
-    JSCValue *js_value, *js_uri, *js_color;
+  js_value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
+  if (js_value) {
+    g_autoptr (JSCValue) js_uri = NULL;
+    g_autoptr (JSCValue) js_color = NULL;
     GetBestWebAppIconAsyncData *data;
 
-    data = g_new0 (GetBestWebAppIconAsyncData, 1);
-    js_value = webkit_javascript_result_get_js_value (js_result);
     g_assert (jsc_value_is_object (js_value));
 
     js_uri = jsc_value_object_get_property (js_value, "url");
-    data->icon_uri = jsc_value_to_string (js_uri);
-    g_object_unref (js_uri);
-
     js_color = jsc_value_object_get_property (js_value, "icon");
+
+    data = g_new0 (GetBestWebAppIconAsyncData, 1);
+    data->icon_uri = jsc_value_to_string (js_uri);
     data->icon_color = jsc_value_is_null (js_color) || jsc_value_is_undefined (js_color) ? NULL : jsc_value_to_string (js_color);
-    g_object_unref (js_color);
 
     g_task_return_pointer (task, data, (GDestroyNotify)get_best_web_app_icon_async_data_free);
-    webkit_javascript_result_unref (js_result);
   } else
     g_task_return_error (task, error);
 
@@ -3121,19 +3115,16 @@ get_web_app_title_cb (WebKitWebView *view,
                       GAsyncResult  *result,
                       GTask         *task)
 {
-  WebKitJavascriptResult *js_result;
+  g_autoptr (JSCValue) js_value = NULL;
   GError *error = NULL;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
-  if (js_result) {
-    JSCValue *js_value;
+  js_value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
+  if (js_value) {
     char *retval = NULL;
 
-    js_value = webkit_javascript_result_get_js_value (js_result);
     if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
       retval = jsc_value_to_string (js_value);
     g_task_return_pointer (task, retval, (GDestroyNotify)g_free);
-    webkit_javascript_result_unref (js_result);
   } else
     g_task_return_error (task, error);
 
@@ -3175,19 +3166,14 @@ get_web_app_mobile_capable_cb (WebKitWebView *view,
                                GAsyncResult  *result,
                                GTask         *task)
 {
-  WebKitJavascriptResult *js_result;
+  g_autoptr (JSCValue) js_value = NULL;
   GError *error = NULL;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (view, result, &error);
-  if (js_result) {
-    JSCValue *js_value;
-    gboolean retval = FALSE;
-
-    js_value = webkit_javascript_result_get_js_value (js_result);
-    retval = jsc_value_to_boolean (js_value);
+  js_value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
+  if (js_value) {
+    gboolean retval = jsc_value_to_boolean (js_value);
 
     g_task_return_boolean (task, retval);
-    webkit_javascript_result_unref (js_result);
   } else
     g_task_return_error (task, error);
 

@@ -162,8 +162,8 @@ changes you make to the web process extension (or its javascript files) aren't
 picked up, it means you didn't enable developer mode.
 
 Epiphany uses script message handlers as an additional form of IPC. This allows
-the web extension to send a `WebKitJavascriptResult` to the UI process, which
-is received in `EphyEmbedShell`.
+the web extension to send a `JSCValue` to the UI process, which is received in
+`EphyEmbedShell`.
 
 Corresponding to `WebKitWebContext` and `WebKitWebView`, the central classes of
 the UI process API, the web process API has `WebKitWebProcessExtension` and

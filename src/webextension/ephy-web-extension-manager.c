@@ -1581,16 +1581,16 @@ tab_emit_ready_cb (GObject      *source,
   PendingMessageReplyTracker *tracker = user_data;
   GHashTable *pending_messages;
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (JSCValue) value = NULL;
   GTask *pending_task;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
-                                                          result,
-                                                          &error);
+  value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                      result,
+                                                      &error);
 
   /* If it returned true it will be asynchronously handled later. Otherwise we
    * complete it now with undefined. */
-  if (error || !jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result))) {
+  if (error || !jsc_value_to_boolean (value)) {
     pending_messages = g_hash_table_lookup (manager->pending_messages, tracker->web_extension);
     pending_task = g_hash_table_lookup (pending_messages, tracker->message_guid);
     if (pending_task) {
@@ -1660,13 +1660,13 @@ on_extension_emit_ready (GObject      *source,
   PendingMessageReplyTracker *tracker = user_data;
   GHashTable *pending_messages;
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (JSCValue) value = NULL;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
-                                                          result,
-                                                          &error);
+  value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source),
+                                                      result,
+                                                      &error);
 
-  if (!error && jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result)))
+  if (!error && jsc_value_to_boolean (value))
     tracker->handled = TRUE;
 
   /* Once all views have been notified it will either be handled by one of them, in which case

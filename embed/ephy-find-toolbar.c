@@ -445,16 +445,14 @@ ephy_find_toolbar_selection_async (GObject      *source_object,
   WebKitWebView *web_view = WEBKIT_WEB_VIEW (source_object);
   EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (user_data);
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
-  JSCValue *value = NULL;
+  g_autoptr (JSCValue) value = NULL;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (web_view, res, &error);
-  if (!js_result) {
+  value = webkit_web_view_evaluate_javascript_finish (web_view, res, &error);
+  if (!value) {
     g_warning ("Error running javascript: %s", error->message);
     return;
   }
 
-  value = webkit_javascript_result_get_js_value (js_result);
   if (jsc_value_is_string (value)) {
     JSCException *exception;
     g_autofree gchar *str_value = NULL;

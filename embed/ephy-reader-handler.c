@@ -125,13 +125,10 @@ enum_nick (GType enum_type,
 }
 
 static char *
-readability_get_property_string (WebKitJavascriptResult *js_result,
-                                 char                   *property)
+readability_get_property_string (JSCValue *jsc_value,
+                                 char     *property)
 {
-  JSCValue *jsc_value;
   char *result = NULL;
-
-  jsc_value = webkit_javascript_result_get_js_value (js_result);
 
   if (!jsc_value_is_object (jsc_value))
     return NULL;
@@ -155,7 +152,7 @@ readability_js_finish_cb (GObject      *object,
 {
   WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
   EphyReaderRequest *request = user_data;
-  g_autoptr (WebKitJavascriptResult) js_result = NULL;
+  g_autoptr (JSCValue) value = NULL;
   g_autoptr (GError) error = NULL;
   g_autofree gchar *byline = NULL;
   g_autofree gchar *encoded_byline = NULL;
@@ -168,15 +165,15 @@ readability_js_finish_cb (GObject      *object,
   const gchar *color_scheme;
   AdwStyleManager *style_manager;
 
-  js_result = webkit_web_view_evaluate_javascript_finish (web_view, result, &error);
-  if (!js_result) {
+  value = webkit_web_view_evaluate_javascript_finish (web_view, result, &error);
+  if (!value) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error running javascript: %s", error->message);
     return;
   }
 
-  byline = readability_get_property_string (js_result, "byline");
-  content = readability_get_property_string (js_result, "content");
+  byline = readability_get_property_string (value, "byline");
+  content = readability_get_property_string (value, "content");
   title = webkit_web_view_get_title (web_view);
 
   encoded_byline = byline ? ephy_encode_for_html_entity (byline) : g_strdup ("");

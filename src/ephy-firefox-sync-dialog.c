@@ -356,7 +356,7 @@ out_no_error:
 
 static void
 sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
-                                  WebKitJavascriptResult   *result,
+                                  JSCValue                 *value,
                                   EphyFirefoxSyncDialog    *sync_dialog)
 {
   JsonObject *data = NULL;
@@ -367,7 +367,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
   char *error_msg = NULL;
   gboolean is_error = FALSE;
 
-  message = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
+  message = jsc_value_to_string (value);
   if (!message) {
     g_warning ("Failed to get JavaScript result as string");
     is_error = TRUE;
@@ -431,7 +431,7 @@ out:
 
 static void
 sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
-                              WebKitJavascriptResult   *result,
+                              JSCValue                 *value,
                               EphyFirefoxSyncDialog    *sync_page)
 {
   EphyShell *shell;
@@ -440,7 +440,7 @@ sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
   GtkRoot *prefs_dialog;
   char *url;
 
-  url = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
+  url = jsc_value_to_string (value);
   if (url) {
     /* Open a new tab to the webmail URL. */
     shell = ephy_shell_get_default ();
