@@ -210,7 +210,7 @@ ephy_embed_shell_dispose (GObject *object)
 
 static void
 web_process_extension_password_form_focused_message_received_cb (WebKitUserContentManager *manager,
-                                                                 WebKitJavascriptResult   *message,
+                                                                 JSCValue                 *message,
                                                                  EphyEmbedShell           *shell)
 {
   guint64 page_id;
@@ -218,7 +218,7 @@ web_process_extension_password_form_focused_message_received_cb (WebKitUserConte
   g_autoptr (GVariant) variant = NULL;
   g_autofree char *message_str = NULL;
 
-  message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
+  message_str = jsc_value_to_string (message);
   variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
 
   g_variant_get (variant, "(tb)", &page_id, &insecure_form_action);
@@ -285,13 +285,13 @@ history_set_url_hidden_cb (EphyHistoryService *service,
 
 static void
 web_process_extension_overview_message_received_cb (WebKitUserContentManager *manager,
-                                                    WebKitJavascriptResult   *message,
+                                                    JSCValue                 *message,
                                                     EphyEmbedShell           *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autofree char *url_to_remove = NULL;
 
-  url_to_remove = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
+  url_to_remove = jsc_value_to_string (message);
 
   ephy_history_service_set_url_hidden (priv->global_history_service,
                                        url_to_remove, TRUE, NULL,
@@ -301,45 +301,45 @@ web_process_extension_overview_message_received_cb (WebKitUserContentManager *ma
 
 static void
 web_process_extension_tls_error_page_message_received_cb (WebKitUserContentManager *manager,
-                                                          WebKitJavascriptResult   *message,
+                                                          JSCValue                 *message,
                                                           EphyEmbedShell           *shell)
 {
   guint64 page_id;
 
-  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
+  page_id = jsc_value_to_double (message);
   g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
 }
 
 static void
 web_process_extension_reload_page_message_received_cb (WebKitUserContentManager *manager,
-                                                       WebKitJavascriptResult   *message,
+                                                       JSCValue                 *message,
                                                        EphyEmbedShell           *shell)
 {
   guint64 page_id;
 
-  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
+  page_id = jsc_value_to_double (message);
   g_signal_emit (shell, signals[RELOAD_PAGE], 0, page_id);
 }
 
 static void
 web_process_extension_unsafe_browsing_error_page_message_received_cb (WebKitUserContentManager *manager,
-                                                                      WebKitJavascriptResult   *message,
+                                                                      JSCValue                 *message,
                                                                       EphyEmbedShell           *shell)
 {
   guint64 page_id;
 
-  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
+  page_id = jsc_value_to_double (message);
   g_signal_emit (shell, signals[ALLOW_UNSAFE_BROWSING], 0, page_id);
 }
 
 static void
 web_process_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
-                                                      WebKitJavascriptResult   *message,
+                                                      JSCValue                 *message,
                                                       EphyEmbedShell           *shell)
 {
   g_autofree char *app_id = NULL;
 
-  app_id = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
+  app_id = jsc_value_to_string (message);
   ephy_web_application_delete (app_id, NULL);
 }
 
@@ -430,20 +430,18 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
 
 static void
 web_process_extension_password_manager_save_received_cb (WebKitUserContentManager *manager,
-                                                         WebKitJavascriptResult   *message,
+                                                         JSCValue                 *message,
                                                          EphyEmbedShell           *shell)
 {
-  JSCValue *value = webkit_javascript_result_get_js_value (message);
-  web_process_extension_password_manager_save_real (shell, value, FALSE);
+  web_process_extension_password_manager_save_real (shell, message, FALSE);
 }
 
 static void
 web_process_extension_password_manager_request_save_received_cb (WebKitUserContentManager *manager,
-                                                                 WebKitJavascriptResult   *message,
+                                                                 JSCValue                 *message,
                                                                  EphyEmbedShell           *shell)
 {
-  JSCValue *value = webkit_javascript_result_get_js_value (message);
-  web_process_extension_password_manager_save_real (shell, value, TRUE);
+  web_process_extension_password_manager_save_real (shell, message, TRUE);
 }
 
 static void
