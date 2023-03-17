@@ -1668,10 +1668,7 @@ static void
 download_finished_cb (WebKitDownload            *download,
                       EphyApplicationDialogData *data)
 {
-  g_autofree char *filename = NULL;
-
-  filename = g_filename_display_basename (webkit_download_get_destination (download));
-  set_app_icon_from_filename (data, filename);
+  set_app_icon_from_filename (data, webkit_download_get_destination (download));
 }
 
 static void
