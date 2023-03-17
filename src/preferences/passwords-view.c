@@ -238,7 +238,7 @@ populate_model_cb (GList    *records,
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_widget_set_tooltip_text (button, _("Copy password"));
     gtk_widget_add_css_class (button, "flat");
-    adw_expander_row_add_action (ADW_EXPANDER_ROW (row), button);
+    adw_expander_row_add_suffix (ADW_EXPANDER_ROW (row), button);
     g_signal_connect (button, "clicked", G_CALLBACK (copy_password_clicked), (void *)(ephy_password_record_get_password (record)));
 
     /* Username */
