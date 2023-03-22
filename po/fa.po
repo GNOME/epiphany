@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-07-29 17:13+0000\n"
-"PO-Revision-Date: 2022-07-30 18:29+0430\n"
+"POT-Creation-Date: 2023-03-03 14:38+0000\n"
+"PO-Revision-Date: 2023-03-22 14:37+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -22,20 +22,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
-#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
-#: embed/ephy-about-handler.c:227 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:409 src/window-commands.c:1005
+#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
+#: embed/ephy-about-handler.c:237 src/ephy-main.c:102 src/ephy-main.c:256
+#: src/ephy-main.c:409 src/window-commands.c:1061
 msgid "Web"
 msgstr "وب"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:7
-msgid "Web browser for GNOME"
-msgstr "مرورگر وب برای گنوم"
+#: data/org.gnome.Epiphany.desktop.in.in:5
+msgid "Browse the web"
+msgstr "مرور وب"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:9
 msgid ""
@@ -52,7 +53,7 @@ msgstr ""
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "وب اغلب با نام رمزی‌اش، اپیفنی مورد اشاره قرار می‌گیرد."
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1071
 msgid "The GNOME Project"
 msgstr "پروژهٔ گنوم"
 
@@ -60,14 +61,10 @@ msgstr "پروژهٔ گنوم"
 msgid "Web Browser"
 msgstr "مرورگر وب"
 
-#: data/org.gnome.Epiphany.desktop.in.in:5
-msgid "Browse the web"
-msgstr "مرور وب"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
-msgid "web;browser;internet;"
-msgstr "وب;مرورگر;اینترنت;web;browser;internet;"
+msgid "web;browser;internet;epiphany;"
+msgstr "web;browser;internet;epiphany;وب;مرورگر;اینترنت;اپیفنی;"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -273,7 +270,7 @@ msgid "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "رمزگذاری پیش‌گزیده. مقدارهای مجاز، آن‌هاییند که WebKitGTK می‌تواند بفهمد."
 
 #: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:329
+#: src/resources/gtk/prefs-general-page.ui:258
 msgid "Languages"
 msgstr "زبان‌ها"
 
@@ -381,11 +378,11 @@ msgstr "افزونه‌های وب فعّال"
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
-msgstr "نشانی‌های اضافی برنامهٔ وب"
+msgstr "نشانی‌های اضافی کارهٔ وب"
 
 #: data/org.gnome.epiphany.gschema.xml:287
 msgid "The list of URLs that should be opened by the web application"
-msgstr "سیاههٔ نشانی‌هایی که باید با برنامهٔ وب گشوده شوند"
+msgstr "سیاههٔ نشانی‌هایی که باید با کارهٔ وب گشوده شوند"
 
 #: data/org.gnome.epiphany.gschema.xml:296
 msgid "Run in background"
@@ -475,71 +472,71 @@ msgstr "برچسب‌زمانی همگام‌سازی زبانه‌های باز
 msgid "Memory usage"
 msgstr "استفاده از حافظه"
 
-#: embed/ephy-about-handler.c:169
+#: embed/ephy-about-handler.c:171
 #, c-format
 msgid "Version %s"
 msgstr "نسخه %s"
 
-#: embed/ephy-about-handler.c:190
+#: embed/ephy-about-handler.c:202
 msgid "About Web"
 msgstr "دربارهٔ وب"
 
-#: embed/ephy-about-handler.c:195 src/window-commands.c:1007
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1063
 msgid "Epiphany Technology Preview"
 msgstr "پیش‌نمایش فنی اپیفنی"
 
-#: embed/ephy-about-handler.c:198
+#: embed/ephy-about-handler.c:210
 msgid "A simple, clean, beautiful view of the web"
 msgstr "یک نمای ساده، تمیز و زیبا از وب"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:259 embed/ephy-about-handler.c:260
-#: embed/ephy-about-handler.c:324 embed/ephy-about-handler.c:339
-msgid "Applications"
-msgstr "برنامه‌ها"
+#: embed/ephy-about-handler.c:269 embed/ephy-about-handler.c:270
+#: embed/ephy-about-handler.c:334 embed/ephy-about-handler.c:360
+msgid "Apps"
+msgstr "کاره‌ها"
 
-#: embed/ephy-about-handler.c:261
-msgid "List of installed web applications"
-msgstr "سیاههٔ برنامه‌های وب نصب شده"
+#: embed/ephy-about-handler.c:271
+msgid "List of installed web apps"
+msgstr "سیاههٔ کاره‌های وب نصب شده"
 
-#: embed/ephy-about-handler.c:310
+#: embed/ephy-about-handler.c:319
 msgid "Delete"
 msgstr "حذف"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:312
+#: embed/ephy-about-handler.c:321
 msgid "Installed on:"
 msgstr "نصب شده در:"
 
-#: embed/ephy-about-handler.c:339
+#: embed/ephy-about-handler.c:360
 msgid ""
-"You can add your favorite website by clicking <b>Install Site as Web Application…"
-"</b> within the page menu."
+"You can add your favorite website by clicking <b>Install as Web App…</b> within "
+"the page menu."
 msgstr ""
-"می‌توانید پایگاه وب مورد علاقه‌تان را با کلیک روی <b>نصب پایگاه به عنوان برنامهٔ وب…"
-"</b> از فهرست صفحه، بیفزایید."
+"می‌توانید پایگاه وب مورد علاقه‌تان را با کلیک روی <b>نصب پایگاه به عنوان کارهٔ وب…</"
+"b> از فهرست صفحه، بیفزایید."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:431
+#: embed/ephy-about-handler.c:465
 msgid "Welcome to Web"
 msgstr "به وب خوش آمدید"
 
-#: embed/ephy-about-handler.c:431
+#: embed/ephy-about-handler.c:465
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "شروع به مرور وب کنید و پایگاه‌هایی که توسط شما بیشتر بازدید شده‌اند اینجا نمایش "
 "داده می‌شوند."
 
-#: embed/ephy-about-handler.c:467
-#: embed/web-process-extension/resources/js/overview.js:148
+#: embed/ephy-about-handler.c:499
+#: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "حذف از بررسی اجمالی"
 
-#: embed/ephy-about-handler.c:557 embed/ephy-about-handler.c:558
+#: embed/ephy-about-handler.c:589 embed/ephy-about-handler.c:590
 msgid "Private Browsing"
 msgstr "مرور خصوصی"
 
-#: embed/ephy-about-handler.c:559
+#: embed/ephy-about-handler.c:591
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not show up "
 "in your browsing history and all stored information will be cleared when you "
@@ -549,13 +546,13 @@ msgstr ""
 "تاریخچهٔ مرورتان ظاهر نشده و همهٔ اطّلاعات ذخیره‌شده، هنگام بستن پنجره، پاک‌سازی "
 "می‌شوند. پرونده‌های بارگیری‌شده نگه‌داری خواهند شد."
 
-#: embed/ephy-about-handler.c:563
+#: embed/ephy-about-handler.c:595
 msgid "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "حالت ناشناس فعالیت شما را فقط از کسانی که از این رایانه استفاده می‌کنند پنهان "
 "می‌کند."
 
-#: embed/ephy-about-handler.c:565
+#: embed/ephy-about-handler.c:597
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites that "
@@ -565,61 +562,56 @@ msgstr ""
 "دهندهٔ اینترنتی شما، حکومت شما، حکومت‌های دیگر، وب‌گاه‌هایی که بازدید می‌کنید و آگهی "
 "دهنده‌ها در این وب‌گاه‌ها ممکن است هم‌چنان شما را ردگیری کنند."
 
-#: embed/ephy-download.c:678 src/preferences/prefs-general-page.c:723
+#: embed/ephy-download.c:679 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "گزینش یک شاخه"
 
-#: embed/ephy-download.c:681 embed/ephy-download.c:687
-#: src/preferences/prefs-general-page.c:726 src/window-commands.c:311
-msgid "_Select"
-msgstr "_گزینش"
-
-#: embed/ephy-download.c:682 embed/ephy-download.c:688 embed/ephy-download.c:739
-#: lib/widgets/ephy-file-chooser.c:113 src/ephy-web-extension-dialog.c:89
-#: src/ephy-web-extension-dialog.c:282 src/preferences/prefs-general-page.c:727
-#: src/resources/gtk/firefox-sync-dialog.ui:166
-#: src/resources/gtk/history-dialog.ui:91 src/resources/gtk/prefs-lang-dialog.ui:14
-#: src/window-commands.c:309 src/window-commands.c:381 src/window-commands.c:428
-#: src/window-commands.c:554 src/window-commands.c:654 src/window-commands.c:798
-msgid "_Cancel"
-msgstr "_لغو"
-
-#: embed/ephy-download.c:684
+#: embed/ephy-download.c:687
 msgid "Select the Destination"
 msgstr "گزینش مقصد"
 
-#: embed/ephy-download.c:738
-msgid "Download requested"
+#: embed/ephy-download.c:729
+msgid "Download Requested"
 msgstr "بارگیری درخواست شد"
 
-#: embed/ephy-download.c:739
+#: embed/ephy-download.c:732 src/ephy-history-dialog.c:572 src/ephy-window.c:265
+#: src/preferences/extension-view.c:133 src/preferences/passwords-view.c:183
+#: src/resources/gtk/firefox-sync-dialog.ui:139
+#: src/resources/gtk/history-dialog.ui:42 src/resources/gtk/prefs-lang-dialog.ui:14
+#: src/window-commands.c:331 src/window-commands.c:577 src/window-commands.c:831
+#: src/window-commands.c:1238 src/window-commands.c:1937 src/window-commands.c:2688
+msgid "_Cancel"
+msgstr "_لغو"
+
+#: embed/ephy-download.c:733
 msgid "_Download"
 msgstr "_بارگیری"
 
-#: embed/ephy-download.c:752
+#. Type
+#: embed/ephy-download.c:761
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "گونه: %s (%s)"
 
-#. From
-#: embed/ephy-download.c:758
+#. Source
+#: embed/ephy-download.c:767
 #, c-format
-msgid "From: %s"
-msgstr "از: %s"
+msgid "Source: %s"
+msgstr "منبع: %s"
 
 #. Question
-#: embed/ephy-download.c:763
+#: embed/ephy-download.c:773
 msgid "Where do you want to save the file?"
 msgstr "می‌خواهید پرونده را کجا ذخیره کنید؟"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:942
+#: embed/ephy-download.c:951
 #, c-format
 msgid "Finished downloading %s"
 msgstr "پایان بارگیری %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:944
+#: embed/ephy-download.c:953
 msgid "Download finished"
 msgstr "بارگیری تمام شد"
 
@@ -638,11 +630,11 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:807
-msgid "Web is being controlled by automation."
-msgstr "وب با اتوماسیون واپایش می‌شود."
+#: embed/ephy-embed.c:805
+msgid "Web is being controlled by automation"
+msgstr "وب با اتوماسیون واپایش می‌شود"
 
-#: embed/ephy-embed-shell.c:753
+#: embed/ephy-embed-shell.c:715
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "نشانی %s برای دستسی به منبع %s اپیفنی تأیید هویت نشده"
@@ -670,7 +662,8 @@ msgid "Blank page"
 msgstr "صفحهٔ سفید"
 
 #. Title for the blank page
-#: embed/ephy-embed-utils.h:32
+#. Translators: tooltip for the new tab button
+#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.ui:105
 msgid "New Tab"
 msgstr "زبانهٔ جدید"
 
@@ -998,155 +991,94 @@ msgstr "یونی‌کد (UTF-3_2 LE‎)"
 msgid "Unknown (%s)"
 msgstr "نامعلوم (%s)"
 
-#: embed/ephy-find-toolbar.c:111
-msgid "Text not found"
-msgstr "متن پیدا نشد"
-
-#: embed/ephy-find-toolbar.c:117
-msgid "Search wrapped back to the top"
-msgstr "جست‌وجو به بالای صفحه بازگشت"
-
-#: embed/ephy-find-toolbar.c:370
+#: embed/ephy-find-toolbar.c:235
 msgid "Type to search…"
 msgstr "نوشتن برای جست‌وجو…"
 
-#: embed/ephy-find-toolbar.c:376
+#: embed/ephy-find-toolbar.c:241
 msgid "Find previous occurrence of the search string"
 msgstr "پیدا کردن مورد قبلی رشتهٔ جست‌وجو"
 
-#: embed/ephy-find-toolbar.c:383
+#: embed/ephy-find-toolbar.c:248
 msgid "Find next occurrence of the search string"
 msgstr "پیدا کردن مورد بعدی رشتهٔ جست‌وجو"
 
-#: embed/ephy-reader-handler.c:296
+#: embed/ephy-reader-handler.c:312
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s یک نشانی معتبر نیست"
 
-#: embed/ephy-web-view.c:202 src/window-commands.c:1365
-msgid "Open"
-msgstr "گشودن"
+#: embed/ephy-search-entry.c:495
+msgid "Text not found"
+msgstr "متن پیدا نشد"
 
-#: embed/ephy-web-view.c:376
-msgid "Not No_w"
-msgstr "_اکنون نه"
+#: embed/ephy-search-entry.c:499
+msgid "Search wrapped back to the top"
+msgstr "جست‌وجو به بالای صفحه بازگشت"
 
-#: embed/ephy-web-view.c:377
-msgid "_Never Save"
-msgstr "_هرگز ذخیره نشود"
+#: embed/ephy-web-view.c:221 lib/ephy-file-dialog-utils.c:76
+msgid "All files"
+msgstr "همهٔ پرونده‌ها"
 
-#: embed/ephy-web-view.c:378 lib/widgets/ephy-file-chooser.c:124
-#: src/resources/gtk/firefox-sync-dialog.ui:175 src/window-commands.c:653
-msgid "_Save"
-msgstr "_ذخیره"
-
-#. Translators: The %s the hostname where this is happening.
-#. * Example: mail.google.com.
-#.
-#: embed/ephy-web-view.c:385
-#, c-format
-msgid "Do you want to save your password for “%s”?"
-msgstr "آیا می‌خواهید گذرواژه‌تان را برای «%s» ذخیره کنید؟"
+#: embed/ephy-web-view.c:230 lib/ephy-file-dialog-utils.c:64
+msgid "All supported types"
+msgstr "همهٔ انواع پشتیبانی شده"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:624
-msgid ""
-"Heads-up: this form is not secure. If you type your password, it will not be "
-"kept private."
-msgstr "توجّه: این فرم امن نیست. اگر گذرواژه‌تان را بنویسید، خصوصی نگهش نخواهد داشت."
+#: embed/ephy-web-view.c:560
+msgid "This form is not secure ‒ passwords will not be kept private"
+msgstr "این فرم امن نیست ‒ گذرواژه‌ها خصوصی نگه داشته نخواهند شد"
 
-#: embed/ephy-web-view.c:842
+#: embed/ephy-web-view.c:561 embed/ephy-web-view.c:3276
+msgid "_Dismiss"
+msgstr "_دور انداختن"
+
+#: embed/ephy-web-view.c:782
 msgid "Web process crashed"
 msgstr "فرایند وب فروپاشید"
 
-#: embed/ephy-web-view.c:845
+#: embed/ephy-web-view.c:785
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "فرایند وب به دلیل گذر از کران حافظه بسته شد"
 
-#: embed/ephy-web-view.c:848
+#: embed/ephy-web-view.c:788
 msgid "Web process terminated by API request"
 msgstr "فرایند وب به دلیل درخواست API بسته شد"
 
-#: embed/ephy-web-view.c:892
+#: embed/ephy-web-view.c:829
+msgid "Page Unresponsive"
+msgstr "صفحه ناپاسخگو"
+
+#: embed/ephy-web-view.c:833
 #, c-format
-msgid "The current page '%s' is unresponsive"
+msgid "The current page “%s” is not responding"
 msgstr "صفحهٔ کنونی «%s» پاسخگو نیست"
 
-#: embed/ephy-web-view.c:895
+#: embed/ephy-web-view.c:837
 msgid "_Wait"
 msgstr "_شکیبایی"
 
-#: embed/ephy-web-view.c:896
-msgid "_Kill"
-msgstr "_کشتن"
-
-#: embed/ephy-web-view.c:1107 embed/ephy-web-view.c:1228
-#: lib/widgets/ephy-security-popover.c:512
-msgid "Deny"
-msgstr "رد شود"
-
-#: embed/ephy-web-view.c:1108 embed/ephy-web-view.c:1229
-#: lib/widgets/ephy-security-popover.c:511
-msgid "Allow"
-msgstr "اجازه داده شود"
-
-#. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1121
-#, c-format
-msgid "The page at %s wants to show desktop notifications."
-msgstr "صفحهٔ %s می‌خواهد آگاهی‌های میزکار نمایش دهد."
-
-#. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1126
-#, c-format
-msgid "The page at %s wants to know your location."
-msgstr "صفحهٔ %s می‌خواهد موقعیتتان را بداند."
-
-#. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1131
-#, c-format
-msgid "The page at %s wants to use your microphone."
-msgstr "صفحهٔ %s می‌خواهد از میکروفونتان استفاده کند."
-
-#. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1136
-#, c-format
-msgid "The page at %s wants to use your webcam."
-msgstr "صفحهٔ %s می‌خواهد از دروبینتان استفاده کند."
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1141
-#, c-format
-msgid "The page at %s wants to use your webcam and microphone."
-msgstr "صفحهٔ %s می‌خواهد از وب‌کم و میکروفونتان استفاده کند."
-
-#: embed/ephy-web-view.c:1236
-#, c-format
-msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
-msgstr "می‌خواهید بگذارید %s هنگام مرور %s از کوکی‌ها استفاده کند؟"
-
-#: embed/ephy-web-view.c:1245
-#, c-format
-msgid "This will allow “%s” to track your activity."
-msgstr "می‌گذارد %s فعّالیت‌هایتان را ردیابی کند."
+#: embed/ephy-web-view.c:838
+msgid "Force _Stop"
+msgstr "_توقّف اجباری"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1423
+#: embed/ephy-web-view.c:1084
 #, c-format
 msgid "Loading “%s”…"
 msgstr "در حال بار کردن «%s»…"
 
-#: embed/ephy-web-view.c:1425 embed/ephy-web-view.c:1431
+#: embed/ephy-web-view.c:1086 embed/ephy-web-view.c:1092
 msgid "Loading…"
 msgstr "در حال بار کردن…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1764
+#: embed/ephy-web-view.c:1425
 msgid "This website presented identification that belongs to a different website."
 msgstr "این وب‌گاه هویتی را ارائه داده است که متعلق به وب‌گاه دیگری است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1430
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1155,17 +1087,17 @@ msgstr ""
 "بررسی کنید."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1774
+#: embed/ephy-web-view.c:1435
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "هویت این وب‌گاه توسط سازمان مورد اعتمادی صادر نشده است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1779
+#: embed/ephy-web-view.c:1440
 msgid "This website’s identification could not be processed. It may be corrupted."
 msgstr "هویت این وب‌گاه قابل پردازش نیست. ممکن است مخدوش شده باشد."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1445
 msgid ""
 "This website’s identification has been revoked by the trusted organization that "
 "issued it."
@@ -1173,7 +1105,7 @@ msgstr ""
 "هویت این وب‌گاه توسط سازمان مورد اعتمادی که آن را صادر کرده بود باطل شده است."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1789
+#: embed/ephy-web-view.c:1450
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1181,7 +1113,7 @@ msgstr ""
 "هویت این وب‌گاه قابل اعتماد نیست زیرا از رمزنگاری بسیار ضعیفی استفاده می‌کند."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1794
+#: embed/ephy-web-view.c:1455
 msgid ""
 "This website’s identification is only valid for future dates. Check the date on "
 "your computer’s calendar."
@@ -1191,24 +1123,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1859 embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:1520 embed/ephy-web-view.c:1576
 #, c-format
 msgid "Problem Loading Page"
 msgstr "مشکل در هنگام بارگیری صفحه"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1862
+#: embed/ephy-web-view.c:1523
 msgid "Unable to display this website"
 msgstr "ناتوانی در نمایش این پایگاه وب"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1867
+#: embed/ephy-web-view.c:1528
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "به نظر پایگاه روی %s ناموجود است."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1871
+#: embed/ephy-web-view.c:1532
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish to "
 "verify that your internet connection is working correctly."
@@ -1217,7 +1149,7 @@ msgstr ""
 "صحت عملکرد اتّصال اینترنتیتان مطمين شوید."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1881
+#: embed/ephy-web-view.c:1542
 #, c-format
 msgid "The precise error was: %s"
 msgstr "خطای دقیق این بود: %s"
@@ -1226,48 +1158,50 @@ msgstr "خطای دقیق این بود: %s"
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1886 embed/ephy-web-view.c:1939 embed/ephy-web-view.c:1975
-#: embed/ephy-web-view.c:2011 src/resources/gtk/page-menu-popover.ui:102
+#. Translators: tooltip for the refresh button
+#: embed/ephy-web-view.c:1547 embed/ephy-web-view.c:1600 embed/ephy-web-view.c:1636
+#: embed/ephy-web-view.c:1672 src/ephy-action-bar-start.c:36
+#: src/resources/gtk/page-menu-popover.ui:166
 msgid "Reload"
 msgstr "بازخوانی"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1890 embed/ephy-web-view.c:1943 embed/ephy-web-view.c:1979
-#: embed/ephy-web-view.c:2015
+#: embed/ephy-web-view.c:1551 embed/ephy-web-view.c:1604 embed/ephy-web-view.c:1640
+#: embed/ephy-web-view.c:1676
 msgctxt "reload-access-key"
 msgid "R"
-msgstr "ب"
+msgstr "ن"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1918
+#: embed/ephy-web-view.c:1579
 msgid "Oops! There may be a problem"
 msgstr "اُخ! ممکن است مشکلی وجود داشته باشد"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1923
+#: embed/ephy-web-view.c:1584
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "ممکن است صفحهٔ %s موجب بسته‌شدن غیرمنتظرهٔ وب شده باشد."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1930
+#: embed/ephy-web-view.c:1591
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "اگر باز هم رخ داد، لطفاً مشکل را به توسعه‌دهندگان %s گزارش کنید."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1964
+#: embed/ephy-web-view.c:1625
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "مشکل در نمایش صفحه"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1967
+#: embed/ephy-web-view.c:1628
 msgid "Oops!"
 msgstr "اُخ!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1631
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1276,18 +1210,18 @@ msgstr ""
 "صفحه‌ای دیگر را ببینید."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:1661
 #, c-format
 msgid "Unresponsive Page"
 msgstr "صفحهٔ ناپاسخگو"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2003
+#: embed/ephy-web-view.c:1664
 msgid "Uh-oh!"
 msgstr "ای وای!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2006
+#: embed/ephy-web-view.c:1667
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a different "
 "page to continue."
@@ -1296,18 +1230,18 @@ msgstr ""
 "دیگر را ببینید."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2042
+#: embed/ephy-web-view.c:1703
 #, c-format
 msgid "Security Violation"
 msgstr "نقض امنیت"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2045
+#: embed/ephy-web-view.c:1706
 msgid "This Connection is Not Secure"
 msgstr "این اتصال امن نیست"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2050
+#: embed/ephy-web-view.c:1711
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or alter "
@@ -1319,43 +1253,43 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2198
+#: embed/ephy-web-view.c:1721 embed/ephy-web-view.c:1809 embed/ephy-web-view.c:1859
 msgid "Go Back"
 msgstr "بازگشت"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2063 embed/ephy-web-view.c:2151 embed/ephy-web-view.c:2201
+#: embed/ephy-web-view.c:1724 embed/ephy-web-view.c:1812 embed/ephy-web-view.c:1862
 msgctxt "back-access-key"
 msgid "B"
 msgstr "ب"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2066 embed/ephy-web-view.c:2154
+#: embed/ephy-web-view.c:1727 embed/ephy-web-view.c:1815
 msgid "Accept Risk and Proceed"
 msgstr "پذیرش ریسک و ادامه دادن"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2070 embed/ephy-web-view.c:2158
+#: embed/ephy-web-view.c:1731 embed/ephy-web-view.c:1819
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "پ"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2098
+#: embed/ephy-web-view.c:1759
 #, c-format
 msgid "Security Warning"
 msgstr "هشدار امنیتی"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2101
+#: embed/ephy-web-view.c:1762
 msgid "Unsafe website detected!"
 msgstr "پایگاه وب ناامن کشف شد!"
 
-#: embed/ephy-web-view.c:2109
+#: embed/ephy-web-view.c:1770
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious code "
@@ -1364,7 +1298,7 @@ msgstr ""
 "مشاهدهٔ %s می‌تواند به رایانه‌تان آسیب بزند. به نظر می‌رسد این صفحه شامل کدهای "
 "مخرّبیست که می‌توانند بدون رضایتتان، روی رایانه‌تان بارگیری شوند."
 
-#: embed/ephy-web-view.c:2113
+#: embed/ephy-web-view.c:1774
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1373,7 +1307,7 @@ msgstr ""
 "می‌توانید در %s بیش‌تر در مورد محتوای وب مخرّب شامل ویروس‌ها و دیگر بدافزارها و روش "
 "محافظت از رایانه‌تان بیاموزید."
 
-#: embed/ephy-web-view.c:2120
+#: embed/ephy-web-view.c:1781
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1383,12 +1317,12 @@ msgstr ""
 "ممکن است نفوذگران روی %s شما را به انجام کاری خطرناک مانند نصب نصب‌افزارها یا "
 "افشای اطّلاعات شخصیتان (مثلاً گذرواژه‌ها، شماره‌تلفن‌ها یا کارت‌های اعتباری) وادارند."
 
-#: embed/ephy-web-view.c:2125
+#: embed/ephy-web-view.c:1786
 #, c-format
 msgid "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "می‌توانید در %s یا از %s بیش‌تر دربارهٔ مهندسی اجتماعی (فیشینگ) بیاموزید."
 
-#: embed/ephy-web-view.c:2134
+#: embed/ephy-web-view.c:1795
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1399,24 +1333,24 @@ msgstr ""
 "برنامه‌هایی که تجربهٔ مرورتان را خراب می‌کنند (مثلاً با تعویض صفحهٔ خانگی یا نمایش "
 "تبلیغات اضافی روی پایگاه‌هایی که می‌بینید) وادارند."
 
-#: embed/ephy-web-view.c:2139
+#: embed/ephy-web-view.c:1800
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "می‌توانید در %s درباره نرم‌افزارهای ناخواسته بیش‌تر بیاموزید."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2181 embed/ephy-web-view.c:2184
+#: embed/ephy-web-view.c:1842 embed/ephy-web-view.c:1845
 #, c-format
 msgid "File not found"
 msgstr "پرونده پیدا نشد"
 
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:1850
 #, c-format
 msgid "%s could not be found."
 msgstr "%s نتوانست پیدا شود."
 
-#: embed/ephy-web-view.c:2191
+#: embed/ephy-web-view.c:1852
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also check "
@@ -1425,25 +1359,31 @@ msgstr ""
 "لطفاً نام پرونده را برای حروف بزرگ یا دیگر خطاهای نگارشی بررسی کنید. هم‌چنین "
 "جابه‌جایی، تغییرنام یا حذفش را بررسی کنید."
 
-#: embed/ephy-web-view.c:2254
+#: embed/ephy-web-view.c:1915
 msgid "None specified"
 msgstr "هیچکدام مشخص نشده"
 
-#: embed/ephy-web-view.c:2385
+#: embed/ephy-web-view.c:2046
 msgid "Technical information"
 msgstr "اطلاعات فنی"
-
-#: embed/ephy-web-view.c:3580
-msgid "_OK"
-msgstr "_قبول"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
 msgstr "نامشخص"
 
+#: lib/ephy-file-dialog-utils.c:68
+msgid "Web pages"
+msgstr "صفحات وب"
+
+#: lib/ephy-file-dialog-utils.c:72
+msgid "Images"
+msgstr "تصاویر"
+
 #. If we don't have XDG user dirs info, return an educated guess.
+#. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
-#: src/resources/gtk/prefs-general-page.ui:185
+#: src/resources/gtk/action-bar-end.ui:11
+#: src/resources/gtk/prefs-general-page.ui:135
 msgid "Downloads"
 msgstr "بارگیری‌ها"
 
@@ -1470,11 +1410,6 @@ msgstr "پروندهٔ «%s» وجود دارد. لطفاً آن را از سر 
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ایجاد شاخهٔ «%s» شکست خورد."
-
-#: lib/ephy-gui.c:73
-#, c-format
-msgid "Could not display help: %s"
-msgstr "نمایش راهنما ممکن نیست: %s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -1597,339 +1532,93 @@ msgstr ""
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:435
+#: lib/sync/ephy-password-manager.c:450
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "گذرواژه برای %s در فرمی در %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:439
+#: lib/sync/ephy-password-manager.c:454
 #, c-format
 msgid "Password in a form in %s"
 msgstr "گذرواژه در فرمی در %s"
 
-#: lib/sync/ephy-sync-service.c:1043
+#: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain storage credentials."
 msgstr "شکست در گرفتن اعتبارنامهٔ ذخیره‌سازی."
 
-#: lib/sync/ephy-sync-service.c:1044 lib/sync/ephy-sync-service.c:1205
-#: lib/sync/ephy-sync-service.c:2055
+#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
+#: lib/sync/ephy-sync-service.c:1940
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "لطفاً برای ادامهٔ همگام‌سازی، همگام‌سازی فایرفاکس را مشاهده کرده و دوباره وارد شوید."
 
-#: lib/sync/ephy-sync-service.c:1195
+#: lib/sync/ephy-sync-service.c:1116
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "به نظر می‌رسد گذرواژهٔ حساب فایرفاکستان عوض شده است."
 
-#: lib/sync/ephy-sync-service.c:1196
+#: lib/sync/ephy-sync-service.c:1117
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue syncing."
 msgstr ""
 "لطفاً برای ادامهٔ همگام‌سازی، همگام‌سازی فایرفاکس را مشاهده کرده و با گذرواژهٔ جدید "
 "وارد شوید."
 
-#: lib/sync/ephy-sync-service.c:1204
+#: lib/sync/ephy-sync-service.c:1125
 msgid "Failed to obtain signed certificate."
 msgstr "شکست در گرفتن اعتبارنامهٔ امضاشده."
 
-#: lib/sync/ephy-sync-service.c:2021 lib/sync/ephy-sync-service.c:2026
+#: lib/sync/ephy-sync-service.c:1906 lib/sync/ephy-sync-service.c:1911
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "نمی‌توان رمزهای همگام‌سازی را برای کاربر کنونی یافت."
 
-#: lib/sync/ephy-sync-service.c:2033 lib/sync/ephy-sync-service.c:2041
+#: lib/sync/ephy-sync-service.c:1918 lib/sync/ephy-sync-service.c:1926
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "رمزهای همگام‌سازی برای کاربر کنونی همگام‌سازی نامعتبرند."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2149
+#: lib/sync/ephy-sync-service.c:2034
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "رمزهای همگام‌سازی %s"
 
-#: lib/sync/ephy-sync-service.c:2184
+#: lib/sync/ephy-sync-service.c:2064
 msgid "Failed to upload client record."
 msgstr "شکست در بازگذاری رکورد کارخواه."
 
-#: lib/sync/ephy-sync-service.c:2393
+#: lib/sync/ephy-sync-service.c:2267
 msgid "Failed to upload crypto/keys record."
 msgstr "شکست در بارگذاری رکورد crypto/keys."
 
-#: lib/sync/ephy-sync-service.c:2510
+#: lib/sync/ephy-sync-service.c:2379
 msgid "Failed to retrieve crypto keys."
 msgstr "شکست در دیافت کلیدهای رمزنگاری."
 
-#: lib/sync/ephy-sync-service.c:2569
+#: lib/sync/ephy-sync-service.c:2433
 msgid "Failed to upload meta/global record."
 msgstr "شکست در بارگذاری رکورد meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2696
+#: lib/sync/ephy-sync-service.c:2555
 #, c-format
 msgid "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "حساب فایرفاکستان از نگارش %Id استفاده می‌کند. وب فقط از نگارش %Id پشتیبانی می‌کند."
 
-#: lib/sync/ephy-sync-service.c:2707
+#: lib/sync/ephy-sync-service.c:2566
 msgid "Failed to verify storage version."
 msgstr "شکست در تأیید نگارش ذخیره‌سازی."
 
-#: lib/sync/ephy-sync-service.c:2770
+#: lib/sync/ephy-sync-service.c:2624
 msgid "Failed to upload device info"
 msgstr "شکست در بارگذاری اطّلاعات افزاره"
 
-#: lib/sync/ephy-sync-service.c:2846 lib/sync/ephy-sync-service.c:2934
+#: lib/sync/ephy-sync-service.c:2700 lib/sync/ephy-sync-service.c:2783
 msgid "Failed to retrieve the Sync Key"
 msgstr "شکست در دیافت کلید همگام‌سازی"
 
-#: lib/widgets/ephy-certificate-dialog.c:101
-msgid "The certificate does not match this website"
-msgstr "گواهی با این وب‌گاه مطابقت ندارد"
-
-#: lib/widgets/ephy-certificate-dialog.c:104
-msgid "The certificate has expired"
-msgstr "گواهی منسوخ شده است"
-
-#: lib/widgets/ephy-certificate-dialog.c:107
-msgid "The signing certificate authority is not known"
-msgstr "امضا کننده گواهی شناخته شده نیست"
-
-#: lib/widgets/ephy-certificate-dialog.c:110
-msgid "The certificate contains errors"
-msgstr "گواهی شامل خطا است"
-
-#: lib/widgets/ephy-certificate-dialog.c:113
-msgid "The certificate has been revoked"
-msgstr "گواهی باطل شده است"
-
-#: lib/widgets/ephy-certificate-dialog.c:116
-msgid "The certificate is signed using a weak signature algorithm"
-msgstr "گواهی توسط که الگوریتم ضعیف رمزنگاری شده است"
-
-#: lib/widgets/ephy-certificate-dialog.c:119
-msgid "The certificate activation time is still in the future"
-msgstr "زمان فعال‌سازی گواهی هنوز در آینده است"
-
-#: lib/widgets/ephy-certificate-dialog.c:161
-msgid "The identity of this website has been verified."
-msgstr "هویت این وب‌سایت تایید شده است."
-
-#: lib/widgets/ephy-certificate-dialog.c:162
-msgid "The identity of this website has not been verified."
-msgstr "هویت این وب‌سایت تایید نشده است."
-
-#. Message on certificte dialog ertificate dialog
-#: lib/widgets/ephy-certificate-dialog.c:174
-msgid "No problems have been detected with your connection."
-msgstr "هیچ مشکلی در اتصال شما تشخیص داده نشد."
-
-#: lib/widgets/ephy-certificate-dialog.c:177
-msgid ""
-"This certificate is valid. However, resources on this page were sent insecurely."
-msgstr "این گواهی معتبر است. هرچند، منابع روی این صفحه به صورت امن ارسال نشده‌اند."
-
-#: lib/widgets/ephy-downloads-popover.c:216 src/resources/gtk/history-dialog.ui:216
-#: src/resources/gtk/passwords-view.ui:27
-msgid "_Clear All"
-msgstr "_‌پاک کردن همه"
-
-#: lib/widgets/ephy-download-widget.c:78
-#, c-format
-msgid "%d second left"
-msgid_plural "%d seconds left"
-msgstr[0] "%Id ثانیه باقی‌مانده"
-msgstr[1] "%Id ثانیه باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:82
-#, c-format
-msgid "%d minute left"
-msgid_plural "%d minutes left"
-msgstr[0] "%Id دقیقه باقی‌مانده"
-msgstr[1] "%Id دقیقه باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:86
-#, c-format
-msgid "%d hour left"
-msgid_plural "%d hours left"
-msgstr[0] "%Id ساعت باقی‌مانده"
-msgstr[1] "%Id ساعت باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:90
-#, c-format
-msgid "%d day left"
-msgid_plural "%d days left"
-msgstr[0] "%Id روز باقی‌مانده"
-msgstr[1] "%Id روز باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:94
-#, c-format
-msgid "%d week left"
-msgid_plural "%d weeks left"
-msgstr[0] "%Id هفته باقی‌مانده"
-msgstr[1] "%Id هفته باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:98
-#, c-format
-msgid "%d month left"
-msgid_plural "%d months left"
-msgstr[0] "%Id ماه باقی‌مانده"
-msgstr[1] "%Id ماه باقی‌مانده"
-
-#: lib/widgets/ephy-download-widget.c:213 lib/widgets/ephy-download-widget.c:426
-msgid "Finished"
-msgstr "پایان یافت"
-
-#: lib/widgets/ephy-download-widget.c:223
-msgid "Moved or deleted"
-msgstr "جابه‌جا یا حذف شده"
-
-#: lib/widgets/ephy-download-widget.c:238 lib/widgets/ephy-download-widget.c:423
-#, c-format
-msgid "Error downloading: %s"
-msgstr "خطا در بارکردن: %s"
-
-#: lib/widgets/ephy-download-widget.c:264
-msgid "Cancelling…"
-msgstr "در حال لغو…"
-
-#: lib/widgets/ephy-download-widget.c:428
-msgid "Starting…"
-msgstr "در حال شروع…"
-
-#: lib/widgets/ephy-file-chooser.c:122 src/ephy-web-extension-dialog.c:281
-#: src/resources/gtk/history-dialog.ui:255
-msgid "_Open"
-msgstr "_گشودن"
-
-#: lib/widgets/ephy-file-chooser.c:131
-msgid "All supported types"
-msgstr "همهٔ انواع پشتیبانی شده"
-
-#: lib/widgets/ephy-file-chooser.c:147
-msgid "Web pages"
-msgstr "صفحات وب"
-
-#: lib/widgets/ephy-file-chooser.c:158
-msgid "Images"
-msgstr "تصاویر"
-
-#: lib/widgets/ephy-file-chooser.c:167
-msgid "All files"
-msgstr "همهٔ پرونده‌ها"
-
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: lib/widgets/ephy-location-entry.c:749 src/ephy-history-dialog.c:600
-msgid "Cl_ear"
-msgstr "_پاک کردن"
-
-#: lib/widgets/ephy-location-entry.c:769
-msgid "Paste and _Go"
-msgstr "جای‌گذاری و _گشودن"
-
-#. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:934
-msgid "_Undo"
-msgstr "بر_گردان"
-
-#: lib/widgets/ephy-location-entry.c:797
-msgid "_Redo"
-msgstr "_انجام دوباره"
-
-#: lib/widgets/ephy-location-entry.c:1044
-msgid "Show website security status and permissions"
-msgstr "نمایش وضعیت امنیت پایگاه وب و اجازه‌ها"
-
-#: lib/widgets/ephy-location-entry.c:1046
-msgid "Search for websites, bookmarks, and open tabs"
-msgstr "جست‌وجو برای پایگاه‌های وب، نشانک‌ها و زبانه‌های باز"
-
-#: lib/widgets/ephy-location-entry.c:1091
-msgid "Toggle reader mode"
-msgstr "تغییر وضعیت حالت خواندن"
-
-#: lib/widgets/ephy-location-entry.c:1115
-msgid "Bookmark this page"
-msgstr "نشانک‌گذاری این صفحه"
-
-#. Label in certificate popover when site is untrusted. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:183
-#, c-format
-msgid ""
-"This web site’s digital identification is not trusted. You may have connected to "
-"an attacker pretending to be %s."
-msgstr ""
-"هویت دیجیتال این وب‌گاه مورد اعتماد نیست. ممکن است شما به مهاجمی وصل شده باشید که "
-"وانمود می‌کند %s است."
-
-#. Label in certificate popover when site uses HTTP. %s is a URL.
-#: lib/widgets/ephy-security-popover.c:190
-#, c-format
-msgid ""
-"This site has no security. An attacker could see any information you send, or "
-"control the content that you see."
-msgstr ""
-"این پایگاه هیچ امنیتی ندارد. یک مهاجم می‌تواند هر اطّلاعاتی را که ارسال می‌کنید "
-"دیده یا محتوایی که می‌بینید را وابپاید."
-
-#. Label in certificate popover when site sends mixed content.
-#: lib/widgets/ephy-security-popover.c:197
-msgid "This web site did not properly secure your connection."
-msgstr "این وب‌گاه اتصال شما را به صورت مناسب امن نکرده است."
-
-#. Label in certificate popover on secure sites.
-#: lib/widgets/ephy-security-popover.c:202
-msgid "Your connection seems to be secure."
-msgstr "اتصال شما امن به نظر می‌رسد."
-
-#: lib/widgets/ephy-security-popover.c:248
-msgid "_View Certificate…"
-msgstr "_نمایش اعتبارنامه…"
-
-#: lib/widgets/ephy-security-popover.c:515
-msgid "Ask"
-msgstr "درخواست"
-
-#: lib/widgets/ephy-security-popover.c:532
-msgid "Permissions"
-msgstr "اجازه‌ها"
-
-#: lib/widgets/ephy-security-popover.c:572
-msgid "Advertisements"
-msgstr "تبلیغات"
-
-#: lib/widgets/ephy-security-popover.c:573
-msgid "Notifications"
-msgstr "آگاهی‌ها"
-
-#: lib/widgets/ephy-security-popover.c:574
-msgid "Password saving"
-msgstr "ذخیرهٔ گذرواژه"
-
-#: lib/widgets/ephy-security-popover.c:575
-msgid "Location access"
-msgstr "دسترسی موقعیت"
-
-#: lib/widgets/ephy-security-popover.c:576
-msgid "Microphone access"
-msgstr "دسترسی میکروفون"
-
-#: lib/widgets/ephy-security-popover.c:577
-msgid "Webcam access"
-msgstr "دسترسی دوربین"
-
-#: lib/widgets/ephy-security-popover.c:578
-msgid "Media autoplay"
-msgstr "پخش خودکار رسانه"
-
-#: lib/widgets/ephy-security-popover.c:578
-msgid "Without Sound"
-msgstr "بدون صدا"
-
-#: src/bookmarks/ephy-bookmark-row.c:62
+#: src/bookmarks/ephy-bookmark-row.c:65
 msgid "Bookmark Properties"
 msgstr "ترجیحات نشانک"
 
@@ -1984,60 +1673,233 @@ msgstr "علاقه‌مندی‌ها"
 msgid "Mobile"
 msgstr "تلفن همراه"
 
-#. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:52
-msgid "Reload the current page"
-msgstr "بازخوانی صفحهٔ کنونی"
+#: src/context-menu-commands.c:264
+msgid "Save Link As"
+msgstr "ذخیرهٔ پیوند به نام"
 
-#: src/ephy-action-bar-start.c:644 src/ephy-header-bar.c:453
-msgid "Stop loading the current page"
-msgstr "توقف بار کردن صفحهٔ کنونی"
+#: src/context-menu-commands.c:272
+msgid "Save Image As"
+msgstr "ذخیرهٔ تصویر به نام"
+
+#: src/context-menu-commands.c:280
+msgid "Save Media As"
+msgstr "ذخیرهٔ رسانه به عنوان"
+
+#. Translators: tooltip for the empty bookmark button
+#: src/ephy-action-bar-end.c:394 src/ephy-location-entry.c:1784
+msgid "Bookmark Page"
+msgstr "نشانک‌گذاری صفحه"
+
+#. Translators: tooltip for the bookmarked button
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1792
+msgid "Edit Bookmark"
+msgstr "ویرایش نشانک"
+
+#: src/ephy-action-bar-start.c:568
+msgid "Stop"
+msgstr "توقف"
+
+#: src/ephy-certificate-dialog.c:269
+msgid "The certificate does not match this website"
+msgstr "گواهی با این وب‌گاه مطابقت ندارد"
+
+#: src/ephy-certificate-dialog.c:272
+msgid "The certificate has expired"
+msgstr "گواهی منسوخ شده است"
+
+#: src/ephy-certificate-dialog.c:275
+msgid "The signing certificate authority is not known"
+msgstr "امضا کننده گواهی شناخته شده نیست"
+
+#: src/ephy-certificate-dialog.c:278
+msgid "The certificate contains errors"
+msgstr "گواهی شامل خطا است"
+
+#: src/ephy-certificate-dialog.c:281
+msgid "The certificate has been revoked"
+msgstr "گواهی باطل شده است"
+
+#: src/ephy-certificate-dialog.c:284
+msgid "The certificate is signed using a weak signature algorithm"
+msgstr "گواهی توسط که الگوریتم ضعیف رمزنگاری شده است"
+
+#: src/ephy-certificate-dialog.c:287
+msgid "The certificate activation time is still in the future"
+msgstr "زمان فعال‌سازی گواهی هنوز در آینده است"
+
+#: src/ephy-certificate-dialog.c:329
+msgid "The identity of this website has been verified."
+msgstr "هویت این وب‌سایت تایید شده است."
+
+#: src/ephy-certificate-dialog.c:330
+msgid "The identity of this website has not been verified."
+msgstr "هویت این وب‌سایت تایید نشده است."
+
+#. Message on certificte dialog ertificate dialog
+#: src/ephy-certificate-dialog.c:342
+msgid "No problems have been detected with your connection."
+msgstr "هیچ مشکلی در اتصال شما تشخیص داده نشد."
+
+#: src/ephy-certificate-dialog.c:345
+msgid ""
+"This certificate is valid. However, resources on this page were sent insecurely."
+msgstr "این گواهی معتبر است. هرچند، منابع روی این صفحه به صورت امن ارسال نشده‌اند."
+
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:140
+#: src/resources/gtk/passwords-view.ui:27
+msgid "_Clear All"
+msgstr "_‌پاک کردن همه"
+
+#: src/ephy-download-widget.c:78
+#, c-format
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "%Id ثانیه باقی‌مانده"
+msgstr[1] "%Id ثانیه باقی‌مانده"
+
+#: src/ephy-download-widget.c:82
+#, c-format
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "%Id دقیقه باقی‌مانده"
+msgstr[1] "%Id دقیقه باقی‌مانده"
+
+#: src/ephy-download-widget.c:86
+#, c-format
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "%Id ساعت باقی‌مانده"
+msgstr[1] "%Id ساعت باقی‌مانده"
+
+#: src/ephy-download-widget.c:90
+#, c-format
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "%Id روز باقی‌مانده"
+msgstr[1] "%Id روز باقی‌مانده"
+
+#: src/ephy-download-widget.c:94
+#, c-format
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "%Id هفته باقی‌مانده"
+msgstr[1] "%Id هفته باقی‌مانده"
+
+#: src/ephy-download-widget.c:98
+#, c-format
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "%Id ماه باقی‌مانده"
+msgstr[1] "%Id ماه باقی‌مانده"
+
+#: src/ephy-download-widget.c:213 src/ephy-download-widget.c:408
+msgid "Finished"
+msgstr "پایان یافت"
+
+#: src/ephy-download-widget.c:222
+msgid "Moved or deleted"
+msgstr "جابه‌جا یا حذف شده"
+
+#: src/ephy-download-widget.c:237 src/ephy-download-widget.c:405
+#, c-format
+msgid "Error downloading: %s"
+msgstr "خطا در بارکردن: %s"
+
+#: src/ephy-download-widget.c:262
+msgid "Cancelling…"
+msgstr "در حال لغو…"
+
+#: src/ephy-download-widget.c:410
+msgid "Starting…"
+msgstr "در حال شروع…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:108
+#: src/ephy-firefox-sync-dialog.c:139
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "آخرین همگام‌سازی: %s"
 
-#: src/ephy-firefox-sync-dialog.c:396
+#: src/ephy-firefox-sync-dialog.c:427
 msgid "Something went wrong, please try again later."
 msgstr "چیزی اشتباه پیش رفت. لطفاً بعداً دوباره تلاش کنید."
 
-#: src/ephy-firefox-sync-dialog.c:703
+#: src/ephy-firefox-sync-dialog.c:627
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
 msgstr[0] "%Iu د"
 msgstr[1] "%Iu د"
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1012
+#. Translators: tooltip for the refresh button
+#: src/ephy-header-bar.c:52
+msgid "Reload the current page"
+msgstr "بازخوانی صفحهٔ کنونی"
+
+#: src/ephy-header-bar.c:298
+msgid "Main Menu"
+msgstr "فهرست اصلی"
+
+#: src/ephy-header-bar.c:482
+msgid "Stop loading the current page"
+msgstr "توقف بار کردن صفحهٔ کنونی"
+
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "در حالت ناشناس نمی‌توان تاریخچه را دستکاری کرد."
 
-#: src/ephy-history-dialog.c:495
+#: src/ephy-history-dialog.c:486
 msgid "Remove the selected pages from history"
 msgstr "حذف صفحه‌های انتخاب شده از تاریخچه"
 
-#: src/ephy-history-dialog.c:501
+#: src/ephy-history-dialog.c:492
 msgid "Copy URL"
 msgstr "رونوشت از نشانی"
 
-#: src/ephy-history-dialog.c:590
-msgid "Clear browsing history?"
-msgstr "تاریخچهٔ مرور پاک شود؟"
+#: src/ephy-history-dialog.c:567
+msgid "Clear Browsing History?"
+msgstr "پاک سازی تاریخچهٔ مرور؟"
 
-#: src/ephy-history-dialog.c:594
+#: src/ephy-history-dialog.c:568
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 "پاک کردن تاریخچهٔ مرور سبب خواهد شد همهٔ پیوندهای تاریخچه برای همیشه حذف شوند."
 
-#: src/ephy-history-dialog.c:1015
+#: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:294
+msgid "Cl_ear"
+msgstr "_پاک کردن"
+
+#: src/ephy-history-dialog.c:1026
 msgid "Remove all history"
 msgstr "برداشتن تمام تاریخچه"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-location-entry.c:1828 src/ephy-permission-popover.c:271
+msgid "Notification Request"
+msgstr "درخواست آگاهی"
+
+#: src/ephy-location-entry.c:1832
+msgid "Camera Request"
+msgstr "درخواست دوربین"
+
+#: src/ephy-location-entry.c:1836
+msgid "Microphone Request"
+msgstr "درخواست میکروفون"
+
+#: src/ephy-location-entry.c:1840
+msgid "Location Request"
+msgstr "درخواست مکان"
+
+#: src/ephy-location-entry.c:1844
+msgid "Webcam and Microphone Request"
+msgstr "درخواست وبکم و میکروفون"
+
+#: src/ephy-location-entry.c:1848
+msgid "Permission Request"
+msgstr "درخواست اجازه"
 
 #: src/ephy-main.c:111
 msgid "Open a new browser window instead of a new tab"
@@ -2061,7 +1923,7 @@ msgstr "شروع یک نمونهٔ خصوصی با داده‌های کاربر�
 
 #: src/ephy-main.c:120
 msgid "Start a private instance in web application mode"
-msgstr "شروع یک نمونهٔ خصوصی در حالت برنامهٔ وب"
+msgstr "شروع یک نمونهٔ خصوصی در حالت کارهٔ وب"
 
 #: src/ephy-main.c:122
 msgid "Start a private instance for WebDriver control"
@@ -2083,309 +1945,458 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "گزینه‌های وب"
 
+#. Translators: Notification policy for a specific site.
+#: src/ephy-permission-popover.c:273
+#, c-format
+msgid "The page at “%s” would like to send you notifications"
+msgstr "صفحهٔ «%s» می‌خواهد برایتان آگاهی بفرستد"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:278
+msgid "Location Access Request"
+msgstr "درخواست دسترسی موقعیت"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-permission-popover.c:280
+#, c-format
+msgid "The page at “%s” would like to know your location"
+msgstr "صفحهٔ «%s» می‌خواهد مکانتان را بداند"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:285
+msgid "Microphone Access Request"
+msgstr "درخواست دسترسی میکروفون"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-permission-popover.c:287
+#, c-format
+msgid "The page at “%s” would like to use your microphone"
+msgstr "صفحهٔ «%s» می‌خواهد از میکروفونتان استفاده کند"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:292
+msgid "Webcam Access Request"
+msgstr "درخواست دسترسی دوربین"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-permission-popover.c:294
+#, c-format
+msgid "The page at “%s” would like to use your webcam"
+msgstr "صفحهٔ «%s» می‌خواهد از وب‌کمتان استفاده کند"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:299
+msgid "Webcam and Microphone Access Request"
+msgstr "درخواست دسترسی وب‌کم و میکروفون"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-permission-popover.c:301
+#, c-format
+msgid "The page at “%s” would like to use your webcam and microphone"
+msgstr "صفحهٔ «%s» می‌خواهد از وب‌کم و میکروفونتان استفاده کند"
+
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:308
+msgid "Third-party Cookies Request"
+msgstr "درخواست کوکی‌های سوم‌شخص"
+
+#. Translators: Cookie policy for a specific site.
+#: src/ephy-permission-popover.c:310
+#, c-format
+msgid ""
+"The page at “%s” would like to use cookies while browsing “%s”. This will allow "
+"“%s” to track your activity."
+msgstr ""
+"صفحهٔ «%s» می‌خواهید هنگام مرور «%s» از کوکی‌ها استفاده کند. این کار می‌گذار «%s» "
+"فعّالیت‌هایتان را ردیابی کند."
+
+#. Label in certificate popover when site is untrusted. %s is a URL.
+#: src/ephy-security-popover.c:185
+#, c-format
+msgid ""
+"This web site’s digital identification is not trusted. You may have connected to "
+"an attacker pretending to be %s."
+msgstr ""
+"هویت دیجیتال این وب‌گاه مورد اعتماد نیست. ممکن است شما به مهاجمی وصل شده باشید که "
+"وانمود می‌کند %s است."
+
+#. Label in certificate popover when site uses HTTP. %s is a URL.
+#: src/ephy-security-popover.c:192
+#, c-format
+msgid ""
+"This site has no security. An attacker could see any information you send, or "
+"control the content that you see."
+msgstr ""
+"این پایگاه هیچ امنیتی ندارد. یک مهاجم می‌تواند هر اطّلاعاتی را که ارسال می‌کنید "
+"دیده یا محتوایی که می‌بینید را وابپاید."
+
+#. Label in certificate popover when site sends mixed content.
+#: src/ephy-security-popover.c:199
+msgid "This web site did not properly secure your connection."
+msgstr "این وب‌گاه اتصال شما را به صورت مناسب امن نکرده است."
+
+#. Label in certificate popover on secure sites.
+#: src/ephy-security-popover.c:204
+msgid "Your connection seems to be secure."
+msgstr "اتصال شما امن به نظر می‌رسد."
+
+#: src/ephy-security-popover.c:247
+msgid "_View Certificate…"
+msgstr "_نمایش اعتبارنامه…"
+
+#: src/ephy-security-popover.c:492
+msgid "Allow"
+msgstr "اجازه داده شود"
+
+#: src/ephy-security-popover.c:493
+msgid "Deny"
+msgstr "رد شود"
+
+#: src/ephy-security-popover.c:496
+msgid "Ask"
+msgstr "درخواست"
+
+#: src/ephy-security-popover.c:514
+msgid "Permissions"
+msgstr "اجازه‌ها"
+
+#: src/ephy-security-popover.c:556
+msgid "Advertisements"
+msgstr "تبلیغات"
+
+#: src/ephy-security-popover.c:557
+msgid "Notifications"
+msgstr "آگاهی‌ها"
+
+#: src/ephy-security-popover.c:558
+msgid "Password saving"
+msgstr "ذخیرهٔ گذرواژه"
+
+#: src/ephy-security-popover.c:559
+msgid "Location access"
+msgstr "دسترسی موقعیت"
+
+#: src/ephy-security-popover.c:560
+msgid "Microphone access"
+msgstr "دسترسی میکروفون"
+
+#: src/ephy-security-popover.c:561
+msgid "Webcam access"
+msgstr "دسترسی دوربین"
+
+#: src/ephy-security-popover.c:562
+msgid "Media autoplay"
+msgstr "پخش خودکار رسانه"
+
+#: src/ephy-security-popover.c:562
+msgid "Without Sound"
+msgstr "بدون صدا"
+
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:90
+#: src/ephy-tab-view.c:618
 msgid "Open a new tab"
 msgstr "گشودن زبانه‌ای جدید"
 
-#: src/ephy-web-extension-dialog.c:87
-msgid "Do you really want to remove this extension?"
-msgstr "واقعاً می‌خواهید این افزونه را بردارید؟"
+#. Undo, redo.
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:262
+msgid "_Undo"
+msgstr "بر_گردان"
 
-#: src/ephy-web-extension-dialog.c:91 src/ephy-web-extension-dialog.c:220
-#: src/resources/gtk/bookmark-properties.ui:120
-msgid "_Remove"
-msgstr "_‌حذف"
-
-#: src/ephy-web-extension-dialog.c:182
-msgid "Author"
-msgstr "نگارنده"
-
-#: src/ephy-web-extension-dialog.c:191
-msgid "Version"
-msgstr "نگارش"
-
-#: src/ephy-web-extension-dialog.c:200 src/resources/gtk/prefs-general-page.ui:127
-msgid "Homepage"
-msgstr "صفحهٔ خانگی"
-
-#: src/ephy-web-extension-dialog.c:213
-msgid "Open _Inspector"
-msgstr "گشودن _بازرس"
-
-#: src/ephy-web-extension-dialog.c:215
-msgid "Open Inspector for debugging Background Page"
-msgstr "گشودن بازرس برای اشکال‌زدایی صفحهٔ پس‌زمینه"
-
-#: src/ephy-web-extension-dialog.c:224
-msgid "Remove selected WebExtension"
-msgstr "برداشتن افزونهٔ وب گزیده"
-
-#. Translators: this is the title of a file chooser dialog.
-#: src/ephy-web-extension-dialog.c:278
-msgid "Open File (manifest.json/xpi)"
-msgstr "گشودن پرونده (manifest.json/xpi)"
-
-#: src/ephy-window.c:935
+#: src/ephy-window.c:921
 msgid "Re_do"
 msgstr "دو_باره"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:924 src/resources/gtk/location-entry.ui:272
 msgid "Cu_t"
 msgstr "_بریدن"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:925 src/resources/gtk/location-entry.ui:276
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:926 src/resources/gtk/location-entry.ui:280
 msgid "_Paste"
 msgstr "_جای‌گذاری"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:927
 msgid "_Paste Text Only"
 msgstr "فقط _چسباندن متن"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:928 src/resources/gtk/location-entry.ui:298
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:930
 msgid "S_end Link by Email…"
 msgstr "_ارسال پیوند با رایانامه…"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:932
 msgid "_Reload"
 msgstr "_بار کردن مجدد"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:933
 msgid "_Back"
 msgstr "_بازگشت"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:934
 msgid "_Forward"
 msgstr "_پیشروی"
 
 #. Bookmarks
-#: src/ephy-window.c:951
+#: src/ephy-window.c:937
 msgid "Add Boo_kmark…"
 msgstr "افزودن _نشانک…"
 
 #. Links.
-#: src/ephy-window.c:955
+#: src/ephy-window.c:941
 msgid "Open Link in New _Window"
 msgstr "گشودن پیوند در پنجرهٔ _جدید"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:942
 msgid "Open Link in New _Tab"
 msgstr "گشودن پیوند در _زبانهٔ جدید"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:943
 msgid "Open Link in I_ncognito Window"
 msgstr "گشودن پیوند در پنجرهٔ _ناشناس"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:944
 msgid "_Save Link As…"
 msgstr "_ذخیرهٔ پیوند به عنوان…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:945
 msgid "_Copy Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:946
 msgid "_Copy E-mail Address"
 msgstr "_رونوشت از آدرس رایانامه"
 
 #. Images.
-#: src/ephy-window.c:964
+#: src/ephy-window.c:950
 msgid "View _Image in New Tab"
 msgstr "نمایش _‌تصویر در زبانهٔ جدید"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:951
 msgid "Copy I_mage Address"
 msgstr "رونوشت از نشانی _تصویر"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:952
 msgid "_Save Image As…"
 msgstr "_ذخیرهٔ تصویر به عنوان…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:953
 msgid "Set as _Wallpaper"
 msgstr "تنظیم به عنوان _‌کاغذ دیواری"
 
 #. Video.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:957
 msgid "Open Video in New _Window"
 msgstr "گشودن ویدیو در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:958
 msgid "Open Video in New _Tab"
 msgstr "گشودن ویدیو در _زبانهٔ جدید"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:959
 msgid "_Save Video As…"
 msgstr "_ذخیرهٔ ویدیو به عنوان…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:960
 msgid "_Copy Video Address"
 msgstr "_رونوشت از نشانی ویدیو"
 
 #. Audio.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:964
 msgid "Open Audio in New _Window"
 msgstr "گشودن صدا در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:965
 msgid "Open Audio in New _Tab"
 msgstr "گشودن صدا در _زبانهٔ جدید"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:966
 msgid "_Save Audio As…"
 msgstr "_ذخیرهٔ صدا به عنوان…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:967
 msgid "_Copy Audio Address"
 msgstr "_‌نسخه‌برداری از نشانی صدا"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:973
 msgid "Save Pa_ge As…"
 msgstr "_ذخیرهٔ _صفحه به عنوان…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:974
 msgid "_Take Screenshot…"
 msgstr "-ضبط نماگرفت…"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:975
 msgid "_Page Source"
 msgstr "کد منبع _صفحه"
 
-#: src/ephy-window.c:1373
+#: src/ephy-window.c:1357
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "جست‌وجوی وب برای %s"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1386
 msgid "Open Link"
 msgstr "گشودن پیوند"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1388
 msgid "Open Link In New Tab"
 msgstr "گشودن پیوند در زبانهٔ جدید"
 
-#: src/ephy-window.c:1406
+#: src/ephy-window.c:1390
 msgid "Open Link In New Window"
 msgstr "گشودن پیوند در پنجرهٔ جدید"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1392
 msgid "Open Link In Incognito Window"
 msgstr "گشودن پیوند در پنجرهٔ ناشناس"
 
-#: src/ephy-window.c:2854 src/ephy-window.c:4183
-msgid "Do you want to leave this website?"
-msgstr "می‌خواهید از این پایگاه وب خارج شوید؟"
+#: src/ephy-window.c:2798
+msgid "_Ask Later"
+msgstr "_بعداً پرسیده شود"
 
-#: src/ephy-window.c:2855 src/ephy-window.c:4184 src/window-commands.c:1213
-msgid "A form you modified has not been submitted."
-msgstr "فرمی که تغییر دادید، ثبت نشده است."
+#: src/ephy-window.c:2799
+msgid "_Deny"
+msgstr "_رد"
 
-#: src/ephy-window.c:2856 src/ephy-window.c:4185 src/window-commands.c:1215
-msgid "_Discard form"
+#: src/ephy-window.c:2800
+msgid "_Allow"
+msgstr "_اجازه"
+
+#: src/ephy-window.c:2996 src/ephy-window.c:4417
+msgid "Leave Website?"
+msgstr "ترک پایگاه؟"
+
+#: src/ephy-window.c:2997 src/ephy-window.c:4418 src/window-commands.c:1235
+msgid "A form was modified and has not been submitted"
+msgstr "فرمی تغییر داده و ثبت نشده"
+
+#: src/ephy-window.c:2998 src/ephy-window.c:4419 src/window-commands.c:1239
+msgid "_Discard Form"
 msgstr "_دور انداختن فرم"
 
-#: src/ephy-window.c:2877
+#: src/ephy-window.c:3019
 msgid "Download operation"
 msgstr "عملیات بارگیری"
 
-#: src/ephy-window.c:2879
+#: src/ephy-window.c:3021
 msgid "Show details"
 msgstr "نمایش جزییات"
 
-#: src/ephy-window.c:2881
+#: src/ephy-window.c:3023
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%Id عملیات بارگیری فعّال"
 msgstr[1] "%Id عملیات بارگیری فعّال"
 
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3375
-msgid "View open tabs"
-msgstr "دیدن زبانه‌های باز"
+#: src/ephy-window.c:3244
+msgid "Set as Default Browser?"
+msgstr "تنظیم به عنوان مرورگر پیش‌گزیده؟"
 
-#: src/ephy-window.c:3505
-msgid "Set Web as your default browser?"
-msgstr "تنظیم وب به عنوان مرورگر پیش‌گزیده‌تان؟"
+#: src/ephy-window.c:3246
+msgid "Use Web as your default web browser and for opening external links"
+msgstr "استفاده از وب به عنوان مرورگر وب پیش‌گزیده‌تان و برای گشودن پیوندهای خارجی"
 
-#: src/ephy-window.c:3507
-msgid "Set Epiphany Technology Preview as your default browser?"
-msgstr "تنظیم پیش‌نمایش فنی اپیفنی به عنوان مرورگر پیش‌گزیده‌تان؟"
+#: src/ephy-window.c:3248
+msgid ""
+"Use Epiphany Technology Preview as your default web browser and for opening "
+"external links"
+msgstr ""
+"تنظیم پیش‌نمایش فنی اپیفنی به عنوان مرورگر پیش‌گزیده‌تان و برای گشودن پیوندهای خارجی"
 
-#: src/ephy-window.c:3519
-msgid "_Yes"
-msgstr "_بله"
+#: src/ephy-window.c:3252
+msgid "_Ask Again Later"
+msgstr "_بعداً دوباره پرسیده شود"
 
-#: src/ephy-window.c:3520
+#: src/ephy-window.c:3253
 msgid "_No"
 msgstr "_خیر"
 
-#: src/ephy-window.c:4317
-msgid "There are multiple tabs open."
-msgstr "چندین زبانه بازند."
+#: src/ephy-window.c:3254
+msgid "_Yes"
+msgstr "_بله"
 
-#: src/ephy-window.c:4318
-msgid "If you close this window, all open tabs will be lost"
-msgstr "اگر این پنجره را ببندید، همهٔ زبانه‌های باز از دست می‌روند"
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3605
+msgid "View open tabs"
+msgstr "دیدن زبانه‌های باز"
 
-#: src/ephy-window.c:4319
-msgid "C_lose tabs"
-msgstr "بستن _زبانه‌ها"
+#: src/ephy-window.c:3759
+msgid "Save login?"
+msgstr "ذخیرهٔ ورود؟"
 
-#: src/context-menu-commands.c:271
-msgid "Save Link As"
-msgstr "ذخیرهٔ پیوند به نام"
+#: src/ephy-window.c:3760
+msgid ""
+"Passwords are saved only on your device and can be removed at any time in "
+"Preferences"
+msgstr ""
+"گذرواژه‌ها فقط روی افزاره‌تان ذخیره شده‌اند و می‌توانند در هر زمانی در ترجیحات "
+"برداشته شوند"
 
-#: src/context-menu-commands.c:279
-msgid "Save Image As"
-msgstr "ذخیرهٔ تصویر به نام"
+#: src/ephy-window.c:3762
+msgid "Not Now"
+msgstr "اکنون نه"
 
-#: src/context-menu-commands.c:287
-msgid "Save Media As"
-msgstr "ذخیرهٔ رسانه به عنوان"
+#: src/ephy-window.c:3763
+msgid "Never Save"
+msgstr "هرگز ذخیره نشود"
 
-#: src/preferences/clear-data-view.c:70
+#: src/ephy-window.c:3764
+msgid "Save"
+msgstr "ذخیره"
+
+#: src/ephy-window.c:4548
+msgid "Close Multiple Tabs?"
+msgstr "بستن چندین زبانه؟"
+
+#: src/ephy-window.c:4549
+msgid "If this window is closed, all open tabs will be lost"
+msgstr "اگر این پنجره بسته شود، تمامی زبانه‌های باز از دست می‌روند"
+
+#: src/ephy-window.c:4550
+msgid "C_lose Tabs"
+msgstr "_بستن زبانه‌ها"
+
+#: src/ephy-window.c:4654
+msgid "New tab opened"
+msgstr "زبانهٔ جدید گشوده شد"
+
+#: src/ephy-window.c:4658
+msgid "Switch"
+msgstr "تعویض"
+
+#: src/preferences/clear-data-view.c:68
 msgid "Cookies"
 msgstr "کوکی‌ها"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:69
 msgid "HTTP disk cache"
 msgstr "انبارهٔ دیسک HTTP"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:70
 msgid "Local storage data"
 msgstr "داده‌های ذخیره‌سازی محلّی"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:71
 msgid "Offline web application cache"
-msgstr "انبارهٔ برنامهٔ وب برون‌خط"
+msgstr "انبارهٔ کارهٔ وب برون‌خط"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:72
 msgid "IndexedDB databases"
 msgstr "پایگاه داده‌های IndexedDB"
 
-#: src/preferences/clear-data-view.c:75
-msgid "WebSQL databases"
-msgstr "پایگاه داده‌های WebSQL"
-
-#: src/preferences/clear-data-view.c:76
-msgid "Plugins data"
-msgstr "داده‌های افزایه‌ها"
-
-#: src/preferences/clear-data-view.c:77
+#: src/preferences/clear-data-view.c:73
 msgid "HSTS policies cache"
 msgstr "انبارهٔ سیاست‌های HSTS"
 
-#: src/preferences/clear-data-view.c:78
+#: src/preferences/clear-data-view.c:74
 msgid "Intelligent Tracking Prevention data"
 msgstr "داده‌های جلوگیری از ردیابی هوشمند"
 
@@ -2425,193 +2436,196 @@ msgid ""
 "search?q=%s"
 msgstr "نشانی معتبر نیست. باید شبیه ‪https://www.example.com/search?q=%s‬ باشد"
 
-#: src/preferences/ephy-search-engine-row.c:190
+#: src/preferences/ephy-search-engine-row.c:188
 msgid "This shortcut is already used."
 msgstr "یک میان‌بر از پیش استفاده شده."
 
-#: src/preferences/ephy-search-engine-row.c:192
+#: src/preferences/ephy-search-engine-row.c:190
 msgid "Search shortcuts must not contain any space."
 msgstr "میان‌برهای جست‌وجو نباید هیچ فاصله‌ای داشته باشند."
 
-#: src/preferences/ephy-search-engine-row.c:200
+#: src/preferences/ephy-search-engine-row.c:198
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "میان‌برهای جست‌وجو باید با نشانی چون !، # یا @ شروع شوند."
 
-#: src/preferences/ephy-search-engine-row.c:333
+#: src/preferences/ephy-search-engine-row.c:331
 msgid "A name is required"
 msgstr "نامی لازم است"
 
-#: src/preferences/ephy-search-engine-row.c:335
+#: src/preferences/ephy-search-engine-row.c:333
 msgid "This search engine already exists"
 msgstr "این موتور جست‌وجو از پیش موجود است"
 
-#: src/preferences/passwords-view.c:191
+#: src/preferences/extension-view.c:129 src/resources/gtk/extension-view.ui:108
+msgid "Remove Extension"
+msgstr "برداشتن افزونه"
+
+#: src/preferences/extension-view.c:130
+msgid "Do you really want to remove this extension?"
+msgstr "واقعاً می‌خواهید این افزونه را بردارید؟"
+
+#: src/preferences/extension-view.c:134
+#: src/resources/gtk/bookmark-properties.ui:106
+msgid "_Remove"
+msgstr "_‌حذف"
+
+#: src/preferences/passwords-view.c:179
 msgid "Delete All Passwords?"
 msgstr "حذف همهٔ گذرواژه‌ها؟"
 
-#: src/preferences/passwords-view.c:194
+#: src/preferences/passwords-view.c:180
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "این کار همهٔ گذرواژه‌های ذخیره‌شده به صورت محلّی را پاک‌سازی کرده و قابل بازگردانی "
 "نیست."
 
-#: src/preferences/passwords-view.c:199 src/resources/gtk/history-dialog.ui:239
+#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:155
+#: src/resources/gtk/location-entry.ui:288
 msgid "_Delete"
 msgstr "_حذف"
 
-#: src/preferences/passwords-view.c:257
+#: src/preferences/passwords-view.c:239
 msgid "Copy password"
 msgstr "رونوشت از گذرواژه‌"
 
-#: src/preferences/passwords-view.c:263
+#: src/preferences/passwords-view.c:246
 msgid "Username"
 msgstr "نام کاربری"
 
-#: src/preferences/passwords-view.c:286
+#: src/preferences/passwords-view.c:256
 msgid "Copy username"
 msgstr "رونوشت از نام کاربری"
 
-#: src/preferences/passwords-view.c:292
+#: src/preferences/passwords-view.c:263
 msgid "Password"
 msgstr "گذرواژه‌"
 
-#: src/preferences/passwords-view.c:317
-msgid "Reveal password"
-msgstr "رونمایی گذرواژه"
-
-#: src/preferences/passwords-view.c:327
+#: src/preferences/passwords-view.c:275
 msgid "Remove Password"
 msgstr "برداشتن گذرواژه"
 
-#: src/preferences/prefs-appearance-page.c:66
+#: src/preferences/prefs-appearance-page.c:64
 msgid "Sans"
 msgstr "بدون"
 
-#: src/preferences/prefs-appearance-page.c:68
+#: src/preferences/prefs-appearance-page.c:66
 msgid "Serif"
 msgstr "سریف"
 
-#: src/preferences/prefs-appearance-page.c:146
+#: src/preferences/prefs-appearance-page.c:108
 msgid "Light"
 msgstr "روشن"
 
-#: src/preferences/prefs-appearance-page.c:148
+#: src/preferences/prefs-appearance-page.c:110
 msgid "Dark"
 msgstr "تاریک"
 
-#: src/preferences/prefs-general-page.c:301
-#: src/resources/gtk/prefs-lang-dialog.ui:11
+#. Translators: this is the title of a file chooser dialog.
+#: src/preferences/prefs-extensions-page.c:79
+msgid "Open File (manifest.json/xpi)"
+msgstr "گشودن پرونده (manifest.json/xpi)"
+
+#: src/preferences/prefs-general-page.c:201
+#: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "اضافه کردن زبان"
 
-#: src/preferences/prefs-general-page.c:530
-#: src/preferences/prefs-general-page.c:689
+#: src/preferences/prefs-general-page.c:363
+#: src/preferences/prefs-general-page.c:519
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "زبان سیستم (%s)"
 msgstr[1] "زبان‌های سیستم (%s)"
 
-#: src/preferences/prefs-general-page.c:895
-msgid "Web Application Icon"
-msgstr "نقشک برنامهٔ وب"
-
-#: src/preferences/prefs-general-page.c:900
+#: src/preferences/prefs-general-page.c:720
 msgid "Supported Image Files"
 msgstr "پرونده‌های تصویری پشتیبانی‌شده"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1803
+#: src/profile-migrator/ephy-profile-migrator.c:1802
 msgid "Executes only the n-th migration step"
 msgstr "تنها مرحله‌های مشخص تبدیل‌گر را اجرا می‌کند"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1805
+#: src/profile-migrator/ephy-profile-migrator.c:1804
 msgid "Specifies the required version for the migrator"
 msgstr "نسخهٔ مجموعه‌تنظیمات تبدیل‌گر را مشخص میکند"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1807
+#: src/profile-migrator/ephy-profile-migrator.c:1806
 msgid "Specifies the profile where the migrator should run"
 msgstr "مجموعه‌تنظیماتی که باید در آن تبدیل‌گر اجرا شود را مشخص می‌کند"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1828
+#: src/profile-migrator/ephy-profile-migrator.c:1827
 msgid "Web profile migrator"
 msgstr "تبدیل‌گر مجموعه‌تنظیمات وب"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1829
+#: src/profile-migrator/ephy-profile-migrator.c:1828
 msgid "Web profile migrator options"
 msgstr "گزینه‌های تبدیل‌گر مجموعه‌تنظیمات «وب»"
 
-#. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:18
-msgid "View downloads"
-msgstr "دیدن بارگیری‌ها"
-
-#. Translators: tooltip for the bookmark button
-#: src/resources/gtk/action-bar-end.ui:56
-msgid "Bookmark page"
-msgstr "نشانک‌گذاری صفحه"
+#. Translators: tooltip for the webextension actions button
+#: src/resources/gtk/action-bar-end.ui:28
+#: src/resources/gtk/prefs-extensions-page.ui:6
+msgid "Extensions"
+msgstr "افزونه‌ها"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:73
-msgid "View and manage your bookmarks"
-msgstr "دیدن و مدیریت نشانک‌هایتان"
+#: src/resources/gtk/action-bar-end.ui:100
+msgid "Bookmarks"
+msgstr "نشانک‌ها"
 
 #. Translators: tooltip for the back button
-#: src/resources/gtk/action-bar-start.ui:18
-msgid "Go back to the previous page"
-msgstr "بازگشت به صفحهٔ پیشین"
+#: src/resources/gtk/action-bar-start.ui:17
+msgid "Back"
+msgstr "بازگشت"
 
 #. Translators: tooltip for the forward button
-#: src/resources/gtk/action-bar-start.ui:36
-msgid "Go forward to the next page"
-msgstr "پیشروی به صفحهٔ بعدی"
+#: src/resources/gtk/action-bar-start.ui:45
+msgid "Forward"
+msgstr "پیشروی"
 
 #. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:72
-msgid "Go to your homepage"
-msgstr "رفتن به صفحهٔ خانگیتان"
+#: src/resources/gtk/action-bar-start.ui:89 src/resources/gtk/extension-view.ui:69
+#: src/resources/gtk/prefs-general-page.ui:85
+msgid "Homepage"
+msgstr "صفحهٔ خانگی"
 
-#. Translators: tooltip for the page switcher button
-#: src/resources/gtk/action-bar.ui:23
-msgid "View open pages"
-msgstr "دیدن صفحه‌ّای باز"
-
-#: src/resources/gtk/bookmark-properties.ui:16
+#: src/resources/gtk/bookmark-properties.ui:14
 msgid "Bookmark"
 msgstr "نشانک"
 
-#: src/resources/gtk/bookmark-properties.ui:26
+#: src/resources/gtk/bookmark-properties.ui:23
 msgid "_Name"
 msgstr "_نام"
 
-#: src/resources/gtk/bookmark-properties.ui:45
+#: src/resources/gtk/bookmark-properties.ui:40
 msgid "_Address"
 msgstr "_نشانی"
 
-#: src/resources/gtk/bookmark-properties.ui:63
-#: src/resources/gtk/bookmarks-popover.ui:77
+#: src/resources/gtk/bookmark-properties.ui:55
+#: src/resources/gtk/bookmarks-popover.ui:57
 msgid "Tags"
 msgstr "برچسب‌ها"
 
-#: src/resources/gtk/bookmark-properties.ui:100
+#: src/resources/gtk/bookmark-properties.ui:88
 msgid "Add Tag…"
 msgstr "افزودن برچسب…"
 
-#: src/resources/gtk/bookmark-properties.ui:105
-#: src/resources/gtk/prefs-lang-dialog.ui:23
+#: src/resources/gtk/bookmark-properties.ui:93
+#: src/resources/gtk/prefs-lang-dialog.ui:22
 msgid "_Add"
 msgstr "_اضافه کردن"
 
-#: src/resources/gtk/bookmarks-popover.ui:56
+#: src/resources/gtk/bookmarks-popover.ui:36
 msgid "All"
 msgstr "همه"
 
-#: src/resources/gtk/bookmarks-popover.ui:163
-msgid "No bookmarks yet?"
-msgstr "هنوز هیچ نشانکی نیست؟"
+#: src/resources/gtk/bookmarks-popover.ui:138
+msgid "No Bookmarks"
+msgstr "بدون نشانک"
 
-#: src/resources/gtk/bookmarks-popover.ui:179
-msgid "Bookmark some webpages to view them here."
-msgstr "برخی صفحه‌های وب را نشان کنید تا این‌جا ببینیدشان."
+#: src/resources/gtk/bookmarks-popover.ui:139
+msgid "Bookmarked pages will appear here"
+msgstr "صفحه‌های نشانک گذاری شده این‌جا ظاهر خواهند شد"
 
 #: src/resources/gtk/clear-data-view.ui:22
 msgid "Website Data"
@@ -2637,11 +2651,11 @@ msgstr "هیچ دادهٔ پایگاه وبی وجود ندارد"
 msgid "Website data will be listed here"
 msgstr "داده‌های پایگاه وب این‌جا سیاهه خواهند شد"
 
-#: src/resources/gtk/clear-data-view.ui:55
+#: src/resources/gtk/clear-data-view.ui:50
 msgid "Clear selected website data:"
 msgstr "پاک‌سازی داده‌های پایگاه دادهٔ گزیده:"
 
-#: src/resources/gtk/clear-data-view.ui:113
+#: src/resources/gtk/clear-data-view.ui:105
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be removed "
 "forever."
@@ -2649,16 +2663,16 @@ msgstr ""
 "این کار قابل بازیابی نخواهد بود. اطلاعاتی که شما برای حذف انتخاب کرده‌اید برای "
 "همیشه پاک خواهد شد."
 
-#: src/resources/gtk/data-view.ui:44 src/resources/gtk/history-dialog.ui:69
-#: src/resources/gtk/history-dialog.ui:114
+#: src/resources/gtk/data-view.ui:24 src/resources/gtk/history-dialog.ui:30
+#: src/resources/gtk/history-dialog.ui:49
 msgid "Search"
 msgstr "جست‌وجو"
 
-#: src/resources/gtk/data-view.ui:100 src/resources/gtk/history-dialog.ui:198
+#: src/resources/gtk/data-view.ui:76 src/resources/gtk/history-dialog.ui:126
 msgid "No Results Found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
-#: src/resources/gtk/data-view.ui:101 src/resources/gtk/history-dialog.ui:199
+#: src/resources/gtk/data-view.ui:77 src/resources/gtk/history-dialog.ui:127
 msgid "Try a different search"
 msgstr "جست‌وجویی دیگر را بیازمایید"
 
@@ -2666,27 +2680,43 @@ msgstr "جست‌وجویی دیگر را بیازمایید"
 msgid "Text Encoding"
 msgstr "کدگذاری متن"
 
-#: src/resources/gtk/encoding-dialog.ui:34
+#: src/resources/gtk/encoding-dialog.ui:29
 msgid "Use the encoding specified by the document"
 msgstr "استفاده از کدگذاری مشخص شده در نوشتار"
 
-#: src/resources/gtk/encoding-dialog.ui:68
+#: src/resources/gtk/encoding-dialog.ui:61
 msgid "Recent encodings"
 msgstr "کدگذاری‌های اخیر"
 
-#: src/resources/gtk/encoding-dialog.ui:98
+#: src/resources/gtk/encoding-dialog.ui:87
 msgid "Related encodings"
 msgstr "کدگذاری‌های مربوط"
 
-#: src/resources/gtk/encoding-dialog.ui:123
+#: src/resources/gtk/encoding-dialog.ui:110
 msgid "Show all…"
 msgstr "نمایش همه…"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:20
+#: src/resources/gtk/extension-view.ui:7
+msgid "Open _Inspector"
+msgstr "گشودن _بازرس"
+
+#: src/resources/gtk/extension-view.ui:42
+msgid "Author"
+msgstr "نگارنده"
+
+#: src/resources/gtk/extension-view.ui:55
+msgid "Version"
+msgstr "نگارش"
+
+#: src/resources/gtk/extension-view.ui:85
+msgid "Enabled"
+msgstr "فعال شده"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
 msgstr "همگام‌سازی فایرفاکس"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:28
+#: src/resources/gtk/firefox-sync-dialog.ui:17
 msgid ""
 "Sign in with your Firefox account to sync your data with GNOME Web and Firefox "
 "on other computers. GNOME Web is not Firefox and is not produced or endorsed by "
@@ -2695,81 +2725,114 @@ msgstr ""
 "برای همگام‌سازی داده‌هایتان با وب گنوم و فایرفاکس روی دیگر رایانه‌ها، با حساب "
 "فایرفاکستان وارد شوید. وب، فایرفاکس نیست و به دست موزیلا ساخته یا توصیه نمی‌شود."
 
-#: src/resources/gtk/firefox-sync-dialog.ui:47
+#: src/resources/gtk/firefox-sync-dialog.ui:34
 msgid "Firefox Account"
 msgstr "حساب فایرفاکس"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:51
+#: src/resources/gtk/firefox-sync-dialog.ui:37
 msgid "Logged in"
 msgstr "وارد شده"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:56
+#: src/resources/gtk/firefox-sync-dialog.ui:41
 msgid "Sign _out"
 msgstr "_خروج"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:69
+#: src/resources/gtk/firefox-sync-dialog.ui:53
 msgid "Sync Options"
 msgstr "گزینه‌های همگام‌سازی"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:74
+#: src/resources/gtk/firefox-sync-dialog.ui:57
 msgid "Sync _Bookmarks"
 msgstr "همگام‌سازی _نشانک‌ها"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:88
+#: src/resources/gtk/firefox-sync-dialog.ui:69
 msgid "Sync _Passwords"
 msgstr "همگام‌سازی _گذرواژه‌ها"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:102
+#: src/resources/gtk/firefox-sync-dialog.ui:81
 msgid "Sync _History"
 msgstr "همگام‌سازی _تاریخچه"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:116
+#: src/resources/gtk/firefox-sync-dialog.ui:93
 msgid "Sync Open _Tabs"
 msgstr "همگام‌سازی _زبانه‌های باز"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:127
+#: src/resources/gtk/firefox-sync-dialog.ui:102
 msgid "S_ynced tabs"
 msgstr "زبانه‌های _همگام"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:138
+#: src/resources/gtk/firefox-sync-dialog.ui:112
 msgid "Frequency"
 msgstr "بسامد"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:149
+#: src/resources/gtk/firefox-sync-dialog.ui:124
 msgid "Sync _now"
 msgstr "همگام‌سازی _هم‌اکنون"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:161
+#: src/resources/gtk/firefox-sync-dialog.ui:135
 msgid "Device name"
 msgstr "نام دستگاه"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:184
+#: src/resources/gtk/firefox-sync-dialog.ui:148
+msgid "_Save"
+msgstr "_ذخیره"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:157
 msgid "_Change"
 msgstr "_تغییر"
 
-#: src/resources/gtk/history-dialog.ui:27 src/resources/gtk/history-dialog.ui:82
+#: src/resources/gtk/history-dialog.ui:10
 msgid "History"
 msgstr "تاریخچه"
 
-#: src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:23
 msgid "Select Items"
 msgstr "گزینش موارد"
 
-#: src/resources/gtk/history-dialog.ui:138
+#: src/resources/gtk/history-dialog.ui:68
 msgid "Search history"
 msgstr "جست‌وجو در تاریخچه"
 
-#: src/resources/gtk/history-dialog.ui:190
+#: src/resources/gtk/history-dialog.ui:119
 msgid "The History is Empty"
 msgstr "تاریخچه‌تان خالی است"
 
-#: src/resources/gtk/history-dialog.ui:191
+#: src/resources/gtk/history-dialog.ui:120
 msgid "Visited pages will be listed here"
 msgstr "صفحه‌های مشاهده‌شده این‌جا سیاهه خواهند شد"
 
-#: src/resources/gtk/lang-row.ui:39
+#: src/resources/gtk/history-dialog.ui:166
+msgid "_Open"
+msgstr "_گشودن"
+
+#: src/resources/gtk/lang-row.ui:21
 msgid "Delete language"
 msgstr "حذف زبان"
+
+#: src/resources/gtk/location-entry.ui:11
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "جست‌وجو برای پایگاه‌های وب، نشانک‌ها و زبانه‌های باز"
+
+#: src/resources/gtk/location-entry.ui:65
+msgid "Website Security Status and Permissions"
+msgstr "وضعیت امنیتی پایگاه وب و اجازه‌ها"
+
+#: src/resources/gtk/location-entry.ui:84
+#: src/resources/gtk/prefs-appearance-page.ui:59
+msgid "Reader Mode"
+msgstr "حالت خواندن"
+
+#: src/resources/gtk/location-entry.ui:96
+msgid "View available passwords"
+msgstr "دیدن گذرواژه‌های موجود"
+
+#: src/resources/gtk/location-entry.ui:266
+msgid "_Redo"
+msgstr "_انجام دوباره"
+
+#: src/resources/gtk/location-entry.ui:284
+msgid "Paste and _Go"
+msgstr "جای‌گذاری و _گشودن"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -2795,134 +2858,126 @@ msgstr "_برداشتن سنجاق زبانه"
 msgid "_Mute Tab"
 msgstr "_خموشی زبانه"
 
-#: src/resources/gtk/notebook-context-menu.ui:38
+#: src/resources/gtk/notebook-context-menu.ui:37
 msgid "Close Tabs to the _Left"
 msgstr "جابه‌جایی بستن زبانه‌ها به _راست"
 
-#: src/resources/gtk/notebook-context-menu.ui:42
+#: src/resources/gtk/notebook-context-menu.ui:41
 msgid "Close Tabs to the _Right"
 msgstr "بستن زبانه‌ها به _چپ"
 
-#: src/resources/gtk/notebook-context-menu.ui:46
+#: src/resources/gtk/notebook-context-menu.ui:45
 msgid "Close _Other Tabs"
 msgstr "بستن _دیگر زبانه‌ها"
 
-#: src/resources/gtk/notebook-context-menu.ui:50
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:263
 msgid "_Close"
 msgstr "_بستن"
 
-#: src/resources/gtk/page-menu-popover.ui:23
+#: src/resources/gtk/page-menu-popover.ui:14
+msgid "_Run in Background"
+msgstr "_اجرا در پس‌زمینه"
+
+#: src/resources/gtk/page-menu-popover.ui:21
+msgid "_New Window"
+msgstr "_پنجرهٔ جدید"
+
+#: src/resources/gtk/page-menu-popover.ui:25
+msgid "New _Incognito Window"
+msgstr "_پنجرهٔ ناشناس جدید"
+
+#: src/resources/gtk/page-menu-popover.ui:31
+msgid "Reopen Closed _Tab"
+msgstr "دوباره گشودن _زبانه بسته شده"
+
+#: src/resources/gtk/page-menu-popover.ui:35
+msgid "Histo_ry"
+msgstr "_تاریخچه"
+
+#: src/resources/gtk/page-menu-popover.ui:41
+msgid "Firefox _Sync"
+msgstr "_همگام‌سازی فایرفاکس"
+
+#: src/resources/gtk/page-menu-popover.ui:45
+msgid "I_mport and Export"
+msgstr "_درون‌ریزی و برون‌ریزی"
+
+#: src/resources/gtk/page-menu-popover.ui:49
+msgid "I_mport Bookmarks…"
+msgstr "_درون‌ریزی نشانک‌ها…"
+
+#: src/resources/gtk/page-menu-popover.ui:53
+msgid "E_xport Bookmarks…"
+msgstr "_برون‌ریزی نشانک‌ها…"
+
+#: src/resources/gtk/page-menu-popover.ui:59
+msgid "Import _Passwords…"
+msgstr "درون‌ریزی _گذرواژه‌ها…"
+
+#: src/resources/gtk/page-menu-popover.ui:67
+msgid "Install as _Web App…"
+msgstr "نصب پایگاه به عنوان _کارهٔ وب…"
+
+#: src/resources/gtk/page-menu-popover.ui:71
+msgid "Manag_e Web Apps"
+msgstr "_مدیریت کاره‌های وب"
+
+#: src/resources/gtk/page-menu-popover.ui:77
+msgid "Text Enco_ding…"
+msgstr "_کدگذاری متن…"
+
+#: src/resources/gtk/page-menu-popover.ui:83
+msgid "Pr_eferences"
+msgstr "_ترجیحات"
+
+#: src/resources/gtk/page-menu-popover.ui:87
+msgid "_Keyboard Shortcuts"
+msgstr "_کلید‌های میانبر"
+
+#: src/resources/gtk/page-menu-popover.ui:91
+msgid "_Help"
+msgstr "_راهنما"
+
+#: src/resources/gtk/page-menu-popover.ui:95
+msgid "_About Web"
+msgstr "_دربارهٔ وب"
+
+#: src/resources/gtk/page-menu-popover.ui:112
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "بزرگ‌نمایی به خارج"
 
-#: src/resources/gtk/page-menu-popover.ui:36
+#: src/resources/gtk/page-menu-popover.ui:119
 msgid "Restore Zoom"
 msgstr "بازگردانی بزگنمایی"
 
-#: src/resources/gtk/page-menu-popover.ui:49
+#: src/resources/gtk/page-menu-popover.ui:130
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "بزرگ‌نمایی به داخل"
 
-#: src/resources/gtk/page-menu-popover.ui:72
+#: src/resources/gtk/page-menu-popover.ui:145
 msgid "Print…"
 msgstr "چاپ…"
 
-#: src/resources/gtk/page-menu-popover.ui:82
+#: src/resources/gtk/page-menu-popover.ui:152
 msgid "Find…"
 msgstr "یافتن…"
 
-#: src/resources/gtk/page-menu-popover.ui:92
+#: src/resources/gtk/page-menu-popover.ui:159
 msgid "Fullscreen"
 msgstr "تمام‌صفحه"
 
-#: src/resources/gtk/page-menu-popover.ui:138
-msgid "_Run in Background"
-msgstr "_اجرا در پس‌زمینه"
-
-#: src/resources/gtk/page-menu-popover.ui:155
-msgid "_New Window"
-msgstr "_پنجرهٔ جدید"
-
-#: src/resources/gtk/page-menu-popover.ui:162
-msgid "New _Incognito Window"
-msgstr "_پنجرهٔ ناشناس جدید"
-
-#: src/resources/gtk/page-menu-popover.ui:178
-msgid "Reopen Closed _Tab"
-msgstr "دوباره گشودن _زبانه بسته شده"
-
-#: src/resources/gtk/page-menu-popover.ui:185
-msgid "_History"
-msgstr "_تاریخچه"
-
-#: src/resources/gtk/page-menu-popover.ui:201
-msgid "Firefox _Sync"
-msgstr "_همگام‌سازی فایرفاکس"
-
-#: src/resources/gtk/page-menu-popover.ui:208
-msgid "I_mport and Export"
-msgstr "_درون‌ریزی و برون‌ریزی"
-
-#: src/resources/gtk/page-menu-popover.ui:224
-msgid "Install Site as Web _Application…"
-msgstr "نصب پایگاه به عنوان _برنامهٔ وب…"
-
-#: src/resources/gtk/page-menu-popover.ui:231
-msgid "Open Appli_cation Manager"
-msgstr "گشودن مدیر _برنامه"
-
-#: src/resources/gtk/page-menu-popover.ui:238
-msgid "E_xtensions"
-msgstr "_افزونه‌ها"
-
-#: src/resources/gtk/page-menu-popover.ui:254
-msgid "_Override Text Encoding…"
-msgstr "_اجبار در کدگذاری متن…"
-
-#: src/resources/gtk/page-menu-popover.ui:269
-msgid "Pr_eferences"
-msgstr "_ترجیحات"
-
-#: src/resources/gtk/page-menu-popover.ui:277
-msgid "_Keyboard Shortcuts"
-msgstr "_کلید‌های میانبر"
-
-#: src/resources/gtk/page-menu-popover.ui:285
-msgid "_Help"
-msgstr "_راهنما"
-
-#: src/resources/gtk/page-menu-popover.ui:293
-msgid "_About Web"
-msgstr "_دربارهٔ وب"
-
-#: src/resources/gtk/page-menu-popover.ui:316
-msgid "Import and Export"
-msgstr "درون‌ریزی و برون‌ریزی"
-
-#: src/resources/gtk/page-menu-popover.ui:326
-msgid "I_mport Bookmarks…"
-msgstr "_درون‌ریزی نشانک‌ها…"
-
-#: src/resources/gtk/page-menu-popover.ui:333
-msgid "E_xport Bookmarks…"
-msgstr "_برون‌ریزی نشانک‌ها…"
-
-#: src/resources/gtk/page-menu-popover.ui:348
-msgid "Import _Passwords…"
-msgstr "درون‌ریزی _گذرواژه‌ها…"
-
-#: src/resources/gtk/page-row.ui:61
-msgid "Close page"
-msgstr "بستن صفحه"
+#: src/resources/gtk/page-row.ui:52
+msgid "Close"
+msgstr "بستن"
 
 #: src/resources/gtk/pages-view.ui:11
 msgid "Tabs"
 msgstr "زبانه‌ها"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:107
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "Passwords"
 msgstr "گذرواژه‌ها"
 
@@ -2942,11 +2997,11 @@ msgstr "هیچ گذرواژه‌ای وجود ندارد"
 msgid "Saved passwords will be listed here"
 msgstr "گذرواژه‌های ذخیره‌شده این‌جا سیاهه خواهند شد"
 
-#: src/resources/gtk/passwords-view.ui:73
+#: src/resources/gtk/passwords-view.ui:69
 msgid "_Copy Password"
 msgstr "_رونوشت از گذرواژه‌"
 
-#: src/resources/gtk/passwords-view.ui:77
+#: src/resources/gtk/passwords-view.ui:73
 msgid "C_opy Username"
 msgstr "_رونوشت از نام کاربری"
 
@@ -2954,143 +3009,161 @@ msgstr "_رونوشت از نام کاربری"
 msgid "Appearance"
 msgstr "ظاهر"
 
-#: src/resources/gtk/prefs-appearance-page.ui:10
+#: src/resources/gtk/prefs-appearance-page.ui:9
 msgid "Fonts"
 msgstr "قلم‌ها"
 
-#: src/resources/gtk/prefs-appearance-page.ui:15
+#: src/resources/gtk/prefs-appearance-page.ui:13
 msgid "Use Custom Fonts"
 msgstr "استفاده از قلم‌های سفارشی"
 
-#: src/resources/gtk/prefs-appearance-page.ui:20
+#: src/resources/gtk/prefs-appearance-page.ui:17
 msgid "Sans serif font"
 msgstr "قلم بدون سریف"
 
-#: src/resources/gtk/prefs-appearance-page.ui:35
+#: src/resources/gtk/prefs-appearance-page.ui:30
 msgid "Serif font"
 msgstr "قلم سریف"
 
-#: src/resources/gtk/prefs-appearance-page.ui:50
+#: src/resources/gtk/prefs-appearance-page.ui:43
 msgid "Monospace font"
 msgstr "قلم تک‌عرض"
 
-#: src/resources/gtk/prefs-appearance-page.ui:68
-msgid "Reader Mode"
-msgstr "حالت خواندن"
-
-#: src/resources/gtk/prefs-appearance-page.ui:72
+#: src/resources/gtk/prefs-appearance-page.ui:62
 msgid "Font Style"
 msgstr "سبک قلم‌ها"
 
-#: src/resources/gtk/prefs-appearance-page.ui:78
+#: src/resources/gtk/prefs-appearance-page.ui:77
 msgid "Color Scheme"
 msgstr "شمای رنگی"
 
-#: src/resources/gtk/prefs-appearance-page.ui:86
+#: src/resources/gtk/prefs-appearance-page.ui:94
 msgid "Style"
 msgstr "سبک"
 
-#: src/resources/gtk/prefs-appearance-page.ui:91
+#: src/resources/gtk/prefs-appearance-page.ui:98
 msgid "Use Custom Stylesheet"
 msgstr "استفاده از برگهٔ سبک سفارشی"
 
-#: src/resources/gtk/prefs-appearance-page.ui:126
+#: src/resources/gtk/prefs-appearance-page.ui:118
 msgid "Use Custom JavaScript"
 msgstr "استفاده از جاوااسکریپت‌های سفارشی"
 
-#: src/resources/gtk/prefs-appearance-page.ui:161
+#: src/resources/gtk/prefs-appearance-page.ui:138
 msgid "Default Zoom Level"
 msgstr "سطح بزرگ‌نمایی پیش‌گزیده"
+
+#: src/resources/gtk/prefs-extensions-page.ui:12
+msgid "Add New Extension"
+msgstr "افزودن افزونهٔ جدید"
+
+#: src/resources/gtk/prefs-extensions-page.ui:13
+msgid "Extensions must be installed manually from their files"
+msgstr "افزونه‌ها باید دستی از پرونده‌هایشان نصب شوند"
+
+#: src/resources/gtk/prefs-extensions-page.ui:27
+msgid ""
+"Epiphany is compatible with web extensions for Mozilla Firefox. To find and add "
+"web extensions, visit <a href=\"https://addons.mozilla.org\">addons.mozilla.org</"
+"a>"
+msgstr ""
+"اپیفنی بای افزونه‌های وب فایرفاکس موزیلا سازگار است. برای یافتن و افزودن "
+"افزونه‌های وب،‌ <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a> را "
+"بازدید کنید"
+
+#: src/resources/gtk/prefs-extensions-page.ui:59
+msgid "No extensions installed"
+msgstr "هیچ افزونه‌ای نصب نشده"
 
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
 msgstr "عمومی"
 
-#: src/resources/gtk/prefs-general-page.ui:10
-msgid "Web Application"
-msgstr "برنامهٔ وب"
+#: src/resources/gtk/prefs-general-page.ui:9
+msgid "Web App"
+msgstr "کارهٔ وب"
 
-#: src/resources/gtk/prefs-general-page.ui:15
+#: src/resources/gtk/prefs-general-page.ui:13
 msgid "_Icon"
 msgstr "_نقشک"
 
-#: src/resources/gtk/prefs-general-page.ui:38
+#: src/resources/gtk/prefs-general-page.ui:25
 msgid "_Homepage"
 msgstr "_صفحهٔ خانگی"
 
-#: src/resources/gtk/prefs-general-page.ui:53
+#: src/resources/gtk/prefs-general-page.ui:32
 msgid "_Title"
 msgstr "_عنوان"
 
-#: src/resources/gtk/prefs-general-page.ui:68
+#: src/resources/gtk/prefs-general-page.ui:40
 msgid "_Manage Additional URLs"
 msgstr "_مدیریت نشانی‌های اضافی"
 
-#: src/resources/gtk/prefs-general-page.ui:93
+#: src/resources/gtk/prefs-general-page.ui:56
 msgid "Web Content"
 msgstr "محتویات وب"
 
-#: src/resources/gtk/prefs-general-page.ui:98
+#: src/resources/gtk/prefs-general-page.ui:60
 msgid "Block _Advertisements"
 msgstr "انسداد _تبلیغات"
 
-#: src/resources/gtk/prefs-general-page.ui:112
+#: src/resources/gtk/prefs-general-page.ui:72
 msgid "Block _Popup Windows"
 msgstr "انسداد پنجره‌های _واشو"
 
-#: src/resources/gtk/prefs-general-page.ui:132
+#: src/resources/gtk/prefs-general-page.ui:89
 msgid "Most _Visited Pages"
 msgstr "صفحه‌های بیش‌تر دیده شده"
 
-#: src/resources/gtk/prefs-general-page.ui:146
+#: src/resources/gtk/prefs-general-page.ui:101
 msgid "_Blank Page"
 msgstr "صفحهٔ _سفید"
 
-#: src/resources/gtk/prefs-general-page.ui:161
+#: src/resources/gtk/prefs-general-page.ui:114
 msgid "_Custom"
 msgstr "_سفارشی"
 
-#: src/resources/gtk/prefs-general-page.ui:190
+#: src/resources/gtk/prefs-general-page.ui:139
 msgid "Ask o_n Download"
 msgstr "_پرسش هنگام بارگیری"
 
-#: src/resources/gtk/prefs-general-page.ui:205
+#: src/resources/gtk/prefs-general-page.ui:152
 msgid "_Download Folder"
 msgstr "شاخهٔ _بارگیری"
 
-#: src/resources/gtk/prefs-general-page.ui:250
+#: src/resources/gtk/prefs-general-page.ui:192
 msgid "Search Engines"
 msgstr "موتورهای جست‌وجو"
 
-#: src/resources/gtk/prefs-general-page.ui:261
+#: src/resources/gtk/prefs-general-page.ui:200
 msgid "Session"
 msgstr "نشست"
 
-#: src/resources/gtk/prefs-general-page.ui:266
+#: src/resources/gtk/prefs-general-page.ui:204
 msgid "Start in _Incognito Mode"
 msgstr "شروع در حالت _ناشناس"
 
-#: src/resources/gtk/prefs-general-page.ui:280
+#: src/resources/gtk/prefs-general-page.ui:216
 msgid "_Restore Tabs on Startup"
 msgstr "_بارگردانی زبانه‌ها هنگام شروع"
 
-#: src/resources/gtk/prefs-general-page.ui:295
+#: src/resources/gtk/prefs-general-page.ui:229
 msgid "Browsing"
 msgstr "مرور"
 
-#: src/resources/gtk/prefs-general-page.ui:300
+#: src/resources/gtk/prefs-general-page.ui:233
 msgid "Mouse _Gestures"
 msgstr "_حرکت‌های موشی"
 
-#: src/resources/gtk/prefs-general-page.ui:314
+#: src/resources/gtk/prefs-general-page.ui:245
 msgid "S_witch Immediately to New Tabs"
 msgstr "_تعویض فوری به زبانه‌های جدید"
 
-#: src/resources/gtk/prefs-general-page.ui:349
+#: src/resources/gtk/prefs-general-page.ui:274
 msgid "_Spell Checking"
 msgstr "_خطایاب املایی"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:48
+#: src/resources/gtk/prefs-lang-dialog.ui:43
 msgid "Choose a language:"
 msgstr "گزینش یک زبان:"
 
@@ -3098,76 +3171,76 @@ msgstr "گزینش یک زبان:"
 msgid "Privacy"
 msgstr "زندگی خصوصی"
 
-#: src/resources/gtk/prefs-privacy-page.ui:10
+#: src/resources/gtk/prefs-privacy-page.ui:9
 msgid "Web Safety"
 msgstr "امنیت وب"
 
-#: src/resources/gtk/prefs-privacy-page.ui:15
+#: src/resources/gtk/prefs-privacy-page.ui:13
 msgid "Block Dangerous Web_sites"
 msgstr "انسداد _پایگاه‌های وب خطرناک"
 
-#: src/resources/gtk/prefs-privacy-page.ui:30
+#: src/resources/gtk/prefs-privacy-page.ui:26
 msgid "Web Tracking"
 msgstr "ردیابی وب"
 
-#: src/resources/gtk/prefs-privacy-page.ui:35
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "Intelligent _Tracking Prevention"
 msgstr "جلوگیری از ردیابی هوشمند"
 
-#: src/resources/gtk/prefs-privacy-page.ui:49
+#: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr ""
 "اجازهٔ ذخیرهٔ کوکی، پایگاه داده‌ها و داده‌های ذخیرهٔ محلّی را به پایگاه‌های وب می‌دهد."
 
-#: src/resources/gtk/prefs-privacy-page.ui:50
+#: src/resources/gtk/prefs-privacy-page.ui:43
 msgid "_Website Data Storage"
 msgstr "ذخیرهٔ دادهٔ _پایگاه داده"
 
-#: src/resources/gtk/prefs-privacy-page.ui:65
+#: src/resources/gtk/prefs-privacy-page.ui:56
 msgid "Search Suggestions"
 msgstr "پیشنهادهای جست‌وجو"
 
-#: src/resources/gtk/prefs-privacy-page.ui:70
+#: src/resources/gtk/prefs-privacy-page.ui:60
 msgid "Enable search suggestions in the URL entry."
 msgstr "به کار انداختن پیشنهادهای جست‌وجو در ورودی نشانی."
 
-#: src/resources/gtk/prefs-privacy-page.ui:71
+#: src/resources/gtk/prefs-privacy-page.ui:61
 msgid "_Google Search Suggestions"
 msgstr "_پیشنهادهای جست‌وجوی گوگل"
 
-#: src/resources/gtk/prefs-privacy-page.ui:86
+#: src/resources/gtk/prefs-privacy-page.ui:74
 msgid "Personal Data"
 msgstr "داده‌های شخصی"
 
-#: src/resources/gtk/prefs-privacy-page.ui:91
+#: src/resources/gtk/prefs-privacy-page.ui:78
 msgid "Clear Website _Data"
 msgstr "_پاک‌سازی داده‌های پایگاه وب"
 
-#: src/resources/gtk/prefs-privacy-page.ui:112
+#: src/resources/gtk/prefs-privacy-page.ui:96
 msgid "_Passwords"
 msgstr "_گذرواژه‌ها"
 
-#: src/resources/gtk/prefs-privacy-page.ui:127
+#: src/resources/gtk/prefs-privacy-page.ui:109
 msgid "_Remember Passwords"
 msgstr "_به خاطر سپردن گذرواژه‌ها"
 
-#: src/resources/gtk/search-engine-row.ui:10
+#: src/resources/gtk/search-engine-row.ui:8
 msgid "Selects the default search engine"
 msgstr "گزینش موتور جست‌وجوی پیش‌گزیده"
 
-#: src/resources/gtk/search-engine-row.ui:31
+#: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
 msgstr "نام"
 
-#: src/resources/gtk/search-engine-row.ui:53
+#: src/resources/gtk/search-engine-row.ui:46
 msgid "Address"
 msgstr "نشانی"
 
-#: src/resources/gtk/search-engine-row.ui:79
+#: src/resources/gtk/search-engine-row.ui:69
 msgid "Shortcut"
 msgstr "میان‌بر"
 
-#: src/resources/gtk/search-engine-row.ui:106
+#: src/resources/gtk/search-engine-row.ui:92
 #, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine that "
@@ -3176,307 +3249,307 @@ msgstr ""
 "برای مشخّص کردن نشانی جست‌وجو، با استفاده از موتوری که می‌خواهید بیفزایید، جست‌وجویی "
 "انجام داده و عبارت جست‌وجو را با %s جایگزین کنید."
 
-#: src/resources/gtk/search-engine-row.ui:126
+#: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
 msgstr "_برداشتن موتور جست‌وجو"
 
-#: src/resources/gtk/shortcuts-dialog.ui:15
+#: src/resources/gtk/shortcuts-dialog.ui:13
 msgctxt "shortcut window"
 msgid "General"
 msgstr "عمومی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:19
+#: src/resources/gtk/shortcuts-dialog.ui:16
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "پنجرهٔ جدید"
 
-#: src/resources/gtk/shortcuts-dialog.ui:26
+#: src/resources/gtk/shortcuts-dialog.ui:22
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "پنجرهٔ ناشناس جدید"
 
-#: src/resources/gtk/shortcuts-dialog.ui:33
+#: src/resources/gtk/shortcuts-dialog.ui:28
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "گشودن پرونده"
 
-#: src/resources/gtk/shortcuts-dialog.ui:40
+#: src/resources/gtk/shortcuts-dialog.ui:34
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "ذخیرهٔ صفحه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:47
+#: src/resources/gtk/shortcuts-dialog.ui:40
 msgctxt "shortcut window"
 msgid "Take Screenshot"
 msgstr "ضبط نماگرفت"
 
-#: src/resources/gtk/shortcuts-dialog.ui:54
+#: src/resources/gtk/shortcuts-dialog.ui:46
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "چاپ صفحه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:52
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "خروج"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:58
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "راهنما"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:64
 msgctxt "shortcut window"
 msgid "Open menu"
 msgstr "گشودن فهرست"
 
-#: src/resources/gtk/shortcuts-dialog.ui:82
+#: src/resources/gtk/shortcuts-dialog.ui:70
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "میان‌برها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:89
+#: src/resources/gtk/shortcuts-dialog.ui:76
 msgctxt "shortcut window"
 msgid "Show downloads list"
 msgstr "نمایش سیاههٔ بارگیری‌ها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:100
+#: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "ناوش"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:89
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "رفتن به صفحهٔ خانگی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:95
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "بازخوانی صفحهٔ کنونی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:101
 msgctxt "shortcut window"
 msgid "Reload bypassing cache"
 msgstr "بازخوانی انبارهٔ جنبی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:125
+#: src/resources/gtk/shortcuts-dialog.ui:107
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "توقف بار کردن صفحهٔ کنونی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:132
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:113
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "بازگشت به صفحهٔ پیشین"
 
-#: src/resources/gtk/shortcuts-dialog.ui:139
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:119
+#: src/resources/gtk/shortcuts-dialog.ui:132
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "پیشروی به صفحهٔ بعدی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:164
+#: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "زبانه‌ها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:144
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "زبانهٔ جدید"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "بستن زبانهٔ کنونی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:182
+#: src/resources/gtk/shortcuts-dialog.ui:156
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "گشودن دوبارهٔ زبانه بسته‌شده"
 
-#: src/resources/gtk/shortcuts-dialog.ui:189
+#: src/resources/gtk/shortcuts-dialog.ui:162
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "رفتن به زبانهٔ بعدی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:196
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "رفتن به زبانهٔ پیشین"
 
-#: src/resources/gtk/shortcuts-dialog.ui:203
+#: src/resources/gtk/shortcuts-dialog.ui:174
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "جابه‌جایی زبانهٔ جاری به راست"
 
-#: src/resources/gtk/shortcuts-dialog.ui:210
+#: src/resources/gtk/shortcuts-dialog.ui:180
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "جابه‌جایی زبانهٔ جاری به چپ"
 
-#: src/resources/gtk/shortcuts-dialog.ui:217
+#: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "تکثیر زبانهٔ کنونی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:228
+#: src/resources/gtk/shortcuts-dialog.ui:196
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "سایر"
 
-#: src/resources/gtk/shortcuts-dialog.ui:232
+#: src/resources/gtk/shortcuts-dialog.ui:199
 msgctxt "shortcut window"
 msgid "History"
 msgstr "تاریخچه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:239
+#: src/resources/gtk/shortcuts-dialog.ui:205
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "ترجیحات"
 
-#: src/resources/gtk/shortcuts-dialog.ui:246
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "نشانک‌گذاری صفحه فعلی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:253
+#: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
 msgid "Show bookmarks list"
 msgstr "نمایش سیاههٔ نشانک‌ها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:260
+#: src/resources/gtk/shortcuts-dialog.ui:223
 msgctxt "shortcut window"
 msgid "Import bookmarks"
 msgstr "درون‌ریزی نشانک‌ها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:267
+#: src/resources/gtk/shortcuts-dialog.ui:229
 msgctxt "shortcut window"
 msgid "Export bookmarks"
 msgstr "برون‌ریزی نشانک‌ها"
 
-#: src/resources/gtk/shortcuts-dialog.ui:274
+#: src/resources/gtk/shortcuts-dialog.ui:235
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "تغییر وضعیت مرور با carret"
 
-#: src/resources/gtk/shortcuts-dialog.ui:285
+#: src/resources/gtk/shortcuts-dialog.ui:245
 msgctxt "shortcut window"
-msgid "Web application"
-msgstr "برنامهٔ وب"
+msgid "Web app"
+msgstr "کارهٔ وب"
 
-#: src/resources/gtk/shortcuts-dialog.ui:289
+#: src/resources/gtk/shortcuts-dialog.ui:248
 msgctxt "shortcut window"
-msgid "Install site as web application"
-msgstr "نصب پایگاه به عنوان برنامهٔ وب"
+msgid "Install site as web app"
+msgstr "نصب پایگاه به عنوان کارهٔ وب"
 
-#: src/resources/gtk/shortcuts-dialog.ui:300
+#: src/resources/gtk/shortcuts-dialog.ui:258
 msgctxt "shortcut window"
 msgid "View"
 msgstr "نما"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "بزرگ‌نمایی به داخل"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "بزرگ‌نمایی به خارج"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:273
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "بازنشانی بزرگ‌نمایی"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:279
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "تمام‌صفحه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "نمایش مبدأ صفحه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:291
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "تغییر وضعیت بازرس"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Toggle reader mode"
 msgstr "تغییر وضعیت حالت خواندن"
 
-#: src/resources/gtk/shortcuts-dialog.ui:357
+#: src/resources/gtk/shortcuts-dialog.ui:307
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "ویرایش"
 
-#: src/resources/gtk/shortcuts-dialog.ui:361
+#: src/resources/gtk/shortcuts-dialog.ui:310
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "بریدن"
 
-#: src/resources/gtk/shortcuts-dialog.ui:368
+#: src/resources/gtk/shortcuts-dialog.ui:316
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "رونوشت"
 
-#: src/resources/gtk/shortcuts-dialog.ui:375
+#: src/resources/gtk/shortcuts-dialog.ui:322
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "جای‌گذاری"
 
-#: src/resources/gtk/shortcuts-dialog.ui:382
+#: src/resources/gtk/shortcuts-dialog.ui:328
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "برگردان"
 
-#: src/resources/gtk/shortcuts-dialog.ui:389
+#: src/resources/gtk/shortcuts-dialog.ui:334
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "انجام دوباره"
 
-#: src/resources/gtk/shortcuts-dialog.ui:396
+#: src/resources/gtk/shortcuts-dialog.ui:340
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "انتخاب همه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:403
+#: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "گزینش نشانی صفحه"
 
-#: src/resources/gtk/shortcuts-dialog.ui:410
+#: src/resources/gtk/shortcuts-dialog.ui:352
 msgctxt "shortcut window"
 msgid "Search with default search engine"
 msgstr "جست‌وجو با موتور جست‌وجوی پیش‌گزیده"
 
-#: src/resources/gtk/shortcuts-dialog.ui:417
+#: src/resources/gtk/shortcuts-dialog.ui:358
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "یافتن"
 
-#: src/resources/gtk/shortcuts-dialog.ui:424
+#: src/resources/gtk/shortcuts-dialog.ui:364
 msgctxt "shortcut window"
 msgid "Next find result"
 msgstr "نتیجهٔ بعدی یافتن"
 
-#: src/resources/gtk/shortcuts-dialog.ui:431
+#: src/resources/gtk/shortcuts-dialog.ui:370
 msgctxt "shortcut window"
 msgid "Previous find result"
 msgstr "نتیجهٔ پیشین یافتن"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:22
+#: src/resources/gtk/synced-tabs-dialog.ui:18
 msgid "Synced Tabs"
 msgstr "زبانه‌های همگام"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:41
+#: src/resources/gtk/synced-tabs-dialog.ui:35
 msgid ""
 "Below are the synced open tabs of your other devices that use Firefox Sync with "
 "this account. Open a tab by double clicking its name (tabs under Local Tabs "
@@ -3486,52 +3559,35 @@ msgstr ""
 "استفاده می‌کنند در زیر آورده شده‌اند. با دوبار کلیک روی نام یک زیانه، بگشاییدش "
 "(زبانه‌های ذیل زبانه‌ّای محلّی نمی‌توانند باز شوند)."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:17
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:15
 msgid "Additional URLs"
 msgstr "نشانی‌های اضافی"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:28
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:29
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded URL "
 "will be used."
 msgstr ""
-"نشانی اینترنتی‌ای که با هر یک از نشانی‌های اضافی آغاز شوند با برنامهٔ وب باز خواهند "
+"نشانی اینترنتی‌ای که با هر یک از نشانی‌های اضافی آغاز شوند با کارهٔ وب باز خواهند "
 "شد. اگر شمای نشانی را خالی بگذارید، شمای نشانی باز شدهٔ کنونی استفاده خواهد شد."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:52
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:51
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
-msgstr "نشانی اینترنتی"
+msgstr "نشانی"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:77
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:76
 msgid "Add new URL"
 msgstr "افزودن نشانی جدید"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:90
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:82
 msgid "Remove the selected URLs"
 msgstr "برداشتن نشانی‌های گزیده"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:104
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:89
 msgid "C_lear All"
 msgstr "_‌پاک کردن همه"
-
-#: src/resources/gtk/web-extensions-dialog.ui:12
-#: src/resources/gtk/web-extensions-dialog.ui:21
-msgid "Extensions"
-msgstr "افزونه‌ها"
-
-#: src/resources/gtk/web-extensions-dialog.ui:26
-msgid "_Add…"
-msgstr "_افزودن…"
-
-#: src/resources/gtk/web-extensions-dialog.ui:40
-msgid "No Extensions Installed"
-msgstr "هیچ افزونه‌ای نصب نشده"
-
-#: src/resources/gtk/web-extensions-dialog.ui:41
-msgid "Add some extensions to display them here."
-msgstr "چند افزونه بیفزایید تا این‌جا نشان داده شوند."
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -3543,7 +3599,7 @@ msgstr "جست‌وجوی وب برای %s"
 msgid "Load “%s”"
 msgstr "بار کردن «%s»"
 
-#: src/synced-tabs-dialog.c:190
+#: src/synced-tabs-dialog.c:194
 msgid "Local Tabs"
 msgstr "زبانه‌های محلّی"
 
@@ -3563,7 +3619,7 @@ msgstr "نام داده شده معتبر نبود"
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
-msgstr "نصب برنامهٔ وب «%s»(%s) شکست خورد: %s"
+msgstr "نصب کارهٔ وب «%s»(%s) شکست خورد: %s"
 
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
@@ -3573,103 +3629,93 @@ msgstr "شناسهٔ پروندهٔ میزکار داده شده «%s» معتب
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
 msgid "The web application ‘%s’ does not exist"
-msgstr "برنامهٔ وب «%s» وجود ندارد"
+msgstr "کارهٔ وب «%s» وجود ندارد"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
 #, c-format
 msgid "The web application ‘%s’ could not be deleted"
-msgstr "برنامهٔ وب «%s» نتوانست حذف شود"
+msgstr "کارهٔ وب «%s» نتوانست حذف شود"
 
 #: src/webextension/api/runtime.c:161
 #, c-format
 msgid "Options for %s"
 msgstr "گزینه‌های %s"
 
-#: src/window-commands.c:113
+#: src/window-commands.c:118
 msgid "GVDB File"
 msgstr "پروندهٔ GVDB"
 
-#: src/window-commands.c:114
+#: src/window-commands.c:119
 msgid "HTML File"
 msgstr "پروندهٔ HTML"
 
-#: src/window-commands.c:115
+#: src/window-commands.c:120
 msgid "Firefox"
 msgstr "فایرفاکس"
 
-#: src/window-commands.c:116 src/window-commands.c:693
+#: src/window-commands.c:121 src/window-commands.c:714
 msgid "Chrome"
 msgstr "کروم"
 
-#: src/window-commands.c:117 src/window-commands.c:694
+#: src/window-commands.c:122 src/window-commands.c:715
 msgid "Chromium"
 msgstr "کرومیوم"
 
-#: src/window-commands.c:131 src/window-commands.c:556 src/window-commands.c:772
+#: src/window-commands.c:137 src/window-commands.c:581 src/window-commands.c:793
 msgid "Ch_oose File"
 msgstr "_گزینش پرونده"
 
-#: src/window-commands.c:133 src/window-commands.c:380 src/window-commands.c:427
-#: src/window-commands.c:774 src/window-commands.c:800
+#: src/window-commands.c:139 src/window-commands.c:795 src/window-commands.c:835
 msgid "I_mport"
 msgstr "_وارد کردن"
 
-#: src/window-commands.c:293 src/window-commands.c:368 src/window-commands.c:415
-#: src/window-commands.c:458 src/window-commands.c:481 src/window-commands.c:497
+#: src/window-commands.c:300 src/window-commands.c:385 src/window-commands.c:432
+#: src/window-commands.c:476 src/window-commands.c:499 src/window-commands.c:515
 msgid "Bookmarks successfully imported!"
 msgstr "نشانک‌ها با موفّقیت درون‌ریزی شدند!"
 
-#: src/window-commands.c:306
+#: src/window-commands.c:319
 msgid "Select Profile"
 msgstr "گزینش نمایه"
 
-#: src/window-commands.c:377 src/window-commands.c:424 src/window-commands.c:650
+#: src/window-commands.c:335
+msgid "_Select"
+msgstr "_گزینش"
+
+#: src/window-commands.c:396 src/window-commands.c:443 src/window-commands.c:673
 msgid "Choose File"
 msgstr "گزینش پرونده"
 
-#: src/window-commands.c:551
+#: src/window-commands.c:564
 msgid "Import Bookmarks"
 msgstr "وارد کردن نشانک‌ها"
 
-#: src/window-commands.c:570 src/window-commands.c:814
+#: src/window-commands.c:594 src/window-commands.c:848
 msgid "From:"
 msgstr "از:"
 
-#: src/window-commands.c:612
+#: src/window-commands.c:634
 msgid "Bookmarks successfully exported!"
 msgstr "نشانک‌ها با موفّقیت برون‌ریزی شدند!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:658
+#: src/window-commands.c:684
 msgid "bookmarks.html"
 msgstr "نشانک‌ها.html"
 
-#: src/window-commands.c:731
+#: src/window-commands.c:758
 msgid "Passwords successfully imported!"
 msgstr "گذرواژه‌ها با موفّقیت درون‌ریزی شدند!"
 
-#: src/window-commands.c:795
+#: src/window-commands.c:819
 msgid "Import Passwords"
 msgstr "درون‌ریزی گذرواژه‌ها"
 
-#: src/window-commands.c:988
-#, c-format
-msgid ""
-"A simple, clean, beautiful view of the web.\n"
-"Powered by WebKitGTK %d.%d.%d"
-msgstr ""
-"نمایی ساده، تمیز و زیبا از وب.\n"
-"قدرت‌گرفته از وب‌کیت %Id٫%Id٫%Id"
-
-#: src/window-commands.c:1002
+#: src/window-commands.c:1058
 msgid "Epiphany Canary"
 msgstr "اپیفنی قناری"
 
-#: src/window-commands.c:1018
-msgid "Website"
-msgstr "پایگاه وب"
-
-#: src/window-commands.c:1051
+#: src/window-commands.c:1081
 msgid "translator-credits"
 msgstr ""
 "آرش موسوی <mousavi.arash@gmail.com>\n"
@@ -3680,65 +3726,55 @@ msgstr ""
 "مهیار مقیمی <mahyar.moqimi@gmail.com>\n"
 "هادی زاهدیان <zahedianhadi@gmail.com>"
 
-#: src/window-commands.c:1211
-msgid "Do you want to reload this website?"
-msgstr "می‌خواهید این پایگاه وب را دوباره بار کنید؟"
+#: src/window-commands.c:1234
+msgid "Reload Website?"
+msgstr "نوسازی پایگاه وب"
 
-#: src/window-commands.c:1813
+#: src/window-commands.c:1851
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "برنامهٔ «%s» آمادهٔ استفاده است"
 
-#: src/window-commands.c:1816
+#: src/window-commands.c:1854
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "برنامهٔ «%s» نتوانست ایجاد شود: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1825
+#: src/window-commands.c:1863
 msgid "Launch"
 msgstr "راه‌اندازی"
 
-#: src/window-commands.c:1896
+#: src/window-commands.c:1929
+msgid "Replace Existing Web App?"
+msgstr "جایگزینی کارهٔ وب موجود؟"
+
+#: src/window-commands.c:1933
 #, c-format
-msgid "A web application named “%s” already exists. Do you want to replace it?"
-msgstr "برنامهٔ وبی با نام «%s» از پیش موجود است. می‌خواهید جایگزینش کنید؟"
+msgid "An application named “%s” already exists, replacing it will overwrite it"
+msgstr "برنامه‌ای با نام «%s» از پیش موجود است. جای‌گزینیش موجب پایمالیش خواهد شد"
 
-#: src/window-commands.c:1899
-msgid "Cancel"
-msgstr "لغو"
+#: src/window-commands.c:1938
+msgid "_Replace"
+msgstr "_جای‌گزینی"
 
-#: src/window-commands.c:1901
-msgid "Replace"
-msgstr "جای‌گزینی"
-
-#: src/window-commands.c:1905
-msgid ""
-"An application with the same name already exists. Replacing it will overwrite it."
-msgstr ""
-"برنامه‌ای با این نام از قبل موجود است. جای‌گزینی آن باعث رونویسی اطلاعات خواهد شد."
-
-#: src/window-commands.c:2118 src/window-commands.c:2174
-msgid "Save"
-msgstr "ذخیره"
-
-#: src/window-commands.c:2139
+#: src/window-commands.c:2134
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2144
+#: src/window-commands.c:2138
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2195
+#: src/window-commands.c:2184
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2699
-msgid "Enable caret browsing mode?"
-msgstr "به‌کار انداختن حالت مرور با هشتک؟"
+#: src/window-commands.c:2683
+msgid "Enable Caret Browsing Mode?"
+msgstr "به‌کار انداختن حالت مرور با کرت؟"
 
-#: src/window-commands.c:2702
+#: src/window-commands.c:2684
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you want "
@@ -3748,9 +3784,134 @@ msgstr ""
 "شونده را در صفحهٔ وب می‌گذارد، تا به شما اجازه دهد بوسیلهٔ صفحهٔ کلید خود در صفحه "
 "جابجا شوید. آیا مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: src/window-commands.c:2705
+#: src/window-commands.c:2689
 msgid "_Enable"
 msgstr "_به کار انداختن"
+
+#~ msgid "Web browser for GNOME"
+#~ msgstr "مرورگر وب برای گنوم"
+
+#~ msgid "Applications"
+#~ msgstr "برنامه‌ها"
+
+#, c-format
+#~ msgid "From: %s"
+#~ msgstr "از: %s"
+
+#~ msgid "Open"
+#~ msgstr "گشودن"
+
+#, c-format
+#~ msgid "Do you want to save your password for “%s”?"
+#~ msgstr "آیا می‌خواهید گذرواژه‌تان را برای «%s» ذخیره کنید؟"
+
+#~ msgid "_Kill"
+#~ msgstr "_کشتن"
+
+#, c-format
+#~ msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
+#~ msgstr "می‌خواهید بگذارید %s هنگام مرور %s از کوکی‌ها استفاده کند؟"
+
+#, c-format
+#~ msgid "This will allow “%s” to track your activity."
+#~ msgstr "می‌گذارد %s فعّالیت‌هایتان را ردیابی کند."
+
+#~ msgid "_OK"
+#~ msgstr "_قبول"
+
+#, c-format
+#~ msgid "Could not display help: %s"
+#~ msgstr "نمایش راهنما ممکن نیست: %s"
+
+#~ msgid "Toggle reader mode"
+#~ msgstr "تغییر وضعیت حالت خواندن"
+
+#~ msgid "Bookmark this page"
+#~ msgstr "نشانک‌گذاری این صفحه"
+
+#~ msgid "Open Inspector for debugging Background Page"
+#~ msgstr "گشودن بازرس برای اشکال‌زدایی صفحهٔ پس‌زمینه"
+
+#~ msgid "Do you want to leave this website?"
+#~ msgstr "می‌خواهید از این پایگاه وب خارج شوید؟"
+
+#~ msgid "There are multiple tabs open."
+#~ msgstr "چندین زبانه بازند."
+
+#~ msgid "WebSQL databases"
+#~ msgstr "پایگاه داده‌های WebSQL"
+
+#~ msgid "Plugins data"
+#~ msgstr "داده‌های افزایه‌ها"
+
+#~ msgid "Reveal password"
+#~ msgstr "رونمایی گذرواژه"
+
+#~ msgid "Web Application Icon"
+#~ msgstr "نقشک برنامهٔ وب"
+
+#~ msgid "View downloads"
+#~ msgstr "دیدن بارگیری‌ها"
+
+#~ msgid "View and manage your bookmarks"
+#~ msgstr "دیدن و مدیریت نشانک‌هایتان"
+
+#~ msgid "Go back to the previous page"
+#~ msgstr "بازگشت به صفحهٔ پیشین"
+
+#~ msgid "Go forward to the next page"
+#~ msgstr "پیشروی به صفحهٔ بعدی"
+
+#~ msgid "Go to your homepage"
+#~ msgstr "رفتن به صفحهٔ خانگیتان"
+
+#~ msgid "View open pages"
+#~ msgstr "دیدن صفحه‌ّای باز"
+
+#~ msgid "No bookmarks yet?"
+#~ msgstr "هنوز هیچ نشانکی نیست؟"
+
+#~ msgid "_History"
+#~ msgstr "_تاریخچه"
+
+#~ msgid "Open Appli_cation Manager"
+#~ msgstr "گشودن مدیر _برنامه"
+
+#~ msgid "E_xtensions"
+#~ msgstr "_افزونه‌ها"
+
+#~ msgid "_Override Text Encoding…"
+#~ msgstr "_اجبار در کدگذاری متن…"
+
+#~ msgid "Import and Export"
+#~ msgstr "درون‌ریزی و برون‌ریزی"
+
+#~ msgid "Close page"
+#~ msgstr "بستن صفحه"
+
+#~ msgid "_Add…"
+#~ msgstr "_افزودن…"
+
+#~ msgid "Add some extensions to display them here."
+#~ msgstr "چند افزونه بیفزایید تا این‌جا نشان داده شوند."
+
+#, c-format
+#~ msgid ""
+#~ "A simple, clean, beautiful view of the web.\n"
+#~ "Powered by WebKitGTK %d.%d.%d"
+#~ msgstr ""
+#~ "نمایی ساده، تمیز و زیبا از وب.\n"
+#~ "قدرت‌گرفته از وب‌کیت %Id٫%Id٫%Id"
+
+#~ msgid "Do you want to reload this website?"
+#~ msgstr "می‌خواهید این پایگاه وب را دوباره بار کنید؟"
+
+#, c-format
+#~ msgid "A web application named “%s” already exists. Do you want to replace it?"
+#~ msgstr "برنامهٔ وبی با نام «%s» از پیش موجود است. می‌خواهید جایگزینش کنید؟"
+
+#~ msgid "Cancel"
+#~ msgstr "لغو"
 
 #~ msgid "You can clear stored personal data."
 #~ msgstr "می‌توانید داده‌های شخصی ذخیره شده را پاک کنید."
@@ -3894,9 +4055,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Forget the selected passwords"
 #~ msgstr "فراموشی گذرواژه‌های انتخاب شده"
-
-#~ msgid "Reveal all the passwords"
-#~ msgstr "آشکارسازی همهٔ گذرواژه‌ها"
 
 #~ msgid "Preferences"
 #~ msgstr "ترجیحات"
@@ -4135,9 +4293,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Plugins are disabled in the preferences"
 #~ msgstr "افزونه‌ها در ترجیحات از کار انداخته شده‌اند"
-
-#~ msgid "Enabled"
-#~ msgstr "فعال شده"
 
 #~ msgid "MIME type"
 #~ msgstr "نوع MIME"
@@ -4530,13 +4685,6 @@ msgstr "_به کار انداختن"
 #~ msgid "Save page as web app"
 #~ msgstr "ذخیره صفحه به عنوان برنامه وب"
 
-#~ msgctxt "shortcut window"
-#~ msgid "Bookmarks"
-#~ msgstr "نشانک‌ها"
-
-#~ msgid "Stop"
-#~ msgstr "توقف"
-
 #~ msgid "Stop current data transfer"
 #~ msgstr "توقف انتقال داده‌های جاری"
 
@@ -4573,12 +4721,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Find Pre_vious"
 #~ msgstr "پیدا کردن _قبلی"
-
-#~ msgid "Edit _Bookmarks"
-#~ msgstr "ویرایش _نشانک‌ها"
-
-#~ msgid "_Stop"
-#~ msgstr "_توقف"
 
 #~ msgid "_Normal Size"
 #~ msgstr "اندازه‌ی _عادی"
