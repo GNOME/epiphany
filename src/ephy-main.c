@@ -42,6 +42,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/resource.h>
 
 static gboolean open_in_new_window = FALSE;
 
@@ -161,6 +162,28 @@ get_startup_id (void)
   }
 
   return retval;
+}
+
+static void
+maximize_fd_limit (void)
+{
+  /* We need a relatively high number of file descriptors per web process. The
+   * default limit of 1024 will be exceeded with relatively small numbers of
+   * open tabs. Let's increase as far as we can. Note this code cannot safely
+   * go into WebKit because it will break applications that use select().
+   *
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/2010
+   */
+  struct rlimit rlim;
+
+  if (getrlimit (RLIMIT_NOFILE, &rlim) == -1) {
+    g_warning ("Failed to read file descriptor limit: %s", g_strerror (errno));
+    return;
+  }
+
+  rlim.rlim_cur = rlim.rlim_max;
+  if (setrlimit (RLIMIT_NOFILE, &rlim) == -1)
+    g_warning ("Failed to set file descriptor limit: %s", g_strerror (errno));
 }
 
 int
@@ -410,6 +433,8 @@ main (int   argc,
 
     gtk_window_set_default_icon_name (APPLICATION_ID);
   }
+
+  maximize_fd_limit ();
 
   _ephy_shell_create_instance (mode);
 
