@@ -12,9 +12,8 @@
 
   <template class="EphyExtensionView" parent="AdwBin">
     <child>
-      <object class="GtkBox" id="box">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView" id="box">
+        <child type="top">
           <object class="GtkHeaderBar" id="header_bar">
             <property name="title-widget">
               <object class="AdwWindowTitle" id="window_title"/>
