@@ -4,9 +4,8 @@
   <requires lib="libhandy" version="0.0"/>
   <template class="EphyDataView" parent="GtkWidget">
     <child>
-      <object class="GtkBox" id="box">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView" id="box">
+        <child type="top">
           <object class="GtkHeaderBar" id="header_bar">
             <property name="title-widget">
               <object class="AdwWindowTitle" id="window_title"/>
@@ -26,7 +25,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="top">
           <object class="GtkSearchBar" id="search_bar">
             <property name="search_mode_enabled">False</property>
             <property name="key-capture-widget">EphyDataView</property>
@@ -81,7 +80,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="bottom">
           <object class="GtkActionBar">
             <child type="end">
               <object class="GtkButton" id="clear_button">
