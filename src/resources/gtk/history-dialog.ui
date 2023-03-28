@@ -9,9 +9,8 @@
     <property name="destroy-with_parent">True</property>
     <property name="title" translatable="yes">History</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView">
+        <child type="top">
           <object class="GtkStack" id="header_bars_stack">
             <property name="transition-type">crossfade</property>
             <child>
@@ -54,7 +53,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="top">
           <object class="GtkSearchBar" id="search_bar">
             <property name="search_mode_enabled">False</property>
             <property name="key-capture-widget">EphyHistoryDialog</property>
@@ -129,7 +128,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="bottom">
           <object class="GtkStack" id="action_bars_stack">
             <property name="transition-type">crossfade</property>
             <child>
