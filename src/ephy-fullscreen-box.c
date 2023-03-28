@@ -29,7 +29,7 @@
 struct _EphyFullscreenBox {
   GtkWidget parent_instance;
 
-  AdwFlap *flap;
+  AdwToolbarView *toolbar_view;
 
   gboolean fullscreen;
   gboolean autohide;
@@ -39,19 +39,16 @@ struct _EphyFullscreenBox {
   GtkWidget *last_focus;
   gdouble last_y;
   gboolean is_touch;
+
+  GList *headers;
 };
 
-static void ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                      ephy_fullscreen_box_buildable_init))
+G_DEFINE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
   PROP_FULLSCREEN,
   PROP_AUTOHIDE,
-  PROP_TITLEBAR,
   PROP_CONTENT,
   PROP_REVEALED,
   LAST_PROP
@@ -59,15 +56,12 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
-/* Ignore AdwFlap deprecations throughout entire file */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 static void
 show_ui (EphyFullscreenBox *self)
 {
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
-  adw_flap_set_reveal_flap (self->flap, TRUE);
+  adw_toolbar_view_set_reveal_top_bars (self->toolbar_view, TRUE);
 }
 
 static void
@@ -78,8 +72,8 @@ hide_ui (EphyFullscreenBox *self)
   if (!self->fullscreen)
     return;
 
-  adw_flap_set_reveal_flap (self->flap, FALSE);
-  gtk_widget_grab_focus (GTK_WIDGET (self->flap));
+  adw_toolbar_view_set_reveal_top_bars (self->toolbar_view, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->toolbar_view));
 }
 
 static void
@@ -93,7 +87,7 @@ hide_timeout_cb (EphyFullscreenBox *self)
 static void
 start_hide_timeout (EphyFullscreenBox *self)
 {
-  if (!adw_flap_get_reveal_flap (self->flap))
+  if (!adw_toolbar_view_get_reveal_top_bars (self->toolbar_view))
     return;
 
   if (self->timeout_id)
@@ -127,13 +121,21 @@ is_descendant_of (GtkWidget *widget,
 static double
 get_titlebar_area_height (EphyFullscreenBox *self)
 {
-  gdouble height;
+  double height = adw_toolbar_view_get_top_bar_height (self->toolbar_view);
 
-  height = gtk_widget_get_allocated_height (adw_flap_get_flap (self->flap));
-  height *= adw_flap_get_reveal_progress (self->flap);
-  height = MAX (height, SHOW_HEADERBAR_DISTANCE_PX);
+  return MAX (height, SHOW_HEADERBAR_DISTANCE_PX);
+}
 
-  return height;
+static gboolean
+is_focusing_titlebar (EphyFullscreenBox *self)
+{
+  GList *l;
+
+  for (l = self->headers; l; l = l->next)
+    if (is_descendant_of (self->last_focus, l->data))
+      return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -149,8 +151,7 @@ update (EphyFullscreenBox *self,
     return;
   }
 
-  if (self->last_focus && is_descendant_of (self->last_focus,
-                                            adw_flap_get_flap (self->flap)))
+  if (self->last_focus && is_focusing_titlebar (self))
     show_ui (self);
   else if (hide_immediately)
     hide_ui (self);
@@ -267,16 +268,12 @@ ephy_fullscreen_box_get_property (GObject    *object,
       g_value_set_boolean (value, ephy_fullscreen_box_get_autohide (self));
       break;
 
-    case PROP_TITLEBAR:
-      g_value_set_object (value, ephy_fullscreen_box_get_titlebar (self));
-      break;
-
     case PROP_CONTENT:
       g_value_set_object (value, ephy_fullscreen_box_get_content (self));
       break;
 
     case PROP_REVEALED:
-      g_value_set_boolean (value, adw_flap_get_reveal_flap (self->flap));
+      g_value_set_boolean (value, adw_toolbar_view_get_reveal_top_bars (self->toolbar_view));
       break;
 
     default:
@@ -301,10 +298,6 @@ ephy_fullscreen_box_set_property (GObject      *object,
       ephy_fullscreen_box_set_autohide (self, g_value_get_boolean (value));
       break;
 
-    case PROP_TITLEBAR:
-      ephy_fullscreen_box_set_titlebar (self, g_value_get_object (value));
-      break;
-
     case PROP_CONTENT:
       ephy_fullscreen_box_set_content (self, g_value_get_object (value));
       break;
@@ -319,10 +312,12 @@ ephy_fullscreen_box_dispose (GObject *object)
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
 
-  if (self->flap) {
-    gtk_widget_unparent (GTK_WIDGET (self->flap));
-    self->flap = NULL;
+  if (self->toolbar_view) {
+    gtk_widget_unparent (GTK_WIDGET (self->toolbar_view));
+    self->toolbar_view = NULL;
   }
+
+  g_clear_pointer (&self->headers, g_list_free);
 
   G_OBJECT_CLASS (ephy_fullscreen_box_parent_class)->dispose (object);
 }
@@ -352,12 +347,6 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  props[PROP_TITLEBAR] =
-    g_param_spec_object ("titlebar",
-                         NULL, NULL,
-                         GTK_TYPE_WIDGET,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
   props[PROP_CONTENT] =
     g_param_spec_object ("content",
                          NULL, NULL,
@@ -379,27 +368,21 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
 static void
 ephy_fullscreen_box_init (EphyFullscreenBox *self)
 {
-  AdwFlap *flap;
+  AdwToolbarView *toolbar_view;
   GtkEventController *controller;
   GtkGesture *gesture;
 
   self->autohide = TRUE;
 
-  flap = ADW_FLAP (adw_flap_new ());
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (flap), GTK_ORIENTATION_VERTICAL);
-  adw_flap_set_flap_position (flap, GTK_PACK_START);
-  adw_flap_set_fold_policy (flap, ADW_FLAP_FOLD_POLICY_NEVER);
-  adw_flap_set_locked (flap, TRUE);
-  adw_flap_set_modal (flap, FALSE);
-  adw_flap_set_swipe_to_open (flap, FALSE);
-  adw_flap_set_swipe_to_close (flap, FALSE);
-  adw_flap_set_transition_type (flap, ADW_FLAP_TRANSITION_TYPE_OVER);
+  toolbar_view = ADW_TOOLBAR_VIEW (adw_toolbar_view_new ());
+  adw_toolbar_view_set_top_bar_style (toolbar_view, ADW_TOOLBAR_RAISED);
+  adw_toolbar_view_set_bottom_bar_style (toolbar_view, ADW_TOOLBAR_RAISED);
 
-  g_signal_connect_object (flap, "notify::reveal-flap",
+  g_signal_connect_object (toolbar_view, "notify::reveal-top-bars",
                            G_CALLBACK (notify_reveal_cb), self, G_CONNECT_SWAPPED);
 
-  gtk_widget_set_parent (GTK_WIDGET (flap), GTK_WIDGET (self));
-  self->flap = flap;
+  gtk_widget_set_parent (GTK_WIDGET (toolbar_view), GTK_WIDGET (self));
+  self->toolbar_view = toolbar_view;
 
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
@@ -416,26 +399,6 @@ ephy_fullscreen_box_init (EphyFullscreenBox *self)
   g_signal_connect_object (gesture, "pressed",
                            G_CALLBACK (press_cb), self, G_CONNECT_SWAPPED);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-}
-
-static void
-ephy_fullscreen_box_buildable_add_child (GtkBuildable *buildable,
-                                         GtkBuilder   *builder,
-                                         GObject      *child,
-                                         const gchar  *type)
-{
-  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (buildable);
-
-  if (!g_strcmp0 (type, "titlebar"))
-    ephy_fullscreen_box_set_titlebar (self, GTK_WIDGET (child));
-  else
-    ephy_fullscreen_box_set_content (self, GTK_WIDGET (child));
-}
-
-static void
-ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface)
-{
-  iface->add_child = ephy_fullscreen_box_buildable_add_child;
 }
 
 EphyFullscreenBox *
@@ -468,13 +431,12 @@ ephy_fullscreen_box_set_fullscreen (EphyFullscreenBox *self,
   if (!self->autohide)
     return;
 
-  if (fullscreen) {
-    adw_flap_set_fold_policy (self->flap, ADW_FLAP_FOLD_POLICY_ALWAYS);
+  adw_toolbar_view_set_extend_content_to_top_edge (self->toolbar_view, fullscreen);
+
+  if (fullscreen)
     update (self, FALSE);
-  } else {
-    adw_flap_set_fold_policy (self->flap, ADW_FLAP_FOLD_POLICY_NEVER);
+  else
     show_ui (self);
-  }
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_FULLSCREEN]);
 }
@@ -512,34 +474,11 @@ ephy_fullscreen_box_set_autohide (EphyFullscreenBox *self,
 }
 
 GtkWidget *
-ephy_fullscreen_box_get_titlebar (EphyFullscreenBox *self)
-{
-  g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
-
-  return adw_flap_get_flap (self->flap);
-}
-
-void
-ephy_fullscreen_box_set_titlebar (EphyFullscreenBox *self,
-                                  GtkWidget         *titlebar)
-{
-  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (titlebar == NULL || GTK_IS_WIDGET (titlebar));
-
-  if (adw_flap_get_flap (self->flap) == titlebar)
-    return;
-
-  adw_flap_set_flap (self->flap, titlebar);
-
-  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TITLEBAR]);
-}
-
-GtkWidget *
 ephy_fullscreen_box_get_content (EphyFullscreenBox *self)
 {
   g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
 
-  return adw_flap_get_content (self->flap);
+  return adw_toolbar_view_get_content (self->toolbar_view);
 }
 
 void
@@ -549,13 +488,32 @@ ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
   g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
   g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
 
-  if (adw_flap_get_content (self->flap) == content)
+  if (ephy_fullscreen_box_get_content (self) == content)
     return;
 
-  adw_flap_set_content (self->flap, content);
+  adw_toolbar_view_set_content (self->toolbar_view, content);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
 }
 
-/* Ignore AdwFlap deprecations throughout entire file */
-G_GNUC_END_IGNORE_DEPRECATIONS
+void
+ephy_fullscreen_box_add_top_bar (EphyFullscreenBox *self,
+                                 GtkWidget         *child)
+{
+  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  adw_toolbar_view_add_top_bar (self->toolbar_view, child);
+
+  self->headers = g_list_prepend (self->headers, child);
+}
+
+void
+ephy_fullscreen_box_add_bottom_bar (EphyFullscreenBox *self,
+                                    GtkWidget         *child)
+{
+  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  adw_toolbar_view_add_bottom_bar (self->toolbar_view, child);
+}

@@ -38,12 +38,13 @@ gboolean           ephy_fullscreen_box_get_autohide   (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_autohide   (EphyFullscreenBox *self,
                                                        gboolean           autohide);
 
-GtkWidget         *ephy_fullscreen_box_get_titlebar   (EphyFullscreenBox *self);
-void               ephy_fullscreen_box_set_titlebar   (EphyFullscreenBox *self,
-                                                       GtkWidget         *titlebar);
-
 GtkWidget         *ephy_fullscreen_box_get_content    (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_content    (EphyFullscreenBox *self,
                                                        GtkWidget         *content);
+
+void               ephy_fullscreen_box_add_top_bar    (EphyFullscreenBox *self,
+                                                       GtkWidget         *child);
+void               ephy_fullscreen_box_add_bottom_bar (EphyFullscreenBox *self,
+                                                       GtkWidget         *child);
 
 G_END_DECLS
