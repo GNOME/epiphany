@@ -93,14 +93,14 @@ flatpak aarch64:
 flatpak stable:
   extends: '.flatpak'
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dsoup2=enabled'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
     - gnome-*
 
 flatpak aarch64 stable:
   extends: '.flatpak@aarch64'
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dsoup2=enabled'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
     - gnome-*
 
