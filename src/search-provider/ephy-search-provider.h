@@ -22,6 +22,8 @@
 
 #include "ephy-shell-search-provider-generated.h"
 
+#include "ephy-embed-shell.h"
+
 #include <glib-object.h>
 #include <gio/gio.h>
 
@@ -29,7 +31,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_PROVIDER (ephy_search_provider_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphySearchProvider, ephy_search_provider, EPHY, SEARCH_PROVIDER, GApplication)
+G_DECLARE_FINAL_TYPE (EphySearchProvider, ephy_search_provider, EPHY, SEARCH_PROVIDER, EphyEmbedShell)
 
 EphySearchProvider *ephy_search_provider_new (void);
 

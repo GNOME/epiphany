@@ -49,10 +49,10 @@ struct _EphySearchProvider {
 };
 
 struct _EphySearchProviderClass {
-  GApplicationClass parent_class;
+  EphyEmbedShellClass parent_class;
 };
 
-G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_APPLICATION)
+G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, EPHY_TYPE_EMBED_SHELL)
 
 #define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 
@@ -431,5 +431,6 @@ ephy_search_provider_new (void)
 
   return g_object_new (EPHY_TYPE_SEARCH_PROVIDER,
                        "application-id", app_id,
+                       "mode", EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER,
                        NULL);
 }
