@@ -48,8 +48,6 @@ main (gint    argc,
     return 1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER);
-
   search_provider = ephy_search_provider_new ();
   status = g_application_run (G_APPLICATION (search_provider), argc, argv);
   g_object_unref (search_provider);
