@@ -1987,24 +1987,29 @@ window_cmd_save_as_application (GSimpleAction *action,
 }
 
 static char *
-get_suggested_filename (EphyEmbed *embed)
+get_suggested_filename (EphyEmbed  *embed,
+                        const char *file_extension)
 {
   EphyWebView *view;
   const char *suggested_filename;
   const char *mimetype;
+  const char *page_title;
   WebKitURIResponse *response;
   WebKitWebResource *web_resource;
   g_autoptr (GUri) uri = NULL;
+  g_autofree char *filename = NULL;
 
   view = ephy_embed_get_web_view (embed);
   web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
   response = webkit_web_resource_get_response (web_resource);
   mimetype = webkit_uri_response_get_mime_type (response);
   uri = g_uri_parse (webkit_web_resource_get_uri (web_resource), G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  page_title = ephy_embed_get_title (embed);
+  filename = g_strconcat (page_title, file_extension, NULL);
 
   if (g_ascii_strncasecmp (mimetype, "text/html", 9) == 0 && g_strcmp0 (g_uri_get_scheme (uri), EPHY_VIEW_SOURCE_SCHEME) != 0) {
     /* Web Title will be used as suggested filename */
-    return g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
+    return g_steal_pointer (&filename);
   }
 
   suggested_filename = webkit_uri_response_get_suggested_filename (response);
@@ -2018,7 +2023,7 @@ get_suggested_filename (EphyEmbed *embed)
       return g_strdup (path);
   }
 
-  return suggested_filename ? g_strdup (suggested_filename) : g_strdup ("index.html");
+  return suggested_filename ? g_strdup (suggested_filename) : g_steal_pointer (&filename);
 }
 
 
@@ -2138,7 +2143,7 @@ window_cmd_save_as (GSimpleAction *action,
   g_list_store_append (filters, mthtml_filter);
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
+  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed, ".mhtml"));
   gtk_file_dialog_set_initial_name (dialog, suggested_filename);
 
   gtk_file_dialog_save (dialog,
@@ -2183,7 +2188,7 @@ window_cmd_screenshot (GSimpleAction *action,
   g_list_store_append (filters, filter);
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".png", NULL);
+  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed, ".png"));
   gtk_file_dialog_set_initial_name (dialog, suggested_filename);
 
   gtk_file_dialog_save (dialog,
