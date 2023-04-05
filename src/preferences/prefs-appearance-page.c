@@ -46,9 +46,9 @@ struct _PrefsAppearancePage {
   GtkWidget *reader_mode_color_scheme;
 
   /* Style */
-  GtkWidget *css_switch;
+  GtkWidget *css_row;
   GtkWidget *css_edit_button;
-  GtkWidget *js_switch;
+  GtkWidget *js_row;
   GtkWidget *js_edit_button;
   GtkWidget *default_zoom_spin_button;
 };
@@ -305,7 +305,7 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
   /* ======================================================================== */
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_USER_CSS,
-                   appearance_page->css_switch,
+                   appearance_page->css_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -322,7 +322,7 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_USER_JS,
-                   appearance_page->js_switch,
+                   appearance_page->js_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -361,9 +361,9 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, reader_mode_color_scheme);
 
   /* Style */
-  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, css_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, css_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, css_edit_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_edit_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, default_zoom_spin_button);
 

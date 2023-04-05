@@ -8,15 +8,9 @@
       <object class="AdwPreferencesGroup" id="safe_browsing_group">
         <property name="title" translatable="yes">Web Safety</property>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">enable_safe_browsing_switch</property>
+          <object class="AdwSwitchRow" id="enable_safe_browsing_row">
             <property name="title" translatable="yes">Block Dangerous Web_sites</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkSwitch" id="enable_safe_browsing_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
@@ -25,28 +19,16 @@
       <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Web Tracking</property>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">enable_itp_switch</property>
+          <object class="AdwSwitchRow" id="enable_itp_row">
             <property name="title" translatable="yes">Intelligent _Tracking Prevention</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkSwitch" id="enable_itp_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">enable_website_data_storage_switch</property>
+          <object class="AdwSwitchRow" id="enable_website_data_storage_row">
             <property name="subtitle" translatable="yes">Allow websites to store cookies, databases, and local storage data.</property>
             <property name="title" translatable="yes">_Website Data Storage</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkSwitch" id="enable_website_data_storage_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
@@ -55,16 +37,10 @@
       <object class="AdwPreferencesGroup" id="search_suggestions_box">
         <property name="title" translatable="yes">Search Suggestions</property>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">enable_google_search_suggestions_switch</property>
+          <object class="AdwSwitchRow" id="enable_google_search_suggestions_row">
             <property name="subtitle" translatable="yes">Enable search suggestions in the URL entry.</property>
             <property name="title" translatable="yes">_Google Search Suggestions</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkSwitch" id="enable_google_search_suggestions_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
@@ -104,15 +80,9 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">remember_passwords_switch</property>
+          <object class="AdwSwitchRow" id="remember_passwords_row">
             <property name="title" translatable="yes">_Remember Passwords</property>
             <property name="use_underline">True</property>
-            <child>
-              <object class="GtkSwitch" id="remember_passwords_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>

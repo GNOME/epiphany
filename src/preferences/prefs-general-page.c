@@ -54,8 +54,8 @@ struct _PrefsGeneralPage {
   GtkWidget *webapp_title_row;
 
   /* Web Content */
-  GtkWidget *adblock_allow_switch;
-  GtkWidget *popups_allow_switch;
+  GtkWidget *adblock_allow_row;
+  GtkWidget *popups_allow_row;
 
   /* Homepage */
   GtkWidget *homepage_box;
@@ -66,7 +66,7 @@ struct _PrefsGeneralPage {
 
   /* Downloads */
   GtkWidget *download_box;
-  GtkWidget *ask_on_download_switch;
+  GtkWidget *ask_on_download_row;
   GtkWidget *download_folder_row;
   GtkWidget *download_folder_label;
 
@@ -75,19 +75,18 @@ struct _PrefsGeneralPage {
 
   /* Session */
   GtkWidget *session_box;
-  GtkWidget *start_in_incognito_mode_switch;
+  GtkWidget *start_in_incognito_mode_row;
   GtkWidget *restore_session_row;
-  GtkWidget *restore_session_switch;
 
   /* Browsing */
   GtkWidget *browsing_box;
-  GtkWidget *enable_mouse_gesture_switch;
+  GtkWidget *enable_mouse_gesture_row;
   GtkWidget *enable_switch_to_new_tab;
 
   /* Languages */
   AdwPreferencesGroup *lang_group;
   GtkWidget *lang_listbox;
-  GtkWidget *enable_spell_checking_switch;
+  GtkWidget *enable_spell_checking_row;
 
   GtkWindow *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
@@ -910,8 +909,8 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_title_row);
 
   /* Web Content */
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, adblock_allow_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, popups_allow_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, adblock_allow_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, popups_allow_row);
 
   /* Homepage */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, homepage_box);
@@ -922,7 +921,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 
   /* Downloads */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, ask_on_download_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, ask_on_download_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_label);
 
@@ -931,19 +930,18 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, start_in_incognito_mode_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, start_in_incognito_mode_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, restore_session_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, restore_session_switch);
 
   /* Browsing */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, browsing_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_mouse_gesture_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_mouse_gesture_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_switch_to_new_tab);
 
   /* Languages */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, lang_group);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, lang_listbox);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_spell_checking_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_spell_checking_row);
 
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
@@ -1007,13 +1005,13 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   general_page->adblock_allow_switch,
+                   general_page->adblock_allow_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_POPUPS,
-                   general_page->popups_allow_switch,
+                   general_page->popups_allow_row,
                    "active",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 
@@ -1084,7 +1082,7 @@ setup_general_page (PrefsGeneralPage *general_page)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
-                   general_page->ask_on_download_switch,
+                   general_page->ask_on_download_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -1093,7 +1091,7 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   g_settings_bind (settings,
                    EPHY_PREFS_START_IN_INCOGNITO_MODE,
-                   general_page->start_in_incognito_mode_switch,
+                   general_page->start_in_incognito_mode_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -1105,7 +1103,7 @@ setup_general_page (PrefsGeneralPage *general_page)
 
   g_settings_bind_with_mapping (settings,
                                 EPHY_PREFS_RESTORE_SESSION_POLICY,
-                                general_page->restore_session_switch,
+                                general_page->restore_session_row,
                                 "active",
                                 G_SETTINGS_BIND_DEFAULT,
                                 restore_session_get_mapping,
@@ -1117,7 +1115,7 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_MOUSE_GESTURES,
-                   general_page->enable_mouse_gesture_switch,
+                   general_page->enable_mouse_gesture_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -1132,7 +1130,7 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-                   general_page->enable_spell_checking_switch,
+                   general_page->enable_spell_checking_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 

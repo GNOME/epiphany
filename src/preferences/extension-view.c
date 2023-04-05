@@ -36,7 +36,7 @@ struct _EphyExtensionView {
   GtkWidget *version_label;
   GtkWidget *homepage_row;
 
-  GtkSwitch *enabled_switch;
+  AdwSwitchRow *enabled_row;
 
   GMenuModel *menu_model;
 
@@ -96,14 +96,12 @@ on_homepage_activated (AdwActionRow *row,
 }
 
 static void
-on_toggle_extension_enabled (EphyExtensionView *view,
-                             GParamSpec        *pspec,
-                             GtkSwitch         *toggle)
+on_toggle_extension_enabled (EphyExtensionView *view)
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   ephy_web_extension_manager_set_active (manager, view->web_extension,
-                                         gtk_switch_get_active (toggle));
+                                         adw_switch_row_get_active (view->enabled_row));
 }
 
 static void
@@ -166,7 +164,8 @@ update (EphyExtensionView *self)
   if (*ephy_web_extension_get_homepage_url (self->web_extension))
     gtk_widget_set_visible (self->homepage_row, TRUE);
 
-  gtk_switch_set_active (self->enabled_switch, ephy_web_extension_manager_is_active (manager, self->web_extension));
+  adw_switch_row_set_active (self->enabled_row,
+                             ephy_web_extension_manager_is_active (manager, self->web_extension));
 
   /* Add actions */
   simple_action_group = g_simple_action_group_new ();
@@ -259,7 +258,7 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, version_row);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, version_label);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, homepage_row);
-  gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, enabled_switch);
+  gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, enabled_row);
 
   gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);

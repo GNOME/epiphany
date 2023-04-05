@@ -93,14 +93,8 @@
       <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Style</property>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">css_switch</property>
+          <object class="AdwSwitchRow" id="css_row">
             <property name="title" translatable="yes">Use Custom Stylesheet</property>
-            <child>
-              <object class="GtkSwitch" id="css_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
             <child>
               <object class="GtkButton" id="css_edit_button">
                 <property name="valign">center</property>
@@ -113,14 +107,8 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable_widget">js_switch</property>
+          <object class="AdwSwitchRow" id="js_row">
             <property name="title" translatable="yes">Use Custom JavaScript</property>
-            <child>
-              <object class="GtkSwitch" id="js_switch">
-                <property name="valign">center</property>
-              </object>
-            </child>
             <child>
               <object class="GtkButton" id="js_edit_button">
                 <property name="valign">center</property>

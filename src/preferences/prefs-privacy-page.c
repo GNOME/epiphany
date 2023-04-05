@@ -38,18 +38,18 @@ struct _PrefsPrivacyPage {
 
   /* Web Safety */
   GtkWidget *safe_browsing_group;
-  GtkWidget *enable_safe_browsing_switch;
+  GtkWidget *enable_safe_browsing_row;
 
   /* Web Tracking */
-  GtkWidget *enable_itp_switch;
-  GtkWidget *enable_website_data_storage_switch;
+  GtkWidget *enable_itp_row;
+  GtkWidget *enable_website_data_storage_row;
 
   /* Search Suggestions */
   GtkWidget *search_suggestions_box;
-  GtkWidget *enable_google_search_suggestions_switch;
+  GtkWidget *enable_google_search_suggestions_row;
 
   /* Passwords */
-  GtkWidget *remember_passwords_switch;
+  GtkWidget *remember_passwords_row;
 };
 
 static guint signals[LAST_SIGNAL];
@@ -81,7 +81,7 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
-                   privacy_page->enable_safe_browsing_switch,
+                   privacy_page->enable_safe_browsing_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -93,13 +93,13 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_ITP,
-                   privacy_page->enable_itp_switch,
+                   privacy_page->enable_itp_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
-                   privacy_page->enable_website_data_storage_switch,
+                   privacy_page->enable_website_data_storage_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -108,7 +108,7 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
   /* ======================================================================== */
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
-                   privacy_page->remember_passwords_switch,
+                   privacy_page->remember_passwords_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -117,7 +117,7 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
   /* ======================================================================== */
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS,
-                   privacy_page->enable_google_search_suggestions_switch,
+                   privacy_page->enable_google_search_suggestions_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 }
@@ -146,18 +146,18 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
 
   /* Web Safety */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, safe_browsing_group);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_row);
 
   /* Web Tracking */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_website_data_storage_row);
 
   /* Search Suggestions */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, search_suggestions_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_row);
 
   /* Passwords */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_row);
 
   /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);

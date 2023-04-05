@@ -80,15 +80,9 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow">
-                    <property name="activatable_widget">enabled_switch</property>
+                  <object class="AdwSwitchRow" id="enabled_row">
                     <property name="title" translatable="yes">Enabled</property>
-                    <child>
-                      <object class="GtkSwitch" id="enabled_switch">
-                        <property name="valign">center</property>
-                        <signal name="notify::active" handler="on_toggle_extension_enabled" object="EphyExtensionView" swapped="yes"/>
-                      </object>
-                    </child>
+                    <signal name="notify::active" handler="on_toggle_extension_enabled" swapped="yes"/>
                   </object>
                 </child>
               </object>

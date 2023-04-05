@@ -52,51 +52,27 @@
           <object class="AdwPreferencesGroup" id="sync_options_group">
             <property name="title" translatable="yes">Sync Options</property>
             <child>
-              <object class="AdwActionRow">
-                <property name="activatable_widget">sync_bookmarks_switch</property>
+              <object class="AdwSwitchRow" id="sync_bookmarks_row">
                 <property name="title" translatable="yes">Sync _Bookmarks</property>
                 <property name="use_underline">True</property>
-                <child>
-                  <object class="GtkSwitch" id="sync_bookmarks_switch">
-                    <property name="valign">center</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
-                <property name="activatable_widget">sync_passwords_switch</property>
+              <object class="AdwSwitchRow" id="sync_passwords_row">
                 <property name="title" translatable="yes">Sync _Passwords</property>
                 <property name="use_underline">True</property>
-                <child>
-                  <object class="GtkSwitch" id="sync_passwords_switch">
-                    <property name="valign">center</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
-                <property name="activatable_widget">sync_history_switch</property>
+              <object class="AdwSwitchRow" id="sync_history_row">
                 <property name="title" translatable="yes">Sync _History</property>
                 <property name="use_underline">True</property>
-                <child>
-                  <object class="GtkSwitch" id="sync_history_switch">
-                    <property name="valign">center</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
-              <object class="AdwActionRow">
-                <property name="activatable_widget">sync_open_tabs_switch</property>
+              <object class="AdwSwitchRow" id="sync_open_tabs_row">
                 <property name="title" translatable="yes">Sync Open _Tabs</property>
                 <property name="use_underline">True</property>
-                <child>
-                  <object class="GtkSwitch" id="sync_open_tabs_switch">
-                    <property name="valign">center</property>
-                  </object>
-                </child>
                 <child>
                   <object class="GtkButton" id="synced_tabs_button">
                     <property name="label" translatable="yes">S_ynced tabs</property>
@@ -186,3 +162,4 @@
     </widgets>
   </object>
 </interface>
+
