@@ -37,7 +37,7 @@ struct _EphyTabView {
   AdwTabPage *current_page;
 };
 
-G_DEFINE_TYPE (EphyTabView, ephy_tab_view, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyTabView, ephy_tab_view, ADW_TYPE_BIN)
 
 enum {
   PROP_0,

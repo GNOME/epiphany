@@ -62,7 +62,7 @@ struct _EphySyncService {
   gboolean is_signing_in;
 };
 
-G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 enum {
   UID,

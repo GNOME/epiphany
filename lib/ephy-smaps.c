@@ -32,7 +32,7 @@ struct _EphySMaps {
   GRegex *detail;
 };
 
-G_DEFINE_TYPE (EphySMaps, ephy_smaps, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphySMaps, ephy_smaps, G_TYPE_OBJECT)
 
 typedef struct {
   char *start;

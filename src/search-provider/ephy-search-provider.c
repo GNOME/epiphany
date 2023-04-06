@@ -52,7 +52,7 @@ struct _EphySearchProviderClass {
   EphyEmbedShellClass parent_class;
 };
 
-G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, EPHY_TYPE_EMBED_SHELL)
+G_DEFINE_FINAL_TYPE (EphySearchProvider, ephy_search_provider, EPHY_TYPE_EMBED_SHELL)
 
 #define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 

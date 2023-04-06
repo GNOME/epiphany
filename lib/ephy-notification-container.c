@@ -29,7 +29,7 @@ struct _EphyNotificationContainer {
   GtkWidget *box;
 };
 
-G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, ADW_TYPE_BIN);
+G_DEFINE_FINAL_TYPE (EphyNotificationContainer, ephy_notification_container, ADW_TYPE_BIN);
 
 static EphyNotificationContainer *notification_container = NULL;
 

@@ -102,7 +102,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyHistoryService, ephy_history_service, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (EphyHistoryService, ephy_history_service, G_TYPE_OBJECT);
 
 static void
 ephy_history_service_set_property (GObject      *object,

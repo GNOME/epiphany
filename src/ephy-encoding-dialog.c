@@ -70,7 +70,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_WINDOW)
 
 static void
 select_encoding_row (GtkListBox   *list_box,

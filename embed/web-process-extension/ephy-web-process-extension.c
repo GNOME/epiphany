@@ -61,7 +61,7 @@ struct _EphyWebProcessExtension {
   GHashTable *translation_table;
 };
 
-G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
 static void
 web_page_will_submit_form (WebKitWebPage *web_page,

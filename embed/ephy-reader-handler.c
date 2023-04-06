@@ -39,7 +39,7 @@ struct _EphyReaderHandler {
   GList *outstanding_requests;
 };
 
-G_DEFINE_TYPE (EphyReaderHandler, ephy_reader_handler, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyReaderHandler, ephy_reader_handler, G_TYPE_OBJECT)
 
 typedef struct {
   EphyReaderHandler *source_handler;

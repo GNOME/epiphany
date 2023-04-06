@@ -34,7 +34,7 @@ struct _EphyWebappAdditionalURLsDialog {
   GActionGroup *action_group;
 };
 
-G_DEFINE_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, GTK_TYPE_WINDOW)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static gboolean

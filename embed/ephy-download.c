@@ -64,7 +64,7 @@ struct _EphyDownload {
   gboolean was_moved;
 };
 
-G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

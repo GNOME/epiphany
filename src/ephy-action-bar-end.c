@@ -55,7 +55,7 @@ struct _EphyActionBarEnd {
   guint downloads_button_attention_timeout_id;
 };
 
-G_DEFINE_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
 
 static void set_browser_actions (EphyActionBarEnd *action_bar_end,
                                  GListStore       *browser_actions);

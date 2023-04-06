@@ -39,7 +39,7 @@ struct _EphySQLiteStatement {
   EphySQLiteConnection *connection;
 };
 
-G_DEFINE_TYPE (EphySQLiteStatement, ephy_sqlite_statement, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (EphySQLiteStatement, ephy_sqlite_statement, G_TYPE_OBJECT);
 
 static void
 ephy_sqlite_statement_set_property (GObject      *object,

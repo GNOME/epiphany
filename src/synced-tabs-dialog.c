@@ -42,7 +42,7 @@ struct _SyncedTabsDialog {
   GCancellable *cancellable;
 };
 
-G_DEFINE_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_WINDOW)
 
 enum {
   ICON_COLUMN,

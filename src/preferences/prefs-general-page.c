@@ -94,7 +94,7 @@ struct _PrefsGeneralPage {
   GCancellable *cancellable;
 };
 
-G_DEFINE_TYPE (PrefsGeneralPage, prefs_general_page, ADW_TYPE_PREFERENCES_PAGE)
+G_DEFINE_FINAL_TYPE (PrefsGeneralPage, prefs_general_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
 prefs_general_page_dispose (GObject *object)

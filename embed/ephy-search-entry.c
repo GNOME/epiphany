@@ -62,11 +62,11 @@ static int signals[LAST_SIGNAL] = {};
 static void ephy_search_entry_editable_init (GtkEditableInterface *iface);
 static void ephy_search_entry_accessible_init (GtkAccessibleInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphySearchEntry, ephy_search_entry, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-                                                ephy_search_entry_editable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
-                                                ephy_search_entry_accessible_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphySearchEntry, ephy_search_entry, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+                                                      ephy_search_entry_editable_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                      ephy_search_entry_accessible_init))
 
 static void
 update_matches (EphySearchEntry *self)

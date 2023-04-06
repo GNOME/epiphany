@@ -45,7 +45,7 @@ struct _EphyBookmarksPopover {
   EphyBookmarksManager *manager;
 };
 
-G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"

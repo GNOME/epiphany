@@ -61,7 +61,7 @@ struct _EphyCertificateDialog {
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_WINDOW)
 
 static char *
 bytes_to_display (GBytes *bytes)

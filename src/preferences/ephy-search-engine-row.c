@@ -42,7 +42,7 @@ struct _EphySearchEngineRow {
   EphySearchEngineManager *manager;
 };
 
-G_DEFINE_TYPE (EphySearchEngineRow, ephy_search_engine_row, ADW_TYPE_EXPANDER_ROW)
+G_DEFINE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, ADW_TYPE_EXPANDER_ROW)
 
 enum {
   PROP_0,

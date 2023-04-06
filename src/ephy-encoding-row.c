@@ -44,7 +44,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyEncodingRow, ephy_encoding_row, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyEncodingRow, ephy_encoding_row, GTK_TYPE_BOX)
 
 void
 ephy_encoding_row_set_selected (EphyEncodingRow *row,

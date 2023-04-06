@@ -36,7 +36,7 @@ struct _EphyViewSourceHandler {
   GList *outstanding_requests;
 };
 
-G_DEFINE_TYPE (EphyViewSourceHandler, ephy_view_source_handler, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyViewSourceHandler, ephy_view_source_handler, G_TYPE_OBJECT)
 
 typedef struct {
   EphyViewSourceHandler *source_handler;

@@ -70,7 +70,7 @@ struct _EphyHeaderBar {
   guint popover_hide_timeout_id;
 };
 
-G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, ADW_TYPE_BIN)
 
 static void
 ephy_header_bar_set_property (GObject      *object,

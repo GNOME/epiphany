@@ -54,7 +54,7 @@ struct _PrefsPrivacyPage {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (PrefsPrivacyPage, prefs_privacy_page, ADW_TYPE_PREFERENCES_PAGE)
+G_DEFINE_FINAL_TYPE (PrefsPrivacyPage, prefs_privacy_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
 on_passwords_row_activated (GtkWidget        *row,

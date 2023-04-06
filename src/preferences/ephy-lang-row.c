@@ -37,7 +37,7 @@ struct _EphyLangRow {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyLangRow, ephy_lang_row, ADW_TYPE_ACTION_ROW)
+G_DEFINE_FINAL_TYPE (EphyLangRow, ephy_lang_row, ADW_TYPE_ACTION_ROW)
 
 static void
 ephy_lang_row_dispose (GObject *object)

@@ -111,7 +111,7 @@ struct _EphyWebExtension {
 
 G_DEFINE_QUARK (web - extension - error - quark, web_extension_error)
 
-G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean is_supported_scheme (const char *scheme);
 

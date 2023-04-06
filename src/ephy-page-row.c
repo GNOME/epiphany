@@ -41,7 +41,7 @@ struct _EphyPageRow {
   EphyTabView *tab_view;
 };
 
-G_DEFINE_TYPE (EphyPageRow, ephy_page_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (EphyPageRow, ephy_page_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void
 update_spinner (EphyPageRow *self)

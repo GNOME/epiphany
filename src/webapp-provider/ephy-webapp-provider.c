@@ -38,7 +38,7 @@ struct _EphyWebAppProviderServiceClass {
   GApplicationClass parent_class;
 };
 
-G_DEFINE_TYPE (EphyWebAppProviderService, ephy_web_app_provider_service, G_TYPE_APPLICATION)
+G_DEFINE_FINAL_TYPE (EphyWebAppProviderService, ephy_web_app_provider_service, G_TYPE_APPLICATION)
 
 #define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 

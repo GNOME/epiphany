@@ -41,11 +41,11 @@ struct _EphyPasswordRecord {
 static void json_serializable_iface_init (JsonSerializableIface *iface);
 static void ephy_synchronizable_iface_init (EphySynchronizableInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyPasswordRecord, ephy_password_record, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
-                                                json_serializable_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
-                                                ephy_synchronizable_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyPasswordRecord, ephy_password_record, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
+                                                      json_serializable_iface_init)
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
+                                                      ephy_synchronizable_iface_init))
 
 enum {
   PROP_0,

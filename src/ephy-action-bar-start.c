@@ -51,7 +51,7 @@ struct _EphyActionBarStart {
   GCancellable *cancellable;
 };
 
-G_DEFINE_TYPE (EphyActionBarStart, ephy_action_bar_start, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyActionBarStart, ephy_action_bar_start, GTK_TYPE_BOX)
 
 typedef enum {
   EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,

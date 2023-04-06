@@ -41,7 +41,7 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (EphyFloatingBar, ephy_floating_bar, GTK_TYPE_BOX);
+G_DEFINE_FINAL_TYPE (EphyFloatingBar, ephy_floating_bar, GTK_TYPE_BOX);
 
 static void
 ephy_floating_bar_finalize (GObject *obj)

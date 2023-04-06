@@ -41,7 +41,7 @@ struct _EphyAddSearchEngineRowItem {
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE (EphyAddSearchEngineRowItem, ephy_add_search_engine_row_item, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyAddSearchEngineRowItem, ephy_add_search_engine_row_item, G_TYPE_OBJECT)
 
 static void ephy_add_search_engine_row_item_class_init (EphyAddSearchEngineRowItemClass *klass) {}
 
@@ -68,8 +68,8 @@ struct _EphyAddEngineButtonMergedModel {
 static void list_model_iface_init (GListModelInterface *iface,
                                    gpointer             iface_data);
 
-G_DEFINE_TYPE_WITH_CODE (EphyAddEngineButtonMergedModel, ephy_add_engine_button_merged_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyAddEngineButtonMergedModel, ephy_add_engine_button_merged_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static void
 inner_model_items_changed_cb (GListModel *list,
@@ -189,7 +189,7 @@ struct _EphySearchEngineListBox {
   gboolean is_model_initially_loaded;
 };
 
-G_DEFINE_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, ADW_TYPE_BIN)
 
 GtkWidget *
 ephy_search_engine_list_box_new (void)

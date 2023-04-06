@@ -36,7 +36,7 @@ struct _EphyWebExtensionExtension {
   int counter;
 };
 
-G_DEFINE_TYPE (EphyWebExtensionExtension, ephy_web_extension_extension, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyWebExtensionExtension, ephy_web_extension_extension, G_TYPE_OBJECT)
 
 static EphyWebExtensionExtension *extension = NULL;
 

@@ -32,7 +32,7 @@ struct _EphyWebOverviewModel {
   GHashTable *title_listeners;
 };
 
-G_DEFINE_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
 
 static void
 ephy_web_overview_model_dispose (GObject *object)

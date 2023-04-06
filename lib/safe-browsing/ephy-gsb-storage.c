@@ -59,7 +59,7 @@ struct _EphyGSBStorage {
   gboolean is_operable;
 };
 
-G_DEFINE_TYPE (EphyGSBStorage, ephy_gsb_storage, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (EphyGSBStorage, ephy_gsb_storage, G_TYPE_OBJECT);
 
 enum {
   PROP_0,

@@ -36,7 +36,7 @@ struct _EphyPagesPopover {
   EphyTabView *tab_view;
 };
 
-G_DEFINE_TYPE (EphyPagesPopover, ephy_pages_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphyPagesPopover, ephy_pages_popover, GTK_TYPE_POPOVER)
 
 static void
 drop_tab_view (EphyPagesPopover *self)

@@ -42,7 +42,7 @@ struct _EphyLockdown {
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
 
 static void
 arbitrary_url_cb (GSettings  *settings,

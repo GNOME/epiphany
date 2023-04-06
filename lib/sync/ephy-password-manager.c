@@ -77,9 +77,9 @@ static void ephy_password_manager_forget_record (EphyPasswordManager *self,
 
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyPasswordManager, ephy_password_manager, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
-                                                ephy_synchronizable_manager_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyPasswordManager, ephy_password_manager, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
+                                                      ephy_synchronizable_manager_iface_init))
 
 typedef struct {
   EphyPasswordManagerQueryCallback callback;

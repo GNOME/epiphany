@@ -44,7 +44,7 @@ struct _EphyAboutHandler {
   EphySMaps *smaps;
 };
 
-G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
 
 #define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 9

@@ -31,7 +31,7 @@ struct _EphySuggestion {
   cairo_surface_t *favicon;
 };
 
-G_DEFINE_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
+G_DEFINE_FINAL_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
 
 enum {
   PROP_0,

@@ -48,7 +48,7 @@ struct _EphyFiltersManager {
   WebKitUserContentFilterStore *store;
 };
 
-G_DEFINE_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
 
 enum {
   FILTER_READY,

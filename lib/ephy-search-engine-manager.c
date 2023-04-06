@@ -47,9 +47,9 @@ struct _EphySearchEngineManager {
 static void list_model_iface_init (GListModelInterface *iface,
                                    gpointer             iface_data);
 
-G_DEFINE_TYPE_WITH_CODE (EphySearchEngineManager, ephy_search_engine_manager,
-                         G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphySearchEngineManager, ephy_search_engine_manager,
+                               G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,

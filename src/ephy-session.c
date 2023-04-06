@@ -78,7 +78,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 static void ephy_session_save_now (EphySession *session);
 
-G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
 /* Helper functions */
 

@@ -147,7 +147,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
+G_DEFINE_FINAL_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
 
 static void
 open_dialog_cb (GtkFileDialog            *dialog,

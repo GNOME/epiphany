@@ -53,7 +53,7 @@ struct _PrefsAppearancePage {
   GtkWidget *default_zoom_spin_button;
 };
 
-G_DEFINE_TYPE (PrefsAppearancePage, prefs_appearance_page, ADW_TYPE_PREFERENCES_PAGE)
+G_DEFINE_FINAL_TYPE (PrefsAppearancePage, prefs_appearance_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static gchar *
 reader_font_style_get_name (gpointer                 user_data,

@@ -54,7 +54,7 @@ struct _EphyBookmarkProperties {
   GtkWidget *add_tag_button;
 };
 
-G_DEFINE_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_BOX)
 
 enum {
   PROP_0,

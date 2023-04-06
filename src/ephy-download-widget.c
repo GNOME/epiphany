@@ -41,7 +41,7 @@ struct _EphyDownloadWidget {
   GtkWidget *action_button;
 };
 
-G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyDownloadWidget, ephy_download_widget, ADW_TYPE_BIN)
 
 enum {
   PROP_0,

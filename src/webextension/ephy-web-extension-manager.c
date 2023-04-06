@@ -73,7 +73,7 @@ struct _EphyWebExtensionManager {
   GHashTable *pending_messages;
 };
 
-G_DEFINE_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyWebExtensionManager, ephy_web_extension_manager, G_TYPE_OBJECT)
 
 EphyWebExtensionApiHandler api_handlers[] = {
   {"alarms", ephy_web_extension_api_alarms_handler},

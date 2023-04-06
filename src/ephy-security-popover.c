@@ -71,7 +71,7 @@ struct _EphySecurityPopover {
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void

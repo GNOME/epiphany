@@ -44,7 +44,7 @@ struct _EphyPasswordsView {
   GCancellable *cancellable;
 };
 
-G_DEFINE_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY_TYPE_DATA_VIEW)
+G_DEFINE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY_TYPE_DATA_VIEW)
 
 static void populate_model (EphyPasswordsView *passwords_view);
 

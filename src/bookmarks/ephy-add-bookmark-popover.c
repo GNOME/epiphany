@@ -37,7 +37,7 @@ struct _EphyAddBookmarkPopover {
   GtkWidget *grid;
 };
 
-G_DEFINE_TYPE (EphyAddBookmarkPopover, ephy_add_bookmark_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphyAddBookmarkPopover, ephy_add_bookmark_popover, GTK_TYPE_POPOVER)
 
 static void
 bookmark_removed_cb (EphyAddBookmarkPopover *self,

@@ -50,7 +50,7 @@ struct _EphyFindToolbar {
   char *find_string;
 };
 
-G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, ADW_TYPE_BIN)
 
 enum {
   PROP_0,

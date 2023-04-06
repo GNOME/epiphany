@@ -142,7 +142,7 @@ encoding_entries [] = {
 
 #define RECENT_MAX  4
 
-G_DEFINE_TYPE (EphyEncodings, ephy_encodings, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyEncodings, ephy_encodings, G_TYPE_OBJECT)
 
 static void
 ephy_encodings_finalize (GObject *object)

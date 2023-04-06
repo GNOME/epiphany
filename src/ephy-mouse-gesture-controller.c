@@ -62,7 +62,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE (EphyMouseGestureController, ephy_mouse_gesture_controller, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyMouseGestureController, ephy_mouse_gesture_controller, G_TYPE_OBJECT)
 
 static void
 ephy_mouse_gesture_controller_reset (EphyMouseGestureController *self)

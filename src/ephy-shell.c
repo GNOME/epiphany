@@ -85,7 +85,7 @@ static EphyShell *ephy_shell = NULL;
 static void ephy_shell_dispose (GObject *object);
 static void ephy_shell_finalize (GObject *object);
 
-G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
+G_DEFINE_FINAL_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
 /**
  * ephy_shell_startup_context_new:

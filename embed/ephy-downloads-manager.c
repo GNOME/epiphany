@@ -45,7 +45,7 @@ struct _EphyDownloadsManager {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyDownloadsManager, ephy_downloads_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyDownloadsManager, ephy_downloads_manager, G_TYPE_OBJECT)
 
 static void
 ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)

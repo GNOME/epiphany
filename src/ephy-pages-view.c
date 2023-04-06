@@ -36,7 +36,7 @@ struct _EphyPagesView {
   EphyTabView *tab_view;
 };
 
-G_DEFINE_TYPE (EphyPagesView, ephy_pages_view, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyPagesView, ephy_pages_view, GTK_TYPE_BOX)
 
 static void
 row_activated_cb (EphyPagesView *self,

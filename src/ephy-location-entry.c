@@ -115,13 +115,13 @@ static void ephy_location_entry_editable_init (GtkEditableInterface *iface);
 static void ephy_location_entry_accessible_init (GtkAccessibleInterface *iface);
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-                                                ephy_location_entry_editable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
-                                                ephy_location_entry_accessible_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
-                                                ephy_location_entry_title_widget_interface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+                                                      ephy_location_entry_editable_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                      ephy_location_entry_accessible_init)
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
+                                                      ephy_location_entry_title_widget_interface_init))
 
 typedef struct {
   GUri *uri;

@@ -47,7 +47,7 @@ struct _EphyActionBar {
   gboolean can_reveal;
 };
 
-G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
 
 static void
 sync_chromes_visibility (EphyActionBar *action_bar)

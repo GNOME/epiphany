@@ -43,7 +43,7 @@ struct _PrefsExtensionsPage {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (PrefsExtensionsPage, prefs_extensions_page, ADW_TYPE_PREFERENCES_PAGE)
+G_DEFINE_FINAL_TYPE (PrefsExtensionsPage, prefs_extensions_page, ADW_TYPE_PREFERENCES_PAGE)
 
 static void
 on_extension_row_activated (GtkWidget           *row,

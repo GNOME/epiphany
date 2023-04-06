@@ -49,7 +49,7 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EphyNotification, ephy_notification, ADW_TYPE_BIN);
+G_DEFINE_FINAL_TYPE (EphyNotification, ephy_notification, ADW_TYPE_BIN);
 
 static void
 ephy_notification_constructed (GObject *object)

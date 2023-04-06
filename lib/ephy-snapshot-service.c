@@ -37,7 +37,7 @@ struct _EphySnapshotService {
   GHashTable *cache;
 };
 
-G_DEFINE_TYPE (EphySnapshotService, ephy_snapshot_service, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphySnapshotService, ephy_snapshot_service, G_TYPE_OBJECT)
 
 typedef enum {
   SNAPSHOT_STALE,

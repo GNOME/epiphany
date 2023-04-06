@@ -44,9 +44,9 @@ struct _EphyTitleBox {
 
 static void ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, ADW_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
-                                                ephy_title_box_title_widget_interface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, ADW_TYPE_BIN,
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
+                                                      ephy_title_box_title_widget_interface_init))
 
 static void
 create_security_popup_cb (GtkMenuButton *button,

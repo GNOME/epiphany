@@ -45,7 +45,7 @@ struct _EphyPrefsDialog {
   GtkWidget *active_data_view;
 };
 
-G_DEFINE_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_WINDOW)
 
 static gboolean
 on_close_request (EphyPrefsDialog *prefs_dialog)

@@ -396,11 +396,11 @@ ephy_window_link_iface_init (EphyLinkInterface *iface)
   iface->open_link = ephy_window_open_link;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, ADW_TYPE_APPLICATION_WINDOW,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-                                                ephy_window_link_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
-                                                ephy_window_embed_container_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyWindow, ephy_window, ADW_TYPE_APPLICATION_WINDOW,
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                      ephy_window_link_iface_init)
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
+                                                      ephy_window_embed_container_iface_init))
 
 static void
 sync_chromes_visibility (EphyWindow *window)

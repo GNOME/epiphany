@@ -33,7 +33,7 @@ struct _EphyEncoding {
   int language_groups;
 };
 
-G_DEFINE_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

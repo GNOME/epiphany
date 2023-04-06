@@ -35,7 +35,7 @@ struct _EphySQLiteConnection {
   EphySQLiteConnectionMode mode;
 };
 
-G_DEFINE_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
 
 enum {
   PROP_0,

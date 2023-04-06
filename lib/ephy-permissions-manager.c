@@ -43,7 +43,7 @@ struct _EphyPermissionsManager {
   GSettingsBackend *backend;
 };
 
-G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
 
 #define PERMISSIONS_FILENAME "permissions.ini"
 

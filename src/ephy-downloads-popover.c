@@ -34,7 +34,7 @@ struct _EphyDownloadsPopover {
   GtkWidget *clear_button;
 };
 
-G_DEFINE_TYPE (EphyDownloadsPopover, ephy_downloads_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphyDownloadsPopover, ephy_downloads_popover, GTK_TYPE_POPOVER)
 
 #define DOWNLOADS_BOX_MIN_SIZE 330
 

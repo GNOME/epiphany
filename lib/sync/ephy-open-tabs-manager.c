@@ -37,9 +37,9 @@ struct _EphyOpenTabsManager {
 
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyOpenTabsManager, ephy_open_tabs_manager, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
-                                                ephy_synchronizable_manager_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyOpenTabsManager, ephy_open_tabs_manager, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
+                                                      ephy_synchronizable_manager_iface_init))
 
 enum {
   PROP_0,

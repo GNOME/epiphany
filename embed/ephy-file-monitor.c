@@ -39,7 +39,7 @@ struct _EphyFileMonitor {
   EphyWebView *view;
 };
 
-G_DEFINE_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
 
 enum {
   PROP_0,

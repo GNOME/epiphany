@@ -43,11 +43,11 @@ struct _EphyDownloadsPaintable {
 static void ephy_downloads_paintable_paintable_init (GdkPaintableInterface *iface);
 static void ephy_downloads_paintable_symbolic_paintable_init (GtkSymbolicPaintableInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyDownloadsPaintable, ephy_downloads_paintable, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                ephy_downloads_paintable_paintable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
-                                                ephy_downloads_paintable_symbolic_paintable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyDownloadsPaintable, ephy_downloads_paintable, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                      ephy_downloads_paintable_paintable_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
+                                                      ephy_downloads_paintable_symbolic_paintable_init))
 
 enum {
   PROP_0,

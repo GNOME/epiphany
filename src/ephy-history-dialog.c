@@ -90,7 +90,7 @@ struct _EphyHistoryDialog {
   gboolean has_search_results;
 };
 
-G_DEFINE_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_WINDOW)
 
 enum {
   PROP_0,

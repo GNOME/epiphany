@@ -70,9 +70,9 @@ enum {
 };
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-                                                NULL))
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                      NULL))
 
 static gboolean
 handle_ephy_tab_uri (EphyLocationController *controller,

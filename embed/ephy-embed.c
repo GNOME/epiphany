@@ -89,7 +89,7 @@ struct _EphyEmbed {
   gboolean progress_bar_enabled;
 };
 
-G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
 
 enum {
   PROP_0,

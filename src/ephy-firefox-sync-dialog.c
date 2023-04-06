@@ -92,7 +92,7 @@ struct _EphyFirefoxSyncDialog {
   WebKitUserScript *fxa_script;
 };
 
-G_DEFINE_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, GTK_TYPE_WINDOW)
 
 static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
 
