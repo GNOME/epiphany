@@ -47,10 +47,10 @@ typedef struct {
 
 static void ephy_data_view_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (EphyDataView, ephy_data_view, GTK_TYPE_WIDGET,
-                               G_ADD_PRIVATE (EphyDataView)
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                      ephy_data_view_buildable_init))
+G_DEFINE_TYPE_WITH_CODE (EphyDataView, ephy_data_view, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (EphyDataView)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                ephy_data_view_buildable_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
