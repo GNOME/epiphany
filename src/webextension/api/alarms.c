@@ -128,7 +128,7 @@ on_alarm_repeat (gpointer user_data)
   return G_SOURCE_CONTINUE;
 }
 
-static gboolean
+static void
 on_alarm_start (gpointer user_data)
 {
   GHashTable *alarms;
@@ -149,8 +149,6 @@ on_alarm_start (gpointer user_data)
   } else {
     alarm_destroy (alarm);
   }
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -191,13 +189,13 @@ alarms_handler_create (EphyWebExtensionSender *sender,
   alarm->name = g_strdup (name);
 
   if (delay_in_minutes) {
-    alarm->timeout_id = g_timeout_add (minutes_to_ms (delay_in_minutes), on_alarm_start, alarm);
+    alarm->timeout_id = g_timeout_add_once (minutes_to_ms (delay_in_minutes), on_alarm_start, alarm);
     alarm->scheduled_time = (double)(time_now_ms () + minutes_to_ms (delay_in_minutes));
   } else if (when) {
-    alarm->timeout_id = g_timeout_add (timestamp_to_ms (when), on_alarm_start, alarm);
+    alarm->timeout_id = g_timeout_add_once (timestamp_to_ms (when), on_alarm_start, alarm);
     alarm->scheduled_time = when;
   } else {
-    alarm->timeout_id = g_idle_add (on_alarm_start, alarm);
+    alarm->timeout_id = g_idle_add_once (on_alarm_start, alarm);
     alarm->scheduled_time = (double)time_now_ms ();
   }
 

@@ -73,14 +73,14 @@ gsb_api_key = get_option('gsb_api_key')
 conf.set_quoted('GSB_API_KEY', gsb_api_key)
 conf.set10('ENABLE_GSB', gsb_api_key != '')
 
-glib_requirement = '>= 2.70.0'
+glib_requirement = '>= 2.74.0'
 gtk_requirement = '>= 4.9.3'
 libadwaita_requirement = '>= 1.4.alpha'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.39.91'
 
-conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_70')
-conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_70')
+conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_74')
+conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_74')
 conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_6')
 conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_10')
 

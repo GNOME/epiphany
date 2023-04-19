@@ -553,17 +553,16 @@ rules_match_uri (GStrv  rules,
   return FALSE;
 }
 
-gboolean
+void
 menu_activate_browser_action (gpointer user_data)
 {
   EphyWebExtension *web_extension = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   ephy_web_extension_manager_show_browser_action (manager, web_extension);
-  return G_SOURCE_REMOVE;
 }
 
-gboolean
+void
 menu_activate_page_button (gpointer user_data)
 {
   EphyWebExtension *web_extension = user_data;
@@ -573,7 +572,6 @@ menu_activate_page_button (gpointer user_data)
   GtkWidget *button = ephy_web_extension_manager_get_page_action (manager, web_extension, view);
 
   gtk_widget_mnemonic_activate (button, false);
-  return G_SOURCE_REMOVE;
 }
 
 void
@@ -585,9 +583,9 @@ menu_activate_command_action (GAction  *action,
   Command command = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (action), "command"));
 
   if (command == COMMAND_BROWSER_ACTION) {
-    g_idle_add (menu_activate_browser_action, web_extension);
+    g_idle_add_once (menu_activate_browser_action, web_extension);
   } else if (command == COMMAND_PAGE_ACTION) {
-    g_idle_add (menu_activate_page_button, web_extension);
+    g_idle_add_once (menu_activate_page_button, web_extension);
   }
 }
 

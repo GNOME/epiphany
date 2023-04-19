@@ -60,13 +60,11 @@ G_DEFINE_FINAL_TYPE (EphyActionBarEnd, ephy_action_bar_end, GTK_TYPE_BOX)
 static void set_browser_actions (EphyActionBarEnd *action_bar_end,
                                  GListStore       *browser_actions);
 
-static gboolean
+static void
 add_attention_timeout_cb (EphyActionBarEnd *self)
 {
   gtk_widget_remove_css_class (self->downloads_icon, "accent");
   self->downloads_button_attention_timeout_id = 0;
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -75,9 +73,9 @@ add_attention (EphyActionBarEnd *self)
   g_clear_handle_id (&self->downloads_button_attention_timeout_id, g_source_remove);
 
   gtk_widget_add_css_class (self->downloads_icon, "accent");
-  self->downloads_button_attention_timeout_id = g_timeout_add (NEEDS_ATTENTION_ANIMATION_TIMEOUT,
-                                                               G_SOURCE_FUNC (add_attention_timeout_cb),
-                                                               self);
+  self->downloads_button_attention_timeout_id = g_timeout_add_once (NEEDS_ATTENTION_ANIMATION_TIMEOUT,
+                                                                    (GSourceOnceFunc)add_attention_timeout_cb,
+                                                                    self);
 }
 
 static void

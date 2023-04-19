@@ -1950,7 +1950,7 @@ ephy_location_entry_get_reader_mode_state (EphyLocationEntry *entry)
   return entry->reader_mode_active;
 }
 
-static gboolean
+static void
 progress_hide (gpointer user_data)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
@@ -1959,11 +1959,9 @@ progress_hide (gpointer user_data)
   gtk_widget_set_visible (entry->progress, FALSE);
 
   g_clear_handle_id (&entry->progress_timeout, g_source_remove);
-
-  return G_SOURCE_REMOVE;
 }
 
-static gboolean
+static void
 ephy_location_entry_set_fraction_internal (gpointer user_data)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
@@ -1982,16 +1980,14 @@ ephy_location_entry_set_fraction_internal (gpointer user_data)
   progress = current + 0.025;
   if (progress < entry->progress_fraction) {
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress), progress);
-    entry->progress_timeout = g_timeout_add (ms, ephy_location_entry_set_fraction_internal, entry);
+    entry->progress_timeout = g_timeout_add_once (ms, ephy_location_entry_set_fraction_internal, entry);
   } else {
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress), entry->progress_fraction);
     if (entry->progress_fraction == 1.0)
-      entry->progress_timeout = g_timeout_add (500, progress_hide, entry);
+      entry->progress_timeout = g_timeout_add_once (500, progress_hide, entry);
   }
 
   gtk_widget_set_visible (entry->progress, TRUE);
-
-  return G_SOURCE_REMOVE;
 }
 
 void

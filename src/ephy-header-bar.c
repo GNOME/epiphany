@@ -121,14 +121,12 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
 }
 
-static gboolean
+static void
 hide_timeout_cb (EphyHeaderBar *header_bar)
 {
   gtk_menu_button_popdown (GTK_MENU_BUTTON (header_bar->page_menu_button));
 
   header_bar->popover_hide_timeout_id = 0;
-
-  return G_SOURCE_REMOVE;
 }
 
 void
@@ -145,7 +143,7 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
     g_clear_handle_id (&header_bar->popover_hide_timeout_id, g_source_remove);
 
     header_bar->popover_hide_timeout_id =
-      g_timeout_add (POPOVER_HIDE_DELAY, (GSourceFunc)hide_timeout_cb, header_bar);
+      g_timeout_add_once (POPOVER_HIDE_DELAY, (GSourceOnceFunc)hide_timeout_cb, header_bar);
   }
 }
 

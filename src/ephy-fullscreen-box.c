@@ -79,14 +79,12 @@ hide_ui (EphyFullscreenBox *self)
   gtk_widget_grab_focus (GTK_WIDGET (self->flap));
 }
 
-static gboolean
+static void
 hide_timeout_cb (EphyFullscreenBox *self)
 {
   self->timeout_id = 0;
 
   hide_ui (self);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -98,9 +96,9 @@ start_hide_timeout (EphyFullscreenBox *self)
   if (self->timeout_id)
     return;
 
-  self->timeout_id = g_timeout_add (FULLSCREEN_HIDE_DELAY,
-                                    (GSourceFunc)hide_timeout_cb,
-                                    self);
+  self->timeout_id = g_timeout_add_once (FULLSCREEN_HIDE_DELAY,
+                                         (GSourceOnceFunc)hide_timeout_cb,
+                                         self);
 }
 
 static gboolean

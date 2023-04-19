@@ -281,13 +281,11 @@ animate_done_cb (double                  value,
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
-static gboolean
+static void
 animation_timeout_cb (EphyDownloadsPaintable *self)
 {
   adw_animation_play (self->done_animation);
   self->timeout_id = -1;
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -299,7 +297,7 @@ animation_done_done_cb (EphyDownloadsPaintable *self)
     adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->done_animation), 1);
     adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->done_animation), 0);
 
-    self->timeout_id = g_timeout_add (delay, G_SOURCE_FUNC (animation_timeout_cb), self);
+    self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)animation_timeout_cb, self);
   } else {
     g_clear_object (&self->done_animation);
   }

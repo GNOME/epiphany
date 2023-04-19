@@ -302,15 +302,13 @@ typedef struct {
   SnapshotPathCachedData *data;
 } CacheData;
 
-static gboolean
+static void
 idle_cache_snapshot_path (gpointer user_data)
 {
   CacheData *data = (CacheData *)user_data;
   g_hash_table_insert (data->cache, data->url, data->data);
   g_hash_table_unref (data->cache);
   g_free (data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -326,7 +324,7 @@ cache_snapshot_data_in_idle (EphySnapshotService   *service,
   data->data = g_new (SnapshotPathCachedData, 1);
   data->data->path = g_strdup (path);
   data->data->freshness = freshness;
-  g_idle_add (idle_cache_snapshot_path, data);
+  g_idle_add_once (idle_cache_snapshot_path, data);
 }
 
 static void

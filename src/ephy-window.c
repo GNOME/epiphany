@@ -4386,13 +4386,6 @@ window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
   g_free (data);
 }
 
-static gboolean
-destroy_window_cb (GtkWindow *window)
-{
-  gtk_window_destroy (window);
-  return G_SOURCE_REMOVE;
-}
-
 static void
 finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
@@ -4407,7 +4400,7 @@ finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data
    * destroyed first.
    */
   if (should_close)
-    g_idle_add (G_SOURCE_FUNC (destroy_window_cb), data->window);
+    g_idle_add_once ((GSourceOnceFunc)gtk_window_destroy, data->window);
 
   window_has_modified_forms_data_free (data);
 }

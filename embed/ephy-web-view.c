@@ -649,7 +649,7 @@ readability_js_finish_cb (GObject      *object,
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_READER_MODE]);
 }
 
-static gboolean
+static void
 run_readability_js_if_needed (gpointer data)
 {
   EphyWebView *web_view = data;
@@ -676,7 +676,6 @@ run_readability_js_if_needed (gpointer data)
   }
 
   web_view->reader_js_timeout = 0;
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1356,7 +1355,7 @@ load_changed_cb (WebKitWebView   *web_view,
       g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
 
       if (!ephy_embed_utils_is_no_show_address (view->address))
-        view->reader_js_timeout = g_idle_add (run_readability_js_if_needed, web_view);
+        view->reader_js_timeout = g_idle_add_once (run_readability_js_if_needed, web_view);
 
       break;
 

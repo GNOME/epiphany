@@ -627,7 +627,7 @@ progress_update (EphyWebView *view,
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
 
-static gboolean
+static void
 load_delayed_request_if_mapped (gpointer user_data)
 {
   EphyEmbed *embed = EPHY_EMBED (user_data);
@@ -637,7 +637,7 @@ load_delayed_request_if_mapped (gpointer user_data)
   embed->delayed_request_source_id = 0;
 
   if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
-    return G_SOURCE_REMOVE;
+    return;
 
   web_view = ephy_embed_get_web_view (embed);
   if (embed->delayed_state)
@@ -652,7 +652,7 @@ load_delayed_request_if_mapped (gpointer user_data)
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
-  return G_SOURCE_REMOVE;
+  return;
 }
 
 static void
@@ -665,7 +665,7 @@ ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
    * is scrolling rapidly through a bunch of delayed tabs, we don't start
    * loading them all.
    */
-  embed->delayed_request_source_id = g_timeout_add (300, load_delayed_request_if_mapped, embed);
+  embed->delayed_request_source_id = g_timeout_add_once (300, load_delayed_request_if_mapped, embed);
   g_source_set_name_by_id (embed->delayed_request_source_id, "[epiphany] load_delayed_request_if_mapped");
 }
 
