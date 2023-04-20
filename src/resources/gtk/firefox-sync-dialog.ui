@@ -8,7 +8,20 @@
     <property name="destroy-with-parent">True</property>
     <property name="title" translatable="yes">Firefox Sync</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar"/>
+      <object class="GtkHeaderBar">
+        <child>
+          <object class="GtkButton" id="sync_now_button">
+            <property name="child">
+              <object class="AdwButtonContent">
+                <property name="icon-name">emblem-synchronizing-symbolic</property>
+                <property name="label" translatable="yes">Sync _now</property>
+                <property name="use-underline">True</property>
+              </object>
+            </property>
+            <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
+          </object>
+        </child>
+      </object>
     </child>
     <child>
       <object class="AdwPreferencesPage">
@@ -113,20 +126,6 @@
                 <property name="expression">
                   <closure type="gchararray" function="get_sync_frequency_minutes_name"/>
                 </property>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="margin_bottom">8</property>
-                    <property name="margin_top">8</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="sync_now_button">
-                    <property name="label" translatable="yes">Sync _now</property>
-                    <property name="use-underline">True</property>
-                    <property name="valign">center</property>
-                    <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
@@ -181,7 +180,6 @@
     <widgets>
       <widget name="sync_sign_out_button"/>
       <widget name="synced_tabs_button"/>
-      <widget name="sync_now_button"/>
       <widget name="sync_device_name_change_button"/>
     </widgets>
   </object>
