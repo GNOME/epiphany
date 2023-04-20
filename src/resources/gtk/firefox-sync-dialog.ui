@@ -11,13 +11,13 @@
       <object class="GtkHeaderBar">
         <child>
           <object class="GtkButton" id="sync_now_button">
-            <child>
+            <property name="child">
               <object class="AdwButtonContent">
                 <property name="icon-name">emblem-synchronizing-symbolic</property>
                 <property name="label" translatable="yes">Sync _now</property>
                 <property name="use-underline">True</property>
               </object>
-            </child>
+            </property>
             <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
           </object>
         </child>
