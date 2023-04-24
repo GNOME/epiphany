@@ -182,6 +182,7 @@ ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
   GSettings *settings;
 
   g_assert (type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE);
+  g_assert (type != EPHY_PERMISSION_TYPE_COOKIES);
 
   settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   return g_settings_get_enum (settings, permission_type_to_string (type));
@@ -264,6 +265,7 @@ ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
   GSettings *settings;
 
   g_assert (type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE);
+  g_assert (type != EPHY_PERMISSION_TYPE_COOKIES);
 
   webkit_origin = webkit_security_origin_new_for_uri (origin);
   if (webkit_origin == NULL)
