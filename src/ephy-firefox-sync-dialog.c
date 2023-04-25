@@ -106,7 +106,8 @@ sync_collection_toggled_cb (GtkWidget             *sw,
   EphySyncService *service = ephy_shell_get_sync_service (shell);
 
   if (GTK_WIDGET (sw) == sync_dialog->sync_bookmarks_row) {
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+    return; /* https://gitlab.gnome.org/GNOME/epiphany/-/issues/1118#note_1731178
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell)); */
   } else if (GTK_WIDGET (sw) == sync_dialog->sync_passwords_row) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
   } else if (GTK_WIDGET (sw) == sync_dialog->sync_history_row) {

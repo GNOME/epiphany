@@ -406,10 +406,12 @@ register_synchronizable_managers (EphyShell       *shell,
     ephy_sync_service_register_manager (service, manager);
   }
 
+/* https://gitlab.gnome.org/GNOME/epiphany/-/issues/1118#note_1731178
   if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
     ephy_sync_service_register_manager (service, manager);
   }
+*/
 
   if (ephy_sync_utils_passwords_sync_is_enabled ()) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
