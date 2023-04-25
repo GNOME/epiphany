@@ -103,11 +103,11 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
   g_autoptr (GIcon) favicon = NULL;
   int scale;
 
-  g_assert (EPHY_IS_BOOKMARK_ROW (self));
-
   icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
   if (!icon_texture)
     return;
+
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
   scale = gtk_widget_get_scale_factor (self->favicon_image);
   favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
