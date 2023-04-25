@@ -59,6 +59,8 @@ typedef enum
 #define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
 #define EPHY_PREFS_UI_KEEP_WINDOW_OPEN           "keep-window-open"
 #define EPHY_PREFS_UI_BOTTOM_URL_BAR             "bottom-url-bar"
+#define EPHY_PREFS_UI_WEBKIT_FEATURES_PANEL      "webkit-features-page"
+#define EPHY_PREFS_UI_WEBKIT_INTERNAL_FEATURES   "webkit-features-page-show-internal"
 
 #define EPHY_PREFS_READER_SCHEMA                 "org.gnome.Epiphany.reader"
 #define EPHY_PREFS_READER_FONT_STYLE             "font-style"

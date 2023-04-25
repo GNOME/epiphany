@@ -33,6 +33,7 @@
 #include "ephy-settings.h"
 #include "ephy-web-extension.h"
 #include "extension-view.h"
+#include "prefs-features-page.h"
 #include "prefs-general-page.h"
 #include "prefs-extensions-page.h"
 #include "webapp-additional-urls-dialog.h"
@@ -44,6 +45,10 @@ struct _EphyPrefsDialog {
   GtkWidget *extensions_page;
 
   EphyWindow *parent_window;
+
+#if !TECH_PREVIEW
+  GtkWidget *features_page;
+#endif
 };
 
 G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_DIALOG)
@@ -140,6 +145,24 @@ sync_extensions (EphyPrefsDialog *self)
   }
 }
 
+#if !TECH_PREVIEW
+static void
+sync_features (EphyPrefsDialog *self)
+{
+  gboolean enable_features = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_WEBKIT_FEATURES_PANEL);
+
+  if (enable_features && !self->features_page) {
+    self->features_page = g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, NULL);
+    adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (self),
+                                ADW_PREFERENCES_PAGE (self->features_page));
+  } else if (self->features_page) {
+    adw_preferences_dialog_remove (ADW_PREFERENCES_DIALOG (self),
+                                   ADW_PREFERENCES_PAGE (self->features_page));
+    self->features_page = NULL;
+  }
+}
+#endif
+
 static void
 ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 {
@@ -168,4 +191,16 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
                            G_CALLBACK (sync_extensions),
                            dialog,
                            G_CONNECT_SWAPPED);
+
+#if TECH_PREVIEW
+  adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (dialog),
+                              g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, NULL));
+#else
+  sync_features (dialog);
+  g_signal_connect_object (EPHY_SETTINGS_UI,
+                           "changed::" EPHY_PREFS_UI_WEBKIT_FEATURES_PANEL,
+                           G_CALLBACK (sync_features),
+                           dialog,
+                           G_CONNECT_SWAPPED);
+#endif
 }
