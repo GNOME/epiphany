@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-03-30 20:59+0000\n"
-"PO-Revision-Date: 2023-03-31 09:06+0800\n"
+"POT-Creation-Date: 2023-04-21 14:16+0000\n"
+"PO-Revision-Date: 2023-04-22 07:48+0800\n"
 "Last-Translator: Nanling <neithern@outlook.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -36,8 +36,8 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
-#: embed/ephy-about-handler.c:237 src/ephy-main.c:102 src/ephy-main.c:256
-#: src/ephy-main.c:409 src/window-commands.c:1061
+#: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:279
+#: src/ephy-main.c:432 src/window-commands.c:1061
 msgid "Web"
 msgstr "浏览器"
 
@@ -383,7 +383,7 @@ msgid ""
 msgstr "默认编码。只接受 WebKitGTK 能理解的值。"
 
 #: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:258
+#: src/resources/gtk/prefs-general-page.ui:215
 msgid "Languages"
 msgstr "语言"
 
@@ -998,7 +998,7 @@ msgstr ""
 "无痕模式不能在工作中对雇主隐藏您的活动。您的互联网服务提供商、政府或其他政府"
 "机构，您访问的网站，以及广告提供商依然可以追踪您。"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:553
 msgid "Select a Directory"
 msgstr "选择目录"
 
@@ -1011,14 +1011,14 @@ msgid "Download Requested"
 msgstr "已请求下载"
 
 #: embed/ephy-download.c:762 src/ephy-history-dialog.c:572
-#: src/ephy-window.c:265 src/preferences/extension-view.c:133
+#: src/ephy-window.c:265 src/preferences/extension-view.c:131
 #: src/preferences/passwords-view.c:183
-#: src/resources/gtk/firefox-sync-dialog.ui:139
+#: src/resources/gtk/firefox-sync-dialog.ui:114
 #: src/resources/gtk/history-dialog.ui:42
 #: src/resources/gtk/prefs-lang-dialog.ui:14 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
 #: src/window-commands.c:1238 src/window-commands.c:1932
-#: src/window-commands.c:2683
+#: src/window-commands.c:2688
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1468,89 +1468,89 @@ msgstr "支持的全部类型"
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "此表格不安全 - 密码不会被保密"
 
-#: embed/ephy-web-view.c:563 embed/ephy-web-view.c:3262
+#: embed/ephy-web-view.c:563 embed/ephy-web-view.c:3261
 msgid "_Dismiss"
 msgstr "撤消(_D)"
 
-#: embed/ephy-web-view.c:781
+#: embed/ephy-web-view.c:780
 msgid "Web process crashed"
 msgstr "网页进程已崩溃"
 
-#: embed/ephy-web-view.c:784
+#: embed/ephy-web-view.c:783
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "网页进程因为超出内存限制已被终止"
 
-#: embed/ephy-web-view.c:787
+#: embed/ephy-web-view.c:786
 msgid "Web process terminated by API request"
 msgstr "网页进程被 API 请求终止"
 
-#: embed/ephy-web-view.c:828
+#: embed/ephy-web-view.c:827
 msgid "Page Unresponsive"
 msgstr "页面无响应"
 
-#: embed/ephy-web-view.c:832
+#: embed/ephy-web-view.c:831
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "当前页面 %s 无响应"
 
-#: embed/ephy-web-view.c:836
+#: embed/ephy-web-view.c:835
 msgid "_Wait"
 msgstr "等待(_W)"
 
-#: embed/ephy-web-view.c:837
+#: embed/ephy-web-view.c:836
 msgid "Force _Stop"
 msgstr "强制停止(_S)"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1083
+#: embed/ephy-web-view.c:1082
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在加载“%s”…"
 
-#: embed/ephy-web-view.c:1085 embed/ephy-web-view.c:1091
+#: embed/ephy-web-view.c:1084 embed/ephy-web-view.c:1090
 msgid "Loading…"
 msgstr "正在载入…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1424
+#: embed/ephy-web-view.c:1423
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "此站点给出了一个其他站点的证书。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1429
+#: embed/ephy-web-view.c:1428
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr "此站点的证书因太老而无法信任。请检查计算机的时间是否正确。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1434
+#: embed/ephy-web-view.c:1433
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "此站点的证书不是由可信的组织签发。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1439
+#: embed/ephy-web-view.c:1438
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "此站点的证书无法处理。可能已经损坏。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1444
+#: embed/ephy-web-view.c:1443
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "此站点的证书已经被发布它的可信组织吊销。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1449
+#: embed/ephy-web-view.c:1448
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "此站点的证书不受信任，因为使用了非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1454
+#: embed/ephy-web-view.c:1453
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1558,24 +1558,24 @@ msgstr "此站点的证书尚未到生效时间。检查计算机的时间是不
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1519 embed/ephy-web-view.c:1575
+#: embed/ephy-web-view.c:1518 embed/ephy-web-view.c:1574
 #, c-format
 msgid "Problem Loading Page"
 msgstr "载入页面时发生问题"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1522
+#: embed/ephy-web-view.c:1521
 msgid "Unable to display this website"
 msgstr "无法显示此网站"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1527
+#: embed/ephy-web-view.c:1526
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "站点 %s 似乎不可用。"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1531
+#: embed/ephy-web-view.c:1530
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1583,7 +1583,7 @@ msgstr ""
 "该站点可能暂时无法访问或已移动到新的地址。您可能需要确定互联网连接是否正常。"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1541
+#: embed/ephy-web-view.c:1540
 #, c-format
 msgid "The precise error was: %s"
 msgstr "确切的错误为：%s"
@@ -1593,85 +1593,85 @@ msgstr "确切的错误为：%s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1546 embed/ephy-web-view.c:1599
-#: embed/ephy-web-view.c:1635 embed/ephy-web-view.c:1671
+#: embed/ephy-web-view.c:1545 embed/ephy-web-view.c:1598
+#: embed/ephy-web-view.c:1634 embed/ephy-web-view.c:1670
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:169
 msgid "Reload"
 msgstr "刷新"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1550 embed/ephy-web-view.c:1603
-#: embed/ephy-web-view.c:1639 embed/ephy-web-view.c:1675
+#: embed/ephy-web-view.c:1549 embed/ephy-web-view.c:1602
+#: embed/ephy-web-view.c:1638 embed/ephy-web-view.c:1674
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1577
 msgid "Oops! There may be a problem"
 msgstr "糟糕！好像出问题了"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1583
+#: embed/ephy-web-view.c:1582
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "页面 %s 可能导致了浏览器的异常关闭。"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1590
+#: embed/ephy-web-view.c:1589
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "如果此错误再次发生，请将问题报告给 %s 开发者。"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1624
+#: embed/ephy-web-view.c:1623
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "渲染页面时发生问题"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1627
+#: embed/ephy-web-view.c:1626
 msgid "Oops!"
 msgstr "哎唷！"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1630
+#: embed/ephy-web-view.c:1629
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr "显示页面时发生了错误。请重新载入或转到其他网页。"
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1660
+#: embed/ephy-web-view.c:1659
 #, c-format
 msgid "Unresponsive Page"
 msgstr "无响应页面"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1662
 msgid "Uh-oh!"
 msgstr "糟糕！"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1666
+#: embed/ephy-web-view.c:1665
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr "这个页面很长时间没有响应了。请重新载入或转到其他网页。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1702
+#: embed/ephy-web-view.c:1701
 #, c-format
 msgid "Security Violation"
 msgstr "安全违例"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1705
+#: embed/ephy-web-view.c:1704
 msgid "This Connection is Not Secure"
 msgstr "连接不安全"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1710
+#: embed/ephy-web-view.c:1709
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1683,45 +1683,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1720 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1858
+#: embed/ephy-web-view.c:1719 embed/ephy-web-view.c:1807
+#: embed/ephy-web-view.c:1857
 msgid "Go Back"
 msgstr "后退"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1723 embed/ephy-web-view.c:1811
-#: embed/ephy-web-view.c:1861
+#: embed/ephy-web-view.c:1722 embed/ephy-web-view.c:1810
+#: embed/ephy-web-view.c:1860
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1726 embed/ephy-web-view.c:1814
+#: embed/ephy-web-view.c:1725 embed/ephy-web-view.c:1813
 msgid "Accept Risk and Proceed"
 msgstr "接受风险并继续"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1730 embed/ephy-web-view.c:1818
+#: embed/ephy-web-view.c:1729 embed/ephy-web-view.c:1817
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1758
+#: embed/ephy-web-view.c:1757
 #, c-format
 msgid "Security Warning"
 msgstr "安全警告"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1761
+#: embed/ephy-web-view.c:1760
 msgid "Unsafe website detected!"
 msgstr "探测到不安全的网站！"
 
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1768
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1730,7 +1730,7 @@ msgstr ""
 "访问 %s 可能会损坏您的电脑。该页面可能包含恶意代码，并可能不经许可下载到您的"
 "电脑上。"
 
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1772
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1739,7 +1739,7 @@ msgstr ""
 "您可以通过 %s 了解关于有害互联网内容如病毒和恶意代码，以及保护您的电脑的细"
 "节。"
 
-#: embed/ephy-web-view.c:1780
+#: embed/ephy-web-view.c:1779
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1749,13 +1749,13 @@ msgstr ""
 "%s 上的攻击者可能诱骗您进行风险操作，如安装软件或分享个人信息（如密码，电话号"
 "码或信用卡信息）。"
 
-#: embed/ephy-web-view.c:1785
+#: embed/ephy-web-view.c:1784
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "您可以通过 %s 或 %s 了解关于社会工程（网络钓鱼）的细节。"
 
-#: embed/ephy-web-view.c:1794
+#: embed/ephy-web-view.c:1793
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1765,24 +1765,24 @@ msgstr ""
 "%s 可能包含有害程序。攻击者可能尝试诱骗您安装软件并破坏浏览体验（如更换主页或"
 "显示额外的广告）。"
 
-#: embed/ephy-web-view.c:1799
+#: embed/ephy-web-view.c:1798
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "您可以通过 %s 了解关于有害软件的细节。"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1841 embed/ephy-web-view.c:1844
+#: embed/ephy-web-view.c:1840 embed/ephy-web-view.c:1843
 #, c-format
 msgid "File not found"
 msgstr "文件未找到"
 
-#: embed/ephy-web-view.c:1849
+#: embed/ephy-web-view.c:1848
 #, c-format
 msgid "%s could not be found."
 msgstr "无法找到 %s。"
 
-#: embed/ephy-web-view.c:1851
+#: embed/ephy-web-view.c:1850
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1791,11 +1791,11 @@ msgstr ""
 "请检查文件名中是否存在大小写、拼写错误等问题，以及文件是否被移动、重命名或删"
 "除。"
 
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1913
 msgid "None specified"
 msgstr "未指定"
 
-#: embed/ephy-web-view.c:2045
+#: embed/ephy-web-view.c:2044
 msgid "Technical information"
 msgstr "技术信息"
 
@@ -1815,7 +1815,7 @@ msgstr "图像"
 #. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/action-bar-end.ui:11
-#: src/resources/gtk/prefs-general-page.ui:135
+#: src/resources/gtk/prefs-general-page.ui:123
 msgid "Downloads"
 msgstr "下载"
 
@@ -2113,12 +2113,12 @@ msgid "Save Media As"
 msgstr "媒体另存为"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:394 src/ephy-location-entry.c:1784
+#: src/ephy-action-bar-end.c:392 src/ephy-location-entry.c:1784
 msgid "Bookmark Page"
 msgstr "书签页"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1792
+#: src/ephy-action-bar-end.c:400 src/ephy-location-entry.c:1792
 msgid "Edit Bookmark"
 msgstr "编辑书签"
 
@@ -2258,11 +2258,11 @@ msgstr[0] "%u 分钟"
 msgid "Reload the current page"
 msgstr "重载当前页面"
 
-#: src/ephy-header-bar.c:298
+#: src/ephy-header-bar.c:296
 msgid "Main Menu"
 msgstr "主菜单"
 
-#: src/ephy-header-bar.c:489
+#: src/ephy-header-bar.c:487
 msgid "Stop loading the current page"
 msgstr "停止加载当前页面"
 
@@ -2321,47 +2321,47 @@ msgstr "摄像头和麦克风请求"
 msgid "Permission Request"
 msgstr "权限请求"
 
-#: src/ephy-main.c:111
+#: src/ephy-main.c:112
 msgid "Open a new browser window instead of a new tab"
 msgstr "在新的浏览器窗口中打开"
 
-#: src/ephy-main.c:113
+#: src/ephy-main.c:114
 msgid "Load the given session state file"
 msgstr "载入指定的会话文件"
 
-#: src/ephy-main.c:113
+#: src/ephy-main.c:114
 msgid "FILE"
 msgstr "文件"
 
-#: src/ephy-main.c:115
+#: src/ephy-main.c:116
 msgid "Start an instance with user data read-only"
 msgstr "启动一个使用只读用户数据的模式进程"
 
-#: src/ephy-main.c:117
+#: src/ephy-main.c:118
 msgid "Start a private instance with separate user data"
 msgstr "启动一个使用独立用户数据的私密浏览进程"
 
-#: src/ephy-main.c:120
+#: src/ephy-main.c:121
 msgid "Start a private instance in web application mode"
 msgstr "以网页应用程序模式启动私密浏览进程"
 
-#: src/ephy-main.c:122
+#: src/ephy-main.c:123
 msgid "Start a private instance for WebDriver control"
 msgstr "启动一个由网络驱动器控制的私密浏览进程"
 
-#: src/ephy-main.c:124
+#: src/ephy-main.c:125
 msgid "Custom profile directory for private instance"
 msgstr "私密浏览进程中所使用的配置文件目录"
 
-#: src/ephy-main.c:124
+#: src/ephy-main.c:125
 msgid "DIR"
 msgstr "目录"
 
-#: src/ephy-main.c:126
+#: src/ephy-main.c:127
 msgid "URL …"
 msgstr "网址…"
 
-#: src/ephy-main.c:257
+#: src/ephy-main.c:280
 msgid "Web options"
 msgstr "浏览器选项"
 
@@ -2684,15 +2684,15 @@ msgstr "拒绝(_D)"
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: src/ephy-window.c:2996 src/ephy-window.c:4417
+#: src/ephy-window.c:2996 src/ephy-window.c:4422
 msgid "Leave Website?"
 msgstr "离开网站？"
 
-#: src/ephy-window.c:2997 src/ephy-window.c:4418 src/window-commands.c:1235
+#: src/ephy-window.c:2997 src/ephy-window.c:4423 src/window-commands.c:1235
 msgid "A form was modified and has not been submitted"
 msgstr "一个表格已被修改，但还没有提交。"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4419 src/window-commands.c:1239
+#: src/ephy-window.c:2998 src/ephy-window.c:4424 src/window-commands.c:1239
 msgid "_Discard Form"
 msgstr "丢弃表单(_D)"
 
@@ -2763,23 +2763,23 @@ msgstr "从不保存"
 msgid "Save"
 msgstr "保存"
 
-#: src/ephy-window.c:4548
+#: src/ephy-window.c:4553
 msgid "Close Multiple Tabs?"
 msgstr "关闭多个标签页？"
 
-#: src/ephy-window.c:4549
+#: src/ephy-window.c:4554
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "如果你关闭该窗口，所有其中的标签页都将被关闭"
 
-#: src/ephy-window.c:4550
+#: src/ephy-window.c:4555
 msgid "C_lose Tabs"
 msgstr "关闭多个标签页(_L)"
 
-#: src/ephy-window.c:4654
+#: src/ephy-window.c:4659
 msgid "New tab opened"
 msgstr "打开的新标签页"
 
-#: src/ephy-window.c:4658
+#: src/ephy-window.c:4663
 msgid "Switch"
 msgstr "开关"
 
@@ -2867,15 +2867,15 @@ msgstr "请填写名字"
 msgid "This search engine already exists"
 msgstr "该搜索引擎已存在"
 
-#: src/preferences/extension-view.c:129 src/resources/gtk/extension-view.ui:108
+#: src/preferences/extension-view.c:127 src/resources/gtk/extension-view.ui:102
 msgid "Remove Extension"
 msgstr "移除扩展"
 
-#: src/preferences/extension-view.c:130
+#: src/preferences/extension-view.c:128
 msgid "Do you really want to remove this extension?"
 msgstr "您确实要移除这个扩展吗？"
 
-#: src/preferences/extension-view.c:134
+#: src/preferences/extension-view.c:132
 #: src/resources/gtk/bookmark-properties.ui:106
 msgid "_Remove"
 msgstr "移除(_R)"
@@ -2934,19 +2934,19 @@ msgstr "暗色"
 msgid "Open File (manifest.json/xpi)"
 msgstr "打开文件 (manifest.json/xpi)"
 
-#: src/preferences/prefs-general-page.c:201
+#: src/preferences/prefs-general-page.c:200
 #: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "添加语言"
 
-#: src/preferences/prefs-general-page.c:363
-#: src/preferences/prefs-general-page.c:519
+#: src/preferences/prefs-general-page.c:362
+#: src/preferences/prefs-general-page.c:518
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "系统语言 (%s)"
 
-#: src/preferences/prefs-general-page.c:720
+#: src/preferences/prefs-general-page.c:719
 msgid "Supported Image Files"
 msgstr "支持的图像文件"
 
@@ -2994,7 +2994,7 @@ msgstr "前进"
 #. Translators: tooltip for the secret homepage button
 #: src/resources/gtk/action-bar-start.ui:98
 #: src/resources/gtk/extension-view.ui:69
-#: src/resources/gtk/prefs-general-page.ui:85
+#: src/resources/gtk/prefs-general-page.ui:73
 msgid "Homepage"
 msgstr "主页"
 
@@ -3115,7 +3115,7 @@ msgstr "作者"
 msgid "Version"
 msgstr "版本"
 
-#: src/resources/gtk/extension-view.ui:85
+#: src/resources/gtk/extension-view.ui:84
 msgid "Enabled"
 msgstr "已启用"
 
@@ -3124,6 +3124,10 @@ msgid "Firefox Sync"
 msgstr "Firefox 同步"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:17
+msgid "Sync _Now"
+msgstr "立即同步(_N)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:30
 msgid ""
 "Sign in with your Firefox account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3132,27 +3136,27 @@ msgstr ""
 "登录到您的 Firefox 帐号以和其他电脑同步浏览器数据。本浏览器不是 Firefox，"
 "Mozilla 亦不是 GNOME 浏览器的开发者或维护者。"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:34
+#: src/resources/gtk/firefox-sync-dialog.ui:47
 msgid "Firefox Account"
 msgstr "Firefox 帐号"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:37
+#: src/resources/gtk/firefox-sync-dialog.ui:50
 msgid "Logged in"
 msgstr "当前以 %s 用户登录"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:41
-msgid "Sign _out"
+#: src/resources/gtk/firefox-sync-dialog.ui:54
+msgid "Sign _Out"
 msgstr "注销(_O)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:53
+#: src/resources/gtk/firefox-sync-dialog.ui:66
 msgid "Sync Options"
 msgstr "同步选项"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:57
+#: src/resources/gtk/firefox-sync-dialog.ui:69
 msgid "Sync _Bookmarks"
 msgstr "同步书签(_B)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:69
+#: src/resources/gtk/firefox-sync-dialog.ui:75
 msgid "Sync _Passwords"
 msgstr "同步密码(_P)"
 
@@ -3160,31 +3164,27 @@ msgstr "同步密码(_P)"
 msgid "Sync _History"
 msgstr "同步历史(_H)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:93
+#: src/resources/gtk/firefox-sync-dialog.ui:87
 msgid "Sync Open _Tabs"
 msgstr "同步打开的标签页(_T)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:102
-msgid "S_ynced tabs"
+#: src/resources/gtk/firefox-sync-dialog.ui:91
+msgid "S_ynced Tabs"
 msgstr "已同步的标签页(_Y)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:112
+#: src/resources/gtk/firefox-sync-dialog.ui:101
 msgid "Frequency"
 msgstr "频率"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:124
-msgid "Sync _now"
-msgstr "立即同步(_N)"
-
-#: src/resources/gtk/firefox-sync-dialog.ui:135
+#: src/resources/gtk/firefox-sync-dialog.ui:110
 msgid "Device name"
 msgstr "设备名称"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:148
+#: src/resources/gtk/firefox-sync-dialog.ui:123
 msgid "_Save"
 msgstr "保存(_S)"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:157
+#: src/resources/gtk/firefox-sync-dialog.ui:132
 msgid "_Change"
 msgstr "更改(_C)"
 
@@ -3384,7 +3384,7 @@ msgid "Tabs"
 msgstr "标签页"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:92
+#: src/resources/gtk/prefs-privacy-page.ui:68
 msgid "Passwords"
 msgstr "密码"
 
@@ -3448,15 +3448,15 @@ msgstr "配色方案"
 msgid "Style"
 msgstr "样式"
 
-#: src/resources/gtk/prefs-appearance-page.ui:98
+#: src/resources/gtk/prefs-appearance-page.ui:97
 msgid "Use Custom Stylesheet"
 msgstr "使用自定义样式表"
 
-#: src/resources/gtk/prefs-appearance-page.ui:118
+#: src/resources/gtk/prefs-appearance-page.ui:111
 msgid "Use Custom JavaScript"
 msgstr "使用自定义 JavaScript"
 
-#: src/resources/gtk/prefs-appearance-page.ui:138
+#: src/resources/gtk/prefs-appearance-page.ui:126
 msgid "Default Zoom Level"
 msgstr "默认缩放级别"
 
@@ -3508,63 +3508,63 @@ msgstr "管理附加 URL(_M)"
 msgid "Web Content"
 msgstr "网页内容"
 
-#: src/resources/gtk/prefs-general-page.ui:60
+#: src/resources/gtk/prefs-general-page.ui:59
 msgid "Block _Advertisements"
 msgstr "阻止广告(_A)"
 
-#: src/resources/gtk/prefs-general-page.ui:72
+#: src/resources/gtk/prefs-general-page.ui:65
 msgid "Block _Popup Windows"
 msgstr "阻止弹出窗口(_P)"
 
-#: src/resources/gtk/prefs-general-page.ui:89
+#: src/resources/gtk/prefs-general-page.ui:77
 msgid "Most _Visited Pages"
 msgstr "最常浏览的页面(_V)"
 
-#: src/resources/gtk/prefs-general-page.ui:101
+#: src/resources/gtk/prefs-general-page.ui:89
 msgid "_Blank Page"
 msgstr "空白页(_B)"
 
-#: src/resources/gtk/prefs-general-page.ui:114
+#: src/resources/gtk/prefs-general-page.ui:102
 msgid "_Custom"
 msgstr "自定义(_C)"
 
-#: src/resources/gtk/prefs-general-page.ui:139
+#: src/resources/gtk/prefs-general-page.ui:126
 msgid "Ask o_n Download"
 msgstr "下载时询问(_N)"
 
-#: src/resources/gtk/prefs-general-page.ui:152
+#: src/resources/gtk/prefs-general-page.ui:133
 msgid "_Download Folder"
 msgstr "下载文件夹(_D)"
 
-#: src/resources/gtk/prefs-general-page.ui:192
+#: src/resources/gtk/prefs-general-page.ui:173
 msgid "Search Engines"
 msgstr "搜索引擎"
 
-#: src/resources/gtk/prefs-general-page.ui:200
+#: src/resources/gtk/prefs-general-page.ui:181
 msgid "Session"
 msgstr "会话"
 
-#: src/resources/gtk/prefs-general-page.ui:204
+#: src/resources/gtk/prefs-general-page.ui:184
 msgid "Start in _Incognito Mode"
 msgstr "以无痕模式启动(_I)"
 
-#: src/resources/gtk/prefs-general-page.ui:216
+#: src/resources/gtk/prefs-general-page.ui:190
 msgid "_Restore Tabs on Startup"
 msgstr "在启动时自动打开上次浏览的标签页(_R)"
 
-#: src/resources/gtk/prefs-general-page.ui:229
+#: src/resources/gtk/prefs-general-page.ui:198
 msgid "Browsing"
 msgstr "浏览"
 
-#: src/resources/gtk/prefs-general-page.ui:233
+#: src/resources/gtk/prefs-general-page.ui:201
 msgid "Mouse _Gestures"
 msgstr "鼠标手势(_G)"
 
-#: src/resources/gtk/prefs-general-page.ui:245
+#: src/resources/gtk/prefs-general-page.ui:207
 msgid "S_witch Immediately to New Tabs"
 msgstr "立即切换到新标签页(_W)"
 
-#: src/resources/gtk/prefs-general-page.ui:274
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "_Spell Checking"
 msgstr "拼写检查(_S)"
 
@@ -3580,51 +3580,51 @@ msgstr "隐私"
 msgid "Web Safety"
 msgstr "网站安全"
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.ui:12
 msgid "Block Dangerous Web_sites"
 msgstr "阻止危险网站(_S)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:26
+#: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "Web Tracking"
 msgstr "网络跟踪"
 
-#: src/resources/gtk/prefs-privacy-page.ui:30
+#: src/resources/gtk/prefs-privacy-page.ui:23
 msgid "Intelligent _Tracking Prevention"
 msgstr "智能跟踪预防(_T)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:42
+#: src/resources/gtk/prefs-privacy-page.ui:29
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr "允许网站存储 Cookie、数据库和本地存储数据。"
 
-#: src/resources/gtk/prefs-privacy-page.ui:43
+#: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "_Website Data Storage"
 msgstr "网站数据存储(_W)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:56
+#: src/resources/gtk/prefs-privacy-page.ui:38
 msgid "Search Suggestions"
 msgstr "搜索建议"
 
-#: src/resources/gtk/prefs-privacy-page.ui:60
+#: src/resources/gtk/prefs-privacy-page.ui:41
 msgid "Enable search suggestions in the URL entry."
 msgstr "在地址栏结果中显示搜索建议。"
 
-#: src/resources/gtk/prefs-privacy-page.ui:61
+#: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "_Google Search Suggestions"
 msgstr "谷歌搜索建议(_G)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:74
+#: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "Personal Data"
 msgstr "个人数据"
 
-#: src/resources/gtk/prefs-privacy-page.ui:78
+#: src/resources/gtk/prefs-privacy-page.ui:54
 msgid "Clear Website _Data"
 msgstr "清除网站数据(_D)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:96
+#: src/resources/gtk/prefs-privacy-page.ui:72
 msgid "_Passwords"
 msgstr "密码(_P)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:109
+#: src/resources/gtk/prefs-privacy-page.ui:84
 msgid "_Remember Passwords"
 msgstr "记住密码(_R)"
 
@@ -4174,23 +4174,23 @@ msgstr "一个名为 %s 的应用程序已经存在，替换它将覆盖它。"
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: src/window-commands.c:2129
+#: src/window-commands.c:2134
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2133
+#: src/window-commands.c:2138
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2179
+#: src/window-commands.c:2184
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2678
+#: src/window-commands.c:2683
 msgid "Enable Caret Browsing Mode?"
 msgstr "启用光标导航吗？"
 
-#: src/window-commands.c:2679
+#: src/window-commands.c:2684
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4199,9 +4199,12 @@ msgstr ""
 "按 F7 键可以启用或停用光标导航功能。此功能在网页中放置一个可移动光标，从而允"
 "许您使用键盘在页面内导航。您是否要启用光标导航？"
 
-#: src/window-commands.c:2684
+#: src/window-commands.c:2689
 msgid "_Enable"
 msgstr "启用(_E)"
+
+#~ msgid "S_ynced tabs"
+#~ msgstr "已同步的标签页(_Y)"
 
 # 这样翻译，与GNOME开发者把这个浏览器改名的用意接近。
 #~ msgid "Web browser for GNOME"
