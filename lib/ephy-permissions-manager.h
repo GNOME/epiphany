@@ -46,6 +46,7 @@ typedef enum {
   EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY,
   EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE,
   EPHY_PERMISSION_TYPE_COOKIES,
+  EPHY_PERMISSION_TYPE_CLIPBOARD
 } EphyPermissionType;
 
 EphyPermissionsManager *ephy_permissions_manager_new            (void);

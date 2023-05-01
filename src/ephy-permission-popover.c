@@ -310,6 +310,13 @@ ephy_permission_popover_get_text (EphyPermissionPopover  *self,
       *message = g_strdup_printf (_("The page at “%s” would like to access its own data (including cookies) while browsing “%s”. This will allow “%s” to track your activity on “%s”."),
                                   requesting_domain, current_domain, requesting_domain, current_domain);
       break;
+    case EPHY_PERMISSION_TYPE_CLIPBOARD:
+      /* Translators: Clipboard policy for a specific site. */
+      *title = g_strdup (_("Clipboard Access Request"));
+      /* Translators: Clipboard policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to access your clipboard"),
+                                  bold_origin);
+      break;
     default:
       g_assert_not_reached ();
   }
