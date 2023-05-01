@@ -304,11 +304,11 @@ ephy_permission_popover_get_text (EphyPermissionPopover  *self,
     case EPHY_PERMISSION_TYPE_COOKIES:
       requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (self->permission_request));
       current_domain = webkit_website_data_access_permission_request_get_current_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (self->permission_request));
-      /* Translators: Cookie policy for a specific site. */
-      *title = g_strdup (_("Third-party Cookies Request"));
-      /* Translators: Cookie policy for a specific site. */
-      *message = g_strdup_printf (_("The page at “%s” would like to use cookies while browsing “%s”. This will allow “%s” to track your activity."),
-                                  requesting_domain, current_domain, requesting_domain);
+      /* Translators: Storage access policy for a specific site. */
+      *title = g_strdup (_("Website Data Access Request"));
+      /* Translators: Storage access policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to access its own data (including cookies) while browsing “%s”. This will allow “%s” to track your activity on “%s”."),
+                                  requesting_domain, current_domain, requesting_domain, current_domain);
       break;
     default:
       g_assert_not_reached ();
