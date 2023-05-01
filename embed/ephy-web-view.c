@@ -946,6 +946,8 @@ permission_request_cb (WebKitWebView           *web_view,
     permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
   } else if (WEBKIT_IS_CLIPBOARD_PERMISSION_REQUEST (decision)) {
     permission_type = EPHY_PERMISSION_TYPE_CLIPBOARD;
+  } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
+    permission_type = EPHY_PERMISSION_TYPE_COOKIES;
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
     gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
     gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
@@ -960,8 +962,6 @@ permission_request_cb (WebKitWebView           *web_view,
     } else {
       return FALSE;
     }
-  } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
-    return TRUE;
   } else {
     return FALSE;
   }
