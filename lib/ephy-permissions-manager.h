@@ -67,4 +67,6 @@ void                    ephy_permissions_manager_export_to_js_context  (EphyPerm
                                                                         JSCContext             *js_context,
                                                                         JSCValue               *js_namespace);
 
+gboolean                ephy_permission_is_stored_by_permissions_manager (EphyPermissionType type);
+
 G_END_DECLS

@@ -154,6 +154,8 @@ ephy_permissions_manager_new (void)
 static const char *
 permission_type_to_string (EphyPermissionType type)
 {
+  g_assert (ephy_permission_is_stored_by_permissions_manager (type));
+
   switch (type) {
     case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
       return "notifications-permission";
@@ -174,6 +176,24 @@ permission_type_to_string (EphyPermissionType type)
   }
 }
 
+/* Some permissions do not get remembered by the permissions manager. Generally,
+ * Epiphany prompts every time such permission is requested. But
+ * ACCESS_WEBCAM_AND_MICROPHONE is special: only separate ACCESS_MICROPHONE and
+ * ACCESS_WEBCAM permissions get stored.
+ */
+gboolean
+ephy_permission_is_stored_by_permissions_manager (EphyPermissionType type)
+{
+  switch (type) {
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
+      /* fallthrough */
+    case EPHY_PERMISSION_TYPE_COOKIES:
+      return FALSE;
+    default:
+      return TRUE;
+  }
+}
+
 EphyPermission
 ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
                                          EphyPermissionType      type,
@@ -181,7 +201,7 @@ ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
 {
   GSettings *settings;
 
-  g_assert (type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE);
+  g_assert (ephy_permission_is_stored_by_permissions_manager (type));
 
   settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   return g_settings_get_enum (settings, permission_type_to_string (type));
@@ -263,7 +283,7 @@ ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
   WebKitSecurityOrigin *webkit_origin;
   GSettings *settings;
 
-  g_assert (type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE);
+  g_assert (ephy_permission_is_stored_by_permissions_manager (type));
 
   webkit_origin = webkit_security_origin_new_for_uri (origin);
   if (webkit_origin == NULL)
