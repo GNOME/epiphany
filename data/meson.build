@@ -41,7 +41,6 @@ appdata = i18n.merge_file(
   install_dir: join_paths(datadir, 'metainfo'),
   po_dir: po_dir
 )
-appstream_util = find_program('appstream-util', required: false)
 
 # We need three custom_target() calls because Meson doesn't have very
 # good support for GSettings yet. First, generate our GSettings enums
@@ -134,12 +133,12 @@ if desktop_file_validate.found()
   )
 endif
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
+appstreamcli = find_program('appstreamcli', required: false)
+if appstreamcli.found()
   test(
-    'validate-appdata', appstream_util,
+    'validate-appdata', appstreamcli,
     args: [
-      'validate-relax', '--nonet', appdata.full_path()
+      'validate', '--no-net', appdata.full_path()
     ],
     depends: appdata
   )
