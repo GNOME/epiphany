@@ -947,7 +947,7 @@ permission_request_cb (WebKitWebView           *web_view,
   } else if (WEBKIT_IS_CLIPBOARD_PERMISSION_REQUEST (decision)) {
     permission_type = EPHY_PERMISSION_TYPE_CLIPBOARD;
   } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
-    permission_type = EPHY_PERMISSION_TYPE_COOKIES;
+    permission_type = EPHY_PERMISSION_TYPE_WEBSITE_DATA_ACCESS;
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
     gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
     gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
