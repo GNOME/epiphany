@@ -971,11 +971,11 @@ permission_request_cb (WebKitWebView           *web_view,
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
 
-  if (permission_type != EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
+  if (ephy_permission_is_stored_by_permissions_manager (permission_type)) {
     permission = ephy_permissions_manager_get_permission (permissions_manager,
                                                           permission_type,
                                                           origin);
-  } else {
+  } else if (permission_type == EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
     EphyPermission video_permission;
     EphyPermission mic_permission;
 
@@ -990,6 +990,8 @@ permission_request_cb (WebKitWebView           *web_view,
       permission = video_permission;
     else
       permission = EPHY_PERMISSION_UNDECIDED;
+  } else {
+    permission = EPHY_PERMISSION_UNDECIDED;
   }
 
   switch (permission) {

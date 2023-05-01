@@ -2712,12 +2712,12 @@ set_permission (EphyPermissionPopover *popover,
   EphyPermissionType permission_type = ephy_permission_popover_get_permission_type (popover);
   const char *origin = ephy_permission_popover_get_origin (popover);
 
-  if (permission_type != (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE | EPHY_PERMISSION_TYPE_COOKIES)) {
+  if (ephy_permission_is_stored_by_permissions_manager (permission_type)) {
     ephy_permissions_manager_set_permission (permissions_manager,
                                              permission_type, origin,
                                              response ? EPHY_PERMISSION_PERMIT
                                                       : EPHY_PERMISSION_DENY);
-  } else {
+  } else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
     ephy_permissions_manager_set_permission (permissions_manager,
                                              EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
                                              origin,
