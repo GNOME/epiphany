@@ -61,16 +61,17 @@ static void
 drag_begin_cb (EphyLangRow *self,
                GdkDrag     *drag)
 {
-  GtkAllocation alloc;
   GtkWidget *drag_list;
   GtkWidget *drag_row;
   GtkWidget *drag_icon;
   const char *title;
+  int width, height;
 
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+  height = gtk_widget_get_height (GTK_WIDGET (self));
 
   drag_list = gtk_list_box_new ();
-  gtk_widget_set_size_request (drag_list, alloc.width, alloc.height);
+  gtk_widget_set_size_request (drag_list, width, height);
   gtk_widget_add_css_class (drag_list, "boxed-list");
 
   title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (self));
